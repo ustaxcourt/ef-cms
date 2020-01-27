@@ -10,6 +10,7 @@ const {
 const {
   updatePetitionerInformationInteractor,
 } = require('./updatePetitionerInformationInteractor');
+const { constants } = require('../utilities/setServiceIndicatorsForCase');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
@@ -183,6 +184,23 @@ describe('update petitioner contact information on a case', () => {
     expect(generatePdfFromHtmlInteractorStub).toHaveBeenCalled();
     expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('https://www.example.com');
+  });
+
+  it('does not serve a document or return a paperServicePdfUrl if only the serviceIndicator changes but not the address', async () => {
+    const result = await updatePetitionerInformationInteractor({
+      applicationContext,
+      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      contactPrimary: {
+        ...MOCK_CASE.contactPrimary,
+        serviceIndicator: constants.SI_PAPER,
+      },
+      partyType: ContactFactory.PARTY_TYPES.petitioner,
+    });
+    expect(updateCaseStub).toHaveBeenCalled();
+    expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
+    expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
+    expect(sendServedPartiesEmailsMock).not.toHaveBeenCalled();
+    expect(result.paperServicePdfUrl).toBeUndefined();
   });
 
   it('throws an error if the user making the request does not have permission to edit petition details', async () => {

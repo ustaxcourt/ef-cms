@@ -138,6 +138,38 @@ describe('Petition', () => {
     expect(caseExternal.isValid()).toEqual(false);
   });
 
+  it('returns false for isValid if serviceIndicator is an invalid value', () => {
+    caseExternal = new CaseExternal({
+      caseType: 'Other',
+      contactPrimary: {
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        country: 'USA',
+        countryType: 'domestic',
+        name: 'Jimmy Dean',
+        phone: '4444444444',
+        postalCode: '05198',
+        secondaryName: 'Jimmy Dean',
+        serviceIndicator: 'WHAT',
+        state: 'AK',
+        title: 'Some Title',
+      },
+      filingType: 'Myself',
+      hasIrsNotice: true,
+      irsNoticeDate: '2009-10-13',
+      mailingDate: 'testing',
+      partyType: ContactFactory.PARTY_TYPES.estate,
+      petitionFile: {},
+      petitionFileSize: 1,
+      preferredTrialCity: 'Chattanooga, Tennessee',
+      procedureType: 'Small',
+      signature: true,
+      stinFile: {},
+      stinFileSize: 1,
+    });
+    expect(caseExternal.isValid()).toEqual(false);
+  });
+
   it('a valid petition returns true for isValid', () => {
     const caseExternal = new CaseExternal({
       caseType: 'Other',
