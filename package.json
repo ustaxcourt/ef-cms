@@ -167,6 +167,7 @@
     "lint:js": "TIMING=1 eslint --ext .js,.jsx shared/src/ web-api/src/ web-client/src/",
     "lint:swagger": "swagger-cli validate web-api/swagger.json",
     "lint": "npx run-p lint:swagger lint:css lint:js",
+    "loadtest": "TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000  AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop node ./web-api/storage/scripts/trialSession/loadTestSmall.js",
     "print:success": "echo 'Build successful. You can access the site at http://localhost:1234'",
     "seed:db": "node ./web-api/create-dynamo-tables.js && node ./web-api/seed-dynamo.js",
     "seed:elasticsearch": "./web-api/seed-elasticsearch.sh",
