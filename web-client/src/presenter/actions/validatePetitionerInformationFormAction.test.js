@@ -1,4 +1,4 @@
-import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/cases/Case';
+import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/cases/CaseConstants';
 import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
