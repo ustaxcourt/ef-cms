@@ -12,11 +12,12 @@ const { post } = require('../requests');
 exports.associateRespondentWithCaseInteractor = ({
   applicationContext,
   caseId,
+  serviceIndicator,
   userId,
 }) => {
   return post({
     applicationContext,
-    body: { caseId, userId },
+    body: { caseId, serviceIndicator, userId },
     endpoint: `/case-parties/${caseId}/associate-respondent`,
   });
 };
