@@ -36,7 +36,7 @@ const setServiceIndicatorsForCase = caseDetail => {
   }
 
   // contactPrimary
-  if (contactPrimary) {
+  if (contactPrimary && !contactPrimary.serviceIndicator) {
     if (hasPrimaryPractitioner) {
       contactPrimary.serviceIndicator = constants.SI_NONE;
     } else {
@@ -47,7 +47,7 @@ const setServiceIndicatorsForCase = caseDetail => {
   }
 
   // contactSecondary
-  if (!isEmpty(contactSecondary)) {
+  if (!isEmpty(contactSecondary) && !contactSecondary.serviceIndicator) {
     contactSecondary.serviceIndicator = hasSecondaryPractitioner
       ? constants.SI_NONE
       : constants.SI_PAPER;
