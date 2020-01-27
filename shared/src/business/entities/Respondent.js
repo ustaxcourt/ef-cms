@@ -7,7 +7,7 @@ const {
   userValidation,
   VALIDATION_ERROR_MESSAGES,
 } = require('./User');
-const { SERVICE_INDICATOR_TYPES } = require('./cases/Case');
+const { SERVICE_INDICATOR_TYPES } = require('./cases/CaseConstants');
 
 /**
  * constructor

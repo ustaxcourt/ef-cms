@@ -1,4 +1,4 @@
-import { constants } from '../../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
+import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/cases/CaseConstants';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateEditRespondentsAction } from './validateEditRespondentsAction';
@@ -27,18 +27,24 @@ describe('validateEditRespondentsAction', () => {
       state: {
         caseDetail: {
           respondents: [
-            { serviceIndicator: constants.SI_ELECTRONIC, userId: '1' },
-            { serviceIndicator: constants.SI_ELECTRONIC, userId: '2' },
+            {
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              userId: '1',
+            },
+            {
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              userId: '2',
+            },
           ],
         },
         modal: {
           respondents: [
             {
-              serviceIndicator: constants.SI_ELECTRONIC,
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
               userId: '1',
             },
             {
-              serviceIndicator: constants.SI_ELECTRONIC,
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
               userId: '2',
             },
           ],
@@ -57,14 +63,20 @@ describe('validateEditRespondentsAction', () => {
       state: {
         caseDetail: {
           respondents: [
-            { serviceIndicator: constants.SI_PAPER, userId: '1' },
-            { serviceIndicator: constants.SI_PAPER, userId: '2' },
+            { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER, userId: '1' },
+            { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER, userId: '2' },
           ],
         },
         modal: {
           respondents: [
-            { serviceIndicator: constants.SI_ELECTRONIC, userId: '1' },
-            { serviceIndicator: constants.SI_ELECTRONIC, userId: '2' },
+            {
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              userId: '1',
+            },
+            {
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              userId: '2',
+            },
           ],
         },
       },
