@@ -1,4 +1,4 @@
-import { constants } from '../../../shared/src/business/utilities/setServiceIndicatorsForCase';
+import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/cases/CaseConstants';
 
 export default test => {
   return it('docket clerk edits service indicator for a petitioner', async () => {
@@ -7,12 +7,12 @@ export default test => {
     });
 
     expect(test.getState('form.contactPrimary.serviceIndicator')).toEqual(
-      constants.SI_NONE,
+      SERVICE_INDICATOR_TYPES.SI_NONE,
     );
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.serviceIndicator',
-      value: constants.SI_ELECTRONIC,
+      value: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
 
     await test.runSequence('updatePetitionerInformationFormSequence');
@@ -23,18 +23,18 @@ export default test => {
     });
 
     expect(test.getState('caseDetail.contactPrimary.serviceIndicator')).toEqual(
-      constants.SI_NONE,
+      SERVICE_INDICATOR_TYPES.SI_NONE,
     );
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.serviceIndicator',
-      value: constants.SI_PAPER,
+      value: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
 
     await test.runSequence('updatePetitionerInformationFormSequence');
 
     expect(test.getState('caseDetail.contactPrimary.serviceIndicator')).toEqual(
-      constants.SI_PAPER,
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
 };

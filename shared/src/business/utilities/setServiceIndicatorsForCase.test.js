@@ -1,8 +1,6 @@
+import { SERVICE_INDICATOR_TYPES } from '../entities/cases/CaseConstants';
 import { User } from '../entities/User';
-import {
-  constants,
-  setServiceIndicatorsForCase,
-} from './setServiceIndicatorsForCase';
+import { setServiceIndicatorsForCase } from './setServiceIndicatorsForCase';
 
 let baseCaseDetail;
 
@@ -34,7 +32,7 @@ describe('setServiceIndicatorsForCases', () => {
     };
   });
 
-  it(`should return ${constants.SI_PAPER} for a Petitioner (contactPrimary) with no representing counsel filing by paper`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_PAPER} for a Petitioner (contactPrimary) with no representing counsel filing by paper`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: true,
@@ -42,35 +40,39 @@ describe('setServiceIndicatorsForCases', () => {
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(constants.SI_PAPER);
+    expect(result.contactPrimary.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
   });
 
-  it(`should return ${constants.SI_ELECTRONIC} for a Petitioner (contactPrimary) with no representing counsel filing electronically`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_ELECTRONIC} for a Petitioner (contactPrimary) with no representing counsel filing electronically`, async () => {
     const caseDetail = { ...baseCaseDetail };
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
     expect(result.contactPrimary.serviceIndicator).toEqual(
-      constants.SI_ELECTRONIC,
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
   });
 
-  it(`should return ${constants.SI_NONE} for a Petitioner (contactPrimary) with ${constants.SI_NONE} already set as an override`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactPrimary) with ${SERVICE_INDICATOR_TYPES.SI_NONE} already set as an override`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
       contactPrimary: {
         email: 'petitioner@example.com',
         name: 'Test Petitioner',
-        serviceIndicator: constants.SI_NONE,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
       },
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(constants.SI_NONE);
+    expect(result.contactPrimary.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_NONE,
+    );
   });
 
-  it(`should return ${constants.SI_NONE} for a Petitioner (contactPrimary) with representing counsel filing by paper`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactPrimary) with representing counsel filing by paper`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: true,
@@ -79,10 +81,12 @@ describe('setServiceIndicatorsForCases', () => {
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(constants.SI_NONE);
+    expect(result.contactPrimary.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_NONE,
+    );
   });
 
-  it(`should return ${constants.SI_NONE} for a Petitioner (contactPrimary) with representing counsel filing electronically`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactPrimary) with representing counsel filing electronically`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: false,
@@ -91,10 +95,12 @@ describe('setServiceIndicatorsForCases', () => {
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(constants.SI_NONE);
+    expect(result.contactPrimary.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_NONE,
+    );
   });
 
-  it(`should return ${constants.SI_PAPER} for a Petitioner (contactSecondary) with no representing counsel`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_PAPER} for a Petitioner (contactSecondary) with no representing counsel`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
       contactSecondary: {
@@ -106,26 +112,28 @@ describe('setServiceIndicatorsForCases', () => {
     const result = setServiceIndicatorsForCase(caseDetail);
 
     expect(result.contactSecondary.serviceIndicator).toEqual(
-      constants.SI_PAPER,
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
 
-  it(`should return ${constants.SI_NONE} for a Petitioner (contactSecondary) with a serviceIndicator already set as an override`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactSecondary) with a serviceIndicator already set as an override`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
       contactSecondary: {
         name: 'Test Petitioner2',
-        serviceIndicator: constants.SI_NONE,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
       },
       practitioners: [{ ...basePractitioner }],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactSecondary.serviceIndicator).toEqual(constants.SI_NONE);
+    expect(result.contactSecondary.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_NONE,
+    );
   });
 
-  it(`should return ${constants.SI_NONE} for a Petitioner (contactSecondary) with representing counsel`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactSecondary) with representing counsel`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
       contactSecondary: {
@@ -136,7 +144,9 @@ describe('setServiceIndicatorsForCases', () => {
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactSecondary.serviceIndicator).toEqual(constants.SI_NONE);
+    expect(result.contactSecondary.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_NONE,
+    );
   });
 
   it('should not modify the serviceIndicator on the Practitioner', async () => {
@@ -149,7 +159,7 @@ describe('setServiceIndicatorsForCases', () => {
     const result = setServiceIndicatorsForCase(caseDetail);
 
     expect(result.practitioners[0].serviceIndicator).toEqual(
-      constants.SI_PAPER,
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
 
@@ -160,6 +170,8 @@ describe('setServiceIndicatorsForCases', () => {
     };
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.respondents[0].serviceIndicator).toEqual(constants.SI_PAPER);
+    expect(result.respondents[0].serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
   });
 });

@@ -1550,4 +1550,5 @@ Case.prototype.setAsSealed = function() {
   return this;
 };
 
-module.exports = { Case, isAssociatedUser };
+exports.Case = Case;
+exports.isAssociatedUser = isAssociatedUser;
