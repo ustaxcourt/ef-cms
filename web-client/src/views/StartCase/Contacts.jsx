@@ -37,14 +37,14 @@ export const Contacts = connect(
               onChange={onChange}
             />
             {showPrimaryServiceIndicator && (
-              <>
+              <div className="margin-bottom-6">
                 <h4 className="margin-top-6">Service Information</h4>
                 <ServiceIndicatorRadios
                   bind="form.contactPrimary"
                   validateSequence={validateSequence}
                   validationErrors="validationErrors.contactPrimary"
                 />
-              </>
+              </div>
             )}
           </>
         )}

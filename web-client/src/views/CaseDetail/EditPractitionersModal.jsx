@@ -48,6 +48,7 @@ export const EditPractitionersModal = connect(
                   {practitioner.name} ({practitioner.barNumber})
                 </label>
                 <FormGroup
+                  className="margin-bottom-0"
                   errorText={
                     validationErrors &&
                     validationErrors.practitioners &&
