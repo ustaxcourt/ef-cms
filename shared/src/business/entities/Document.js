@@ -326,7 +326,10 @@ joiValidationDecorator(
       .string()
       .optional()
       .allow(null),
-    status: joi.string().optional(),
+    status: joi
+      .string()
+      .valid('served')
+      .optional(),
     supportingDocument: joi
       .string()
       .optional()
