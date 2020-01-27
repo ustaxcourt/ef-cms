@@ -35,33 +35,45 @@ joiValidationDecorator(
     action: joi
       .string()
       .optional()
-      .allow(null),
-    description: joi.string().required(),
+      .allow(null)
+      .description('Action taken in response to this Docket Record item.'),
+    description: joi
+      .string()
+      .required()
+      .description(
+        'Text that describes this Docket Record item, which may be part of the Filings and Proceedings value.',
+      ),
     documentId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
       .allow(null)
-      .optional(),
+      .optional()
+      .description('ID of the associated PDF document in the S3 bucket.'),
     editState: joi
       .string()
       .allow(null)
-      .optional(),
+      .optional()
+      .description('JSON representation of the in-progress edit of this item.'),
+    // TODO: Gather all event codes for validation
     eventCode: joi.string().required(),
     filedBy: joi
       .string()
       .optional()
-      .allow(null),
+      .allow(null)
+      .description('ID of the uswer that filed this Docket Record item.'),
     filingDate: joi
       .date()
       .max('now')
       .iso()
-      .required(),
+      .required()
+      .description('Date that this Docket Record item was filed.'),
     index: joi
       .number()
       .integer()
-      .required(),
+      .required()
+      .description('Index of this item in the Docket Record list.'),
   }),
   undefined,
   DocketRecord.VALIDATION_ERROR_MESSAGES,
