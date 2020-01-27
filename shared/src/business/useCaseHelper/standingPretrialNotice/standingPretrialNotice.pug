@@ -1,64 +1,71 @@
-doctype html
-html(lang="en")
-  head
-    meta(charset="utf-8")
-    title U.S. Tax Court
-    style= css
-  body
-    .page-container
-      .court-header
-        img.logo(src=logo)
-        h1.text-center United States Tax Court
-        p.text-center 
-          | 400 Second Street, N.W.
-          br
-          | Washington D.C. 20217
+.court-header
+  .us-tax-court-seal
+  h1 United States Tax Court
+  p.heading-address.margin-top-0
+    | 400 Second Street, N.W.
+    br
+    | Washington, D.C. 20217
 
-      .case-information
-        #case-caption
-          p #{caption}
-          p.space Petitioner
-        .clear
-        #caption
-          p.space.margin-top-0 v.
-          p Commissioner of Internal Revenue
-          p.space Respondent
-        #docket-number Docket Number #{docketNumberWithSuffix}
-        .clear
-        
-      h1 STANDING PRETRIAL NOTICE
-      .info-box
-        .info-box-header
-          p This case is set for the trial session beginning at  10:00AM on Monday, March 25, 2019.
-      ul
-        li 
-          b WHAT TO DO NOW
-        ul
-          li Call respondent’s counsel (the IRS lawyer) as soon as possible.  Their name and phone number is [INSERT AT TIME OF PRINTING].
-          ul
-            li Tell them if English is not your first language.
-            li Send them copies of documents that you think help your case.
-            li Find out whether you will need to go to trial or if you can settle your case.
-        li Visit the Tax Court website at www.ustaxcourt.gov for more information about the process and Frequently Asked Questions.
-      ul
-        li 
-          b WHAT TO DO BEFORE TRIAL
-        ul
-          li Talk to the IRS lawyer about what facts and documents you can both stipulate (agree) to. Facts might include your name, address, and the tax year(s) involved. Documents might include the notice or your tax returns.
-          li For documents you cannot agree on, bring 3 copies to trial.  A photocopier may not be available at the courthouse. Only documents presented at trial will be part of the case record. The Tax Court is not part of the IRS. If you gave something to the IRS before, bring a copy with you!
-          li Consider filing a “pretrial memorandum” because it is helpful to the Judge.  A form you can use is attached.
-          li You can send an update to the Court a week in advance if you need to by filing a Final Status Report, available at https://www.ustaxcourt.gov/FinalStatusReport/.
-          li Your case may not be tried on [DAY], [DATE] because trial sessions can last more than one day. If you have witnesses that can only be there on [DAY], please put that in your pretrial memorandum or Final Status Report.  
-        li WHAT TO DO THE DAY OF THE TRIAL SESSION
-        ul
-          li Arrive 1 hour early because you will have to go through security. Bring a government-issued photo ID.
-          li Don’t forget copies of your documents.
-          li Be prepared for trial.  Cases will not be continued (postponed) other than in unusual situations.
-        li Find out more at 
-          a(href="http://www.ustaxcourt.gov ") www.ustaxcourt.gov 
-          | or call 202-521-0700.
-          
-      p.float-right.width-third 
-        | Stephanie A. Servoss
+.case-information
+  #case-caption
+    p #{caption}
+    p.space Petitioner
+  .clear
+  #caption
+    p.space.margin-top-0 v.
+    p Commissioner of Internal Revenue
+    p.space Respondent
+  #docket-number Docket Number #{docketNumberWithSuffix}
+  .clear
+  
+h1(style='margin-bottom:39px') STANDING PRETRIAL NOTICE
+
+.info-box
+  .info-box-header
+    p This case is set for the trial session beginning at  10:00AM on Monday, March 25, 2019.
+  .info-box-content
+    p.text-center
+      | #{trialInfo.courthouseName}
+      br
+      | #{trialInfo.address1}
+      br
+      if trialInfo.address2
+        | #{trialInfo.address2}
         br
-        | Clerk of the Court
+      if trialInfo.address3
+        | #{trialInfo.address3}
+        br
+      | #{trialInfo.city}, #{trialInfo.state}  #{trialInfo.postalCode}
+
+ul
+  li 
+    b WHAT TO DO NOW
+  ul
+    li Call respondent’s counsel (the IRS lawyer) as soon as possible.  Their name and phone number is [INSERT AT TIME OF PRINTING].
+    ul
+      li Tell them if English is not your first language.
+      li Send them copies of documents that you think help your case.
+      li Find out whether you will need to go to trial or if you can settle your case.
+  li Visit the Tax Court website at www.ustaxcourt.gov for more information about the process and Frequently Asked Questions.
+ul
+  li 
+    b WHAT TO DO BEFORE TRIAL
+  ul
+    li Talk to the IRS lawyer about what facts and documents you can both stipulate (agree) to. Facts might include your name, address, and the tax year(s) involved. Documents might include the notice or your tax returns.
+    li For documents you cannot agree on, bring 3 copies to trial.  A photocopier may not be available at the courthouse. Only documents presented at trial will be part of the case record. The Tax Court is not part of the IRS. If you gave something to the IRS before, bring a copy with you!
+    li Consider filing a “pretrial memorandum” because it is helpful to the Judge.  A form you can use is attached.
+    li You can send an update to the Court a week in advance if you need to by filing a Final Status Report, available at https://www.ustaxcourt.gov/FinalStatusReport/.
+    li Your case may not be tried on [DAY], [DATE] because trial sessions can last more than one day. If you have witnesses that can only be there on [DAY], please put that in your pretrial memorandum or Final Status Report.  
+  li WHAT TO DO THE DAY OF THE TRIAL SESSION
+  ul
+    li Arrive 1 hour early because you will have to go through security. Bring a government-issued photo ID.
+    li Don’t forget copies of your documents.
+    li Be prepared for trial.  Cases will not be continued (postponed) other than in unusual situations.
+  li Find out more at 
+    a(href="http://www.ustaxcourt.gov ") www.ustaxcourt.gov 
+    | or call 202-521-0700.
+    
+p.float-right.width-third 
+  | Stephanie A. Servoss
+  br
+  | Clerk of the Court
