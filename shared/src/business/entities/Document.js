@@ -11,12 +11,12 @@ const { Order } = require('./orders/Order');
 const { TrialSession } = require('./trialSessions/TrialSession');
 const { WorkItem } = require('./WorkItem');
 
-Document.PETITION_DOCUMENT_TYPES = ['Petition'];
 Document.CATEGORIES = Object.keys(documentMapExternal);
 Document.CATEGORY_MAP = documentMapExternal;
+Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
-Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
+Document.PETITION_DOCUMENT_TYPES = ['Petition'];
 
 Document.validationName = 'Document';
 
