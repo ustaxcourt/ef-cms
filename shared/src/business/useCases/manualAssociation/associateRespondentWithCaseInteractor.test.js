@@ -1,7 +1,9 @@
 const {
   associateRespondentWithCaseInteractor,
 } = require('./associateRespondentWithCaseInteractor');
-const { constants } = require('../../utilities/setServiceIndicatorsForCase');
+const {
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/cases/CaseConstants');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { User } = require('../../entities/User');
 
@@ -47,7 +49,7 @@ describe('associateRespondentWithCaseInteractor', () => {
       await associateRespondentWithCaseInteractor({
         applicationContext,
         caseId: caseRecord.caseId,
-        serviceIndicator: constants.SI_ELECTRONIC,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (err) {
@@ -84,7 +86,7 @@ describe('associateRespondentWithCaseInteractor', () => {
     await associateRespondentWithCaseInteractor({
       applicationContext,
       caseId: caseRecord.caseId,
-      serviceIndicator: constants.SI_ELECTRONIC,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 

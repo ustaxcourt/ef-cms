@@ -1,8 +1,8 @@
 const isCaseRecord = item => !!item.caseType; // only case records have a caseType defined
 
 const {
-  constants,
-} = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
+  SERVICE_INDICATOR_TYPES,
+} = require('../../shared/src/business/entities/cases/CaseConstants');
 
 const { forAllRecords } = require('./00004-service-indicator');
 
@@ -12,7 +12,7 @@ const up = async (documentClient, tableName) => {
 
     item.respondents.forEach(respondent => {
       if (!respondent.serviceIndicator) {
-        respondent.serviceIndicator = constants.SI_ELECTRONIC;
+        respondent.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
       }
     });
 
