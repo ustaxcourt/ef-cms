@@ -21,12 +21,8 @@ AWS.config.region = 'us-east-1';
 
   for (let i = 0; i < NUM_CASES; i++) {
     try {
-      console.log('Creating Case');
       const caseEntity = await createCase();
-      const { caseId, docketNumber } = caseEntity;
-      console.log(
-        `Adding Case ${caseId} [${docketNumber}] to Trial Session ${trialSessionId}`,
-      );
+      const { caseId } = caseEntity;
       await addCaseToTrialSession({
         caseId,
         trialSessionId,

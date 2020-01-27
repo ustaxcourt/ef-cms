@@ -1,4 +1,5 @@
 const createApplicationContext = require('../../../src/applicationContext');
+const faker = require('faker');
 
 const createTrialSession = async () => {
   const user = {
@@ -10,15 +11,46 @@ const createTrialSession = async () => {
 
   const applicationContext = createApplicationContext(user);
 
+  const { TrialSession } = applicationContext.getEntityConstructors();
+
+  const sessionType = faker.random.arrayElement(TrialSession.SESSION_TYPES);
+  const startDate = faker.date.future(1);
+  const startDateObj = new Date(startDate);
+  let selectedMonth = startDate.getMonth() + 1;
+
+  while (selectedMonth !== 7) {
+    selectedMonth = startDate.getMonth() + 7;
+  }
+
+  const termsByMonth = {
+    fall: [9, 10, 11, 12],
+    spring: [4, 5, 6],
+    winter: [1, 2, 3],
+  };
+
+  let term = '';
+
+  if (termsByMonth.winter.includes(selectedMonth)) {
+    term = 'Winter';
+  } else if (termsByMonth.spring.includes(selectedMonth)) {
+    term = 'Spring';
+  } else if (termsByMonth.fall.includes(selectedMonth)) {
+    term = 'Fall';
+  }
+
+  let trialLocation = faker.random.arrayElement(
+    TrialSession.TRIAL_CITY_STRINGS,
+  );
+
   return await applicationContext.getUseCases().createTrialSessionInteractor({
     applicationContext,
     trialSession: {
       maxCases: 100,
-      sessionType: 'Regular',
-      startDate: '2025-03-01T00:00:00.000Z',
-      term: 'Fall',
-      termYear: '2025',
-      trialLocation: 'Birmingham, Alabama',
+      sessionType,
+      startDate,
+      term,
+      termYear: `${startDateObj.getFullYear}`,
+      trialLocation,
     },
   });
 };
