@@ -219,6 +219,7 @@
     "respondents": [
       {
         "role": "respondent",
+        "serviceIndicator": "Electronic",
         "barNumber": "RT6789",
         "contact": {
           "address3": "Under the stairs",

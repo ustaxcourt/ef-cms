@@ -19,10 +19,12 @@ describe('aggregatePartiesForService', () => {
     {
       email: 'respondentone@example.com',
       name: 'Respondent One',
+      serviceIndicator: 'Electronic',
     },
     {
       email: 'respondenttwo@example.com',
       name: 'Respondent Two',
+      serviceIndicator: 'Electronic',
     },
   ];
 
@@ -30,11 +32,13 @@ describe('aggregatePartiesForService', () => {
     {
       email: 'practitionerone@example.com',
       name: 'Practitioner One',
+      serviceIndicator: 'Electronic',
       userId: 'p1',
     },
     {
       email: 'practitionertwo@example.com',
       name: 'Practitioner Two',
+      serviceIndicator: 'Electronic',
       userId: 'p2',
     },
   ];
