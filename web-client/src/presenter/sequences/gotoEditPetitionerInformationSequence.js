@@ -2,11 +2,11 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setupPetitionerInformationFormAction } from '../actions/setupPetitionerInformationFormAction';
-import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditPetitionerInformationSequence = [
   setCurrentPageAction('Interstitial'),
-  startShowValidationAction,
+  stopShowValidationAction,
   getCaseAction,
   setCaseAction,
   setupPetitionerInformationFormAction,
