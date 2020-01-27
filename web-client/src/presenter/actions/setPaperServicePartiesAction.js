@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  */
 export const setPaperServicePartiesAction = ({ props, store }) => {
   if (
-    props.paperServicePdfUrl &&
+    props.pdfUrl &&
     props.paperServiceParties &&
     props.paperServiceParties.length > 0
   ) {
