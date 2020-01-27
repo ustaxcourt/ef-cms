@@ -64,8 +64,6 @@ export const FilingsAndProceedings = connect(
       );
     };
 
-    console.log('entry', entry);
-
     return (
       <>
         {entry.showLinkToDocument && renderDocumentLink()}
