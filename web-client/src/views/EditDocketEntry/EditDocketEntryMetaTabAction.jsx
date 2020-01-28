@@ -19,7 +19,7 @@ export const EditDocketEntryMetaTabAction = connect(
     return (
       <div className="blue-container">
         <FormGroup errorText={validationErrors && validationErrors.action}>
-          <label className="usa-label" htmlFor="filedBy" id="action-label">
+          <label className="usa-label" htmlFor="action" id="action-label">
             Action
           </label>
           <input
