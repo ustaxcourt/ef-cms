@@ -37,8 +37,8 @@ const generateStandingPretrialNoticeTemplate = async ({
 
   let respondentContactText = 'not available at this time';
   if (trialInfo.respondents && trialInfo.respondents.length) {
-    const fristRespondent = trialInfo.respondents[0];
-    respondentContactText = `${fristRespondent.name} (${fristRespondent.contact.phone})`;
+    const firstRespondent = trialInfo.respondents[0];
+    respondentContactText = `${firstRespondent.name} (${firstRespondent.contact.phone})`;
   }
   trialInfo.respondentContactText = respondentContactText;
 
