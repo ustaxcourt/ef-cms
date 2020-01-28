@@ -33,7 +33,7 @@ export const validateEditPractitionersAction = ({
       });
 
     const oldPractitioner = oldPractitioners.find(
-      oldPractitioner => oldPractitioner.userId === practitioner.userId,
+      foundPractitioner => foundPractitioner.userId === practitioner.userId,
     );
     if (
       ['Paper', 'None'].includes(oldPractitioner.serviceIndicator) &&
