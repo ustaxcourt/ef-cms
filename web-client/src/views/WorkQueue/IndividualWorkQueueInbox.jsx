@@ -1,5 +1,5 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -52,8 +52,7 @@ export const IndividualWorkQueueInbox = connect(
                   </td>
                   <td className="message-queue-row has-icon padding-right-0">
                     {item.showBatchedStatusIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="false"
+                      <Icon
                         aria-label="batched for IRS"
                         className="iconStatusBatched"
                         icon={['far', 'clock']}
@@ -61,8 +60,7 @@ export const IndividualWorkQueueInbox = connect(
                       />
                     )}
                     {item.showRecalledStatusIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="false"
+                      <Icon
                         aria-label="recalled from IRS"
                         className="iconStatusRecalled"
                         icon={['far', 'clock']}
@@ -70,8 +68,7 @@ export const IndividualWorkQueueInbox = connect(
                       />
                     )}
                     {item.showUnreadStatusIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="false"
+                      <Icon
                         aria-label="unread message"
                         className="iconStatusUnread"
                         icon={['fas', 'envelope']}
@@ -79,8 +76,7 @@ export const IndividualWorkQueueInbox = connect(
                       />
                     )}
                     {item.showHighPriorityIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="false"
+                      <Icon
                         aria-label="high priority"
                         className="iconHighPriority"
                         icon={['fas', 'exclamation-circle']}

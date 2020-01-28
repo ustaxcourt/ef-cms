@@ -1,9 +1,5 @@
-const constants = {
-  SI_ELECTRONIC: 'Electronic',
-  SI_NONE: 'None',
-  SI_PAPER: 'Paper',
-};
 const { isEmpty } = require('lodash');
+const { SERVICE_INDICATOR_TYPES } = require('../entities/cases/CaseConstants');
 
 /**
  * sets the service indicators for parties on the given case
@@ -38,25 +34,24 @@ const setServiceIndicatorsForCase = caseDetail => {
   // contactPrimary
   if (contactPrimary && !contactPrimary.serviceIndicator) {
     if (hasPrimaryPractitioner) {
-      contactPrimary.serviceIndicator = constants.SI_NONE;
+      contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
     } else {
       contactPrimary.serviceIndicator = isPaper
-        ? constants.SI_PAPER
-        : constants.SI_ELECTRONIC;
+        ? SERVICE_INDICATOR_TYPES.SI_PAPER
+        : SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
     }
   }
 
   // contactSecondary
   if (!isEmpty(contactSecondary) && !contactSecondary.serviceIndicator) {
     contactSecondary.serviceIndicator = hasSecondaryPractitioner
-      ? constants.SI_NONE
-      : constants.SI_PAPER;
+      ? SERVICE_INDICATOR_TYPES.SI_NONE
+      : SERVICE_INDICATOR_TYPES.SI_PAPER;
   }
 
   return caseDetail;
 };
 
 module.exports = {
-  constants,
   setServiceIndicatorsForCase,
 };

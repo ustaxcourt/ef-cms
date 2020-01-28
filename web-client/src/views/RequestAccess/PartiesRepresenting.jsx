@@ -48,7 +48,10 @@ export const PartiesRepresenting = connect(
                     validateCaseAssociationRequestSequence();
                   }}
                 />
-                <label className="usa-checkbox__label" htmlFor="party-primary">
+                <label
+                  className="usa-checkbox__label inline-block"
+                  htmlFor="party-primary"
+                >
                   {formattedCaseDetail.contactPrimary.name}, Petitioner
                 </label>
               </div>
@@ -70,7 +73,7 @@ export const PartiesRepresenting = connect(
                     }}
                   />
                   <label
-                    className="usa-checkbox__label"
+                    className="usa-checkbox__label inline-block"
                     htmlFor="party-secondary"
                   >
                     {formattedCaseDetail.contactSecondary.name}, Petitioner
