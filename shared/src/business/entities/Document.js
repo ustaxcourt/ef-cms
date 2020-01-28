@@ -244,6 +244,7 @@ Document.eventCodes = [
   'MISL',
   'FEE',
   'FEEW',
+  'MGRTED',
 ];
 
 /**
