@@ -35,13 +35,14 @@ exports.generateStandingPretrialNoticeInteractor = async ({
     courthouseName,
     postalCode,
     startDate,
+    judge,
     startTime,
     state,
   } = trialSession;
 
   // TODO - GET Respondent contact
 
-  const { caseCaption, docketNumberSuffix } = caseDetail;
+  const { caseCaption, docketNumberSuffix, respondents } = caseDetail;
 
   const contentHtml = await applicationContext
     .getTemplateGenerators()
@@ -54,8 +55,10 @@ exports.generateStandingPretrialNoticeInteractor = async ({
           address1,
           address2,
           city,
+          judge,
           courthouseName,
           postalCode,
+          respondents,
           startDate,
           startTime,
           state,

@@ -46,11 +46,11 @@ h1(style='margin-bottom:39px') STANDING PRETRIAL NOTICE
 
 +case-info-box
 
-ul.notice-notes(style='margin-bottom:250px')
+ul.notice-notes(style='margin-bottom:225px')
   li 
     b WHAT TO DO NOW
     ul
-      li Call respondent’s counsel (the IRS lawyer) as soon as possible.  Their name and phone number is [INSERT AT TIME OF PRINTING].
+      li Call respondent’s counsel (the IRS lawyer) as soon as possible.  Their name and phone number is #{trialInfo.respondentContactText}.
         ul
           li Tell them if English is not your first language.
           li Send them copies of documents that you think help your case.
@@ -61,7 +61,7 @@ h3.text-center.text-bold(style='page-break-after:always') Served #{footerDate}
 
 +case-info-box
 
-ul.notice-notes(style='margin-bottom:200px')
+ul.notice-notes(style='margin-bottom:100px')
   li 
     b WHAT TO DO BEFORE TRIAL
     ul
@@ -69,14 +69,14 @@ ul.notice-notes(style='margin-bottom:200px')
       li For documents you cannot agree on, bring 3 copies to trial.  A photocopier may not be available at the courthouse. Only documents presented at trial will be part of the case record. The Tax Court is not part of the IRS. If you gave something to the IRS before, bring a copy with you!
       li Consider filing a “pretrial memorandum” because it is helpful to the Judge.  A form you can use is attached.
       li You can send an update to the Court a week in advance if you need to by filing a Final Status Report, available at https://www.ustaxcourt.gov/FinalStatusReport/.
-      li Your case may not be tried on [DAY], [DATE] because trial sessions can last more than one day. If you have witnesses that can only be there on [DAY], please put that in your pretrial memorandum or Final Status Report.  
-  li 
+      li Your case may not be tried on #{trialInfo.fullStartDate} because trial sessions can last more than one day. If you have witnesses that can only be there on #{trialInfo.startDay}, please put that in your pretrial memorandum or Final Status Report.  
+  li(style='margin-top:30px')
     b WHAT TO DO THE DAY OF THE TRIAL SESSION
     ul
       li Arrive 1 hour early because you will have to go through security. Bring a government-issued photo ID.
       li Don’t forget copies of your documents.
       li Be prepared for trial.  Cases will not be continued (postponed) other than in unusual situations.
-  li Find out more at 
+  li(style='margin-top:30px') Find out more at 
     a(href="http://www.ustaxcourt.gov") www.ustaxcourt.gov 
     | or call 202-521-0700.
     
