@@ -2,7 +2,7 @@
 ENV=$1
 REGION="us-east-1"
 
-CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-${ENV}" --key '{"pk":{"S":"deployed-stack"},"sk":{"S":"deployed-stack"}}' | jq -r ".Item.current.S")
+CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-blue-green" --key '{"pk":{"S":"deployed-stack"},"sk":{"S":"${ENV}"}}' | jq -r ".Item.current.S")
 
 restApiId=$(aws apigateway get-rest-apis --region="${REGION}" --query "items[?name=='${ENV}-ef-cms-users-${CURRENT_COLOR}'].id" --output text)
 

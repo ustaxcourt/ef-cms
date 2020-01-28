@@ -186,6 +186,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     });
 
     noticeOfTrialDocument.setAsServed(servedParties.all);
+    standingPretrialDocument.setAsServed(servedParties.all);
 
     const rawCase = caseEntity.validate().toRawObject();
     await applicationContext.getPersistenceGateway().updateCase({
