@@ -2,6 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { getAllEventCodes } = require('../../utilities/getAllEventCodes');
 
 /**
  * DocketRecord constructor
@@ -56,8 +57,10 @@ joiValidationDecorator(
       .allow(null)
       .optional()
       .description('JSON representation of the in-progress edit of this item.'),
-    // TODO: Gather all event codes for validation
-    eventCode: joi.string().required(),
+    eventCode: joi
+      .string()
+      .valid(...getAllEventCodes())
+      .required(),
     filedBy: joi
       .string()
       .optional()
