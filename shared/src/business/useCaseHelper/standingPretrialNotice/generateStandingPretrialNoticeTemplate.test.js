@@ -24,9 +24,9 @@ describe('generateStandingPretrialNoticeTemplate', () => {
         trialInfo: {
           address1: 'Address 1',
           address2: 'Address 2',
-          judge: { name: 'Test Judge' },
           city: 'City',
           courthouseName: 'Courthouse Name',
+          judge: { name: 'Test Judge' },
           postalCode: '12345',
           startDate: '2020-02-02T05:00:00.000Z',
           startTime: '10:00',
