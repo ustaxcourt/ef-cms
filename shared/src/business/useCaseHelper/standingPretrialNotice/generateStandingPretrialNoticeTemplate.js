@@ -28,11 +28,19 @@ const generateStandingPretrialNoticeTemplate = async ({
   const footerDate = formatNow('MMDDYYYY');
   const trialStartTimeIso = createISODateString(trialInfo.startTime, 'HH:mm');
   trialInfo.startTime = formatDateString(trialStartTimeIso, 'hh:mm A');
+  trialInfo.startDay = formatDateString(trialInfo.startDate, 'dddd');
   trialInfo.fullStartDate = formatDateString(
     trialInfo.startDate,
     'dddd, MMMM D, YYYY',
   );
   trialInfo.startDate = formatDateString(trialInfo.startDate, 'MMDDYYYY');
+
+  let respondentContactText = 'not available at this time';
+  if (trialInfo.respondents && trialInfo.respondents.length) {
+    const fristRespondent = trialInfo.respondents[0];
+    respondentContactText = `${fristRespondent.name} (${fristRespondent.contact.phone})`;
+  }
+  trialInfo.respondentContactText = respondentContactText;
 
   const compiledFunction = pug.compile(template);
   const main = compiledFunction({
