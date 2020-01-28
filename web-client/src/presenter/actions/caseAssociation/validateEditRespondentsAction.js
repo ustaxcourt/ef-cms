@@ -20,7 +20,7 @@ export const validateEditRespondentsAction = ({ get, path }) => {
   respondents.forEach(respondent => {
     const error = {};
     const oldRespondent = oldRespondents.find(
-      oldRespondent => oldRespondent.userId === respondent.userId,
+      foundRespondent => foundRespondent.userId === respondent.userId,
     );
     if (
       ['Paper', 'None'].includes(oldRespondent.serviceIndicator) &&
