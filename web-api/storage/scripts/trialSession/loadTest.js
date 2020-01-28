@@ -71,12 +71,22 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
 
   console.log('trial session', trialSessionId);
 
+  let petitionFileId;
+  let stinFileId;
+
   for (let i = 0; i < +process.env.SIZE; i++) {
+    console.log(
+      `Adding case #${i + 1} to Trial Session ID: ${trialSessionId}.`,
+    );
     try {
-      const caseEntity = await createCase({
+      const { caseDetail, ...caseResult } = await createCase({
         applicationContext: createApplicationContext(petitionerUser),
+        petitionFileId,
+        stinFileId,
       });
-      const { caseId } = caseEntity;
+      ({ petitionFileId, stinFileId } = caseResult);
+
+      const { caseId } = caseDetail;
       await addCaseToTrialSession({
         applicationContext: createApplicationContext(docketClerkUser),
         caseId,
@@ -86,4 +96,6 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
       console.log('err', e);
     }
   }
+
+  console.log(`Completed adding cases to Trial Session ID: ${trialSessionId}.`);
 })();
