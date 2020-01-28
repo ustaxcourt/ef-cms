@@ -1,4 +1,7 @@
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { EditDocketEntryMetaFormCourtIssued } from './EditDocketEntryMetaFormDocument';
+import { EditDocketEntryMetaFormDocument } from './EditDocketEntryMetaFormDocument';
+import { EditDocketEntryMetaFormNoDocument } from './EditDocketEntryMetaFormNoDocument';
 import { EditDocketEntryMetaTabAction } from './EditDocketEntryMetaTabAction';
 import { EditDocketEntryMetaTabService } from './EditDocketEntryMetaTabService';
 import { ErrorNotification } from '../ErrorNotification';
@@ -29,9 +32,14 @@ export const EditDocketEntryMeta = connect(
                   tabName="documentInfo"
                   title="Document Info"
                 >
-                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent && (
-                    <editDocketEntryMetaHelper.docketEntryMetaFormComponent />
-                  )}
+                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
+                    'CourtIssued' && <EditDocketEntryMetaFormCourtIssued />}
+
+                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
+                    'Document' && <EditDocketEntryMetaFormDocument />}
+
+                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
+                    'NoDocument' && <EditDocketEntryMetaFormNoDocument />}
                 </Tab>
                 <Tab id="tab-service" tabName="service" title="Service">
                   <EditDocketEntryMetaTabService />
