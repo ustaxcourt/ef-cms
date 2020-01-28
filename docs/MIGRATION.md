@@ -8,6 +8,7 @@
 
 Valid Case object example:
 
+```
 {
    "associatedJudge":"Chief Judge",
    "blocked":false,
@@ -1036,3 +1037,4 @@ Valid Case object example:
    
 }
 }
+```
