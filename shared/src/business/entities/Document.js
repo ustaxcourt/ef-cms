@@ -227,6 +227,27 @@ Document.getDocumentTypes = () => {
 
 /**
  *
+ * @returns {Array} event codes defined in the Document entity
+ */
+Document.eventCodes = [
+  Document.INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
+  Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+  Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
+  Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+  Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
+  Document.NOTICE_OF_DOCKET_CHANGE.eventCode,
+  Document.NOTICE_OF_TRIAL.eventCode,
+  Document.NOTICE_OF_TRIAL.eventCode,
+  Document.STANDING_PRETRIAL_NOTICE.eventCode,
+  Document.STANDING_PRETRIAL_ORDER.eventCode,
+  // TODO: Move these constants
+  'MISL',
+  'FEE',
+  'FEEW',
+];
+
+/**
+ *
  * @returns {boolean} true if the document is a petition document type, false otherwise
  */
 Document.prototype.isPetitionDocument = function() {
