@@ -1,25 +1,17 @@
-const createApplicationContext = require('../../../src/applicationContext');
 const faker = require('faker');
 
-const createTrialSession = async () => {
-  const user = {
-    email: 'docketclerk',
-    name: 'Test Docketclerk',
-    role: 'docketclerk',
-    userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-  };
-
-  const applicationContext = createApplicationContext(user);
-
+const createTrialSession = async ({ applicationContext }) => {
   const { TrialSession } = applicationContext.getEntityConstructors();
 
   const sessionType = faker.random.arrayElement(TrialSession.SESSION_TYPES);
-  const startDate = faker.date.future(1);
-  const startDateObj = new Date(startDate);
+  let startDate = faker.date.future(1);
+  let startDateObj = new Date(startDate);
   let selectedMonth = startDate.getMonth() + 1;
 
-  while (selectedMonth !== 7) {
-    selectedMonth = startDate.getMonth() + 7;
+  while (selectedMonth === 7 || selectedMonth === 8) {
+    startDate = faker.date.future(1);
+    startDateObj = new Date(startDate);
+    selectedMonth = startDate.getMonth() + 1;
   }
 
   const termsByMonth = {
@@ -47,24 +39,15 @@ const createTrialSession = async () => {
     trialSession: {
       maxCases: 100,
       sessionType,
-      startDate,
+      startDate: startDate.toISOString(),
       term,
-      termYear: `${startDateObj.getFullYear}`,
+      termYear: `${startDateObj.getFullYear()}`,
       trialLocation,
     },
   });
 };
 
-const createCase = async () => {
-  const user = {
-    email: 'petitioner',
-    name: 'Test Petitioner',
-    role: 'petitioner',
-    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  };
-
-  const applicationContext = createApplicationContext(user);
-
+const createCase = async ({ applicationContext }) => {
   const petitionFile = Buffer.from(
     'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=',
     'base64',
@@ -101,31 +84,43 @@ const createCase = async () => {
     console.log('e', e);
   }
 
+  const {
+    Case,
+    TrialSession,
+    User,
+  } = applicationContext.getEntityConstructors();
+
+  const petitionerName = `${faker.name.firstName()} ${faker.name.lastName()}`;
+
   const caseDetail = await applicationContext
     .getUseCases()
     .createCaseInteractor({
       applicationContext,
       petitionFileId,
       petitionMetadata: {
-        caseCaption: 'Brett Osborne',
-        caseType: 'Whistleblower',
+        caseCaption: petitionerName,
+        caseType: 'CDP (Lien/Levy)',
         contactPrimary: {
-          address1: '68 Fabien Freeway',
-          address2: 'Suscipit animi solu',
-          address3: 'Architecto assumenda',
-          city: 'Aspernatur nostrum s',
+          address1: faker.address.streetAddress(),
+          address2: faker.address.secondaryAddress(),
+          address3: faker.address.streetSuffix(),
+          city: faker.address.city(),
           countryType: 'domestic',
-          email: 'petitioner',
-          name: 'Brett Osborne',
-          phone: '+1 (537) 235-6147',
-          postalCode: '89499',
-          state: 'AS',
+          email: faker.internet.email(),
+          name: petitionerName,
+          phone: faker.phone.phoneNumber(),
+          postalCode: faker.address.zipCode(),
+          state: faker.address.stateAbbr(),
         },
-        filingType: 'Myself',
+        filingType: faker.random.arrayElement(
+          Case.FILING_TYPES[User.ROLES.petitioner],
+        ),
         hasIrsNotice: false,
         partyType: 'Petitioner',
-        preferredTrialCity: 'Birmingham, Alabama',
-        procedureType: 'Regular',
+        preferredTrialCity: faker.random.arrayElement(
+          TrialSession.TRIAL_CITY_STRINGS,
+        ),
+        procedureType: faker.random.arrayElement(Case.PROCEDURE_TYPES),
       },
       stinFileId,
     });
@@ -145,16 +140,11 @@ const createCase = async () => {
   return caseDetail;
 };
 
-const addCaseToTrialSession = async ({ caseId, trialSessionId }) => {
-  const user = {
-    email: 'docketclerk',
-    name: 'Test Docketclerk',
-    role: 'docketclerk',
-    userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-  };
-
-  const applicationContext = createApplicationContext(user);
-
+const addCaseToTrialSession = async ({
+  applicationContext,
+  caseId,
+  trialSessionId,
+}) => {
   return await applicationContext
     .getUseCases()
     .addCaseToTrialSessionInteractor({
@@ -164,4 +154,50 @@ const addCaseToTrialSession = async ({ caseId, trialSessionId }) => {
     });
 };
 
-module.exports = { addCaseToTrialSession, createCase, createTrialSession };
+const getClientId = async ({ cognito, userPoolId }) => {
+  const results = await cognito
+    .listUserPoolClients({
+      MaxResults: 60,
+      UserPoolId: userPoolId,
+    })
+    .promise();
+  const clientId = results.UserPoolClients[0].ClientId;
+  return clientId;
+};
+
+const getUserPoolId = async ({ cognito, env }) => {
+  const results = await cognito
+    .listUserPools({
+      MaxResults: 50,
+    })
+    .promise();
+  const userPoolId = results.UserPools.find(
+    pool => pool.Name === `efcms-${env}`,
+  ).Id;
+  return userPoolId;
+};
+
+const getUserToken = async ({ cognito, env, password, username }) => {
+  const userPoolId = await getUserPoolId({ cognito, env });
+  const clientId = await getClientId({ cognito, userPoolId });
+
+  const response = await cognito
+    .adminInitiateAuth({
+      AuthFlow: 'ADMIN_NO_SRP_AUTH',
+      AuthParameters: {
+        PASSWORD: password,
+        USERNAME: username,
+      },
+      ClientId: clientId,
+      UserPoolId: userPoolId,
+    })
+    .promise();
+  return response.AuthenticationResult.IdToken;
+};
+
+module.exports = {
+  addCaseToTrialSession,
+  createCase,
+  createTrialSession,
+  getUserToken,
+};
