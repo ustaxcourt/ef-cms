@@ -217,8 +217,6 @@ export const getWorkItemDocumentLink = ({
     }
   }
   if (!editLink) {
-    const { USER_ROLES } = applicationContext.getConstants();
-    const user = applicationContext.getCurrentUser();
     const messageId = result.messages[0] && result.messages[0].messageId;
 
     const workItemIdToMarkAsRead = !result.isRead ? result.workItemId : null;
@@ -228,14 +226,7 @@ export const getWorkItemDocumentLink = ({
         ? `/mark/${workItemIdToMarkAsRead}`
         : '';
 
-    if (
-      messageId &&
-      (workQueueIsInternal ||
-        permissions.DOCKET_ENTRY ||
-        (!workQueueIsInternal &&
-          user.role === USER_ROLES.petitionsClerk &&
-          box === 'inbox'))
-    ) {
+    if (messageId && (workQueueIsInternal || permissions.DOCKET_ENTRY)) {
       editLink = `/messages/${messageId}${markReadPath}`;
     } else {
       editLink = `${markReadPath}`;
