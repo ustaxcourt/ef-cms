@@ -3,7 +3,6 @@ const faker = require('faker');
 const createTrialSession = async ({ applicationContext }) => {
   const { TrialSession } = applicationContext.getEntityConstructors();
 
-  const sessionType = faker.random.arrayElement(TrialSession.SESSION_TYPES);
   let startDate = faker.date.future(1);
   let startDateObj = new Date(startDate);
   let selectedMonth = startDate.getMonth() + 1;
@@ -151,10 +150,21 @@ const createCase = async ({
     });
   };
 
-  if (shouldUpload) {
-    for (const document of caseDetail.documents) {
+  let idx = 0;
+  for (const document of caseDetail.documents) {
+    if (shouldUpload) {
       await addCoversheet(document);
     }
+
+    await applicationContext
+      .getPersistenceGateway()
+      .updateDocumentProcessingStatus({
+        applicationContext,
+        caseId: caseDetail.caseId,
+        documentIndex: idx,
+      });
+
+    idx++;
   }
 
   return { caseDetail, petitionFileId, stinFileId };
