@@ -20,6 +20,7 @@ export const Contacts = connect(
     showPrimaryServiceIndicator,
     showSecondaryContact,
     showSecondaryServiceIndicator,
+    validateSequence,
     wrapperClassName,
   }) => {
     return (
@@ -36,13 +37,14 @@ export const Contacts = connect(
               onChange={onChange}
             />
             {showPrimaryServiceIndicator && (
-              <>
+              <div className="margin-bottom-6">
                 <h4 className="margin-top-6">Service Information</h4>
                 <ServiceIndicatorRadios
                   bind="form.contactPrimary"
-                  validationErrors="validationErrors"
+                  validateSequence={validateSequence}
+                  validationErrors="validationErrors.contactPrimary"
                 />
-              </>
+              </div>
             )}
           </>
         )}
@@ -61,7 +63,8 @@ export const Contacts = connect(
                 <h4 className="margin-top-6">Service Information</h4>
                 <ServiceIndicatorRadios
                   bind="form.contactSecondary"
-                  validationErrors="validationErrors"
+                  validateSequence={validateSequence}
+                  validationErrors="validationErrors.contactSecondary"
                 />
               </>
             )}
