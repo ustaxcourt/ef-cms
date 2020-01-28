@@ -245,6 +245,8 @@ Document.eventCodes = [
   'FEE',
   'FEEW',
   'MGRTED',
+  'MIND',
+  'MINC',
 ];
 
 /**

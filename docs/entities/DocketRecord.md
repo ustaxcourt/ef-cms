@@ -220,6 +220,9 @@ JSON representation of the in-progress edit of this item.
  - `M136`
  - `M218`
  - `MEMO`
+ - `MGRTED`
+ - `MINC`
+ - `MIND`
  - `MISC`
  - `MISCL`
  - `MISL`
