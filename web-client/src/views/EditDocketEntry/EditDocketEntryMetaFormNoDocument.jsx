@@ -1,6 +1,6 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { connect } from '@cerebral/react';
+import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
