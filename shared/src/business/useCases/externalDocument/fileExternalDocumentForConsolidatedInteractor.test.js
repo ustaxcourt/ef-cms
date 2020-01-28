@@ -120,7 +120,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         documentMetadata: {
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
-          eventCode: 'M',
+          eventCode: 'MISP',
         },
       });
     } catch (err) {
@@ -141,7 +141,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
-        eventCode: 'M',
+        eventCode: 'MISP',
       },
       leadCaseId: caseId0,
     });
@@ -162,7 +162,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
-        eventCode: 'M',
+        eventCode: 'MISP',
       },
       leadCaseId: caseId0,
     });
@@ -180,7 +180,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
-        eventCode: 'M',
+        eventCode: 'MISP',
       },
       filingPartyNames: ['Guy Fieri', 'Enzo Ferrari'],
       leadCaseId: caseId0,
@@ -195,7 +195,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
-        eventCode: 'M',
+        eventCode: 'MISP',
       },
       leadCaseId: caseId0,
     });
@@ -223,11 +223,11 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
-        eventCode: 'M',
+        eventCode: 'MISP',
         secondaryDocument: {
           documentTitle: 'Redacted',
           documentType: 'Redacted',
-          eventCode: 'R',
+          eventCode: 'REDC',
         },
       },
       leadCaseId: caseId0,
@@ -248,24 +248,24 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
-        eventCode: 'M',
+        eventCode: 'MISP',
         secondaryDocument: {
           documentTitle: 'Redacted',
           documentType: 'Redacted',
-          eventCode: 'R',
+          eventCode: 'REDC',
         },
         secondarySupportingDocuments: [
           {
             documentTitle: 'Redacted',
             documentType: 'Redacted',
-            eventCode: 'R',
+            eventCode: 'REDC',
           },
         ],
         supportingDocuments: [
           {
             documentTitle: 'Redacted',
             documentType: 'Redacted',
-            eventCode: 'R',
+            eventCode: 'REDC',
           },
         ],
       },
