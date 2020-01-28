@@ -48,7 +48,10 @@ export const PartiesFiling = connect(
                     validateExternalDocumentInformationSequence();
                   }}
                 />
-                <label className="usa-checkbox__label" htmlFor="party-primary">
+                <label
+                  className="usa-checkbox__label inline-block"
+                  htmlFor="party-primary"
+                >
                   {formattedCaseDetail.contactPrimary.name}, Petitioner
                 </label>
               </div>
@@ -70,7 +73,7 @@ export const PartiesFiling = connect(
                     }}
                   />
                   <label
-                    className="usa-checkbox__label"
+                    className="usa-checkbox__label inline-block"
                     htmlFor="party-secondary"
                   >
                     {formattedCaseDetail.contactSecondary.name}, Petitioner
@@ -94,7 +97,7 @@ export const PartiesFiling = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label"
+                  className="usa-checkbox__label inline-block"
                   htmlFor="party-respondent"
                 >
                   Respondent

@@ -133,7 +133,10 @@ export const AddPractitionerModal = connect(
                     validateSequence();
                   }}
                 />
-                <label className="usa-checkbox__label" htmlFor="party-primary">
+                <label
+                  className="usa-checkbox__label  inline-block"
+                  htmlFor="party-primary"
+                >
                   {caseDetail.contactPrimary.name}
                 </label>
               </div>
@@ -155,7 +158,7 @@ export const AddPractitionerModal = connect(
                     }}
                   />
                   <label
-                    className="usa-checkbox__label"
+                    className="usa-checkbox__label inline-block"
                     htmlFor="party-secondary"
                   >
                     {caseDetail.contactSecondary.name}

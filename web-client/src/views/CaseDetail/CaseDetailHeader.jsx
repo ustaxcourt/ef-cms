@@ -2,6 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeaderMenu } from './CaseDetailHeaderMenu';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { props, state } from 'cerebral';
@@ -25,7 +26,8 @@ export const CaseDetailHeader = connect(
         {caseDetailHeaderHelper.showSealedCaseBanner && (
           <div className="red-warning-header sealed-banner">
             <div className="grid-container text-bold">
-              <FontAwesomeIcon
+              <Icon
+                aria-label="sealed case"
                 className="margin-right-1 icon-sealed"
                 icon="lock"
                 size="1x"
@@ -41,7 +43,8 @@ export const CaseDetailHeader = connect(
                 <div className="margin-bottom-1">
                   <h1 className="heading-2 captioned" tabIndex="-1">
                     {caseDetailHeaderHelper.showConsolidatedCaseIcon && (
-                      <FontAwesomeIcon
+                      <Icon
+                        aria-label="consolidated case"
                         className="margin-right-1 icon-consolidated"
                         icon="copy"
                         size="1x"
