@@ -17,6 +17,15 @@ const findNoticeOfTrial = caseRecord => {
   );
 };
 
+const findStandingPretrialDocument = caseRecord => {
+  return caseRecord.documents.find(
+    document =>
+      document.documentType ===
+        Document.STANDING_PRETRIAL_NOTICE.documentType ||
+      document.documentType === Document.STANDING_PRETRIAL_ORDER.documentType,
+  );
+};
+
 const fakeData =
   'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
 
@@ -376,5 +385,56 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(generateStandingPretrialNoticeInteractorMock).toHaveBeenCalled();
+  });
+
+  it('Should set the status of the Standing Pretrial Document as served for each case', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
+
+    expect(findStandingPretrialDocument(calendaredCases[0]).status).toEqual(
+      'served',
+    );
+    expect(findStandingPretrialDocument(calendaredCases[1]).status).toEqual(
+      'served',
+    );
+  });
+
+  it('Should set the servedAt field for the Standing Pretrial Document for each case', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
+
+    expect(
+      findStandingPretrialDocument(calendaredCases[0]).servedAt,
+    ).toBeTruthy();
+    expect(
+      findStandingPretrialDocument(calendaredCases[1]).servedAt,
+    ).toBeTruthy();
+  });
+
+  it('Should set the servedParties field for the Standing Pretrial Document for each case', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
+
+    expect(
+      findStandingPretrialDocument(calendaredCases[0]).servedParties.length,
+    ).toBeGreaterThan(0);
+    expect(
+      findStandingPretrialDocument(calendaredCases[1]).servedParties.length,
+    ).toBeGreaterThan(0);
   });
 });
