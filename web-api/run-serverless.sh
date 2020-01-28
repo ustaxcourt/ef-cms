@@ -26,7 +26,7 @@ cp "./dist/${handler}" web-api/src
 export SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploys"
 export SLS_DEBUG="*"
 
-CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-blue-green" --key '{"pk":{"S":"deployed-stack"},"sk":{"S":"${slsStage}"}}' | jq -r ".Item.current.S")
+CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${slsStage}" --key '{"pk":{"S":"deployed-stack"},"sk":{"S":"deployed-stack"}}' | jq -r ".Item.current.S")
 
 echo "current color: ${CURRENT_COLOR}"
 
