@@ -1,5 +1,4 @@
 const { Case } = require('../../entities/cases/Case');
-// const { formatNow } = require('../../utilities/DateHandler');
 
 /**
  * generateStandingPretrialOrderInteractor
