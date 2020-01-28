@@ -353,6 +353,39 @@ jobs:
           name: 'Deploy - Web API - Serverless - Notifications - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-notifications.sh ${ENV} us-west-1"
 
+  switch-env-color:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run:
+          name: Build Docker Image
+          command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../clamav && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
+      - run:
+          name: Setup Env
+          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+      - run:
+          name: 'Deploy - Switch environment color'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./switch-environment-color.sh ${ENV}"
+
+  deploy-ui:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run:
+          name: Build Docker Image
+          command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../clamav && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
+      - run:
+          name: Setup Env
+          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+      - run:
+          name: 'Deploy - Web Client - S3'
+          command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
+      - run:
+          name: 'Deploy - Public Web Client - S3'
+          command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist-public.sh $ENV && aws s3 sync dist-public s3://ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist-public s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
+
   post-deploy:
     machine:
       docker_layer_caching: true
@@ -364,9 +397,6 @@ jobs:
       - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-      - run:
-          name: 'Deploy - Switch environment color'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./switch-environment-color.sh ${ENV}"
       - run:
           name: 'Deploy - Web API - Route53'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./setup-regional-route53.sh ${ENV}"
@@ -394,24 +424,6 @@ jobs:
       - run:
           name: 'Deploy - Cypress Smoke Tests'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "CYPRESS_BASE_URL='https://ui-$ENV.$EFCMS_DOMAIN' ENV=${ENV} npm run cypress:smoketests"
-
-  deploy-ui:
-    machine:
-      docker_layer_caching: true
-    steps:
-      - checkout
-      - run:
-          name: Build Docker Image
-          command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../clamav && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
-      - run:
-          name: Setup Env
-          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-      - run:
-          name: 'Deploy - Web Client - S3'
-          command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
-      - run:
-          name: 'Deploy - Public Web Client - S3'
-          command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist-public.sh $ENV && aws s3 sync dist-public s3://ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist-public s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
 
 workflows:
   version: 2
@@ -446,13 +458,16 @@ workflows:
       - deploy-api-east:
           requires:
             - pre-deploy
-      - post-deploy:
+      - switch-env-color:
           requires:
             - deploy-api-west
             - deploy-api-east
       - deploy-ui:
           requires:
-            - post-deploy
+            - switch-env-color
+      - post-deploy:
+          requires:
+            - deploy-ui
     triggers:
       - schedule:
           cron: '0 12-23 * * 1-5'
@@ -536,7 +551,7 @@ workflows:
                 - test
                 - master
                 - experimental
-      - post-deploy:
+      - switch-env-color:
           requires:
             - deploy-api-west
             - deploy-api-east
@@ -549,7 +564,17 @@ workflows:
                 - experimental
       - deploy-ui:
           requires:
-            - post-deploy
+            - switch-env-color
+          filters:
+            branches:
+              only:
+                - staging
+                - test
+                - master
+                - experimental
+      - post-deploy:
+          requires:
+            - deploy-ui
           filters:
             branches:
               only:
