@@ -40,8 +40,6 @@ exports.generateStandingPretrialNoticeInteractor = async ({
     state,
   } = trialSession;
 
-  // TODO - GET Respondent contact
-
   const { caseCaption, docketNumberSuffix, respondents } = caseDetail;
 
   const contentHtml = await applicationContext
