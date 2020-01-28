@@ -17,6 +17,16 @@ export const validatePetitionerInformationFormAction = ({
 }) => {
   const { contactPrimary, contactSecondary, partyType } = get(state.form);
 
+  const {
+    contactPrimary: oldContactPrimary,
+    contactSecondary: oldContactSecondary,
+  } = get(state.caseDetail);
+
+  const serviceIndicatorError = {
+    serviceIndicator:
+      'You cannot change from paper to electronic service. Select a valid service preference.',
+  };
+
   const errors = applicationContext
     .getUseCases()
     .validatePetitionerInformationFormInteractor({
@@ -25,6 +35,27 @@ export const validatePetitionerInformationFormAction = ({
       contactSecondary,
       partyType,
     });
+
+  if (
+    ['Paper', 'None'].includes(oldContactPrimary.serviceIndicator) &&
+    contactPrimary.serviceIndicator === 'Electronic'
+  ) {
+    errors.contactPrimary = {
+      ...errors.contactPrimary,
+      ...serviceIndicatorError,
+    };
+  }
+
+  if (
+    oldContactSecondary &&
+    ['Paper', 'None'].includes(oldContactSecondary.serviceIndicator) &&
+    contactSecondary.serviceIndicator === 'Electronic'
+  ) {
+    errors.contactSecondary = {
+      ...errors.contactSecondary,
+      ...serviceIndicatorError,
+    };
+  }
 
   if (isEmpty(errors.contactPrimary) && isEmpty(errors.contactSecondary)) {
     return path.success();

@@ -1,5 +1,5 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -29,15 +29,12 @@ export const SectionWorkQueueInbox = connect(
       <React.Fragment>
         {workQueueHelper.showSendToBar && (
           <div className="action-section">
-            <span
-              aria-label="selected work items count"
-              className="assign-work-item-count"
-            >
-              <FontAwesomeIcon icon="check" />
+            <span className="assign-work-item-count">
+              <Icon aria-label="selected work items count" icon="check" />
               {selectedWorkItems.length}
             </span>
             <select
-              aria-label="select a assignee"
+              aria-label="select an assignee"
               className="usa-select"
               id="options"
               name="options"
@@ -139,16 +136,15 @@ export const SectionWorkQueueInbox = connect(
                 {!workQueueHelper.hideIconColumn && (
                   <td className="message-queue-row has-icon padding-right-0">
                     {item.showBatchedStatusIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="true"
+                      <Icon
+                        aria-label="batched for IRS"
                         className="iconStatusBatched"
                         icon={['far', 'clock']}
                         size="lg"
                       />
                     )}
                     {item.showRecalledStatusIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="false"
+                      <Icon
                         aria-label="recalled from IRS"
                         className="iconStatusRecalled"
                         icon={['far', 'clock']}
@@ -156,16 +152,15 @@ export const SectionWorkQueueInbox = connect(
                       />
                     )}
                     {item.showUnassignedIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="true"
+                      <Icon
+                        aria-label="unassigned"
                         className="iconStatusUnassigned"
                         icon={['fas', 'question-circle']}
                         size="lg"
                       />
                     )}
                     {item.showHighPriorityIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="false"
+                      <Icon
                         aria-label="high priority"
                         className="iconHighPriority"
                         icon={['fas', 'exclamation-circle']}

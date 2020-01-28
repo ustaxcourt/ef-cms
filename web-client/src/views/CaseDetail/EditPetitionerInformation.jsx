@@ -92,6 +92,7 @@ export const EditPetitionerInformation = connect(
                   showSecondaryServiceIndicator={
                     editPetitionerInformationHelper.showSecondaryContact
                   }
+                  validateSequence={validatePetitionerInformationFormSequence}
                   wrapperClassName="contact-wrapper"
                   onBlur="validatePetitionerInformationFormSequence"
                   onChange="updateFormValueSequence"

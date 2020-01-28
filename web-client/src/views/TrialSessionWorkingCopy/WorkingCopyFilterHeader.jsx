@@ -51,7 +51,7 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label"
+                  className="usa-checkbox__label inline-block"
                   htmlFor="filters.showAll"
                 >
                   Show All
@@ -79,7 +79,7 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label"
+                  className="usa-checkbox__label inline-block"
                   htmlFor="filters.setForTrial"
                 >
                   Set for Trial
@@ -105,7 +105,7 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label"
+                  className="usa-checkbox__label inline-block"
                   htmlFor="filters.dismissed"
                 >
                   Dismissed
@@ -133,7 +133,7 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label"
+                  className="usa-checkbox__label inline-block"
                   htmlFor="filters.continued"
                 >
                   Continued
@@ -159,7 +159,7 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label"
+                  className="usa-checkbox__label inline-block"
                   htmlFor="filters.rule122"
                 >
                   Rule 122
@@ -187,7 +187,7 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label"
+                  className="usa-checkbox__label inline-block"
                   htmlFor="filters.aBasisReached"
                 >
                   A Basis Reached
@@ -213,7 +213,7 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label"
+                  className="usa-checkbox__label inline-block"
                   htmlFor="filters.settled"
                 >
                   Settled
@@ -240,7 +240,10 @@ export const WorkingCopyFilterHeader = connect(
                     });
                   }}
                 />
-                <label className="usa-checkbox__label" htmlFor="filters.recall">
+                <label
+                  className="usa-checkbox__label inline-block"
+                  htmlFor="filters.recall"
+                >
                   Recall
                 </label>
               </div>
@@ -264,7 +267,7 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label"
+                  className="usa-checkbox__label inline-block"
                   htmlFor="filters.takenUnderAdvisement"
                 >
                   Taken Under Advisement
@@ -292,7 +295,7 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label"
+                  className="usa-checkbox__label inline-block"
                   htmlFor="filters.statusUnassigned"
                 >
                   Status unassigned
