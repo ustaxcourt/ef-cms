@@ -165,6 +165,19 @@ const router = {
     );
 
     route(
+      '/case-detail/*/docket-entry/*/edit-meta',
+      ifHasAccess((docketNumber, docketRecordIndex) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Edit Docket Entry Meta`,
+        );
+        app.getSequence('gotoEditDocketEntryMetaSequence')({
+          docketNumber,
+          docketRecordIndex,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/documents/*/edit-court-issued',
       ifHasAccess((docketNumber, documentId) => {
         setPageTitle(

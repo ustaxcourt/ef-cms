@@ -2,6 +2,7 @@ const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty } = require('lodash');
 const { dateStringsCompared } = require('./DateHandler');
 const { Document } = require('../entities/Document');
+const { IRS_BATCH_SYSTEM_SECTION } = require('../entities/WorkQueue');
 
 const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
@@ -56,7 +57,12 @@ const formatDocument = (applicationContext, document) => {
   result.qcWorkItemsUntouched =
     !!qcWorkItems.length &&
     qcWorkItems.reduce((acc, wi) => {
-      return acc && !wi.isRead && !wi.completedAt;
+      return (
+        acc &&
+        !wi.isRead &&
+        !wi.completedAt &&
+        wi.section !== IRS_BATCH_SYSTEM_SECTION
+      );
     }, true);
 
   // Served parties code - R = Respondent, P = Petitioner, B = Both
