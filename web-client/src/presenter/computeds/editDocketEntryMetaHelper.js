@@ -1,18 +1,16 @@
 import { state } from 'cerebral';
 
 export const editDocketEntryMetaHelper = (get, applicationContext) => {
-  const { docketRecordEntry, documentDetail } = get(state.form);
+  const { documentId, eventCode } = get(state.form);
   const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();
   const COURT_ISSUED_EVENT_CODES_MAP = COURT_ISSUED_EVENT_CODES.map(
     courtIssuedEvent => courtIssuedEvent.eventCode,
   );
 
-  const hasDocument =
-    docketRecordEntry.documentId && documentDetail && documentDetail.documentId;
+  const hasDocument = !!documentId;
 
   const isCourtIssuedDocument =
-    hasDocument &&
-    COURT_ISSUED_EVENT_CODES_MAP.includes(documentDetail.eventCode);
+    hasDocument && COURT_ISSUED_EVENT_CODES_MAP.includes(eventCode);
 
   let docketEntryMetaFormComponent;
   let validationSequenceName = 'validateDocketRecordSequence';
@@ -25,8 +23,6 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
   } else {
     docketEntryMetaFormComponent = 'Document';
   }
-
-  // TODO: Some logic to determine docketEntryMetaFormComponent value (one of: CourtIssued, Document, or NoDocument)
 
   return {
     docketEntryMetaFormComponent,
