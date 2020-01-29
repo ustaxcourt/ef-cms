@@ -2,6 +2,7 @@ import { state } from 'cerebral';
 
 export const editDocketEntryMetaHelper = (get, applicationContext) => {
   const { documentId, eventCode } = get(state.form);
+
   const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();
   const COURT_ISSUED_EVENT_CODES_MAP = COURT_ISSUED_EVENT_CODES.map(
     courtIssuedEvent => courtIssuedEvent.eventCode,
@@ -13,8 +14,6 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
     hasDocument && COURT_ISSUED_EVENT_CODES_MAP.includes(eventCode);
 
   let docketEntryMetaFormComponent;
-  let validationSequenceName = 'validateDocketRecordSequence';
-  let submitSequenceName;
 
   const caseDetail = get(state.caseDetail);
   const validationErrors = get(state.validationErrors);
@@ -57,7 +56,5 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
     partyValidationError,
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showSecondaryParty,
-    submitSequenceName,
-    validationSequenceName,
   };
 };

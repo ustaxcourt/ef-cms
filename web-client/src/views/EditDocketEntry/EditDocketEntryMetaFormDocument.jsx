@@ -32,12 +32,13 @@ export const EditDocketEntryMetaFormDocument = connect(
     validateDocketRecordSequence,
     validationErrors,
   }) => {
+    console.log('form', form);
     return (
       <div className="blue-container">
         <FormGroup errorText={validationErrors.lodged}>
           <fieldset className="usa-fieldset">
             <legend className="usa-legend">Filing status</legend>
-            {['File', 'Lodge'].map(option => (
+            {['Filed', 'Lodge'].map(option => (
               <div className="usa-radio usa-radio__inline" key={option}>
                 <input
                   checked={form.lodged === (option === 'Lodge')}

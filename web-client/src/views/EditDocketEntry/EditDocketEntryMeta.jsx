@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { EditDocketEntryMetaFormCourtIssued } from './EditDocketEntryMetaFormDocument';
 import { EditDocketEntryMetaFormDocument } from './EditDocketEntryMetaFormDocument';
@@ -7,14 +8,16 @@ import { EditDocketEntryMetaTabService } from './EditDocketEntryMetaTabService';
 import { ErrorNotification } from '../ErrorNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const EditDocketEntryMeta = connect(
   {
+    caseDetail: state.caseDetail,
     editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
+    submitSequence: sequences.submitEditDocketEntryMetaSequence,
   },
-  ({ editDocketEntryMetaHelper }) => {
+  ({ caseDetail, editDocketEntryMetaHelper, submitSequence }) => {
     return (
       <>
         <CaseDetailHeader />
@@ -49,6 +52,20 @@ export const EditDocketEntryMeta = connect(
                   <EditDocketEntryMetaTabAction />
                 </Tab>
               </Tabs>
+
+              <div className="margin-top-3">
+                <Button
+                  onClick={() => {
+                    submitSequence();
+                  }}
+                >
+                  Save
+                </Button>
+
+                <Button link href={`/case-detail/${caseDetail.docketNumber}`}>
+                  Cancel
+                </Button>
+              </div>
             </div>
             <div className="grid-col-7">{/* TODO: File preview */}</div>
           </div>
