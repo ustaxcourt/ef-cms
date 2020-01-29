@@ -8,15 +8,11 @@ export const EditDocketEntryMetaTabService = connect(
   {
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validateDocketRecordSequence: sequences.validateDocketRecordSequence,
     validationErrors: state.modal.validationErrors,
+    validationSequence:
+      sequences[state.editDocketEntryMetaHelper].validationSequenceName,
   },
-  ({
-    form,
-    updateFormValueSequence,
-    validateDocketRecordSequence,
-    validationErrors,
-  }) => {
+  ({ form, updateFormValueSequence, validationErrors, validationSequence }) => {
     return (
       <div className="blue-container">
         <FormGroup errorText={validationErrors && validationErrors.servedDate}>
@@ -42,7 +38,7 @@ export const EditDocketEntryMetaTabService = connect(
                   placeholder="MM"
                   type="number"
                   value={form.servedDateMonth || ''}
-                  onBlur={() => validateDocketRecordSequence()}
+                  onBlur={() => validationSequence()}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -68,7 +64,7 @@ export const EditDocketEntryMetaTabService = connect(
                   placeholder="DD"
                   type="number"
                   value={form.servedDateDat || ''}
-                  onBlur={() => validateDocketRecordSequence()}
+                  onBlur={() => validationSequence()}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -94,7 +90,7 @@ export const EditDocketEntryMetaTabService = connect(
                   placeholder="YYYY"
                   type="number"
                   value={form.servedDateYear || ''}
-                  onBlur={() => validateDocketRecordSequence()}
+                  onBlur={() => validationSequence()}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -128,7 +124,7 @@ export const EditDocketEntryMetaTabService = connect(
                     key: e.target.name,
                     value: e.target.value,
                   });
-                  validateDocketRecordSequence();
+                  validationSequence();
                 }}
               />
               <label
@@ -153,7 +149,7 @@ export const EditDocketEntryMetaTabService = connect(
                     key: e.target.name,
                     value: e.target.value,
                   });
-                  validateDocketRecordSequence();
+                  validationSequence();
                 }}
               />
               <label
@@ -178,7 +174,7 @@ export const EditDocketEntryMetaTabService = connect(
                     key: e.target.name,
                     value: e.target.value,
                   });
-                  validateDocketRecordSequence();
+                  validationSequence();
                 }}
               />
               <label

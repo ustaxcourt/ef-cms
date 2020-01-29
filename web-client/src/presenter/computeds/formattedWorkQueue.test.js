@@ -735,7 +735,7 @@ describe('formatted work queue computed', () => {
       messageId: '9ad0fceb-41be-4902-8294-9f505fb7a353',
     };
 
-    it('should return editLink with a direct link to the message if document is petition and user is petitionsclerk', () => {
+    it('should return editLink as default document detail page if document is petition and user is petitionsclerk viewing a QC box (workQueueIsInternal=false)', () => {
       const permissions = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -760,7 +760,7 @@ describe('formatted work queue computed', () => {
           workQueueIsInternal: false,
         },
       });
-      expect(result).toEqual('/messages/9ad0fceb-41be-4902-8294-9f505fb7a353');
+      expect(result).toEqual('');
     });
 
     it('should return /edit-court-issued if document is court-issued and not served and user is docketclerk', () => {
@@ -791,7 +791,7 @@ describe('formatted work queue computed', () => {
       expect(result).toEqual('/edit-court-issued');
     });
 
-    it('should return editLink with a direct link to the message if document is court-issued and not served and user is petitionsclerk', () => {
+    it('should return editLink as default document detail page if document is court-issued and not served and user is petitionsclerk viewing a QC box (workQueueIsInternal=false)', () => {
       const { permissions } = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -816,7 +816,7 @@ describe('formatted work queue computed', () => {
           workQueueIsInternal: false,
         },
       });
-      expect(result).toEqual('/messages/9ad0fceb-41be-4902-8294-9f505fb7a353');
+      expect(result).toEqual('');
     });
 
     it('should return /complete if document is in progress and user is docketclerk', () => {
@@ -922,7 +922,7 @@ describe('formatted work queue computed', () => {
       expect(result).toEqual('/edit');
     });
 
-    it("should return editLink with a direct link to the message if document is an external doc that has not been qc'd (isQC is true) and user is petitionsClerk", () => {
+    it("should return editLink with a direct link to the message if document is an external doc that has not been qc'd (isQC is true) and user is petitionsClerk and viewing a messages box (workQueueIsInternal=true)", () => {
       const { permissions } = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -949,13 +949,13 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'section',
-          workQueueIsInternal: false,
+          workQueueIsInternal: true,
         },
       });
       expect(result).toEqual('/messages/9ad0fceb-41be-4902-8294-9f505fb7a353');
     });
 
-    it('should return editLink with message id to mark as read if the box is my inbox and user is petitionsClerk', () => {
+    it('should return editLink with message id to mark as read if the box is my inbox and user is petitionsClerk viewing a messages box (workQueueIsInternal=true)', () => {
       const { permissions } = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -982,7 +982,7 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
-          workQueueIsInternal: false,
+          workQueueIsInternal: true,
         },
       });
       expect(result).toEqual(
