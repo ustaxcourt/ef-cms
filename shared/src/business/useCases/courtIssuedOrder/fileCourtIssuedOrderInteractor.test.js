@@ -143,8 +143,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
     expect(
       updateCaseSpy.mock.calls[0][0].caseToUpdate.documents.length,
     ).toEqual(4);
-    expect(
-      updateCaseSpy.mock.calls[0][0].caseToUpdate.documents[3],
-    ).toMatchObject({ freeText: 'Notice to be nice' });
+
+    const result = updateCaseSpy.mock.calls[0][0].caseToUpdate.documents[3];
+
+    expect(result).toMatchObject({ freeText: 'Notice to be nice' });
+    expect(result.signedAt).toBeTruthy();
   });
 });
