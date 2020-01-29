@@ -1,3 +1,5 @@
+import { find } from 'lodash';
+import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { state } from 'cerebral';
 
 export const editDocketEntryMetaHelper = (get, applicationContext) => {
@@ -52,9 +54,21 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
     docketEntryMetaFormComponent = 'Document';
   }
 
+  let categoryInformation;
+  find(
+    INTERNAL_CATEGORY_MAP,
+    entries => (categoryInformation = find(entries, { eventCode: eventCode })),
+  );
+
+  const optionsForCategory = getOptionsForCategory(
+    caseDetail,
+    categoryInformation,
+  );
+
   return {
     docketEntryMetaFormComponent,
     partyValidationError,
+    primary: optionsForCategory,
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showSecondaryParty,
     submitSequenceName,
