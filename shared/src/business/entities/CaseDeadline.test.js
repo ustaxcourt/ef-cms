@@ -1,3 +1,4 @@
+const { Case } = require('./cases/Case');
 const { CaseDeadline } = require('./CaseDeadline');
 
 const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
@@ -56,6 +57,36 @@ You ain't been up off that porch, now`,
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({
         description: VALIDATION_ERROR_MESSAGES.description[0].message,
       });
+    });
+
+    it('should use associated judge if one is provided', () => {
+      const mockJudgeName = 'Dumbledore';
+      const caseDeadlineWithJudge = new CaseDeadline(
+        {
+          associatedJudge: mockJudgeName,
+          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          deadlineDate: '2019-03-01T21:42:29.073Z',
+          description: 'One small step',
+        },
+        { applicationContext },
+      );
+
+      expect(caseDeadlineWithJudge.associatedJudge).toEqual(mockJudgeName);
+    });
+
+    it('should use default judge if one is not provided', () => {
+      const caseDeadlineWithoutJudge = new CaseDeadline(
+        {
+          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          deadlineDate: '2019-03-01T21:42:29.073Z',
+          description: 'One small step',
+        },
+        { applicationContext },
+      );
+
+      expect(caseDeadlineWithoutJudge.associatedJudge).toEqual(
+        Case.CHIEF_JUDGE,
+      );
     });
   });
 });
