@@ -53,26 +53,6 @@ describe('editDocketEntryMetaHelper', () => {
     });
   });
 
-  describe('submitSequenceName', () => {});
-
-  describe('validationSequenceName', () => {
-    it('Should return validateDocketRecordSequence', () => {
-      const result = runCompute(editDocketEntryMetaHelper, {
-        state: {
-          caseDetail: {
-            partyType: 'Petitioner',
-          },
-          form: {
-            documentId: '123',
-          },
-        },
-      });
-      expect(result.validationSequenceName).toEqual(
-        'validateDocketRecordSequence',
-      );
-    });
-  });
-
   describe('showObjection', () => {
     it('should show objection field if the documentType allows (e.g. Motions)', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
