@@ -191,7 +191,7 @@ describe('completeDocketEntryQCInteractor', () => {
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Document Title',
           documentType: 'Memorandum in Support',
-          eventCode: 'M',
+          eventCode: 'MISP',
         },
       });
     } catch (err) {
@@ -227,7 +227,7 @@ describe('completeDocketEntryQCInteractor', () => {
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Something Else',
           documentType: 'Memorandum in Support',
-          eventCode: 'M',
+          eventCode: 'MISP',
         },
       });
     } catch (err) {
@@ -253,7 +253,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
-        eventCode: 'M',
+        eventCode: 'MISP',
       },
     });
     expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
@@ -271,7 +271,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
-        eventCode: 'M',
+        eventCode: 'MISP',
       },
     });
     expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
@@ -319,7 +319,7 @@ describe('completeDocketEntryQCInteractor', () => {
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Something Else',
           documentType: 'Memorandum in Support',
-          eventCode: 'M',
+          eventCode: 'MISP',
         },
       });
     } catch (err) {
@@ -358,7 +358,7 @@ describe('completeDocketEntryQCInteractor', () => {
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Notice of Change of Address',
           documentType: 'Notice of Change of Address',
-          eventCode: 'M',
+          eventCode: 'MISP',
         },
       });
     } catch (err) {

@@ -6,6 +6,7 @@ export default test => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
+
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
     expect(test.getState('caseDetail.status')).toEqual(Case.STATUS_TYPES.new);
 

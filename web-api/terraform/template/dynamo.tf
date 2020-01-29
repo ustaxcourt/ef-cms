@@ -103,9 +103,9 @@ resource "aws_dynamodb_table" "efcms-west" {
   }
 }
 
-resource "aws_dynamodb_table" "efcms-blue-green" {
+resource "aws_dynamodb_table" "efcms-deploy-${var.environment}" {
   provider       = "aws.us-east-1"
-  name           = "efcms-blue-green"
+  name           = "efcms-deploy-${var.environment}"
   billing_mode = "PAY_PER_REQUEST"
 
   hash_key = "pk"
@@ -126,7 +126,7 @@ resource "aws_dynamodb_table" "efcms-blue-green" {
   }
 
   tags {
-    Name        = "efcms-blue-green"
+    Name        = "efcms-deploy-${var.environment}"
     Environment = "${var.environment}"
   }
 }

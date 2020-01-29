@@ -401,6 +401,8 @@ Otherwise, this field is `any` and is `optional`.
  - `Stipulated Decision`
  - `Notice of Docket Change`
  - `Notice of Trial`
+ - `Standing Pretrial Order`
+ - `Standing Pretrial Notice`
 
 ### draftState
 
@@ -543,6 +545,8 @@ Otherwise, this field is `any` and is `optional`.
 ### status
 
 > `string` | optional
+
+##### Can be served.
 
 ### supportingDocument
 
