@@ -1,4 +1,5 @@
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { EditDocketEntryMetaDocketEntryPreview } from './EditDocketEntryMetaDocketEntryPreview';
 import { EditDocketEntryMetaFormCourtIssued } from './EditDocketEntryMetaFormDocument';
 import { EditDocketEntryMetaFormDocument } from './EditDocketEntryMetaFormDocument';
 import { EditDocketEntryMetaFormNoDocument } from './EditDocketEntryMetaFormNoDocument';
@@ -12,11 +13,9 @@ import React from 'react';
 
 export const EditDocketEntryMeta = connect(
   {
-    addCourtIssuedDocketEntryHelper: state.addCourtIssuedDocketEntryHelper,
     editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
-    form: state.form,
   },
-  ({ addCourtIssuedDocketEntryHelper, editDocketEntryMetaHelper, form }) => {
+  ({ editDocketEntryMetaHelper }) => {
     return (
       <>
         <CaseDetailHeader />
@@ -31,17 +30,7 @@ export const EditDocketEntryMeta = connect(
               <div className="display-flex flex-row flex-justify flex-align-center">
                 <div className="margin-top-1 margin-bottom-1 docket-entry-preview-text">
                   <span className="text-bold">Docket Entry Preview: </span>
-                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
-                    'CourtIssued' &&
-                    form &&
-                    form.documentTitle}
-                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
-                    'Document' &&
-                    addCourtIssuedDocketEntryHelper.formattedDocumentTitle}
-                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
-                    'NoDocument' &&
-                    form &&
-                    form.description}
+                  <EditDocketEntryMetaDocketEntryPreview />
                 </div>
               </div>
             </div>
