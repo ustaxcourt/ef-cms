@@ -89,7 +89,7 @@ describe('editDocketEntryMetaHelper', () => {
       expect(result.showObjection).toBeTruthy();
     });
 
-    it('should show objection field if the documentType is not a Motion', () => {
+    it('should not show objection field if the documentType is not a Motion', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
