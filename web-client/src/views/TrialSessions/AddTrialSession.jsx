@@ -35,6 +35,10 @@ export const AddTrialSession = connect(
             aria-labelledby="start-case-header"
             className="usa-form maxw-none"
             role="form"
+            onSubmit={e => {
+              e.preventDefault();
+              submitTrialSessionSequence();
+            }}
           >
             {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog onCancelSequence="closeModalAndReturnToTrialSessionsSequence" />
@@ -72,14 +76,7 @@ export const AddTrialSession = connect(
               </div>
             </div>
 
-            <Button
-              type="button"
-              onClick={() => {
-                submitTrialSessionSequence();
-              }}
-            >
-              Add Session
-            </Button>
+            <Button type="submit">Add Session</Button>
             <Button
               link
               type="button"
