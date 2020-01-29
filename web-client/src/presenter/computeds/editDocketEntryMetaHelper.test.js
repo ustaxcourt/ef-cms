@@ -17,13 +17,8 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           form: {
-            docketRecordEntry: {
-              documentId: '123',
-            },
-            documentDetail: {
-              documentId: '123',
-              eventCode: Document.COURT_ISSUED_EVENT_CODES[0].eventCode,
-            },
+            documentId: '123',
+            eventCode: Document.COURT_ISSUED_EVENT_CODES[0].eventCode,
           },
         },
       });
@@ -33,12 +28,7 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           form: {
-            docketRecordEntry: {
-              documentId: '123',
-            },
-            documentDetail: {
-              documentId: '123',
-            },
+            documentId: '123',
           },
         },
       });
@@ -47,10 +37,7 @@ describe('editDocketEntryMetaHelper', () => {
     it('Should return NoDocument when there is no document', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
-          form: {
-            docketRecordEntry: {},
-            documentDetail: {},
-          },
+          form: {},
         },
       });
       expect(result.docketEntryMetaFormComponent).toEqual('NoDocument');
@@ -63,10 +50,7 @@ describe('editDocketEntryMetaHelper', () => {
     it('Should return validateDocketRecordSequence', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
-          form: {
-            docketRecordEntry: {},
-            documentDetail: {},
-          },
+          form: {},
         },
       });
       expect(result.validationSequenceName).toEqual(
