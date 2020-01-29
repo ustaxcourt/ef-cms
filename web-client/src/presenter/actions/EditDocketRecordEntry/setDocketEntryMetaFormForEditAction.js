@@ -29,4 +29,6 @@ export const setDocketEntryMetaFormForEditAction = ({ get, props, store }) => {
   } else {
     store.set(state.form, docketRecordEntry);
   }
+
+  store.set(state.docketRecordIndex, docketRecordIndex);
 };
