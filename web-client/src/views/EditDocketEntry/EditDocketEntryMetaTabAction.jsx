@@ -9,7 +9,7 @@ export const EditDocketEntryMetaTabAction = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.modal.validationErrors,
     validationSequence:
-      sequences[state.editDocketEntryMetaHelper].validationSequenceName,
+      sequences[state.editDocketEntryMetaHelper.validationSequenceName],
   },
   ({ form, updateFormValueSequence, validationErrors, validationSequence }) => {
     return (
