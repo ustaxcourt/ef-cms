@@ -1,4 +1,5 @@
 import { fileCourtIssuedDocketEntryInteractor } from './fileCourtIssuedDocketEntryInteractor';
+const { Case } = require('../../entities/cases/Case');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { User } = require('../../entities/User');
 
@@ -8,11 +9,13 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   let createSectionInboxRecordMock;
   let applicationContext;
   let caseRecord;
+  let getCaseDeadlinesByCaseIdMock;
 
   beforeEach(() => {
     updateCaseMock = jest.fn(() => caseRecord);
     createUserInboxRecordMock = jest.fn();
     createSectionInboxRecordMock = jest.fn();
+    getCaseDeadlinesByCaseIdMock = jest.fn().mockReturnValue([]);
 
     applicationContext = {
       environment: { stage: 'local' },
@@ -26,6 +29,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         createSectionInboxRecord: createSectionInboxRecordMock,
         createUserInboxRecord: createUserInboxRecordMock,
         getCaseByCaseId: async () => caseRecord,
+        getCaseDeadlinesByCaseId: getCaseDeadlinesByCaseIdMock,
         getUserById: async () => {
           return applicationContext.getCurrentUser();
         },
@@ -80,9 +84,17 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
-          documentTile: 'Order',
+          documentTitle: 'Order',
           documentType: 'Order',
           eventCode: 'O',
+          userId: 'respondent',
+        },
+        {
+          docketNumber: '45678-18',
+          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          documentTitle: 'Order to Show Cause',
+          documentType: 'Order to Show Cause',
+          eventCode: 'OSC',
           userId: 'respondent',
         },
       ],
@@ -125,7 +137,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         applicationContext,
         documentMeta: {
           caseId: caseRecord.caseId,
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           documentType: 'Order',
         },
       });
@@ -159,5 +171,66 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     expect(updateCaseMock).toHaveBeenCalled();
     expect(createUserInboxRecordMock).toHaveBeenCalled();
     expect(createSectionInboxRecordMock).toHaveBeenCalled();
+  });
+
+  it('should call updateCase and set the case as automatic blocked if the document is a tracked document', async () => {
+    applicationContext.getCurrentUser = () => ({
+      name: 'Olivia Jade',
+      role: User.ROLES.docketClerk,
+      section: 'docket',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    await fileCourtIssuedDocketEntryInteractor({
+      applicationContext,
+      documentMeta: {
+        caseId: caseRecord.caseId,
+        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+        documentTitle: 'Order to Show Cause',
+        documentType: 'Order to Show Cause',
+        eventCode: 'OSC',
+        generatedDocumentTitle: 'Generated Order Document Title',
+      },
+    });
+
+    expect(updateCaseMock).toHaveBeenCalled();
+    expect(updateCaseMock.mock.calls[0][0].caseToUpdate).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedDate: expect.anything(),
+      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+    });
+  });
+
+  it('should call updateCase and set the case as automatic blocked with deadlines if the document is a tracked document and the case has deadlines', async () => {
+    getCaseDeadlinesByCaseIdMock = jest.fn().mockReturnValue([
+      {
+        deadlineDate: 'sometime',
+      },
+    ]);
+    applicationContext.getCurrentUser = () => ({
+      name: 'Olivia Jade',
+      role: User.ROLES.docketClerk,
+      section: 'docket',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    await fileCourtIssuedDocketEntryInteractor({
+      applicationContext,
+      documentMeta: {
+        caseId: caseRecord.caseId,
+        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+        documentTitle: 'Order to Show Cause',
+        documentType: 'Order to Show Cause',
+        eventCode: 'OSC',
+        generatedDocumentTitle: 'Generated Order Document Title',
+      },
+    });
+
+    expect(updateCaseMock).toHaveBeenCalled();
+    expect(updateCaseMock.mock.calls[0][0].caseToUpdate).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedDate: expect.anything(),
+      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
+    });
   });
 });

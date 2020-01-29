@@ -189,6 +189,22 @@ exports.fileExternalDocumentInteractor = async ({
     }
   }
 
+  if (caseEntity.doesHavePendingItems()) {
+    const caseDeadlines = await applicationContext
+      .getPersistenceGateway()
+      .getCaseDeadlinesByCaseId({
+        applicationContext,
+        caseId: caseEntity.caseId,
+      });
+
+    const blockedReason =
+      caseDeadlines.length > 0
+        ? Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate
+        : Case.AUTOMATIC_BLOCKED_REASONS.pending;
+
+    caseEntity.setAsAutomaticBlocked(blockedReason);
+  }
+
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
