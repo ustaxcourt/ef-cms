@@ -4,6 +4,7 @@ import { fakeFile, setupTest } from './helpers';
 import docketClerkChecksDocketEntryEditLink from './journey/docketClerkChecksDocketEntryEditLink';
 import docketClerkEditsDocketEntryMeta from './journey/docketClerkEditsDocketEntryMeta';
 import docketClerkLogIn from './journey/docketClerkLogIn';
+import docketClerkNavigatesToEditDocketEntryMeta from './journey/docketClerkNavigatesToEditDocketEntryMeta';
 import docketClerkQCsDocketEntry from './journey/docketClerkQCsDocketEntry';
 import docketClerkSignsOut from './journey/docketClerkSignsOut';
 import docketClerkVerifiesDocketEntryMetaUpdates from './journey/docketClerkVerifiesDocketEntryMetaUpdates';
@@ -34,6 +35,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   docketClerkQCsDocketEntry(test);
   docketClerkChecksDocketEntryEditLink(test, { value: true });
 
+  docketClerkNavigatesToEditDocketEntryMeta(test);
   docketClerkEditsDocketEntryMeta(test);
 
   docketClerkVerifiesDocketEntryMetaUpdates(test);
