@@ -51,7 +51,10 @@ exports.updatePetitionerInformationInteractor = async ({
     });
 
   const secondaryChange =
-    contactSecondary && contactSecondary.name
+    contactSecondary &&
+    contactSecondary.name &&
+    oldCase.contactSecondary &&
+    oldCase.contactSecondary.name
       ? applicationContext.getUtilities().getDocumentTypeForAddressChange({
           newData: contactSecondary,
           oldData: oldCase.contactSecondary || {},
