@@ -2,6 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { Case } = require('./cases/Case');
 const { createISODateString } = require('../utilities/DateHandler');
 
 /**
@@ -20,6 +21,7 @@ function CaseDeadline(rawProps, { applicationContext }) {
   this.createdAt = rawProps.createdAt || createISODateString();
   this.description = rawProps.description;
   this.deadlineDate = rawProps.deadlineDate;
+  this.associatedJudge = rawProps.associatedJudge || Case.CHIEF_JUDGE;
 }
 
 CaseDeadline.VALIDATION_ERROR_MESSAGES = {
@@ -35,6 +37,7 @@ CaseDeadline.VALIDATION_ERROR_MESSAGES = {
 };
 
 CaseDeadline.schema = joi.object().keys({
+  associatedJudge: joi.string().required(),
   caseDeadlineId: joi
     .string()
     .uuid({
