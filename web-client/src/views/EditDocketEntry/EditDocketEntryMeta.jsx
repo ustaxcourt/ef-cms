@@ -12,15 +12,40 @@ import React from 'react';
 
 export const EditDocketEntryMeta = connect(
   {
+    addCourtIssuedDocketEntryHelper: state.addCourtIssuedDocketEntryHelper,
     editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
+    form: state.form,
   },
-  ({ editDocketEntryMetaHelper }) => {
+  ({ addCourtIssuedDocketEntryHelper, editDocketEntryMetaHelper, form }) => {
     return (
       <>
         <CaseDetailHeader />
         <section className="usa-section grid-container">
           <ErrorNotification />
 
+          <div className="grid-row grid-gap">
+            <div className="grid-col-5">
+              <h1 className="margin-bottom-105">Docket Entry</h1>
+            </div>
+            <div className="grid-col-7">
+              <div className="display-flex flex-row flex-justify flex-align-center">
+                <div className="margin-top-1 margin-bottom-1 docket-entry-preview-text">
+                  <span className="text-bold">Docket Entry Preview: </span>
+                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
+                    'CourtIssued' &&
+                    form &&
+                    form.documentTitle}
+                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
+                    'Document' &&
+                    addCourtIssuedDocketEntryHelper.formattedDocumentTitle}
+                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
+                    'NoDocument' &&
+                    form &&
+                    form.description}
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="grid-row grid-gap">
             <div className="grid-col-5 DocumentDetail">
               <Tabs
