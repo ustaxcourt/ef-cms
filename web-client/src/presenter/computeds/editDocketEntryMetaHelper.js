@@ -14,8 +14,6 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
     hasDocument && COURT_ISSUED_EVENT_CODES_MAP.includes(eventCode);
 
   let docketEntryMetaFormComponent;
-  let validationSequenceName = 'validateDocketRecordSequence';
-  let submitSequenceName = 'submitEditDocketEntryMetaSequence';
 
   if (!hasDocument) {
     docketEntryMetaFormComponent = 'NoDocument';
@@ -27,7 +25,5 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
 
   return {
     docketEntryMetaFormComponent,
-    submitSequenceName,
-    validationSequenceName,
   };
 };

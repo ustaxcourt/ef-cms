@@ -9,8 +9,7 @@ export const EditDocketEntryMetaTabService = connect(
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.modal.validationErrors,
-    validationSequence:
-      sequences[state.editDocketEntryMetaHelper.validationSequenceName],
+    validationSequence: sequences.validateDocketRecordSequence,
   },
   ({ form, updateFormValueSequence, validationErrors, validationSequence }) => {
     return (

@@ -15,8 +15,7 @@ export const EditDocketEntryMeta = connect(
   {
     caseDetail: state.caseDetail,
     editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
-    submitSequence:
-      sequences[state.editDocketEntryMetaHelper.submitSequenceName],
+    submitSequence: sequences.submitEditDocketEntryMetaSequence,
   },
   ({ caseDetail, editDocketEntryMetaHelper, submitSequence }) => {
     return (
@@ -54,17 +53,19 @@ export const EditDocketEntryMeta = connect(
                 </Tab>
               </Tabs>
 
-              <Button
-                onClick={() => {
-                  submitSequence();
-                }}
-              >
-                Save
-              </Button>
+              <div className="margin-top-3">
+                <Button
+                  onClick={() => {
+                    submitSequence();
+                  }}
+                >
+                  Save
+                </Button>
 
-              <Button link href={`/case-detail/${caseDetail.docketNumber}`}>
-                Cancel
-              </Button>
+                <Button link href={`/case-detail/${caseDetail.docketNumber}`}>
+                  Cancel
+                </Button>
+              </div>
             </div>
             <div className="grid-col-7">{/* TODO: File preview */}</div>
           </div>
