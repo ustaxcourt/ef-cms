@@ -26,8 +26,8 @@ export const EditDocketEntryMeta = connect(
           <ErrorNotification />
 
           <div className="grid-row grid-gap">
-            <div className="grid-col-5">
-              <h1 className="margin-bottom-105">Docket Entry</h1>
+            <div className="grid-col-5 title">
+              <h1>Docket Entry</h1>
             </div>
             <div className="grid-col-7">
               <div className="display-flex flex-row flex-justify flex-align-center">
