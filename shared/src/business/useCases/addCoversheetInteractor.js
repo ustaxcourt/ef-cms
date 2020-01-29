@@ -2,6 +2,15 @@ const { Case } = require('../entities/cases/Case');
 const { coverLogo } = require('../assets/coverLogo');
 const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 
+/**
+ * a helper function which assembles the correct data to be used in the generation of a PDF
+ *
+ * @param {object} options the providers object
+ * @param {object} options.applicationContext the application context
+ * @param {string} options.caseEntity the case entity associated with the document we are creating the cover for
+ * @param {object} options.documentEntity the document entity we are creating the cover for
+ * @returns {object} the key/value pairs of computed strings
+ */
 exports.generateCoverSheetData = ({
   applicationContext,
   caseEntity,
