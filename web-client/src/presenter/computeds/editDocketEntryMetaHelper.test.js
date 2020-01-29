@@ -43,19 +43,4 @@ describe('editDocketEntryMetaHelper', () => {
       expect(result.docketEntryMetaFormComponent).toEqual('NoDocument');
     });
   });
-
-  describe('submitSequenceName', () => {});
-
-  describe('validationSequenceName', () => {
-    it('Should return validateDocketRecordSequence', () => {
-      const result = runCompute(editDocketEntryMetaHelper, {
-        state: {
-          form: {},
-        },
-      });
-      expect(result.validationSequenceName).toEqual(
-        'validateDocketRecordSequence',
-      );
-    });
-  });
 });
