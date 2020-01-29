@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
-import { EditDocketEntryMetaModal } from '../EditDocketRecordEntry/EditDocketEntryMetaModal';
 import { FilingsAndProceedings } from './FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
@@ -13,15 +12,12 @@ export const DocketRecord = connect(
   {
     docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
-    openEditDocketEntryMetaModalSequence:
-      sequences.openEditDocketEntryMetaModalSequence,
     refreshCaseSequence: sequences.refreshCaseSequence,
     showModal: state.showModal,
   },
   ({
     docketRecordHelper,
     formattedCaseDetail,
-    openEditDocketEntryMetaModalSequence,
     refreshCaseSequence,
     showModal,
   }) => {
@@ -132,16 +128,7 @@ export const DocketRecord = connect(
                     {docketRecordHelper.showEditDocketRecordEntry && (
                       <td>
                         {entry.showEditDocketRecordEntry && (
-                          <Button
-                            link
-                            className="padding-0"
-                            icon="edit"
-                            onClick={() => {
-                              openEditDocketEntryMetaModalSequence({
-                                index: entry.index,
-                              });
-                            }}
-                          >
+                          <Button link className="padding-0" icon="edit">
                             Edit
                           </Button>
                         )}
@@ -154,9 +141,6 @@ export const DocketRecord = connect(
           </tbody>
         </table>
         {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
-        {showModal == 'EditDocketEntryMetaModal' && (
-          <EditDocketEntryMetaModal />
-        )}
       </>
     );
   },
