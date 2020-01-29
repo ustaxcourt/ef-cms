@@ -1,6 +1,5 @@
 import { CourtIssuedNonstandardForm } from '../CourtIssuedDocketEntry/CourtIssuedNonstandardForm';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { classNames } from 'classnames';
 import { connect } from '@cerebral/react';
 import {
   courtIssuedDocketEntryOnChange,
@@ -11,6 +10,7 @@ import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
+import classNames from 'classnames';
 
 export const EditDocketEntryMetaFormCourtIssued = connect(
   {
