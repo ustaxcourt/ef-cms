@@ -19,7 +19,6 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displayInCareOf: true,
           header: 'Corporation Information',
           inCareOfLabel: 'In care of',
-          inCareOfLabelHint: 'Your Name',
           nameLabel: 'Business name',
         },
       };
