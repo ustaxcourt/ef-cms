@@ -25,7 +25,7 @@ export const EditDocketEntryMeta = connect(
             <div className="grid-col-5 DocumentDetail">
               <Tabs
                 boxed
-                bind="editDocketRecordMetaTab"
+                bind="editDocketEntryMetaTab"
                 className="no-full-border-bottom tab-button-h3 container-tabs"
               >
                 <Tab
