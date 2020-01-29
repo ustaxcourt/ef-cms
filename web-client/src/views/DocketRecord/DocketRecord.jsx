@@ -1,4 +1,3 @@
-import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
 import { FilingsAndProceedings } from './FilingsAndProceedings';
@@ -128,9 +127,11 @@ export const DocketRecord = connect(
                     {docketRecordHelper.showEditDocketRecordEntry && (
                       <td>
                         {entry.showEditDocketRecordEntry && (
-                          <Button link className="padding-0" icon="edit">
-                            Edit
-                          </Button>
+                          <a
+                            href={`/case-detail/${formattedCaseDetail.docketNumber}/docket-entry/${entry.index}/edit`}
+                          >
+                            <FontAwesomeIcon icon="edit" size="sm" /> Edit
+                          </a>
                         )}
                       </td>
                     )}
