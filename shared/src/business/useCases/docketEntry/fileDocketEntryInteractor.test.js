@@ -1,4 +1,5 @@
 const sinon = require('sinon');
+const { Case } = require('../../entities/cases/Case');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { fileDocketEntryInteractor } = require('./fileDocketEntryInteractor');
 const { User } = require('../../entities/User');
@@ -246,5 +247,125 @@ describe('fileDocketEntryInteractor', () => {
     expect(caseEntity.documents[4].lodged).toEqual(true);
     expect(caseEntity.documents[5].eventCode).toEqual('MISL');
     expect(caseEntity.documents[5].lodged).toEqual(true);
+  });
+
+  it('sets the case as blocked if the document filed is a tracked document type', async () => {
+    let error;
+    let getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
+    let saveWorkItemForNonPaperSpy = sinon.spy();
+    let saveWorkItemForDocketClerkFilingExternalDocumentSpy = sinon.spy();
+    let saveWorkItemForDocketEntryWithoutFileSpy = sinon.spy();
+    let updateCaseSpy = sinon.spy();
+    try {
+      applicationContext = {
+        environment: { stage: 'local' },
+        getCurrentUser: () => {
+          return {
+            name: 'Olivia Jade',
+            role: User.ROLES.docketClerk,
+            section: 'docket',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          };
+        },
+        getPersistenceGateway: () => ({
+          getCaseByCaseId: getCaseByCaseIdSpy,
+          getUserById: async () => ({
+            name: 'Olivia Jade',
+            role: User.ROLES.docketClerk,
+            section: 'docket',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          }),
+          saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
+          saveWorkItemForDocketEntryWithoutFile: saveWorkItemForDocketEntryWithoutFileSpy,
+          saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
+
+          updateCase: updateCaseSpy,
+        }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      };
+      await fileDocketEntryInteractor({
+        applicationContext,
+        documentMetadata: {
+          caseId: caseRecord.caseId,
+          category: 'Application',
+          documentTitle: 'Application for Examination Pursuant to Rule 73',
+          documentType: 'Application for Examination Pursuant to Rule 73',
+          eventCode: 'AFE',
+          isPaper: true,
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeUndefined();
+    expect(getCaseByCaseIdSpy.called).toEqual(true);
+    expect(saveWorkItemForNonPaperSpy.called).toEqual(false);
+    expect(updateCaseSpy.called).toEqual(true);
+    expect(updateCaseSpy.getCalls(0).args[0]).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedDate: expect.anything(),
+      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+    });
+  });
+
+  it('sets the case as blocked with due dates if the document filed is a tracked document type and the case has due dates', async () => {
+    let error;
+    let getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
+    let saveWorkItemForNonPaperSpy = sinon.spy();
+    let saveWorkItemForDocketClerkFilingExternalDocumentSpy = sinon.spy();
+    let saveWorkItemForDocketEntryWithoutFileSpy = sinon.spy();
+    let updateCaseSpy = sinon.spy();
+    try {
+      applicationContext = {
+        environment: { stage: 'local' },
+        getCurrentUser: () => {
+          return {
+            name: 'Olivia Jade',
+            role: User.ROLES.docketClerk,
+            section: 'docket',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          };
+        },
+        getPersistenceGateway: () => ({
+          getCaseByCaseId: getCaseByCaseIdSpy,
+          getCaseDeadlinesByCaseId: () => [{ deadlineDate: 'something' }],
+          getUserById: async () => ({
+            name: 'Olivia Jade',
+            role: User.ROLES.docketClerk,
+            section: 'docket',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          }),
+          saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
+          saveWorkItemForDocketEntryWithoutFile: saveWorkItemForDocketEntryWithoutFileSpy,
+          saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
+          updateCase: updateCaseSpy,
+        }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      };
+      await fileDocketEntryInteractor({
+        applicationContext,
+        documentMetadata: {
+          caseId: caseRecord.caseId,
+          category: 'Application',
+          documentTitle: 'Application for Examination Pursuant to Rule 73',
+          documentType: 'Application for Examination Pursuant to Rule 73',
+          eventCode: 'AFE',
+          isPaper: true,
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeUndefined();
+    expect(getCaseByCaseIdSpy.called).toEqual(true);
+    expect(saveWorkItemForNonPaperSpy.called).toEqual(false);
+    expect(updateCaseSpy.called).toEqual(true);
+    expect(updateCaseSpy.getCalls(0).args[0]).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedDate: expect.anything(),
+      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
+    });
   });
 });

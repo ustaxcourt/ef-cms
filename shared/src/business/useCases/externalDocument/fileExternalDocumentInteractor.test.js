@@ -15,6 +15,7 @@ describe('fileExternalDocumentInteractor', () => {
   const saveWorkItemForNonPaperSpy = jest.fn();
   const updateCaseSpy = jest.fn();
   const sendServedPartiesEmailsSpy = jest.fn();
+  let getCaseDeadlinesByCaseIdSpy;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -78,12 +79,14 @@ describe('fileExternalDocumentInteractor', () => {
     });
 
     getCaseByCaseIdSpy = jest.fn().mockReturnValue(caseRecord);
+    getCaseDeadlinesByCaseIdSpy = jest.fn().mockReturnValue([]);
 
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => globalUser,
       getPersistenceGateway: () => ({
         getCaseByCaseId: getCaseByCaseIdSpy,
+        getCaseDeadlinesByCaseId: getCaseDeadlinesByCaseIdSpy,
         getUserById: ({ userId }) => MOCK_USERS[userId],
         saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
         updateCase: updateCaseSpy,
@@ -197,7 +200,6 @@ describe('fileExternalDocumentInteractor', () => {
 
   it('should create a not-high-priority work item if the case status is not calendared', async () => {
     caseRecord.status = Case.STATUS_TYPES.new;
-    let error;
 
     await fileExternalDocumentInteractor({
       applicationContext,
@@ -211,10 +213,57 @@ describe('fileExternalDocumentInteractor', () => {
       },
     });
 
-    expect(error).toBeUndefined();
     expect(saveWorkItemForNonPaperSpy).toBeCalled();
     expect(saveWorkItemForNonPaperSpy.mock.calls[0][0]).toMatchObject({
       workItem: { highPriority: false },
+    });
+  });
+
+  it('should automatically block the case if the document filed is a tracked document', async () => {
+    await fileExternalDocumentInteractor({
+      applicationContext,
+      documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        category: 'Application',
+        docketNumber: '45678-18',
+        documentTitle: 'Application for Waiver of Filing Fee',
+        documentType: 'Application for Waiver of Filing Fee',
+        eventCode: 'APPW',
+      },
+    });
+
+    expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedDate: expect.anything(),
+      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+    });
+  });
+
+  it('should automatically block the case with deadlines if the document filed is a tracked document and the case has a deadline', async () => {
+    getCaseDeadlinesByCaseIdSpy = jest.fn().mockReturnValue([
+      {
+        deadlineDate: 'something',
+      },
+    ]);
+
+    await fileExternalDocumentInteractor({
+      applicationContext,
+      documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        category: 'Application',
+        docketNumber: '45678-18',
+        documentTitle: 'Application for Waiver of Filing Fee',
+        documentType: 'Application for Waiver of Filing Fee',
+        eventCode: 'APPW',
+      },
+    });
+
+    expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedDate: expect.anything(),
+      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
   });
 });
