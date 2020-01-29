@@ -165,7 +165,7 @@ const router = {
     );
 
     route(
-      '/case-detail/*/docket-entry/*/edit',
+      '/case-detail/*/docket-entry/*/edit-meta',
       ifHasAccess((docketNumber, docketRecordIndex) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit Docket Entry Meta`,
