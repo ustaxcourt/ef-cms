@@ -71,33 +71,10 @@ You ain't been up off that porch, now`,
         { applicationContext },
       );
 
-      const caseDeadlineWithoutJudge = new CaseDeadline(
-        {
-          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          deadlineDate: '2019-03-01T21:42:29.073Z',
-          description: 'One small step',
-        },
-        { applicationContext },
-      );
-
       expect(caseDeadlineWithJudge.associatedJudge).toEqual(mockJudgeName);
-      expect(caseDeadlineWithoutJudge.associatedJudge).toEqual(
-        Case.CHIEF_JUDGE,
-      );
     });
 
     it('should use default judge if one is not provided', () => {
-      const mockJudgeName = 'Dumbledore';
-      const caseDeadlineWithJudge = new CaseDeadline(
-        {
-          associatedJudge: mockJudgeName,
-          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          deadlineDate: '2019-03-01T21:42:29.073Z',
-          description: 'One small step',
-        },
-        { applicationContext },
-      );
-
       const caseDeadlineWithoutJudge = new CaseDeadline(
         {
           caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -107,7 +84,6 @@ You ain't been up off that porch, now`,
         { applicationContext },
       );
 
-      expect(caseDeadlineWithJudge.associatedJudge).toEqual(mockJudgeName);
       expect(caseDeadlineWithoutJudge.associatedJudge).toEqual(
         Case.CHIEF_JUDGE,
       );
