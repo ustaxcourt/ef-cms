@@ -22,8 +22,8 @@ describe('filePetitionFromPaperInteractor', () => {
     return {
       environment: { stage: 'local' },
       getCurrentUser: () => ({
-        role: User.ROLES.docketClerk,
-        userId: 'Don Clark',
+        role: User.ROLES.petitionsClerk,
+        userId: 'petitionsClerk',
       }),
       getPersistenceGateway: () => ({
         uploadDocumentFromClient: uploadDocumentStub,
