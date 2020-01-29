@@ -61,7 +61,7 @@ const formatDocument = (applicationContext, document) => {
         acc &&
         !wi.isRead &&
         !wi.completedAt &&
-        !wi.section === IRS_BATCH_SYSTEM_SECTION
+        wi.section !== IRS_BATCH_SYSTEM_SECTION
       );
     }, true);
 
