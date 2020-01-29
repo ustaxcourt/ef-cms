@@ -2,7 +2,6 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const EditDocketEntryMetaTabService = connect(
   {
@@ -14,93 +13,6 @@ export const EditDocketEntryMetaTabService = connect(
   ({ form, updateFormValueSequence, validationErrors, validationSequence }) => {
     return (
       <div className="blue-container">
-        <FormGroup errorText={validationErrors && validationErrors.servedDate}>
-          <fieldset className="usa-fieldset margin-bottom-0">
-            <legend className="usa-legend" id="served-date-legend">
-              Served Date
-            </legend>
-            <div className="usa-memorable-date">
-              <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                <input
-                  aria-describedby="served-date-legend"
-                  aria-label="month, two digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    validationErrors &&
-                      validationErrors.servedDate &&
-                      'usa-input--error',
-                  )}
-                  id="served-date-month"
-                  max="12"
-                  min="1"
-                  name="servedDateMonth"
-                  placeholder="MM"
-                  type="number"
-                  value={form.servedDateMonth || ''}
-                  onBlur={() => validationSequence()}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                <input
-                  aria-describedby="served-date-legend"
-                  aria-label="day, two digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    validationErrors &&
-                      validationErrors.servedDate &&
-                      'usa-input--error',
-                  )}
-                  id="served-date-day"
-                  max="31"
-                  min="1"
-                  name="servedDateDay"
-                  placeholder="DD"
-                  type="number"
-                  value={form.servedDateDat || ''}
-                  onBlur={() => validationSequence()}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                <input
-                  aria-describedby="served-date-legend"
-                  aria-label="year, four digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    validationErrors &&
-                      validationErrors.servedDate &&
-                      'usa-input--error',
-                  )}
-                  id="served-date-year"
-                  max="2100"
-                  min="1900"
-                  name="servedDateYear"
-                  placeholder="YYYY"
-                  type="number"
-                  value={form.servedDateYear || ''}
-                  onBlur={() => validationSequence()}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </fieldset>
-        </FormGroup>
         <FormGroup
           errorText={validationErrors && validationErrors.servedPartiesCode}
         >
