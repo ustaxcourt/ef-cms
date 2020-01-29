@@ -31,7 +31,6 @@ export const contactsHelper = (get, applicationContext) => {
           displayInCareOf: true,
           header: 'Tell Us About the Corporation You Are Filing For',
           inCareOfLabel: 'In care of',
-          inCareOfLabelHint: 'Your Name',
           nameLabel: 'Business name',
         };
         break;
@@ -64,7 +63,7 @@ export const contactsHelper = (get, applicationContext) => {
           displayInCareOf: true,
           header: 'Tell Us About the Estate You Are Filing For',
           inCareOfLabel: 'In care of',
-          inCareOfLabelHint: 'Your Name',
+          inCareOfLabelHint: 'optional',
           nameLabel: 'Name of decedent',
         };
         break;
