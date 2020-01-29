@@ -13,10 +13,7 @@ export const EditDocketEntryMetaDocketEntryPreview = connect(
       <>
         {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
           'CourtIssued' &&
-          form &&
-          form.documentTitle}
-        {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
-          'Document' && addCourtIssuedDocketEntryHelper.formattedDocumentTitle}
+          addCourtIssuedDocketEntryHelper.formattedDocumentTitle}
         {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
           'NoDocument' &&
           form &&
