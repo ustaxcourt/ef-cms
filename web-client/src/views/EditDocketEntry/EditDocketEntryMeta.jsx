@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { EditDocketEntryMetaDocketEntryPreview } from './EditDocketEntryMetaDocketEntryPreview';
-import { EditDocketEntryMetaFormCourtIssued } from './EditDocketEntryMetaFormDocument';
+import { EditDocketEntryMetaFormCourtIssued } from './EditDocketEntryMetaFormCourtIssued';
 import { EditDocketEntryMetaFormDocument } from './EditDocketEntryMetaFormDocument';
 import { EditDocketEntryMetaFormNoDocument } from './EditDocketEntryMetaFormNoDocument';
 import { EditDocketEntryMetaTabAction } from './EditDocketEntryMetaTabAction';
