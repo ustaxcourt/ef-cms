@@ -1,6 +1,7 @@
 const fs = require('fs');
 const json2md = require('json2md');
 const { Case } = require('../business/entities/cases/Case');
+const { CaseDeadline } = require('../business/entities/CaseDeadline');
 const { DocketRecord } = require('../business/entities/DocketRecord');
 const { Document } = require('../business/entities/Document');
 
@@ -146,5 +147,6 @@ exports.generateMarkdownSchema = (entity, entityName) => {
 };
 
 exports.generateMarkdownSchema(Case, 'Case');
+exports.generateMarkdownSchema(CaseDeadline, 'CaseDeadline');
 exports.generateMarkdownSchema(DocketRecord, 'DocketRecord');
 exports.generateMarkdownSchema(Document, 'Document');
