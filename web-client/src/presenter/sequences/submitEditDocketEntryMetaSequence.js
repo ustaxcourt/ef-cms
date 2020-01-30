@@ -18,7 +18,7 @@ export const submitEditDocketEntryMetaSequence = [
   primePropsFromEditDocketEntryMetaModalAction,
   validateDocketRecordAction,
   {
-    error: [setValidationErrorsAction],
+    error: [setAlertErrorAction, setValidationErrorsAction],
     success: [
       stopShowValidationAction,
       clearAlertsAction,
