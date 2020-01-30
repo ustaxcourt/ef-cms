@@ -3,7 +3,7 @@ import { generateTitlePreviewAction } from '../actions/EditDocketRecordEntry/gen
 import { setFormValueAction } from '../actions/setFormValueAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
-export const updateDocketEntryMetaDocumentFormValueSequenceSequence = [
+export const updateDocketEntryMetaDocumentFormValueSequence = [
   setFormValueAction,
   updateDocketEntryWizardDataAction,
   chooseMetaTypePathAction,
