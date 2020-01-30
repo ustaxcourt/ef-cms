@@ -9,7 +9,9 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const CaseDeadlines = connect(
-  { caseDeadlineReportHelper: state.caseDeadlineReportHelper },
+  {
+    caseDeadlineReportHelper: state.caseDeadlineReportHelper,
+  },
   ({ caseDeadlineReportHelper }) => (
     <>
       <BigHeader text="Reports" />
@@ -43,7 +45,7 @@ export const CaseDeadlines = connect(
                   <BindedSelect
                     ariaDescribedBy="case-deadlines-tab filterHeading"
                     ariaLabel="judge"
-                    bind="screenMetadata.caseDeadlineReportHelper.judge"
+                    bind="screenMetadata.caseDeadlinesFilter.judge"
                     className="select-left"
                     id="judgeFilter"
                     name="judge"
