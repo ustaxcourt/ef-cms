@@ -1,6 +1,9 @@
 const {
   removeCasePendingItemInteractor,
 } = require('./removeCasePendingItemInteractor');
+const {
+  updateCaseAutomaticBlock,
+} = require('../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
 const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
@@ -10,6 +13,7 @@ describe('removeCasePendingItemInteractor', () => {
   let user;
   const updateCaseMock = jest.fn().mockImplementation(v => v);
   let getCaseDeadlinesByCaseIdMock;
+  const deleteCaseTrialSortMappingRecordsMock = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -25,9 +29,13 @@ describe('removeCasePendingItemInteractor', () => {
     applicationContext = {
       getCurrentUser: () => user,
       getPersistenceGateway: () => ({
+        deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsMock,
         getCaseByCaseId: () => MOCK_CASE,
         getCaseDeadlinesByCaseId: getCaseDeadlinesByCaseIdMock,
         updateCase: updateCaseMock,
+      }),
+      getUseCaseHelpers: () => ({
+        updateCaseAutomaticBlock,
       }),
     };
   });
@@ -76,7 +84,7 @@ describe('removeCasePendingItemInteractor', () => {
     });
   });
 
-  it('should call updateCase with automaticBlocked=true and a reason if there are deadlines remaining on the case', async () => {
+  it('should call updateCase with automaticBlocked=true and a reason and call deleteCaseTrialSortMappingRecords if there are deadlines remaining on the case', async () => {
     getCaseDeadlinesByCaseIdMock = jest
       .fn()
       .mockReturnValue([{ deadline: 'something' }]);
@@ -92,5 +100,6 @@ describe('removeCasePendingItemInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.dueDate,
     });
+    expect(deleteCaseTrialSortMappingRecordsMock).toBeCalled();
   });
 });
