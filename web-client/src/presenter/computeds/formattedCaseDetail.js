@@ -59,13 +59,18 @@ export const formattedCaseDetail = (get, applicationContext) => {
         document.qcWorkItemsUntouched &&
         !document.isCourtIssuedDocument;
 
+      const hasCourtIssuedDocument = document && document.isCourtIssuedDocument;
+      const hasServedCourtIssuedDocument =
+        hasCourtIssuedDocument && !!document.servedAt;
+
       const hasSystemGeneratedDocument =
         document && systemGeneratedEventCodes.includes(document.eventCode);
 
       const showEditDocketRecordEntry =
         permissions.EDIT_DOCKET_ENTRY &&
         (!document || document.qcWorkItemsCompleted) &&
-        !hasSystemGeneratedDocument;
+        !hasSystemGeneratedDocument &&
+        (!hasCourtIssuedDocument || hasServedCourtIssuedDocument);
 
       const isPaper =
         !isInProgress && !qcWorkItemsUntouched && document && document.isPaper;
