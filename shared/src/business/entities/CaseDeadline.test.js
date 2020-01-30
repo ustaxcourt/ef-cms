@@ -23,6 +23,7 @@ describe('CaseDeadline', () => {
         caseId: VALIDATION_ERROR_MESSAGES.caseId,
         deadlineDate: VALIDATION_ERROR_MESSAGES.deadlineDate,
         description: VALIDATION_ERROR_MESSAGES.description[1],
+        docketNumber: VALIDATION_ERROR_MESSAGES.docketNumber,
       });
     });
 
@@ -32,6 +33,7 @@ describe('CaseDeadline', () => {
           caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: 'One small step',
+          docketNumber: '101-21',
         },
         { applicationContext },
       );
@@ -51,6 +53,7 @@ Ridin' on a horse, ha
 You can whip your Porsche
 I been in the valley
 You ain't been up off that porch, now`,
+          docketNumber: '101-21',
         },
         { applicationContext },
       );

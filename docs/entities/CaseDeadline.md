@@ -38,6 +38,18 @@ When the Case Deadline expires.
 ### description
 
 
-User provided dscription of the Case Deadline.
+User provided description of the Case Deadline.
 
 > `string` | required
+
+### docketNumber
+
+
+Unique Case ID in XXXXX-YY format.
+
+> `string` | required
+
+##### Regex Pattern
+
+
+`/^(\d{3,5}-\d{2})$/`
