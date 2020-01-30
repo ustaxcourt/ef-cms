@@ -352,63 +352,21 @@ describe('formatCase', () => {
     it('should format blockedDate when blocked is true', () => {
       const result = formatCase(applicationContext, {
         ...mockCaseDetail,
+        automaticBlocked: true,
+        automaticBlockedDate: '2020-01-06T11:12:13.007Z',
+        automaticBlockedReason: 'for reasons',
         blocked: true,
         blockedDate: getDateISO(),
         blockedReason: 'for reasons',
       });
 
       expect(result).toMatchObject({
-        blockedDateEarliest: applicationContext
+        automaticBblockedDateFormatted: applicationContext
           .getUtilities()
-          .formatDateString(getDateISO(), 'MMDDYY'),
+          .formatDateString('2020-01-06T11:12:13.007Z', 'MMDDYY'),
         blockedDateFormatted: applicationContext
           .getUtilities()
           .formatDateString(getDateISO(), 'MMDDYY'),
-        showBlockedFromTrial: true,
-      });
-    });
-    it('should display the earliest blocked date if blocked manually but also by the system', () => {
-      const result = formatCase(applicationContext, {
-        ...mockCaseDetail,
-        automaticBlocked: true,
-        automaticBlockedDate: '2020-01-29T20:00:08.765Z',
-        automaticBlockedReason: 'an older reason',
-        blocked: true,
-        blockedDate: getDateISO(),
-        blockedReason: 'a new reason',
-      });
-
-      expect(result).toMatchObject({
-        automaticBlockedDateFormatted: applicationContext
-          .getUtilities()
-          .formatDateString('2020-01-29T20:00:08.765Z', 'MMDDYY'),
-        blockedDateEarliest: applicationContext
-          .getUtilities()
-          .formatDateString('2020-01-29T20:00:08.765Z', 'MMDDYY'),
-        blockedDateFormatted: applicationContext
-          .getUtilities()
-          .formatDateString('2020-01-30T20:00:08.765Z', 'MMDDYY'),
-        showBlockedFromTrial: true,
-      });
-    });
-    it('should display the automatic blocked date if not blocked manually but by automaticBlocked', () => {
-      const result = formatCase(applicationContext, {
-        ...mockCaseDetail,
-        automaticBlocked: true,
-        automaticBlockedDate: '2020-01-30T20:00:08.765Z',
-        automaticBlockedReason: 'the only reason',
-        blocked: false,
-        blockedDate: undefined,
-        blockedReason: 'no reason',
-      });
-
-      expect(result).toMatchObject({
-        automaticBlockedDateFormatted: applicationContext
-          .getUtilities()
-          .formatDateString('2020-01-30T20:00:08.765Z', 'MMDDYY'),
-        blockedDateEarliest: applicationContext
-          .getUtilities()
-          .formatDateString('2020-01-30T20:00:08.765Z', 'MMDDYY'),
         showBlockedFromTrial: true,
       });
     });

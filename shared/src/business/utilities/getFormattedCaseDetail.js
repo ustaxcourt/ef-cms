@@ -321,25 +321,13 @@ const formatCase = (applicationContext, caseDetail) => {
     }
   } else if (result.blocked || result.automaticBlocked) {
     result.showBlockedFromTrial = true;
-
-    if (result.blockedDate && result.automaticBlocked) {
+    if (result.blocked) {
       result.blockedDateFormatted = applicationContext
         .getUtilities()
         .formatDateString(result.blockedDate, 'MMDDYY');
+    }
+    if (result.automaticBlocked) {
       result.automaticBlockedDateFormatted = applicationContext
-        .getUtilities()
-        .formatDateString(result.automaticBlockedDate, 'MMDDYY');
-      if (result.blockedDate <= result.automaticBlockedDate) {
-        result.blockedDateEarliest = result.blockedDateFormatted;
-      } else {
-        result.blockedDateEarliest = result.automaticBlockedDateFormatted;
-      }
-    } else if (result.blocked) {
-      result.blockedDateEarliest = result.blockedDateFormatted = applicationContext
-        .getUtilities()
-        .formatDateString(result.blockedDate, 'MMDDYY');
-    } else if (result.automaticBlocked) {
-      result.blockedDateEarliest = result.automaticBlockedDateFormatted = applicationContext
         .getUtilities()
         .formatDateString(result.automaticBlockedDate, 'MMDDYY');
     }
