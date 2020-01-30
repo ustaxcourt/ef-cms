@@ -1,3 +1,4 @@
+import { updateDocketEntryMetaDocumentFormValueSequenceSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequenceSequence';
 import { ActionError } from './errors/ActionError';
 import { InvalidRequestError } from './errors/InvalidRequestError';
 import { NotFoundError } from './errors/NotFoundError';
@@ -351,6 +352,7 @@ export const presenter = {
   ],
   providers: {},
   sequences: {
+    updateDocketEntryMetaDocumentFormValueSequenceSequence,
     addCaseToTrialSessionSequence,
     addSupportingDocumentToFormSequence,
     archiveDraftDocumentModalSequence,
