@@ -15,6 +15,13 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
 
+  const { Document } = applicationContext.getEntityConstructors();
+  const systemGeneratedEventCodes = Object.keys(
+    Document.SYSTEM_GENERATED_DOCUMENT_TYPES,
+  ).map(key => {
+    return Document.SYSTEM_GENERATED_DOCUMENT_TYPES[key].eventCode;
+  });
+
   const {
     formatCase,
     formatCaseDeadlines,
@@ -52,9 +59,13 @@ export const formattedCaseDetail = (get, applicationContext) => {
         document.qcWorkItemsUntouched &&
         !document.isCourtIssuedDocument;
 
+      const hasSystemGeneratedDocument =
+        document && systemGeneratedEventCodes.includes(document.eventCode);
+
       const showEditDocketRecordEntry =
         permissions.EDIT_DOCKET_ENTRY &&
-        (!document || document.qcWorkItemsCompleted);
+        (!document || document.qcWorkItemsCompleted) &&
+        !hasSystemGeneratedDocument;
 
       const isPaper =
         !isInProgress && !qcWorkItemsUntouched && document && document.isPaper;
