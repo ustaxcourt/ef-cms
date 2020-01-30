@@ -75,11 +75,6 @@ CaseDeadline.schema = joi.object().keys({
     .description('User provided dscription of the Case Deadline.'),
 });
 
-// CaseDeadline.prototype.toRawObject = function() {
-//   const result = this.toRawObjectFromJoi();
-//   return result;
-// };
-
 joiValidationDecorator(
   CaseDeadline,
   CaseDeadline.schema,
