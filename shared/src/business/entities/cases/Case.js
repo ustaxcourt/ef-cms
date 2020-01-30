@@ -126,6 +126,12 @@ Case.ANSWER_DOCUMENT_CODES = [
   'AATT',
 ];
 
+Case.AUTOMATIC_BLOCKED_REASONS = {
+  dueDate: 'Due Date',
+  pending: 'Pending Item',
+  pendingAndDueDate: 'Pending Item and Due Date',
+};
+
 Case.CHIEF_JUDGE = 'Chief Judge';
 
 Case.DOCKET_NUMBER_SUFFIXES = ['W', 'P', 'X', 'R', 'SL', 'L', 'S'];
@@ -219,6 +225,9 @@ function Case(rawCase, { applicationContext }) {
     throw new TypeError('applicationContext must be defined');
   }
   this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
+  this.automaticBlocked = rawCase.automaticBlocked;
+  this.automaticBlockedDate = rawCase.automaticBlockedDate;
+  this.automaticBlockedReason = rawCase.automaticBlockedReason;
   this.blocked = rawCase.blocked;
   this.blockedDate = rawCase.blockedDate;
   this.blockedReason = rawCase.blockedReason;
@@ -345,6 +354,31 @@ joiValidationDecorator(
       .string()
       .required()
       .description('Defaults to Chief Judge.'),
+    automaticBlocked: joi
+      .boolean()
+      .optional()
+      .description(
+        'Temporarily blocked from trial due to a pending item or due date.',
+      ),
+    automaticBlockedDate: joi.when('automaticBlocked', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .date()
+        .iso()
+        .required(),
+    }),
+    automaticBlockedReason: joi.when('automaticBlocked', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .string()
+        .valid(...Object.values(Case.AUTOMATIC_BLOCKED_REASONS))
+        .required()
+        .description(
+          'The reason the case was automatically blocked from trial.',
+        ),
+    }),
     blocked: joi
       .boolean()
       .optional()
@@ -1229,6 +1263,31 @@ Case.prototype.unsetAsBlocked = function() {
   this.blocked = false;
   this.blockedReason = undefined;
   this.blockedDate = undefined;
+  return this;
+};
+
+/**
+ * set as automaticBlocked with an automaticBlockedReason
+ *
+ * @param {string} automaticBlockedReason - the reason the case was blocked
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setAsAutomaticBlocked = function(automaticBlockedReason) {
+  this.automaticBlocked = true;
+  this.automaticBlockedReason = automaticBlockedReason;
+  this.automaticBlockedDate = createISODateString();
+  return this;
+};
+
+/**
+ * unblock the case and remove the automaticBlockedReason
+ *
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.unsetAsAutomaticBlocked = function() {
+  this.automaticBlocked = false;
+  this.automaticBlockedReason = undefined;
+  this.automaticBlockedDate = undefined;
   return this;
 };
 

@@ -1,5 +1,6 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from '../AddDocketEntry/Inclusions';
+import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { connect } from '@cerebral/react';
 import {
   docketEntryOnChange,
@@ -188,6 +189,17 @@ export const EditDocketEntryMetaFormDocument = connect(
             }}
           />
         </FormGroup>
+
+        {editDocketEntryMetaHelper.primary.showNonstandardForm && (
+          <NonstandardForm
+            helper="editDocketEntryMetaHelper"
+            level="primary"
+            updateSequence="updateDocketEntryFormValueSequence"
+            validateSequence="validateDocketEntrySequence"
+            validationErrors="validationErrors"
+          />
+        )}
+
         <FormGroup errorText={validationErrors.additionalInfo}>
           <label
             className="usa-label"
