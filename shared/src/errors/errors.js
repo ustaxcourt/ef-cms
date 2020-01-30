@@ -71,6 +71,24 @@ module.exports.UnprocessableEntityError = class UnprocessableEntityError extends
 };
 
 /**
+ * UnsanitizedEntityError error
+ *
+ * @type {module.UnsanitizedEntity}
+ */
+module.exports.UnsanitizedEntityError = class UnsanitizedEntityError extends Error {
+  /**
+   * constructor
+   *
+   * @param {string} message the error message
+   */
+  constructor(message = 'Unsanitized entity') {
+    super(message);
+
+    this.statusCode = 500;
+  }
+};
+
+/**
  * InvalidEntityError error
  *
  * @type {module.InvalidEntityError}
