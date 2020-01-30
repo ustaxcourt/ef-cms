@@ -149,6 +149,66 @@ describe('fileExternalDocumentInteractor', () => {
     expect(updatedCase.documents[3].servedAt).toBeDefined();
   });
 
+  it('should set secondary document and secondary supporting documents to lodged with eventCode MISL', async () => {
+    const updatedCase = await fileExternalDocumentInteractor({
+      applicationContext,
+      documentIds: [
+        'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+        'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+        'c54ba5a9-b37b-479d-9201-067ec6e335be',
+      ],
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        docketNumber: '45678-18',
+        documentTitle: 'Motion for Leave to File',
+        documentType: 'Motion for Leave to File',
+        eventCode: 'M115',
+        secondaryDocument: {
+          documentTitle: 'Motion for Judgment on the Pleadings',
+          documentType: 'Motion for Judgment on the Pleadings',
+          eventCode: 'M121',
+        },
+        secondarySupportingDocuments: [
+          {
+            documentTitle: 'Motion for in Camera Review',
+            documentType: 'Motion for in Camera Review',
+            eventCode: 'M135',
+          },
+        ],
+        supportingDocuments: [
+          {
+            documentTitle: 'Civil Penalty Approval Form',
+            documentType: 'Civil Penalty Approval Form',
+            eventCode: 'CIVP',
+          },
+        ],
+      },
+    });
+    expect(updateCaseSpy).toBeCalled();
+    expect(updatedCase.documents).toMatchObject([
+      {}, // first 3 docs were already on the case
+      {},
+      {},
+      {
+        eventCode: 'M115', // primary document
+        lodged: undefined,
+      },
+      {
+        eventCode: 'CIVP', // supporting document
+        lodged: undefined,
+      },
+      {
+        eventCode: 'MISL', //secondary document
+        lodged: true,
+      },
+      {
+        eventCode: 'MISL', // secondary supporting document
+        lodged: true,
+      },
+    ]);
+  });
+
   it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
     let error;
 
