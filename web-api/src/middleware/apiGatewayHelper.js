@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const {
   NotFoundError,
   UnauthorizedError,
+  UnsanitizedEntityError,
 } = require('../../../shared/src/errors/errors');
 const { pick } = require('lodash');
 const headers = {
@@ -27,6 +28,17 @@ exports.handle = async (event, fun) => {
   }
   try {
     let response = await fun();
+    if (Array.isArray(response)) {
+      response.forEach(item => {
+        if (item.pk || item.sk) {
+          throw new UnsanitizedEntityError();
+        }
+      });
+    } else {
+      if (response.pk || response.sk) {
+        throw new UnsanitizedEntityError();
+      }
+    }
     if (event.queryStringParameters && event.queryStringParameters.fields) {
       const { fields } = event.queryStringParameters;
       const fieldsArr = fields.split(',');
