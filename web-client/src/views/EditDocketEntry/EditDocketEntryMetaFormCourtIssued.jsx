@@ -1,6 +1,5 @@
 import { CourtIssuedNonstandardForm } from '../CourtIssuedDocketEntry/CourtIssuedNonstandardForm';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { classNames } from 'classnames';
 import { connect } from '@cerebral/react';
 import {
   courtIssuedDocketEntryOnChange,
@@ -11,6 +10,7 @@ import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
+import classNames from 'classnames';
 
 export const EditDocketEntryMetaFormCourtIssued = connect(
   {
@@ -36,7 +36,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
         <FormGroup errorText={validationErrors.filingDate}>
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="filing-date-legend">
-              Filing Date
+              Filed Date
             </legend>
             <div className="usa-memorable-date">
               <div className="usa-form-group usa-form-group--month margin-bottom-0">

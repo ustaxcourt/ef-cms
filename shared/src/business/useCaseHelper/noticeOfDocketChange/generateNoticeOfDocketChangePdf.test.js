@@ -26,7 +26,7 @@ const chromiumBrowserMock = {
   newPage: () => pageMock,
 };
 
-const applicationContext = {
+let applicationContext = {
   getCaseCaptionNames: Case.getCaseCaptionNames,
   getChromiumBrowser: () => chromiumBrowserMock,
   getCurrentUser: () => {
@@ -105,5 +105,35 @@ describe('generateNoticeOfDocketChangePdf', () => {
     });
 
     expect(result).toEqual('uniqueId');
+  });
+
+  it('catches a thrown exception', async () => {
+    applicationContext = {
+      ...applicationContext,
+      getChromiumBrowser: jest.fn().mockReturnValue({
+        close: () => {},
+        newPage: () => ({
+          pdf: () => {
+            throw new Error('error pdf');
+          },
+          setContent: () => {
+            throw new Error('error setContent');
+          },
+        }),
+      }),
+    };
+
+    let err;
+
+    try {
+      await generateNoticeOfDocketChangePdf({
+        applicationContext,
+        docketChangeInfo,
+      });
+    } catch (e) {
+      err = e;
+    }
+
+    expect(err).toBeDefined();
   });
 });
