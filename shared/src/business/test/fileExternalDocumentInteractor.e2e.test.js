@@ -8,6 +8,9 @@ const {
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
+const {
+  updateCaseAutomaticBlock,
+} = require('../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
@@ -30,6 +33,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
     });
     applicationContext.getUseCaseHelpers = () => ({
       sendServedPartiesEmails: jest.fn(),
+      updateCaseAutomaticBlock,
     });
   });
 
