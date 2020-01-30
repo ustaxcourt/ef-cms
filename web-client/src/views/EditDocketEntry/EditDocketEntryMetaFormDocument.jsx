@@ -279,7 +279,7 @@ export const EditDocketEntryMetaFormDocument = connect(
           />
         </FormGroup>
         <FormGroup>
-          <Inclusions />
+          <Inclusions updateSequence="updateDocketEntryMetaDocumentFormValueSequenceSequence" />
         </FormGroup>
         <FormGroup errorText={editDocketEntryMetaHelper.partyValidationError}>
           <fieldset

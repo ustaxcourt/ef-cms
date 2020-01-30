@@ -367,7 +367,7 @@ export const PrimaryDocumentForm = connect(
             />
           </div>
 
-          <Inclusions />
+          <Inclusions updateSequence="updateDocketEntryFormValueSequence" />
 
           <FormGroup
             className={!addDocketEntryHelper.showObjection && 'margin-bottom-0'}
