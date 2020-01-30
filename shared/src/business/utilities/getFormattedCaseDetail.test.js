@@ -349,7 +349,7 @@ describe('formatCase', () => {
   });
 
   describe('should indicate blocked status', () => {
-    it('should format blockedDate when blocked is true', () => {
+    it('should format blockedDate and automaticBlockedDate when blocked and automaticBlocked are true', () => {
       const result = formatCase(applicationContext, {
         ...mockCaseDetail,
         automaticBlocked: true,
@@ -361,7 +361,7 @@ describe('formatCase', () => {
       });
 
       expect(result).toMatchObject({
-        automaticBblockedDateFormatted: applicationContext
+        automaticBlockedDateFormatted: applicationContext
           .getUtilities()
           .formatDateString('2020-01-06T11:12:13.007Z', 'MMDDYY'),
         blockedDateFormatted: applicationContext
