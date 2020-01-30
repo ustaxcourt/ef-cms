@@ -8,6 +8,9 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryMetaFormForEditAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaFormForEditAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { setDocketEntryMetaTypeAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaTypeAction';
+import { chooseMetaTypePathAction } from '../actions/EditDocketRecordEntry/chooseMetaTypePathAction';
+import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 
 export const gotoEditDocketEntryMeta = [
   setCurrentPageAction('Interstitial'),
@@ -18,6 +21,13 @@ export const gotoEditDocketEntryMeta = [
   getCaseAction,
   setCaseAction,
   setDocketEntryMetaFormForEditAction,
+  setDocketEntryMetaTypeAction,
+  chooseMetaTypePathAction,
+  {
+    courtIssued: [generateCourtIssuedDocumentTitleAction],
+    document: [],
+    noDocument: [],
+  },
   setCurrentPageAction('EditDocketEntryMeta'),
 ];
 
