@@ -46,7 +46,7 @@ exports.fileExternalDocumentInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
   const workItems = [];
 
   const {
@@ -189,16 +189,12 @@ exports.fileExternalDocumentInteractor = async ({
     }
   }
 
-  if (caseEntity.doesHavePendingItems()) {
-    const caseDeadlines = await applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByCaseId({
-        applicationContext,
-        caseId: caseEntity.caseId,
-      });
-
-    caseEntity.updateAutomaticBlocked({ caseDeadlines });
-  }
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+    });
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
