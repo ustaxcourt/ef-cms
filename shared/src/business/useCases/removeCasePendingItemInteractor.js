@@ -35,13 +35,20 @@ exports.removeCasePendingItemInteractor = async ({
     }
   });
 
-  const updatedCase = new Case(caseToUpdate, { applicationContext })
-    .validate()
-    .toRawObject();
+  const updatedCase = new Case(caseToUpdate, { applicationContext });
+
+  const caseDeadlines = await applicationContext
+    .getPersistenceGateway()
+    .getCaseDeadlinesByCaseId({
+      applicationContext,
+      caseId: caseToUpdate.caseId,
+    });
+
+  updatedCase.updateAutomaticBlocked({ caseDeadlines });
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
-    caseToUpdate: updatedCase,
+    caseToUpdate: updatedCase.validate().toRawObject(),
   });
 
   return updatedCase;
