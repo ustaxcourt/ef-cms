@@ -57,6 +57,19 @@ describe('DateHandler', () => {
     });
   });
 
+  describe('deconstructDate', () => {
+    it('returns month, day, and year when provided a valid ISO timestamp', () => {
+      const input = '2019-10-30T12:39:54.007Z';
+      const result = DateHandler.deconstructDate(input);
+      expect(result).toMatchObject({ day: '30', month: '10', year: '2019' });
+    });
+    it('returns undefined if given a value not representative of an ISO timestamp', () => {
+      const input = '';
+      const result = DateHandler.deconstructDate(input);
+      expect(result).toBeUndefined();
+    });
+  });
+
   describe('formatDateString', () => {
     it('accepts YYYY-MM-DD as EST and displays same as EST', () => {
       const dateRetrievedFromStorage = '2001-01-01';
