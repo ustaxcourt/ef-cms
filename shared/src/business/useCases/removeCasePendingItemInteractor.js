@@ -1,33 +1,39 @@
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { UnauthorizedError } = require('../../../errors/errors');
+} = require('../../authorization/authorizationClientService');
+const { Case } = require('../entities/cases/Case');
+const { UnauthorizedError } = require('../../errors/errors');
 
 /**
- * deleteCaseDeadlineInteractor
+ * removeCasePendingItemInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseDeadlineId the id of the case deadline to delete
- * @param {string} providers.caseId the id of the case the case deadline is attached to
- * @returns {Promise} the promise of the delete call
+ * @param {string} providers.caseId the id of the case to update
+ * @param {object} providers.documentId the id of the document no longer pending
+ * @returns {object} the updated case data
  */
-exports.deleteCaseDeadlineInteractor = async ({
+exports.removeCasePendingItemInteractor = async ({
   applicationContext,
-  caseDeadlineId,
   caseId,
+  documentId,
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE)) {
-    throw new UnauthorizedError('Unauthorized for deleting case deadline');
+  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
+    throw new UnauthorizedError('Unauthorized for update case');
   }
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({ applicationContext, caseId });
+
+  caseToUpdate.documents.forEach(document => {
+    if (document.documentId === documentId) {
+      document.pending = false;
+    }
+  });
 
   const updatedCase = new Case(caseToUpdate, { applicationContext });
 
@@ -45,9 +51,5 @@ exports.deleteCaseDeadlineInteractor = async ({
     caseToUpdate: updatedCase.validate().toRawObject(),
   });
 
-  return await applicationContext.getPersistenceGateway().deleteCaseDeadline({
-    applicationContext,
-    caseDeadlineId,
-    caseId,
-  });
+  return updatedCase;
 };
