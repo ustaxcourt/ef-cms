@@ -17,6 +17,9 @@ const {
   getCaseByCaseId,
 } = require('../../persistence/dynamo/cases/getCaseByCaseId');
 const {
+  getCaseDeadlinesByCaseId,
+} = require('../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByCaseId');
+const {
   getDocumentQCBatchedForSection,
 } = require('../../persistence/dynamo/workitems/getDocumentQCBatchedForSection');
 const {
@@ -117,6 +120,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         deleteUserOutboxRecord,
         deleteWorkItemFromInbox,
         getCaseByCaseId,
+        getCaseDeadlinesByCaseId,
         getDocumentQCBatchedForSection,
         getDocumentQCBatchedForUser,
         getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,

@@ -1,3 +1,6 @@
+const {
+  updateCaseAutomaticBlock,
+} = require('../../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
 const { Case } = require('../../entities/cases/Case');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { fileDocketEntryInteractor } = require('./fileDocketEntryInteractor');
@@ -10,6 +13,7 @@ describe('fileDocketEntryInteractor', () => {
   const saveWorkItemForDocketEntryWithoutFileSpy = jest.fn();
   const saveWorkItemForNonPaperSpy = jest.fn();
   const updateCaseSpy = jest.fn().mockImplementation(v => v);
+  const deleteCaseTrialSortMappingRecordsSpy = jest.fn();
   let getCaseDeadlinesByCaseIdSpy;
 
   let caseRecord;
@@ -73,6 +77,7 @@ describe('fileDocketEntryInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => user,
       getPersistenceGateway: () => ({
+        deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsSpy,
         getCaseByCaseId: async () => caseRecord,
         getCaseDeadlinesByCaseId: getCaseDeadlinesByCaseIdSpy,
         getUserById: async () => user,
@@ -82,6 +87,7 @@ describe('fileDocketEntryInteractor', () => {
         updateCase: updateCaseSpy,
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({ updateCaseAutomaticBlock }),
     };
   });
 
@@ -194,6 +200,7 @@ describe('fileDocketEntryInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
     });
+    expect(deleteCaseTrialSortMappingRecordsSpy).toBeCalled();
   });
 
   it('sets the case as blocked with due dates if the document filed is a tracked document type and the case has due dates', async () => {
@@ -218,5 +225,6 @@ describe('fileDocketEntryInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
+    expect(deleteCaseTrialSortMappingRecordsSpy).toBeCalled();
   });
 });
