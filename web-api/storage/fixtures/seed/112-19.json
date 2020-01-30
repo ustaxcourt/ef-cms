@@ -25,6 +25,7 @@
               "partySecondary": false,
               "documentId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
               "receivedAt": "2019-12-11T15:25:55.007Z",
+              "filingDate": "2019-12-11T15:25:55.007Z",
               "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
             },
             "caseTitle": "Brian Earl Spilner",
@@ -52,6 +53,7 @@
         ],
         "pending": false,
         "receivedAt": "2019-12-11T15:25:55.007Z",
+        "filingDate": "2019-12-11T15:25:55.007Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "eventCode": "P",
         "createdAt": "2019-12-11T15:25:55.007Z",
@@ -67,6 +69,7 @@
         "workItems": [],
         "pending": false,
         "receivedAt": "2019-12-11T15:25:55.008Z",
+        "filingDate": "2019-12-11T15:25:55.008Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "eventCode": "STIN",
         "createdAt": "2019-12-11T15:25:55.008Z",

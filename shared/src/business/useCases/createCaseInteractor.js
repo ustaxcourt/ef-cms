@@ -145,6 +145,7 @@ exports.createCaseInteractor = async ({
       documentId: petitionFileId,
       documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
+      filingDate: caseToAdd.receivedAt || caseToAdd.createdAt,
       partyPrimary: true,
       partySecondary,
       practitioner: practitioners,
@@ -178,6 +179,7 @@ exports.createCaseInteractor = async ({
       documentId: stinFileId,
       documentType: Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
       eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
+      filingDate: caseToAdd.receivedAt || caseToAdd.createdAt,
       partyPrimary: true,
       partySecondary,
       practitioner: practitioners,
@@ -200,6 +202,7 @@ exports.createCaseInteractor = async ({
           Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         eventCode:
           Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+        filingDate: caseToAdd.receivedAt || caseToAdd.createdAt,
         partyPrimary: true,
         partySecondary,
         practitioner: practitioners,
