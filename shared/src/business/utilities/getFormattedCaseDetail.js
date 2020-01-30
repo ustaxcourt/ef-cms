@@ -319,11 +319,30 @@ const formatCase = (applicationContext, caseDetail) => {
     } else {
       result.formattedTrialDate = 'Not scheduled';
     }
-  } else if (result.blocked) {
+  } else if (result.blocked || result.automaticBlocked) {
     result.showBlockedFromTrial = true;
-    result.blockedDateFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(result.blockedDate, 'MMDDYY');
+
+    if (result.blockedDate && result.automaticBlocked) {
+      result.blockedDateFormatted = applicationContext
+        .getUtilities()
+        .formatDateString(result.blockedDate, 'MMDDYY');
+      result.automaticBlockedDateFormatted = applicationContext
+        .getUtilities()
+        .formatDateString(result.automaticBlockedDate, 'MMDDYY');
+      if (result.blockedDate <= result.automaticBlockedDate) {
+        result.blockedDateEarliest = result.blockedDateFormatted;
+      } else {
+        result.blockedDateEarliest = result.automaticBlockedDateFormatted;
+      }
+    } else if (result.blocked) {
+      result.blockedDateEarliest = result.blockedDateFormatted = applicationContext
+        .getUtilities()
+        .formatDateString(result.blockedDate, 'MMDDYY');
+    } else if (result.automaticBlocked) {
+      result.blockedDateEarliest = result.automaticBlockedDateFormatted = applicationContext
+        .getUtilities()
+        .formatDateString(result.automaticBlockedDate, 'MMDDYY');
+    }
   } else if (result.highPriority) {
     result.formattedTrialDate = 'Not scheduled';
     result.formattedAssociatedJudge = 'Not assigned';
