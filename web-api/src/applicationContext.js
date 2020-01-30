@@ -641,6 +641,9 @@ const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
+  updateCaseAutomaticBlock,
+} = require('../../shared/src/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
+const {
   updateCaseContextInteractor,
 } = require('../../shared/src/business/useCases/updateCaseContextInteractor');
 const {
@@ -1033,6 +1036,7 @@ module.exports = (appContextUser = {}) => {
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
         sendServedPartiesEmails,
+        updateCaseAutomaticBlock,
       };
     },
     getUseCases: () => {

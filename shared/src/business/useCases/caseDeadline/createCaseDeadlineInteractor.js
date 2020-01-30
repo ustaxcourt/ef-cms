@@ -39,8 +39,14 @@ exports.createCaseDeadlineInteractor = async ({
       applicationContext,
       caseId: caseDeadline.caseId,
     });
-  const caseEntity = new Case(caseDetail, { applicationContext });
-  caseEntity.updateAutomaticBlocked({ caseDeadlines: [newCaseDeadline] });
+  let caseEntity = new Case(caseDetail, { applicationContext });
+
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+    });
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

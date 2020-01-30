@@ -3,13 +3,16 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
+import { generateTitlePreviewAction } from '../actions/EditDocketRecordEntry/generateTitlePreviewAction';
 import { getCaseAction } from '../actions/getCaseAction';
+import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryMetaFormForEditAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaFormForEditAction';
 import { setDocketEntryMetaTypeAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaTypeAction';
+import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditDocketEntryMeta = [
@@ -24,8 +27,12 @@ export const gotoEditDocketEntryMeta = [
   setDocketEntryMetaTypeAction,
   chooseMetaTypePathAction,
   {
-    courtIssued: [generateCourtIssuedDocumentTitleAction],
-    document: [],
+    courtIssued: [
+      getUsersInSectionAction({ section: 'judge' }),
+      setUsersByKeyAction('judgeUsers'),
+      generateCourtIssuedDocumentTitleAction,
+    ],
+    document: [generateTitlePreviewAction],
     noDocument: [],
   },
   setCurrentPageAction('EditDocketEntryMeta'),

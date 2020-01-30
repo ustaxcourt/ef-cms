@@ -15,6 +15,7 @@
       "partySecondary": false,
       "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
       "receivedAt": "2020-01-21T16:41:39.481Z",
+      "filingDate": "2020-01-21T16:41:39.481Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "caseTitle": "Eve Brewer",
@@ -74,6 +75,7 @@
       "partySecondary": false,
       "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
       "receivedAt": "2020-01-21T16:41:39.481Z",
+      "filingDate": "2020-01-21T16:41:39.481Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "caseTitle": "Eve Brewer",
@@ -155,6 +157,7 @@
         ],
         "pending": false,
         "receivedAt": "2020-01-21T16:41:39.481Z",
+        "filingDate": "2020-01-21T16:41:39.481Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "eventCode": "P",
         "createdAt": "2020-01-21T16:41:39.481Z",
@@ -171,6 +174,7 @@
         "workItems": [],
         "pending": false,
         "receivedAt": "2020-01-21T16:41:39.483Z",
+        "filingDate": "2020-01-21T16:41:39.483Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "eventCode": "STIN",
         "createdAt": "2020-01-21T16:41:39.482Z",

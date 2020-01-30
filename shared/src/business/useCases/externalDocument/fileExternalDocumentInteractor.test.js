@@ -1,6 +1,9 @@
 const {
   fileExternalDocumentInteractor,
 } = require('./fileExternalDocumentInteractor');
+const {
+  updateCaseAutomaticBlock,
+} = require('../../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
 const { Case } = require('../../entities/cases/Case');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -16,6 +19,7 @@ describe('fileExternalDocumentInteractor', () => {
   const updateCaseSpy = jest.fn();
   const sendServedPartiesEmailsSpy = jest.fn();
   let getCaseDeadlinesByCaseIdSpy;
+  const deleteCaseTrialSortMappingRecordsSpy = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -85,6 +89,7 @@ describe('fileExternalDocumentInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => globalUser,
       getPersistenceGateway: () => ({
+        deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsSpy,
         getCaseByCaseId: getCaseByCaseIdSpy,
         getCaseDeadlinesByCaseId: getCaseDeadlinesByCaseIdSpy,
         getUserById: ({ userId }) => MOCK_USERS[userId],
@@ -94,6 +99,7 @@ describe('fileExternalDocumentInteractor', () => {
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       getUseCaseHelpers: () => ({
         sendServedPartiesEmails: sendServedPartiesEmailsSpy,
+        updateCaseAutomaticBlock,
       }),
     };
   });
@@ -298,6 +304,7 @@ describe('fileExternalDocumentInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
     });
+    expect(deleteCaseTrialSortMappingRecordsSpy).toBeCalled();
   });
 
   it('should automatically block the case with deadlines if the document filed is a tracked document and the case has a deadline', async () => {
@@ -325,5 +332,6 @@ describe('fileExternalDocumentInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
+    expect(deleteCaseTrialSortMappingRecordsSpy).toBeCalled();
   });
 });
