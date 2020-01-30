@@ -24,6 +24,7 @@
               "partySecondary": false,
               "documentId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
               "receivedAt": "2019-12-11T15:25:09.285Z",
+              "filingDate": "2019-12-11T15:25:09.285Z",
               "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
             },
             "caseTitle": "Guy Fieri",
@@ -51,6 +52,7 @@
         ],
         "pending": false,
         "receivedAt": "2019-12-11T15:25:09.285Z",
+        "filingDate": "2019-12-11T15:25:09.285Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "eventCode": "P",
         "createdAt": "2019-12-11T15:25:09.285Z",
@@ -66,6 +68,7 @@
         "workItems": [],
         "pending": false,
         "receivedAt": "2019-12-11T15:25:09.286Z",
+        "filingDate": "2019-12-11T15:25:09.286Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "eventCode": "STIN",
         "createdAt": "2019-12-11T15:25:09.286Z",
