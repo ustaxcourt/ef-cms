@@ -1,8 +1,8 @@
+import { Document } from '../../../../../shared/src/business/entities/Document';
 import { applicationContext } from '../../../applicationContext';
-import { setDocketEntryMetaTypeAction } from './setDocketEntryMetaTypeAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { Document } from '../../../../../shared/src/business/entities/Document';
+import { setDocketEntryMetaTypeAction } from './setDocketEntryMetaTypeAction';
 
 describe('setDocketEntryMetaTypeAction', () => {
   beforeEach(() => {

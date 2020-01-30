@@ -7,7 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the application context needed for getting the utility method
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store
- * @returns {object} the new props
  */
 export const setDocketEntryMetaTypeAction = ({
   applicationContext,
