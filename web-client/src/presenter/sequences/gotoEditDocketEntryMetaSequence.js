@@ -3,6 +3,7 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
+import { generateTitlePreviewAction } from '../actions/EditDocketRecordEntry/generateTitlePreviewAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
@@ -25,7 +26,7 @@ export const gotoEditDocketEntryMeta = [
   chooseMetaTypePathAction,
   {
     courtIssued: [generateCourtIssuedDocumentTitleAction],
-    document: [],
+    document: [generateTitlePreviewAction],
     noDocument: [],
   },
   setCurrentPageAction('EditDocketEntryMeta'),
