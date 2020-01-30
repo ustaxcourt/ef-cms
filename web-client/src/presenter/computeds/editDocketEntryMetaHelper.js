@@ -3,19 +3,7 @@ import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { state } from 'cerebral';
 
 export const editDocketEntryMetaHelper = (get, applicationContext) => {
-  const { documentId, eventCode } = get(state.form);
-
-  const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();
-  const COURT_ISSUED_EVENT_CODES_MAP = COURT_ISSUED_EVENT_CODES.map(
-    courtIssuedEvent => courtIssuedEvent.eventCode,
-  );
-
-  const hasDocument = !!documentId;
-
-  const isCourtIssuedDocument =
-    hasDocument && COURT_ISSUED_EVENT_CODES_MAP.includes(eventCode);
-
-  let docketEntryMetaFormComponent;
+  const { eventCode } = get(state.form);
 
   const caseDetail = get(state.caseDetail);
   const validationErrors = get(state.validationErrors);
@@ -45,14 +33,6 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
 
-  if (!hasDocument) {
-    docketEntryMetaFormComponent = 'NoDocument';
-  } else if (isCourtIssuedDocument) {
-    docketEntryMetaFormComponent = 'CourtIssued';
-  } else {
-    docketEntryMetaFormComponent = 'Document';
-  }
-
   let categoryInformation;
   find(
     INTERNAL_CATEGORY_MAP,
@@ -65,7 +45,6 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
   );
 
   return {
-    docketEntryMetaFormComponent,
     partyValidationError,
     primary: optionsForCategory,
     showObjection: objectionDocumentTypes.includes(form.documentType),
