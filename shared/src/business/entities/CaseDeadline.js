@@ -15,14 +15,16 @@ function CaseDeadline(rawProps, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.associatedJudge = rawProps.associatedJudge || Case.CHIEF_JUDGE;
   this.caseDeadlineId =
     rawProps.caseDeadlineId || applicationContext.getUniqueId();
   this.caseId = rawProps.caseId;
   this.createdAt = rawProps.createdAt || createISODateString();
-  this.description = rawProps.description;
   this.deadlineDate = rawProps.deadlineDate;
-  this.associatedJudge = rawProps.associatedJudge || Case.CHIEF_JUDGE;
+  this.description = rawProps.description;
 }
+
+CaseDeadline.validationName = 'CaseDeadline';
 
 CaseDeadline.VALIDATION_ERROR_MESSAGES = {
   caseId: 'You must have a case id.',
@@ -37,32 +39,46 @@ CaseDeadline.VALIDATION_ERROR_MESSAGES = {
 };
 
 CaseDeadline.schema = joi.object().keys({
-  associatedJudge: joi.string().required(),
+  associatedJudge: joi
+    .string()
+    .required()
+    .description('Judge assigned to this Case. Defaults to Chief Judge.'),
   caseDeadlineId: joi
     .string()
     .uuid({
       version: ['uuidv4'],
     })
-    .required(),
+    .required()
+    .description('Unique Case Deadline ID only used by the system.'),
   caseId: joi
     .string()
     .uuid({
       version: ['uuidv4'],
     })
-    .required(),
+    .required()
+    .description('Unique Case ID only used by the system.'),
   createdAt: joi
     .date()
     .iso()
-    .required(),
+    .required()
+    .description('When the Case Deadline was added to the system.'),
   deadlineDate: joi
     .date()
     .iso()
-    .required(),
+    .required()
+    .description('When the Case Deadline expires.'),
   description: joi
     .string()
     .max(120)
-    .required(),
+    .min(1)
+    .required()
+    .description('User provided dscription of the Case Deadline.'),
 });
+
+// CaseDeadline.prototype.toRawObject = function() {
+//   const result = this.toRawObjectFromJoi();
+//   return result;
+// };
 
 joiValidationDecorator(
   CaseDeadline,

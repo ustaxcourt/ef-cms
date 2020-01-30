@@ -353,7 +353,7 @@ joiValidationDecorator(
     associatedJudge: joi
       .string()
       .required()
-      .description('Defaults to Chief Judge.'),
+      .description('Judge assigned to this Case. Defaults to Chief Judge.'),
     automaticBlocked: joi
       .boolean()
       .optional()
@@ -428,7 +428,7 @@ joiValidationDecorator(
       .date()
       .iso()
       .required()
-      .description('When the case was added to the system.'),
+      .description('When the Case was added to the system.'),
     docketNumber: joi
       .string()
       .regex(Case.docketNumberMatcher)
