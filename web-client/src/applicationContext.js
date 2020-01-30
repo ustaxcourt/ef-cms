@@ -81,6 +81,7 @@ import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/pr
 import {
   createISODateString,
   createISODateStringFromObject,
+  deconstructDate,
   formatDateString,
   formatNow,
   isStringISOFormatted,
@@ -160,6 +161,7 @@ import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCas
 import { recallPetitionFromIRSHoldingQueueInteractor } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshTokenInteractor } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { removeCaseFromTrialInteractor } from '../../shared/src/proxies/trialSessions/removeCaseFromTrialProxy';
+import { removeCasePendingItemInteractor } from '../../shared/src/proxies/removeCasePendingItemProxy';
 import { removeConsolidatedCasesInteractor } from '../../shared/src/proxies/removeConsolidatedCasesProxy';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
@@ -336,6 +338,7 @@ const allUseCases = {
   recallPetitionFromIRSHoldingQueueInteractor,
   refreshTokenInteractor,
   removeCaseFromTrialInteractor,
+  removeCasePendingItemInteractor,
   removeConsolidatedCasesInteractor,
   removeItemInteractor,
   runBatchProcessInteractor,
@@ -553,6 +556,7 @@ const applicationContext = {
       compareStrings,
       createISODateString,
       createISODateStringFromObject,
+      deconstructDate,
       filterEmptyStrings,
       formatCase,
       formatCaseDeadlines,

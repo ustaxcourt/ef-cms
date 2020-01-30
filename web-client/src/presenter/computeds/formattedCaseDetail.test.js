@@ -998,6 +998,21 @@ describe('formattedCaseDetail', () => {
             description: 'Filing Fee Paid',
             filingDate: '2019-06-19T17:29:13.120Z',
           },
+          {
+            description: 'System Generated',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
+          {
+            description: 'Court Issued - Not Served',
+            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
+          {
+            description: 'Court Issued - Served',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
         ],
         documents: [
           {
@@ -1009,6 +1024,44 @@ describe('formattedCaseDetail', () => {
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
             workItems: [{ isQC: true }],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            documentTitle: 'System Generated',
+            documentType: 'Notice of Trial',
+            eventCode: 'NDT',
+            workItems: [{ isQC: true }],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            documentTitle: 'Court Issued - Not Served',
+            documentType: 'O - Order',
+            eventCode: 'O',
+            isCourtIssuedDocument: true,
+            workItems: [
+              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
+            ],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            documentTitle: 'Court Issued - Served',
+            documentType: 'O - Order',
+            eventCode: 'O',
+            isCourtIssuedDocument: true,
+            servedAt: '2019-06-19T17:29:13.120Z',
+            status: 'served',
+            workItems: [
+              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
+            ],
           },
         ],
       };
@@ -1085,6 +1138,57 @@ describe('formattedCaseDetail', () => {
 
       expect(
         result.formattedDocketEntries[1].showEditDocketRecordEntry,
+      ).toEqual(true);
+    });
+
+    it('should not show the edit button if the docket entry has a system generated document', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+        },
+      });
+
+      expect(
+        result.formattedDocketEntries[2].showEditDocketRecordEntry,
+      ).toEqual(false);
+    });
+
+    it('should NOT show the edit button if the docket entry has an unserved court issued document', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+        },
+      });
+
+      expect(
+        result.formattedDocketEntries[3].showEditDocketRecordEntry,
+      ).toEqual(false);
+    });
+
+    it('should show the edit button if the docket entry has a served court issued document', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+        },
+      });
+
+      expect(
+        result.formattedDocketEntries[4].showEditDocketRecordEntry,
       ).toEqual(true);
     });
   });

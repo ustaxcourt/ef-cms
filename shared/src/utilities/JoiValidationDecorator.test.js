@@ -108,4 +108,8 @@ describe('Joi Validation Decorator', () => {
     const obj = new MockEntity2({});
     expect(obj.getSchema()).toEqual(MockEntity2Schema);
   });
+
+  it('should have access to the schema without instantiating the entity', () => {
+    expect(MockEntity2.getSchema()).toEqual(MockEntity2Schema);
+  });
 });

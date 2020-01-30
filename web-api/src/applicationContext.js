@@ -539,6 +539,9 @@ const {
   removeCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor');
 const {
+  removeCasePendingItemInteractor,
+} = require('../../shared/src/business/useCases/removeCasePendingItemInteractor');
+const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
 const {
@@ -637,6 +640,9 @@ const {
 const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
+const {
+  updateCaseAutomaticBlock,
+} = require('../../shared/src/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
 const {
   updateCaseContextInteractor,
 } = require('../../shared/src/business/useCases/updateCaseContextInteractor');
@@ -1030,6 +1036,7 @@ module.exports = (appContextUser = {}) => {
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
         sendServedPartiesEmails,
+        updateCaseAutomaticBlock,
       };
     },
     getUseCases: () => {
@@ -1117,6 +1124,7 @@ module.exports = (appContextUser = {}) => {
         processStreamRecordsInteractor,
         recallPetitionFromIRSHoldingQueueInteractor,
         removeCaseFromTrialInteractor,
+        removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
         reprocessFailedRecordsInteractor,
         runBatchProcessInteractor,

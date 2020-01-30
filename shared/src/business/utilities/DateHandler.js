@@ -101,6 +101,23 @@ const dateStringsCompared = (a, b) => {
 };
 
 /**
+ * @param {string} dateString date to be deconstructed
+ * @returns {object} deconstructed date object
+ */
+const deconstructDate = dateString => {
+  const momentObj = dateString && prepareDateFromString(dateString);
+  let result;
+  if (momentObj && momentObj.toDate() instanceof Date && momentObj.isValid()) {
+    result = {
+      day: momentObj.format('D'),
+      month: momentObj.format('M'),
+      year: momentObj.format('YYYY'),
+    };
+  }
+  return result;
+};
+
+/**
  * @param {string} dateString the date string
  * @param {string} formats the format to check against
  * @returns {boolean} if the date string is valid
@@ -114,6 +131,7 @@ module.exports = {
   createISODateString,
   createISODateStringFromObject,
   dateStringsCompared,
+  deconstructDate,
   formatDateString,
   formatNow,
   isStringISOFormatted,

@@ -79,6 +79,7 @@ export const AddTrialSession = connect(
             <Button type="submit">Add Session</Button>
             <Button
               link
+              type="button"
               onClick={() => {
                 formCancelToggleCancelSequence();
               }}
