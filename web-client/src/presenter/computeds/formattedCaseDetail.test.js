@@ -998,6 +998,11 @@ describe('formattedCaseDetail', () => {
             description: 'Filing Fee Paid',
             filingDate: '2019-06-19T17:29:13.120Z',
           },
+          {
+            description: 'System Generated',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
         ],
         documents: [
           {
@@ -1008,6 +1013,16 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
+            workItems: [{ isQC: true }],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            documentTitle: 'Court Issued',
+            documentType: 'Notice of Trial',
+            eventCode: 'NDT',
             workItems: [{ isQC: true }],
           },
         ],
@@ -1086,6 +1101,23 @@ describe('formattedCaseDetail', () => {
       expect(
         result.formattedDocketEntries[1].showEditDocketRecordEntry,
       ).toEqual(true);
+    });
+
+    it('should not show the edit button if the docket entry has a system generated document', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+        },
+      });
+
+      expect(
+        result.formattedDocketEntries[2].showEditDocketRecordEntry,
+      ).toEqual(false);
     });
   });
 });
