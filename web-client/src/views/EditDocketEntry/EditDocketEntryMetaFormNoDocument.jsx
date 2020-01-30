@@ -23,7 +23,7 @@ export const EditDocketEntryMetaFormNoDocument = connect(
         <FormGroup errorText={validationErrors.filingDate}>
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="filing-date-legend">
-              Filing Date
+              Filed Date
             </legend>
             <div className="usa-memorable-date">
               <div className="usa-form-group usa-form-group--month margin-bottom-0">
