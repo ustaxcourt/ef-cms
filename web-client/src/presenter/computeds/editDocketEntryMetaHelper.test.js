@@ -1,4 +1,3 @@
-import { Document } from '../../../../shared/src/business/entities/Document';
 import { applicationContext } from '../../applicationContext';
 import { editDocketEntryMetaHelper as editDocketEntryMetaHelperComputed } from './editDocketEntryMetaHelper';
 import { runCompute } from 'cerebral/test';

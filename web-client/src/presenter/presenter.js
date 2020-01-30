@@ -1,4 +1,3 @@
-import { updateDocketEntryMetaDocumentFormValueSequenceSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequenceSequence';
 import { ActionError } from './errors/ActionError';
 import { InvalidRequestError } from './errors/InvalidRequestError';
 import { NotFoundError } from './errors/NotFoundError';
@@ -281,6 +280,7 @@ import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updat
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
+import { updateDocketEntryMetaDocumentFormValueSequenceSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequenceSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
 import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
@@ -352,7 +352,6 @@ export const presenter = {
   ],
   providers: {},
   sequences: {
-    updateDocketEntryMetaDocumentFormValueSequenceSequence,
     addCaseToTrialSessionSequence,
     addSupportingDocumentToFormSequence,
     archiveDraftDocumentModalSequence,
@@ -627,6 +626,7 @@ export const presenter = {
     updateCreateOrderModalFormValueSequence,
     updateCurrentTabSequence,
     updateDocketEntryFormValueSequence,
+    updateDocketEntryMetaDocumentFormValueSequenceSequence,
     updateDocketNumberSearchFormSequence,
     updateDocumentValueSequence,
     updateFileDocumentWizardFormValueSequence,
