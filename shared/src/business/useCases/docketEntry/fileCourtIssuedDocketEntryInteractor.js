@@ -42,7 +42,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const document = caseEntity.getDocumentById({
     documentId,
@@ -129,16 +129,12 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     }),
   );
 
-  if (caseEntity.doesHavePendingItems()) {
-    const caseDeadlines = await applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByCaseId({
-        applicationContext,
-        caseId: caseEntity.caseId,
-      });
-
-    caseEntity.updateAutomaticBlocked({ caseDeadlines });
-  }
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+    });
 
   const saveItems = [
     applicationContext.getPersistenceGateway().createUserInboxRecord({

@@ -29,16 +29,14 @@ exports.deleteCaseDeadlineInteractor = async ({
     .getPersistenceGateway()
     .getCaseByCaseId({ applicationContext, caseId });
 
-  const updatedCase = new Case(caseToUpdate, { applicationContext });
+  let updatedCase = new Case(caseToUpdate, { applicationContext });
 
-  const caseDeadlines = await applicationContext
-    .getPersistenceGateway()
-    .getCaseDeadlinesByCaseId({
+  updatedCase = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
       applicationContext,
-      caseId: caseToUpdate.caseId,
+      caseEntity: updatedCase,
     });
-
-  updatedCase.updateAutomaticBlocked({ caseDeadlines });
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
