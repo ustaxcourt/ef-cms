@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
-import { EditDocketEntryMetaFormCourtIssued } from './EditDocketEntryMetaFormDocument';
+import { EditDocketEntryMetaDocketEntryPreview } from './EditDocketEntryMetaDocketEntryPreview';
+import { EditDocketEntryMetaFormCourtIssued } from './EditDocketEntryMetaFormCourtIssued';
 import { EditDocketEntryMetaFormDocument } from './EditDocketEntryMetaFormDocument';
 import { EditDocketEntryMetaFormNoDocument } from './EditDocketEntryMetaFormNoDocument';
 import { EditDocketEntryMetaTabAction } from './EditDocketEntryMetaTabAction';
@@ -24,6 +25,19 @@ export const EditDocketEntryMeta = connect(
         <section className="usa-section grid-container">
           <ErrorNotification />
 
+          <div className="grid-row grid-gap">
+            <div className="grid-col-5 title">
+              <h1>Docket Entry</h1>
+            </div>
+            <div className="grid-col-7">
+              <div className="display-flex flex-row flex-justify flex-align-center">
+                <div className="margin-top-1 margin-bottom-1 docket-entry-preview-text">
+                  <span className="text-bold">Docket Entry Preview: </span>
+                  <EditDocketEntryMetaDocketEntryPreview />
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="grid-row grid-gap">
             <div className="grid-col-5 DocumentDetail">
               <Tabs
