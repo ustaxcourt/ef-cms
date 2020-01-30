@@ -191,12 +191,7 @@ exports.fileDocketEntryInteractor = async ({
         caseId: caseEntity.caseId,
       });
 
-    const blockedReason =
-      caseDeadlines.length > 0
-        ? Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate
-        : Case.AUTOMATIC_BLOCKED_REASONS.pending;
-
-    caseEntity.setAsAutomaticBlocked(blockedReason);
+    caseEntity.updateAutomaticBlocked({ caseDeadlines });
   }
 
   await applicationContext.getPersistenceGateway().updateCase({
