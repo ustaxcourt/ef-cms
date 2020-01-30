@@ -13,6 +13,8 @@ module.exports = {
   prioritizeCaseLambda: require('./cases/prioritizeCaseLambda').handler,
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda')
     .handler,
+  removeCasePendingItemLambda: require('./cases/removeCasePendingItemLambda')
+    .handler,
   removeConsolidatedCasesLambda: require('./cases/removeConsolidatedCasesLambda')
     .handler,
   saveCaseDetailInternalEditLambda: require('./cases/saveCaseDetailInternalEditLambda')

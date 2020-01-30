@@ -5,19 +5,23 @@ import React from 'react';
 export const EditDocketEntryMetaDocketEntryPreview = connect(
   {
     addCourtIssuedDocketEntryHelper: state.addCourtIssuedDocketEntryHelper,
-    editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
-    form: state.form,
+    documentTitlePreview: state.screenMetadata.documentTitlePreview,
+    editType: state.screenMetadata.editType,
+    noDocumentDescription: state.form.description,
   },
-  ({ addCourtIssuedDocketEntryHelper, editDocketEntryMetaHelper, form }) => {
+  ({
+    addCourtIssuedDocketEntryHelper,
+    documentTitlePreview,
+    editType,
+    noDocumentDescription,
+  }) => {
     return (
       <>
-        {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
-          'CourtIssued' &&
-          addCourtIssuedDocketEntryHelper.formattedDocumentTitle}
-        {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
-          'NoDocument' &&
-          form &&
-          form.description}
+        {(editType === 'CourtIssued' &&
+          addCourtIssuedDocketEntryHelper.formattedDocumentTitle) ||
+          ''}
+        {(editType === 'Document' && documentTitlePreview) || ''}
+        {(editType === 'NoDocument' && noDocumentDescription) || ''}
       </>
     );
   },

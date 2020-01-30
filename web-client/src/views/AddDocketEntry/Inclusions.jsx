@@ -8,15 +8,14 @@ export const Inclusions = connect(
   {
     form: state.form,
     marginClass: props.marginClass,
-    updateDocketEntryFormValueSequence:
-      sequences.updateDocketEntryFormValueSequence,
+    updateSequence: sequences[props.updateSequence],
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
   ({
     form,
     marginClass,
-    updateDocketEntryFormValueSequence,
+    updateSequence,
     validateDocketEntrySequence,
     validationErrors,
   }) => {
@@ -34,7 +33,7 @@ export const Inclusions = connect(
               name="attachments"
               type="checkbox"
               onChange={e => {
-                updateDocketEntryFormValueSequence({
+                updateSequence({
                   key: e.target.name,
                   value: e.target.checked,
                 });
@@ -56,7 +55,7 @@ export const Inclusions = connect(
               name="certificateOfService"
               type="checkbox"
               onChange={e => {
-                updateDocketEntryFormValueSequence({
+                updateSequence({
                   key: e.target.name,
                   value: e.target.checked,
                 });
@@ -100,7 +99,7 @@ export const Inclusions = connect(
                           validateDocketEntrySequence();
                         }}
                         onChange={e => {
-                          updateDocketEntryFormValueSequence({
+                          updateSequence({
                             key: e.target.name,
                             value: e.target.value,
                           });
@@ -123,7 +122,7 @@ export const Inclusions = connect(
                           validateDocketEntrySequence();
                         }}
                         onChange={e => {
-                          updateDocketEntryFormValueSequence({
+                          updateSequence({
                             key: e.target.name,
                             value: e.target.value,
                           });
@@ -146,7 +145,7 @@ export const Inclusions = connect(
                           validateDocketEntrySequence();
                         }}
                         onChange={e => {
-                          updateDocketEntryFormValueSequence({
+                          updateSequence({
                             key: e.target.name,
                             value: e.target.value,
                           });

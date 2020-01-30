@@ -24,6 +24,7 @@
               "partySecondary": false,
               "documentId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d",
               "receivedAt": "2019-12-11T16:02:31.174Z",
+              "filingDate": "2019-12-11T16:02:31.174Z",
               "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
             },
             "caseTitle": "Letti Toretto",
@@ -51,6 +52,7 @@
         ],
         "pending": false,
         "receivedAt": "2019-12-11T16:02:31.174Z",
+        "filingDate": "2019-12-11T16:02:31.174Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "eventCode": "P",
         "createdAt": "2019-12-11T16:02:31.174Z",
@@ -66,6 +68,7 @@
         "workItems": [],
         "pending": false,
         "receivedAt": "2019-12-11T16:02:31.176Z",
+        "filingDate": "2019-12-11T16:02:31.176Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "eventCode": "STIN",
         "createdAt": "2019-12-11T16:02:31.176Z",
