@@ -60,10 +60,10 @@ export const BlockedCasesReport = connect(
                             <td>{item.caseName}</td>
                             <td>{item.status}</td>
                             <td>
-                              {[
-                                item.blockedReason,
-                                item.automaticBlockedReason,
-                              ].join(<br />)}
+                              {item.blockedReason}
+                              {item.blockedReason &&
+                                item.automaticBlockedReason && <br />}
+                              {item.automaticBlockedReason}
                             </td>
                           </tr>
                         ),
