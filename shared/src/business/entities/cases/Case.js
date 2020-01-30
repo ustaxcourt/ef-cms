@@ -13,7 +13,7 @@ const {
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
-const { find, includes } = require('lodash');
+const { find, includes, isEmpty } = require('lodash');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
 const { Order } = require('../orders/Order');
 const { Practitioner } = require('../Practitioner');
@@ -1267,27 +1267,31 @@ Case.prototype.unsetAsBlocked = function() {
 };
 
 /**
- * set as automaticBlocked with an automaticBlockedReason
+ * update as automaticBlocked with an automaticBlockedReason based on
+ * provided case deadlines and pending items
  *
- * @param {string} automaticBlockedReason - the reason the case was blocked
+ * @param {object} caseDeadlines - the case deadlines
  * @returns {Case} the updated case entity
  */
-Case.prototype.setAsAutomaticBlocked = function(automaticBlockedReason) {
-  this.automaticBlocked = true;
-  this.automaticBlockedReason = automaticBlockedReason;
-  this.automaticBlockedDate = createISODateString();
-  return this;
-};
-
-/**
- * unblock the case and remove the automaticBlockedReason
- *
- * @returns {Case} the updated case entity
- */
-Case.prototype.unsetAsAutomaticBlocked = function() {
-  this.automaticBlocked = false;
-  this.automaticBlockedReason = undefined;
-  this.automaticBlockedDate = undefined;
+Case.prototype.updateAutomaticBlocked = function({ caseDeadlines }) {
+  const hasPendingItems = this.doesHavePendingItems();
+  let automaticBlockedReason;
+  if (hasPendingItems && !isEmpty(caseDeadlines)) {
+    automaticBlockedReason = Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
+  } else if (hasPendingItems) {
+    automaticBlockedReason = Case.AUTOMATIC_BLOCKED_REASONS.pending;
+  } else if (!isEmpty(caseDeadlines)) {
+    automaticBlockedReason = Case.AUTOMATIC_BLOCKED_REASONS.dueDate;
+  }
+  if (automaticBlockedReason) {
+    this.automaticBlocked = true;
+    this.automaticBlockedDate = createISODateString();
+    this.automaticBlockedReason = automaticBlockedReason;
+  } else {
+    this.automaticBlocked = false;
+    this.automaticBlockedDate = undefined;
+    this.automaticBlockedReason = undefined;
+  }
   return this;
 };
 

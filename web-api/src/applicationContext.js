@@ -539,6 +539,9 @@ const {
   removeCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor');
 const {
+  removeCasePendingItemInteractor,
+} = require('../../shared/src/business/useCases/removeCasePendingItemInteractor');
+const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
 const {
@@ -1117,6 +1120,7 @@ module.exports = (appContextUser = {}) => {
         processStreamRecordsInteractor,
         recallPetitionFromIRSHoldingQueueInteractor,
         removeCaseFromTrialInteractor,
+        removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
         reprocessFailedRecordsInteractor,
         runBatchProcessInteractor,
