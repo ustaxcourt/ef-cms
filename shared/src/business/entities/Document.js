@@ -48,6 +48,7 @@ function Document(rawDocument, { applicationContext }) {
   this.eventCode = rawDocument.eventCode;
   this.exhibits = rawDocument.exhibits;
   this.filedBy = rawDocument.filedBy;
+  this.filingDate = rawDocument.filingDate || createISODateString();
   this.freeText = rawDocument.freeText;
   this.freeText2 = rawDocument.freeText2;
   this.hasSupportingDocuments = rawDocument.hasSupportingDocuments;
@@ -149,6 +150,13 @@ Document.STANDING_PRETRIAL_ORDER = {
   eventCode: 'SPTO',
 };
 
+Document.SYSTEM_GENERATED_DOCUMENT_TYPES = {
+  noticeOfDocketChange: Document.NOTICE_OF_DOCKET_CHANGE,
+  noticeOfTrial: Document.NOTICE_OF_TRIAL,
+  standingPretrialNotice: Document.STANDING_PRETRIAL_NOTICE,
+  standingPretrialOrder: Document.STANDING_PRETRIAL_ORDER,
+};
+
 Document.SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
     documentType: 'Stipulated Decision',
@@ -209,6 +217,10 @@ Document.getDocumentTypes = () => {
   const signedTypes = Object.keys(Document.SIGNED_DOCUMENT_TYPES).map(
     t => Document.SIGNED_DOCUMENT_TYPES[t].documentType,
   );
+  const systemGeneratedTypes = Object.keys(
+    Document.SYSTEM_GENERATED_DOCUMENT_TYPES,
+  ).map(t => Document.SYSTEM_GENERATED_DOCUMENT_TYPES[t].documentType);
+
   const documentTypes = [
     ...initialTypes,
     ...practitionerAssociationDocumentTypes,
@@ -216,10 +228,7 @@ Document.getDocumentTypes = () => {
     ...orderDocTypes,
     ...courtIssuedDocTypes,
     ...signedTypes,
-    Document.NOTICE_OF_DOCKET_CHANGE.documentType,
-    Document.NOTICE_OF_TRIAL.documentType,
-    Document.STANDING_PRETRIAL_ORDER.documentType,
-    Document.STANDING_PRETRIAL_NOTICE.documentType,
+    ...systemGeneratedTypes,
   ];
 
   return documentTypes;
@@ -236,7 +245,6 @@ Document.eventCodes = [
   Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
   Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
   Document.NOTICE_OF_DOCKET_CHANGE.eventCode,
-  Document.NOTICE_OF_TRIAL.eventCode,
   Document.NOTICE_OF_TRIAL.eventCode,
   Document.STANDING_PRETRIAL_NOTICE.eventCode,
   Document.STANDING_PRETRIAL_ORDER.eventCode,
@@ -297,6 +305,12 @@ joiValidationDecorator(
       .string()
       .allow('')
       .optional(),
+    filingDate: joi
+      .date()
+      .max('now')
+      .iso()
+      .required()
+      .description('Date that this Document was filed.'),
     freeText: joi.string().optional(),
     freeText2: joi.string().optional(),
     hasSupportingDocuments: joi.boolean().optional(),

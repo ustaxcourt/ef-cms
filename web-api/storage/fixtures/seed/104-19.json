@@ -4,6 +4,7 @@
     "documents": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
+        "filingDate": "2019-03-05T17:34:13.490Z",
         "documentType": "Petition",
         "documentTitle": "Petition",
         "filedBy": "Test Petitioner",
@@ -51,6 +52,7 @@
       {
         "processingStatus": "complete",
         "createdAt": "2019-03-05T17:34:13.491Z",
+        "filingDate": "2019-03-05T17:34:13.491Z",
         "documentType": "Statement of Taxpayer Identification",
         "filedBy": "Test Petitioner",
         "workItems": [],
@@ -61,6 +63,7 @@
       {
         "processingStatus": "complete",
         "createdAt": "2019-03-05T17:34:13.491Z",
+        "filingDate": "2019-03-05T17:34:13.491Z",
         "documentType": "Ownership Disclosure Statement",
         "filedBy": "Test Petitioner",
         "workItems": [],
@@ -163,6 +166,7 @@
     "document": {
       "createdAt": "2019-03-05T17:34:13.490Z",
       "receivedAt": "2019-03-01T21:40:46.415Z",
+      "filingDate": "2019-03-01T21:40:46.415Z",
       "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
       "documentType": "Petition",
       "documentTitle": "Petition",
@@ -201,6 +205,7 @@
     "document": {
       "createdAt": "2019-03-05T17:34:13.490Z",
       "receivedAt": "2019-03-01T21:40:46.415Z",
+      "filingDate": "2019-03-01T21:40:46.415Z",
       "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
       "documentType": "Petition",
       "documentTitle": "Petition",

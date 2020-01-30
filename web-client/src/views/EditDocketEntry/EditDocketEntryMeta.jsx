@@ -15,16 +15,15 @@ import React from 'react';
 export const EditDocketEntryMeta = connect(
   {
     caseDetail: state.caseDetail,
-    editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
+    editType: state.screenMetadata.editType,
     submitSequence: sequences.submitEditDocketEntryMetaSequence,
   },
-  ({ caseDetail, editDocketEntryMetaHelper, submitSequence }) => {
+  ({ caseDetail, editType, submitSequence }) => {
     return (
       <>
         <CaseDetailHeader />
         <section className="usa-section grid-container">
           <ErrorNotification />
-
           <div className="grid-row grid-gap">
             <div className="grid-col-5 title">
               <h1>Docket Entry</h1>
@@ -50,14 +49,15 @@ export const EditDocketEntryMeta = connect(
                   tabName="documentInfo"
                   title="Document Info"
                 >
-                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
-                    'CourtIssued' && <EditDocketEntryMetaFormCourtIssued />}
-
-                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
-                    'Document' && <EditDocketEntryMetaFormDocument />}
-
-                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
-                    'NoDocument' && <EditDocketEntryMetaFormNoDocument />}
+                  {editType === 'CourtIssued' && (
+                    <EditDocketEntryMetaFormCourtIssued />
+                  )}
+                  {editType === 'Document' && (
+                    <EditDocketEntryMetaFormDocument />
+                  )}
+                  {editType === 'NoDocument' && (
+                    <EditDocketEntryMetaFormNoDocument />
+                  )}
                 </Tab>
                 <Tab id="tab-service" tabName="service" title="Service">
                   <EditDocketEntryMetaTabService />

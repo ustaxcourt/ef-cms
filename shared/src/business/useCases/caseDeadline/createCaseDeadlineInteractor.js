@@ -40,10 +40,7 @@ exports.createCaseDeadlineInteractor = async ({
       caseId: caseDeadline.caseId,
     });
   const caseEntity = new Case(caseDetail, { applicationContext });
-  const blockedReason = caseEntity.hasPendingItems
-    ? Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate
-    : Case.AUTOMATIC_BLOCKED_REASONS.dueDate;
-  caseEntity.setAsAutomaticBlocked(blockedReason);
+  caseEntity.updateAutomaticBlocked({ caseDeadlines: [newCaseDeadline] });
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
