@@ -13,6 +13,10 @@ describe('generateTitlePreviewAction', () => {
       getUseCases: () => ({
         generateDocumentTitleInteractor: generateDocumentTitleStub,
       }),
+      getUtilities: () => ({
+        formatDocument: v => v,
+        getFilingsAndProceedings: () => '',
+      }),
     };
   });
 
