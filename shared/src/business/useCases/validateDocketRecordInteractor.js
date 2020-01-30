@@ -10,6 +10,7 @@ exports.validateDocketRecordInteractor = ({
   applicationContext,
   docketRecord,
 }) => {
+  console.log('docketRecord', docketRecord);
   const errors = new (applicationContext.getEntityConstructors().DocketRecord)(
     docketRecord,
   ).getFormattedValidationErrors();
