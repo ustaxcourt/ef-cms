@@ -95,7 +95,7 @@ describe('workQueueHelper', () => {
     });
   });
 
-  it('shows the start a case button when role is docket clerk', () => {
+  it('does not show the start a case button when role is docket clerk', () => {
     const user = {
       role: User.ROLES.docketClerk,
       userId: '123',
@@ -112,7 +112,7 @@ describe('workQueueHelper', () => {
       },
     });
     expect(result).toMatchObject({
-      showStartCaseButton: true,
+      showStartCaseButton: false,
     });
   });
 

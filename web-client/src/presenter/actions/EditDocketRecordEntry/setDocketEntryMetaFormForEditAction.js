@@ -19,14 +19,17 @@ export const setDocketEntryMetaFormForEditAction = ({ get, props, store }) => {
 
   if (docketRecordEntry.documentId) {
     const documentDetail = documents.find(
-      document => docketRecord.documentId === document.documentId,
+      document => docketRecordEntry.documentId === document.documentId,
     );
 
     store.set(state.form, {
       ...docketRecordEntry,
       ...documentDetail,
+      lodged: !!documentDetail.lodged,
     });
   } else {
     store.set(state.form, docketRecordEntry);
   }
+
+  store.set(state.docketRecordIndex, docketRecordIndex);
 };
