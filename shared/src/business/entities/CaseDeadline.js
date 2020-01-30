@@ -22,6 +22,7 @@ function CaseDeadline(rawProps, { applicationContext }) {
   this.createdAt = rawProps.createdAt || createISODateString();
   this.deadlineDate = rawProps.deadlineDate;
   this.description = rawProps.description;
+  this.docketNumber = rawProps.docketNumber;
 }
 
 CaseDeadline.validationName = 'CaseDeadline';
@@ -36,6 +37,7 @@ CaseDeadline.VALIDATION_ERROR_MESSAGES = {
     },
     'Enter a description of this deadline',
   ],
+  docketNumber: 'Enter a valid docket number',
 };
 
 CaseDeadline.schema = joi.object().keys({
@@ -72,7 +74,12 @@ CaseDeadline.schema = joi.object().keys({
     .max(120)
     .min(1)
     .required()
-    .description('User provided dscription of the Case Deadline.'),
+    .description('User provided description of the Case Deadline.'),
+  docketNumber: joi
+    .string()
+    .regex(Case.docketNumberMatcher)
+    .required()
+    .description('Unique Case ID in XXXXX-YY format.'),
 });
 
 joiValidationDecorator(

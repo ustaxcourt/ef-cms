@@ -401,8 +401,8 @@ Otherwise, this field is `any` and is `optional`.
  - `Stipulated Decision`
  - `Notice of Docket Change`
  - `Notice of Trial`
- - `Standing Pretrial Order`
  - `Standing Pretrial Notice`
+ - `Standing Pretrial Order`
 
 ### draftState
 
@@ -421,6 +421,13 @@ Otherwise, this field is `any` and is `optional`.
 > `string` | optional
 
 ##### Can be .
+
+### filingDate
+
+
+Date that this Document was filed.
+
+> `date` | required
 
 ### freeText
 
