@@ -15,6 +15,10 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
   let caseDeadlines = get(state.allCaseDeadlines) || [];
   let filterStartDate = get(state.screenMetadata.filterStartDate);
   let filterEndDate = get(state.screenMetadata.filterEndDate);
+  const judges = (get(state.judges) || [])
+    .map(i => i.name.replace(/^Judge\s+/, ''))
+    .concat('Chief Judge')
+    .sort();
 
   filterStartDate = applicationContext
     .getUtilities()
@@ -51,10 +55,13 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
     }
   };
 
+  const judgeFilter = get(state.screenMetadata.caseDeadlineReportHelper.judge);
+
   caseDeadlines = caseDeadlines
     .sort(sortByDateAndDocketNumber(applicationContext))
     .map(d => ({
       ...d,
+      associatedJudgeFormatted: d.associatedJudge.replace(/^Judge\s+/, ''),
       deadlineDateReal: applicationContext
         .getUtilities()
         .prepareDateFromString(d.deadlineDate),
@@ -65,9 +72,16 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
     }))
     .filter(d => filterByDate(d.deadlineDateReal));
 
+  if (judgeFilter) {
+    caseDeadlines = caseDeadlines.filter(
+      i => i.associatedJudgeFormatted === judgeFilter,
+    );
+  }
+
   return {
     caseDeadlineCount: caseDeadlines.length,
     caseDeadlines,
     formattedFilterDateHeader,
+    judges,
   };
 };

@@ -1,4 +1,5 @@
 import { BigHeader } from '../BigHeader';
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DateSelectCalendar } from './DateSelectCalendar';
 import { ErrorNotification } from '../ErrorNotification';
@@ -34,6 +35,31 @@ export const CaseDeadlines = connect(
               </div>
             </div>
             {caseDeadlineReportHelper.caseDeadlines.length > 0 && (
+              <div className="grid-row grid-gap padding-bottom-1">
+                <div className="grid-col-3 tablet:grid-col-2 padding-top-05">
+                  <h3 id="filterHeading">Filter by</h3>
+                </div>
+                <div className="grid-col-3">
+                  <BindedSelect
+                    ariaDescribedBy="case-deadlines-tab filterHeading"
+                    ariaLabel="judge"
+                    bind="screenMetadata.caseDeadlineReportHelper.judge"
+                    className="select-left"
+                    id="judgeFilter"
+                    name="judge"
+                    placeHolder="xyz"
+                  >
+                    <option value="">-Judge-</option>
+                    {caseDeadlineReportHelper.judges.map((judge, idx) => (
+                      <option key={idx} value={judge}>
+                        {judge}
+                      </option>
+                    ))}
+                  </BindedSelect>
+                </div>
+              </div>
+            )}
+            {caseDeadlineReportHelper.caseDeadlines.length > 0 && (
               <table className="usa-table row-border-only subsection work-queue deadlines">
                 <thead>
                   <tr>
@@ -41,6 +67,7 @@ export const CaseDeadlines = connect(
                     <th>Docket</th>
                     <th>Case title</th>
                     <th>Description</th>
+                    <th>Judge</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -54,6 +81,9 @@ export const CaseDeadlines = connect(
                       </td>
                       <td>{item.caseTitle}</td>
                       <td className="padding-extra">{item.description}</td>
+                      <td className="no-wrap">
+                        {item.associatedJudgeFormatted}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
