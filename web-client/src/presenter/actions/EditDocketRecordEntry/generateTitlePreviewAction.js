@@ -20,5 +20,12 @@ export const generateTitlePreviewAction = ({
       applicationContext,
       documentMetadata,
     });
+
+  documentTitle = documentTitle
+    ? `${documentTitle}${
+        documentMetadata.attachments ? ' (Attachment(s))' : ''
+      }`
+    : '';
+
   store.set(state.screenMetadata.documentTitlePreview, documentTitle);
 };
