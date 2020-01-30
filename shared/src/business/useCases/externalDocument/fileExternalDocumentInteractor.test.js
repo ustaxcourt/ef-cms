@@ -15,6 +15,7 @@ describe('fileExternalDocumentInteractor', () => {
   const saveWorkItemForNonPaperSpy = jest.fn();
   const updateCaseSpy = jest.fn();
   const sendServedPartiesEmailsSpy = jest.fn();
+  let getCaseDeadlinesByCaseIdSpy;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -78,12 +79,14 @@ describe('fileExternalDocumentInteractor', () => {
     });
 
     getCaseByCaseIdSpy = jest.fn().mockReturnValue(caseRecord);
+    getCaseDeadlinesByCaseIdSpy = jest.fn().mockReturnValue([]);
 
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => globalUser,
       getPersistenceGateway: () => ({
         getCaseByCaseId: getCaseByCaseIdSpy,
+        getCaseDeadlinesByCaseId: getCaseDeadlinesByCaseIdSpy,
         getUserById: ({ userId }) => MOCK_USERS[userId],
         saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
         updateCase: updateCaseSpy,
@@ -146,6 +149,66 @@ describe('fileExternalDocumentInteractor', () => {
     expect(updatedCase.documents[3].servedAt).toBeDefined();
   });
 
+  it('should set secondary document and secondary supporting documents to lodged with eventCode MISL', async () => {
+    const updatedCase = await fileExternalDocumentInteractor({
+      applicationContext,
+      documentIds: [
+        'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+        'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+        'c54ba5a9-b37b-479d-9201-067ec6e335be',
+      ],
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        docketNumber: '45678-18',
+        documentTitle: 'Motion for Leave to File',
+        documentType: 'Motion for Leave to File',
+        eventCode: 'M115',
+        secondaryDocument: {
+          documentTitle: 'Motion for Judgment on the Pleadings',
+          documentType: 'Motion for Judgment on the Pleadings',
+          eventCode: 'M121',
+        },
+        secondarySupportingDocuments: [
+          {
+            documentTitle: 'Motion for in Camera Review',
+            documentType: 'Motion for in Camera Review',
+            eventCode: 'M135',
+          },
+        ],
+        supportingDocuments: [
+          {
+            documentTitle: 'Civil Penalty Approval Form',
+            documentType: 'Civil Penalty Approval Form',
+            eventCode: 'CIVP',
+          },
+        ],
+      },
+    });
+    expect(updateCaseSpy).toBeCalled();
+    expect(updatedCase.documents).toMatchObject([
+      {}, // first 3 docs were already on the case
+      {},
+      {},
+      {
+        eventCode: 'M115', // primary document
+        lodged: undefined,
+      },
+      {
+        eventCode: 'CIVP', // supporting document
+        lodged: undefined,
+      },
+      {
+        eventCode: 'MISL', //secondary document
+        lodged: true,
+      },
+      {
+        eventCode: 'MISL', // secondary supporting document
+        lodged: true,
+      },
+    ]);
+  });
+
   it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
     let error;
 
@@ -197,7 +260,6 @@ describe('fileExternalDocumentInteractor', () => {
 
   it('should create a not-high-priority work item if the case status is not calendared', async () => {
     caseRecord.status = Case.STATUS_TYPES.new;
-    let error;
 
     await fileExternalDocumentInteractor({
       applicationContext,
@@ -211,10 +273,57 @@ describe('fileExternalDocumentInteractor', () => {
       },
     });
 
-    expect(error).toBeUndefined();
     expect(saveWorkItemForNonPaperSpy).toBeCalled();
     expect(saveWorkItemForNonPaperSpy.mock.calls[0][0]).toMatchObject({
       workItem: { highPriority: false },
+    });
+  });
+
+  it('should automatically block the case if the document filed is a tracked document', async () => {
+    await fileExternalDocumentInteractor({
+      applicationContext,
+      documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        category: 'Application',
+        docketNumber: '45678-18',
+        documentTitle: 'Application for Waiver of Filing Fee',
+        documentType: 'Application for Waiver of Filing Fee',
+        eventCode: 'APPW',
+      },
+    });
+
+    expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedDate: expect.anything(),
+      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+    });
+  });
+
+  it('should automatically block the case with deadlines if the document filed is a tracked document and the case has a deadline', async () => {
+    getCaseDeadlinesByCaseIdSpy = jest.fn().mockReturnValue([
+      {
+        deadlineDate: 'something',
+      },
+    ]);
+
+    await fileExternalDocumentInteractor({
+      applicationContext,
+      documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        category: 'Application',
+        docketNumber: '45678-18',
+        documentTitle: 'Application for Waiver of Filing Fee',
+        documentType: 'Application for Waiver of Filing Fee',
+        eventCode: 'APPW',
+      },
+    });
+
+    expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedDate: expect.anything(),
+      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
   });
 });
