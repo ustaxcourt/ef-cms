@@ -55,7 +55,7 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
     }
   };
 
-  const judgeFilter = get(state.screenMetadata.caseDeadlineReportHelper.judge);
+  const judgeFilter = get(state.screenMetadata.caseDeadlinesFilter.judge);
 
   caseDeadlines = caseDeadlines
     .sort(sortByDateAndDocketNumber(applicationContext))
