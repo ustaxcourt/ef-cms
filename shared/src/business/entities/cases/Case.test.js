@@ -262,6 +262,36 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeTruthy();
     });
 
+    it('Creates a valid case with automaticBlocked set to true and a valid automaticBlockedReason and automaticBlockedDate', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          automaticBlocked: true,
+          automaticBlockedDate: '2019-03-01T21:42:29.073Z',
+          automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
+
+    it('Creates a valid case with automaticBlocked set to true and an invalid automaticBlockedReason and automaticBlockedDate', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          automaticBlocked: true,
+          automaticBlockedDate: '2019-03-01T21:42:29.073Z',
+          automaticBlockedReason: 'Some Other Reason Not Valid',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
+    });
+
     it('Creates an invalid case with highPriority set to true but no highPriorityReason', () => {
       const myCase = new Case(
         {
@@ -1653,6 +1683,75 @@ describe('Case entity', () => {
       expect(caseToUpdate.blocked).toBeFalsy();
       expect(caseToUpdate.blockedReason).toBeUndefined();
       expect(caseToUpdate.blockedDate).toBeUndefined();
+    });
+  });
+
+  describe('setAsAutomaticBlocked', () => {
+    it('sets the case as automaticBlocked with a valid blocked reason', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToUpdate.automaticBlocked).toBeFalsy();
+
+      caseToUpdate.setAsAutomaticBlocked(
+        Case.AUTOMATIC_BLOCKED_REASONS.pending,
+      );
+
+      expect(caseToUpdate.automaticBlocked).toEqual(true);
+      expect(caseToUpdate.automaticBlockedReason).toEqual(
+        Case.AUTOMATIC_BLOCKED_REASONS.pending,
+      );
+      expect(caseToUpdate.automaticBlockedDate).toBeDefined();
+      expect(caseToUpdate.isValid()).toBeTruthy();
+    });
+
+    it('sets the case as automaticBlocked with a invalid blocked reason', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToUpdate.automaticBlocked).toBeFalsy();
+
+      caseToUpdate.setAsAutomaticBlocked('Some Wrong Text');
+
+      expect(caseToUpdate.automaticBlocked).toEqual(true);
+      expect(caseToUpdate.automaticBlockedReason).toEqual('Some Wrong Text');
+      expect(caseToUpdate.automaticBlockedDate).toBeDefined();
+      expect(caseToUpdate.isValid()).toBeFalsy();
+    });
+  });
+
+  describe('unsetAsAutomaticBlocked', () => {
+    it('unsets the case as automatic blocked', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+          automaticBlocked: true,
+          automaticBlockedReason: 'because reasons',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToUpdate.automaticBlocked).toBeTruthy();
+
+      caseToUpdate.unsetAsAutomaticBlocked();
+
+      expect(caseToUpdate.automaticBlocked).toBeFalsy();
+      expect(caseToUpdate.automaticBlockedReason).toBeUndefined();
+      expect(caseToUpdate.automaticBlockedDate).toBeUndefined();
     });
   });
 
