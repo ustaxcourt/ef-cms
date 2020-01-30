@@ -12,47 +12,6 @@ const editDocketEntryMetaHelper = withAppContextDecorator(
 );
 
 describe('editDocketEntryMetaHelper', () => {
-  describe('docketEntryMetaFormComponent', () => {
-    it('Should return CourtIssued in the case of a court issued document', () => {
-      const result = runCompute(editDocketEntryMetaHelper, {
-        state: {
-          caseDetail: {
-            partyType: 'Petitioner',
-          },
-          form: {
-            documentId: '123',
-            eventCode: Document.COURT_ISSUED_EVENT_CODES[0].eventCode,
-          },
-        },
-      });
-      expect(result.docketEntryMetaFormComponent).toEqual('CourtIssued');
-    });
-    it('Should return Document in the case of a non court issued document', () => {
-      const result = runCompute(editDocketEntryMetaHelper, {
-        state: {
-          caseDetail: {
-            partyType: 'Petitioner',
-          },
-          form: {
-            documentId: '123',
-          },
-        },
-      });
-      expect(result.docketEntryMetaFormComponent).toEqual('Document');
-    });
-    it('Should return NoDocument when there is no document', () => {
-      const result = runCompute(editDocketEntryMetaHelper, {
-        state: {
-          caseDetail: {
-            partyType: 'Petitioner',
-          },
-          form: {},
-        },
-      });
-      expect(result.docketEntryMetaFormComponent).toEqual('NoDocument');
-    });
-  });
-
   describe('showObjection', () => {
     it('should show objection field if the documentType allows (e.g. Motions)', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
