@@ -11,8 +11,9 @@ import React from 'react';
 export const CaseDeadlines = connect(
   {
     caseDeadlineReportHelper: state.caseDeadlineReportHelper,
+    judgeFilter: state.screenMetadata.caseDeadlinesFilter.judge,
   },
-  ({ caseDeadlineReportHelper }) => (
+  ({ caseDeadlineReportHelper, judgeFilter }) => (
     <>
       <BigHeader text="Reports" />
       <section className="usa-section grid-container">
@@ -36,7 +37,8 @@ export const CaseDeadlines = connect(
                 </span>
               </div>
             </div>
-            {caseDeadlineReportHelper.caseDeadlines.length > 0 && (
+            {(caseDeadlineReportHelper.caseDeadlines.length > 0 ||
+              judgeFilter) && (
               <div className="grid-row grid-gap padding-bottom-1">
                 <div className="grid-col-3 tablet:grid-col-2 padding-top-05">
                   <h3 id="filterHeading">Filter by</h3>
