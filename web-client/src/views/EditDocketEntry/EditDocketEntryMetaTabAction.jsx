@@ -21,7 +21,7 @@ export const EditDocketEntryMetaTabAction = connect(
             aria-describedby="action-label"
             className="usa-input"
             id="action"
-            name="form.action"
+            name="action"
             type="text"
             value={form.action || ''}
             onChange={e => {

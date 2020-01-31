@@ -48,6 +48,8 @@ exports.updateDocketEntryMetaInteractor = async ({
 
   const {
     action,
+    additionalInfo,
+    additionalInfo2,
     attachments,
     certificateOfService,
     certificateOfServiceDate,
@@ -58,6 +60,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     filingDate,
     freeText,
     generatedDocumentTitle,
+    judge,
     lodged,
     objections,
     servedAt,
@@ -76,6 +79,8 @@ exports.updateDocketEntryMetaInteractor = async ({
   });
 
   if (
+    additionalInfo ||
+    additionalInfo2 ||
     attachments ||
     certificateOfServiceDate ||
     certificateOfService ||
@@ -85,6 +90,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     filingDate ||
     freeText ||
     generatedDocumentTitle ||
+    judge ||
     lodged ||
     objections ||
     servedAt
@@ -111,6 +117,8 @@ exports.updateDocketEntryMetaInteractor = async ({
       const documentEntity = new Document(
         {
           ...documentDetail,
+          additionalInfo: additionalInfo || documentDetail.additionalInfo,
+          additionalInfo2: additionalInfo2 || documentDetail.additionalInfo2,
           attachments:
             attachments !== null ? attachments : documentDetail.attachments,
           certificateOfService:
@@ -125,6 +133,7 @@ exports.updateDocketEntryMetaInteractor = async ({
           filedBy: filedBy || documentDetail.filedBy,
           filingDate: filingDate || documentDetail.filingDate,
           freeText: freeText || documentDetail.freeText,
+          judge: judge || documentDetail.judge,
           lodged: lodged !== null ? lodged : documentDetail.lodged,
           objections: objections || documentDetail.objections,
           servedAt: servedAt || documentDetail.servedAt,
