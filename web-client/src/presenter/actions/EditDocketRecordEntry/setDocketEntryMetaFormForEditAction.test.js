@@ -29,6 +29,11 @@ describe('setDocketEntryMetaFormForEditAction', () => {
           documentId: '234',
           index: 3,
         },
+        {
+          documentId: '456',
+          index: 4,
+          servedPartiesCode: 'R',
+        },
       ],
       documents: [
         {
@@ -40,6 +45,16 @@ describe('setDocketEntryMetaFormForEditAction', () => {
           certificateOfService: true,
           certificateOfServiceDate: '2020-02-02',
           documentId: '234',
+          eventCode: 'A',
+          filingDate: '2020-01-01',
+          lodged: false,
+          servedAt: '2020-01-01',
+          servedParties: [{}],
+        },
+        {
+          certificateOfService: true,
+          certificateOfServiceDate: '2020-02-02',
+          documentId: '456',
           eventCode: 'A',
           filingDate: '2020-01-01',
           lodged: false,
@@ -107,5 +122,47 @@ describe('setDocketEntryMetaFormForEditAction', () => {
       index: 3,
       lodged: false,
     });
+  });
+
+  it('returns an empty string for servedPartiesCode if the document has no served parties and is not being overwritten by the docketRecordEntry', async () => {
+    const result = await runAction(setDocketEntryMetaFormForEditAction, {
+      modules: { presenter },
+      props: {
+        docketRecordIndex: 2,
+      },
+      state: {
+        caseDetail,
+      },
+    });
+
+    expect(result.state.form.servedPartiesCode).toEqual('');
+  });
+
+  it('gets computes the servedPartiesCode from documentDetail when NOT present on docketRecordEntry', async () => {
+    const result = await runAction(setDocketEntryMetaFormForEditAction, {
+      modules: { presenter },
+      props: {
+        docketRecordIndex: 3,
+      },
+      state: {
+        caseDetail,
+      },
+    });
+
+    expect(result.state.form.servedPartiesCode).toEqual('B');
+  });
+
+  it('overwrites documentDetail.servedPartiesCode if servedPartiesCode is present on docketRecordEntry', async () => {
+    const result = await runAction(setDocketEntryMetaFormForEditAction, {
+      modules: { presenter },
+      props: {
+        docketRecordIndex: 4,
+      },
+      state: {
+        caseDetail,
+      },
+    });
+
+    expect(result.state.form.servedPartiesCode).toEqual('R');
   });
 });
