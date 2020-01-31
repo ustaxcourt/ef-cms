@@ -5,6 +5,9 @@ const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
+const {
+  updateCaseAutomaticBlock,
+} = require('../../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
 const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
@@ -19,6 +22,7 @@ describe('createCaseDeadlineInteractor', () => {
   let user;
   const updateCaseStub = jest.fn();
   let getCaseByCaseIdStub;
+  const deleteCaseTrialSortMappingRecordsStub = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -32,10 +36,15 @@ describe('createCaseDeadlineInteractor', () => {
       getCurrentUser: () => user,
       getPersistenceGateway: () => ({
         createCaseDeadline: v => v,
+        deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsStub,
         getCaseByCaseId: getCaseByCaseIdStub,
+        getCaseDeadlinesByCaseId: () => [{ deadline: 'something' }],
         updateCase: updateCaseStub,
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({
+        updateCaseAutomaticBlock,
+      }),
     };
   });
 
@@ -49,7 +58,7 @@ describe('createCaseDeadlineInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('creates a case deadline and marks the case as automatically blocked when there are no pending items', async () => {
+  it('creates a case deadline, marks the case as automatically blocked, and calls deleteCaseTrialSortMappingRecords when there are no pending items', async () => {
     getCaseByCaseIdStub = jest.fn().mockReturnValue(MOCK_CASE_WITHOUT_PENDING);
 
     const caseDeadline = await createCaseDeadlineInteractor({
@@ -64,9 +73,10 @@ describe('createCaseDeadlineInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.dueDate,
     });
+    expect(deleteCaseTrialSortMappingRecordsStub).toBeCalled();
   });
 
-  it('creates a case deadline and marks the case as automatically blocked when there are already pending items on the case', async () => {
+  it('creates a case deadline, marks the case as automatically blocked, and calls deleteCaseTrialSortMappingRecords when there are already pending items on the case', async () => {
     getCaseByCaseIdStub = jest.fn().mockReturnValue(MOCK_CASE);
 
     const caseDeadline = await createCaseDeadlineInteractor({
@@ -81,5 +91,6 @@ describe('createCaseDeadlineInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
+    expect(deleteCaseTrialSortMappingRecordsStub).toBeCalled();
   });
 });
