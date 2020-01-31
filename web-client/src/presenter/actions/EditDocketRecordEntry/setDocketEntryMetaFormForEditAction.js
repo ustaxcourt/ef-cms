@@ -34,13 +34,32 @@ export const setDocketEntryMetaFormForEditAction = ({
   };
 
   const docketRecordEntry = docketRecord.find(
-    ({ index }) => index == docketRecordIndex,
+    ({ index }) => index === docketRecordIndex,
   );
+
+  store.set(state.docketRecordIndex, docketRecordIndex);
 
   if (docketRecordEntry.documentId) {
     const documentDetail = documents.find(
       document => docketRecordEntry.documentId === document.documentId,
     );
+
+    // TODO: Abstract this (also in getFormattedCaseDetail)
+    if (docketRecordEntry.servedPartiesCode) {
+      documentDetail.servedPartiesCode = docketRecordEntry.servedPartiesCode;
+    } else {
+      if (
+        documentDetail &&
+        !!documentDetail.servedAt &&
+        documentDetail.servedParties &&
+        documentDetail.servedParties.length > 0
+      ) {
+        documentDetail.servedPartiesCode = 'B';
+      } else {
+        // TODO: Address Respondent and Petitioner codes
+        documentDetail.servedPartiesCode = '';
+      }
+    }
 
     store.set(state.form, {
       ...docketRecordEntry,
@@ -56,9 +75,13 @@ export const setDocketEntryMetaFormForEditAction = ({
         'certificateOfService',
       ),
     });
+
+    // TODO: add to unit test
+    return {
+      key: 'initEventCode',
+      value: documentDetail.eventCode,
+    };
   } else {
     store.set(state.form, docketRecordEntry);
   }
-
-  store.set(state.docketRecordIndex, docketRecordIndex);
 };

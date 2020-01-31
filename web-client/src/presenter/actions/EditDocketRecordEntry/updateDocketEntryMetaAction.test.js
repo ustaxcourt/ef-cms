@@ -28,8 +28,10 @@ describe('updateDocketEntryMetaAction', () => {
   it('updates the docket entry by calling the interactor', async () => {
     await runAction(updateDocketEntryMetaAction, {
       modules: { presenter },
-      props: {
-        caseId: '123-45',
+      state: {
+        caseDetail: {
+          caseId: '123-45',
+        },
         docketRecordEntry: {
           servedParties: [],
         },
@@ -50,8 +52,10 @@ describe('updateDocketEntryMetaAction', () => {
 
     await runAction(updateDocketEntryMetaAction, {
       modules: { presenter },
-      props: {
-        caseId: '123-45',
+      state: {
+        caseDetail: {
+          caseId: '123-45',
+        },
         docketRecordEntry: {
           description: 'Test Description',
         },
