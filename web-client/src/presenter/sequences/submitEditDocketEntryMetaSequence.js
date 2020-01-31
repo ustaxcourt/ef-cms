@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
@@ -18,6 +19,7 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 export const submitEditDocketEntryMetaSequence = [
   startShowValidationAction,
   computeFilingFormDateAction,
+  computeCertificateOfServiceFormDateAction,
   primePropsFromEditDocketEntryMetaModalAction,
   generateCourtIssuedDocumentTitleAction,
   validateDocketRecordAction,

@@ -49,6 +49,8 @@ exports.updateDocketEntryMetaInteractor = async ({
   const {
     action,
     attachments,
+    certificateOfService,
+    certificateOfServiceDate,
     description,
     documentType,
     eventCode,
@@ -70,6 +72,8 @@ exports.updateDocketEntryMetaInteractor = async ({
   });
 
   if (
+    certificateOfServiceDate ||
+    certificateOfService ||
     servedAt ||
     filedBy ||
     filingDate ||
@@ -83,6 +87,15 @@ exports.updateDocketEntryMetaInteractor = async ({
       documentId: docketRecordEntity.documentId,
     });
 
+    let newCertificateOfServiceDate =
+      certificateOfServiceDate !== null
+        ? certificateOfServiceDate
+        : documentDetail.certificateOfServiceDate;
+
+    if (certificateOfService === false) {
+      newCertificateOfServiceDate = undefined;
+    }
+
     if (documentDetail) {
       const servedAtUpdated = servedAt && servedAt !== documentDetail.servedAt;
       const filingDateUpdated =
@@ -94,6 +107,11 @@ exports.updateDocketEntryMetaInteractor = async ({
           ...documentDetail,
           attachments:
             attachments !== null ? attachments : documentDetail.attachments,
+          certificateOfService:
+            certificateOfService !== null
+              ? certificateOfService
+              : documentDetail.certificateOfService,
+          certificateOfServiceDate: newCertificateOfServiceDate,
           createdAt: filingDateUpdated ? null : documentDetail.createdAt,
           documentTitle: generatedDocumentTitle || documentDetail.title, // setting to null will regenerate it for the coversheet
           documentType: documentType || documentDetail.documentType,
