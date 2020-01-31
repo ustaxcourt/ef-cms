@@ -28,6 +28,6 @@ describe('computeFilingFormDateAction', () => {
       },
     });
 
-    expect(result.state.form.filingDate).toBeUndefined();
+    expect(result.state.form.filingDate).toBeNull();
   });
 });
