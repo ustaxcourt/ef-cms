@@ -48,7 +48,10 @@ exports.updateDocketEntryMetaInteractor = async ({
 
   const {
     action,
+    attachments,
     description,
+    documentType,
+    eventCode,
     filedBy,
     filingDate,
     freeText,
@@ -61,11 +64,21 @@ exports.updateDocketEntryMetaInteractor = async ({
     action: action || docketRecordEntry.action,
     description:
       generatedDocumentTitle || description || docketRecordEntry.description,
+    eventCode: eventCode || docketRecordEntry.eventCode,
     filedBy: filedBy || docketRecordEntry.filedBy,
     filingDate: filingDate || docketRecordEntry.filingDate,
   });
 
-  if (servedAt || filedBy || filingDate || freeText || generatedDocumentTitle) {
+  if (
+    servedAt ||
+    filedBy ||
+    filingDate ||
+    freeText ||
+    generatedDocumentTitle ||
+    attachments ||
+    documentType ||
+    eventCode
+  ) {
     const documentDetail = caseEntity.getDocumentById({
       documentId: docketRecordEntity.documentId,
     });
@@ -79,9 +92,14 @@ exports.updateDocketEntryMetaInteractor = async ({
       const documentEntity = new Document(
         {
           ...documentDetail,
+          attachments:
+            attachments !== null ? attachments : documentDetail.attachments,
           createdAt: filingDateUpdated ? null : documentDetail.createdAt,
           documentTitle: generatedDocumentTitle || documentDetail.title, // setting to null will regenerate it for the coversheet
+          documentType: documentType || documentDetail.documentType,
+          eventCode: eventCode || documentDetail.eventCode,
           filedBy: filedBy || documentDetail.filedBy,
+          filingDate: filingDate || documentDetail.filingDate,
           freeText: freeText || documentDetail.freeText,
           servedAt: servedAt || documentDetail.servedAt,
         },
