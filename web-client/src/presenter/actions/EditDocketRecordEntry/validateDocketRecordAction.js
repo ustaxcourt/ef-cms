@@ -14,14 +14,45 @@ export const validateDocketRecordAction = ({
   get,
   path,
 }) => {
-  const docketRecord = get(state.form);
+  const formMetadata = get(state.form);
+  const editType = get(state.screenMetadata.editType); // Document, CourtIssued, NoDocument
 
-  const errors = applicationContext
-    .getUseCases()
-    .validateDocketRecordInteractor({
-      applicationContext,
-      docketRecord,
-    });
+  let errors = applicationContext.getUseCases().validateDocketRecordInteractor({
+    applicationContext,
+    docketRecord: formMetadata,
+  });
+
+  let errorDisplayOrder = [];
+
+  if (editType === 'Document') {
+    errors = {
+      ...errors,
+      ...applicationContext.getUseCases().validateExternalDocumentInteractor({
+        applicationContext,
+        documentMetadata: formMetadata,
+      }),
+    };
+  }
+
+  if (editType === 'CourtIssued') {
+    errors = {
+      ...errors,
+      ...applicationContext
+        .getUseCases()
+        .validateCourtIssuedDocketEntryInteractor({
+          applicationContext,
+          entryMetadata: formMetadata,
+        }),
+    };
+
+    errorDisplayOrder = [
+      'eventCode',
+      'date',
+      'judge',
+      'freeText',
+      'docketNumbers',
+    ];
+  }
 
   if (!errors) {
     return path.success();
@@ -30,6 +61,7 @@ export const validateDocketRecordAction = ({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
+      errorDisplayOrder,
       errors,
     });
   }
