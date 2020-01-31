@@ -37,6 +37,8 @@ export const setDocketEntryMetaFormForEditAction = ({
     ({ index }) => index == docketRecordIndex,
   );
 
+  store.set(state.docketRecordIndex, docketRecordIndex);
+
   if (docketRecordEntry.documentId) {
     const documentDetail = documents.find(
       document => docketRecordEntry.documentId === document.documentId,
@@ -56,9 +58,13 @@ export const setDocketEntryMetaFormForEditAction = ({
         'certificateOfService',
       ),
     });
+
+    // TODO: add to unit test
+    return {
+      key: 'initEventCode',
+      value: documentDetail.eventCode,
+    };
   } else {
     store.set(state.form, docketRecordEntry);
   }
-
-  store.set(state.docketRecordIndex, docketRecordIndex);
 };
