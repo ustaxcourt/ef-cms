@@ -16,7 +16,7 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
   let filterStartDate = get(state.screenMetadata.filterStartDate);
   let filterEndDate = get(state.screenMetadata.filterEndDate);
   const judges = (get(state.judges) || [])
-    .map(i => i.name.replace(/^Judge\s+/, ''))
+    .map(i => applicationContext.getUtilities().formatJudgeName(i.name))
     .concat('Chief Judge')
     .sort();
 
@@ -61,7 +61,9 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
     .sort(sortByDateAndDocketNumber(applicationContext))
     .map(d => ({
       ...d,
-      associatedJudgeFormatted: d.associatedJudge.replace(/^Judge\s+/, ''),
+      associatedJudgeFormatted: applicationContext
+        .getUtilities()
+        .formatJudgeName(d.associatedJudge),
       deadlineDateReal: applicationContext
         .getUtilities()
         .prepareDateFromString(d.deadlineDate),
