@@ -1,6 +1,9 @@
 const {
   deleteCaseDeadlineInteractor,
 } = require('./deleteCaseDeadlineInteractor');
+const {
+  updateCaseAutomaticBlock,
+} = require('../../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
 const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE_WITHOUT_PENDING } = require('../../../test/mockCase');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -12,6 +15,7 @@ describe('deleteCaseDeadlineInteractor', () => {
   const deleteCaseDeadlineMock = jest.fn();
   const updateCaseMock = jest.fn();
   let getCaseDeadlinesByCaseIdMock;
+  const deleteCaseTrialSortMappingRecordsMock = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -29,9 +33,13 @@ describe('deleteCaseDeadlineInteractor', () => {
       getCurrentUser: () => user,
       getPersistenceGateway: () => ({
         deleteCaseDeadline: deleteCaseDeadlineMock,
+        deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsMock,
         getCaseByCaseId: () => MOCK_CASE_WITHOUT_PENDING,
         getCaseDeadlinesByCaseId: getCaseDeadlinesByCaseIdMock,
         updateCase: updateCaseMock,
+      }),
+      getUseCaseHelpers: () => ({
+        updateCaseAutomaticBlock,
       }),
     };
   });
@@ -65,6 +73,7 @@ describe('deleteCaseDeadlineInteractor', () => {
       automaticBlockedDate: undefined,
       automaticBlockedReason: undefined,
     });
+    expect(deleteCaseTrialSortMappingRecordsMock).not.toBeCalled();
   });
 
   it('calls persistence to delete a case deadline and leaves the case automatically blocked if there are more deadlines', async () => {
@@ -87,5 +96,6 @@ describe('deleteCaseDeadlineInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.dueDate,
     });
+    expect(deleteCaseTrialSortMappingRecordsMock).toBeCalled();
   });
 });
