@@ -51,18 +51,21 @@ exports.updateDocketEntryMetaInteractor = async ({
     description,
     filedBy,
     filingDate,
+    freeText,
+    generatedDocumentTitle,
     servedAt,
   } = docketEntryMeta;
 
   const docketRecordEntity = new DocketRecord({
     ...docketRecordEntry,
     action: action || docketRecordEntry.action,
-    description: description || docketRecordEntry.description,
+    description:
+      generatedDocumentTitle || description || docketRecordEntry.description,
     filedBy: filedBy || docketRecordEntry.filedBy,
     filingDate: filingDate || docketRecordEntry.filingDate,
   });
 
-  if (servedAt || filedBy || filingDate) {
+  if (servedAt || filedBy || filingDate || freeText || generatedDocumentTitle) {
     const documentDetail = caseEntity.getDocumentById({
       documentId: docketRecordEntity.documentId,
     });
@@ -76,8 +79,10 @@ exports.updateDocketEntryMetaInteractor = async ({
       const documentEntity = new Document(
         {
           ...documentDetail,
-          createdAt: filingDateUpdated ? null : documentDetail.createdAt, // setting to null will regenerate it for the coversheet
+          createdAt: filingDateUpdated ? null : documentDetail.createdAt,
+          documentTitle: generatedDocumentTitle || documentDetail.title, // setting to null will regenerate it for the coversheet
           filedBy: filedBy || documentDetail.filedBy,
+          freeText: freeText || documentDetail.freeText,
           servedAt: servedAt || documentDetail.servedAt,
         },
         { applicationContext },
