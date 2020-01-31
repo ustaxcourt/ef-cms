@@ -1,21 +1,24 @@
-import { fileCourtIssuedDocketEntryInteractor } from './fileCourtIssuedDocketEntryInteractor';
+const {
+  fileCourtIssuedDocketEntryInteractor,
+} = require('./fileCourtIssuedDocketEntryInteractor');
+const {
+  updateCaseAutomaticBlock,
+} = require('../../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
 const { Case } = require('../../entities/cases/Case');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { User } = require('../../entities/User');
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
-  let updateCaseMock;
-  let createUserInboxRecordMock;
-  let createSectionInboxRecordMock;
+  const updateCaseMock = jest.fn(() => caseRecord);
+  let createUserInboxRecordMock = jest.fn();
+  let createSectionInboxRecordMock = jest.fn();
   let applicationContext;
   let caseRecord;
-  let getCaseDeadlinesByCaseIdMock;
+  let getCaseDeadlinesByCaseIdMock = jest.fn().mockReturnValue([]);
+  const deleteCaseTrialSortMappingRecordsMock = jest.fn();
 
   beforeEach(() => {
-    updateCaseMock = jest.fn(() => caseRecord);
-    createUserInboxRecordMock = jest.fn();
-    createSectionInboxRecordMock = jest.fn();
-    getCaseDeadlinesByCaseIdMock = jest.fn().mockReturnValue([]);
+    jest.clearAllMocks();
 
     applicationContext = {
       environment: { stage: 'local' },
@@ -28,6 +31,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       getPersistenceGateway: () => ({
         createSectionInboxRecord: createSectionInboxRecordMock,
         createUserInboxRecord: createUserInboxRecordMock,
+        deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsMock,
         getCaseByCaseId: async () => caseRecord,
         getCaseDeadlinesByCaseId: getCaseDeadlinesByCaseIdMock,
         getUserById: async () => {
@@ -36,6 +40,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         updateCase: updateCaseMock,
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({ updateCaseAutomaticBlock }),
     };
 
     caseRecord = {
@@ -199,6 +204,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
     });
+    expect(deleteCaseTrialSortMappingRecordsMock).toBeCalled();
   });
 
   it('should call updateCase and set the case as automatic blocked with deadlines if the document is a tracked document and the case has deadlines', async () => {
@@ -232,5 +238,6 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
+    expect(deleteCaseTrialSortMappingRecordsMock).toBeCalled();
   });
 });
