@@ -319,11 +319,21 @@ const formatCase = (applicationContext, caseDetail) => {
     } else {
       result.formattedTrialDate = 'Not scheduled';
     }
-  } else if (result.blocked) {
+  } else if (result.blocked || result.automaticBlocked) {
     result.showBlockedFromTrial = true;
-    result.blockedDateFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(result.blockedDate, 'MMDDYY');
+    if (result.blocked) {
+      result.blockedDateFormatted = applicationContext
+        .getUtilities()
+        .formatDateString(result.blockedDate, 'MMDDYY');
+    }
+    if (result.automaticBlocked) {
+      result.automaticBlockedDateFormatted = applicationContext
+        .getUtilities()
+        .formatDateString(result.automaticBlockedDate, 'MMDDYY');
+      if (result.highPriority) {
+        result.showAutomaticBlockedAndHighPriority = true;
+      }
+    }
   } else if (result.highPriority) {
     result.formattedTrialDate = 'Not scheduled';
     result.formattedAssociatedJudge = 'Not assigned';

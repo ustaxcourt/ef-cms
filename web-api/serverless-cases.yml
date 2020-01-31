@@ -162,6 +162,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  removeCasePendingItem:
+    handler: web-api/${self:provider.dir}/casesHandlers.removeCasePendingItemLambda
+    events:
+      - http:
+          path: /{caseId}/remove-pending/{documentId}
+          method: delete
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   updateCaseTrialSortTags:
     handler: web-api/${self:provider.dir}/casesHandlers.updateCaseTrialSortTagsLambda
     events:

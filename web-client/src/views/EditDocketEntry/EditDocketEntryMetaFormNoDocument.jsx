@@ -1,25 +1,29 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { classNames } from 'classnames';
 import { connect } from '@cerebral/react';
 import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const EditDocketEntryMetaFormNoDocument = connect(
   {
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateDocketRecordSequence: sequences.validateDocketRecordSequence,
     validationErrors: state.validationErrors,
-    validationSequence:
-      sequences[state.editDocketEntryMetaHelper].validationSequenceName,
   },
-  ({ form, updateFormValueSequence, validationErrors, validationSequence }) => {
+  ({
+    form,
+    updateFormValueSequence,
+    validateDocketRecordSequence,
+    validationErrors,
+  }) => {
     return (
       <div className="blue-container">
         <FormGroup errorText={validationErrors.filingDate}>
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="filing-date-legend">
-              Filing Date
+              Filed Date
             </legend>
             <div className="usa-memorable-date">
               <div className="usa-form-group usa-form-group--month margin-bottom-0">
@@ -37,7 +41,7 @@ export const EditDocketEntryMetaFormNoDocument = connect(
                   name="filingDateMonth"
                   type="number"
                   value={form.filingDateMonth || ''}
-                  onBlur={() => validationSequence()}
+                  onBlur={() => validateDocketRecordSequence()}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -61,7 +65,7 @@ export const EditDocketEntryMetaFormNoDocument = connect(
                   name="filingDateDay"
                   type="number"
                   value={form.filingDateDay || ''}
-                  onBlur={() => validationSequence()}
+                  onBlur={() => validateDocketRecordSequence()}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -85,7 +89,7 @@ export const EditDocketEntryMetaFormNoDocument = connect(
                   name="filingDateYear"
                   type="number"
                   value={form.filingDateYear || ''}
-                  onBlur={() => validationSequence()}
+                  onBlur={() => validateDocketRecordSequence()}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -118,7 +122,7 @@ export const EditDocketEntryMetaFormNoDocument = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
-              validationSequence();
+              validateDocketRecordSequence();
             }}
           />
         </FormGroup>

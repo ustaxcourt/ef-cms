@@ -4,6 +4,7 @@ const {
 const {
   generateCourtIssuedDocumentTitleInteractor,
 } = require('./generateCourtIssuedDocumentTitleInteractor');
+const { Document } = require('../../entities/Document');
 
 describe('generateCourtIssuedDocumentTitleInteractor', () => {
   let applicationContext;
@@ -13,6 +14,7 @@ describe('generateCourtIssuedDocumentTitleInteractor', () => {
       environment: { stage: 'local' },
       getEntityConstructors: () => ({
         CourtIssuedDocumentFactory,
+        Document,
       }),
     };
     const title = await generateCourtIssuedDocumentTitleInteractor({
@@ -33,6 +35,7 @@ describe('generateCourtIssuedDocumentTitleInteractor', () => {
       environment: { stage: 'local' },
       getEntityConstructors: () => ({
         CourtIssuedDocumentFactory,
+        Document,
       }),
     };
     const title = await generateCourtIssuedDocumentTitleInteractor({
@@ -42,5 +45,26 @@ describe('generateCourtIssuedDocumentTitleInteractor', () => {
       },
     });
     expect(title).toBeUndefined();
+  });
+
+  it('resets the document title to the default "bracketed" state before generating the title', async () => {
+    applicationContext = {
+      environment: { stage: 'local' },
+      getEntityConstructors: () => ({
+        CourtIssuedDocumentFactory,
+        Document,
+      }),
+    };
+    const title = await generateCourtIssuedDocumentTitleInteractor({
+      applicationContext,
+      documentMetadata: {
+        documentTitle: 'NOT THE ORIGINAL TITLE',
+        documentType: 'OFAB - Order fixing amount of bond',
+        eventCode: 'OFAB',
+        freeText: '100 million dollars',
+        scenario: 'Type A',
+      },
+    });
+    expect(title).toEqual('Order fixing amount of bond at 100 million dollars');
   });
 });

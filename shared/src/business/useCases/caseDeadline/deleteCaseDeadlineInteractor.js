@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -24,9 +25,29 @@ exports.deleteCaseDeadlineInteractor = async ({
     throw new UnauthorizedError('Unauthorized for deleting case deadline');
   }
 
-  return await applicationContext.getPersistenceGateway().deleteCaseDeadline({
+  const caseToUpdate = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({ applicationContext, caseId });
+
+  let updatedCase = new Case(caseToUpdate, { applicationContext });
+
+  await applicationContext.getPersistenceGateway().deleteCaseDeadline({
     applicationContext,
     caseDeadlineId,
     caseId,
   });
+
+  updatedCase = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity: updatedCase,
+    });
+
+  const updatedCaseRaw = updatedCase.validate().toRawObject();
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: updatedCaseRaw,
+  });
+  return updatedCaseRaw;
 };

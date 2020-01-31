@@ -15,6 +15,13 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
 
+  const { Document } = applicationContext.getEntityConstructors();
+  const systemGeneratedEventCodes = Object.keys(
+    Document.SYSTEM_GENERATED_DOCUMENT_TYPES,
+  ).map(key => {
+    return Document.SYSTEM_GENERATED_DOCUMENT_TYPES[key].eventCode;
+  });
+
   const {
     formatCase,
     formatCaseDeadlines,
@@ -52,9 +59,18 @@ export const formattedCaseDetail = (get, applicationContext) => {
         document.qcWorkItemsUntouched &&
         !document.isCourtIssuedDocument;
 
+      const hasCourtIssuedDocument = document && document.isCourtIssuedDocument;
+      const hasServedCourtIssuedDocument =
+        hasCourtIssuedDocument && !!document.servedAt;
+
+      const hasSystemGeneratedDocument =
+        document && systemGeneratedEventCodes.includes(document.eventCode);
+
       const showEditDocketRecordEntry =
         permissions.EDIT_DOCKET_ENTRY &&
-        (!document || document.qcWorkItemsCompleted);
+        (!document || document.qcWorkItemsCompleted) &&
+        !hasSystemGeneratedDocument &&
+        (!hasCourtIssuedDocument || hasServedCourtIssuedDocument);
 
       const isPaper =
         !isInProgress && !qcWorkItemsUntouched && document && document.isPaper;
@@ -122,7 +138,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
         isPending: document && document.pending,
         isServed: document && !!document.servedAt,
         servedAtFormatted: document && document.servedAtFormatted,
-        servedPartiesCode: document && document.servedPartiesCode,
+        servedPartiesCode:
+          record.servedPartiesCode || (document && document.servedPartiesCode),
         showDocumentDescriptionWithoutLink:
           !userHasAccessToCase ||
           !document ||
@@ -176,7 +193,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   result.consolidatedCases = result.consolidatedCases || [];
 
-  result.showBlockedTag = caseDetail.blocked;
+  result.showBlockedTag = caseDetail.blocked || caseDetail.automaticBlocked;
   result.docketRecordSort = docketRecordSort;
   result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
   return result;
