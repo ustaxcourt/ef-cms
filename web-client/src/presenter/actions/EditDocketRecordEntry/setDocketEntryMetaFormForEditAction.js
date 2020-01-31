@@ -34,7 +34,7 @@ export const setDocketEntryMetaFormForEditAction = ({
   };
 
   const docketRecordEntry = docketRecord.find(
-    ({ index }) => index == docketRecordIndex,
+    ({ index }) => index === docketRecordIndex,
   );
 
   store.set(state.docketRecordIndex, docketRecordIndex);

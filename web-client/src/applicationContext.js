@@ -111,6 +111,7 @@ import {
   getFormattedCaseDetail,
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
+import { formatJudgeName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateCourtIssuedDocumentTitleInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitleInteractor';
@@ -564,6 +565,7 @@ const applicationContext = {
       formatCaseForTrialSession,
       formatDateString,
       formatDocument,
+      formatJudgeName,
       formatNow,
       formattedTrialSessionDetails,
       getFilingsAndProceedings,

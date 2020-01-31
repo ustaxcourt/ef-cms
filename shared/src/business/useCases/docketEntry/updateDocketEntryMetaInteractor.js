@@ -42,9 +42,9 @@ exports.updateDocketEntryMetaInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const docketRecordEntry = caseEntity.docketRecord.find(
-    record => record.index === docketRecordIndex,
-  );
+  const docketRecordEntry = caseEntity.docketRecord.find(record => {
+    return record.index === docketRecordIndex;
+  });
 
   const {
     action,

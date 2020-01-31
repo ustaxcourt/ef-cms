@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
@@ -10,6 +11,7 @@ export const validateDocketRecordSequence = [
     ignore: [],
     validate: [
       computeFilingFormDateAction,
+      computeDateReceivedAction,
       validateDocketRecordAction,
       {
         error: [setValidationErrorsByFlagAction],
