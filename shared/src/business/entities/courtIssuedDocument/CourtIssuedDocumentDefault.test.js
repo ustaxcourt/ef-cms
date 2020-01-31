@@ -24,10 +24,11 @@ describe('CourtIssuedDocumentDefault', () => {
 
   describe('getDocumentTitle', () => {
     it('should get the document title', () => {
-    const document = CourtIssuedDocumentFactory.get({
-      documentTitle: 'Loaded Cheese Fries',
-      documentType: 'Order',
+      const document = CourtIssuedDocumentFactory.get({
+        documentTitle: 'Loaded Cheese Fries',
+        documentType: 'Order',
+      });
+      expect(document.getDocumentTitle()).toEqual('Loaded Cheese Fries');
     });
-    expect(document.getDocumentTitle()).toEqual('Loaded Cheese Fries');
   });
 });
