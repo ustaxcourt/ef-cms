@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
 import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
@@ -12,10 +13,11 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryMetaAction } from '../actions/EditDocketRecordEntry/updateDocketEntryMetaAction';
 import { validateDocketRecordAction } from '../actions/EditDocketRecordEntry/validateDocketRecordAction';
 
-import { gotoCaseDetailSequence } from './gotoCaseDetailSequence';
+import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 
 export const submitEditDocketEntryMetaSequence = [
   startShowValidationAction,
+  computeFilingFormDateAction,
   primePropsFromEditDocketEntryMetaModalAction,
   generateCourtIssuedDocumentTitleAction,
   validateDocketRecordAction,
@@ -32,7 +34,7 @@ export const submitEditDocketEntryMetaSequence = [
           clearModalStateAction,
           getEditDocketEntryMetaAlertSuccessAction,
           setAlertSuccessAction,
-          ...gotoCaseDetailSequence, // Needs to refresh the formatted case detail / docket record,
+          navigateToCaseDetailAction,
         ],
       },
     ],
