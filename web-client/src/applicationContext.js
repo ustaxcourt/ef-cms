@@ -107,6 +107,7 @@ import {
   formatCase,
   formatCaseDeadlines,
   formatDocument,
+  getFilingsAndProceedings,
   getFormattedCaseDetail,
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
@@ -567,6 +568,7 @@ const applicationContext = {
       formatJudgeName,
       formatNow,
       formattedTrialSessionDetails,
+      getFilingsAndProceedings,
       getFormattedCaseDetail,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
