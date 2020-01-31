@@ -42,8 +42,11 @@ describe('initCourtIssuedOrderFormPropsFromEventCodeAction', () => {
         modules: {
           presenter,
         },
-        props: { initEventCode: 'ROAR' },
-        state: { form: {} },
+        state: {
+          form: {
+            eventCode: 'ROAR',
+          },
+        },
       },
     );
     expect(result.state.form).toEqual({
@@ -54,17 +57,20 @@ describe('initCourtIssuedOrderFormPropsFromEventCodeAction', () => {
     });
   });
 
-  it('should not set the state if there is not a matching event code', async () => {
+  it('should not update the state if there is no matching event code', async () => {
     const result = await runAction(
       initCourtIssuedOrderFormPropsFromEventCodeAction,
       {
         modules: {
           presenter,
         },
-        props: { initEventCode: 'MEOW' },
-        state: { form: {} },
+        state: {
+          form: {
+            eventCode: 'MEOW',
+          },
+        },
       },
     );
-    expect(result.state.form).toEqual({});
+    expect(result.state.form).toEqual({ eventCode: 'MEOW' });
   });
 });
