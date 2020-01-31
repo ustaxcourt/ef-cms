@@ -27,6 +27,9 @@ exports.getBlockedCasesInteractor = async ({
   const body = await applicationContext.getSearchClient().search({
     body: {
       _source: [
+        'automaticBlocked',
+        'automaticBlockedDate',
+        'automaticBlockedReason',
         'blocked',
         'blockedDate',
         'blockedReason',
@@ -38,8 +41,15 @@ exports.getBlockedCasesInteractor = async ({
       query: {
         bool: {
           must: [
-            { match: { 'blocked.BOOL': true } },
             { match: { 'preferredTrialCity.S': trialLocation } },
+            {
+              bool: {
+                should: [
+                  { match: { 'automaticBlocked.BOOL': true } },
+                  { match: { 'blocked.BOOL': true } },
+                ],
+              },
+            },
           ],
         },
       },
