@@ -36,8 +36,6 @@ CourtIssuedDocumentFactory.get = documentMetadata => {
         return new CourtIssuedDocumentTypeF(documentMetadata);
       case 'type g':
         return new CourtIssuedDocumentTypeG(documentMetadata);
-      default:
-        return new CourtIssuedDocumentDefault(documentMetadata);
     }
   }
 

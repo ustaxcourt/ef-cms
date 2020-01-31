@@ -8,7 +8,7 @@ describe('CourtIssuedDocumentDefault', () => {
         scenario: null,
       });
       expect(document.getFormattedValidationErrors()).toEqual({
-        attachments: VALIDATION_ERROR_MESSAGES.attachments,
+        documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
       });
     });
