@@ -41,18 +41,25 @@ describe('blockedCasesReportHelper', () => {
       state: {
         blockedCases: [
           {
+            blocked: true,
             blockedDate: '2019-03-01T21:42:29.073Z',
             caseCaption: 'Brett Osborne, Petitioner',
             caseId: '1',
             docketNumber: '105-19',
           },
           {
+            automaticBlocked: true,
+            automaticBlockedDate: '2018-03-05T21:42:29.073Z',
+            blocked: true,
             blockedDate: '2019-07-01T21:42:29.073Z',
             caseCaption: 'Selma Horn & Cairo Harris, Petitioners',
             caseId: '2',
             docketNumber: '102-19',
           },
           {
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-03-05T21:42:29.073Z',
+            blocked: true,
             blockedDate: '2018-03-05T21:42:29.073Z',
             caseCaption:
               'Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)',
@@ -60,15 +67,25 @@ describe('blockedCasesReportHelper', () => {
             docketNumber: '103-18',
             docketNumberSuffix: 'S',
           },
+          {
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-03-05T21:42:29.073Z',
+            caseCaption: 'Bob Barker, Petitioner',
+            caseId: '4',
+            docketNumber: '104-19',
+          },
         ],
       },
     });
     expect(result).toEqual({
-      blockedCasesCount: 3,
+      blockedCasesCount: 4,
       blockedCasesFormatted: [
         {
+          automaticBlocked: true,
+          automaticBlockedDate: '2019-03-05T21:42:29.073Z',
+          blocked: true,
           blockedDate: '2018-03-05T21:42:29.073Z',
-          blockedDateFormatted: '03/05/18',
+          blockedDateEarliest: '03/05/18',
           caseCaption:
             'Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)',
           caseId: '3',
@@ -78,8 +95,11 @@ describe('blockedCasesReportHelper', () => {
           docketNumberWithSuffix: '103-18S',
         },
         {
+          automaticBlocked: true,
+          automaticBlockedDate: '2018-03-05T21:42:29.073Z',
+          blocked: true,
           blockedDate: '2019-07-01T21:42:29.073Z',
-          blockedDateFormatted: '07/01/19',
+          blockedDateEarliest: '03/05/18',
           caseCaption: 'Selma Horn & Cairo Harris, Petitioners',
           caseId: '2',
           caseName: 'Selma Horn & Cairo Harris',
@@ -87,8 +107,19 @@ describe('blockedCasesReportHelper', () => {
           docketNumberWithSuffix: '102-19',
         },
         {
+          automaticBlocked: true,
+          automaticBlockedDate: '2019-03-05T21:42:29.073Z',
+          blockedDateEarliest: '03/05/19',
+          caseCaption: 'Bob Barker, Petitioner',
+          caseId: '4',
+          caseName: 'Bob Barker',
+          docketNumber: '104-19',
+          docketNumberWithSuffix: '104-19',
+        },
+        {
+          blocked: true,
           blockedDate: '2019-03-01T21:42:29.073Z',
-          blockedDateFormatted: '03/01/19',
+          blockedDateEarliest: '03/01/19',
           caseCaption: 'Brett Osborne, Petitioner',
           caseId: '1',
           caseName: 'Brett Osborne',

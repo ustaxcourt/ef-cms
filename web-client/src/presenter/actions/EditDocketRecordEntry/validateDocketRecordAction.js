@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { isEmpty, omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -26,13 +26,16 @@ export const validateDocketRecordAction = ({
   let errorDisplayOrder = [];
 
   if (editType === 'Document') {
-    errors = {
-      ...errors,
-      ...applicationContext.getUseCases().validateExternalDocumentInteractor({
-        applicationContext,
-        documentMetadata: formMetadata,
-      }),
-    };
+    errors = omit(
+      {
+        ...errors,
+        ...applicationContext.getUseCases().validateDocketEntryInteractor({
+          applicationContext,
+          entryMetadata: formMetadata,
+        }),
+      },
+      ['dateReceived'],
+    );
   }
 
   if (editType === 'CourtIssued') {
