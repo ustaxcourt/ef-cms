@@ -370,6 +370,30 @@ describe('formatCase', () => {
         showBlockedFromTrial: true,
       });
     });
+
+    it('should show automatic blocked and high priority indicator if the case is automaticBlocked and highPriority', () => {
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        automaticBlocked: true,
+        automaticBlockedDate: '2020-01-06T11:12:13.007Z',
+        automaticBlockedReason: 'for reasons',
+        highPriority: true,
+      });
+
+      expect(result.showAutomaticBlockedAndHighPriority).toBeTruthy();
+    });
+
+    it('should not show automatic blocked and high priority indicator if the case is automaticBlocked but not highPriority', () => {
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        automaticBlocked: true,
+        automaticBlockedDate: '2020-01-06T11:12:13.007Z',
+        automaticBlockedReason: 'for reasons',
+        highPriority: false,
+      });
+
+      expect(result.showAutomaticBlockedAndHighPriority).toBeFalsy();
+    });
   });
 
   it('should format trial details if case status is calendared', () => {
