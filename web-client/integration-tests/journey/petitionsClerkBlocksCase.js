@@ -1,4 +1,6 @@
-export default test => {
+import { Case } from '../../../shared/src/business/entities/cases/Case';
+
+export default (test, trialLocation) => {
   return it('Petitions clerk blocks the case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -31,7 +33,7 @@ export default test => {
 
     await test.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
-      value: 'Jackson, Mississippi',
+      value: trialLocation,
     });
 
     expect(test.getState('blockedCases')).toMatchObject([
@@ -42,7 +44,7 @@ export default test => {
           'Test Person, Deceased, Test Person, Surviving Spouse, Petitioner',
         docketNumber: test.docketNumber,
         docketNumberSuffix: 'S',
-        status: 'New',
+        status: Case.STATUS_TYPES.generalDocketReadyForTrial,
       },
     ]);
   });
