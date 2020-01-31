@@ -42,7 +42,7 @@ describe('fetchPendingItems', () => {
     ],
   };
 
-  it('calls search function with correct params and returns records', async () => {
+  it('calls search function with correct params when provided a judge and returns records', async () => {
     searchSpy = jest.fn(async () => {
       return {
         hits: {
@@ -77,6 +77,62 @@ describe('fetchPendingItems', () => {
       { caseId: '1', documentId: 'def', pending: true },
       { caseId: '2', documentId: 'abc', pending: true },
     ]);
+  });
+
+  it('calls search function with correct params when not provided a judge and returns records', async () => {
+    searchSpy = jest.fn(async () => {
+      return {
+        hits: {
+          hits: [
+            {
+              _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
+            },
+            {
+              _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
+            },
+          ],
+        },
+      };
+    });
+
+    const results = await fetchPendingItems({
+      applicationContext,
+    });
+
+    expect(searchSpy).toHaveBeenCalled();
+    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+      {
+        match: { 'hasPendingItems.BOOL': true },
+      },
+    ]);
+
+    expect(results).toEqual([
+      { caseId: '1', documentId: 'def', pending: true },
+      { caseId: '2', documentId: 'abc', pending: true },
+    ]);
+  });
+
+  it('returns an empty array when no hits are returned from the search client', async () => {
+    searchSpy = jest.fn(async () => {
+      return {
+        hits: {
+          hits: [],
+        },
+      };
+    });
+
+    const results = await fetchPendingItems({
+      applicationContext,
+    });
+
+    expect(searchSpy).toHaveBeenCalled();
+    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+      {
+        match: { 'hasPendingItems.BOOL': true },
+      },
+    ]);
+
+    expect(results).toEqual([]);
   });
 
   it('uses caseId filter and calls getCaseByCaseId and returns the pending items for that case', async () => {
