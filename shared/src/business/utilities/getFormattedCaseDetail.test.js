@@ -370,6 +370,21 @@ describe('formatCase', () => {
         showBlockedFromTrial: true,
       });
     });
+    it('should format blockedDate and when blocked is true', () => {
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        blocked: true,
+        blockedDate: getDateISO(),
+        blockedReason: 'for reasons',
+      });
+
+      expect(result).toMatchObject({
+        blockedDateFormatted: applicationContext
+          .getUtilities()
+          .formatDateString(getDateISO(), 'MMDDYY'),
+        showBlockedFromTrial: true,
+      });
+    });
 
     it('should show automatic blocked and high priority indicator if the case is automaticBlocked and highPriority', () => {
       const result = formatCase(applicationContext, {
