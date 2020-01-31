@@ -33,6 +33,7 @@ export const EditDocketEntryMetaFormDocument = connect(
     validateDocketRecordSequence,
     validationErrors,
   }) => {
+    console.log('validationErrors', validationErrors);
     return (
       <div className="blue-container">
         <FormGroup errorText={validationErrors.lodged}>

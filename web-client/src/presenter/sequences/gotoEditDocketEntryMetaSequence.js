@@ -14,6 +14,7 @@ import { setDocketEntryMetaFormForEditAction } from '../actions/EditDocketRecord
 import { setDocketEntryMetaTypeAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaTypeAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
 export const gotoEditDocketEntryMeta = [
   setCurrentPageAction('Interstitial'),
@@ -24,6 +25,7 @@ export const gotoEditDocketEntryMeta = [
   getCaseAction,
   setCaseAction,
   setDocketEntryMetaFormForEditAction,
+  updateDocketEntryWizardDataAction,
   setDocketEntryMetaTypeAction,
   chooseMetaTypePathAction,
   {
