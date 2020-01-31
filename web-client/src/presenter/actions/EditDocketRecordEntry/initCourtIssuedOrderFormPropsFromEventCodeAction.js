@@ -17,13 +17,13 @@ export const initCourtIssuedOrderFormPropsFromEventCodeAction = ({
 
   const eventCode = get(state.form.eventCode);
 
-  const item = COURT_ISSUED_EVENT_CODES.find(
+  const selectedDocumentProps = COURT_ISSUED_EVENT_CODES.find(
     item => item.eventCode === eventCode,
   );
 
-  if (item) {
+  if (selectedDocumentProps) {
     ['documentType', 'documentTitle', 'eventCode', 'scenario'].forEach(key =>
-      store.set(state.form[key], item[key]),
+      store.set(state.form[key], selectedDocumentProps[key]),
     );
   }
 };
