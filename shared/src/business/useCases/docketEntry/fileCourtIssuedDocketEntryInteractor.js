@@ -42,7 +42,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const document = caseEntity.getDocumentById({
     documentId,
@@ -128,6 +128,13 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       filingDate: documentEntity.date || createISODateString(),
     }),
   );
+
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+    });
 
   const saveItems = [
     applicationContext.getPersistenceGateway().createUserInboxRecord({

@@ -81,6 +81,7 @@ import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/pr
 import {
   createISODateString,
   createISODateStringFromObject,
+  deconstructDate,
   formatDateString,
   formatNow,
   isStringISOFormatted,
@@ -106,9 +107,11 @@ import {
   formatCase,
   formatCaseDeadlines,
   formatDocument,
+  getFilingsAndProceedings,
   getFormattedCaseDetail,
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
+import { formatJudgeName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateCourtIssuedDocumentTitleInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitleInteractor';
@@ -160,6 +163,7 @@ import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCas
 import { recallPetitionFromIRSHoldingQueueInteractor } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshTokenInteractor } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { removeCaseFromTrialInteractor } from '../../shared/src/proxies/trialSessions/removeCaseFromTrialProxy';
+import { removeCasePendingItemInteractor } from '../../shared/src/proxies/removeCasePendingItemProxy';
 import { removeConsolidatedCasesInteractor } from '../../shared/src/proxies/removeConsolidatedCasesProxy';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
@@ -336,6 +340,7 @@ const allUseCases = {
   recallPetitionFromIRSHoldingQueueInteractor,
   refreshTokenInteractor,
   removeCaseFromTrialInteractor,
+  removeCasePendingItemInteractor,
   removeConsolidatedCasesInteractor,
   removeItemInteractor,
   runBatchProcessInteractor,
@@ -553,14 +558,17 @@ const applicationContext = {
       compareStrings,
       createISODateString,
       createISODateStringFromObject,
+      deconstructDate,
       filterEmptyStrings,
       formatCase,
       formatCaseDeadlines,
       formatCaseForTrialSession,
       formatDateString,
       formatDocument,
+      formatJudgeName,
       formatNow,
       formattedTrialSessionDetails,
+      getFilingsAndProceedings,
       getFormattedCaseDetail,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,

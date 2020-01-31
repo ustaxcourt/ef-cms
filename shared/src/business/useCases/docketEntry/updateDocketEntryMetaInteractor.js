@@ -42,30 +42,65 @@ exports.updateDocketEntryMetaInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const docketRecordEntry = caseEntity.docketRecord.find(
-    record => record.index === docketRecordIndex,
-  );
+  const docketRecordEntry = caseEntity.docketRecord.find(record => {
+    return record.index === docketRecordIndex;
+  });
 
   const {
     action,
+    attachments,
+    certificateOfService,
+    certificateOfServiceDate,
     description,
+    documentType,
+    eventCode,
     filedBy,
     filingDate,
+    freeText,
+    generatedDocumentTitle,
+    lodged,
+    objections,
     servedAt,
+    servedPartiesCode,
   } = docketEntryMeta;
 
   const docketRecordEntity = new DocketRecord({
     ...docketRecordEntry,
     action: action || docketRecordEntry.action,
-    description: description || docketRecordEntry.description,
+    description:
+      generatedDocumentTitle || description || docketRecordEntry.description,
+    eventCode: eventCode || docketRecordEntry.eventCode,
     filedBy: filedBy || docketRecordEntry.filedBy,
     filingDate: filingDate || docketRecordEntry.filingDate,
+    servedPartiesCode: servedPartiesCode || docketRecordEntry.servedPartiesCode,
   });
 
-  if (servedAt || filedBy || filingDate) {
+  if (
+    attachments ||
+    certificateOfServiceDate ||
+    certificateOfService ||
+    documentType ||
+    eventCode ||
+    filedBy ||
+    filingDate ||
+    freeText ||
+    generatedDocumentTitle ||
+    lodged ||
+    objections ||
+    servedAt
+  ) {
     const documentDetail = caseEntity.getDocumentById({
       documentId: docketRecordEntity.documentId,
     });
+
+    let newCertificateOfServiceDate =
+      certificateOfServiceDate !== null
+        ? certificateOfServiceDate
+        : documentDetail.certificateOfServiceDate;
+
+    if (certificateOfService === false) {
+      newCertificateOfServiceDate = undefined;
+    }
 
     if (documentDetail) {
       const servedAtUpdated = servedAt && servedAt !== documentDetail.servedAt;
@@ -76,8 +111,22 @@ exports.updateDocketEntryMetaInteractor = async ({
       const documentEntity = new Document(
         {
           ...documentDetail,
-          createdAt: filingDateUpdated ? null : documentDetail.createdAt, // setting to null will regenerate it for the coversheet
+          attachments:
+            attachments !== null ? attachments : documentDetail.attachments,
+          certificateOfService:
+            certificateOfService !== null
+              ? certificateOfService
+              : documentDetail.certificateOfService,
+          certificateOfServiceDate: newCertificateOfServiceDate,
+          createdAt: filingDateUpdated ? null : documentDetail.createdAt,
+          documentTitle: generatedDocumentTitle || documentDetail.title, // setting to null will regenerate it for the coversheet
+          documentType: documentType || documentDetail.documentType,
+          eventCode: eventCode || documentDetail.eventCode,
           filedBy: filedBy || documentDetail.filedBy,
+          filingDate: filingDate || documentDetail.filingDate,
+          freeText: freeText || documentDetail.freeText,
+          lodged: lodged !== null ? lodged : documentDetail.lodged,
+          objections: objections || documentDetail.objections,
           servedAt: servedAt || documentDetail.servedAt,
         },
         { applicationContext },

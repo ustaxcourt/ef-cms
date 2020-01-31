@@ -1,5 +1,6 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from '../AddDocketEntry/Inclusions';
+import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { connect } from '@cerebral/react';
 import {
   docketEntryOnChange,
@@ -18,8 +19,8 @@ export const EditDocketEntryMetaFormDocument = connect(
     editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
     form: state.form,
     internalTypesHelper: state.internalTypesHelper,
-    updateDocketEntryFormValueSequence:
-      sequences.updateDocketEntryFormValueSequence,
+    updateDocketEntryMetaDocumentFormValueSequence:
+      sequences.updateDocketEntryMetaDocumentFormValueSequence,
     validateDocketRecordSequence: sequences.validateDocketRecordSequence,
     validationErrors: state.validationErrors,
   },
@@ -28,11 +29,10 @@ export const EditDocketEntryMetaFormDocument = connect(
     editDocketEntryMetaHelper,
     form,
     internalTypesHelper,
-    updateDocketEntryFormValueSequence,
+    updateDocketEntryMetaDocumentFormValueSequence,
     validateDocketRecordSequence,
     validationErrors,
   }) => {
-    console.log('form', form);
     return (
       <div className="blue-container">
         <FormGroup errorText={validationErrors.lodged}>
@@ -48,7 +48,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                   type="radio"
                   value={option}
                   onChange={e => {
-                    updateDocketEntryFormValueSequence({
+                    updateDocketEntryMetaDocumentFormValueSequence({
                       key: e.target.name,
                       value: e.target.value === 'Lodge',
                     });
@@ -68,7 +68,7 @@ export const EditDocketEntryMetaFormDocument = connect(
         <FormGroup errorText={validationErrors.filingDate}>
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="filing-date-legend">
-              Filing Date
+              Filed Date
             </legend>
             <div className="usa-memorable-date">
               <div className="usa-form-group usa-form-group--month margin-bottom-0">
@@ -88,7 +88,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                   value={form.filingDateMonth || ''}
                   onBlur={() => validateDocketRecordSequence()}
                   onChange={e => {
-                    updateDocketEntryFormValueSequence({
+                    updateDocketEntryMetaDocumentFormValueSequence({
                       key: e.target.name,
                       value: limitLength(e.target.value, 2),
                     });
@@ -112,7 +112,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                   value={form.filingDateDay || ''}
                   onBlur={() => validateDocketRecordSequence()}
                   onChange={e => {
-                    updateDocketEntryFormValueSequence({
+                    updateDocketEntryMetaDocumentFormValueSequence({
                       key: e.target.name,
                       value: limitLength(e.target.value, 2),
                     });
@@ -136,7 +136,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                   value={form.filingDateYear || ''}
                   onBlur={() => validateDocketRecordSequence()}
                   onChange={e => {
-                    updateDocketEntryFormValueSequence({
+                    updateDocketEntryMetaDocumentFormValueSequence({
                       key: e.target.name,
                       value: limitLength(e.target.value, 4),
                     });
@@ -174,7 +174,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                 action,
                 inputValue,
                 name,
-                updateSequence: updateDocketEntryFormValueSequence,
+                updateSequence: updateDocketEntryMetaDocumentFormValueSequence,
                 validateSequence: validateDocketRecordSequence,
               });
               return true;
@@ -188,6 +188,17 @@ export const EditDocketEntryMetaFormDocument = connect(
             }}
           />
         </FormGroup>
+
+        {editDocketEntryMetaHelper.primary.showNonstandardForm && (
+          <NonstandardForm
+            helper="editDocketEntryMetaHelper"
+            level="primary"
+            updateSequence="updateDocketEntryMetaDocumentFormValueSequence"
+            validateSequence="validateDocketEntrySequence"
+            validationErrors="validationErrors"
+          />
+        )}
+
         <FormGroup errorText={validationErrors.additionalInfo}>
           <label
             className="usa-label"
@@ -208,7 +219,7 @@ export const EditDocketEntryMetaFormDocument = connect(
               validateDocketRecordSequence();
             }}
             onChange={e => {
-              updateDocketEntryFormValueSequence({
+              updateDocketEntryMetaDocumentFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -224,7 +235,7 @@ export const EditDocketEntryMetaFormDocument = connect(
               name="addToCoversheet"
               type="checkbox"
               onChange={e => {
-                updateDocketEntryFormValueSequence({
+                updateDocketEntryMetaDocumentFormValueSequence({
                   key: e.target.name,
                   value: e.target.checked,
                 });
@@ -259,7 +270,7 @@ export const EditDocketEntryMetaFormDocument = connect(
               validateDocketRecordSequence();
             }}
             onChange={e => {
-              updateDocketEntryFormValueSequence({
+              updateDocketEntryMetaDocumentFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -267,7 +278,7 @@ export const EditDocketEntryMetaFormDocument = connect(
           />
         </FormGroup>
         <FormGroup>
-          <Inclusions />
+          <Inclusions updateSequence="updateDocketEntryMetaDocumentFormValueSequence" />
         </FormGroup>
         <FormGroup errorText={editDocketEntryMetaHelper.partyValidationError}>
           <fieldset
@@ -285,7 +296,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                 name="partyPrimary"
                 type="checkbox"
                 onChange={e => {
-                  updateDocketEntryFormValueSequence({
+                  updateDocketEntryMetaDocumentFormValueSequence({
                     key: e.target.name,
                     value: e.target.checked,
                   });
@@ -308,7 +319,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                   name="partySecondary"
                   type="checkbox"
                   onChange={e => {
-                    updateDocketEntryFormValueSequence({
+                    updateDocketEntryMetaDocumentFormValueSequence({
                       key: e.target.name,
                       value: e.target.checked,
                     });
@@ -331,7 +342,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                 name="partyRespondent"
                 type="checkbox"
                 onChange={e => {
-                  updateDocketEntryFormValueSequence({
+                  updateDocketEntryMetaDocumentFormValueSequence({
                     key: e.target.name,
                     value: e.target.checked,
                   });
@@ -364,7 +375,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                     type="radio"
                     value={option}
                     onChange={e => {
-                      updateDocketEntryFormValueSequence({
+                      updateDocketEntryMetaDocumentFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });

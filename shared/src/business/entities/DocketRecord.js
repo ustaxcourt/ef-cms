@@ -19,6 +19,7 @@ function DocketRecord(rawDocketRecord) {
   this.filedBy = rawDocketRecord.filedBy;
   this.filingDate = rawDocketRecord.filingDate;
   this.index = rawDocketRecord.index;
+  this.servedPartiesCode = rawDocketRecord.servedPartiesCode;
 }
 
 DocketRecord.validationName = 'DocketRecord';
@@ -77,6 +78,11 @@ joiValidationDecorator(
       .integer()
       .required()
       .description('Index of this item in the Docket Record list.'),
+    servedPartiesCode: joi
+      .string()
+      .allow(null)
+      .optional()
+      .description('Served parties code to override system-computed code.'),
   }),
   undefined,
   DocketRecord.VALIDATION_ERROR_MESSAGES,

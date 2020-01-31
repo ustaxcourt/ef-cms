@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
-import { EditDocketEntryMetaFormCourtIssued } from './EditDocketEntryMetaFormDocument';
+import { EditDocketEntryMetaDocketEntryPreview } from './EditDocketEntryMetaDocketEntryPreview';
+import { EditDocketEntryMetaFormCourtIssued } from './EditDocketEntryMetaFormCourtIssued';
 import { EditDocketEntryMetaFormDocument } from './EditDocketEntryMetaFormDocument';
 import { EditDocketEntryMetaFormNoDocument } from './EditDocketEntryMetaFormNoDocument';
 import { EditDocketEntryMetaTabAction } from './EditDocketEntryMetaTabAction';
@@ -14,16 +15,28 @@ import React from 'react';
 export const EditDocketEntryMeta = connect(
   {
     caseDetail: state.caseDetail,
-    editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
+    editType: state.screenMetadata.editType,
     submitSequence: sequences.submitEditDocketEntryMetaSequence,
   },
-  ({ caseDetail, editDocketEntryMetaHelper, submitSequence }) => {
+  ({ caseDetail, editType, submitSequence }) => {
     return (
       <>
         <CaseDetailHeader />
         <section className="usa-section grid-container">
           <ErrorNotification />
-
+          <div className="grid-row grid-gap">
+            <div className="grid-col-5 title">
+              <h1>Docket Entry</h1>
+            </div>
+            <div className="grid-col-7">
+              <div className="display-flex flex-row flex-justify flex-align-center">
+                <div className="margin-top-1 margin-bottom-1 docket-entry-preview-text">
+                  <span className="text-bold">Docket Entry Preview: </span>
+                  <EditDocketEntryMetaDocketEntryPreview />
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="grid-row grid-gap">
             <div className="grid-col-5 DocumentDetail">
               <Tabs
@@ -36,14 +49,15 @@ export const EditDocketEntryMeta = connect(
                   tabName="documentInfo"
                   title="Document Info"
                 >
-                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
-                    'CourtIssued' && <EditDocketEntryMetaFormCourtIssued />}
-
-                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
-                    'Document' && <EditDocketEntryMetaFormDocument />}
-
-                  {editDocketEntryMetaHelper.docketEntryMetaFormComponent ===
-                    'NoDocument' && <EditDocketEntryMetaFormNoDocument />}
+                  {editType === 'CourtIssued' && (
+                    <EditDocketEntryMetaFormCourtIssued />
+                  )}
+                  {editType === 'Document' && (
+                    <EditDocketEntryMetaFormDocument />
+                  )}
+                  {editType === 'NoDocument' && (
+                    <EditDocketEntryMetaFormNoDocument />
+                  )}
                 </Tab>
                 <Tab id="tab-service" tabName="service" title="Service">
                   <EditDocketEntryMetaTabService />

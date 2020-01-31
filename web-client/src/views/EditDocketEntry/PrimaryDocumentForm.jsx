@@ -347,7 +347,7 @@ export const PrimaryDocumentForm = connect(
             />
           </div>
 
-          <Inclusions />
+          <Inclusions updateSequence="updateDocketEntryFormValueSequence" />
 
           <FormGroup errorText={addDocketEntryHelper.partyValidationError}>
             <fieldset
