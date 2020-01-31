@@ -58,7 +58,10 @@ exports.updateDocketEntryMetaInteractor = async ({
     filingDate,
     freeText,
     generatedDocumentTitle,
+    lodged,
+    objections,
     servedAt,
+    servedPartiesCode,
   } = docketEntryMeta;
 
   const docketRecordEntity = new DocketRecord({
@@ -69,19 +72,22 @@ exports.updateDocketEntryMetaInteractor = async ({
     eventCode: eventCode || docketRecordEntry.eventCode,
     filedBy: filedBy || docketRecordEntry.filedBy,
     filingDate: filingDate || docketRecordEntry.filingDate,
+    servedPartiesCode: servedPartiesCode || docketRecordEntry.servedPartiesCode,
   });
 
   if (
+    attachments ||
     certificateOfServiceDate ||
     certificateOfService ||
-    servedAt ||
+    documentType ||
+    eventCode ||
     filedBy ||
     filingDate ||
     freeText ||
     generatedDocumentTitle ||
-    attachments ||
-    documentType ||
-    eventCode
+    lodged ||
+    objections ||
+    servedAt
   ) {
     const documentDetail = caseEntity.getDocumentById({
       documentId: docketRecordEntity.documentId,
@@ -119,6 +125,8 @@ exports.updateDocketEntryMetaInteractor = async ({
           filedBy: filedBy || documentDetail.filedBy,
           filingDate: filingDate || documentDetail.filingDate,
           freeText: freeText || documentDetail.freeText,
+          lodged: lodged !== null ? lodged : documentDetail.lodged,
+          objections: objections || documentDetail.objections,
           servedAt: servedAt || documentDetail.servedAt,
         },
         { applicationContext },
