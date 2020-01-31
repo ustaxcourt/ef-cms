@@ -174,8 +174,6 @@ function DocketEntryFactory(rawProps) {
     addToSchema('partyPrimary');
   }
 
-  console.log('schema', schema);
-
   joiValidationDecorator(
     entityConstructor,
     schema,
