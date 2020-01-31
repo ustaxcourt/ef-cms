@@ -112,7 +112,7 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
 
 const formatDocketRecordWithDocument = (
   applicationContext,
-  docketRecords = [],
+  docketRecords,
   documents = [],
 ) => {
   const documentMap = documents.reduce((acc, document) => {
