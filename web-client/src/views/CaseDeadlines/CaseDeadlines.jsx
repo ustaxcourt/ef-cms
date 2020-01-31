@@ -49,7 +49,7 @@ export const CaseDeadlines = connect(
                     className="select-left"
                     id="judgeFilter"
                     name="judge"
-                    placeHolder="xyz"
+                    placeHolder="- Judge -"
                   >
                     <option value="">-Judge-</option>
                     {caseDeadlineReportHelper.judges.map((judge, idx) => (
