@@ -18,32 +18,34 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
   let showJudge = false;
   let showTrialLocation = false;
 
-  switch (selectedDocumentInformation.scenario) {
-    case 'Type A':
-      showFreeText = true;
-      break;
-    case 'Type B':
-      showFreeText = true;
-      showJudge = true;
-      break;
-    case 'Type C':
-      showDocketNumbers = true;
-      break;
-    case 'Type D':
-      showFreeText = true;
-      showDate = true;
-      break;
-    case 'Type E':
-      showDate = true;
-      break;
-    case 'Type F':
-      showJudge = true;
-      showTrialLocation = true;
-      break;
-    case 'Type G':
-      showDate = true;
-      showTrialLocation = true;
-      break;
+  if (selectedDocumentInformation) {
+    switch (selectedDocumentInformation.scenario) {
+      case 'Type A':
+        showFreeText = true;
+        break;
+      case 'Type B':
+        showFreeText = true;
+        showJudge = true;
+        break;
+      case 'Type C':
+        showDocketNumbers = true;
+        break;
+      case 'Type D':
+        showFreeText = true;
+        showDate = true;
+        break;
+      case 'Type E':
+        showDate = true;
+        break;
+      case 'Type F':
+        showJudge = true;
+        showTrialLocation = true;
+        break;
+      case 'Type G':
+        showDate = true;
+        showTrialLocation = true;
+        break;
+    }
   }
 
   let freeTextLabel;
