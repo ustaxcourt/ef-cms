@@ -44,6 +44,23 @@ export const setDocketEntryMetaFormForEditAction = ({
       document => docketRecordEntry.documentId === document.documentId,
     );
 
+    // TODO: Abstract this (also in getFormattedCaseDetail)
+    if (docketRecordEntry.servedPartiesCode) {
+      documentDetail.servedPartiesCode = docketRecordEntry.servedPartiesCode;
+    } else {
+      if (
+        documentDetail &&
+        !!documentDetail.servedAt &&
+        documentDetail.servedParties &&
+        documentDetail.servedParties.length > 0
+      ) {
+        documentDetail.servedPartiesCode = 'B';
+      } else {
+        // TODO: Address Respondent and Petitioner codes
+        documentDetail.servedPartiesCode = '';
+      }
+    }
+
     store.set(state.form, {
       ...docketRecordEntry,
       ...documentDetail,

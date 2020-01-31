@@ -12,33 +12,35 @@ exports.updateCaseAutomaticBlock = async ({
   applicationContext,
   caseEntity,
 }) => {
-  const caseDeadlines = await applicationContext
-    .getPersistenceGateway()
-    .getCaseDeadlinesByCaseId({
-      applicationContext,
-      caseId: caseEntity.caseId,
-    });
-
-  caseEntity.updateAutomaticBlocked({ caseDeadlines });
-
-  if (caseEntity.automaticBlocked) {
-    await applicationContext
+  if (caseEntity.status !== Case.STATUS_TYPES.calendared) {
+    const caseDeadlines = await applicationContext
       .getPersistenceGateway()
-      .deleteCaseTrialSortMappingRecords({
+      .getCaseDeadlinesByCaseId({
         applicationContext,
         caseId: caseEntity.caseId,
       });
-  } else if (
-    caseEntity.status === Case.STATUS_TYPES.generalDocketReadyForTrial &&
-    !caseEntity.blocked
-  ) {
-    await applicationContext
-      .getPersistenceGateway()
-      .createCaseTrialSortMappingRecords({
-        applicationContext,
-        caseId: caseEntity.caseId,
-        caseSortTags: caseEntity.generateTrialSortTags(),
-      });
+
+    caseEntity.updateAutomaticBlocked({ caseDeadlines });
+
+    if (caseEntity.automaticBlocked) {
+      await applicationContext
+        .getPersistenceGateway()
+        .deleteCaseTrialSortMappingRecords({
+          applicationContext,
+          caseId: caseEntity.caseId,
+        });
+    } else if (
+      caseEntity.status === Case.STATUS_TYPES.generalDocketReadyForTrial &&
+      !caseEntity.blocked
+    ) {
+      await applicationContext
+        .getPersistenceGateway()
+        .createCaseTrialSortMappingRecords({
+          applicationContext,
+          caseId: caseEntity.caseId,
+          caseSortTags: caseEntity.generateTrialSortTags(),
+        });
+    }
   }
 
   return caseEntity;
