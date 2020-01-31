@@ -348,18 +348,28 @@ describe('formatCase', () => {
     expect(result.irsNoticeDateFormatted).toEqual('No notice provided');
   });
 
-  it('should format blockedDate when blocked is true', () => {
-    const result = formatCase(applicationContext, {
-      ...mockCaseDetail,
-      blocked: true,
-      blockedDate: getDateISO(),
-    });
+  describe('should indicate blocked status', () => {
+    it('should format blockedDate and automaticBlockedDate when blocked and automaticBlocked are true', () => {
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        automaticBlocked: true,
+        automaticBlockedDate: '2020-01-06T11:12:13.007Z',
+        automaticBlockedReason: 'for reasons',
+        blocked: true,
+        blockedDate: getDateISO(),
+        blockedReason: 'for reasons',
+      });
 
-    expect(result.blockedDateFormatted).toEqual(
-      applicationContext
-        .getUtilities()
-        .formatDateString(getDateISO(), 'MMDDYY'),
-    );
+      expect(result).toMatchObject({
+        automaticBlockedDateFormatted: applicationContext
+          .getUtilities()
+          .formatDateString('2020-01-06T11:12:13.007Z', 'MMDDYY'),
+        blockedDateFormatted: applicationContext
+          .getUtilities()
+          .formatDateString(getDateISO(), 'MMDDYY'),
+        showBlockedFromTrial: true,
+      });
+    });
   });
 
   it('should format trial details if case status is calendared', () => {

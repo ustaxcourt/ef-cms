@@ -192,7 +192,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   result.consolidatedCases = result.consolidatedCases || [];
 
-  result.showBlockedTag = caseDetail.blocked;
+  result.showBlockedTag = caseDetail.blocked || caseDetail.automaticBlocked;
   result.docketRecordSort = docketRecordSort;
   result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
   return result;
