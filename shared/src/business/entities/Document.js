@@ -54,6 +54,7 @@ function Document(rawDocument, { applicationContext }) {
   this.hasSupportingDocuments = rawDocument.hasSupportingDocuments;
   this.isFileAttached = rawDocument.isFileAttached;
   this.isPaper = rawDocument.isPaper;
+  this.judge = rawDocument.judge;
   this.lodged = rawDocument.lodged;
   this.objections = rawDocument.objections;
   this.ordinalValue = rawDocument.ordinalValue;
@@ -316,6 +317,11 @@ joiValidationDecorator(
     hasSupportingDocuments: joi.boolean().optional(),
     isFileAttached: joi.boolean().optional(),
     isPaper: joi.boolean().optional(),
+    judge: joi
+      .string()
+      .allow(null)
+      .optional()
+      .description('The judge associated with the document.'),
     lodged: joi.boolean().optional(),
     objections: joi.string().optional(),
     ordinalValue: joi.string().optional(),
