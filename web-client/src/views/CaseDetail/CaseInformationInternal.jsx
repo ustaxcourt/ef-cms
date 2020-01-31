@@ -235,6 +235,17 @@ const TrialInformation = ({
             </div>
           </div>
         )}
+        {caseDetail.showAutomaticBlockedAndHighPriority && (
+          <div className="grid-row margin-top-3">
+            <h4 className="margin-bottom-0">
+              <FontAwesomeIcon
+                className="text-secondary-darker"
+                icon="exclamation-circle"
+              />{' '}
+              Trial - Not Scheduled - High Priority
+            </h4>
+          </div>
+        )}
       </>
     )}
     {caseDetail.showNotScheduled && (
