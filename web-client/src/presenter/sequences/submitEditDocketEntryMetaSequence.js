@@ -8,7 +8,7 @@ import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketR
 import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
+import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryMetaAction } from '../actions/EditDocketRecordEntry/updateDocketEntryMetaAction';
@@ -24,7 +24,7 @@ export const submitEditDocketEntryMetaSequence = [
   generateCourtIssuedDocumentTitleAction,
   validateDocketRecordAction,
   {
-    error: [setValidationErrorsByFlagAction],
+    error: [setAlertErrorAction, setValidationErrorsAction],
     success: [
       stopShowValidationAction,
       clearAlertsAction,

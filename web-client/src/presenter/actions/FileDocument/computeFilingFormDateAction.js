@@ -21,7 +21,7 @@ export const computeFilingFormDateAction = ({ get, store }) => {
       .split('-')
       .map(segment => segment.padStart(2, '0'))
       .join('-');
-
-    store.set(state.form.filingDate, formDate);
   }
+
+  store.set(state.form.filingDate, formDate);
 };

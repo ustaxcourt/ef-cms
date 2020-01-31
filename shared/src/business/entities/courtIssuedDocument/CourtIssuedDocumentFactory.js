@@ -1,3 +1,4 @@
+const { CourtIssuedDocumentDefault } = require('./CourtIssuedDocumentDefault');
 const { CourtIssuedDocumentTypeA } = require('./CourtIssuedDocumentTypeA');
 const { CourtIssuedDocumentTypeB } = require('./CourtIssuedDocumentTypeB');
 const { CourtIssuedDocumentTypeC } = require('./CourtIssuedDocumentTypeC');
@@ -37,6 +38,8 @@ CourtIssuedDocumentFactory.get = documentMetadata => {
         return new CourtIssuedDocumentTypeG(documentMetadata);
     }
   }
+
+  return new CourtIssuedDocumentDefault(documentMetadata);
 };
 
 module.exports = { CourtIssuedDocumentFactory };
