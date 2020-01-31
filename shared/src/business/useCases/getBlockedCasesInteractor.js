@@ -58,14 +58,10 @@ exports.getBlockedCasesInteractor = async ({
     index: 'efcms',
   });
 
-  const foundCases = [];
-  const hits = get(body, 'hits.hits');
-
-  if (hits && hits.length > 0) {
-    hits.forEach(hit => {
-      foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
-    });
-  }
+  const hits = get(body, 'hits.hits', []);
+  const foundCases = hits.map(hit =>
+    AWS.DynamoDB.Converter.unmarshall(hit['_source']),
+  );
 
   return foundCases;
 };
