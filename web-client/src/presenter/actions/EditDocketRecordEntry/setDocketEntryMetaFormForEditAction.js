@@ -74,7 +74,7 @@ export const setDocketEntryMetaFormForEditAction = ({
       ),
     });
   } else {
-    store.set(state.form, docketRecordEntry.servedPartiesCode);
+    store.set(state.form, docketRecordEntry);
   }
 
   store.set(state.docketRecordIndex, docketRecordIndex);
