@@ -48,24 +48,53 @@ exports.updateDocketEntryMetaInteractor = async ({
 
   const {
     action,
+    attachments,
+    certificateOfService,
+    certificateOfServiceDate,
     description,
+    documentType,
+    eventCode,
     filedBy,
     filingDate,
+    freeText,
+    generatedDocumentTitle,
     servedAt,
   } = docketEntryMeta;
 
   const docketRecordEntity = new DocketRecord({
     ...docketRecordEntry,
     action: action || docketRecordEntry.action,
-    description: description || docketRecordEntry.description,
+    description:
+      generatedDocumentTitle || description || docketRecordEntry.description,
+    eventCode: eventCode || docketRecordEntry.eventCode,
     filedBy: filedBy || docketRecordEntry.filedBy,
     filingDate: filingDate || docketRecordEntry.filingDate,
   });
 
-  if (servedAt || filedBy || filingDate) {
+  if (
+    certificateOfServiceDate ||
+    certificateOfService ||
+    servedAt ||
+    filedBy ||
+    filingDate ||
+    freeText ||
+    generatedDocumentTitle ||
+    attachments ||
+    documentType ||
+    eventCode
+  ) {
     const documentDetail = caseEntity.getDocumentById({
       documentId: docketRecordEntity.documentId,
     });
+
+    let newCertificateOfServiceDate =
+      certificateOfServiceDate !== null
+        ? certificateOfServiceDate
+        : documentDetail.certificateOfServiceDate;
+
+    if (certificateOfService === false) {
+      newCertificateOfServiceDate = undefined;
+    }
 
     if (documentDetail) {
       const servedAtUpdated = servedAt && servedAt !== documentDetail.servedAt;
@@ -76,8 +105,20 @@ exports.updateDocketEntryMetaInteractor = async ({
       const documentEntity = new Document(
         {
           ...documentDetail,
-          createdAt: filingDateUpdated ? null : documentDetail.createdAt, // setting to null will regenerate it for the coversheet
+          attachments:
+            attachments !== null ? attachments : documentDetail.attachments,
+          certificateOfService:
+            certificateOfService !== null
+              ? certificateOfService
+              : documentDetail.certificateOfService,
+          certificateOfServiceDate: newCertificateOfServiceDate,
+          createdAt: filingDateUpdated ? null : documentDetail.createdAt,
+          documentTitle: generatedDocumentTitle || documentDetail.title, // setting to null will regenerate it for the coversheet
+          documentType: documentType || documentDetail.documentType,
+          eventCode: eventCode || documentDetail.eventCode,
           filedBy: filedBy || documentDetail.filedBy,
+          filingDate: filingDate || documentDetail.filingDate,
+          freeText: freeText || documentDetail.freeText,
           servedAt: servedAt || documentDetail.servedAt,
         },
         { applicationContext },
