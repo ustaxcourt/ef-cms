@@ -6,10 +6,10 @@ export const formatPendingItem = (item, { applicationContext }) => {
   result.formattedFiledDate = applicationContext
     .getUtilities()
     .formatDateString(result.receivedAt, 'MMDDYY');
-  result.associatedJudgeFormatted = result.associatedJudge.replace(
-    /^Judge\s+/,
-    '',
-  );
+  result.associatedJudgeFormatted = applicationContext
+    .getUtilities()
+    .formatJudgeName(result.associatedJudge);
+
   result.formattedName = result.documentTitle || result.documentType;
   return result;
 };
@@ -20,7 +20,7 @@ export const formattedPendingItems = (get, applicationContext) => {
   );
   const judgeFilter = get(state.screenMetadata.pendingItemsFilters.judge);
   const judges = (get(state.judges) || [])
-    .map(i => i.name.replace(/^Judge\s+/, ''))
+    .map(i => applicationContext.getUtilities().formatJudgeName(i.name))
     .concat('Chief Judge')
     .sort();
 
