@@ -4,7 +4,7 @@ const {
 const {
   generateCourtIssuedDocumentTitleInteractor,
 } = require('./generateCourtIssuedDocumentTitleInteractor');
-const { Document } = require('../../entities//Document');
+const { Document } = require('../../entities/Document');
 
 describe('generateCourtIssuedDocumentTitleInteractor', () => {
   let applicationContext;
