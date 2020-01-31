@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
 import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -16,6 +17,7 @@ import { gotoCaseDetailSequence } from './gotoCaseDetailSequence';
 export const submitEditDocketEntryMetaSequence = [
   startShowValidationAction,
   primePropsFromEditDocketEntryMetaModalAction,
+  generateCourtIssuedDocumentTitleAction,
   validateDocketRecordAction,
   {
     error: [setValidationErrorsByFlagAction],
