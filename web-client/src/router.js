@@ -172,7 +172,7 @@ const router = {
         );
         app.getSequence('gotoEditDocketEntryMetaSequence')({
           docketNumber,
-          docketRecordIndex,
+          docketRecordIndex: +docketRecordIndex,
         });
       }),
     );

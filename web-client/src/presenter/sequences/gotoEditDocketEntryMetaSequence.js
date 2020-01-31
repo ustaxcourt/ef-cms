@@ -6,6 +6,7 @@ import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDo
 import { generateTitlePreviewAction } from '../actions/EditDocketRecordEntry/generateTitlePreviewAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
+import { initCourtIssuedOrderFormPropsFromEventCodeAction } from '../actions/EditDocketRecordEntry/initCourtIssuedOrderFormPropsFromEventCodeAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -14,6 +15,7 @@ import { setDocketEntryMetaFormForEditAction } from '../actions/EditDocketRecord
 import { setDocketEntryMetaTypeAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaTypeAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
 export const gotoEditDocketEntryMeta = [
   setCurrentPageAction('Interstitial'),
@@ -28,11 +30,12 @@ export const gotoEditDocketEntryMeta = [
   chooseMetaTypePathAction,
   {
     courtIssued: [
+      initCourtIssuedOrderFormPropsFromEventCodeAction,
       getUsersInSectionAction({ section: 'judge' }),
       setUsersByKeyAction('judgeUsers'),
       generateCourtIssuedDocumentTitleAction,
     ],
-    document: [generateTitlePreviewAction],
+    document: [updateDocketEntryWizardDataAction, generateTitlePreviewAction],
     noDocument: [],
   },
   setCurrentPageAction('EditDocketEntryMeta'),
