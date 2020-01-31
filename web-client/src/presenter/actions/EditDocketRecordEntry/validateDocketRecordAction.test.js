@@ -1,19 +1,22 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateDocketRecordAction } from './validateDocketRecordAction';
-import sinon from 'sinon';
 
 describe('validateDocketRecordAction', () => {
   let validateDocketRecordInteractorStub;
+  let validateDocketEntryInteractorStub;
+  let validateCourtIssuedDocketEntryInteractorStub;
   let successStub;
   let errorStub;
 
   let mockDocketRecord;
 
   beforeEach(() => {
-    validateDocketRecordInteractorStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+    validateDocketRecordInteractorStub = jest.fn();
+    successStub = jest.fn();
+    errorStub = jest.fn();
+    validateDocketEntryInteractorStub = jest.fn();
+    validateCourtIssuedDocketEntryInteractorStub = jest.fn();
 
     mockDocketRecord = {
       description: 'hello world',
@@ -24,6 +27,8 @@ describe('validateDocketRecordAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
+        validateCourtIssuedDocketEntryInteractor: validateCourtIssuedDocketEntryInteractorStub,
+        validateDocketEntryInteractor: validateDocketEntryInteractorStub,
         validateDocketRecordInteractor: validateDocketRecordInteractorStub,
       }),
     };
@@ -35,30 +40,128 @@ describe('validateDocketRecordAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateDocketRecordInteractorStub.returns(null);
+    validateDocketRecordInteractorStub.mockReturnValue(null);
     await runAction(validateDocketRecordAction, {
       modules: {
         presenter,
       },
       state: {
         form: mockDocketRecord,
+        screenMetadata: {
+          editType: 'NoDocument',
+        },
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub).toHaveBeenCalled();
+    expect(validateDocketRecordInteractorStub).toHaveBeenCalled();
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateDocketRecordInteractorStub.returns('error');
+    validateDocketRecordInteractorStub.mockReturnValue({
+      validationErrors: 'error',
+    });
     await runAction(validateDocketRecordAction, {
       modules: {
         presenter,
       },
       state: {
         form: mockDocketRecord,
+        screenMetadata: {
+          editType: 'NoDocument',
+        },
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub).toHaveBeenCalled();
+    expect(validateDocketRecordInteractorStub).toHaveBeenCalled();
+  });
+
+  it('should call the error path when any errors are found with a document', async () => {
+    validateDocketRecordInteractorStub.mockReturnValue(null);
+    validateDocketEntryInteractorStub.mockReturnValue({
+      validationErrors: 'error',
+    });
+
+    await runAction(validateDocketRecordAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: mockDocketRecord,
+        screenMetadata: {
+          editType: 'Document',
+        },
+      },
+    });
+
+    expect(validateDocketRecordInteractorStub).toHaveBeenCalled();
+    expect(validateDocketEntryInteractorStub).toHaveBeenCalled();
+    expect(errorStub).toHaveBeenCalled();
+  });
+
+  it('should call the success path when no errors are found with a document', async () => {
+    validateDocketRecordInteractorStub.mockReturnValue(null);
+    validateDocketEntryInteractorStub.mockReturnValue(null);
+
+    await runAction(validateDocketRecordAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: mockDocketRecord,
+        screenMetadata: {
+          editType: 'Document',
+        },
+      },
+    });
+
+    expect(successStub).toHaveBeenCalled();
+    expect(validateDocketEntryInteractorStub).toHaveBeenCalled();
+    expect(validateDocketRecordInteractorStub).toHaveBeenCalled();
+  });
+
+  it('should call the success path when no errors are found with a court-issued document', async () => {
+    validateDocketRecordInteractorStub.mockReturnValue(null);
+    validateCourtIssuedDocketEntryInteractorStub.mockReturnValue(null);
+
+    await runAction(validateDocketRecordAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: mockDocketRecord,
+        screenMetadata: {
+          editType: 'CourtIssued',
+        },
+      },
+    });
+
+    expect(successStub).toHaveBeenCalled();
+    expect(validateCourtIssuedDocketEntryInteractorStub).toHaveBeenCalled();
+    expect(validateDocketRecordInteractorStub).toHaveBeenCalled();
+  });
+
+  it('should call the error path when any errors are found with a court-issued document', async () => {
+    validateDocketRecordInteractorStub.mockReturnValue(null);
+    validateCourtIssuedDocketEntryInteractorStub.mockReturnValue({
+      validationErrors: 'error',
+    });
+
+    await runAction(validateDocketRecordAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: mockDocketRecord,
+        screenMetadata: {
+          editType: 'CourtIssued',
+        },
+      },
+    });
+
+    expect(errorStub).toHaveBeenCalled();
+    expect(validateCourtIssuedDocketEntryInteractorStub).toHaveBeenCalled();
+    expect(validateDocketRecordInteractorStub).toHaveBeenCalled();
   });
 });
