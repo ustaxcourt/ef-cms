@@ -9,6 +9,7 @@ describe('updateCaseDeadlineInteractor', () => {
   const mockCaseDeadline = {
     caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    caseTitle: 'My Case Title',
     deadlineDate: '2019-03-01T21:42:29.073Z',
     description: 'hello world',
     docketNumber: '101-21',

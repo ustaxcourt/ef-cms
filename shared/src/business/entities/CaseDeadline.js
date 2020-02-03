@@ -19,6 +19,7 @@ function CaseDeadline(rawProps, { applicationContext }) {
   this.caseDeadlineId =
     rawProps.caseDeadlineId || applicationContext.getUniqueId();
   this.caseId = rawProps.caseId;
+  this.caseTitle = rawProps.caseTitle;
   this.createdAt = rawProps.createdAt || createISODateString();
   this.deadlineDate = rawProps.deadlineDate;
   this.description = rawProps.description;
@@ -28,7 +29,8 @@ function CaseDeadline(rawProps, { applicationContext }) {
 CaseDeadline.validationName = 'CaseDeadline';
 
 CaseDeadline.VALIDATION_ERROR_MESSAGES = {
-  caseId: 'You must have a case id.',
+  caseId: 'You must have a case ID.',
+  caseTitle: 'You must have a case title.',
   deadlineDate: 'Enter a valid deadline date',
   description: [
     {
@@ -59,6 +61,11 @@ CaseDeadline.schema = joi.object().keys({
     })
     .required()
     .description('Unique Case ID only used by the system.'),
+  caseTitle: joi
+    .string()
+    .min(1)
+    .required()
+    .description('Title of the Case.'),
   createdAt: joi
     .date()
     .iso()
