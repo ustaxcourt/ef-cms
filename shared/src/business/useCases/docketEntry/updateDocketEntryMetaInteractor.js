@@ -23,6 +23,7 @@ exports.updateDocketEntryMetaInteractor = async ({
   docketEntryMeta,
   docketRecordIndex,
 }) => {
+  let caseUpdated;
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY)) {
@@ -111,7 +112,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     if (documentDetail) {
       const servedAtUpdated = servedAt && servedAt !== documentDetail.servedAt;
       const filingDateUpdated =
-        filingDate && filingDate !== documentDetail.createdAt;
+        filingDate && filingDate !== documentDetail.filingDate;
       const shouldGenerateCoversheet = servedAtUpdated || filingDateUpdated;
 
       const documentEntity = new Document(
@@ -141,6 +142,16 @@ exports.updateDocketEntryMetaInteractor = async ({
         { applicationContext },
       );
 
+      caseEntity.updateDocketRecordEntry(docketRecordEntity);
+      caseEntity.updateDocument(documentEntity);
+
+      await applicationContext.getPersistenceGateway().updateCase({
+        applicationContext,
+        caseToUpdate: caseEntity.validate().toRawObject(),
+      });
+
+      caseUpdated = true;
+
       if (shouldGenerateCoversheet) {
         // servedAt or filingDate has changed, generate a new coversheet
         await applicationContext.getUseCases().addCoversheetInteractor({
@@ -149,16 +160,17 @@ exports.updateDocketEntryMetaInteractor = async ({
           documentId: documentDetail.documentId,
         });
       }
-      caseEntity.updateDocument(documentEntity);
     }
   }
 
-  caseEntity.updateDocketRecordEntry(docketRecordEntity);
+  if (!caseUpdated) {
+    caseEntity.updateDocketRecordEntry(docketRecordEntity);
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
+    await applicationContext.getPersistenceGateway().updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+  }
 
   return caseEntity.toRawObject();
 };
