@@ -174,7 +174,7 @@ const TrialInformation = ({
     )}
     {caseDetail.showBlockedFromTrial && (
       <>
-        <h3 className="underlined">
+        <h3 className="underlined" id="blocked-from-trial-header">
           Trial - Blocked From Trial
           <FontAwesomeIcon
             className="text-secondary-dark margin-left-1"
