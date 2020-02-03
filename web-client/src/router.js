@@ -519,7 +519,7 @@ const router = {
 
           app.getSequence('gotoMessagesSequence')(routeArgs);
         }
-        setPageTitle('Messages');
+        setPageTitle('Document QC');
       }),
     );
 
