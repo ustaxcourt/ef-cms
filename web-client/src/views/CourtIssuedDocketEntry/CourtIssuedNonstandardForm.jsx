@@ -104,7 +104,7 @@ export const CourtIssuedNonstandardForm = connect(
         {addCourtIssuedDocketEntryNonstandardHelper.showJudge && (
           <FormGroup errorText={validationErrors.judge}>
             <label className="usa-label" htmlFor="judge" id="judge-label">
-              Judge’s Name
+              Judge’s name
             </label>
             <select
               className="usa-select"
@@ -136,7 +136,7 @@ export const CourtIssuedNonstandardForm = connect(
               htmlFor="trial-location"
               id="trial-location-label"
             >
-              Trial Location
+              Trial location
             </label>
             <select
               className="usa-select"
@@ -191,7 +191,7 @@ export const CourtIssuedNonstandardForm = connect(
               htmlFor="docket-numbers"
               id="docket-numbers-label"
             >
-              Docket Number(s)
+              Docket number(s)
             </label>
 
             <input

@@ -36,7 +36,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
         <FormGroup errorText={validationErrors.filingDate}>
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="filing-date-legend">
-              Filed Date
+              Filed date
             </legend>
             <div className="usa-memorable-date">
               <div className="usa-form-group usa-form-group--month margin-bottom-0">
@@ -121,7 +121,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
             htmlFor="document-type"
             id="document-type-label"
           >
-            Document Type
+            Document type
           </label>
           <Select
             aria-labelledby="document-type-label"

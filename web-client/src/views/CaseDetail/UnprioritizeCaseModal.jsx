@@ -11,10 +11,10 @@ export const UnprioritizeCaseModal = connect(
   ({ cancelSequence, confirmSequence }) => {
     return (
       <ModalDialog
-        cancelLabel="No, cancel"
+        cancelLabel="No, Cancel"
         cancelSequence={cancelSequence}
         className=""
-        confirmLabel="Yes, remove high priority"
+        confirmLabel="Yes, Remove High Priority"
         confirmSequence={confirmSequence}
         title="Are You Sure You Want to Remove the High Priority on This Case?"
       >
