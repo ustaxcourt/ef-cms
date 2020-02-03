@@ -5,17 +5,17 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
- * @param {object} providers.props the cerebral props object
+ * @param {object} providers.get the cerebral get method
  * @param {object} providers.applicationContext the application context
  */
 export const initCourtIssuedOrderFormPropsFromEventCodeAction = ({
   applicationContext,
-  props,
+  get,
   store,
 }) => {
   const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();
 
-  const eventCode = props.initEventCode;
+  const eventCode = get(state.form.eventCode);
 
   const item = COURT_ISSUED_EVENT_CODES.find(
     item => item.eventCode === eventCode,
