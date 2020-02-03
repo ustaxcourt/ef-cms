@@ -215,7 +215,7 @@ const TrialInformation = ({
                   openBlockFromTrialModalSequence();
                 }}
               >
-                Manually Block From Trial
+                Add Manual Block
               </Button>
             </div>
           </div>
@@ -284,7 +284,7 @@ const TrialInformation = ({
               openBlockFromTrialModalSequence();
             }}
           >
-            Manually Block From Trial
+            Add Manual Block
           </Button>
         </div>
       </>

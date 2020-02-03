@@ -3,9 +3,36 @@
 ### associatedJudge
 
 
-Defaults to Chief Judge.
+Judge assigned to this Case. Defaults to Chief Judge.
 
 > `string` | required
+
+### automaticBlocked
+
+
+Temporarily blocked from trial due to a pending item or due date.
+
+> `boolean` | optional
+
+### automaticBlockedDate
+
+> `any`
+
+
+If `automaticBlocked` = `true`, then this field is `date` and is `required.` 
+
+
+Otherwise, this field is `any` and is `optional`. `null` is allowed.
+
+### automaticBlockedReason
+
+> `any`
+
+
+If `automaticBlocked` = `true`, then this field is `string` and is `required.` 
+
+
+Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 ### blocked
 
@@ -86,7 +113,7 @@ Unique Case ID only used by the system.
 ### createdAt
 
 
-When the case was added to the system.
+When the Case was added to the system.
 
 > `date` | required
 
