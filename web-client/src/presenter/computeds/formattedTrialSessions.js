@@ -1,4 +1,12 @@
-import { filter, find, identity, orderBy, pickBy } from 'lodash';
+import {
+  filter,
+  find,
+  identity,
+  isEmpty,
+  isEqual,
+  orderBy,
+  pickBy,
+} from 'lodash';
 import { state } from 'cerebral';
 
 export const formatSession = (session, applicationContext) => {
@@ -18,6 +26,31 @@ export const formatSession = (session, applicationContext) => {
 
 export const sessionSorter = sessionList => {
   return orderBy(sessionList, ['startDate', 'trialLocation'], ['asc', 'asc']);
+};
+
+export const filterFormattedSessionsByStatus = trialSessions => {
+  const filteredbyStatusType = {
+    all: trialSessions,
+    closed: [],
+    new: [],
+    open: [],
+  };
+  // TODO: something different?
+  trialSessions.forEach(trialSession => {
+    if (
+      !isEmpty(trialSession.allCases) &&
+      isEqual(trialSession.allCases, trialSession.inactiveCases)
+    ) {
+      filteredbyStatusType.closed.push(trialSession);
+    }
+    if (trialSession.isCalendared) {
+      filteredbyStatusType.open.push(trialSession);
+    }
+    if (!trialSession.isCalendared) {
+      filteredbyStatusType.new.push(trialSession);
+    }
+  });
+  return filteredbyStatusType;
 };
 
 export const formattedTrialSessions = (get, applicationContext) => {
@@ -82,6 +115,7 @@ export const formattedTrialSessions = (get, applicationContext) => {
   const showSwingSessionList = get(state.form.swingSession);
 
   return {
+    filteredTrialSessions: filterFormattedSessionsByStatus(formattedSessions),
     formattedSessions,
     sessionsByTerm,
     showSwingSessionList,
