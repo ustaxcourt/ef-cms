@@ -5,16 +5,16 @@ import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocume
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
+import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryMetaAction } from '../actions/EditDocketRecordEntry/updateDocketEntryMetaAction';
 import { validateDocketRecordAction } from '../actions/EditDocketRecordEntry/validateDocketRecordAction';
-
-import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 
 export const submitEditDocketEntryMetaSequence = [
   startShowValidationAction,
@@ -24,7 +24,11 @@ export const submitEditDocketEntryMetaSequence = [
   generateCourtIssuedDocumentTitleAction,
   validateDocketRecordAction,
   {
-    error: [setAlertErrorAction, setValidationErrorsAction],
+    error: [
+      setAlertErrorAction,
+      setValidationErrorsAction,
+      setValidationAlertErrorsAction,
+    ],
     success: [
       stopShowValidationAction,
       clearAlertsAction,
