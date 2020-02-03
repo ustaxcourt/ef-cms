@@ -30,7 +30,7 @@ export const submitEditDocketEntryMetaSequence = [
           clearModalStateAction,
           getEditDocketEntryMetaAlertSuccessAction,
           setAlertSuccessAction,
-          ...gotoCaseDetailSequence, // Needs to refresh the formatted case detail / docket record,
+          ...gotoCaseDetailSequence, // Needs to refresh the formatted case detail / docket record.
         ],
       },
     ],
