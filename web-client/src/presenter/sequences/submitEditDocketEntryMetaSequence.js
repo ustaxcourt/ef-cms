@@ -45,7 +45,7 @@ export const submitEditDocketEntryMetaSequence = [
           setSaveAlertsForNavigationAction,
           getEditDocketEntryMetaAlertSuccessAction,
           setAlertSuccessAction,
-          ...gotoCaseDetailSequence,
+          gotoCaseDetailSequence,
         ],
       },
       unsetWaitingForResponseAction,
