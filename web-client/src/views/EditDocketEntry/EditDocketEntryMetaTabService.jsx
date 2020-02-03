@@ -26,7 +26,7 @@ export const EditDocketEntryMetaTabService = connect(
             className="usa-fieldset margin-bottom-2"
             id="served-parties-radios"
           >
-            <legend htmlFor="served-parties-radios">Parties Served</legend>
+            <legend htmlFor="served-parties-radios">Parties served</legend>
             <div className="usa-radio">
               <input
                 aria-describedby="served-parties-radios"

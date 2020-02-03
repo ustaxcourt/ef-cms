@@ -1525,7 +1525,7 @@ describe('document detail helper', () => {
   });
 
   describe('showPrintCaseConfirmationButton', () => {
-    it("should show the 'print confirmation' button if a document has been served and the document is a petition ", () => {
+    it("should show the 'Print Confirmation' button if a document has been served and the document is a petition ", () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -1551,7 +1551,7 @@ describe('document detail helper', () => {
       expect(result.showPrintCaseConfirmationButton).toEqual(true);
     });
 
-    it("should not show the 'print confirmation' button if a document has not been served", () => {
+    it("should not show the 'Print Confirmation' button if a document has not been served", () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -1577,7 +1577,7 @@ describe('document detail helper', () => {
       expect(result.showPrintCaseConfirmationButton).toEqual(false);
     });
 
-    it("should not show the 'print confirmation' button if the document is not a petition ", () => {
+    it("should not show the 'Print Confirmation' button if the document is not a petition ", () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
