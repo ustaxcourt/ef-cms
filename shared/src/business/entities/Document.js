@@ -322,7 +322,12 @@ joiValidationDecorator(
       .allow(null)
       .optional()
       .description('The judge associated with the document.'),
-    lodged: joi.boolean().optional(),
+    lodged: joi
+      .boolean()
+      .optional()
+      .description(
+        'A lodged document is awaiting action by the judge to enact or refuse',
+      ),
     objections: joi.string().optional(),
     ordinalValue: joi.string().optional(),
     partyPrimary: joi.boolean().optional(),

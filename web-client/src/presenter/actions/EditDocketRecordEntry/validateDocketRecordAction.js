@@ -23,7 +23,7 @@ export const validateDocketRecordAction = ({
     docketRecord: formMetadata,
   });
 
-  let errorDisplayOrder = [];
+  let errorDisplayOrder = ['description', 'eventCode', 'filingDate', 'index'];
 
   if (editType === 'Document') {
     errors = omit(
@@ -36,6 +36,20 @@ export const validateDocketRecordAction = ({
       },
       ['dateReceived'],
     );
+
+    errorDisplayOrder = [
+      ...errorDisplayOrder,
+      'dateReceived',
+      'eventCode',
+      'freeText',
+      'freeText2',
+      'previousDocument',
+      'serviceDate',
+      'trialLocation',
+      'ordinalValue',
+      'certificateOfServiceDate',
+      'objections',
+    ];
   }
 
   if (editType === 'CourtIssued') {
@@ -50,6 +64,7 @@ export const validateDocketRecordAction = ({
     };
 
     errorDisplayOrder = [
+      ...errorDisplayOrder,
       'eventCode',
       'date',
       'judge',

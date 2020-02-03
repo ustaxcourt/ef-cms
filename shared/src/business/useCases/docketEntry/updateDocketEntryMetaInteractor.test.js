@@ -17,6 +17,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       {
         documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
         documentType: 'Order',
+        filingDate: '2019-01-01T00:01:00.000Z',
         servedAt: '2019-01-01T00:01:00.000Z',
         servedParties: ['Some Party'],
         userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
@@ -24,6 +25,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       {
         documentId: '111ba5a9-b37b-479d-9201-067ec6e33111',
         documentType: 'Order',
+        filingDate: '2019-01-01T00:01:00.000Z',
         servedAt: '2019-01-02T00:01:00.000Z',
         servedParties: ['Some Other Party'],
         userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
@@ -255,6 +257,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
+        filingDate: '2019-01-01T00:01:00.000Z', // unchanged from current filingDate
         servedAt: '2019-01-01T00:01:00.000Z', // unchanged from current servedAt
       },
       docketRecordIndex: 0,
