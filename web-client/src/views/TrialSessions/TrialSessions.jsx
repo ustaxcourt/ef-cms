@@ -21,7 +21,7 @@ export const TrialSessions = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <Tabs bind="trialSessionsTab.group" defaultActiveTab="New">
+          <Tabs bind="trialSessionsTab.group" defaultActiveTab="All">
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
               <Button
                 link
