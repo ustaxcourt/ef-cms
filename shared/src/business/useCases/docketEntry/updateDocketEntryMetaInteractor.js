@@ -111,7 +111,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     if (documentDetail) {
       const servedAtUpdated = servedAt && servedAt !== documentDetail.servedAt;
       const filingDateUpdated =
-        filingDate && filingDate !== documentDetail.createdAt;
+        filingDate && filingDate !== documentDetail.filingDate;
       const shouldGenerateCoversheet = servedAtUpdated || filingDateUpdated;
 
       const documentEntity = new Document(
