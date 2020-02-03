@@ -433,7 +433,7 @@ const router = {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Case Confirmation`,
         );
-        app.getSequence('gotoPrintablePendingReportSequence')({
+        app.getSequence('gotoPrintablePendingReportForCaseSequence')({
           caseIdFilter: true,
           docketNumber,
         });

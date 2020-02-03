@@ -97,6 +97,7 @@ import { gotoPrimaryContactEditSequence } from './sequences/gotoPrimaryContactEd
 import { gotoPrintPreviewSequence } from './sequences/gotoPrintPreviewSequence';
 import { gotoPrintableCaseConfirmationSequence } from './sequences/gotoPrintableCaseConfirmationSequence';
 import { gotoPrintableDocketRecordSequence } from './sequences/gotoPrintableDocketRecordSequence';
+import { gotoPrintablePendingReportForCaseSequence } from './sequences/gotoPrintablePendingReportForCaseSequence';
 import { gotoPrintablePendingReportSequence } from './sequences/gotoPrintablePendingReportSequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
@@ -456,6 +457,7 @@ export const presenter = {
     gotoTrialSessionWorkingCopySequence,
     gotoTrialSessionsSequence,
     gotoUserContactEditSequence,
+    gotoPrintablePendingReportForCaseSequence,
     gotoViewAllDocumentsSequence,
     loadOriginalProposedStipulatedDecisionSequence,
     loadPdfSequence,
