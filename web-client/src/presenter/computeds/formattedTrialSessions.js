@@ -28,28 +28,69 @@ export const sessionSorter = sessionList => {
   return orderBy(sessionList, ['startDate', 'trialLocation'], ['asc', 'asc']);
 };
 
-export const filterFormattedSessionsByStatus = trialSessions => {
+export const filterFormattedSessionsByStatus = (
+  trialTerms,
+  applicationContext,
+) => {
   const filteredbyStatusType = {
-    all: trialSessions,
+    all: trialTerms,
     closed: [],
     new: [],
     open: [],
   };
+
+  const initTermIndex = (trialTerm, filtered) => {
+    let termIndex = filtered.findIndex(
+      term => term.dateFormatted === trialTerm.dateFormatted,
+    );
+
+    if (termIndex === -1) {
+      filtered.push({
+        dateFormatted: trialTerm.dateFormatted,
+        sessions: [],
+      });
+      termIndex = filtered.length - 1;
+    }
+
+    return termIndex;
+  };
+
   // TODO: something different?
-  trialSessions.forEach(trialSession => {
-    if (
-      !isEmpty(trialSession.allCases) &&
-      isEqual(trialSession.allCases, trialSession.inactiveCases)
-    ) {
-      filteredbyStatusType.closed.push(trialSession);
-    }
-    if (trialSession.isCalendared) {
-      filteredbyStatusType.open.push(trialSession);
-    }
-    if (!trialSession.isCalendared) {
-      filteredbyStatusType.new.push(trialSession);
-    }
+  trialTerms.forEach(trialTerm => {
+    trialTerm.sessions.map(async session => {
+      // TODO: Consider bulk-loading / associating cases with multiple trial sessions
+      session.calendaredCases = await applicationContext
+        .getUseCases()
+        .getCalendaredCasesForTrialSessionInteractor({
+          applicationContext,
+          trialSessionId: session.trialSessionId,
+        });
+
+      const formattedSession = await applicationContext
+        .getUtilities()
+        .formattedTrialSessionDetails({
+          applicationContext,
+          trialSession: session,
+        });
+
+      if (
+        !isEmpty(formattedSession.allCases) &&
+        isEqual(formattedSession.allCases, formattedSession.inactiveCases)
+      ) {
+        const termIndex = initTermIndex(trialTerm, filteredbyStatusType.closed);
+        filteredbyStatusType.closed[termIndex].sessions.push(session);
+      }
+      if (formattedSession.isCalendared) {
+        const termIndex = initTermIndex(trialTerm, filteredbyStatusType.open);
+        filteredbyStatusType.open[termIndex].sessions.push(session);
+      }
+      if (!formattedSession.isCalendared) {
+        const termIndex = initTermIndex(trialTerm, filteredbyStatusType.new);
+        filteredbyStatusType.new[termIndex].sessions.push(session);
+      }
+    });
   });
+
   return filteredbyStatusType;
 };
 
@@ -115,7 +156,10 @@ export const formattedTrialSessions = (get, applicationContext) => {
   const showSwingSessionList = get(state.form.swingSession);
 
   return {
-    filteredTrialSessions: filterFormattedSessionsByStatus(formattedSessions),
+    filteredTrialSessions: filterFormattedSessionsByStatus(
+      formattedSessions,
+      applicationContext,
+    ),
     formattedSessions,
     sessionsByTerm,
     showSwingSessionList,
