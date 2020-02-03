@@ -4,8 +4,5 @@ export default test => {
       docketNumber: test.docketNumber,
       docketRecordIndex: 1,
     });
-
-    console.log('state', test.getState('form'));
-    console.log('caseDetail', test.getState('caseDetail'));
   });
 };

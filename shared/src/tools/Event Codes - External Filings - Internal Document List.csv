@@ -1,4 +1,4 @@
-Document Name (Concatenation Mapping),Document Type (Option),Document Type Category (Option),Respondent,Practitioner,Petitioner,Event Code ,Scenario,Variations ,Label- Previous Document from Record ,Label- Free Text / Trial Location Dropdown,Second Free Text ,Ordinal Field
+Document Name (Concatenation Mapping),Document type (Option),Document type Category (Option),Respondent,Practitioner,Petitioner,Event Code ,Scenario,Variations ,Label- Previous Document from Record ,Label- Free Text / Trial location dropdown,Second Free Text ,Ordinal Field
 "[First, Second, etc. ] Amended [Document Name]",Amended [Document Name],Miscellaneous,,,,AMAT ,Nonstandard B ,,,What is being amended? ,,
 "[First, Second, etc.] Amendment to [anything]",Amendment [anything],Miscellaneous,,,,ADMT,Nonstandard I ,,What is this amendment for?,,,What Iteration Is this filing?
 "[First, Second, etc.] Request for Admissions",Request for Admissions,Request,TRUE,TRUE,TRUE,REQA,Nonstandard G,,,,,What Iteration Is this filing?

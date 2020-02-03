@@ -27,7 +27,7 @@ export const RemoveFromTrialSessionModal = connect(
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         className=""
-        confirmLabel="Remove case"
+        confirmLabel="Remove Case"
         confirmSequence={confirmSequence}
         title="Remove From Trial Session"
       >

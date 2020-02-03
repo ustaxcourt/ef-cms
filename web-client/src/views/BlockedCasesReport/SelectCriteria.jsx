@@ -12,12 +12,12 @@ export const SelectCriteria = connect(
   ({ form, getBlockedCasesByTrialLocationSequence }) => (
     <>
       <div className="header-with-blue-background">
-        <h3>Select Criteria</h3>
+        <h3>Select criteria</h3>
       </div>
       <div className="blue-container">
         <div className="usa-form-group margin-bottom-0">
           <label className="usa-label" htmlFor="trial-location">
-            Trial Location
+            Trial location
           </label>
           <select
             className="usa-select"

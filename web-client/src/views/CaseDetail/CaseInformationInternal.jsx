@@ -103,15 +103,15 @@ const TrialInformation = ({
         </h3>
         <div className="grid-row">
           <div className="grid-col-4">
-            <p className="label">Place of Trial</p>
+            <p className="label">Place of trial</p>
             <p>{caseDetail.formattedPreferredTrialCity}</p>
           </div>
           <div className="grid-col-4">
-            <p className="label">Trial Date</p>
+            <p className="label">Trial date</p>
             <p>{caseDetail.formattedTrialDate}</p>
           </div>
           <div className="grid-col-4">
-            <p className="label">Trial Judge</p>
+            <p className="label">Trial judge</p>
             <p>{caseDetail.formattedAssociatedJudge}</p>
           </div>
         </div>
@@ -147,15 +147,15 @@ const TrialInformation = ({
         </h3>
         <div className="grid-row">
           <div className="grid-col-4">
-            <p className="label">Place of Trial</p>
+            <p className="label">Place of trial</p>
             <p>{caseDetail.formattedTrialCity}</p>
           </div>
           <div className="grid-col-4">
-            <p className="label">Trial Date</p>
+            <p className="label">Trial date</p>
             <p>{caseDetail.formattedTrialDate}</p>
           </div>
           <div className="grid-col-4">
-            <p className="label">Trial Judge</p>
+            <p className="label">Trial judge</p>
             <p>{caseDetail.formattedAssociatedJudge}</p>
           </div>
         </div>
@@ -174,7 +174,7 @@ const TrialInformation = ({
     )}
     {caseDetail.showBlockedFromTrial && (
       <>
-        <h3 className="underlined">
+        <h3 className="underlined" id="blocked-from-trial-header">
           Trial - Blocked From Trial
           <FontAwesomeIcon
             className="text-secondary-dark margin-left-1"
@@ -186,7 +186,7 @@ const TrialInformation = ({
           <div className="grid-row">
             <div className="grid-col-8">
               <p className="label">
-                Manually blocked from Trial {caseDetail.blockedDateFormatted}:{' '}
+                Manually blocked from trial {caseDetail.blockedDateFormatted}:{' '}
               </p>
               <p>{caseDetail.blockedReason}</p>
             </div>
@@ -215,7 +215,7 @@ const TrialInformation = ({
                   openBlockFromTrialModalSequence();
                 }}
               >
-                Manually Block From Trial
+                Add Manual Block
               </Button>
             </div>
           </div>
@@ -224,7 +224,7 @@ const TrialInformation = ({
           <div className="grid-row">
             <div className="grid-col-12">
               <p className="label">
-                System blocked from Trial{' '}
+                System blocked from trial{' '}
                 {caseDetail.automaticBlockedDateFormatted}:{' '}
               </p>
               <p>{caseDetail.automaticBlockedReason}</p>
@@ -284,7 +284,7 @@ const TrialInformation = ({
               openBlockFromTrialModalSequence();
             }}
           >
-            Manually Block From Trial
+            Add Manual Block
           </Button>
         </div>
       </>
@@ -294,15 +294,15 @@ const TrialInformation = ({
         <h3 className="underlined">Trial - Scheduled</h3>
         <div className="grid-row">
           <div className="grid-col-4">
-            <p className="label">Place of Trial</p>
+            <p className="label">Place of trial</p>
             <p>{caseDetail.formattedTrialCity}</p>
           </div>
           <div className="grid-col-4">
-            <p className="label">Trial Date</p>
+            <p className="label">Trial date</p>
             <p>{caseDetail.formattedTrialDate}</p>
           </div>
           <div className="grid-col-4">
-            <p className="label">Trial Judge</p>
+            <p className="label">Trial judge</p>
             <p>{caseDetail.formattedAssociatedJudge}</p>
           </div>
         </div>
@@ -387,7 +387,7 @@ export const CaseInformationInternal = connect(
                           icon="print"
                           size="1x"
                         />
-                        Print confirmation
+                        Print Confirmation
                       </Button>
                     </If>
                   </h3>
@@ -444,7 +444,7 @@ export const CaseInformationInternal = connect(
                           });
                         }}
                       >
-                        Remove cases
+                        Remove Cases
                       </Button>
                     )}
                     {formattedCaseDetail.canConsolidate && (
