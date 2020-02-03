@@ -28,11 +28,13 @@ export default test => {
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'additionalInfo',
-      value: 'Additional info.',
+      key: 'action',
+      value: 'Added new nickname of "Sauceboss"',
     });
 
-    await test.runSequence('submitEditDocketEntryMetaSequence');
+    await test.runSequence('submitEditDocketEntryMetaSequence', {
+      caseId: test.docketNumber,
+    });
 
     expect(test.getState('alertSuccess')).toMatchObject({
       message: 'You can view your updates to the Docket Record below.',
