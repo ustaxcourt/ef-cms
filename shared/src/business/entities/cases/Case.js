@@ -1172,7 +1172,11 @@ Case.prototype.generateTrialSortTags = function() {
  * @returns {Case} the updated case entity
  */
 Case.prototype.setAsCalendared = function(trialSessionEntity) {
-  if (trialSessionEntity.judge && trialSessionEntity.judge.name) {
+  if (
+    trialSessionEntity.isCalendared &&
+    trialSessionEntity.judge &&
+    trialSessionEntity.judge.name
+  ) {
     this.associatedJudge = trialSessionEntity.judge.name;
   }
   this.trialSessionId = trialSessionEntity.trialSessionId;
