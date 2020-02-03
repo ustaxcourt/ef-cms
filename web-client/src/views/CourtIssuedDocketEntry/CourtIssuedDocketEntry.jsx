@@ -73,7 +73,7 @@ export const CourtIssuedDocketEntry = connect(
             <div className="grid-col-7">
               <div className="display-flex flex-row flex-justify flex-align-center">
                 <div className="margin-top-1 margin-bottom-1 docket-entry-preview-text">
-                  <span className="text-bold">Docket Entry Preview: </span>
+                  <span className="text-bold">Docket entry preview: </span>
                   {addCourtIssuedDocketEntryHelper.formattedDocumentTitle}
                 </div>
                 <Button
@@ -97,7 +97,7 @@ export const CourtIssuedDocketEntry = connect(
                     htmlFor="document-type"
                     id="document-type-label"
                   >
-                    Document Type
+                    Document type
                   </label>
                   <Select
                     aria-labelledby="document-type-label"
@@ -166,7 +166,7 @@ export const CourtIssuedDocketEntry = connect(
                 {addCourtIssuedDocketEntryHelper.showServiceStamp && (
                   <FormGroup errorText={validationErrors.serviceStamp}>
                     <fieldset className="usa-fieldset">
-                      <legend className="usa-legend">Service Stamp</legend>
+                      <legend className="usa-legend">Service stamp</legend>
                       {constants.SERVICE_STAMP_OPTIONS.map((option, idx) => (
                         <div className="usa-radio usa-radio__inline" key={idx}>
                           <input
@@ -196,7 +196,7 @@ export const CourtIssuedDocketEntry = connect(
                 )}
 
                 <div className="usa-label" htmlFor="service-parties">
-                  Service Parties
+                  Service parties
                 </div>
 
                 <div id="service-parties">

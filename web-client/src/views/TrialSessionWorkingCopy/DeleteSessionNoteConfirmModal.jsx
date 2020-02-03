@@ -4,8 +4,8 @@ import React from 'react';
 export const DeleteSessionNoteConfirmModal = () => (
   <ConfirmModal
     noCloseBtn
-    cancelLabel="No, cancel"
-    confirmLabel="Yes, delete"
+    cancelLabel="No, Cancel"
+    confirmLabel="Yes, Delete"
     preventCancelOnBlur={true}
     title="Are you sure you want to delete this note?"
     onCancelSequence="clearModalSequence"
