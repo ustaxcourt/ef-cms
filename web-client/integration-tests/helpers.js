@@ -391,6 +391,7 @@ exports.setupTest = ({ useCases = {} } = {}) => {
           });
           break;
         case `/case-detail/${test.docketNumber}`:
+          console.log('yeehaw');
           await test.runSequence('gotoCaseDetailSequence', {
             docketNumber: test.docketNumber,
           });
