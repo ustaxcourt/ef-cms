@@ -38,6 +38,7 @@ describe('addCoversheetInteractor', () => {
         createdAt: '2019-04-19T14:45:15.595Z',
         documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'Answer',
+        filingDate: '2019-04-19T14:45:15.595Z',
         isPaper: false,
         processingStatus: 'pending',
         userId: 'petitionsclerk',
@@ -64,6 +65,7 @@ describe('addCoversheetInteractor', () => {
         documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
         documentType:
           'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+        filingDate: '2019-04-19T14:45:15.595Z',
         isPaper: true,
         lodged: true,
       },
@@ -207,6 +209,7 @@ describe('addCoversheetInteractor', () => {
             documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
             documentType:
               'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+            filingDate: '2019-04-19T14:45:15.595Z',
             isPaper: true,
             lodged: true,
           },
@@ -256,6 +259,27 @@ describe('addCoversheetInteractor', () => {
         },
       });
       expect(result.caseCaptionPostfix).toEqual(', Petitioner');
+    });
+    it('generates correct filed date', async () => {
+      const result = generateCoverSheetData({
+        applicationContext,
+        caseEntity: {
+          ...caseData,
+          caseCaption: 'Janie Petitioner, Petitioner',
+        },
+        documentEntity: {
+          ...testingCaseData.documents[0],
+          addToCoversheet: true,
+          additionalInfo: 'Additional Info Something',
+          certificateOfService: true,
+          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          documentType:
+            'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          filingDate: '2019-04-19T14:45:15.595Z',
+          isPaper: true,
+        },
+      });
+      expect(result.dateFiled).toEqual('04/19/2019');
     });
   });
 });
