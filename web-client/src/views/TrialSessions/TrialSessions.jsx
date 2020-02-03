@@ -3,7 +3,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
-import { UpcomingTrialSessions } from './UpcomingTrialSessions';
+import { TrialSessionsTable } from './TrialSessionsTable';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
@@ -21,7 +21,7 @@ export const TrialSessions = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <Tabs bind="trialSessionsTab.group" defaultActiveTab="Upcoming">
+          <Tabs bind="trialSessionsTab.group" defaultActiveTab="New">
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
               <Button
                 link
@@ -40,13 +40,17 @@ export const TrialSessions = connect(
             >
               Add Trial Session
             </Button>
-
-            <Tab
-              id="upcoming-trial-sessions-tab"
-              tabName="Upcoming"
-              title="Upcoming"
-            >
-              <UpcomingTrialSessions />
+            <Tab id="new-trial-sessions-tab" tabName="New" title="New">
+              <TrialSessionsTable filter="new" />
+            </Tab>
+            <Tab id="open-trial-sessions-tab" tabName="Open" title="Open">
+              <TrialSessionsTable filter="open" />
+            </Tab>
+            <Tab id="closed-trial-sessions-tab" tabName="Closed" title="Closed">
+              <TrialSessionsTable filter="closed" />
+            </Tab>
+            <Tab id="all-trial-sessions-tab" tabName="All" title="All">
+              <TrialSessionsTable filter="all" />
             </Tab>
           </Tabs>
         </section>
