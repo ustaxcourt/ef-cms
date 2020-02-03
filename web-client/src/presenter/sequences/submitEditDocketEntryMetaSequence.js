@@ -8,6 +8,7 @@ import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketR
 import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -34,6 +35,7 @@ export const submitEditDocketEntryMetaSequence = [
         success: [
           clearModalAction,
           clearModalStateAction,
+          setSaveAlertsForNavigationAction,
           getEditDocketEntryMetaAlertSuccessAction,
           setAlertSuccessAction,
           navigateToCaseDetailAction,
