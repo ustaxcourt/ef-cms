@@ -39,7 +39,6 @@ export const validateDocketRecordAction = ({
 
     errorDisplayOrder = [
       ...errorDisplayOrder,
-      'primaryDocumentFile',
       'dateReceived',
       'eventCode',
       'freeText',
