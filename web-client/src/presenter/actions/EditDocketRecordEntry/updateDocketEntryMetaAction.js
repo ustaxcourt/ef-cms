@@ -17,8 +17,6 @@ export const updateDocketEntryMetaAction = async ({
   const docketRecordEntry = get(state.form);
   const docketRecordIndex = get(state.docketRecordIndex);
 
-  console.log('docketRecordEntry', docketRecordEntry);
-
   try {
     await applicationContext.getUseCases().updateDocketEntryMetaInteractor({
       applicationContext,
