@@ -37,7 +37,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
 
   docketClerkNavigatesToEditDocketEntryMeta(test);
   docketClerkEditsDocketEntryMeta(test);
-
   docketClerkVerifiesDocketEntryMetaUpdates(test);
+
   docketClerkSignsOut(test);
 });

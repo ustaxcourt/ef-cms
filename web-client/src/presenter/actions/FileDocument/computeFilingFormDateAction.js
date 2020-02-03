@@ -17,6 +17,8 @@ export const computeFilingFormDateAction = ({ get, store }) => {
   if (formMonth && formDay && formYear) {
     formDate = `${formYear}-${formMonth}-${formDay}`;
 
+    console.log('formDate', formDate);
+
     formDate = formDate
       .split('-')
       .map(segment => segment.padStart(2, '0'))
