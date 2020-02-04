@@ -8,5 +8,9 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  */
 export const setFormValueAction = ({ props, store }) => {
-  store.set(state.form[props.key], props.value);
+  if (props.value !== '') {
+    store.set(state.form[props.key], props.value);
+  } else {
+    store.unset(state.form[props.key]);
+  }
 };

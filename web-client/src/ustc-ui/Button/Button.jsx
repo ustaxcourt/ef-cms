@@ -8,6 +8,7 @@ export const Button = props => {
     children,
     className,
     icon,
+    iconColor, // e.g. blue
     link,
     secondary,
     ...remainingProps
@@ -26,10 +27,15 @@ export const Button = props => {
     link && 'usa-button--unstyled ustc-button--unstyled',
   );
 
+  const iconClasses = classNames(
+    'margin-right-05',
+    iconColor && `fa-icon-${iconColor}`,
+  );
+
   return (
     <Element className={classes} {...remainingProps}>
       {icon && (
-        <FontAwesomeIcon className="margin-right-05" icon={icon} size="1x" />
+        <FontAwesomeIcon className={iconClasses} icon={icon} size="1x" />
       )}
       {children}
     </Element>

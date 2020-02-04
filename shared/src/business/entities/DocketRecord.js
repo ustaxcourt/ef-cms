@@ -61,7 +61,10 @@ joiValidationDecorator(
     eventCode: joi
       .string()
       .valid(...getAllEventCodes())
-      .required(),
+      .required()
+      .description(
+        'Code associated with the event that resulted in this item being added to the Docket Record.',
+      ),
     filedBy: joi
       .string()
       .optional()

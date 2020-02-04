@@ -10,6 +10,7 @@ const {
 const {
   updatePetitionerInformationInteractor,
 } = require('./updatePetitionerInformationInteractor');
+const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { SERVICE_INDICATOR_TYPES } = require('../entities/cases/CaseConstants');
@@ -68,6 +69,7 @@ const userData = {
 let userObj = userData;
 const applicationContext = {
   environment: { stage: 'local' },
+  getCaseCaptionNames: Case.getCaseCaptionNames,
   getCurrentUser: () => {
     return new User(userObj);
   },
