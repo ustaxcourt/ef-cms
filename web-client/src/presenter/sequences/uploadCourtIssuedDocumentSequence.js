@@ -10,22 +10,26 @@ import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submit
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { uploadOrderFileAction } from '../actions/FileDocument/uploadOrderFileAction';
 
-const onFileUploadedSuccess = [
-  submitCourtIssuedOrderAction,
-  setCaseAction,
-  getFileExternalDocumentAlertSuccessAction,
-  setAlertSuccessAction,
-  setSaveAlertsForNavigationAction,
-  navigateToCaseDetailAction,
-];
-
-export const uploadCourtIssuedDocumentSequence = [
+export const uploadCourtIssuedDocument = (
+  lastAction = navigateToCaseDetailAction,
+) => [
   generateTitleAction,
-  setWaitingForResponseAction,
   uploadOrderFileAction,
   {
     error: [openFileUploadErrorModal],
-    success: onFileUploadedSuccess,
+    success: [
+      submitCourtIssuedOrderAction,
+      setCaseAction,
+      getFileExternalDocumentAlertSuccessAction,
+      setAlertSuccessAction,
+      setSaveAlertsForNavigationAction,
+      lastAction,
+    ],
   },
+];
+
+export const uploadCourtIssuedDocumentSequence = [
+  setWaitingForResponseAction,
+  uploadCourtIssuedDocument(),
   unsetWaitingForResponseAction,
 ];
