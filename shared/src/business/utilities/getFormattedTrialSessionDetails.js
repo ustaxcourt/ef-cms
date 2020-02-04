@@ -1,4 +1,4 @@
-const { compact } = require('lodash');
+const { compact, isEmpty, isEqual } = require('lodash');
 
 exports.formatCase = ({ applicationContext, caseItem }) => {
   caseItem.docketNumberWithSuffix = `${
@@ -52,6 +52,19 @@ exports.formattedTrialSessionDetails = ({
   trialSession.formattedTerm = `${
     trialSession.term
   } ${trialSession.termYear.substr(-2)}`;
+
+  const allCases = trialSession.caseOrder;
+  const inactiveCases = allCases.filter(
+    sessionCase => sessionCase.removedFromTrial === true,
+  );
+
+  if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
+    trialSession.computedStatus = 'Closed';
+  } else if (trialSession.isCalendared) {
+    trialSession.computedStatus = 'Open';
+  } else {
+    trialSession.computedStatus = 'New';
+  }
 
   trialSession.formattedStartDate = applicationContext
     .getUtilities()
