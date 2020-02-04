@@ -33,15 +33,14 @@ function Document(rawDocument, { applicationContext }) {
   this.additionalInfo = rawDocument.additionalInfo;
   this.additionalInfo2 = rawDocument.additionalInfo2;
   this.addToCoversheet = rawDocument.addToCoversheet;
-  this.attachments = rawDocument.attachments;
   this.archived = rawDocument.archived;
+  this.attachments = rawDocument.attachments;
   this.caseId = rawDocument.caseId;
   this.certificateOfService = rawDocument.certificateOfService;
   this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
   this.createdAt = rawDocument.createdAt || createISODateString();
   this.docketNumber = rawDocument.docketNumber;
   this.documentId = rawDocument.documentId;
-  this.mailingDate = rawDocument.mailingDate;
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
   this.draftState = rawDocument.draftState;
@@ -56,6 +55,7 @@ function Document(rawDocument, { applicationContext }) {
   this.isPaper = rawDocument.isPaper;
   this.judge = rawDocument.judge;
   this.lodged = rawDocument.lodged;
+  this.mailingDate = rawDocument.mailingDate;
   this.objections = rawDocument.objections;
   this.ordinalValue = rawDocument.ordinalValue;
   this.partyPrimary = rawDocument.partyPrimary;
@@ -85,8 +85,7 @@ function Document(rawDocument, { applicationContext }) {
   this.supportingDocument = rawDocument.supportingDocument;
   this.trialLocation = rawDocument.trialLocation;
   this.userId = rawDocument.userId;
-  this.workItems = rawDocument.workItems;
-  this.workItems = (this.workItems || []).map(
+  this.workItems = (rawDocument.workItems || []).map(
     workItem => new WorkItem(workItem, { applicationContext }),
   );
 
@@ -286,19 +285,22 @@ joiValidationDecorator(
     createdAt: joi
       .date()
       .iso()
-      .required(),
+      .required()
+      .description('When the Document was added to the system.'),
     docketNumber: joi.string().optional(),
     documentId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
-      .required(),
+      .required()
+      .description('ID of the associated PDF document in the S3 bucket.'),
     documentTitle: joi.string().optional(),
     documentType: joi
       .string()
       .valid(...Document.getDocumentTypes())
-      .required(),
+      .required()
+      .description('The type of this document.'),
     draftState: joi.object().optional(),
     eventCode: joi.string().optional(),
     exhibits: joi.boolean().optional(),
