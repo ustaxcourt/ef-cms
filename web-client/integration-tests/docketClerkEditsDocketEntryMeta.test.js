@@ -8,6 +8,7 @@ import docketClerkNavigatesToEditDocketEntryMeta from './journey/docketClerkNavi
 import docketClerkQCsDocketEntry from './journey/docketClerkQCsDocketEntry';
 import docketClerkSignsOut from './journey/docketClerkSignsOut';
 import docketClerkVerifiesDocketEntryMetaUpdates from './journey/docketClerkVerifiesDocketEntryMetaUpdates';
+import docketClerkViewsCaseDetail from './journey/docketClerkViewsCaseDetail';
 
 // petitioner
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
@@ -37,7 +38,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
 
   docketClerkNavigatesToEditDocketEntryMeta(test);
   docketClerkEditsDocketEntryMeta(test);
-
   docketClerkVerifiesDocketEntryMetaUpdates(test);
+
   docketClerkSignsOut(test);
 });

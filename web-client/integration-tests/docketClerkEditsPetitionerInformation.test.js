@@ -43,7 +43,7 @@ describe('docket clerk edits the petitioner information', () => {
       value: '',
     });
 
-    expect(test.getState('form.contactPrimary.address1')).toEqual('');
+    expect(test.getState('form.contactPrimary.address1')).toBeUndefined();
 
     await test.runSequence('updatePetitionerInformationFormSequence');
 

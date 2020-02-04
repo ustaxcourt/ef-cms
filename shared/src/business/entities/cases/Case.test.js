@@ -1413,7 +1413,7 @@ describe('Case entity', () => {
       expect(myCase.trialTime).toBeTruthy();
     });
 
-    it('should set all trial session fields but not set the case as calendared if the trial session is not calendared', () => {
+    it('should set all trial session fields but not set the case as calendared or associated judge if the trial session is not calendared', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -1439,7 +1439,7 @@ describe('Case entity', () => {
 
       expect(myCase.status).toEqual(Case.STATUS_TYPES.new);
       expect(myCase.trialDate).toBeTruthy();
-      expect(myCase.associatedJudge).toBeTruthy();
+      expect(myCase.associatedJudge).toEqual(Case.CHIEF_JUDGE);
       expect(myCase.trialLocation).toBeTruthy();
       expect(myCase.trialSessionId).toBeTruthy();
       expect(myCase.trialTime).toBeTruthy();
