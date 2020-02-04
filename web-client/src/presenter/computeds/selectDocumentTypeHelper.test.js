@@ -114,7 +114,7 @@ describe('selectDocumentTypeHelper', () => {
       primary: {
         showNonstandardForm: true,
         showTextInput: true,
-        textInputLabel: 'What is this Statement for?',
+        textInputLabel: 'What is this statement for?',
       },
     });
   });
@@ -162,7 +162,7 @@ describe('selectDocumentTypeHelper', () => {
         ],
         showDateFields: true,
         showNonstandardForm: true,
-        textInputLabel: 'Date of Service',
+        textInputLabel: 'Date of service',
       },
     });
   });
@@ -180,7 +180,7 @@ describe('selectDocumentTypeHelper', () => {
       primary: {
         showNonstandardForm: true,
         showTrialLocationSelect: true,
-        textInputLabel: 'Requested Location',
+        textInputLabel: 'Requested location',
       },
     });
   });
