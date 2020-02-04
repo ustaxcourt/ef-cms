@@ -1,6 +1,7 @@
 const {
   updateUserContactInformationInteractor,
 } = require('./updateUserContactInformationInteractor');
+const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -32,6 +33,7 @@ describe('updateUserContactInformationInteractor', () => {
     const updateUserSpy = jest.fn();
     const applicationContext = {
       environment: { stage: 'local' },
+      getCaseCaptionNames: Case.getCaseCaptionNames,
       getCurrentUser: () => {
         return MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'];
       },
@@ -106,6 +108,7 @@ describe('updateUserContactInformationInteractor', () => {
     const updateUserSpy = jest.fn();
     const applicationContext = {
       environment: { stage: 'local' },
+      getCaseCaptionNames: Case.getCaseCaptionNames,
       getCurrentUser: () => {
         return MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'];
       },
