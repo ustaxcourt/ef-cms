@@ -14,10 +14,6 @@ const externalRoute = path => {
   window.location.replace(path);
 };
 
-const queryString = () => {
-  return window.location.search;
-};
-
 const openInNewTab = (path, noopener = true) => {
   const windowFeatures = (noopener && 'noopener, noreferrer') || '';
   window.open(path, '_blank', windowFeatures);
