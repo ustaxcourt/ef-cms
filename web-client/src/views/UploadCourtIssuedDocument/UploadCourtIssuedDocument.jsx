@@ -39,10 +39,10 @@ export const UploadCourtIssuedDocument = connect(
         {showModal === 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
         )}
-        <SuccessNotification />
-        <ErrorNotification />
 
         <section className="usa-section grid-container DocumentDetail">
+          <SuccessNotification />
+          <ErrorNotification />
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
