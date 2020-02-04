@@ -178,10 +178,16 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(
     draftDocument => {
+      let editLink = '';
+
+      if (permissions.DOCKET_ENTRY && permissions.CREATE_ORDER_DOCKET_ENTRY) {
+        editLink = '/add-court-issued-docket-entry';
+      }
+
       return {
         ...draftDocument,
         descriptionDisplay: draftDocument.documentTitle,
-        editLink: '',
+        editLink,
         showDocumentEditLink: draftDocument && permissions.UPDATE_CASE,
       };
     },
