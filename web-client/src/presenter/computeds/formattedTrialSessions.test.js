@@ -28,18 +28,21 @@ describe('formattedTrialSessions', () => {
   beforeEach(() => {
     TRIAL_SESSIONS_LIST = [
       {
+        caseOrder: [],
         judge: { name: '1', userId: '1' },
         startDate: '2019-11-25T15:00:00.000Z',
         swingSession: true,
         trialLocation: 'Hartford, Connecticut',
       },
       {
+        caseOrder: [],
         judge: { name: '2', userId: '2' },
         startDate: '2019-11-25T15:00:00.000Z',
         swingSession: true,
         trialLocation: 'Knoxville, TN',
       },
       {
+        caseOrder: [],
         judge: { name: '3', userId: '3' },
         noticeIssuedDate: '2019-07-25T15:00:00.000Z',
         startDate: '2019-11-27T15:00:00.000Z',
@@ -47,18 +50,21 @@ describe('formattedTrialSessions', () => {
         trialLocation: 'Jacksonville, FL',
       },
       {
+        caseOrder: [],
         judge: { name: '4', userId: '4' },
         startDate: '2019-11-27T15:00:00.000Z',
         swingSession: true,
         trialLocation: 'Memphis, TN',
       },
       {
+        caseOrder: [],
         judge: { name: '5', userId: '5' },
         startDate: '2019-11-25T15:00:00.000Z',
         swingSession: false,
         trialLocation: 'Anchorage, AK',
       },
       {
+        caseOrder: [],
         judge: { name: '6', userId: '6' },
         startDate: '2020-02-17T15:00:00.000Z',
         swingSession: false,
@@ -68,77 +74,89 @@ describe('formattedTrialSessions', () => {
   });
 
   describe('filterFormattedSessionsByStatus', () => {
+    let trialTerms;
+
     beforeEach(() => {
-      TRIAL_SESSIONS_LIST.forEach((session, idx) => {
-        TRIAL_SESSIONS_LIST[idx] = {
-          ...session,
-          allCases: [],
-          inactiveCases: [],
-          openCases: [],
-        };
-      });
+      trialTerms = [
+        {
+          dateFormatted: 'October 1, 2022',
+          sessions: [...TRIAL_SESSIONS_LIST],
+        },
+        {
+          dateFormatted: 'November 1, 2022',
+          sessions: [...TRIAL_SESSIONS_LIST],
+        },
+        {
+          dateFormatted: 'December 1, 2022',
+          sessions: [...TRIAL_SESSIONS_LIST],
+        },
+      ];
     });
 
     it('filters closed cases when all trial session cases are inactive', () => {
-      TRIAL_SESSIONS_LIST[0] = {
-        ...TRIAL_SESSIONS_LIST[0],
-        allCases: [{ docketNumber: '123-19' }],
-        inactiveCases: [{ docketNumber: '123-19' }],
+      const sessions = trialTerms[0].sessions.slice(0);
+      sessions[0] = {
+        ...sessions[0],
+        caseOrder: [
+          { docketNumber: '123-19', removedFromTrial: true },
+          { docketNumber: '234-19', removedFromTrial: true },
+        ],
       };
+      trialTerms[0].sessions = sessions;
 
-      const results = filterFormattedSessionsByStatus(TRIAL_SESSIONS_LIST);
+      const results = filterFormattedSessionsByStatus(trialTerms);
+
       expect(results.closed.length).toEqual(1);
-      expect(results.closed).toEqual([TRIAL_SESSIONS_LIST[0]]);
+      expect(results.closed).toEqual([
+        {
+          ...trialTerms[0],
+          sessions: [sessions[0]],
+        },
+      ]);
     });
 
     it('filters open cases', () => {
-      TRIAL_SESSIONS_LIST[0] = {
-        ...TRIAL_SESSIONS_LIST[0],
-        allCases: [
-          { docketNumber: '121-19' },
-          { docketNumber: '122-19' },
-          { docketNumber: '123-19', removedFromTrial: true },
-        ],
+      const sessions = trialTerms[0].sessions.slice(0);
+      sessions[0] = {
+        ...sessions[0],
         isCalendared: true,
-        openCases: [{ docketNumber: '121-19' }, { docketNumber: '122-19' }],
       };
-      TRIAL_SESSIONS_LIST[1] = {
-        ...TRIAL_SESSIONS_LIST[0],
-        allCases: [
-          { docketNumber: '121-19' },
-          { docketNumber: '122-19' },
-          { docketNumber: '123-19', removedFromTrial: true },
-        ],
-        isCalendared: false,
-        openCases: [{ docketNumber: '121-19' }, { docketNumber: '122-19' }],
-      };
-      TRIAL_SESSIONS_LIST[3] = {
-        ...TRIAL_SESSIONS_LIST[0],
-        allCases: [
-          { docketNumber: '121-19' },
-          { docketNumber: '122-19' },
-          { docketNumber: '123-19', removedFromTrial: true },
-        ],
-        isCalendared: true,
-        openCases: [],
-      };
+      trialTerms[0].sessions = sessions;
 
-      const results = filterFormattedSessionsByStatus(TRIAL_SESSIONS_LIST);
+      const results = filterFormattedSessionsByStatus(trialTerms);
+
       expect(results.open.length).toEqual(1);
-      expect(results.open).toEqual([TRIAL_SESSIONS_LIST[0]]);
+      expect(results.open).toEqual([
+        {
+          ...trialTerms[0],
+          sessions: [sessions[0]],
+        },
+      ]);
     });
 
     it('filters new cases', () => {
-      const trialSessions = [...TRIAL_SESSIONS_LIST];
-      trialSessions[0].isCalendared = true;
-      const results = filterFormattedSessionsByStatus(TRIAL_SESSIONS_LIST);
-      expect(results.new.length).toEqual(trialSessions.length - 1);
-      expect(results.new).toEqual(TRIAL_SESSIONS_LIST.slice(1));
+      TRIAL_SESSIONS_LIST.forEach(session => (session.isCalendared = true));
+      const sessions = trialTerms[0].sessions.slice(0);
+      sessions[0] = {
+        ...sessions[0],
+        isCalendared: false,
+      };
+      trialTerms[0].sessions = sessions;
+
+      const results = filterFormattedSessionsByStatus(trialTerms);
+
+      expect(results.new.length).toEqual(1);
+      expect(results.new).toEqual([
+        {
+          ...trialTerms[0],
+          sessions: [sessions[0]],
+        },
+      ]);
     });
 
     it('filters all cases (returns everything)', () => {
-      const results = filterFormattedSessionsByStatus(TRIAL_SESSIONS_LIST);
-      expect(results.all).toEqual(TRIAL_SESSIONS_LIST);
+      const results = filterFormattedSessionsByStatus(trialTerms);
+      expect(results.all).toEqual(trialTerms);
     });
   });
 
