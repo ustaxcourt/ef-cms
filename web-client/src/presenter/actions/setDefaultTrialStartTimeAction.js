@@ -3,6 +3,7 @@ import { state } from 'cerebral';
 /**
  * sets the state.form.startTime values to a default 10:00am value
  *
+ * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  */
 export const setDefaultTrialStartTimeAction = ({ store }) => {
