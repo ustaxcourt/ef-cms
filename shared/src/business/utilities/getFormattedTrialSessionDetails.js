@@ -53,7 +53,7 @@ exports.formattedTrialSessionDetails = ({
     trialSession.term
   } ${trialSession.termYear.substr(-2)}`;
 
-  const allCases = trialSession.caseOrder;
+  const allCases = trialSession.caseOrder || [];
   const inactiveCases = allCases.filter(
     sessionCase => sessionCase.removedFromTrial === true,
   );

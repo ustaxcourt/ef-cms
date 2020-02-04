@@ -10,6 +10,7 @@ const formattedTrialSessionDetails = withAppContextDecorator(
 
 describe('formattedTrialSessionDetails', () => {
   const TRIAL_SESSION = {
+    caseOrder: [],
     city: 'Hartford',
     courtReporter: 'Test Court Reporter',
     irsCalendarAdministrator: 'Test Calendar Admin',
@@ -325,5 +326,36 @@ describe('formattedTrialSessionDetails', () => {
       { docketNumber: '101-18' },
       { docketNumber: '102-19' },
     ]);
+  });
+
+  it('should show open cases when the trial session is calendared and has open cases', () => {
+    let result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          caseOrder: [{ caseId: 'eaff20df-d86e-48ab-adc2-831b6ad7e039' }],
+          isCalendared: true,
+        },
+      },
+    });
+    expect(result.showOpenCases).toEqual(true);
+  });
+
+  it('should show only closed cases when the trial session is calendared and has no open cases', () => {
+    let result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          caseOrder: [
+            {
+              caseId: 'eaff20df-d86e-48ab-adc2-831b6ad7e039',
+              removedFromTrial: true,
+            },
+          ],
+          isCalendared: true,
+        },
+      },
+    });
+    expect(result.showOnlyClosedCases).toEqual(true);
   });
 });
