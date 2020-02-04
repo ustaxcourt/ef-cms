@@ -6,6 +6,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
+const { DOCKET_NUMBER_MATCHER } = require('./cases/CaseConstants');
 const { flatten, map } = require('lodash');
 const { Order } = require('./orders/Order');
 const { TrialSession } = require('./trialSessions/TrialSession');
@@ -287,7 +288,11 @@ joiValidationDecorator(
       .iso()
       .required()
       .description('When the Document was added to the system.'),
-    docketNumber: joi.string().optional(),
+    docketNumber: joi
+      .string()
+      .regex(DOCKET_NUMBER_MATCHER)
+      .optional()
+      .description('Docket Number of the associated Case in XXXXX-YY format.'),
     documentId: joi
       .string()
       .uuid({
@@ -295,7 +300,10 @@ joiValidationDecorator(
       })
       .required()
       .description('ID of the associated PDF document in the S3 bucket.'),
-    documentTitle: joi.string().optional(),
+    documentTitle: joi
+      .string()
+      .optional()
+      .description('The title of this document.'),
     documentType: joi
       .string()
       .valid(...Document.getDocumentTypes())
