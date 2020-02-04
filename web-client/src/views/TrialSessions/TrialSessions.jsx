@@ -15,11 +15,7 @@ export const TrialSessions = connect(
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
   },
-  ({
-    defaultTab,
-    navigateToPathSequence,
-    openTrialSessionPlanningModalSequence,
-  }) => {
+  ({ defaultTab, openTrialSessionPlanningModalSequence }) => {
     return (
       <>
         <BigHeader text="Trial Sessions" />
