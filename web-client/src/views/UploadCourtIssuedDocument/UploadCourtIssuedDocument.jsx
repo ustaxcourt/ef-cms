@@ -52,10 +52,7 @@ export const UploadCourtIssuedDocument = connect(
 
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
-                <div
-                  className="blue-container"
-                  style={{ 'min-height': '471px' }}
-                >
+                <div className="blue-container" style={{ minHeight: '471px' }}>
                   <FormGroup
                     errorText={validationErrors && validationErrors.freeText}
                   >
