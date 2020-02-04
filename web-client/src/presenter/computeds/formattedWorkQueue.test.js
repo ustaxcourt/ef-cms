@@ -542,6 +542,167 @@ describe('formatted work queue computed', () => {
     });
   });
 
+  it('sorts high priority work items to the start of the list - qc, my, inbox', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [
+          {
+            ...qcWorkItem,
+            assigneeId: docketClerkUser.userId,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '101-19',
+            highPriority: false,
+            id: 'c',
+            receivedAt: '2019-01-17T15:27:55.801Z',
+          },
+          {
+            ...qcWorkItem,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '102-19',
+            highPriority: true,
+            id: 'b',
+            receivedAt: '2019-02-17T15:27:55.801Z',
+            trialDate: '2019-01-17T00:00:00.000Z',
+          },
+          {
+            ...qcWorkItem,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '103-19',
+            highPriority: true,
+            id: 'a',
+            receivedAt: '2019-01-17T15:27:55.801Z',
+            trialDate: '2019-02-17T00:00:00.000Z',
+          },
+          {
+            ...qcWorkItem,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '104-19',
+            highPriority: false,
+            id: 'd',
+            receivedAt: '2019-04-17T15:27:55.801Z',
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+
+    expect(result[0].id).toEqual('b');
+    expect(result[1].id).toEqual('a');
+    expect(result[2].id).toEqual('c');
+    expect(result[3].id).toEqual('d');
+  });
+
+  it('sorts high priority work items to the start of the list - qc, my, inbox', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [
+          {
+            ...qcWorkItem,
+            assigneeId: docketClerkUser.userId,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '101-19',
+            highPriority: true,
+            id: 'c',
+            receivedAt: '2019-01-17T15:27:55.801Z',
+            trialDate: '2019-02-17T00:00:00.000Z',
+          },
+          {
+            ...qcWorkItem,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '102-19',
+            highPriority: true,
+            id: 'b',
+            receivedAt: '2019-02-17T15:27:55.801Z',
+            trialDate: '2019-02-17T00:00:00.000Z',
+          },
+          {
+            ...qcWorkItem,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '103-19',
+            highPriority: true,
+            id: 'a',
+            receivedAt: '2019-01-17T15:27:55.801Z',
+            trialDate: '2019-01-17T00:00:00.000Z',
+          },
+          {
+            ...qcWorkItem,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '104-19',
+            id: 'd',
+            receivedAt: '2019-04-17T15:27:55.801Z',
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+
+    expect(result[0].id).toEqual('a');
+    expect(result[1].id).toEqual('c');
+    expect(result[2].id).toEqual('b');
+    expect(result[3].id).toEqual('d');
+  });
+
+  it('sorts high priority work items to the start of the list - qc, my, inbox', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [
+          {
+            ...qcWorkItem,
+            assigneeId: docketClerkUser.userId,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '101-19',
+            id: 'c',
+            receivedAt: '2019-01-17T15:27:55.801Z',
+          },
+          {
+            ...qcWorkItem,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '102-19',
+            highPriority: false,
+            id: 'b',
+            receivedAt: '2019-02-17T15:27:55.801Z',
+          },
+          {
+            ...qcWorkItem,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '103-19',
+            highPriority: false,
+            id: 'a',
+            receivedAt: '2019-03-17T15:27:55.801Z',
+          },
+          {
+            ...qcWorkItem,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '104-19',
+            id: 'd',
+            receivedAt: '2019-04-17T15:27:55.801Z',
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+
+    expect(result[0].id).toEqual('c');
+    expect(result[1].id).toEqual('b');
+    expect(result[2].id).toEqual('a');
+    expect(result[3].id).toEqual('d');
+  });
+
   describe('getWorkItemDocumentLink', () => {
     const baseWorkItem = {
       assigneeId: null,
@@ -574,7 +735,7 @@ describe('formatted work queue computed', () => {
       messageId: '9ad0fceb-41be-4902-8294-9f505fb7a353',
     };
 
-    it('should return editLink with a direct link to the message if document is petition and user is petitionsclerk', () => {
+    it('should return editLink as default document detail page if document is petition and user is petitionsclerk viewing a QC box (workQueueIsInternal=false)', () => {
       const permissions = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -599,7 +760,7 @@ describe('formatted work queue computed', () => {
           workQueueIsInternal: false,
         },
       });
-      expect(result).toEqual('/messages/9ad0fceb-41be-4902-8294-9f505fb7a353');
+      expect(result).toEqual('');
     });
 
     it('should return /edit-court-issued if document is court-issued and not served and user is docketclerk', () => {
@@ -630,7 +791,7 @@ describe('formatted work queue computed', () => {
       expect(result).toEqual('/edit-court-issued');
     });
 
-    it('should return editLink with a direct link to the message if document is court-issued and not served and user is petitionsclerk', () => {
+    it('should return editLink as default document detail page if document is court-issued and not served and user is petitionsclerk viewing a QC box (workQueueIsInternal=false)', () => {
       const { permissions } = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -655,7 +816,7 @@ describe('formatted work queue computed', () => {
           workQueueIsInternal: false,
         },
       });
-      expect(result).toEqual('/messages/9ad0fceb-41be-4902-8294-9f505fb7a353');
+      expect(result).toEqual('');
     });
 
     it('should return /complete if document is in progress and user is docketclerk', () => {
@@ -761,7 +922,7 @@ describe('formatted work queue computed', () => {
       expect(result).toEqual('/edit');
     });
 
-    it("should return editLink with a direct link to the message if document is an external doc that has not been qc'd (isQC is true) and user is petitionsClerk", () => {
+    it("should return editLink with a direct link to the message if document is an external doc that has not been qc'd (isQC is true) and user is petitionsClerk and viewing a messages box (workQueueIsInternal=true)", () => {
       const { permissions } = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -788,13 +949,13 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'section',
-          workQueueIsInternal: false,
+          workQueueIsInternal: true,
         },
       });
       expect(result).toEqual('/messages/9ad0fceb-41be-4902-8294-9f505fb7a353');
     });
 
-    it('should return editLink with message id to mark as read if the box is my inbox and user is petitionsClerk', () => {
+    it('should return editLink with message id to mark as read if the box is my inbox and user is petitionsClerk viewing a messages box (workQueueIsInternal=true)', () => {
       const { permissions } = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -821,7 +982,7 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
-          workQueueIsInternal: false,
+          workQueueIsInternal: true,
         },
       });
       expect(result).toEqual(

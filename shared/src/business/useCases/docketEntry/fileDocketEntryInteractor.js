@@ -176,6 +176,7 @@ exports.fileDocketEntryInteractor = async ({
           description: metadata.documentTitle,
           documentId: documentEntity.documentId,
           editState: JSON.stringify(docketRecordEditState),
+          eventCode: documentEntity.eventCode,
           filingDate: documentEntity.receivedAt,
         }),
       );

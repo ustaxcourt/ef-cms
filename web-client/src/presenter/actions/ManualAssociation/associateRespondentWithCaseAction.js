@@ -15,11 +15,13 @@ export const associateRespondentWithCaseAction = async ({
   path,
 }) => {
   const userId = get(state.modal.user.userId);
+  const serviceIndicator = get(state.modal.serviceIndicator);
   const caseId = get(state.caseDetail.caseId);
 
   await applicationContext.getUseCases().associateRespondentWithCaseInteractor({
     applicationContext,
     caseId,
+    serviceIndicator,
     userId,
   });
 

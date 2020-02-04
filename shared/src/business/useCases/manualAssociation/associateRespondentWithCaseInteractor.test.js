@@ -1,15 +1,26 @@
-const sinon = require('sinon');
 const {
   associateRespondentWithCaseInteractor,
 } = require('./associateRespondentWithCaseInteractor');
+const {
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/cases/CaseConstants');
+const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { User } = require('../../entities/User');
 
 describe('associateRespondentWithCaseInteractor', () => {
   let applicationContext;
 
   let caseRecord = {
+    caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    caseType: 'Deficiency',
     docketNumber: '123-19',
+    docketRecord: MOCK_CASE.docketRecord,
+    documents: MOCK_CASE.documents,
+    filingType: 'Myself',
+    partyType: 'Petitioner',
+    preferredTrialCity: 'Fresno, California',
+    procedureType: 'Regular',
   };
 
   it('should throw an error when not authorized', async () => {
@@ -38,6 +49,7 @@ describe('associateRespondentWithCaseInteractor', () => {
       await associateRespondentWithCaseInteractor({
         applicationContext,
         caseId: caseRecord.caseId,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (err) {
@@ -47,7 +59,7 @@ describe('associateRespondentWithCaseInteractor', () => {
   });
 
   it('should add mapping for a respondent', async () => {
-    let updateCaseSpy = sinon.spy();
+    let updateCaseSpy = jest.fn();
 
     applicationContext = {
       environment: { stage: 'local' },
@@ -74,9 +86,10 @@ describe('associateRespondentWithCaseInteractor', () => {
     await associateRespondentWithCaseInteractor({
       applicationContext,
       caseId: caseRecord.caseId,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(updateCaseSpy.called).toEqual(true);
+    expect(updateCaseSpy).toBeCalled();
   });
 });

@@ -106,9 +106,9 @@ exports.updatePetitionerInformationInteractor = async ({
         additionalInfo: `for ${contactName}`,
         caseId,
         documentId: newDocumentId,
+        documentTitle: documentType.title,
         documentType: documentType.title,
         eventCode: documentType.eventCode,
-        filedBy: user.name,
         processingStatus: 'complete',
         userId: user.userId,
       },
@@ -171,7 +171,7 @@ exports.updatePetitionerInformationInteractor = async ({
     });
   }
 
-  if (servedParties.paper.length > 0) {
+  if ((primaryChange || secondaryChange) && servedParties.paper.length > 0) {
     const fullDocument = await PDFDocument.create();
 
     const addressPages = await getAddressPages({

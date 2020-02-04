@@ -19,8 +19,8 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
     state.form = {};
   });
 
-  it('returns showFreeText = true when state.form.eventCode is O5 (scenario = Type A)', () => {
-    let testState = { ...state, form: { eventCode: 'O5' } };
+  it('returns showFreeText = true when state.form.eventCode is O (scenario = Type A)', () => {
+    let testState = { ...state, form: { eventCode: 'O' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,
@@ -30,6 +30,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
       showDocketNumbers: false,
       showFreeText: true,
       showJudge: false,
+      showTrialLocation: false,
     });
   });
 
@@ -44,6 +45,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
       showDocketNumbers: false,
       showFreeText: true,
       showJudge: true,
+      showTrialLocation: false,
     });
   });
 
@@ -58,6 +60,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
       showDocketNumbers: true,
       showFreeText: false,
       showJudge: false,
+      showTrialLocation: false,
     });
   });
 
@@ -72,6 +75,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
       showDocketNumbers: false,
       showFreeText: true,
       showJudge: false,
+      showTrialLocation: false,
     });
   });
 
@@ -86,6 +90,37 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
       showDocketNumbers: false,
       showFreeText: false,
       showJudge: false,
+      showTrialLocation: false,
+    });
+  });
+
+  it('returns showJudge = true and showTrialLocation = true when state.form.eventCode is FTRL (scenario = Type F)', () => {
+    let testState = { ...state, form: { eventCode: 'FTRL' } };
+
+    const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
+      state: testState,
+    });
+    expect(result).toMatchObject({
+      showDate: false,
+      showDocketNumbers: false,
+      showFreeText: false,
+      showJudge: true,
+      showTrialLocation: true,
+    });
+  });
+
+  it('returns showDate = true and showTrialLocation = true when state.form.eventCode is NTD (scenario = Type G)', () => {
+    let testState = { ...state, form: { eventCode: 'NTD' } };
+
+    const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
+      state: testState,
+    });
+    expect(result).toMatchObject({
+      showDate: true,
+      showDocketNumbers: false,
+      showFreeText: false,
+      showJudge: false,
+      showTrialLocation: true,
     });
   });
 
@@ -108,6 +143,17 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
     });
     expect(result).toMatchObject({
       freeTextLabel: 'What is this notice for?',
+    });
+  });
+
+  it('returns default freeTextLabel if the selected eventCode is not NOT or O', () => {
+    let testState = { ...state, form: { eventCode: 'WRIT' } };
+
+    const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
+      state: testState,
+    });
+    expect(result).toMatchObject({
+      freeTextLabel: 'Enter description',
     });
   });
 });

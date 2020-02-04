@@ -16,7 +16,7 @@ export const extractedPendingMessagesFromCaseDetail = (
       const editLink = getWorkItemDocumentLink({
         applicationContext,
         permissions,
-        workItem,
+        workItem: result,
       });
       return { ...result, editLink };
     })

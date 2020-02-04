@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -7,6 +7,7 @@ const {
   userValidation,
   VALIDATION_ERROR_MESSAGES,
 } = require('./User');
+const { SERVICE_INDICATOR_TYPES } = require('./cases/CaseConstants');
 
 /**
  * constructor
@@ -16,11 +17,19 @@ const {
  */
 function Respondent(rawUser) {
   userDecorator(this, rawUser);
+  this.serviceIndicator =
+    rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 }
 
 joiValidationDecorator(
   Respondent,
-  joi.object().keys(userValidation),
+  joi.object().keys({
+    ...userValidation,
+    serviceIndicator: joi
+      .string()
+      .valid(...Object.values(SERVICE_INDICATOR_TYPES))
+      .required(),
+  }),
   undefined,
   VALIDATION_ERROR_MESSAGES,
 );

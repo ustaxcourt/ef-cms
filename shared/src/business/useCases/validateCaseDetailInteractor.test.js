@@ -54,12 +54,23 @@ describe('validate case detail', () => {
     const errors = validateCaseDetailInteractor({
       applicationContext,
       caseDetail: {
-        caseType: 'defined',
+        caseCaption: 'Caption',
+        caseType: 'Other',
         contactPrimary,
         docketNumber: '101-18',
+        docketRecord: [
+          {
+            description: 'first record',
+            documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+            eventCode: 'P',
+            filingDate: '2018-03-01T00:01:00.000Z',
+            index: 1,
+          },
+        ],
         documents: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             role: User.ROLES.petitioner,
@@ -68,6 +79,7 @@ describe('validate case detail', () => {
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             role: User.ROLES.petitioner,
@@ -80,8 +92,8 @@ describe('validate case detail', () => {
         irsNoticeDate: new Date().toISOString(),
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
-        preferredTrialCity: 'defined',
-        procedureType: 'defined',
+        preferredTrialCity: 'Fresno, California',
+        procedureType: 'Regular',
         signature: true,
       },
     });
@@ -104,12 +116,23 @@ describe('validate case detail', () => {
     const errors = validateCaseDetailInteractor({
       applicationContext,
       caseDetail: {
-        caseType: 'defined',
+        caseCaption: 'Caption',
+        caseType: 'Other',
         contactPrimary,
         docketNumber: '101-18',
+        docketRecord: [
+          {
+            description: 'first record',
+            documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+            eventCode: 'P',
+            filingDate: '2018-03-01T00:01:00.000Z',
+            index: 1,
+          },
+        ],
         documents: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             role: User.ROLES.petitioner,
@@ -118,6 +141,7 @@ describe('validate case detail', () => {
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             role: User.ROLES.petitioner,
@@ -125,13 +149,13 @@ describe('validate case detail', () => {
             workItems: [],
           },
         ],
-        filingType: 'defined',
+        filingType: 'Other',
         hasIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
-        preferredTrialCity: 'Chattanooga, TN',
-        procedureType: 'defined',
+        preferredTrialCity: 'Fresno, California',
+        procedureType: 'Regular',
         signature: true,
       },
     });
@@ -142,12 +166,23 @@ describe('validate case detail', () => {
     const errors = validateCaseDetailInteractor({
       applicationContext,
       caseDetail: {
-        caseType: 'defined',
+        caseCaption: 'Caption',
+        caseType: 'Other',
         contactPrimary,
         docketNumber: '101-18',
+        docketRecord: [
+          {
+            description: 'first record',
+            documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+            eventCode: 'P',
+            filingDate: '2018-03-01T00:01:00.000Z',
+            index: 1,
+          },
+        ],
         documents: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             role: User.ROLES.petitioner,
@@ -156,6 +191,7 @@ describe('validate case detail', () => {
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             role: User.ROLES.petitioner,
@@ -163,13 +199,13 @@ describe('validate case detail', () => {
             workItems: [],
           },
         ],
-        filingType: 'defined',
+        filingType: 'Other',
         hasIrsNotice: false,
         irsNoticeDate: null,
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
-        preferredTrialCity: 'Chattanooga, TN',
-        procedureType: 'defined',
+        preferredTrialCity: 'Fresno, California',
+        procedureType: 'Regular',
         signature: true,
       },
     });

@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   createISODateString,
   formatDateString,
@@ -18,6 +18,7 @@ const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
 const { Order } = require('../orders/Order');
 const { Practitioner } = require('../Practitioner');
 const { Respondent } = require('../Respondent');
+const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 
 const orderDocumentTypes = Order.ORDER_TYPES.map(
@@ -127,6 +128,8 @@ Case.ANSWER_DOCUMENT_CODES = [
 
 Case.CHIEF_JUDGE = 'Chief Judge';
 
+Case.DOCKET_NUMBER_SUFFIXES = ['W', 'P', 'X', 'R', 'SL', 'L', 'S'];
+
 Case.VALIDATION_ERROR_MESSAGES = {
   applicationForWaiverOfFilingFeeFile:
     'Upload an Application for Waiver of Filing Fee',
@@ -140,6 +143,7 @@ Case.VALIDATION_ERROR_MESSAGES = {
   caseCaption: 'Enter a case caption',
   caseType: 'Select a case type',
   docketNumber: 'Docket number is required',
+  docketRecord: 'At least one valid Docket Record is required',
   documents: 'At least one valid document is required',
   filingType: 'Select on whose behalf you are filing',
   hasIrsNotice: 'Indicate whether you received an IRS notice',
@@ -245,6 +249,8 @@ function Case(rawCase, { applicationContext }) {
   this.procedureType = rawCase.procedureType;
   this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.receivedAt = rawCase.receivedAt || createISODateString();
+  this.sealedDate = rawCase.sealedDate;
+  this.isSealed = !!rawCase.sealedDate;
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialLocation = rawCase.trialLocation;
@@ -335,8 +341,14 @@ function Case(rawCase, { applicationContext }) {
 joiValidationDecorator(
   Case,
   joi.object().keys({
-    associatedJudge: joi.string().required(),
-    blocked: joi.boolean().optional(),
+    associatedJudge: joi
+      .string()
+      .required()
+      .description('Defaults to Chief Judge.'),
+    blocked: joi
+      .boolean()
+      .optional()
+      .description('Temporarily blocked from trial.'),
     blockedDate: joi.when('blocked', {
       is: true,
       otherwise: joi.optional().allow(null),
@@ -348,21 +360,32 @@ joiValidationDecorator(
     blockedReason: joi.when('blocked', {
       is: true,
       otherwise: joi.optional().allow(null),
-      then: joi.string().required(),
+      then: joi
+        .string()
+        .required()
+        .description(
+          'Open text field for describing reason for blocking this Case from Trial.',
+        ),
     }),
-    caseCaption: joi.string().optional(),
+    caseCaption: joi
+      .string()
+      .required()
+      .description(
+        'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
+      ),
     caseId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
-      .optional(),
+      .required()
+      .description('Unique Case ID only used by the system.'),
     caseNote: joi.string().optional(),
-    caseType: joi.string().optional(),
-    contactPrimary: joi
-      .object()
-      .optional()
-      .allow(null),
+    caseType: joi
+      .string()
+      .valid(...Case.CASE_TYPES)
+      .required(),
+    contactPrimary: joi.object().required(),
     contactSecondary: joi
       .object()
       .optional()
@@ -370,18 +393,38 @@ joiValidationDecorator(
     createdAt: joi
       .date()
       .iso()
-      .optional(),
+      .required()
+      .description('When the case was added to the system.'),
     docketNumber: joi
       .string()
       .regex(Case.docketNumberMatcher)
-      .required(),
+      .required()
+      .description('Unique Case ID in XXXXX-YY format.'),
     docketNumberSuffix: joi
       .string()
       .allow(null)
+      .valid(...Object.values(Case.DOCKET_NUMBER_SUFFIXES))
       .optional(),
-    docketRecord: joi.array().optional(),
-    documents: joi.array().optional(),
-    filingType: joi.string().optional(),
+    docketRecord: joi
+      .array()
+      .items(joi.object().meta({ entityName: 'DocketRecord' }))
+      .min(1)
+      .required()
+      .unique((a, b) => a.index === b.index)
+      .description('List of DocketRecord Entities for the Case.'),
+    documents: joi
+      .array()
+      .items(joi.object().meta({ entityName: 'Document' }))
+      .min(1)
+      .required()
+      .description('List of Document Entities for the Case.'),
+    filingType: joi
+      .string()
+      .valid(
+        ...Case.FILING_TYPES[User.ROLES.petitioner],
+        ...Case.FILING_TYPES[User.ROLES.practitioner],
+      )
+      .optional(),
     hasIrsNotice: joi.boolean().optional(),
     hasVerifiedIrsNotice: joi
       .boolean()
@@ -406,18 +449,23 @@ joiValidationDecorator(
       .iso()
       .max('now')
       .optional()
-      .allow(null),
+      .allow(null)
+      .description('Last date that the Petitioner is allowed to file before.'),
     irsSendDate: joi
       .date()
       .iso()
-      .optional(),
+      .optional()
+      .description('When the Case was sent to the IRS by the Court.'),
     isPaper: joi.boolean().optional(),
     leadCaseId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
-      .optional(),
+      .optional()
+      .description(
+        'If this Case is consolidated, this is the ID of the lead Case. It is the lowest Docket Number in the consolidated group.',
+      ),
     mailingDate: joi.when('isPaper', {
       is: true,
       otherwise: joi
@@ -442,7 +490,10 @@ joiValidationDecorator(
     orderForRatification: joi.boolean().optional(),
     orderToChangeDesignatedPlaceOfTrial: joi.boolean().optional(),
     orderToShowCause: joi.boolean().optional(),
-    partyType: joi.string().optional(),
+    partyType: joi
+      .string()
+      .valid(...Object.values(ContactFactory.PARTY_TYPES))
+      .required(),
     petitionPaymentDate: joi.when('petitionPaymentStatus', {
       is: Case.PAYMENT_STATUS.PAID,
       otherwise: joi
@@ -465,7 +516,7 @@ joiValidationDecorator(
     }),
     petitionPaymentStatus: joi
       .string()
-      .valid(Object.values(Case.PAYMENT_STATUS))
+      .valid(...Object.values(Case.PAYMENT_STATUS))
       .required(),
     petitionPaymentWaivedDate: joi.when('petitionPaymentStatus', {
       is: Case.PAYMENT_STATUS.WAIVED,
@@ -481,35 +532,64 @@ joiValidationDecorator(
     }),
     practitioners: joi.array().optional(),
     preferredTrialCity: joi
+      .alternatives()
+      .try(
+        joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS, null),
+        joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
+      )
+      .required(),
+    procedureType: joi
       .string()
-      .optional()
-      .allow(null),
-    procedureType: joi.string().optional(),
-    qcCompleteForTrial: joi.object().required(),
+      .valid(...Case.PROCEDURE_TYPES)
+      .required(),
+    qcCompleteForTrial: joi
+      .object()
+      .required()
+      .description(
+        'QC Checklist object that must be completed before the Case can go to trial.',
+      ),
     receivedAt: joi
+      .date()
+      .iso()
+      .required()
+      .allow(null)
+      .description('When the case was received by the Court.'),
+    respondents: joi.array().optional(),
+    sealedDate: joi
       .date()
       .iso()
       .optional()
       .allow(null),
-    respondents: joi.array().optional(),
     status: joi
       .string()
-      .valid(Object.values(Case.STATUS_TYPES))
-      .optional(),
+      .valid(...Object.values(Case.STATUS_TYPES))
+      .required(),
     trialDate: joi
       .date()
       .iso()
       .optional()
       .allow(null),
-    trialLocation: joi.string().optional(),
+    trialLocation: joi
+      .alternatives()
+      .try(
+        joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS, null),
+        joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
+      )
+      .optional(),
     trialSessionId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
       .optional(),
-    trialTime: joi.string().optional(),
-    userId: joi.string().optional(),
+    trialTime: joi
+      .string()
+      .pattern(/^[0-9]+:([0-5][0-9])$/)
+      .optional(),
+    userId: joi
+      .string()
+      .optional()
+      .description('The ID of the User who added the Case to the System.'),
     workItems: joi.array().optional(),
   }),
   function() {
@@ -680,6 +760,7 @@ Case.prototype.addDocument = function(document) {
     new DocketRecord({
       description: document.documentType,
       documentId: document.documentId,
+      eventCode: document.eventCode,
       filedBy: document.filedBy,
       filingDate: document.receivedAt || document.createdAt,
       status: document.status,
@@ -747,6 +828,7 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
     this.addDocketRecord(
       new DocketRecord({
         description: `Caption of case is amended from '${lastTitle}' to '${this.caseTitle}'`,
+        eventCode: 'MINC',
         filingDate: createISODateString(),
       }),
     );
@@ -784,6 +866,7 @@ Case.prototype.updateDocketNumberRecord = function() {
     this.addDocketRecord(
       new DocketRecord({
         description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
+        eventCode: 'MIND',
         filingDate: createISODateString(),
       }),
     );
@@ -1069,6 +1152,23 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
 };
 
 /**
+ * returns true if the case is associated with the userId
+ *
+ * @param {object} arguments arguments
+ * @param {object} arguments.caseRaw raw case details
+ * @param {string} arguments.userId id of the user account
+ * @returns {boolean} if the case is associated
+ */
+const isAssociatedUser = function({ caseRaw, userId }) {
+  const isRespondent =
+    caseRaw.respondents && caseRaw.respondents.find(r => r.userId === userId);
+  const isPractitioner =
+    caseRaw.practitioners &&
+    caseRaw.practitioners.find(p => p.userId === userId);
+  return isRespondent || isPractitioner;
+};
+
+/**
  * returns true if the case status is already calendared
  *
  * @returns {boolean} if the case is calendared
@@ -1343,6 +1443,16 @@ Case.prototype.setLeadCase = function(leadCaseId) {
 };
 
 /**
+ * removes the consolidation from the case by setting leadCaseId to undefined
+ *
+ * @returns {Case} the updated Case entity
+ */
+Case.prototype.removeConsolidation = function() {
+  this.leadCaseId = undefined;
+  return this;
+};
+
+/**
  * sorts the given array of cases by docket number
  *
  * @param {Array} cases the cases to check for lead case computation
@@ -1429,4 +1539,16 @@ Case.prototype.setQcCompleteForTrial = function({
   return this;
 };
 
-module.exports = { Case };
+/**
+ * sets the sealedDate on a case to the current date and time
+ *
+ * @returns {Case} this case entity
+ */
+Case.prototype.setAsSealed = function() {
+  this.sealedDate = createISODateString();
+  this.isSealed = true;
+  return this;
+};
+
+exports.Case = Case;
+exports.isAssociatedUser = isAssociatedUser;

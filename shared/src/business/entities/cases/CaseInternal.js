@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
@@ -22,6 +22,8 @@ function CaseInternal(rawCase) {
     rawCase.applicationForWaiverOfFilingFeeFileSize;
   this.caseCaption = rawCase.caseCaption;
   this.caseType = rawCase.caseType;
+  this.filingType = rawCase.filingType;
+  this.mailingDate = rawCase.mailingDate;
   this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
   this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
   this.partyType = rawCase.partyType;
@@ -30,7 +32,6 @@ function CaseInternal(rawCase) {
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt;
-  this.mailingDate = rawCase.mailingDate;
   this.requestForPlaceOfTrialFile = rawCase.requestForPlaceOfTrialFile;
   this.requestForPlaceOfTrialFileSize = rawCase.requestForPlaceOfTrialFileSize;
   this.stinFile = rawCase.stinFile;

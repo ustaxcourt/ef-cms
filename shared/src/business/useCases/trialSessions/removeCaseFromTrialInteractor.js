@@ -60,6 +60,12 @@ exports.removeCaseFromTrialInteractor = async ({
 
   caseEntity.removeFromTrial();
 
+  await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
+    applicationContext,
+    caseId,
+    highPriority: false,
+  });
+
   await applicationContext
     .getPersistenceGateway()
     .createCaseTrialSortMappingRecords({

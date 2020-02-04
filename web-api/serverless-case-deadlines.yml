@@ -1,4 +1,4 @@
-service: ef-cms-case-deadlines
+service: ef-cms-case-deadlines-${opt:stageColor}
 plugins:
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
@@ -67,6 +67,7 @@ custom:
 
 provider:
   name: aws
+  endpointType: REGIONAL
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}

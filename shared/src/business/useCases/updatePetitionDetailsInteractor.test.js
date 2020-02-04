@@ -115,7 +115,7 @@ describe('updatePetitionDetailsInteractor', () => {
       eventCode: 'FEEW',
       filedBy: undefined,
       filingDate: '2019-11-30T09:10:11.000Z',
-      index: 5,
+      index: 4,
       signatory: undefined,
       status: undefined,
     });
@@ -139,7 +139,7 @@ describe('updatePetitionDetailsInteractor', () => {
       eventCode: 'FEE',
       filedBy: undefined,
       filingDate: '2019-11-30T09:10:11.000Z',
-      index: 5,
+      index: 4,
       signatory: undefined,
       status: undefined,
     });

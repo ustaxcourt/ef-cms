@@ -5,7 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {Function} providers.store the cerebral store used for setting state.path
- * @param {Function} providers.store the cerebral store used for setting state.path
+ * @param {Function} providers.props the cerebral props object
  *
  */
 export const setSelectedBatchIndexAction = async ({ props, store }) => {

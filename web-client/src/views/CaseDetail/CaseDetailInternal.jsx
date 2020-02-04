@@ -13,6 +13,7 @@ import { MessagesInProgress } from './MessagesInProgress';
 import { PaperServiceConfirmModal } from './PaperServiceConfirmModal';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
+import { SealCaseModal } from './SealCaseModal';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -121,6 +122,7 @@ export const CaseDetailInternal = connect(
         {showModal === 'PaperServiceConfirmModal' && (
           <PaperServiceConfirmModal />
         )}
+        {showModal === 'SealCaseModal' && <SealCaseModal />}
 
         {/* This section below will be removed in a future story */}
         <section className="usa-section grid-container">

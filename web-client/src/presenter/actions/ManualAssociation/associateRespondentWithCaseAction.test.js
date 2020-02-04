@@ -1,3 +1,4 @@
+import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/cases/CaseConstants';
 import { associateRespondentWithCaseAction } from './associateRespondentWithCaseAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
@@ -25,6 +26,7 @@ describe('associateRespondentWithCaseAction', () => {
       state: {
         caseDetail: { caseId: 'sdsdfsd' },
         modal: {
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           user: {
             userId: 'sdfsd',
           },

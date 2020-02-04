@@ -1,6 +1,7 @@
 module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
+    'src/**/*.js',
     '!src/sharedAppContext.js',
     '!src/**/ContactFactory.js',
     '!src/**/getScannerMockInterface.js',
@@ -9,7 +10,6 @@ module.exports = {
     '!src/tools/**/*.js',
     '!src/test/**/*.js',
     '!src/**/*_.js',
-    'src/**/*.js',
   ],
   coverageDirectory: './coverage',
   coverageThreshold: {

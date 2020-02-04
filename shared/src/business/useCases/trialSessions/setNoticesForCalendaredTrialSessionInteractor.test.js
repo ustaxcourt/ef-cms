@@ -17,6 +17,15 @@ const findNoticeOfTrial = caseRecord => {
   );
 };
 
+const findStandingPretrialDocument = caseRecord => {
+  return caseRecord.documents.find(
+    document =>
+      document.documentType ===
+        Document.STANDING_PRETRIAL_NOTICE.documentType ||
+      document.documentType === Document.STANDING_PRETRIAL_ORDER.documentType,
+  );
+};
+
 const fakeData =
   'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
 
@@ -36,7 +45,7 @@ const MOCK_TRIAL = {
   startDate: '2025-12-01T00:00:00.000Z',
   term: 'Fall',
   termYear: '2025',
-  trialLocation: 'Birmingham, AL',
+  trialLocation: 'Birmingham, Alabama',
 };
 
 const testPdfDoc = testPdfDocBytes();
@@ -44,6 +53,8 @@ const testPdfDoc = testPdfDocBytes();
 let applicationContext;
 let calendaredCases;
 let generateNoticeOfTrialIssuedInteractorMock = jest.fn();
+let generateStandingPretrialNoticeInteractorMock = jest.fn();
+let generateStandingPretrialOrderInteractorMock = jest.fn();
 let generatePaperServiceAddressPagePdfMock = jest
   .fn()
   .mockResolvedValue(testPdfDoc);
@@ -65,6 +76,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         email: 'petitioner@example.com',
       },
       docketNumber: '102-20',
+      procedureType: 'Regular',
     };
 
     const case1 = {
@@ -77,6 +89,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       docketNumber: '103-20',
       isPaper: true,
       mailingDate: 'testing',
+      procedureType: 'Small',
     };
 
     calendaredCases = [case0, case1];
@@ -118,6 +131,14 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       getUseCases: () => ({
         generateNoticeOfTrialIssuedInteractor: () => {
           generateNoticeOfTrialIssuedInteractorMock();
+          return fakeFile;
+        },
+        generateStandingPretrialNoticeInteractor: () => {
+          generateStandingPretrialNoticeInteractorMock();
+          return fakeFile;
+        },
+        generateStandingPretrialOrderInteractor: () => {
+          generateStandingPretrialOrderInteractorMock();
           return fakeFile;
         },
       }),
@@ -344,5 +365,76 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy(); // Document should not exist on this case
     expect(findNoticeOfTrial(calendaredCases[1]).status).toEqual('served');
+  });
+
+  it('Should generate a Standing Pretrial Order for REGULAR cases', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      caseId: '000aa3f7-e2e3-43e6-885d-4ce341588000', // MOCK_CASE with procedureType: 'Regular'
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateStandingPretrialOrderInteractorMock).toHaveBeenCalled();
+  });
+
+  it('Should generate a Standing Pretrial Notice for SMALL cases', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111', // MOCK_CASE with procedureType: 'Small'
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateStandingPretrialNoticeInteractorMock).toHaveBeenCalled();
+  });
+
+  it('Should set the status of the Standing Pretrial Document as served for each case', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
+
+    expect(findStandingPretrialDocument(calendaredCases[0]).status).toEqual(
+      'served',
+    );
+    expect(findStandingPretrialDocument(calendaredCases[1]).status).toEqual(
+      'served',
+    );
+  });
+
+  it('Should set the servedAt field for the Standing Pretrial Document for each case', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
+
+    expect(
+      findStandingPretrialDocument(calendaredCases[0]).servedAt,
+    ).toBeTruthy();
+    expect(
+      findStandingPretrialDocument(calendaredCases[1]).servedAt,
+    ).toBeTruthy();
+  });
+
+  it('Should set the servedParties field for the Standing Pretrial Document for each case', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
+
+    expect(
+      findStandingPretrialDocument(calendaredCases[0]).servedParties.length,
+    ).toBeGreaterThan(0);
+    expect(
+      findStandingPretrialDocument(calendaredCases[1]).servedParties.length,
+    ).toBeGreaterThan(0);
   });
 });
