@@ -1,5 +1,6 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
+import { computeTrialSessionStartTimeAction } from '../actions/TrialSession/computeTrialSessionStartTimeAction';
 import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
@@ -24,10 +25,11 @@ const gotoEditTrialSession = [
   getTrialSessionDetailsAction,
   setTrialSessionDetailsAction,
   setTrialSessionDetailsOnFormAction,
+  computeTrialSessionStartTimeAction,
+  setTrialStartTimeAction,
   getSetJudgesSequence,
   getUsersInSectionAction({ section: 'trialClerks' }),
   setUsersByKeyAction('trialClerks'),
-  setTrialStartTimeAction,
   setCurrentPageAction('EditTrialSession'),
 ];
 
