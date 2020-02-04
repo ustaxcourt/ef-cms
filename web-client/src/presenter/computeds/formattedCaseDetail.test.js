@@ -33,6 +33,10 @@ const docketClerkUser = {
   role: User.ROLES.docketClerk,
   userId: '234',
 };
+const judgeUser = {
+  role: User.ROLES.judge,
+  userId: '345',
+};
 
 describe('formattedCaseDetail', () => {
   it('does not error and returns expected empty values on empty caseDetail', () => {
@@ -901,7 +905,7 @@ describe('formattedCaseDetail', () => {
           descriptionDisplay: 'Order to do something',
           documentId: 'd-1-2-3',
           documentType: 'Order',
-          editLink: '',
+          editLink: '/add-court-issued-docket-entry',
           isCourtIssuedDocument: false,
           isInProgress: false,
           isNotServedCourtIssuedDocument: false,
@@ -916,7 +920,7 @@ describe('formattedCaseDetail', () => {
           descriptionDisplay: 'Stipulated Decision',
           documentId: 'd-2-3-4',
           documentType: 'Stipulated Decision',
-          editLink: '',
+          editLink: '/add-court-issued-docket-entry',
           isCourtIssuedDocument: true,
           isInProgress: false,
           isNotServedCourtIssuedDocument: true,
@@ -959,6 +963,48 @@ describe('formattedCaseDetail', () => {
           documentId: 'd-2-3-4',
           documentType: 'Stipulated Decision',
           editLink: '/add-court-issued-docket-entry',
+          isCourtIssuedDocument: true,
+          isInProgress: false,
+          isNotServedCourtIssuedDocument: true,
+          isPetition: false,
+          isStatusServed: false,
+          showDocumentEditLink: true,
+          signedAtFormatted: undefined,
+          signedAtFormattedTZ: undefined,
+        },
+      ]);
+    });
+
+    it('does not populate editLink for judges', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(judgeUser),
+          caseDetail,
+          caseDetailErrors: {},
+        },
+      });
+      expect(result.formattedDraftDocuments).toMatchObject([
+        {
+          createdAtFormatted: '02/28/19',
+          descriptionDisplay: 'Order to do something',
+          documentId: 'd-1-2-3',
+          documentType: 'Order',
+          editLink: '',
+          isCourtIssuedDocument: false,
+          isInProgress: false,
+          isNotServedCourtIssuedDocument: false,
+          isPetition: false,
+          isStatusServed: false,
+          showDocumentEditLink: true,
+          signedAtFormatted: undefined,
+          signedAtFormattedTZ: undefined,
+        },
+        {
+          createdAtFormatted: '02/28/19',
+          descriptionDisplay: 'Stipulated Decision',
+          documentId: 'd-2-3-4',
+          documentType: 'Stipulated Decision',
+          editLink: '',
           isCourtIssuedDocument: true,
           isInProgress: false,
           isNotServedCourtIssuedDocument: true,
