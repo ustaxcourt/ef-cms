@@ -25,7 +25,7 @@ export const TrialSessions = connect(
 
           <Tabs
             bind="trialSessionsTab.group"
-            defaultActiveTab={defaultTab || 'new'}
+            defaultActiveTab={defaultTab || 'open'}
             id="trial-sessions-tabs"
           >
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
