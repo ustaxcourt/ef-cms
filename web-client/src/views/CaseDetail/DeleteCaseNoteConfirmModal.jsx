@@ -10,7 +10,7 @@ export const DeleteCaseNoteConfirmModal = connect(
       cancelLabel="No, Cancel"
       confirmLabel="Yes, Delete"
       preventCancelOnBlur={true}
-      title="Are you sure you want to delete this note?"
+      title="Are You Sure You Want to Delete This Note?"
       onCancelSequence="clearModalSequence"
       onConfirmSequence={onConfirmSequence}
     >
