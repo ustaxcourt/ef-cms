@@ -1,6 +1,5 @@
-import { set } from 'cerebral/factories';
-import { state } from 'cerebral';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
 export const gotoPdfPreviewSequence = [
-  set(state.currentPage, 'SimplePdfPreviewPage'),
+  setCurrentPageAction('SimplePdfPreviewPage'),
 ];
