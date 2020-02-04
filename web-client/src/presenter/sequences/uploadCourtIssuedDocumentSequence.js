@@ -1,5 +1,5 @@
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
-import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
+import { getUploadCourtIssuedDocumentAlertSuccessAction } from '../actions/uploadCourtIssuedDocument/getUploadCourtIssuedDocumentAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -11,9 +11,10 @@ import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submit
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { uploadOrderFileAction } from '../actions/FileDocument/uploadOrderFileAction';
 
-export const uploadCourtIssuedDocument = (
-  lastAction = navigateToCaseDetailAction,
-) => [
+export const uploadCourtIssuedDocument = ({
+  completeAction,
+  getAlertSuccessAction,
+}) => [
   setWaitingForResponseAction,
   uploadOrderFileAction,
   {
@@ -23,13 +24,18 @@ export const uploadCourtIssuedDocument = (
       setupUploadMetadataAction,
       submitCourtIssuedOrderAction,
       setCaseAction,
-      getFileExternalDocumentAlertSuccessAction,
+      getAlertSuccessAction,
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
-      lastAction,
+      completeAction,
     ],
   },
   unsetWaitingForResponseAction,
 ];
 
-export const uploadCourtIssuedDocumentSequence = [uploadCourtIssuedDocument()];
+export const uploadCourtIssuedDocumentSequence = [
+  uploadCourtIssuedDocument({
+    completeAction: navigateToCaseDetailAction,
+    getAlertSuccessAction: getUploadCourtIssuedDocumentAlertSuccessAction,
+  }),
+];
