@@ -31,7 +31,7 @@ export const EditDocketEntryMeta = connect(
             <div className="grid-col-7">
               <div className="display-flex flex-row flex-justify flex-align-center">
                 <div className="margin-top-1 margin-bottom-1 docket-entry-preview-text">
-                  <span className="text-bold">Docket Entry Preview: </span>
+                  <span className="text-bold">Docket Entry peview: </span>
                   <EditDocketEntryMetaDocketEntryPreview />
                 </div>
               </div>

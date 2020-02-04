@@ -131,7 +131,7 @@ export const AppComponent = connect(
 
     const CurrentPage = pages[currentPage];
     return (
-      <React.Fragment>
+      <>
         <a
           className="usa-skipnav"
           href="#main-content"
@@ -154,7 +154,7 @@ export const AppComponent = connect(
         {showModal === 'FileCompressionErrorModal' && (
           <FileCompressionErrorModal />
         )}
-      </React.Fragment>
+      </>
     );
   },
 );
