@@ -339,6 +339,7 @@ import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWi
 import { validateTrialSessionPlanningSequence } from './sequences/validateTrialSessionPlanningSequence';
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
 import { validateUpdateCaseModalSequence } from './sequences/validateUpdateCaseModalSequence';
+import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
 
 /**
@@ -689,6 +690,7 @@ export const presenter = {
     validateTrialSessionPlanningSequence,
     validateTrialSessionSequence,
     validateUpdateCaseModalSequence,
+    validateUploadCourtIssuedDocumentSequence,
     validateUserContactSequence,
   },
   state,

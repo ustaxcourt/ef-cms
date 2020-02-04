@@ -15,5 +15,5 @@ export const initializeUploadFormAction = ({ applicationContext, store }) => {
     courtIssuedEvent => courtIssuedEvent.eventCode === defaultEventCode,
   );
 
-  store.set(state.form, defaultEntry);
+  store.set(state.form, { ...defaultEntry });
 };
