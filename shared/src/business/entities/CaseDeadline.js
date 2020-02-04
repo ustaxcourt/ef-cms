@@ -4,6 +4,7 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const { Case } = require('./cases/Case');
 const { createISODateString } = require('../utilities/DateHandler');
+const { DOCKET_NUMBER_MATCHER } = require('./cases/CaseConstants');
 
 /**
  * Case Deadline entity
@@ -84,7 +85,7 @@ CaseDeadline.schema = joi.object().keys({
     .description('User provided description of the Case Deadline.'),
   docketNumber: joi
     .string()
-    .regex(Case.docketNumberMatcher)
+    .regex(DOCKET_NUMBER_MATCHER)
     .required()
     .description('Unique Case ID in XXXXX-YY format.'),
 });
