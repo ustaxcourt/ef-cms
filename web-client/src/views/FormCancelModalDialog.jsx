@@ -17,7 +17,7 @@ export const FormCancelModalDialog = connect(
         confirmLabel="Yes, Cancel"
         confirmSequence={confirmSequence}
         message="If you cancel, your form selections will be lost."
-        title="Are you sure you want to cancel?"
+        title="Are You Sure You Want to Cancel?"
       ></ModalDialog>
     );
   },
