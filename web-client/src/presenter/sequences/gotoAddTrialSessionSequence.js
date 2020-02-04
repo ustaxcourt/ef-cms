@@ -6,8 +6,8 @@ import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultTrialStartTimeAction } from '../actions/setDefaultTrialStartTimeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
-import { setTrialStartTimeAction } from '../actions/setTrialStartTimeAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
@@ -21,7 +21,7 @@ const gotoAddTrialSession = [
   getSetJudgesSequence,
   getUsersInSectionAction({ section: 'trialClerks' }),
   setUsersByKeyAction('trialClerks'),
-  setTrialStartTimeAction,
+  setDefaultTrialStartTimeAction,
   setCurrentPageAction('AddTrialSession'),
 ];
 
