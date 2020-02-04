@@ -149,7 +149,7 @@ export const EditPractitionersModal = connect(
                     className="usa-checkbox__label inline-block"
                     htmlFor={`remove-practitioner-${idx}`}
                   >
-                    Remove from Case
+                    Remove from case
                   </label>
                 </div>
               </div>

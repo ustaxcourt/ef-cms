@@ -40,7 +40,7 @@ export const SearchByName = connect(
                 clearAdvancedSearchFormSequence();
               }}
             >
-              Clear search
+              Clear Search
             </Button>
           </NonMobile>
         </div>
@@ -208,7 +208,7 @@ export const SearchByName = connect(
                       clearAdvancedSearchFormSequence();
                     }}
                   >
-                    Clear search
+                    Clear Search
                   </Button>
                 </div>
               </div>

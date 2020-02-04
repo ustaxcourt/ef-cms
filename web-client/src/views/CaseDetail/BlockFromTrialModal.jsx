@@ -26,7 +26,7 @@ export const BlockFromTrialModal = connect(
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         className=""
-        confirmLabel="Block case"
+        confirmLabel="Block Case"
         confirmSequence={confirmSequence}
         title="Block From Trial"
       >

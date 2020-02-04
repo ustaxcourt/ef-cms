@@ -79,7 +79,7 @@ export const TrialSessionsTable = connect(
               <th>Type</th>
               <th>Judge</th>
               <th aria-label="Number of cases">No. of cases</th>
-              <th>Notice Issued</th>
+              <th>Notice issued</th>
             </tr>
           </thead>
           {formattedTrialSessions.map((trialDate, idxDate) => (

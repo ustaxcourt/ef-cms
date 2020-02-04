@@ -11,10 +11,10 @@ export const ServeToIrsModalDialog = connect(
   ({ cancelSequence, confirmSequence }) => {
     return (
       <ModalDialog
-        cancelLabel="No, take me back"
+        cancelLabel="No, Take Me Back"
         cancelSequence={cancelSequence}
         className=""
-        confirmLabel="Yes, serve"
+        confirmLabel="Yes, Serve"
         confirmSequence={confirmSequence}
         message="This Petition will be added to the batch to serve to the IRS at 3pm."
         title="Are you sure you want to serve this Petition to the IRS?"

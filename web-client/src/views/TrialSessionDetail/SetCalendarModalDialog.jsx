@@ -11,10 +11,10 @@ export const SetCalendarModalDialog = connect(
   ({ cancelSequence, confirmSequence }) => {
     return (
       <ModalDialog
-        cancelLabel="No, cancel"
+        cancelLabel="No, Cancel"
         cancelSequence={cancelSequence}
         className=""
-        confirmLabel="Yes, set calendar"
+        confirmLabel="Yes, Set Calendar"
         confirmSequence={confirmSequence}
         message="Once you set the calendar, you will not be able to bulk assign cases to this trial session."
         title="Are you sure you want to set the calendar for this trial session?"

@@ -206,7 +206,7 @@ export const SessionInformationForm = connect(
                     className="usa-checkbox__label inline-block"
                     htmlFor="swing-session"
                   >
-                    This is part of a Swing Session
+                    This is part of a Swing session
                   </label>
                 </div>
               </div>
