@@ -22,6 +22,8 @@ export const UploadCourtIssuedDocument = connect(
       sequences.uploadCourtIssuedDocumentAndUploadAnotherSequence,
     uploadCourtIssuedDocumentSequence:
       sequences.uploadCourtIssuedDocumentSequence,
+    validateUploadCourtIssuedDocumentSequence:
+      sequences.validateUploadCourtIssuedDocumentSequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -31,6 +33,7 @@ export const UploadCourtIssuedDocument = connect(
     showModal,
     uploadCourtIssuedDocumentAndUploadAnotherSequence,
     uploadCourtIssuedDocumentSequence,
+    validateUploadCourtIssuedDocumentSequence,
     validationErrors,
   }) => {
     return (
@@ -52,10 +55,7 @@ export const UploadCourtIssuedDocument = connect(
 
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
-                <div
-                  className="blue-container"
-                  style={{ 'min-height': '471px' }}
-                >
+                <div className="blue-container" style={{ minHeight: '471px' }}>
                   <FormGroup
                     errorText={validationErrors && validationErrors.freeText}
                   >
@@ -71,6 +71,9 @@ export const UploadCourtIssuedDocument = connect(
                       ariaLabel="notes"
                       bind="form.freeText"
                       id="upload-description"
+                      onChange={() => {
+                        validateUploadCourtIssuedDocumentSequence();
+                      }}
                     />
                   </FormGroup>
                 </div>
@@ -115,7 +118,7 @@ export const UploadCourtIssuedDocument = connect(
                       id="primary-document"
                       name="primaryDocumentFile"
                       updateFormValueSequence="updateFormValueSequence"
-                      validationSequence="validateExternalDocumentInformationSequence"
+                      validationSequence="validateUploadCourtIssuedDocumentSequence"
                     />
                   </FormGroup>
                 </div>
