@@ -12,12 +12,12 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
     entry => entry.eventCode === selectedEventCode,
   );
 
+  let showDateFirst = false;
+  let showDateLast = false;
   let showDocketNumbers = false;
   let showFreeText = false;
   let showJudge = false;
   let showTrialLocation = false;
-  let showDateFirst = false;
-  let showDateLast = false;
 
   if (selectedDocumentInformation) {
     switch (selectedDocumentInformation.scenario) {

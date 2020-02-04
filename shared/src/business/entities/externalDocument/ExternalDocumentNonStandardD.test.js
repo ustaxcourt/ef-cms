@@ -65,7 +65,7 @@ describe('ExternalDocumentNonStandardD', () => {
   });
 
   describe('title generation', () => {
-    const serviceDate = '2012-04-10T00:00:00-05:00';
+    const serviceDate = '2012-04-10T04:00:00.000Z';
     it('should generate valid title', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',

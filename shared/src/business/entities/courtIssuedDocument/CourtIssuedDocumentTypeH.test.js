@@ -36,7 +36,7 @@ describe('CourtIssuedDocumentTypeH', () => {
     it('should be valid when all fields are present', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
-        date: '2019-04-10T00:00:00-05:00',
+        date: '2019-04-10T04:00:00.000Z',
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'TRAN - Transcript',
         freeText: 'Some free text',
@@ -50,7 +50,7 @@ describe('CourtIssuedDocumentTypeH', () => {
     it('should generate valid title', () => {
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,
-        date: '2019-04-10T00:00:00-05:00',
+        date: '2019-04-10T04:00:00.000Z',
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'TRAN - Transcript',
         freeText: 'Some free text',
