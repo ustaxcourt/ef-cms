@@ -361,6 +361,18 @@ const router = {
     );
 
     route(
+      '/case-detail/*/upload-court-issued',
+      ifHasAccess(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Upload a document`,
+        );
+        app.getSequence('gotoUploadCourtIssuedDocumentSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/edit-order/*',
       ifHasAccess((docketNumber, documentIdToEdit) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
