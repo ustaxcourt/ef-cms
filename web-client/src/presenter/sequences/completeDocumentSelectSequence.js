@@ -5,6 +5,7 @@ import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeS
 import { defaultSecondaryDocumentAction } from '../actions/FileDocument/defaultSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { navigateToFileADocumentAction } from '../actions/FileDocument/navigateToFileADocumentAction';
+import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setDocketNumberPropAction } from '../actions/FileDocument/setDocketNumberPropAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -25,6 +26,7 @@ export const completeDocumentSelectSequence = [
     success: [
       clearAlertsAction,
       stopShowValidationAction,
+      refreshExternalDocumentTitleFromEventCodeAction,
       generateTitleAction,
       setDocketNumberPropAction,
       setDefaultFileDocumentFormValuesAction,
