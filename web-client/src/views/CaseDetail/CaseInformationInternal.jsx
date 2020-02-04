@@ -168,7 +168,7 @@ const TrialInformation = ({
             openRemoveFromTrialSessionModalSequence();
           }}
         >
-          Remove from Trial Session
+          Remove From Trial Session
         </Button>
       </>
     )}
@@ -315,7 +315,7 @@ const TrialInformation = ({
             openRemoveFromTrialSessionModalSequence();
           }}
         >
-          Remove from Trial Session
+          Remove From Trial Session
         </Button>
       </>
     )}
