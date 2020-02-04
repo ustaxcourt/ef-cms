@@ -13,6 +13,17 @@ describe('setFormValueAction', () => {
     expect(result.state.form.hasApples).toEqual(true);
   });
 
+  it('sets the state.form[props.key] to false if the passed in props.value is false', async () => {
+    const result = await runAction(setFormValueAction, {
+      props: {
+        key: 'hasApples',
+        value: false,
+      },
+      state: { form: {} },
+    });
+    expect(result.state.form.hasApples).toEqual(false);
+  });
+
   it('unsets the state.form[props.key] if the passed in props.value is empty string', async () => {
     const result = await runAction(setFormValueAction, {
       props: {
