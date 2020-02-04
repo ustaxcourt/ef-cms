@@ -8,7 +8,6 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 const gotoUploadCourtIssuedDocument = [
   setCurrentPageAction('Interstitial'),
@@ -19,13 +18,12 @@ const gotoUploadCourtIssuedDocument = [
     documentTitle: '[anything]',
     documentType: 'MISC - Miscellaneous',
     eventCode: 'MISC',
-    scenario: 'Nonstandard B',
+    scenario: 'Type A',
   }),
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
   setCurrentPageAction('UploadCourtIssuedDocument'),
-  unsetWaitingForResponseAction,
 ];
 
 export const gotoUploadCourtIssuedDocumentSequence = [
