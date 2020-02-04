@@ -6,6 +6,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { setupUploadMetadataAction } from '../actions/uploadCourtIssuedDocument/setupUploadMetadataAction';
 import { state } from 'cerebral';
 import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
@@ -20,12 +21,7 @@ export const uploadCourtIssuedDocument = (
     error: [openFileUploadErrorModal],
     success: [
       generateCourtIssuedDocumentTitleAction,
-      ({ get, store }) => {
-        store.set(
-          state.form.documentTitle,
-          get(state.form.generatedDocumentTitle),
-        );
-      },
+      setupUploadMetadataAction,
       submitCourtIssuedOrderAction,
       setCaseAction,
       getFileExternalDocumentAlertSuccessAction,
