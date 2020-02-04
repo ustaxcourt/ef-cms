@@ -30,6 +30,7 @@ export const TrialSessions = connect(
           <Tabs
             bind="trialSessionsTab.group"
             defaultActiveTab={defaultTab || 'new'}
+            id="trial-sessions-tabs"
             onSelect={tab =>
               navigateToPathSequence({ path: `/trial-sessions?status=${tab}` })
             }
