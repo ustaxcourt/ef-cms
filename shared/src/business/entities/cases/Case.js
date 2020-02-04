@@ -11,6 +11,7 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { DOCKET_NUMBER_MATCHER } = require('./CaseConstants');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes, isEmpty } = require('lodash');
@@ -210,8 +211,6 @@ Case.VALIDATION_ERROR_MESSAGES = {
 };
 
 Case.validationName = 'Case';
-
-Case.docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
 /**
  * Case Entity
@@ -431,7 +430,7 @@ joiValidationDecorator(
       .description('When the Case was added to the system.'),
     docketNumber: joi
       .string()
-      .regex(Case.docketNumberMatcher)
+      .regex(DOCKET_NUMBER_MATCHER)
       .required()
       .description('Unique Case ID in XXXXX-YY format.'),
     docketNumberSuffix: joi
@@ -1038,7 +1037,7 @@ Case.isValidCaseId = caseId =>
 Case.isValidDocketNumber = docketNumber => {
   return (
     docketNumber &&
-    Case.docketNumberMatcher.test(docketNumber) &&
+    DOCKET_NUMBER_MATCHER.test(docketNumber) &&
     parseInt(docketNumber.split('-')[0]) > 100
   );
 };
