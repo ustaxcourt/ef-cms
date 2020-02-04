@@ -43,7 +43,15 @@ When the Document was added to the system.
 
 ### docketNumber
 
+
+Docket Number of the associated Case in XXXXX-YY format.
+
 > `string` | optional
+
+##### Regex Pattern
+
+
+`/^(\d{3,5}-\d{2})$/`
 
 ### documentId
 
@@ -53,6 +61,9 @@ ID of the associated PDF document in the S3 bucket.
 > `string` | required
 
 ### documentTitle
+
+
+The title of this document.
 
 > `string` | optional
 
