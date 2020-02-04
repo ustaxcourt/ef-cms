@@ -10,10 +10,12 @@ import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const UploadCourtIssuedDocument = connect(
   {
     constants: state.constants,
+    fileDocumentHelper: state.fileDocumentHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.showModal,
     uploadCourtIssuedDocumentAndUploadAnotherSequence:
@@ -24,6 +26,7 @@ export const UploadCourtIssuedDocument = connect(
   },
   ({
     constants,
+    fileDocumentHelper,
     formCancelToggleCancelSequence,
     showModal,
     uploadCourtIssuedDocumentAndUploadAnotherSequence,
@@ -89,7 +92,11 @@ export const UploadCourtIssuedDocument = connect(
                 <div className="document-select-container">
                   <FormGroup errorText={validationErrors.primaryDocumentFile}>
                     <label
-                      className="usa-label with-hint"
+                      className={classNames(
+                        'usa-label ustc-upload with-hint',
+                        fileDocumentHelper.showPrimaryDocumentValid &&
+                          'validated',
+                      )}
                       htmlFor="primary-document-file"
                       id="primary-document-label"
                     >
@@ -122,7 +129,7 @@ export const UploadCourtIssuedDocument = connect(
                     uploadCourtIssuedDocumentSequence();
                   }}
                 >
-                  Save Order
+                  Finish
                 </Button>
                 <Button
                   secondary
