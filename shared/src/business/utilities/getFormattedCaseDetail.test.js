@@ -1,6 +1,8 @@
 import { Case } from '../entities/cases/Case';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
+import { calculateISODate, createISODateString } from './DateHandler';
 import {
+  documentMeetsAgeRequirements,
   formatCase,
   formatCaseDeadlines,
   formatDocument,
@@ -679,6 +681,32 @@ describe('getFormattedCaseDetail', () => {
         signedAtFormatted: undefined,
       },
     ]);
+  });
+});
+
+describe('documentMeetsAgeRequirements', () => {
+  it('indicates success if document is not a transcript', () => {
+    const result = documentMeetsAgeRequirements({ eventCode: 'BANANA' });
+    expect(result).toBeTruthy();
+  });
+  it('indicates success if document is a transcript aged more than 90 days', () => {
+    const result = documentMeetsAgeRequirements({
+      eventCode: 'TRAN',
+      filingDate: '2010-01-01T01:02:03.007Z',
+    });
+    expect(result).toBeTruthy();
+  });
+  it('indicates failure if document is a transcript aged less than 90 days', () => {
+    const aFewWeeksAgo = calculateISODate({
+      dateString: createISODateString(),
+      howMuch: -21,
+      units: 'days',
+    });
+    const result = documentMeetsAgeRequirements({
+      eventCode: 'TRAN',
+      filingDate: aFewWeeksAgo,
+    });
+    expect(result).toBeFalsy();
   });
 });
 

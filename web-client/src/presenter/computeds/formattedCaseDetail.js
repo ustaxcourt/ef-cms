@@ -49,6 +49,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   result.formattedDocketEntries = result.docketRecordWithDocument.map(
     ({ document, index, record }) => {
       const userHasAccessToCase = !isExternalUser || userAssociatedWithCase;
+      const userHasAccessToDocument = record.isAvailableToUser;
 
       const isInProgress = !isExternalUser && document && document.isInProgress;
 
@@ -85,6 +86,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
       const showDocumentEditLink =
         document &&
+        userHasAccessToDocument &&
         permissions.UPDATE_CASE &&
         (!document.isInProgress ||
           ((permissions.DOCKET_ENTRY ||
@@ -142,6 +144,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
           record.servedPartiesCode || (document && document.servedPartiesCode),
         showDocumentDescriptionWithoutLink:
           !userHasAccessToCase ||
+          !userHasAccessToDocument ||
           !document ||
           (document &&
             (document.isNotServedCourtIssuedDocument ||
@@ -158,6 +161,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         showInProgress: document && document.isInProgress && !isExternalUser,
         showLinkToDocument:
           userHasAccessToCase &&
+          userHasAccessToDocument &&
           document &&
           !permissions.UPDATE_CASE &&
           document.processingStatus === 'complete' &&
