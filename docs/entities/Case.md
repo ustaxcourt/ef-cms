@@ -236,11 +236,17 @@ Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 ### initialDocketNumberSuffix
 
+
+Case docket number suffix before modification.
+
 > `string` | optional
 
 ##### Can be null.
 
 ### initialTitle
+
+
+Case title before modification.
 
 > `string` | optional
 
@@ -275,6 +281,9 @@ If this Case is consolidated, this is the ID of the lead Case. It is the lowest 
 
 ### mailingDate
 
+
+Date that petition was mailed to the court.
+
 > `any`
 
 
@@ -285,6 +294,9 @@ Otherwise, this field is `string` and is `optional`. `null` is allowed.
 
 ### noticeOfAttachments
 
+
+ 
+
 > `boolean` | optional
 
 ### noticeOfTrialDate
@@ -293,33 +305,57 @@ Otherwise, this field is `string` and is `optional`. `null` is allowed.
 
 ### orderForAmendedPetition
 
+
+ 
+
 > `boolean` | optional
 
 ### orderForAmendedPetitionAndFilingFee
+
+
+ 
 
 > `boolean` | optional
 
 ### orderForFilingFee
 
+
+ 
+
 > `boolean` | optional
 
 ### orderForOds
+
+
+ 
 
 > `boolean` | optional
 
 ### orderForRatification
 
+
+ 
+
 > `boolean` | optional
 
 ### orderToChangeDesignatedPlaceOfTrial
+
+
+ 
 
 > `boolean` | optional
 
 ### orderToShowCause
 
+
+ 
+
 > `boolean` | optional
 
 ### partyType
+
+
+Party type of the Case Petitioner.
 
 > `string` | required
 
@@ -347,6 +383,9 @@ Otherwise, this field is `string` and is `optional`. `null` is allowed.
 
 ### petitionPaymentStatus
 
+
+Status of the Case fee payment.
+
 > `string` | required
 
 ##### Allowed Values
@@ -358,6 +397,9 @@ Otherwise, this field is `string` and is `optional`. `null` is allowed.
 
 ### petitionPaymentDate
 
+
+When the Petitioner payed the Case fee.
+
 > `any`
 
 
@@ -367,6 +409,9 @@ If `petitionPaymentStatus` = `Paid`, then this field is `date` and is `required.
 Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
 ### petitionPaymentMethod
+
+
+How the Petitioner payed the Case fee.
 
 > `any`
 
@@ -378,6 +423,9 @@ Otherwise, this field is `string` and is `optional`. `null` is allowed.
 
 ### petitionPaymentWaivedDate
 
+
+When the Case fee was waived.
+
 > `any`
 
 
@@ -388,9 +436,15 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
 ### practitioners
 
+
+List of Practitioners associated with the Case.
+
 > `array` | optional
 
 ### preferredTrialCity
+
+
+Where the Petitioner would prefer to hold the Case trial.
 
 > `conditional` | required
 
@@ -491,6 +545,9 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
 ### procedureType
 
+
+Procedure type of the Case.
+
 > `string` | required
 
 ##### Allowed Values
@@ -520,15 +577,24 @@ When the case was received by the Court.
 
 ### respondents
 
+
+List of Respondents (from the IRS) associated with the Case.
+
 > `array` | optional
 
 ### sealedDate
+
+
+When the Case was sealed from the public.
 
 > `date` | optional
 
 ##### Can be null.
 
 ### status
+
+
+Status of the Case.
 
 
 Restricted
@@ -555,11 +621,17 @@ Restricted
 
 ### trialDate
 
+
+When this Case goes to trial.
+
 > `date` | optional
 
 ##### Can be null.
 
 ### trialLocation
+
+
+Where this Case goes to trial. This may be different that the preferred trial location.
 
 > `conditional` | optional
 
@@ -660,9 +732,15 @@ Restricted
 
 ### trialSessionId
 
+
+The unique ID of the Trial Session associated with this Case.
+
 > `string` | optional
 
 ### trialTime
+
+
+Time of day when this Case goes to trial.
 
 > `string` | optional
 
@@ -674,7 +752,7 @@ Restricted
 ### userId
 
 
-The ID of the User who added the Case to the System.
+The unique ID of the User who added the Case to the System.
 
 
 Restricted
@@ -682,6 +760,9 @@ Restricted
 > `string` | optional
 
 ### workItems
+
+
+List of system messages associated with this Case.
 
 
 Restricted

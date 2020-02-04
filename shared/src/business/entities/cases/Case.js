@@ -489,11 +489,13 @@ joiValidationDecorator(
     initialDocketNumberSuffix: joi
       .string()
       .allow(null)
-      .optional(),
+      .optional()
+      .description('Case docket number suffix before modification.'),
     initialTitle: joi
       .string()
       .allow(null)
-      .optional(),
+      .optional()
+      .description('Case title before modification.'),
     irsNoticeDate: joi
       .date()
       .iso()
@@ -516,82 +518,121 @@ joiValidationDecorator(
       .description(
         'If this Case is consolidated, this is the ID of the lead Case. It is the lowest Docket Number in the consolidated group.',
       ),
-    mailingDate: joi.when('isPaper', {
-      is: true,
-      otherwise: joi
-        .string()
-        .max(25)
-        .allow(null)
-        .optional(),
-      then: joi
-        .string()
-        .max(25)
-        .required(),
-    }),
-    noticeOfAttachments: joi.boolean().optional(),
+    mailingDate: joi
+      .when('isPaper', {
+        is: true,
+        otherwise: joi
+          .string()
+          .max(25)
+          .allow(null)
+          .optional(),
+        then: joi
+          .string()
+          .max(25)
+          .required(),
+      })
+      .description('Date that petition was mailed to the court.'),
+    noticeOfAttachments: joi
+      .boolean()
+      .optional()
+      .description(' '),
     noticeOfTrialDate: joi
       .date()
       .iso()
       .optional(),
-    orderForAmendedPetition: joi.boolean().optional(),
-    orderForAmendedPetitionAndFilingFee: joi.boolean().optional(),
-    orderForFilingFee: joi.boolean().optional(),
-    orderForOds: joi.boolean().optional(),
-    orderForRatification: joi.boolean().optional(),
-    orderToChangeDesignatedPlaceOfTrial: joi.boolean().optional(),
-    orderToShowCause: joi.boolean().optional(),
+    orderForAmendedPetition: joi
+      .boolean()
+      .optional()
+      .description(' '),
+    orderForAmendedPetitionAndFilingFee: joi
+      .boolean()
+      .optional()
+      .description(' '),
+    orderForFilingFee: joi
+      .boolean()
+      .optional()
+      .description(' '),
+    orderForOds: joi
+      .boolean()
+      .optional()
+      .description(' '),
+    orderForRatification: joi
+      .boolean()
+      .optional()
+      .description(' '),
+    orderToChangeDesignatedPlaceOfTrial: joi
+      .boolean()
+      .optional()
+      .description(' '),
+    orderToShowCause: joi
+      .boolean()
+      .optional()
+      .description(' '),
     partyType: joi
       .string()
       .valid(...Object.values(ContactFactory.PARTY_TYPES))
-      .required(),
-    petitionPaymentDate: joi.when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.PAID,
-      otherwise: joi
-        .date()
-        .iso()
-        .optional()
-        .allow(null),
-      then: joi
-        .date()
-        .iso()
-        .required(),
-    }),
-    petitionPaymentMethod: joi.when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.PAID,
-      otherwise: joi
-        .string()
-        .allow(null)
-        .optional(),
-      then: joi.string().required(),
-    }),
+      .required()
+      .description('Party type of the Case Petitioner.'),
+    petitionPaymentDate: joi
+      .when('petitionPaymentStatus', {
+        is: Case.PAYMENT_STATUS.PAID,
+        otherwise: joi
+          .date()
+          .iso()
+          .optional()
+          .allow(null),
+        then: joi
+          .date()
+          .iso()
+          .required(),
+      })
+      .description('When the Petitioner payed the Case fee.'),
+    petitionPaymentMethod: joi
+      .when('petitionPaymentStatus', {
+        is: Case.PAYMENT_STATUS.PAID,
+        otherwise: joi
+          .string()
+          .allow(null)
+          .optional(),
+        then: joi.string().required(),
+      })
+      .description('How the Petitioner payed the Case fee.'),
     petitionPaymentStatus: joi
       .string()
       .valid(...Object.values(Case.PAYMENT_STATUS))
-      .required(),
-    petitionPaymentWaivedDate: joi.when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.WAIVED,
-      otherwise: joi
-        .date()
-        .iso()
-        .allow(null)
-        .optional(),
-      then: joi
-        .date()
-        .iso()
-        .required(),
-    }),
-    practitioners: joi.array().optional(),
+      .required()
+      .description('Status of the Case fee payment.'),
+    petitionPaymentWaivedDate: joi
+      .when('petitionPaymentStatus', {
+        is: Case.PAYMENT_STATUS.WAIVED,
+        otherwise: joi
+          .date()
+          .iso()
+          .allow(null)
+          .optional(),
+        then: joi
+          .date()
+          .iso()
+          .required(),
+      })
+      .description('When the Case fee was waived.'),
+    practitioners: joi
+      .array()
+      .optional()
+      .description('List of Practitioners associated with the Case.'),
     preferredTrialCity: joi
       .alternatives()
       .try(
         joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS, null),
         joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
       )
-      .required(),
+      .required()
+      .description('Where the Petitioner would prefer to hold the Case trial.'),
     procedureType: joi
       .string()
       .valid(...Case.PROCEDURE_TYPES)
-      .required(),
+      .required()
+      .description('Procedure type of the Case.'),
     qcCompleteForTrial: joi
       .object()
       .required()
@@ -605,48 +646,66 @@ joiValidationDecorator(
       .required()
       .allow(null)
       .description('When the case was received by the Court.'),
-    respondents: joi.array().optional(),
+    respondents: joi
+      .array()
+      .optional()
+      .description(
+        'List of Respondents (from the IRS) associated with the Case.',
+      ),
     sealedDate: joi
       .date()
       .iso()
       .optional()
-      .allow(null),
+      .allow(null)
+      .description('When the Case was sealed from the public.'),
     status: joi
       .string()
       .valid(...Object.values(Case.STATUS_TYPES))
       .required()
-      .meta({ tags: ['Restricted'] }),
+      .meta({ tags: ['Restricted'] })
+      .description('Status of the Case.'),
     trialDate: joi
       .date()
       .iso()
       .optional()
-      .allow(null),
+      .allow(null)
+      .description('When this Case goes to trial.'),
     trialLocation: joi
       .alternatives()
       .try(
         joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS, null),
         joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
       )
-      .optional(),
+      .optional()
+      .description(
+        'Where this Case goes to trial. This may be different that the preferred trial location.',
+      ),
     trialSessionId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
-      .optional(),
+      .optional()
+      .description(
+        'The unique ID of the Trial Session associated with this Case.',
+      ),
     trialTime: joi
       .string()
       .pattern(/^[0-9]+:([0-5][0-9])$/)
-      .optional(),
+      .optional()
+      .description('Time of day when this Case goes to trial.'),
     userId: joi
       .string()
       .optional()
       .meta({ tags: ['Restricted'] })
-      .description('The ID of the User who added the Case to the System.'),
+      .description(
+        'The unique ID of the User who added the Case to the System.',
+      ),
     workItems: joi
       .array()
       .optional()
-      .meta({ tags: ['Restricted'] }),
+      .meta({ tags: ['Restricted'] })
+      .description('List of system messages associated with this Case.'),
   }),
   function() {
     return (
