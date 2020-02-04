@@ -321,7 +321,7 @@
     "eventCode": "TRAN",
     "documentType": "TRAN - Transcript",
     "documentTitle": "Transcript of [anything] on [date]",
-    "scenario": "Type D"
+    "scenario": "Type H"
   },
   {
     "eventCode": "SPTO",
@@ -332,7 +332,7 @@
   {
     "eventCode": "MISC",
     "documentType": "MISC - Miscellaneous",
-    "documentTitle": "",
+    "documentTitle": "[anything]",
     "scenario": "Type A"
   }
 ]

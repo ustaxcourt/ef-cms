@@ -12,7 +12,7 @@ exports.generateJsonFromSchema = (schema, entityName) => {
   const jsonResult = [{ h1: entityName }];
 
   const handleField = (field, fieldName, isAlternative = false, index = 0) => {
-    const { allow, flags, matches, rules, type } = field;
+    const { allow, flags, matches, metas, rules, type } = field;
     let presence, description;
 
     if (flags) {
@@ -31,6 +31,16 @@ exports.generateJsonFromSchema = (schema, entityName) => {
 
     if (description) {
       result.push({ p: description });
+    }
+
+    if (metas) {
+      metas.forEach(meta => {
+        if (meta['tags']) {
+          meta['tags'].forEach(tag => {
+            result.push({ p: tag });
+          });
+        }
+      });
     }
 
     result.push({

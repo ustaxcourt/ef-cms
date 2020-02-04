@@ -1,4 +1,12 @@
-import { filter, find, identity, orderBy, pickBy } from 'lodash';
+import {
+  filter,
+  find,
+  identity,
+  isEmpty,
+  isEqual,
+  orderBy,
+  pickBy,
+} from 'lodash';
 import { state } from 'cerebral';
 
 export const formatSession = (session, applicationContext) => {
@@ -18,6 +26,53 @@ export const formatSession = (session, applicationContext) => {
 
 export const sessionSorter = sessionList => {
   return orderBy(sessionList, ['startDate', 'trialLocation'], ['asc', 'asc']);
+};
+
+export const filterFormattedSessionsByStatus = trialTerms => {
+  const filteredbyStatusType = {
+    all: trialTerms,
+    closed: [],
+    new: [],
+    open: [],
+  };
+
+  const initTermIndex = (trialTerm, filtered) => {
+    let termIndex = filtered.findIndex(
+      term => term.dateFormatted === trialTerm.dateFormatted,
+    );
+
+    if (termIndex === -1) {
+      filtered.push({
+        dateFormatted: trialTerm.dateFormatted,
+        sessions: [],
+      });
+      termIndex = filtered.length - 1;
+    }
+
+    return termIndex;
+  };
+
+  trialTerms.forEach(trialTerm => {
+    trialTerm.sessions.forEach(session => {
+      const allCases = session.caseOrder;
+      const inactiveCases = allCases.filter(
+        sessionCase => sessionCase.removedFromTrial === true,
+      );
+
+      if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
+        const termIndex = initTermIndex(trialTerm, filteredbyStatusType.closed);
+        filteredbyStatusType.closed[termIndex].sessions.push(session);
+      } else if (session.isCalendared) {
+        const termIndex = initTermIndex(trialTerm, filteredbyStatusType.open);
+        filteredbyStatusType.open[termIndex].sessions.push(session);
+      } else if (!session.isCalendared) {
+        const termIndex = initTermIndex(trialTerm, filteredbyStatusType.new);
+        filteredbyStatusType.new[termIndex].sessions.push(session);
+      }
+    });
+  });
+
+  return filteredbyStatusType;
 };
 
 export const formattedTrialSessions = (get, applicationContext) => {
@@ -82,6 +137,10 @@ export const formattedTrialSessions = (get, applicationContext) => {
   const showSwingSessionList = get(state.form.swingSession);
 
   return {
+    filteredTrialSessions: filterFormattedSessionsByStatus(
+      formattedSessions,
+      applicationContext,
+    ),
     formattedSessions,
     sessionsByTerm,
     showSwingSessionList,

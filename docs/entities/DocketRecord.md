@@ -36,6 +36,9 @@ JSON representation of the in-progress edit of this item.
 
 ### eventCode
 
+
+Code associated with the event that resulted in this item being added to the Docket Record.
+
 > `string` | required
 
 ##### Allowed Values
@@ -405,3 +408,12 @@ Date that this Docket Record item was filed.
 Index of this item in the Docket Record list.
 
 > `number` | required
+
+### servedPartiesCode
+
+
+Served parties code to override system-computed code.
+
+> `string` | optional
+
+##### Can be null.

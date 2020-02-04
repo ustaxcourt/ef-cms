@@ -17,7 +17,7 @@ export const CancelDraftDocumentModal = connect(
         confirmLabel="Yes, Cancel"
         confirmSequence={confirmSequence}
         message="If you cancel, this document will be returned to Draft Documents."
-        title="Are you sure you want to cancel?"
+        title="Are You Sure You Want to Cancel?"
       />
     );
   },
