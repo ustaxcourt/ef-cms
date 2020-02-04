@@ -49,6 +49,13 @@ describe('updateDocketEntryMetaInteractor', () => {
         filingDate: '2019-01-02T00:01:00.000Z',
         index: 1,
       },
+      {
+        description: 'Test Entry 2',
+        eventCode: 'O',
+        filedBy: 'Test User',
+        filingDate: '2019-01-02T00:01:00.000Z',
+        index: 2,
+      },
     ];
 
     const caseByCaseId = {
@@ -277,5 +284,28 @@ describe('updateDocketEntryMetaInteractor', () => {
     });
 
     expect(updateCaseMock).toHaveBeenCalled();
+  });
+
+  it('should not throw an error when a null certificate of service date is passed for a docket entry without an associated document', async () => {
+    let error;
+
+    try {
+      await updateDocketEntryMetaInteractor({
+        applicationContext,
+        caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
+        docketEntryMeta: {
+          action: 'asdf',
+          certificateOfServiceDate: null,
+          description: 'Request for Place of Trial at Houston, Texas',
+          eventCode: 'RQT',
+          filingDate: '2020-02-03',
+        },
+        docketRecordIndex: 2,
+      });
+    } catch (e) {
+      error = e;
+    }
+
+    expect(error).toBeUndefined();
   });
 });
