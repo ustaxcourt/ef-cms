@@ -45,7 +45,7 @@ export const UploadCourtIssuedDocument = connect(
               <div className="grid-col-4">
                 <BindedTextarea
                   ariaLabel="notes"
-                  bind="form.description"
+                  bind="form.freeText"
                   id="upload-description"
                 />
               </div>
