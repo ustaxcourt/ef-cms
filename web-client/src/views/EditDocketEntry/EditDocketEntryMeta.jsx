@@ -7,6 +7,7 @@ import { EditDocketEntryMetaFormNoDocument } from './EditDocketEntryMetaFormNoDo
 import { EditDocketEntryMetaTabAction } from './EditDocketEntryMetaTabAction';
 import { EditDocketEntryMetaTabService } from './EditDocketEntryMetaTabService';
 import { ErrorNotification } from '../ErrorNotification';
+import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -14,11 +15,12 @@ import React from 'react';
 
 export const EditDocketEntryMeta = connect(
   {
-    caseDetail: state.caseDetail,
+    cancelSequence: sequences.formCancelToggleCancelSequence,
     editType: state.screenMetadata.editType,
+    showModal: state.showModal,
     submitSequence: sequences.submitEditDocketEntryMetaSequence,
   },
-  ({ caseDetail, editType, submitSequence }) => {
+  ({ cancelSequence, editType, showModal, submitSequence }) => {
     return (
       <>
         <CaseDetailHeader />
@@ -31,7 +33,7 @@ export const EditDocketEntryMeta = connect(
             <div className="grid-col-7">
               <div className="display-flex flex-row flex-justify flex-align-center">
                 <div className="margin-top-1 margin-bottom-1 docket-entry-preview-text">
-                  <span className="text-bold">Docket Entry Preview: </span>
+                  <span className="text-bold">Docket Entry peview: </span>
                   <EditDocketEntryMetaDocketEntryPreview />
                 </div>
               </div>
@@ -76,7 +78,12 @@ export const EditDocketEntryMeta = connect(
                   Save
                 </Button>
 
-                <Button link href={`/case-detail/${caseDetail.docketNumber}`}>
+                <Button
+                  link
+                  onClick={() => {
+                    cancelSequence();
+                  }}
+                >
                   Cancel
                 </Button>
               </div>
@@ -84,6 +91,9 @@ export const EditDocketEntryMeta = connect(
             <div className="grid-col-7">{/* TODO: File preview */}</div>
           </div>
         </section>
+        {showModal === 'FormCancelModalDialog' && (
+          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+        )}
       </>
     );
   },

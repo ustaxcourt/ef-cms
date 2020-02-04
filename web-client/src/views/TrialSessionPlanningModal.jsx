@@ -29,7 +29,7 @@ export const TrialSessionPlanningModal = connect(
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         className="trial-session-planning-modal"
-        confirmLabel="Run report"
+        confirmLabel="Run Report"
         confirmSequence={confirmSequence}
         title="Run Trial Session Planning Report"
       >
@@ -71,7 +71,7 @@ export const TrialSessionPlanningModal = connect(
           <FormGroup errorText={validationErrors.year}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="display-block" id="trial-year">
-                Select Year
+                Select year
               </legend>
               <select
                 aria-label="trial report year"

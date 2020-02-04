@@ -30,7 +30,7 @@ export const AddToTrialModal = connect(
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         className=""
-        confirmLabel="Add case"
+        confirmLabel="Add Case"
         confirmSequence={confirmSequence}
         title="Add to Trial Session"
       >
@@ -38,7 +38,7 @@ export const AddToTrialModal = connect(
           <div className="usa-form-group">
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="display-block" id="year-filed-legend">
-                Trial Locations
+                Trial locations
               </legend>
               <div className="usa-radio usa-radio__inline">
                 <input
@@ -58,7 +58,7 @@ export const AddToTrialModal = connect(
                   className="usa-radio__label"
                   htmlFor="show-all-locations-false"
                 >
-                  Requested City Only
+                  Requested city only
                 </label>
               </div>
               <div className="usa-radio usa-radio__inline">
@@ -79,7 +79,7 @@ export const AddToTrialModal = connect(
                   className="usa-radio__label"
                   htmlFor="show-all-locations-true"
                 >
-                  All Locations
+                  All locations
                 </label>
               </div>
             </fieldset>
@@ -87,7 +87,7 @@ export const AddToTrialModal = connect(
 
           <FormGroup errorText={validationErrors.trialSessionId}>
             <label className="usa-label" htmlFor="trial-session">
-              Select Trial Session
+              Select trial session
             </label>
             <BindedSelect
               bind="modal.trialSessionId"

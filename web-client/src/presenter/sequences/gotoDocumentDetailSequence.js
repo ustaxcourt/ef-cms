@@ -1,5 +1,6 @@
 import { clearFormsAction } from '../actions/clearFormsAction';
 import { clearWorkItemActionMapAction } from '../actions/clearWorkItemActionMapAction';
+import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseTypesAction } from '../actions/getCaseTypesAction';
 import { getInternalUsersAction } from '../actions/getInternalUsersAction';
@@ -58,5 +59,6 @@ export const gotoDocumentDetailSequence = [
       ],
       noAction: [],
     },
+    fetchUserNotificationsSequence,
   ]),
 ];

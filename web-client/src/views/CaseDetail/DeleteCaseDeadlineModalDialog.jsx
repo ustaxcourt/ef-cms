@@ -12,12 +12,12 @@ export const DeleteCaseDeadlineModalDialog = connect(
   ({ cancelSequence, confirmSequence, form }) => {
     return (
       <ModalDialog
-        cancelLabel="No, cancel"
+        cancelLabel="No, Cancel"
         cancelSequence={cancelSequence}
         className=""
-        confirmLabel="Yes, remove"
+        confirmLabel="Yes, Remove"
         confirmSequence={confirmSequence}
-        title="Are you sure you want to delete this deadline?"
+        title="Are You Sure You Want to Delete This Deadline?"
       >
         <div className="ustc-delete-case-deadline-modal margin-bottom-2">
           <label className="margin-right-2" htmlFor="deadline-to-delete">

@@ -21,8 +21,8 @@ export const ConfirmRescanBatchModal = connect(
   { batchIndex: state.batchIndexToRescan },
   ({ batchIndex }) => (
     <ConfirmModal
-      cancelLabel="No, cancel"
-      confirmLabel="Yes, rescan"
+      cancelLabel="No, Cancel"
+      confirmLabel="Yes, Rescan"
       title={`Rescan Batch ${batchIndex + 1}`}
       onCancelSequence="clearModalSequence"
       onConfirmSequence="rescanBatchSequence"
@@ -39,8 +39,8 @@ export const DeleteBatchModal = connect(
   ({ batchIndex, pageCount }) => {
     return (
       <ConfirmModal
-        cancelLabel="No, cancel"
-        confirmLabel="Yes, delete"
+        cancelLabel="No, Cancel"
+        confirmLabel="Yes, Delete"
         title={`Are you sure you want to delete Batch ${batchIndex + 1}?`}
         onCancelSequence="clearModalSequence"
         onConfirmSequence="removeBatchSequence"
@@ -54,8 +54,8 @@ export const DeleteBatchModal = connect(
 export const DeletePDFModal = connect({}, () => {
   return (
     <ConfirmModal
-      cancelLabel="No, cancel"
-      confirmLabel="Yes, delete"
+      cancelLabel="No, Cancel"
+      confirmLabel="Yes, Delete"
       title="Are you sure you want to delete this PDF?"
       onCancelSequence="clearModalSequence"
       onConfirmSequence="removeScannedPdfSequence"

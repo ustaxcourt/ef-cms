@@ -11,13 +11,13 @@ export const FormCancelModalDialog = connect(
   ({ cancelSequence, confirmSequence }) => {
     return (
       <ModalDialog
-        cancelLabel="No, take me back"
+        cancelLabel="No, Take Me Back"
         cancelSequence={cancelSequence}
         className=""
-        confirmLabel="Yes, cancel"
+        confirmLabel="Yes, Cancel"
         confirmSequence={confirmSequence}
         message="If you cancel, your form selections will be lost."
-        title="Are you sure you want to cancel?"
+        title="Are You Sure You Want to Cancel?"
       ></ModalDialog>
     );
   },
