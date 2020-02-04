@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
 
 /**
+ * Refresh External Document Title From Event Code
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
