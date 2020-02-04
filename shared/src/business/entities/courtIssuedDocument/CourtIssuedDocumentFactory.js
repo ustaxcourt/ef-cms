@@ -6,6 +6,7 @@ const { CourtIssuedDocumentTypeD } = require('./CourtIssuedDocumentTypeD');
 const { CourtIssuedDocumentTypeE } = require('./CourtIssuedDocumentTypeE');
 const { CourtIssuedDocumentTypeF } = require('./CourtIssuedDocumentTypeF');
 const { CourtIssuedDocumentTypeG } = require('./CourtIssuedDocumentTypeG');
+const { CourtIssuedDocumentTypeH } = require('./CourtIssuedDocumentTypeH');
 
 /**
  *
@@ -36,6 +37,8 @@ CourtIssuedDocumentFactory.get = documentMetadata => {
         return new CourtIssuedDocumentTypeF(documentMetadata);
       case 'type g':
         return new CourtIssuedDocumentTypeG(documentMetadata);
+      case 'type h':
+        return new CourtIssuedDocumentTypeH(documentMetadata);
     }
   }
 

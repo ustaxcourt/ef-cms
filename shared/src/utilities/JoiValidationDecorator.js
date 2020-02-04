@@ -45,8 +45,9 @@ function getFormattedValidationErrorsHelper(entity) {
         ) {
           errors[key] = errorObject.message;
           break;
-        } else {
+        } else if (typeof errorObject !== 'object') {
           errors[key] = errorObject;
+          break;
         }
       }
     } else if (errorMap) {

@@ -4,6 +4,87 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+const DateInput = ({
+  addCourtIssuedDocketEntryNonstandardHelper,
+  form,
+  updateCourtIssuedDocketEntryFormValueSequence,
+  validateCourtIssuedDocketEntrySequence,
+  validationErrors,
+}) => (
+  <FormGroup errorText={validationErrors.date}>
+    <fieldset className="usa-fieldset margin-bottom-0 margin-top-2">
+      <legend className="usa-legend" id="date-legend">
+        {addCourtIssuedDocketEntryNonstandardHelper.dateLabel}
+      </legend>
+      <div className="usa-memorable-date">
+        <div className="usa-form-group usa-form-group--month margin-bottom-0">
+          <input
+            aria-describedby="date-legend"
+            aria-label="month, two digits"
+            className="usa-input usa-input-inline"
+            id="date-month"
+            max="12"
+            min="1"
+            name="month"
+            placeholder="MM"
+            type="number"
+            value={form.month || ''}
+            onBlur={() => validateCourtIssuedDocketEntrySequence()}
+            onChange={e => {
+              updateCourtIssuedDocketEntryFormValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+          />
+        </div>
+        <div className="usa-form-group usa-form-group--day margin-bottom-0">
+          <input
+            aria-describedby="date-legend"
+            aria-label="day, two digits"
+            className="usa-input usa-input-inline"
+            id="date-day"
+            max="31"
+            min="1"
+            name="day"
+            placeholder="DD"
+            type="number"
+            value={form.day || ''}
+            onBlur={() => validateCourtIssuedDocketEntrySequence()}
+            onChange={e => {
+              updateCourtIssuedDocketEntryFormValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+          />
+        </div>
+        <div className="usa-form-group usa-form-group--year margin-bottom-0">
+          <input
+            aria-describedby="date-legend"
+            aria-label="year, four digits"
+            className="usa-input usa-input-inline"
+            id="date-year"
+            max="2100"
+            min="1900"
+            name="year"
+            placeholder="YYYY"
+            type="number"
+            value={form.year || ''}
+            onBlur={() => validateCourtIssuedDocketEntrySequence()}
+            onChange={e => {
+              updateCourtIssuedDocketEntryFormValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+          />
+        </div>
+      </div>
+    </fieldset>
+  </FormGroup>
+);
+
 export const CourtIssuedNonstandardForm = connect(
   {
     addCourtIssuedDocketEntryNonstandardHelper:
@@ -26,79 +107,20 @@ export const CourtIssuedNonstandardForm = connect(
   }) => {
     return (
       <>
-        {addCourtIssuedDocketEntryNonstandardHelper.showDate && (
-          <FormGroup errorText={validationErrors.date}>
-            <fieldset className="usa-fieldset margin-bottom-0 margin-top-2">
-              <legend className="usa-legend" id="date-legend">
-                Date
-              </legend>
-              <div className="usa-memorable-date">
-                <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                  <input
-                    aria-describedby="date-legend"
-                    aria-label="month, two digits"
-                    className="usa-input usa-input-inline"
-                    id="date-month"
-                    max="12"
-                    min="1"
-                    name="month"
-                    placeholder="MM"
-                    type="number"
-                    value={form.month || ''}
-                    onBlur={() => validateCourtIssuedDocketEntrySequence()}
-                    onChange={e => {
-                      updateCourtIssuedDocketEntryFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                  <input
-                    aria-describedby="date-legend"
-                    aria-label="day, two digits"
-                    className="usa-input usa-input-inline"
-                    id="date-day"
-                    max="31"
-                    min="1"
-                    name="day"
-                    placeholder="DD"
-                    type="number"
-                    value={form.day || ''}
-                    onBlur={() => validateCourtIssuedDocketEntrySequence()}
-                    onChange={e => {
-                      updateCourtIssuedDocketEntryFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                  <input
-                    aria-describedby="date-legend"
-                    aria-label="year, four digits"
-                    className="usa-input usa-input-inline"
-                    id="date-year"
-                    max="2100"
-                    min="1900"
-                    name="year"
-                    placeholder="YYYY"
-                    type="number"
-                    value={form.year || ''}
-                    onBlur={() => validateCourtIssuedDocketEntrySequence()}
-                    onChange={e => {
-                      updateCourtIssuedDocketEntryFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-            </fieldset>
-          </FormGroup>
+        {addCourtIssuedDocketEntryNonstandardHelper.showDateFirst && (
+          <DateInput
+            addCourtIssuedDocketEntryNonstandardHelper={
+              addCourtIssuedDocketEntryNonstandardHelper
+            }
+            form={form}
+            updateCourtIssuedDocketEntryFormValueSequence={
+              updateCourtIssuedDocketEntryFormValueSequence
+            }
+            validateCourtIssuedDocketEntrySequence={
+              validateCourtIssuedDocketEntrySequence
+            }
+            validationErrors={validationErrors}
+          />
         )}
 
         {addCourtIssuedDocketEntryNonstandardHelper.showJudge && (
@@ -209,6 +231,22 @@ export const CourtIssuedNonstandardForm = connect(
               }}
             />
           </FormGroup>
+        )}
+
+        {addCourtIssuedDocketEntryNonstandardHelper.showDateLast && (
+          <DateInput
+            addCourtIssuedDocketEntryNonstandardHelper={
+              addCourtIssuedDocketEntryNonstandardHelper
+            }
+            form={form}
+            updateCourtIssuedDocketEntryFormValueSequence={
+              updateCourtIssuedDocketEntryFormValueSequence
+            }
+            validateCourtIssuedDocketEntrySequence={
+              validateCourtIssuedDocketEntrySequence
+            }
+            validationErrors={validationErrors}
+          />
         )}
       </>
     );
