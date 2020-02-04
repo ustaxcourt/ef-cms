@@ -28,10 +28,7 @@ export const sessionSorter = sessionList => {
   return orderBy(sessionList, ['startDate', 'trialLocation'], ['asc', 'asc']);
 };
 
-export const filterFormattedSessionsByStatus = (
-  trialTerms,
-  applicationContext,
-) => {
+export const filterFormattedSessionsByStatus = trialTerms => {
   const filteredbyStatusType = {
     all: trialTerms,
     closed: [],
@@ -55,36 +52,20 @@ export const filterFormattedSessionsByStatus = (
     return termIndex;
   };
 
-  // TODO: something different?
   trialTerms.forEach(trialTerm => {
     trialTerm.sessions.map(async session => {
-      // TODO: Consider bulk-loading / associating cases with multiple trial sessions
-      session.calendaredCases = await applicationContext
-        .getUseCases()
-        .getCalendaredCasesForTrialSessionInteractor({
-          applicationContext,
-          trialSessionId: session.trialSessionId,
-        });
+      const allCases = session.caseOrder;
+      const inactiveCases = allCases.filter(
+        sessionCase => sessionCase.removedFromTrial === true,
+      );
 
-      const formattedSession = await applicationContext
-        .getUtilities()
-        .formattedTrialSessionDetails({
-          applicationContext,
-          trialSession: session,
-        });
-
-      if (
-        !isEmpty(formattedSession.allCases) &&
-        isEqual(formattedSession.allCases, formattedSession.inactiveCases)
-      ) {
+      if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
         const termIndex = initTermIndex(trialTerm, filteredbyStatusType.closed);
         filteredbyStatusType.closed[termIndex].sessions.push(session);
-      }
-      if (formattedSession.isCalendared) {
+      } else if (session.isCalendared) {
         const termIndex = initTermIndex(trialTerm, filteredbyStatusType.open);
         filteredbyStatusType.open[termIndex].sessions.push(session);
-      }
-      if (!formattedSession.isCalendared) {
+      } else if (!session.isCalendared) {
         const termIndex = initTermIndex(trialTerm, filteredbyStatusType.new);
         filteredbyStatusType.new[termIndex].sessions.push(session);
       }
