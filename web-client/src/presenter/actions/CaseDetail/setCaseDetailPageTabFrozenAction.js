@@ -1,10 +1,9 @@
 import { state } from 'cerebral';
 
 /**
- * sets props.blockedCases on state.blockedCases
+ * sets caseDetailPage.frozen to true (prevents tabs from being set in state, or "freezes" their values)
  *
  * @param {object} providers the providers object
- * @param {object} providers.props the props object
  * @param {Function} providers.store the cerebral store function
  */
 export const setCaseDetailPageTabFrozenAction = async ({ store }) => {
