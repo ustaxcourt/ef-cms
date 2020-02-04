@@ -180,7 +180,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
     draftDocument => {
       let editLink = '';
 
-      if (permissions.DOCKET_ENTRY && permissions.CREATE_ORDER_DOCKET_ENTRY) {
+      if (permissions.CREATE_ORDER_DOCKET_ENTRY) {
         editLink = '/add-court-issued-docket-entry';
       }
 
