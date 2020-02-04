@@ -1,10 +1,12 @@
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
+import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/caseConsolidation/getConsolidatedCasesByCaseAction';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
+import { parallel } from 'cerebral/factories';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
@@ -61,7 +63,7 @@ export const gotoCaseDetailSequence = [
         'petitionsclerk',
         'trialclerk',
       ],
-      gotoCaseDetailInternal,
+      parallel([gotoCaseDetailInternal, fetchUserNotificationsSequence]),
     ),
     ...takePathForRoles(
       ['petitioner', 'practitioner', 'respondent'],
