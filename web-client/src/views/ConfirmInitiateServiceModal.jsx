@@ -23,7 +23,7 @@ export const ConfirmInitiateServiceModal = connect(
         className="confirm-initiate-service-modal"
         confirmLabel="Yes, Serve"
         confirmSequence={confirmSequence}
-        title="Are you ready to initiate service?"
+        title="Are You Ready to Initiate Service?"
       >
         <p className="margin-bottom-1">
           The following document will be served on all parties:
