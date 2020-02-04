@@ -281,7 +281,7 @@ module.exports = [
 
   /* trial sessions */
   {
-    actions: ['wait for table#upcoming-sessions to be visible'],
+    actions: ['wait for #trial-sessions-tabs to be visible'],
     notes: 'checks a11y of trial sessions table list',
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-sessions&info=list-trial-sessions',
