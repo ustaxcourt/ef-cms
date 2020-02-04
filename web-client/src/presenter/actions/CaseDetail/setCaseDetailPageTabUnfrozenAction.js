@@ -7,5 +7,5 @@ import { state } from 'cerebral';
  * @param {Function} providers.store the cerebral store function
  */
 export const setCaseDetailPageTabUnfrozenAction = async ({ store }) => {
-  store.set(state.caseDetailPage.frozen, false);
+  store.unset(state.caseDetailPage.frozen);
 };
