@@ -5,13 +5,16 @@ const {
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
 const {
+  DOCKET_NUMBER_MATCHER,
+  TRIAL_LOCATION_MATCHER,
+} = require('./CaseConstants');
+const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { ContactFactory } = require('../contacts/ContactFactory');
-const { DOCKET_NUMBER_MATCHER } = require('./CaseConstants');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes, isEmpty } = require('lodash');
@@ -568,7 +571,7 @@ joiValidationDecorator(
       .alternatives()
       .try(
         joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS, null),
-        joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
+        joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
       )
       .required(),
     procedureType: joi
@@ -606,7 +609,7 @@ joiValidationDecorator(
       .alternatives()
       .try(
         joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS, null),
-        joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
+        joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
       )
       .optional(),
     trialSessionId: joi
