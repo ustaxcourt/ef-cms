@@ -50,6 +50,7 @@ import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
+import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
 import { connect } from '@cerebral/react';
@@ -104,6 +105,7 @@ const pages = {
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
+  UploadCourtIssuedDocument,
   UserContactEdit,
 };
 

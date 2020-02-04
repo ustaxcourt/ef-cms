@@ -308,6 +308,8 @@ import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessi
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
 import { updateUserContactValueSequence } from './sequences/updateUserContactValueSequence';
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
+import { uploadCourtIssuedDocumentAndUploadAnotherSequence } from './sequences/uploadCourtIssuedDocumentAndUploadAnotherSequence';
+import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
 import { validateAddPractitionerSequence } from './sequences/caseAssociation/validateAddPractitionerSequence';
 import { validateAddRespondentSequence } from './sequences/caseAssociation/validateAddRespondentSequence';
 import { validateAddToTrialSessionSequence } from './sequences/validateAddToTrialSessionSequence';
@@ -656,6 +658,8 @@ export const presenter = {
     updateTrialSessionSequence,
     updateUserContactValueSequence,
     updateWorkingCopySessionNoteSequence,
+    uploadCourtIssuedDocumentAndUploadAnotherSequence,
+    uploadCourtIssuedDocumentSequence,
     validateAddPractitionerSequence,
     validateAddRespondentSequence,
     validateAddToTrialSessionSequence,
