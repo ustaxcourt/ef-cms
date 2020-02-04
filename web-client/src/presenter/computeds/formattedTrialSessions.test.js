@@ -231,6 +231,7 @@ describe('formattedTrialSessions', () => {
   it('shows swing session option only if matching term and term year is found', () => {
     const trialSessions = [
       {
+        caseOrder: [],
         judge: { name: '1', userId: '1' },
         startDate: '2019-11-25T15:00:00.000Z',
         term: 'Fall',
@@ -238,6 +239,7 @@ describe('formattedTrialSessions', () => {
         trialLocation: 'Denver, CO',
       },
       {
+        caseOrder: [],
         judge: { name: '2', userId: '2' },
         startDate: '2019-04-25T15:00:00.000Z',
         term: 'Spring',
@@ -289,30 +291,35 @@ describe('formattedTrialSessions', () => {
   it('returns sessionsByTerm with only sessions in that term if form.term is set', () => {
     const trialSessions = [
       {
+        caseOrder: [],
         judge: { name: '1', userId: '1' },
         startDate: '2019-11-25T15:00:00.000Z',
         term: 'Winter',
         trialLocation: 'Denver, CO',
       },
       {
+        caseOrder: [],
         judge: { name: '2', userId: '2' },
         startDate: '2019-11-25T15:00:00.000Z',
         term: 'Spring',
         trialLocation: 'Jacksonville, FL',
       },
       {
+        caseOrder: [],
         judge: { name: '3', userId: '3' },
         startDate: '2019-11-25T15:00:00.000Z',
         term: 'Fall',
         trialLocation: 'Houston, TX',
       },
       {
+        caseOrder: [],
         judge: { name: '4', userId: '4' },
         startDate: '2019-11-25T15:00:00.000Z',
         term: 'Winter',
         trialLocation: 'Birmingham, Alabama',
       },
       {
+        caseOrder: [],
         judge: { name: '5', userId: '5' },
         startDate: '2019-11-25T15:00:00.000Z',
         term: 'Winter',
@@ -331,6 +338,7 @@ describe('formattedTrialSessions', () => {
     });
     expect(result.sessionsByTerm).toEqual([
       {
+        caseOrder: [],
         formattedStartDate: '11/25/19',
         judge: { name: '4', userId: '4' },
         startDate: '2019-11-25T15:00:00.000Z',
@@ -340,6 +348,7 @@ describe('formattedTrialSessions', () => {
         userIsAssignedToSession: false,
       },
       {
+        caseOrder: [],
         formattedStartDate: '11/25/19',
         judge: { name: '1', userId: '1' },
         startDate: '2019-11-25T15:00:00.000Z',
@@ -349,6 +358,7 @@ describe('formattedTrialSessions', () => {
         userIsAssignedToSession: true,
       },
       {
+        caseOrder: [],
         formattedStartDate: '11/25/19',
         judge: { name: '5', userId: '5' },
         startDate: '2019-11-25T15:00:00.000Z',
