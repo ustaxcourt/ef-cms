@@ -13,9 +13,6 @@ export const refreshExternalDocumentTitleFromEventCodeAction = ({
   get,
   store,
 }) => {
-  const caseId = get(state.caseId);
-  store.set(state.caseId, caseId);
-
   const { category, eventCode } = get(state.form);
   const { CATEGORY_MAP } = applicationContext.getConstants();
 
