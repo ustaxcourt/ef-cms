@@ -100,12 +100,11 @@ exports.updateDocketEntryMetaInteractor = async ({
       documentId: docketRecordEntity.documentId,
     });
 
-    let newCertificateOfServiceDate =
-      certificateOfServiceDate !== null
-        ? certificateOfServiceDate
-        : documentDetail.certificateOfServiceDate;
+    let newCertificateOfServiceDate;
 
-    if (certificateOfService === false) {
+    if (certificateOfServiceDate !== null) {
+      newCertificateOfServiceDate = certificateOfServiceDate;
+    } else {
       newCertificateOfServiceDate = undefined;
     }
 
@@ -114,6 +113,13 @@ exports.updateDocketEntryMetaInteractor = async ({
       const filingDateUpdated =
         filingDate && filingDate !== documentDetail.filingDate;
       const shouldGenerateCoversheet = servedAtUpdated || filingDateUpdated;
+
+      if (
+        !newCertificateOfServiceDate &&
+        documentDetail.certificateOfServiceDate
+      ) {
+        newCertificateOfServiceDate = documentDetail.certificateOfServiceDate;
+      }
 
       const documentEntity = new Document(
         {
