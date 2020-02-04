@@ -431,7 +431,7 @@ const router = {
       '/case-detail/*/pending-report',
       ifHasAccess(docketNumber => {
         setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Case Confirmation`,
+          `${getPageTitleDocketPrefix(docketNumber)} Pending Report`,
         );
         app.getSequence('gotoPrintablePendingReportForCaseSequence')({
           caseIdFilter: true,
