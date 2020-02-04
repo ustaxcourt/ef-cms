@@ -1,5 +1,5 @@
-Document Name (Concatenation Mapping),Document type (Option),Document type Category (Option),Respondent,Practitioner,Petitioner,Event Code ,Scenario,Variations ,Label- Previous Document from Record ,Label- Free Text / Trial location dropdown,Second Free Text ,Ordinal Field
-"[First, Second, etc. ] Amended [Document Name]",Amended [Document Name],Miscellaneous,,,,AMAT ,Nonstandard B ,,,What is being amended? ,,
+Document Name (Concatenation Mapping),Document Type (Option),Document Type Category (Option),Respondent,Practitioner,Petitioner,Event Code ,Scenario,Variations ,Label- Previous Document from Record ,Label- Free Text / Trial Location Dropdown,Second Free Text ,Ordinal Field
+"[First, Second, etc. ] Amended [Document Name]",Amended [Document Name],Miscellaneous,,,,AMAT ,Nonstandard F,,Which document are you amending?,,,What Iteration Is this filing?
 "[First, Second, etc.] Amendment to [anything]",Amendment [anything],Miscellaneous,,,,ADMT,Nonstandard I ,,What is this amendment for?,,,What Iteration Is this filing?
 "[First, Second, etc.] Request for Admissions",Request for Admissions,Request,TRUE,TRUE,TRUE,REQA,Nonstandard G,,,,,What Iteration Is this filing?
 "[First, Second, etc.] Stipulation of Facts",Stipulation of Facts,Stipulation,TRUE,TRUE,TRUE,STIP,Nonstandard G,,,,,What Iteration Is this filing?
@@ -130,7 +130,7 @@ Motion to Dismiss,Motion to Dismiss,Motion,TRUE,TRUE,TRUE,M070,Standard,,,,,
 Motion to Dismiss for Failure to Properly Prosecute,Motion to Dismiss for Failure to Properly Prosecute,Motion,TRUE,TRUE,TRUE,M071,Standard,,,,,
 Motion to Dismiss for Failure to State a Claim upon Which Relief Can Be Granted,Motion to Dismiss for Failure to State a Claim upon Which Relief Can Be Granted,Motion,TRUE,TRUE,TRUE,M072,Standard,,,,,
 Motion to Dismiss for Lack of Jurisdiction,Motion to Dismiss for Lack of Jurisdiction,Motion,TRUE,TRUE,TRUE,M073,Standard,,,,,
-"Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]","Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]",Motion,TRUE,TRUE,TRUE,M126,Nonstandard B,,,"Person, notice, or Year",,
+"Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]","Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]",Motion,TRUE,TRUE,TRUE,M126,Nonstandard B,,,"Person, notice, or year",,
 Motion to Dismiss for Lack of Prosecution,Motion to Dismiss for Lack of Prosecution,Motion,TRUE,TRUE,TRUE,M074,Standard,,,,,
 Motion to Dismiss on Grounds of Mootness,Motion to Dismiss on Grounds of Mootness,Motion,TRUE,TRUE,TRUE,M075,Standard,,,,,
 Motion to Disqualify Counsel,Motion to Disqualify Counsel,Motion,TRUE,TRUE,TRUE,M130,Standard,,,,,

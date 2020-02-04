@@ -288,11 +288,11 @@
       "documentType": "Amended [Document Name]",
       "category": "Miscellaneous",
       "eventCode": "AMAT",
-      "scenario": "Nonstandard B",
-      "labelPreviousDocument": "",
-      "labelFreeText": "What is being amended?",
+      "scenario": "Nonstandard F",
+      "labelPreviousDocument": "Which document are you amending?",
+      "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": ""
+      "ordinalField": "What Iteration Is this filing?"
     },
     {
       "documentTitle": "Amended Certificate of Service of [Document Name]",
@@ -1502,7 +1502,7 @@
       "eventCode": "M126",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Person, notice, or Year",
+      "labelFreeText": "Person, notice, or year",
       "labelFreeText2": "",
       "ordinalField": ""
     },
