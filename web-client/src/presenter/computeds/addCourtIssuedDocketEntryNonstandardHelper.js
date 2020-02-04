@@ -12,7 +12,8 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
     entry => entry.eventCode === selectedEventCode,
   );
 
-  let showDate = false;
+  let showDateFirst = false;
+  let showDateLast = false;
   let showDocketNumbers = false;
   let showFreeText = false;
   let showJudge = false;
@@ -32,18 +33,22 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
         break;
       case 'Type D':
         showFreeText = true;
-        showDate = true;
+        showDateFirst = true;
         break;
       case 'Type E':
-        showDate = true;
+        showDateFirst = true;
         break;
       case 'Type F':
         showJudge = true;
         showTrialLocation = true;
         break;
       case 'Type G':
-        showDate = true;
+        showDateFirst = true;
         showTrialLocation = true;
+        break;
+      case 'Type H':
+        showFreeText = true;
+        showDateLast = true;
         break;
     }
   }
@@ -57,9 +62,16 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
     freeTextLabel = 'Enter description';
   }
 
+  let dateLabel = 'Date';
+  if (selectedEventCode === 'TRAN') {
+    dateLabel = 'Date of trial/hearing';
+  }
+
   return {
+    dateLabel,
     freeTextLabel,
-    showDate,
+    showDateFirst,
+    showDateLast,
     showDocketNumbers,
     showFreeText,
     showJudge,

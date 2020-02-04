@@ -132,7 +132,7 @@ export default (test, draftOrderIndex) => {
 
     expect(nonstandardHelperComputed.showFreeText).toBeTruthy();
     expect(test.getState('form.freeText')).toBeFalsy();
-    expect(nonstandardHelperComputed.showDate).toBeTruthy();
+    expect(nonstandardHelperComputed.showDateFirst).toBeTruthy();
     expect(test.getState('form.month')).toBeFalsy();
     expect(test.getState('form.day')).toBeFalsy();
     expect(test.getState('form.year')).toBeFalsy();
@@ -151,7 +151,7 @@ export default (test, draftOrderIndex) => {
     );
 
     expect(nonstandardHelperComputed.showFreeText).toBeFalsy();
-    expect(nonstandardHelperComputed.showDate).toBeTruthy();
+    expect(nonstandardHelperComputed.showDateFirst).toBeTruthy();
     expect(test.getState('form.month')).toBeFalsy();
     expect(test.getState('form.day')).toBeFalsy();
     expect(test.getState('form.year')).toBeFalsy();
