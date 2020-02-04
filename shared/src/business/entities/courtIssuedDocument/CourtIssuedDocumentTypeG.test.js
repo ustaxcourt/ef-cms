@@ -9,7 +9,7 @@ describe('CourtIssuedDocumentTypeG', () => {
       });
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
-        date: VALIDATION_ERROR_MESSAGES.date[1],
+        date: VALIDATION_ERROR_MESSAGES.date[2],
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
         trialLocation: VALIDATION_ERROR_MESSAGES.trialLocation,
       });
@@ -25,7 +25,7 @@ describe('CourtIssuedDocumentTypeG', () => {
         trialLocation: 'Seattle, Washington',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        date: VALIDATION_ERROR_MESSAGES.date[1],
+        date: VALIDATION_ERROR_MESSAGES.date[2],
       });
     });
 
