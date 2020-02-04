@@ -103,7 +103,7 @@ describe('Get case', () => {
             docketNumber: '00101-00',
             documents,
             petitioners: [{ name: 'Test Petitioner' }],
-            preferredTrialCity: 'Washington, D.C.',
+            preferredTrialCity: 'Washington, District of Columbia',
             procedureType: 'Regular',
           }),
       }),
@@ -139,7 +139,7 @@ describe('Get case', () => {
               docketNumber: '00101-00',
               documents,
               petitioners: [{ name: 'Test Petitioner' }],
-              preferredTrialCity: 'Washington, D.C.',
+              preferredTrialCity: 'Washington, District of Columbia',
               procedureType: 'Regular',
             },
           ]),
@@ -157,6 +157,73 @@ describe('Get case', () => {
     expect(error).toBeDefined();
     expect(error.message).toEqual('Unauthorized');
   });
+  describe('permissions-filtered access', () => {
+    let user;
+    beforeEach(() => {
+      user = {
+        role: User.ROLES.practitioner,
+        userId: 'practitioner2',
+      };
+      applicationContext = {
+        environment: { stage: 'local' },
+        getCurrentUser: () => {
+          return user;
+        },
+        getPersistenceGateway: () => ({
+          getCaseByDocketNumber: () =>
+            Promise.resolve({
+              ...MOCK_CASE,
+              caseCaption: 'a case caption',
+              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+              caseTitle: 'a case title',
+              caseType: 'Other',
+              createdAt: new Date().toISOString(),
+              docketNumber: '00101-18',
+              documents,
+              petitioners: [{ name: 'Test Petitioner' }],
+              practitioners: [{ userId: 'practitioner' }],
+              preferredTrialCity: 'Washington, District of Columbia',
+              procedureType: 'Regular',
+              respondents: [{ userId: 'respondent' }],
+              sealedDate: new Date().toISOString(),
+            }),
+        }),
+        getUniqueId: () => '6',
+      };
+    });
+    it('restricted case by inadequate permissions', async () => {
+      let error, result;
+      try {
+        result = await getCaseInteractor({
+          applicationContext,
+          caseId: '00101-18',
+        });
+      } catch (err) {
+        error = err;
+        console.log(err.stack);
+      }
+      expect(error).not.toBeDefined();
+      expect(result).toMatchObject({ isSealed: true });
+    });
+    it('full case access via sealed case permissions', async () => {
+      let error, result;
+      user.role = User.ROLES.docketClerk;
+      try {
+        result = await getCaseInteractor({
+          applicationContext,
+          caseId: '00101-18',
+        });
+      } catch (err) {
+        error = err;
+        console.log(err.stack);
+      }
+      expect(error).not.toBeDefined();
+      expect(result).toMatchObject({
+        caseCaption: 'a case caption',
+        sealedDate: expect.anything(),
+      });
+    });
+  });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
@@ -171,13 +238,14 @@ describe('Get case', () => {
         return {
           getCaseByDocketNumber: () =>
             Promise.resolve({
+              caseCaption: 'Caption',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
               caseType: 'Other',
               createdAt: new Date().toISOString(),
               hasIrsNotice: false,
               partyType: ContactFactory.PARTY_TYPES.petitioner,
               petitioners: [{ name: 'Test Petitioner' }],
-              preferredTrialCity: 'Washington, D.C.',
+              preferredTrialCity: 'Washington, District of Columbia',
               procedureType: 'Regular',
             }),
         };
@@ -193,7 +261,7 @@ describe('Get case', () => {
       error = err;
     }
     expect(error.message).toContain(
-      'The Case entity was invalid ValidationError: child "docketNumber" fails because ["docketNumber" is required]',
+      'The Case entity was invalid ValidationError: "docketNumber" is required',
     );
   });
 });

@@ -5,7 +5,7 @@ describe('CaseExternalIncomplete entity', () => {
   describe('isValid', () => {
     it('assigns a new irsNoticeDate if one is not passed in', () => {
       const caseExternalIncomplete = new CaseExternalIncomplete({
-        caseType: 'other',
+        caseType: 'Other',
         contactPrimary: {
           address1: '99 South Oak Lane',
           address2: 'Culpa numquam saepe ',
@@ -24,7 +24,7 @@ describe('CaseExternalIncomplete entity', () => {
         irsNoticeDate: null,
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitionFileId: '102e29fa-bb8c-43ff-b18f-ddce9089dd80',
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
       expect(caseExternalIncomplete.getFormattedValidationErrors()).toEqual(

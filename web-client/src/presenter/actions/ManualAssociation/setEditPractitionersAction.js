@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -11,6 +12,5 @@ import { state } from 'cerebral';
  */
 export const setEditPractitionersAction = async ({ get, store }) => {
   const practitioners = get(state.caseDetail.practitioners);
-
-  store.set(state.modal.practitioners, practitioners);
+  store.set(state.modal.practitioners, cloneDeep(practitioners));
 };

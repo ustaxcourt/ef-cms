@@ -16,6 +16,8 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const currentPage = get(state.currentPage);
   const isRequestAccessForm = currentPage === 'RequestAccessWizard';
 
+  const isCaseSealed = !!caseDetail.isSealed;
+
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
@@ -23,11 +25,12 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   if (isExternalUser && !userAssociatedWithCase) {
     if (user.role === USER_ROLES.practitioner) {
       showRequestAccessToCaseButton =
-        !pendingAssociation && !isRequestAccessForm;
+        !pendingAssociation && !isRequestAccessForm && !isCaseSealed;
       showPendingAccessToCaseButton = pendingAssociation;
     } else if (user.role === USER_ROLES.respondent) {
-      showFileFirstDocumentButton = !caseHasRespondent;
-      showRequestAccessToCaseButton = caseHasRespondent && !isRequestAccessForm;
+      showFileFirstDocumentButton = !caseHasRespondent && !isCaseSealed;
+      showRequestAccessToCaseButton =
+        caseHasRespondent && !isRequestAccessForm && !isCaseSealed;
     }
   }
 
@@ -54,5 +57,6 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     showFileFirstDocumentButton,
     showPendingAccessToCaseButton,
     showRequestAccessToCaseButton,
+    showSealedCaseBanner: isCaseSealed,
   };
 };

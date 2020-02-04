@@ -1,7 +1,7 @@
 const {
-  constants,
   setServiceIndicatorsForCase,
 } = require('./setServiceIndicatorsForCase');
+const { SERVICE_INDICATOR_TYPES } = require('../entities/cases/CaseConstants');
 
 /**
  * aggregatePartiesForService
@@ -25,13 +25,16 @@ const aggregatePartiesForService = caseEntity => {
     if (
       party &&
       party.email &&
-      party.serviceIndicator === constants.SI_ELECTRONIC
+      party.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
     ) {
       aggregated.electronic.push({
         email: party.email,
         name: party.name,
       });
-    } else if (party && party.serviceIndicator === constants.SI_PAPER) {
+    } else if (
+      party &&
+      party.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER
+    ) {
       aggregated.paper.push({
         ...party,
       });

@@ -26,7 +26,7 @@ describe('Send petition to IRS', () => {
       error = err;
     }
     expect(error.message).toContain(
-      'The Case entity was invalid ValidationError: child "docketNumber" fails because ["docketNumber" is required]',
+      'The Case entity was invalid ValidationError: "docketNumber" is required',
     );
   });
 });

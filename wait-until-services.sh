@@ -13,5 +13,6 @@
 ./wait-until.sh http://localhost:3011/ 400 true # notifications -- websocket port 3011
 ./wait-until.sh http://localhost:3012/ 404
 ./wait-until.sh http://localhost:3013/ 404
-./wait-until.sh http://localhost:3020/ 404 
+./wait-until.sh http://localhost:3020/ 404
+./wait-until.sh http://localhost:3030/ 404 # migrate - putting it far away from the other ports
 ./wait-until.sh http://localhost:9200/ 200
