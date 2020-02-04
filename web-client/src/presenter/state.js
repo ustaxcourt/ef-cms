@@ -96,7 +96,9 @@ export const state = {
   caseDetailErrors: {},
   caseDetailHeaderHelper,
   caseDetailHelper,
-  caseDetailPage: {},
+  caseDetailPage: {
+    frozen: false,
+  },
   caseDetailSubnavHelper,
   caseInformationHelper,
   caseTypeDescriptionHelper,

@@ -4,6 +4,8 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setCaseDetailPageTabAction } from '../actions/setCaseDetailPageTabAction';
+import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { setupUploadMetadataAction } from '../actions/uploadCourtIssuedDocument/setupUploadMetadataAction';
@@ -26,6 +28,8 @@ export const uploadCourtIssuedDocument = (
       getFileExternalDocumentAlertSuccessAction,
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
+      setCaseDetailPageTabAction,
+      setCaseDetailPageTabFrozenAction,
       lastAction,
     ],
   },
