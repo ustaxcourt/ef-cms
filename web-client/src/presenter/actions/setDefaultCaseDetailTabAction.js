@@ -10,7 +10,7 @@ import { state } from 'cerebral';
 export const setDefaultCaseDetailTabAction = ({ get, props, store }) => {
   const frozen = get(state.caseDetailPage.frozen);
 
-  if (frozen === false) {
+  if (!frozen) {
     store.set(
       state.caseDetailPage.primaryTab,
       props.primaryTab || 'docketRecord',
