@@ -326,7 +326,7 @@ joiValidationDecorator(
       .boolean()
       .optional()
       .description(
-        'A lodged document is awaiting action by the judge to enact or refuse',
+        'A lodged document is awaiting action by the judge to enact or refuse.',
       ),
     objections: joi.string().optional(),
     ordinalValue: joi.string().optional(),
