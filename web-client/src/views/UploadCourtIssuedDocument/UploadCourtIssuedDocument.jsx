@@ -129,7 +129,9 @@ export const UploadCourtIssuedDocument = connect(
               <div className="grid-col-8">
                 <Button
                   onClick={() => {
-                    uploadCourtIssuedDocumentSequence();
+                    uploadCourtIssuedDocumentSequence({
+                      tab: 'inProgress',
+                    });
                   }}
                 >
                   Finish
