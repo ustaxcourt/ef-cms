@@ -1,4 +1,3 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
