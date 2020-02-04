@@ -5,6 +5,7 @@ const {
 const {
   updatePrimaryContactInteractor,
 } = require('./updatePrimaryContactInteractor');
+const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
@@ -39,6 +40,7 @@ const useCases = {
 
 const applicationContext = {
   environment: { stage: 'local' },
+  getCaseCaptionNames: Case.getCaseCaptionNames,
   getCurrentUser: () => {
     return new User({
       name: 'bob',

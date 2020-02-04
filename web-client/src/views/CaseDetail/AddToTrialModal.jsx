@@ -87,7 +87,7 @@ export const AddToTrialModal = connect(
 
           <FormGroup errorText={validationErrors.trialSessionId}>
             <label className="usa-label" htmlFor="trial-session">
-              Select Trial session
+              Select trial session
             </label>
             <BindedSelect
               bind="modal.trialSessionId"

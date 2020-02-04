@@ -11,6 +11,7 @@ const {
   formatNow,
   prepareDateFromString,
 } = require('../utilities/DateHandler');
+const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { PDFDocument } = require('pdf-lib');
 
@@ -100,6 +101,7 @@ describe('addCoversheetInteractor', () => {
     const params = {
       applicationContext: {
         environment: { documentsBucketName: 'documents' },
+        getCaseCaptionNames: Case.getCaseCaptionNames,
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdStub,
           saveDocumentFromLambda: saveDocumentFromLambdaStub,
@@ -148,6 +150,7 @@ describe('addCoversheetInteractor', () => {
     const params = {
       applicationContext: {
         environment: { documentsBucketName: 'documents' },
+        getCaseCaptionNames: Case.getCaseCaptionNames,
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdStub,
           saveDocumentFromLambda: saveDocumentFromLambdaStub,
@@ -185,6 +188,7 @@ describe('addCoversheetInteractor', () => {
     let caseData, applicationContext;
     beforeEach(() => {
       applicationContext = {
+        getCaseCaptionNames: Case.getCaseCaptionNames,
         getUtilities: () => {
           return {
             formatDateString,
@@ -218,6 +222,7 @@ describe('addCoversheetInteractor', () => {
         partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
       };
     });
+
     it('generates cover sheet data appropriate for multiple petitioners', async () => {
       const result = generateCoverSheetData({
         applicationContext,
@@ -237,8 +242,9 @@ describe('addCoversheetInteractor', () => {
           lodged: true,
         },
       });
-      expect(result.caseCaptionPostfix).toEqual(', Petitioners');
+      expect(result.caseCaptionPostfix).toEqual('Petitioners');
     });
+
     it('generates cover sheet data appropriate for a single petitioners', async () => {
       const result = generateCoverSheetData({
         applicationContext,
@@ -258,8 +264,31 @@ describe('addCoversheetInteractor', () => {
           lodged: true,
         },
       });
-      expect(result.caseCaptionPostfix).toEqual(', Petitioner');
+      expect(result.caseCaptionPostfix).toEqual('Petitioner');
     });
+
+    it('generates empty string for caseCaptionPostfix if the caseCaption is not in the proper format', async () => {
+      const result = generateCoverSheetData({
+        applicationContext,
+        caseEntity: {
+          ...caseData,
+          caseCaption: 'Janie Petitioner',
+        },
+        documentEntity: {
+          ...testingCaseData.documents[0],
+          addToCoversheet: true,
+          additionalInfo: 'Additional Info Something',
+          certificateOfService: true,
+          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          documentType:
+            'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          isPaper: true,
+          lodged: true,
+        },
+      });
+      expect(result.caseCaptionPostfix).toEqual('');
+    });
+
     it('generates correct filed date', async () => {
       const result = generateCoverSheetData({
         applicationContext,

@@ -9,7 +9,7 @@ describe('CourtIssuedDocumentTypeG', () => {
       });
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
-        date: VALIDATION_ERROR_MESSAGES.date[1],
+        date: VALIDATION_ERROR_MESSAGES.date[2],
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
         trialLocation: VALIDATION_ERROR_MESSAGES.trialLocation,
       });
@@ -25,14 +25,14 @@ describe('CourtIssuedDocumentTypeG', () => {
         trialLocation: 'Seattle, Washington',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        date: VALIDATION_ERROR_MESSAGES.date[1],
+        date: VALIDATION_ERROR_MESSAGES.date[2],
       });
     });
 
     it('should be valid when all fields are present', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
-        date: '2025-04-10T00:00:00-05:00',
+        date: '2025-04-10T04:00:00.000Z',
         documentTitle: 'Notice of Trial on [Date] at [Place]',
         documentType: 'NTD - Notice of Trial',
         scenario: 'Type G',
@@ -46,7 +46,7 @@ describe('CourtIssuedDocumentTypeG', () => {
     it('should generate valid title', () => {
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,
-        date: '2025-04-10T00:00:00-05:00',
+        date: '2025-04-10T04:00:00.000Z',
         documentTitle: 'Notice of Trial on [Date] at [Place]',
         documentType: 'NTD - Notice of Trial',
         scenario: 'Type G',

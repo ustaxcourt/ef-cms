@@ -21,6 +21,13 @@ Unique Case ID only used by the system.
 
 > `string` | required
 
+### caseTitle
+
+
+Title of the Case.
+
+> `string` | required
+
 ### createdAt
 
 

@@ -6,6 +6,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
+const { DOCKET_NUMBER_MATCHER } = require('./cases/CaseConstants');
 const { flatten, map } = require('lodash');
 const { Order } = require('./orders/Order');
 const { TrialSession } = require('./trialSessions/TrialSession');
@@ -33,15 +34,14 @@ function Document(rawDocument, { applicationContext }) {
   this.additionalInfo = rawDocument.additionalInfo;
   this.additionalInfo2 = rawDocument.additionalInfo2;
   this.addToCoversheet = rawDocument.addToCoversheet;
-  this.attachments = rawDocument.attachments;
   this.archived = rawDocument.archived;
+  this.attachments = rawDocument.attachments;
   this.caseId = rawDocument.caseId;
   this.certificateOfService = rawDocument.certificateOfService;
   this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
   this.createdAt = rawDocument.createdAt || createISODateString();
   this.docketNumber = rawDocument.docketNumber;
   this.documentId = rawDocument.documentId;
-  this.mailingDate = rawDocument.mailingDate;
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
   this.draftState = rawDocument.draftState;
@@ -56,6 +56,7 @@ function Document(rawDocument, { applicationContext }) {
   this.isPaper = rawDocument.isPaper;
   this.judge = rawDocument.judge;
   this.lodged = rawDocument.lodged;
+  this.mailingDate = rawDocument.mailingDate;
   this.objections = rawDocument.objections;
   this.ordinalValue = rawDocument.ordinalValue;
   this.partyPrimary = rawDocument.partyPrimary;
@@ -85,8 +86,7 @@ function Document(rawDocument, { applicationContext }) {
   this.supportingDocument = rawDocument.supportingDocument;
   this.trialLocation = rawDocument.trialLocation;
   this.userId = rawDocument.userId;
-  this.workItems = rawDocument.workItems;
-  this.workItems = (this.workItems || []).map(
+  this.workItems = (rawDocument.workItems || []).map(
     workItem => new WorkItem(workItem, { applicationContext }),
   );
 
@@ -273,7 +273,10 @@ joiValidationDecorator(
     additionalInfo: joi.string().optional(),
     additionalInfo2: joi.string().optional(),
     archived: joi.boolean().optional(),
-    caseId: joi.string().optional(),
+    caseId: joi
+      .string()
+      .optional()
+      .description('Unique ID of the associated Case.'),
     certificateOfService: joi.boolean().optional(),
     certificateOfServiceDate: joi.when('certificateOfService', {
       is: true,
@@ -286,19 +289,29 @@ joiValidationDecorator(
     createdAt: joi
       .date()
       .iso()
-      .required(),
-    docketNumber: joi.string().optional(),
+      .required()
+      .description('When the Document was added to the system.'),
+    docketNumber: joi
+      .string()
+      .regex(DOCKET_NUMBER_MATCHER)
+      .optional()
+      .description('Docket Number of the associated Case in XXXXX-YY format.'),
     documentId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
-      .required(),
-    documentTitle: joi.string().optional(),
+      .required()
+      .description('ID of the associated PDF document in the S3 bucket.'),
+    documentTitle: joi
+      .string()
+      .optional()
+      .description('The title of this document.'),
     documentType: joi
       .string()
       .valid(...Document.getDocumentTypes())
-      .required(),
+      .required()
+      .description('The type of this document.'),
     draftState: joi.object().optional(),
     eventCode: joi.string().optional(),
     exhibits: joi.boolean().optional(),

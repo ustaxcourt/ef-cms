@@ -17,7 +17,7 @@ export const RecallPetitionModalDialog = connect(
         confirmLabel="Yes, Recall"
         confirmSequence={confirmSequence}
         message="Recalling this Petition will remove it from the IRS service batch and return it to your work queue."
-        title="Are you sure you want to recall this Petition?"
+        title="Are You Sure You Want to Recall This Petition?"
       ></ModalDialog>
     );
   },
