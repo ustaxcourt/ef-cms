@@ -61,7 +61,7 @@ export const TrialSessionDetail = connect(
           </Tabs>
         )}
         {showModal == 'SetCalendarModalDialog' && <SetCalendarModalDialog />}
-        {formattedTrialSessionDetails.isCalendared && (
+        {formattedTrialSessionDetails.showOpenCases && (
           <Tabs
             bind="trialSessionDetailsTab.calendaredCaseList"
             defaultActiveTab="OpenCases"
@@ -83,6 +83,18 @@ export const TrialSessionDetail = connect(
             <Tab id="all-cases-tab" tabName="AllCases" title="All Cases">
               <div id="all-cases-tab-content">
                 <AllCases />
+              </div>
+            </Tab>
+          </Tabs>
+        )}
+        {formattedTrialSessionDetails.showOnlyClosedCases && (
+          <Tabs
+            bind="trialSessionDetailsTab.calendaredCaseList"
+            defaultActiveTab="InactiveCases"
+          >
+            <Tab id="inactive-cases-tab" tabName="InactiveCases" title="Cases">
+              <div id="inactive-cases-tab-content">
+                <InactiveCases />
               </div>
             </Tab>
           </Tabs>
