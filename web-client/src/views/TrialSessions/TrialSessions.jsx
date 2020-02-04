@@ -31,9 +31,6 @@ export const TrialSessions = connect(
             bind="trialSessionsTab.group"
             defaultActiveTab={defaultTab || 'new'}
             id="trial-sessions-tabs"
-            onSelect={tab =>
-              navigateToPathSequence({ path: `/trial-sessions?status=${tab}` })
-            }
           >
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
               <Button
