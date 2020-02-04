@@ -14,6 +14,10 @@ const externalRoute = path => {
   window.location.replace(path);
 };
 
+const queryString = () => {
+  return window.location.search;
+};
+
 const openInNewTab = (path, noopener = true) => {
   const windowFeatures = (noopener && 'noopener, noreferrer') || '';
   window.open(path, '_blank', windowFeatures);
@@ -559,12 +563,14 @@ const router = {
     route(
       '/trial-sessions..',
       ifHasAccess(() => {
-        var query = {};
+        const trialSessionFilter = {};
         forEach(route.query(), (value, key) => {
-          set(query, key, value);
+          set(trialSessionFilter, key, value);
         });
         setPageTitle('Trial sessions');
-        app.getSequence('gotoTrialSessionsSequence')({ query });
+        app.getSequence('gotoTrialSessionsSequence')({
+          query: trialSessionFilter,
+        });
       }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
     );
 
