@@ -5,7 +5,7 @@ import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocume
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
-import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
+import { gotoCaseDetailSequence } from './gotoCaseDetailSequence';
 import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -45,7 +45,7 @@ export const submitEditDocketEntryMetaSequence = [
           setSaveAlertsForNavigationAction,
           getEditDocketEntryMetaAlertSuccessAction,
           setAlertSuccessAction,
-          navigateToCaseDetailAction,
+          gotoCaseDetailSequence,
         ],
       },
       unsetWaitingForResponseAction,
