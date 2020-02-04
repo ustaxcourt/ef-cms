@@ -1,9 +1,11 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
+import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
 import { getAllCaseDeadlinesAction } from '../actions/CaseDeadline/getAllCaseDeadlinesAction';
 import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -24,7 +26,10 @@ const gotoAllCaseDeadlines = [
 export const gotoAllCaseDeadlinesSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoAllCaseDeadlines,
+    isLoggedIn: parallel([
+      fetchUserNotificationsSequence,
+      gotoAllCaseDeadlines,
+    ]),
     unauthorized: [redirectToCognitoAction],
   },
 ];
