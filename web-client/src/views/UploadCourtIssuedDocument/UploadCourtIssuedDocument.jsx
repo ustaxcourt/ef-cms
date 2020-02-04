@@ -22,6 +22,8 @@ export const UploadCourtIssuedDocument = connect(
       sequences.uploadCourtIssuedDocumentAndUploadAnotherSequence,
     uploadCourtIssuedDocumentSequence:
       sequences.uploadCourtIssuedDocumentSequence,
+    validateUploadCourtIssuedDocumentSequence:
+      sequences.validateUploadCourtIssuedDocumentSequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -31,6 +33,7 @@ export const UploadCourtIssuedDocument = connect(
     showModal,
     uploadCourtIssuedDocumentAndUploadAnotherSequence,
     uploadCourtIssuedDocumentSequence,
+    validateUploadCourtIssuedDocumentSequence,
     validationErrors,
   }) => {
     return (
@@ -68,6 +71,9 @@ export const UploadCourtIssuedDocument = connect(
                       ariaLabel="notes"
                       bind="form.freeText"
                       id="upload-description"
+                      onChange={() => {
+                        validateUploadCourtIssuedDocumentSequence();
+                      }}
                     />
                   </FormGroup>
                 </div>
@@ -112,7 +118,7 @@ export const UploadCourtIssuedDocument = connect(
                       id="primary-document"
                       name="primaryDocumentFile"
                       updateFormValueSequence="updateFormValueSequence"
-                      validationSequence="validateExternalDocumentInformationSequence"
+                      validationSequence="validateUploadCourtIssuedDocumentSequence"
                     />
                   </FormGroup>
                 </div>

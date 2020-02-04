@@ -13,6 +13,7 @@ export const validateUploadCourtIssuedDocumentAction = ({ get, path }) => {
   const { freeText, primaryDocumentFile } = get(state.form);
 
   let errors = {};
+  let errorDisplayOrder = ['freeText', 'primaryDocumentFile'];
 
   if (!freeText) {
     errors.freeText = 'Enter a description';
@@ -25,6 +26,9 @@ export const validateUploadCourtIssuedDocumentAction = ({ get, path }) => {
   if (isEmpty(errors)) {
     return path.success();
   } else {
-    return path.error({ errors });
+    return path.error({
+      errorDisplayOrder,
+      errors,
+    });
   }
 };
