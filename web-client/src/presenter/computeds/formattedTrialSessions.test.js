@@ -115,7 +115,7 @@ describe('formattedTrialSessions', () => {
       ]);
     });
 
-    it('filters open cases', () => {
+    it('filters open trial sessions', () => {
       const sessions = trialTerms[0].sessions.slice(0);
       sessions[0] = {
         ...sessions[0],
@@ -134,7 +134,7 @@ describe('formattedTrialSessions', () => {
       ]);
     });
 
-    it('filters new cases', () => {
+    it('filters new trial sessions', () => {
       TRIAL_SESSIONS_LIST.forEach(session => (session.isCalendared = true));
       const sessions = trialTerms[0].sessions.slice(0);
       sessions[0] = {
@@ -154,7 +154,7 @@ describe('formattedTrialSessions', () => {
       ]);
     });
 
-    it('filters all cases (returns everything)', () => {
+    it('filters all trial sessions (returns everything)', () => {
       const results = filterFormattedSessionsByStatus(trialTerms);
       expect(results.all).toEqual(trialTerms);
     });

@@ -53,7 +53,7 @@ export const filterFormattedSessionsByStatus = trialTerms => {
   };
 
   trialTerms.forEach(trialTerm => {
-    trialTerm.sessions.map(async session => {
+    trialTerm.sessions.forEach(session => {
       const allCases = session.caseOrder;
       const inactiveCases = allCases.filter(
         sessionCase => sessionCase.removedFromTrial === true,
