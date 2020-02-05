@@ -28,6 +28,28 @@ describe('DateHandler', () => {
     });
   });
 
+  describe('calculateISODate', () => {
+    it('calculates dates with zero adjustment', () => {
+      const result = DateHandler.calculateISODate({ dateString: 'x' });
+      expect(result).toEqual('x');
+    });
+    it('calculates dates with positive adjustment', () => {
+      const result = DateHandler.calculateISODate({
+        dateString: '2000-01-01T00:00:00.000Z',
+        howMuch: 20,
+        units: 'days',
+      });
+      expect(result).toEqual('2000-01-21T00:00:00.000Z');
+    });
+    it('calculates dates with negative adjustment', () => {
+      const result = DateHandler.calculateISODate({
+        dateString: '2000-01-21T00:00:00.000Z',
+        howMuch: -20,
+        units: 'days',
+      });
+      expect(result).toEqual('2000-01-01T00:00:00.000Z');
+    });
+  });
   describe('createISODateString', () => {
     it('creates a date anew', () => {
       const myDate = DateHandler.createISODateString();

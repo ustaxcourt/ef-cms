@@ -1,6 +1,10 @@
+const {
+  calculateISODate,
+  createISODateString,
+  dateStringsCompared,
+} = require('./DateHandler');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty } = require('lodash');
-const { dateStringsCompared } = require('./DateHandler');
 const { Document } = require('../entities/Document');
 const { IRS_BATCH_SYSTEM_SECTION } = require('../entities/WorkQueue');
 
@@ -90,6 +94,21 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
   return result;
 };
 
+const TRANSCRIPT_AGE_DAYS_MIN = 1; // TODO: change to 90 post-UX review
+const documentMeetsAgeRequirements = document => {
+  const transcriptCodes = ['TRAN'];
+  const isTranscript = transcriptCodes.includes(document.eventCode);
+  if (!isTranscript) return true;
+  const availableOnDate = calculateISODate({
+    dateString: document.secondaryDate,
+    howMuch: TRANSCRIPT_AGE_DAYS_MIN,
+    units: 'days',
+  });
+  const rightNow = createISODateString();
+  const meetsTranscriptAgeRequirements = availableOnDate <= rightNow;
+  return meetsTranscriptAgeRequirements;
+};
+
 const formatCaseDeadline = (applicationContext, caseDeadline) => {
   const result = cloneDeep(caseDeadline);
   result.deadlineDateFormatted = applicationContext
@@ -137,6 +156,10 @@ const formatDocketRecordWithDocument = (
       ) {
         record.createdAtFormatted = undefined;
       }
+
+      record.isAvailableToUser = documentMeetsAgeRequirements(
+        documentMap[record.documentId],
+      );
 
       record.filingsAndProceedings = getFilingsAndProceedings(
         formattedDocument,
@@ -428,6 +451,8 @@ const getFormattedCaseDetail = ({
 };
 
 module.exports = {
+  TRANSCRIPT_AGE_DAYS_MIN,
+  documentMeetsAgeRequirements,
   formatCase,
   formatCaseDeadlines,
   formatDocketRecord,
