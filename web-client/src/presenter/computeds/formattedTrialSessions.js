@@ -7,6 +7,11 @@ export const formatSession = (session, applicationContext) => {
     .prepareDateFromString(session.startDate)
     .startOf('isoWeek')
     .format('MMMM D, YYYY');
+  session.startOfWeekSortable = applicationContext
+    .getUtilities()
+    .prepareDateFromString(session.startDate)
+    .startOf('isoWeek')
+    .format('YYYYMMDD');
   session.formattedStartDate = applicationContext
     .getUtilities()
     .formatDateString(session.startDate, 'MMDDYY');
@@ -16,8 +21,12 @@ export const formatSession = (session, applicationContext) => {
   return session;
 };
 
-export const sessionSorter = sessionList => {
-  return orderBy(sessionList, ['startDate', 'trialLocation'], ['asc', 'asc']);
+export const sessionSorter = (sessionList, dateSort = 'asc') => {
+  return orderBy(
+    sessionList,
+    ['startDate', 'trialLocation'],
+    [dateSort, 'asc'],
+  );
 };
 
 export const filterFormattedSessionsByStatus = (
@@ -25,6 +34,14 @@ export const filterFormattedSessionsByStatus = (
   applicationContext,
 ) => {
   const { getTrialSessionStatus } = applicationContext.getUtilities();
+
+  const sessionSort = {
+    all: 'asc',
+    closed: 'asc',
+    new: 'desc',
+    open: 'desc',
+  };
+
   const filteredbyStatusType = {
     all: [],
     closed: [],
@@ -41,6 +58,7 @@ export const filterFormattedSessionsByStatus = (
       filtered.push({
         dateFormatted: trialTerm.dateFormatted,
         sessions: [],
+        startOfWeekSortable: trialTerm.startOfWeekSortable,
       });
       termIndex = filtered.length - 1;
     }
@@ -62,19 +80,30 @@ export const filterFormattedSessionsByStatus = (
     });
   });
 
+  for (let [status, trialTerms] of Object.entries(filteredbyStatusType)) {
+    filteredbyStatusType[status] = orderBy(
+      trialTerms,
+      ['startOfWeekSortable'],
+      [sessionSort[status]],
+    );
+    trialTerms.forEach(trialTerm => {
+      trialTerm.sessions = sessionSorter(trialTerm.sessions, [
+        sessionSort[status],
+      ]);
+    });
+  }
+
   return filteredbyStatusType;
 };
 
 export const formattedTrialSessions = (get, applicationContext) => {
-  const judgeUser = get(state.judgeUser);
-  const orderedSessions = orderBy(get(state.trialSessions), 'startDate');
+  const judgeId = get(state.judgeUser.userId);
 
   // filter trial sessions
   const trialSessionFilters = pickBy(
     get(state.screenMetadata.trialSessionFilters),
     identity,
   );
-
   const judgeFilter = get(
     state.screenMetadata.trialSessionFilters.judge.userId,
   );
@@ -82,40 +111,37 @@ export const formattedTrialSessions = (get, applicationContext) => {
     delete trialSessionFilters.judge;
   }
 
-  const sessions = filter(orderedSessions, trialSessionFilters);
+  const sessions = filter(get(state.trialSessions), trialSessionFilters);
 
   const formattedSessions = [];
   sessions.forEach(session => {
-    if (
-      session.judge &&
-      judgeUser &&
-      session.judge.userId === judgeUser.userId
-    ) {
-      session.userIsAssignedToSession = true;
-    } else {
-      session.userIsAssignedToSession = false;
-    }
+    session.userIsAssignedToSession = session.judge?.userId === judgeId;
 
     const formattedSession = formatSession(session, applicationContext);
 
-    let match = find(formattedSessions, {
-      dateFormatted: formattedSession.startOfWeek,
+    let sessionWeek = find(formattedSessions, {
+      startOfWeekSortable: formattedSession.startOfWeekSortable,
     });
 
-    if (!match) {
-      match = { dateFormatted: formattedSession.startOfWeek, sessions: [] };
-      formattedSessions.push(match);
+    if (!sessionWeek) {
+      sessionWeek = {
+        dateFormatted: formattedSession.startOfWeek,
+        sessions: [],
+        startOfWeekSortable: formattedSession.startOfWeekSortable,
+      };
+      formattedSessions.push(sessionWeek);
     }
-    match.sessions.push(session);
+    sessionWeek.sessions.push(session);
   });
+
   formattedSessions.forEach(
     week => (week.sessions = sessionSorter(week.sessions)),
   );
 
   const selectedTerm = get(state.form.term);
-  const selectedTermYear = get(state.form.termYear);
   let sessionsByTerm = [];
   if (selectedTerm) {
+    const selectedTermYear = get(state.form.termYear);
     sessionsByTerm = orderBy(
       sessions.filter(
         session =>
@@ -124,7 +150,6 @@ export const formattedTrialSessions = (get, applicationContext) => {
       'trialLocation',
     );
   }
-  const showSwingSessionList = get(state.form.swingSession);
 
   return {
     filteredTrialSessions: filterFormattedSessionsByStatus(
@@ -133,7 +158,7 @@ export const formattedTrialSessions = (get, applicationContext) => {
     ),
     formattedSessions,
     sessionsByTerm,
-    showSwingSessionList,
+    showSwingSessionList: get(state.form.swingSession),
     showSwingSessionOption: sessionsByTerm.length > 0,
   };
 };
