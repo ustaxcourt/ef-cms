@@ -10,7 +10,7 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
-        date: VALIDATION_ERROR_MESSAGES.date[1],
+        date: VALIDATION_ERROR_MESSAGES.date[2],
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
       });
     });
@@ -36,7 +36,7 @@ describe('CourtIssuedDocumentTypeD', () => {
     it('should be valid when all fields are present', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
-        date: '2025-04-10T00:00:00-05:00',
+        date: '2025-04-10T04:00:00.000Z',
         documentTitle:
           'Order for Amended Petition and Filing Fee on [Date] [Anything]',
         documentType: 'Order for Amended Petition and Filing Fee',
@@ -51,7 +51,7 @@ describe('CourtIssuedDocumentTypeD', () => {
     it('should generate valid title', () => {
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,
-        date: '2025-04-10T00:00:00-05:00',
+        date: '2025-04-10T04:00:00.000Z',
         documentTitle:
           'Order for Amended Petition and Filing Fee on [Date] [Anything]',
         documentType: 'Order for Amended Petition and Filing Fee',
@@ -66,7 +66,7 @@ describe('CourtIssuedDocumentTypeD', () => {
     it('should generate valid title without optional freeText', () => {
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,
-        date: '2025-04-10T00:00:00-05:00',
+        date: '2025-04-10T04:00:00.000Z',
         documentTitle:
           'Order for Amended Petition and Filing Fee on [Date] [Anything]',
         documentType: 'Order for Amended Petition and Filing Fee',

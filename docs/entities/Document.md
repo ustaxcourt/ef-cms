@@ -18,6 +18,9 @@
 
 ### caseId
 
+
+Unique ID of the associated Case.
+
 > `string` | optional
 
 ### certificateOfService
