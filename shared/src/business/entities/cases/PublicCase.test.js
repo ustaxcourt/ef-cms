@@ -124,7 +124,7 @@ describe('PublicCase', () => {
     });
   });
 
-  it('should filter private (draft court-issued) documents out of the documents array', () => {
+  it('should filter private documents out of the documents array', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
@@ -143,6 +143,7 @@ describe('PublicCase', () => {
           },
           { documentId: '234', documentType: 'O - Order' },
           { documentId: '345', documentType: 'Petition' },
+          { documentId: '987', eventCode: 'TRAN' },
         ],
         receivedAt: 'testing',
       },
@@ -178,6 +179,17 @@ describe('PublicCase', () => {
           documentType: 'Stipulated Decision',
         },
         [],
+      );
+      expect(isPrivate).toEqual(true);
+    });
+
+    it('should return true for a transcript document', () => {
+      const isPrivate = isPrivateDocument(
+        {
+          documentId: 'db3ed57e-cfca-4228-ad5c-547484b1a801',
+          eventCode: 'TRAN',
+        },
+        [{ documentId: 'db3ed57e-cfca-4228-ad5c-547484b1a801' }],
       );
       expect(isPrivate).toEqual(true);
     });

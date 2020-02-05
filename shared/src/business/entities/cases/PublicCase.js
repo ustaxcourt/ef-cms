@@ -100,6 +100,7 @@ const isPrivateDocument = function(document, docketRecord) {
   );
 
   const isStipDecision = document.documentType === 'Stipulated Decision';
+  const isTranscript = document.eventCode === 'TRAN';
   const isOrder = orderDocumentTypes.includes(document.documentType);
   const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
     document.documentType,
@@ -109,8 +110,9 @@ const isPrivateDocument = function(document, docketRecord) {
   );
 
   return (
-    (isStipDecision || isOrder || isCourtIssuedDocument) &&
-    !isDocumentOnDocketRecord
+    ((isStipDecision || isOrder || isCourtIssuedDocument) &&
+      !isDocumentOnDocketRecord) ||
+    isTranscript
   );
 };
 
