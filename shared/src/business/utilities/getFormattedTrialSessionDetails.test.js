@@ -1,5 +1,6 @@
 import { Case } from '../entities/cases/Case';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { TrialSession } from '../entities/trialSessions/TrialSession';
 import {
   formattedTrialSessionDetails,
   getTrialSessionStatus,
@@ -306,7 +307,8 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   describe('getTrialSessionStatus', () => {
-    it('returns `closed` when all trial session cases are inactive / removed from trial', () => {
+    const { SESSION_SORT_STATUS_TYPES } = TrialSession;
+    it('returns `Closed` when all trial session cases are inactive / removed from trial', () => {
       const session = {
         caseOrder: [
           { docketNumber: '123-19', removedFromTrial: true },
@@ -314,12 +316,12 @@ describe('formattedTrialSessionDetails', () => {
         ],
       };
 
-      const results = getTrialSessionStatus(session);
+      const results = getTrialSessionStatus({ applicationContext, session });
 
-      expect(results).toEqual('closed');
+      expect(results).toEqual(SESSION_SORT_STATUS_TYPES.closed);
     });
 
-    it('returns `open` when a trial session is calendared and does not meet conditions for `closed` status', () => {
+    it('returns `Open` when a trial session is calendared and does not meet conditions for `Closed` status', () => {
       const session = {
         caseOrder: [
           { docketNumber: '123-19' },
@@ -328,12 +330,12 @@ describe('formattedTrialSessionDetails', () => {
         isCalendared: true,
       };
 
-      const results = getTrialSessionStatus(session);
+      const results = getTrialSessionStatus({ applicationContext, session });
 
-      expect(results).toEqual('open');
+      expect(results).toEqual(SESSION_SORT_STATUS_TYPES.open);
     });
 
-    it('returns `new` when a trial session is calendared and does not meet conditions for `closed` status', () => {
+    it('returns `New` when a trial session is calendared and does not meet conditions for `Closed` status', () => {
       const session = {
         caseOrder: [
           { docketNumber: '123-19' },
@@ -342,9 +344,9 @@ describe('formattedTrialSessionDetails', () => {
         isCalendared: false,
       };
 
-      const results = getTrialSessionStatus(session);
+      const results = getTrialSessionStatus({ applicationContext, session });
 
-      expect(results).toEqual('new');
+      expect(results).toEqual(SESSION_SORT_STATUS_TYPES.new);
     });
   });
 });

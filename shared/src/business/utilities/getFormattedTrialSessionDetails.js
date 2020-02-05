@@ -122,7 +122,9 @@ exports.formattedTrialSessionDetails = ({
   return trialSession;
 };
 
-exports.getTrialSessionStatus = session => {
+exports.getTrialSessionStatus = ({ applicationContext, session }) => {
+  const { SESSION_SORT_STATUS_TYPES } = applicationContext.getConstants();
+
   const allCases = session.caseOrder;
   const inactiveCases = allCases.filter(
     sessionCase => sessionCase.removedFromTrial === true,
@@ -130,10 +132,10 @@ exports.getTrialSessionStatus = session => {
 
   if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
     // TODO: Move to constants, on the entity?
-    return 'closed';
+    return SESSION_SORT_STATUS_TYPES.closed;
   } else if (session.isCalendared) {
-    return 'open';
+    return SESSION_SORT_STATUS_TYPES.open;
   } else if (!session.isCalendared) {
-    return 'new';
+    return SESSION_SORT_STATUS_TYPES.new;
   }
 };
