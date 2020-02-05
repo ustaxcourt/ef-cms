@@ -109,6 +109,13 @@ TrialSession.SESSION_TYPES = [
   'Motion/Hearing',
 ];
 
+TrialSession.SESSION_STATUS_GROUPS = {
+  all: 'All',
+  closed: 'Closed',
+  new: 'New',
+  open: 'Open',
+};
+
 TrialSession.validationName = 'TrialSession';
 
 /**
