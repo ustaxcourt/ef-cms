@@ -17,7 +17,7 @@ module.exports = {
     chromeLaunchConfig: {
       args: ['--no-sandbox'],
     },
-    concurrency: 2,
+    concurrency: 1,
     debug: true,
     'include-notices': true,
     'include-warnings': true,
