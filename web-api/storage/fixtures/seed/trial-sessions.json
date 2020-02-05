@@ -195,5 +195,93 @@
     "sk": "dabbad04-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "149159ca-f4a1-4b2b-bc24-bd1fbe6defdc",
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "caseOrder": [],
+    "gsi1pk": "trial-session-catalog",
+    "trialLocation": "Birmingham, AL",
+    "createdAt": "2019-10-27T05:00:00.000Z",
+    "swingSessionId": "108a959f-9526-4db5-b262-e58c476a4604",
+    "sk": "trial-session-159c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "sessionType": "Hybrid",
+    "termYear": "2020",
+    "startTime": "10:00",
+    "term": "Winter",
+    "pk": "trial-session-159c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "judge": {
+      "name": "Judge Ashford",
+      "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
+    },
+    "swingSession": true,
+    "startDate": "2020-01-26T05:00:00.000Z",
+    "isCalendared": true,
+    "maxCases": 100,
+    "trialSessionId": "159c4338-0fac-42eb-b0eb-d53b8d0195cc"
+  },
+  {
+    "caseOrder": [],
+    "gsi1pk": "trial-session-catalog",
+    "trialLocation": "Washington, DC",
+    "createdAt": "2019-10-27T05:00:00.000Z",
+    "swingSessionId": "118a959f-9526-4db5-b262-e58c476a4604",
+    "sk": "trial-session-359c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "sessionType": "Hybrid",
+    "termYear": "2020",
+    "startTime": "10:00",
+    "term": "Winter",
+    "pk": "trial-session-359c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "judge": {
+      "name": "Judge Ashford",
+      "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
+    },
+    "swingSession": true,
+    "startDate": "2020-01-16T05:00:00.000Z",
+    "isCalendared": true,
+    "maxCases": 100,
+    "trialSessionId": "359c4338-0fac-42eb-b0eb-d53b8d0195cc"
+  },
+  {
+    "caseOrder": [],
+    "gsi1pk": "trial-session-catalog",
+    "trialLocation": "New York, NY",
+    "createdAt": "2019-10-27T05:00:00.000Z",
+    "swingSessionId": "119a959f-9526-4db5-b262-e58c476a4604",
+    "sk": "trial-session-459c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "sessionType": "Hybrid",
+    "termYear": "2020",
+    "startTime": "10:00",
+    "term": "Winter",
+    "pk": "trial-session-459c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "judge": {
+      "name": "Judge Ashford",
+      "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
+    },
+    "swingSession": true,
+    "startDate": "2020-01-06T05:00:00.000Z",
+    "isCalendared": true,
+    "maxCases": 100,
+    "trialSessionId": "459c4338-0fac-42eb-b0eb-d53b8d0195cc"
+  },
+  {
+    "caseOrder": [],
+    "gsi1pk": "trial-session-catalog",
+    "trialLocation": "San Francisco, CA",
+    "createdAt": "2019-10-27T05:00:00.000Z",
+    "swingSessionId": "218a959f-9526-4db5-b262-e58c476a4604",
+    "sk": "trial-session-539c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "sessionType": "Hybrid",
+    "termYear": "2020",
+    "startTime": "10:00",
+    "term": "Winter",
+    "pk": "trial-session-539c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "judge": {
+      "name": "Judge Ashford",
+      "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
+    },
+    "swingSession": true,
+    "startDate": "2019-12-30T05:00:00.000Z",
+    "isCalendared": true,
+    "maxCases": 100,
+    "trialSessionId": "539c4338-0fac-42eb-b0eb-d53b8d0195cc"
   }
 ]
