@@ -28,23 +28,11 @@ export const sessionSorter = sessionList => {
   return orderBy(sessionList, ['startDate', 'trialLocation'], ['asc', 'asc']);
 };
 
-export const getTrialSessionStatus = session => {
-  const allCases = session.caseOrder;
-  const inactiveCases = allCases.filter(
-    sessionCase => sessionCase.removedFromTrial === true,
-  );
-
-  if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
-    // TODO: Move to constants, on the entity?
-    return 'closed';
-  } else if (session.isCalendared) {
-    return 'open';
-  } else if (!session.isCalendared) {
-    return 'new';
-  }
-};
-
-export const filterFormattedSessionsByStatus = trialTerms => {
+export const filterFormattedSessionsByStatus = (
+  trialTerms,
+  applicationContext,
+) => {
+  const { getTrialSessionStatus } = applicationContext.getUtilities();
   const filteredbyStatusType = {
     all: trialTerms,
     closed: [],
