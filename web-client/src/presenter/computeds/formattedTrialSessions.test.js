@@ -104,7 +104,10 @@ describe('formattedTrialSessions', () => {
       };
       trialTerms[0].sessions = sessions;
 
-      const results = filterFormattedSessionsByStatus(trialTerms);
+      const results = filterFormattedSessionsByStatus(
+        trialTerms,
+        applicationContext,
+      );
 
       expect(results.closed.length).toEqual(1);
       expect(results.closed).toEqual([
@@ -123,7 +126,10 @@ describe('formattedTrialSessions', () => {
       };
       trialTerms[0].sessions = sessions;
 
-      const results = filterFormattedSessionsByStatus(trialTerms);
+      const results = filterFormattedSessionsByStatus(
+        trialTerms,
+        applicationContext,
+      );
 
       expect(results.open.length).toEqual(1);
       expect(results.open).toEqual([
@@ -143,7 +149,10 @@ describe('formattedTrialSessions', () => {
       };
       trialTerms[0].sessions = sessions;
 
-      const results = filterFormattedSessionsByStatus(trialTerms);
+      const results = filterFormattedSessionsByStatus(
+        trialTerms,
+        applicationContext,
+      );
 
       expect(results.new.length).toEqual(1);
       expect(results.new).toEqual([
@@ -154,9 +163,21 @@ describe('formattedTrialSessions', () => {
       ]);
     });
 
-    it('filters all trial sessions (returns everything)', () => {
-      const results = filterFormattedSessionsByStatus(trialTerms);
-      expect(results.all).toEqual(trialTerms);
+    it('filters all trial sessions (returns everything) with the sessionStatus on the session', () => {
+      const results = filterFormattedSessionsByStatus(
+        trialTerms,
+        applicationContext,
+      );
+
+      const getSessionCount = trialTerms => {
+        let count = 0;
+        trialTerms.forEach(term => (count += term.sessions.length));
+        return count;
+      };
+
+      expect(results.all.length).toEqual(trialTerms.length);
+      expect(getSessionCount(results.all)).toEqual(getSessionCount(trialTerms));
+      expect(results.all[0].sessions[0]).toHaveProperty('sessionStatus');
     });
   });
 
@@ -341,6 +362,7 @@ describe('formattedTrialSessions', () => {
         caseOrder: [],
         formattedStartDate: '11/25/19',
         judge: { name: '4', userId: '4' },
+        sessionStatus: 'new',
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
@@ -352,6 +374,7 @@ describe('formattedTrialSessions', () => {
         caseOrder: [],
         formattedStartDate: '11/25/19',
         judge: { name: '1', userId: '1' },
+        sessionStatus: 'new',
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
@@ -363,6 +386,7 @@ describe('formattedTrialSessions', () => {
         caseOrder: [],
         formattedStartDate: '11/25/19',
         judge: { name: '5', userId: '5' },
+        sessionStatus: 'new',
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',

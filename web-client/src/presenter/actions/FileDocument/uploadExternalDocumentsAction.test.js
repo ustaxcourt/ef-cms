@@ -73,6 +73,66 @@ describe('uploadExternalDocumentsAction', () => {
     });
   });
 
+  it('should call uploadExternalDocumentsInteractor for a single document file and also skip addCoversheetInteractorStub for any pending documents without a file attached', async () => {
+    uploadExternalDocumentsInteractorStub.returns({
+      ...MOCK_CASE,
+      documents: [
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          documentId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          documentTitle: 'Answer',
+          documentType: 'Answer',
+          eventCode: 'A',
+          processingStatus: 'pending',
+          userId: 'petitioner',
+          workItems: [],
+        },
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          documentId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          documentTitle: 'Answer',
+          documentType: 'Answer',
+          eventCode: 'A',
+          isFileAttached: false,
+          processingStatus: 'pending',
+          userId: 'petitioner',
+          workItems: [],
+        },
+      ],
+    });
+
+    await runAction(uploadExternalDocumentsAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: MOCK_CASE,
+        form: {
+          attachments: true,
+          primaryDocumentFile: { data: 'something' },
+        },
+      },
+    });
+
+    expect(uploadExternalDocumentsInteractorStub.calledOnce).toEqual(true);
+    expect(
+      uploadExternalDocumentsInteractorStub.getCall(0).args[0],
+    ).toMatchObject({
+      documentFiles: { primary: { data: 'something' } },
+      documentMetadata: {
+        attachments: true,
+        caseId: MOCK_CASE.caseId,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+    });
+    expect(addCoversheetInteractorStub.calledOnce).toEqual(true);
+    expect(addCoversheetInteractorStub.calledTwice).toEqual(false);
+    expect(addCoversheetInteractorStub.getCall(0).args[0]).toMatchObject({
+      caseId: MOCK_CASE.caseId,
+      documentId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    });
+  });
+
   it('should call uploadExternalDocumentsInteractor for a primary and secondary document with multiple supporting documents', async () => {
     uploadExternalDocumentsInteractorStub.returns(MOCK_CASE);
 
