@@ -109,11 +109,11 @@ const isPrivateDocument = function(document, docketRecord) {
     docketEntry => docketEntry.documentId === document.documentId,
   );
 
+  const isPublicDocumentType =
+    (isStipDecision || isOrder || isCourtIssuedDocument) && !isTranscript;
+
   return (
-    ((isStipDecision || isOrder || isCourtIssuedDocument) &&
-      !isDocumentOnDocketRecord) ||
-    isTranscript ||
-    !(isStipDecision || isOrder || isCourtIssuedDocument)
+    (isPublicDocumentType && !isDocumentOnDocketRecord) || !isPublicDocumentType
   );
 };
 
