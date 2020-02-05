@@ -10,9 +10,15 @@ export const TrialSessionsTable = connect(
     formattedTrialSessions:
       state.formattedTrialSessions.filteredTrialSessions[props.filter],
     trialSessionTypes: state.constants.TRIAL_SESSION_TYPES,
+    trialSessionsHelper: state.trialSessionsHelper,
     users: state.users,
   },
-  ({ formattedTrialSessions, trialSessionTypes, users }) => {
+  ({
+    formattedTrialSessions,
+    trialSessionsHelper,
+    trialSessionTypes,
+    users,
+  }) => {
     return (
       <React.Fragment>
         <div className="grid-row margin-bottom-3">
@@ -78,15 +84,18 @@ export const TrialSessionsTable = connect(
               <th>Location</th>
               <th>Type</th>
               <th>Judge</th>
-              <th aria-label="Number of cases">No. of cases</th>
-              <th>Notice issued</th>
+              {trialSessionsHelper.showNumberOfCases && (
+                <th aria-label="Number of cases">No. of cases</th>
+              )}
+              {trialSessionsHelper.showNoticeIssued && <th>Notice issued</th>}
+              {trialSessionsHelper.showSessionStatus && <th>Session Status</th>}
             </tr>
           </thead>
           {formattedTrialSessions.map((trialDate, idxDate) => (
             <React.Fragment key={idxDate}>
               <tbody>
                 <tr className="trial-date">
-                  <td colSpan="7">
+                  <td colSpan={trialSessionsHelper.numCols}>
                     <h4 className="margin-bottom-0">
                       {trialDate.dateFormatted}
                     </h4>
@@ -119,8 +128,15 @@ export const TrialSessionsTable = connect(
                     </td>
                     <td>{item.sessionType}</td>
                     <td>{item.judge && item.judge.name}</td>
-                    <td>{item.maxCases}</td>
-                    <td>{item.formattedNoticeIssuedDate}</td>
+                    {trialSessionsHelper.showNumberOfCases && (
+                      <td>{item.maxCases}</td>
+                    )}
+                    {trialSessionsHelper.showNoticeIssued && (
+                      <td>{item.formattedNoticeIssuedDate}</td>
+                    )}
+                    {trialSessionsHelper.showSessionStatus && (
+                      <td>{item.sessionStatus}</td>
+                    )}
                   </tr>
                 </tbody>
               ))}
