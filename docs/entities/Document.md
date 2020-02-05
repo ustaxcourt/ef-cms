@@ -551,6 +551,13 @@ A lodged document is awaiting action by the judge to enact or refuse.
 
 > `string` | optional
 
+### secondaryDate
+
+
+A secondary date associated with the document, typically related to time-restricted availability.
+
+> `date` | optional
+
 ### secondaryDocument
 
 > `object` | optional
