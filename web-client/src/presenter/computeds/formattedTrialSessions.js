@@ -68,11 +68,15 @@ export const filterFormattedSessionsByStatus = (
 
   trialTerms.forEach(trialTerm => {
     trialTerm.sessions.forEach(session => {
-      const status = getTrialSessionStatus(session);
-      const termIndex = initTermIndex(trialTerm, filteredbyStatusType[status]);
+      const status = getTrialSessionStatus({ applicationContext, session });
+      const statusLowerCase = status.toLowerCase();
+      const termIndex = initTermIndex(
+        trialTerm,
+        filteredbyStatusType[statusLowerCase],
+      );
       // Add session status to filtered session
       session.sessionStatus = status;
-      filteredbyStatusType[status][termIndex].sessions.push(session);
+      filteredbyStatusType[statusLowerCase][termIndex].sessions.push(session);
 
       // Push to all
       const allTermIndex = initTermIndex(trialTerm, filteredbyStatusType.all);
@@ -80,15 +84,17 @@ export const filterFormattedSessionsByStatus = (
     });
   });
 
-  for (let [status, trialTerms] of Object.entries(filteredbyStatusType)) {
-    filteredbyStatusType[status] = orderBy(
+  for (let [statusLowerCase, trialTerms] of Object.entries(
+    filteredbyStatusType,
+  )) {
+    filteredbyStatusType[statusLowerCase] = orderBy(
       trialTerms,
       ['startOfWeekSortable'],
-      [sessionSort[status]],
+      [sessionSort[statusLowerCase]],
     );
     trialTerms.forEach(trialTerm => {
       trialTerm.sessions = sessionSorter(trialTerm.sessions, [
-        sessionSort[status],
+        sessionSort[statusLowerCase],
       ]);
     });
   }
