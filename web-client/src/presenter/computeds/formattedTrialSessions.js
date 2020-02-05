@@ -36,17 +36,17 @@ export const filterFormattedSessionsByStatus = (
   const { getTrialSessionStatus } = applicationContext.getUtilities();
 
   const sessionSort = {
-    all: 'desc',
-    closed: 'desc',
-    new: 'asc',
-    open: 'asc',
+    All: 'desc',
+    Closed: 'desc',
+    New: 'asc',
+    Open: 'asc',
   };
 
   const filteredbyStatusType = {
-    all: [],
-    closed: [],
-    new: [],
-    open: [],
+    All: [],
+    Closed: [],
+    New: [],
+    Open: [],
   };
 
   const initTermIndex = (trialTerm, filtered) => {
@@ -69,32 +69,26 @@ export const filterFormattedSessionsByStatus = (
   trialTerms.forEach(trialTerm => {
     trialTerm.sessions.forEach(session => {
       const status = getTrialSessionStatus({ applicationContext, session });
-      const statusLowerCase = status.toLowerCase();
-      const termIndex = initTermIndex(
-        trialTerm,
-        filteredbyStatusType[statusLowerCase],
-      );
+      const termIndex = initTermIndex(trialTerm, filteredbyStatusType[status]);
       // Add session status to filtered session
       session.sessionStatus = status;
-      filteredbyStatusType[statusLowerCase][termIndex].sessions.push(session);
+      filteredbyStatusType[status][termIndex].sessions.push(session);
 
       // Push to all
-      const allTermIndex = initTermIndex(trialTerm, filteredbyStatusType.all);
-      filteredbyStatusType.all[allTermIndex].sessions.push(session);
+      const allTermIndex = initTermIndex(trialTerm, filteredbyStatusType.All);
+      filteredbyStatusType.All[allTermIndex].sessions.push(session);
     });
   });
 
-  for (let [statusLowerCase, trialTerms] of Object.entries(
-    filteredbyStatusType,
-  )) {
-    filteredbyStatusType[statusLowerCase] = orderBy(
+  for (let [status, trialTerms] of Object.entries(filteredbyStatusType)) {
+    filteredbyStatusType[status] = orderBy(
       trialTerms,
       ['startOfWeekSortable'],
-      [sessionSort[statusLowerCase]],
+      [sessionSort[status]],
     );
     trialTerms.forEach(trialTerm => {
       trialTerm.sessions = sessionSorter(trialTerm.sessions, [
-        sessionSort[statusLowerCase],
+        sessionSort[status],
       ]);
     });
   }
