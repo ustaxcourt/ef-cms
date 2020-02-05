@@ -64,7 +64,7 @@ export const UploadCourtIssuedDocument = connect(
                       htmlFor="upload-description"
                       id="upload-description-label"
                     >
-                      PDF description
+                      Description
                     </label>
                     <input
                       aria-labelledby="upload-description-label"
