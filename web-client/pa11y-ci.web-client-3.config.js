@@ -31,7 +31,7 @@ module.exports = {
     'include-notices': true,
     'include-warnings': true,
     standard: 'WCAG2AA',
-    timeout: 30000,
+    timeout: 60000,
     useIncognitoBrowserContext: true,
     wait: 10000,
   },
