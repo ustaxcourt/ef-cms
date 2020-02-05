@@ -25,16 +25,11 @@ export const CaseDetailEdit = connect(
     waitingForResponse,
   }) => {
     return (
-      <form
-        noValidate
+      <div
         id="case-edit-form"
         role="form"
         onFocus={() => {
           unsetFormSaveSuccessSequence();
-        }}
-        onSubmit={e => {
-          e.preventDefault();
-          submitCaseDetailEditSaveSequence();
         }}
       >
         <Tabs
@@ -58,7 +53,8 @@ export const CaseDetailEdit = connect(
           aria-disabled={waitingForResponse ? 'true' : 'false'}
           disabled={waitingForResponse}
           secondary={!waitingForResponse}
-          type="submit"
+          type="button"
+          onClick={() => submitCaseDetailEditSaveSequence()}
         >
           {waitingForResponse && <div className="spinner" />}
           Save
@@ -72,7 +68,7 @@ export const CaseDetailEdit = connect(
             Your changes have been saved.
           </span>
         )}
-      </form>
+      </div>
     );
   },
 );
