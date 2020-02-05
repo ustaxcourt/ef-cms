@@ -1,4 +1,8 @@
-const { isPrivateDocument, PublicCase } = require('./PublicCase');
+const {
+  isDraftDocument,
+  isPrivateDocument,
+  PublicCase,
+} = require('./PublicCase');
 
 describe('PublicCase', () => {
   describe('validation', () => {
@@ -66,8 +70,8 @@ describe('PublicCase', () => {
         createdAt: 'testing',
         docketNumber: 'testing',
         docketNumberSuffix: 'testing',
-        docketRecord: [{}],
-        documents: [{}],
+        docketRecord: [],
+        documents: [],
         receivedAt: 'testing',
       },
       {},
@@ -88,15 +92,7 @@ describe('PublicCase', () => {
       createdAt: 'testing',
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
-      docketRecord: [
-        {
-          description: undefined,
-          documentId: undefined,
-          filedBy: undefined,
-          filingDate: undefined,
-          index: undefined,
-        },
-      ],
+      docketRecord: [],
       documents: [],
       isSealed: false,
       receivedAt: 'testing',
@@ -137,7 +133,7 @@ describe('PublicCase', () => {
     });
   });
 
-  it('should filter private documents out of the documents array', () => {
+  it('should filter draft documents out of the documents array', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
@@ -172,15 +168,113 @@ describe('PublicCase', () => {
       createdAt: 'testing',
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
-      docketRecord: [{ documentId: '123' }],
+      docketRecord: [
+        {
+          description: undefined,
+          documentId: '123',
+          filedBy: undefined,
+          filingDate: undefined,
+          index: undefined,
+        },
+      ],
       documents: [
         {
+          additionalInfo: undefined,
+          additionalInfo2: undefined,
+          caseId: undefined,
+          createdAt: undefined,
           documentId: '123',
+          documentTitle: undefined,
           documentType: 'OAJ - Order that case is assigned',
+          eventCode: undefined,
+          filedBy: undefined,
+          isPaper: undefined,
+          processingStatus: undefined,
+          receivedAt: undefined,
+          servedAt: undefined,
+          servedParties: undefined,
+          status: undefined,
+        },
+        {
+          additionalInfo: undefined,
+          additionalInfo2: undefined,
+          caseId: undefined,
+          createdAt: undefined,
+          documentId: '345',
+          documentTitle: undefined,
+          documentType: 'Petition',
+          eventCode: undefined,
+          filedBy: undefined,
+          isPaper: undefined,
+          processingStatus: undefined,
+          receivedAt: undefined,
+          servedAt: undefined,
+          servedParties: undefined,
+          status: undefined,
+        },
+        {
+          additionalInfo: undefined,
+          additionalInfo2: undefined,
+          caseId: undefined,
+          createdAt: undefined,
+          documentId: '987',
+          documentTitle: undefined,
+          documentType: undefined,
+          eventCode: 'TRAN',
+          filedBy: undefined,
+          isPaper: undefined,
+          processingStatus: undefined,
+          receivedAt: undefined,
+          servedAt: undefined,
+          servedParties: undefined,
+          status: undefined,
         },
       ],
       isSealed: false,
       receivedAt: 'testing',
+    });
+  });
+
+  describe('isDraftDocument', () => {
+    it('should return true for a stipulated decision document that is not on the docket record', () => {
+      const isPrivate = isDraftDocument(
+        {
+          documentType: 'Stipulated Decision',
+        },
+        [],
+      );
+      expect(isPrivate).toEqual(true);
+    });
+
+    it('should return true for an order document that is not on the docket record', () => {
+      const isPrivate = isDraftDocument(
+        {
+          documentType: 'Order',
+        },
+        [],
+      );
+      expect(isPrivate).toEqual(true);
+    });
+
+    it('should return true for a court-issued order document that is not on the docket record', () => {
+      const isPrivate = isDraftDocument(
+        {
+          documentType: 'O - Order',
+        },
+        [],
+      );
+      expect(isPrivate).toEqual(true);
+    });
+
+    it('should return false for a court-issued order document that is on the docket record', () => {
+      const isPrivate = isDraftDocument(
+        {
+          documentId: '123',
+          documentType: 'O - Order',
+        },
+        [{ documentId: '123' }],
+      );
+      expect(isPrivate).toEqual(false);
     });
   });
 
@@ -226,7 +320,7 @@ describe('PublicCase', () => {
       expect(isPrivate).toEqual(true);
     });
 
-    it('should return true for a court-issued order document that is on the docket record', () => {
+    it('should return false for a court-issued order document that is on the docket record', () => {
       const isPrivate = isPrivateDocument(
         {
           documentId: '123',
