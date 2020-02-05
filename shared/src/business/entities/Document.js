@@ -7,7 +7,7 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
 const { DOCKET_NUMBER_MATCHER } = require('./cases/CaseConstants');
-const { flatten, map } = require('lodash');
+const { flatten } = require('lodash');
 const { Order } = require('./orders/Order');
 const { TrialSession } = require('./trialSessions/TrialSession');
 const { WorkItem } = require('./WorkItem');
@@ -522,23 +522,6 @@ Document.prototype.setAsProcessingStatusAsCompleted = function() {
 
 Document.prototype.getQCWorkItem = function() {
   return this.workItems.find(workItem => workItem.isQC === true);
-};
-
-Document.prototype.isPublicAccessible = function() {
-  const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');
-  const courtIssuedDocumentTypes = map(
-    Document.COURT_ISSUED_EVENT_CODES,
-    'documentType',
-  );
-
-  const isServed = !!this.servedAt;
-  const isStipDecision = this.documentType === 'Stipulated Decision';
-  const isOrder = orderDocumentTypes.includes(this.documentType);
-  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
-    this.documentType,
-  );
-
-  return (isStipDecision || isOrder || isCourtIssuedDocument) && isServed;
 };
 
 Document.prototype.isAutoServed = function() {
