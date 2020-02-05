@@ -1,4 +1,3 @@
-import { Case } from '../entities/cases/Case';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { TrialSession } from '../entities/trialSessions/TrialSession';
 const { SESSION_SORT_STATUS_TYPES } = TrialSession;
@@ -209,7 +208,6 @@ describe('formattedTrialSessionDetails', () => {
             caseCaption: 'Test Person & Someone Else, Petitioners',
             docketNumber: '102-17',
             docketNumberSuffix: 'W',
-            status: Case.STATUS_TYPES.closed,
           },
           {
             ...MOCK_CASE,
@@ -233,11 +231,53 @@ describe('formattedTrialSessionDetails', () => {
     expect(result.allCases[2].docketNumberWithSuffix).toEqual('101-18');
     expect(result.allCases[2].caseCaptionNames).toEqual('Test Petitioner');
 
-    expect(result.openCases.length).toEqual(1);
-    expect(result.inactiveCases.length).toEqual(2);
-    expect(result.openCases[0].docketNumberWithSuffix).toEqual('101-18');
+    expect(result.openCases.length).toEqual(2);
+    expect(result.inactiveCases.length).toEqual(1);
+    expect(result.openCases[0].docketNumberWithSuffix).toEqual('102-17W');
+    expect(result.openCases[1].docketNumberWithSuffix).toEqual('101-18');
     expect(result.inactiveCases[0].docketNumberWithSuffix).toEqual('101-16S');
-    expect(result.inactiveCases[1].docketNumberWithSuffix).toEqual('102-17W');
+  });
+
+  it('splits cases into open and inactive cases from caseOrder when calendaredCases is not present', () => {
+    let result = formattedTrialSessionDetails({
+      applicationContext,
+      trialSession: {
+        ...TRIAL_SESSION,
+        caseOrder: [
+          MOCK_CASE,
+          {
+            ...MOCK_CASE,
+            caseCaption: 'Test Person & Someone Else, Petitioners',
+            docketNumber: '102-17',
+            docketNumberSuffix: 'W',
+          },
+          {
+            ...MOCK_CASE,
+            caseCaption: 'Someone Else, Petitioner',
+            disposition: 'omg',
+            docketNumber: '101-16',
+            docketNumberSuffix: 'S',
+            removedFromTrial: true,
+            removedFromTrialDate: '2019-03-01T21:40:46.415Z',
+          },
+        ],
+      },
+    });
+    expect(result.allCases.length).toEqual(3);
+    expect(result.allCases[0].docketNumberWithSuffix).toEqual('101-16S');
+    expect(result.allCases[0].caseCaptionNames).toEqual('Someone Else');
+    expect(result.allCases[1].docketNumberWithSuffix).toEqual('102-17W');
+    expect(result.allCases[1].caseCaptionNames).toEqual(
+      'Test Person & Someone Else',
+    );
+    expect(result.allCases[2].docketNumberWithSuffix).toEqual('101-18');
+    expect(result.allCases[2].caseCaptionNames).toEqual('Test Petitioner');
+
+    expect(result.openCases.length).toEqual(2);
+    expect(result.inactiveCases.length).toEqual(1);
+    expect(result.openCases[0].docketNumberWithSuffix).toEqual('102-17W');
+    expect(result.openCases[1].docketNumberWithSuffix).toEqual('101-18');
+    expect(result.inactiveCases[0].docketNumberWithSuffix).toEqual('101-16S');
   });
 
   it('sorts calendared cases by docket number', () => {
@@ -274,12 +314,12 @@ describe('formattedTrialSessionDetails', () => {
     expect(result.computedStatus).toEqual(SESSION_SORT_STATUS_TYPES.new);
   });
 
-  it('sets computedStatus to Open if the session is calendared and caseOrder contains open cases', () => {
+  it('sets computedStatus to Open if the session is calendared and calendaredCases contains open cases', () => {
     let result = formattedTrialSessionDetails({
       applicationContext,
       trialSession: {
         ...TRIAL_SESSION,
-        caseOrder: [
+        calendaredCases: [
           {
             caseId: MOCK_CASE.caseId,
           },

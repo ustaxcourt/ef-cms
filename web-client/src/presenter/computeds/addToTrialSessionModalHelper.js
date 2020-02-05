@@ -1,4 +1,4 @@
-import { sortBy } from 'lodash';
+import { isEmpty, isEqual, sortBy } from 'lodash';
 import { state } from 'cerebral';
 
 export const addToTrialSessionModalHelper = (get, applicationContext) => {
@@ -14,7 +14,6 @@ export const addToTrialSessionModalHelper = (get, applicationContext) => {
   let trialSessionStatesSorted = null;
   if (trialSessionsFormatted) {
     trialSessionsFormatted = trialSessionsFormatted
-      .filter(trialSession => trialSession.status === 'Upcoming')
       .map(trialSession => {
         trialSession.startDateFormatted = applicationContext
           .getUtilities()
@@ -35,8 +34,25 @@ export const addToTrialSessionModalHelper = (get, applicationContext) => {
             break;
         }
         trialSession.optionText = `${trialSession.trialLocation} ${trialSession.startDateFormatted} (${trialSession.sessionTypeFormatted})`;
+
+        const allCases = trialSession.caseOrder || [];
+        const inactiveCases = allCases.filter(
+          sessionCase => sessionCase.removedFromTrial === true,
+        );
+
+        if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
+          trialSession.computedStatus = 'Closed';
+        } else if (trialSession.isCalendared) {
+          trialSession.computedStatus = 'Open';
+        } else {
+          trialSession.computedStatus = 'New';
+        }
+
         return trialSession;
-      });
+      })
+      .filter(trialSession =>
+        ['New', 'Open'].includes(trialSession.computedStatus),
+      );
 
     if (showAllLocations) {
       trialSessionsFormatted.forEach(
