@@ -1,12 +1,4 @@
-import {
-  filter,
-  find,
-  identity,
-  isEmpty,
-  isEqual,
-  orderBy,
-  pickBy,
-} from 'lodash';
+import { filter, find, identity, orderBy, pickBy } from 'lodash';
 import { state } from 'cerebral';
 
 export const formatSession = (session, applicationContext) => {
