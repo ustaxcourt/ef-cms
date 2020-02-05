@@ -71,6 +71,7 @@ import {
   compareCasesByDocketNumber,
   formatCase as formatCaseForTrialSession,
   formattedTrialSessionDetails,
+  getTrialSessionStatus,
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { completeDocketEntryQCInteractor } from '../../shared/src/proxies/editDocketEntry/completeDocketEntryQCProxy';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
@@ -570,6 +571,7 @@ const applicationContext = {
       formattedTrialSessionDetails,
       getFilingsAndProceedings,
       getFormattedCaseDetail,
+      getTrialSessionStatus,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isStringISOFormatted,

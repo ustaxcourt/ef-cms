@@ -5,7 +5,7 @@ import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
-import docketClerkViewsAnUpcomingTrialSession from './journey/docketClerkViewsAnUpcomingTrialSession';
+import docketClerkViewsNewTrialSession from './journey/docketClerkViewsNewTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import judgeAddsNotesFromWorkingCopyCaseList from './journey/judgeAddsNotesFromWorkingCopyCaseList';
 import judgeLogIn from './journey/judgeLogIn';
@@ -41,7 +41,7 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
   docketClerkLogIn(test);
   docketClerkCreatesATrialSession(test, overrides);
   docketClerkViewsTrialSessionList(test, overrides);
-  docketClerkViewsAnUpcomingTrialSession(test);
+  docketClerkViewsNewTrialSession(test);
   userSignsOut(test);
 
   const caseOverrides = {

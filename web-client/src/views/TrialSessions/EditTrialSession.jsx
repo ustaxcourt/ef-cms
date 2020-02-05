@@ -39,7 +39,6 @@ export const EditTrialSession = connect(
             role="form"
             onSubmit={e => {
               e.preventDefault();
-              updateTrialSessionSequence();
             }}
           >
             {showModal === 'FormCancelModalDialog' && (
@@ -78,7 +77,14 @@ export const EditTrialSession = connect(
               </div>
             </div>
 
-            <Button type="submit">Save</Button>
+            <Button
+              type="submit"
+              onClick={() => {
+                updateTrialSessionSequence();
+              }}
+            >
+              Save
+            </Button>
             <Button
               link
               onClick={() => {
