@@ -145,7 +145,7 @@ jobs:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
       - run:
-          name: Pa11y - Web Client 1
+          name: Pa11y - Web Client
           command: |
             npm run build:all
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-1.txt &
@@ -153,17 +153,10 @@ jobs:
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 15
             npm run test:pa11y:1 --node-flags --max-old-space-size=1024
-      - run:
-          name: Pa11y - Web Client 2
-          command: |
-            npm run build:all
-            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-2.txt &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 15
             npm run test:pa11y:2 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:3 --node-flags --max-old-space-size=1024
       - run:
-          name: Pa11y - Public Site
+          name: Pa11y - Public Client
           command: |
             AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public > /tmp/pa11y/pa11y-server-public.txt &
             sleep 15
