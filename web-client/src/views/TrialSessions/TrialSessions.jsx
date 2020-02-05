@@ -15,11 +15,7 @@ export const TrialSessions = connect(
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
   },
-  ({
-    defaultTab,
-    navigateToPathSequence,
-    openTrialSessionPlanningModalSequence,
-  }) => {
+  ({ defaultTab, openTrialSessionPlanningModalSequence }) => {
     return (
       <>
         <BigHeader text="Trial Sessions" />
@@ -29,11 +25,8 @@ export const TrialSessions = connect(
 
           <Tabs
             bind="trialSessionsTab.group"
-            defaultActiveTab={defaultTab || 'new'}
+            defaultActiveTab={defaultTab || 'open'}
             id="trial-sessions-tabs"
-            onSelect={tab =>
-              navigateToPathSequence({ path: `/trial-sessions?status=${tab}` })
-            }
           >
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
               <Button
