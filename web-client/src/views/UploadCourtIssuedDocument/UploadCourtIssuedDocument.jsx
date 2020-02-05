@@ -55,7 +55,7 @@ export const UploadCourtIssuedDocument = connect(
 
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
-                <div className="blue-container" style={{ minHeight: '471px' }}>
+                <div className="blue-container upload-court-document-description-container">
                   <FormGroup
                     errorText={validationErrors && validationErrors.freeText}
                   >
@@ -129,7 +129,9 @@ export const UploadCourtIssuedDocument = connect(
               <div className="grid-col-8">
                 <Button
                   onClick={() => {
-                    uploadCourtIssuedDocumentSequence();
+                    uploadCourtIssuedDocumentSequence({
+                      tab: 'inProgress',
+                    });
                   }}
                 >
                   Finish
