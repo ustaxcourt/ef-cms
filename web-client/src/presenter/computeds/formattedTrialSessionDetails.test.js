@@ -283,10 +283,12 @@ describe('formattedTrialSessionDetails', () => {
             {
               ...MOCK_CASE,
               caseCaption: 'Test Person & Someone Else, Petitioners',
+              caseId: 'ef88c665-4d1d-48a9-898a-eae698187b2b',
               docketNumberSuffix: 'W',
-              status: 'Closed',
+              removedFromTrial: true,
             },
           ],
+          isCalendared: true,
         },
       },
     });
