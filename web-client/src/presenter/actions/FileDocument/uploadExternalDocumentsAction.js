@@ -60,7 +60,9 @@ export const uploadExternalDocumentsAction = async ({
   }
 
   const pendingDocuments = caseDetail.documents.filter(
-    document => document.processingStatus === 'pending',
+    document =>
+      document.processingStatus === 'pending' &&
+      document.isFileAttached !== false,
   );
   const addCoversheet = document => {
     return applicationContext.getUseCases().addCoversheetInteractor({

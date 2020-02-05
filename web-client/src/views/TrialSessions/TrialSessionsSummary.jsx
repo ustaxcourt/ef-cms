@@ -54,16 +54,8 @@ export const TrialSessionsSummary = connect(
             )}
           </div>
           <div className="grid-row underlined margin-top-4">
-            <div className="tablet:grid-col-8">
+            <div className="tablet:grid-col-12">
               <h3>Recent Trial Sessions</h3>
-            </div>
-            <div className="tablet:grid-col-4">
-              <a
-                className="usa-link float-right"
-                href={`/trial-sessions?type=recent&judge[userId]=${user.userId}`}
-              >
-                View All
-              </a>
             </div>
           </div>
           <div className="margin-bottom-0" role="list">
