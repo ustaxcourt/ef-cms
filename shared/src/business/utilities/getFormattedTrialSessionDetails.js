@@ -53,18 +53,10 @@ exports.formattedTrialSessionDetails = ({
     trialSession.term
   } ${trialSession.termYear.substr(-2)}`;
 
-  const allCases = trialSession.caseOrder || [];
-  const inactiveCases = allCases.filter(
-    sessionCase => sessionCase.removedFromTrial === true,
-  );
-
-  if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
-    trialSession.computedStatus = 'Closed';
-  } else if (trialSession.isCalendared) {
-    trialSession.computedStatus = 'Open';
-  } else {
-    trialSession.computedStatus = 'New';
-  }
+  trialSession.computedStatus = exports.getTrialSessionStatus({
+    applicationContext,
+    session: trialSession,
+  });
 
   trialSession.formattedStartDate = applicationContext
     .getUtilities()
@@ -125,7 +117,7 @@ exports.formattedTrialSessionDetails = ({
 exports.getTrialSessionStatus = ({ applicationContext, session }) => {
   const { SESSION_SORT_STATUS_TYPES } = applicationContext.getConstants();
 
-  const allCases = session.caseOrder;
+  const allCases = session.caseOrder || [];
   const inactiveCases = allCases.filter(
     sessionCase => sessionCase.removedFromTrial === true,
   );
