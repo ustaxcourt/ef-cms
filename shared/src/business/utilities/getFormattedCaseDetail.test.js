@@ -693,7 +693,7 @@ describe('documentMeetsAgeRequirements', () => {
   it(`indicates success if document is a transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
     const result = documentMeetsAgeRequirements({
       eventCode: 'TRAN',
-      filingDate: '2010-01-01T01:02:03.007Z', // 10yr old transcript
+      secondaryDate: '2010-01-01T01:02:03.007Z', // 10yr old transcript
     });
     expect(result).toBeTruthy();
   });
@@ -705,7 +705,7 @@ describe('documentMeetsAgeRequirements', () => {
     });
     const result = documentMeetsAgeRequirements({
       eventCode: 'TRAN',
-      filingDate: aShortTimeAgo,
+      secondaryDate: aShortTimeAgo,
     });
     expect(result).toBeFalsy();
   });

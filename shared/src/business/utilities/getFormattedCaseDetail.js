@@ -100,7 +100,7 @@ const documentMeetsAgeRequirements = document => {
   const isTranscript = transcriptCodes.includes(document.eventCode);
   if (!isTranscript) return true;
   const availableOnDate = calculateISODate({
-    dateString: document.filingDate,
+    dateString: document.secondaryDate,
     howMuch: TRANSCRIPT_AGE_DAYS_MIN,
     units: 'days',
   });
@@ -157,7 +157,9 @@ const formatDocketRecordWithDocument = (
         record.createdAtFormatted = undefined;
       }
 
-      record.isAvailableToUser = documentMeetsAgeRequirements(record);
+      record.isAvailableToUser = documentMeetsAgeRequirements(
+        documentMap[record.documentId],
+      );
 
       record.filingsAndProceedings = getFilingsAndProceedings(
         formattedDocument,
