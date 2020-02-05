@@ -64,14 +64,14 @@ export const UploadCourtIssuedDocument = connect(
                       htmlFor="upload-description"
                       id="upload-description-label"
                     >
-                      Document description
+                      PDF description
                     </label>
                     <input
                       aria-labelledby="upload-description-label"
                       autoCapitalize="none"
                       className="usa-input"
                       id="upload-description"
-                      name="contact.phone"
+                      name="freeText"
                       type="text"
                       value={form.freeText || ''}
                       onChange={e => {
