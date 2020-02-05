@@ -352,6 +352,7 @@ joiValidationDecorator(
     associatedJudge: joi
       .string()
       .required()
+      .meta({ tags: ['Restricted'] })
       .description('Judge assigned to this Case. Defaults to Chief Judge.'),
     automaticBlocked: joi
       .boolean()
@@ -381,25 +382,30 @@ joiValidationDecorator(
     blocked: joi
       .boolean()
       .optional()
+      .meta({ tags: ['Restricted'] })
       .description('Temporarily blocked from trial.'),
-    blockedDate: joi.when('blocked', {
-      is: true,
-      otherwise: joi.optional().allow(null),
-      then: joi
-        .date()
-        .iso()
-        .required(),
-    }),
-    blockedReason: joi.when('blocked', {
-      is: true,
-      otherwise: joi.optional().allow(null),
-      then: joi
-        .string()
-        .required()
-        .description(
-          'Open text field for describing reason for blocking this Case from Trial.',
-        ),
-    }),
+    blockedDate: joi
+      .when('blocked', {
+        is: true,
+        otherwise: joi.optional().allow(null),
+        then: joi
+          .date()
+          .iso()
+          .required(),
+      })
+      .meta({ tags: ['Restricted'] }),
+    blockedReason: joi
+      .when('blocked', {
+        is: true,
+        otherwise: joi.optional().allow(null),
+        then: joi
+          .string()
+          .required()
+          .description(
+            'Open text field for describing reason for blocking this Case from Trial.',
+          ),
+      })
+      .meta({ tags: ['Restricted'] }),
     caseCaption: joi
       .string()
       .required()
@@ -413,7 +419,10 @@ joiValidationDecorator(
       })
       .required()
       .description('Unique Case ID only used by the system.'),
-    caseNote: joi.string().optional(),
+    caseNote: joi
+      .string()
+      .optional()
+      .meta({ tags: ['Restricted'] }),
     caseType: joi
       .string()
       .valid(...Case.CASE_TYPES)
@@ -463,12 +472,17 @@ joiValidationDecorator(
       .boolean()
       .optional()
       .allow(null),
-    highPriority: joi.boolean().optional(),
-    highPriorityReason: joi.when('highPriority', {
-      is: true,
-      otherwise: joi.optional().allow(null),
-      then: joi.string().required(),
-    }),
+    highPriority: joi
+      .boolean()
+      .optional()
+      .meta({ tags: ['Restricted'] }),
+    highPriorityReason: joi
+      .when('highPriority', {
+        is: true,
+        otherwise: joi.optional().allow(null),
+        then: joi.string().required(),
+      })
+      .meta({ tags: ['Restricted'] }),
     initialDocketNumberSuffix: joi
       .string()
       .allow(null)
@@ -578,6 +592,7 @@ joiValidationDecorator(
     qcCompleteForTrial: joi
       .object()
       .required()
+      .meta({ tags: ['Restricted'] })
       .description(
         'QC Checklist object that must be completed before the Case can go to trial.',
       ),
@@ -596,7 +611,8 @@ joiValidationDecorator(
     status: joi
       .string()
       .valid(...Object.values(Case.STATUS_TYPES))
-      .required(),
+      .required()
+      .meta({ tags: ['Restricted'] }),
     trialDate: joi
       .date()
       .iso()
@@ -622,8 +638,12 @@ joiValidationDecorator(
     userId: joi
       .string()
       .optional()
+      .meta({ tags: ['Restricted'] })
       .description('The ID of the User who added the Case to the System.'),
-    workItems: joi.array().optional(),
+    workItems: joi
+      .array()
+      .optional()
+      .meta({ tags: ['Restricted'] }),
   }),
   function() {
     return (
