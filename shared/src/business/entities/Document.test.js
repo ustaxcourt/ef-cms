@@ -188,6 +188,20 @@ describe('Document entity', () => {
       }
       expect(error).toBeDefined();
     });
+
+    it('should correctly validate with a secondaryDate', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          eventCode: 'TRAN',
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeTruthy();
+      expect(document.secondaryDate).toBeDefined();
+    });
   });
 
   describe('generate filed by string', () => {

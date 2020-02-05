@@ -52,6 +52,11 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
+  let secondaryDate;
+  if (documentMeta.eventCode === 'TRAN') {
+    secondaryDate = documentMeta.date;
+  }
+
   const documentEntity = new Document(
     {
       ...currentDocument,
@@ -61,6 +66,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
       eventCode: documentMeta.eventCode,
       freeText: documentMeta.freeText,
       scenario: documentMeta.scenario,
+      secondaryDate,
       serviceStamp: documentMeta.serviceStamp,
       userId: user.userId,
     },

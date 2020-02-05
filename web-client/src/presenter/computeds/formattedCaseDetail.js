@@ -86,7 +86,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
       const showDocumentEditLink =
         document &&
-        userHasAccessToDocument &&
         permissions.UPDATE_CASE &&
         (!document.isInProgress ||
           ((permissions.DOCKET_ENTRY ||
@@ -143,15 +142,17 @@ export const formattedCaseDetail = (get, applicationContext) => {
         servedPartiesCode:
           record.servedPartiesCode || (document && document.servedPartiesCode),
         showDocumentDescriptionWithoutLink:
-          !userHasAccessToCase ||
-          !userHasAccessToDocument ||
-          !document ||
-          (document &&
-            (document.isNotServedCourtIssuedDocument ||
-              document.isInProgress) &&
-            !(
-              permissions.DOCKET_ENTRY || permissions.CREATE_ORDER_DOCKET_ENTRY
-            )),
+          !showDocumentEditLink &&
+          (!userHasAccessToCase ||
+            !userHasAccessToDocument ||
+            !document ||
+            (document &&
+              (document.isNotServedCourtIssuedDocument ||
+                document.isInProgress) &&
+              !(
+                permissions.DOCKET_ENTRY ||
+                permissions.CREATE_ORDER_DOCKET_ENTRY
+              ))),
         showDocumentEditLink,
         showDocumentProcessing:
           document &&
