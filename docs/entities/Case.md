@@ -295,60 +295,63 @@ Otherwise, this field is `string` and is `optional`. `null` is allowed.
 ### noticeOfAttachments
 
 
- 
+Reminder for clerks to review the notice of attachments.
 
 > `boolean` | optional
 
 ### noticeOfTrialDate
+
+
+Reminder for clerks to review the notice of trial date.
 
 > `date` | optional
 
 ### orderForAmendedPetition
 
 
- 
+Reminder for clerks to review the order for Amended Petition.
 
 > `boolean` | optional
 
 ### orderForAmendedPetitionAndFilingFee
 
 
- 
+Reminder for clerks to review the order for Amended Petition And Filing Fee.
 
 > `boolean` | optional
 
 ### orderForFilingFee
 
 
- 
+Reminder for clerks to review the order for Filing Fee.
 
 > `boolean` | optional
 
 ### orderForOds
 
 
- 
+Reminder for clerks to review the order for ODS.
 
 > `boolean` | optional
 
 ### orderForRatification
 
 
- 
+Reminder for clerks to review the order for Ratification.
 
 > `boolean` | optional
 
 ### orderToChangeDesignatedPlaceOfTrial
 
 
- 
+Reminder for clerks to review the Order to Change Designated Place Of Trial.
 
 > `boolean` | optional
 
 ### orderToShowCause
 
 
- 
+Reminder for clerks to review the Order to Show Cause.
 
 > `boolean` | optional
 

@@ -535,39 +535,46 @@ joiValidationDecorator(
     noticeOfAttachments: joi
       .boolean()
       .optional()
-      .description(' '),
+      .description('Reminder for clerks to review the notice of attachments.'),
     noticeOfTrialDate: joi
       .date()
       .iso()
-      .optional(),
+      .optional()
+      .description('Reminder for clerks to review the notice of trial date.'),
     orderForAmendedPetition: joi
       .boolean()
       .optional()
-      .description(' '),
+      .description(
+        'Reminder for clerks to review the order for Amended Petition.',
+      ),
     orderForAmendedPetitionAndFilingFee: joi
       .boolean()
       .optional()
-      .description(' '),
+      .description(
+        'Reminder for clerks to review the order for Amended Petition And Filing Fee.',
+      ),
     orderForFilingFee: joi
       .boolean()
       .optional()
-      .description(' '),
+      .description('Reminder for clerks to review the order for Filing Fee.'),
     orderForOds: joi
       .boolean()
       .optional()
-      .description(' '),
+      .description('Reminder for clerks to review the order for ODS.'),
     orderForRatification: joi
       .boolean()
       .optional()
-      .description(' '),
+      .description('Reminder for clerks to review the order for Ratification.'),
     orderToChangeDesignatedPlaceOfTrial: joi
       .boolean()
       .optional()
-      .description(' '),
+      .description(
+        'Reminder for clerks to review the Order to Change Designated Place Of Trial.',
+      ),
     orderToShowCause: joi
       .boolean()
       .optional()
-      .description(' '),
+      .description('Reminder for clerks to review the Order to Show Cause.'),
     partyType: joi
       .string()
       .valid(...Object.values(ContactFactory.PARTY_TYPES))
