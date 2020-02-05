@@ -2,12 +2,13 @@ import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { props, state } from 'cerebral';
 import React from 'react';
 
-export const UpcomingTrialSessions = connect(
+export const TrialSessionsTable = connect(
   {
-    formattedTrialSessions: state.formattedTrialSessions.formattedSessions,
+    formattedTrialSessions:
+      state.formattedTrialSessions.filteredTrialSessions[props.filter],
     trialSessionTypes: state.constants.TRIAL_SESSION_TYPES,
     users: state.users,
   },
@@ -66,9 +67,9 @@ export const UpcomingTrialSessions = connect(
         </div>
         <table
           aria-describedby="filterHeading sessionFilter locationFilter judgeFilter"
-          aria-label="upcoming trial sessions"
+          aria-label={`${props.filter} trial sessions`}
           className="usa-table ustc-table trial-sessions subsection"
-          id="upcoming-sessions"
+          id={`${props.filter}-sessions`}
         >
           <thead>
             <tr>

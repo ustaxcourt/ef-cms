@@ -5,6 +5,9 @@
 
 Judge assigned to this Case. Defaults to Chief Judge.
 
+
+Restricted
+
 > `string` | required
 
 ### automaticBlocked
@@ -39,9 +42,15 @@ Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 Temporarily blocked from trial.
 
+
+Restricted
+
 > `boolean` | optional
 
 ### blockedDate
+
+
+Restricted
 
 > `any`
 
@@ -52,6 +61,9 @@ If `blocked` = `true`, then this field is `date` and is `required.`
 Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 ### blockedReason
+
+
+Restricted
 
 > `any`
 
@@ -76,6 +88,9 @@ Unique Case ID only used by the system.
 > `string` | required
 
 ### caseNote
+
+
+Restricted
 
 > `string` | optional
 
@@ -201,9 +216,15 @@ At least `1` item(s) must be selected.
 
 ### highPriority
 
+
+Restricted
+
 > `boolean` | optional
 
 ### highPriorityReason
+
+
+Restricted
 
 > `any`
 
@@ -483,6 +504,9 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
 QC Checklist object that must be completed before the Case can go to trial.
 
+
+Restricted
+
 > `object` | required
 
 ### receivedAt
@@ -505,6 +529,9 @@ When the case was received by the Court.
 ##### Can be null.
 
 ### status
+
+
+Restricted
 
 > `string` | required
 
@@ -649,8 +676,14 @@ When the case was received by the Court.
 
 The ID of the User who added the Case to the System.
 
+
+Restricted
+
 > `string` | optional
 
 ### workItems
+
+
+Restricted
 
 > `array` | optional
