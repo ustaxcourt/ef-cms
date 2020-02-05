@@ -11,7 +11,6 @@ import React from 'react';
 export const TrialSessions = connect(
   {
     defaultTab: state.screenMetadata.trialSessionFilters.status,
-    navigateToPathSequence: sequences.navigateToPathSequence,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
   },
