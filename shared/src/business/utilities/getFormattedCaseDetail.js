@@ -94,19 +94,18 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
   return result;
 };
 
+const TRANSCRIPT_AGE_DAYS_MIN = 1; // TODO: change to 90 post-UX review
 const documentMeetsAgeRequirements = document => {
   const transcriptCodes = ['TRAN'];
   const isTranscript = transcriptCodes.includes(document.eventCode);
   if (!isTranscript) return true;
-
-  const transcriptAgeDaysMinimum = 90;
-  const isAvailableOnDate = calculateISODate({
+  const availableOnDate = calculateISODate({
     dateString: document.filingDate,
-    howMuch: transcriptAgeDaysMinimum,
+    howMuch: TRANSCRIPT_AGE_DAYS_MIN,
     units: 'days',
   });
-  const todayTimestamp = createISODateString();
-  const meetsTranscriptAgeRequirements = isAvailableOnDate <= todayTimestamp;
+  const rightNow = createISODateString();
+  const meetsTranscriptAgeRequirements = availableOnDate <= rightNow;
   return meetsTranscriptAgeRequirements;
 };
 
@@ -450,6 +449,7 @@ const getFormattedCaseDetail = ({
 };
 
 module.exports = {
+  TRANSCRIPT_AGE_DAYS_MIN,
   documentMeetsAgeRequirements,
   formatCase,
   formatCaseDeadlines,

@@ -1,7 +1,6 @@
 import { Case } from '../entities/cases/Case';
-import { applicationContext } from '../../../../web-client/src/applicationContext';
-import { calculateISODate, createISODateString } from './DateHandler';
 import {
+  TRANSCRIPT_AGE_DAYS_MIN,
   documentMeetsAgeRequirements,
   formatCase,
   formatCaseDeadlines,
@@ -10,6 +9,8 @@ import {
   getFormattedCaseDetail,
   sortDocketRecords,
 } from './getFormattedCaseDetail';
+import { applicationContext } from '../../../../web-client/src/applicationContext';
+import { calculateISODate, createISODateString } from './DateHandler';
 
 const mockCaseDetailBase = {
   caseId: '123-456-abc-def',
@@ -689,22 +690,22 @@ describe('documentMeetsAgeRequirements', () => {
     const result = documentMeetsAgeRequirements({ eventCode: 'BANANA' });
     expect(result).toBeTruthy();
   });
-  it('indicates success if document is a transcript aged more than 90 days', () => {
+  it(`indicates success if document is a transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
     const result = documentMeetsAgeRequirements({
       eventCode: 'TRAN',
-      filingDate: '2010-01-01T01:02:03.007Z',
+      filingDate: '2010-01-01T01:02:03.007Z', // 10yr old transcript
     });
     expect(result).toBeTruthy();
   });
-  it('indicates failure if document is a transcript aged less than 90 days', () => {
-    const aFewWeeksAgo = calculateISODate({
+  it(`indicates failure if document is a transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
+    const aShortTimeAgo = calculateISODate({
       dateString: createISODateString(),
-      howMuch: -21,
-      units: 'days',
+      howMuch: -12,
+      units: 'hours',
     });
     const result = documentMeetsAgeRequirements({
       eventCode: 'TRAN',
-      filingDate: aFewWeeksAgo,
+      filingDate: aShortTimeAgo,
     });
     expect(result).toBeFalsy();
   });
