@@ -273,7 +273,10 @@ joiValidationDecorator(
     additionalInfo: joi.string().optional(),
     additionalInfo2: joi.string().optional(),
     archived: joi.boolean().optional(),
-    caseId: joi.string().optional(),
+    caseId: joi
+      .string()
+      .optional()
+      .description('Unique ID of the associated Case.'),
     certificateOfService: joi.boolean().optional(),
     certificateOfServiceDate: joi.when('certificateOfService', {
       is: true,

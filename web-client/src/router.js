@@ -361,6 +361,18 @@ const router = {
     );
 
     route(
+      '/case-detail/*/upload-court-issued',
+      ifHasAccess(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Upload a document`,
+        );
+        app.getSequence('gotoUploadCourtIssuedDocumentSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/edit-order/*',
       ifHasAccess((docketNumber, documentIdToEdit) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
@@ -559,12 +571,14 @@ const router = {
     route(
       '/trial-sessions..',
       ifHasAccess(() => {
-        var query = {};
+        const trialSessionFilter = {};
         forEach(route.query(), (value, key) => {
-          set(query, key, value);
+          set(trialSessionFilter, key, value);
         });
         setPageTitle('Trial sessions');
-        app.getSequence('gotoTrialSessionsSequence')({ query });
+        app.getSequence('gotoTrialSessionsSequence')({
+          query: trialSessionFilter,
+        });
       }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
     );
 
