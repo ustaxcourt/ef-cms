@@ -1,6 +1,7 @@
 const {
   getPublicDownloadPolicyUrlInteractor,
 } = require('./getPublicDownloadPolicyUrlInteractor');
+const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
@@ -43,6 +44,12 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
         },
         { applicationContext },
       ),
+    );
+    MOCK_CASE.docketRecord.push(
+      new DocketRecord({
+        documentId: '8008b288-8b6b-48e3-8239-599266b13b8b',
+      }),
+      { applicationContext },
     );
     const result = await getPublicDownloadPolicyUrlInteractor({
       applicationContext,

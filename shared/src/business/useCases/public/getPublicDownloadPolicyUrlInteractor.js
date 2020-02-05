@@ -1,4 +1,5 @@
 const { Case } = require('../../entities/cases/Case');
+const { isPrivateDocument } = require('../../entities/cases/PublicCase');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -26,9 +27,9 @@ exports.getPublicDownloadPolicyUrlInteractor = async ({
 
   const documentEntity = caseEntity.getDocumentById({ documentId });
 
-  const isPublic = documentEntity.isPublicAccessible();
+  const isPrivate = isPrivateDocument(documentEntity, caseEntity.docketRecord);
 
-  if (!isPublic) {
+  if (isPrivate) {
     throw new UnauthorizedError('Unauthorized');
   }
 
