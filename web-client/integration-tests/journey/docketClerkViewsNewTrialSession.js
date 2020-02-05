@@ -2,16 +2,11 @@ import { formattedTrialSessionDetails } from '../../src/presenter/computeds/form
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default (test, expectedCount) => {
-  return it('Petitions Clerk Views A Trial Sessions Eligible Cases', async () => {
+export default test => {
+  return it('Docket Clerk Views A New Trial Session', async () => {
     await test.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: test.trialSessionId,
     });
-
-    expect(test.getState('trialSession.eligibleCases').length).toEqual(
-      expectedCount,
-    );
-    expect(test.getState('trialSession.isCalendared')).toEqual(false);
 
     const trialSessionFormatted = runCompute(
       withAppContextDecorator(formattedTrialSessionDetails),
@@ -19,6 +14,7 @@ export default (test, expectedCount) => {
         state: test.getState(),
       },
     );
+
     expect(trialSessionFormatted.computedStatus).toEqual('New');
   });
 };
