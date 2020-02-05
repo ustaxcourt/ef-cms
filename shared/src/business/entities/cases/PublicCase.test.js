@@ -50,7 +50,6 @@ describe('PublicCase', () => {
         contactSecondary: expect.anything(),
         createdAt: expect.anything(),
         docketRecord: expect.anything(),
-        documents: expect.anything(),
         receivedAt: expect.anything(),
       });
     });
@@ -78,13 +77,27 @@ describe('PublicCase', () => {
       caseCaption: 'testing',
       caseId: 'testing',
       caseTitle: 'testing',
-      contactPrimary: {},
-      contactSecondary: {},
+      contactPrimary: {
+        name: undefined,
+        state: undefined,
+      },
+      contactSecondary: {
+        name: undefined,
+        state: undefined,
+      },
       createdAt: 'testing',
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
-      docketRecord: [{}],
-      documents: [{}],
+      docketRecord: [
+        {
+          description: undefined,
+          documentId: undefined,
+          filedBy: undefined,
+          filingDate: undefined,
+          index: undefined,
+        },
+      ],
+      documents: [],
       isSealed: false,
       receivedAt: 'testing',
     });
@@ -165,7 +178,6 @@ describe('PublicCase', () => {
           documentId: '123',
           documentType: 'OAJ - Order that case is assigned',
         },
-        { documentId: '345', documentType: 'Petition' },
       ],
       isSealed: false,
       receivedAt: 'testing',
@@ -225,14 +237,14 @@ describe('PublicCase', () => {
       expect(isPrivate).toEqual(false);
     });
 
-    it('should return false for a non-court-issued order document', () => {
+    it('should return true for an external document', () => {
       const isPrivate = isPrivateDocument(
         {
           documentType: 'Petition',
         },
         [],
       );
-      expect(isPrivate).toEqual(false);
+      expect(isPrivate).toEqual(true);
     });
   });
 });

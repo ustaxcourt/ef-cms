@@ -112,7 +112,8 @@ const isPrivateDocument = function(document, docketRecord) {
   return (
     ((isStipDecision || isOrder || isCourtIssuedDocument) &&
       !isDocumentOnDocketRecord) ||
-    isTranscript
+    isTranscript ||
+    !(isStipDecision || isOrder || isCourtIssuedDocument)
   );
 };
 
