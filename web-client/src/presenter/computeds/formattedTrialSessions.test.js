@@ -4,7 +4,6 @@ import {
   filterFormattedSessionsByStatus,
   formatSession,
   formattedTrialSessions as formattedTrialSessionsComputed,
-  getTrialSessionStatus,
 } from './formattedTrialSessions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
