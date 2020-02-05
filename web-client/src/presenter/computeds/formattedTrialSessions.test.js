@@ -4,6 +4,7 @@ import {
   filterFormattedSessionsByStatus,
   formatSession,
   formattedTrialSessions as formattedTrialSessionsComputed,
+  getTrialSessionStatus,
 } from './formattedTrialSessions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -71,6 +72,49 @@ describe('formattedTrialSessions', () => {
         trialLocation: 'Jacksonville, FL',
       },
     ];
+  });
+
+  describe('getTrialSessionStatus', () => {
+    it('returns `closed` when all trial session cases are inactive / removed from trial', () => {
+      const session = {
+        caseOrder: [
+          { docketNumber: '123-19', removedFromTrial: true },
+          { docketNumber: '234-19', removedFromTrial: true },
+        ],
+      };
+
+      const results = getTrialSessionStatus(session);
+
+      expect(results).toEqual('closed');
+    });
+
+    it('returns `open` when a trial session is calendared and does not meet conditions for `closed` status', () => {
+      const session = {
+        caseOrder: [
+          { docketNumber: '123-19' },
+          { docketNumber: '234-19', removedFromTrial: true },
+        ],
+        isCalendared: true,
+      };
+
+      const results = getTrialSessionStatus(session);
+
+      expect(results).toEqual('open');
+    });
+
+    it('returns `new` when a trial session is calendared and does not meet conditions for `closed` status', () => {
+      const session = {
+        caseOrder: [
+          { docketNumber: '123-19' },
+          { docketNumber: '234-19', removedFromTrial: true },
+        ],
+        isCalendared: false,
+      };
+
+      const results = getTrialSessionStatus(session);
+
+      expect(results).toEqual('new');
+    });
   });
 
   describe('filterFormattedSessionsByStatus', () => {
