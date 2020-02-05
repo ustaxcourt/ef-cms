@@ -1,4 +1,7 @@
 const {
+  documentMeetsAgeRequirements,
+} = require('../utilities/getFormattedCaseDetail');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
@@ -32,6 +35,22 @@ exports.getDownloadPolicyUrlInteractor = async ({
 
     if (!userAssociatedWithCase) {
       throw new UnauthorizedError('Unauthorized');
+    }
+
+    //verify that the document is available
+    const caseData = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId({
+        applicationContext,
+        caseId,
+      });
+    const selectedDocument = caseData.documents.find(
+      document => document.documentId === documentId,
+    );
+    const documentIsAvailable = documentMeetsAgeRequirements(selectedDocument);
+
+    if (!documentIsAvailable) {
+      throw new UnauthorizedError('Unauthorized to view document at this time');
     }
   }
 
