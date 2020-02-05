@@ -1,6 +1,6 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { TrialSession } from '../entities/trialSessions/TrialSession';
-const { SESSION_SORT_STATUS_TYPES } = TrialSession;
+const { SESSION_STATUS_GROUPS } = TrialSession;
 import {
   formattedTrialSessionDetails,
   getTrialSessionStatus,
@@ -311,7 +311,7 @@ describe('formattedTrialSessionDetails', () => {
         isCalendared: false,
       },
     });
-    expect(result.computedStatus).toEqual(SESSION_SORT_STATUS_TYPES.new);
+    expect(result.computedStatus).toEqual(SESSION_STATUS_GROUPS.new);
   });
 
   it('sets computedStatus to Open if the session is calendared and calendaredCases contains open cases', () => {
@@ -327,7 +327,7 @@ describe('formattedTrialSessionDetails', () => {
         isCalendared: true,
       },
     });
-    expect(result.computedStatus).toEqual(SESSION_SORT_STATUS_TYPES.open);
+    expect(result.computedStatus).toEqual(SESSION_STATUS_GROUPS.open);
   });
 
   it('sets computedStatus to Closed if the session is calendared and caseOrder contains only cases with removedFromTrial = true', () => {
@@ -344,7 +344,7 @@ describe('formattedTrialSessionDetails', () => {
         isCalendared: true,
       },
     });
-    expect(result.computedStatus).toEqual(SESSION_SORT_STATUS_TYPES.closed);
+    expect(result.computedStatus).toEqual(SESSION_STATUS_GROUPS.closed);
   });
 
   describe('getTrialSessionStatus', () => {
@@ -358,7 +358,7 @@ describe('formattedTrialSessionDetails', () => {
 
       const results = getTrialSessionStatus({ applicationContext, session });
 
-      expect(results).toEqual(SESSION_SORT_STATUS_TYPES.closed);
+      expect(results).toEqual(SESSION_STATUS_GROUPS.closed);
     });
 
     it('returns `Open` when a trial session is calendared and does not meet conditions for `Closed` status', () => {
@@ -372,7 +372,7 @@ describe('formattedTrialSessionDetails', () => {
 
       const results = getTrialSessionStatus({ applicationContext, session });
 
-      expect(results).toEqual(SESSION_SORT_STATUS_TYPES.open);
+      expect(results).toEqual(SESSION_STATUS_GROUPS.open);
     });
 
     it('returns `New` when a trial session is calendared and does not meet conditions for `Closed` status', () => {
@@ -386,7 +386,7 @@ describe('formattedTrialSessionDetails', () => {
 
       const results = getTrialSessionStatus({ applicationContext, session });
 
-      expect(results).toEqual(SESSION_SORT_STATUS_TYPES.new);
+      expect(results).toEqual(SESSION_STATUS_GROUPS.new);
     });
   });
 });
