@@ -160,7 +160,7 @@ describe('trialSessionsHelper', () => {
     expect(result.showSessionStatus).toEqual(false);
   });
 
-  it('should show 5 table columns for `new` sessions', () => {
+  it('should show 0 additional table columns for `new` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
         trialSessionsTab: {
@@ -169,10 +169,10 @@ describe('trialSessionsHelper', () => {
       },
     });
 
-    expect(result.additionalColumnsShown).toEqual(5);
+    expect(result.additionalColumnsShown).toEqual(0);
   });
 
-  it('should show 5 table columns for `closed` sessions', () => {
+  it('should show 0 additional table columns for `closed` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
         trialSessionsTab: {
@@ -181,10 +181,10 @@ describe('trialSessionsHelper', () => {
       },
     });
 
-    expect(result.additionalColumnsShown).toEqual(5);
+    expect(result.additionalColumnsShown).toEqual(0);
   });
 
-  it('should show 7 table columns for `open` sessions', () => {
+  it('should show 2 additional table columns for `open` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
         trialSessionsTab: {
@@ -193,10 +193,10 @@ describe('trialSessionsHelper', () => {
       },
     });
 
-    expect(result.additionalColumnsShown).toEqual(7);
+    expect(result.additionalColumnsShown).toEqual(2);
   });
 
-  it('should show 6 table columns for `all` sessions', () => {
+  it('should show 1 additional table column for `all` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
         trialSessionsTab: {
@@ -205,6 +205,6 @@ describe('trialSessionsHelper', () => {
       },
     });
 
-    expect(result.numCols).toEqual(6);
+    expect(result.additionalColumnsShown).toEqual(1);
   });
 });

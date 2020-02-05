@@ -32,7 +32,7 @@ describe('formattedTrialSessions', () => {
         judge: { name: '1', userId: '1' },
         startDate: '2019-11-25T15:00:00.000Z',
         swingSession: true,
-        trialLocation: 'Hartford, Connecticut',
+        triAllocation: 'Hartford, Connecticut',
       },
       {
         caseOrder: [],
@@ -109,8 +109,8 @@ describe('formattedTrialSessions', () => {
         applicationContext,
       );
 
-      expect(results.closed.length).toEqual(1);
-      expect(results.closed).toEqual([
+      expect(results.Closed.length).toEqual(1);
+      expect(results.Closed).toEqual([
         {
           ...trialTerms[0],
           sessions: [sessions[0]],
@@ -131,8 +131,8 @@ describe('formattedTrialSessions', () => {
         applicationContext,
       );
 
-      expect(results.open.length).toEqual(1);
-      expect(results.open).toEqual([
+      expect(results.Open.length).toEqual(1);
+      expect(results.Open).toEqual([
         {
           ...trialTerms[0],
           sessions: [sessions[0]],
@@ -154,8 +154,8 @@ describe('formattedTrialSessions', () => {
         applicationContext,
       );
 
-      expect(results.new.length).toEqual(1);
-      expect(results.new).toEqual([
+      expect(results.New.length).toEqual(1);
+      expect(results.New).toEqual([
         {
           ...trialTerms[0],
           sessions: [sessions[0]],
@@ -175,9 +175,9 @@ describe('formattedTrialSessions', () => {
         return count;
       };
 
-      expect(results.all.length).toEqual(trialTerms.length);
-      expect(getSessionCount(results.all)).toEqual(getSessionCount(trialTerms));
-      expect(results.all[0].sessions[0]).toHaveProperty('sessionStatus');
+      expect(results.All.length).toEqual(trialTerms.length);
+      expect(getSessionCount(results.All)).toEqual(getSessionCount(trialTerms));
+      expect(results.All[0].sessions[0]).toHaveProperty('sessionStatus');
     });
   });
 
@@ -415,11 +415,11 @@ describe('formattedTrialSessions', () => {
             userIsAssignedToSession: false,
           },
           {
-            judge: { name: '1', userId: '1' },
+            judge: { name: '2', userId: '2' },
             userIsAssignedToSession: false,
           },
           {
-            judge: { name: '2', userId: '2' },
+            judge: { name: '1', userId: '1' },
             userIsAssignedToSession: false,
           },
           {
@@ -461,12 +461,12 @@ describe('formattedTrialSessions', () => {
             userIsAssignedToSession: false,
           },
           {
-            judge: { name: '1', userId: '1' },
-            userIsAssignedToSession: true,
-          },
-          {
             judge: { name: '2', userId: '2' },
             userIsAssignedToSession: false,
+          },
+          {
+            judge: { name: '1', userId: '1' },
+            userIsAssignedToSession: true,
           },
           {
             judge: { name: '3', userId: '3' },
