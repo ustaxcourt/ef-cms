@@ -3,13 +3,11 @@ module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/f1aa4aa2-c214-424c-8870-d0049c5744d7/sign',
   {
     actions: [
-      'wait for #section-work-queue to be visible',
-      'wait for #label-337f4e0d-cf5e-4c4f-b373-5256edbbbdf2 to be visible',
-      'click element #label-337f4e0d-cf5e-4c4f-b373-5256edbbbdf2',
+      'wait for td.message-select-control>label to be visible',
+      'click element td.message-select-control>label',
       'wait for .action-section to be visible',
     ],
-    notes:
-      'checks a11y of section queue tab panel, may become brittle if element IDs change',
+    notes: 'checks a11y of section queue tab panel',
     url:
       'http://localhost:1234/mock-login?token=docketclerk&path=/document-qc/section/inbox&info=section-queue-tab',
   },
