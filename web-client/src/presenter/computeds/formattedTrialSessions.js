@@ -28,6 +28,22 @@ export const sessionSorter = sessionList => {
   return orderBy(sessionList, ['startDate', 'trialLocation'], ['asc', 'asc']);
 };
 
+export const getTrialSessionStatus = session => {
+  const allCases = session.caseOrder;
+  const inactiveCases = allCases.filter(
+    sessionCase => sessionCase.removedFromTrial === true,
+  );
+
+  if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
+    // TODO: Move to constants, on the entity?
+    return 'closed';
+  } else if (session.isCalendared) {
+    return 'open';
+  } else if (!session.isCalendared) {
+    return 'new';
+  }
+};
+
 export const filterFormattedSessionsByStatus = trialTerms => {
   const filteredbyStatusType = {
     all: trialTerms,
@@ -54,21 +70,10 @@ export const filterFormattedSessionsByStatus = trialTerms => {
 
   trialTerms.forEach(trialTerm => {
     trialTerm.sessions.forEach(session => {
-      const allCases = session.caseOrder;
-      const inactiveCases = allCases.filter(
-        sessionCase => sessionCase.removedFromTrial === true,
-      );
+      const status = getTrialSessionStatus(session);
+      const termIndex = initTermIndex(trialTerm, filteredbyStatusType[status]);
 
-      if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
-        const termIndex = initTermIndex(trialTerm, filteredbyStatusType.closed);
-        filteredbyStatusType.closed[termIndex].sessions.push(session);
-      } else if (session.isCalendared) {
-        const termIndex = initTermIndex(trialTerm, filteredbyStatusType.open);
-        filteredbyStatusType.open[termIndex].sessions.push(session);
-      } else if (!session.isCalendared) {
-        const termIndex = initTermIndex(trialTerm, filteredbyStatusType.new);
-        filteredbyStatusType.new[termIndex].sessions.push(session);
-      }
+      filteredbyStatusType[status][termIndex].sessions.push(session);
     });
   });
 
