@@ -116,11 +116,6 @@ TrialSession.SESSION_SORT_STATUS_TYPES = {
   open: 'Open',
 };
 
-TrialSession.STATUS_TYPES = {
-  closed: 'Closed',
-  upcoming: 'Upcoming',
-};
-
 TrialSession.validationName = 'TrialSession';
 
 /**
@@ -161,7 +156,6 @@ TrialSession.prototype.init = function(rawSession, { applicationContext }) {
   this.startDate = rawSession.startDate;
   this.startTime = rawSession.startTime || '10:00';
   this.state = rawSession.state;
-  this.status = rawSession.status || TrialSession.STATUS_TYPES.upcoming;
   this.swingSession = rawSession.swingSession;
   this.swingSessionId = rawSession.swingSessionId;
   this.term = rawSession.term;
@@ -248,13 +242,6 @@ TrialSession.validationRules = {
       .string()
       .allow('')
       .optional(),
-    status: joi
-      .string()
-      .valid(
-        ...Object.keys(TrialSession.STATUS_TYPES).map(
-          key => TrialSession.STATUS_TYPES[key],
-        ),
-      ),
     swingSession: joi.boolean().optional(),
     swingSessionId: joi.when('swingSession', {
       is: true,
@@ -309,13 +296,6 @@ joiValidationDecorator(
       }),
     ),
     isCalendared: joi.boolean().required(),
-    status: joi
-      .string()
-      .valid(
-        ...Object.keys(TrialSession.STATUS_TYPES).map(
-          key => TrialSession.STATUS_TYPES[key],
-        ),
-      ),
   }),
   function() {
     return !this.getFormattedValidationErrors();
