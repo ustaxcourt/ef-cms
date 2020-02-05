@@ -109,6 +109,13 @@ TrialSession.SESSION_TYPES = [
   'Motion/Hearing',
 ];
 
+TrialSession.SESSION_SORT_STATUS_TYPES = {
+  all: 'All',
+  closed: 'Closed',
+  new: 'New',
+  open: 'Open',
+};
+
 TrialSession.STATUS_TYPES = {
   closed: 'Closed',
   upcoming: 'Upcoming',
