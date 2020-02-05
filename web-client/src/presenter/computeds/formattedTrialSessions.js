@@ -1,4 +1,4 @@
-import { filter, find, identity, orderBy, pickBy } from 'lodash';
+import { filter, find, identity, omit, orderBy, pickBy } from 'lodash';
 import { state } from 'cerebral';
 
 export const formatSession = (session, applicationContext) => {
@@ -101,7 +101,7 @@ export const formattedTrialSessions = (get, applicationContext) => {
 
   // filter trial sessions
   const trialSessionFilters = pickBy(
-    get(state.screenMetadata.trialSessionFilters),
+    omit(get(state.screenMetadata.trialSessionFilters), 'status'),
     identity,
   );
   const judgeFilter = get(
