@@ -30,7 +30,6 @@
     "startDate": "2020-11-27T05:00:00.000Z",
     "isCalendared": true,
     "maxCases": 100,
-    "status": "Upcoming",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc"
   },
   {
@@ -59,7 +58,6 @@
     "trialLocation": "Austin, Texas",
     "trialSessionId": "208a959f-9526-4db5-b262-e58c476a4604",
     "isCalendared": false,
-    "status": "Upcoming",
     "caseOrder": []
   },
   {
@@ -86,7 +84,6 @@
     "trialLocation": "Seattle, Washington",
     "trialSessionId": "f3b04943-8ea8-422b-8990-dec3ca644c83",
     "isCalendared": false,
-    "status": "Upcoming",
     "caseOrder": []
   },
   {
@@ -113,7 +110,6 @@
     "trialLocation": "Las Vegas, Nevada",
     "trialSessionId": "5b18af9e-4fbd-459b-8db7-7b15108c7fa5",
     "isCalendared": false,
-    "status": "Upcoming",
     "caseOrder": []
   },
   {
@@ -140,7 +136,6 @@
     "trialLocation": "Kansas City, Missouri",
     "trialSessionId": "6b6975cf-2b10-4e84-bcae-91e162d2f9d1",
     "isCalendared": false,
-    "status": "Upcoming",
     "caseOrder": []
   },
   {
@@ -167,7 +162,6 @@
     "trialLocation": "Denver, Colorado",
     "trialSessionId": "9c943468-bc2e-4631-84e3-b084cf5b1faa",
     "isCalendared": false,
-    "status": "Upcoming",
     "caseOrder": []
   },
   {
@@ -194,7 +188,6 @@
     "trialLocation": "Birmingham, Alabama",
     "trialSessionId": "149159ca-f4a1-4b2b-bc24-bd1fbe6defdc",
     "isCalendared": false,
-    "status": "Upcoming",
     "caseOrder": []
   },
   {

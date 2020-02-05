@@ -31,34 +31,37 @@ exports.formattedTrialSessionDetails = ({
   applicationContext,
   trialSession,
 }) => {
-  const { STATUS_TYPES } = applicationContext.getConstants();
   if (!trialSession) return undefined;
 
   trialSession.formattedEligibleCases = (
     trialSession.eligibleCases || []
   ).map(caseItem => exports.formatCase({ applicationContext, caseItem }));
-  trialSession.allCases = (trialSession.calendaredCases || [])
-    .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
-    .sort(exports.compareCasesByDocketNumber);
+
+  if (trialSession.calendaredCases) {
+    trialSession.allCases = trialSession.calendaredCases
+      .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
+      .sort(exports.compareCasesByDocketNumber);
+  } else {
+    trialSession.allCases = (trialSession.caseOrder || [])
+      .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
+      .sort(exports.compareCasesByDocketNumber);
+  }
+
   trialSession.openCases = trialSession.allCases.filter(
-    item =>
-      item.status !== STATUS_TYPES.closed && item.removedFromTrial !== true,
+    item => item.removedFromTrial !== true,
   );
   trialSession.inactiveCases = trialSession.allCases.filter(
-    item =>
-      item.status === STATUS_TYPES.closed || item.removedFromTrial === true,
+    item => item.removedFromTrial === true,
   );
 
   trialSession.formattedTerm = `${
     trialSession.term
   } ${trialSession.termYear.substr(-2)}`;
 
-  const allCases = trialSession.caseOrder || [];
-  const inactiveCases = allCases.filter(
-    sessionCase => sessionCase.removedFromTrial === true,
-  );
-
-  if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
+  if (
+    !isEmpty(trialSession.allCases) &&
+    isEqual(trialSession.allCases, trialSession.inactiveCases)
+  ) {
     trialSession.computedStatus = 'Closed';
   } else if (trialSession.isCalendared) {
     trialSession.computedStatus = 'Open';
