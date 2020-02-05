@@ -1,6 +1,7 @@
 import { Case } from '../entities/cases/Case';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { TrialSession } from '../entities/trialSessions/TrialSession';
+const { SESSION_SORT_STATUS_TYPES } = TrialSession;
 import {
   formattedTrialSessionDetails,
   getTrialSessionStatus,
@@ -270,7 +271,7 @@ describe('formattedTrialSessionDetails', () => {
         isCalendared: false,
       },
     });
-    expect(result.computedStatus).toEqual('New');
+    expect(result.computedStatus).toEqual(SESSION_SORT_STATUS_TYPES.new);
   });
 
   it('sets computedStatus to Open if the session is calendared and caseOrder contains open cases', () => {
@@ -286,7 +287,7 @@ describe('formattedTrialSessionDetails', () => {
         isCalendared: true,
       },
     });
-    expect(result.computedStatus).toEqual('Open');
+    expect(result.computedStatus).toEqual(SESSION_SORT_STATUS_TYPES.open);
   });
 
   it('sets computedStatus to Closed if the session is calendared and caseOrder contains only cases with removedFromTrial = true', () => {
@@ -303,11 +304,10 @@ describe('formattedTrialSessionDetails', () => {
         isCalendared: true,
       },
     });
-    expect(result.computedStatus).toEqual('Closed');
+    expect(result.computedStatus).toEqual(SESSION_SORT_STATUS_TYPES.closed);
   });
 
   describe('getTrialSessionStatus', () => {
-    const { SESSION_SORT_STATUS_TYPES } = TrialSession;
     it('returns `Closed` when all trial session cases are inactive / removed from trial', () => {
       const session = {
         caseOrder: [

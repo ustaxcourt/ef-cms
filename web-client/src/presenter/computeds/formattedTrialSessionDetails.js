@@ -8,11 +8,13 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       trialSession: get(state.trialSession),
     });
 
+  const { SESSION_SORT_STATUS_TYPES } = applicationContext.getConstants();
+
   if (formattedTrialSession) {
     formattedTrialSession.showOpenCases =
-      formattedTrialSession.computedStatus === 'Open';
+      formattedTrialSession.computedStatus === SESSION_SORT_STATUS_TYPES.open;
     formattedTrialSession.showOnlyClosedCases =
-      formattedTrialSession.computedStatus === 'Closed';
+      formattedTrialSession.computedStatus === SESSION_SORT_STATUS_TYPES.closed;
 
     if (formattedTrialSession.startDate) {
       const trialDateFormatted = applicationContext
