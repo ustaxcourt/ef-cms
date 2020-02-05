@@ -943,6 +943,17 @@ describe('Document entity', () => {
       expect(document.isPublicAccessible()).toBeTruthy();
     });
 
+    it('should not be public accessible if it is a transcript document', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          eventCode: 'TRAN',
+        },
+        { applicationContext },
+      );
+      expect(document.isPublicAccessible()).toBeFalsy();
+    });
+
     it('should be public accessible if it is a served Order document', () => {
       const document = new Document(
         {

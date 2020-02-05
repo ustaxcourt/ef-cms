@@ -533,12 +533,17 @@ Document.prototype.isPublicAccessible = function() {
 
   const isServed = !!this.servedAt;
   const isStipDecision = this.documentType === 'Stipulated Decision';
+  const isTranscript = this.eventCode === 'TRAN';
   const isOrder = orderDocumentTypes.includes(this.documentType);
   const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
     this.documentType,
   );
 
-  return (isStipDecision || isOrder || isCourtIssuedDocument) && isServed;
+  return (
+    (isStipDecision || isOrder || isCourtIssuedDocument) &&
+    !isTranscript &&
+    isServed
+  );
 };
 
 Document.prototype.isAutoServed = function() {
