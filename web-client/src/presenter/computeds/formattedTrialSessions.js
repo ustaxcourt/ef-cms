@@ -1,12 +1,4 @@
-import {
-  filter,
-  find,
-  identity,
-  isEmpty,
-  isEqual,
-  orderBy,
-  pickBy,
-} from 'lodash';
+import { filter, find, identity, orderBy, pickBy } from 'lodash';
 import { state } from 'cerebral';
 
 export const formatSession = (session, applicationContext) => {
@@ -37,16 +29,21 @@ export const sessionSorter = (sessionList, dateSort = 'asc') => {
   );
 };
 
-export const filterFormattedSessionsByStatus = trialTerms => {
+export const filterFormattedSessionsByStatus = (
+  trialTerms,
+  applicationContext,
+) => {
+  const { getTrialSessionStatus } = applicationContext.getUtilities();
+
   const sessionSort = {
-    all: 'asc',
-    closed: 'asc',
-    new: 'desc',
-    open: 'desc',
+    all: 'desc',
+    closed: 'desc',
+    new: 'asc',
+    open: 'asc',
   };
 
   const filteredbyStatusType = {
-    all: trialTerms,
+    all: [],
     closed: [],
     new: [],
     open: [],
@@ -71,21 +68,15 @@ export const filterFormattedSessionsByStatus = trialTerms => {
 
   trialTerms.forEach(trialTerm => {
     trialTerm.sessions.forEach(session => {
-      const allCases = session.caseOrder;
-      const inactiveCases = allCases.filter(
-        sessionCase => sessionCase.removedFromTrial === true,
-      );
+      const status = getTrialSessionStatus(session);
+      const termIndex = initTermIndex(trialTerm, filteredbyStatusType[status]);
+      // Add session status to filtered session
+      session.sessionStatus = status;
+      filteredbyStatusType[status][termIndex].sessions.push(session);
 
-      if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
-        const termIndex = initTermIndex(trialTerm, filteredbyStatusType.closed);
-        filteredbyStatusType.closed[termIndex].sessions.push(session);
-      } else if (session.isCalendared) {
-        const termIndex = initTermIndex(trialTerm, filteredbyStatusType.open);
-        filteredbyStatusType.open[termIndex].sessions.push(session);
-      } else if (!session.isCalendared) {
-        const termIndex = initTermIndex(trialTerm, filteredbyStatusType.new);
-        filteredbyStatusType.new[termIndex].sessions.push(session);
-      }
+      // Push to all
+      const allTermIndex = initTermIndex(trialTerm, filteredbyStatusType.all);
+      filteredbyStatusType.all[allTermIndex].sessions.push(session);
     });
   });
 
