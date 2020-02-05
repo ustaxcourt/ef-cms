@@ -124,7 +124,7 @@ describe('trialSessionsHelper', () => {
     expect(result.showSessionStatus).toEqual(true);
   });
 
-  it('should NOT show the Number of Cases column for `new` sessions', () => {
+  it('should NOT show the Session Status column for `new` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
         trialSessionsTab: {
@@ -136,7 +136,7 @@ describe('trialSessionsHelper', () => {
     expect(result.showSessionStatus).toEqual(false);
   });
 
-  it('should NOT show the Number of Cases column for `open` sessions', () => {
+  it('should NOT show the Session Status column for `open` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
         trialSessionsTab: {
@@ -148,7 +148,7 @@ describe('trialSessionsHelper', () => {
     expect(result.showSessionStatus).toEqual(false);
   });
 
-  it('should NOT show the Number of Cases column for `closed` sessions', () => {
+  it('should NOT show the Session Status column for `closed` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
         trialSessionsTab: {
@@ -169,7 +169,7 @@ describe('trialSessionsHelper', () => {
       },
     });
 
-    expect(result.numCols).toEqual(5);
+    expect(result.additionalColumnsShown).toEqual(5);
   });
 
   it('should show 5 table columns for `closed` sessions', () => {
@@ -181,7 +181,7 @@ describe('trialSessionsHelper', () => {
       },
     });
 
-    expect(result.numCols).toEqual(5);
+    expect(result.additionalColumnsShown).toEqual(5);
   });
 
   it('should show 7 table columns for `open` sessions', () => {
@@ -193,7 +193,7 @@ describe('trialSessionsHelper', () => {
       },
     });
 
-    expect(result.numCols).toEqual(7);
+    expect(result.additionalColumnsShown).toEqual(7);
   });
 
   it('should show 6 table columns for `all` sessions', () => {
