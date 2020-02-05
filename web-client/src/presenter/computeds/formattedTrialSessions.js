@@ -36,10 +36,10 @@ export const filterFormattedSessionsByStatus = (
   const { getTrialSessionStatus } = applicationContext.getUtilities();
 
   const sessionSort = {
-    all: 'asc',
-    closed: 'asc',
-    new: 'desc',
-    open: 'desc',
+    all: 'desc',
+    closed: 'desc',
+    new: 'asc',
+    open: 'asc',
   };
 
   const filteredbyStatusType = {
