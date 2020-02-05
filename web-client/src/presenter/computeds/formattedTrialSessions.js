@@ -26,7 +26,7 @@ export const filterFormattedSessionsByStatus = (
 ) => {
   const { getTrialSessionStatus } = applicationContext.getUtilities();
   const filteredbyStatusType = {
-    all: trialTerms,
+    all: [],
     closed: [],
     new: [],
     open: [],
@@ -52,8 +52,13 @@ export const filterFormattedSessionsByStatus = (
     trialTerm.sessions.forEach(session => {
       const status = getTrialSessionStatus(session);
       const termIndex = initTermIndex(trialTerm, filteredbyStatusType[status]);
-
+      // Add session status to filtered session
+      session.sessionStatus = status;
       filteredbyStatusType[status][termIndex].sessions.push(session);
+
+      // Push to all
+      const allTermIndex = initTermIndex(trialTerm, filteredbyStatusType.all);
+      filteredbyStatusType.all[allTermIndex].sessions.push(session);
     });
   });
 
