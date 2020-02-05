@@ -74,49 +74,6 @@ describe('formattedTrialSessions', () => {
     ];
   });
 
-  describe('getTrialSessionStatus', () => {
-    it('returns `closed` when all trial session cases are inactive / removed from trial', () => {
-      const session = {
-        caseOrder: [
-          { docketNumber: '123-19', removedFromTrial: true },
-          { docketNumber: '234-19', removedFromTrial: true },
-        ],
-      };
-
-      const results = getTrialSessionStatus(session);
-
-      expect(results).toEqual('closed');
-    });
-
-    it('returns `open` when a trial session is calendared and does not meet conditions for `closed` status', () => {
-      const session = {
-        caseOrder: [
-          { docketNumber: '123-19' },
-          { docketNumber: '234-19', removedFromTrial: true },
-        ],
-        isCalendared: true,
-      };
-
-      const results = getTrialSessionStatus(session);
-
-      expect(results).toEqual('open');
-    });
-
-    it('returns `new` when a trial session is calendared and does not meet conditions for `closed` status', () => {
-      const session = {
-        caseOrder: [
-          { docketNumber: '123-19' },
-          { docketNumber: '234-19', removedFromTrial: true },
-        ],
-        isCalendared: false,
-      };
-
-      const results = getTrialSessionStatus(session);
-
-      expect(results).toEqual('new');
-    });
-  });
-
   describe('filterFormattedSessionsByStatus', () => {
     let trialTerms;
 
@@ -148,7 +105,10 @@ describe('formattedTrialSessions', () => {
       };
       trialTerms[0].sessions = sessions;
 
-      const results = filterFormattedSessionsByStatus(trialTerms);
+      const results = filterFormattedSessionsByStatus(
+        trialTerms,
+        applicationContext,
+      );
 
       expect(results.closed.length).toEqual(1);
       expect(results.closed).toEqual([
@@ -167,7 +127,10 @@ describe('formattedTrialSessions', () => {
       };
       trialTerms[0].sessions = sessions;
 
-      const results = filterFormattedSessionsByStatus(trialTerms);
+      const results = filterFormattedSessionsByStatus(
+        trialTerms,
+        applicationContext,
+      );
 
       expect(results.open.length).toEqual(1);
       expect(results.open).toEqual([
@@ -187,7 +150,10 @@ describe('formattedTrialSessions', () => {
       };
       trialTerms[0].sessions = sessions;
 
-      const results = filterFormattedSessionsByStatus(trialTerms);
+      const results = filterFormattedSessionsByStatus(
+        trialTerms,
+        applicationContext,
+      );
 
       expect(results.new.length).toEqual(1);
       expect(results.new).toEqual([
@@ -199,7 +165,10 @@ describe('formattedTrialSessions', () => {
     });
 
     it('filters all trial sessions (returns everything)', () => {
-      const results = filterFormattedSessionsByStatus(trialTerms);
+      const results = filterFormattedSessionsByStatus(
+        trialTerms,
+        applicationContext,
+      );
       expect(results.all).toEqual(trialTerms);
     });
   });
