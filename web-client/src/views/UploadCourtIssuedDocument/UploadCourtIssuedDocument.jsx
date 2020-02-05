@@ -1,4 +1,3 @@
-import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
@@ -16,10 +15,10 @@ export const UploadCourtIssuedDocument = connect(
   {
     constants: state.constants,
     fileDocumentHelper: state.fileDocumentHelper,
+    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.showModal,
-    uploadCourtIssuedDocumentAndUploadAnotherSequence:
-      sequences.uploadCourtIssuedDocumentAndUploadAnotherSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
     uploadCourtIssuedDocumentSequence:
       sequences.uploadCourtIssuedDocumentSequence,
     validateUploadCourtIssuedDocumentSequence:
@@ -29,9 +28,10 @@ export const UploadCourtIssuedDocument = connect(
   ({
     constants,
     fileDocumentHelper,
+    form,
     formCancelToggleCancelSequence,
     showModal,
-    uploadCourtIssuedDocumentAndUploadAnotherSequence,
+    updateFormValueSequence,
     uploadCourtIssuedDocumentSequence,
     validateUploadCourtIssuedDocumentSequence,
     validationErrors,
@@ -49,7 +49,7 @@ export const UploadCourtIssuedDocument = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
-                <h2 className="heading-1">Upload Document</h2>
+                <h2 className="heading-1">Upload PDF</h2>
               </div>
             </div>
 
@@ -64,14 +64,21 @@ export const UploadCourtIssuedDocument = connect(
                       htmlFor="upload-description"
                       id="upload-description-label"
                     >
-                      Document Description
+                      Document description
                     </label>
-                    <BindedTextarea
+                    <input
                       aria-labelledby="upload-description-label"
-                      ariaLabel="notes"
-                      bind="form.freeText"
+                      autoCapitalize="none"
+                      className="usa-input"
                       id="upload-description"
-                      onChange={() => {
+                      name="contact.phone"
+                      type="text"
+                      value={form.freeText || ''}
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
                         validateUploadCourtIssuedDocumentSequence();
                       }}
                     />
@@ -85,7 +92,7 @@ export const UploadCourtIssuedDocument = connect(
                     <div className="grid-row grid-gap">
                       <div className="grid-col-6">
                         <h3 className="margin-bottom-0 margin-left-105">
-                          Add Document
+                          Add PDF
                         </h3>
                       </div>
                     </div>
@@ -134,15 +141,7 @@ export const UploadCourtIssuedDocument = connect(
                     });
                   }}
                 >
-                  Finish
-                </Button>
-                <Button
-                  secondary
-                  onClick={() => {
-                    uploadCourtIssuedDocumentAndUploadAnotherSequence();
-                  }}
-                >
-                  Add Another Entry
+                  Save
                 </Button>
                 <Button
                   link
