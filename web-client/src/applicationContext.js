@@ -462,6 +462,7 @@ const applicationContext = {
       SERVICE_STAMP_OPTIONS,
       SESSION_DEBOUNCE: 250,
       SESSION_MODAL_TIMEOUT: 5 * MINUTES,
+      SESSION_SORT_STATUS_TYPES: TrialSession.SESSION_SORT_STATUS_TYPES,
       SESSION_TIMEOUT:
         (process.env.SESSION_TIMEOUT &&
           parseInt(process.env.SESSION_TIMEOUT)) ||
