@@ -121,3 +121,19 @@ exports.formattedTrialSessionDetails = ({
 
   return trialSession;
 };
+
+exports.getTrialSessionStatus = session => {
+  const allCases = session.caseOrder;
+  const inactiveCases = allCases.filter(
+    sessionCase => sessionCase.removedFromTrial === true,
+  );
+
+  if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
+    // TODO: Move to constants, on the entity?
+    return 'closed';
+  } else if (session.isCalendared) {
+    return 'open';
+  } else if (!session.isCalendared) {
+    return 'new';
+  }
+};
