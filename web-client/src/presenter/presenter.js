@@ -108,6 +108,7 @@ import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDetailSequence';
 import { gotoTrialSessionWorkingCopySequence } from './sequences/gotoTrialSessionWorkingCopySequence';
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
+import { gotoUploadCourtIssuedDocumentSequence } from './sequences/gotoUploadCourtIssuedDocumentSequence';
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
 import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
 import { loadOriginalProposedStipulatedDecisionSequence } from './sequences/loadOriginalProposedStipulatedDecisionSequence';
@@ -307,6 +308,8 @@ import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessi
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
 import { updateUserContactValueSequence } from './sequences/updateUserContactValueSequence';
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
+import { uploadCourtIssuedDocumentAndUploadAnotherSequence } from './sequences/uploadCourtIssuedDocumentAndUploadAnotherSequence';
+import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
 import { validateAddPractitionerSequence } from './sequences/caseAssociation/validateAddPractitionerSequence';
 import { validateAddRespondentSequence } from './sequences/caseAssociation/validateAddRespondentSequence';
 import { validateAddToTrialSessionSequence } from './sequences/validateAddToTrialSessionSequence';
@@ -336,6 +339,7 @@ import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWi
 import { validateTrialSessionPlanningSequence } from './sequences/validateTrialSessionPlanningSequence';
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
 import { validateUpdateCaseModalSequence } from './sequences/validateUpdateCaseModalSequence';
+import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
 
 /**
@@ -457,6 +461,7 @@ export const presenter = {
     gotoTrialSessionDetailSequence,
     gotoTrialSessionWorkingCopySequence,
     gotoTrialSessionsSequence,
+    gotoUploadCourtIssuedDocumentSequence,
     gotoUserContactEditSequence,
     gotoViewAllDocumentsSequence,
     loadOriginalProposedStipulatedDecisionSequence,
@@ -654,6 +659,8 @@ export const presenter = {
     updateTrialSessionSequence,
     updateUserContactValueSequence,
     updateWorkingCopySessionNoteSequence,
+    uploadCourtIssuedDocumentAndUploadAnotherSequence,
+    uploadCourtIssuedDocumentSequence,
     validateAddPractitionerSequence,
     validateAddRespondentSequence,
     validateAddToTrialSessionSequence,
@@ -683,6 +690,7 @@ export const presenter = {
     validateTrialSessionPlanningSequence,
     validateTrialSessionSequence,
     validateUpdateCaseModalSequence,
+    validateUploadCourtIssuedDocumentSequence,
     validateUserContactSequence,
   },
   state,

@@ -7,6 +7,7 @@ import { applicationContext } from '../../../../web-client/src/applicationContex
 
 describe('formattedTrialSessionDetails', () => {
   const TRIAL_SESSION = {
+    caseOrder: [],
     city: 'Hartford',
     courtReporter: 'Test Court Reporter',
     irsCalendarAdministrator: 'Test Calendar Admin',
@@ -255,5 +256,49 @@ describe('formattedTrialSessionDetails', () => {
       { docketNumber: '101-18' },
       { docketNumber: '102-19' },
     ]);
+  });
+
+  it('sets computedStatus to New if the session is not calendared', () => {
+    let result = formattedTrialSessionDetails({
+      applicationContext,
+      trialSession: {
+        ...TRIAL_SESSION,
+        isCalendared: false,
+      },
+    });
+    expect(result.computedStatus).toEqual('New');
+  });
+
+  it('sets computedStatus to Open if the session is calendared and caseOrder contains open cases', () => {
+    let result = formattedTrialSessionDetails({
+      applicationContext,
+      trialSession: {
+        ...TRIAL_SESSION,
+        caseOrder: [
+          {
+            caseId: MOCK_CASE.caseId,
+          },
+        ],
+        isCalendared: true,
+      },
+    });
+    expect(result.computedStatus).toEqual('Open');
+  });
+
+  it('sets computedStatus to Closed if the session is calendared and caseOrder contains only cases with removedFromTrial = true', () => {
+    let result = formattedTrialSessionDetails({
+      applicationContext,
+      trialSession: {
+        ...TRIAL_SESSION,
+        caseOrder: [
+          {
+            caseId: MOCK_CASE.caseId,
+            removedFromTrial: true,
+          },
+        ],
+        isCalendared: true,
+      },
+    });
+    expect(result.computedStatus).toEqual('Closed');
   });
 });
