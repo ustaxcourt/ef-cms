@@ -16,6 +16,10 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
 };
 
 exports.compareCasesByDocketNumber = (a, b) => {
+  if (!a || !a.docketNumber || !b || !b.docketNumber) {
+    return 0;
+  }
+
   const [numberA, yearA] = a.docketNumber.split('-');
   const [numberB, yearB] = b.docketNumber.split('-');
 
@@ -37,15 +41,9 @@ exports.formattedTrialSessionDetails = ({
     trialSession.eligibleCases || []
   ).map(caseItem => exports.formatCase({ applicationContext, caseItem }));
 
-  if (trialSession.calendaredCases) {
-    trialSession.allCases = trialSession.calendaredCases
-      .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
-      .sort(exports.compareCasesByDocketNumber);
-  } else {
-    trialSession.allCases = (trialSession.caseOrder || [])
-      .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
-      .sort(exports.compareCasesByDocketNumber);
-  }
+  trialSession.allCases = (trialSession.calendaredCases || [])
+    .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
+    .sort(exports.compareCasesByDocketNumber);
 
   trialSession.openCases = trialSession.allCases.filter(
     item => item.removedFromTrial !== true,
