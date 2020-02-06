@@ -64,6 +64,12 @@ describe('publicCaseDetailHelper', () => {
         filingDate: '2018-12-25T20:49:28.192Z',
         index: 5,
       },
+      {
+        description: 'sixth record',
+        documentId: 'e47e365d-6349-4d23-98b4-421efb4d8007',
+        filingDate: '2018-12-25T20:49:28.192Z',
+        index: 6,
+      },
     ];
     state.caseDetail.documents = [
       {
@@ -117,6 +123,14 @@ describe('publicCaseDetailHelper', () => {
         documentType: 'Request for Place of Trial',
         eventCode: 'RQT',
         processingStatus: 'complete',
+      },
+      {
+        createdAt: '2018-12-25T20:49:28.192Z',
+        documentId: 'e47e365d-6349-4d23-98b4-421efb4d8007',
+        documentType: 'TRAN - Transcript',
+        eventCode: 'TRAN',
+        processingStatus: 'complete',
+        servedAt: '2018-11-27T20:49:28.192Z',
       },
     ];
     const result = runCompute(publicCaseDetailHelper, { state });
@@ -212,6 +226,26 @@ describe('publicCaseDetailHelper', () => {
         index: 5,
         isPaper: undefined,
         servedAtFormatted: undefined,
+        servedPartiesCode: '',
+        showDocumentDescriptionWithoutLink: true,
+        showLinkToDocument: false,
+        showNotServed: false,
+        showServed: false,
+        signatory: undefined,
+      },
+      {
+        action: undefined,
+        createdAtFormatted: '12/25/18',
+        description: 'sixth record',
+        descriptionDisplay: 'sixth record',
+        documentId: 'e47e365d-6349-4d23-98b4-421efb4d8007',
+        eventCode: 'TRAN',
+        filedBy: undefined,
+        filingsAndProceedingsWithAdditionalInfo: '',
+        hasDocument: true,
+        index: 6,
+        isPaper: undefined,
+        servedAtFormatted: '11/27/18',
         servedPartiesCode: '',
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
