@@ -12,7 +12,7 @@ const {
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('../externalDocument/ExternalDocumentInformationFactory');
-const { includes } = require('lodash');
+const { Document } = require('../Document');
 
 DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
   ...VALIDATION_ERROR_MESSAGES,
@@ -145,16 +145,19 @@ function DocketEntryFactory(rawProps) {
     addToSchema('certificateOfServiceDate');
   }
 
+  const objectionDocumentTypes = [
+    ...Document.CATEGORY_MAP['Motion'].map(entry => {
+      return entry.documentType;
+    }),
+    'Motion to Withdraw Counsel (filed by petitioner)',
+    'Motion to Withdraw as Counsel',
+    'Application to Take Deposition',
+  ];
+
   if (
-    rawProps.category === 'Motion' ||
-    includes(
-      [
-        'Motion to Withdraw Counsel',
-        'Motion to Withdraw As Counsel',
-        'Application to Take Deposition',
-      ],
-      rawProps.documentType,
-    )
+    objectionDocumentTypes.includes(rawProps.documentType) ||
+    (['AMAT', 'ADMT'].includes(rawProps.eventCode) &&
+      objectionDocumentTypes.includes(rawProps.previousDocument.documentType))
   ) {
     addToSchema('objections');
   }
