@@ -349,7 +349,7 @@ joiValidationDecorator(
     partySecondary: joi.boolean().optional(),
     pending: joi.boolean().optional(),
     practitioner: joi.array().optional(),
-    previousDocument: joi.string().optional(),
+    previousDocument: joi.object().optional(),
     processingStatus: joi.string().optional(),
     qcAt: joi
       .date()
