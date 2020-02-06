@@ -135,7 +135,7 @@ export const EditUploadCourtIssuedDocument = connect(
 
                         <StateDrivenFileInput
                           aria-describedby="primary-document-label"
-                          id="primary-document"
+                          id="primary-document-file"
                           name="primaryDocumentFile"
                           updateFormValueSequence="updateFormValueSequence"
                           validationSequence="validateUploadCourtIssuedDocumentSequence"
