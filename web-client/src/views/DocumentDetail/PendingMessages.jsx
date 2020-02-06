@@ -305,6 +305,7 @@ export const PendingMessages = connect(
                       role="tabpanel"
                     >
                       <div
+                        noValidate
                         aria-labelledby={`forward-tab-${idx}`}
                         className="forward-form"
                         data-workitemid={workItem.workItemId}
