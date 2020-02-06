@@ -94,6 +94,7 @@ export const SupportingDocumentForm = connect(
                   key: `supportingDocuments.${index}.previousDocument`,
                   value: {
                     documentTitle: form.documentTitle || form.documentType,
+                    documentType: form.documentType,
                   },
                 });
                 updateFileDocumentWizardFormValueSequence({
