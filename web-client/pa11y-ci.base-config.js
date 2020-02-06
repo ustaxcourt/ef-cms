@@ -16,13 +16,13 @@ const defaults = {
   chromeLaunchConfig: {
     args: ['--no-sandbox'],
   },
-  concurrency: 2,
+  concurrency: 1,
   debug: true,
   'include-notices': true,
   'include-warnings': true,
   standard: 'WCAG2AA',
-  timeout: 30000,
-  wait: 5000,
+  timeout: 60000,
+  wait: 10000,
 };
 
 module.exports = {
