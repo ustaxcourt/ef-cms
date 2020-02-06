@@ -61,6 +61,8 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     'Application to Take Deposition',
   ];
 
+  const amendmentEventCodes = ['AMAT', 'ADMT'];
+
   const partyValidationError =
     validationErrors &&
     (validationErrors.partyPrimary ||
@@ -118,7 +120,8 @@ export const addDocketEntryHelper = (get, applicationContext) => {
       caseDetail.documents,
       doc =>
         includes(documentIdWhitelist, doc.documentId) &&
-        (doc.documentTitle || doc.documentType) === form.previousDocument,
+        (doc.documentTitle || doc.documentType) ===
+          form.previousDocument.documentTitle,
     );
   const showSupportingInclusions =
     previousDocument && previousDocument.relationship !== 'secondaryDocument';
@@ -139,7 +142,10 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     primary: optionsForCategory,
     secondary: secondaryOptionsForCategory,
     showDateReceivedEdit,
-    showObjection: objectionDocumentTypes.includes(form.documentType),
+    showObjection:
+      objectionDocumentTypes.includes(form.documentType) ||
+      (amendmentEventCodes.includes(form.eventCode) &&
+        objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryParty,
