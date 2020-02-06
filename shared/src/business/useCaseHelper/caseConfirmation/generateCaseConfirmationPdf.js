@@ -110,7 +110,7 @@ exports.generateCaseConfirmationPdf = async ({
     }
   }
 
-  const documentId = `case-${caseEntity.docketNumber}-confirmation.pdf`;
+  const documentId = caseEntity.getCaseConfirmationDocumentId();
 
   await new Promise(resolve => {
     const documentsBucket = applicationContext.getDocumentsBucketName();
