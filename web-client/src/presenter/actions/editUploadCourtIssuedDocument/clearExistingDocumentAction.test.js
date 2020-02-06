@@ -6,10 +6,11 @@ describe('clearExistingDocumentAction', () => {
   it('should clear the document and set a flag', async () => {
     const result = await runAction(clearExistingDocumentAction, {
       modules: { presenter },
-      state: { form: { primaryDocumentFile: true } },
+      state: { form: { documentId: '123', primaryDocumentFile: true } },
     });
 
     expect(result.screenMetadata.documentReset).toEqual(true);
     expect(result.form.primaryDocumentFile).toEqual(undefined);
+    expect(result.form.documentIdToEdit).toEqual('123');
   });
 });

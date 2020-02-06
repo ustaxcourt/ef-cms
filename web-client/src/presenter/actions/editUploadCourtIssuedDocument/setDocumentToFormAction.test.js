@@ -26,9 +26,6 @@ describe('setDocumentToFormAction', () => {
       },
     });
     expect(result.state.form).toEqual(documentToMatch);
-    expect(result.state.screenMetadata.selectedDocument).toEqual(
-      documentToMatch,
-    );
   });
 
   it('does nothing if documentId isdoes not match a document', async () => {
@@ -47,7 +44,6 @@ describe('setDocumentToFormAction', () => {
         documentId: '890',
       },
     });
-    expect(result.state.documentToEdit).toBeUndefined();
     expect(result.state.form).toBeUndefined();
   });
 });
