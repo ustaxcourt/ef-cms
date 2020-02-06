@@ -1809,7 +1809,9 @@ describe('document detail helper', () => {
         });
 
         expect(result.isDraftDocument).toEqual(true);
-        expect(result.formattedDocument.editUrl).toContain('/documents/abc/sign');
+        expect(result.formattedDocument.editUrl).toContain(
+          '/documents/abc/sign',
+        );
       });
 
       it('should go to the edit upload pdf url when the document is a Miscellaneous document', () => {
@@ -1835,7 +1837,9 @@ describe('document detail helper', () => {
         });
 
         expect(result.isDraftDocument).toEqual(true);
-        expect(result.formattedDocument.editUrl).toContain('/edit-upload-court-issued/abc');
+        expect(result.formattedDocument.editUrl).toContain(
+          '/edit-upload-court-issued/abc',
+        );
       });
 
       it('should go to the edit order url when the document is a Order document', () => {
