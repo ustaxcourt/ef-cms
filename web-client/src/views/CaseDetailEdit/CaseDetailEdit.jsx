@@ -14,24 +14,16 @@ export const CaseDetailEdit = connect(
     screenMetadata: state.screenMetadata,
     submitCaseDetailEditSaveSequence:
       sequences.submitCaseDetailEditSaveSequence,
-    unsetFormSaveSuccessSequence: sequences.unsetFormSaveSuccessSequence,
     waitingForResponse: state.waitingForResponse,
   },
   ({
     navigateBackSequence,
     screenMetadata,
     submitCaseDetailEditSaveSequence,
-    unsetFormSaveSuccessSequence,
     waitingForResponse,
   }) => {
     return (
-      <div
-        id="case-edit-form"
-        role="form"
-        onFocus={() => {
-          unsetFormSaveSuccessSequence();
-        }}
-      >
+      <div id="case-edit-form" role="form">
         <Tabs
           boxed
           bind="documentDetail.tab"
