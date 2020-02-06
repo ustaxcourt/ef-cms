@@ -21,7 +21,7 @@ import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
 import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformation';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
-import { EditUploadCourtIssuedDocument } from './UploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
+import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
 import { Error } from './Error';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
