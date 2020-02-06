@@ -153,6 +153,7 @@ export const EditUploadCourtIssuedDocument = connect(
                               View PDF
                               <Button
                                 link
+                                aria-label="Change existing PDF"
                                 className="set-right"
                                 id="cancel-button"
                                 onClick={() => {
