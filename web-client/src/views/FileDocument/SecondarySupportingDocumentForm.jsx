@@ -100,6 +100,7 @@ export const SecondarySupportingDocumentForm = connect(
                     documentTitle:
                       form.secondaryDocument.documentTitle ||
                       form.secondaryDocument.documentType,
+                    documentType: form.secondaryDocument.documentType,
                   },
                 });
                 updateFileDocumentWizardFormValueSequence({
