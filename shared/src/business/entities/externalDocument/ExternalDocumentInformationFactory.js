@@ -232,7 +232,12 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     (['Amended', 'Amendment [anything]'].includes(
       documentMetadata.documentType,
     ) &&
-      documentMetadata.previousDocument.includes('Motion'))
+      (documentMetadata.previousDocument.category === 'Motion' ||
+        [
+          'Motion to Withdraw Counsel',
+          'Motion to Withdraw As Counsel',
+          'Application to Take Deposition',
+        ].includes(documentMetadata.previousDocument.documentType)))
   ) {
     makeRequired('objections');
   }

@@ -75,9 +75,13 @@ export default (test, fakeFile) => {
       value: 'Brief in Support',
     });
 
+    const caseDetail = test.getState('caseDetail');
+    const previousDocument = caseDetail.documents.find(
+      document => document.documentTitle === 'Motion for Continuance',
+    );
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocuments.0.previousDocument',
-      value: 'Motion for Continuance',
+      value: previousDocument.documentId,
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
