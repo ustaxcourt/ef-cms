@@ -2627,4 +2627,20 @@ describe('Case entity', () => {
       'docketRecord[1]': '"docketRecord[1]" contains a duplicate value',
     });
   });
+
+  describe('getCaseConfirmationDocumentId', () => {
+    it('generates the correct case confirmation document id', () => {
+      const caseToVerify = new Case(
+        {
+          docketNumber: '123-20',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(caseToVerify.getCaseConfirmationDocumentId()).toEqual(
+        'case-123-20-confirmation.pdf',
+      );
+    });
+  });
 });

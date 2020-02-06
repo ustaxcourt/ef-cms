@@ -1635,6 +1635,14 @@ Case.prototype.setAsSealed = function() {
   this.isSealed = true;
   return this;
 };
+/**
+ * generates the case confirmation documentId
+ *
+ * @returns {string} this case confirmation documentId
+ */
+Case.prototype.getCaseConfirmationDocumentId = function() {
+  return `case-${this.docketNumber}-confirmation.pdf`;
+};
 
 exports.Case = Case;
 exports.isAssociatedUser = isAssociatedUser;
