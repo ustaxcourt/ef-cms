@@ -16,6 +16,7 @@ const {
 const {
   SupportingDocumentInformationFactory,
 } = require('./SupportingDocumentInformationFactory');
+const { Document } = require('../Document');
 const { includes, isEqual, reduce, some, sortBy, values } = require('lodash');
 
 const VALIDATION_ERROR_MESSAGES = {
@@ -222,22 +223,23 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     makeRequired('certificateOfServiceDate');
   }
 
+  const objectionDocumentTypes = [
+    ...Document.CATEGORY_MAP['Motion'].map(entry => {
+      return entry.documentType;
+    }),
+    'Motion to Withdraw Counsel (filed by petitioner)',
+    'Motion to Withdraw as Counsel',
+    'Application to Take Deposition',
+  ];
+
   if (
-    documentMetadata.category === 'Motion' ||
-    [
-      'Motion to Withdraw Counsel',
-      'Motion to Withdraw As Counsel',
-      'Application to Take Deposition',
-    ].includes(documentMetadata.documentType) ||
+    objectionDocumentTypes.includes(documentMetadata.documentType) ||
     (['Amended', 'Amendment [anything]'].includes(
       documentMetadata.documentType,
     ) &&
-      (documentMetadata.previousDocument.category === 'Motion' ||
-        [
-          'Motion to Withdraw Counsel',
-          'Motion to Withdraw As Counsel',
-          'Application to Take Deposition',
-        ].includes(documentMetadata.previousDocument.documentType)))
+      objectionDocumentTypes.includes(
+        documentMetadata.previousDocument.documentType,
+      ))
   ) {
     makeRequired('objections');
   }
