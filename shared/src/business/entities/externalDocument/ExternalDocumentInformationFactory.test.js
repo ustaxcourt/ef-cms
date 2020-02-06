@@ -72,6 +72,7 @@ describe('ExternalDocumentInformationFactory', () => {
     describe('Motion Document', () => {
       beforeEach(() => {
         baseDoc.category = 'Motion';
+        baseDoc.documentType = 'Motion for Continuance';
       });
 
       it('should require objections radio be selected', () => {
@@ -79,6 +80,20 @@ describe('ExternalDocumentInformationFactory', () => {
           VALIDATION_ERROR_MESSAGES.objections,
         );
         baseDoc.objections = 'Yes';
+        expect(errors().objections).toEqual(undefined);
+      });
+
+      it('should require objections for an Amended document with a Motion previousDocument', () => {
+        baseDoc.category = 'Miscellaneous';
+        baseDoc.eventCode = 'AMAT';
+        baseDoc.previousDocument = {
+          documentType: 'Motion for Continuance',
+        };
+
+        expect(errors().objections).toEqual(
+          VALIDATION_ERROR_MESSAGES.objections,
+        );
+        baseDoc.objections = 'No';
         expect(errors().objections).toEqual(undefined);
       });
     });
