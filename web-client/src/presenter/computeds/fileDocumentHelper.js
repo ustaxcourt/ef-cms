@@ -33,6 +33,8 @@ export const fileDocumentHelper = (get, applicationContext) => {
     'Application to Take Deposition',
   ];
 
+  const amendmentDocumentTypes = ['Amended', 'Amendment [anything]'];
+
   const partyValidationError =
     validationErrors.partyPrimary ||
     validationErrors.partySecondary ||
@@ -142,14 +144,23 @@ export const fileDocumentHelper = (get, applicationContext) => {
       form.documentType === 'Motion for Leave to File',
     partyValidationError,
     primaryDocument: {
-      showObjection: objectionDocumentTypes.includes(form.documentType),
+      showObjection:
+        objectionDocumentTypes.includes(form.documentType) ||
+        (amendmentDocumentTypes.includes(form.documentType) &&
+          objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     },
     secondaryDocument: {
       certificateOfServiceDateFormatted: secondaryDocumentCertificateOfServiceDateFormatted,
       showObjection:
         form.secondaryDocument &&
         form.secondaryDocumentFile &&
-        objectionDocumentTypes.includes(form.secondaryDocument.documentType),
+        (objectionDocumentTypes.includes(form.secondaryDocument.documentType) ||
+          (amendmentDocumentTypes.includes(
+            form.secondaryDocument.documentType,
+          ) &&
+            objectionDocumentTypes.includes(
+              form.secondaryDocument.previousDocument?.documentType,
+            ))),
     },
     selectedCasesAsCase,
     showAddSecondarySupportingDocuments,
