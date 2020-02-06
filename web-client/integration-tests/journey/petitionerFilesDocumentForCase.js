@@ -247,9 +247,13 @@ export default (test, fakeFile) => {
       key: 'supportingDocuments.0.documentType',
       value: 'Affidavit in Support',
     });
+
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocuments.0.previousDocument',
-      value: test.getState('form.documentTitle'),
+      value: {
+        documentTitle: test.getState('form.documentTitle'),
+        documentType: test.getState('form.documentType'),
+      },
     });
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocuments.0.supportingDocument',
@@ -329,7 +333,10 @@ export default (test, fakeFile) => {
     });
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondarySupportingDocuments.0.previousDocument',
-      value: test.getState('form.secondaryDocument.documentTitle'),
+      value: {
+        documentTitle: test.getState('form.secondaryDocument.documentTitle'),
+        documentType: test.getState('form.secondaryDocument.documentType'),
+      },
     });
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondarySupportingDocuments.0.supportingDocument',

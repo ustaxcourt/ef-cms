@@ -65,7 +65,7 @@ describe('ExternalDocumentNonStandardH', () => {
         category: 'Supporting Document',
         documentTitle: 'Brief in Support of [Document Name]',
         documentType: 'Brief in Support',
-        previousDocument: 'Petition',
+        previousDocument: { documentType: 'Petition' },
         scenario: 'Nonstandard A',
       },
     });
@@ -84,7 +84,7 @@ describe('ExternalDocumentNonStandardH', () => {
           category: 'Supporting Document',
           documentTitle: 'Brief in Support of [Document Name]',
           documentType: 'Brief in Support',
-          previousDocument: 'Petition',
+          previousDocument: { documentType: 'Petition' },
           scenario: 'Nonstandard A',
         },
       });

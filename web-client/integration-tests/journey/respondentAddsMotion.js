@@ -77,7 +77,10 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocuments.0.previousDocument',
-      value: 'Motion for Continuance',
+      value: {
+        documentTitle: test.getState('form.documentTitle'),
+        documentType: test.getState('form.documentType'),
+      },
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
