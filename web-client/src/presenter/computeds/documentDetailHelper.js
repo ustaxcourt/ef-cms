@@ -46,6 +46,8 @@ export const documentDetailHelper = (get, applicationContext) => {
     courtIssuedDoc => courtIssuedDoc.documentType,
   );
   const STIPULATED_DECISION_DOCUMENT_TYPE = 'Stipulated Decision';
+  const MISCELLANEOUS_DOCUMENT_TYPE = 'MISC - Miscellaneous';
+
   const newOrRecalledStatus = [STATUS_TYPES.new, STATUS_TYPES.recalled];
 
   const caseDetail = get(state.caseDetail);
@@ -91,6 +93,7 @@ export const documentDetailHelper = (get, applicationContext) => {
 
   const isStipDecision =
     document.documentType === STIPULATED_DECISION_DOCUMENT_TYPE;
+  const isMiscellaneous = document.documentType === MISCELLANEOUS_DOCUMENT_TYPE;
 
   formattedDocument.signUrl = isStipDecision
     ? `/case-detail/${caseDetail.docketNumber}/documents/${formattedDocument.documentId}/sign`
@@ -98,6 +101,8 @@ export const documentDetailHelper = (get, applicationContext) => {
 
   formattedDocument.editUrl = isStipDecision
     ? `/case-detail/${caseDetail.docketNumber}/documents/${formattedDocument.documentId}/sign`
+    : isMiscellaneous
+    ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${formattedDocument.documentId}`
     : `/case-detail/${caseDetail.docketNumber}/edit-order/${formattedDocument.documentId}`;
 
   const stipulatedWorkItem = formattedDocument.workItems.find(
