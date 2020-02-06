@@ -148,18 +148,18 @@ export const EditUploadCourtIssuedDocument = connect(
                     <div className="scanner-area-header">
                       <div className="grid-container padding-x-0">
                         <div className="grid-row grid-gap">
-                          <div className="grid-col-6">
+                          <div className="grid-col-12">
                             <h3 className="margin-bottom-0 margin-left-105">
                               View PDF
                               <Button
                                 link
-                                className="float-right"
+                                className="set-right"
                                 id="cancel-button"
                                 onClick={() => {
                                   clearExistingDocumentSequence();
                                 }}
                               >
-                                Cancel
+                                Reset PDF
                               </Button>
                             </h3>
                           </div>
