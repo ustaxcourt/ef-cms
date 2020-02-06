@@ -1,3 +1,5 @@
+const axios = require('axios');
+
 export default test => {
   it('user sees the case confirmation pdf', async () => {
     await test.runSequence('gotoPrintableCaseConfirmationSequence', {
@@ -5,5 +7,7 @@ export default test => {
     });
     const pdfPreviewUrl = test.getState('pdfPreviewUrl');
     expect(pdfPreviewUrl).not.toBeNull;
+
+    axios.get(pdfPreviewUrl);
   });
 };
