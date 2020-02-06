@@ -25,7 +25,11 @@ import unauthedUserSearchesByMeta from './journey/unauthedUserSearchesByMeta';
 import unauthedUserViewsCaseDetail from './journey/unauthedUserViewsCaseDetail';
 import unauthedUserViewsPrintableDocketRecord from './journey/unauthedUserViewsPrintableDocketRecord';
 
-const test = setupTest();
+const test = setupTest({
+  useCases: {
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
+  },
+});
 const testClient = setupTestClient();
 testClient.draftOrders = [];
 
