@@ -58,6 +58,8 @@ const formatDocument = (applicationContext, document) => {
   result.isNotServedCourtIssuedDocument =
     result.isCourtIssuedDocument && !result.servedAt;
 
+  result.isTranscript = result.eventCode === Document.TRANSCRIPT_EVENT_CODE;
+
   result.qcWorkItemsUntouched =
     !!qcWorkItems.length &&
     qcWorkItems.reduce((acc, wi) => {
@@ -96,7 +98,7 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
 
 const TRANSCRIPT_AGE_DAYS_MIN = 1; // TODO: change to 90 post-UX review
 const documentMeetsAgeRequirements = document => {
-  const transcriptCodes = ['TRAN'];
+  const transcriptCodes = [Document.TRANSCRIPT_EVENT_CODE];
   const isTranscript = transcriptCodes.includes(document.eventCode);
   if (!isTranscript) return true;
   const availableOnDate = calculateISODate({
@@ -247,6 +249,8 @@ const formatCase = (applicationContext, caseDetail) => {
       editUrl:
         document.documentType === 'Stipulated Decision'
           ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+          : document.documentType === 'MISC - Miscellaneous'
+          ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${document.documentId}`
           : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
       signUrl:
         document.documentType === 'Stipulated Decision'

@@ -665,6 +665,12 @@ describe('getFormattedCaseDetail', () => {
             documentId: 'd-2-3-4',
             documentType: 'Stipulated Decision',
           },
+          {
+            archived: false,
+            createdAt: getDateISO(),
+            documentId: 'd-3-4-5',
+            documentType: 'MISC - Miscellaneous',
+          },
         ],
       },
       docketRecordSort: 'byDate',
@@ -679,6 +685,11 @@ describe('getFormattedCaseDetail', () => {
       {
         editUrl: '/case-detail/123-45/documents/d-2-3-4/sign',
         signUrl: '/case-detail/123-45/documents/d-2-3-4/sign',
+        signedAtFormatted: undefined,
+      },
+      {
+        editUrl: '/case-detail/123-45/edit-upload-court-issued/d-3-4-5',
+        signUrl: '/case-detail/123-45/edit-order/d-3-4-5/sign',
         signedAtFormatted: undefined,
       },
     ]);

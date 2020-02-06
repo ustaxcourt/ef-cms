@@ -189,6 +189,8 @@ Document.CONTACT_CHANGE_DOCUMENT_TYPES = [
   'Notice of Change of Address and Telephone Number',
 ];
 
+Document.TRANSCRIPT_EVENT_CODE = 'TRAN';
+
 Document.isPendingOnCreation = rawDocument => {
   const isPending = Object.values(Document.TRACKED_DOCUMENT_TYPES).some(
     trackedType => {
