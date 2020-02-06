@@ -5,6 +5,7 @@ const documentIdToEdit = '123';
 const documentToMatch = {
   documentId: documentIdToEdit,
   documentType: 'Order',
+  primaryDocumentFile: true,
 };
 
 describe('setDocumentToFormAction', () => {

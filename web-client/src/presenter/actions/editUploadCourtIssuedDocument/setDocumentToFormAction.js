@@ -16,7 +16,10 @@ export const setDocumentToFormAction = ({ props, store }) => {
   );
 
   if (documentToSet) {
-    store.set(state.screenMetadata.selectedDocument, { ...documentToSet });
-    store.set(state.form, { ...documentToSet });
+    store.set(state.screenMetadata.selectedDocument, {
+      ...documentToSet,
+      primaryDocumentFile: true,
+    });
+    store.set(state.form, { ...documentToSet, primaryDocumentFile: true });
   }
 };
