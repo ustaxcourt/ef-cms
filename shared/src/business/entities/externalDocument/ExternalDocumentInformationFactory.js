@@ -234,9 +234,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
 
   if (
     objectionDocumentTypes.includes(documentMetadata.documentType) ||
-    (['Amended', 'Amendment [anything]'].includes(
-      documentMetadata.documentType,
-    ) &&
+    (['AMAT', 'ADMT'].includes(documentMetadata.eventCode) &&
       objectionDocumentTypes.includes(
         documentMetadata.previousDocument.documentType,
       ))
