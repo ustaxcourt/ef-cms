@@ -30,7 +30,11 @@ const test = setupTest({
     loadPDFForSigningInteractor: () => Promise.resolve(null),
   },
 });
-const testClient = setupTestClient();
+const testClient = setupTestClient({
+  useCases: {
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
+  },
+});
 testClient.draftOrders = [];
 
 describe('Petitioner creates cases to search for', () => {
