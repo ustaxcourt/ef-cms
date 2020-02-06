@@ -32,7 +32,7 @@ describe('formattedTrialSessions', () => {
         judge: { name: '1', userId: '1' },
         startDate: '2019-11-25T15:00:00.000Z',
         swingSession: true,
-        triAllocation: 'Hartford, Connecticut',
+        trialLocation: 'Hartford, Connecticut',
       },
       {
         caseOrder: [],
@@ -415,11 +415,11 @@ describe('formattedTrialSessions', () => {
             userIsAssignedToSession: false,
           },
           {
-            judge: { name: '2', userId: '2' },
+            judge: { name: '1', userId: '1' },
             userIsAssignedToSession: false,
           },
           {
-            judge: { name: '1', userId: '1' },
+            judge: { name: '2', userId: '2' },
             userIsAssignedToSession: false,
           },
           {
@@ -461,12 +461,12 @@ describe('formattedTrialSessions', () => {
             userIsAssignedToSession: false,
           },
           {
-            judge: { name: '2', userId: '2' },
-            userIsAssignedToSession: false,
-          },
-          {
             judge: { name: '1', userId: '1' },
             userIsAssignedToSession: true,
+          },
+          {
+            judge: { name: '2', userId: '2' },
+            userIsAssignedToSession: false,
           },
           {
             judge: { name: '3', userId: '3' },
