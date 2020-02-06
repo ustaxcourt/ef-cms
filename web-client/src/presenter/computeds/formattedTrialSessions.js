@@ -80,13 +80,13 @@ export const filterFormattedSessionsByStatus = (
     });
   });
 
-  for (let [status, trialTerms] of Object.entries(filteredbyStatusType)) {
+  for (let [status, entryTrialTerms] of Object.entries(filteredbyStatusType)) {
     filteredbyStatusType[status] = orderBy(
-      trialTerms,
+      entryTrialTerms,
       ['startOfWeekSortable'],
       [sessionSort[status]],
     );
-    trialTerms.forEach(trialTerm => {
+    entryTrialTerms.forEach(trialTerm => {
       trialTerm.sessions = sessionSorter(trialTerm.sessions, [
         sessionSort[status],
       ]);

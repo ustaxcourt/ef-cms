@@ -46,16 +46,16 @@ export const TrialSessions = connect(
               Add Trial Session
             </Button>
             <Tab id="new-trial-sessions-tab" tabName="new" title="New">
-              <TrialSessionsTable filter="new" />
+              <TrialSessionsTable filter="New" />
             </Tab>
             <Tab id="open-trial-sessions-tab" tabName="open" title="Open">
-              <TrialSessionsTable filter="open" />
+              <TrialSessionsTable filter="Open" />
             </Tab>
             <Tab id="closed-trial-sessions-tab" tabName="closed" title="Closed">
-              <TrialSessionsTable filter="closed" />
+              <TrialSessionsTable filter="Closed" />
             </Tab>
             <Tab id="all-trial-sessions-tab" tabName="all" title="All">
-              <TrialSessionsTable filter="all" />
+              <TrialSessionsTable filter="All" />
             </Tab>
           </Tabs>
         </section>
