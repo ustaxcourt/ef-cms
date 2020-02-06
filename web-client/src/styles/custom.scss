@@ -1316,6 +1316,22 @@ button.change-scanner-button {
   padding: 10px;
   background-color: color($theme-color-primary-darker);
   color: white;
+
+  a,
+  button {
+    color: $color-white;
+  }
+
+  a:not(.usa-button):hover,
+  button:hover {
+    color: $color-primary-alt;
+  }
+
+  .set-right {
+    padding: 0;
+    margin-top: 5px;
+    float: right;
+  }
 }
 
 .document-select-container {
