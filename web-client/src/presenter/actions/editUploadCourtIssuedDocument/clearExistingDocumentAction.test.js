@@ -9,8 +9,8 @@ describe('clearExistingDocumentAction', () => {
       state: { form: { documentId: '123', primaryDocumentFile: true } },
     });
 
-    expect(result.screenMetadata.documentReset).toEqual(true);
-    expect(result.form.primaryDocumentFile).toEqual(undefined);
-    expect(result.documentToEdit.documentId).toEqual('123');
+    expect(result.state.screenMetadata.documentReset).toEqual(true);
+    expect(result.state.form.primaryDocumentFile).toEqual(undefined);
+    expect(result.state.documentToEdit.documentId).toEqual('123');
   });
 });
