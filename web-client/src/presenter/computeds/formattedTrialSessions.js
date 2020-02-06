@@ -1,4 +1,4 @@
-import { filter, find, identity, orderBy, pickBy } from 'lodash';
+import { filter, find, identity, omit, orderBy, pickBy } from 'lodash';
 import { state } from 'cerebral';
 
 export const formatSession = (session, applicationContext) => {
@@ -80,13 +80,13 @@ export const filterFormattedSessionsByStatus = (
     });
   });
 
-  for (let [status, trialTerms] of Object.entries(filteredbyStatusType)) {
+  for (let [status, entryTrialTerms] of Object.entries(filteredbyStatusType)) {
     filteredbyStatusType[status] = orderBy(
-      trialTerms,
+      entryTrialTerms,
       ['startOfWeekSortable'],
       [sessionSort[status]],
     );
-    trialTerms.forEach(trialTerm => {
+    entryTrialTerms.forEach(trialTerm => {
       trialTerm.sessions = sessionSorter(trialTerm.sessions, [
         sessionSort[status],
       ]);
@@ -101,7 +101,7 @@ export const formattedTrialSessions = (get, applicationContext) => {
 
   // filter trial sessions
   const trialSessionFilters = pickBy(
-    get(state.screenMetadata.trialSessionFilters),
+    omit(get(state.screenMetadata.trialSessionFilters), 'status'),
     identity,
   );
   const judgeFilter = get(
