@@ -450,6 +450,7 @@ const applicationContext = {
       INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
       MAX_FILE_SIZE_BYTES,
       MAX_FILE_SIZE_MB,
+      NOTICE_EVENT_CODES: Document.NOTICE_EVENT_CODES,
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
       OTHER_TYPES: ContactFactory.OTHER_TYPES,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
