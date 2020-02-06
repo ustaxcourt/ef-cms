@@ -122,7 +122,7 @@ const isPrivateDocument = function(document, docketRecord) {
   );
 
   const isStipDecision = document.documentType === 'Stipulated Decision';
-  const isTranscript = document.eventCode === 'TRAN';
+  const isTranscript = document.eventCode === Document.TRANSCRIPT_EVENT_CODE;
   const isOrder = orderDocumentTypes.includes(document.documentType);
   const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
     document.documentType,
