@@ -140,13 +140,18 @@ export const SignOrder = connect(
         <CaseDetailHeader />
         <section className="usa-section grid-container">
           <div className="grid-row margin-bottom-1">
+            <div className="grid-col-12">
+              <h1>Apply Signature</h1>
+            </div>
+          </div>
+          <div className="grid-row margin-bottom-1">
             <div className="grid-col-4">
               <Button
                 link
                 href={`/case-detail/${docketNumber}/documents/${documentId}`}
               >
                 <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
-                Back to Draft
+                Back to Draft Document
               </Button>
             </div>
             <div className="grid-col-4 text-align-center sign-pdf-control">
