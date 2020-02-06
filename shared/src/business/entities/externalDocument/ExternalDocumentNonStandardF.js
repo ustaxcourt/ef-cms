@@ -24,7 +24,7 @@ ExternalDocumentNonStandardF.prototype.getDocumentTitle = function() {
   return replaceBracketed(
     this.documentTitle,
     this.ordinalValue,
-    this.previousDocument.documentTitle,
+    this.previousDocument.documentTitle || this.previousDocument.documentType,
   );
 };
 
@@ -40,7 +40,7 @@ ExternalDocumentNonStandardF.schema = {
   previousDocument: joi
     .object()
     .keys({
-      documentTitle: joi.string().required(),
+      documentTitle: joi.string().optional(),
       documentType: joi.string().required(),
     })
     .required(),

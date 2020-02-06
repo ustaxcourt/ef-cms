@@ -22,7 +22,7 @@ function ExternalDocumentNonStandardA(rawProps) {
 ExternalDocumentNonStandardA.prototype.getDocumentTitle = function() {
   return replaceBracketed(
     this.documentTitle,
-    this.previousDocument.documentTitle,
+    this.previousDocument.documentTitle || this.previousDocument.documentType,
   );
 };
 
@@ -37,7 +37,7 @@ ExternalDocumentNonStandardA.schema = {
   previousDocument: joi
     .object()
     .keys({
-      documentTitle: joi.string().required(),
+      documentTitle: joi.string().optional(),
       documentType: joi.string().required(),
     })
     .required(),
