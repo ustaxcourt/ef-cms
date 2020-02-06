@@ -159,7 +159,7 @@ export const EditUploadCourtIssuedDocument = connect(
                                   clearExistingDocumentSequence();
                                 }}
                               >
-                                Reset PDF
+                                Change
                               </Button>
                             </h3>
                           </div>
