@@ -19,10 +19,13 @@ export const formattedDashboardTrialSessions = (get, applicationContext) => {
       .isBefore();
 
   const { userId } = applicationContext.getCurrentUser();
+  const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
   const trialSessions = get(state.trialSessions).filter(session => {
     return (
-      applicationContext.getUtilities().getTrialSessionStatus(session) ===
-      'open'
+      applicationContext
+        .getUtilities()
+        .getTrialSessionStatus({ applicationContext, session }) ===
+      SESSION_STATUS_GROUPS.open
     );
   });
 
