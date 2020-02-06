@@ -17,7 +17,6 @@ module.exports = {
     'include-warnings': true,
     standard: 'WCAG2AA',
     timeout: 30000,
-    useIncognitoBrowserContext: true,
     wait: 5000,
   },
   urls,

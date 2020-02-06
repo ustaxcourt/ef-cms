@@ -109,8 +109,8 @@ describe('formattedTrialSessions', () => {
         applicationContext,
       );
 
-      expect(results.closed.length).toEqual(1);
-      expect(results.closed).toEqual([
+      expect(results.Closed.length).toEqual(1);
+      expect(results.Closed).toEqual([
         {
           ...trialTerms[0],
           sessions: [sessions[0]],
@@ -131,8 +131,8 @@ describe('formattedTrialSessions', () => {
         applicationContext,
       );
 
-      expect(results.open.length).toEqual(1);
-      expect(results.open).toEqual([
+      expect(results.Open.length).toEqual(1);
+      expect(results.Open).toEqual([
         {
           ...trialTerms[0],
           sessions: [sessions[0]],
@@ -154,8 +154,8 @@ describe('formattedTrialSessions', () => {
         applicationContext,
       );
 
-      expect(results.new.length).toEqual(1);
-      expect(results.new).toEqual([
+      expect(results.New.length).toEqual(1);
+      expect(results.New).toEqual([
         {
           ...trialTerms[0],
           sessions: [sessions[0]],
@@ -175,9 +175,9 @@ describe('formattedTrialSessions', () => {
         return count;
       };
 
-      expect(results.all.length).toEqual(trialTerms.length);
-      expect(getSessionCount(results.all)).toEqual(getSessionCount(trialTerms));
-      expect(results.all[0].sessions[0]).toHaveProperty('sessionStatus');
+      expect(results.All.length).toEqual(trialTerms.length);
+      expect(getSessionCount(results.All)).toEqual(getSessionCount(trialTerms));
+      expect(results.All[0].sessions[0]).toHaveProperty('sessionStatus');
     });
   });
 
@@ -362,7 +362,7 @@ describe('formattedTrialSessions', () => {
         caseOrder: [],
         formattedStartDate: '11/25/19',
         judge: { name: '4', userId: '4' },
-        sessionStatus: 'new',
+        sessionStatus: 'New',
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
@@ -374,7 +374,7 @@ describe('formattedTrialSessions', () => {
         caseOrder: [],
         formattedStartDate: '11/25/19',
         judge: { name: '1', userId: '1' },
-        sessionStatus: 'new',
+        sessionStatus: 'New',
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
@@ -386,7 +386,7 @@ describe('formattedTrialSessions', () => {
         caseOrder: [],
         formattedStartDate: '11/25/19',
         judge: { name: '5', userId: '5' },
-        sessionStatus: 'new',
+        sessionStatus: 'New',
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
