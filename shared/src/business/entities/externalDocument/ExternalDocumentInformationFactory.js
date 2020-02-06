@@ -165,7 +165,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     hasSupportingDocuments: joi.boolean().required(),
     lodged: joi.boolean().optional(),
     ordinalValue: joi.string().optional(),
-    previousDocument: joi.string().optional(),
+    previousDocument: joi.object().optional(),
     primaryDocumentFile: joi.object().required(),
     primaryDocumentFileSize: joi
       .number()
@@ -224,14 +224,15 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
 
   if (
     documentMetadata.category === 'Motion' ||
-    includes(
-      [
-        'Motion to Withdraw Counsel',
-        'Motion to Withdraw As Counsel',
-        'Application to Take Deposition',
-      ],
+    [
+      'Motion to Withdraw Counsel',
+      'Motion to Withdraw As Counsel',
+      'Application to Take Deposition',
+    ].includes(documentMetadata.documentType) ||
+    (['Amended', 'Amendment [anything]'].includes(
       documentMetadata.documentType,
-    )
+    ) &&
+      documentMetadata.previousDocument.includes('Motion'))
   ) {
     makeRequired('objections');
   }
