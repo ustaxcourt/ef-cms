@@ -58,16 +58,10 @@ exports.formattedTrialSessionDetails = ({
     trialSession.term
   } ${trialSession.termYear.substr(-2)}`;
 
-  if (
-    !isEmpty(trialSession.allCases) &&
-    isEqual(trialSession.allCases, trialSession.inactiveCases)
-  ) {
-    trialSession.computedStatus = 'Closed';
-  } else if (trialSession.isCalendared) {
-    trialSession.computedStatus = 'Open';
-  } else {
-    trialSession.computedStatus = 'New';
-  }
+  trialSession.computedStatus = exports.getTrialSessionStatus({
+    applicationContext,
+    session: trialSession,
+  });
 
   trialSession.formattedStartDate = applicationContext
     .getUtilities()
@@ -125,18 +119,20 @@ exports.formattedTrialSessionDetails = ({
   return trialSession;
 };
 
-exports.getTrialSessionStatus = session => {
-  const allCases = session.caseOrder;
+exports.getTrialSessionStatus = ({ applicationContext, session }) => {
+  const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
+
+  const allCases = session.caseOrder || [];
   const inactiveCases = allCases.filter(
     sessionCase => sessionCase.removedFromTrial === true,
   );
 
   if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
     // TODO: Move to constants, on the entity?
-    return 'closed';
+    return SESSION_STATUS_GROUPS.closed;
   } else if (session.isCalendared) {
-    return 'open';
+    return SESSION_STATUS_GROUPS.open;
   } else if (!session.isCalendared) {
-    return 'new';
+    return SESSION_STATUS_GROUPS.new;
   }
 };
