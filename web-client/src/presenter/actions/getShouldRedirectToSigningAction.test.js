@@ -11,6 +11,11 @@ describe('getShouldRedirectToSigningAction', () => {
     yesMock = jest.fn();
     noMock = jest.fn();
 
+    presenter.providers.path = {
+      no: noMock,
+      yes: yesMock,
+    };
+
     presenter.providers.applicationContext = applicationContext;
   });
 
@@ -35,7 +40,7 @@ describe('getShouldRedirectToSigningAction', () => {
       },
       props: {
         documentId: '123',
-        eventCode: 'O',
+        eventCode: 'NOT',
       },
       state: {},
     });
@@ -49,7 +54,7 @@ describe('getShouldRedirectToSigningAction', () => {
       },
       props: {
         documentId: '123',
-        eventCode: 'O',
+        eventCode: 'NOT',
       },
       state: {},
     });
