@@ -11,6 +11,6 @@ describe('clearExistingDocumentAction', () => {
 
     expect(result.screenMetadata.documentReset).toEqual(true);
     expect(result.form.primaryDocumentFile).toEqual(undefined);
-    expect(result.form.documentIdToEdit).toEqual('123');
+    expect(result.documentToEdit.documentId).toEqual('123');
   });
 });

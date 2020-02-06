@@ -4,6 +4,7 @@ import { setDocumentToFormAction } from './setDocumentToFormAction';
 const documentIdToEdit = '123';
 const documentToMatch = {
   documentId: documentIdToEdit,
+  documentIdToEdit: documentIdToEdit,
   documentType: 'Order',
   primaryDocumentFile: true,
 };

@@ -16,6 +16,10 @@ export const setDocumentToFormAction = ({ props, store }) => {
   );
 
   if (documentToSet) {
-    store.set(state.form, { ...documentToSet, primaryDocumentFile: true });
+    store.set(state.form, {
+      ...documentToSet,
+      documentIdToEdit: documentId,
+      primaryDocumentFile: true,
+    });
   }
 };

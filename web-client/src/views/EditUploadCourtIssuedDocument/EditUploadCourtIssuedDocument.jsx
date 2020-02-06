@@ -53,12 +53,7 @@ export const EditUploadCourtIssuedDocument = connect(
           <SuccessNotification />
           <ErrorNotification />
           {screenMetadata.documentReset && (
-            <Hint>
-              Don’t forget to check your PDF(s) to ensure all personal
-              information has been removed or redacted from all documents{' '}
-              <span className="semi-bold">EXCEPT</span> for the Statement of
-              Taxpayer Identification.
-            </Hint>
+            <Hint>When you submit it will overwrite the previous document</Hint>
           )}
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
