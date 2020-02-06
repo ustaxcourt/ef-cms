@@ -371,6 +371,18 @@ const router = {
         });
       }),
     );
+    route(
+      '/case-detail/*/edit-upload-court-issued/*',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Upload a document`,
+        );
+        app.getSequence('gotoEditUploadCourtIssuedDocumentSequence')({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
 
     route(
       '/case-detail/*/edit-order/*',
