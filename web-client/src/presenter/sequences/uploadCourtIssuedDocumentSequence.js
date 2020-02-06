@@ -20,10 +20,7 @@ import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForRespons
 import { uploadOrderFileAction } from '../actions/FileDocument/uploadOrderFileAction';
 import { validateUploadCourtIssuedDocumentAction } from '../actions/uploadCourtIssuedDocument/validateUploadCourtIssuedDocumentAction';
 
-export const uploadCourtIssuedDocument = ({
-  completeAction,
-  getAlertSuccessAction,
-}) => [
+export const uploadCourtIssuedDocumentSequence = [
   startShowValidationAction,
   validateUploadCourtIssuedDocumentAction,
   {
@@ -44,22 +41,15 @@ export const uploadCourtIssuedDocument = ({
           setupUploadMetadataAction,
           submitCourtIssuedOrderAction,
           setCaseAction,
-          getAlertSuccessAction,
+          getUploadCourtIssuedDocumentAlertSuccessAction,
           setAlertSuccessAction,
           setSaveAlertsForNavigationAction,
           setCaseDetailPageTabAction,
           setCaseDetailPageTabFrozenAction,
-          completeAction,
+          navigateToCaseDetailAction,
         ],
       },
       unsetWaitingForResponseAction,
     ],
   },
-];
-
-export const uploadCourtIssuedDocumentSequence = [
-  uploadCourtIssuedDocument({
-    completeAction: navigateToCaseDetailAction,
-    getAlertSuccessAction: getUploadCourtIssuedDocumentAlertSuccessAction,
-  }),
 ];
