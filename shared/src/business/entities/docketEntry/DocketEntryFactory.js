@@ -88,7 +88,7 @@ function DocketEntryFactory(rawProps) {
     hasSupportingDocuments: joi.boolean(),
     lodged: joi.boolean(),
     ordinalValue: joi.string().optional(),
-    previousDocument: joi.string().optional(),
+    previousDocument: joi.object().optional(),
     primaryDocumentFile: joi.object().optional(),
     primaryDocumentFileSize: joi.when('primaryDocumentFile', {
       is: joi.exist().not(null),

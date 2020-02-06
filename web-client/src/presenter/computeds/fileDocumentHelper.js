@@ -33,7 +33,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
     'Application to Take Deposition',
   ];
 
-  const amendmentDocumentTypes = ['Amended', 'Amendment [anything]'];
+  const amendmentEventCodes = ['AMAT', 'ADMT'];
 
   const partyValidationError =
     validationErrors.partyPrimary ||
@@ -146,7 +146,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
     primaryDocument: {
       showObjection:
         objectionDocumentTypes.includes(form.documentType) ||
-        (amendmentDocumentTypes.includes(form.documentType) &&
+        (amendmentEventCodes.includes(form.eventCode) &&
           objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     },
     secondaryDocument: {
@@ -155,9 +155,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
         form.secondaryDocument &&
         form.secondaryDocumentFile &&
         (objectionDocumentTypes.includes(form.secondaryDocument.documentType) ||
-          (amendmentDocumentTypes.includes(
-            form.secondaryDocument.documentType,
-          ) &&
+          (amendmentEventCodes.includes(form.secondaryDocument.eventCode) &&
             objectionDocumentTypes.includes(
               form.secondaryDocument.previousDocument?.documentType,
             ))),
