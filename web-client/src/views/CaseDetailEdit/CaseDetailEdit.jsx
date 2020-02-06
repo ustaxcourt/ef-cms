@@ -23,7 +23,7 @@ export const CaseDetailEdit = connect(
     waitingForResponse,
   }) => {
     return (
-      <div id="case-edit-form" role="form">
+      <div noValidate id="case-edit-form" role="form">
         <Tabs
           boxed
           bind="documentDetail.tab"

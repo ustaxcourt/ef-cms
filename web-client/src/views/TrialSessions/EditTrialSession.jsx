@@ -33,6 +33,7 @@ export const EditTrialSession = connect(
           <h1 id="edit-trial-session-header">Edit Trial Session</h1>
 
           <div
+            noValidate
             aria-labelledby="edit-trial-session-header"
             className="usa-form maxw-none"
             role="form"
