@@ -41,8 +41,6 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
         filingsAndProceedingsWithAdditionalInfo += ` ${document.additionalInfo2}`;
       }
 
-      const isTranscriptDocument = document && document.eventCode === 'TRAN';
-
       return {
         action: record.action,
         createdAtFormatted: record.createdAtFormatted,
@@ -63,13 +61,13 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
           (document &&
             (!document.isCourtIssuedDocument ||
               document.isNotServedCourtIssuedDocument ||
-              isTranscriptDocument)),
+              document.isTranscript)),
         showLinkToDocument:
           document &&
           document.processingStatus === 'complete' &&
           document.isCourtIssuedDocument &&
           !document.isNotServedCourtIssuedDocument &&
-          !isTranscriptDocument,
+          !document.isTranscript,
         showNotServed: document && document.isNotServedCourtIssuedDocument,
         showServed: document && document.isStatusServed,
         signatory: record.signatory,

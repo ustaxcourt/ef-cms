@@ -4,7 +4,10 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
   get,
   applicationContext,
 ) => {
-  const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();
+  const {
+    COURT_ISSUED_EVENT_CODES,
+    TRANSCRIPT_EVENT_CODE,
+  } = applicationContext.getConstants();
 
   const selectedEventCode = get(state.form.eventCode);
 
@@ -63,7 +66,7 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
   }
 
   let dateLabel = 'Date';
-  if (selectedEventCode === 'TRAN') {
+  if (selectedEventCode === TRANSCRIPT_EVENT_CODE) {
     dateLabel = 'Date of trial/hearing';
   }
 
