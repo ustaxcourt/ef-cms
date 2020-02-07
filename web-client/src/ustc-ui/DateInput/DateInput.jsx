@@ -36,9 +36,7 @@ export const DateInput = props => {
               aria-label="month, two digits"
               className="usa-input usa-input-inline"
               id={`${id}-month`}
-              max="12"
               maxLength="2"
-              min="1"
               name={names.month}
               placeholder="MM"
               type="text"
@@ -58,9 +56,7 @@ export const DateInput = props => {
               aria-label="day, two digits"
               className="usa-input usa-input-inline"
               id={`${id}-day`}
-              max="31"
               maxLength="2"
-              min="1"
               name={names.day}
               placeholder="DD"
               type="text"
@@ -80,9 +76,7 @@ export const DateInput = props => {
               aria-label="year, four digits"
               className="usa-input usa-input-inline"
               id={`${id}-year`}
-              max="2100"
               maxLength="4"
-              min="1900"
               name={names.year}
               placeholder="YYYY"
               type="text"
