@@ -5,9 +5,10 @@ export default test => {
     await test.runSequence('gotoPrintableCaseConfirmationSequence', {
       docketNumber: test.docketNumber,
     });
+
     const pdfPreviewUrl = test.getState('pdfPreviewUrl');
     expect(pdfPreviewUrl).not.toBeNull;
 
-    axios.get(pdfPreviewUrl);
+    await axios.get(pdfPreviewUrl);
   });
 };
