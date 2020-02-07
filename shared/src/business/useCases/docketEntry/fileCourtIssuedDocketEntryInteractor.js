@@ -57,7 +57,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   let secondaryDate;
-  if (documentMeta.eventCode === 'TRAN') {
+  if (documentMeta.eventCode === Document.TRANSCRIPT_EVENT_CODE) {
     secondaryDate = documentMeta.date;
   }
 
