@@ -2628,7 +2628,7 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getCaseConfirmationDocumentId', () => {
+  describe('getCaseConfirmationGeneratedPdfFileName', () => {
     it('generates the correct case confirmation document id', () => {
       const caseToVerify = new Case(
         {
@@ -2638,7 +2638,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(caseToVerify.getCaseConfirmationDocumentId()).toEqual(
+      expect(caseToVerify.getCaseConfirmationGeneratedPdfFileName()).toEqual(
         'case-123-20-confirmation.pdf',
       );
     });

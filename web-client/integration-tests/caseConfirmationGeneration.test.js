@@ -20,7 +20,7 @@ describe('Case Confirmation', () => {
     jest.setTimeout(30000);
   });
 
-  describe('Petitoner creates a case / Petitionsclerk Sends to Holding Queue / Petitionsclerk then has access to case confirmation', () => {
+  describe('Petitioner creates a case / Petitionsclerk Sends to Holding Queue / Petitionsclerk then has access to case confirmation', () => {
     petitionerLogin(test);
     petitionerNavigatesToCreateCase(test);
     petitionerChoosesProcedureType(test);
@@ -34,7 +34,7 @@ describe('Case Confirmation', () => {
     userSignsOut(test);
   });
 
-  describe('Petitoner creates a case / Petitionsclerk Sends to Holding Queue / Petitioner then has access to case confirmation', () => {
+  describe('Petitioner creates a case / Petitionsclerk Sends to Holding Queue / Petitioner then has access to case confirmation', () => {
     petitionerLogin(test);
     petitionerNavigatesToCreateCase(test);
     petitionerChoosesProcedureType(test);
