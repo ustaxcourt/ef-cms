@@ -351,6 +351,16 @@ const router = {
     );
 
     route(
+      '/case-detail/*/contacts/secondary/edit',
+      ifHasAccess(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Secondary contact`,
+        );
+        app.getSequence('gotoSecondaryContactEditSequence')({ docketNumber });
+      }),
+    );
+
+    route(
       '/case-detail/*/create-order',
       ifHasAccess(docketNumber => {
         setPageTitle(
