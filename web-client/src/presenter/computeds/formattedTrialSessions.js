@@ -70,6 +70,13 @@ export const filterFormattedSessionsByStatus = (
     trialTerm.sessions.forEach(session => {
       const status = getTrialSessionStatus({ applicationContext, session });
       const termIndex = initTermIndex(trialTerm, filteredbyStatusType[status]);
+
+      if (!session.judge) {
+        session.judge = {
+          name: 'Unassigned',
+          userId: 'unassigned',
+        };
+      }
       // Add session status to filtered session
       session.sessionStatus = status;
       filteredbyStatusType[status][termIndex].sessions.push(session);
@@ -107,7 +114,10 @@ export const formattedTrialSessions = (get, applicationContext) => {
   const judgeFilter = get(
     state.screenMetadata.trialSessionFilters.judge.userId,
   );
-  if (!judgeFilter) {
+
+  const tab = get(state.trialSessionsTab.group);
+
+  if (!judgeFilter || (tab !== 'new' && judgeFilter === 'unassigned')) {
     delete trialSessionFilters.judge;
   }
 

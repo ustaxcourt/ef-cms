@@ -38,7 +38,6 @@ export default test => {
 
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
-    expect(test.getState('form.primaryDocumentFile')).toBeDefined();
 
     const {
       draftDocuments,

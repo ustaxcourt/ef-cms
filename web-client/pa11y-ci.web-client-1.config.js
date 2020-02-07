@@ -1,5 +1,6 @@
 const docketclerk = require('./pa11y/pa11y-docketclerk');
 const judge = require('./pa11y/pa11y-judge');
+const { defaults, jsCheckDecorator } = require('./pa11y-ci.base-config.js');
 
 const userUrls = [...docketclerk, ...judge];
 
@@ -19,20 +20,9 @@ if (process.env.CI) {
   });
 }
 
-// see https://github.com/pa11y/pa11y#command-line-interface
+const urls = [...initialUrls, ...userUrls].map(jsCheckDecorator);
 
 module.exports = {
-  defaults: {
-    chromeLaunchConfig: {
-      args: ['--no-sandbox'],
-    },
-    concurrency: 1,
-    debug: true,
-    'include-notices': true,
-    'include-warnings': true,
-    standard: 'WCAG2AA',
-    timeout: 60000,
-    wait: 10000,
-  },
-  urls: [...initialUrls, ...userUrls],
+  defaults,
+  urls,
 };
