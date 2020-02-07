@@ -1636,11 +1636,11 @@ Case.prototype.setAsSealed = function() {
   return this;
 };
 /**
- * generates the case confirmation documentId
+ * generates the case confirmation pdf file name
  *
- * @returns {string} this case confirmation documentId
+ * @returns {string} this case confirmation pdf file name
  */
-Case.prototype.getCaseConfirmationDocumentId = function() {
+Case.prototype.getCaseConfirmationGeneratedPdfFileName = function() {
   return `case-${this.docketNumber}-confirmation.pdf`;
 };
 

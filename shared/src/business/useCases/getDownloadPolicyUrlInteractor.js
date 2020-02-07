@@ -49,7 +49,7 @@ exports.getDownloadPolicyUrlInteractor = async ({
     const caseEntity = new Case(caseData, { applicationContext });
 
     if (documentId.includes('.pdf')) {
-      if (caseEntity.getCaseConfirmationDocumentId() !== documentId) {
+      if (caseEntity.getCaseConfirmationGeneratedPdfFileName() !== documentId) {
         throw new UnauthorizedError('Unauthorized');
       }
     } else {
