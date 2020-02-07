@@ -96,7 +96,7 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
   return result;
 };
 
-const TRANSCRIPT_AGE_DAYS_MIN = 1; // TODO: change to 90 post-UX review
+const TRANSCRIPT_AGE_DAYS_MIN = 90;
 const documentMeetsAgeRequirements = document => {
   const transcriptCodes = [Document.TRANSCRIPT_EVENT_CODE];
   const isTranscript = transcriptCodes.includes(document.eventCode);
