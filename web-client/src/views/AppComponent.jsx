@@ -39,6 +39,7 @@ import { PrintPreview } from './CourtIssuedDocketEntry/PrintPreview';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
+import { SecondaryContactEdit } from './SecondaryContactEdit';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
 import { SignStipDecision } from './SignStipDecision';
@@ -96,6 +97,7 @@ const pages = {
   PrintableDocketRecord,
   PrintableTrialCalendar,
   RequestAccessWizard,
+  SecondaryContactEdit,
   SelectDocumentType,
   SignOrder,
   SignStipDecision,
