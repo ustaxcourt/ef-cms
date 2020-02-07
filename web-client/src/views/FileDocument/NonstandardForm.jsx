@@ -102,7 +102,7 @@ export const NonstandardForm = connect(
               )}
               id={`${namespace}previous-document`}
               name={`${namespace}previousDocument`}
-              value={get(form, `${namespace}previousDocument`, '')}
+              value={get(form, `${namespace}previousDocument.documentId`, '')}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
@@ -113,10 +113,11 @@ export const NonstandardForm = connect(
             >
               <option value="">- Select -</option>
               {helper[level].previouslyFiledDocuments.map(
-                (documentTitle, idx) => {
+                (previousDocument, idx) => {
                   return (
-                    <option key={idx} value={documentTitle}>
-                      {documentTitle}
+                    <option key={idx} value={previousDocument.documentId}>
+                      {previousDocument.documentTitle ||
+                        previousDocument.documentType}
                     </option>
                   );
                 },

@@ -1,11 +1,10 @@
 import { state } from 'cerebral';
 
 /**
- * used to direct the user to the correct next page - either the case detail page
- * or the supporting document form if they indicated they have supporting documents
+ * used to choose the next path based off whether the path stated in the factory exists and is truthy
  *
  * @param {string} statePath the state path
- * @returns {*} returns action that takes the next action in the sequence's path
+ * @returns {Function} returns action that takes the next action in the sequence's path
  */
 export const chooseByTruthyStateActionFactory = statePath => ({
   get,

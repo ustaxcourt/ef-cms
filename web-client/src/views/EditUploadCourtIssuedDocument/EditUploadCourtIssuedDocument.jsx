@@ -46,7 +46,7 @@ export const EditUploadCourtIssuedDocument = connect(
       <>
         <CaseDetailHeader />
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailDraftDocumentsSequence" />
         )}
 
         <section className="usa-section grid-container DocumentDetail">
@@ -135,7 +135,7 @@ export const EditUploadCourtIssuedDocument = connect(
 
                         <StateDrivenFileInput
                           aria-describedby="primary-document-label"
-                          id="primary-document"
+                          id="primary-document-file"
                           name="primaryDocumentFile"
                           updateFormValueSequence="updateFormValueSequence"
                           validationSequence="validateUploadCourtIssuedDocumentSequence"
@@ -153,6 +153,7 @@ export const EditUploadCourtIssuedDocument = connect(
                               View PDF
                               <Button
                                 link
+                                aria-label="Change existing PDF"
                                 className="set-right"
                                 id="cancel-button"
                                 onClick={() => {

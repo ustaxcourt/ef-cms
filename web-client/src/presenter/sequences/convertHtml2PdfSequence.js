@@ -4,14 +4,13 @@ import { getPdfFileAction } from '../actions/CourtIssuedOrder/getPdfFileAction';
 import { setMetadataAsPristineAction } from '../actions/setMetadataAsPristineAction';
 import { setPdfFileAction } from '../actions/CourtIssuedOrder/setPdfFileAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const convertHtml2PdfSequence = [
-  setWaitingForResponseAction,
+export const convertHtml2PdfSequence = showProgressSequenceDecorator([
   createOrderAction,
   clearPdfPreviewUrlAction,
   getPdfFileAction,
   setPdfFileAction,
   setPdfPreviewUrlAction,
   setMetadataAsPristineAction,
-];
+]);
