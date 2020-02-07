@@ -3,8 +3,8 @@ export default test => {
     expect(test.getState('currentPage')).toEqual('EditDocketEntryMeta');
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'filedBy',
-      value: 'New Filer',
+      key: 'eventCode',
+      value: 'STST',
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
