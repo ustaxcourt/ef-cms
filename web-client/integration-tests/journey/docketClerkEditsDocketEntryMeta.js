@@ -33,6 +33,11 @@ export default test => {
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'partyRespondent',
+      value: 'true',
+    });
+
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
       key: 'action',
       value: 'Added new nickname of "Sauceboss"',
     });
