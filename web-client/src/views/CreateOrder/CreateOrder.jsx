@@ -57,11 +57,11 @@ export const CreateOrder = connect(
                 <Button
                   link
                   className="margin-top-105 minw-10"
+                  icon="sync"
                   onClick={() => {
                     convertHtml2PdfSequence();
                   }}
                 >
-                  <FontAwesomeIcon icon="sync" size="sm" />
                   Refresh
                 </Button>
               </div>
