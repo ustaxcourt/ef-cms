@@ -1,4 +1,4 @@
-Secondaryconst {
+const {
   createISODateString,
   formatDateString,
 } = require('../../../../shared/src/business/utilities/DateHandler');
@@ -23,79 +23,98 @@ const getDocumentTypeForAddressChangeStub = jest.fn();
 const saveDocumentFromLambdaStub = jest.fn();
 const sendServedPartiesEmailsStub = jest.fn();
 
-let persistenceGateway = {
-  getCaseByCaseId: () => MOCK_CASE,
-  saveDocumentFromLambda: saveDocumentFromLambdaStub,
-  saveWorkItemForNonPaper: () => null,
-  updateCase: updateCaseStub,
-};
+let persistenceGateway;
+let useCases;
+let applicationContext;
 
-const useCases = {
-  generatePdfFromHtmlInteractor: () => {
-    generatePdfFromHtmlInteractorStub();
-    return fakeFile;
-  },
-  userIsAssociated: () => true,
-};
-
-const applicationContext = {
-  environment: { stage: 'local' },
-  getCaseCaptionNames: Case.getCaseCaptionNames,
-  getCurrentUser: () => {
-    return new User({
-      name: 'bob',
-      role: User.ROLES.petitioner,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-  },
-  getDispatchers: () => ({
-    sendBulkTemplatedEmail: () => null,
-  }),
-  getPersistenceGateway: () => {
-    return persistenceGateway;
-  },
-  getTemplateGenerators: () => {
-    return {
-      generateChangeOfAddressTemplate: async () => {
-        generateChangeOfAddressTemplateStub();
-        return '<html></html>';
-      },
+describe('update secondary contact on a case', () => {
+  beforeEach(() => {
+    persistenceGateway = {
+      getCaseByCaseId: () => ({
+        ...MOCK_CASE,
+        contactSecondary: {
+          address1: 'nothing',
+          city: 'Somewhere',
+          countryType: 'domestic',
+          email: 'secondary@example.com',
+          name: 'Secondary Party',
+          phone: '9876543210',
+          postalCode: '12345',
+          state: 'TN',
+        },
+        partyType: 'Petitioner & spouse',
+      }),
+      saveDocumentFromLambda: saveDocumentFromLambdaStub,
+      saveWorkItemForNonPaper: () => null,
+      updateCase: updateCaseStub,
     };
-  },
-  getUniqueId: () => 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-  getUseCaseHelpers: () => ({
-    sendServedPartiesEmails: sendServedPartiesEmailsStub,
-  }),
-  getUseCases: () => useCases,
-  getUtilities: () => {
-    return {
-      createISODateString,
-      formatDateString,
-      getAddressPhoneDiff: () => {
-        getAddressPhoneDiffStub();
+
+    useCases = {
+      generatePdfFromHtmlInteractor: () => {
+        generatePdfFromHtmlInteractorStub();
+        return fakeFile;
+      },
+      userIsAssociated: () => true,
+    };
+
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCaseCaptionNames: Case.getCaseCaptionNames,
+      getCurrentUser: () => {
+        return new User({
+          name: 'bob',
+          role: User.ROLES.petitioner,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getDispatchers: () => ({
+        sendBulkTemplatedEmail: () => null,
+      }),
+      getPersistenceGateway: () => {
+        return persistenceGateway;
+      },
+      getTemplateGenerators: () => {
         return {
-          address1: {
-            newData: 'new test',
-            oldData: 'test',
+          generateChangeOfAddressTemplate: async () => {
+            generateChangeOfAddressTemplateStub();
+            return '<html></html>';
           },
         };
       },
-      getDocumentTypeForAddressChange: () => {
-        getDocumentTypeForAddressChangeStub();
+      getUniqueId: () => 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      getUseCaseHelpers: () => ({
+        sendServedPartiesEmails: sendServedPartiesEmailsStub,
+      }),
+      getUseCases: () => useCases,
+      getUtilities: () => {
         return {
-          eventCode: 'NCA',
-          title: 'Notice of Change of Address',
+          createISODateString,
+          formatDateString,
+          getAddressPhoneDiff: () => {
+            getAddressPhoneDiffStub();
+            return {
+              address1: {
+                newData: 'new test',
+                oldData: 'test',
+              },
+            };
+          },
+          getDocumentTypeForAddressChange: () => {
+            getDocumentTypeForAddressChangeStub();
+            return {
+              eventCode: 'NCA',
+              title: 'Notice of Change of Address',
+            };
+          },
         };
       },
+      logger: {
+        time: () => null,
+        timeEnd: () => null,
+      },
     };
-  },
-  logger: {
-    time: () => null,
-    timeEnd: () => null,
-  },
-};
+  });
 
-describe('update secondary contact on a case', () => {
   it('updates contactSecondary', async () => {
     const caseDetail = await updateSecondaryContactInteractor({
       applicationContext,
@@ -104,20 +123,22 @@ describe('update secondary contact on a case', () => {
         address1: '453 Electric Ave',
         city: 'Philadelphia',
         countryType: 'domestic',
-        email: 'petitioner',
-        name: 'Bill Burr',
+        email: 'secondary@example.com',
+        name: 'New Secondary',
         phone: '1234567890',
         postalCode: '99999',
         serviceIndicator: 'Electronic',
         state: 'PA',
       },
     });
+
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorStub).toHaveBeenCalled();
     expect(caseDetail.documents[4].servedAt).toBeDefined();
     expect(caseDetail.documents[4].servedParties).toEqual([
-      { email: 'petitioner', name: 'Bill Burr' },
+      { email: 'petitioner@example.com', name: 'Test Petitioner' },
+      { email: 'secondary@example.com', name: 'New Secondary' },
     ]);
   });
 
