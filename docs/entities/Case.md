@@ -3,7 +3,7 @@
 ### associatedJudge
 
 
-Judge assigned to this Case. Defaults to Chief Judge.
+Judge assigned to this case. Defaults to Chief Judge.
 
 
 Restricted
@@ -83,7 +83,7 @@ The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mar
 ### caseId
 
 
-Unique Case ID only used by the system.
+Unique case ID only used by the system.
 
 > `string` | required
 
@@ -128,14 +128,14 @@ Restricted
 ### createdAt
 
 
-When the Case was added to the system.
+When the case was added to the system.
 
 > `date` | required
 
 ### docketNumber
 
 
-Unique Case ID in XXXXX-YY format.
+Unique case ID in XXXXX-YY format.
 
 > `string` | required
 
@@ -163,7 +163,7 @@ Unique Case ID in XXXXX-YY format.
 ### docketRecord
 
 
-List of DocketRecord Entities for the Case.
+List of DocketRecord Entities for the case.
 
 > `array` | required
 
@@ -178,7 +178,7 @@ At least `1` item(s) must be selected.
 ### documents
 
 
-List of Document Entities for the Case.
+List of Document Entities for the case.
 
 > `array` | required
 
@@ -255,7 +255,7 @@ Case title before modification.
 ### irsNoticeDate
 
 
-Last date that the Petitioner is allowed to file before.
+Last date that the petitioner is allowed to file before.
 
 > `date` | optional
 
@@ -264,7 +264,7 @@ Last date that the Petitioner is allowed to file before.
 ### irsSendDate
 
 
-When the Case was sent to the IRS by the Court.
+When the case was sent to the IRS by the court.
 
 > `date` | optional
 
@@ -275,7 +275,7 @@ When the Case was sent to the IRS by the Court.
 ### leadCaseId
 
 
-If this Case is consolidated, this is the ID of the lead Case. It is the lowest Docket Number in the consolidated group.
+If this case is consolidated, this is the ID of the lead case. It is the lowest docket number in the consolidated group.
 
 > `string` | optional
 
@@ -309,21 +309,21 @@ Reminder for clerks to review the notice of trial date.
 ### orderForAmendedPetition
 
 
-Reminder for clerks to review the order for Amended Petition.
+Reminder for clerks to review the order for amended Petition.
 
 > `boolean` | optional
 
 ### orderForAmendedPetitionAndFilingFee
 
 
-Reminder for clerks to review the order for Amended Petition And Filing Fee.
+Reminder for clerks to review the order for amended Petition And filing fee.
 
 > `boolean` | optional
 
 ### orderForFilingFee
 
 
-Reminder for clerks to review the order for Filing Fee.
+Reminder for clerks to review the order for filing fee.
 
 > `boolean` | optional
 
@@ -337,7 +337,7 @@ Reminder for clerks to review the order for ODS.
 ### orderForRatification
 
 
-Reminder for clerks to review the order for Ratification.
+Reminder for clerks to review the Order for Ratification.
 
 > `boolean` | optional
 
@@ -358,7 +358,7 @@ Reminder for clerks to review the Order to Show Cause.
 ### partyType
 
 
-Party type of the Case Petitioner.
+Party type of the case petitioner.
 
 > `string` | required
 
@@ -387,7 +387,7 @@ Party type of the Case Petitioner.
 ### petitionPaymentStatus
 
 
-Status of the Case fee payment.
+Status of the case fee payment.
 
 > `string` | required
 
@@ -401,7 +401,7 @@ Status of the Case fee payment.
 ### petitionPaymentDate
 
 
-When the Petitioner payed the Case fee.
+When the petitioner payed the case fee.
 
 > `any`
 
@@ -414,7 +414,7 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 ### petitionPaymentMethod
 
 
-How the Petitioner payed the Case fee.
+How the petitioner payed the case fee.
 
 > `any`
 
@@ -427,7 +427,7 @@ Otherwise, this field is `string` and is `optional`. `null` is allowed.
 ### petitionPaymentWaivedDate
 
 
-When the Case fee was waived.
+When the case fee was waived.
 
 > `any`
 
@@ -440,14 +440,14 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 ### practitioners
 
 
-List of Practitioners associated with the Case.
+List of practitioners associated with the case.
 
 > `array` | optional
 
 ### preferredTrialCity
 
 
-Where the Petitioner would prefer to hold the Case trial.
+Where the petitioner would prefer to hold the case trial.
 
 > `conditional` | required
 
@@ -549,7 +549,7 @@ Where the Petitioner would prefer to hold the Case trial.
 ### procedureType
 
 
-Procedure type of the Case.
+Procedure type of the case.
 
 > `string` | required
 
@@ -562,7 +562,7 @@ Procedure type of the Case.
 ### qcCompleteForTrial
 
 
-QC Checklist object that must be completed before the Case can go to trial.
+QC Checklist object that must be completed before the case can go to trial.
 
 
 Restricted
@@ -572,7 +572,7 @@ Restricted
 ### receivedAt
 
 
-When the case was received by the Court.
+When the case was received by the court.
 
 > `date` | required
 
@@ -581,14 +581,14 @@ When the case was received by the Court.
 ### respondents
 
 
-List of Respondents (from the IRS) associated with the Case.
+List of respondents (from the IRS) associated with the case.
 
 > `array` | optional
 
 ### sealedDate
 
 
-When the Case was sealed from the public.
+When the case was sealed from the public.
 
 > `date` | optional
 
@@ -597,7 +597,7 @@ When the Case was sealed from the public.
 ### status
 
 
-Status of the Case.
+Status of the case.
 
 
 Restricted
@@ -625,7 +625,7 @@ Restricted
 ### trialDate
 
 
-When this Case goes to trial.
+When this case goes to trial.
 
 > `date` | optional
 
@@ -634,7 +634,7 @@ When this Case goes to trial.
 ### trialLocation
 
 
-Where this Case goes to trial. This may be different that the preferred trial location.
+Where this case goes to trial. This may be different that the preferred trial location.
 
 > `conditional` | optional
 
@@ -736,14 +736,14 @@ Where this Case goes to trial. This may be different that the preferred trial lo
 ### trialSessionId
 
 
-The unique ID of the Trial Session associated with this Case.
+The unique ID of the trial session associated with this case.
 
 > `string` | optional
 
 ### trialTime
 
 
-Time of day when this Case goes to trial.
+Time of day when this case goes to trial.
 
 > `string` | optional
 
@@ -755,7 +755,7 @@ Time of day when this Case goes to trial.
 ### userId
 
 
-The unique ID of the User who added the Case to the System.
+The unique ID of the User who added the case to the system.
 
 
 Restricted
@@ -765,7 +765,7 @@ Restricted
 ### workItems
 
 
-List of system messages associated with this Case.
+List of system messages associated with this case.
 
 
 Restricted
