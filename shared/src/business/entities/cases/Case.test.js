@@ -2629,7 +2629,7 @@ describe('Case entity', () => {
   });
 
   describe('getCaseConfirmationGeneratedPdfFileName', () => {
-    it('generates the correct case confirmation document id', () => {
+    it('generates the correct name for the case confirmation pdf', () => {
       const caseToVerify = new Case(
         {
           docketNumber: '123-20',
