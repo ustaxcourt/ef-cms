@@ -34,10 +34,10 @@ export default (test, fakeFile, draftOrderIndex) => {
 
     await test.runSequence('clearExistingDocumentSequence');
 
-    await test.runSequence('validateUploadCourtIssuedDocumentSequence');
+    await test.runSequence('editUploadCourtIssuedDocumentSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      primaryDocumentFile: '',
+      primaryDocumentFile: 'Upload a document',
     });
 
     await test.runSequence('updateFormValueSequence', {

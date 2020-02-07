@@ -13,8 +13,8 @@ export default (test, fakeFile) => {
     await test.runSequence('uploadCourtIssuedDocumentSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      freeText: '',
-      primaryDocumentFile: '',
+      freeText: 'Enter a description',
+      primaryDocumentFile: 'Upload a document',
     });
 
     await test.runSequence('updateFormValueSequence', {
