@@ -89,7 +89,7 @@ export const CreateOrder = connect(
                     submitCourtIssuedOrderSequence();
                   }}
                 >
-                  Save Order
+                  Save
                 </Button>
                 <Button
                   link
