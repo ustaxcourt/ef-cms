@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { SuccessNotification } from '../SuccessNotification';
@@ -57,11 +56,11 @@ export const CreateOrder = connect(
                 <Button
                   link
                   className="margin-top-105 minw-10"
+                  icon="sync"
                   onClick={() => {
                     convertHtml2PdfSequence();
                   }}
                 >
-                  <FontAwesomeIcon icon="sync" size="sm" />
                   Refresh
                 </Button>
               </div>
