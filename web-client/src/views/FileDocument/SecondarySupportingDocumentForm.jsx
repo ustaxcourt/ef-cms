@@ -96,7 +96,12 @@ export const SecondarySupportingDocumentForm = connect(
                 });
                 updateFileDocumentWizardFormValueSequence({
                   key: `secondarySupportingDocuments.${index}.previousDocument`,
-                  value: form.secondaryDocument.documentTitle,
+                  value: {
+                    documentTitle:
+                      form.secondaryDocument.documentTitle ||
+                      form.secondaryDocument.documentType,
+                    documentType: form.secondaryDocument.documentType,
+                  },
                 });
                 updateFileDocumentWizardFormValueSequence({
                   key: e.target.name,

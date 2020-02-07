@@ -211,21 +211,7 @@ export const PendingMessages = connect(
                       id={`complete-card-${idx}`}
                       role="tabpanel"
                     >
-                      <form
-                        noValidate
-                        id={`complete-form-${idx}`}
-                        role="form"
-                        onSubmit={e => {
-                          e.preventDefault();
-                          submitCompleteSequence({
-                            workItemId: workItem.workItemId,
-                          });
-                          setWorkItemActionSequence({
-                            action: null,
-                            workItemId: workItem.workItemId,
-                          });
-                        }}
-                      >
+                      <div noValidate id={`complete-form-${idx}`} role="form">
                         <label
                           className="usa-label"
                           htmlFor={`complete-message-${idx}`}
@@ -245,8 +231,21 @@ export const PendingMessages = connect(
                           }}
                         />
 
-                        <Button type="submit">Complete</Button>
-                      </form>
+                        <Button
+                          type="button"
+                          onClick={() => {
+                            submitCompleteSequence({
+                              workItemId: workItem.workItemId,
+                            });
+                            setWorkItemActionSequence({
+                              action: null,
+                              workItemId: workItem.workItemId,
+                            });
+                          }}
+                        >
+                          Complete
+                        </Button>
+                      </div>
                     </div>
                   )}
                   {documentDetailHelper.showAction(
@@ -305,18 +304,12 @@ export const PendingMessages = connect(
                       id={`forward-card-${idx}`}
                       role="tabpanel"
                     >
-                      <form
+                      <div
                         noValidate
                         aria-labelledby={`forward-tab-${idx}`}
                         className="forward-form"
                         data-workitemid={workItem.workItemId}
                         role="form"
-                        onSubmit={e => {
-                          e.preventDefault();
-                          submitForwardSequence({
-                            workItemId: workItem.workItemId,
-                          });
-                        }}
                       >
                         <Select
                           error={
@@ -424,8 +417,17 @@ export const PendingMessages = connect(
                             });
                           }}
                         />
-                        <Button type="submit">Send</Button>
-                      </form>
+                        <Button
+                          type="button"
+                          onClick={() => {
+                            submitForwardSequence({
+                              workItemId: workItem.workItemId,
+                            });
+                          }}
+                        >
+                          Send
+                        </Button>
+                      </div>
                     </div>
                   )}
                 </div>

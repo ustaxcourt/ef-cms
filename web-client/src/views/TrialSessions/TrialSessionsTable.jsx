@@ -66,6 +66,11 @@ export const TrialSessionsTable = connect(
                       {judge.name}
                     </option>
                   ))}
+                  {trialSessionsHelper.showUnassignedJudgeFilter && (
+                    <option key={users.length} value="unassigned">
+                      Unassigned
+                    </option>
+                  )}
                 </BindedSelect>
               </div>
             </div>
