@@ -3,6 +3,7 @@ import { state } from 'cerebral';
 export const trialSessionsHelper = get => {
   const tab = get(state.trialSessionsTab.group);
 
+  const isNewTab = tab === 'new';
   const isOpenTab = tab === 'open';
   const isAllTab = tab === 'all';
 
@@ -18,5 +19,6 @@ export const trialSessionsHelper = get => {
     showNoticeIssued: isOpenTab,
     showNumberOfCases: isOpenTab,
     showSessionStatus: isAllTab,
+    showUnassignedJudgeFilter: isNewTab,
   };
 };

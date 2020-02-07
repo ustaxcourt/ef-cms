@@ -207,4 +207,52 @@ describe('trialSessionsHelper', () => {
 
     expect(result.additionalColumnsShown).toEqual(1);
   });
+
+  it('should show the `unassigned` judge filter for `new` sessions', () => {
+    const result = runCompute(trialSessionsHelper, {
+      state: {
+        trialSessionsTab: {
+          group: 'new',
+        },
+      },
+    });
+
+    expect(result.showUnassignedJudgeFilter).toBeTruthy();
+  });
+
+  it('should NOT show the `unassigned` judge filter for `open` sessions', () => {
+    const result = runCompute(trialSessionsHelper, {
+      state: {
+        trialSessionsTab: {
+          group: 'open',
+        },
+      },
+    });
+
+    expect(result.showUnassignedJudgeFilter).toBeFalsy();
+  });
+
+  it('should NOT show the `unassigned` judge filter for `closed` sessions', () => {
+    const result = runCompute(trialSessionsHelper, {
+      state: {
+        trialSessionsTab: {
+          group: 'close',
+        },
+      },
+    });
+
+    expect(result.showUnassignedJudgeFilter).toBeFalsy();
+  });
+
+  it('should NOT show the `unassigned` judge filter for `all` sessions', () => {
+    const result = runCompute(trialSessionsHelper, {
+      state: {
+        trialSessionsTab: {
+          group: 'all',
+        },
+      },
+    });
+
+    expect(result.showUnassignedJudgeFilter).toBeFalsy();
+  });
 });
