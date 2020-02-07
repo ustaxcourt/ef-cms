@@ -46,7 +46,7 @@ export const EditUploadCourtIssuedDocument = connect(
       <>
         <CaseDetailHeader />
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailDraftDocumentsSequence" />
         )}
 
         <section className="usa-section grid-container DocumentDetail">
