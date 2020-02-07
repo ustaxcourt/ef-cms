@@ -23,7 +23,7 @@ exports.updateDocketEntryMetaInteractor = async ({
   docketEntryMeta,
   docketRecordIndex,
 }) => {
-  let caseUpdated;
+  let caseUpdated, filedBy;
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY)) {
@@ -57,7 +57,6 @@ exports.updateDocketEntryMetaInteractor = async ({
     description,
     documentType,
     eventCode,
-    filedBy,
     filingDate,
     freeText,
     generatedDocumentTitle,
@@ -67,6 +66,15 @@ exports.updateDocketEntryMetaInteractor = async ({
     servedAt,
     servedPartiesCode,
   } = docketEntryMeta;
+
+  const documentEntityForFiledBy = new Document(
+    {
+      ...docketEntryMeta,
+    },
+    { applicationContext },
+  );
+  documentEntityForFiledBy.generateFiledBy(caseToUpdate);
+  { filedBy } = documentEntityForFiledBy;
 
   const docketRecordEntity = new DocketRecord({
     ...docketRecordEntry,
