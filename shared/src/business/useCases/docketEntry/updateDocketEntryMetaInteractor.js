@@ -133,7 +133,6 @@ exports.updateDocketEntryMetaInteractor = async ({
               ? certificateOfService
               : documentDetail.certificateOfService,
           certificateOfServiceDate: newCertificateOfServiceDate,
-          createdAt: documentDetail.createdAt,
           documentTitle: generatedDocumentTitle || documentDetail.title, // setting to null will regenerate it for the coversheet
           documentType: documentType || documentDetail.documentType,
           eventCode: eventCode || documentDetail.eventCode,
