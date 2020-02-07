@@ -57,8 +57,6 @@ const PetitionerInformation = connect(
       sequences.openAddPractitionerModalSequence,
     openEditPractitionersModalSequence:
       sequences.openEditPractitionersModalSequence,
-    openEditSecondaryContactModalSequence:
-      sequences.openEditSecondaryContactModalSequence,
     showModal: state.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
@@ -71,7 +69,6 @@ const PetitionerInformation = connect(
     formattedCaseDetail,
     openAddPractitionerModalSequence,
     openEditPractitionersModalSequence,
-    openEditSecondaryContactModalSequence,
     showModal,
     updateFormValueSequence,
     validationErrors,
@@ -151,10 +148,10 @@ const PetitionerInformation = connect(
                       <Button
                         link
                         className="push-right margin-right-0 margin-top-neg-1 ustc-button--mobile-inline margin-left-2"
-                        icon="question-circle"
-                        onClick={() => openEditSecondaryContactModalSequence()}
+                        href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/secondary/edit`}
+                        icon="edit"
                       >
-                        Why can’t I edit this?
+                        Edit
                       </Button>
                     )}
                   </h3>
