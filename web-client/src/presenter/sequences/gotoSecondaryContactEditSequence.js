@@ -5,17 +5,16 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-// TODO
 const gotoSecondaryContactEdit = [
   setCurrentPageAction('Interstitial'),
-  startShowValidationAction,
+  stopShowValidationAction,
   clearFormAction,
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
-  setCurrentPageAction('PrimaryContactEdit'),
+  setCurrentPageAction('SecondaryContactEdit'),
 ];
 
 export const gotoSecondaryContactEditSequence = [

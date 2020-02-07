@@ -245,6 +245,7 @@ import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketE
 import { submitEditPractitionersModalSequence } from './sequences/submitEditPractitionersModalSequence';
 import { submitEditPrimaryContactSequence } from './sequences/submitEditPrimaryContactSequence';
 import { submitEditRespondentsModalSequence } from './sequences/submitEditRespondentsModalSequence';
+import { submitEditSecondaryContactSequence } from './sequences/submitEditSecondaryContactSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitForwardSequence } from './sequences/submitForwardSequence';
@@ -336,6 +337,7 @@ import { validatePetitionerInformationFormSequence } from './sequences/validateP
 import { validatePrimaryContactSequence } from './sequences/validatePrimaryContactSequence';
 import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCaseSequence';
 import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemoveFromTrialSessionSequence';
+import { validateSecondaryContactSequence } from './sequences/validateSecondaryContactSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
 import { validateTrialSessionPlanningSequence } from './sequences/validateTrialSessionPlanningSequence';
@@ -598,6 +600,7 @@ export const presenter = {
     submitEditPractitionersModalSequence,
     submitEditPrimaryContactSequence,
     submitEditRespondentsModalSequence,
+    submitEditSecondaryContactSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
     submitForwardSequence,
@@ -689,6 +692,7 @@ export const presenter = {
     validatePrimaryContactSequence,
     validatePrioritizeCaseSequence,
     validateRemoveFromTrialSessionSequence,
+    validateSecondaryContactSequence,
     validateSelectDocumentTypeSequence,
     validateStartCaseWizardSequence,
     validateTrialSessionPlanningSequence,
