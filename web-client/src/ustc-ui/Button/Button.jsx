@@ -9,13 +9,12 @@ export const Button = props => {
     className,
     icon,
     iconColor, // e.g. blue
+    iconRight = false,
     link,
+    marginDirection = 'right',
     secondary,
     ...remainingProps
   } = props;
-
-  let { marginDirection } = props;
-  marginDirection = marginDirection || 'right';
 
   const Element = href ? 'a' : 'button';
 
@@ -28,16 +27,19 @@ export const Button = props => {
   );
 
   const iconClasses = classNames(
-    'margin-right-05',
+    iconRight ? 'margin-left-05' : 'margin-right-05',
     iconColor && `fa-icon-${iconColor}`,
   );
 
   return (
     <Element className={classes} {...remainingProps}>
-      {icon && (
+      {icon && !iconRight && (
         <FontAwesomeIcon className={iconClasses} icon={icon} size="1x" />
       )}
       {children}
+      {icon && iconRight && (
+        <FontAwesomeIcon className={iconClasses} icon={icon} size="1x" />
+      )}
     </Element>
   );
 };
