@@ -21,6 +21,7 @@ describe('Case Confirmation', () => {
   });
 
   describe('Petitoner creates a case / Petitionsclerk Sends to Holding Queue / User then has access to case confirmation', () => {
+  describe('Petitoner creates a case / Petitionsclerk Sends to Holding Queue / Petitionsclerk then has access to case confirmation', () => {
     petitionerLogin(test);
     petitionerNavigatesToCreateCase(test);
     petitionerChoosesProcedureType(test);
@@ -29,6 +30,23 @@ describe('Case Confirmation', () => {
     userSignsOut(test);
     petitionsClerkLogIn(test);
     petitionsClerkSendsCaseToIRSHoldingQueue(test);
+    petitionsClerkRunsBatchProcess(test);
+    userNavigatesToCreateCaseConfirmation(test);
+    userSignsOut(test);
+  });
+
+  describe('Petitoner creates a case / Petitionsclerk Sends to Holding Queue / Petitioner then has access to case confirmation', () => {
+    petitionerLogin(test);
+    petitionerNavigatesToCreateCase(test);
+    petitionerChoosesProcedureType(test);
+    petitionerChoosesCaseType(test);
+    petitionerCreatesNewCase(test, fakeFile);
+    userSignsOut(test);
+    petitionsClerkLogIn(test);
+    petitionsClerkSendsCaseToIRSHoldingQueue(test);
+    petitionsClerkRunsBatchProcess(test);
+    userSignsOut(test);
+    petitionerLogin(test);
     userNavigatesToCreateCaseConfirmation(test);
     userSignsOut(test);
   });
