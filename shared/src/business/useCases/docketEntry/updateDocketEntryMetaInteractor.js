@@ -73,7 +73,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     },
     { applicationContext },
   );
-  documentEntityForFiledBy.generateFiledBy(caseToUpdate);
+  documentEntityForFiledBy.generateFiledBy(caseToUpdate, true);
   { filedBy } = documentEntityForFiledBy;
 
   const docketRecordEntity = new DocketRecord({
