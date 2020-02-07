@@ -5,6 +5,7 @@ jest.mock('../../../authorization/authorizationClientService');
 const {
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 const PDF_MOCK_BUFFER = 'Hello World';
@@ -95,6 +96,9 @@ describe('generateCaseConfirmationPdf', () => {
       caseEntity: {
         ...MOCK_CASE,
         documents: [{ servedAt: '2009-09-17T08:06:07.530Z' }],
+        getCaseConfirmationDocumentId() {
+          return '';
+        },
       },
     });
 
