@@ -44,7 +44,7 @@ describe('validateSecondaryContactAction', () => {
     expect(successStub.calledOnce).toEqual(true);
   });
 
-  it('runs validation on the primary contact with an invalid result', async () => {
+  it('runs validation on the secondary contact with an invalid result', async () => {
     presenter.providers.applicationContext = applicationContext;
 
     const result = await runAction(validateSecondaryContactAction, {
