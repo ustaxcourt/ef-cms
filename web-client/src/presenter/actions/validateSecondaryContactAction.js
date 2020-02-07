@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * Validates primary contact information and redirects user to success or error path
+ * Validates secondary contact information and redirects user to success or error path
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -10,23 +10,23 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @returns {object} path.success or path.error
  */
-export const validatePrimaryContactAction = ({
+export const validateSecondaryContactAction = ({
   applicationContext,
   get,
   path,
   store,
 }) => {
-  const contactInfo = get(state.caseDetail.contactPrimary);
+  const contactInfo = get(state.caseDetail.contactSecondary);
   const partyType = get(state.caseDetail.partyType);
 
   const errors = applicationContext
     .getUseCases()
-    .validatePrimaryContactInteractor({
+    .validateSecondaryContactInteractor({
       contactInfo,
       partyType,
     });
 
-  store.set(state.validationErrors.contactPrimary, errors || {});
+  store.set(state.validationErrors.contactSecondary, errors || {});
 
   if (!errors) {
     return path.success();
