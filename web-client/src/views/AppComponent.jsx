@@ -21,6 +21,7 @@ import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
 import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformation';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
+import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
 import { Error } from './Error';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
@@ -38,6 +39,7 @@ import { PrintPreview } from './CourtIssuedDocketEntry/PrintPreview';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
+import { SecondaryContactEdit } from './SecondaryContactEdit';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
 import { SignStipDecision } from './SignStipDecision';
@@ -80,6 +82,7 @@ const pages = {
   EditPetitionDetails,
   EditPetitionerInformation,
   EditTrialSession,
+  EditUploadCourtIssuedDocument,
   Error,
   FileDocumentWizard,
   IdleLogout,
@@ -94,6 +97,7 @@ const pages = {
   PrintableDocketRecord,
   PrintableTrialCalendar,
   RequestAccessWizard,
+  SecondaryContactEdit,
   SelectDocumentType,
   SignOrder,
   SignStipDecision,

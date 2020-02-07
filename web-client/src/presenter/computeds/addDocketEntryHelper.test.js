@@ -98,15 +98,6 @@ describe('addDocketEntryHelper', () => {
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
-  it("shows should show inclusions when previous document isn't secondary", () => {
-    state.form.previousDocument = 'Statement of Taxpayer Identification';
-    state.screenMetadata = {
-      filedDocumentIds: ['abc81f4d-1e47-423a-8caf-6d2fdc3d3859'],
-    };
-    const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showSupportingInclusions).toBeTruthy();
-  });
-
   it('should show track option as default', () => {
     const result = runCompute(addDocketEntryHelper, { state });
     expect(result.showTrackOption).toBeTruthy();

@@ -42,6 +42,17 @@ import { validateDocketRecordInteractor } from '../../shared/src/business/useCas
 const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
+import {
+  FORMATS,
+  createISODateString,
+  createISODateStringFromObject,
+  deconstructDate,
+  formatDateString,
+  formatNow,
+  isStringISOFormatted,
+  isValidDateString,
+  prepareDateFromString,
+} from '../../shared/src/business/utilities/DateHandler';
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
 import {
   MAX_FILE_SIZE_BYTES,
@@ -79,16 +90,6 @@ import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadl
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
-import {
-  createISODateString,
-  createISODateStringFromObject,
-  deconstructDate,
-  formatDateString,
-  formatNow,
-  isStringISOFormatted,
-  isValidDateString,
-  prepareDateFromString,
-} from '../../shared/src/business/utilities/DateHandler';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { createWorkItemInteractor } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
@@ -230,6 +231,7 @@ import { validatePetitionFromPaperInteractor } from '../../shared/src/business/u
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionerInformationFormInteractor } from '../../shared/src/business/useCases/validatePetitionerInformationFormInteractor';
 import { validatePrimaryContactInteractor } from '../../shared/src/business/useCases/validatePrimaryContactInteractor';
+import { validateSecondaryContactInteractor } from '../../shared/src/business/useCases/validateSecondaryContactInteractor';
 import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { validateUserContactInteractor } from '../../shared/src/business/useCases/users/validateUserContactInteractor';
@@ -402,6 +404,7 @@ const allUseCases = {
   validatePetitionInteractor,
   validatePetitionerInformationFormInteractor,
   validatePrimaryContactInteractor,
+  validateSecondaryContactInteractor,
   validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
   validateUserContactInteractor,
@@ -446,10 +449,12 @@ const applicationContext = {
       CONTACT_CHANGE_DOCUMENT_TYPES: Document.CONTACT_CHANGE_DOCUMENT_TYPES,
       COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
       COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
+      DATE_FORMATS: FORMATS,
       ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
       INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
       MAX_FILE_SIZE_BYTES,
       MAX_FILE_SIZE_MB,
+      NOTICE_EVENT_CODES: Document.NOTICE_EVENT_CODES,
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
       OTHER_TYPES: ContactFactory.OTHER_TYPES,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -471,6 +476,7 @@ const applicationContext = {
       STATUS_TYPES_MANUAL_UPDATE: Case.STATUS_TYPES_MANUAL_UPDATE,
       STATUS_TYPES_WITH_ASSOCIATED_JUDGE:
         Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
+      TRANSCRIPT_EVENT_CODE: Document.TRANSCRIPT_EVENT_CODE,
       TRIAL_CITIES: TrialSession.TRIAL_CITIES,
       TRIAL_SESSION_TYPES: TrialSession.SESSION_TYPES,
       TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,

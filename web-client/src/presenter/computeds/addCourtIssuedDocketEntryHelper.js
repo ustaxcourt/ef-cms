@@ -19,7 +19,7 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   let eventCodes = COURT_ISSUED_EVENT_CODES;
   if (user.role === USER_ROLES.petitionsClerk) {
     eventCodes = eventCodes.filter(entry =>
-      ['O', 'NOT'].includes(entry.eventCode),
+      ['O', 'NOT', 'MISC'].includes(entry.eventCode),
     );
   }
 

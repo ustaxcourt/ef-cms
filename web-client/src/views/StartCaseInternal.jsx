@@ -54,15 +54,7 @@ export const StartCaseInternal = connect(
       <>
         <BigHeader text="Create Case" />
         <section className="usa-section grid-container">
-          <form
-            noValidate
-            aria-labelledby="start-case-header"
-            role="form"
-            onSubmit={e => {
-              e.preventDefault();
-              submitPetitionFromPaperSequence();
-            }}
-          >
+          <div noValidate aria-labelledby="start-case-header" role="form">
             {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
             )}
@@ -294,7 +286,13 @@ export const StartCaseInternal = connect(
                     </div>
                   )}
                 </div>
-                <Button id="submit-case" type="submit">
+                <Button
+                  id="submit-case"
+                  type="button"
+                  onClick={() => {
+                    submitPetitionFromPaperSequence();
+                  }}
+                >
                   Create Case
                 </Button>
                 <Button
@@ -337,7 +335,7 @@ export const StartCaseInternal = connect(
                 />
               </div>
             </div>
-          </form>
+          </div>
           {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
           {showModal === 'FileUploadErrorModal' && (
             <FileUploadErrorModal

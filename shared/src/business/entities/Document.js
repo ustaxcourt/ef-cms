@@ -3,10 +3,13 @@ const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
 const joi = require('@hapi/joi');
 const {
+  DOCKET_NUMBER_MATCHER,
+  TRIAL_LOCATION_MATCHER,
+} = require('./cases/CaseConstants');
+const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
-const { DOCKET_NUMBER_MATCHER } = require('./cases/CaseConstants');
 const { flatten } = require('lodash');
 const { Order } = require('./orders/Order');
 const { TrialSession } = require('./trialSessions/TrialSession');
@@ -14,6 +17,7 @@ const { WorkItem } = require('./WorkItem');
 
 Document.CATEGORIES = Object.keys(documentMapExternal);
 Document.CATEGORY_MAP = documentMapExternal;
+Document.NOTICE_EVENT_CODES = ['NOT'];
 Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
@@ -189,6 +193,8 @@ Document.CONTACT_CHANGE_DOCUMENT_TYPES = [
   'Notice of Change of Address and Telephone Number',
 ];
 
+Document.TRANSCRIPT_EVENT_CODE = 'TRAN';
+
 Document.isPendingOnCreation = rawDocument => {
   const isPending = Object.values(Document.TRACKED_DOCUMENT_TYPES).some(
     trackedType => {
@@ -349,7 +355,7 @@ joiValidationDecorator(
     partySecondary: joi.boolean().optional(),
     pending: joi.boolean().optional(),
     practitioner: joi.array().optional(),
-    previousDocument: joi.string().optional(),
+    previousDocument: joi.object().optional(),
     processingStatus: joi.string().optional(),
     qcAt: joi
       .date()
@@ -408,7 +414,7 @@ joiValidationDecorator(
       .alternatives()
       .try(
         joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
-        joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
+        joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
         joi.string().allow(null),
       )
       .optional(),

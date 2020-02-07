@@ -249,6 +249,24 @@ describe('formattedTrialSessions', () => {
     expect(result.formattedSessions.length).toBe(2);
   });
 
+  it('does NOT return the unassigned judge filter on trial sessions tabs other than "new"', () => {
+    let result = runCompute(formattedTrialSessions, {
+      state: {
+        ...baseState,
+        screenMetadata: {
+          trialSessionFilters: { judge: { userId: 'unassigned' } },
+        },
+        trialSessions: TRIAL_SESSIONS_LIST,
+        trialSessionsTab: {
+          group: 'open',
+        },
+        user: testJudgeUser,
+      },
+    });
+
+    expect(result.formattedSessions.length).toBe(2);
+  });
+
   it('shows swing session option only if matching term and term year is found', () => {
     const trialSessions = [
       {

@@ -82,6 +82,9 @@ export const setDocketEntryMetaFormForEditAction = ({
       value: documentDetail.eventCode,
     };
   } else {
-    store.set(state.form, docketRecordEntry);
+    store.set(state.form, {
+      ...docketRecordEntry,
+      ...deconstructDateWrapper(docketRecordEntry.filingDate, 'filingDate'),
+    });
   }
 };
