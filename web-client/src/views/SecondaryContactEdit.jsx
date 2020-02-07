@@ -66,10 +66,7 @@ export const SecondaryContactEdit = connect(
 
             {contactEditHelper.contactSecondary?.showInCareOf && (
               <FormGroup
-                errorText={
-                  validationErrors.contactSecondary &&
-                  validationErrors.contactSecondary.inCareOf
-                }
+                errorText={validationErrors.contactSecondary?.inCareOf}
               >
                 <label className="usa-label" htmlFor="inCareOf">
                   <span>In care of</span>

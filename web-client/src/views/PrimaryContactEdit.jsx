@@ -13,10 +13,8 @@ import React from 'react';
 export const PrimaryContactEdit = connect(
   {
     caseDetail: state.caseDetail,
-    caseDetailHelper: state.caseDetailHelper,
     contactEditHelper: state.contactEditHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    formattedCaseDetail: state.formattedCaseDetail,
     showModal: state.showModal,
     submitEditPrimaryContactSequence:
       sequences.submitEditPrimaryContactSequence,
@@ -26,9 +24,7 @@ export const PrimaryContactEdit = connect(
   },
   ({
     caseDetail,
-    caseDetailHelper,
     contactEditHelper,
-    formattedCaseDetail,
     formCancelToggleCancelSequence,
     showModal,
     submitEditPrimaryContactSequence,
@@ -64,20 +60,11 @@ export const PrimaryContactEdit = connect(
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
               <p className="usa-label">Contact name</p>
-              <p className="margin-top-0">
-                {caseDetailHelper.showCaseNameForPrimary
-                  ? formattedCaseDetail.caseName
-                  : caseDetail.contactPrimary.name}
-              </p>
+              <p className="margin-top-0">{caseDetail.contactPrimary.name}</p>
             </div>
 
             {contactEditHelper.contactPrimary?.showInCareOf && (
-              <FormGroup
-                errorText={
-                  validationErrors.contactPrimary &&
-                  validationErrors.contactPrimary.inCareOf
-                }
-              >
+              <FormGroup errorText={validationErrors.contactPrimary?.inCareOf}>
                 <label className="usa-label" htmlFor="inCareOf">
                   <span>In care of</span>
                 </label>
