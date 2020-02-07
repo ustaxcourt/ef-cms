@@ -26,7 +26,11 @@ import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCa
 import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionsClerkPrioritizesCase from './journey/petitionsClerkPrioritizesCase';
 
-const test = setupTest();
+const test = setupTest({
+  useCases: {
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
+  },
+});
 test.draftOrders = [];
 
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
