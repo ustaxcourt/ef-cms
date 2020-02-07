@@ -23,7 +23,7 @@ exports.updateDocketEntryMetaInteractor = async ({
   docketEntryMeta,
   docketRecordIndex,
 }) => {
-  let caseUpdated, filedBy;
+  let caseUpdated, newFiledBy;
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY)) {
@@ -55,11 +55,11 @@ exports.updateDocketEntryMetaInteractor = async ({
     certificateOfService,
     certificateOfServiceDate,
     description,
+    documentTitle,
     documentType,
     eventCode,
     filingDate,
     freeText,
-    documentTitle,
     judge,
     lodged,
     objections,
@@ -74,15 +74,14 @@ exports.updateDocketEntryMetaInteractor = async ({
     { applicationContext },
   );
   documentEntityForFiledBy.generateFiledBy(caseToUpdate, true);
-  { filedBy } = documentEntityForFiledBy;
+  newFiledBy = documentEntityForFiledBy.filedBy;
 
   const docketRecordEntity = new DocketRecord({
     ...docketRecordEntry,
     action: action || docketRecordEntry.action,
-    description:
-      documentTitle || description || docketRecordEntry.description,
+    description: documentTitle || description || docketRecordEntry.description,
     eventCode: eventCode || docketRecordEntry.eventCode,
-    filedBy: filedBy || docketRecordEntry.filedBy,
+    filedBy: newFiledBy || docketRecordEntry.filedBy,
     filingDate: filingDate || docketRecordEntry.filingDate,
     servedPartiesCode: servedPartiesCode || docketRecordEntry.servedPartiesCode,
   });
@@ -95,7 +94,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     certificateOfService ||
     documentType ||
     eventCode ||
-    filedBy ||
+    newFiledBy ||
     filingDate ||
     freeText ||
     documentTitle ||
@@ -144,7 +143,7 @@ exports.updateDocketEntryMetaInteractor = async ({
           documentTitle: documentTitle || documentDetail.documentTitle, // setting to null will regenerate it for the coversheet
           documentType: documentType || documentDetail.documentType,
           eventCode: eventCode || documentDetail.eventCode,
-          filedBy: filedBy || documentDetail.filedBy,
+          filedBy: newFiledBy || documentDetail.filedBy,
           filingDate: filingDate || documentDetail.filingDate,
           freeText: freeText || documentDetail.freeText,
           judge: judge || documentDetail.judge,
