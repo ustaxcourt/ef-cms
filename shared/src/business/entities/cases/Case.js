@@ -1704,6 +1704,14 @@ Case.prototype.setAsSealed = function() {
   this.isSealed = true;
   return this;
 };
+/**
+ * generates the case confirmation pdf file name
+ *
+ * @returns {string} this case confirmation pdf file name
+ */
+Case.prototype.getCaseConfirmationGeneratedPdfFileName = function() {
+  return `case-${this.docketNumber}-confirmation.pdf`;
+};
 
 exports.Case = Case;
 exports.isAssociatedUser = isAssociatedUser;
