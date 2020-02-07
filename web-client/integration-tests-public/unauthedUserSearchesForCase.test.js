@@ -25,8 +25,16 @@ import unauthedUserSearchesByMeta from './journey/unauthedUserSearchesByMeta';
 import unauthedUserViewsCaseDetail from './journey/unauthedUserViewsCaseDetail';
 import unauthedUserViewsPrintableDocketRecord from './journey/unauthedUserViewsPrintableDocketRecord';
 
-const test = setupTest();
-const testClient = setupTestClient();
+const test = setupTest({
+  useCases: {
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
+  },
+});
+const testClient = setupTestClient({
+  useCases: {
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
+  },
+});
 testClient.draftOrders = [];
 
 describe('Petitioner creates cases to search for', () => {
