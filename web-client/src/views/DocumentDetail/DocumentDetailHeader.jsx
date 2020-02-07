@@ -66,7 +66,7 @@ export const DocumentDetailHeader = connect(
                       });
                     }}
                   >
-                    Edit Order
+                    Edit
                   </Button>
                 ) : (
                   <Button
@@ -74,7 +74,7 @@ export const DocumentDetailHeader = connect(
                     href={documentDetailHelper.formattedDocument.editUrl}
                     icon="edit"
                   >
-                    Edit Order
+                    Edit
                   </Button>
                 )}
 

@@ -24,7 +24,7 @@ describe('submitEditRespondentsModalAction', () => {
       success: successStub,
     };
   });
-  //
+
   it('should call the delete use case for each respondent on the form with removeFromCase set to true and call the path.success when finished', async () => {
     const form = {
       respondents: [

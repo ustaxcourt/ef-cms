@@ -98,9 +98,19 @@ describe('updateDocketEntryWizardDataAction', () => {
       },
     });
 
-    expect(result.state.form.previousDocument).toEqual('C Document');
+    expect(result.state.form.previousDocument).toEqual({
+      documentId: '3',
+      documentTitle: 'C Document',
+      documentType: 'C Document',
+      relationship: 'primaryDocument',
+    });
     expect(result.state.form).toEqual({
-      previousDocument: 'C Document',
+      previousDocument: {
+        documentId: '3',
+        documentTitle: 'C Document',
+        documentType: 'C Document',
+        relationship: 'primaryDocument',
+      },
       something: true,
       somethingElse: false,
     });

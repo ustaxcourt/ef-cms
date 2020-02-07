@@ -519,7 +519,7 @@ A lodged document is awaiting action by the judge to enact or refuse.
 
 ### previousDocument
 
-> `string` | optional
+> `object` | optional
 
 ### processingStatus
 
@@ -550,6 +550,13 @@ A lodged document is awaiting action by the judge to enact or refuse.
 ### scenario
 
 > `string` | optional
+
+### secondaryDate
+
+
+A secondary date associated with the document, typically related to time-restricted availability.
+
+> `date` | optional
 
 ### secondaryDocument
 

@@ -22,7 +22,11 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-const test = setupTest();
+const test = setupTest({
+  useCases: {
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
+  },
+});
 test.draftOrders = [];
 
 describe('Docket Clerk Adds Transcript to Docket Record', () => {
