@@ -11,10 +11,9 @@ export default (
   {
     currentRichText = '<p>This is a test order.</p>',
     setRichText = '<p>This is an edited test order.</p>',
-    viewAfterEdit = 'DocumentDetail',
   },
 ) => {
-  return it('Petitions edits draft order', async () => {
+  return it('Petitions Clerk edits draft order', async () => {
     const formatted = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
@@ -38,12 +37,6 @@ export default (
     const editedDraftOrder = formattedAfterEdit.draftDocuments[0];
 
     expect(editedDraftOrder.draftState.richText).toEqual(setRichText);
-    if (viewAfterEdit === 'CaseDetail') {
-      expect(test.currentRouteUrl).toEqual(`/case-detail/${draftOrder.caseId}`);
-    } else if (viewAfterEdit === 'DocumentDetail') {
-      expect(test.currentRouteUrl).toEqual(
-        `/case-detail/${draftOrder.caseId}/documents/${draftOrder.documentId}`,
-      );
-    }
+    expect(test.getState('currentPage')).toEqual('SignOrder');
   });
 };
