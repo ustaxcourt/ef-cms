@@ -4,7 +4,12 @@ export default test => {
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
       key: 'eventCode',
-      value: 'STST',
+      value: 'REQA',
+    });
+
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'ordinalValue',
+      value: 'First',
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {

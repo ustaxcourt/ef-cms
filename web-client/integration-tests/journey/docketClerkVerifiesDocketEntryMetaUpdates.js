@@ -12,5 +12,8 @@ export default (test, docketRecordIndex = 1) => {
     );
 
     expect(docketRecordEntry.filingDate).toEqual('2020-01-04T05:00:00.000Z');
+    expect(docketRecordEntry.description).toEqual(
+      'First Request for Admissions',
+    );
   });
 };
