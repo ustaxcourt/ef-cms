@@ -1,7 +1,7 @@
 import { fakeFile, setupTest } from './helpers';
 
 // docketClerk
-import docketClerkAddsDocketEntryFromOrder from './journey/docketClerkAddsDocketEntryFromOrder';
+import docketClerkAddsDocketEntryFromDraft from './journey/docketClerkAddsDocketEntryFromDraft';
 import docketClerkEditsAnUploadedCourtIssuedDocument from './journey/docketClerkEditsAnUploadedCourtIssuedDocument';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSignsOut from './journey/docketClerkSignsOut';
@@ -38,7 +38,7 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   docketClerkSignsOut(test);
 
   petitionsClerkLogIn(test);
-  petitionsClerkViewsCaseDetail(test, 4);
+  petitionsClerkViewsCaseDetail(test, 3);
   petitionsClerkViewsDraftOrder(test, 0);
   petitionsClerkSignsOut(test);
 
@@ -46,7 +46,7 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsDraftOrder(test, 0);
   docketClerkEditsAnUploadedCourtIssuedDocument(test, fakeFile, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
+  docketClerkAddsDocketEntryFromDraft(test, 0);
   docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkSignsOut(test);
 
