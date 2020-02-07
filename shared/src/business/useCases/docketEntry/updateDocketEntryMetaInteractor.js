@@ -59,7 +59,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     eventCode,
     filingDate,
     freeText,
-    generatedDocumentTitle,
+    documentTitle,
     judge,
     lodged,
     objections,
@@ -80,7 +80,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     ...docketRecordEntry,
     action: action || docketRecordEntry.action,
     description:
-      generatedDocumentTitle || description || docketRecordEntry.description,
+      documentTitle || description || docketRecordEntry.description,
     eventCode: eventCode || docketRecordEntry.eventCode,
     filedBy: filedBy || docketRecordEntry.filedBy,
     filingDate: filingDate || docketRecordEntry.filingDate,
@@ -98,7 +98,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     filedBy ||
     filingDate ||
     freeText ||
-    generatedDocumentTitle ||
+    documentTitle ||
     judge ||
     lodged ||
     objections ||
@@ -141,7 +141,7 @@ exports.updateDocketEntryMetaInteractor = async ({
               ? certificateOfService
               : documentDetail.certificateOfService,
           certificateOfServiceDate: newCertificateOfServiceDate,
-          documentTitle: generatedDocumentTitle || documentDetail.title, // setting to null will regenerate it for the coversheet
+          documentTitle: documentTitle || documentDetail.title, // setting to null will regenerate it for the coversheet
           documentType: documentType || documentDetail.documentType,
           eventCode: eventCode || documentDetail.eventCode,
           filedBy: filedBy || documentDetail.filedBy,
