@@ -7,20 +7,20 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoPrimaryContactEdit = [
+const gotoSecondaryContactEdit = [
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearFormAction,
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
-  setCurrentPageAction('PrimaryContactEdit'),
+  setCurrentPageAction('SecondaryContactEdit'),
 ];
 
-export const gotoPrimaryContactEditSequence = [
+export const gotoSecondaryContactEditSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoPrimaryContactEdit,
+    isLoggedIn: gotoSecondaryContactEdit,
     unauthorized: [redirectToCognitoAction],
   },
 ];

@@ -104,6 +104,7 @@ import { gotoPrintableDocketRecordSequence } from './sequences/gotoPrintableDock
 import { gotoPrintablePendingReportForCaseSequence } from './sequences/gotoPrintablePendingReportForCaseSequence';
 import { gotoPrintablePendingReportSequence } from './sequences/gotoPrintablePendingReportSequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
+import { gotoSecondaryContactEditSequence } from './sequences/gotoSecondaryContactEditSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
 import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
 import { gotoSignPDFDocumentSequence } from './sequences/gotoSignPDFDocumentSequence';
@@ -158,7 +159,6 @@ import { openDeleteSessionNoteConfirmModalSequence } from './sequences/openDelet
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
 import { openEditPractitionersModalSequence } from './sequences/openEditPractitionersModalSequence';
 import { openEditRespondentsModalSequence } from './sequences/openEditRespondentsModalSequence';
-import { openEditSecondaryContactModalSequence } from './sequences/openEditSecondaryContactModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
@@ -245,6 +245,7 @@ import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketE
 import { submitEditPractitionersModalSequence } from './sequences/submitEditPractitionersModalSequence';
 import { submitEditPrimaryContactSequence } from './sequences/submitEditPrimaryContactSequence';
 import { submitEditRespondentsModalSequence } from './sequences/submitEditRespondentsModalSequence';
+import { submitEditSecondaryContactSequence } from './sequences/submitEditSecondaryContactSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitForwardSequence } from './sequences/submitForwardSequence';
@@ -336,6 +337,7 @@ import { validatePetitionerInformationFormSequence } from './sequences/validateP
 import { validatePrimaryContactSequence } from './sequences/validatePrimaryContactSequence';
 import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCaseSequence';
 import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemoveFromTrialSessionSequence';
+import { validateSecondaryContactSequence } from './sequences/validateSecondaryContactSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
 import { validateTrialSessionPlanningSequence } from './sequences/validateTrialSessionPlanningSequence';
@@ -459,6 +461,7 @@ export const presenter = {
     gotoPrintablePendingReportForCaseSequence,
     gotoPrintablePendingReportSequence,
     gotoRequestAccessSequence,
+    gotoSecondaryContactEditSequence,
     gotoSelectDocumentTypeSequence,
     gotoSignOrderSequence,
     gotoSignPDFDocumentSequence,
@@ -513,7 +516,6 @@ export const presenter = {
     openEditCaseDeadlineModalSequence,
     openEditPractitionersModalSequence,
     openEditRespondentsModalSequence,
-    openEditSecondaryContactModalSequence,
     openPdfPreviewModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
@@ -598,6 +600,7 @@ export const presenter = {
     submitEditPractitionersModalSequence,
     submitEditPrimaryContactSequence,
     submitEditRespondentsModalSequence,
+    submitEditSecondaryContactSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
     submitForwardSequence,
@@ -689,6 +692,7 @@ export const presenter = {
     validatePrimaryContactSequence,
     validatePrioritizeCaseSequence,
     validateRemoveFromTrialSessionSequence,
+    validateSecondaryContactSequence,
     validateSelectDocumentTypeSequence,
     validateStartCaseWizardSequence,
     validateTrialSessionPlanningSequence,

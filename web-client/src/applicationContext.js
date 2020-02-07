@@ -232,6 +232,7 @@ import { validatePetitionFromPaperInteractor } from '../../shared/src/business/u
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionerInformationFormInteractor } from '../../shared/src/business/useCases/validatePetitionerInformationFormInteractor';
 import { validatePrimaryContactInteractor } from '../../shared/src/business/useCases/validatePrimaryContactInteractor';
+import { validateSecondaryContactInteractor } from '../../shared/src/business/useCases/validateSecondaryContactInteractor';
 import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { validateUserContactInteractor } from '../../shared/src/business/useCases/users/validateUserContactInteractor';
@@ -405,6 +406,7 @@ const allUseCases = {
   validatePetitionInteractor,
   validatePetitionerInformationFormInteractor,
   validatePrimaryContactInteractor,
+  validateSecondaryContactInteractor,
   validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
   validateUserContactInteractor,

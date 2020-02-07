@@ -21,6 +21,7 @@ import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
+import { contactEditHelper } from './computeds/contactEditHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
@@ -47,7 +48,6 @@ import { menuHelper } from './computeds/menuHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
-import { primaryContactEditHelper } from './computeds/primaryContactEditHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
@@ -107,6 +107,7 @@ export const state = {
   completeDocumentTypeSectionHelper,
   completeForm: {},
   confirmInitiateServiceModalHelper,
+  contactEditHelper,
   contactsHelper,
   createOrderHelper,
   currentPage: 'Interstitial',
@@ -176,7 +177,6 @@ export const state = {
   permissions: null,
   petition: {},
   previewPdfFile: null,
-  primaryContactEditHelper,
   procedureTypes: [],
   requestAccessHelper,
   scanBatchPreviewerHelper,
