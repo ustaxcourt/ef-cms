@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { SuccessNotification } from '../SuccessNotification';

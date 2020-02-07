@@ -1,7 +1,7 @@
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
-const showProgressSequenceDecorator = actionsList => {
+export const showProgressSequenceDecorator = actionsList => {
   const wrappedActions = [
     setWaitingForResponseAction,
     ...actionsList,
@@ -9,5 +9,3 @@ const showProgressSequenceDecorator = actionsList => {
   ];
   return wrappedActions;
 };
-
-module.exports = { showProgressSequenceDecorator };
