@@ -10,16 +10,17 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const PrimaryContactEdit = connect(
+export const SecondaryContactEdit = connect(
   {
     caseDetail: state.caseDetail,
     contactEditHelper: state.contactEditHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.showModal,
-    submitEditPrimaryContactSequence:
-      sequences.submitEditPrimaryContactSequence,
+    submitEditSecondaryContactSequence:
+      sequences.submitEditSecondaryContactSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
-    validatePrimaryContactSequence: sequences.validatePrimaryContactSequence,
+    validateSecondaryContactSequence:
+      sequences.validateSecondaryContactSequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -27,14 +28,14 @@ export const PrimaryContactEdit = connect(
     contactEditHelper,
     formCancelToggleCancelSequence,
     showModal,
-    submitEditPrimaryContactSequence,
+    submitEditSecondaryContactSequence,
     updateCaseValueSequence,
-    validatePrimaryContactSequence,
+    validateSecondaryContactSequence,
     validationErrors,
   }) => {
-    const type = 'contactPrimary';
+    const type = 'contactSecondary';
     const bind = 'caseDetail';
-    const onBlur = 'validatePrimaryContactSequence';
+    const onBlur = 'validateSecondaryContactSequence';
 
     return (
       <>
@@ -60,11 +61,13 @@ export const PrimaryContactEdit = connect(
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
               <p className="usa-label">Contact name</p>
-              <p className="margin-top-0">{caseDetail.contactPrimary.name}</p>
+              <p className="margin-top-0">{caseDetail.contactSecondary.name}</p>
             </div>
 
-            {contactEditHelper.contactPrimary?.showInCareOf && (
-              <FormGroup errorText={validationErrors.contactPrimary?.inCareOf}>
+            {contactEditHelper.contactSecondary?.showInCareOf && (
+              <FormGroup
+                errorText={validationErrors.contactSecondary?.inCareOf}
+              >
                 <label className="usa-label" htmlFor="inCareOf">
                   <span>In care of</span>
                 </label>
@@ -72,11 +75,11 @@ export const PrimaryContactEdit = connect(
                   autoCapitalize="none"
                   className="usa-input"
                   id="inCareOf"
-                  name="contactPrimary.inCareOf"
+                  name="contactSecondary.inCareOf"
                   type="text"
-                  value={caseDetail.contactPrimary.inCareOf || ''}
+                  value={caseDetail.contactSecondary.inCareOf || ''}
                   onBlur={() => {
-                    validatePrimaryContactSequence();
+                    validateSecondaryContactSequence();
                   }}
                   onChange={e => {
                     updateCaseValueSequence({
@@ -94,7 +97,7 @@ export const PrimaryContactEdit = connect(
               type={type}
               onChange="countryTypeChangeSequence"
             />
-            {caseDetail.contactPrimary.countryType === 'domestic' ? (
+            {caseDetail.contactSecondary.countryType === 'domestic' ? (
               <Address
                 bind={bind}
                 type={type}
@@ -112,8 +115,8 @@ export const PrimaryContactEdit = connect(
             <FormGroup
               errorText={
                 validationErrors &&
-                validationErrors.contactPrimary &&
-                validationErrors.contactPrimary.phone
+                validationErrors.contactSecondary &&
+                validationErrors.contactSecondary.phone
               }
             >
               <label className="usa-label" htmlFor="phone">
@@ -123,11 +126,11 @@ export const PrimaryContactEdit = connect(
                 autoCapitalize="none"
                 className="usa-input max-width-200"
                 id="phone"
-                name="contactPrimary.phone"
+                name="contactSecondary.phone"
                 type="tel"
-                value={caseDetail.contactPrimary.phone || ''}
+                value={caseDetail.contactSecondary.phone || ''}
                 onBlur={() => {
-                  validatePrimaryContactSequence();
+                  validateSecondaryContactSequence();
                 }}
                 onChange={e => {
                   updateCaseValueSequence({
@@ -140,7 +143,7 @@ export const PrimaryContactEdit = connect(
           </div>
           <Button
             onClick={() => {
-              submitEditPrimaryContactSequence();
+              submitEditSecondaryContactSequence();
             }}
           >
             Save
