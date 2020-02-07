@@ -66,6 +66,11 @@ export const TrialSessionsTable = connect(
                       {judge.name}
                     </option>
                   ))}
+                  {trialSessionsHelper.showUnassignedJudgeFilter && (
+                    <option key={users.length} value="unassigned">
+                      Unassigned
+                    </option>
+                  )}
                 </BindedSelect>
               </div>
             </div>
@@ -95,7 +100,7 @@ export const TrialSessionsTable = connect(
             <React.Fragment key={idxDate}>
               <tbody>
                 <tr className="trial-date">
-                  <td colSpan={trialSessionsHelper.numCols}>
+                  <td colSpan={5 + trialSessionsHelper.additionalColumnsShown}>
                     <h4 className="margin-bottom-0">
                       {trialDate.dateFormatted}
                     </h4>

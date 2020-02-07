@@ -351,6 +351,16 @@ const router = {
     );
 
     route(
+      '/case-detail/*/contacts/secondary/edit',
+      ifHasAccess(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Secondary contact`,
+        );
+        app.getSequence('gotoSecondaryContactEditSequence')({ docketNumber });
+      }),
+    );
+
+    route(
       '/case-detail/*/create-order',
       ifHasAccess(docketNumber => {
         setPageTitle(
@@ -368,6 +378,18 @@ const router = {
         );
         app.getSequence('gotoUploadCourtIssuedDocumentSequence')({
           docketNumber,
+        });
+      }),
+    );
+    route(
+      '/case-detail/*/edit-upload-court-issued/*',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Upload a document`,
+        );
+        app.getSequence('gotoEditUploadCourtIssuedDocumentSequence')({
+          docketNumber,
+          documentId,
         });
       }),
     );
