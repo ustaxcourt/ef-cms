@@ -1,88 +1,25 @@
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const DateInput = ({
+const NonstandardDateInput = ({
   addCourtIssuedDocketEntryNonstandardHelper,
   form,
   updateCourtIssuedDocketEntryFormValueSequence,
   validateCourtIssuedDocketEntrySequence,
   validationErrors,
 }) => (
-  <FormGroup errorText={validationErrors.date}>
-    <fieldset className="usa-fieldset margin-bottom-0 margin-top-2">
-      <legend className="usa-legend" id="date-legend">
-        {addCourtIssuedDocketEntryNonstandardHelper.dateLabel}
-      </legend>
-      <div className="usa-memorable-date">
-        <div className="usa-form-group usa-form-group--month margin-bottom-0">
-          <input
-            aria-describedby="date-legend"
-            aria-label="month, two digits"
-            className="usa-input usa-input-inline"
-            id="date-month"
-            max="12"
-            min="1"
-            name="month"
-            placeholder="MM"
-            type="number"
-            value={form.month || ''}
-            onBlur={() => validateCourtIssuedDocketEntrySequence()}
-            onChange={e => {
-              updateCourtIssuedDocketEntryFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-            }}
-          />
-        </div>
-        <div className="usa-form-group usa-form-group--day margin-bottom-0">
-          <input
-            aria-describedby="date-legend"
-            aria-label="day, two digits"
-            className="usa-input usa-input-inline"
-            id="date-day"
-            max="31"
-            min="1"
-            name="day"
-            placeholder="DD"
-            type="number"
-            value={form.day || ''}
-            onBlur={() => validateCourtIssuedDocketEntrySequence()}
-            onChange={e => {
-              updateCourtIssuedDocketEntryFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-            }}
-          />
-        </div>
-        <div className="usa-form-group usa-form-group--year margin-bottom-0">
-          <input
-            aria-describedby="date-legend"
-            aria-label="year, four digits"
-            className="usa-input usa-input-inline"
-            id="date-year"
-            max="2100"
-            min="1900"
-            name="year"
-            placeholder="YYYY"
-            type="number"
-            value={form.year || ''}
-            onBlur={() => validateCourtIssuedDocketEntrySequence()}
-            onChange={e => {
-              updateCourtIssuedDocketEntryFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-            }}
-          />
-        </div>
-      </div>
-    </fieldset>
-  </FormGroup>
+  <DateInput
+    errorText={validationErrors.date}
+    id="date"
+    label={addCourtIssuedDocketEntryNonstandardHelper.dateLabel}
+    values={form}
+    onBlur={validateCourtIssuedDocketEntrySequence}
+    onChange={updateCourtIssuedDocketEntryFormValueSequence}
+  />
 );
 
 export const CourtIssuedNonstandardForm = connect(
@@ -108,7 +45,7 @@ export const CourtIssuedNonstandardForm = connect(
     return (
       <>
         {addCourtIssuedDocketEntryNonstandardHelper.showDateFirst && (
-          <DateInput
+          <NonstandardDateInput
             addCourtIssuedDocketEntryNonstandardHelper={
               addCourtIssuedDocketEntryNonstandardHelper
             }
@@ -234,7 +171,7 @@ export const CourtIssuedNonstandardForm = connect(
         )}
 
         {addCourtIssuedDocketEntryNonstandardHelper.showDateLast && (
-          <DateInput
+          <NonstandardDateInput
             addCourtIssuedDocketEntryNonstandardHelper={
               addCourtIssuedDocketEntryNonstandardHelper
             }

@@ -50,8 +50,8 @@ For documentation about the CI/CD setup, API, style guide, UX, code review, etc.
 
 ## Dependency diagrams
 
-- <a href="docs/images/client-dependencies.png">Client</a>
-- <a href="docs/images/server-dependencies.png">Server</a>
+- <a href="docs/images/client-dependencies.jpg">Client</a>
+- <a href="docs/images/server-dependencies.jpg">Server</a>
 
 ## Backlog
 
