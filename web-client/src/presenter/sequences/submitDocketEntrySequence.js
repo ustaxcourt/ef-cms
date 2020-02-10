@@ -26,24 +26,22 @@ import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNav
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stashWizardDataAction } from '../actions/DocketEntry/stashWizardDataAction';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitDocketEntryWithFileAction } from '../actions/DocketEntry/submitDocketEntryWithFileAction';
 import { submitDocketEntryWithoutFileAction } from '../actions/DocketEntry/submitDocketEntryWithoutFileAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateDocketEntryWithFileAction } from '../actions/DocketEntry/updateDocketEntryWithFileAction';
 import { updateDocketEntryWithoutFileAction } from '../actions/DocketEntry/updateDocketEntryWithoutFileAction';
 import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
-const afterEntryCreatedOrUpdated = [
+const afterEntryCreatedOrUpdated = showProgressSequenceDecorator([
   stashWizardDataAction,
   setCaseAction,
   closeFileUploadStatusModalAction,
-  setWaitingForResponseAction,
   chooseNextStepAction,
   {
     addAnotherEntry: [
@@ -64,8 +62,7 @@ const afterEntryCreatedOrUpdated = [
       navigateToCaseDetailAction,
     ],
   },
-  unsetWaitingForResponseAction,
-];
+]);
 
 export const submitDocketEntrySequence = [
   checkForActiveBatchesAction,
