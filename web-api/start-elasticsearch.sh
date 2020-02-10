@@ -23,7 +23,7 @@ if [ -f /.dockerenv ]; then
   cp -R .elasticsearch/* /home/elasticsearch
   chmod -R 755 /home/elasticsearch/*
   chown elasticsearch:elasticsearch -R /home/elasticsearch/*
-  su -c "JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 /home/elasticsearch/bin/elasticsearch" elasticsearch
+  su -c "JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 /home/elasticsearch/bin/elasticsearch" elasticsearch
 else
   cd .elasticsearch && ./bin/elasticsearch
 fi
