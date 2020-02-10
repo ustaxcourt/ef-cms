@@ -3,8 +3,13 @@ export default test => {
     expect(test.getState('currentPage')).toEqual('EditDocketEntryMeta');
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'filedBy',
-      value: 'New Filer',
+      key: 'eventCode',
+      value: 'REQA',
+    });
+
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'ordinalValue',
+      value: 'First',
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
@@ -25,6 +30,11 @@ export default test => {
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
       key: 'filingDateYear',
       value: '2020',
+    });
+
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'partyRespondent',
+      value: 'true',
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {

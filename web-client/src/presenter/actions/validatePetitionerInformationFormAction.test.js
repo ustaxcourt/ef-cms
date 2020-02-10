@@ -112,7 +112,7 @@ describe('validatePetitionerInformationFormAction', () => {
     });
   });
 
-  it('returns an error when attemping to change from paper to electronic service for contactPrimary and contactSecondary', async () => {
+  it('returns an error when attempting to change from paper to electronic service for contactPrimary and contactSecondary', async () => {
     presenter.providers.applicationContext = applicationContext;
 
     await runAction(validatePetitionerInformationFormAction, {

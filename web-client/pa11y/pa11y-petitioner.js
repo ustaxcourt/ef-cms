@@ -326,14 +326,14 @@ module.exports = [
       'click #submit-document',
       'wait for element #primary-document to be visible',
       'click #primaryDocument-certificateOfService-label',
-      'wait for element fieldset.service-date to be visible',
+      'wait for element .primaryDocument-service-date to be visible',
       'wait for element #add-supporting-document-button to be visible',
       'click element #add-supporting-document-button',
       'wait for element #supporting-document-0-label to be visible',
       'wait for element #secondary-document to be visible',
       'wait for element #secondaryDocument-certificateOfService-label to be visible',
       'click #secondaryDocument-certificateOfService-label',
-      'wait for element fieldset.service-date to be visible',
+      'wait for element .secondaryDocument-service-date to be visible',
       'wait for element #add-secondary-supporting-document-button to be visible',
       'click element #add-secondary-supporting-document-button',
       'wait for element #secondary-supporting-document-0-label to be visible',
@@ -344,4 +344,5 @@ module.exports = [
   },
 
   'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/contacts/primary/edit',
+  'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/contacts/secondary/edit',
 ];

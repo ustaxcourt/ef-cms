@@ -95,6 +95,9 @@ describe('generateCaseConfirmationPdf', () => {
       caseEntity: {
         ...MOCK_CASE,
         documents: [{ servedAt: '2009-09-17T08:06:07.530Z' }],
+        getCaseConfirmationGeneratedPdfFileName() {
+          return '';
+        },
       },
     });
 
