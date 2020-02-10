@@ -5,7 +5,7 @@ describe('openPdfPreviewInNewTabAction', () => {
   const openMock = jest.fn();
 
   beforeEach(() => {
-    global.open = openMock;
+    global.window.open = openMock;
   });
 
   it('should open the pdfUrl from props in a new tab', () => {
