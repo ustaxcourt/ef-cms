@@ -1,9 +1,9 @@
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const EditCaseDeadlineModalDialog = connect(
   {
@@ -32,87 +32,14 @@ export const EditCaseDeadlineModalDialog = connect(
         title="Edit Deadline"
       >
         <div className="ustc-create-order-modal">
-          <FormGroup errorText={validationErrors.deadlineDate}>
-            <fieldset className="usa-fieldset margin-bottom-0">
-              <legend className="usa-legend" id="deadline-date-legend">
-                Due date
-              </legend>
-              <div className="usa-memorable-date">
-                <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                  <input
-                    aria-describedby="deadline-date-legend"
-                    aria-label="month, two digits"
-                    className={classNames(
-                      'usa-input usa-input--inline',
-                      validationErrors.deadlineDate && 'usa-input--error',
-                    )}
-                    id="deadline-date-month"
-                    max="12"
-                    min="1"
-                    name="month"
-                    placeholder="MM"
-                    type="number"
-                    value={form.month || ''}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                      validateCaseDeadlineSequence();
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                  <input
-                    aria-describedby="deadline-date-legend"
-                    aria-label="day, two digits"
-                    className={classNames(
-                      'usa-input usa-input--inline',
-                      validationErrors.deadlineDate && 'usa-input--error',
-                    )}
-                    id="deadline-date-day"
-                    max="31"
-                    min="1"
-                    name="day"
-                    placeholder="DD"
-                    type="number"
-                    value={form.day || ''}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                      validateCaseDeadlineSequence();
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                  <input
-                    aria-describedby="deadline-date-legend"
-                    aria-label="year, four digits"
-                    className={classNames(
-                      'usa-input usa-input--inline',
-                      validationErrors.deadlineDate && 'usa-input--error',
-                    )}
-                    id="deadline-date-year"
-                    max="2100"
-                    min="1900"
-                    name="year"
-                    placeholder="YYYY"
-                    type="number"
-                    value={form.year || ''}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                      validateCaseDeadlineSequence();
-                    }}
-                  />
-                </div>
-              </div>
-            </fieldset>
-          </FormGroup>
+          <DateInput
+            errorText={validationErrors.deadlineDate}
+            id="deadline-date"
+            label="Due date"
+            values={form}
+            onBlur={validateCaseDeadlineSequence}
+            onChange={updateFormValueSequence}
+          />
 
           <FormGroup errorText={validationErrors.description}>
             <label className="usa-label" htmlFor="description">

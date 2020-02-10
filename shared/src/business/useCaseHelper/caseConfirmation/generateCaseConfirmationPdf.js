@@ -110,7 +110,7 @@ exports.generateCaseConfirmationPdf = async ({
     }
   }
 
-  const documentId = `case-${caseEntity.docketNumber}-confirmation.pdf`;
+  const caseConfirmationPdfName = caseEntity.getCaseConfirmationGeneratedPdfFileName();
 
   await new Promise(resolve => {
     const documentsBucket = applicationContext.getDocumentsBucketName();
@@ -120,7 +120,7 @@ exports.generateCaseConfirmationPdf = async ({
       Body: result,
       Bucket: documentsBucket,
       ContentType: 'application/pdf',
-      Key: documentId,
+      Key: caseConfirmationPdfName,
     };
 
     s3Client.upload(params, resolve);

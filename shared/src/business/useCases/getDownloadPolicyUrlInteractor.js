@@ -5,6 +5,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const { Case } = require('../entities/cases/Case');
 const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
@@ -44,13 +45,26 @@ exports.getDownloadPolicyUrlInteractor = async ({
         applicationContext,
         caseId,
       });
-    const selectedDocument = caseData.documents.find(
-      document => document.documentId === documentId,
-    );
-    const documentIsAvailable = documentMeetsAgeRequirements(selectedDocument);
 
-    if (!documentIsAvailable) {
-      throw new UnauthorizedError('Unauthorized to view document at this time');
+    const caseEntity = new Case(caseData, { applicationContext });
+
+    if (documentId.includes('.pdf')) {
+      if (caseEntity.getCaseConfirmationGeneratedPdfFileName() !== documentId) {
+        throw new UnauthorizedError('Unauthorized');
+      }
+    } else {
+      const selectedDocument = caseData.documents.find(
+        document => document.documentId === documentId,
+      );
+      const documentIsAvailable = documentMeetsAgeRequirements(
+        selectedDocument,
+      );
+
+      if (!documentIsAvailable) {
+        throw new UnauthorizedError(
+          'Unauthorized to view document at this time',
+        );
+      }
     }
   }
 
