@@ -1,3 +1,4 @@
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
@@ -102,85 +103,23 @@ export const PetitionPaymentForm = connect(
 
         {bind.petitionPaymentStatus === paymentStatus.PAID && (
           <>
-            <FormGroup errorText={validationErrors.petitionPaymentDate}>
-              <fieldset className="usa-fieldset margin-bottom-0">
-                <legend className="usa-legend" id="payment-date-legend">
-                  Payment date
-                </legend>
-                <div className="usa-memorable-date">
-                  <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                    <input
-                      aria-describedby="payment-date-legend"
-                      aria-label="month, two digits"
-                      className={classNames(
-                        'usa-input usa-input--inline',
-                        validationErrors.paymentDate && 'usa-input-error',
-                      )}
-                      id="payment-date-month"
-                      max="12"
-                      min="1"
-                      name="paymentDateMonth"
-                      placeholder="MM"
-                      type="number"
-                      value={dateBind.paymentDateMonth || ''}
-                      onBlur={() => validateSequence()}
-                      onChange={e => {
-                        updateDateSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                    <input
-                      aria-describedby="payment-date-legend"
-                      aria-label="day, two digits"
-                      className={classNames(
-                        'usa-input usa-input--inline',
-                        validationErrors.paymentDate && 'usa-input-error',
-                      )}
-                      id="payment-date-day"
-                      max="31"
-                      min="1"
-                      name="paymentDateDay"
-                      placeholder="DD"
-                      type="number"
-                      value={dateBind.paymentDateDay || ''}
-                      onBlur={() => validateSequence()}
-                      onChange={e => {
-                        updateDateSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                    <input
-                      aria-describedby="payment-date-legend"
-                      aria-label="year, four digits"
-                      className={classNames(
-                        'usa-input usa-input--inline',
-                        validationErrors.paymentDate && 'usa-input-error',
-                      )}
-                      id="payment-date-year"
-                      name="paymentDateYear"
-                      placeholder="YYYY"
-                      type="number"
-                      value={dateBind.paymentDateYear || ''}
-                      onBlur={() => validateSequence()}
-                      onChange={e => {
-                        updateDateSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
-              </fieldset>
-            </FormGroup>
+            <DateInput
+              errorText={validationErrors.petitionPaymentDate}
+              id="payment-date"
+              label="Payment date"
+              names={{
+                day: 'paymentDateDay',
+                month: 'paymentDateMonth',
+                year: 'paymentDateYear',
+              }}
+              values={{
+                day: dateBind.paymentDateDay,
+                month: dateBind.paymentDateMonth,
+                year: dateBind.paymentDateYear,
+              }}
+              onBlur={validateSequence}
+              onChange={updateDateSequence}
+            />
 
             <FormGroup errorText={validationErrors.petitionPaymentMethod}>
               <label className="usa-label" htmlFor="petition-payment-method">
@@ -207,85 +146,23 @@ export const PetitionPaymentForm = connect(
         )}
 
         {bind.petitionPaymentStatus === paymentStatus.WAIVED && (
-          <FormGroup errorText={validationErrors.petitionPaymentWaivedDate}>
-            <fieldset className="usa-fieldset margin-bottom-0">
-              <legend className="usa-legend" id="payment-date-waived-legend">
-                Date waived
-              </legend>
-              <div className="usa-memorable-date">
-                <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                  <input
-                    aria-describedby="payment-date-waived-legend"
-                    aria-label="month, two digits"
-                    className={classNames(
-                      'usa-input usa-input--inline',
-                      validationErrors.paymentDateWaived && 'usa-input-error',
-                    )}
-                    id="payment-date-waived-month"
-                    max="12"
-                    min="1"
-                    name="paymentDateWaivedMonth"
-                    placeholder="MM"
-                    type="number"
-                    value={dateBind.paymentDateWaivedMonth || ''}
-                    onBlur={() => validateSequence()}
-                    onChange={e => {
-                      updateDateSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                  <input
-                    aria-describedby="payment-date-waived-legend"
-                    aria-label="day, two digits"
-                    className={classNames(
-                      'usa-input usa-input--inline',
-                      validationErrors.paymentDateWaived && 'usa-input-error',
-                    )}
-                    id="payment-date-waived-day"
-                    max="31"
-                    min="1"
-                    name="paymentDateWaivedDay"
-                    placeholder="DD"
-                    type="number"
-                    value={dateBind.paymentDateWaivedDay || ''}
-                    onBlur={() => validateSequence()}
-                    onChange={e => {
-                      updateDateSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                  <input
-                    aria-describedby="payment-date-waived-legend"
-                    aria-label="year, four digits"
-                    className={classNames(
-                      'usa-input usa-input--inline',
-                      validationErrors.paymentDateWaived && 'usa-input-error',
-                    )}
-                    id="payment-date-waived-year"
-                    name="paymentDateWaivedYear"
-                    placeholder="YYYY"
-                    type="number"
-                    value={dateBind.paymentDateWaivedYear || ''}
-                    onBlur={() => validateSequence()}
-                    onChange={e => {
-                      updateDateSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-            </fieldset>
-          </FormGroup>
+          <DateInput
+            errorText={validationErrors.petitionPaymentWaivedDate}
+            id="payment-date-waived"
+            label="Date waived"
+            names={{
+              day: 'paymentDateWaivedDay',
+              month: 'paymentDateWaivedMonth',
+              year: 'paymentDateWaivedYear',
+            }}
+            values={{
+              day: dateBind.paymentDateWaivedDay,
+              month: dateBind.paymentDateWaivedMonth,
+              year: dateBind.paymentDateWaivedYear,
+            }}
+            onBlur={validateSequence}
+            onChange={updateDateSequence}
+          />
         )}
       </>
     );

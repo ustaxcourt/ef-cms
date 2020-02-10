@@ -1,9 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-import { parallel } from 'cerebral/factories';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -19,7 +17,7 @@ export const submitEditPrimaryContactSequence = [
     error: [setValidationAlertErrorsAction],
     success: showProgressSequenceDecorator([
       updatePrimaryContactAction,
-      parallel([setDocumentDetailTabAction, setAlertSuccessAction]),
+      setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
       setCurrentPageAction('Interstitial'),
       navigateToCaseDetailAction,

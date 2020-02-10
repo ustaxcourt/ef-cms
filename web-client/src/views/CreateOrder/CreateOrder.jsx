@@ -11,22 +11,23 @@ import React from 'react';
 
 export const CreateOrder = connect(
   {
+    convertHtml2PdfAndOpenInNewTabSequence:
+      sequences.convertHtml2PdfAndOpenInNewTabSequence,
     convertHtml2PdfSequence: sequences.convertHtml2PdfSequence,
     createOrderHelper: state.createOrderHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    pdfPreviewUrl: state.pdfPreviewUrl,
     showModal: state.showModal,
     submitCourtIssuedOrderSequence: sequences.submitCourtIssuedOrderSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   ({
+    convertHtml2PdfAndOpenInNewTabSequence,
     convertHtml2PdfSequence,
     createOrderHelper,
     form,
     formCancelToggleCancelSequence,
-    pdfPreviewUrl,
     showModal,
     submitCourtIssuedOrderSequence,
     updateFormValueSequence,
@@ -103,9 +104,9 @@ export const CreateOrder = connect(
               <div className="grid-col-4">
                 <Button
                   secondary
-                  href={pdfPreviewUrl}
-                  rel="noopener noreferrer"
-                  target="_blank"
+                  onClick={() => {
+                    convertHtml2PdfAndOpenInNewTabSequence();
+                  }}
                 >
                   View Full PDF
                 </Button>
