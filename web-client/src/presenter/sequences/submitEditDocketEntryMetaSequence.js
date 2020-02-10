@@ -7,7 +7,7 @@ import { computeFilingFormDateAction } from '../actions/FileDocument/computeFili
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
-import { gotoCaseDetailSequence } from './gotoCaseDetailSequence';
+import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -56,7 +56,7 @@ export const submitEditDocketEntryMetaSequence = [
           setSaveAlertsForNavigationAction,
           getEditDocketEntryMetaAlertSuccessAction,
           setAlertSuccessAction,
-          ...gotoCaseDetailSequence, // Needs to refresh the formatted case detail / docket record.
+          navigateToCaseDetailAction,
         ],
       },
       unsetWaitingForResponseAction,
