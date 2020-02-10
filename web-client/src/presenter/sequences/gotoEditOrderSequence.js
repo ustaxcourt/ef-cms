@@ -10,7 +10,6 @@ import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unset } from 'cerebral/factories';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 const gotoEditOrder = [
   unset(state.documentToEdit),
@@ -21,9 +20,8 @@ const gotoEditOrder = [
   getCaseAction,
   setCaseAction,
   setDocumentToEditAction,
-  ...convertHtml2PdfSequence,
+  convertHtml2PdfSequence,
   setCurrentPageAction('CreateOrder'),
-  unsetWaitingForResponseAction,
 ];
 
 export const gotoEditOrderSequence = [

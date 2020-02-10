@@ -1,9 +1,9 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { setAlertFromExceptionAction } from '../actions/setAlertFromExceptionAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { unsetWaitingForResponseOnErrorAction } from '../actions/unsetWaitingForResponseOnErrorAction';
 
 export const setCurrentPageErrorSequence = [
-  unsetWaitingForResponseAction,
+  unsetWaitingForResponseOnErrorAction,
   setAlertFromExceptionAction,
   clearModalAction,
 ];

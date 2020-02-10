@@ -8,9 +8,8 @@ import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNav
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateTrialSessionAction } from '../actions/TrialSession/updateTrialSessionAction';
 import { validateTrialSessionAction } from '../actions/TrialSession/validateTrialSessionAction';
 
@@ -26,8 +25,7 @@ export const updateTrialSessionSequence = [
       setValidationErrorsAction,
       setValidationAlertErrorsAction,
     ],
-    success: [
-      stopShowValidationAction,
+    success: showProgressSequenceDecorator([
       setWaitingForResponseAction,
       updateTrialSessionAction,
       {
@@ -38,7 +36,6 @@ export const updateTrialSessionSequence = [
           navigateToTrialSessionDetailAction,
         ],
       },
-      unsetWaitingForResponseAction,
-    ],
+    ]),
   },
 ];

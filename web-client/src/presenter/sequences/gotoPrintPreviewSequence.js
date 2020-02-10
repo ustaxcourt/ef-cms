@@ -7,10 +7,10 @@ import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setFormSubmittingSequence } from './setFormSubmittingSequence';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { state } from 'cerebral';
-import { unsetFormSubmittingSequence } from './unsetFormSubmittingSequence';
 
-export const gotoPrintPreviewSequence = [
+export const gotoPrintPreviewSequence = showProgressSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   clearModalAction,
   clearFormAction,
@@ -20,5 +20,4 @@ export const gotoPrintPreviewSequence = [
   setCaseAction,
   setAlertWarningAction,
   set(state.currentPage, 'PrintPreview'),
-  unsetFormSubmittingSequence,
-];
+]);

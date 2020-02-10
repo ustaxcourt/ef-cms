@@ -6,10 +6,10 @@ import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setFormSubmittingSequence } from './setFormSubmittingSequence';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { state } from 'cerebral';
-import { unsetFormSubmittingSequence } from './unsetFormSubmittingSequence';
 
-export const gotoOrdersNeededSequence = [
+export const gotoOrdersNeededSequence = showProgressSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   clearModalAction,
   clearFormAction,
@@ -18,5 +18,4 @@ export const gotoOrdersNeededSequence = [
   getCaseAction,
   setCaseAction,
   set(state.currentPage, 'OrdersNeededSummary'),
-  unsetFormSubmittingSequence,
-];
+]);
