@@ -3,7 +3,7 @@ import { runAction } from 'cerebral/test';
 
 import { unsetWaitingForResponseAction } from './unsetWaitingForResponseAction';
 
-describe('shouldValidateAction', () => {
+describe('unsetWaitingForResponseAction', () => {
   it('state of waiting remains unchanged if already false with no requests pending', async () => {
     const result = await runAction(unsetWaitingForResponseAction, {
       modules: {
