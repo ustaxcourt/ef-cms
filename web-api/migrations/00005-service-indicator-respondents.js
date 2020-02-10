@@ -1,8 +1,7 @@
-const { isCaseRecord } = require('./utilities');
-
 const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../shared/src/business/entities/cases/CaseConstants');
+const { isCaseRecord } = require('./utilities');
 
 const up = async (documentClient, tableName, forAllRecords) => {
   await forAllRecords(documentClient, tableName, async item => {
