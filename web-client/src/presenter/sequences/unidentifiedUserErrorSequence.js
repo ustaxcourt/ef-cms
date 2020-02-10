@@ -1,10 +1,10 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setAlertFromExceptionAction } from '../actions/setAlertFromExceptionAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { unsetWaitingForResponseOnErrorAction } from '../actions/unsetWaitingForResponseOnErrorAction';
 
 export const unidentifiedUserErrorSequence = [
-  unsetWaitingForResponseAction,
+  unsetWaitingForResponseOnErrorAction,
   setAlertFromExceptionAction,
   clearModalAction,
   redirectToCognitoAction,

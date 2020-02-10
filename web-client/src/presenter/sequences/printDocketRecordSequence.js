@@ -1,13 +1,10 @@
 import { generateDocketRecordPdfUrlAction } from '../actions/generateDocketRecordPdfUrlAction';
 import { gotoPrintDocketRecordPreviewAction } from '../actions/gotoPrintDocketRecordPreviewAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const printDocketRecordSequence = [
-  setWaitingForResponseAction,
+export const printDocketRecordSequence = showProgressSequenceDecorator([
   generateDocketRecordPdfUrlAction,
-  ...setPdfPreviewUrlSequence,
+  setPdfPreviewUrlSequence,
   gotoPrintDocketRecordPreviewAction,
-  unsetWaitingForResponseAction,
-];
+]);
