@@ -11,6 +11,10 @@ export default (test, docketRecordIndex = 1) => {
       entry => entry.index === docketRecordIndex,
     );
 
-    expect(docketRecordEntry.filedBy).toEqual('New Filer');
+    expect(docketRecordEntry.filingDate).toEqual('2020-01-04T05:00:00.000Z');
+    expect(docketRecordEntry.filedBy).toEqual('Resp. & Petr. Test Person');
+    expect(docketRecordEntry.description).toEqual(
+      'First Request for Admissions',
+    );
   });
 };
