@@ -1,3 +1,4 @@
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import React from 'react';
 
 export const Forms = () => (
@@ -313,56 +314,15 @@ export const Forms = () => (
       </div>
 
       <div className="blue-container margin-bottom-4">
-        <fieldset className="usa-fieldset margin-bottom-0">
-          <legend className="usa-legend">Date of birth</legend>
-          <div className="usa-memorable-date">
-            <div className="usa-form-group usa-form-group--month">
-              <label className="usa-label" htmlFor="date_of_birth_1">
-                Month
-              </label>
-              <input
-                aria-describedby="dobHint"
-                className="usa-input usa-input--inline"
-                defaultValue=""
-                id="date_of_birth_1"
-                max="12"
-                min="1"
-                name="date_of_birth_1"
-                type="number"
-              />
-            </div>
-            <div className="usa-form-group usa-form-group--day">
-              <label className="usa-label" htmlFor="date_of_birth_2">
-                Day
-              </label>
-              <input
-                aria-describedby="dobHint"
-                className="usa-input usa-input--inline"
-                defaultValue=""
-                id="date_of_birth_2"
-                max="31"
-                min="1"
-                name="date_of_birth_2"
-                type="number"
-              />
-            </div>
-            <div className="usa-form-group usa-form-group--year">
-              <label className="usa-label" htmlFor="date_of_birth_3">
-                Year
-              </label>
-              <input
-                aria-describedby="dobHint"
-                className="usa-input usa-input--inline"
-                defaultValue=""
-                id="date_of_birth_3"
-                max="2000"
-                min="1900"
-                name="date_of_birth_3"
-                type="number"
-              />
-            </div>
-          </div>
-        </fieldset>
+        <DateInput
+          id="date_of_birth"
+          label="Date of birth"
+          names={{
+            day: 'date_of_birth_1',
+            month: 'date_of_birth_2',
+            year: 'date_of_birth_3',
+          }}
+        />
 
         <fieldset className="usa-fieldset margin-bottom-0">
           <legend className="usa-legend sr-only">Mailing address</legend>

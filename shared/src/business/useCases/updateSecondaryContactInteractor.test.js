@@ -15,13 +15,13 @@ const fakeData =
 const fakeFile = Buffer.from(fakeData, 'base64');
 fakeFile.name = 'fakeFile.pdf';
 
-const updateCaseStub = jest.fn();
-const generateChangeOfAddressTemplateStub = jest.fn();
-const generatePdfFromHtmlInteractorStub = jest.fn();
-const getAddressPhoneDiffStub = jest.fn();
-const getDocumentTypeForAddressChangeStub = jest.fn();
-const saveDocumentFromLambdaStub = jest.fn();
-const sendServedPartiesEmailsStub = jest.fn();
+let updateCaseStub;
+let generateChangeOfAddressTemplateStub;
+let generatePdfFromHtmlInteractorStub;
+let getAddressPhoneDiffStub;
+let getDocumentTypeForAddressChangeStub;
+let saveDocumentFromLambdaStub;
+let sendServedPartiesEmailsStub;
 
 let persistenceGateway;
 let useCases;
@@ -29,6 +29,14 @@ let applicationContext;
 
 describe('update secondary contact on a case', () => {
   beforeEach(() => {
+    updateCaseStub = jest.fn();
+    generateChangeOfAddressTemplateStub = jest.fn();
+    generatePdfFromHtmlInteractorStub = jest.fn();
+    getAddressPhoneDiffStub = jest.fn();
+    getDocumentTypeForAddressChangeStub = jest.fn();
+    saveDocumentFromLambdaStub = jest.fn();
+    sendServedPartiesEmailsStub = jest.fn();
+
     persistenceGateway = {
       getCaseByCaseId: () => ({
         ...MOCK_CASE,
@@ -176,5 +184,32 @@ describe('update secondary contact on a case', () => {
       error = err;
     }
     expect(error.message).toEqual('Unauthorized for update case contact');
+  });
+
+  it('does not update the case if the contact information does not change', async () => {
+    const getUtilities = applicationContext.getUtilities();
+    applicationContext.getUtilities = () => ({
+      ...getUtilities,
+      getDocumentTypeForAddressChange: () => undefined, // returns undefined when there is no diff
+    });
+    await updateSecondaryContactInteractor({
+      applicationContext,
+      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      contactInfo: {
+        // Matches current contact info
+        address1: 'nothing',
+        city: 'Somewhere',
+        countryType: 'domestic',
+        email: 'secondary@example.com',
+        name: 'Secondary Party',
+        phone: '9876543210',
+        postalCode: '12345',
+        state: 'TN',
+      },
+    });
+
+    expect(updateCaseStub).not.toHaveBeenCalled();
+    expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
+    expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
   });
 });

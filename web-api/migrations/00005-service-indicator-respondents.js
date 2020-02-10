@@ -9,6 +9,7 @@ const { forAllRecords } = require('./00004-service-indicator');
 const up = async (documentClient, tableName) => {
   await forAllRecords(documentClient, tableName, async item => {
     if (!isCaseRecord(item)) return;
+    if (!item.respondents) return;
 
     item.respondents.forEach(respondent => {
       if (!respondent.serviceIndicator) {
