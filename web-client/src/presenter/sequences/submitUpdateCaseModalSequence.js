@@ -4,7 +4,6 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitUpdateCaseModalAction } from '../actions/CaseDetail/submitUpdateCaseModalAction';
@@ -17,7 +16,6 @@ export const submitUpdateCaseModalSequence = showProgressSequenceDecorator([
     error: [setValidationErrorsAction],
     success: [
       stopShowValidationAction,
-      setWaitingForResponseAction,
       submitUpdateCaseModalAction,
       setCaseAction,
       setAlertSuccessAction,
