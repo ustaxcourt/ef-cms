@@ -29,8 +29,6 @@ const generateTrialSessionPlanningReportTemplate = async ({
           '<div class="calendar-icon"></div>'}</td>
         <td>${row.previousTermsData[2].join('<br />') ||
           '<div class="calendar-icon"></div>'}</td>
-        <td>${row.previousTermsData[3].join('<br />') ||
-          '<div class="calendar-icon"></div>'}</td>
       </tr>
     `;
   });
@@ -55,7 +53,6 @@ const generateTrialSessionPlanningReportTemplate = async ({
           <th>${capitalize(previousTerms[0].term)} ${previousTerms[0].year}</th>
           <th>${capitalize(previousTerms[1].term)} ${previousTerms[1].year}</th>
           <th>${capitalize(previousTerms[2].term)} ${previousTerms[2].year}</th>
-          <th>${capitalize(previousTerms[3].term)} ${previousTerms[3].year}</th>
         </tr>
       </thead>
       <tbody>

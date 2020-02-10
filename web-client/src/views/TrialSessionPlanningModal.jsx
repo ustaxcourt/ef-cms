@@ -61,9 +61,6 @@ export const TrialSessionPlanningModal = connect(
                 <option key="spring" value="spring">
                   Spring
                 </option>
-                <option key="summer" value="summer">
-                  Summer
-                </option>
                 <option key="fall" value="fall">
                   Fall
                 </option>
