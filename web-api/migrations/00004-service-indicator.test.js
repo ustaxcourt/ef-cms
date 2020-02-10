@@ -1,9 +1,9 @@
 const { fail } = require('jest');
 const { forAllRecords } = require('./utilities');
 const { MOCK_CASE } = require('../../shared/src/test/mockCase');
-const { up } = require('./00005-service-indicator-respondents');
+const { up } = require('./00004-service-indicator');
 
-describe('service indicator respondents migration', () => {
+describe('service indicator migration', () => {
   let applicationContext;
   let scanStub;
   let putStub;
@@ -30,7 +30,7 @@ describe('service indicator respondents migration', () => {
     };
   });
 
-  it('should not throw an error when a case does not have any respondents', async () => {
+  it('should not throw an error when a case does not have any practitioners', async () => {
     await up(applicationContext.getDocumentClient(), '', forAllRecords).catch(
       () => {
         fail();
