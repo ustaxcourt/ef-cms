@@ -1,12 +1,10 @@
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PetitionPaymentForm } from '../CaseDetail/PetitionPaymentForm';
 import { ProcedureType } from '../StartCase/ProcedureType';
 import { connect } from '@cerebral/react';
-import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const CaseInfo = connect(
   {
@@ -35,87 +33,23 @@ export const CaseInfo = connect(
       <div className="blue-container">
         {caseDetail.isPaper && (
           <>
-            <FormGroup errorText={caseDetailErrors.receivedAt}>
-              <fieldset className="usa-fieldset margin-bottom-0">
-                <legend className="usa-legend" id="received-at-legend">
-                  Date received
-                </legend>
-                <div className="usa-memorable-date">
-                  <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                    <input
-                      aria-describedby="received-at-legend"
-                      aria-label="month, two digits"
-                      className={classNames(
-                        'usa-input usa-input--inline',
-                        caseDetailErrors.receivedAt && 'usa-error',
-                      )}
-                      id="received-at-month"
-                      max="12"
-                      maxLength="2"
-                      min="1"
-                      name="receivedAtMonth"
-                      type="number"
-                      value={form.receivedAtMonth || ''}
-                      onBlur={() => validateCaseDetailSequence()}
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: limitLength(e.target.value, 2),
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                    <input
-                      aria-describedby="received-at-legend"
-                      aria-label="day, two digits"
-                      className={classNames(
-                        'usa-input usa-input--inline',
-                        caseDetailErrors.receivedAt && 'usa-error',
-                      )}
-                      id="received-at-day"
-                      max="31"
-                      maxLength="2"
-                      min="1"
-                      name="receivedAtDay"
-                      type="number"
-                      value={form.receivedAtDay || ''}
-                      onBlur={() => validateCaseDetailSequence()}
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: limitLength(e.target.value, 2),
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                    <input
-                      aria-describedby="received-at-legend"
-                      aria-label="year, four digits"
-                      className={classNames(
-                        'usa-input usa-input--inline',
-                        caseDetailErrors.receivedAt && 'usa-error',
-                      )}
-                      id="received-at-year"
-                      max="2100"
-                      maxLength="4"
-                      min="1900"
-                      name="receivedAtYear"
-                      type="number"
-                      value={form.receivedAtYear || ''}
-                      onBlur={() => validateCaseDetailSequence()}
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: limitLength(e.target.value, 4),
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
-              </fieldset>
-            </FormGroup>
+            <DateInput
+              errorText={caseDetailErrors.receivedAt}
+              id="received-at"
+              label="Date received"
+              names={{
+                day: 'receivedAtDay',
+                month: 'receivedAtMonth',
+                year: 'receivedAtYear',
+              }}
+              values={{
+                day: form.receivedAtDay,
+                month: form.receivedAtMonth,
+                year: form.receivedAtYear,
+              }}
+              onBlur={validateCaseDetailSequence}
+              onChange={updateFormValueSequence}
+            />
 
             <div className="usa-form-group read-only">
               <div className="label">Mailing date</div>
