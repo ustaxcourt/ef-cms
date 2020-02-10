@@ -2,14 +2,11 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { deleteCaseNoteAction } from '../actions/CaseNotes/deleteCaseNoteAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const deleteCaseNoteSequence = [
-  setWaitingForResponseAction,
+export const deleteCaseNoteSequence = showProgressSequenceDecorator([
   deleteCaseNoteAction,
   setCaseAction,
   clearModalAction,
   clearModalStateAction,
-  unsetWaitingForResponseAction,
-];
+]);

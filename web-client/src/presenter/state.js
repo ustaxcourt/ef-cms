@@ -218,6 +218,7 @@ export const state = {
   validationErrors: {},
   viewAllDocumentsHelper,
   waitingForResponse: false,
+  waitingForResponseRequests: 0,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},

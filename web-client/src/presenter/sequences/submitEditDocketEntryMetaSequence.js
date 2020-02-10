@@ -14,11 +14,10 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { setupUploadMetadataAction } from '../actions/uploadCourtIssuedDocument/setupUploadMetadataAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateDocketEntryMetaAction } from '../actions/EditDocketRecordEntry/updateDocketEntryMetaAction';
 import { validateDocketRecordAction } from '../actions/EditDocketRecordEntry/validateDocketRecordAction';
 
@@ -43,10 +42,9 @@ export const submitEditDocketEntryMetaSequence = [
       setValidationErrorsAction,
       setValidationAlertErrorsAction,
     ],
-    success: [
+    success: showProgressSequenceDecorator([
       stopShowValidationAction,
       clearAlertsAction,
-      setWaitingForResponseAction,
       updateDocketEntryMetaAction,
       {
         error: [setAlertErrorAction],
@@ -59,7 +57,6 @@ export const submitEditDocketEntryMetaSequence = [
           navigateToCaseDetailAction,
         ],
       },
-      unsetWaitingForResponseAction,
-    ],
+    ]),
   },
 ];

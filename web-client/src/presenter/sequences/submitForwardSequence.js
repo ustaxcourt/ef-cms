@@ -6,14 +6,12 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setForwardMessageValidationErrorsAction } from '../actions/setForwardMessageValidationErrorsAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startForwardValidationAction } from '../actions/ForwardForm/startForwardValidationAction';
 import { unsetShowForwardInputs } from '../actions/unsetShowForwardInputs';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateForwardMessageAction } from '../actions/validateForwardMessageAction';
 
-export const submitForwardSequence = [
-  setWaitingForResponseAction,
+export const submitForwardSequence = showProgressSequenceDecorator([
   startForwardValidationAction,
   clearAlertsAction,
   validateForwardMessageAction,
@@ -31,5 +29,4 @@ export const submitForwardSequence = [
       navigateToDashboardAction,
     ],
   },
-  unsetWaitingForResponseAction,
-];
+]);

@@ -1,7 +1,6 @@
-const isCaseRecord = item => !!item.caseType;
-const { forAllRecords } = require('./00004-service-indicator');
+const { isCaseRecord } = require('./utilities');
 
-const up = async (documentClient, tableName) => {
+const up = async (documentClient, tableName, forAllRecords) => {
   await forAllRecords(documentClient, tableName, async item => {
     if (!isCaseRecord(item)) return;
 
