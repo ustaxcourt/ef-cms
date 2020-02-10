@@ -30,4 +30,5 @@ export const state = {
   user: {},
   validationErrors: {},
   waitingForResponse: false,
+  waitingForResponseRequests: 0,
 };

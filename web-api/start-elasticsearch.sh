@@ -2,9 +2,9 @@
 
 # download the elasticsearch archive if needed
 if [ -f /.dockerenv ]; then
-  ES_DOWNLOAD="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.4.0-linux-x86_64.tar.gz"
+  ES_DOWNLOAD="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.5.2-linux-x86_64.tar.gz"
 else 
-  ES_DOWNLOAD="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.4.0-darwin-x86_64.tar.gz"
+  ES_DOWNLOAD="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.5.2-darwin-x86_64.tar.gz"
 fi
 
 ES_ARCH_RENAMED="elasticsearch.tar.gz"
@@ -23,7 +23,7 @@ if [ -f /.dockerenv ]; then
   cp -R .elasticsearch/* /home/elasticsearch
   chmod -R 755 /home/elasticsearch/*
   chown elasticsearch:elasticsearch -R /home/elasticsearch/*
-  su -c "JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 /home/elasticsearch/bin/elasticsearch" elasticsearch
+  su -c "JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 /home/elasticsearch/bin/elasticsearch" elasticsearch
 else
   cd .elasticsearch && ./bin/elasticsearch
 fi

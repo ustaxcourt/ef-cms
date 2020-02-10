@@ -6,11 +6,9 @@ import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
 import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const submitLoginSequence = [
-  setWaitingForResponseAction,
+export const submitLoginSequence = showProgressSequenceDecorator([
   createTokenAction,
   decodeTokenAction,
   setTokenAction,
@@ -19,5 +17,4 @@ export const submitLoginSequence = [
   setUserPermissionsAction,
   clearAlertsAction,
   navigateToPathAction,
-  unsetWaitingForResponseAction,
-];
+]);

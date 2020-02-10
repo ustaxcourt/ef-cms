@@ -12,10 +12,9 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCompleteDocketEntryAlertAction } from '../actions/DocketEntry/setCompleteDocketEntryAlertAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateWorkItemFromPropsOrModalOrFormAction } from '../actions/WorkItem/updateWorkItemFromPropsOrModalOrFormAction';
 import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
 
@@ -26,9 +25,8 @@ export const completeDocketEntryQCAndSendMessageSequence = [
   validateInitialWorkItemMessageAction,
   {
     error: [setValidationErrorsByFlagAction],
-    success: [
+    success: showProgressSequenceDecorator([
       stopShowValidationAction,
-      setWaitingForResponseAction,
       completeDocketEntryQCAction,
       createWorkItemAction,
       clearFormAction,
@@ -40,8 +38,7 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       setSaveAlertsForNavigationAction,
       setCaseAction,
       setAlertSuccessAction,
-      unsetWaitingForResponseAction,
       navigateToCaseDetailAction,
-    ],
+    ]),
   },
 ];
