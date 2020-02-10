@@ -1,8 +1,8 @@
 /**
- * sets the state.screenMetadata.pristine to the props.users passed in.
+ * opens the pdfUrl from props in a new tab
  *
  * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store object
+ * @param {object} providers.props the cerebral props object
  */
 export const openPdfPreviewInNewTabAction = ({ props }) => {
   const { pdfUrl } = props;
