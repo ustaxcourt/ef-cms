@@ -211,7 +211,6 @@ import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSe
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
 import { setFieldOrderSequence } from './sequences/setFieldOrderSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
-import { setFormSubmittingSequence } from './sequences/setFormSubmittingSequence';
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
@@ -567,7 +566,6 @@ export const presenter = {
     setDocumentUploadModeSequence,
     setFieldOrderSequence,
     setFocusedWorkItemSequence,
-    setFormSubmittingSequence,
     setIdleStatusIdleSequence,
     setIrsNoticeFalseSequence,
     setModalDialogNameSequence,

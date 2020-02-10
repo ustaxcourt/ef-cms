@@ -7,7 +7,6 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { updateTrialSessionAction } from '../actions/TrialSession/updateTrialSessionAction';
@@ -26,7 +25,6 @@ export const updateTrialSessionSequence = [
       setValidationAlertErrorsAction,
     ],
     success: showProgressSequenceDecorator([
-      setWaitingForResponseAction,
       updateTrialSessionAction,
       {
         error: [],
