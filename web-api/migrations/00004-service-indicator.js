@@ -29,6 +29,7 @@ const forAllRecords = async (documentClient, tableName, cb) => {
 const up = async (documentClient, tableName) => {
   await forAllRecords(documentClient, tableName, async item => {
     if (!isCaseRecord(item)) return;
+    if (!item.practitioners) return;
 
     item.practitioners.forEach(practitioner => {
       if (!practitioner.serviceIndicator) {
