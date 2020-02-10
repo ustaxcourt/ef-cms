@@ -83,6 +83,7 @@ const PetitionerInformation = connect(
                 {caseDetailHelper.showEditContacts && (
                   <Button
                     link
+                    aria-label="Edit petitioner contact information"
                     className="push-right margin-right-0 margin-top-neg-1 ustc-button--mobile-inline margin-left-2"
                     href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
                     icon="edit"
@@ -147,6 +148,7 @@ const PetitionerInformation = connect(
                     {caseDetailHelper.showEditContacts && (
                       <Button
                         link
+                        aria-label="Edit spouse contact information"
                         className="push-right margin-right-0 margin-top-neg-1 ustc-button--mobile-inline margin-left-2"
                         href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/secondary/edit`}
                         icon="edit"
