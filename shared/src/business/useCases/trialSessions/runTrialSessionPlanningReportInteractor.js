@@ -12,6 +12,7 @@ const getPreviousTerm = (currentTerm, currentYear) => {
     `fall ${+currentYear - 1}`,
     `winter ${currentYear}`,
     `spring ${currentYear}`,
+    `summer ${currentYear}`,
     `fall ${currentYear}`,
   ];
   const termsReversed = terms.reverse();
@@ -31,7 +32,7 @@ const getTrialSessionPlanningReportData = async ({
   const previousTerms = [];
   let currentTerm = term;
   let currentYear = year;
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 4; i++) {
     const previous = getPreviousTerm(currentTerm, currentYear);
     previousTerms.push(previous);
     currentTerm = previous.term;
