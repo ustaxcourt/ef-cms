@@ -4,9 +4,8 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateSecondaryContactAction } from '../actions/updateSecondaryContactAction';
 import { validateSecondaryContactAction } from '../actions/validateSecondaryContactAction';
 
@@ -16,14 +15,12 @@ export const submitEditSecondaryContactSequence = [
   validateSecondaryContactAction,
   {
     error: [setValidationAlertErrorsAction],
-    success: [
-      setWaitingForResponseAction,
+    success: showProgressSequenceDecorator([
       updateSecondaryContactAction,
       setAlertSuccessAction,
-      unsetWaitingForResponseAction,
       setSaveAlertsForNavigationAction,
       setCurrentPageAction('Interstitial'),
       navigateToCaseDetailAction,
-    ],
+    ]),
   },
 ];
