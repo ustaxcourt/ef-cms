@@ -6,9 +6,8 @@ import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPrevie
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updatePetitionerInformationAction } from '../actions/updatePetitionerInformationAction';
 import { validatePetitionerInformationFormAction } from '../actions/validatePetitionerInformationFormAction';
 
@@ -24,15 +23,13 @@ export const updatePetitionerInformationFormSequence = [
       setValidationErrorsAction,
       setValidationAlertErrorsAction,
     ],
-    success: [
-      setWaitingForResponseAction,
+    success: showProgressSequenceDecorator([
       updatePetitionerInformationAction,
       setPdfPreviewUrlAction,
       setPaperServicePartiesAction,
-      unsetWaitingForResponseAction,
       setSaveAlertsForNavigationAction,
       setAlertSuccessAction,
       navigateToCaseDetailCaseInformationAction,
-    ],
+    ]),
   },
 ];

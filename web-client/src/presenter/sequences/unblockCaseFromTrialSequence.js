@@ -2,14 +2,13 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { unblockCaseFromTrialAction } from '../actions/CaseDetail/unblockCaseFromTrialAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
-export const unblockCaseFromTrialSequence = [
+export const unblockCaseFromTrialSequence = showProgressSequenceDecorator([
   setWaitingForResponseAction,
   unblockCaseFromTrialAction,
-  unsetWaitingForResponseAction,
   setAlertSuccessAction,
   clearModalAction,
   setCaseAction,
-];
+]);

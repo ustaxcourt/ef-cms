@@ -5,12 +5,10 @@ import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { unsetShowForwardInputs } from '../actions/unsetShowForwardInputs';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
-export const submitCompleteSequence = [
-  setWaitingForResponseAction,
+export const submitCompleteSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   completeWorkItemAction,
   refreshCaseAction,
@@ -18,6 +16,5 @@ export const submitCompleteSequence = [
   unsetShowForwardInputs,
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
-  unsetWaitingForResponseAction,
   navigateToMessagesAction,
-];
+]);

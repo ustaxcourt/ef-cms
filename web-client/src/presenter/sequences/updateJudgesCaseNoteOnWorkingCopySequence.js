@@ -4,10 +4,9 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTrialSessionWorkingCopyAction';
 import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTrialSessionWorkingCopyAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateCalendaredCaseJudgesNoteAction } from '../actions/TrialSessionWorkingCopy/updateCalendaredCaseJudgesNoteAction';
 import { updateJudgesCaseNoteAction } from '../actions/TrialSession/updateJudgesCaseNoteAction';
 import { updateNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateNotePropsFromModalStateAction';
@@ -18,8 +17,7 @@ export const updateJudgesCaseNoteOnWorkingCopySequence = [
   validateNoteAction,
   {
     error: [setValidationErrorsAction],
-    success: [
-      setWaitingForResponseAction,
+    success: showProgressSequenceDecorator([
       stopShowValidationAction,
       clearAlertsAction,
       updateNotePropsFromModalStateAction,
@@ -29,7 +27,6 @@ export const updateJudgesCaseNoteOnWorkingCopySequence = [
       updateCalendaredCaseJudgesNoteAction,
       clearModalAction,
       clearModalStateAction,
-      unsetWaitingForResponseAction,
-    ],
+    ]),
   },
 ];
