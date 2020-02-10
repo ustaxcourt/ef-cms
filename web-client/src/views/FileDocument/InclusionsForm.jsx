@@ -114,6 +114,7 @@ export const InclusionsForm = connect(
         </div>
         {data.certificateOfService && (
           <DateInput
+            className={`${type}-service-date`}
             errorText={validationData?.certificateOfServiceDate}
             id={`${type}-service-date`}
             label="Service date"
