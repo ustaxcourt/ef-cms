@@ -3,9 +3,10 @@
  *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object
+ * @param {object} providers.router the riot.router object that is used for changing the route
  */
-export const openPdfPreviewInNewTabAction = ({ props }) => {
+export const openPdfPreviewInNewTabAction = ({ props, router }) => {
   const { pdfUrl } = props;
 
-  window.open(pdfUrl, '_blank');
+  router.openInNewTab(pdfUrl);
 };
