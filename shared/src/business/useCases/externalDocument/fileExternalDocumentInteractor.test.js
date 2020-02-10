@@ -72,7 +72,6 @@ describe('fileExternalDocumentInteractor', () => {
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: User.ROLES.petitioner,
-      trialDate: '2019-03-01T21:40:46.415Z',
       userId: 'petitioner',
     };
 
@@ -245,6 +244,7 @@ describe('fileExternalDocumentInteractor', () => {
 
   it('should create a high-priority work item if the case status is calendared', async () => {
     caseRecord.status = Case.STATUS_TYPES.calendared;
+    caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
 
     await fileExternalDocumentInteractor({
       applicationContext,
