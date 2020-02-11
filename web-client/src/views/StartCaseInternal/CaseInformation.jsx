@@ -25,7 +25,6 @@ export const CaseInformation = connect(
     validatePetitionFromPaperSequence,
     validationErrors,
   }) => {
-    console.log('form', form);
     return (
       <div className="blue-container">
         <DateInput
