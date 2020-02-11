@@ -105,6 +105,7 @@ import { gotoPrintableDocketRecordSequence } from './sequences/gotoPrintableDock
 import { gotoPrintablePendingReportForCaseSequence } from './sequences/gotoPrintablePendingReportForCaseSequence';
 import { gotoPrintablePendingReportSequence } from './sequences/gotoPrintablePendingReportSequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
+import { gotoReviewPetitionSequence } from './sequences/gotoReviewPetitionSequence';
 import { gotoSecondaryContactEditSequence } from './sequences/gotoSecondaryContactEditSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
 import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
@@ -149,6 +150,7 @@ import { openConfirmEditModalSequence } from './sequences/openConfirmEditModalSe
 import { openConfirmInitiateServiceModalSequence } from './sequences/openConfirmInitiateServiceModalSequence';
 import { openConfirmRemoveCaseDetailPendingItemModalSequence } from './sequences/openConfirmRemoveCaseDetailPendingItemModalSequence';
 import { openConfirmRescanBatchModalSequence } from './sequences/openConfirmRescanBatchModalSequence';
+import { openConfirmServeToIrsModalSequence } from './sequences/openConfirmServeToIrsModalSequence';
 import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseDeadlineModalSequence';
 import { openCreateMessageAlongsideDocketRecordQCModalSequence } from './sequences/openCreateMessageAlongsideDocketRecordQCModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
@@ -461,6 +463,7 @@ export const presenter = {
     gotoPrintablePendingReportForCaseSequence,
     gotoPrintablePendingReportSequence,
     gotoRequestAccessSequence,
+    gotoReviewPetitionSequence,
     gotoSecondaryContactEditSequence,
     gotoSelectDocumentTypeSequence,
     gotoSignOrderSequence,
@@ -505,6 +508,7 @@ export const presenter = {
     openConfirmInitiateServiceModalSequence,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     openConfirmRescanBatchModalSequence,
+    openConfirmServeToIrsModalSequence,
     openCreateCaseDeadlineModalSequence,
     openCreateMessageAlongsideDocketRecordQCModalSequence,
     openCreateMessageModalSequence,
