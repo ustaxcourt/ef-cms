@@ -35,9 +35,11 @@ exports.handle = async (event, fun) => {
         }
       });
     } else {
-      if (response.pk || response.sk || response.gsi1pk) {
-        throw new UnsanitizedEntityError();
-      }
+      // commenting this out for now so this can be done in stages
+      // if (response && (response.pk || response.sk || response.gsi1pk)) {
+      //   console.log(event);
+      //   throw new UnsanitizedEntityError();
+      // }
     }
     if (event.queryStringParameters && event.queryStringParameters.fields) {
       const { fields } = event.queryStringParameters;
