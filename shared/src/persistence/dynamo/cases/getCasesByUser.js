@@ -1,7 +1,6 @@
 const {
   getRecordsViaMapping,
 } = require('../../dynamo/helpers/getRecordsViaMapping');
-const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 exports.getCasesByUser = async ({ applicationContext, userId }) => {
@@ -11,8 +10,5 @@ exports.getCasesByUser = async ({ applicationContext, userId }) => {
     type: 'case',
   });
 
-  return stripWorkItems(
-    stripInternalKeys(cases),
-    applicationContext.isAuthorizedForWorkItems(),
-  );
+  return stripWorkItems(cases, applicationContext.isAuthorizedForWorkItems());
 };
