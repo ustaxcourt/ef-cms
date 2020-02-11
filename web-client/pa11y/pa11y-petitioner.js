@@ -344,4 +344,5 @@ module.exports = [
   },
 
   'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/contacts/primary/edit',
+  'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/contacts/secondary/edit',
 ];

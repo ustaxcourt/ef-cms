@@ -7,10 +7,9 @@ import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateCaseDeadlineAction } from '../actions/CaseDeadline/updateCaseDeadlineAction';
 import { validateCaseDeadlineAction } from '../actions/CaseDeadline/validateCaseDeadlineAction';
 
@@ -21,8 +20,7 @@ export const updateCaseDeadlineSequence = [
   validateCaseDeadlineAction,
   {
     error: [setValidationErrorsAction],
-    success: [
-      setWaitingForResponseAction,
+    success: showProgressSequenceDecorator([
       updateCaseDeadlineAction,
       {
         success: [stopShowValidationAction],
@@ -33,7 +31,6 @@ export const updateCaseDeadlineSequence = [
       clearModalStateAction,
       refreshCaseAction,
       getCaseDeadlinesForCaseAction,
-      unsetWaitingForResponseAction,
-    ],
+    ]),
   },
 ];

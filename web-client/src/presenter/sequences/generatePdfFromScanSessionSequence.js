@@ -7,28 +7,27 @@ import { getFormValueDocumentSizeAction } from '../actions/getFormValueDocumentS
 import { resetScanSessionAction } from '../actions/resetScanSessionAction';
 import { selectDocumentForPreviewSequence } from './selectDocumentForPreviewSequence';
 import { setDocumentUploadModeSequence } from './setDocumentUploadModeSequence';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { updateFormValueSequence } from './updateFormValueSequence';
 import { validateFileSizeAction } from '../actions/validateFileSizeAction';
 import { validatePetitionFromPaperSequence } from './validatePetitionFromPaperSequence';
 
-export const generatePdfFromScanSessionSequence = [
-  setWaitingForResponseAction,
-  generatePdfFromScanSessionAction,
-  validateFileSizeAction,
-  {
-    invalid: [set(state.isScanning, false)],
-    valid: [
-      getFormValueDocumentAction,
-      ...updateFormValueSequence,
-      getFormValueDocumentSizeAction,
-      ...updateFormValueSequence,
-      ...validatePetitionFromPaperSequence,
-      ...selectDocumentForPreviewSequence,
-      ...setDocumentUploadModeSequence,
-      resetScanSessionAction,
-    ],
-  },
-  unsetWaitingForResponseAction,
-];
+export const generatePdfFromScanSessionSequence = showProgressSequenceDecorator(
+  [
+    generatePdfFromScanSessionAction,
+    validateFileSizeAction,
+    {
+      invalid: [set(state.isScanning, false)],
+      valid: [
+        getFormValueDocumentAction,
+        ...updateFormValueSequence,
+        getFormValueDocumentSizeAction,
+        ...updateFormValueSequence,
+        ...validatePetitionFromPaperSequence,
+        ...selectDocumentForPreviewSequence,
+        ...setDocumentUploadModeSequence,
+        resetScanSessionAction,
+      ],
+    },
+  ],
+);
