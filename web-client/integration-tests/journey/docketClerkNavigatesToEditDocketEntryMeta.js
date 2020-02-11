@@ -1,11 +1,15 @@
-export default test => {
+import { waitForRouter } from '../helpers';
+
+export default (test, docketRecordIndex = 1) => {
   it('the docketclerk navigates to page to edit docket entry meta', async () => {
     await test.runSequence('gotoEditDocketEntryMetaSequence', {
       docketNumber: test.docketNumber,
-      docketRecordIndex: 1,
+      docketRecordIndex,
     });
 
-    console.log('state', test.getState('form'));
-    console.log('caseDetail', test.getState('caseDetail'));
+    await waitForRouter();
+
+    expect(test.getState('currentPage')).toEqual('EditDocketEntryMeta');
+    expect(test.getState('screenMetadata.editType')).toEqual('Document');
   });
 };

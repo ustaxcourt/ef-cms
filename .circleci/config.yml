@@ -27,7 +27,7 @@ jobs:
             - npm-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: NPM - Install
-          command: npm i && npm rebuild node-sass
+          command: npm ci && npm rebuild node-sass
       - save_cache:
           name: NPM - Save to Cache
           paths:
@@ -106,7 +106,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+    resource_class: 2xlarge
     steps:
       - attach_workspace:
           at: ~/
@@ -137,7 +137,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
-    resource_class: xlarge
+    resource_class: 2xlarge
     steps:
       - attach_workspace:
           at: ~/
@@ -151,7 +151,7 @@ jobs:
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-1.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 5
+            sleep 15
             npm run test:pa11y:1 --node-flags --max-old-space-size=1024
       - run:
           name: Pa11y - Web Client 2
@@ -160,13 +160,22 @@ jobs:
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-2.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 5
+            sleep 15
             npm run test:pa11y:2 --node-flags --max-old-space-size=1024
+      - run:
+          name: Pa11y - Web Client 3
+          command: |
+            npm run build:all
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-2.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 15
+            npm run test:pa11y:3 --node-flags --max-old-space-size=1024
       - run:
           name: Pa11y - Public Site
           command: |
             AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public > /tmp/pa11y/pa11y-server-public.txt &
-            sleep 5
+            sleep 15
             npm run test:pa11y:public
       - store_artifacts:
           path: /tmp/pa11y
@@ -400,6 +409,9 @@ jobs:
       - run:
           name: 'Deploy - Web API - Cognito Create Users'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd web-api && ./setup-cognito-users.sh ${ENV}"
+      - run:
+          name: 'Deploy - Web API - Cognito Create Court Users'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd web-api && ./setup-court-users.sh ${ENV}"
       - run:
           name: 'Deploy - Web API - Run Migrations'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "./web-api/run-umzug.sh ${ENV}"

@@ -16,7 +16,11 @@ import petitionsClerkViewsDocumentDetail from './journey/petitionsClerkViewsDocu
 import petitionsClerkViewsDraftDocuments from './journey/petitionsClerkViewsDraftDocuments';
 import petitionsDeletesOrderFromCase from './journey/petitionsDeletesOrderFromCase';
 
-const test = setupTest();
+const test = setupTest({
+  useCases: {
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
+  },
+});
 
 describe('Petitions Clerk Create Order Journey', () => {
   beforeAll(() => {
@@ -37,15 +41,12 @@ describe('Petitions Clerk Create Order Journey', () => {
   petitionsClerkAddsOrderToCase(test);
   petitionsClerkViewsCaseDetailAfterAddingOrder(test);
   petitionsClerkViewsDraftDocuments(test, 1);
-  petitionsClerkEditsDraftOrder(test, {
-    viewAfterEdit: 'CaseDetail',
-  });
+  petitionsClerkEditsDraftOrder(test, {});
   petitionsClerkViewsDraftDocuments(test, 1);
   petitionsClerkViewsDocumentDetail(test);
   petitionsClerkEditsDraftOrder(test, {
     currentRichText: '<p>This is an edited test order.</p>',
     setRichText: '<p>This is a re-edited test order</p>',
-    viewAfterEdit: 'DocumentDetail',
   });
   petitionsDeletesOrderFromCase(test);
   petitionsClerkViewsDraftDocuments(test, 0);

@@ -56,6 +56,11 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
+  let secondaryDate;
+  if (documentMeta.eventCode === Document.TRANSCRIPT_EVENT_CODE) {
+    secondaryDate = documentMeta.date;
+  }
+
   const documentEntity = new Document(
     {
       ...omit(document, 'filedBy'),
@@ -67,6 +72,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       freeText: documentMeta.freeText,
       isFileAttached: true,
       scenario: documentMeta.scenario,
+      secondaryDate,
       serviceStamp: documentMeta.serviceStamp,
       userId: user.userId,
     },

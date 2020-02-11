@@ -21,6 +21,7 @@ import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
 import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformation';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
+import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
 import { Error } from './Error';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
@@ -38,6 +39,7 @@ import { PrintPreview } from './CourtIssuedDocketEntry/PrintPreview';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
+import { SecondaryContactEdit } from './SecondaryContactEdit';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
 import { SignStipDecision } from './SignStipDecision';
@@ -50,6 +52,7 @@ import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
+import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
 import { connect } from '@cerebral/react';
@@ -79,6 +82,7 @@ const pages = {
   EditPetitionDetails,
   EditPetitionerInformation,
   EditTrialSession,
+  EditUploadCourtIssuedDocument,
   Error,
   FileDocumentWizard,
   IdleLogout,
@@ -93,6 +97,7 @@ const pages = {
   PrintableDocketRecord,
   PrintableTrialCalendar,
   RequestAccessWizard,
+  SecondaryContactEdit,
   SelectDocumentType,
   SignOrder,
   SignStipDecision,
@@ -104,6 +109,7 @@ const pages = {
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
+  UploadCourtIssuedDocument,
   UserContactEdit,
 };
 
@@ -131,7 +137,7 @@ export const AppComponent = connect(
 
     const CurrentPage = pages[currentPage];
     return (
-      <React.Fragment>
+      <>
         <a
           className="usa-skipnav"
           href="#main-content"
@@ -154,7 +160,7 @@ export const AppComponent = connect(
         {showModal === 'FileCompressionErrorModal' && (
           <FileCompressionErrorModal />
         )}
-      </React.Fragment>
+      </>
     );
   },
 );

@@ -1,3 +1,4 @@
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
@@ -102,7 +103,7 @@ export const NonstandardForm = connect(
               )}
               id={`${namespace}previous-document`}
               name={`${namespace}previousDocument`}
-              value={get(form, `${namespace}previousDocument`, '')}
+              value={get(form, `${namespace}previousDocument.documentId`, '')}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
@@ -113,10 +114,11 @@ export const NonstandardForm = connect(
             >
               <option value="">- Select -</option>
               {helper[level].previouslyFiledDocuments.map(
-                (documentTitle, idx) => {
+                (previousDocument, idx) => {
                   return (
-                    <option key={idx} value={documentTitle}>
-                      {documentTitle}
+                    <option key={idx} value={previousDocument.documentId}>
+                      {previousDocument.documentTitle ||
+                        previousDocument.documentType}
                     </option>
                   );
                 },
@@ -126,117 +128,23 @@ export const NonstandardForm = connect(
         )}
 
         {helper[level].showDateFields && (
-          <FormGroup
-            errorText={validationErrors && validationErrors.serviceDate}
-          >
-            <fieldset className="usa-fieldset margin-bottom-0">
-              <legend id="date-of-service-legend">Service date</legend>
-              <div className="usa-memorable-date">
-                <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                  <label
-                    aria-hidden="true"
-                    className="usa-label"
-                    htmlFor={`${namespace}month`}
-                  >
-                    MM
-                  </label>
-                  <input
-                    aria-describedby="date-of-service-legend"
-                    aria-label="month, two digits"
-                    className={classNames(
-                      'usa-input usa-input-inline',
-                      validationErrors &&
-                        validationErrors.serviceDate &&
-                        'usa-input--error',
-                    )}
-                    id={`${namespace}month`}
-                    max="12"
-                    min="1"
-                    name={`${namespace}month`}
-                    type="number"
-                    value={get(form, `${namespace}month`, '')}
-                    onBlur={() => {
-                      validateSequence();
-                    }}
-                    onChange={e => {
-                      updateSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                  <label
-                    aria-hidden="true"
-                    className="usa-label"
-                    htmlFor={`${namespace}day`}
-                  >
-                    DD
-                  </label>
-                  <input
-                    aria-describedby="date-of-service-legend"
-                    aria-label="day, two digits"
-                    className={classNames(
-                      'usa-input usa-input-inline',
-                      validationErrors &&
-                        validationErrors.serviceDate &&
-                        'usa-input--error',
-                    )}
-                    id={`${namespace}day`}
-                    max="31"
-                    min="1"
-                    name={`${namespace}day`}
-                    type="number"
-                    value={get(form, `${namespace}day`, '')}
-                    onBlur={() => {
-                      validateSequence();
-                    }}
-                    onChange={e => {
-                      updateSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                  <label
-                    aria-hidden="true"
-                    className="usa-label"
-                    htmlFor={`${namespace}year`}
-                  >
-                    YYYY
-                  </label>
-                  <input
-                    aria-describedby="date-of-service-legend"
-                    aria-label="year, four digits"
-                    className={classNames(
-                      'usa-input usa-input-inline',
-                      validationErrors &&
-                        validationErrors.serviceDate &&
-                        'usa-input--error',
-                    )}
-                    id={`${namespace}year`}
-                    max="2100"
-                    min="1900"
-                    name={`${namespace}year`}
-                    type="number"
-                    value={get(form, `${namespace}year`, '')}
-                    onBlur={() => {
-                      validateSequence();
-                    }}
-                    onChange={e => {
-                      updateSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-            </fieldset>
-          </FormGroup>
+          <DateInput
+            errorText={validationErrors?.serviceDate}
+            id="date-of-service"
+            label="Service date"
+            names={{
+              day: `${namespace}day`,
+              month: `${namespace}month`,
+              year: `${namespace}year`,
+            }}
+            values={{
+              day: get(form, `${namespace}day`, ''),
+              month: get(form, `${namespace}month`, ''),
+              year: get(form, `${namespace}year`, ''),
+            }}
+            onBlur={validateSequence}
+            onChange={updateSequence}
+          />
         )}
 
         {helper[level].showTrialLocationSelect && (

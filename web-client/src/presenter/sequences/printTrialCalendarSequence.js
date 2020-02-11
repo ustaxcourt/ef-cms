@@ -1,13 +1,10 @@
 import { generateTrialCalendarPdfUrlAction } from '../actions/TrialSession/generateTrialCalendarPdfUrlAction';
 import { gotoPrintTrialCalendarPreviewAction } from '../actions/gotoPrintTrialCalendarPreviewAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const printTrialCalendarSequence = [
-  setWaitingForResponseAction,
+export const printTrialCalendarSequence = showProgressSequenceDecorator([
   generateTrialCalendarPdfUrlAction,
-  ...setPdfPreviewUrlSequence,
+  setPdfPreviewUrlSequence,
   gotoPrintTrialCalendarPreviewAction,
-  unsetWaitingForResponseAction,
-];
+]);

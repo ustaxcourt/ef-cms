@@ -698,6 +698,9 @@ const {
   updateQcCompleteForTrialInteractor,
 } = require('../../shared/src/business/useCases/updateQcCompleteForTrialInteractor');
 const {
+  updateSecondaryContactInteractor,
+} = require('../../shared/src/business/useCases/updateSecondaryContactInteractor');
+const {
   updateTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
 const {
@@ -1157,6 +1160,7 @@ module.exports = (appContextUser = {}) => {
         updatePetitionerInformationInteractor,
         updatePrimaryContactInteractor,
         updateQcCompleteForTrialInteractor,
+        updateSecondaryContactInteractor,
         updateTrialSessionInteractor,
         updateTrialSessionWorkingCopyInteractor,
         updateUserContactInformationInteractor,

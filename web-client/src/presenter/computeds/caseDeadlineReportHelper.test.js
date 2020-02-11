@@ -12,18 +12,22 @@ const caseDeadlineReportHelper = withAppContextDecorator(
 
 const caseDeadlines = [
   {
+    associatedJudge: 'Hale',
     deadlineDate: '2019-08-22T04:00:00.000Z',
     docketNumber: '101-19',
   },
   {
+    associatedJudge: 'Brandeis',
     deadlineDate: '2019-08-24T04:00:00.000Z',
     docketNumber: '103-19',
   },
   {
+    associatedJudge: 'Rummy',
     deadlineDate: '2019-08-21T04:00:00.000Z',
     docketNumber: '101-19',
   },
   {
+    associatedJudge: 'Renjie',
     deadlineDate: '2019-08-21T04:00:00.000Z',
     docketNumber: '102-19',
   },
@@ -103,6 +107,30 @@ describe('caseDeadlineReportHelper', () => {
     expect(result.formattedFilterDateHeader).toEqual(
       'August 21, 2019 – August 23, 2019',
     );
+  });
+
+  it('should filter deadlines by judge when a judge is selected', () => {
+    const filteredCaseDeadlines = runCompute(caseDeadlineReportHelper, {
+      state: {
+        allCaseDeadlines: caseDeadlines,
+        screenMetadata: {
+          caseDeadlinesFilter: {
+            judge: 'Rummy',
+          },
+          filterEndDate: '2019-08-23T04:00:00.000Z',
+          filterStartDate: '2019-08-21T04:00:00.000Z',
+        },
+      },
+    });
+
+    expect(filteredCaseDeadlines.caseDeadlineCount).toEqual(1);
+    expect(filteredCaseDeadlines.caseDeadlines).toMatchObject([
+      {
+        associatedJudge: 'Rummy',
+        deadlineDate: '2019-08-21T04:00:00.000Z',
+        docketNumber: '101-19',
+      },
+    ]);
   });
 
   describe('sortByDateAndDocketNumber', () => {

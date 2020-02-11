@@ -19,7 +19,15 @@ export const formattedDashboardTrialSessions = (get, applicationContext) => {
       .isBefore();
 
   const { userId } = applicationContext.getCurrentUser();
-  const trialSessions = get(state.trialSessions);
+  const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
+  const trialSessions = get(state.trialSessions).filter(session => {
+    return (
+      applicationContext
+        .getUtilities()
+        .getTrialSessionStatus({ applicationContext, session }) ===
+      SESSION_STATUS_GROUPS.open
+    );
+  });
 
   //partition
   let [recentSessions, upcomingSessions] = partition(

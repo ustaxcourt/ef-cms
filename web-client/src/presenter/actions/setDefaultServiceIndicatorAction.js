@@ -9,8 +9,8 @@ import { state } from 'cerebral';
 export const setDefaultServiceIndicatorAction = key => {
   /**
    * @param {object} providers the providers object
-   * @param {object} providers.store the cerebral store used for setting state.waitingForResponse
    * @param {object} providers.applicationContext the application context
+   * @param {object} providers.store the cerebral store used for setting the service indicator
    */
   return ({ applicationContext, store }) => {
     const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();

@@ -166,5 +166,8 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
 
     test.docketNumber = test.getState('caseDetail.docketNumber');
     test.caseId = test.getState('caseDetail.caseId');
+    expect(test.getState('caseDetail.preferredTrialCity')).toEqual(
+      trialLocation,
+    );
   });
 };

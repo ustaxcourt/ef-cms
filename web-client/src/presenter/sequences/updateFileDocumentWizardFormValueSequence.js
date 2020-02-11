@@ -1,9 +1,9 @@
 import { clearWizardDataAction } from '../actions/FileDocument/clearWizardDataAction';
 import { defaultSecondaryDocumentAction } from '../actions/FileDocument/defaultSecondaryDocumentAction';
-import { setFormValueAction } from '../actions/setFormValueAction';
+import { setFileDocumentFormValueAction } from '../actions/setFileDocumentFormValueAction';
 
 export const updateFileDocumentWizardFormValueSequence = [
-  setFormValueAction,
+  setFileDocumentFormValueAction,
   clearWizardDataAction,
   defaultSecondaryDocumentAction,
 ];

@@ -18,7 +18,11 @@ const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
   extractedPendingMessagesFromCaseDetailComputed,
 );
 
-const test = setupTest();
+const test = setupTest({
+  useCases: {
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
+  },
+});
 
 describe('a docket clerk views case detail messages in progress with a message on a draft order', () => {
   beforeAll(() => {

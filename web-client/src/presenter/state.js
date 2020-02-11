@@ -21,6 +21,7 @@ import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
+import { contactEditHelper } from './computeds/contactEditHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
@@ -47,7 +48,6 @@ import { menuHelper } from './computeds/menuHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
-import { primaryContactEditHelper } from './computeds/primaryContactEditHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
@@ -61,6 +61,7 @@ import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
 import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
+import { trialSessionsHelper } from './computeds/trialSessionsHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
@@ -106,6 +107,7 @@ export const state = {
   completeDocumentTypeSectionHelper,
   completeForm: {},
   confirmInitiateServiceModalHelper,
+  contactEditHelper,
   contactsHelper,
   createOrderHelper,
   currentPage: 'Interstitial',
@@ -175,7 +177,6 @@ export const state = {
   permissions: null,
   petition: {},
   previewPdfFile: null,
-  primaryContactEditHelper,
   procedureTypes: [],
   requestAccessHelper,
   scanBatchPreviewerHelper,
@@ -204,6 +205,7 @@ export const state = {
   trialSessionDetailsHelper,
   trialSessionHeaderHelper,
   trialSessionWorkingCopyHelper,
+  trialSessionsHelper,
   trialSessionsTab: {
     group: null,
   },
@@ -216,6 +218,7 @@ export const state = {
   validationErrors: {},
   viewAllDocumentsHelper,
   waitingForResponse: false,
+  waitingForResponseRequests: 0,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},

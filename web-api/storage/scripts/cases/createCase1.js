@@ -73,4 +73,29 @@ module.exports.createCase1 = async () => {
       signedDocumentId: documentId,
     });
   });
+
+  await asUserFromEmail('docketclerk', async applicationContext => {
+    const { caseId, docketNumber } = caseDetail;
+
+    const documentMetadata = {
+      caseId,
+      docketNumber,
+      documentTitle: 'Something',
+      documentType: 'MISC - Miscellaneous',
+      eventCode: 'MISC',
+      freeText: 'Something',
+      scenario: 'Type A',
+    };
+
+    documentMetadata.draftState = { ...documentMetadata };
+    const documentId = 'dd219579-9f1a-49e3-a092-f79164631ae8';
+
+    caseDetail = await applicationContext
+      .getUseCases()
+      .fileCourtIssuedOrderInteractor({
+        applicationContext,
+        documentMetadata,
+        primaryDocumentFileId: documentId,
+      });
+  });
 };

@@ -6,11 +6,17 @@ import React from 'react';
 export const EditDocketEntryMetaTabService = connect(
   {
     form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateDocketEntryMetaDocumentFormValueSequence:
+      sequences.updateDocketEntryMetaDocumentFormValueSequence,
     validationErrors: state.modal.validationErrors,
     validationSequence: sequences.validateDocketRecordSequence,
   },
-  ({ form, updateFormValueSequence, validationErrors, validationSequence }) => {
+  ({
+    form,
+    updateDocketEntryMetaDocumentFormValueSequence,
+    validationErrors,
+    validationSequence,
+  }) => {
     return (
       <div className="blue-container">
         <FormGroup
@@ -20,18 +26,18 @@ export const EditDocketEntryMetaTabService = connect(
             className="usa-fieldset margin-bottom-2"
             id="served-parties-radios"
           >
-            <legend htmlFor="served-parties-radios">Parties Served</legend>
+            <legend htmlFor="served-parties-radios">Parties served</legend>
             <div className="usa-radio">
               <input
                 aria-describedby="served-parties-radios"
-                checked={form.eventCode === 'P'}
+                checked={form.servedPartiesCode === 'P'}
                 className="usa-radio__input"
                 id="served-parties-p"
-                name="eventCode"
+                name="servedPartiesCode"
                 type="radio"
                 value="P"
                 onChange={e => {
-                  updateFormValueSequence({
+                  updateDocketEntryMetaDocumentFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
@@ -49,14 +55,14 @@ export const EditDocketEntryMetaTabService = connect(
             <div className="usa-radio">
               <input
                 aria-describedby="served-parties-radios"
-                checked={form.eventCode === 'R'}
+                checked={form.servedPartiesCode === 'R'}
                 className="usa-radio__input"
                 id="served-parties-r"
-                name="eventCode"
+                name="servedPartiesCode"
                 type="radio"
                 value="R"
                 onChange={e => {
-                  updateFormValueSequence({
+                  updateDocketEntryMetaDocumentFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
@@ -65,7 +71,7 @@ export const EditDocketEntryMetaTabService = connect(
               />
               <label
                 className="usa-radio__label"
-                htmlFor="served-parties-pr"
+                htmlFor="served-parties-r"
                 id="served-parties-r-label"
               >
                 Respondent
@@ -74,14 +80,14 @@ export const EditDocketEntryMetaTabService = connect(
             <div className="usa-radio">
               <input
                 aria-describedby="served-parties-radios"
-                checked={form.eventCode === 'B'}
+                checked={form.servedPartiesCode === 'B'}
                 className="usa-radio__input"
                 id="served-parties-b"
-                name="eventCode"
+                name="servedPartiesCode"
                 type="radio"
                 value="B"
                 onChange={e => {
-                  updateFormValueSequence({
+                  updateDocketEntryMetaDocumentFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
