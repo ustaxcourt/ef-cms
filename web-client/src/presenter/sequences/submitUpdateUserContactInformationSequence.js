@@ -5,9 +5,8 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateUserContactInformationAction } from '../actions/updateUserContactInformationAction';
 import { validateUserContactAction } from '../actions/validateUserContactAction';
 
@@ -17,8 +16,7 @@ export const submitUpdateUserContactInformationSequence = [
   validateUserContactAction,
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
-    success: [
-      setWaitingForResponseAction,
+    success: showProgressSequenceDecorator([
       updateUserContactInformationAction,
       {
         noChange: [navigateToDashboardAction],
@@ -29,7 +27,6 @@ export const submitUpdateUserContactInformationSequence = [
           navigateToDashboardAction,
         ],
       },
-      unsetWaitingForResponseAction,
-    ],
+    ]),
   },
 ];
