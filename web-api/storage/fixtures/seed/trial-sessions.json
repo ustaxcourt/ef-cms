@@ -39,6 +39,28 @@
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   },
   {
+    "pk": "trial-session-208a959f-9526-4db5-b262-e58c476a4604",
+    "sk": "trial-session-208a959f-9526-4db5-b262-e58c476a4604",
+    "gsi1pk": "trial-session-catalog",
+    "maxCases": 6,
+    "sessionType": "Special",
+    "judge": {
+      "userId": "dabbad03-18d0-43ec-bafb-654e83405416",
+      "name": "Judge Carluzzo"
+    },
+    "startDate": "2020-11-25T05:00:00.000Z",
+    "createdAt": "2020-10-25T05:00:00.000Z",
+    "startTime": "15:00",
+    "term": "Fall",
+    "termYear": "2020",
+    "swingSession": true,
+    "swingSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "trialLocation": "Dallas, Texas",
+    "trialSessionId": "208a959f-9526-4db5-b262-e58c476a4604",
+    "isCalendared": false,
+    "caseOrder": []
+  },
+  {
     "pk": "trial-session-working-copy|208a959f-9526-4db5-b262-e58c476a4604",
     "sk": "dabbad03-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "208a959f-9526-4db5-b262-e58c476a4604",
