@@ -35,7 +35,7 @@ exports.handle = async (event, fun) => {
         }
       });
     } else {
-      if (response.pk || response.sk) {
+      if (response.pk || response.sk || response.gsi1pk) {
         throw new UnsanitizedEntityError();
       }
     }

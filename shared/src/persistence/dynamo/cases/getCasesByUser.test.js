@@ -64,13 +64,16 @@ describe('getCasesByUser', () => {
     client.updateConsistent.restore();
   });
 
-  it('should strip the pk and sk from the results', async () => {
+  it('should return data as received from persistence', async () => {
     const result = await getCasesByUser({
       applicationContext,
       user,
     });
-    expect(result).toEqual([{ caseId: '123', status: 'New' }]);
+    expect(result).toEqual([
+      { caseId: '123', pk: '123', sk: '123', status: 'New' },
+    ]);
   });
+
   it('should attempt to do a batch get in the same ids that were returned in the mapping records', async () => {
     await getCasesByUser({
       applicationContext,
