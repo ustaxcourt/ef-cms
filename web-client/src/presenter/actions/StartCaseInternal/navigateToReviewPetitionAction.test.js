@@ -1,5 +1,5 @@
 import { navigateToReviewPetitionAction } from './navigateToReviewPetitionAction';
-import { presenter } from '../presenter';
+import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
 
