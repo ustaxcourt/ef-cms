@@ -51,7 +51,7 @@ const goToMessages = [
     ],
   },
   setCurrentPageAction('Messages'),
-  ...chooseWorkQueueSequence,
+  chooseWorkQueueSequence,
 ];
 
 export const gotoMessagesSequence = [

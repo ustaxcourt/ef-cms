@@ -1,4 +1,4 @@
-const isCaseRecord = item => !!item.caseType; // only case records have a caseType defined
+const { isCaseRecord } = require('./utilities');
 
 const up = async (documentClient, tableName) => {
   let hasMoreResults = true;

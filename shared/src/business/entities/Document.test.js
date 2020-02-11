@@ -188,6 +188,20 @@ describe('Document entity', () => {
       }
       expect(error).toBeDefined();
     });
+
+    it('should correctly validate with a secondaryDate', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          eventCode: 'TRAN',
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeTruthy();
+      expect(document.secondaryDate).toBeDefined();
+    });
   });
 
   describe('generate filed by string', () => {
@@ -913,67 +927,6 @@ describe('Document entity', () => {
       );
 
       expect(document.getQCWorkItem()).toBeUndefined();
-    });
-  });
-
-  describe('isPublicAccessible', () => {
-    it('should be public accessible if it is a served Stipulated Decision document', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          documentType: 'Stipulated Decision',
-          servedAt: '2019-03-01T21:40:46.415Z',
-        },
-        { applicationContext },
-      );
-      expect(document.isPublicAccessible()).toBeTruthy();
-    });
-
-    it('should be public accessible if it is a served Order document', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          documentType: 'Order',
-          servedAt: '2019-03-01T21:40:46.415Z',
-        },
-        { applicationContext },
-      );
-      expect(document.isPublicAccessible()).toBeTruthy();
-    });
-
-    it('should be public accessible if it is a served court-issued order document', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          documentType: 'O - Order',
-          servedAt: '2019-03-01T21:40:46.415Z',
-        },
-        { applicationContext },
-      );
-      expect(document.isPublicAccessible()).toBeTruthy();
-    });
-
-    it('should not be public accessible if it is an unserved court-issued document', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          documentType: 'Stipulated Decision',
-        },
-        { applicationContext },
-      );
-      expect(document.isPublicAccessible()).toBeFalsy();
-    });
-
-    it('should not be public accessible if it is a served non-court-issued document', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          documentType: 'Petition',
-          servedAt: '2019-03-01T21:40:46.415Z',
-        },
-        { applicationContext },
-      );
-      expect(document.isPublicAccessible()).toBeFalsy();
     });
   });
 

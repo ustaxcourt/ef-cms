@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
+const { CaseDeadline } = require('../../entities/CaseDeadline');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -25,8 +26,12 @@ exports.getAllCaseDeadlinesInteractor = async ({ applicationContext }) => {
       applicationContext,
     });
 
-  return allCaseDeadlines.map(caseDeadline => ({
+  const rawCaseDeadlines = allCaseDeadlines.map(caseDeadline => ({
     ...caseDeadline,
     caseTitle: Case.getCaseCaptionNames(caseDeadline.caseTitle),
   }));
+
+  return CaseDeadline.validateRawCollection(rawCaseDeadlines, {
+    applicationContext,
+  });
 };

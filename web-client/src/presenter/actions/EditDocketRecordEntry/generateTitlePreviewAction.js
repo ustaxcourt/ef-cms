@@ -14,18 +14,32 @@ export const generateTitlePreviewAction = ({
 }) => {
   const documentMetadata = get(state.form);
 
-  let documentTitle = applicationContext
+  const formattedDocument = applicationContext
+    .getUtilities()
+    .formatDocument(applicationContext, documentMetadata);
+
+  let updatedDocumentTitle = applicationContext
     .getUseCases()
     .generateDocumentTitleInteractor({
       applicationContext,
       documentMetadata,
     });
 
-  documentTitle = documentTitle
-    ? `${documentTitle}${
-        documentMetadata.attachments ? ' (Attachment(s))' : ''
-      }`
-    : '';
+  if (formattedDocument.additionalInfo) {
+    updatedDocumentTitle += ` ${formattedDocument.additionalInfo}`;
+  }
 
-  store.set(state.screenMetadata.documentTitlePreview, documentTitle);
+  const filingsAndProceedings = applicationContext
+    .getUtilities()
+    .getFilingsAndProceedings(formattedDocument);
+
+  if (filingsAndProceedings) {
+    updatedDocumentTitle += ` ${filingsAndProceedings}`;
+  }
+
+  if (formattedDocument.additionalInfo2) {
+    updatedDocumentTitle += ` ${formattedDocument.additionalInfo2}`;
+  }
+
+  store.set(state.screenMetadata.documentTitlePreview, updatedDocumentTitle);
 };

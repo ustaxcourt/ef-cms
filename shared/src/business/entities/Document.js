@@ -3,16 +3,21 @@ const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
 const joi = require('@hapi/joi');
 const {
+  DOCKET_NUMBER_MATCHER,
+  TRIAL_LOCATION_MATCHER,
+} = require('./cases/CaseConstants');
+const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
-const { flatten, map } = require('lodash');
+const { flatten } = require('lodash');
 const { Order } = require('./orders/Order');
 const { TrialSession } = require('./trialSessions/TrialSession');
 const { WorkItem } = require('./WorkItem');
 
 Document.CATEGORIES = Object.keys(documentMapExternal);
 Document.CATEGORY_MAP = documentMapExternal;
+Document.NOTICE_EVENT_CODES = ['NOT'];
 Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
@@ -33,15 +38,14 @@ function Document(rawDocument, { applicationContext }) {
   this.additionalInfo = rawDocument.additionalInfo;
   this.additionalInfo2 = rawDocument.additionalInfo2;
   this.addToCoversheet = rawDocument.addToCoversheet;
-  this.attachments = rawDocument.attachments;
   this.archived = rawDocument.archived;
+  this.attachments = rawDocument.attachments;
   this.caseId = rawDocument.caseId;
   this.certificateOfService = rawDocument.certificateOfService;
   this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
   this.createdAt = rawDocument.createdAt || createISODateString();
   this.docketNumber = rawDocument.docketNumber;
   this.documentId = rawDocument.documentId;
-  this.mailingDate = rawDocument.mailingDate;
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
   this.draftState = rawDocument.draftState;
@@ -54,7 +58,9 @@ function Document(rawDocument, { applicationContext }) {
   this.hasSupportingDocuments = rawDocument.hasSupportingDocuments;
   this.isFileAttached = rawDocument.isFileAttached;
   this.isPaper = rawDocument.isPaper;
+  this.judge = rawDocument.judge;
   this.lodged = rawDocument.lodged;
+  this.mailingDate = rawDocument.mailingDate;
   this.objections = rawDocument.objections;
   this.ordinalValue = rawDocument.ordinalValue;
   this.partyPrimary = rawDocument.partyPrimary;
@@ -73,6 +79,7 @@ function Document(rawDocument, { applicationContext }) {
   this.receivedAt = rawDocument.receivedAt || createISODateString();
   this.relationship = rawDocument.relationship;
   this.scenario = rawDocument.scenario;
+  this.secondaryDate = rawDocument.secondaryDate;
   this.secondaryDocument = rawDocument.secondaryDocument;
   this.servedAt = rawDocument.servedAt;
   this.servedParties = rawDocument.servedParties;
@@ -84,8 +91,7 @@ function Document(rawDocument, { applicationContext }) {
   this.supportingDocument = rawDocument.supportingDocument;
   this.trialLocation = rawDocument.trialLocation;
   this.userId = rawDocument.userId;
-  this.workItems = rawDocument.workItems;
-  this.workItems = (this.workItems || []).map(
+  this.workItems = (rawDocument.workItems || []).map(
     workItem => new WorkItem(workItem, { applicationContext }),
   );
 
@@ -187,6 +193,8 @@ Document.CONTACT_CHANGE_DOCUMENT_TYPES = [
   'Notice of Change of Address and Telephone Number',
 ];
 
+Document.TRANSCRIPT_EVENT_CODE = 'TRAN';
+
 Document.isPendingOnCreation = rawDocument => {
   const isPending = Object.values(Document.TRACKED_DOCUMENT_TYPES).some(
     trackedType => {
@@ -272,7 +280,10 @@ joiValidationDecorator(
     additionalInfo: joi.string().optional(),
     additionalInfo2: joi.string().optional(),
     archived: joi.boolean().optional(),
-    caseId: joi.string().optional(),
+    caseId: joi
+      .string()
+      .optional()
+      .description('Unique ID of the associated Case.'),
     certificateOfService: joi.boolean().optional(),
     certificateOfServiceDate: joi.when('certificateOfService', {
       is: true,
@@ -285,19 +296,29 @@ joiValidationDecorator(
     createdAt: joi
       .date()
       .iso()
-      .required(),
-    docketNumber: joi.string().optional(),
+      .required()
+      .description('When the Document was added to the system.'),
+    docketNumber: joi
+      .string()
+      .regex(DOCKET_NUMBER_MATCHER)
+      .optional()
+      .description('Docket Number of the associated Case in XXXXX-YY format.'),
     documentId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
-      .required(),
-    documentTitle: joi.string().optional(),
+      .required()
+      .description('ID of the associated PDF document in the S3 bucket.'),
+    documentTitle: joi
+      .string()
+      .optional()
+      .description('The title of this document.'),
     documentType: joi
       .string()
       .valid(...Document.getDocumentTypes())
-      .required(),
+      .required()
+      .description('The type of this document.'),
     draftState: joi.object().optional(),
     eventCode: joi.string().optional(),
     exhibits: joi.boolean().optional(),
@@ -316,7 +337,17 @@ joiValidationDecorator(
     hasSupportingDocuments: joi.boolean().optional(),
     isFileAttached: joi.boolean().optional(),
     isPaper: joi.boolean().optional(),
-    lodged: joi.boolean().optional(),
+    judge: joi
+      .string()
+      .allow(null)
+      .optional()
+      .description('The judge associated with the document.'),
+    lodged: joi
+      .boolean()
+      .optional()
+      .description(
+        'A lodged document is awaiting action by the judge to enact or refuse.',
+      ),
     objections: joi.string().optional(),
     ordinalValue: joi.string().optional(),
     partyPrimary: joi.boolean().optional(),
@@ -324,7 +355,7 @@ joiValidationDecorator(
     partySecondary: joi.boolean().optional(),
     pending: joi.boolean().optional(),
     practitioner: joi.array().optional(),
-    previousDocument: joi.string().optional(),
+    previousDocument: joi.object().optional(),
     processingStatus: joi.string().optional(),
     qcAt: joi
       .date()
@@ -341,8 +372,15 @@ joiValidationDecorator(
       .optional(),
     relationship: joi.string().optional(),
     scenario: joi.string().optional(),
-    secondaryDocument: joi.object().optional(),
+    secondaryDate: joi
+      .date()
+      .iso()
+      .optional()
+      .description(
+        'A secondary date associated with the document, typically related to time-restricted availability.',
+      ),
     // TODO: What's the difference between servedAt and serviceDate?
+    secondaryDocument: joi.object().optional(),
     servedAt: joi
       .date()
       .iso()
@@ -376,7 +414,7 @@ joiValidationDecorator(
       .alternatives()
       .try(
         joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
-        joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
+        joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
         joi.string().allow(null),
       )
       .optional(),
@@ -490,23 +528,6 @@ Document.prototype.setAsProcessingStatusAsCompleted = function() {
 
 Document.prototype.getQCWorkItem = function() {
   return this.workItems.find(workItem => workItem.isQC === true);
-};
-
-Document.prototype.isPublicAccessible = function() {
-  const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');
-  const courtIssuedDocumentTypes = map(
-    Document.COURT_ISSUED_EVENT_CODES,
-    'documentType',
-  );
-
-  const isServed = !!this.servedAt;
-  const isStipDecision = this.documentType === 'Stipulated Decision';
-  const isOrder = orderDocumentTypes.includes(this.documentType);
-  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
-    this.documentType,
-  );
-
-  return (isStipDecision || isOrder || isCourtIssuedDocument) && isServed;
 };
 
 Document.prototype.isAutoServed = function() {

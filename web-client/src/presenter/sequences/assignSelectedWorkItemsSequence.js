@@ -1,11 +1,8 @@
 import { assignSelectedWorkItemsAction } from '../actions/assignSelectedWorkItemsAction';
 import { chooseWorkQueueSequence } from '../sequences/chooseWorkQueueSequence';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const assignSelectedWorkItemsSequence = [
-  setWaitingForResponseAction,
+export const assignSelectedWorkItemsSequence = showProgressSequenceDecorator([
   assignSelectedWorkItemsAction,
   ...chooseWorkQueueSequence,
-  unsetWaitingForResponseAction,
-];
+]);

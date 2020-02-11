@@ -2,6 +2,7 @@ import { BigHeader } from './BigHeader';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { Contacts } from './StartCase/Contacts';
+import { DateInput } from '../ustc-ui/DateInput/DateInput';
 import { ErrorNotification } from './ErrorNotification';
 import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
@@ -12,7 +13,6 @@ import { ProcedureType } from './StartCase/ProcedureType';
 import { ScanBatchPreviewer } from './ScanBatchPreviewer';
 import { TrialCityOptions } from './TrialCityOptions';
 import { connect } from '@cerebral/react';
-import { limitLength } from '../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -54,15 +54,7 @@ export const StartCaseInternal = connect(
       <>
         <BigHeader text="Create Case" />
         <section className="usa-section grid-container">
-          <form
-            noValidate
-            aria-labelledby="start-case-header"
-            role="form"
-            onSubmit={e => {
-              e.preventDefault();
-              submitPetitionFromPaperSequence();
-            }}
-          >
+          <div noValidate aria-labelledby="start-case-header" role="form">
             {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
             )}
@@ -79,81 +71,14 @@ export const StartCaseInternal = connect(
 
               <div className="grid-col-5">
                 <div className="blue-container margin-bottom-4 document-detail-one-third">
-                  <FormGroup errorText={validationErrors.receivedAt}>
-                    <fieldset className="usa-fieldset margin-bottom-0">
-                      <legend className="usa-legend" id="date-received-legend">
-                        Date received
-                      </legend>
-                      <div className="usa-memorable-date">
-                        <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                          <input
-                            aria-describedby="date-received-legend"
-                            aria-label="month, two digits"
-                            className="usa-input usa-input-inline"
-                            id="date-received-month"
-                            max="12"
-                            min="1"
-                            name="month"
-                            placeholder="MM"
-                            type="number"
-                            onBlur={() => {
-                              validatePetitionFromPaperSequence();
-                            }}
-                            onChange={e => {
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: limitLength(e.target.value, 2),
-                              });
-                            }}
-                          />
-                        </div>
-                        <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                          <input
-                            aria-describedby="date-received-legend"
-                            aria-label="day, two digits"
-                            className="usa-input usa-input-inline"
-                            id="date-received-day"
-                            max="31"
-                            min="1"
-                            name="day"
-                            placeholder="DD"
-                            type="number"
-                            onBlur={() => {
-                              validatePetitionFromPaperSequence();
-                            }}
-                            onChange={e => {
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: limitLength(e.target.value, 2),
-                              });
-                            }}
-                          />
-                        </div>
-                        <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                          <input
-                            aria-describedby="date-received-legend"
-                            aria-label="year, four digits"
-                            className="usa-input usa-input-inline"
-                            id="date-received-year"
-                            max="2100"
-                            min="1900"
-                            name="year"
-                            placeholder="YYYY"
-                            type="number"
-                            onBlur={() => {
-                              validatePetitionFromPaperSequence();
-                            }}
-                            onChange={e => {
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: limitLength(e.target.value, 4),
-                              });
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </fieldset>
-                  </FormGroup>
+                  <DateInput
+                    errorText={validationErrors.receivedAt}
+                    id="date-received"
+                    label="Date received"
+                    values={form}
+                    onBlur={validatePetitionFromPaperSequence}
+                    onChange={updateFormValueSequence}
+                  />
 
                   <FormGroup errorText={validationErrors.mailingDate}>
                     <label className="usa-label" htmlFor="mailing-date">
@@ -294,7 +219,13 @@ export const StartCaseInternal = connect(
                     </div>
                   )}
                 </div>
-                <Button id="submit-case" type="submit">
+                <Button
+                  id="submit-case"
+                  type="button"
+                  onClick={() => {
+                    submitPetitionFromPaperSequence();
+                  }}
+                >
                   Create Case
                 </Button>
                 <Button
@@ -337,7 +268,7 @@ export const StartCaseInternal = connect(
                 />
               </div>
             </div>
-          </form>
+          </div>
           {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
           {showModal === 'FileUploadErrorModal' && (
             <FileUploadErrorModal

@@ -61,6 +61,26 @@ describe('updateCaseAutomaticBlock', () => {
     expect(deleteCaseTrialSortMappingRecordsMock).toBeCalled();
   });
 
+  it('does not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords if it already has a trial date', async () => {
+    getCaseDeadlinesByCaseIdMock = jest
+      .fn()
+      .mockReturnValue([{ deadline: 'something' }]);
+
+    const caseEntity = new Case(
+      { ...MOCK_CASE_WITHOUT_PENDING, trialDate: '2021-03-01T21:40:46.415Z' },
+      {
+        applicationContext,
+      },
+    );
+    const updatedCase = await updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+    });
+
+    expect(updatedCase.automaticBlocked).toBeFalsy();
+    expect(deleteCaseTrialSortMappingRecordsMock).not.toBeCalled();
+  });
+
   it('sets the case to not automaticBlocked but does not call createCaseTrialSortMappingRecords if the case does not have deadlines or pending items and the case is not generalDocketReadyForTrial status', async () => {
     getCaseDeadlinesByCaseIdMock = jest.fn().mockReturnValue([]);
 

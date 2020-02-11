@@ -1,6 +1,7 @@
 const fs = require('fs');
 const json2md = require('json2md');
 const { Case } = require('../business/entities/cases/Case');
+const { CaseDeadline } = require('../business/entities/CaseDeadline');
 const { DocketRecord } = require('../business/entities/DocketRecord');
 const { Document } = require('../business/entities/Document');
 
@@ -11,7 +12,7 @@ exports.generateJsonFromSchema = (schema, entityName) => {
   const jsonResult = [{ h1: entityName }];
 
   const handleField = (field, fieldName, isAlternative = false, index = 0) => {
-    const { allow, flags, matches, rules, type } = field;
+    const { allow, flags, matches, metas, rules, type } = field;
     let presence, description;
 
     if (flags) {
@@ -30,6 +31,16 @@ exports.generateJsonFromSchema = (schema, entityName) => {
 
     if (description) {
       result.push({ p: description });
+    }
+
+    if (metas) {
+      metas.forEach(meta => {
+        if (meta['tags']) {
+          meta['tags'].forEach(tag => {
+            result.push({ p: tag });
+          });
+        }
+      });
     }
 
     result.push({
@@ -146,5 +157,6 @@ exports.generateMarkdownSchema = (entity, entityName) => {
 };
 
 exports.generateMarkdownSchema(Case, 'Case');
+exports.generateMarkdownSchema(CaseDeadline, 'CaseDeadline');
 exports.generateMarkdownSchema(DocketRecord, 'DocketRecord');
 exports.generateMarkdownSchema(Document, 'Document');

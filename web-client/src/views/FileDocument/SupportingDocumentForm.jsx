@@ -92,7 +92,10 @@ export const SupportingDocumentForm = connect(
                 });
                 updateFileDocumentWizardFormValueSequence({
                   key: `supportingDocuments.${index}.previousDocument`,
-                  value: form.documentTitle || form.documentType,
+                  value: {
+                    documentTitle: form.documentTitle || form.documentType,
+                    documentType: form.documentType,
+                  },
                 });
                 updateFileDocumentWizardFormValueSequence({
                   key: e.target.name,

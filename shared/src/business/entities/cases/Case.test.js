@@ -1413,7 +1413,7 @@ describe('Case entity', () => {
       expect(myCase.trialTime).toBeTruthy();
     });
 
-    it('should set all trial session fields but not set the case as calendared if the trial session is not calendared', () => {
+    it('should set all trial session fields but not set the case as calendared or associated judge if the trial session is not calendared', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -1439,7 +1439,7 @@ describe('Case entity', () => {
 
       expect(myCase.status).toEqual(Case.STATUS_TYPES.new);
       expect(myCase.trialDate).toBeTruthy();
-      expect(myCase.associatedJudge).toBeTruthy();
+      expect(myCase.associatedJudge).toEqual(Case.CHIEF_JUDGE);
       expect(myCase.trialLocation).toBeTruthy();
       expect(myCase.trialSessionId).toBeTruthy();
       expect(myCase.trialTime).toBeTruthy();
@@ -2625,6 +2625,22 @@ describe('Case entity', () => {
 
     expect(caseEntity.getFormattedValidationErrors()).toEqual({
       'docketRecord[1]': '"docketRecord[1]" contains a duplicate value',
+    });
+  });
+
+  describe('getCaseConfirmationGeneratedPdfFileName', () => {
+    it('generates the correct name for the case confirmation pdf', () => {
+      const caseToVerify = new Case(
+        {
+          docketNumber: '123-20',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(caseToVerify.getCaseConfirmationGeneratedPdfFileName()).toEqual(
+        'case-123-20-confirmation.pdf',
+      );
     });
   });
 });

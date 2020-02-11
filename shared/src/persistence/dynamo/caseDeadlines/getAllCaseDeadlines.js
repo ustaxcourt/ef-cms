@@ -61,6 +61,7 @@ exports.getAllCaseDeadlines = async ({ applicationContext }) => {
       'contactPrimary',
       'contactSecondary',
     ]),
+    associatedJudge: caseMap[m.caseId].associatedJudge,
     caseTitle: caseMap[m.caseId].caseCaption,
   }));
 

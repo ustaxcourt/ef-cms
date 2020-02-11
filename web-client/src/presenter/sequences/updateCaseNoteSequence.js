@@ -5,10 +5,9 @@ import { saveCaseNoteAction } from '../actions/CaseNotes/saveCaseNoteAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseNoteOnCaseDetailAction } from '../actions/CaseNotes/setCaseNoteOnCaseDetailAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateNoteAction } from '../actions/validateNoteAction';
 
 export const updateCaseNoteSequence = [
@@ -16,8 +15,7 @@ export const updateCaseNoteSequence = [
   validateNoteAction,
   {
     error: [setValidationErrorsAction],
-    success: [
-      setWaitingForResponseAction,
+    success: showProgressSequenceDecorator([
       stopShowValidationAction,
       clearAlertsAction,
       saveCaseNoteAction,
@@ -25,7 +23,6 @@ export const updateCaseNoteSequence = [
       setAlertSuccessAction,
       clearModalAction,
       clearModalStateAction,
-      unsetWaitingForResponseAction,
-    ],
+    ]),
   },
 ];

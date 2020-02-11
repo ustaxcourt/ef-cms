@@ -8,13 +8,13 @@ export const Button = props => {
     children,
     className,
     icon,
+    iconColor, // e.g. blue
+    iconRight = false,
     link,
+    marginDirection = 'right',
     secondary,
     ...remainingProps
   } = props;
-
-  let { marginDirection } = props;
-  marginDirection = marginDirection || 'right';
 
   const Element = href ? 'a' : 'button';
 
@@ -26,12 +26,20 @@ export const Button = props => {
     link && 'usa-button--unstyled ustc-button--unstyled',
   );
 
+  const iconClasses = classNames(
+    iconRight ? 'margin-left-05' : 'margin-right-05',
+    iconColor && `fa-icon-${iconColor}`,
+  );
+
   return (
     <Element className={classes} {...remainingProps}>
-      {icon && (
-        <FontAwesomeIcon className="margin-right-05" icon={icon} size="1x" />
+      {icon && !iconRight && (
+        <FontAwesomeIcon className={iconClasses} icon={icon} size="1x" />
       )}
       {children}
+      {icon && iconRight && (
+        <FontAwesomeIcon className={iconClasses} icon={icon} size="1x" />
+      )}
     </Element>
   );
 };

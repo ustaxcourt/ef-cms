@@ -26,7 +26,7 @@ describe('ExternalDocumentNonStandardD', () => {
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',
         documentType: 'Certificate of Service',
-        previousDocument: 'Petition',
+        previousDocument: { documentType: 'Petition' },
         scenario: 'Nonstandard D',
         serviceDate,
       });
@@ -41,7 +41,7 @@ describe('ExternalDocumentNonStandardD', () => {
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',
         documentType: 'Certificate of Service',
-        previousDocument: 'Petition',
+        previousDocument: { documentType: 'Petition' },
         scenario: 'Nonstandard D',
         serviceDate,
       });
@@ -54,7 +54,7 @@ describe('ExternalDocumentNonStandardD', () => {
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',
         documentType: 'Certificate of Service',
-        previousDocument: 'Petition',
+        previousDocument: { documentType: 'Petition' },
         scenario: 'Nonstandard D',
         serviceDate,
       });
@@ -65,18 +65,35 @@ describe('ExternalDocumentNonStandardD', () => {
   });
 
   describe('title generation', () => {
-    const serviceDate = '2012-04-10T00:00:00-05:00';
-    it('should generate valid title', () => {
+    const serviceDate = '2012-04-10T04:00:00.000Z';
+    it('should generate valid title with previousDocument documentType', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',
         documentType: 'Certificate of Service',
-        previousDocument: 'Petition',
+        previousDocument: { documentType: 'Petition' },
         scenario: 'Nonstandard D',
         serviceDate,
       });
       expect(extDoc.getDocumentTitle()).toEqual(
         'Certificate of Service Petition 04-10-2012',
+      );
+    });
+
+    it('should generate valid title with previousDocument documentTitle', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Supporting Document',
+        documentTitle: 'Certificate of Service [Document Name] [Date]',
+        documentType: 'Certificate of Service',
+        previousDocument: {
+          documentTitle: 'Stipulation Something',
+          documentType: 'Stipulation',
+        },
+        scenario: 'Nonstandard D',
+        serviceDate,
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'Certificate of Service Stipulation Something 04-10-2012',
       );
     });
   });

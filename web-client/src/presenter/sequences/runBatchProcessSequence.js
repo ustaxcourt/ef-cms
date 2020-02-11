@@ -1,11 +1,8 @@
 import { chooseWorkQueueSequence } from '../sequences/chooseWorkQueueSequence';
 import { runBatchProcessAction } from '../actions/runBatchProcessAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const runBatchProcessSequence = [
-  setWaitingForResponseAction,
+export const runBatchProcessSequence = showProgressSequenceDecorator([
   runBatchProcessAction,
-  unsetWaitingForResponseAction,
-  ...chooseWorkQueueSequence,
-];
+  chooseWorkQueueSequence,
+]);

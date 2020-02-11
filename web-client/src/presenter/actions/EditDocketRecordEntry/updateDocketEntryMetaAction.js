@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * update props from modal state to pass to through sequence
  *
@@ -8,10 +10,12 @@
  */
 export const updateDocketEntryMetaAction = async ({
   applicationContext,
+  get,
   path,
-  props,
 }) => {
-  const { caseId, docketRecordEntry, docketRecordIndex } = props;
+  const { caseId } = get(state.caseDetail);
+  const docketRecordEntry = get(state.form);
+  const docketRecordIndex = get(state.docketRecordIndex);
 
   try {
     await applicationContext.getUseCases().updateDocketEntryMetaInteractor({

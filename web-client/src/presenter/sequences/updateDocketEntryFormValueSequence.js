@@ -1,7 +1,7 @@
-import { setFormValueAction } from '../actions/setFormValueAction';
+import { setFileDocumentFormValueAction } from '../actions/setFileDocumentFormValueAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
 export const updateDocketEntryFormValueSequence = [
-  setFormValueAction,
+  setFileDocumentFormValueAction,
   updateDocketEntryWizardDataAction,
 ];

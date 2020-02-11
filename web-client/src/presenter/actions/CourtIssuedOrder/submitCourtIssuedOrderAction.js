@@ -64,5 +64,7 @@ export const submitCourtIssuedOrderAction = async ({
   return {
     caseDetail,
     caseId: docketNumber,
+    documentId,
+    eventCode: documentMetadata.eventCode,
   };
 };

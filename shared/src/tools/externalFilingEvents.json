@@ -245,7 +245,7 @@
       "eventCode": "AMDC",
       "scenario": "Nonstandard D",
       "labelPreviousDocument": "Which document is this Certificate of Service for?",
-      "labelFreeText": "Date of Service",
+      "labelFreeText": "Date of service",
       "ordinalField": ""
     },
     {
@@ -275,7 +275,7 @@
       "eventCode": "CS",
       "scenario": "Nonstandard D",
       "labelPreviousDocument": "Which document is this Certificate of Service for?",
-      "labelFreeText": "Date of Service",
+      "labelFreeText": "Date of service",
       "ordinalField": ""
     },
     {
@@ -937,7 +937,7 @@
       "eventCode": "M052",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Docket Numbers (separate with a comma)",
+      "labelFreeText": "Docket numbers (separate with a comma)",
       "ordinalField": ""
     },
     {
@@ -977,7 +977,7 @@
       "eventCode": "M058",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
-      "labelFreeText": "Requested Location",
+      "labelFreeText": "Requested location",
       "ordinalField": ""
     },
     {
@@ -987,7 +987,7 @@
       "eventCode": "M059",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
-      "labelFreeText": "Requested Location",
+      "labelFreeText": "Requested location",
       "ordinalField": ""
     },
     {
@@ -1077,7 +1077,7 @@
       "eventCode": "M067",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Docket Numbers to Be Consolidated (separate with a comma)",
+      "labelFreeText": "Docket numbers to be consolidated (separate with a comma)",
       "ordinalField": ""
     },
     {
@@ -1167,7 +1167,7 @@
       "eventCode": "M126",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Person, Notice, or Year",
+      "labelFreeText": "Person, notice, or year",
       "ordinalField": ""
     },
     {
@@ -1967,7 +1967,7 @@
       "eventCode": "RQT",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
-      "labelFreeText": "Requested Location",
+      "labelFreeText": "Requested location",
       "ordinalField": ""
     },
     {
@@ -2225,7 +2225,7 @@
       "eventCode": "STAT",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What is this Statement for?",
+      "labelFreeText": "What is this statement for?",
       "ordinalField": ""
     },
     {
@@ -2277,7 +2277,7 @@
       "eventCode": "STP",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What is this Stipulation for?",
+      "labelFreeText": "What is this stipulation for?",
       "ordinalField": ""
     },
     {
@@ -2347,7 +2347,7 @@
       "eventCode": "STBB",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Docket Number",
+      "labelFreeText": "Docket number",
       "ordinalField": ""
     },
     {

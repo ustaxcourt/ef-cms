@@ -31,6 +31,12 @@ exports.deleteCaseDeadlineInteractor = async ({
 
   let updatedCase = new Case(caseToUpdate, { applicationContext });
 
+  await applicationContext.getPersistenceGateway().deleteCaseDeadline({
+    applicationContext,
+    caseDeadlineId,
+    caseId,
+  });
+
   updatedCase = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAutomaticBlock({
@@ -38,14 +44,10 @@ exports.deleteCaseDeadlineInteractor = async ({
       caseEntity: updatedCase,
     });
 
+  const updatedCaseRaw = updatedCase.validate().toRawObject();
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
-    caseToUpdate: updatedCase.validate().toRawObject(),
+    caseToUpdate: updatedCaseRaw,
   });
-
-  return await applicationContext.getPersistenceGateway().deleteCaseDeadline({
-    applicationContext,
-    caseDeadlineId,
-    caseId,
-  });
+  return updatedCaseRaw;
 };

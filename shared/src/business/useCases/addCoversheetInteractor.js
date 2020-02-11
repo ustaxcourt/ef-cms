@@ -46,15 +46,19 @@ exports.generateCoverSheetData = ({
   }
 
   const dateFiledFormatted =
-    (documentEntity.createdAt &&
+    (documentEntity.filingDate &&
       applicationContext
         .getUtilities()
-        .formatDateString(documentEntity.createdAt, 'MMDDYYYY')) ||
+        .formatDateString(documentEntity.filingDate, 'MMDDYYYY')) ||
     null;
 
   const caseCaption = caseEntity.caseCaption || Case.getCaseCaption(caseEntity);
-  const caseCaptionNames = Case.getCaseCaptionNames(caseCaption);
-  const caseCaptionPostfix = caseCaption.replace(caseCaptionNames, '');
+  let caseCaptionNames = applicationContext.getCaseCaptionNames(caseCaption);
+  let caseCaptionPostfix = '';
+  if (caseCaptionNames !== caseCaption) {
+    caseCaptionNames += ', ';
+    caseCaptionPostfix = caseCaption.replace(caseCaptionNames, '');
+  }
 
   let documentTitle =
     documentEntity.documentTitle || documentEntity.documentType;

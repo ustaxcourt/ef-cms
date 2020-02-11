@@ -3,6 +3,7 @@ const moment = require('moment-timezone');
 const FORMATS = {
   DATE_TIME: 'MM/DD/YY hh:mm a',
   DATE_TIME_TZ: 'MM/DD/YY h:mm a [ET]',
+  ISO: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
   MMDDYY: 'MM/DD/YY',
   MMDDYYYY: 'MM/DD/YYYY',
   MONTH_DAY_YEAR: 'MMMM D, YYYY',
@@ -14,7 +15,7 @@ const FORMATS = {
 const USTC_TZ = 'America/New_York';
 
 const isStringISOFormatted = dateString => {
-  return moment.utc(dateString, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid();
+  return moment.utc(dateString, FORMATS.ISO, true).isValid();
 };
 
 /**
@@ -25,6 +26,14 @@ const isStringISOFormatted = dateString => {
  */
 const prepareDateFromString = (dateString, inputFormat) => {
   return moment.tz(dateString, inputFormat, USTC_TZ);
+};
+
+const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
+  if (!howMuch) return dateString;
+
+  return prepareDateFromString(dateString, FORMATS.ISO)
+    .add(howMuch, units)
+    .toISOString();
 };
 
 /**
@@ -128,6 +137,7 @@ const isValidDateString = (dateString, formats = ['M-D-YYYY', 'M/D/YYYY']) => {
 
 module.exports = {
   FORMATS,
+  calculateISODate,
   createISODateString,
   createISODateStringFromObject,
   dateStringsCompared,
