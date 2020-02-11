@@ -103,7 +103,7 @@ describe('handle', () => {
     });
   });
 
-  xit('should return an object representing an 500 status if the function returns an unsanitized entity (response contains private data)', async () => {
+  it('should return an object representing an 500 status if the function returns an unsanitized entity (response contains private data)', async () => {
     const response = await handle({}, async () => ({
       pk: 'this is bad!',
     }));

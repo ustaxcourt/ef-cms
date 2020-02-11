@@ -43,7 +43,12 @@ describe('getRespondentsBySearchKeyInteractor', () => {
         };
       },
       getPersistenceGateway: () => ({
-        getUsersBySearchKey: async () => [{ name: 'Test Respondent' }],
+        getUsersBySearchKey: async () => [
+          {
+            name: 'Test Respondent',
+            userId: '7d9eca44-4d10-44f2-9210-e7eed047f3c5',
+          },
+        ],
       }),
     };
 
@@ -52,6 +57,6 @@ describe('getRespondentsBySearchKeyInteractor', () => {
       searchKey: 'Test Respondent',
     });
 
-    expect(result).toEqual([{ name: 'Test Respondent' }]);
+    expect(result).toMatchObject([{ name: 'Test Respondent' }]);
   });
 });
