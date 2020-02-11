@@ -9,7 +9,11 @@ import { state } from 'cerebral';
  */
 export const unsetWaitingForResponseAction = ({ get, store }) => {
   let requestCount = get(state.waitingForResponseRequests);
-  requestCount = requestCount <= 1 ? 0 : --requestCount; // cannot be less than zero
+
+  if (requestCount > 0) {
+    --requestCount;
+  }
+
   store.set(state.waitingForResponseRequests, requestCount);
   store.set(state.waitingForResponse, requestCount > 0);
 };
