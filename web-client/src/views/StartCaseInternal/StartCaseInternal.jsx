@@ -16,9 +16,16 @@ export const StartCaseInternal = connect(
   {
     documentSelectedForScan: state.documentSelectedForScan,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    navigateToReviewPetitionSequence:
+      sequences.navigateToReviewPetitionSequence,
     showModal: state.showModal,
   },
-  ({ documentSelectedForScan, formCancelToggleCancelSequence, showModal }) => {
+  ({
+    documentSelectedForScan,
+    formCancelToggleCancelSequence,
+    navigateToReviewPetitionSequence,
+    showModal,
+  }) => {
     return (
       <>
         <BigHeader text="Create Case" />
@@ -85,7 +92,13 @@ export const StartCaseInternal = connect(
             </div>
             <div className="grid-row grid-gap margin-top-3">
               <div className="grid-col-5">
-                <Button href="/review-petition" id="submit-case" type="button">
+                <Button
+                  id="submit-case"
+                  type="button"
+                  onClick={() => {
+                    navigateToReviewPetitionSequence();
+                  }}
+                >
                   Review Petition
                 </Button>
                 <Button
