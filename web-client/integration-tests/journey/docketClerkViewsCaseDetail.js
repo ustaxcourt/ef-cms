@@ -12,9 +12,11 @@ export default (test, docketNumber = null) => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: docketNumber || test.docketNumber,
     });
+
     let result = runCompute(extractedPendingMessagesFromCaseDetail, {
       state: test.getState(),
     });
+
     result = result.map(message => ({
       assigneeId: message.assigneeId,
       createdAt: message.currentMessage.createdAt,
@@ -22,6 +24,7 @@ export default (test, docketNumber = null) => {
       fromUserId: message.currentMessage.fromUserId,
       message: message.currentMessage.message,
     }));
+
     expect(orderBy(result, 'message')).toMatchObject(
       orderBy(
         [
@@ -56,5 +59,21 @@ export default (test, docketNumber = null) => {
         'message',
       ),
     );
+
+    const caseDetail = test.getState('caseDetail');
+
+    expect(caseDetail.associatedJudge).toBeDefined();
+    // need to block case
+    // expect(caseDetail.blocked).toBeDefined();
+    // expect(caseDetail.blockedDate).toBeDefined();
+    // expect(caseDetail.blockedReason).toBeDefined();
+    expect(caseDetail.caseNote).toBeDefined();
+    expect(caseDetail.highPriority).toBeDefined();
+    expect(caseDetail.highPriorityReason).toBeDefined();
+    expect(caseDetail.qcCompleteForTrial).toBeDefined();
+    expect(caseDetail.status).toBeDefined();
+    expect(caseDetail.userId).toBeDefined();
+    // need to add work items
+    // expect(caseDetail.workItems).toBeDefined();
   });
 };
