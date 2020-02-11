@@ -44,6 +44,7 @@ import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCa
 import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
+import petitionsClerkAddsCaseNote from './journey/petitionsClerkAddsCaseNote';
 import petitionsClerkAssignsWorkItemToOther from './journey/petitionsClerkAssignsWorkItemToOther';
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
@@ -60,6 +61,7 @@ import respondentAddsStipulatedDecision from './journey/respondentAddsStipulated
 import respondentLogIn from './journey/respondentLogIn';
 import respondentViewsCaseDetailOfBatchedCase from './journey/respondentViewsCaseDetailOfBatchedCase';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
+import petitionsClerkPrioritizesCase from './journey/petitionsClerkPrioritizesCase';
 
 let test;
 global.FormData = FormData;
@@ -127,7 +129,6 @@ describe('Case journey', () => {
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCaseTestAllOptions(test, fakeFile);
   petitionerViewsDashboard(test);
-  petitionerViewsCaseDetail(test);
   petitionerSignsOut(test);
 
   petitionsClerkLogIn(test);
@@ -137,10 +138,16 @@ describe('Case journey', () => {
   petitionsClerkAssignsWorkItemToOther(test);
   petitionsClerkLogIn(test, 'petitionsclerk1');
   petitionsClerkViewsMessagesAfterReassign(test);
+  petitionsClerkAddsCaseNote(test);
+  petitionsClerkPrioritizesCase(test);
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkUpdatesCaseDetail(test);
   petitionsClerkSubmitsCaseToIrs(test);
   petitionsClerkIrsHoldingQueue(test);
+
+  petitionerLogin(test);
+  petitionerViewsCaseDetail(test);
+  petitionerSignsOut(test);
 
   respondentLogIn(test);
   respondentViewsDashboard(test);
