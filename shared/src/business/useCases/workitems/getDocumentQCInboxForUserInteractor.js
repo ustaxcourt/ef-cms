@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * getDocumentQCInboxForUserInteractor
@@ -33,8 +34,12 @@ exports.getDocumentQCInboxForUserInteractor = async ({
       userId,
     });
 
-  return workItems.filter(
+  const filteredWorkItems = workItems.filter(
     workItem =>
       workItem.assigneeId === user.userId && workItem.section === user.section,
   );
+
+  return WorkItem.validateRawCollection(filteredWorkItems, {
+    applicationContext,
+  });
 };
