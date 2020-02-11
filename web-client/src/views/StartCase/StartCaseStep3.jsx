@@ -2,6 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { Contacts } from './Contacts';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SpousePermissionConfirmModal } from './SpousePermissionConfirmModal';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
@@ -18,6 +19,7 @@ export const StartCaseStep3 = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
+    showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
@@ -31,6 +33,7 @@ export const StartCaseStep3 = connect(
     form,
     formCancelToggleCancelSequence,
     navigateBackSequence,
+    showModal,
     startCaseHelper,
     updateStartCaseFormValueSequence,
     validateStartCaseWizardSequence,
@@ -428,6 +431,9 @@ export const StartCaseStep3 = connect(
             Cancel
           </Button>
         </div>
+        {showModal === 'SpousePermissionConfirmModal' && (
+          <SpousePermissionConfirmModal />
+        )}
       </>
     );
   },

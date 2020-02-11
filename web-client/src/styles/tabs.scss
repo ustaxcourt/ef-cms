@@ -65,6 +65,18 @@
     }
   }
 
+  &.flex {
+    nav {
+      ul {
+        display: flex;
+
+        li {
+          flex: auto;
+        }
+      }
+    }
+  }
+
   &.container-tabs {
     nav {
       ul {

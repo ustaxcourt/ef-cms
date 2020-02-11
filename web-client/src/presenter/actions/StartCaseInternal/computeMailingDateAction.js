@@ -1,18 +1,18 @@
 import { state } from 'cerebral';
 
 /**
- * computes the date from a month, day and year value
+ * computes the mailing date from a month, day and year value
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object
  * @param {object} providers.get the cerebral get function
  * @returns {object} props object
  */
-export const computeDateReceivedAction = ({ get, store }) => {
+export const computeMailingDateAction = ({ get, store }) => {
   let formDate = null;
-  const formMonth = get(state.form.dateReceivedMonth);
-  const formDay = get(state.form.dateReceivedDay);
-  const formYear = get(state.form.dateReceivedYear);
+  const formMonth = get(state.form.mailingDateMonth);
+  const formDay = get(state.form.mailingDateDay);
+  const formYear = get(state.form.mailingDateYear);
 
   if (formMonth || formDay || formYear) {
     formDate = `${formYear}-${formMonth}-${formDay}`;
@@ -23,7 +23,7 @@ export const computeDateReceivedAction = ({ get, store }) => {
       .join('-');
   }
 
-  store.set(state.form.dateReceived, formDate);
+  store.set(state.form.mailingDate, formDate);
 
-  return { computedDateReceived: formDate };
+  return { computedMailingDate: formDate };
 };
