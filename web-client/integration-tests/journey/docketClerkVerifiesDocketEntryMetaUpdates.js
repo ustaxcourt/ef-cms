@@ -1,8 +1,8 @@
-import { waitForRouter } from '../helpers';
-
 export default (test, docketRecordIndex = 1) => {
   return it('docket clerk verifies docket entry meta update', async () => {
-    await waitForRouter();
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
