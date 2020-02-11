@@ -5,13 +5,11 @@ import { saveCaseDetailInternalEditAction } from '../actions/saveCaseDetailInter
 import { setCaseAction } from '../actions/setCaseAction';
 import { setSaveSuccessAction } from '../actions/setSaveSuccessAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
 
-export const submitCaseDetailEditSaveSequence = [
-  setWaitingForResponseAction,
+export const submitCaseDetailEditSaveSequence = showProgressSequenceDecorator([
   startShowValidationAction,
   clearAlertsAction,
   getFormCombinedWithCaseDetailAction,
@@ -25,5 +23,4 @@ export const submitCaseDetailEditSaveSequence = [
       expireSaveSuccessAction,
     ],
   },
-  unsetWaitingForResponseAction,
-];
+]);
