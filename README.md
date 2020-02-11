@@ -2,6 +2,8 @@
 
 An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS, which began in October 2018. Work is not yet in production, so `master` does not deploy. For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
 
+### Build Status
+
 #### develop
 
 [![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop)
