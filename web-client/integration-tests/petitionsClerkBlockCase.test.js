@@ -149,6 +149,42 @@ describe('Blocking a Case', () => {
   petitionsClerkUnblocksCase(test, trialLocation, false);
   petitionsClerkDeletesCaseDeadline(test);
   petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
+
+  //add deadline for a case that was manually added to a non-calendared session - it shouldn't actually be set to blocked
+  it('petitions clerk manually adds case to trial', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    await test.runSequence('openAddToTrialModalSequence');
+
+    await test.runSequence('updateModalValueSequence', {
+      key: 'showAllLocations',
+      value: true,
+    });
+
+    await test.runSequence('updateModalValueSequence', {
+      key: 'trialSessionId',
+      value: test.trialSessionId,
+    });
+
+    await test.runSequence('addCaseToTrialSessionSequence');
+  });
+
+  petitionsClerkCreatesACaseDeadline(test);
+  it('petitions clerk views blocked report with no blocked cases', async () => {
+    // we need to wait for elasticsearch to get updated by the processing stream lambda
+    await new Promise(resolve => setTimeout(resolve, 4000));
+
+    await test.runSequence('gotoBlockedCasesReportSequence');
+
+    await test.runSequence('getBlockedCasesByTrialLocationSequence', {
+      key: 'trialLocation',
+      value: trialLocation,
+    });
+
+    expect(test.getState('blockedCases')).toMatchObject([]);
+  });
   petitionsClerkSignsOut(test);
 
   //add deadline for a calendared case - it shouldn't actually be set to blocked

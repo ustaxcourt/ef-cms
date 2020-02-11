@@ -6,11 +6,10 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitEditPractitionersModalAction } from '../actions/caseAssociation/submitEditPractitionersModalAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateEditPractitionersAction } from '../actions/caseAssociation/validateEditPractitionersAction';
 
 export const submitEditPractitionersModalSequence = [
@@ -18,8 +17,7 @@ export const submitEditPractitionersModalSequence = [
   validateEditPractitionersAction,
   {
     error: [setValidationErrorsAction],
-    success: [
-      setWaitingForResponseAction,
+    success: showProgressSequenceDecorator([
       clearAlertsAction,
       stopShowValidationAction,
       submitEditPractitionersModalAction,
@@ -31,9 +29,8 @@ export const submitEditPractitionersModalSequence = [
           setCasePropFromStateAction,
           getCaseAction,
           setCaseAction,
-          unsetWaitingForResponseAction,
         ],
       },
-    ],
+    ]),
   },
 ];

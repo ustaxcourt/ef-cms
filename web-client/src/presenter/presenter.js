@@ -45,6 +45,7 @@ import { completeDocumentSelectSequence } from './sequences/completeDocumentSele
 import { completeDocumentSigningSequence } from './sequences/completeDocumentSigningSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
+import { convertHtml2PdfAndOpenInNewTabSequence } from './sequences/convertHtml2PdfAndOpenInNewTabSequence';
 import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
 import { countryTypeChangeSequence } from './sequences/countryTypeChangeSequence';
 import { countryTypeUserContactChangeSequence } from './sequences/countryTypeUserContactChangeSequence';
@@ -210,7 +211,6 @@ import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSe
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
 import { setFieldOrderSequence } from './sequences/setFieldOrderSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
-import { setFormSubmittingSequence } from './sequences/setFormSubmittingSequence';
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
@@ -270,7 +270,6 @@ import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence
 import { unblockCaseFromTrialSequence } from './sequences/unblockCaseFromTrialSequence';
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
 import { unprioritizeCaseSequence } from './sequences/unprioritizeCaseSequence';
-import { unsetFormSubmittingSequence } from './sequences/unsetFormSubmittingSequence';
 import { unsetWorkQueueIsInternalSequence } from './sequences/unsetWorkQueueIsInternalSequence';
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateBatchDownloadProgressSequence } from './sequences/updateBatchDownloadProgressSequence';
@@ -402,6 +401,7 @@ export const presenter = {
     completeDocumentSigningSequence,
     completeStartCaseWizardStepSequence,
     confirmStayLoggedInSequence,
+    convertHtml2PdfAndOpenInNewTabSequence,
     convertHtml2PdfSequence,
     countryTypeChangeSequence,
     countryTypeUserContactChangeSequence,
@@ -566,7 +566,6 @@ export const presenter = {
     setDocumentUploadModeSequence,
     setFieldOrderSequence,
     setFocusedWorkItemSequence,
-    setFormSubmittingSequence,
     setIdleStatusIdleSequence,
     setIrsNoticeFalseSequence,
     setModalDialogNameSequence,
@@ -625,7 +624,6 @@ export const presenter = {
     unblockCaseFromTrialSequence,
     unidentifiedUserErrorSequence,
     unprioritizeCaseSequence,
-    unsetFormSubmittingSequence,
     unsetWorkQueueIsInternalSequence,
     updateAdvancedSearchFormValueSequence,
     updateBatchDownloadProgressSequence,

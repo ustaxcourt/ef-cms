@@ -1,11 +1,8 @@
 import { setQcCompleteOnCaseOnTrialSessionAction } from '../actions/TrialSession/setQcCompleteOnCaseOnTrialSessionAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { updateQcCompleteForTrialAction } from '../actions/TrialSession/updateQcCompleteForTrialAction';
 
-export const updateQcCompleteForTrialSequence = [
-  setWaitingForResponseAction,
+export const updateQcCompleteForTrialSequence = showProgressSequenceDecorator([
   updateQcCompleteForTrialAction,
   { error: [], success: [setQcCompleteOnCaseOnTrialSessionAction] },
-  unsetWaitingForResponseAction,
-];
+]);

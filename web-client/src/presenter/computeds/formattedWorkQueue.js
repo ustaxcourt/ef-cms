@@ -162,6 +162,17 @@ export const formatWorkItem = ({
   );
   result.isOrder = !!orderDocumentTypes.includes(result.document.documentType);
 
+  let descriptionDisplay = result.document.documentType;
+
+  if (result.document.documentTitle) {
+    descriptionDisplay = result.document.documentTitle;
+    if (result.document.additionalInfo) {
+      descriptionDisplay += ` ${result.document.additionalInfo}`;
+    }
+  }
+
+  result.document.descriptionDisplay = descriptionDisplay;
+
   return result;
 };
 
