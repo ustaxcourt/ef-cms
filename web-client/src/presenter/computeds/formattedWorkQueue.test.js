@@ -4,6 +4,7 @@ import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { cloneDeep } from 'lodash';
 import {
+  formatWorkItem,
   formattedWorkQueue as formattedWorkQueueComputed,
   getWorkItemDocumentLink,
 } from './formattedWorkQueue';
@@ -1021,6 +1022,53 @@ describe('formatted work queue computed', () => {
         },
       });
       expect(result).toEqual('/edit');
+    });
+  });
+
+  describe('formatWorkItem', () => {
+    it('should return the documentType as descriptionDisplay if no documentTitle is present', () => {
+      const workItem = {
+        ...FORMATTED_WORK_ITEM,
+        document: {
+          ...FORMATTED_WORK_ITEM.document,
+          documentType: 'Document Type',
+        },
+      };
+
+      const result = formatWorkItem({ applicationContext, workItem });
+
+      expect(result.document.descriptionDisplay).toEqual('Document Type');
+    });
+
+    it('should return the documentTitle as descriptionDisplay if no additionalInfo is present', () => {
+      const workItem = {
+        ...FORMATTED_WORK_ITEM,
+        document: {
+          ...FORMATTED_WORK_ITEM.document,
+          documentTitle: 'Document Title',
+        },
+      };
+
+      const result = formatWorkItem({ applicationContext, workItem });
+
+      expect(result.document.descriptionDisplay).toEqual('Document Title');
+    });
+
+    it('should return the documentTitle with additionalInfo as descriptionDisplay if documentTitle and additionalInfo are present', () => {
+      const workItem = {
+        ...FORMATTED_WORK_ITEM,
+        document: {
+          ...FORMATTED_WORK_ITEM.document,
+          additionalInfo: 'with Additional Info',
+          documentTitle: 'Document Title',
+        },
+      };
+
+      const result = formatWorkItem({ applicationContext, workItem });
+
+      expect(result.document.descriptionDisplay).toEqual(
+        'Document Title with Additional Info',
+      );
     });
   });
 });
