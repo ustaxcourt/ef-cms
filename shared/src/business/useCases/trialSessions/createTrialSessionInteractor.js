@@ -57,5 +57,7 @@ exports.createTrialSessionInteractor = async ({
       });
   }
 
-  return createdTrialSession;
+  return new TrialSession(createdTrialSession, { applicationContext })
+    .validate()
+    .toRawObject();
 };

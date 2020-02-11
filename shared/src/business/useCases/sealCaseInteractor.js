@@ -28,8 +28,12 @@ exports.sealCaseInteractor = async ({ applicationContext, caseId }) => {
 
   newCase.setAsSealed();
 
-  return await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: newCase.validate().toRawObject(),
-  });
+  const updatedCase = await applicationContext
+    .getPersistenceGateway()
+    .updateCase({
+      applicationContext,
+      caseToUpdate: newCase.validate().toRawObject(),
+    });
+
+  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
