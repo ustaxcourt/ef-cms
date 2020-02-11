@@ -35,6 +35,6 @@ describe('getEligibleCasesForTrialSession', () => {
     const result = await getEligibleCasesForTrialSession({
       applicationContext,
     });
-    expect(result).toEqual([MOCK_CASE]);
+    expect(result).toEqual([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }]);
   });
 });

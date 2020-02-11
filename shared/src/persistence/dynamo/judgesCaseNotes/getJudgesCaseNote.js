@@ -1,5 +1,4 @@
 const client = require('../../dynamodbClientService');
-const { stripInternalKeys } = require('../helpers/stripInternalKeys');
 
 /**
  * getJudgesCaseNote
@@ -11,13 +10,11 @@ const { stripInternalKeys } = require('../helpers/stripInternalKeys');
  * @returns {Promise} the promise of the persistence call to get the record
  */
 exports.getJudgesCaseNote = async ({ applicationContext, caseId, userId }) => {
-  return await client
-    .get({
-      Key: {
-        pk: `judges-case-note|${caseId}`,
-        sk: `${userId}`,
-      },
-      applicationContext,
-    })
-    .then(stripInternalKeys);
+  return await client.get({
+    Key: {
+      pk: `judges-case-note|${caseId}`,
+      sk: `${userId}`,
+    },
+    applicationContext,
+  });
 };

@@ -23,7 +23,7 @@ describe('Get internal users', () => {
 
   it('returns the same users that were returned from mocked persistence', async () => {
     const users = await getInternalUsersInteractor({ applicationContext });
-    expect(users).toEqual([
+    expect(users).toMatchObject([
       {
         userId: 'abc',
       },
