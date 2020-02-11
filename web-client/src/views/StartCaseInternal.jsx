@@ -62,11 +62,8 @@ export const StartCaseInternal = connect(
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
                 <Focus>
-                  <h2 className="margin-bottom-105">Case Information</h2>
+                  <h2 className="margin-bottom-105">Petition</h2>
                 </Focus>
-                <p className="margin-bottom-3 margin-top-0 required-statement">
-                  *All fields required unless otherwise noted
-                </p>
               </div>
 
               <div className="grid-col-5">
