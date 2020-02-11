@@ -178,8 +178,7 @@ export const SectionWorkQueueInbox = connect(
                         e.stopPropagation();
                       }}
                     >
-                      {item.document.documentTitle ||
-                        item.document.documentType}
+                      {item.document.descriptionDisplay}
                     </a>
                   </div>
                   {workQueueHelper.showMessageContent && (
