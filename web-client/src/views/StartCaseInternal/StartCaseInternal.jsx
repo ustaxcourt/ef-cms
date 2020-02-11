@@ -2,8 +2,6 @@ import { BigHeader } from './../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseInformation } from './CaseInformation';
 import { ErrorNotification } from './../ErrorNotification';
-import { FileUploadErrorModal } from './../FileUploadErrorModal';
-import { FileUploadStatusModal } from './../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from './../FormCancelModalDialog';
 import { IRSNotice } from './IRSNotice';
