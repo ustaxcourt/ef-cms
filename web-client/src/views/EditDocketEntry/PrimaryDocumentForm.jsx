@@ -370,7 +370,7 @@ export const PrimaryDocumentForm = connect(
             <FormGroup errorText={validationErrors.objections}>
               <fieldset className="usa-fieldset margin-bottom-0">
                 <legend className="usa-legend" id="objections-legend">
-                  Are there any objections to this document?
+                  Are there any objections to the granting of this document?
                 </legend>
                 {['Yes', 'No', 'Unknown'].map(option => (
                   <div className="usa-radio" key={option}>
