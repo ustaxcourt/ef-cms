@@ -35,7 +35,7 @@ describe('getUsersBySearchKey', () => {
     client.query.restore();
   });
 
-  it('should strip the pk and sk from the user', async () => {
+  it('should return data as received from persistence', async () => {
     const result = await getUsersBySearchKey({
       applicationContext,
       searchKey: 'Test Practitioner',
@@ -45,8 +45,10 @@ describe('getUsersBySearchKey', () => {
       {
         barNumber: 'PT1234',
         name: 'Test Practitioner',
+        pk: '9805d1ab-18d0-43ec-bafb-654e83405416',
         role: User.ROLES.practitioner,
         section: 'practitioner',
+        sk: '9805d1ab-18d0-43ec-bafb-654e83405416',
         userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ]);
