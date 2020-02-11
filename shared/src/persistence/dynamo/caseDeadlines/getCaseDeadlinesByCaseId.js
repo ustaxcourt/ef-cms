@@ -1,7 +1,6 @@
 const {
   getRecordsViaMapping,
 } = require('../../dynamo/helpers/getRecordsViaMapping');
-const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 /**
  * getCaseDeadlinesByCaseId
@@ -16,5 +15,5 @@ exports.getCaseDeadlinesByCaseId = async ({ applicationContext, caseId }) => {
     applicationContext,
     key: caseId,
     type: 'case-deadline',
-  }).then(stripInternalKeys);
+  });
 };

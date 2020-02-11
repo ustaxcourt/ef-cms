@@ -1,7 +1,6 @@
 const {
   getRecordViaMapping,
 } = require('../../dynamo/helpers/getRecordViaMapping');
-const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 /**
@@ -22,8 +21,5 @@ exports.getCaseByDocketNumber = async ({
     type: 'case',
   });
 
-  return stripWorkItems(
-    stripInternalKeys(aCase),
-    applicationContext.isAuthorizedForWorkItems(),
-  );
+  return stripWorkItems(aCase, applicationContext.isAuthorizedForWorkItems());
 };
