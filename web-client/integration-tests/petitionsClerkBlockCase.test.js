@@ -21,8 +21,6 @@ import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase
 import petitionsClerkDeletesCaseDeadline from './journey/petitionsClerkDeletesCaseDeadline';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkRemovesPendingItemFromCase from './journey/petitionsClerkRemovesPendingItemFromCase';
-import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
-import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
 import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkUnblocksCase from './journey/petitionsClerkUnblocksCase';
 import petitionsClerkViewsATrialSessionsEligibleCases from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
@@ -41,8 +39,6 @@ describe('Blocking a Case', () => {
 
   petitionsClerkLogIn(test);
   petitionsClerkCreatesNewCase(test, fakeFile, trialLocation);
-  petitionsClerkSendsCaseToIRSHoldingQueue(test);
-  petitionsClerkRunsBatchProcess(test);
   petitionsClerkSignsOut(test);
 
   docketClerkLogIn(test);
