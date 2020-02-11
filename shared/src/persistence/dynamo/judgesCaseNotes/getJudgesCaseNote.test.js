@@ -31,6 +31,8 @@ describe('getJudgesCaseNote', () => {
     expect(result).toEqual({
       caseId: '123',
       notes: 'something',
+      pk: 'judges-case-note|123',
+      sk: '456',
       userId: '456',
     });
   });

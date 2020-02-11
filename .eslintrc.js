@@ -281,6 +281,7 @@ module.exports = {
           'unmount',
           'unprioritize',
           'unprocessable',
+          'unsanitized',
           'unset',
           'unsets',
           'unsetting',
