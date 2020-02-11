@@ -33,5 +33,5 @@ module.exports = {
     '^.+\\.js$': 'babel-jest',
     '^.+\\.jsx$': 'babel-jest',
   },
-  verbose: true,
+  verbose: false,
 };

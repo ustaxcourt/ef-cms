@@ -13,13 +13,11 @@ import { overwriteOrderFileAction } from '../actions/CourtIssuedOrder/overwriteO
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { uploadOrderFileAction } from '../actions/FileDocument/uploadOrderFileAction';
 
 const onFileUploadedSuccess = [
-  setWaitingForResponseAction,
   submitCourtIssuedOrderAction,
   setCaseAction,
   getFileExternalDocumentAlertSuccessAction,
@@ -39,11 +37,10 @@ const onFileUploadedSuccess = [
   },
 ];
 
-export const submitCourtIssuedOrderSequence = [
-  setWaitingForResponseAction,
+export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
   isFormPristineAction,
   {
-    no: [...convertHtml2PdfSequence],
+    no: convertHtml2PdfSequence,
     yes: [],
   },
   isEditingOrderAction,
@@ -63,5 +60,4 @@ export const submitCourtIssuedOrderSequence = [
       },
     ],
   },
-  unsetWaitingForResponseAction,
-];
+]);

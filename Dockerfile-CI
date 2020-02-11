@@ -2,12 +2,13 @@ FROM cypress/base:12.13.0
 
 WORKDIR /home/app/ef-cms
 
-RUN sh -c 'echo "deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list'
-RUN sed -i '/deb http:\/\/deb.debian.org\/debian jessie-updates main/d' /etc/apt/sources.list
+RUN sh -c 'echo "deb [check-valid-until=no] http://ftp.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/stretch-backports.list'
+RUN sed -i '/deb http:\/\/deb.debian.org\/debian stretch-backports main/d' /etc/apt/sources.list
 
 RUN apt-get -o Acquire::Check-Valid-Until=false update && \
-  apt-get install -y -t jessie-backports ca-certificates-java && \
-  apt-get -y install openjdk-8-jdk && update-alternatives --config java
+  apt-get install -y -t stretch-backports openjdk-11-jdk
+
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip
 RUN unzip sonar-scanner-cli-4.0.0.1744-linux.zip

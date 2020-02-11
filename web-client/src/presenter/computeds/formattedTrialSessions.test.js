@@ -345,6 +345,13 @@ describe('formattedTrialSessions', () => {
       },
       {
         caseOrder: [],
+        judge: { name: '2', userId: '2' },
+        startDate: '2019-11-25T15:00:00.000Z',
+        term: 'Summer',
+        trialLocation: 'Jacksonville, FL',
+      },
+      {
+        caseOrder: [],
         judge: { name: '3', userId: '3' },
         startDate: '2019-11-25T15:00:00.000Z',
         term: 'Fall',

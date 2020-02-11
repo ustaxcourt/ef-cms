@@ -11,12 +11,11 @@ import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseD
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { setupUploadMetadataAction } from '../actions/uploadCourtIssuedDocument/setupUploadMetadataAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { uploadOrderFileAction } from '../actions/FileDocument/uploadOrderFileAction';
 import { validateUploadCourtIssuedDocumentAction } from '../actions/uploadCourtIssuedDocument/validateUploadCourtIssuedDocumentAction';
 
@@ -29,10 +28,9 @@ export const uploadCourtIssuedDocumentSequence = [
       setValidationErrorsAction,
       setValidationAlertErrorsAction,
     ],
-    success: [
+    success: showProgressSequenceDecorator([
       stopShowValidationAction,
       clearAlertsAction,
-      setWaitingForResponseAction,
       uploadOrderFileAction,
       {
         error: [openFileUploadErrorModal],
@@ -49,7 +47,6 @@ export const uploadCourtIssuedDocumentSequence = [
           navigateToCaseDetailAction,
         ],
       },
-      unsetWaitingForResponseAction,
-    ],
+    ]),
   },
 ];

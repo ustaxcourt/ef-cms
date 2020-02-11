@@ -4,16 +4,15 @@ import { primePropsFromCaseDetailAction } from '../actions/CaseDetail/primeProps
 import { primePropsFromModalStateAction } from '../actions/modal/primePropsFromModalStateAction';
 import { removeCaseDetailPendingItemAction } from '../actions/PendingItems/removeCaseDetailPendingItemAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const removeCaseDetailPendingItemSequence = [
-  primePropsFromModalStateAction,
-  primePropsFromCaseDetailAction,
-  setWaitingForResponseAction,
-  removeCaseDetailPendingItemAction,
-  setCaseAction,
-  clearModalAction,
-  clearModalStateAction,
-  unsetWaitingForResponseAction,
-];
+export const removeCaseDetailPendingItemSequence = showProgressSequenceDecorator(
+  [
+    primePropsFromModalStateAction,
+    primePropsFromCaseDetailAction,
+    removeCaseDetailPendingItemAction,
+    setCaseAction,
+    clearModalAction,
+    clearModalStateAction,
+  ],
+);

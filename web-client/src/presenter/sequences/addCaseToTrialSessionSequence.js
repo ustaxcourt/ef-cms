@@ -14,14 +14,12 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setNoticesForCalendaredTrialSessionAction } from '../actions/TrialSession/setNoticesForCalendaredTrialSessionAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateAddToTrialSessionAction } from '../actions/CaseDetail/validateAddToTrialSessionAction';
 
 const showSuccessAlert = [
   clearModalStateAction,
-  unsetWaitingForResponseAction,
   setAlertSuccessAction,
   getCaseAction,
   setCaseAction,
@@ -33,8 +31,7 @@ export const addCaseToTrialSessionSequence = [
   validateAddToTrialSessionAction,
   {
     error: [setValidationErrorsAction],
-    success: [
-      setWaitingForResponseAction,
+    success: showProgressSequenceDecorator([
       clearModalAction,
       addCaseToTrialSessionAction,
       getTrialSessionDetailsAction,
@@ -47,7 +44,6 @@ export const addCaseToTrialSessionSequence = [
             electronic: showSuccessAlert,
             paper: [
               clearModalStateAction,
-              unsetWaitingForResponseAction,
               ...setPdfPreviewUrlSequence,
               setAlternateBackLocationAction,
               getAddCaseToTrialSessionCalendarAlertWarningAction,
@@ -57,6 +53,6 @@ export const addCaseToTrialSessionSequence = [
           },
         ],
       },
-    ],
+    ]),
   },
 ];
