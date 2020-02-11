@@ -204,6 +204,7 @@ import { selectScannerSequence } from './sequences/selectScannerSequence';
 import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { serveCourtIssuedDocumentSequence } from './sequences/serveCourtIssuedDocumentSequence';
+import { serveToIrsSequence } from './sequences/serveToIrsSequence';
 import { setCanvasForPDFSigningSequence } from './sequences/setCanvasForPDFSigningSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
@@ -562,6 +563,7 @@ export const presenter = {
     selectSecondaryDocumentSequence,
     selectWorkItemSequence,
     serveCourtIssuedDocumentSequence,
+    serveToIrsSequence,
     setCanvasForPDFSigningSequence,
     setCaseDetailPageTabSequence,
     setCurrentPageIndexSequence,

@@ -1,15 +1,3 @@
-// import { chooseByTruthyStateActionFactory } from '../actions/editUploadCourtIssuedDocument/chooseByTruthyStateActionFactory';
-// import { gotoDashboardSequence } from './gotoDashboardSequence';
-//
-
-// export const gotoReviewPetitionSequence = [
-//   setCurrentPageAction('ReviewPetition'),
-//   // chooseByTruthyStateActionFactory('form.partyType'),
-//   // {
-//   //   no: [gotoDashboardSequence],
-//   //   yes: [setCurrentPageAction('ReviewPetition')],
-//   // },
-// ];
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeFormDateAction } from '../actions/computeFormDateAction';
