@@ -5,13 +5,13 @@ import { ProcedureType } from '../StartCase/ProcedureType';
 import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import { startCaseInternalHelper } from '../../presenter/computeds/startCaseInternalHelper';
 import React from 'react';
 
 export const CaseInformation = connect(
   {
     constants: state.constants,
     form: state.form,
+    startCaseInternalHelper: state.startCaseInternalHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validatePetitionFromPaperSequence:
       sequences.validatePetitionFromPaperSequence,
@@ -20,32 +20,50 @@ export const CaseInformation = connect(
   ({
     constants,
     form,
+    startCaseInternalHelper,
     updateFormValueSequence,
     validatePetitionFromPaperSequence,
     validationErrors,
   }) => {
+    console.log('form', form);
     return (
       <div className="blue-container">
         <DateInput
           errorText={validationErrors.receivedAt}
           id="date-received"
           label="Date received"
-          values={form}
+          names={{
+            day: 'dateReceivedDay',
+            month: 'dateReceivedMonth',
+            year: 'dateReceivedYear',
+          }}
+          values={{
+            day: form.dateReceivedDay,
+            month: form.dateReceivedMonth,
+            year: form.dateReceivedYear,
+          }}
           onBlur={validatePetitionFromPaperSequence}
           onChange={updateFormValueSequence}
         />
 
-        <FormGroup errorText={validationErrors.mailingDate}>
-          <DateInput
-            errorText={validationErrors.mailingDate}
-            id="mailing-date"
-            label="Mailing Date"
-            optional={true}
-            values={form}
-            onBlur={validatePetitionFromPaperSequence}
-            onChange={updateFormValueSequence}
-          />
-        </FormGroup>
+        <DateInput
+          errorText={validationErrors.mailingDate}
+          id="mailing-date"
+          label="Mailing Date"
+          names={{
+            day: 'mailingDateDay',
+            month: 'mailingDateMonth',
+            year: 'mailingDateYear',
+          }}
+          optional={true}
+          values={{
+            day: form.mailingDateDay,
+            month: form.mailingDateMonth,
+            year: form.mailingDateYear,
+          }}
+          onBlur={validatePetitionFromPaperSequence}
+          onChange={updateFormValueSequence}
+        />
 
         <FormGroup errorText={validationErrors.caseCaption}>
           <label className="usa-label" htmlFor="case-caption">
@@ -55,6 +73,7 @@ export const CaseInformation = connect(
             className="usa-textarea"
             id="case-caption"
             name="caseCaption"
+            value={form.caseCaption}
             onBlur={() => {
               validatePetitionFromPaperSequence();
             }}

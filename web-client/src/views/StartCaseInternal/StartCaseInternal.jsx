@@ -1,7 +1,6 @@
 import { BigHeader } from './../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseInformation } from './CaseInformation';
-import { CaseTypeSelect } from './../StartCase/CaseTypeSelect';
 import { ErrorNotification } from './../ErrorNotification';
 import { FileUploadErrorModal } from './../FileUploadErrorModal';
 import { FileUploadStatusModal } from './../FileUploadStatusModal';
@@ -17,7 +16,6 @@ import React from 'react';
 
 export const StartCaseInternal = connect(
   {
-    caseTypes: state.caseTypes,
     documentSelectedForScan: state.documentSelectedForScan,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -25,9 +23,7 @@ export const StartCaseInternal = connect(
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
   },
   ({
-    caseTypes,
     documentSelectedForScan,
-    form,
     formCancelToggleCancelSequence,
     showModal,
     submitPetitionFromPaperSequence,
