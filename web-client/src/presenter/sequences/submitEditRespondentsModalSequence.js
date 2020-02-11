@@ -5,10 +5,9 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { submitEditRespondentsModalAction } from '../actions/caseAssociation/submitEditRespondentsModalAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateEditRespondentsAction } from '../actions/caseAssociation/validateEditRespondentsAction';
 
 export const submitEditRespondentsModalSequence = [
@@ -16,8 +15,7 @@ export const submitEditRespondentsModalSequence = [
   validateEditRespondentsAction,
   {
     error: [setValidationErrorsAction],
-    success: [
-      setWaitingForResponseAction,
+    success: showProgressSequenceDecorator([
       submitEditRespondentsModalAction,
       {
         success: [
@@ -29,7 +27,6 @@ export const submitEditRespondentsModalSequence = [
           setCaseAction,
         ],
       },
-      unsetWaitingForResponseAction,
-    ],
+    ]),
   },
 ];
