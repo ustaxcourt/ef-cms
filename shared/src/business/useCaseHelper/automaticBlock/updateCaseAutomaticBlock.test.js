@@ -61,13 +61,13 @@ describe('updateCaseAutomaticBlock', () => {
     expect(deleteCaseTrialSortMappingRecordsMock).toBeCalled();
   });
 
-  it('does not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords if its status is Calendared', async () => {
+  it('does not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords if it already has a trial date', async () => {
     getCaseDeadlinesByCaseIdMock = jest
       .fn()
       .mockReturnValue([{ deadline: 'something' }]);
 
     const caseEntity = new Case(
-      { ...MOCK_CASE_WITHOUT_PENDING, status: Case.STATUS_TYPES.calendared },
+      { ...MOCK_CASE_WITHOUT_PENDING, trialDate: '2021-03-01T21:40:46.415Z' },
       {
         applicationContext,
       },
