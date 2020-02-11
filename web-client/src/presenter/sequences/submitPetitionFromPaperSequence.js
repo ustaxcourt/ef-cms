@@ -2,6 +2,7 @@ import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAct
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeFormDateAction } from '../actions/computeFormDateAction';
+import { computeMailingDateAction } from '../actions/StartCaseInternal/computeMailingDateAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { gotoDocumentDetailSequence } from '../sequences/gotoDocumentDetailSequence';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
@@ -24,6 +25,7 @@ export const submitPetitionFromPaperSequence = [
       clearAlertsAction,
       startShowValidationAction,
       computeFormDateAction,
+      computeMailingDateAction,
       validatePetitionFromPaperAction,
       {
         error: [
