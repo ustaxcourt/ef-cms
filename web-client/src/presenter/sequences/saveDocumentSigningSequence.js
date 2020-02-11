@@ -10,16 +10,13 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const saveDocumentSigningSequence = [
+export const saveDocumentSigningSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   setSaveAlertsForNavigationAction,
-  setWaitingForResponseAction,
   completeDocumentSigningAction,
   parallel([setDocumentIdAction, setDocumentDetailTabAction]),
-  unsetWaitingForResponseAction,
   clearPDFSignatureDataAction,
   clearFormAction,
   setAlertSuccessAction,
@@ -28,4 +25,4 @@ export const saveDocumentSigningSequence = [
     CaseDetail: [navigateToCaseDetailAction],
     DocumentDetail: [navigateToDocumentDetailAction],
   },
-];
+]);

@@ -24,15 +24,28 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     );
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'month',
+      key: 'dateReceivedMonth',
       value: '01',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'day',
+      key: 'dateReceivedDay',
       value: '01',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'year',
+      key: 'dateReceivedYear',
+      value: '2001',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'mailingDateMonth',
+      value: '01',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'mailingDateDay',
+      value: '01',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'mailingDateYear',
       value: '2001',
     });
 
@@ -149,11 +162,6 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.phone',
       value: '1234567890',
-    });
-
-    await test.runSequence('updateFormValueSequence', {
-      key: 'mailingDate',
-      value: 'testing',
     });
 
     await test.runSequence('validatePetitionFromPaperSequence');

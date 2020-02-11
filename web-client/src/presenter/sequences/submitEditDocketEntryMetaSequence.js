@@ -7,18 +7,17 @@ import { computeFilingFormDateAction } from '../actions/FileDocument/computeFili
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
-import { gotoCaseDetailSequence } from './gotoCaseDetailSequence';
+import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { setupUploadMetadataAction } from '../actions/uploadCourtIssuedDocument/setupUploadMetadataAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateDocketEntryMetaAction } from '../actions/EditDocketRecordEntry/updateDocketEntryMetaAction';
 import { validateDocketRecordAction } from '../actions/EditDocketRecordEntry/validateDocketRecordAction';
 
@@ -43,10 +42,9 @@ export const submitEditDocketEntryMetaSequence = [
       setValidationErrorsAction,
       setValidationAlertErrorsAction,
     ],
-    success: [
+    success: showProgressSequenceDecorator([
       stopShowValidationAction,
       clearAlertsAction,
-      setWaitingForResponseAction,
       updateDocketEntryMetaAction,
       {
         error: [setAlertErrorAction],
@@ -56,10 +54,9 @@ export const submitEditDocketEntryMetaSequence = [
           setSaveAlertsForNavigationAction,
           getEditDocketEntryMetaAlertSuccessAction,
           setAlertSuccessAction,
-          ...gotoCaseDetailSequence, // Needs to refresh the formatted case detail / docket record.
+          navigateToCaseDetailAction,
         ],
       },
-      unsetWaitingForResponseAction,
-    ],
+    ]),
   },
 ];

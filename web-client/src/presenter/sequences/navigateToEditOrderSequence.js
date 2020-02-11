@@ -12,7 +12,6 @@ import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
 import { unset } from 'cerebral/factories';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const navigateToEditOrderSequence = [
   setupConfirmWithPropsAction,
@@ -24,11 +23,10 @@ export const navigateToEditOrderSequence = [
   getCaseAction,
   setCaseAction,
   setDocumentToEditAction,
-  ...convertHtml2PdfSequence,
+  convertHtml2PdfSequence,
   overwriteOrderFileAction,
   {
     error: [], // TODO: show an alert if this occurs?
     success: [submitCourtIssuedOrderAction, navigateToPathAction],
   },
-  unsetWaitingForResponseAction,
 ];

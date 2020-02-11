@@ -7,10 +7,6 @@ export const contactEditHelper = (get, applicationContext) => {
   let contactPrimary, contactSecondary;
   switch (caseDetail.partyType) {
     case PARTY_TYPES.estateWithoutExecutor:
-      contactPrimary = {
-        showInCareOf: true,
-      };
-      break;
     case PARTY_TYPES.corporation:
       contactPrimary = {
         showInCareOf: true,

@@ -14,13 +14,12 @@ import { setPrimaryDocumentFileIdPropAction } from '../actions/editUploadCourtIs
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { setupUploadMetadataAction } from '../actions/uploadCourtIssuedDocument/setupUploadMetadataAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
 import { unsetDocumentToEditAction } from '../actions/editUploadCourtIssuedDocument/unsetDocumentToEditAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateUploadCourtIssuedDocumentAction } from '../actions/uploadCourtIssuedDocument/validateUploadCourtIssuedDocumentAction';
 
 const onError = [openFileUploadErrorModal];
@@ -46,10 +45,9 @@ export const editUploadCourtIssuedDocumentSequence = [
       setValidationErrorsAction,
       setValidationAlertErrorsAction,
     ],
-    success: [
+    success: showProgressSequenceDecorator([
       stopShowValidationAction,
       clearAlertsAction,
-      setWaitingForResponseAction,
       chooseByTruthyStateActionFactory('screenMetadata.documentReset'),
       {
         no: [setPrimaryDocumentFileIdPropAction, onSuccess],
@@ -62,7 +60,6 @@ export const editUploadCourtIssuedDocumentSequence = [
         ],
       },
       unsetDocumentToEditAction,
-      unsetWaitingForResponseAction,
-    ],
+    ]),
   },
 ];

@@ -2,6 +2,8 @@ const AWS = require('aws-sdk');
 const path = require('path');
 const Umzug = require('umzug');
 
+const { forAllRecords } = require('./migrations/utilities');
+
 const { DynamoDB } = AWS;
 
 const ENV = process.argv[2];
@@ -79,7 +81,7 @@ const storage = {
 async function run() {
   const umzug = new Umzug({
     migrations: {
-      params: [documentClient, TABLE_NAME],
+      params: [documentClient, TABLE_NAME, forAllRecords],
       path: path.join(__dirname, '/migrations'),
       pattern: /^\d+[\w-]+\.js$/,
     },
