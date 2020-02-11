@@ -1,7 +1,7 @@
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
-import { computeFormDateAction } from '../actions/computeFormDateAction';
+import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeMailingDateAction } from '../actions/StartCaseInternal/computeMailingDateAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { gotoDocumentDetailSequence } from '../sequences/gotoDocumentDetailSequence';
@@ -24,7 +24,7 @@ export const submitPetitionFromPaperSequence = [
     noActiveBatches: [
       clearAlertsAction,
       startShowValidationAction,
-      computeFormDateAction,
+      computeDateReceivedAction,
       computeMailingDateAction,
       validatePetitionFromPaperAction,
       {

@@ -27,8 +27,11 @@ export const startCaseInternalHelper = (get, applicationContext) => {
     showOwnershipDisclosureStatement = true;
   }
 
+  const shouldShowIrsNoticeDate = get(state.form.hasVerifiedIrsNotice) === true;
+
   return {
     partyTypes: PARTY_TYPES,
+    shouldShowIrsNoticeDate,
     showOrderForFilingFee: petitionPaymentStatus === PAYMENT_STATUS.UNPAID,
     showOwnershipDisclosureStatement,
     showPrimaryContact: showContacts.contactPrimary,
