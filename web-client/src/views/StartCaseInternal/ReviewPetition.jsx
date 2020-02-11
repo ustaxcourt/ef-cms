@@ -7,7 +7,6 @@ import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
-import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -21,9 +20,9 @@ export const ReviewPetition = connect(
     navigateBackSequence: sequences.navigateBackSequence,
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
+    serveToIrsSequence: sequences.serveToIrsSequence,
     showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
-    user: state.user,
   },
   ({
     constants,
@@ -31,11 +30,10 @@ export const ReviewPetition = connect(
     formCancelToggleCancelSequence,
     navigateBackSequence,
     openConfirmServeToIrsModalSequence,
+    serveToIrsSequence,
     showModal,
     startCaseHelper,
-    user,
   }) => {
-    console.log(JSON.stringify(form));
     return (
       <>
         <section
@@ -325,7 +323,7 @@ export const ReviewPetition = connect(
         )}
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal confirmSequence={submitFilePetitionSequence} />
+          <FileUploadErrorModal confirmSequence={serveToIrsSequence} />
         )}
         {showModal == 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />

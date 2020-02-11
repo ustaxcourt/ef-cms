@@ -103,12 +103,6 @@ export const StartCaseInternal = connect(
               <div className="grid-col-7" />
             </div>
           </div>
-          {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-          {showModal === 'FileUploadErrorModal' && (
-            <FileUploadErrorModal
-              confirmSequence={submitPetitionFromPaperSequence}
-            />
-          )}
         </section>
       </>
     );
