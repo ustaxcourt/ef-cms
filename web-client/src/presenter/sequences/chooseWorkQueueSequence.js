@@ -14,12 +14,10 @@ import { getSentMessagesForUserAction } from '../actions/getSentMessagesForUserA
 import { parallel } from 'cerebral/factories';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
 import { setSectionInboxCountAction } from '../actions/setSectionInboxCountAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { setWorkItemsAction } from '../actions/setWorkItemsAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const chooseWorkQueueSequence = [
-  setWaitingForResponseAction,
+export const chooseWorkQueueSequence = showProgressSequenceDecorator([
   clearWorkQueueAction,
   parallel([
     [getNotificationsAction, setNotificationsAction],
@@ -74,5 +72,4 @@ export const chooseWorkQueueSequence = [
       },
     ],
   ]),
-  unsetWaitingForResponseAction,
-];
+]);
