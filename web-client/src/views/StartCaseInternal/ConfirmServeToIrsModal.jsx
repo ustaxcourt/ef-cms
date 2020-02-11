@@ -9,6 +9,6 @@ export const ConfirmServeToIrsModal = connect({}, () => (
     preventCancelOnBlur={true}
     title="Are You Sure You Want to Serve This Petition to the IRS?"
     onCancelSequence="clearModalSequence"
-    onConfirmSequence="serveCaseToIrsSequence"
+    onConfirmSequence="serveToIrsSequence"
   ></ConfirmModal>
 ));
