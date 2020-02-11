@@ -219,14 +219,8 @@ export const StartCaseInternal = connect(
                     </div>
                   )}
                 </div>
-                <Button
-                  id="submit-case"
-                  type="button"
-                  onClick={() => {
-                    submitPetitionFromPaperSequence();
-                  }}
-                >
-                  Create Case
+                <Button href="/review-petition" id="submit-case" type="button">
+                  Review Petition
                 </Button>
                 <Button
                   link
