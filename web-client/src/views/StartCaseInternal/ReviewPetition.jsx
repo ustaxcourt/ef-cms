@@ -54,15 +54,13 @@ export const ReviewPetition = connect(
                     <h3 className="underlined">Parties</h3>
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-4 margin-bottom-1">
-                        <>
-                          <label
-                            className="usa-label usa-label-display"
-                            htmlFor="filing-parties"
-                          >
-                            Party type
-                          </label>
-                          {form.partyType}
-                        </>
+                        <label
+                          className="usa-label usa-label-display"
+                          htmlFor="filing-parties"
+                        >
+                          Party type
+                        </label>
+                        {form.partyType}
                       </div>
                       <div className="tablet:grid-col-4 margin-bottom-1">
                         <label
