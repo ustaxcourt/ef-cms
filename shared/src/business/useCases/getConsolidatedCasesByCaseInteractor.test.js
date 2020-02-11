@@ -6,8 +6,14 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
 
   beforeEach(() => {
     getCasesByLeadCaseIdStub = jest.fn().mockResolvedValue([
-      { caseCaption: 'Guy Fieri vs. Bobby Flay', caseId: 'abc-123' },
-      { caseCaption: 'Guy Fieri vs. Gordon Ramsay', caseId: 'def-321' },
+      {
+        caseCaption: 'Guy Fieri vs. Bobby Flay',
+        caseId: 'a0af9894-0390-463c-bf17-aae52c34c026',
+      },
+      {
+        caseCaption: 'Guy Fieri vs. Gordon Ramsay',
+        caseId: '976e0e9d-ffa7-4d56-ac6f-aea848a5dba1',
+      },
     ]);
 
     applicationContext = {
@@ -25,8 +31,14 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
 
     expect(getCasesByLeadCaseIdStub).toHaveBeenCalled();
     expect(cases).toEqual([
-      { caseCaption: 'Guy Fieri vs. Bobby Flay', caseId: 'abc-123' },
-      { caseCaption: 'Guy Fieri vs. Gordon Ramsay', caseId: 'def-321' },
+      {
+        caseCaption: 'Guy Fieri vs. Bobby Flay',
+        caseId: 'a0af9894-0390-463c-bf17-aae52c34c026',
+      },
+      {
+        caseCaption: 'Guy Fieri vs. Gordon Ramsay',
+        caseId: '976e0e9d-ffa7-4d56-ac6f-aea848a5dba1',
+      },
     ]);
   });
 });
