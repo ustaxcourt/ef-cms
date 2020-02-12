@@ -2,7 +2,6 @@
 echo "killing dynamo if already running"
 pkill -f DynamoDBLocal
 
-
 echo "starting dynamo"
 ./web-api/start-dynamo.sh &
 DYNAMO_PID=$!
@@ -16,9 +15,9 @@ npm run build:assets
 
 # these exported values expire when script terminates
 export SKIP_VIRUS_SCAN=true
-export AWS_ACCESS_KEY_ID=noop
-export AWS_SECRET_ACCESS_KEY=noop
-export SLS_DEPLOYMENT_BUCKET=noop
+export AWS_ACCESS_KEY_ID=S3RVER
+export AWS_SECRET_ACCESS_KEY=S3RVER
+export SLS_DEPLOYMENT_BUCKET=S3RVER
 export MASTER_DYNAMODB_ENDPOINT=http://localhost:8000 
 export S3_ENDPOINT=http://localhost:9000
 export DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1
