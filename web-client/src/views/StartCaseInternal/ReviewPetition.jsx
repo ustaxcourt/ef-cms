@@ -20,6 +20,7 @@ export const ReviewPetition = connect(
     navigateBackSequence: sequences.navigateBackSequence,
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
+    reviewPetitionHelper: state.reviewPetitionHelper,
     serveToIrsSequence: sequences.serveToIrsSequence,
     showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
@@ -30,6 +31,7 @@ export const ReviewPetition = connect(
     formCancelToggleCancelSequence,
     navigateBackSequence,
     openConfirmServeToIrsModalSequence,
+    reviewPetitionHelper,
     serveToIrsSequence,
     showModal,
     startCaseHelper,
@@ -109,7 +111,7 @@ export const ReviewPetition = connect(
                           >
                             Date recieved
                           </label>
-                          {form.receivedAt}
+                          {reviewPetitionHelper.receivedAtFormatted}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
                           <label
@@ -138,7 +140,7 @@ export const ReviewPetition = connect(
                           >
                             Mailing Date
                           </label>
-                          *needed*
+                          {reviewPetitionHelper.mailingDateFormatted}
                         </div>
 
                         <div className="margin-top-3 margin-bottom-2">
@@ -156,9 +158,9 @@ export const ReviewPetition = connect(
                             className="usa-label usa-label-display"
                             htmlFor="filing-location"
                           >
-                            Filing fee
+                            Filing Fee
                           </label>
-                          Not paid
+                          {reviewPetitionHelper.petitionPaymentStatusFormatted}
                         </div>
                       </div>
                     </div>
@@ -183,7 +185,7 @@ export const ReviewPetition = connect(
                           >
                             Notice attached to petition?
                           </label>
-                          {(form.hasIrsNotice && 'Yes') || 'No'}
+                          {reviewPetitionHelper.hasIrsNoticeFormatted}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
                           <label
@@ -196,15 +198,17 @@ export const ReviewPetition = connect(
                         </div>
                       </div>
                       <div className="tablet:grid-col-4 margin-bottom-1">
-                        <div>
-                          <label
-                            className="usa-label usa-label-display"
-                            htmlFor="filing-type"
-                          >
-                            Date of notice
-                          </label>
-                          {form.irsNoticeDate}
-                        </div>
+                        {reviewPetitionHelper.shouldShowIrsNoticeDate && (
+                          <div>
+                            <label
+                              className="usa-label usa-label-display"
+                              htmlFor="filing-type"
+                            >
+                              Date of notice
+                            </label>
+                            {reviewPetitionHelper.irsNoticeDateFormatted}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
