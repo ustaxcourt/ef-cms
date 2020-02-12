@@ -43,7 +43,12 @@ describe('getPractitionersBySearchKeyInteractor', () => {
         };
       },
       getPersistenceGateway: () => ({
-        getUsersBySearchKey: async () => [{ name: 'Test Practitioner' }],
+        getUsersBySearchKey: async () => [
+          {
+            name: 'Test Practitioner',
+            userId: 'f3e91236-495b-4412-b684-1cffe59ed9d9',
+          },
+        ],
       }),
     };
 
@@ -52,6 +57,6 @@ describe('getPractitionersBySearchKeyInteractor', () => {
       searchKey: 'Test Practitioner',
     });
 
-    expect(result).toEqual([{ name: 'Test Practitioner' }]);
+    expect(result).toMatchObject([{ name: 'Test Practitioner' }]);
   });
 });
