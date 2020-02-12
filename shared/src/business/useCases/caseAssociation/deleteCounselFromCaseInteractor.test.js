@@ -24,7 +24,7 @@ const mockPetitioners = [{ role: User.ROLES.petitioner, userId: '111' }];
 
 describe('deleteCounselFromCaseInteractor', () => {
   beforeEach(() => {
-    updateCaseMock = jest.fn();
+    updateCaseMock = jest.fn().mockImplementation(v => v.caseToUpdate);
     deleteUserFromCaseMock = jest.fn();
 
     applicationContext = {
