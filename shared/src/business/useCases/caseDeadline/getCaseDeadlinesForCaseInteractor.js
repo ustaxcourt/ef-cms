@@ -1,3 +1,5 @@
+const { CaseDeadline } = require('../../entities/CaseDeadline');
+
 /**
  * getCaseDeadlinesForCaseInteractor
  *
@@ -10,10 +12,14 @@ exports.getCaseDeadlinesForCaseInteractor = async ({
   applicationContext,
   caseId,
 }) => {
-  return await applicationContext
+  const caseDeadlines = await applicationContext
     .getPersistenceGateway()
     .getCaseDeadlinesByCaseId({
       applicationContext,
       caseId,
     });
+
+  return CaseDeadline.validateRawCollection(caseDeadlines, {
+    applicationContext,
+  });
 };

@@ -3,7 +3,7 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
-const updateCaseMock = jest.fn().mockImplementation(async c => c);
+const updateCaseMock = jest.fn().mockImplementation(async c => c.caseToUpdate);
 const getCaseByCaseIdMock = jest
   .fn()
   .mockResolvedValue({ ...MOCK_CASE, caseNote: 'My Procedural Note' });
@@ -46,6 +46,7 @@ describe('deleteCaseNoteInteractor', () => {
         getCaseByCaseId: getCaseByCaseIdMock,
         updateCase: updateCaseMock,
       }),
+      getUniqueId: () => '09c66c94-7480-4915-8f10-2f2e6e0bf4ad',
     };
 
     let error;
