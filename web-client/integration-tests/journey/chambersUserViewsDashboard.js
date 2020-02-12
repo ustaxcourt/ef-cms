@@ -19,7 +19,7 @@ export default (
     const workQueue = test.getState('workQueue');
 
     expect(test.getState('currentPage')).toEqual('DashboardChambers');
-    expect(workQueue.length).toBeGreaterThan(1);
+    expect(workQueue.length).toBeGreaterThan(0);
     expect(workQueue[0].messages[1].message).toEqual(message);
     expect(trialSessionsSummaryHelperComputed.judgeUserId).toEqual(judgeUserId);
   });
