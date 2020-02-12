@@ -1,9 +1,10 @@
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { getInternalCaseCaptionAction } from './getInternalCaseCaptionAction';
 import { runAction } from 'cerebral/test';
 
 describe('getInternalCaseCaptionAction', () => {
-  it('should return an empty string when party type has not been selected', async () => {
+  it('should return just the respondent when party type has not been selected', async () => {
     const result = await runAction(getInternalCaseCaptionAction, {
       state: {
         form: {
@@ -12,7 +13,7 @@ describe('getInternalCaseCaptionAction', () => {
       },
     });
 
-    expect(result.output.caseCaption).toBe('');
+    expect(result.output.caseCaption).toBe(` ${Case.CASE_CAPTION_POSTFIX}`);
   });
 
   it('should return a generated case caption when party type has been selected', async () => {
@@ -27,6 +28,8 @@ describe('getInternalCaseCaptionAction', () => {
       },
     });
 
-    expect(result.output.caseCaption).toBe('Carl Fredricksen, Petitioner');
+    expect(result.output.caseCaption).toBe(
+      `Carl Fredricksen, Petitioner ${Case.CASE_CAPTION_POSTFIX}`,
+    );
   });
 });
