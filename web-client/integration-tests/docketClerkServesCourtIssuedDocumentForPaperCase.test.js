@@ -1,3 +1,4 @@
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import { fakeFile, setupTest } from './helpers';
 
 // docketClerk
@@ -44,6 +45,10 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkServesOrderWithPaperService(test, 0);
-  docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 0);
+  docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(
+    test,
+    0,
+    Case.STATUS_TYPES.generalDocket,
+  );
   docketClerkSignsOut(test);
 });
