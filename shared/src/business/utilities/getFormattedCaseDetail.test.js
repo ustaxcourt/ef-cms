@@ -803,6 +803,46 @@ describe('sortDocketRecords', () => {
     expect(result[0].index).toEqual('1');
   });
 
+  it('should evaluate sort items by index if sorted by date and item dates match', () => {
+    const result = sortDocketRecords(
+      [
+        {
+          index: '2',
+          record: {
+            filingDate: '2019-08-03',
+          },
+        },
+        {
+          index: '1',
+          record: {
+            filingDate: '2019-08-03',
+          },
+        },
+        {
+          index: '4',
+          record: {
+            filingDate: '2019-08-03',
+          },
+        },
+        {
+          index: '3',
+          record: {
+            filingDate: '2019-08-03T00:06:44.000Z',
+          },
+        },
+        {
+          index: '5',
+          record: {
+            filingDate: '2019-09-01T00:01:12.025Z',
+          },
+        },
+      ],
+      'byDate',
+    );
+
+    expect(result[0].index).toEqual('1');
+  });
+
   it('should sort docket records by index when sortBy is byIndex', () => {
     const result = sortDocketRecords(
       [
