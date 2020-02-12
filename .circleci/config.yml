@@ -104,7 +104,7 @@ jobs:
           command: |
             AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /dev/null &
             ./wait-until.sh http://localhost:3000/api/swagger
-            npm run test:client
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run test:client
       - run:
           name: Web Client - SonarQube
           command: |
@@ -194,7 +194,7 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
-            npm run cypress
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run cypress
       - store_artifacts:
           path: /root/project/cypress/videos/
 
