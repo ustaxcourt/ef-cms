@@ -55,10 +55,6 @@ describe('Case Confirmation', () => {
     petitionsClerkCreatesNewCase(test, fakeFile);
     petitionsClerkViewsMyMessagesInbox(test, true);
     petitionsClerkGetsMyMessagesInboxCount(test);
-    petitionsClerkSendsCaseToIRSHoldingQueue(test);
-    petitionsClerkRunsBatchProcess(test);
-    petitionsClerkViewsMyMessagesInbox(test);
-    petitionsClerkGetsMyMessagesInboxCount(test, 1);
     userNavigatesToCreateCaseConfirmation(test);
     userSignsOut(test);
   });

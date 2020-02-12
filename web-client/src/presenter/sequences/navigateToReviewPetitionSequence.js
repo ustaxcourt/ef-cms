@@ -1,15 +1,9 @@
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeMailingDateAction } from '../actions/StartCaseInternal/computeMailingDateAction';
-import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
-import { gotoDocumentDetailSequence } from '../sequences/gotoDocumentDetailSequence';
-import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
-import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
+import { navigateToReviewPetitionAction } from '../actions/StartCaseInternal/navigateToReviewPetitionAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { setCaseAction } from '../actions/setCaseAction';
-import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -17,7 +11,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validatePetitionFromPaperAction } from '../actions/validatePetitionFromPaperAction';
 
-export const submitPetitionFromPaperSequence = [
+export const navigateToReviewPetitionSequence = [
   checkForActiveBatchesAction,
   {
     hasActiveBatches: [setShowModalFactoryAction('UnfinishedScansModal')],
@@ -33,20 +27,7 @@ export const submitPetitionFromPaperSequence = [
           setValidationErrorsAction,
           setValidationAlertErrorsAction,
         ],
-        success: [
-          stopShowValidationAction,
-          openFileUploadStatusModalAction,
-          createCaseFromPaperAction,
-          {
-            error: [openFileUploadErrorModal],
-            success: [
-              setCaseAction,
-              setPetitionIdAction,
-              closeFileUploadStatusModalAction,
-              gotoDocumentDetailSequence,
-            ],
-          },
-        ],
+        success: [stopShowValidationAction, navigateToReviewPetitionAction],
       },
     ],
   },

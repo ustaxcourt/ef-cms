@@ -2,8 +2,6 @@ import { BigHeader } from './../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseInformation } from './CaseInformation';
 import { ErrorNotification } from './../ErrorNotification';
-import { FileUploadErrorModal } from './../FileUploadErrorModal';
-import { FileUploadStatusModal } from './../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from './../FormCancelModalDialog';
 import { IRSNotice } from './IRSNotice';
@@ -17,16 +15,16 @@ import React from 'react';
 export const StartCaseInternal = connect(
   {
     documentSelectedForScan: state.documentSelectedForScan,
-    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    navigateToReviewPetitionSequence:
+      sequences.navigateToReviewPetitionSequence,
     showModal: state.showModal,
-    submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
   },
   ({
     documentSelectedForScan,
     formCancelToggleCancelSequence,
+    navigateToReviewPetitionSequence,
     showModal,
-    submitPetitionFromPaperSequence,
   }) => {
     return (
       <>
@@ -98,10 +96,10 @@ export const StartCaseInternal = connect(
                   id="submit-case"
                   type="button"
                   onClick={() => {
-                    submitPetitionFromPaperSequence();
+                    navigateToReviewPetitionSequence();
                   }}
                 >
-                  Create Case
+                  Review Petition
                 </Button>
                 <Button
                   link
@@ -116,12 +114,6 @@ export const StartCaseInternal = connect(
               <div className="grid-col-7" />
             </div>
           </div>
-          {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-          {showModal === 'FileUploadErrorModal' && (
-            <FileUploadErrorModal
-              confirmSequence={submitPetitionFromPaperSequence}
-            />
-          )}
         </section>
       </>
     );
