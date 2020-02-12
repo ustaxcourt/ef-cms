@@ -112,4 +112,52 @@ describe('Joi Validation Decorator', () => {
   it('should have access to the schema without instantiating the entity', () => {
     expect(MockEntity2.getSchema()).toEqual(MockEntity2Schema);
   });
+
+  it('should validate a raw collection', () => {
+    const obj1 = new MockEntity1({
+      favoriteNumber: 1,
+      hasNickname: true,
+      name: 'One',
+    });
+    const obj2 = new MockEntity1({
+      favoriteNumber: 2,
+      hasNickname: false,
+      name: 'Two',
+    });
+
+    expect(MockEntity1.validateRawCollection([obj1, obj2], {})).toEqual([
+      { favoriteNumber: 1, hasNickname: true, name: 'One' },
+      { favoriteNumber: 2, hasNickname: false, name: 'Two' },
+    ]);
+  });
+
+  it('should catch errors when validating a raw collection', () => {
+    const obj1 = new MockEntity1({
+      favoriteNumber: 1,
+      hasNickname: true,
+      name: 'One',
+    });
+    const obj2 = new MockEntity1({
+      favoriteNumber: 2,
+      hasNickname: false,
+      name: 'Two',
+    });
+
+    obj1.favoriteNumber = 'one';
+
+    let error;
+
+    try {
+      MockEntity1.validateRawCollection([obj1, obj2], {});
+    } catch (err) {
+      error = err;
+    }
+
+    expect(error).toBeDefined();
+    expect(error.message).toContain('ValidationError');
+  });
+
+  it('should return an empty array when calling validateRawCollection with an empty collection', () => {
+    expect(MockEntity1.validateRawCollection([], {})).toEqual([]);
+  });
 });
