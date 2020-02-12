@@ -38,6 +38,7 @@ const goToDashboard = [
         'calendarclerk',
         'clerkofcourt',
         'docketclerk',
+        'floater',
         'petitionsclerk',
         'trialclerk',
       ],
