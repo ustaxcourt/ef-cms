@@ -9,7 +9,9 @@ import { state } from 'cerebral';
  * @returns {object} contains the caseCaption
  */
 export const getInternalCaseCaptionAction = async ({ get }) => {
-  const caseCaption = Case.getCaseCaption(get(state.form)) || '';
+  let caseCaption = Case.getCaseCaption(get(state.form)) || '';
+
+  caseCaption += ` ${Case.CASE_CAPTION_POSTFIX}`;
 
   return { caseCaption };
 };
