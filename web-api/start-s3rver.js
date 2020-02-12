@@ -16,7 +16,7 @@ new S3rver({
     },
   ],
   cors: 'wat',
-  directory: __dirname + '/web-api/storage/s3',
+  directory: 'web-api/storage/s3',
   hostname: 'localhost',
   port: 9000,
   serviceEndpoint: 'localhost',
