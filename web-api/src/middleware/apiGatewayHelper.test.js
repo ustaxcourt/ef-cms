@@ -17,6 +17,10 @@ const EXPECTED_HEADERS = {
   'X-Content-Type-Options': 'nosniff',
 };
 
+const applicationContext = {
+  getPersistencePrivateKeys: () => ['private', 'keys'],
+};
+
 describe('handle', () => {
   it('should return warm up string if warm up source is passed in', async () => {
     const response = await handle(
@@ -103,10 +107,14 @@ describe('handle', () => {
     });
   });
 
-  it('should return an object representing 500 status if the function returns an unsanitized entity (response contains private data)', async () => {
-    const response = await handle({}, async () => ({
-      pk: 'this is bad!',
-    }));
+  it('should return an object representing 500 status if the function returns an unsanitized entity (response contains private data as defined in app context)', async () => {
+    const response = await handle(
+      {},
+      async () => ({
+        private: 'this is bad!',
+      }),
+      applicationContext,
+    );
     expect(response).toEqual({
       body: JSON.stringify('Unsanitized entity'),
       headers: EXPECTED_HEADERS,
@@ -114,12 +122,16 @@ describe('handle', () => {
     });
   });
 
-  it('should return an object representing 500 status if the function returns an unsanitized entity as an array (response contains private data)', async () => {
-    const response = await handle({}, async () => [
-      {
-        pk: 'this is bad!',
-      },
-    ]);
+  it('should return an object representing 500 status if the function returns an unsanitized entity as an array (response contains private data as defined in app context)', async () => {
+    const response = await handle(
+      {},
+      async () => [
+        {
+          private: 'this is bad!',
+        },
+      ],
+      applicationContext,
+    );
     expect(response).toEqual({
       body: JSON.stringify('Unsanitized entity'),
       headers: EXPECTED_HEADERS,
