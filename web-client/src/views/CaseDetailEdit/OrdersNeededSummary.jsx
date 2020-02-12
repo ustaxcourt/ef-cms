@@ -11,7 +11,6 @@ export const OrdersNeededSummary = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     openCreateOrderChooseTypeModalSequence:
       sequences.openCreateOrderChooseTypeModalSequence,
-    showModal: state.showModal,
   },
   ({ formattedCaseDetail, openCreateOrderChooseTypeModalSequence }) => {
     return (

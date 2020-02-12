@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 /**
  * getPractitionersBySearchKeyInteractor
@@ -24,9 +25,13 @@ exports.getPractitionersBySearchKeyInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return await applicationContext.getPersistenceGateway().getUsersBySearchKey({
-    applicationContext,
-    searchKey,
-    type: 'practitioner',
-  });
+  const users = await applicationContext
+    .getPersistenceGateway()
+    .getUsersBySearchKey({
+      applicationContext,
+      searchKey,
+      type: 'practitioner',
+    });
+
+  return User.validateRawCollection(users, { applicationContext });
 };
