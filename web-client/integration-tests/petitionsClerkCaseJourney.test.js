@@ -13,6 +13,7 @@ describe('Case journey', () => {
 
   petitionsClerkLogIn(test);
   petitionsClerkCreatesNewCase(test, fakeFile);
-  petitionsClerkUpdatesCaseDetail(test);
-  petitionsClerkViewsDocketRecordAfterServing(test);
+  // TODO this test does nothing currently
+  // petitionsClerkUpdatesCaseDetail(test);
+  // petitionsClerkViewsDocketRecordAfterServing(test);
 });

@@ -4,6 +4,10 @@ const { VALIDATION_ERROR_MESSAGES } = Case;
 
 export default test => {
   return it('Petitions clerk updates case detail', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
     expect(test.getState('caseDetailErrors')).toEqual({});
 
     await test.runSequence('updateCaseValueSequence', {
