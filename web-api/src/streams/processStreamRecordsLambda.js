@@ -19,7 +19,6 @@ exports.handler = event =>
           recordsToProcess,
         });
       applicationContext.logger.info('Results', results);
-      return results;
     } catch (e) {
       applicationContext.logger.error(e);
       throw e;
