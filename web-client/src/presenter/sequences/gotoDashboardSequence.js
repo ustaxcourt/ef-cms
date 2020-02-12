@@ -51,7 +51,7 @@ const goToDashboard = [
       setJudgeUserAction,
       getTrialSessionsAction,
       setTrialSessionsAction,
-      setCurrentPageAction('DashboardChambersAdministrator'),
+      setCurrentPageAction('DashboardChambers'),
     ],
     judge: [
       setMessageInboxPropsAction,

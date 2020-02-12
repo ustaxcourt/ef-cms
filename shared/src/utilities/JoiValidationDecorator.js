@@ -186,10 +186,10 @@ exports.joiValidationDecorator = function(
   entityConstructor.prototype.toRawObjectFromJoi = toRawObjectPrototype;
 
   entityConstructor.validateRawCollection = function(
-    collection = [],
+    collection,
     { applicationContext },
   ) {
-    return collection.map(entity =>
+    return (collection || []).map(entity =>
       new entityConstructor(entity, { applicationContext })
         .validate()
         .toRawObject(),
