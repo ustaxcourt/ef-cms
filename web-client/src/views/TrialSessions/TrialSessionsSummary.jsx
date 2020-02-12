@@ -8,9 +8,13 @@ export const TrialSessionsSummary = connect(
       state.formattedDashboardTrialSessions.formattedRecentSessions,
     formattedUpcomingSessions:
       state.formattedDashboardTrialSessions.formattedUpcomingSessions,
-    user: state.user,
+    trialSessionsSummaryHelper: state.trialSessionsSummaryHelper,
   },
-  ({ formattedRecentSessions, formattedUpcomingSessions, user }) => {
+  ({
+    formattedRecentSessions,
+    formattedUpcomingSessions,
+    trialSessionsSummaryHelper,
+  }) => {
     return (
       <div aria-label="trial sessions" className="card" id="sessions-summary">
         <div className="grid-container content-wrapper gray">
@@ -21,7 +25,7 @@ export const TrialSessionsSummary = connect(
             <div className="tablet:grid-col-4">
               <a
                 className="usa-link float-right"
-                href={`/trial-sessions?judge[userId]=${user.userId}`}
+                href={`/trial-sessions?judge[userId]=${trialSessionsSummaryHelper.judgeUserId}`}
               >
                 View All
               </a>
