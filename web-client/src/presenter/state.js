@@ -49,6 +49,7 @@ import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
+import { reviewPetitionHelper } from './computeds/reviewPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { selectDocumentSelectHelper } from './computeds/selectDocumentSelectHelper';
@@ -180,6 +181,7 @@ export const state = {
   previewPdfFile: null,
   procedureTypes: [],
   requestAccessHelper,
+  reviewPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
   scanner: {},

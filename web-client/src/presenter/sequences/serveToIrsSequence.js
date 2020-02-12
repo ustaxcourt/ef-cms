@@ -1,5 +1,6 @@
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
+import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
 import { computeMailingDateAction } from '../actions/StartCaseInternal/computeMailingDateAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { gotoDocumentDetailSequence } from './gotoDocumentDetailSequence';
@@ -13,6 +14,7 @@ import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 export const serveToIrsSequence = [
   computeDateReceivedAction,
   computeMailingDateAction,
+  computeIrsNoticeDateAction,
   openFileUploadStatusModalAction,
   createCaseFromPaperAction,
   {
