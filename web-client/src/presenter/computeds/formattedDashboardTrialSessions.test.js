@@ -1,3 +1,4 @@
+import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import {
   formatSession,
@@ -11,137 +12,141 @@ const formattedDashboardTrialSessions = withAppContextDecorator(
   applicationContext,
 );
 
+let TRIAL_SESSIONS_LIST;
+
 describe('formattedDashboardTrialSessions', () => {
-  const TRIAL_SESSIONS_LIST = [
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '1', userId: '1' },
-      startDate: '2085-11-25T15:00:00.000Z',
-      swingSession: true,
-      trialLocation: 'Hartford, Connecticut',
-    },
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '2', userId: '1' },
-      startDate: '2017-11-25T15:00:00.000Z',
-      swingSession: true,
-      trialLocation: 'Knoxville, TN',
-    },
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '3', userId: '1' },
-      startDate: '2017-11-27T15:00:00.000Z',
-      swingSession: true,
-      trialLocation: 'Jacksonville, FL',
-    },
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '4', userId: '1' },
-      startDate: '2085-11-27T15:00:00.000Z',
-      swingSession: true,
-      trialLocation: 'Memphis, TN',
-    },
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '5', userId: '5' },
-      startDate: '2019-11-25T15:00:00.000Z',
-      swingSession: false,
-      trialLocation: 'Anchorage, AK',
-    },
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '6', userId: '6' },
-      startDate: '2020-02-17T15:00:00.000Z',
-      swingSession: false,
-      trialLocation: 'Jacksonville, FL',
-    },
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '6', userId: '6' },
-      startDate: '2020-02-17T15:00:00.000Z',
-      swingSession: false,
-      trialLocation: 'Jacksonville, FL',
-    },
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '6', userId: '6' },
-      startDate: '2020-02-17T15:00:00.000Z',
-      swingSession: false,
-      trialLocation: 'Jacksonville, FL',
-    },
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '6', userId: '6' },
-      startDate: '2020-02-17T15:00:00.000Z',
-      swingSession: false,
-      trialLocation: 'Jacksonville, FL',
-    },
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '6', userId: '6' },
-      startDate: '2020-02-17T15:00:00.000Z',
-      swingSession: false,
-      trialLocation: 'Jacksonville, FL',
-    },
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '6', userId: '6' },
-      startDate: '2020-02-17T15:00:00.000Z',
-      swingSession: false,
-      trialLocation: 'Jacksonville, FL',
-    },
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '6', userId: '6' },
-      startDate: '2020-02-17T15:00:00.000Z',
-      swingSession: false,
-      trialLocation: 'Jacksonville, FL',
-    },
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '6', userId: '6' },
-      startDate: '2020-02-17T15:00:00.000Z',
-      swingSession: false,
-      trialLocation: 'Jacksonville, FL',
-    },
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '6', userId: '6' },
-      startDate: '2020-02-17T15:00:00.000Z',
-      swingSession: false,
-      trialLocation: 'Jacksonville, FL',
-    },
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '6', userId: '6' },
-      startDate: '2020-02-17T15:00:00.000Z',
-      swingSession: false,
-      trialLocation: 'Jacksonville, FL',
-    },
-    {
-      caseOrder: [],
-      isCalendared: true,
-      judge: { name: '6', userId: '6' },
-      startDate: '2020-02-17T15:00:00.000Z',
-      swingSession: false,
-      trialLocation: 'Jacksonville, FL',
-    },
-  ];
+  beforeEach(() => {
+    TRIAL_SESSIONS_LIST = [
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '1', userId: '1' },
+        startDate: '2085-11-25T15:00:00.000Z',
+        swingSession: true,
+        trialLocation: 'Hartford, Connecticut',
+      },
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '2', userId: '1' },
+        startDate: '2017-11-25T15:00:00.000Z',
+        swingSession: true,
+        trialLocation: 'Knoxville, TN',
+      },
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '3', userId: '1' },
+        startDate: '2017-11-27T15:00:00.000Z',
+        swingSession: true,
+        trialLocation: 'Jacksonville, FL',
+      },
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '4', userId: '1' },
+        startDate: '2085-11-27T15:00:00.000Z',
+        swingSession: true,
+        trialLocation: 'Memphis, TN',
+      },
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '5', userId: '5' },
+        startDate: '2019-11-25T15:00:00.000Z',
+        swingSession: false,
+        trialLocation: 'Anchorage, AK',
+      },
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '6', userId: '6' },
+        startDate: '2020-02-17T15:00:00.000Z',
+        swingSession: false,
+        trialLocation: 'Jacksonville, FL',
+      },
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '6', userId: '6' },
+        startDate: '2020-02-17T15:00:00.000Z',
+        swingSession: false,
+        trialLocation: 'Jacksonville, FL',
+      },
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '6', userId: '6' },
+        startDate: '2020-02-17T15:00:00.000Z',
+        swingSession: false,
+        trialLocation: 'Jacksonville, FL',
+      },
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '6', userId: '6' },
+        startDate: '2020-02-17T15:00:00.000Z',
+        swingSession: false,
+        trialLocation: 'Jacksonville, FL',
+      },
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '6', userId: '6' },
+        startDate: '2020-02-17T15:00:00.000Z',
+        swingSession: false,
+        trialLocation: 'Jacksonville, FL',
+      },
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '6', userId: '6' },
+        startDate: '2020-02-17T15:00:00.000Z',
+        swingSession: false,
+        trialLocation: 'Jacksonville, FL',
+      },
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '6', userId: '6' },
+        startDate: '2020-02-17T15:00:00.000Z',
+        swingSession: false,
+        trialLocation: 'Jacksonville, FL',
+      },
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '6', userId: '6' },
+        startDate: '2020-02-17T15:00:00.000Z',
+        swingSession: false,
+        trialLocation: 'Jacksonville, FL',
+      },
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '6', userId: '6' },
+        startDate: '2020-02-17T15:00:00.000Z',
+        swingSession: false,
+        trialLocation: 'Jacksonville, FL',
+      },
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '6', userId: '6' },
+        startDate: '2020-02-17T15:00:00.000Z',
+        swingSession: false,
+        trialLocation: 'Jacksonville, FL',
+      },
+      {
+        caseOrder: [],
+        isCalendared: true,
+        judge: { name: '6', userId: '6' },
+        startDate: '2020-02-17T15:00:00.000Z',
+        swingSession: false,
+        trialLocation: 'Jacksonville, FL',
+      },
+    ];
+  });
 
   it('formats trial sessions correctly, formatting start date', () => {
     const result = formatSession(TRIAL_SESSIONS_LIST[2], applicationContext);
@@ -209,5 +214,23 @@ describe('formattedDashboardTrialSessions', () => {
     });
     expect(result.formattedRecentSessions.length).toBe(0);
     expect(result.formattedUpcomingSessions.length).toBe(0);
+  });
+
+  it('returns results for an associated chambers judge if the user role is chambers', () => {
+    applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.chambers,
+      userId: '6',
+    });
+    const result = runCompute(formattedDashboardTrialSessions, {
+      state: {
+        judgeUser: {
+          userId: '1',
+        },
+        trialSessions: TRIAL_SESSIONS_LIST,
+      },
+    });
+
+    expect(result.formattedRecentSessions.length).toBe(2);
+    expect(result.formattedUpcomingSessions.length).toBe(2);
   });
 });

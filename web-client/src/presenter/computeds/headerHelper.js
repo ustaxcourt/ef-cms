@@ -45,7 +45,7 @@ export const headerHelper = (get, applicationContext) => {
       applicationContext.getUtilities().isInternalUser(userRole),
     showAccountMenu: isLoggedIn,
     showDocumentQC: applicationContext.getUtilities().isInternalUser(userRole),
-    showHomeIcon: userRole === USER_ROLES.judge,
+    showHomeIcon: [USER_ROLES.judge, USER_ROLES.chambers].includes(userRole),
     showMessages: applicationContext.getUtilities().isInternalUser(userRole),
     showMessagesIcon: notifications.myInboxUnreadCount > 0,
     showMyCases: applicationContext.getUtilities().isExternalUser(userRole),

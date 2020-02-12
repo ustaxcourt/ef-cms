@@ -5,7 +5,7 @@ const { VALIDATION_ERROR_MESSAGES } = Case;
 export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
   return it('Petitions clerk creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
-    await test.runSequence('submitPetitionFromPaperSequence');
+    await test.runSequence('navigateToReviewPetitionSequence');
 
     expect(test.getState('alertError.title')).toEqual(
       'Please correct the following errors on the page:',
@@ -168,9 +168,12 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('submitPetitionFromPaperSequence');
+    await test.runSequence('navigateToReviewPetitionSequence');
+    await test.runSequence('gotoReviewPetitionSequence');
 
-    expect(test.getState('currentPage')).toEqual('DocumentDetail');
+    expect(test.getState('currentPage')).toEqual('ReviewPetition');
+
+    await test.runSequence('serveToIrsSequence');
 
     test.docketNumber = test.getState('caseDetail.docketNumber');
     test.caseId = test.getState('caseDetail.caseId');

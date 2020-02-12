@@ -4,7 +4,6 @@ const {
   PETITIONS_SECTION,
 } = require('../../../business/entities/WorkQueue');
 const { getUsersInSection } = require('./getUsersInSection');
-const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 exports.getInternalUsers = async ({ applicationContext }) => {
   const users = [
@@ -22,5 +21,5 @@ exports.getInternalUsers = async ({ applicationContext }) => {
     })),
   ];
 
-  return stripInternalKeys(users);
+  return users;
 };
