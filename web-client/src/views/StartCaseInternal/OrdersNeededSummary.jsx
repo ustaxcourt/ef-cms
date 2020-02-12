@@ -13,8 +13,6 @@ export const OrdersNeededSummary = ({ data }) => {
     }
   });
 
-  console.log('data', data);
-
   return (
     <>
       {!closed && (
