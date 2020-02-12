@@ -107,6 +107,21 @@ describe('handle', () => {
     });
   });
 
+  it('should not throw an error for private keys if the applicationContext is not passed in', async () => {
+    const response = await handle({}, async () => ({
+      pk: 'also bad',
+      private: 'this is bad!',
+    }));
+    expect(response).toEqual({
+      body: JSON.stringify({
+        pk: 'also bad',
+        private: 'this is bad!',
+      }),
+      headers: EXPECTED_HEADERS,
+      statusCode: '200',
+    });
+  });
+
   it('should return an object representing 500 status if the function returns an unsanitized entity (response contains private data as defined in app context)', async () => {
     const response = await handle(
       {},
