@@ -9,5 +9,5 @@ module.exports = {
       statements: 95,
     },
   },
-  verbose: true,
+  verbose: false,
 };

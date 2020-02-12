@@ -20,23 +20,33 @@ exports.headers = headers;
  *
  * @param {Function} event the api gateway event
  * @param {Function} fun an function which either returns a promise containing payload data, or throws an exception
+ * @param {object} applicationContext the application context
  * @returns {object} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handle = async (event, fun) => {
+exports.handle = async (event, fun, applicationContext) => {
   if (event.source === 'serverless-plugin-warmup') {
     return exports.sendOk('Lambda is warm!');
   }
   try {
     let response = await fun();
-    if (Array.isArray(response)) {
-      response.forEach(item => {
-        if (item && (item.pk || item.sk || item.gsi1pk)) {
+    if (applicationContext) {
+      const privateKeys = applicationContext.getPersistencePrivateKeys();
+      if (Array.isArray(response)) {
+        response.forEach(item => {
+          if (
+            item &&
+            Object.keys(item).some(key => privateKeys.includes(key))
+          ) {
+            throw new UnsanitizedEntityError();
+          }
+        });
+      } else {
+        if (
+          response &&
+          Object.keys(response).some(key => privateKeys.includes(key))
+        ) {
           throw new UnsanitizedEntityError();
         }
-      });
-    } else {
-      if (response && (response.pk || response.sk || response.gsi1pk)) {
-        throw new UnsanitizedEntityError();
       }
     }
     if (event.queryStringParameters && event.queryStringParameters.fields) {
