@@ -16,6 +16,7 @@ exports.VALIDATION_ERROR_MESSAGES = {
   freeText: 'Enter a description',
   judge: 'Select a judge',
   serviceStamp: 'Select a service stamp',
+  trialLocation: 'Select a trial location',
 };
 
 exports.ENTERED_AND_SERVED_EVENT_CODES = [

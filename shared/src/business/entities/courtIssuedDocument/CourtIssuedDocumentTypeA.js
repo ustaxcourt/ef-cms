@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   GENERIC_ORDER_DOCUMENT_TYPE,
   SERVICE_STAMP_OPTIONS,
@@ -39,7 +39,7 @@ CourtIssuedDocumentTypeA.schema = {
     otherwise: joi.optional().allow(null),
     then: joi
       .string()
-      .valid(SERVICE_STAMP_OPTIONS)
+      .valid(...SERVICE_STAMP_OPTIONS)
       .required(),
   }),
 };

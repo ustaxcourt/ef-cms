@@ -3,7 +3,7 @@ const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
-const { Case } = require('./Case');
+const { Case, isAssociatedUser } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
@@ -29,6 +29,7 @@ describe('Case entity', () => {
   it('defaults the orders to false', () => {
     const myCase = new Case(MOCK_CASE, { applicationContext });
     expect(myCase).toMatchObject({
+      isSealed: false,
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
@@ -280,6 +281,19 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           highPriority: true,
           highPriorityReason: 'something',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
+
+    it('Creates a valid case with sealedDate set to a valid date', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          sealedDate: '2019-09-19T16:42:00.000Z',
         },
         {
           applicationContext,
@@ -952,6 +966,7 @@ describe('Case entity', () => {
       expect(caseToVerify.docketRecord[2].description).toEqual(
         "Docket Number is amended from '123-19P' to '123-19W'",
       );
+      expect(caseToVerify.docketRecord[2].eventCode).toEqual('MIND');
     });
   });
 
@@ -992,7 +1007,7 @@ describe('Case entity', () => {
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
-    it('should add to the docket record when the caption changes from the initial title', () => {
+    it('should add to the docket record with event code MINC when the caption changes from the initial title', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A New Caption',
@@ -1004,6 +1019,7 @@ describe('Case entity', () => {
         },
       ).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(1);
+      expect(caseToVerify.docketRecord[0].eventCode).toEqual('MINC');
     });
 
     it('should not add to the docket record when the caption is equivalent to the last updated title', () => {
@@ -1235,9 +1251,9 @@ describe('Case entity', () => {
       );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-R-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-R-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
 
@@ -1254,9 +1270,9 @@ describe('Case entity', () => {
       );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-S-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-S-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
 
@@ -1273,9 +1289,9 @@ describe('Case entity', () => {
       );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-H-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-R-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-R-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
 
@@ -1292,9 +1308,9 @@ describe('Case entity', () => {
       );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-H-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-R-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-R-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
 
@@ -1312,9 +1328,9 @@ describe('Case entity', () => {
       );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-H-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-S-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-S-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
   });
@@ -1353,7 +1369,7 @@ describe('Case entity', () => {
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
-          trialLocation: 'Birmingham, AL',
+          trialLocation: 'Birmingham, Alabama',
         },
         { applicationContext },
       );
@@ -1385,7 +1401,7 @@ describe('Case entity', () => {
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
-          trialLocation: 'Birmingham, AL',
+          trialLocation: 'Birmingham, Alabama',
         },
         { applicationContext },
       );
@@ -1701,7 +1717,7 @@ describe('Case entity', () => {
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
-          trialLocation: 'Birmingham, AL',
+          trialLocation: 'Birmingham, Alabama',
         },
         { applicationContext },
       );
@@ -1746,7 +1762,7 @@ describe('Case entity', () => {
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
-          trialLocation: 'Birmingham, AL',
+          trialLocation: 'Birmingham, Alabama',
         },
         { applicationContext },
       );
@@ -1786,7 +1802,7 @@ describe('Case entity', () => {
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
-          trialLocation: 'Birmingham, AL',
+          trialLocation: 'Birmingham, Alabama',
         },
         { applicationContext },
       );
@@ -2164,7 +2180,7 @@ describe('Case entity', () => {
         const caseEntity = new Case(
           {
             ...MOCK_CASE,
-            preferredTrialCity: 'Birmingham, AL',
+            preferredTrialCity: 'Birmingham, Alabama',
             procedureType: 'regular',
             status: 'Submitted',
           },
@@ -2173,6 +2189,24 @@ describe('Case entity', () => {
         const result = caseEntity.setLeadCase(leadCaseId);
 
         expect(result.leadCaseId).toEqual(leadCaseId);
+      });
+    });
+
+    describe('removeConsolidation', () => {
+      it('Should unset the leadCaseId on the given case', async () => {
+        const caseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            leadCaseId: 'd64ba5a9-b37b-479d-9201-067ec6e335cc',
+            preferredTrialCity: 'Birmingham, Alabama',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+        const result = caseEntity.removeConsolidation();
+
+        expect(result.leadCaseId).toBeUndefined();
       });
     });
 
@@ -2419,6 +2453,101 @@ describe('Case entity', () => {
       expect(caseEntity.qcCompleteForTrial).toEqual({
         '80950eee-7efd-4374-a642-65a8262135ab': true,
       });
+    });
+  });
+
+  it('required messages display for non-defaulted fields when an empty case is validated', () => {
+    const myCase = new Case(
+      {},
+      {
+        applicationContext,
+      },
+    );
+
+    expect(myCase.getFormattedValidationErrors()).toEqual({
+      caseCaption: 'Enter a case caption',
+      caseType: 'Select a case type',
+      docketNumber: 'Docket number is required',
+      docketRecord: 'At least one valid Docket Record is required',
+      documents: 'At least one valid document is required',
+      partyType: 'Select a party type',
+      preferredTrialCity: 'Select a preferred trial location',
+      procedureType: 'Select a case procedure',
+    });
+  });
+
+  describe('isAssociatedUser', () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        practitioners: [{ userId: '271e5918-6461-4e67-bc38-274bc0aa0248' }],
+        respondents: [{ userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' }],
+      },
+      {
+        applicationContext: {
+          getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+      },
+    );
+
+    it('returns true if the user is a respondent on the case', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72',
+      });
+
+      expect(isAssociated).toBeTruthy();
+    });
+
+    it('returns true if the user is a practitioner on the case', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        userId: '271e5918-6461-4e67-bc38-274bc0aa0248',
+      });
+
+      expect(isAssociated).toBeTruthy();
+    });
+
+    it('returns false if the user is a not a practitioner or respondent on the case', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        userId: '4b32e14b-f583-4631-ba44-1439a093d6d0',
+      });
+
+      expect(isAssociated).toBeFalsy();
+    });
+  });
+
+  describe('DocketRecord indices must be unique', () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        docketRecord: [
+          {
+            description: 'first record',
+            documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+            eventCode: 'P',
+            filingDate: '2018-03-01T00:01:00.000Z',
+            index: 1,
+          },
+          {
+            description: 'second record',
+            documentId: '8675309b-28d0-43ec-bafb-654e83405412',
+            eventCode: 'STIN',
+            filingDate: '2018-03-01T00:02:00.000Z',
+            index: 1,
+          },
+        ],
+      },
+      {
+        applicationContext: {
+          getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+      },
+    );
+
+    expect(caseEntity.getFormattedValidationErrors()).toEqual({
+      'docketRecord[1]': '"docketRecord[1]" contains a duplicate value',
     });
   });
 });

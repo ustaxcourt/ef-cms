@@ -1,8 +1,8 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import calendarClerkLogIn from './journey/calendarClerkLogIn';
+import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
-import docketClerkSetsCalendarForTrialSession from './journey/docketClerkSetsCalendarForTrialSession';
 import docketClerkSignsOut from './journey/docketClerkSignsOut';
 import docketClerkUpdatesCaseStatusFromCalendaredToSubmitted from './journey/docketClerkUpdatesCaseStatusFromCalendaredToSubmitted';
 import docketClerkUpdatesCaseStatusToReadyForTrial from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
@@ -41,10 +41,10 @@ describe('docket clerk update case journey', () => {
 
   calendarClerkLogIn(test);
   markAllCasesAsQCed(test, () => [test.caseId]);
+  calendarClerkSetsATrialSessionsSchedule(test);
   userSignsOut(test);
 
   docketClerkLogIn(test);
-  docketClerkSetsCalendarForTrialSession(test);
   docketClerkUpdatesCaseStatusFromCalendaredToSubmitted(test);
   docketClerkViewsInactiveCasesForTrialSession(test);
   docketClerkUpdatesCaseStatusToReadyForTrial(test);

@@ -28,6 +28,8 @@ module.exports = {
     .handler,
   updateCourtIssuedOrderToCaseLambda: require('./documents/updateCourtIssuedOrderToCaseLambda')
     .handler,
+  updateDocketEntryMetaLambda: require('./documents/updateDocketEntryMetaLambda')
+    .handler,
   updateDocketEntryOnCaseLambda: require('./documents/updateDocketEntryOnCaseLambda')
     .handler,
 };

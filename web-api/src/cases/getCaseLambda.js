@@ -21,7 +21,10 @@ exports.handler = event =>
       applicationContext.logger.info('Results', results);
       return results;
     } catch (e) {
-      applicationContext.logger.error(e);
+      // we don't want email alerts to be sent out just because someone searched for a non-existing case
+      if (!e.skipLogging) {
+        applicationContext.logger.error(e);
+      }
       throw e;
     }
   });

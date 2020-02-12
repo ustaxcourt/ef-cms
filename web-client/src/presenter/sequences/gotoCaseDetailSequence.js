@@ -21,8 +21,10 @@ import { takePathForRoles } from './takePathForRoles';
 
 const gotoCaseDetailInternal = [
   showModalFromQueryAction,
+  getCaseDeadlinesForCaseAction,
   setCurrentPageAction('CaseDetailInternal'),
 ];
+
 const gotoCaseDetailExternal = [
   getCaseAssociationAction,
   setCaseAssociationAction,
@@ -32,7 +34,7 @@ const gotoCaseDetailExternal = [
 const gotoCaseDetailInternalWithNotes = [
   getJudgesCaseNoteForCaseAction,
   setJudgesCaseNoteOnCaseDetailAction,
-  ...gotoCaseDetailInternal,
+  gotoCaseDetailInternal,
 ];
 
 export const gotoCaseDetailSequence = [
@@ -44,7 +46,6 @@ export const gotoCaseDetailSequence = [
   setCaseAction,
   getConsolidatedCasesByCaseAction,
   setConsolidatedCasesForCaseAction,
-  getCaseDeadlinesForCaseAction,
   setDefaultDocketRecordSortAction,
   setBaseUrlAction,
   set(state.editDocumentEntryPoint, 'CaseDetail'),

@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   addPropertyHelper,
   makeRequiredHelper,
@@ -200,8 +200,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     supportingDocuments: joi.array().optional(),
   };
 
-  let customValidate;
-
   const addProperty = (itemName, itemSchema, itemErrorMessage) => {
     addPropertyHelper({
       VALIDATION_ERROR_MESSAGES,
@@ -302,7 +300,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   joiValidationDecorator(
     entityConstructor,
     schema,
-    customValidate,
+    undefined,
     VALIDATION_ERROR_MESSAGES,
   );
 

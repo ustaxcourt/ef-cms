@@ -6,6 +6,10 @@
       },
       {
         "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0"
+      },
+      {
+        "isManuallyAdded": true,
+        "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8"
       }
     ],
     "gsi1pk": "trial-session-catalog",

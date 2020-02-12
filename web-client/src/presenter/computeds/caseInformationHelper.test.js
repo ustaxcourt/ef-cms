@@ -93,4 +93,49 @@ describe('case information helper', () => {
     expect(result.showEditPractitioners).toBeFalsy();
     expect(result.showEditRespondents).toBeFalsy();
   });
+
+  it('should not show Seal Case button if user does not have SEAL_CASE permission', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk, // does not have SEAL_CASE permission
+      userId: '789',
+    };
+    const result = runCompute(caseInformationHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        form: {},
+      },
+    });
+    expect(result.showSealCaseButton).toBeFalsy();
+  });
+
+  it('should show Seal Case button if user has SEAL_CASE permission and case is not already sealed', () => {
+    const user = {
+      role: User.ROLES.docketClerk, // has SEAL_CASE permission
+      userId: '789',
+    };
+    const result = runCompute(caseInformationHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        form: {},
+      },
+    });
+    expect(result.showSealCaseButton).toBeTruthy();
+  });
+
+  it('should not show Seal Case button if user has SEAL_CASE permission and case is already sealed', () => {
+    const user = {
+      role: User.ROLES.docketClerk, // has SEAL_CASE permission
+      userId: '789',
+    };
+    const result = runCompute(caseInformationHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { isSealed: true },
+        form: {},
+      },
+    });
+    expect(result.showSealCaseButton).toBeFalsy();
+  });
 });

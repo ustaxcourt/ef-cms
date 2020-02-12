@@ -5,10 +5,13 @@ import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkOpensCaseConsolidateModal from './journey/docketClerkOpensCaseConsolidateModal';
 import docketClerkSearchesForCaseToConsolidateWith from './journey/docketClerkSearchesForCaseToConsolidateWith';
 import docketClerkSignsOut from './journey/docketClerkSignsOut';
+import docketClerkUnconsolidatesCase from './journey/docketClerkUnconsolidatesCase';
 import docketClerkUpdatesCaseStatusToReadyForTrial from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 // petitioner
 import petitionerLogin from './journey/petitionerLogIn';
+import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerVerifiesConsolidatedCases from './journey/petitionerVerifiesConsolidatedCases';
+import petitionerVerifiesUnconsolidatedCases from './journey/petitionerVerifiesUnconsolidatedCases';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 
 const test = setupTest();
@@ -52,4 +55,14 @@ describe('Case Consolidation Journey', () => {
   petitionerLogin(test);
   petitionerViewsDashboard(test);
   petitionerVerifiesConsolidatedCases(test);
+  petitionerSignsOut(test);
+
+  docketClerkLogIn(test);
+  docketClerkUnconsolidatesCase(test);
+  docketClerkSignsOut(test);
+
+  petitionerLogin(test);
+  petitionerViewsDashboard(test);
+  petitionerVerifiesUnconsolidatedCases(test);
+  petitionerSignsOut(test);
 });

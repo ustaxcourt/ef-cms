@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
@@ -35,7 +35,7 @@ const atWizardStep = (stepNum, schemaObj) => {
   const generatedSchema = {};
   Object.keys(schemaObj).forEach(key => {
     generatedSchema[key] = joi.when('wizardStep', {
-      is: joi.only(stepNumArray),
+      is: joi.valid(...stepNumArray),
       otherwise: joi.optional().allow(null),
       then: schemaObj[key],
     });

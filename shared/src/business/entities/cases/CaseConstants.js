@@ -1,0 +1,7 @@
+const SERVICE_INDICATOR_TYPES = {
+  SI_ELECTRONIC: 'Electronic',
+  SI_NONE: 'None',
+  SI_PAPER: 'Paper',
+};
+
+exports.SERVICE_INDICATOR_TYPES = SERVICE_INDICATOR_TYPES;

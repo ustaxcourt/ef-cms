@@ -28,7 +28,7 @@ const completeWorkItem = async ({
 }) => {
   Object.assign(workItemToUpdate, {
     document: {
-      ...courtIssuedDocument.toRawObject(),
+      ...courtIssuedDocument.validate().toRawObject(),
     },
   });
 

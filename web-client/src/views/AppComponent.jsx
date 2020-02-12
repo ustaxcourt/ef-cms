@@ -17,6 +17,7 @@ import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocumentDetail } from './DocumentDetail/DocumentDetail';
 import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
+import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
 import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformation';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
@@ -74,6 +75,7 @@ const pages = {
   DashboardRespondent,
   DocumentDetail,
   EditDocketEntry,
+  EditDocketEntryMeta,
   EditPetitionDetails,
   EditPetitionerInformation,
   EditTrialSession,

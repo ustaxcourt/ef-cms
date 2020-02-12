@@ -1,33 +1,44 @@
-const client = require('../../../../../shared/src/persistence/dynamodbClientService');
-const sinon = require('sinon');
+jest.mock('../../dynamodbClientService');
+const client = require('../../dynamodbClientService');
 const { Case } = require('../../../business/entities/cases/Case');
 const { updateCase } = require('./updateCase');
 
 describe('updateCase', () => {
   let applicationContext;
-  let putStub, getStub;
+
+  const putStub = jest.fn().mockReturnValue({
+    promise: async () => null,
+  });
+
+  const getStub = jest.fn().mockReturnValue({
+    docketNumberSuffix: null,
+    status: Case.STATUS_TYPES.generalDocket,
+  });
+
+  const queryStub = jest.fn().mockReturnValue([
+    {
+      sk: '123',
+    },
+  ]);
+
+  const updateStub = jest.fn();
+
+  client.get = getStub;
+  client.put = putStub;
+  client.query = queryStub;
+  client.update = updateStub;
 
   beforeEach(() => {
-    putStub = sinon.stub().returns({
-      promise: async () => null,
-    });
-    getStub = sinon.stub(client, 'get').resolves({
-      docketNumberSuffix: null,
-      status: Case.STATUS_TYPES.generalDocket,
-    });
+    jest.clearAllMocks();
 
     applicationContext = {
       environment: {
         stage: 'local',
       },
-      getDocumentClient: () => ({
-        get: getStub,
-        put: putStub,
-      }),
     };
   });
 
-  it('updates case with new version number', async () => {
+  it('updates case', async () => {
     await updateCase({
       applicationContext,
       caseToUpdate: {
@@ -38,9 +49,64 @@ describe('updateCase', () => {
         userId: 'petitioner',
       },
     });
-    expect(putStub.getCall(0).args[0].Item).toMatchObject({
+    expect(putStub.mock.calls[0][0].Item).toMatchObject({
       pk: '123',
       sk: '123',
     });
+  });
+
+  it('updates fields on work items', async () => {
+    await updateCase({
+      applicationContext,
+      caseToUpdate: {
+        caseCaption: 'New caption',
+        caseId: '123',
+        docketNumber: '101-18',
+        docketNumberSuffix: 'W',
+        status: Case.STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:40:46.415Z',
+        userId: 'petitioner',
+      },
+    });
+    expect(putStub.mock.calls[0][0].Item).toMatchObject({
+      pk: '123',
+      sk: '123',
+    });
+    expect(updateStub.mock.calls[0][0]).toMatchObject({
+      ExpressionAttributeValues: {
+        ':caseStatus': Case.STATUS_TYPES.calendared,
+      },
+    });
+    expect(updateStub.mock.calls[1][0]).toMatchObject({
+      ExpressionAttributeValues: {
+        ':caseTitle': 'New caption',
+      },
+    });
+    expect(updateStub.mock.calls[2][0]).toMatchObject({
+      ExpressionAttributeValues: {
+        ':docketNumberSuffix': 'W',
+      },
+    });
+    expect(updateStub.mock.calls[3][0]).toMatchObject({
+      ExpressionAttributeValues: {
+        ':trialDate': '2019-03-01T21:40:46.415Z',
+      },
+    });
+  });
+
+  it('does not update work items if work item fields are unchanged', async () => {
+    await updateCase({
+      applicationContext,
+      caseToUpdate: {
+        caseId: '123',
+        docketNumberSuffix: null,
+        status: Case.STATUS_TYPES.generalDocket,
+      },
+    });
+    expect(putStub.mock.calls[0][0].Item).toMatchObject({
+      pk: '123',
+      sk: '123',
+    });
+    expect(updateStub).not.toBeCalled();
   });
 });

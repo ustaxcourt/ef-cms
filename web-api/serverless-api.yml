@@ -1,4 +1,4 @@
-service: ef-cms
+service: ef-cms-${opt:stageColor}
 
 plugins:
   # - serverless-plugin-split-stacks
@@ -69,6 +69,7 @@ custom:
 
 provider:
   name: aws
+  endpointType: REGIONAL
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}

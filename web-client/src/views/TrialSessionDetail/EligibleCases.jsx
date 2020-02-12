@@ -90,7 +90,7 @@ export const EligibleCases = connect(
                         }}
                       />
                       <label
-                        className="usa-checkbox__label"
+                        className="usa-checkbox__label inline-block"
                         htmlFor={`${item.caseId}-complete`}
                       ></label>
                     </div>

@@ -78,7 +78,6 @@ describe('createCaseFromPaperInteractor integration test', () => {
           description: 'Petition',
           filedBy: 'Petr. Bob Jones',
           filingDate: RECEIVED_DATE,
-          status: undefined,
         },
       ],
       documents: [

@@ -1,5 +1,5 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -29,11 +29,8 @@ export const SectionWorkQueueInProgress = connect(
       <React.Fragment>
         {workQueueHelper.showSendToBar && (
           <div className="action-section">
-            <span
-              aria-label="selected work items count"
-              className="assign-work-item-count"
-            >
-              <FontAwesomeIcon icon="check" />
+            <span className="assign-work-item-count">
+              <Icon aria-label="selected work items count" icon="check" />
               {selectedWorkItems.length}
             </span>
             <select

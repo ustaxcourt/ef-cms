@@ -8,6 +8,7 @@ const { omit } = require('lodash');
 const { User } = require('../entities/User');
 
 const MOCK_CASE = {
+  caseCaption: 'Caption',
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   caseType: 'Other',
   createdAt: new Date().toISOString(),
@@ -36,7 +37,7 @@ const MOCK_CASE = {
   hasIrsNotice: false,
   partyType: ContactFactory.PARTY_TYPES.petitioner,
   petitioners: [{ name: 'Test Petitioner' }],
-  preferredTrialCity: 'Washington, D.C.',
+  preferredTrialCity: 'Washington, District of Columbia',
   procedureType: 'Regular',
   status: Case.STATUS_TYPES.new,
   userId: 'userId',
@@ -73,7 +74,7 @@ describe('updateCase', () => {
     }
     expect(error).not.toBeNull();
     expect(error.message).toContain(
-      'The Case entity was invalid ValidationError: child "docketNumber" fails because ["docketNumber" is required]',
+      'The Case entity was invalid ValidationError: "docketNumber" is required',
     );
   });
 
