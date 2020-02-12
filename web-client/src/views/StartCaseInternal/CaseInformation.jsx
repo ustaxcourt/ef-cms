@@ -101,6 +101,7 @@ export const CaseInformation = connect(
         <FormGroup>
           <div className="order-checkbox">
             <input
+              checked={form.orderToShowCause || false}
               className="usa-checkbox__input"
               id="order-to-show-cause"
               name="orderToShowCause"
@@ -155,6 +156,7 @@ export const CaseInformation = connect(
         {startCaseInternalHelper.showOrderForFilingFee && (
           <div className="order-checkbox">
             <input
+              checked={form.orderForFilingFee || false}
               className="usa-checkbox__input"
               id="order-for-filing-fee"
               name="orderForFilingFee"
@@ -186,6 +188,7 @@ export const CaseInformation = connect(
           <div className="usa-form-group" role="listitem">
             <input
               aria-describedby="orders-needed"
+              checked={form.orderForRatification || false}
               className="usa-checkbox__input"
               id="order-for-ratification"
               name="orderForRatification"
@@ -207,6 +210,7 @@ export const CaseInformation = connect(
           <div className="usa-form-group" role="listitem">
             <input
               aria-describedby="orders-needed"
+              checked={form.noticeOfAttachments || false}
               className="usa-checkbox__input"
               id="notice-of-attachments"
               name="noticeOfAttachments"
@@ -228,6 +232,7 @@ export const CaseInformation = connect(
           <div className="usa-form-group" role="listitem">
             <input
               aria-describedby="orders-needed"
+              checked={form.orderForAmendedPetition || false}
               className="usa-checkbox__input"
               id="order-for-amended-petition"
               name="orderForAmendedPetition"
@@ -249,6 +254,7 @@ export const CaseInformation = connect(
           <div className="usa-form-group margin-bottom-0" role="listitem">
             <input
               aria-describedby="orders-needed"
+              checked={form.orderForAmendedPetitionAndFilingFee || false}
               className="usa-checkbox__input"
               id="order-for-amended-petition-and-filing-fee"
               name="orderForAmendedPetitionAndFilingFee"
