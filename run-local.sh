@@ -12,9 +12,6 @@ DYNAMO_PID=$!
 ESEARCH_PID=$!
 ./wait-until.sh http://localhost:9200/ 200
 
-node ./web-api/start-s3rver &
-S3RVER_PID=$!
-
 npm run build:assets
 
 # these exported values expire when script terminates
@@ -26,6 +23,9 @@ export MASTER_DYNAMODB_ENDPOINT=http://localhost:8000
 export S3_ENDPOINT=http://localhost:9000
 export DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1
 export TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1
+
+node ./web-api/start-s3rver &
+S3RVER_PID=$!
 
 if [ ! -z "$RESUME" ]; then
   echo "Resuming operation with previous s3 and dynamo data"
