@@ -114,7 +114,6 @@
     "serverless-plugin-tracing": "^2.0.0",
     "serverless-plugin-warmup": "^4.8.0",
     "serverless-prune-plugin": "^1.4.1",
-    "serverless-s3-local": "^0.5.4",
     "sinon": "^8.1.1",
     "stylelint": "^13.1.0",
     "stylelint-config-idiomatic-order": "^8.1.0",
