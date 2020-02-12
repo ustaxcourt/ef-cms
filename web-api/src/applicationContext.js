@@ -969,6 +969,7 @@ module.exports = (appContextUser = {}) => {
         zipDocuments,
       };
     },
+    getPersistencePrivateKeys: () => ['pk', 'sk', 'gsi1pk'],
     getPug: () => {
       // Notice: this require is here to only have the lambdas that need it call it.
       // This dependency is only available on lambdas with the 'puppeteer' layer,
