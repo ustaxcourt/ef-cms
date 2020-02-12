@@ -408,8 +408,16 @@ const formatCase = (applicationContext, caseDetail) => {
 
 const getDocketRecordSortFunc = sortBy => {
   const byIndex = (a, b) => a.index - b.index;
-  const byDate = (a, b) =>
-    dateStringsCompared(a.record.filingDate, b.record.filingDate);
+  const byDate = (a, b) => {
+    const compared = dateStringsCompared(
+      a.record.filingDate,
+      b.record.filingDate,
+    );
+    if (compared === 0) {
+      return byIndex(a, b);
+    }
+    return compared;
+  };
 
   switch (sortBy) {
     case 'byIndex': // fall-through
