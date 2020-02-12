@@ -98,5 +98,5 @@ exports.removeConsolidatedCasesInteractor = async ({
     );
   }
 
-  return await Promise.all(updateCasePromises);
+  await Promise.all(updateCasePromises);
 };
