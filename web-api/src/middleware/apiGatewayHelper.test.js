@@ -137,6 +137,28 @@ describe('handle', () => {
     });
   });
 
+  it('should return 200 status if response is undefined', async () => {
+    const response = await handle(
+      {},
+      async () => undefined,
+      applicationContext,
+    );
+    expect(response).toEqual({
+      body: undefined,
+      headers: EXPECTED_HEADERS,
+      statusCode: '200',
+    });
+  });
+
+  it('should return 200 status if response is an empty array', async () => {
+    const response = await handle({}, async () => [], applicationContext);
+    expect(response).toEqual({
+      body: JSON.stringify([]),
+      headers: EXPECTED_HEADERS,
+      statusCode: '200',
+    });
+  });
+
   it('should return an object representing 500 status if the function returns an unsanitized entity as an array (response contains private data as defined in app context)', async () => {
     const response = await handle(
       {},
