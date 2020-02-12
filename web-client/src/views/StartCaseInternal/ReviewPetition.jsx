@@ -7,6 +7,7 @@ import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
+import { OrdersNeededSummary } from './OrdersNeededSummary';
 import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -47,6 +48,8 @@ export const ReviewPetition = connect(
               Review The Petition
             </h2>
           </Focus>
+
+          <OrdersNeededSummary data={form} />
 
           <div className="grid-container padding-x-0 create-case-review">
             <div className="grid-row grid-gap">
