@@ -30,6 +30,70 @@ describe('handle', () => {
     });
   });
 
+  it('should filter data based on the fields query string option', async () => {
+    const response = await handle(
+      {
+        queryStringParameters: {
+          fields: 'caseId,docketNumber',
+        },
+      },
+      async () => ({
+        caseId: '1',
+        docketNumber: 'b',
+        gg: undefined,
+        isAwesome: true,
+        something: 'false',
+        yup: null,
+      }),
+    );
+    expect(response).toMatchObject({
+      body: JSON.stringify({
+        caseId: '1',
+        docketNumber: 'b',
+      }),
+    });
+  });
+
+  it('should filter array data based on the fields query string option', async () => {
+    const response = await handle(
+      {
+        queryStringParameters: {
+          fields: 'caseId,docketNumber',
+        },
+      },
+      async () => [
+        {
+          caseId: '1',
+          docketNumber: 'b',
+          gg: undefined,
+          isAwesome: true,
+          something: 'false',
+          yup: null,
+        },
+        {
+          caseId: '2',
+          docketNumber: 'c',
+          gg: undefined,
+          isAwesome: false,
+          something: 'true',
+          yup: null,
+        },
+      ],
+    );
+    expect(response).toMatchObject({
+      body: JSON.stringify([
+        {
+          caseId: '1',
+          docketNumber: 'b',
+        },
+        {
+          caseId: '2',
+          docketNumber: 'c',
+        },
+      ]),
+    });
+  });
+
   it('should return an object representing an 200 status back if the callback function executes successfully', async () => {
     const response = await handle({}, async () => 'success');
     expect(response).toEqual({

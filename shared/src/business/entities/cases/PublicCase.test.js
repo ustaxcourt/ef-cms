@@ -1,6 +1,61 @@
 const { isPrivateDocument, PublicCase } = require('./PublicCase');
 
 describe('PublicCase', () => {
+  describe('validation', () => {
+    it('should validate when all information is provided and case is not sealed', () => {
+      const entity = new PublicCase(
+        {
+          caseCaption: 'testing',
+          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          caseTitle: 'testing',
+          contactPrimary: {},
+          contactSecondary: {},
+          createdAt: '2020-01-02T03:30:45.007Z',
+          docketNumber: 'testing',
+          docketNumberSuffix: 'testing',
+          docketRecord: [{}],
+          documents: [{}],
+          receivedAt: '2020-01-05T03:30:45.007Z',
+        },
+        {},
+      );
+      expect(entity.getFormattedValidationErrors()).toBe(null);
+    });
+    it('should not validate when case is sealed but sensitive information is provided to constructor', () => {
+      const entity = new PublicCase(
+        {
+          caseCaption: 'testing',
+          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          caseTitle: 'testing',
+          contactPrimary: {},
+          contactSecondary: {},
+          createdAt: '2020-01-02T03:30:45.007Z',
+          docketNumber: '111-12',
+          docketNumberSuffix: 'S',
+          docketRecord: [{ any: 'thing' }],
+          documents: [{ any: 'thing' }],
+          receivedAt: '2020-01-05T03:30:45.007Z',
+          sealedDate: '2020-01-05T03:30:45.007Z',
+        },
+        {},
+      );
+      expect(entity.getFormattedValidationErrors()).toMatchObject({
+        // caseId is permitted
+        // docketNumber is permitted
+        // docketNumberSuffix is permitted
+        // isSealed is permitted
+        caseCaption: expect.anything(),
+        caseTitle: expect.anything(),
+        contactPrimary: expect.anything(),
+        contactSecondary: expect.anything(),
+        createdAt: expect.anything(),
+        docketRecord: expect.anything(),
+        documents: expect.anything(),
+        receivedAt: expect.anything(),
+      });
+    });
+  });
+
   it('should only have expected fields', () => {
     const entity = new PublicCase(
       {
@@ -30,6 +85,7 @@ describe('PublicCase', () => {
       docketNumberSuffix: 'testing',
       docketRecord: [{}],
       documents: [{}],
+      isSealed: false,
       receivedAt: 'testing',
     });
   });
@@ -63,6 +119,7 @@ describe('PublicCase', () => {
       docketNumberSuffix: 'testing',
       docketRecord: [],
       documents: [],
+      isSealed: false,
       receivedAt: 'testing',
     });
   });
@@ -109,6 +166,7 @@ describe('PublicCase', () => {
         },
         { documentId: '345', documentType: 'Petition' },
       ],
+      isSealed: false,
       receivedAt: 'testing',
     });
   });

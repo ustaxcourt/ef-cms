@@ -1,3 +1,6 @@
+const {
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/cases/CaseConstants');
 const { Case } = require('../../entities/cases/Case');
 const { Practitioner } = require('../../entities/Practitioner');
 
@@ -12,6 +15,7 @@ const { Practitioner } = require('../../entities/Practitioner');
  * @param {boolean} providers.representingSecondary true if the practitioner is
  * representing the secondary contact on the case, false otherwise
  * @param {object} providers.user the user object for the logged in user
+ * @param {object} providers.serviceIndicator the service indicator
  * @returns {Promise<*>} the updated case entity
  */
 exports.associatePractitionerToCase = async ({
@@ -19,6 +23,7 @@ exports.associatePractitionerToCase = async ({
   caseId,
   representingPrimary,
   representingSecondary,
+  serviceIndicator,
   user,
 }) => {
   const isAssociated = await applicationContext
@@ -50,8 +55,18 @@ exports.associatePractitionerToCase = async ({
         ...user,
         representingPrimary,
         representingSecondary,
+        serviceIndicator,
       }),
     );
+
+    if (representingPrimary) {
+      caseEntity.contactPrimary.serviceIndicator =
+        SERVICE_INDICATOR_TYPES.SI_NONE;
+    }
+    if (representingSecondary) {
+      caseEntity.contactSecondary.serviceIndicator =
+        SERVICE_INDICATOR_TYPES.SI_NONE;
+    }
 
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,

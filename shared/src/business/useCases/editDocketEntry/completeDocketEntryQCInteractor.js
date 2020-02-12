@@ -5,10 +5,6 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
-  createISODateString,
-  formatDateString,
-} = require('../../utilities/DateHandler');
-const {
   formatDocument,
   getFilingsAndProceedings,
 } = require('../../utilities/getFormattedCaseDetail');
@@ -23,6 +19,7 @@ const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
+const { formatDateString } = require('../../utilities/DateHandler');
 const { omit } = require('lodash');
 const { PDFDocument } = require('pdf-lib');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
@@ -138,6 +135,7 @@ exports.completeDocketEntryQCInteractor = async ({
     description: updatedDocumentTitle,
     documentId: updatedDocument.documentId,
     editState: '{}',
+    eventCode: updatedDocument.eventCode,
     filingDate: updatedDocument.receivedAt,
   });
 
@@ -271,18 +269,6 @@ exports.completeDocketEntryQCInteractor = async ({
     );
 
     noticeUpdatedDocument.setAsServed(servedParties.all);
-
-    const docketEntry = caseEntity.docketRecord.find(
-      entry => entry.documentId === noticeUpdatedDocument.documentId,
-    );
-
-    const updatedDocketRecordEntity = new DocketRecord({
-      ...docketEntry,
-      filingDate: createISODateString(),
-    });
-    updatedDocketRecordEntity.validate();
-
-    caseEntity.updateDocketRecordEntry(updatedDocketRecordEntity);
 
     caseEntity.addDocument(noticeUpdatedDocument);
 

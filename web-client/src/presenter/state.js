@@ -28,6 +28,7 @@ import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
 import { editDocketEntryHelper } from './computeds/editDocketEntryHelper';
+import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
@@ -126,6 +127,7 @@ export const state = {
   documentSigningHelper,
   documentUploadMode: 'scan',
   editDocketEntryHelper,
+  editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,

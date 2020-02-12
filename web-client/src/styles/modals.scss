@@ -47,6 +47,8 @@
   @media only screen and (min-width: $medium-screen) {
     top: 50%;
     width: 500px;
+    max-height: 85vh;
+    overflow-y: auto;
     transform: translateY(-50%);
   }
   /* little screens */
