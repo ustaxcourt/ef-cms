@@ -18,6 +18,7 @@ export const workQueueHelper = (get, applicationContext) => {
     : qcUnreadCount;
   const workQueueType = workQueueIsInternal ? 'Messages' : 'Document QC';
   const isDisplayingQC = !workQueueIsInternal;
+  const userIsChambers = user.role === USER_ROLES.chambers;
   const userIsPetitionsClerk = user.role === USER_ROLES.petitionsClerk;
   const userIsDocketClerk = user.role === USER_ROLES.docketClerk;
   const userIsOther = ![
@@ -36,6 +37,8 @@ export const workQueueHelper = (get, applicationContext) => {
   const inboxFiledColumnLabel = workQueueIsInternal ? 'Received' : 'Filed';
 
   const showStartCaseButton = permissions.START_PAPER_CASE && isDisplayingQC;
+
+  const showCaseTitle = !userIsChambers;
 
   return {
     assigneeColumnTitle: isDisplayingQC ? 'Assigned to' : 'To',
@@ -71,6 +74,7 @@ export const workQueueHelper = (get, applicationContext) => {
     showBatchedByColumn: isDisplayingQC && userIsPetitionsClerk && showOutbox,
     showBatchedForIRSTab: userIsPetitionsClerk && workQueueIsInternal === false,
     showCaseStatusColumn: isJudge,
+    showCaseTitle,
     showEditDocketEntry: permissions.DOCKET_ENTRY,
     showFromColumn: isJudge,
     showInProgressTab: isDisplayingQC && userIsDocketClerk,

@@ -1,5 +1,4 @@
 const client = require('../../dynamodbClientService');
-const { stripInternalKeys } = require('./stripInternalKeys');
 
 exports.getSortRecords = async ({
   afterDate,
@@ -20,5 +19,5 @@ exports.getSortRecords = async ({
     applicationContext,
   });
 
-  return stripInternalKeys(records);
+  return records;
 };

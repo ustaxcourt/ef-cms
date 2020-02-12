@@ -24,6 +24,6 @@ describe('getWorkItemById', () => {
     const result = await getWorkItemById({
       applicationContext,
     });
-    expect(result).toEqual({ workItemId: 'abc' });
+    expect(result).toEqual({ pk: 'abc', sk: 'abc', workItemId: 'abc' });
   });
 });

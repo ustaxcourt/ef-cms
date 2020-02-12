@@ -1,5 +1,4 @@
 const client = require('../../dynamodbClientService');
-const { stripInternalKeys } = require('../helpers/stripInternalKeys');
 
 exports.getCalendaredCasesForTrialSession = async ({
   applicationContext,
@@ -31,15 +30,13 @@ exports.getCalendaredCasesForTrialSession = async ({
 
   let notes = [];
   if (userId) {
-    notes = await client
-      .batchGet({
-        applicationContext,
-        keys: caseOrder.map(myCase => ({
-          pk: `judges-case-note|${myCase.caseId}`,
-          sk: userId,
-        })),
-      })
-      .then(stripInternalKeys);
+    notes = await client.batchGet({
+      applicationContext,
+      keys: caseOrder.map(myCase => ({
+        pk: `judges-case-note|${myCase.caseId}`,
+        sk: userId,
+      })),
+    });
   }
 
   const calendaredCasesWithNotes = afterMapping.map(calendaredCase => ({
@@ -47,5 +44,5 @@ exports.getCalendaredCasesForTrialSession = async ({
     notes: notes.find(note => note.caseId === calendaredCase.caseId),
   }));
 
-  return stripInternalKeys(calendaredCasesWithNotes);
+  return calendaredCasesWithNotes;
 };

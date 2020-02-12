@@ -1,5 +1,4 @@
 const client = require('../../dynamodbClientService');
-const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 exports.getEligibleCasesForTrialSession = async ({
   applicationContext,
@@ -34,5 +33,5 @@ exports.getEligibleCasesForTrialSession = async ({
     ...results.find(r => m === r.pk),
   }));
 
-  return stripInternalKeys(afterMapping);
+  return afterMapping;
 };

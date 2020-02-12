@@ -62,6 +62,7 @@ import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
 import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
+import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
@@ -206,6 +207,7 @@ export const state = {
   trialSessionHeaderHelper,
   trialSessionWorkingCopyHelper,
   trialSessionsHelper,
+  trialSessionsSummaryHelper,
   trialSessionsTab: {
     group: null,
   },
