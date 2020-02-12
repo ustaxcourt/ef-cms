@@ -150,10 +150,14 @@ describe('handle', () => {
     });
   });
 
-  it('should return 200 status if response is an empty array', async () => {
-    const response = await handle({}, async () => [], applicationContext);
+  it('should return 200 status if response is an array with an undefined value', async () => {
+    const response = await handle(
+      {},
+      async () => [undefined],
+      applicationContext,
+    );
     expect(response).toEqual({
-      body: JSON.stringify([]),
+      body: JSON.stringify([undefined]),
       headers: EXPECTED_HEADERS,
       statusCode: '200',
     });
