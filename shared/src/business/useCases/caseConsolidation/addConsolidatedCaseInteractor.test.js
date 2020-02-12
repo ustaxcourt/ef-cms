@@ -165,40 +165,40 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('Should update both cases with the leadCaseId if neither have one', async () => {
-    const result = await addConsolidatedCaseInteractor({
+    await addConsolidatedCaseInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb', // docketNumber: '519-19'
       caseIdToConsolidateWith: 'd44ba5a9-b37b-479d-9201-067ec6e335aa', // docketNumber: '319-19'
     });
 
     expect(updateCaseMock).toHaveBeenCalled();
-    expect(result[0].leadCaseId).toEqual(
+    expect(updateCaseMock.mock.calls[0][0].caseToUpdate.leadCaseId).toEqual(
       'd44ba5a9-b37b-479d-9201-067ec6e335aa', // docketNumber: '319-19'
     );
   });
 
   it('Should update all leadCaseId fields if the new case has the lower docket number', async () => {
-    const result = await addConsolidatedCaseInteractor({
+    await addConsolidatedCaseInteractor({
       applicationContext,
       caseId: '000ba5a9-b37b-479d-9201-067ec6e33000', // docketNumber: '219-19'
       caseIdToConsolidateWith: 'aaaba5a9-b37b-479d-9201-067ec6e33aaa', // docketNumber: '319-19'
     });
 
     expect(updateCaseMock).toHaveBeenCalledTimes(3);
-    expect(result[0].leadCaseId).toEqual(
+    expect(updateCaseMock.mock.calls[0][0].caseToUpdate.leadCaseId).toEqual(
       '000ba5a9-b37b-479d-9201-067ec6e33000', // docketNumber: '219-19'
     );
   });
 
   it('Should combine all cases when both the case and case to consolidate with are in separate consolidated sets', async () => {
-    const result = await addConsolidatedCaseInteractor({
+    await addConsolidatedCaseInteractor({
       applicationContext,
       caseId: 'bbbba5a9-b37b-479d-9201-067ec6e33bbb', // docketNumber: '219-19'
       caseIdToConsolidateWith: '111ba5a9-b37b-479d-9201-067ec6e33111', // docketNumber: '419-19'
     });
 
     expect(updateCaseMock).toHaveBeenCalledTimes(2);
-    expect(result[0].leadCaseId).toEqual(
+    expect(updateCaseMock.mock.calls[0][0].caseToUpdate.leadCaseId).toEqual(
       'bbbba5a9-b37b-479d-9201-067ec6e33bbb', // docketNumber: '219-19'
     );
   });
