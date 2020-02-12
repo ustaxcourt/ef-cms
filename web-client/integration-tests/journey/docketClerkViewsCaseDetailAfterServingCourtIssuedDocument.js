@@ -1,6 +1,6 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 
-export default (test, draftOrderIndex) => {
+export default (test, draftOrderIndex, expectedCaseStatus) => {
   return it('Docketclerk views case detail after serving court-issued document', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -13,7 +13,9 @@ export default (test, draftOrderIndex) => {
 
     expect(orderDocument.servedAt).toBeDefined();
 
-    if (orderDocument.eventCode === 'O') {
+    if (expectedCaseStatus) {
+      expect(test.getState('caseDetail.status')).toEqual(expectedCaseStatus);
+    } else if (orderDocument.eventCode === 'O') {
       expect(test.getState('caseDetail.status')).toEqual(Case.STATUS_TYPES.new);
     } else {
       expect(test.getState('caseDetail.status')).toEqual(
