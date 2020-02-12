@@ -261,6 +261,32 @@ export const ReviewPetition = connect(
                           </div>
                         </div>
                       </div>
+                      {form.requestForPlaceOfTrialFile && (
+                        <div className="margin-top-3 margin-bottom-3">
+                          <label
+                            className="usa-label usa-label-display margin-top-3"
+                            htmlFor="filing-parties"
+                          >
+                            Request for Place of Trial
+                          </label>
+                          <div>
+                            <div className="grid-row">
+                              <div className="grid-col flex-auto">
+                                <FontAwesomeIcon
+                                  className="fa-icon-blue"
+                                  icon={['fas', 'file-pdf']}
+                                />
+                              </div>
+                              <div className="grid-col flex-fill">
+                                <PDFPreviewButton
+                                  file={form.requestForPlaceOfTrialFile}
+                                  title="Request for Place of Trial"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                       {form.ownershipDisclosureFile && (
                         <div className="margin-top-3 margin-bottom-3">
                           <label
