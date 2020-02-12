@@ -32,7 +32,9 @@ export const IndividualWorkQueueOutbox = connect(
                 &nbsp;
               </th>
               <th>Document</th>
-              {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
+              {!workQueueHelper.hideFiledByColumn && (
+                <th>{workQueueHelper.outboxFiledByColumnLabel} by</th>
+              )}
               {!workQueueHelper.hideCaseStatusColumn && <th>Case status</th>}
               {workQueueHelper.showAssignedToColumn && (
                 <th className="max-width-7">
