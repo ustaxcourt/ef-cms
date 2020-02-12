@@ -1,8 +1,6 @@
 import { fakeFile, setupTest } from './helpers';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
-import petitionsClerkUpdatesCaseDetail from './journey/petitionsClerkUpdatesCaseDetail';
-import petitionsClerkViewsDocketRecordAfterServing from './journey/petitionsClerkViewsDocketRecordAfterServing';
 
 const test = setupTest();
 
