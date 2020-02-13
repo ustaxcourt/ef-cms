@@ -49,17 +49,36 @@ exports.updateTrialSessionInteractor = async ({
   );
 
   if (
-    ((!currentTrialSession.judge || !currentTrialSession.judge.userId) &&
-      newTrialSessionEntity.judge &&
-      newTrialSessionEntity.judge.userId) ||
-    (currentTrialSession.judge &&
-      newTrialSessionEntity.judge &&
-      currentTrialSession.judge.userId !== newTrialSessionEntity.judge.userId)
+    (!currentTrialSession.judge?.userId &&
+      newTrialSessionEntity.judge?.userId) ||
+    currentTrialSession.judge?.userId !== newTrialSessionEntity.judge?.userId
   ) {
     //create a working copy for the new judge
     const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
       trialSessionId: newTrialSessionEntity.trialSessionId,
       userId: newTrialSessionEntity.judge.userId,
+    });
+
+    await applicationContext
+      .getPersistenceGateway()
+      .createTrialSessionWorkingCopy({
+        applicationContext,
+        trialSessionWorkingCopy: trialSessionWorkingCopyEntity
+          .validate()
+          .toRawObject(),
+      });
+  }
+
+  if (
+    (!currentTrialSession.trialClerk?.userId &&
+      newTrialSessionEntity.trialClerk?.userId) ||
+    currentTrialSession.trialClerk?.userId !==
+      newTrialSessionEntity.trialClerk?.userId
+  ) {
+    //create a working copy for the new trial clerk
+    const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
+      trialSessionId: newTrialSessionEntity.trialSessionId,
+      userId: newTrialSessionEntity.trialClerk.userId,
     });
 
     await applicationContext
