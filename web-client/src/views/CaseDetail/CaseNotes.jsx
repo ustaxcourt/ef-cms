@@ -1,4 +1,4 @@
-import { AddEditJudgesCaseNoteModal } from '../TrialSessionWorkingCopy/AddEditJudgesCaseNoteModal';
+import { AddEditUserCaseNoteModal } from '../TrialSessionWorkingCopy/AddEditUserCaseNoteModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
 import { DeleteJudgesCaseNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteJudgesCaseNoteConfirmModal';
@@ -13,8 +13,8 @@ export const CaseNotes = connect(
     caseDetailHelper: state.caseDetailHelper,
     openAddEditCaseNoteModalSequence:
       sequences.openAddEditCaseNoteModalSequence,
-    openAddEditJudgesCaseNoteModalFromDetailSequence:
-      sequences.openAddEditJudgesCaseNoteModalFromDetailSequence,
+    openAddEditUserCaseNoteModalFromDetailSequence:
+      sequences.openAddEditUserCaseNoteModalFromDetailSequence,
     openDeleteCaseNoteConfirmModalSequence:
       sequences.openDeleteCaseNoteConfirmModalSequence,
     openDeleteJudgesCaseNoteConfirmModalSequence:
@@ -25,7 +25,7 @@ export const CaseNotes = connect(
     caseDetail,
     caseDetailHelper,
     openAddEditCaseNoteModalSequence,
-    openAddEditJudgesCaseNoteModalFromDetailSequence,
+    openAddEditUserCaseNoteModalFromDetailSequence,
     openDeleteCaseNoteConfirmModalSequence,
     openDeleteJudgesCaseNoteConfirmModalSequence,
     showModal,
@@ -97,7 +97,7 @@ export const CaseNotes = connect(
                           className="float-right margin-right-0 margin-top-1 padding-0"
                           icon="plus-circle"
                           onClick={() => {
-                            openAddEditJudgesCaseNoteModalFromDetailSequence({
+                            openAddEditUserCaseNoteModalFromDetailSequence({
                               caseId: caseDetail.caseId,
                             });
                           }}
@@ -116,11 +116,9 @@ export const CaseNotes = connect(
                               link
                               icon="edit"
                               onClick={() => {
-                                openAddEditJudgesCaseNoteModalFromDetailSequence(
-                                  {
-                                    caseId: caseDetail.caseId,
-                                  },
-                                );
+                                openAddEditUserCaseNoteModalFromDetailSequence({
+                                  caseId: caseDetail.caseId,
+                                });
                               }}
                             >
                               Edit Note
@@ -152,8 +150,8 @@ export const CaseNotes = connect(
         {showModal === 'DeleteJudgesCaseNoteConfirmModal' && (
           <DeleteJudgesCaseNoteConfirmModal onConfirmSequence="deleteJudgesCaseNoteFromCaseDetailSequence" />
         )}
-        {showModal === 'AddEditJudgesCaseNoteModal' && (
-          <AddEditJudgesCaseNoteModal onConfirmSequence="updateJudgesCaseNoteOnCaseDetailSequence" />
+        {showModal === 'AddEditUserCaseNoteModal' && (
+          <AddEditUserCaseNoteModal onConfirmSequence="updateJudgesCaseNoteOnCaseDetailSequence" />
         )}
         {showModal === 'DeleteCaseNoteConfirmModal' && (
           <DeleteCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteSequence" />
