@@ -32,6 +32,7 @@ const goToMessages = [
         'calendarclerk',
         'chambers',
         'clerkofcourt',
+        'floater',
         'trialclerk',
       ],
       [],
