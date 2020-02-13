@@ -2,7 +2,6 @@ import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAct
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
-import { computeMailingDateAction } from '../actions/StartCaseInternal/computeMailingDateAction';
 import { navigateToReviewPetitionAction } from '../actions/StartCaseInternal/navigateToReviewPetitionAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -20,7 +19,6 @@ export const navigateToReviewPetitionSequence = [
       clearAlertsAction,
       startShowValidationAction,
       computeDateReceivedAction,
-      computeMailingDateAction,
       computeIrsNoticeDateAction,
       validatePetitionFromPaperAction,
       {

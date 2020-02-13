@@ -38,16 +38,8 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'mailingDateMonth',
-      value: '01',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'mailingDateDay',
-      value: '01',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'mailingDateYear',
-      value: '2001',
+      key: 'mailingDate',
+      value: 'Some Day',
     });
 
     await test.runSequence('updateFormValueSequence', {
