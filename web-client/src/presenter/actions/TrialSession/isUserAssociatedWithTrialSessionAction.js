@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * used to determine if a judge is associated with a trial session
+ * used to determine if a judge, chambers user, or trial clerk user is associated with a trial session
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -20,9 +20,7 @@ export const isUserAssociatedWithTrialSessionAction = async ({
 
   if (user.role === USER_ROLES.judge) {
     const isJudgeAssociatedWithTrialSession =
-      trialSession &&
-      trialSession.judge &&
-      trialSession.judge.userId === user.userId;
+      trialSession?.judge?.userId === user.userId;
 
     if (isJudgeAssociatedWithTrialSession) {
       return path.yes();
@@ -35,11 +33,13 @@ export const isUserAssociatedWithTrialSessionAction = async ({
     );
 
     const isJudgeAssociatedWithTrialSession =
-      judgeUser &&
-      trialSession.judge &&
-      trialSession.judge.userId === judgeUser.userId;
+      trialSession?.judge?.userId === judgeUser.userId;
 
     if (isJudgeAssociatedWithTrialSession) {
+      return path.yes();
+    }
+  } else if (user.role === USER_ROLES.trialClerk) {
+    if (trialSession?.trialClerk?.userId === user.userId) {
       return path.yes();
     }
   }
