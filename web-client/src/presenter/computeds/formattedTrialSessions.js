@@ -125,7 +125,9 @@ export const formattedTrialSessions = (get, applicationContext) => {
 
   const formattedSessions = [];
   sessions.forEach(session => {
-    session.userIsAssignedToSession = session.judge?.userId === judgeId;
+    session.userIsAssignedToSession = !!(
+      session.judge?.userId === judgeId && judgeId
+    );
 
     const formattedSession = formatSession(session, applicationContext);
 
