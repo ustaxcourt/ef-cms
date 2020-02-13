@@ -19,7 +19,7 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
             caseCaption: 'Sisqo, Petitioner',
             docketNumber: '101-19',
             docketNumberSuffix: 'L',
-            userNote: { notes: 'i got some notes' },
+            judgesNote: { notes: 'i got some notes' },
           },
         },
       },
@@ -43,7 +43,7 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
         state: {
           caseDetail: {
             docketNumber: '101-19',
-            userNote: { notes: 'i got some notes' },
+            judgesNote: { notes: 'i got some notes' },
           },
         },
       },
