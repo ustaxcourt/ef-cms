@@ -16,8 +16,8 @@ export const WorkingCopySessionList = connect(
       sequences.autoSaveTrialSessionWorkingCopySequence,
     casesShownCount: state.trialSessionWorkingCopyHelper.casesShownCount,
     formattedCases: state.trialSessionWorkingCopyHelper.formattedCases,
-    openAddEditJudgesCaseNoteModalFromListSequence:
-      sequences.openAddEditJudgesCaseNoteModalFromListSequence,
+    openAddEditUserCaseNoteModalFromListSequence:
+      sequences.openAddEditUserCaseNoteModalFromListSequence,
     openDeleteJudgesCaseNoteConfirmModalSequence:
       sequences.openDeleteJudgesCaseNoteConfirmModalSequence,
     sort: state.trialSessionWorkingCopy.sort,
@@ -29,7 +29,7 @@ export const WorkingCopySessionList = connect(
     autoSaveTrialSessionWorkingCopySequence,
     casesShownCount,
     formattedCases,
-    openAddEditJudgesCaseNoteModalFromListSequence,
+    openAddEditUserCaseNoteModalFromListSequence,
     openDeleteJudgesCaseNoteConfirmModalSequence,
     sort,
     sortOrder,
@@ -161,7 +161,7 @@ export const WorkingCopySessionList = connect(
                         className="margin-top-1"
                         icon="plus-circle"
                         onClick={() => {
-                          openAddEditJudgesCaseNoteModalFromListSequence({
+                          openAddEditUserCaseNoteModalFromListSequence({
                             caseId: item.caseId,
                           });
                         }}
@@ -202,7 +202,7 @@ export const WorkingCopySessionList = connect(
                         link
                         icon="edit"
                         onClick={() => {
-                          openAddEditJudgesCaseNoteModalFromListSequence({
+                          openAddEditUserCaseNoteModalFromListSequence({
                             caseId: item.caseId,
                           });
                         }}

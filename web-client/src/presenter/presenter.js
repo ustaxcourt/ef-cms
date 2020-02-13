@@ -133,8 +133,8 @@ import { navigateToPrintableDocketRecordSequence } from './sequences/navigateToP
 import { navigateToReviewPetitionSequence } from './sequences/navigateToReviewPetitionSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNoteModalSequence';
-import { openAddEditJudgesCaseNoteModalFromDetailSequence } from './sequences/openAddEditJudgesCaseNoteModalFromDetailSequence';
 import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSessionNoteModalSequence';
+import { openAddEditUserCaseNoteModalFromDetailSequence } from './sequences/openAddEditUserCaseNoteModalFromDetailSequence';
 import { openAddEditUserCaseNoteModalFromListSequence } from './sequences/openAddEditUserCaseNoteModalFromListSequence';
 import { openAddPractitionerModalSequence } from './sequences/openAddPractitionerModalSequence';
 import { openAddRespondentModalSequence } from './sequences/openAddRespondentModalSequence';
@@ -493,8 +493,8 @@ export const presenter = {
     navigateToReviewPetitionSequence,
     notFoundErrorSequence,
     openAddEditCaseNoteModalSequence,
-    openAddEditJudgesCaseNoteModalFromDetailSequence,
     openAddEditSessionNoteModalSequence,
+    openAddEditUserCaseNoteModalFromDetailSequence,
     openAddEditUserCaseNoteModalFromListSequence,
     openAddPractitionerModalSequence,
     openAddRespondentModalSequence,
