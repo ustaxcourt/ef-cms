@@ -19,20 +19,9 @@ jobs:
           key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
           paths:
             - '.git'
-      - restore_cache:
-          name: NPM - Restoring Cache
-          keys:
-            - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - npm-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: NPM - Install
           command: npm ci && npm rebuild node-sass
-      - save_cache:
-          name: NPM - Save to Cache
-          paths:
-            - node_modules # location depends on npm version
-          key: npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - persist_to_workspace:
           root: ~/
           paths:
@@ -115,7 +104,7 @@ jobs:
           command: |
             AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /dev/null &
             ./wait-until.sh http://localhost:3000/api/swagger
-            npm run test:client
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run test:client
       - run:
           name: Web Client - SonarQube
           command: |
@@ -201,7 +190,7 @@ jobs:
               ./node_modules/.bin/cypress install
             fi
 
-            SLS_DEBUG=* RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /dev/null &
+            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000  AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop npx run-p start:api:ci start:client:ci > /dev/null &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
