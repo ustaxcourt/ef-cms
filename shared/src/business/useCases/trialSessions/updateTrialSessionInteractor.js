@@ -49,9 +49,12 @@ exports.updateTrialSessionInteractor = async ({
   );
 
   if (
-    (!currentTrialSession.judge?.userId &&
-      newTrialSessionEntity.judge?.userId) ||
-    currentTrialSession.judge?.userId !== newTrialSessionEntity.judge?.userId
+    ((!currentTrialSession.judge || !currentTrialSession.judge.userId) &&
+      newTrialSessionEntity.judge &&
+      newTrialSessionEntity.judge.userId) ||
+    (currentTrialSession.judge &&
+      newTrialSessionEntity.judge &&
+      currentTrialSession.judge.userId !== newTrialSessionEntity.judge.userId)
   ) {
     //create a working copy for the new judge
     const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
@@ -70,10 +73,14 @@ exports.updateTrialSessionInteractor = async ({
   }
 
   if (
-    (!currentTrialSession.trialClerk?.userId &&
-      newTrialSessionEntity.trialClerk?.userId) ||
-    currentTrialSession.trialClerk?.userId !==
-      newTrialSessionEntity.trialClerk?.userId
+    ((!currentTrialSession.trialClerk ||
+      !currentTrialSession.trialClerk.userId) &&
+      newTrialSessionEntity.trialClerk &&
+      newTrialSessionEntity.trialClerk.userId) ||
+    (currentTrialSession.trialClerk &&
+      newTrialSessionEntity.trialClerk &&
+      currentTrialSession.trialClerk.userId !==
+        newTrialSessionEntity.trialClerk.userId)
   ) {
     //create a working copy for the new trial clerk
     const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
