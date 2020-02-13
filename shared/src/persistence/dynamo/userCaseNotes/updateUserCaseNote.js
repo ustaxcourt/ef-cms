@@ -1,20 +1,20 @@
 const client = require('../../dynamodbClientService');
 
 /**
- * updateJudgesCaseNote
+ * updateUserCaseNote
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.caseNoteToUpdate the case note data to update
  * @returns {Promise} the promise of the call to persistence
  */
-exports.updateJudgesCaseNote = async ({
+exports.updateUserCaseNote = async ({
   applicationContext,
   caseNoteToUpdate,
 }) => {
   return await client.put({
     Item: {
-      pk: `judges-case-note|${caseNoteToUpdate.caseId}`,
+      pk: `user-case-note|${caseNoteToUpdate.caseId}`,
       sk: `${caseNoteToUpdate.userId}`,
       ...caseNoteToUpdate,
     },

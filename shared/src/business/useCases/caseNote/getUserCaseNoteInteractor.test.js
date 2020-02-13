@@ -1,6 +1,4 @@
-const {
-  getJudgesCaseNoteInteractor,
-} = require('./getJudgesCaseNoteInteractor');
+const { getUserCaseNoteInteractor } = require('./getUserCaseNoteInteractor');
 const { omit } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
@@ -25,7 +23,7 @@ describe('Get case note', () => {
       },
       getPersistenceGateway: () => {
         return {
-          getJudgesCaseNote: () => {},
+          getUserCaseNote: () => {},
         };
       },
       getUseCases: () => ({
@@ -33,7 +31,7 @@ describe('Get case note', () => {
       }),
     };
     await expect(
-      getJudgesCaseNoteInteractor({
+      getUserCaseNoteInteractor({
         applicationContext,
         caseId: MOCK_NOTE.caseId,
       }),
@@ -51,7 +49,7 @@ describe('Get case note', () => {
       },
       getPersistenceGateway: () => {
         return {
-          getJudgesCaseNote: () => Promise.resolve(omit(MOCK_NOTE, 'userId')),
+          getUserCaseNote: () => Promise.resolve(omit(MOCK_NOTE, 'userId')),
         };
       },
       getUseCases: () => ({
@@ -63,7 +61,7 @@ describe('Get case note', () => {
     };
     let error;
     try {
-      await getJudgesCaseNoteInteractor({
+      await getUserCaseNoteInteractor({
         applicationContext,
         caseId: MOCK_NOTE.caseId,
       });
@@ -71,7 +69,7 @@ describe('Get case note', () => {
       error = err;
     }
     expect(error.message).toContain(
-      'The JudgesCaseNote entity was invalid ValidationError: "userId" is required',
+      'The UserCaseNote entity was invalid ValidationError: "userId" is required',
     );
   });
 
@@ -86,7 +84,7 @@ describe('Get case note', () => {
       },
       getPersistenceGateway: () => {
         return {
-          getJudgesCaseNote: () => Promise.resolve(MOCK_NOTE),
+          getUserCaseNote: () => Promise.resolve(MOCK_NOTE),
         };
       },
       getUseCases: () => ({
@@ -96,7 +94,7 @@ describe('Get case note', () => {
         }),
       }),
     };
-    const result = await getJudgesCaseNoteInteractor({
+    const result = await getUserCaseNoteInteractor({
       applicationContext,
       caseId: MOCK_NOTE.caseId,
     });
@@ -114,7 +112,7 @@ describe('Get case note', () => {
       },
       getPersistenceGateway: () => {
         return {
-          getJudgesCaseNote: () => null,
+          getUserCaseNote: () => null,
         };
       },
       getUseCases: () => ({
@@ -124,7 +122,7 @@ describe('Get case note', () => {
         }),
       }),
     };
-    const result = await getJudgesCaseNoteInteractor({
+    const result = await getUserCaseNoteInteractor({
       applicationContext,
       caseId: MOCK_NOTE.caseId,
     });
