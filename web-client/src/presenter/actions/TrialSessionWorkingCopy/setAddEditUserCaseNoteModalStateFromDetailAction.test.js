@@ -1,14 +1,14 @@
 import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { setAddEditJudgesCaseNoteModalStateFromDetailAction } from './setAddEditJudgesCaseNoteModalStateFromDetailAction';
+import { setAddEditUserCaseNoteModalStateFromDetailAction } from './setAddEditUserCaseNoteModalStateFromDetailAction';
 
 presenter.providers.applicationContext = applicationContext;
 
-describe('setAddEditJudgesCaseNoteModalStateFromDetailAction', () => {
+describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
   it('should set the modal state from caseDetail and props', async () => {
     const result = await runAction(
-      setAddEditJudgesCaseNoteModalStateFromDetailAction,
+      setAddEditUserCaseNoteModalStateFromDetailAction,
       {
         modules: {
           presenter,
@@ -19,7 +19,7 @@ describe('setAddEditJudgesCaseNoteModalStateFromDetailAction', () => {
             caseCaption: 'Sisqo, Petitioner',
             docketNumber: '101-19',
             docketNumberSuffix: 'L',
-            judgesNote: { notes: 'i got some notes' },
+            userNote: { notes: 'i got some notes' },
           },
         },
       },
@@ -34,7 +34,7 @@ describe('setAddEditJudgesCaseNoteModalStateFromDetailAction', () => {
 
   it('should set the modal state when caseCaption and docketNumberSuffix do not exist', async () => {
     const result = await runAction(
-      setAddEditJudgesCaseNoteModalStateFromDetailAction,
+      setAddEditUserCaseNoteModalStateFromDetailAction,
       {
         modules: {
           presenter,
@@ -43,7 +43,7 @@ describe('setAddEditJudgesCaseNoteModalStateFromDetailAction', () => {
         state: {
           caseDetail: {
             docketNumber: '101-19',
-            judgesNote: { notes: 'i got some notes' },
+            userNote: { notes: 'i got some notes' },
           },
         },
       },
