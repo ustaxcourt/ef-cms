@@ -514,4 +514,33 @@ describe('formattedTrialSessions', () => {
       },
     ]);
   });
+
+  it('sets userIsAssignedToSession false if the current user and session have no associated judge', () => {
+    const result = runCompute(formattedTrialSessions, {
+      state: {
+        ...baseState,
+        judgeUser: undefined,
+        trialSessions: [
+          {
+            caseOrder: [],
+            judge: undefined,
+            startDate: '2020-02-17T15:00:00.000Z',
+            swingSession: false,
+            trialLocation: 'Jacksonville, FL',
+          },
+        ],
+        user: { role: User.ROLES.calendarClerk, userId: '1' },
+      },
+    });
+    expect(result.formattedSessions).toMatchObject([
+      {
+        dateFormatted: 'February 17, 2020',
+        sessions: [
+          {
+            userIsAssignedToSession: false,
+          },
+        ],
+      },
+    ]);
+  });
 });
