@@ -3,11 +3,11 @@ import { state } from 'cerebral';
 export const reviewPetitionHelper = (get, applicationContext) => {
   let irsNoticeDateFormatted;
   const {
+    dateReceived,
     hasVerifiedIrsNotice,
     irsNoticeDate,
     mailingDate,
     petitionPaymentStatus,
-    receivedAt,
   } = get(state.form);
 
   const { PAYMENT_STATUS } = applicationContext.getConstants();
@@ -18,7 +18,7 @@ export const reviewPetitionHelper = (get, applicationContext) => {
 
   const receivedAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(receivedAt, 'MMDDYYYY');
+    .formatDateString(dateReceived, 'MMDDYYYY');
 
   const hasIrsNoticeFormatted = hasVerifiedIrsNotice ? 'Yes' : 'No';
 
