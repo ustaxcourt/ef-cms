@@ -8,11 +8,19 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @returns {object} contains the caseCaption
  */
-export const getInternalCaseCaptionAction = ({ applicationContext, get }) => {
-  const { Case } = applicationContext.getEntityConstructors();
-  let caseCaption = Case.getCaseCaption(get(state.form)) || '';
+export const getInternalCaseCaptionAction = ({
+  applicationContext,
+  get,
+  props,
+}) => {
+  const { tab } = props;
 
-  caseCaption += ` ${Case.CASE_CAPTION_POSTFIX}`;
+  if (tab === 'caseInfo') {
+    const { Case } = applicationContext.getEntityConstructors();
+    let caseCaption = Case.getCaseCaption(get(state.form)) || '';
 
-  return { caseCaption };
+    caseCaption += ` ${Case.CASE_CAPTION_POSTFIX}`;
+
+    return { caseCaption };
+  }
 };
