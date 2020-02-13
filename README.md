@@ -36,7 +36,7 @@ API | Front-End | Shared Code
 
 The fork of this project in which the bulk of development is occurring is [Flexion’s fork](https://github.com/flexion/ef-cms).
 
-Artifacts for ongoing development such as designs, research data, user workflows etc. are located in the [wiki](https://github.com/flexion/ef-cms/wiki).
+Artifacts for ongoing development, such as designs, research data, user workflows etc., are located in the [wiki](https://github.com/flexion/ef-cms/wiki).
 
 ## Technical overview
 
