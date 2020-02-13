@@ -16,7 +16,7 @@ exports.handler = event =>
       const { caseId } = event.pathParameters || {};
       const results = await applicationContext
         .getUseCases()
-        .getJudgesCaseNoteInteractor({
+        .getUserCaseNoteInteractor({
           applicationContext,
           caseId,
         });
