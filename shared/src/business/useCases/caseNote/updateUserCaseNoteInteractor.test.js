@@ -1,11 +1,16 @@
 const {
-  deleteJudgesCaseNoteInteractor,
-} = require('./deleteJudgesCaseNoteInteractor');
+  updateUserCaseNoteInteractor,
+} = require('./updateUserCaseNoteInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
-describe('deleteJudgesCaseNoteInteractor', () => {
+describe('updateUserCaseNoteInteractor', () => {
   let applicationContext;
+  const mockCaseNote = {
+    caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    notes: 'hello world',
+    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  };
 
   it('throws an error if the user is not valid or authorized', async () => {
     applicationContext = {
@@ -15,10 +20,10 @@ describe('deleteJudgesCaseNoteInteractor', () => {
     };
     let error;
     try {
-      await deleteJudgesCaseNoteInteractor({
+      await updateUserCaseNoteInteractor({
         applicationContext,
-        caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        caseId: mockCaseNote.caseId,
+        notes: mockCaseNote.notes,
       });
     } catch (err) {
       error = err;
@@ -27,7 +32,7 @@ describe('deleteJudgesCaseNoteInteractor', () => {
     expect(error).toBeInstanceOf(UnauthorizedError);
   });
 
-  it('deletes a case note', async () => {
+  it('updates a case note', async () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () =>
@@ -37,7 +42,7 @@ describe('deleteJudgesCaseNoteInteractor', () => {
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
       getPersistenceGateway: () => ({
-        deleteJudgesCaseNote: v => v,
+        updateUserCaseNote: v => v.caseNoteToUpdate,
       }),
       getUseCases: () => ({
         getJudgeForUserChambersInteractor: () => ({
@@ -51,9 +56,10 @@ describe('deleteJudgesCaseNoteInteractor', () => {
     let caseNote;
 
     try {
-      caseNote = await deleteJudgesCaseNoteInteractor({
+      caseNote = await updateUserCaseNoteInteractor({
         applicationContext,
-        caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        caseId: mockCaseNote.caseId,
+        notes: mockCaseNote.notes,
       });
     } catch (e) {
       error = e;
