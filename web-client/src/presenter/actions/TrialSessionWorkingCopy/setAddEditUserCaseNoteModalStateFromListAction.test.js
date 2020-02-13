@@ -1,14 +1,14 @@
 import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { setAddEditJudgesCaseNoteModalStateFromListAction } from './setAddEditJudgesCaseNoteModalStateFromListAction';
+import { setAddEditUserCaseNoteModalStateFromListAction } from './setAddEditUserCaseNoteModalStateFromListAction';
 
 presenter.providers.applicationContext = applicationContext;
 
-describe('setAddEditJudgesCaseNoteModalStateFromListAction', () => {
+describe('setAddEditUserCaseNoteModalStateFromListAction', () => {
   it('should set the modal caseId state', async () => {
     const result = await runAction(
-      setAddEditJudgesCaseNoteModalStateFromListAction,
+      setAddEditUserCaseNoteModalStateFromListAction,
       {
         modules: {
           presenter,
@@ -24,7 +24,7 @@ describe('setAddEditJudgesCaseNoteModalStateFromListAction', () => {
             ],
           },
           trialSessionWorkingCopy: {
-            judgesNotes: {
+            userNotes: {
               'c54ba5a9-b37b-479d-9201-067ec6e335bb': {
                 caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
                 notes: 'i got some notes',
@@ -43,7 +43,7 @@ describe('setAddEditJudgesCaseNoteModalStateFromListAction', () => {
 
   it('defaults caseCaptionNames to empty string if the case is not on state.trialSession.calendaredCases', async () => {
     const result = await runAction(
-      setAddEditJudgesCaseNoteModalStateFromListAction,
+      setAddEditUserCaseNoteModalStateFromListAction,
       {
         modules: {
           presenter,
@@ -54,7 +54,7 @@ describe('setAddEditJudgesCaseNoteModalStateFromListAction', () => {
             calendaredCases: [],
           },
           trialSessionWorkingCopy: {
-            judgesNotes: {
+            userNotes: {
               'c54ba5a9-b37b-479d-9201-067ec6e335bb': {
                 caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
                 notes: 'i got some notes',

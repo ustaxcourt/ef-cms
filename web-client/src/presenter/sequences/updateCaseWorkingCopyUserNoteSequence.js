@@ -5,12 +5,12 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { updateJudgesCaseNoteInTrialSessionWorkingCopyAction } from '../actions/TrialSessionWorkingCopy/updateJudgesCaseNoteInTrialSessionWorkingCopyAction';
 import { updateNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateNotePropsFromModalStateAction';
 import { updateTrialSessionWorkingCopyAction } from '../actions/TrialSession/updateTrialSessionWorkingCopyAction';
+import { updateUserCaseNoteInTrialSessionWorkingCopyAction } from '../actions/TrialSessionWorkingCopy/updateUserCaseNoteInTrialSessionWorkingCopyAction';
 import { validateNoteAction } from '../actions/validateNoteAction';
 
-export const updateCaseWorkingCopyJudgesNoteSequence = [
+export const updateCaseWorkingCopyUserNoteSequence = [
   startShowValidationAction,
   validateNoteAction,
   {
@@ -19,7 +19,7 @@ export const updateCaseWorkingCopyJudgesNoteSequence = [
       stopShowValidationAction,
       clearAlertsAction,
       updateNotePropsFromModalStateAction,
-      updateJudgesCaseNoteInTrialSessionWorkingCopyAction,
+      updateUserCaseNoteInTrialSessionWorkingCopyAction,
       updateTrialSessionWorkingCopyAction,
       clearModalAction,
       clearModalStateAction,

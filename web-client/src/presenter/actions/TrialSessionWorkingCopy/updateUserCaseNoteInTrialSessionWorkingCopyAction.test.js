@@ -1,17 +1,18 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { unsetJudgesCaseNoteFromTrialSessionWorkingCopyAction } from './unsetJudgesCaseNoteFromTrialSessionWorkingCopyAction';
+import { updateUserCaseNoteInTrialSessionWorkingCopyAction } from './updateUserCaseNoteInTrialSessionWorkingCopyAction';
 
-describe('unsetJudgesCaseNoteFromTrialSessionWorkingCopyAction', () => {
+describe('updateUserCaseNoteInTrialSessionWorkingCopyAction', () => {
   it('should set the modal caseId state', async () => {
     const result = await runAction(
-      unsetJudgesCaseNoteFromTrialSessionWorkingCopyAction,
+      updateUserCaseNoteInTrialSessionWorkingCopyAction,
       {
         modules: {
           presenter,
         },
         props: {
           docketNumber: '123',
+          notes: 'we are a family',
         },
         state: {
           trialSessionWorkingCopy: {
@@ -25,8 +26,8 @@ describe('unsetJudgesCaseNoteFromTrialSessionWorkingCopyAction', () => {
       },
     );
 
-    expect(result.state.trialSessionWorkingCopy.caseMetadata['123']).toEqual(
-      {},
-    );
+    expect(
+      result.state.trialSessionWorkingCopy.caseMetadata['123'].notes,
+    ).toEqual('we are a family');
   });
 });

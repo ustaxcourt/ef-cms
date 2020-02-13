@@ -1,5 +1,5 @@
+import { set } from 'lodash';
 import { state } from 'cerebral';
-import { unset } from 'lodash';
 
 /**
  * update props from modal state to pass to other actions
@@ -9,14 +9,14 @@ import { unset } from 'lodash';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store
  */
-export const unsetJudgesCaseNoteFromTrialSessionWorkingCopyAction = ({
+export const updateUserCaseNoteInTrialSessionWorkingCopyAction = ({
   get,
   props,
   store,
 }) => {
   const workingCopy = get(state.trialSessionWorkingCopy);
 
-  unset(workingCopy, ['caseMetadata', props.docketNumber, 'notes']);
+  set(workingCopy, ['caseMetadata', props.docketNumber, 'notes'], props.notes);
 
   store.set(state.trialSessionWorkingCopy, workingCopy);
 };
