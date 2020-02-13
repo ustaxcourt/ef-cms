@@ -63,7 +63,6 @@ const gotoTrialSessionDetails = [
         'clerkofcourt',
         'docketclerk',
         'petitionsclerk',
-        'trialclerk',
       ],
       gotoTrialSessionDetailSequence,
     ),
@@ -73,6 +72,7 @@ const gotoTrialSessionDetails = [
       ...checkUserAssociationAndProceed,
     ],
     judge: checkUserAssociationAndProceed,
+    trialClerk: checkUserAssociationAndProceed,
   },
 ];
 
