@@ -8,10 +8,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @returns {object} contains the caseCaption
  */
-export const getInternalCaseCaptionAction = async ({
-  applicationContext,
-  get,
-}) => {
+export const getInternalCaseCaptionAction = ({ applicationContext, get }) => {
   const { Case } = applicationContext.getEntityConstructors();
   let caseCaption = Case.getCaseCaption(get(state.form)) || '';
 
