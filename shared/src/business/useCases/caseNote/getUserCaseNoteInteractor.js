@@ -23,14 +23,12 @@ exports.getUserCaseNoteInteractor = async ({ applicationContext, caseId }) => {
     .getUseCases()
     .getJudgeForUserChambersInteractor({ applicationContext, user });
 
-  //fixme
-
   const caseNote = await applicationContext
     .getPersistenceGateway()
     .getUserCaseNote({
       applicationContext,
       caseId,
-      userId: judgeUser.userId,
+      userId: (judgeUser && judgeUser.userId) || user.userId,
     });
 
   if (caseNote) {

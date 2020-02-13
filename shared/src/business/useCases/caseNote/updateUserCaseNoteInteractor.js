@@ -28,12 +28,10 @@ exports.updateUserCaseNoteInteractor = async ({
     .getUseCases()
     .getJudgeForUserChambersInteractor({ applicationContext, user });
 
-  //fixme
-
   const caseNoteEntity = new UserCaseNote({
     caseId,
     notes,
-    userId: judgeUser.userId,
+    userId: (judgeUser && judgeUser.userId) || user.userId,
   });
 
   const caseNoteToUpdate = caseNoteEntity.validate().toRawObject();

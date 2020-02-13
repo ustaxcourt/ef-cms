@@ -72,7 +72,7 @@ const gotoTrialSessionDetails = [
       ...checkUserAssociationAndProceed,
     ],
     judge: checkUserAssociationAndProceed,
-    trialClerk: checkUserAssociationAndProceed,
+    trialclerk: checkUserAssociationAndProceed,
   },
 ];
 
