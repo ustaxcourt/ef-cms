@@ -105,6 +105,7 @@ export const filterFormattedSessionsByStatus = (
 
 export const formattedTrialSessions = (get, applicationContext) => {
   const judgeId = get(state.judgeUser.userId);
+  const currentUser = applicationContext.getCurrentUser();
 
   // filter trial sessions
   const trialSessionFilters = pickBy(
@@ -125,9 +126,14 @@ export const formattedTrialSessions = (get, applicationContext) => {
 
   const formattedSessions = [];
   sessions.forEach(session => {
-    session.userIsAssignedToSession = !!(
+    const isJudgeUserAssigned = !!(
       session.judge?.userId === judgeId && judgeId
     );
+    const isTrialClerkUserAssigned =
+      session.trialClerk?.userId === currentUser.userId;
+
+    session.userIsAssignedToSession =
+      isJudgeUserAssigned || isTrialClerkUserAssigned;
 
     const formattedSession = formatSession(session, applicationContext);
 
