@@ -1,7 +1,7 @@
 import { AddEditUserCaseNoteModal } from '../TrialSessionWorkingCopy/AddEditUserCaseNoteModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
-import { DeleteJudgesCaseNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteJudgesCaseNoteConfirmModal';
+import { DeleteUserCaseNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteUserCaseNoteConfirmModal';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -17,8 +17,8 @@ export const CaseNotes = connect(
       sequences.openAddEditUserCaseNoteModalFromDetailSequence,
     openDeleteCaseNoteConfirmModalSequence:
       sequences.openDeleteCaseNoteConfirmModalSequence,
-    openDeleteJudgesCaseNoteConfirmModalSequence:
-      sequences.openDeleteJudgesCaseNoteConfirmModalSequence,
+    openDeleteUserCaseNoteConfirmModalSequence:
+      sequences.openDeleteUserCaseNoteConfirmModalSequence,
     showModal: state.showModal,
   },
   ({
@@ -27,7 +27,7 @@ export const CaseNotes = connect(
     openAddEditCaseNoteModalSequence,
     openAddEditUserCaseNoteModalFromDetailSequence,
     openDeleteCaseNoteConfirmModalSequence,
-    openDeleteJudgesCaseNoteConfirmModalSequence,
+    openDeleteUserCaseNoteConfirmModalSequence,
     showModal,
   }) => {
     return (
@@ -130,7 +130,7 @@ export const CaseNotes = connect(
                               className="red-warning no-wrap"
                               icon="trash"
                               onClick={() => {
-                                openDeleteJudgesCaseNoteConfirmModalSequence({
+                                openDeleteUserCaseNoteConfirmModalSequence({
                                   caseId: caseDetail.caseId,
                                 });
                               }}
@@ -147,8 +147,8 @@ export const CaseNotes = connect(
             </div>
           </div>
         </div>
-        {showModal === 'DeleteJudgesCaseNoteConfirmModal' && (
-          <DeleteJudgesCaseNoteConfirmModal onConfirmSequence="deleteJudgesCaseNoteFromCaseDetailSequence" />
+        {showModal === 'DeleteUserCaseNoteConfirmModal' && (
+          <DeleteUserCaseNoteConfirmModal onConfirmSequence="deleteJudgesCaseNoteFromCaseDetailSequence" />
         )}
         {showModal === 'AddEditUserCaseNoteModal' && (
           <AddEditUserCaseNoteModal onConfirmSequence="updateJudgesCaseNoteOnCaseDetailSequence" />
