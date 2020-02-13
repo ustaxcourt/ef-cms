@@ -1,8 +1,8 @@
 import { AddEditSessionNoteModal } from './AddEditSessionNoteModal';
 import { AddEditUserCaseNoteModal } from './AddEditUserCaseNoteModal';
 import { Button } from '../../ustc-ui/Button/Button';
-import { DeleteJudgesCaseNoteConfirmModal } from './DeleteJudgesCaseNoteConfirmModal';
 import { DeleteSessionNoteConfirmModal } from './DeleteSessionNoteConfirmModal';
+import { DeleteUserCaseNoteConfirmModal } from './DeleteUserCaseNoteConfirmModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SessionNotes } from './SessionNotes';
@@ -66,8 +66,8 @@ export const TrialSessionWorkingCopy = connect(
           <ErrorNotification />
           <SessionNotes />
           <WorkingCopySessionList />
-          {showModal === 'DeleteJudgesCaseNoteConfirmModal' && (
-            <DeleteJudgesCaseNoteConfirmModal onConfirmSequence="deleteJudgesCaseNoteFromWorkingCopySequence" />
+          {showModal === 'DeleteUserCaseNoteConfirmModal' && (
+            <DeleteUserCaseNoteConfirmModal onConfirmSequence="deleteJudgesCaseNoteFromWorkingCopySequence" />
           )}
           {showModal === 'DeleteSessionNoteConfirmModal' && (
             <DeleteSessionNoteConfirmModal />

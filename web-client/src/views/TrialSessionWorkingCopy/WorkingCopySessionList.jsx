@@ -18,8 +18,8 @@ export const WorkingCopySessionList = connect(
     formattedCases: state.trialSessionWorkingCopyHelper.formattedCases,
     openAddEditUserCaseNoteModalFromListSequence:
       sequences.openAddEditUserCaseNoteModalFromListSequence,
-    openDeleteJudgesCaseNoteConfirmModalSequence:
-      sequences.openDeleteJudgesCaseNoteConfirmModalSequence,
+    openDeleteUserCaseNoteConfirmModalSequence:
+      sequences.openDeleteUserCaseNoteConfirmModalSequence,
     sort: state.trialSessionWorkingCopy.sort,
     sortOrder: state.trialSessionWorkingCopy.sortOrder,
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
@@ -30,7 +30,7 @@ export const WorkingCopySessionList = connect(
     casesShownCount,
     formattedCases,
     openAddEditUserCaseNoteModalFromListSequence,
-    openDeleteJudgesCaseNoteConfirmModalSequence,
+    openDeleteUserCaseNoteConfirmModalSequence,
     sort,
     sortOrder,
     toggleWorkingCopySortSequence,
@@ -189,7 +189,7 @@ export const WorkingCopySessionList = connect(
                         className="red-warning"
                         icon="trash"
                         onClick={() => {
-                          openDeleteJudgesCaseNoteConfirmModalSequence({
+                          openDeleteUserCaseNoteConfirmModalSequence({
                             caseId: item.caseId,
                           });
                         }}
