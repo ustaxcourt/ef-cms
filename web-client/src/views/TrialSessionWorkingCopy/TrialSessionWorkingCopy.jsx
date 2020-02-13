@@ -1,5 +1,5 @@
-import { AddEditJudgesCaseNoteModal } from './AddEditJudgesCaseNoteModal';
 import { AddEditSessionNoteModal } from './AddEditSessionNoteModal';
+import { AddEditUserCaseNoteModal } from './AddEditUserCaseNoteModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DeleteJudgesCaseNoteConfirmModal } from './DeleteJudgesCaseNoteConfirmModal';
 import { DeleteSessionNoteConfirmModal } from './DeleteSessionNoteConfirmModal';
@@ -72,8 +72,8 @@ export const TrialSessionWorkingCopy = connect(
           {showModal === 'DeleteSessionNoteConfirmModal' && (
             <DeleteSessionNoteConfirmModal />
           )}
-          {showModal === 'AddEditJudgesCaseNoteModal' && (
-            <AddEditJudgesCaseNoteModal onConfirmSequence="updateJudgesCaseNoteOnWorkingCopySequence" />
+          {showModal === 'AddEditUserCaseNoteModal' && (
+            <AddEditUserCaseNoteModal onConfirmSequence="updateUserCaseNoteOnWorkingCopySequence" />
           )}
           {showModal === 'AddEditSessionNoteModal' && (
             <AddEditSessionNoteModal />
