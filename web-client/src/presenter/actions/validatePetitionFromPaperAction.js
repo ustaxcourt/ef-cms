@@ -20,7 +20,6 @@ export const validatePetitionFromPaperAction = ({
   const petition = get(state.petition);
 
   const receivedAt = props.computedDateReceived;
-  const mailingDate = props.computedMailingDate;
 
   const form = omit(
     {
@@ -33,7 +32,7 @@ export const validatePetitionFromPaperAction = ({
     .getUseCases()
     .validatePetitionFromPaperInteractor({
       applicationContext,
-      petition: { ...petition, ...form, mailingDate, receivedAt },
+      petition: { ...petition, ...form, receivedAt },
     });
 
   if (!errors) {
