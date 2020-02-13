@@ -26,6 +26,8 @@ describe('CaseInternal entity', () => {
         petitionFileSize: 1,
         procedureType: 'Small',
         receivedAt: new Date().toISOString(),
+        stinFile: { anObject: true },
+        stinFileSize: 1,
       });
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
