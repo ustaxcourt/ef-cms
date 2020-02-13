@@ -1,7 +1,6 @@
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
-import { computeMailingDateAction } from '../actions/StartCaseInternal/computeMailingDateAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { getServeToIrsAlertSuccessAction } from '../actions/StartCaseInternal/getServeToIrsAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -17,7 +16,6 @@ import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const serveToIrsSequence = [
   computeDateReceivedAction,
-  computeMailingDateAction,
   computeIrsNoticeDateAction,
   showProgressSequenceDecorator([
     openFileUploadStatusModalAction,

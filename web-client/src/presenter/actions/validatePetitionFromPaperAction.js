@@ -26,14 +26,7 @@ export const validatePetitionFromPaperAction = ({
     {
       ...get(state.form),
     },
-    [
-      'dateReceivedYear',
-      'dateReceivedMonth',
-      'dateReceivedDay',
-      'mailingDateYear',
-      'mailingDateMonth',
-      'mailingDateDay',
-    ],
+    ['dateReceivedYear', 'dateReceivedMonth', 'dateReceivedDay'],
   );
 
   const errors = applicationContext
