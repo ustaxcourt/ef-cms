@@ -3,7 +3,7 @@ import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateRec
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
 import { computeMailingDateAction } from '../actions/StartCaseInternal/computeMailingDateAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
-import { gotoDocumentDetailSequence } from './gotoDocumentDetailSequence';
+import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
 import { runBatchProcessAction } from '../actions/runBatchProcessAction';
@@ -25,7 +25,7 @@ export const serveToIrsSequence = [
       closeFileUploadStatusModalAction,
       sendPetitionToIRSHoldingQueueAction,
       runBatchProcessAction,
-      gotoDocumentDetailSequence,
+      navigateToCaseDetailAction,
     ],
   },
 ];
