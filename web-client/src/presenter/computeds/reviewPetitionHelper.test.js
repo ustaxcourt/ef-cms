@@ -38,11 +38,11 @@ describe('reviewPetitionHelper', () => {
     const result = runCompute(reviewPetitionHelper, {
       state: {
         form: {
+          dateReceived: '2020-01-05T03:30:45.007Z',
           hasVerifiedIrsNotice: true,
           irsNoticeDate: '2020-01-05T03:30:45.007Z',
           mailingDate: '2020-01-05T03:30:45.007Z',
           petitionPaymentStatus: PAYMENT_STATUS.PAID,
-          receivedAt: '2020-01-05T03:30:45.007Z',
         },
       },
     });
