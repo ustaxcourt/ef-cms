@@ -13,25 +13,28 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const serveToIrsSequence = [
   computeDateReceivedAction,
   computeMailingDateAction,
   computeIrsNoticeDateAction,
-  openFileUploadStatusModalAction,
-  createCaseFromPaperAction,
-  {
-    error: [openFileUploadErrorModal],
-    success: [
-      setCaseAction,
-      setPetitionIdAction,
-      setDocumentIdAction,
-      closeFileUploadStatusModalAction,
-      sendPetitionToIRSHoldingQueueAction,
-      runBatchProcessAction,
-      getServeToIrsAlertSuccessAction,
-      setAlertSuccessAction,
-      navigateToCaseDetailAction,
-    ],
-  },
+  showProgressSequenceDecorator([
+    openFileUploadStatusModalAction,
+    createCaseFromPaperAction,
+    {
+      error: [openFileUploadErrorModal],
+      success: [
+        setCaseAction,
+        setPetitionIdAction,
+        setDocumentIdAction,
+        closeFileUploadStatusModalAction,
+        sendPetitionToIRSHoldingQueueAction,
+        runBatchProcessAction,
+        getServeToIrsAlertSuccessAction,
+        setAlertSuccessAction,
+        navigateToCaseDetailAction,
+      ],
+    },
+  ]),
 ];
