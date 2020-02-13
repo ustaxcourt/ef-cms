@@ -23,6 +23,7 @@ export const ContactSecondary = connect(
     bind,
     constants,
     contactsHelper,
+    copyFromBind,
     data,
     onBlur,
     onBlurSequence,
@@ -73,6 +74,11 @@ export const ContactSecondary = connect(
               }}
             />
           </FormGroup>
+          {copyFromBind && (
+            <FormGroup>
+              <checkboxhere />
+            </FormGroup>
+          )}
           {contactsHelper.contactSecondary.displayInCareOf && (
             <FormGroup
               errorText={
