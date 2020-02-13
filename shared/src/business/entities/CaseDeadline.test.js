@@ -36,6 +36,7 @@ describe('CaseDeadline', () => {
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: 'One small step',
           docketNumber: '101-21',
+          docketNumberSuffix: 'L',
         },
         { applicationContext },
       );
