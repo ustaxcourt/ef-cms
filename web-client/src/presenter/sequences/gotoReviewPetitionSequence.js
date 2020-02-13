@@ -1,5 +1,11 @@
+import { canNavigateToReviewPetitionScreenAction } from '../actions/StartCaseInternal/canNavigateToReviewPetitionScreenAction';
+import { gotoDashboardSequence } from './gotoDashboardSequence';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
 export const gotoReviewPetitionSequence = [
-  setCurrentPageAction('ReviewPetition'),
+  canNavigateToReviewPetitionScreenAction,
+  {
+    no: [gotoDashboardSequence],
+    yes: [setCurrentPageAction('ReviewPetition')],
+  },
 ];
