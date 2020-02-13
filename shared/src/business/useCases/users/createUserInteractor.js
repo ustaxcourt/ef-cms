@@ -19,12 +19,11 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const userEntity = new User(user, { applicationContext });
   const createdUser = await applicationContext
     .getPersistenceGateway()
     .createUser({
       applicationContext,
-      user: userEntity.validate().toRawObject(),
+      user,
     });
 
   return new User(createdUser, { applicationContext }).validate().toRawObject();
