@@ -11,6 +11,7 @@ import { runBatchProcessAction } from '../actions/runBatchProcessAction';
 import { sendPetitionToIRSHoldingQueueAction } from '../actions/sendPetitionToIRSHoldingQueueAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 
 export const serveToIrsSequence = [
@@ -24,6 +25,7 @@ export const serveToIrsSequence = [
     success: [
       setCaseAction,
       setPetitionIdAction,
+      setDocumentIdAction,
       closeFileUploadStatusModalAction,
       sendPetitionToIRSHoldingQueueAction,
       runBatchProcessAction,
