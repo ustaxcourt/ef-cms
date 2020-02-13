@@ -6,7 +6,7 @@
  * @param {Function} providers.path the cerebral path function
  * @returns {object} path
  */
-export const getInternalCaseCaptionAction = async ({ path, props }) => {
+export const getStartCaseInternalTabAction = async ({ path, props }) => {
   const { tab } = props;
 
   if (tab === 'caseInfo') {
