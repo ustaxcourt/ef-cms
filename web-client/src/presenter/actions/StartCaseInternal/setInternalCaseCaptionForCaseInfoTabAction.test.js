@@ -1,9 +1,9 @@
 import { runAction } from 'cerebral/test';
-import { setInternalCaseCaptionAction } from './setInternalCaseCaptionAction';
+import { setInternalCaseCaptionForCaseInfoTabAction } from './setInternalCaseCaptionForCaseInfoTabAction';
 
-describe('setInternalCaseCaptionAction', () => {
+describe('setInternalCaseCaptionForCaseInfoTabAction', () => {
   it('should set state.form.caseCaption to the passed in props.caseCaption if the tab is caseInfo', async () => {
-    const result = await runAction(setInternalCaseCaptionAction, {
+    const result = await runAction(setInternalCaseCaptionForCaseInfoTabAction, {
       props: {
         caseCaption: 'something something',
         tab: 'caseInfo',
@@ -14,7 +14,7 @@ describe('setInternalCaseCaptionAction', () => {
   });
 
   it('should not set state.form.caseCaption to the passed in props.caseCaption if the tab is not caseInfo', async () => {
-    const result = await runAction(setInternalCaseCaptionAction, {
+    const result = await runAction(setInternalCaseCaptionForCaseInfoTabAction, {
       props: {
         caseCaption: 'something something',
         tab: 'parties',
