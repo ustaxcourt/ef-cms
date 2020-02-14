@@ -1,16 +1,16 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateNotePropsFromModalStateAction';
-import { updateUserCaseNoteAction } from '../actions/TrialSession/updateUserCaseNoteAction';
+import { updateTrialSessionWorkingCopyAction } from '../actions/TrialSession/updateTrialSessionWorkingCopyAction';
+import { updateUserCaseNoteInTrialSessionWorkingCopyAction } from '../actions/TrialSessionWorkingCopy/updateUserCaseNoteInTrialSessionWorkingCopyAction';
 import { validateNoteAction } from '../actions/validateNoteAction';
 
-export const updateJudgesCaseNoteOnCaseDetailSequence = [
+export const updateCaseWorkingCopyUserNoteSequence = [
   startShowValidationAction,
   validateNoteAction,
   {
@@ -19,8 +19,8 @@ export const updateJudgesCaseNoteOnCaseDetailSequence = [
       stopShowValidationAction,
       clearAlertsAction,
       updateNotePropsFromModalStateAction,
-      updateUserCaseNoteAction,
-      setJudgesCaseNoteOnCaseDetailAction,
+      updateUserCaseNoteInTrialSessionWorkingCopyAction,
+      updateTrialSessionWorkingCopyAction,
       clearModalAction,
       clearModalStateAction,
     ]),
