@@ -118,5 +118,17 @@ describe('CaseInternal entity', () => {
         caseInternal.getFormattedValidationErrors().preferredTrialCity,
       ).toEqual(VALIDATION_ERROR_MESSAGES.preferredTrialCity);
     });
+
+    it('fails validation if preferredTrialCity is set, but requestForPlaceOfTrialFile is not', () => {
+      const caseInternal = new CaseInternal({
+        caseCaption: 'Dr. Guy Fieri, Petitioner',
+        preferredTrialCity: 'Flavortown, AR',
+        receivedAt: new Date().toISOString(),
+      });
+
+      expect(
+        caseInternal.getFormattedValidationErrors().requestForPlaceOfTrialFile,
+      ).toEqual(VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile);
+    });
   });
 });
