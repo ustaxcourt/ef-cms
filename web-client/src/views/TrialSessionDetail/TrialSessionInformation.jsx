@@ -33,7 +33,7 @@ export const TrialSessionInformation = connect(
                     className="button-switch-box margin-left-2"
                     href={`/trial-session-working-copy/${formattedTrialSessionDetails.trialSessionId}`}
                   >
-                    View Judge Session Copy
+                    View Session Copy
                   </a>
                 )}
                 {formattedTrialSessionDetails.canEdit && (

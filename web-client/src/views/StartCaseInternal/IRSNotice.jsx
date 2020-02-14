@@ -32,6 +32,7 @@ export const IRSNotice = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby="irs-verified-notice-radios"
+              checked={form.hasVerifiedIrsNotice === true}
               className="usa-radio__input"
               id="hasVerifiedIrsNotice-yes"
               name="hasVerifiedIrsNotice"
@@ -55,6 +56,7 @@ export const IRSNotice = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby="irs-verified-notice-radios"
+              checked={form.hasVerifiedIrsNotice === false}
               className="usa-radio__input"
               id="hasVerifiedIrsNotice-no"
               name="hasVerifiedIrsNotice"
@@ -111,6 +113,7 @@ export const IRSNotice = connect(
           caseTypes={caseTypes}
           legend="Type of case"
           validation="validatePetitionFromPaperSequence"
+          value={form.caseType}
           onChange="updateFormValueSequence"
         />
 
