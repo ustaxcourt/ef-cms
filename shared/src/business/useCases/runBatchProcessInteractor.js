@@ -15,6 +15,76 @@ const { IRS_BATCH_SYSTEM_USER_ID, WorkItem } = require('../entities/WorkItem');
 const { Message } = require('../entities/Message');
 const { UnauthorizedError } = require('../../errors/errors');
 
+let addDocketEntryForPaymentStatus;
+exports.addDocketEntryForPaymentStatus = addDocketEntryForPaymentStatus = ({
+  caseEntity,
+}) => {
+  if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
+    caseEntity.addDocketRecord(
+      new DocketRecord({
+        description: 'Filing Fee Paid',
+        eventCode: 'FEE',
+        filingDate: caseEntity.petitionPaymentDate,
+      }),
+    );
+  } else if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED) {
+    caseEntity.addDocketRecord(
+      new DocketRecord({
+        description: 'Filing Fee Waived',
+        eventCode: 'FEEW',
+        filingDate: caseEntity.petitionPaymentWaivedDate,
+      }),
+    );
+  }
+};
+
+let uploadZipOfDocuments;
+exports.uploadZipOfDocuments = uploadZipOfDocuments = async ({
+  applicationContext,
+  caseEntity,
+}) => {
+  const s3Ids = caseEntity.documents
+    .filter(document => !caseEntity.isDocumentDraft(document.documentId))
+    .map(document => document.documentId);
+  const fileNames = caseEntity.documents.map(
+    document => `${document.documentType}.pdf`,
+  );
+  let zipName = sanitize(`${caseEntity.docketNumber}`);
+
+  if (caseEntity.contactPrimary && caseEntity.contactPrimary.name) {
+    zipName += sanitize(
+      `_${caseEntity.contactPrimary.name.replace(/\s/g, '_')}`,
+    );
+  }
+  zipName += '.zip';
+
+  await applicationContext.getPersistenceGateway().zipDocuments({
+    applicationContext,
+    fileNames,
+    s3Ids,
+    zipName,
+  });
+};
+
+let deleteStinIfAvailable;
+exports.deleteStinIfAvailable = deleteStinIfAvailable = async ({
+  applicationContext,
+  caseEntity,
+}) => {
+  const stinDocument = caseEntity.documents.find(
+    document =>
+      document.documentType ===
+      Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
+  );
+
+  if (stinDocument) {
+    await applicationContext.getPersistenceGateway().deleteDocument({
+      applicationContext,
+      key: stinDocument.documentId,
+    });
+  }
+};
+
 /**
  * runBatchProcessInteractor
  *
@@ -48,25 +118,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
 
     const caseEntity = new Case(caseToBatch, { applicationContext });
 
-    if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
-      caseEntity.addDocketRecord(
-        new DocketRecord({
-          description: 'Filing Fee Paid',
-          eventCode: 'FEE',
-          filingDate: caseEntity.petitionPaymentDate,
-        }),
-      );
-    } else if (
-      caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED
-    ) {
-      caseEntity.addDocketRecord(
-        new DocketRecord({
-          description: 'Filing Fee Waived',
-          eventCode: 'FEEW',
-          filingDate: caseEntity.petitionPaymentWaivedDate,
-        }),
-      );
-    }
+    addDocketEntryForPaymentStatus({ caseEntity });
 
     if (workItem) {
       await applicationContext
@@ -77,40 +129,9 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
         });
     }
 
-    const s3Ids = caseEntity.documents
-      .filter(document => !caseEntity.isDocumentDraft(document.documentId))
-      .map(document => document.documentId);
-    const fileNames = caseEntity.documents.map(
-      document => `${document.documentType}.pdf`,
-    );
-    let zipName = sanitize(`${caseEntity.docketNumber}`);
+    await uploadZipOfDocuments({ applicationContext, caseEntity });
 
-    if (caseEntity.contactPrimary && caseEntity.contactPrimary.name) {
-      zipName += sanitize(
-        `_${caseEntity.contactPrimary.name.replace(/\s/g, '_')}`,
-      );
-    }
-    zipName += '.zip';
-
-    await applicationContext.getPersistenceGateway().zipDocuments({
-      applicationContext,
-      fileNames,
-      s3Ids,
-      zipName,
-    });
-
-    const stinDocument = caseEntity.documents.find(
-      document =>
-        document.documentType ===
-        Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
-    );
-
-    if (stinDocument) {
-      await applicationContext.getPersistenceGateway().deleteDocument({
-        applicationContext,
-        key: stinDocument.documentId,
-      });
-    }
+    await deleteStinIfAvailable({ applicationContext, caseEntity });
 
     caseEntity.markAsSentToIRS(createISODateString());
 
