@@ -28,7 +28,7 @@ describe('reviewPetitionHelper', () => {
       hasIrsNoticeFormatted: 'No',
       irsNoticeDateFormatted: undefined,
       mailingDateFormatted: undefined,
-      petitionPaymentStatusFormatted: 'Not Paid',
+      petitionPaymentStatusFormatted: 'Not paid',
       receivedAtFormatted: undefined,
       shouldShowIrsNoticeDate: false,
     });
