@@ -152,7 +152,7 @@ functions:
     handler: web-api/${self:provider.dir}/caseNotesHandlers.getUserCaseNoteLambda
     events:
       - http:
-          path: /user/{caseId}
+          path: /{caseId}/user-notes
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -164,7 +164,7 @@ functions:
     handler: web-api/${self:provider.dir}/caseNotesHandlers.updateUserCaseNoteLambda
     events:
       - http:
-          path: /user/{caseId}
+          path: /{caseId}/user-notes
           method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -176,7 +176,7 @@ functions:
     handler: web-api/${self:provider.dir}/caseNotesHandlers.deleteUserCaseNoteLambda
     events:
       - http:
-          path: /user/{caseId}
+          path: /{caseId}/user-notes
           method: delete
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

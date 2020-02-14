@@ -4691,7 +4691,7 @@
         }
       }
     },
-    "/case-notes/judges/{caseId}": {
+    "/case-notes/{caseId}/user-notes": {
       "parameters": [
         {
           "name": "caseId",
@@ -4702,14 +4702,14 @@
       ],
       "get": {
         "tags": ["caseNotes"],
-        "summary": "gets the logged in user's judge's note for a case",
-        "description": "gets the logged in user's judge's note for a case.\n",
+        "summary": "gets the logged in user's note for a case",
+        "description": "gets the logged in user's note for a case.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/judgeNote"
+              "$ref": "#/definitions/userNote"
             }
           }
         },
@@ -4721,14 +4721,14 @@
       },
       "post": {
         "tags": ["caseNotes"],
-        "summary": "create and associate a judge's note to a case for the logged in user",
-        "description": "create and associate a judge's note to a case for the logged in user.\n",
+        "summary": "create and associate a note to a case for the logged in user",
+        "description": "create and associate a note to a case for the logged in user.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/judgeNote"
+              "$ref": "#/definitions/userNote"
             }
           }
         },
@@ -4740,14 +4740,14 @@
       },
       "put": {
         "tags": ["caseNotes"],
-        "summary": "update a judge's note for the logged in user",
-        "description": "update a judge's note for the logged in user.\n",
+        "summary": "update a user's note for the logged in user",
+        "description": "update a user's note for the logged in user.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/judgeNote"
+              "$ref": "#/definitions/userNote"
             }
           }
         },
@@ -4759,14 +4759,14 @@
       },
       "delete": {
         "tags": ["caseNotes"],
-        "summary": "delete the judge's note for the logged in user",
-        "description": "delete the judge's note for the logged in user.\n",
+        "summary": "delete the user's note for the logged in user",
+        "description": "delete the user's note for the logged in user.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/judgeNote"
+              "$ref": "#/definitions/userNote"
             }
           }
         },
@@ -5208,7 +5208,7 @@
       },
       "description": "a case deadline"
     },
-    "judgeNote": {
+    "userNote": {
       "type": "object",
       "properties": {
         "caseId": {
@@ -5217,14 +5217,14 @@
         },
         "userId": {
           "type": "string",
-          "description": "id of the judge user who owns the note"
+          "description": "id of the user who owns the note"
         },
         "notes": {
           "type": "string",
-          "description": "judge's notes for the case"
+          "description": "user's notes for the case"
         }
       },
-      "description": "a case judge's note"
+      "description": "a case user's note"
     },
     "caseNote": {
       "type": "object",
