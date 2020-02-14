@@ -87,6 +87,6 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   trialClerkLogIn(test);
   trialClerkViewsTrialSessionWorkingCopy(test);
   trialClerkAddsNotesFromWorkingCopyCaseList(test);
-  trialClerkViewsNotesFromCaseDetail(test); // TODO: Maybe don't need this?
+  trialClerkViewsNotesFromCaseDetail(test);
   userSignsOut(test);
 });
