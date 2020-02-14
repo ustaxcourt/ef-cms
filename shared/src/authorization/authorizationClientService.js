@@ -147,7 +147,10 @@ const AUTHORIZATION_MAP = {
     ROLE_PERMISSIONS.UPLOAD_DOCUMENT,
     ROLE_PERMISSIONS.VIEW_DOCUMENTS,
   ],
-  trialclerk: allInternalUserPermissions,
+  trialclerk: [
+    ...allInternalUserPermissions,
+    ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY,
+  ],
 };
 
 exports.AUTHORIZATION_MAP = AUTHORIZATION_MAP;

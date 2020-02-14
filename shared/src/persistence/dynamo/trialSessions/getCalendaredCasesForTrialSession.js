@@ -33,7 +33,7 @@ exports.getCalendaredCasesForTrialSession = async ({
     notes = await client.batchGet({
       applicationContext,
       keys: caseOrder.map(myCase => ({
-        pk: `judges-case-note|${myCase.caseId}`,
+        pk: `user-case-note|${myCase.caseId}`,
         sk: userId,
       })),
     });
