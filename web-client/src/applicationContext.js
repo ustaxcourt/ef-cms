@@ -176,6 +176,7 @@ import { saveCaseNoteInteractor } from '../../shared/src/proxies/caseNote/saveCa
 import { saveIntermediateDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/saveIntermediateDocketEntryProxy';
 import { sealCaseInteractor } from '../../shared/src/proxies/sealCaseProxy';
 import { sendPetitionToIRSHoldingQueueInteractor } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
+import { serveCaseToIrsInteractor } from '../../shared/src/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
@@ -354,6 +355,7 @@ const allUseCases = {
   saveIntermediateDocketEntryInteractor,
   sealCaseInteractor,
   sendPetitionToIRSHoldingQueueInteractor,
+  serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,
   setItemInteractor,
   setNoticesForCalendaredTrialSessionInteractor,
