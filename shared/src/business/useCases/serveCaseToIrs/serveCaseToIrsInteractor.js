@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  SERVE_CASE_TO_IRS,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -15,7 +15,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, SERVE_CASE_TO_IRS)) {
-    throw new UnauthorizedError('Unauthorized', caseId);
+  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
+    throw new UnauthorizedError('Unauthorized');
   }
 };
