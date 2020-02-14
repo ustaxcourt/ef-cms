@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @returns {object} contains the caseCaption
  */
-export const getInternalCaseCaptionAction = ({
+export const getInternalCaseCaptionForCaseInfoTabAction = ({
   applicationContext,
   get,
   props,
