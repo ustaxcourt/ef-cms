@@ -9,7 +9,6 @@ import React from 'react';
 
 export const CaseInformation = connect(
   {
-    constants: state.constants,
     form: state.form,
     startCaseInternalHelper: state.startCaseInternalHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -18,7 +17,6 @@ export const CaseInformation = connect(
     validationErrors: state.validationErrors,
   },
   ({
-    constants,
     form,
     startCaseInternalHelper,
     updateFormValueSequence,
@@ -72,9 +70,6 @@ export const CaseInformation = connect(
             id="case-caption"
             name="caseCaption"
             value={form.caseCaption}
-            onBlur={() => {
-              validatePetitionFromPaperSequence();
-            }}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
@@ -82,7 +77,6 @@ export const CaseInformation = connect(
               });
             }}
           />
-          <p className="margin-top-1">{constants.CASE_CAPTION_POSTFIX}</p>
         </FormGroup>
         <ProcedureType
           legend="Case procedure"
