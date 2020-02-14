@@ -64,6 +64,7 @@ export const Parties = connect(
               showSecondaryContact={
                 startCaseInternalHelper.showSecondaryContact
               }
+              useSameAsPrimary={true}
               onBlur="validatePetitionFromPaperSequence"
               onChange="updateFormValueSequence"
             />
