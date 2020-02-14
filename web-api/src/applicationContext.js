@@ -599,6 +599,9 @@ const {
   sendServedPartiesEmails,
 } = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
 const {
+  serveCaseToIrsInteractor,
+} = require('../../shared/src/business/useCases/serveCaseToIrs/serveCaseToIrsInteractor');
+const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
 const {
@@ -1139,6 +1142,7 @@ module.exports = (appContextUser = {}) => {
         saveSignedDocumentInteractor,
         sealCaseInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
+        serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
         setNoticesForCalendaredTrialSessionInteractor,
         setTrialSessionAsSwingSessionInteractor,
