@@ -39,8 +39,6 @@ export const workQueueHelper = (get, applicationContext) => {
 
   const showStartCaseButton = permissions.START_PAPER_CASE && isDisplayingQC;
 
-  const showCaseTitle = !userIsChambers;
-
   return {
     assigneeColumnTitle: isDisplayingQC ? 'Assigned to' : 'To',
     currentBoxView: workQueueToDisplay.box,
@@ -77,10 +75,9 @@ export const workQueueHelper = (get, applicationContext) => {
         !userIsOther) ||
       !isDisplayingQC,
     showBatchedByColumn: isDisplayingQC && userIsPetitionsClerk && showOutbox,
-    showCaseStatusColumn: isJudge,
-    showCaseTitle,
+    showCaseStatusColumn: isJudge || userIsChambers,
     showEditDocketEntry: permissions.DOCKET_ENTRY,
-    showFromColumn: isJudge,
+    showFromColumn: isJudge || userIsChambers,
     showInProgressTab: isDisplayingQC && userIsDocketClerk,
     showInbox,
     showIndividualWorkQueue,

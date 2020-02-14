@@ -44,26 +44,25 @@ export const CaseInformation = connect(
           onBlur={validatePetitionFromPaperSequence}
           onChange={updateFormValueSequence}
         />
-
-        <DateInput
-          errorText={validationErrors.mailingDate}
-          id="mailing-date"
-          label="Mailing Date"
-          names={{
-            day: 'mailingDateDay',
-            month: 'mailingDateMonth',
-            year: 'mailingDateYear',
-          }}
-          optional={true}
-          values={{
-            day: form.mailingDateDay,
-            month: form.mailingDateMonth,
-            year: form.mailingDateYear,
-          }}
-          onBlur={validatePetitionFromPaperSequence}
-          onChange={updateFormValueSequence}
-        />
-
+        <FormGroup errorText={validationErrors.mailingDate}>
+          <label className="usa-label" htmlFor="mailing-date">
+            Mailing date
+          </label>
+          <input
+            className="usa-input usa-input-inline"
+            id="mailing-date"
+            maxLength="25"
+            name="mailingDate"
+            value={form.mailingDate || ''}
+            onBlur={() => validatePetitionFromPaperSequence()}
+            onChange={e => {
+              updateFormValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+          />
+        </FormGroup>
         <FormGroup errorText={validationErrors.caseCaption}>
           <label className="usa-label" htmlFor="case-caption">
             Case caption
@@ -85,7 +84,6 @@ export const CaseInformation = connect(
           />
           <p className="margin-top-1">{constants.CASE_CAPTION_POSTFIX}</p>
         </FormGroup>
-
         <ProcedureType
           legend="Case procedure"
           value={form.procedureType}
@@ -97,7 +95,6 @@ export const CaseInformation = connect(
             validatePetitionFromPaperSequence();
           }}
         />
-
         <FormGroup>
           <div className="order-checkbox">
             <input
@@ -121,7 +118,6 @@ export const CaseInformation = connect(
             </label>
           </div>
         </FormGroup>
-
         <FormGroup errorText={validationErrors.preferredTrialCity}>
           <label className="usa-label" htmlFor="preferred-trial-city">
             Trial location <span className="usa-hint">(Required with RQT)</span>
@@ -143,7 +139,6 @@ export const CaseInformation = connect(
             <TrialCityOptions />
           </select>
         </FormGroup>
-
         <PetitionPaymentForm
           bind="form"
           dateBind="form"
@@ -152,7 +147,6 @@ export const CaseInformation = connect(
           validateSequence={validatePetitionFromPaperSequence}
           validationErrorsBind="validationErrors"
         />
-
         {startCaseInternalHelper.showOrderForFilingFee && (
           <div className="order-checkbox">
             <input
@@ -176,7 +170,6 @@ export const CaseInformation = connect(
             </label>
           </div>
         )}
-
         <h3 id="orders-needed">
           Orders Needed <span className="usa-hint">(optional)</span>
         </h3>
