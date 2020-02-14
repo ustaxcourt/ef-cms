@@ -38,12 +38,12 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
 
   let zips = [];
 
-  const processWorkItem = async workItem => {
+  const serveCaseToIrs = async ({ caseId, workItem }) => {
     const caseToBatch = await applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId({
         applicationContext,
-        caseId: workItem.caseId,
+        caseId: caseId,
       });
 
     const caseEntity = new Case(caseToBatch, { applicationContext });
@@ -68,10 +68,14 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
       );
     }
 
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromSection({
-      applicationContext,
-      workItem,
-    });
+    if (workItem) {
+      await applicationContext
+        .getPersistenceGateway()
+        .deleteWorkItemFromSection({
+          applicationContext,
+          workItem,
+        });
+    }
 
     const s3Ids = caseEntity.documents
       .filter(document => !caseEntity.isDocumentDraft(document.documentId))
@@ -231,7 +235,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
   // can't use promise.all here because generating the case confirmation PDFs
   // all at the same time causes errors
   for (const workItem of workItemsInHoldingQueue) {
-    await processWorkItem(workItem);
+    await serveCaseToIrs({ caseId: workItem.caseId, workItem });
   }
 
   return {
