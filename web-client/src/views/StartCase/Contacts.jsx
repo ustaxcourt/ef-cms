@@ -12,7 +12,6 @@ export const Contacts = connect(
   ({
     bind,
     contactsHelper,
-    copyFromBind,
     emailBind,
     onBlur,
     onChange,
@@ -21,6 +20,7 @@ export const Contacts = connect(
     showPrimaryServiceIndicator,
     showSecondaryContact,
     showSecondaryServiceIndicator,
+    useSameAsPrimary,
     validateSequence,
     wrapperClassName,
   }) => {
@@ -54,8 +54,8 @@ export const Contacts = connect(
             <ContactSecondary
               bind={bind}
               contactsHelper={contactsHelper}
-              copyFromBind={copyFromBind}
               parentView={parentView}
+              useSameAsPrimary={useSameAsPrimary}
               wrapperClassName={wrapperClassName}
               onBlur={onBlur}
               onChange={onChange}
