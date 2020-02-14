@@ -7,7 +7,10 @@ import { state } from 'cerebral';
  * @param {Function} providers.props the cerebral props object used for passing in props.caseCaption
  * @param {Function} providers.store the cerebral store used for setting the state.form.caseCaption
  */
-export const setInternalCaseCaptionAction = ({ props, store }) => {
+export const setInternalCaseCaptionForCaseInfoTabAction = ({
+  props,
+  store,
+}) => {
   const { tab } = props;
 
   if (tab === 'caseInfo') {

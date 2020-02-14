@@ -1,7 +1,7 @@
-import { getInternalCaseCaptionAction } from '../actions/StartCaseInternal/getInternalCaseCaptionAction';
-import { setInternalCaseCaptionAction } from '../actions/StartCaseInternal/setInternalCaseCaptionAction';
+import { getInternalCaseCaptionForCaseInfoTabAction } from '../actions/StartCaseInternal/getInternalCaseCaptionForCaseInfoTabAction';
+import { setInternalCaseCaptionForCaseInfoTabAction } from '../actions/StartCaseInternal/setInternalCaseCaptionForCaseInfoTabAction';
 
 export const generateInternalCaseCaptionSequence = [
-  getInternalCaseCaptionAction,
-  setInternalCaseCaptionAction,
+  getInternalCaseCaptionForCaseInfoTabAction,
+  setInternalCaseCaptionForCaseInfoTabAction,
 ];
