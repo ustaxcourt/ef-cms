@@ -11,6 +11,7 @@ export const ContactSecondary = connect(
     bind: props.bind,
     constants: state.constants,
     contactsHelper: state[props.contactsHelper],
+    copyPrimaryContactSequence: sequences.copyPrimaryContactSequence,
     data: state[props.bind],
     onBlur: props.onBlur,
     onBlurSequence: sequences[props.onBlur],
@@ -23,13 +24,14 @@ export const ContactSecondary = connect(
     bind,
     constants,
     contactsHelper,
-    copyFromBind,
+    copyPrimaryContactSequence,
     data,
     onBlur,
     onBlurSequence,
     onChange,
     onChangeSequence,
     parentView,
+    useSameAsPrimary,
     validationErrors,
     wrapperClassName,
   }) => {
@@ -74,9 +76,28 @@ export const ContactSecondary = connect(
               }}
             />
           </FormGroup>
-          {copyFromBind && (
+          {useSameAsPrimary && (
             <FormGroup>
-              <checkboxhere />
+              <div className="order-checkbox">
+                <input
+                  className="usa-checkbox__input"
+                  id="order-to-show-cause"
+                  type="checkbox"
+                  value={true}
+                  onChange={e => {
+                    console.log('value', Boolean(e.target.value));
+                    if (Boolean(e.target.value) === true) {
+                      copyPrimaryContactSequence();
+                    }
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label"
+                  htmlFor="order-to-show-cause"
+                >
+                  Order to Show Cause
+                </label>
+              </div>
             </FormGroup>
           )}
           {contactsHelper.contactSecondary.displayInCareOf && (

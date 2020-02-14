@@ -58,13 +58,13 @@ export const Parties = connect(
             <Contacts
               bind="form"
               contactsHelper="startCaseInternalContactsHelper"
-              copyFromBind="form.contactPrimary"
               emailBind="form.contactPrimary"
               parentView="StartCaseInternal"
               showPrimaryContact={startCaseInternalHelper.showPrimaryContact}
               showSecondaryContact={
                 startCaseInternalHelper.showSecondaryContact
               }
+              useSameAsPrimary={true}
               onBlur="validatePetitionFromPaperSequence"
               onChange="updateFormValueSequence"
             />
