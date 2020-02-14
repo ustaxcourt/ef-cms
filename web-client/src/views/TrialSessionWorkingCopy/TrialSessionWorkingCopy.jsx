@@ -34,7 +34,7 @@ export const TrialSessionWorkingCopy = connect(
           <div className="grid-row">
             <div className="grid-col-9">
               <h2 className="heading-1">
-                {formattedTrialSessionDetails.formattedJudge} - Session Copy
+                {trialSessionHeaderHelper.nameToDisplay} - Session Copy
                 {trialSessionHeaderHelper.showSwitchToSessionDetail && (
                   <a
                     className="button-switch-box margin-left-2"
