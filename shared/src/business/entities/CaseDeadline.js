@@ -25,6 +25,7 @@ function CaseDeadline(rawProps, { applicationContext }) {
   this.deadlineDate = rawProps.deadlineDate;
   this.description = rawProps.description;
   this.docketNumber = rawProps.docketNumber;
+  this.docketNumberSuffix = rawProps.docketNumberSuffix;
 }
 
 CaseDeadline.validationName = 'CaseDeadline';
@@ -88,6 +89,10 @@ CaseDeadline.schema = joi.object().keys({
     .regex(DOCKET_NUMBER_MATCHER)
     .required()
     .description('Unique Case ID in XXXXX-YY format.'),
+  docketNumberSuffix: joi
+    .string()
+    .optional()
+    .allow(null),
 });
 
 joiValidationDecorator(
