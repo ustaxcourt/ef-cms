@@ -12,6 +12,7 @@ const headers = {
   Pragma: 'no-cache',
   'X-Content-Type-Options': 'nosniff',
 };
+const createApplicationContext = require('../applicationContext');
 
 exports.headers = headers;
 
@@ -20,10 +21,10 @@ exports.headers = headers;
  *
  * @param {Function} event the api gateway event
  * @param {Function} fun an function which either returns a promise containing payload data, or throws an exception
- * @param {object} applicationContext the application context
  * @returns {object} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handle = async (event, fun, applicationContext) => {
+exports.handle = async (event, fun) => {
+  const applicationContext = createApplicationContext({});
   if (event.source === 'serverless-plugin-warmup') {
     return exports.sendOk('Lambda is warm!');
   }
@@ -31,23 +32,11 @@ exports.handle = async (event, fun, applicationContext) => {
     let response = await fun();
     if (applicationContext) {
       const privateKeys = applicationContext.getPersistencePrivateKeys();
-      if (Array.isArray(response)) {
-        response.forEach(item => {
-          if (
-            item &&
-            Object.keys(item).some(key => privateKeys.includes(key))
-          ) {
-            throw new UnsanitizedEntityError();
-          }
-        });
-      } else {
-        if (
-          response &&
-          Object.keys(response).some(key => privateKeys.includes(key))
-        ) {
+      (Array.isArray(response) ? response : [response]).forEach(item => {
+        if (item && Object.keys(item).some(key => privateKeys.includes(key))) {
           throw new UnsanitizedEntityError();
         }
-      }
+      });
     }
     if (event.queryStringParameters && event.queryStringParameters.fields) {
       const { fields } = event.queryStringParameters;

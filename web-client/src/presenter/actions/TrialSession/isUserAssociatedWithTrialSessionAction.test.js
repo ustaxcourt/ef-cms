@@ -97,4 +97,42 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
 
     expect(pathYesStub).toHaveBeenCalled();
   });
+
+  it('should return path.yes() if the current user is a trial clerk for this trial session', async () => {
+    applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.trialClerk,
+      userId: '123',
+    });
+    await runAction(isUserAssociatedWithTrialSessionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        trialSession: {
+          trialClerk: { userId: '123' },
+        },
+      },
+    });
+
+    expect(pathYesStub).toHaveBeenCalled();
+  });
+
+  it('should return path.no() if the current user is a trial clerk but is NOT the trial clerk for this trial session', async () => {
+    applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.trialClerk,
+      userId: '234',
+    });
+    await runAction(isUserAssociatedWithTrialSessionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        trialSession: {
+          trialClerk: { userId: '123' },
+        },
+      },
+    });
+
+    expect(pathNoStub).toHaveBeenCalled();
+  });
 });

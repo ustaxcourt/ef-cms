@@ -4,9 +4,9 @@ import { state } from 'cerebral';
  * Fetches the judge's case note for a case
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext needed for getting the getJudgesCaseNoteInteractor use case
+ * @param {object} providers.applicationContext needed for getting the getUserCaseNoteInteractor use case
  * @param {object} providers.get the cerebral get function
- * @returns {object} contains the details of a judgesNote
+ * @returns {object} contains the details of a userNote
  */
 export const getJudgesCaseNoteForCaseAction = async ({
   applicationContext,
@@ -14,18 +14,18 @@ export const getJudgesCaseNoteForCaseAction = async ({
 }) => {
   const caseId = get(state.caseDetail.caseId);
 
-  let judgesNote;
+  let userNote;
 
   try {
-    judgesNote = await applicationContext
+    userNote = await applicationContext
       .getUseCases()
-      .getJudgesCaseNoteInteractor({
+      .getUserCaseNoteInteractor({
         applicationContext,
         caseId,
       });
   } catch (err) {
-    judgesNote = {};
+    userNote = {};
   }
 
-  return { judgesNote };
+  return { userNote };
 };

@@ -1,4 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { waitForRouter } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -37,16 +38,8 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'mailingDateMonth',
-      value: '01',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'mailingDateDay',
-      value: '01',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'mailingDateYear',
-      value: '2001',
+      key: 'mailingDate',
+      value: 'Some Day',
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -174,6 +167,8 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('currentPage')).toEqual('ReviewPetition');
 
     await test.runSequence('serveToIrsSequence');
+
+    await test.runSequence('gotoCaseDetailSequence');
 
     test.docketNumber = test.getState('caseDetail.docketNumber');
     test.caseId = test.getState('caseDetail.caseId');
