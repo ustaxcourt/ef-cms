@@ -25,7 +25,7 @@ export const reviewPetitionHelper = (get, applicationContext) => {
   const shouldShowIrsNoticeDate = hasVerifiedIrsNotice === true;
 
   const petitionPaymentStatusFormatted =
-    petitionPaymentStatus === PAYMENT_STATUS.PAID ? 'Paid' : 'Not Paid';
+    petitionPaymentStatus === PAYMENT_STATUS.PAID ? 'Paid' : 'Not paid';
 
   if (shouldShowIrsNoticeDate) {
     irsNoticeDateFormatted = applicationContext
