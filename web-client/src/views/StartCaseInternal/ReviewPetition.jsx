@@ -73,7 +73,7 @@ export const ReviewPetition = connect(
                           className="usa-label usa-label-display"
                           htmlFor="filing-contact-primary"
                         >
-                          Petitioner contact information
+                          Petitioner’s contact information
                         </label>
                         {form.contactPrimary && (
                           <address aria-labelledby="primary-label">
@@ -142,7 +142,7 @@ export const ReviewPetition = connect(
                             className="usa-label usa-label-display"
                             htmlFor="filing-location"
                           >
-                            Mailing Date
+                            Mailing date
                           </label>
                           {reviewPetitionHelper.mailingDateFormatted}
                         </div>
@@ -162,7 +162,7 @@ export const ReviewPetition = connect(
                             className="usa-label usa-label-display"
                             htmlFor="filing-location"
                           >
-                            Filing Fee
+                            Filing fee
                           </label>
                           {reviewPetitionHelper.petitionPaymentStatusFormatted}
                         </div>
