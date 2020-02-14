@@ -70,6 +70,9 @@ export const CaseInformation = connect(
             id="case-caption"
             name="caseCaption"
             value={form.caseCaption}
+            onBlur={() => {
+              validatePetitionFromPaperSequence();
+            }}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
