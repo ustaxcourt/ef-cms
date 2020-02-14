@@ -30,7 +30,6 @@ describe('updateSecondaryContactAction', () => {
         title: 'Your changes have been saved.',
       },
       caseId: 'ayy',
-      tab: 'caseInfo',
     });
   });
 });
