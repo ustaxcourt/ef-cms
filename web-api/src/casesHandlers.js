@@ -22,6 +22,7 @@ module.exports = {
   sealCaseLambda: require('./cases/sealCaseLambda').handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
     .handler,
+  serveCaseToIrsLambda: require('./cases/serveCaseToIrsLambda').handler,
   unblockCaseFromTrialLambda: require('./cases/unblockCaseFromTrialLambda')
     .handler,
   unprioritizeCaseLambda: require('./cases/unprioritizeCaseLambda').handler,
