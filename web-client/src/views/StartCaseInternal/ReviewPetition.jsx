@@ -18,7 +18,8 @@ export const ReviewPetition = connect(
     constants: state.constants,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    navigateBackSequence: sequences.navigateBackSequence,
+    goBackToStartCaseInternalSequence:
+      sequences.goBackToStartCaseInternalSequence,
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewPetitionHelper: state.reviewPetitionHelper,
@@ -30,7 +31,7 @@ export const ReviewPetition = connect(
     constants,
     form,
     formCancelToggleCancelSequence,
-    navigateBackSequence,
+    goBackToStartCaseInternalSequence,
     openConfirmServeToIrsModalSequence,
     reviewPetitionHelper,
     serveToIrsSequence,
@@ -72,7 +73,7 @@ export const ReviewPetition = connect(
                           className="usa-label usa-label-display"
                           htmlFor="filing-contact-primary"
                         >
-                          Petitioner contact information
+                          Petitioner’s contact information
                         </label>
                         {form.contactPrimary && (
                           <address aria-labelledby="primary-label">
@@ -141,7 +142,7 @@ export const ReviewPetition = connect(
                             className="usa-label usa-label-display"
                             htmlFor="filing-location"
                           >
-                            Mailing Date
+                            Mailing date
                           </label>
                           {reviewPetitionHelper.mailingDateFormatted}
                         </div>
@@ -161,7 +162,7 @@ export const ReviewPetition = connect(
                             className="usa-label usa-label-display"
                             htmlFor="filing-location"
                           >
-                            Filing Fee
+                            Filing fee
                           </label>
                           {reviewPetitionHelper.petitionPaymentStatusFormatted}
                         </div>
@@ -336,7 +337,10 @@ export const ReviewPetition = connect(
             >
               Serve to IRS
             </Button>
-            <Button secondary onClick={() => navigateBackSequence()}>
+            <Button
+              secondary
+              onClick={() => goBackToStartCaseInternalSequence()}
+            >
               Back
             </Button>
             <Button

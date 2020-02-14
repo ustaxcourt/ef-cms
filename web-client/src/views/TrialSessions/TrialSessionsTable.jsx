@@ -85,7 +85,7 @@ export const TrialSessionsTable = connect(
           <thead>
             <tr>
               <th>Date</th>
-              <th aria-hidden="true" className="icon-column" />
+              <th className="icon-column" />
               <th>Location</th>
               <th>Type</th>
               <th>Judge</th>
@@ -111,12 +111,13 @@ export const TrialSessionsTable = connect(
                 <tbody key={idx}>
                   <tr className="trial-sessions-row">
                     <td>{item.formattedStartDate}</td>
-                    <td aria-hidden="true">
+                    <td>
                       {item.swingSession && (
                         <FontAwesomeIcon
                           className="fa-icon-blue"
                           icon="link"
                           size="sm"
+                          title="swing session"
                         />
                       )}
                     </td>

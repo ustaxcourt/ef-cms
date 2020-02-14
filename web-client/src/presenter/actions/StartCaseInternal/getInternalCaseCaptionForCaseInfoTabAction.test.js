@@ -1,15 +1,15 @@
 import { applicationContext } from '../../../applicationContext';
-import { getInternalCaseCaptionAction } from './getInternalCaseCaptionAction';
+import { getInternalCaseCaptionForCaseInfoTabAction } from './getInternalCaseCaptionForCaseInfoTabAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 presenter.providers.applicationContext = applicationContext;
 
-describe('getInternalCaseCaptionAction', () => {
+describe('getInternalCaseCaptionForCaseInfoTabAction', () => {
   const { Case, ContactFactory } = applicationContext.getEntityConstructors();
 
   it('should return just the respondent when party type has not been selected', async () => {
-    const result = await runAction(getInternalCaseCaptionAction, {
+    const result = await runAction(getInternalCaseCaptionForCaseInfoTabAction, {
       modules: {
         presenter,
       },
@@ -27,7 +27,7 @@ describe('getInternalCaseCaptionAction', () => {
   });
 
   it('should return a generated case caption when party type has been selected', async () => {
-    const result = await runAction(getInternalCaseCaptionAction, {
+    const result = await runAction(getInternalCaseCaptionForCaseInfoTabAction, {
       modules: {
         presenter,
       },
@@ -50,7 +50,7 @@ describe('getInternalCaseCaptionAction', () => {
   });
 
   it('should not return a generated case caption when party type has been selected but the prop is not caseInfo', async () => {
-    const result = await runAction(getInternalCaseCaptionAction, {
+    const result = await runAction(getInternalCaseCaptionForCaseInfoTabAction, {
       modules: {
         presenter,
       },
