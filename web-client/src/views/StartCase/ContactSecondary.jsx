@@ -78,26 +78,23 @@ export const ContactSecondary = connect(
           </FormGroup>
           {useSameAsPrimary && (
             <FormGroup>
-              <div className="order-checkbox">
-                <input
-                  className="usa-checkbox__input"
-                  id="order-to-show-cause"
-                  type="checkbox"
-                  value={true}
-                  onChange={e => {
-                    console.log('value', Boolean(e.target.value));
-                    if (Boolean(e.target.value) === true) {
-                      copyPrimaryContactSequence();
-                    }
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label"
-                  htmlFor="order-to-show-cause"
-                >
-                  Order to Show Cause
-                </label>
-              </div>
+              <input
+                className="usa-checkbox__input"
+                id="use-same-address-above"
+                type="checkbox"
+                value={true}
+                onChange={e => {
+                  if (Boolean(e.target.value) === true) {
+                    copyPrimaryContactSequence();
+                  }
+                }}
+              />
+              <label
+                className="usa-checkbox__label"
+                htmlFor="use-same-address-above"
+              >
+                Use same address &amp; phone number as above
+              </label>
             </FormGroup>
           )}
           {contactsHelper.contactSecondary.displayInCareOf && (
