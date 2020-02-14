@@ -11,6 +11,6 @@ const { get } = require('../requests');
 exports.getUserCaseNoteInteractor = ({ applicationContext, caseId }) => {
   return get({
     applicationContext,
-    endpoint: `/case-notes/user/${caseId}`,
+    endpoint: `/case-notes/${caseId}/user-notes`,
   });
 };
