@@ -2,23 +2,18 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const {
-  TrialSessionWorkingCopy,
-} = require('../../entities/trialSessions/TrialSessionWorkingCopy');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { UserCaseNote } = require('../../entities/notes/UserCaseNote');
 
 /**
- * getTrialSessionWorkingCopyInteractor
+ * getUserCaseNoteInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.trialSessionId id of the trial session
- * @returns {TrialSessionWorkingCopy} the trial session working copy returned from persistence
+ * @param {string} providers.caseId the id of the case to get notes for
+ * @returns {object} the case note object if one is found
  */
-exports.getTrialSessionWorkingCopyInteractor = async ({
-  applicationContext,
-  trialSessionId,
-}) => {
+exports.getUserCaseNoteInteractor = async ({ applicationContext, caseId }) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {
     throw new UnauthorizedError('Unauthorized');
@@ -28,18 +23,15 @@ exports.getTrialSessionWorkingCopyInteractor = async ({
     .getUseCases()
     .getJudgeForUserChambersInteractor({ applicationContext, user });
 
-  const trialSessionWorkingCopy = await applicationContext
+  const caseNote = await applicationContext
     .getPersistenceGateway()
-    .getTrialSessionWorkingCopy({
+    .getUserCaseNote({
       applicationContext,
-      trialSessionId,
+      caseId,
       userId: (judgeUser && judgeUser.userId) || user.userId,
     });
 
-  if (trialSessionWorkingCopy) {
-    const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy(
-      trialSessionWorkingCopy,
-    ).validate();
-    return trialSessionWorkingCopyEntity.toRawObject();
+  if (caseNote) {
+    return new UserCaseNote(caseNote).validate().toRawObject();
   }
 };
