@@ -1,4 +1,4 @@
-const genericHandler = require('../genericHandler');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * creates a new document and attaches it to a case.  It also creates a work item on the docket section.
