@@ -14,6 +14,8 @@ export default (test, createdDocketNumberIndex) => {
       document => document.documentType === 'Notice of Change of Address',
     );
 
+    expect(changeOfAddressDocument.servedAt).toBeDefined();
+
     expect(changeOfAddressDocument).toBeDefined();
   });
 };
