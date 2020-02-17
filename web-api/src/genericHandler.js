@@ -15,12 +15,15 @@ exports.genericHandler = (event, cb, options = {}) => {
   handle(event, async () => {
     const user = options.user || getUserFromAuthHeader(event);
 
-    const logEvent = options.logEvent || false;
-    const logResults = options.logResults || true;
-    const logUser = options.logUser || true;
-    const logEventLabel = options.logEventLabel || 'Event';
-    const logResultsLabel = options.logResultsLabel || 'Results';
-    const logUserLabel = options.logUserLabel || 'User';
+    const {
+      isPublicUser,
+      logEvent = false,
+      logEventLabel = 'Event',
+      logResults = true,
+      logResultsLabel = 'Results',
+      logUser = true,
+      logUserLabel = 'User',
+    } = options;
 
     const applicationContext = createApplicationContext(user);
 
@@ -30,7 +33,11 @@ exports.genericHandler = (event, cb, options = {}) => {
       }
 
       if (logUser) {
-        applicationContext.logger.info(logUserLabel, user);
+        let userToLog = user;
+        if (isPublicUser) {
+          userToLog = 'Public User';
+        }
+        applicationContext.logger.info(logUserLabel, userToLog);
       }
 
       const results = await cb({ applicationContext, user });
