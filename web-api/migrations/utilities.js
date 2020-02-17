@@ -22,4 +22,22 @@ const forAllRecords = async (documentClient, tableName, cb) => {
   }
 };
 
-module.exports = { forAllRecords, isCaseRecord };
+const upGenerator = mutateFunction => async (
+  documentClient,
+  tableName,
+  forAllRecords,
+) => {
+  await forAllRecords(documentClient, tableName, async item => {
+    const updatedItem = mutateFunction(item);
+    if (updatedItem) {
+      await documentClient
+        .put({
+          Item: updatedItem,
+          TableName: tableName,
+        })
+        .promise();
+    }
+  });
+};
+
+module.exports = { forAllRecords, isCaseRecord, upGenerator };
