@@ -80,7 +80,7 @@ describe('formattedTrialSessions', () => {
       {
         caseOrder: [],
         judge: { name: '6', userId: '6' },
-        startDate: '2020-02-17T15:00:00.000Z',
+        startDate: '2025-02-17T15:00:00.000Z',
         swingSession: false,
         trialLocation: 'Jacksonville, FL',
       },
@@ -586,7 +586,7 @@ describe('formattedTrialSessions', () => {
           {
             caseOrder: [],
             judge: undefined,
-            startDate: '2020-02-17T15:00:00.000Z',
+            startDate: '2025-02-17T15:00:00.000Z',
             swingSession: false,
             trialLocation: 'Jacksonville, FL',
           },
