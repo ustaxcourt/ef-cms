@@ -29,7 +29,7 @@ const contactInfo = {
 
 describe('updateUserContactInformationInteractor', () => {
   it('updates the user and respondents in the case', async () => {
-    const updateCaseSpy = jest.fn();
+    const updateCaseSpy = jest.fn().mockImplementation(v => v.caseToUpdate);
     const updateUserSpy = jest.fn();
     const applicationContext = {
       environment: { stage: 'local' },
@@ -104,7 +104,7 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   it('updates the user and practitioners in the case', async () => {
-    const updateCaseSpy = jest.fn();
+    const updateCaseSpy = jest.fn().mockImplementation(v => v.caseToUpdate);
     const updateUserSpy = jest.fn();
     const applicationContext = {
       environment: { stage: 'local' },

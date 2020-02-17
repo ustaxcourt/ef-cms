@@ -44,7 +44,7 @@ describe('updateUserContactInformationAction', () => {
         modules: {
           presenter,
         },
-        state: {},
+        state: { form: { contact: {} } },
       });
     } catch (e) {
       error = e;
@@ -62,7 +62,7 @@ describe('updateUserContactInformationAction', () => {
       modules: {
         presenter,
       },
-      state: {},
+      state: { form: { contact: {} } },
     });
     expect(noChangeMock).toHaveBeenCalled();
   });
@@ -75,7 +75,7 @@ describe('updateUserContactInformationAction', () => {
       modules: {
         presenter,
       },
-      state: {},
+      state: { form: { contact: {} } },
     });
     expect(updateUserMock).toHaveBeenCalled();
     expect(successMock).toBeCalled();
