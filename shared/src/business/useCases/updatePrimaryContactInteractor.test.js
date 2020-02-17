@@ -128,6 +128,7 @@ describe('update primary contact on a case', () => {
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
+    expect(sendServedPartiesEmailsStub).toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorStub).toHaveBeenCalled();
     expect(caseDetail.documents[4].servedAt).toBeDefined();
     expect(caseDetail.documents[4].servedParties).toEqual([
