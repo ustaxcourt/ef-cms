@@ -2,8 +2,6 @@ import { BigHeader } from './../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseInformation } from './CaseInformation';
 import { ErrorNotification } from './../ErrorNotification';
-import { FileUploadErrorModal } from './../FileUploadErrorModal';
-import { FileUploadStatusModal } from './../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from './../FormCancelModalDialog';
 import { IRSNotice } from './IRSNotice';
@@ -17,16 +15,19 @@ import React from 'react';
 export const StartCaseInternal = connect(
   {
     documentSelectedForScan: state.documentSelectedForScan,
-    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    generateInternalCaseCaptionSequence:
+      sequences.generateInternalCaseCaptionSequence,
+    navigateToReviewPetitionSequence:
+      sequences.navigateToReviewPetitionSequence,
     showModal: state.showModal,
-    submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
   },
   ({
     documentSelectedForScan,
     formCancelToggleCancelSequence,
+    generateInternalCaseCaptionSequence,
+    navigateToReviewPetitionSequence,
     showModal,
-    submitPetitionFromPaperSequence,
   }) => {
     return (
       <>
@@ -47,6 +48,9 @@ export const StartCaseInternal = connect(
                 <Tabs
                   bind="startCaseInternal.tab"
                   className="container-tabs no-full-border-bottom flex tab-button-h3"
+                  onSelect={tab => {
+                    generateInternalCaseCaptionSequence({ tab });
+                  }}
                 >
                   <Tab id="tab-parties" tabName="parties" title="Parties">
                     <Parties />
@@ -98,10 +102,10 @@ export const StartCaseInternal = connect(
                   id="submit-case"
                   type="button"
                   onClick={() => {
-                    submitPetitionFromPaperSequence();
+                    navigateToReviewPetitionSequence();
                   }}
                 >
-                  Create Case
+                  Review Petition
                 </Button>
                 <Button
                   link
@@ -116,12 +120,6 @@ export const StartCaseInternal = connect(
               <div className="grid-col-7" />
             </div>
           </div>
-          {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-          {showModal === 'FileUploadErrorModal' && (
-            <FileUploadErrorModal
-              confirmSequence={submitPetitionFromPaperSequence}
-            />
-          )}
         </section>
       </>
     );

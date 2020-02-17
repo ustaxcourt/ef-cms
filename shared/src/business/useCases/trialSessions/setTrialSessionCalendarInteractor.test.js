@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   setTrialSessionCalendarInteractor,
 } = require('./setTrialSessionCalendarInteractor');
@@ -52,8 +51,10 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('should set a trial session to "calendared" and calendar all cases that have been QCed', async () => {
-    let updateTrialSession = sinon.spy();
-    let updateCaseSpy = sinon.spy();
+    let updateTrialSession = jest
+      .fn()
+      .mockImplementation(v => v.trialSessionToUpdate);
+    let updateCaseSpy = jest.fn();
 
     applicationContext = {
       getCurrentUser: () => {
@@ -95,12 +96,14 @@ describe('setTrialSessionCalendarInteractor', () => {
       applicationContext,
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    expect(updateCaseSpy.called).toEqual(true);
+    expect(updateCaseSpy).toBeCalled();
   });
 
   it('should set a trial session to "calendared" but not calendar cases that have not been QCed', async () => {
-    let updateTrialSession = sinon.spy();
-    let updateCaseSpy = sinon.spy();
+    let updateTrialSession = jest
+      .fn()
+      .mockImplementation(v => v.trialSessionToUpdate);
+    let updateCaseSpy = jest.fn();
     applicationContext = {
       getCurrentUser: () => {
         return new User({
@@ -130,7 +133,7 @@ describe('setTrialSessionCalendarInteractor', () => {
           },
         ],
         getTrialSessionById: () => MOCK_TRIAL,
-        updateCase: () => {},
+        updateCase: updateCaseSpy,
         updateTrialSession,
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -140,7 +143,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       applicationContext,
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    expect(updateCaseSpy.called).toEqual(false);
+    expect(updateCaseSpy).not.toBeCalled();
   });
 
   it('should set work items as high priority for each case that is calendared', async () => {
@@ -177,7 +180,7 @@ describe('setTrialSessionCalendarInteractor', () => {
         getTrialSessionById: () => MOCK_TRIAL,
         setPriorityOnAllWorkItems: setPriorityOnAllWorkItemsSpy,
         updateCase: () => {},
-        updateTrialSession: () => {},
+        updateTrialSession: v => v.trialSessionToUpdate,
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };

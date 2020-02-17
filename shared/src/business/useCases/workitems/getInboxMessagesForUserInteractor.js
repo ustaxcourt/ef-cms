@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * getInboxMessagesForUserInteractor
@@ -33,5 +34,11 @@ exports.getInboxMessagesForUserInteractor = async ({
       userId,
     });
 
-  return workItems.filter(workItem => workItem.section === user.section);
+  const filteredWorkItems = workItems.filter(
+    workItem => workItem.section === user.section,
+  );
+
+  return WorkItem.validateRawCollection(filteredWorkItems, {
+    applicationContext,
+  });
 };

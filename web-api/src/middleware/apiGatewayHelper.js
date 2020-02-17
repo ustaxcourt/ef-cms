@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const {
   NotFoundError,
   UnauthorizedError,
+  UnsanitizedEntityError,
 } = require('../../../shared/src/errors/errors');
 const { pick } = require('lodash');
 const headers = {
@@ -11,6 +12,7 @@ const headers = {
   Pragma: 'no-cache',
   'X-Content-Type-Options': 'nosniff',
 };
+const createApplicationContext = require('../applicationContext');
 
 exports.headers = headers;
 
@@ -22,24 +24,20 @@ exports.headers = headers;
  * @returns {object} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handle = async (event, fun) => {
+  const applicationContext = createApplicationContext({});
   if (event.source === 'serverless-plugin-warmup') {
     return exports.sendOk('Lambda is warm!');
   }
   try {
     let response = await fun();
-    // commenting this out for now so this can be done in stages
-    // if (Array.isArray(response)) {
-    //   response.forEach(item => {
-    //     if (item && (item.pk || item.sk || item.gsi1pk)) {
-    //       throw new UnsanitizedEntityError();
-    //     }
-    //   });
-    // } else {
-    //   if (response && (response.pk || response.sk || response.gsi1pk)) {
-    //     console.log(event);
-    //     throw new UnsanitizedEntityError();
-    //   }
-    // }
+    if (applicationContext) {
+      const privateKeys = applicationContext.getPersistencePrivateKeys();
+      (Array.isArray(response) ? response : [response]).forEach(item => {
+        if (item && Object.keys(item).some(key => privateKeys.includes(key))) {
+          throw new UnsanitizedEntityError();
+        }
+      });
+    }
     if (event.queryStringParameters && event.queryStringParameters.fields) {
       const { fields } = event.queryStringParameters;
       const fieldsArr = fields.split(',');

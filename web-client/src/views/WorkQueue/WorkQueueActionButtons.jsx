@@ -1,14 +1,13 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const WorkQueueActionButtons = connect(
   {
-    runBatchProcessSequence: sequences.runBatchProcessSequence,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ runBatchProcessSequence, workQueueHelper }) => {
+  ({ workQueueHelper }) => {
     return (
       <React.Fragment>
         {workQueueHelper.showStartCaseButton && (
@@ -20,11 +19,6 @@ export const WorkQueueActionButtons = connect(
             >
               Create a Case
             </Button>
-            {workQueueHelper.showRunBatchIRSProcessButton && (
-              <Button secondary onClick={() => runBatchProcessSequence()}>
-                Run IRS Batch Process
-              </Button>
-            )}
           </div>
         )}
       </React.Fragment>

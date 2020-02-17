@@ -107,6 +107,7 @@ const AUTHORIZATION_MAP = {
     ROLE_PERMISSIONS.UPDATE_CASE_CONTEXT,
     ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY,
   ],
+  floater: allInternalUserPermissions,
   judge: [
     ...allInternalUserPermissions,
     ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION,
@@ -146,7 +147,10 @@ const AUTHORIZATION_MAP = {
     ROLE_PERMISSIONS.UPLOAD_DOCUMENT,
     ROLE_PERMISSIONS.VIEW_DOCUMENTS,
   ],
-  trialclerk: allInternalUserPermissions,
+  trialclerk: [
+    ...allInternalUserPermissions,
+    ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY,
+  ],
 };
 
 exports.AUTHORIZATION_MAP = AUTHORIZATION_MAP;

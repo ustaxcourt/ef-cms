@@ -3,19 +3,19 @@ import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
 
-let getJudgesCaseNoteStub;
+let getUserCaseNoteStub;
 
 describe('getJudgesCaseNoteForCaseAction', () => {
   beforeEach(() => {
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        getJudgesCaseNoteInteractor: getJudgesCaseNoteStub,
+        getUserCaseNoteInteractor: getUserCaseNoteStub,
       }),
     };
   });
 
   it('call the use case to get the trial details', async () => {
-    getJudgesCaseNoteStub = sinon.stub().resolves({
+    getUserCaseNoteStub = sinon.stub().resolves({
       note: '123',
     });
 
@@ -25,7 +25,7 @@ describe('getJudgesCaseNoteForCaseAction', () => {
       },
       state: { caseDetail: { caseId: '123' } },
     });
-    expect(getJudgesCaseNoteStub.calledOnce).toEqual(true);
-    expect(getJudgesCaseNoteStub.getCall(0).args[0].caseId).toEqual('123');
+    expect(getUserCaseNoteStub.calledOnce).toEqual(true);
+    expect(getUserCaseNoteStub.getCall(0).args[0].caseId).toEqual('123');
   });
 });

@@ -54,6 +54,7 @@ CaseInternal.VALIDATION_ERROR_MESSAGES = Object.assign(
   {
     petitionFile: 'Upload or scan a petition',
     preferredTrialCity: 'Select a preferred trial location',
+    requestForPlaceOfTrialFile: 'Upload or scan a requested place of trial',
   },
 );
 
@@ -101,18 +102,26 @@ const paperRequirements = joi.object().keys({
       .max(MAX_FILE_SIZE_BYTES)
       .integer(),
   }),
-  preferredTrialCity: joi.when('requestForPlaceOfTrialFile', {
-    is: joi.exist().not(null),
-    otherwise: joi.optional().allow(null),
-    then: joi.string().required(),
-  }),
+  preferredTrialCity: joi
+    .alternatives()
+    .conditional('requestForPlaceOfTrialFile', {
+      is: joi.exist().not(null),
+      otherwise: joi.optional().allow(null),
+      then: joi.string().required(),
+    }),
   procedureType: joi.string().required(),
   receivedAt: joi
     .date()
     .iso()
     .max('now')
     .required(),
-  requestForPlaceOfTrialFile: joi.object().optional(),
+  requestForPlaceOfTrialFile: joi
+    .alternatives()
+    .conditional('preferredTrialCity', {
+      is: joi.exist().not(null),
+      otherwise: joi.object().optional(),
+      then: joi.object().required(),
+    }),
   requestForPlaceOfTrialFileSize: joi.when('requestForPlaceOfTrialFile', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
@@ -123,7 +132,7 @@ const paperRequirements = joi.object().keys({
       .max(MAX_FILE_SIZE_BYTES)
       .integer(),
   }),
-  stinFile: joi.object().optional(),
+  stinFile: joi.object().required(),
   stinFileSize: joi.when('stinFile', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),

@@ -144,8 +144,14 @@ exports.setTrialSessionCalendarInteractor = async ({
     ...eligibleCases.map(setTrialSessionCalendarForEligibleCase),
   ]);
 
-  return await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
-    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-  });
+  const updatedTrialSession = await applicationContext
+    .getPersistenceGateway()
+    .updateTrialSession({
+      applicationContext,
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    });
+
+  return new TrialSession(updatedTrialSession, { applicationContext })
+    .validate()
+    .toRawObject();
 };

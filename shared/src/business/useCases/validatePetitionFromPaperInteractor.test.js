@@ -3,7 +3,7 @@ const {
 } = require('./validatePetitionFromPaperInteractor');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 
-describe('validatePetition', () => {
+describe('validate petition from paper', () => {
   it('returns the expected errors object on an empty petition', () => {
     const errors = validatePetitionFromPaperInteractor({
       applicationContext: {
@@ -22,6 +22,7 @@ describe('validatePetition', () => {
       'petitionFile',
       'procedureType',
       'receivedAt',
+      'stinFile',
     ]);
   });
 
@@ -41,6 +42,8 @@ describe('validatePetition', () => {
         petitionFileSize: 100,
         procedureType: 'testing',
         receivedAt: new Date().toISOString(),
+        stinFile: {},
+        stinFileSize: 100,
       },
     });
 
