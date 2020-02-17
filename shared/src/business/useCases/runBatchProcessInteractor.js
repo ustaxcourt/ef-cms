@@ -64,6 +64,8 @@ exports.uploadZipOfDocuments = uploadZipOfDocuments = async ({
     s3Ids,
     zipName,
   });
+
+  return { fileNames, s3Ids, zipName };
 };
 
 let deleteStinIfAvailable;
@@ -129,7 +131,10 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
         });
     }
 
-    await uploadZipOfDocuments({ applicationContext, caseEntity });
+    const { fileNames, s3Ids, zipName } = await uploadZipOfDocuments({
+      applicationContext,
+      caseEntity,
+    });
 
     await deleteStinIfAvailable({ applicationContext, caseEntity });
 
