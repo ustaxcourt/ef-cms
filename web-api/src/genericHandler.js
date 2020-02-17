@@ -1,6 +1,6 @@
-const createApplicationContext = require('../applicationContext');
-const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
-const { handle } = require('../middleware/apiGatewayHelper');
+const createApplicationContext = require('./applicationContext');
+const { getUserFromAuthHeader } = require('./middleware/apiGatewayHelper');
+const { handle } = require('./middleware/apiGatewayHelper');
 
 /**
  * generic handler function for use in lambdas
@@ -12,8 +12,10 @@ const { handle } = require('../middleware/apiGatewayHelper');
  */
 
 exports.genericHandler = (event, cb, options = {}) => {
-  handle(event, async () => {
+  return handle(event, async () => {
     const user = options.user || getUserFromAuthHeader(event);
+    const applicationContext =
+      options.applicationContext || createApplicationContext(user); // This is mostly for testing purposes
 
     const {
       isPublicUser,
@@ -24,8 +26,6 @@ exports.genericHandler = (event, cb, options = {}) => {
       logUser = true,
       logUserLabel = 'User',
     } = options;
-
-    const applicationContext = createApplicationContext(user);
 
     try {
       if (logEvent) {
