@@ -66,7 +66,7 @@ describe('formattedTrialSessions', () => {
       {
         caseOrder: [],
         judge: { name: '6', userId: '6' },
-        startDate: '2020-02-17T15:00:00.000Z',
+        startDate: '2021-02-17T15:00:00.000Z',
         swingSession: false,
         trialLocation: 'Jacksonville, FL',
       },
@@ -221,7 +221,7 @@ describe('formattedTrialSessions', () => {
       'November 25, 2019',
     );
     expect(result.formattedSessions[1].dateFormatted).toEqual(
-      'February 17, 2020',
+      'February 15, 2021',
     );
   });
 
@@ -458,7 +458,7 @@ describe('formattedTrialSessions', () => {
         ],
       },
       {
-        dateFormatted: 'February 17, 2020',
+        dateFormatted: 'February 15, 2021',
         sessions: [
           {
             judge: { name: '6', userId: '6' },
@@ -504,7 +504,7 @@ describe('formattedTrialSessions', () => {
         ],
       },
       {
-        dateFormatted: 'February 17, 2020',
+        dateFormatted: 'February 15, 2021',
         sessions: [
           {
             judge: { name: '6', userId: '6' },
