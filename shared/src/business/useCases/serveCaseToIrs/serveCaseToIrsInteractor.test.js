@@ -109,42 +109,4 @@ describe('serveCaseToIrsInteractor', () => {
 
     expect(error.message).toContain('Unauthorized');
   });
-
-  it('returns the case detail once it has been served', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return new User({
-          name: 'bob',
-          role: User.ROLES.petitionsClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => {
-        return {
-          deleteDocument: deleteDocumentStub,
-          deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
-          getCaseByCaseId: () => Promise.resolve(mockCase),
-          getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
-          putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
-          updateCase: updateCaseStub,
-          updateWorkItem: updateWorkItemStub,
-          zipDocuments: zipDocumentsStub,
-        };
-      },
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      getUseCaseHelpers: () => ({
-        generateCaseConfirmationPdf: () => {},
-      }),
-      getUtilities: () => ({
-        formatDateString: () => '12/27/18',
-      }),
-    };
-
-    const result = await serveCaseToIrsInteractor({
-      applicationContext,
-    });
-
-    expect(result.caseDetail.status).toBe(Case.STATUS_TYPES.generalDocket);
-  });
 });
