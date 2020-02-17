@@ -11,14 +11,15 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 
-exports.genericHandler = (event, cb) => {
+exports.genericHandler = (event, cb, options = {}) => {
   handle(event, async () => {
-    const user = getUserFromAuthHeader(event);
+    const user = options.user || getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
       const results = await cb({ applicationContext, user });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
+      return results;
     } catch (e) {
       if (!e.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case
