@@ -1,25 +1,34 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConfirmRemoveCaseDetailPendingItemModal } from './ConfirmRemoveCaseDetailPendingItemModal';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseDetailPendingReportList = connect(
   {
+    formattedCaseDetail: state.formattedCaseDetail,
+    openConfirmRemoveCaseDetailPendingItemModalSequence:
+      sequences.openConfirmRemoveCaseDetailPendingItemModalSequence,
     pendingItemsDocketEntries:
       state.formattedCaseDetail.pendingItemsDocketEntries,
-    users: state.users,
+    showModal: state.showModal,
   },
-  ({ pendingItemsDocketEntries }) => {
+  ({
+    formattedCaseDetail,
+    openConfirmRemoveCaseDetailPendingItemModalSequence,
+    pendingItemsDocketEntries,
+    showModal,
+  }) => {
     return (
       <>
-        <div>
+        <div className="margin-top-neg-3">
           <Button
             link
-            className="push-right margin-top-2"
+            aria-describedby="tab-pending-report"
+            className="margin-top-neg-1 margin-bottom-1"
+            href={`/case-detail/${formattedCaseDetail.docketNumber}/pending-report`}
             icon="print"
-            onClick={() => true}
           >
             Print Report
           </Button>
@@ -32,31 +41,43 @@ export const CaseDetailPendingReportList = connect(
         >
           <thead>
             <tr>
-              <th>No.</th>
-              <th>Date Filed</th>
-              <th>Filings &amp; proceedings</th>
-              <th>Filed By</th>
-              <th>Remove</th>
+              <th>
+                <span>
+                  <span className="usa-sr-only">Number</span>
+                  <span aria-hidden="true">No.</span>
+                </span>
+              </th>
+              <th>Date filed</th>
+              <th>Filings and proceedings</th>
+              <th>Filed by</th>
+              <th></th>
             </tr>
           </thead>
-          {pendingItemsDocketEntries.map(({ document, record }, arrayIndex) => (
+          {pendingItemsDocketEntries.map((entry, arrayIndex) => (
             <tbody key={arrayIndex}>
               <tr className="pending-item-row">
-                <td>{arrayIndex + 1}</td>
+                <td>{entry.index}</td>
                 <td>
-                  <span className="no-wrap">{record.createdAtFormatted}</span>
+                  <span className="no-wrap">{entry.createdAtFormatted}</span>
                 </td>
                 <td>
                   <FilingsAndProceedings
                     arrayIndex={arrayIndex}
-                    document={document}
-                    record={record}
+                    entry={entry}
                   />
                 </td>
-                <td>{document.filedBy}</td>
+                <td>{entry.filedBy}</td>
                 <td>
-                  <Button link className="padding-0">
-                    <FontAwesomeIcon icon={['fas', 'trash']} />
+                  <Button
+                    link
+                    className="padding-0 no-wrap"
+                    icon="trash"
+                    onClick={() =>
+                      openConfirmRemoveCaseDetailPendingItemModalSequence({
+                        documentId: entry.documentId,
+                      })
+                    }
+                  >
                     Remove
                   </Button>
                 </td>
@@ -66,6 +87,9 @@ export const CaseDetailPendingReportList = connect(
         </table>
         {pendingItemsDocketEntries.length === 0 && (
           <p>There is nothing pending.</p>
+        )}
+        {showModal === 'ConfirmRemoveCaseDetailPendingItemModal' && (
+          <ConfirmRemoveCaseDetailPendingItemModal />
         )}
       </>
     );

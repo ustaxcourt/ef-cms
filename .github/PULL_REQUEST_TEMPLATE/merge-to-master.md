@@ -1,6 +1,22 @@
-# Overview of changes
+# Release Notes
+
+## Summary
 
 Explain here, in a paragraph or two, what has changed since the prior merge to master.
+
+## New Features
+- 
+- 
+- 
+
+## Bug Fixes
+
+## Breaking Changes
+
+## Sprints Encompassed
+-
+
+## Notes
 
 # Checklist
 

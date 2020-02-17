@@ -8,7 +8,7 @@ export default test => {
 
     await test.runSequence('gotoAdvancedSearchSequence');
 
-    await test.runSequence('submitAdvancedSearchSequence');
+    await test.runSequence('submitCaseAdvancedSearchSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       petitionerName: CaseSearch.VALIDATION_ERROR_MESSAGES.petitionerName,
@@ -27,7 +27,7 @@ export default test => {
       value: '2030',
     });
 
-    await test.runSequence('submitAdvancedSearchSequence');
+    await test.runSequence('submitCaseAdvancedSearchSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       yearFiledMax: 'Enter a valid ending year',
@@ -47,7 +47,7 @@ export default test => {
       value: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
     });
 
-    await test.runSequence('submitAdvancedSearchSequence');
+    await test.runSequence('submitCaseAdvancedSearchSequence');
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(

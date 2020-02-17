@@ -109,21 +109,37 @@ exports.signProposedStipulatedDecision = async (test, stipDecision) => {
   await test.runSequence('completeDocumentSigningSequence');
 };
 
-exports.serveDocument = async ({
+exports.serveDocument = async ({ docketNumber, documentId, test }) => {
+  await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+    docketNumber,
+    documentId,
+  });
+
+  await test.runSequence('openConfirmInitiateServiceModalSequence');
+  await test.runSequence('serveCourtIssuedDocumentSequence');
+};
+
+exports.createCourtIssuedDocketEntry = async ({
   docketNumber,
   documentId,
-  messageId,
   test,
-  workItemIdToMarkAsRead,
 }) => {
   await test.runSequence('gotoDocumentDetailSequence', {
     docketNumber,
     documentId,
-    messageId,
-    workItemIdToMarkAsRead,
   });
 
-  await test.runSequence('serveDocumentSequence');
+  await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+    docketNumber,
+    documentId,
+  });
+
+  await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+    key: 'judge',
+    value: 'Judge Buch',
+  });
+
+  await test.runSequence('submitCourtIssuedDocketEntrySequence');
 };
 
 exports.getFormattedMyInbox = async test => {
@@ -240,7 +256,7 @@ exports.uploadProposedStipulatedDecision = async test => {
     certificateOfServiceDate: null,
     documentTitle: 'Proposed Stipulated Decision',
     documentType: 'Proposed Stipulated Decision',
-    eventCode: 'PSDEC',
+    eventCode: 'PSDE',
     hasSecondarySupportingDocuments: false,
     hasSupportingDocuments: false,
     partyRespondent: true,
@@ -382,6 +398,19 @@ exports.setupTest = ({ useCases = {} } = {}) => {
         case '/search/no-matches':
           await test.runSequence('gotoCaseSearchNoMatchesSequence');
           break;
+        case `/print-preview/${test.caseId}`:
+          await test.runSequence('gotoPrintPreviewSequence', {
+            docketNumber: test.caseId,
+          });
+          break;
+        case `/case-detail/${test.docketNumber}/case-information`:
+          await test.runSequence('gotoCaseDetailSequence', {
+            docketNumber: test.docketNumber,
+          });
+          break;
+        case '/pdf-preview':
+          await test.runSequence('gotoPdfPreviewSequence');
+          break;
         case '/':
           await test.runSequence('gotoDashboardSequence');
           break;
@@ -433,6 +462,7 @@ exports.setupTest = ({ useCases = {} } = {}) => {
     CATEGORIES: Document.CATEGORIES,
     CATEGORY_MAP: Document.CATEGORY_MAP,
     COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+    COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
     INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
     ORDER_TYPES_MAP: Order.ORDER_TYPES,
     PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -468,7 +498,7 @@ exports.viewDocumentDetailMessage = async ({
 
 /**
  * This is needed because some sequences run router.route which runs another test.runSequence which
- * adds an new entry on the node event loop and causes the tests to continue running even though the sequence is
+ * adds a new entry on the node event loop and causes the tests to continue running even though the sequence is
  * not yet done.
  *
  * @returns {Promise} resolves when the setImmediate is done

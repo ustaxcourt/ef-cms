@@ -137,9 +137,24 @@ describe('DocketEntryFactory', () => {
       describe('Motion Document', () => {
         beforeEach(() => {
           rawEntity.category = 'Motion';
+          rawEntity.documentType = 'Motion for Continuance';
         });
 
         it('should require Objections', () => {
+          expect(errors().objections).toEqual(
+            VALIDATION_ERROR_MESSAGES.objections,
+          );
+          rawEntity.objections = 'No';
+          expect(errors().objections).toEqual(undefined);
+        });
+
+        it('should require Objections for an Amended document with a Motion previousDocument', () => {
+          rawEntity.category = 'Miscellaneous';
+          rawEntity.eventCode = 'AMAT';
+          rawEntity.previousDocument = {
+            documentType: 'Motion for Continuance',
+          };
+
           expect(errors().objections).toEqual(
             VALIDATION_ERROR_MESSAGES.objections,
           );
@@ -165,7 +180,7 @@ describe('DocketEntryFactory', () => {
           it('should validate secondary document', () => {
             expect(errors().secondaryDocument).toEqual({
               category: VALIDATION_ERROR_MESSAGES.category,
-              documentType: VALIDATION_ERROR_MESSAGES.documentType,
+              documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
             });
           });
         });

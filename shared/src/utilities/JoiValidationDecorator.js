@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 
 /**
  *
@@ -11,7 +11,13 @@ function toRawObject(entity) {
   for (let key of keys) {
     const value = entity[key];
     if (Array.isArray(value)) {
-      obj[key] = value.map(v => toRawObject(v));
+      obj[key] = value.map(v => {
+        if (typeof v === 'string' || v instanceof String) {
+          return v;
+        } else {
+          return toRawObject(v);
+        }
+      });
     } else if (typeof value === 'object' && value !== null) {
       obj[key] = toRawObject(value);
     } else {
@@ -39,8 +45,9 @@ function getFormattedValidationErrorsHelper(entity) {
         ) {
           errors[key] = errorObject.message;
           break;
-        } else {
+        } else if (typeof errorObject !== 'object') {
           errors[key] = errorObject;
+          break;
         }
       }
     } else if (errorMap) {
@@ -104,6 +111,10 @@ exports.joiValidationDecorator = function(
   customValidate,
   errorToMessageMap = {},
 ) {
+  if (!schema.validate && typeof schema === 'object') {
+    schema = joi.object().keys({ ...schema });
+  }
+
   entityConstructor.prototype.getErrorToMessageMap = function() {
     return errorToMessageMap;
   };
@@ -112,15 +123,19 @@ exports.joiValidationDecorator = function(
     return schema;
   };
 
+  entityConstructor.getSchema = function() {
+    return schema;
+  };
+
   entityConstructor.prototype.isValid = function isValid() {
     return (
-      joi.validate(this, schema, { allowUnknown: true }).error === null &&
+      !!schema.validate(this, { allowUnknown: true }).error === false &&
       (customValidate ? customValidate.call(this) : true)
     );
   };
 
   entityConstructor.prototype.getValidationError = function getValidationError() {
-    return joi.validate(this, schema, { allowUnknown: true }).error;
+    return schema.validate(this, { allowUnknown: true }).error;
   };
 
   entityConstructor.prototype.validate = function validate() {
@@ -138,7 +153,7 @@ exports.joiValidationDecorator = function(
   };
 
   entityConstructor.prototype.getValidationErrors = function getValidationErrors() {
-    const { error } = joi.validate(this, schema, {
+    const { error } = schema.validate(this, {
       abortEarly: false,
       allowUnknown: true,
     });
@@ -162,15 +177,19 @@ exports.joiValidationDecorator = function(
     return this;
   };
 
-  entityConstructor.prototype.toRawObject = function convertToRawObject() {
+  const toRawObjectPrototype = function() {
     return toRawObject(this);
   };
+
+  entityConstructor.prototype.toRawObject = toRawObjectPrototype;
+
+  entityConstructor.prototype.toRawObjectFromJoi = toRawObjectPrototype;
 
   entityConstructor.validateRawCollection = function(
     collection,
     { applicationContext },
   ) {
-    return collection.map(entity =>
+    return (collection || []).map(entity =>
       new entityConstructor(entity, { applicationContext })
         .validate()
         .toRawObject(),

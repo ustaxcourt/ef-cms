@@ -19,7 +19,6 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displayInCareOf: true,
           header: 'Corporation Information',
           inCareOfLabel: 'In care of',
-          inCareOfLabelHint: 'Your Name',
           nameLabel: 'Business name',
         },
       };
@@ -205,13 +204,14 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
  * gets the contact view options based on partyType
  *
  * @param {Function} get the cerebral get function used
+ * @param {object} applicationContext the application context
  * for getting state.caseDetail.partyType and state.constants
  * @returns {object} the contactPrimary and/or contactSecondary
  * view options
  */
-export const caseDetailEditContactsHelper = get => {
+export const caseDetailEditContactsHelper = (get, applicationContext) => {
   const partyType = get(state.caseDetail.partyType);
-  const { PARTY_TYPES } = get(state.constants);
+  const { PARTY_TYPES } = applicationContext.getConstants();
 
   const contacts = getOptionsForContact({ PARTY_TYPES, partyType });
 

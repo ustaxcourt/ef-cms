@@ -1,7 +1,10 @@
 #!/bin/bash -e
 ENV=$1
 REGION="us-east-1"
-restApiId=$(aws apigateway get-rest-apis --region="${REGION}" --query "items[?name=='${ENV}-ef-cms-users'].id" --output text)
+
+CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"deployed-stack"},"sk":{"S":"deployed-stack"}}' | jq -r ".Item.current.S")
+
+restApiId=$(aws apigateway get-rest-apis --region="${REGION}" --query "items[?name=='${ENV}-ef-cms-users-${CURRENT_COLOR}'].id" --output text)
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}")
 USER_POOL_ID="${USER_POOL_ID%\"}"
@@ -96,15 +99,16 @@ createAccount() {
       --region "${REGION}" \
       --challenge-name NEW_PASSWORD_REQUIRED \
       --challenge-responses 'NEW_PASSWORD="Testing1234$",'USERNAME="${email}" \
-      --session "${session}"
+      --session="${session}"
   fi
 }
 
 createManyAccounts() {
-  emailPrefix=$1
-  role=$1
-  section=$2
-  for i in $(seq 1 5);
+  numAccounts=$1
+  emailPrefix=$2
+  role=$2
+  section=$3
+  for i in $(seq 1 ${numAccounts});
   do
     createAccount "${emailPrefix}${i}@example.com" "${role}" "${i}" "" "${section}"
   done
@@ -147,14 +151,15 @@ createJudgeAccount() {
 
 createAdmin "ustcadmin@example.com" "admin" "admin"
 
-createManyAccounts "adc" "adc"
-createManyAccounts "admissionsclerk" "admissions"
-createManyAccounts "calendarclerk" "calendar"
-createManyAccounts "clerkofcourt" "clerkofcourt"
-createManyAccounts "docketclerk" "docket"
-createManyAccounts "petitioner" "petitioner"
-createManyAccounts "petitionsclerk" "petitions"
-createManyAccounts "trialclerk" "trialClerks"
+createAccount "migrator@example.com" "admin" "" "" "admin"
+createManyAccounts "10" "adc" "adc"
+createManyAccounts "10" "admissionsclerk" "admissions"
+createManyAccounts "10" "calendarclerk" "calendar"
+createManyAccounts "10" "clerkofcourt" "clerkofcourt"
+createManyAccounts "10" "docketclerk" "docket"
+createManyAccounts "10" "petitionsclerk" "petitions"
+createManyAccounts "10" "trialclerk" "trialClerks"
+createManyAccounts "30" "petitioner" "petitioner"
 createChambersAccount "ashfordsChambers" "chambers"
 createChambersAccount "buchsChambers" "chambers"
 createChambersAccount "cohensChambers" "chambers"

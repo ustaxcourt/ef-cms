@@ -4,12 +4,12 @@ import { state } from 'cerebral';
  * update form values for create order modal
  *
  * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the passed in props
- * @param {Function} providers.get the cerebral get helper function
  * @param {Function} providers.store the cerebral store helper function
  */
 export const updateCreateOrderModalFormValueAction = ({
-  get,
+  applicationContext,
   props,
   store,
 }) => {
@@ -19,14 +19,16 @@ export const updateCreateOrderModalFormValueAction = ({
       const eventCode = value;
       store.set(state.form.eventCode, eventCode);
 
-      const { ORDER_TYPES_MAP } = get(state.constants);
+      const { ORDER_TYPES_MAP } = applicationContext.getConstants();
 
       const entry = ORDER_TYPES_MAP.find(item => {
         return item.eventCode === eventCode;
       });
       store.set(state.form.documentType, entry.documentType);
-      if (eventCode !== 'O') {
+      if (eventCode !== 'O' && eventCode !== 'NOT') {
         store.set(state.form.documentTitle, entry.documentTitle);
+      } else if (eventCode === 'NOT') {
+        store.set(state.form.documentTitle, 'Notice');
       } else {
         store.unset(state.form.documentTitle);
       }

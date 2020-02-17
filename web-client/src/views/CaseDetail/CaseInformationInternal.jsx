@@ -1,40 +1,82 @@
+import { AddConsolidatedCaseModal } from './AddConsolidatedCaseModal';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Hint } from '../../ustc-ui/Hint/Hint';
 import { If } from '../../ustc-ui/If/If';
+import { UnconsolidateCasesModal } from './UnconsolidateCasesModal';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import { state } from 'cerebral';
 import React from 'react';
 
-const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
+const PetitionDetails = ({
+  caseDetail,
+  caseInformationHelper,
+  openCleanModalSequence,
+}) => (
   <React.Fragment>
     <div className="grid-row">
-      <div className="grid-col-4">
-        <p className="label">Notice/Case Type</p>
+      <div className="grid-col-6">
+        <p className="label">Notice/case type</p>
         <p>{caseDetail.caseType}</p>
       </div>
-      <div className="grid-col-4">
-        <p className="label">Case Procedure</p>
-        <p>{caseDetail.procedureType}</p>
-      </div>
-      <div className="grid-col-4">
-        <p className="label">Requested Place of Trial</p>
-        <p>{caseDetail.formattedPreferredTrialCity}</p>
+      <div className="grid-col-6">
+        <p className="label">Case procedure</p>
+        <p>{caseDetail.procedureType} Tax Case</p>
       </div>
     </div>
     <div className="grid-row">
-      <div className="grid-col-4">
-        <p className="label">IRS Notice Date</p>
+      <div className="grid-col-6">
+        <p className="label">IRS notice date</p>
         <p className="irs-notice-date">{caseDetail.irsNoticeDateFormatted}</p>
       </div>
-      <div className="grid-col-4">
-        {showPaymentRecord && (
-          <React.Fragment>
-            <p className="label">Petition Fee Paid</p>
-            <p className="pay-gov-id-display">{caseDetail.payGovId}</p>
-          </React.Fragment>
-        )}
+      <div className="grid-col-6">
+        <p className="label">Filing fee</p>
+        <p className="pay-gov-id-display margin-bottom-0">
+          {caseDetail.filingFee}
+        </p>
       </div>
+    </div>
+    <div className="grid-row">
+      <div className="grid-col-6">
+        <p className="label">Requested place of trial</p>
+        <p className="margin-bottom-0">
+          {caseDetail.formattedPreferredTrialCity}
+        </p>
+      </div>
+      {caseInformationHelper.showSealCaseButton && (
+        <div className="grid-col-6">
+          <Button
+            link
+            className="red-warning"
+            icon="lock"
+            onClick={() => {
+              openCleanModalSequence({
+                showModal: 'SealCaseModal',
+              });
+            }}
+          >
+            Seal Case
+          </Button>
+        </div>
+      )}
+    </div>
+  </React.Fragment>
+);
+
+const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
+  <React.Fragment>
+    {!caseDetailHelper.hasConsolidatedCases && <p>Not consolidated</p>}
+    <div className="grid-container padding-left-0">
+      {caseDetail.consolidatedCases.map((consolidatedCase, index) => (
+        <div className="grid-row margin-top-3" key={index}>
+          <div className="grid-col-2">
+            <CaseLink formattedCase={consolidatedCase} />
+          </div>
+          <div className="grid-col-10">{consolidatedCase.caseName}</div>
+        </div>
+      ))}
     </div>
   </React.Fragment>
 );
@@ -61,15 +103,15 @@ const TrialInformation = ({
         </h3>
         <div className="grid-row">
           <div className="grid-col-4">
-            <p className="label">Place of Trial</p>
+            <p className="label">Place of trial</p>
             <p>{caseDetail.formattedPreferredTrialCity}</p>
           </div>
           <div className="grid-col-4">
-            <p className="label">Trial Date</p>
+            <p className="label">Trial date</p>
             <p>{caseDetail.formattedTrialDate}</p>
           </div>
           <div className="grid-col-4">
-            <p className="label">Trial Judge</p>
+            <p className="label">Trial judge</p>
             <p>{caseDetail.formattedAssociatedJudge}</p>
           </div>
         </div>
@@ -105,15 +147,15 @@ const TrialInformation = ({
         </h3>
         <div className="grid-row">
           <div className="grid-col-4">
-            <p className="label">Place of Trial</p>
+            <p className="label">Place of trial</p>
             <p>{caseDetail.formattedTrialCity}</p>
           </div>
           <div className="grid-col-4">
-            <p className="label">Trial Date</p>
+            <p className="label">Trial date</p>
             <p>{caseDetail.formattedTrialDate}</p>
           </div>
           <div className="grid-col-4">
-            <p className="label">Trial Judge</p>
+            <p className="label">Trial judge</p>
             <p>{caseDetail.formattedAssociatedJudge}</p>
           </div>
         </div>
@@ -126,13 +168,13 @@ const TrialInformation = ({
             openRemoveFromTrialSessionModalSequence();
           }}
         >
-          Remove from Trial Session
+          Remove From Trial Session
         </Button>
       </>
     )}
     {caseDetail.showBlockedFromTrial && (
       <>
-        <h3 className="underlined">
+        <h3 className="underlined" id="blocked-from-trial-header">
           Trial - Blocked From Trial
           <FontAwesomeIcon
             className="text-secondary-dark margin-left-1"
@@ -140,28 +182,76 @@ const TrialInformation = ({
             size="1x"
           />
         </h3>
-        <div className="grid-row">
-          <p className="label">
-            Blocked from Trial {caseDetail.blockedDateFormatted}:{' '}
-            <span className="text-normal">{caseDetail.blockedReason}</span>
-          </p>
-        </div>
-        <Button
-          link
-          className="red-warning margin-top-2"
-          icon="trash"
-          onClick={() => {
-            openUnblockFromTrialModalSequence();
-          }}
-        >
-          Remove Block
-        </Button>
+        {caseDetail.blocked && (
+          <div className="grid-row">
+            <div className="grid-col-8">
+              <p className="label">
+                Manually blocked from trial {caseDetail.blockedDateFormatted}:{' '}
+              </p>
+              <p>{caseDetail.blockedReason}</p>
+            </div>
+            <div className="grid-col-4">
+              <Button
+                link
+                className="red-warning margin-top-0 padding-0 push-right"
+                icon="trash"
+                onClick={() => {
+                  openUnblockFromTrialModalSequence();
+                }}
+              >
+                Remove Block
+              </Button>
+            </div>
+          </div>
+        )}
+        {!caseDetail.blocked && (
+          <div className="grid-row">
+            <div className="grid-col-8">
+              <Button
+                link
+                className="block-from-trial-btn red-warning margin-bottom-3"
+                icon="hand-paper"
+                onClick={() => {
+                  openBlockFromTrialModalSequence();
+                }}
+              >
+                Add Manual Block
+              </Button>
+            </div>
+          </div>
+        )}
+        {caseDetail.automaticBlocked && (
+          <div className="grid-row">
+            <div className="grid-col-12">
+              <p className="label">
+                System blocked from trial{' '}
+                {caseDetail.automaticBlockedDateFormatted}:{' '}
+              </p>
+              <p>{caseDetail.automaticBlockedReason}</p>
+              <Hint exclamation className="margin-bottom-0 block">
+                You must remove any pending item or due date to make this case
+                eligible for trial
+              </Hint>
+            </div>
+          </div>
+        )}
+        {caseDetail.showAutomaticBlockedAndHighPriority && (
+          <div className="grid-row margin-top-3">
+            <h4 className="margin-bottom-0">
+              <FontAwesomeIcon
+                className="text-secondary-darker"
+                icon="exclamation-circle"
+              />{' '}
+              Trial - Not Scheduled - High Priority
+            </h4>
+          </div>
+        )}
       </>
     )}
     {caseDetail.showNotScheduled && (
       <>
         <h3 className="underlined">Trial - Not Scheduled</h3>
-        <div className="display-flex flex-row flex-justify">
+        <div className="margin-bottom-1">
           <Button
             link
             icon="plus-circle"
@@ -172,6 +262,8 @@ const TrialInformation = ({
           >
             Add to Trial
           </Button>
+        </div>
+        <div className="margin-bottom-1">
           <Button
             link
             className="high-priority-btn"
@@ -182,6 +274,8 @@ const TrialInformation = ({
           >
             Mark High Priority
           </Button>
+        </div>
+        <div>
           <Button
             link
             className="block-from-trial-btn red-warning"
@@ -190,7 +284,7 @@ const TrialInformation = ({
               openBlockFromTrialModalSequence();
             }}
           >
-            Block From Trial
+            Add Manual Block
           </Button>
         </div>
       </>
@@ -200,15 +294,15 @@ const TrialInformation = ({
         <h3 className="underlined">Trial - Scheduled</h3>
         <div className="grid-row">
           <div className="grid-col-4">
-            <p className="label">Place of Trial</p>
+            <p className="label">Place of trial</p>
             <p>{caseDetail.formattedTrialCity}</p>
           </div>
           <div className="grid-col-4">
-            <p className="label">Trial Date</p>
+            <p className="label">Trial date</p>
             <p>{caseDetail.formattedTrialDate}</p>
           </div>
           <div className="grid-col-4">
-            <p className="label">Trial Judge</p>
+            <p className="label">Trial judge</p>
             <p>{caseDetail.formattedAssociatedJudge}</p>
           </div>
         </div>
@@ -221,7 +315,7 @@ const TrialInformation = ({
             openRemoveFromTrialSessionModalSequence();
           }}
         >
-          Remove from Trial Session
+          Remove From Trial Session
         </Button>
       </>
     )}
@@ -231,11 +325,13 @@ const TrialInformation = ({
 export const CaseInformationInternal = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
+    caseInformationHelper: state.caseInformationHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
+    openCleanModalSequence: sequences.openCleanModalSequence,
     openPrioritizeCaseModalSequence: sequences.openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence:
       sequences.openRemoveFromTrialSessionModalSequence,
@@ -246,10 +342,12 @@ export const CaseInformationInternal = connect(
   },
   ({
     caseDetailHelper,
+    caseInformationHelper,
     formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
+    openCleanModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence,
@@ -264,6 +362,16 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined">
                     Petition Details
+                    {caseDetailHelper.showEditPetitionDetailsButton && (
+                      <Button
+                        link
+                        className="margin-left-2 padding-0"
+                        href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-details`}
+                        icon="edit"
+                      >
+                        Edit
+                      </Button>
+                    )}
                     <If bind="caseDetail.irsSendDate">
                       <Button
                         link
@@ -279,14 +387,15 @@ export const CaseInformationInternal = connect(
                           icon="print"
                           size="1x"
                         />
-                        Print confirmation
+                        Print Confirmation
                       </Button>
                     </If>
                   </h3>
 
                   <PetitionDetails
                     caseDetail={formattedCaseDetail}
-                    showPaymentRecord={caseDetailHelper.showPaymentRecord}
+                    caseInformationHelper={caseInformationHelper}
+                    openCleanModalSequence={openCleanModalSequence}
                   />
                 </div>
               </div>
@@ -313,6 +422,63 @@ export const CaseInformationInternal = connect(
                       openUnprioritizeCaseModalSequence
                     }
                   />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="grid-row grid-gap margin-top-4">
+            <div className="tablet:grid-col-6">
+              <div className="card height-full">
+                <div className="content-wrapper">
+                  <h3 className="underlined">
+                    Consolidated Cases
+                    {formattedCaseDetail.canUnconsolidate && (
+                      <Button
+                        link
+                        aria-label="unconsolidate cases"
+                        className="red-warning margin-right-0 margin-top-1 padding-0 float-right"
+                        icon="minus-circle"
+                        onClick={() => {
+                          openCleanModalSequence({
+                            showModal: 'UnconsolidateCasesModal',
+                          });
+                        }}
+                      >
+                        Remove Cases
+                      </Button>
+                    )}
+                    {formattedCaseDetail.canConsolidate && (
+                      <Button
+                        link
+                        aria-label="add cases to consolidate with this case"
+                        className="margin-right-4 margin-top-1 padding-0 float-right"
+                        icon="plus-circle"
+                        onClick={() => {
+                          openCleanModalSequence({
+                            showModal: 'AddConsolidatedCaseModal',
+                          });
+                        }}
+                      >
+                        Add Cases
+                      </Button>
+                    )}
+                  </h3>
+                  <AddConsolidatedCaseModal />
+                  <UnconsolidateCasesModal />
+                  {formattedCaseDetail.canConsolidate &&
+                    formattedCaseDetail.consolidatedCases.length > 0 && (
+                      <ConsolidatedCases
+                        caseDetail={formattedCaseDetail}
+                        caseDetailHelper={caseDetailHelper}
+                      />
+                    )}
+                  {formattedCaseDetail.canConsolidate &&
+                    formattedCaseDetail.consolidatedCases.length === 0 && (
+                      <p>Not consolidated</p>
+                    )}
+                  {!formattedCaseDetail.canConsolidate && (
+                    <p>This case is not eligible for consolidation.</p>
+                  )}
                 </div>
               </div>
             </div>

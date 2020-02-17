@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');
@@ -14,6 +14,7 @@ User.ROLES = {
   chambers: 'chambers',
   clerkOfCourt: 'clerkofcourt',
   docketClerk: 'docketclerk',
+  floater: 'floater',
   judge: 'judge',
   petitioner: 'petitioner',
   petitionsClerk: 'petitionsclerk',
@@ -98,8 +99,9 @@ const userValidation = {
   name: joi.string().optional(),
   role: joi
     .string()
-    .valid(Object.values(User.ROLES))
+    .valid(...Object.values(User.ROLES))
     .required(),
+  section: joi.string().optional(),
   token: joi.string().optional(),
   userId: joi.string().required(),
 };
@@ -157,6 +159,7 @@ User.isInternalUser = function(role) {
     User.ROLES.chambers,
     User.ROLES.clerkOfCourt,
     User.ROLES.docketClerk,
+    User.ROLES.floater,
     User.ROLES.judge,
     User.ROLES.petitionsClerk,
     User.ROLES.trialClerk,

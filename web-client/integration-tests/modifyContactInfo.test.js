@@ -1,14 +1,17 @@
-import { fakeFile, setupTest } from './helpers';
-import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
-import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
-import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
+import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
+import { loginAs, setupTest, uploadPetition } from './helpers';
+import docketClerkLogIn from './journey/docketClerkLogIn';
+import docketClerkSignsOut from './journey/docketClerkSignsOut';
+import docketClerkViewsNoticeOfChangeOfAddress from './journey/docketClerkViewsNoticeOfChangeOfAddress';
 import petitionerEditsCasePrimaryContactAddress from './journey/petitionerEditsCasePrimaryContactAddress';
 import petitionerEditsCasePrimaryContactAddressAndPhone from './journey/petitionerEditsCasePrimaryContactAddressAndPhone';
 import petitionerEditsCasePrimaryContactPhone from './journey/petitionerEditsCasePrimaryContactPhone';
-import petitionerEditsCaseSecondaryContactInformation from './journey/petitionerEditsCaseSecondaryContactInformation';
+import petitionerEditsCaseSecondaryContactAddress from './journey/petitionerEditsCaseSecondaryContactAddress';
+import petitionerEditsCaseSecondaryContactAddressAndPhone from './journey/petitionerEditsCaseSecondaryContactAddressAndPhone';
+import petitionerEditsCaseSecondaryContactPhone from './journey/petitionerEditsCaseSecondaryContactPhone';
 import petitionerLogin from './journey/petitionerLogIn';
-import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
 import petitionerNavigatesToEditPrimaryContact from './journey/petitionerNavigatesToEditPrimaryContact';
+import petitionerNavigatesToEditSecondaryContact from './journey/petitionerNavigatesToEditSecondaryContact';
 import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
@@ -20,12 +23,25 @@ describe('Modify Petitioner Contact Information', () => {
     jest.setTimeout(30000);
   });
 
-  // valid primary contact modification
-  petitionerLogin(test);
-  petitionerNavigatesToCreateCase(test);
-  petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile, { caseType: 'CDP (Lien/Levy)' });
+  let caseDetail;
+
+  it('login as a tax payer and create a case', async () => {
+    await loginAs(test, 'petitioner');
+    caseDetail = await uploadPetition(test, {
+      contactSecondary: {
+        address1: '734 Cowley Parkway',
+        city: 'Somewhere',
+        countryType: 'domestic',
+        name: 'Secondary Person',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        state: 'CT',
+      },
+      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+    });
+    test.docketNumber = caseDetail.docketNumber;
+  });
+
   petitionerViewsDashboard(test, { caseIndex: 2 });
   petitionerViewsCaseDetail(test, { docketNumberSuffix: 'L' });
   petitionerNavigatesToEditPrimaryContact(test);
@@ -41,6 +57,13 @@ describe('Modify Petitioner Contact Information', () => {
     docketNumberSuffix: 'L',
     documentCount: 5,
   });
-  petitionerEditsCaseSecondaryContactInformation(test);
+  petitionerNavigatesToEditSecondaryContact(test);
+  petitionerEditsCaseSecondaryContactAddress(test);
+  petitionerEditsCaseSecondaryContactPhone(test);
+  petitionerEditsCaseSecondaryContactAddressAndPhone(test);
   petitionerSignsOut(test);
+
+  docketClerkLogIn(test);
+  docketClerkViewsNoticeOfChangeOfAddress(test);
+  docketClerkSignsOut(test);
 });

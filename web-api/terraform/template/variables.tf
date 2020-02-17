@@ -21,3 +21,7 @@ variable "post_confirmation_role_arn" {
 variable "ses_dmarc_rua" {
   type = "string"
 }
+
+variable "es_instance_count" {
+  type = "string"
+}

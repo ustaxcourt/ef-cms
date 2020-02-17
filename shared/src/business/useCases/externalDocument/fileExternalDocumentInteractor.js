@@ -1,4 +1,7 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -43,7 +46,7 @@ exports.fileExternalDocumentInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
   const workItems = [];
 
   const {
@@ -103,20 +106,28 @@ exports.fileExternalDocumentInteractor = async ({
     }
   }
 
-  documentsToAdd.forEach(([documentId, metadata, relationship]) => {
+  const servedParties = aggregatePartiesForService(caseEntity);
+
+  for (let [documentId, metadata, relationship] of documentsToAdd) {
     if (documentId && metadata) {
       const documentEntity = new Document(
         {
           ...baseMetadata,
           ...metadata,
-          relationship,
           documentId,
           documentType: metadata.documentType,
+          relationship,
           userId: user.userId,
+          ...caseEntity.getCaseContacts({
+            contactPrimary: true,
+            contactSecondary: true,
+          }),
         },
         { applicationContext },
       );
-      documentEntity.generateFiledBy(caseToUpdate);
+
+      const highPriorityWorkItem =
+        caseEntity.status === Case.STATUS_TYPES.calendared;
 
       const workItem = new WorkItem(
         {
@@ -131,9 +142,11 @@ exports.fileExternalDocumentInteractor = async ({
             ...documentEntity.toRawObject(),
             createdAt: documentEntity.createdAt,
           },
+          highPriority: highPriorityWorkItem,
           isQC: true,
           section: DOCKET_SECTION,
           sentBy: user.userId,
+          trialDate: caseEntity.trialDate,
         },
         { applicationContext },
       );
@@ -152,33 +165,36 @@ exports.fileExternalDocumentInteractor = async ({
       workItem.addMessage(message);
       documentEntity.addWorkItem(workItem);
 
-      if (metadata.isPaper) {
-        workItem.setAsCompleted({
-          message: 'completed',
-          user,
-        });
-
-        workItem.assignToUser({
-          assigneeId: user.userId,
-          assigneeName: user.name,
-          section: user.section,
-          sentBy: user.name,
-          sentBySection: user.section,
-          sentByUserId: user.userId,
-        });
-      }
-
       workItems.push(workItem);
       caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
       const docketRecordEntity = new DocketRecord({
         description: metadata.documentTitle,
         documentId: documentEntity.documentId,
+        eventCode: documentEntity.eventCode,
         filingDate: documentEntity.receivedAt,
       });
       caseEntity.addDocketRecord(docketRecordEntity);
+
+      if (documentEntity.isAutoServed()) {
+        documentEntity.setAsServed(servedParties.all);
+
+        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+          applicationContext,
+          caseEntity: caseToUpdate,
+          documentEntity,
+          servedParties,
+        });
+      }
     }
-  });
+  }
+
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+    });
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
@@ -187,23 +203,12 @@ exports.fileExternalDocumentInteractor = async ({
 
   const workItemsSaved = [];
   for (let workItem of workItems) {
-    if (workItem.document.isPaper) {
-      workItemsSaved.push(
-        applicationContext
-          .getPersistenceGateway()
-          .saveWorkItemForDocketClerkFilingExternalDocument({
-            applicationContext,
-            workItem: workItem.validate().toRawObject(),
-          }),
-      );
-    } else {
-      workItemsSaved.push(
-        applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-          applicationContext,
-          workItem: workItem.validate().toRawObject(),
-        }),
-      );
-    }
+    workItemsSaved.push(
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
+        applicationContext,
+        workItem: workItem.validate().toRawObject(),
+      }),
+    );
   }
   await Promise.all(workItemsSaved);
 

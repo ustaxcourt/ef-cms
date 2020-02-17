@@ -47,6 +47,8 @@
   @media only screen and (min-width: $medium-screen) {
     top: 50%;
     width: 500px;
+    max-height: 85vh;
+    overflow-y: auto;
     transform: translateY(-50%);
   }
   /* little screens */
@@ -65,6 +67,12 @@
 
   .svg-inline--fa {
     margin-right: 0;
+  }
+}
+
+.modal-error {
+  .modal-dialog {
+    border-color: color($theme-color-secondary-dark);
   }
 }
 
@@ -310,5 +318,18 @@ button {
   .usa-fieldset {
     max-width: unset;
     margin-bottom: 20px;
+  }
+}
+
+.add-consolidated-case-search-modal {
+  .usa-button {
+    &.ustc-search-button {
+      min-width: 90px;
+      height: 34px;
+      background-image: none;
+    }
+  }
+  .usa-input {
+    height: 34px;
   }
 }

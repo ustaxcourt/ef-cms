@@ -49,7 +49,7 @@ exports.fileDocketEntryInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
   const workItems = [];
 
   const {
@@ -99,14 +99,18 @@ exports.fileDocketEntryInteractor = async ({
         {
           ...baseMetadata,
           ...metadata,
-          relationship,
           documentId,
           documentType: metadata.documentType,
+          mailingDate: metadata.mailingDate,
+          relationship,
           userId: user.userId,
+          ...caseEntity.getCaseContacts({
+            contactPrimary: true,
+            contactSecondary: true,
+          }),
         },
         { applicationContext },
       );
-      documentEntity.generateFiledBy(caseToUpdate);
 
       const workItem = new WorkItem(
         {
@@ -172,11 +176,19 @@ exports.fileDocketEntryInteractor = async ({
           description: metadata.documentTitle,
           documentId: documentEntity.documentId,
           editState: JSON.stringify(docketRecordEditState),
+          eventCode: documentEntity.eventCode,
           filingDate: documentEntity.receivedAt,
         }),
       );
     }
   });
+
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+    });
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

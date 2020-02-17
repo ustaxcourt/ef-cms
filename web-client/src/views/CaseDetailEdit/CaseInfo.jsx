@@ -1,15 +1,13 @@
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { PetitionPaymentForm } from '../CaseDetail/PetitionPaymentForm';
 import { ProcedureType } from '../StartCase/ProcedureType';
 import { connect } from '@cerebral/react';
-import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const CaseInfo = connect(
   {
-    autoSaveCaseSequence: sequences.autoSaveCaseSequence,
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     caseDetailEditHelper: state.caseDetailEditHelper,
@@ -18,9 +16,9 @@ export const CaseInfo = connect(
     token: state.token,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
   },
   ({
-    autoSaveCaseSequence,
     baseUrl,
     caseDetail,
     caseDetailEditHelper,
@@ -29,98 +27,34 @@ export const CaseInfo = connect(
     token,
     updateCaseValueSequence,
     updateFormValueSequence,
+    validateCaseDetailSequence,
   }) => {
     return (
       <div className="blue-container">
         {caseDetail.isPaper && (
           <>
-            <FormGroup errorText={caseDetailErrors.receivedAt}>
-              <fieldset className="usa-fieldset margin-bottom-0">
-                <legend className="usa-legend" id="received-at-legend">
-                  Date received
-                </legend>
-                <div className="usa-memorable-date">
-                  <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                    <input
-                      aria-describedby="received-at-legend"
-                      aria-label="month, two digits"
-                      className={classNames(
-                        'usa-input usa-input--inline',
-                        caseDetailErrors.receivedAt && 'usa-error',
-                      )}
-                      id="received-at-month"
-                      max="12"
-                      maxLength="2"
-                      min="1"
-                      name="receivedAtMonth"
-                      type="number"
-                      value={form.receivedAtMonth || ''}
-                      onBlur={() => {
-                        autoSaveCaseSequence();
-                      }}
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: limitLength(e.target.value, 2),
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                    <input
-                      aria-describedby="received-at-legend"
-                      aria-label="day, two digits"
-                      className={classNames(
-                        'usa-input usa-input--inline',
-                        caseDetailErrors.receivedAt && 'usa-error',
-                      )}
-                      id="received-at-day"
-                      max="31"
-                      maxLength="2"
-                      min="1"
-                      name="receivedAtDay"
-                      type="number"
-                      value={form.receivedAtDay || ''}
-                      onBlur={() => {
-                        autoSaveCaseSequence();
-                      }}
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: limitLength(e.target.value, 2),
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                    <input
-                      aria-describedby="received-at-legend"
-                      aria-label="year, four digits"
-                      className={classNames(
-                        'usa-input usa-input--inline',
-                        caseDetailErrors.receivedAt && 'usa-error',
-                      )}
-                      id="received-at-year"
-                      max="2100"
-                      maxLength="4"
-                      min="1900"
-                      name="receivedAtYear"
-                      type="number"
-                      value={form.receivedAtYear || ''}
-                      onBlur={() => {
-                        autoSaveCaseSequence();
-                      }}
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: limitLength(e.target.value, 4),
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
-              </fieldset>
-            </FormGroup>
+            <DateInput
+              errorText={caseDetailErrors.receivedAt}
+              id="received-at"
+              label="Date received"
+              names={{
+                day: 'receivedAtDay',
+                month: 'receivedAtMonth',
+                year: 'receivedAtYear',
+              }}
+              values={{
+                day: form.receivedAtDay,
+                month: form.receivedAtMonth,
+                year: form.receivedAtYear,
+              }}
+              onBlur={validateCaseDetailSequence}
+              onChange={updateFormValueSequence}
+            />
+
+            <div className="usa-form-group read-only">
+              <div className="label">Mailing date</div>
+              <p>{caseDetail.mailingDate}</p>
+            </div>
           </>
         )}
 
@@ -133,7 +67,6 @@ export const CaseInfo = connect(
                 key: 'procedureType',
                 value: e.target.value,
               });
-              autoSaveCaseSequence();
             }}
           />
 
@@ -149,7 +82,6 @@ export const CaseInfo = connect(
                   key: e.target.name,
                   value: e.target.checked,
                 });
-                autoSaveCaseSequence();
               }}
             />
             <label
@@ -184,11 +116,10 @@ export const CaseInfo = connect(
                         key: e.target.name,
                         value: e.target.checked,
                       });
-                      autoSaveCaseSequence();
                     }}
                   />
                   <label
-                    className="usa-checkbox__label"
+                    className="usa-checkbox__label inline-block"
                     htmlFor="order-designating-place-of-trial"
                   >
                     Order Designating Place of Trial
@@ -200,7 +131,7 @@ export const CaseInfo = connect(
               <>
                 <a
                   aria-label="View PDF: Ownership Disclosure Statement"
-                  href={`${baseUrl}/documents/${caseDetailEditHelper.requestForPlaceOfTrialDocumentId}/document-download-url?token=${token}`}
+                  href={`${baseUrl}/case-documents/${caseDetail.caseId}/${caseDetailEditHelper.requestForPlaceOfTrialDocumentId}/document-download-url?token=${token}`}
                   rel="noopener noreferrer"
                   target="_blank"
                 >
@@ -219,11 +150,10 @@ export const CaseInfo = connect(
                         key: e.target.name,
                         value: e.target.checked,
                       });
-                      autoSaveCaseSequence();
                     }}
                   />
                   <label
-                    className="usa-checkbox__label"
+                    className="usa-checkbox__label inline-block"
                     htmlFor="order-to-change-place-of-trial"
                   >
                     Order to Change Designated Place of Trial
@@ -236,135 +166,38 @@ export const CaseInfo = connect(
           </div>
         </div>
 
-        <FormGroup errorText={caseDetailErrors.payGovDate}>
-          <fieldset className="usa-fieldset margin-bottom-0">
-            <legend className="usa-legend" id="fee-payment-date-legend">
-              Fee payment date <span className="usa-hint">(optional)</span>
-            </legend>
-            <div className="usa-memorable-date">
-              <div className="usa-form-group usa-form-group--month">
-                <input
-                  aria-describedby="fee-payment-date-legend"
-                  aria-label="month, two digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    caseDetailErrors.payGovDate && 'usa-input-error',
-                  )}
-                  id="fee-payment-date-month"
-                  max="12"
-                  min="1"
-                  name="payGovMonth"
-                  placeholder="MM"
-                  type="number"
-                  value={form.payGovMonth || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group--day">
-                <input
-                  aria-describedby="fee-payment-date-legend"
-                  aria-label="day, two digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    caseDetailErrors.payGovDate && 'usa-input-error',
-                  )}
-                  id="fee-payment-date-day"
-                  max="31"
-                  min="1"
-                  name="payGovDay"
-                  placeholder="DD"
-                  type="number"
-                  value={form.payGovDay || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group--year">
-                <input
-                  aria-describedby="fee-payment-date-legend"
-                  aria-label="year, four digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    caseDetailErrors.payGovDate && 'usa-input-error',
-                  )}
-                  id="fee-payment-date-year"
-                  max="2100"
-                  min="1900"
-                  name="payGovYear"
-                  placeholder="YYYY"
-                  type="number"
-                  value={form.payGovYear || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </fieldset>
-        </FormGroup>
+        <PetitionPaymentForm
+          bind="caseDetail"
+          dateBind="form"
+          updateDateSequence={updateFormValueSequence}
+          updateSequence={updateCaseValueSequence}
+          validateSequence={validateCaseDetailSequence}
+          validationErrorsBind="caseDetailErrors"
+        />
 
-        <div className="usa-form-group">
-          <label className="usa-label" htmlFor="fee-payment-id">
-            Fee payment ID <span className="usa-hint">(optional)</span>
-          </label>
-          <input
-            className="usa-input"
-            id="fee-payment-id"
-            name="payGovId"
-            type="number"
-            value={caseDetail.payGovId || ''}
-            onBlur={() => {
-              autoSaveCaseSequence();
-            }}
-            onChange={e => {
-              updateCaseValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-            }}
-          />
-        </div>
-
-        <div className="order-checkbox">
-          <input
-            checked={caseDetail.orderForFilingFee}
-            className="usa-checkbox__input"
-            id="order-for-filing-fee"
-            name="orderForFilingFee"
-            type="checkbox"
-            onChange={e => {
-              updateCaseValueSequence({
-                key: e.target.name,
-                value: e.target.checked,
-              });
-              autoSaveCaseSequence();
-            }}
-          />
-          <label className="usa-checkbox__label" htmlFor="order-for-filing-fee">
-            Order for Filing Fee
-          </label>
-        </div>
+        {caseDetailEditHelper.showOrderForFilingFee && (
+          <div className="order-checkbox">
+            <input
+              checked={caseDetail.orderForFilingFee}
+              className="usa-checkbox__input"
+              id="order-for-filing-fee"
+              name="orderForFilingFee"
+              type="checkbox"
+              onChange={e => {
+                updateCaseValueSequence({
+                  key: e.target.name,
+                  value: e.target.checked,
+                });
+              }}
+            />
+            <label
+              className="usa-checkbox__label inline-block"
+              htmlFor="order-for-filing-fee"
+            >
+              Order for Filing Fee
+            </label>
+          </div>
+        )}
 
         <h3 id="orders-needed">
           Orders Needed <span className="usa-hint">(optional)</span>
@@ -387,11 +220,10 @@ export const CaseInfo = connect(
                   key: e.target.name,
                   value: e.target.checked,
                 });
-                autoSaveCaseSequence();
               }}
             />
             <label
-              className="usa-checkbox__label"
+              className="usa-checkbox__label inline-block"
               htmlFor="order-for-ratification"
             >
               Order for Ratification of Petition
@@ -410,11 +242,10 @@ export const CaseInfo = connect(
                   key: e.target.name,
                   value: e.target.checked,
                 });
-                autoSaveCaseSequence();
               }}
             />
             <label
-              className="usa-checkbox__label"
+              className="usa-checkbox__label inline-block"
               htmlFor="notice-of-attachments"
             >
               Notice of Attachments in the Nature of Evidence
@@ -433,11 +264,10 @@ export const CaseInfo = connect(
                   key: e.target.name,
                   value: e.target.checked,
                 });
-                autoSaveCaseSequence();
               }}
             />
             <label
-              className="usa-checkbox__label"
+              className="usa-checkbox__label inline-block"
               htmlFor="order-for-amended-petition"
             >
               Order for Amended Petition
@@ -456,11 +286,10 @@ export const CaseInfo = connect(
                   key: e.target.name,
                   value: e.target.checked,
                 });
-                autoSaveCaseSequence();
               }}
             />
             <label
-              className="usa-checkbox__label"
+              className="usa-checkbox__label inline-block"
               htmlFor="order-for-amended-petition-and-filing-fee"
             >
               Order for Amended Petition and Filing Fee

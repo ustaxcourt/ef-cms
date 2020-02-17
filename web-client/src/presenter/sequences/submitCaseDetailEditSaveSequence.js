@@ -1,27 +1,26 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { expireSaveSuccessAction } from '../actions/expireSaveSuccessAction';
 import { getFormCombinedWithCaseDetailAction } from '../actions/getFormCombinedWithCaseDetailAction';
+import { saveCaseDetailInternalEditAction } from '../actions/saveCaseDetailInternalEditAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setSaveSuccessAction } from '../actions/setSaveSuccessAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
-import { updateCaseAction } from '../actions/updateCaseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
 
-export const submitCaseDetailEditSaveSequence = [
-  setWaitingForResponseAction,
+export const submitCaseDetailEditSaveSequence = showProgressSequenceDecorator([
+  startShowValidationAction,
   clearAlertsAction,
   getFormCombinedWithCaseDetailAction,
   validateCaseDetailAction,
   {
     error: [setValidationAlertErrorsAction],
     success: [
-      updateCaseAction,
+      saveCaseDetailInternalEditAction,
       setCaseAction,
       setSaveSuccessAction,
       expireSaveSuccessAction,
     ],
   },
-  unsetWaitingForResponseAction,
-];
+]);

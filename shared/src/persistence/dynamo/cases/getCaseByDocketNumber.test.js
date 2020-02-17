@@ -58,14 +58,19 @@ describe('getCaseByDocketNumber', () => {
     client.updateConsistent.restore();
   });
 
-  it('should strip the pk and sk from the case', async () => {
+  it('should return data as received from persistence', async () => {
     const result = await getCaseByDocketNumber({
       applicationContext,
       docketNumber: '101-18',
       pk: '123',
       sk: '123',
     });
-    expect(result).toEqual({ caseId: '123', status: 'New' });
+    expect(result).toEqual({
+      caseId: '123',
+      pk: '123',
+      sk: '123',
+      status: 'New',
+    });
   });
 
   it('should return null if no mapping records are returned from the query', async () => {

@@ -1,30 +1,33 @@
 module.exports = {
-  associatePractitionerWithCaseLambda: require('./manualAssociation/associatePractitionerWithCaseLambda')
+  addConsolidatedCaseLambda: require('./cases/addConsolidatedCaseLambda')
     .handler,
-  associateRespondentWithCaseLambda: require('./manualAssociation/associateRespondentWithCaseLambda')
-    .handler,
-  blockCaseLambda: require('./cases/blockCaseLambda').handler,
-  caseSearchLambda: require('./cases/caseSearchLambda').handler,
+  blockCaseFromTrialLambda: require('./cases/blockCaseFromTrialLambda').handler,
+  caseAdvancedSearchLambda: require('./cases/caseAdvancedSearchLambda').handler,
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda')
     .handler,
   createCaseLambda: require('./cases/createCaseLambda').handler,
-  deleteCounselFromCaseLambda: require('./cases/deleteCounselFromCaseLambda')
-    .handler,
   getBlockedCasesLambda: require('./cases/getBlockedCasesLambda').handler,
   getCaseLambda: require('./cases/getCaseLambda').handler,
+  getConsolidatedCasesByCaseLambda: require('./cases/getConsolidatedCasesByCaseLambda')
+    .handler,
   prioritizeCaseLambda: require('./cases/prioritizeCaseLambda').handler,
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda')
     .handler,
+  removeCasePendingItemLambda: require('./cases/removeCasePendingItemLambda')
+    .handler,
+  removeConsolidatedCasesLambda: require('./cases/removeConsolidatedCasesLambda')
+    .handler,
+  saveCaseDetailInternalEditLambda: require('./cases/saveCaseDetailInternalEditLambda')
+    .handler,
+  sealCaseLambda: require('./cases/sealCaseLambda').handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
     .handler,
-  unblockCaseLambda: require('./cases/unblockCaseLambda').handler,
+  unblockCaseFromTrialLambda: require('./cases/unblockCaseFromTrialLambda')
+    .handler,
   unprioritizeCaseLambda: require('./cases/unprioritizeCaseLambda').handler,
   updateCaseContextLambda: require('./cases/updateCaseContextLambda').handler,
-  updateCaseLambda: require('./cases/updateCaseLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .handler,
-  updateCounselOnCaseLambda: require('./cases/updateCounselOnCaseLambda')
-    .handler,
-  updatePrimaryContactLambda: require('./cases/updatePrimaryContactLambda')
+  updateQcCompleteForTrialLambda: require('./cases/updateQcCompleteForTrialLambda')
     .handler,
 };

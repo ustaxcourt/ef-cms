@@ -15,7 +15,7 @@ export default test => {
       key: 'orderDesignatingPlaceOfTrial',
       value: false,
     });
-    await test.runSequence('autoSaveCaseSequence');
+    await test.runSequence('submitCaseDetailEditSaveSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
 
     const caseHelper = runCompute(caseDetailHelper, {

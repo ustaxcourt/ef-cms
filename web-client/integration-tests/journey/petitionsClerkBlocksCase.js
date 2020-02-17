@@ -1,11 +1,13 @@
-export default test => {
+import { Case } from '../../../shared/src/business/entities/cases/Case';
+
+export default (test, trialLocation) => {
   return it('Petitions clerk blocks the case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
     expect(test.getState('caseDetail').blocked).toBeFalsy();
 
-    await test.runSequence('blockFromTrialSequence');
+    await test.runSequence('blockCaseFromTrialSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       reason: 'Provide a reason',
@@ -16,7 +18,7 @@ export default test => {
       value: 'just because',
     });
 
-    await test.runSequence('blockFromTrialSequence');
+    await test.runSequence('blockCaseFromTrialSequence');
 
     expect(test.getState('alertSuccess').title).toEqual(
       'This case is now blocked from being set for trial',
@@ -31,7 +33,7 @@ export default test => {
 
     await test.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
-      value: 'Jackson, Mississippi',
+      value: trialLocation,
     });
 
     expect(test.getState('blockedCases')).toMatchObject([
@@ -42,7 +44,7 @@ export default test => {
           'Test Person, Deceased, Test Person, Surviving Spouse, Petitioner',
         docketNumber: test.docketNumber,
         docketNumberSuffix: 'S',
-        status: 'New',
+        status: Case.STATUS_TYPES.generalDocketReadyForTrial,
       },
     ]);
   });

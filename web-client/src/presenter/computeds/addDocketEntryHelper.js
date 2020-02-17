@@ -1,4 +1,4 @@
-import { find, includes, orderBy } from 'lodash';
+import { find, orderBy } from 'lodash';
 import { state } from 'cerebral';
 
 import {
@@ -18,12 +18,27 @@ const getInternalDocumentTypes = typeMap => {
   return orderBy(filteredTypeList, ['label'], ['asc']);
 };
 
+export const getSupportingDocumentTypeList = categoryMap => {
+  return categoryMap['Supporting Document'].map(entry => {
+    const entryCopy = { ...entry }; //to prevent against modifying constants
+    entryCopy.documentTypeDisplay = entryCopy.documentType.replace(
+      /\sin\sSupport$/i,
+      '',
+    );
+    return entryCopy;
+  });
+};
+
 export const addDocketEntryHelper = (get, applicationContext) => {
-  const { INTERNAL_CATEGORY_MAP, PARTY_TYPES } = get(state.constants);
+  const {
+    INTERNAL_CATEGORY_MAP,
+    PARTY_TYPES,
+  } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {};
   }
+  const showDateReceivedEdit = caseDetail.isPaper;
   const documentIdWhitelist = get(state.screenMetadata.filedDocumentIds);
   const form = get(state.form);
   const validationErrors = get(state.validationErrors);
@@ -33,15 +48,9 @@ export const addDocketEntryHelper = (get, applicationContext) => {
 
   const internalDocumentTypes = getInternalDocumentTypes(INTERNAL_CATEGORY_MAP);
 
-  const supportingDocumentTypeList = INTERNAL_CATEGORY_MAP[
-    'Supporting Document'
-  ].map(entry => {
-    entry.documentTypeDisplay = entry.documentType.replace(
-      /\sin\sSupport$/i,
-      '',
-    );
-    return entry;
-  });
+  const supportingDocumentTypeList = getSupportingDocumentTypeList(
+    INTERNAL_CATEGORY_MAP,
+  );
 
   const objectionDocumentTypes = [
     ...INTERNAL_CATEGORY_MAP['Motion'].map(entry => {
@@ -51,6 +60,8 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     'Motion to Withdraw as Counsel',
     'Application to Take Deposition',
   ];
+
+  const amendmentEventCodes = ['AMAT', 'ADMT'];
 
   const partyValidationError =
     validationErrors &&
@@ -103,21 +114,13 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     secondaryCategoryInformation,
   );
 
-  const previousDocument =
-    form.previousDocument &&
-    find(
-      caseDetail.documents,
-      doc =>
-        includes(documentIdWhitelist, doc.documentId) &&
-        (doc.documentTitle || doc.documentType) === form.previousDocument,
-    );
-  const showSupportingInclusions =
-    previousDocument && previousDocument.relationship !== 'secondaryDocument';
-
   if (optionsForCategory.showSecondaryDocumentSelect) {
     optionsForCategory.showSecondaryDocumentSelect = false;
     optionsForCategory.showSecondaryDocumentForm = true;
   }
+
+  const { Document } = applicationContext.getEntityConstructors();
+  const showTrackOption = !Document.isPendingOnCreation(form);
 
   return {
     certificateOfServiceDateFormatted,
@@ -126,7 +129,11 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     previouslyFiledWizardDocuments,
     primary: optionsForCategory,
     secondary: secondaryOptionsForCategory,
-    showObjection: objectionDocumentTypes.includes(form.documentType),
+    showDateReceivedEdit,
+    showObjection:
+      objectionDocumentTypes.includes(form.documentType) ||
+      (amendmentEventCodes.includes(form.eventCode) &&
+        objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryParty,
@@ -136,7 +143,7 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     ),
     showSupportingDocumentSelect: form.documentType && form.documentType !== '',
     showSupportingDocumentValid: !!form.supportingDocumentFile,
-    showSupportingInclusions,
+    showTrackOption,
     supportingDocumentTypeList,
   };
 };

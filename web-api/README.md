@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - [install JDK 8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-- install Node dependencies: `npm i`
+- install Node dependencies: `npm install`
 
 ## Optional prerequisites, if setting up a local sandbox
 
@@ -20,22 +20,12 @@ This will host a local service at http://localhost:3000.
 
 - `npm test`
 
-# Trouble Shooting
+# Troubleshooting
 
-Sometimes you may get errors when doing npm install.  To fix, removce the package-lock.json file and re-run npm install.
+Sometimes you may get errors when running `npm install`.  To fix this, delete `package-lock.json` and re-run `npm install`.
 
 ## Sandbox Deploys to AWS
 
 Run `EFCMS_DOMAIN=ustc-case-mgmt.example.gov ENVIRONMENT=<yourname> REGION=us-east-1 ./deploy-sandbox.sh`, substituting your domain for `ustc-case-mgmt.example.gov`.
 
-If you want to point your local ui to your sandbox, modify the API_URL in web-client/environments/dev.js to match the URL returned from the serverless deploy.
-
-## Load and Smoke Testing with Artillery
-
-To get the REST API ID of the stage to test against auth to AWS, run:
-
-`aws apigateway get-rest-apis --region=${region} --query "items[?name=='${stage}-ef-cms'].id"`
-
-Using that REST API ID, run:
-
-`API_REGION=<region> API_TARGET=<rest-api-id> API_STAGE=<stage> artillery run ./smokeTest.yml`
+If you want to point your local copy of the front-end to your sandbox, modify the API_URL in `web-client/environments/dev.js` to match the URL returned from the serverless deploy.

@@ -30,6 +30,8 @@ describe('getTrialSessionWorkingCopy', () => {
       userId: '456',
     });
     expect(result).toEqual({
+      pk: 'trial-session-working-copy|123',
+      sk: '456',
       sort: 'practitioner',
       sortOrder: 'desc',
       trialSessionId: '123',

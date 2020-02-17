@@ -1,0 +1,493 @@
+[
+  {
+    "sk": "case-24fcb050-9c95-4d69-a149-96acba0196b8",
+    "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+    "pk": "catalog"
+  },
+  {
+    "sk": "24fcb050-9c95-4d69-a149-96acba0196b8",
+    "pk": "103-20|case"
+  },
+  {
+    "docketNumberSuffix": "L",
+    "caseStatus": "Calendared",
+    "document": {
+      "eventCode": "P",
+      "createdAt": "2020-01-23T21:44:54.043Z",
+      "processingStatus": "pending",
+      "documentType": "Petition",
+      "practitioner": [],
+      "filedBy": "Petr. Reuben Blair",
+      "partyPrimary": true,
+      "pending": false,
+      "partySecondary": false,
+      "documentId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
+      "receivedAt": "2020-01-23T21:44:54.043Z",
+      "filingDate": "2020-01-23T21:44:54.043Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "gsi1pk": "workitem-1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
+    "caseTitle": "Reuben Blair",
+    "section": "petitions",
+    "trialDate": "2020-11-27T05:00:00.000Z",
+    "workItemId": "1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "isQC": true,
+    "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2020-01-23T21:44:54.043Z",
+    "highPriority": true,
+    "assigneeName": null,
+    "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+    "sk": "workitem-1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
+    "messages": [
+      {
+        "createdAt": "2020-01-23T21:44:54.044Z",
+        "messageId": "53b69a65-cf55-442d-a698-1c19de032283",
+        "from": "Test Petitioner",
+        "message": "Petition filed by Reuben Blair is ready for review.",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "section-petitions",
+    "docketNumber": "103-20",
+    "updatedAt": "2020-01-23T21:44:54.044Z"
+  },
+  {
+    "docketNumberSuffix": "L",
+    "caseStatus": "Calendared",
+    "gsi1pk": "workitem-2a3955ca-baad-4ca7-be23-d862d2ef5310",
+    "document": {
+      "hasSupportingDocuments": false,
+      "attachments": false,
+      "documentType": "Administrative Record",
+      "practitioner": [],
+      "partyPrimary": true,
+      "pending": false,
+      "exhibits": false,
+      "receivedAt": "2020-01-23T21:45:34.520Z",
+      "filingDate": "2020-01-23T21:45:34.520Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "eventCode": "ADMR",
+      "createdAt": "2020-01-23T21:45:34.520Z",
+      "processingStatus": "pending",
+      "scenario": "Standard",
+      "filedBy": "Petr. Reuben Blair",
+      "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+      "certificateOfService": false,
+      "certificateOfServiceDate": null,
+      "documentId": "2cca1543-21b2-4783-a1de-eeaaf269d32c",
+      "category": "Miscellaneous",
+      "documentTitle": "Administrative Record",
+      "relationship": "primaryDocument",
+      "docketNumber": "103-20"
+    },
+    "caseTitle": "Reuben Blair",
+    "section": "docket",
+    "trialDate": "2020-11-27T05:00:00.000Z",
+    "workItemId": "2a3955ca-baad-4ca7-be23-d862d2ef5310",
+    "assigneeId": null,
+    "isQC": true,
+    "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2020-01-23T21:45:34.520Z",
+    "highPriority": true,
+    "assigneeName": null,
+    "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+    "sk": "workitem-2a3955ca-baad-4ca7-be23-d862d2ef5310",
+    "messages": [
+      {
+        "createdAt": "2020-01-23T21:45:34.521Z",
+        "messageId": "fb6ddc24-6ee8-4f4d-b360-992f2983e12c",
+        "from": "Test Petitioner",
+        "message": "Administrative Record filed by Petitioner is ready for review.",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "workitem-2a3955ca-baad-4ca7-be23-d862d2ef5310",
+    "docketNumber": "103-20",
+    "updatedAt": "2020-01-23T21:45:34.520Z"
+  },
+  {
+    "sk": "1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
+    "pk": "24fcb050-9c95-4d69-a149-96acba0196b8|workItem"
+  },
+  {
+    "sk": "2a3955ca-baad-4ca7-be23-d862d2ef5310",
+    "pk": "24fcb050-9c95-4d69-a149-96acba0196b8|workItem"
+  },
+  {
+    "docketNumberSuffix": "L",
+    "caseStatus": "Calendared",
+    "gsi1pk": "workitem-2a3955ca-baad-4ca7-be23-d862d2ef5310",
+    "document": {
+      "hasSupportingDocuments": false,
+      "attachments": false,
+      "documentType": "Administrative Record",
+      "practitioner": [],
+      "partyPrimary": true,
+      "pending": false,
+      "exhibits": false,
+      "receivedAt": "2020-01-23T21:45:34.520Z",
+      "filingDate": "2020-01-23T21:45:34.520Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "eventCode": "ADMR",
+      "createdAt": "2020-01-23T21:45:34.520Z",
+      "processingStatus": "pending",
+      "scenario": "Standard",
+      "filedBy": "Petr. Reuben Blair",
+      "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+      "certificateOfService": false,
+      "certificateOfServiceDate": null,
+      "documentId": "2cca1543-21b2-4783-a1de-eeaaf269d32c",
+      "category": "Miscellaneous",
+      "documentTitle": "Administrative Record",
+      "relationship": "primaryDocument",
+      "docketNumber": "103-20"
+    },
+    "caseTitle": "Reuben Blair",
+    "section": "docket",
+    "trialDate": "2020-11-27T05:00:00.000Z",
+    "workItemId": "2a3955ca-baad-4ca7-be23-d862d2ef5310",
+    "assigneeId": null,
+    "isQC": true,
+    "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2020-01-23T21:45:34.520Z",
+    "highPriority": true,
+    "assigneeName": null,
+    "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+    "sk": "workitem-2a3955ca-baad-4ca7-be23-d862d2ef5310",
+    "messages": [
+      {
+        "createdAt": "2020-01-23T21:45:34.521Z",
+        "messageId": "fb6ddc24-6ee8-4f4d-b360-992f2983e12c",
+        "from": "Test Petitioner",
+        "message": "Administrative Record filed by Petitioner is ready for review.",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "section-docket",
+    "docketNumber": "103-20",
+    "updatedAt": "2020-01-23T21:45:34.520Z"
+  },
+  {
+    "docketNumberSuffix": "L",
+    "caseStatus": "Calendared",
+    "document": {
+      "eventCode": "P",
+      "createdAt": "2020-01-23T21:44:54.043Z",
+      "processingStatus": "pending",
+      "documentType": "Petition",
+      "practitioner": [],
+      "filedBy": "Petr. Reuben Blair",
+      "partyPrimary": true,
+      "pending": false,
+      "partySecondary": false,
+      "documentId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
+      "receivedAt": "2020-01-23T21:44:54.043Z",
+      "filingDate": "2020-01-23T21:44:54.043Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "gsi1pk": "workitem-1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
+    "caseTitle": "Reuben Blair",
+    "section": "petitions",
+    "trialDate": "2020-11-27T05:00:00.000Z",
+    "workItemId": "1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "isQC": true,
+    "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2020-01-23T21:44:54.043Z",
+    "highPriority": true,
+    "assigneeName": null,
+    "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+    "sk": "workitem-1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
+    "messages": [
+      {
+        "createdAt": "2020-01-23T21:44:54.044Z",
+        "messageId": "53b69a65-cf55-442d-a698-1c19de032283",
+        "from": "Test Petitioner",
+        "message": "Petition filed by Reuben Blair is ready for review.",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "pk": "workitem-1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
+    "docketNumber": "103-20",
+    "updatedAt": "2020-01-23T21:44:54.044Z"
+  },
+  {
+    "sk": "24fcb050-9c95-4d69-a149-96acba0196b8",
+    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+  },
+  {
+    "associatedJudge": "Judge Armen",
+    "isSealed": false,
+    "procedureType": "Regular",
+    "contactSecondary": {},
+    "isPaper": false,
+    "initialTitle": "Reuben Blair, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "documents": [
+      {
+        "documentType": "Petition",
+        "practitioner": [],
+        "partyPrimary": true,
+        "workItems": [
+          {
+            "docketNumberSuffix": "L",
+            "caseStatus": "New",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2020-01-23T21:44:54.043Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "practitioner": [],
+              "filedBy": "Petr. Reuben Blair",
+              "partyPrimary": true,
+              "pending": false,
+              "partySecondary": false,
+              "documentId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
+              "receivedAt": "2020-01-23T21:44:54.043Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "caseTitle": "Reuben Blair",
+            "section": "petitions",
+            "workItemId": "1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "isQC": true,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "createdAt": "2020-01-23T21:44:54.043Z",
+            "assigneeName": null,
+            "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+            "messages": [
+              {
+                "createdAt": "2020-01-23T21:44:54.044Z",
+                "messageId": "53b69a65-cf55-442d-a698-1c19de032283",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Reuben Blair is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "103-20",
+            "updatedAt": "2020-01-23T21:44:54.044Z"
+          }
+        ],
+        "pending": false,
+        "receivedAt": "2020-01-23T21:44:54.043Z",
+        "filingDate": "2020-01-23T21:44:54.043Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "eventCode": "P",
+        "createdAt": "2020-01-23T21:44:54.043Z",
+        "processingStatus": "complete",
+        "filedBy": "Petr. Reuben Blair",
+        "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+        "partySecondary": false,
+        "documentId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34"
+      },
+      {
+        "documentType": "Statement of Taxpayer Identification",
+        "practitioner": [],
+        "partyPrimary": true,
+        "workItems": [],
+        "pending": false,
+        "receivedAt": "2020-01-23T21:44:54.044Z",
+        "filingDate": "2020-01-23T21:44:54.044Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "eventCode": "STIN",
+        "createdAt": "2020-01-23T21:44:54.044Z",
+        "processingStatus": "complete",
+        "filedBy": "Petr. Reuben Blair",
+        "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+        "partySecondary": false,
+        "documentId": "f6f9ce81-8b65-433c-8c7b-f0ffa7a74068"
+      },
+      {
+        "servedParties": [
+          {
+            "name": "Reuben Blair",
+            "email": "petitioner"
+          }
+        ],
+        "documentType": "Notice of Trial",
+        "workItems": [],
+        "pending": false,
+        "receivedAt": "2020-01-23T21:45:14.136Z",
+        "filingDate": "2020-01-23T21:45:14.136Z",
+        "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "eventCode": "NDT",
+        "createdAt": "2020-01-23T21:45:14.136Z",
+        "processingStatus": "complete",
+        "filedBy": "Test Docketclerk",
+        "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+        "documentId": "4d736f72-6312-4f7f-886e-210a0074fdc3",
+        "servedAt": "2020-01-23T21:45:14.148Z",
+        "documentTitle": "Notice of Trial on 11/27/2020 at Houston, Texas",
+        "status": "served"
+      },
+      {
+        "servedParties": [
+          {
+            "name": "Reuben Blair",
+            "email": "petitioner"
+          }
+        ],
+        "attachments": false,
+        "documentType": "Administrative Record",
+        "partyPrimary": true,
+        "pending": false,
+        "exhibits": false,
+        "receivedAt": "2020-01-23T21:45:34.520Z",
+        "filingDate": "2020-01-23T21:45:34.520Z",
+        "createdAt": "2020-01-23T21:45:34.520Z",
+        "scenario": "Standard",
+        "filedBy": "Petr. Reuben Blair",
+        "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+        "certificateOfService": false,
+        "documentTitle": "Administrative Record",
+        "relationship": "primaryDocument",
+        "hasSupportingDocuments": false,
+        "practitioner": [],
+        "workItems": [
+          {
+            "docketNumberSuffix": "L",
+            "caseStatus": "Calendared",
+            "document": {
+              "hasSupportingDocuments": false,
+              "attachments": false,
+              "documentType": "Administrative Record",
+              "practitioner": [],
+              "partyPrimary": true,
+              "pending": false,
+              "exhibits": false,
+              "receivedAt": "2020-01-23T21:45:34.520Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+              "eventCode": "ADMR",
+              "createdAt": "2020-01-23T21:45:34.520Z",
+              "processingStatus": "pending",
+              "scenario": "Standard",
+              "filedBy": "Petr. Reuben Blair",
+              "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+              "certificateOfService": false,
+              "certificateOfServiceDate": null,
+              "documentId": "2cca1543-21b2-4783-a1de-eeaaf269d32c",
+              "category": "Miscellaneous",
+              "documentTitle": "Administrative Record",
+              "relationship": "primaryDocument",
+              "docketNumber": "103-20"
+            },
+            "caseTitle": "Reuben Blair",
+            "section": "docket",
+            "trialDate": "2020-11-27T05:00:00.000Z",
+            "workItemId": "2a3955ca-baad-4ca7-be23-d862d2ef5310",
+            "assigneeId": null,
+            "isQC": true,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "createdAt": "2020-01-23T21:45:34.520Z",
+            "highPriority": true,
+            "assigneeName": null,
+            "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+            "messages": [
+              {
+                "createdAt": "2020-01-23T21:45:34.521Z",
+                "messageId": "fb6ddc24-6ee8-4f4d-b360-992f2983e12c",
+                "from": "Test Petitioner",
+                "message": "Administrative Record filed by Petitioner is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "103-20",
+            "updatedAt": "2020-01-23T21:45:34.520Z"
+          }
+        ],
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "eventCode": "ADMR",
+        "processingStatus": "complete",
+        "certificateOfServiceDate": null,
+        "documentId": "2cca1543-21b2-4783-a1de-eeaaf269d32c",
+        "servedAt": "2020-01-23T21:45:34.521Z",
+        "category": "Miscellaneous",
+        "docketNumber": "103-20",
+        "status": "served"
+      }
+    ],
+    "qcCompleteForTrial": {},
+    "orderForFilingFee": false,
+    "petitionPaymentStatus": "Not Paid",
+    "partyType": "Petitioner",
+    "receivedAt": "2020-01-23T21:44:54.034Z",
+    "caseType": "CDP (Lien/Levy)",
+    "trialLocation": "Houston, Texas",
+    "orderDesignatingPlaceOfTrial": false,
+    "contactPrimary": {
+      "serviceIndicator": "Electronic",
+      "address3": "In laboris hic volup",
+      "address2": "Ut culpa cum sint ",
+      "city": "Omnis dignissimos at",
+      "phone": "+1 (338) 996-7072",
+      "address1": "66 East Clarendon Parkway",
+      "postalCode": "92017",
+      "name": "Reuben Blair",
+      "state": "DC",
+      "countryType": "domestic",
+      "email": "petitioner"
+    },
+    "createdAt": "2020-01-23T21:44:54.034Z",
+    "noticeOfAttachments": false,
+    "trialTime": "10:00",
+    "caseCaption": "Reuben Blair, Petitioner",
+    "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+    "sk": "24fcb050-9c95-4d69-a149-96acba0196b8",
+    "filingType": "Myself",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "L",
+    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "docketNumberSuffix": "L",
+    "orderToChangeDesignatedPlaceOfTrial": false,
+    "caseTitle": "Reuben Blair, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "trialDate": "2020-11-27T05:00:00.000Z",
+    "noticeOfTrialDate": "2020-01-23T21:45:14.136Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Houston, Texas",
+    "respondents": [],
+    "practitioners": [],
+    "hasPendingItems": false,
+    "docketRecord": [
+      {
+        "eventCode": "P",
+        "description": "Petition",
+        "index": 1,
+        "documentId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
+        "filingDate": "2020-01-23T21:44:54.043Z",
+        "filedBy": "Petr. Reuben Blair"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Houston, Texas",
+        "index": 2,
+        "filingDate": "2020-01-23T21:44:54.034Z"
+      },
+      {
+        "eventCode": "NDT",
+        "description": "Notice of Trial",
+        "index": 3,
+        "documentId": "4d736f72-6312-4f7f-886e-210a0074fdc3",
+        "filingDate": "2020-01-23T21:45:14.136Z",
+        "filedBy": "Test Docketclerk"
+      },
+      {
+        "eventCode": "ADMR",
+        "description": "Administrative Record",
+        "index": 4,
+        "documentId": "2cca1543-21b2-4783-a1de-eeaaf269d32c",
+        "filingDate": "2020-01-23T21:45:34.520Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "24fcb050-9c95-4d69-a149-96acba0196b8",
+    "docketNumber": "103-20",
+    "status": "Calendared"
+  }
+]

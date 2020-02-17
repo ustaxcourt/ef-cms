@@ -3,7 +3,10 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { fetchPendingItemsSequence } from './pending/fetchPendingItemsSequence';
+import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
+import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
@@ -13,6 +16,7 @@ const gotoPendingReport = [
   clearFormAction,
   closeMobileMenuAction,
   clearErrorAlertsAction,
+  getSetJudgesSequence,
   fetchPendingItemsSequence,
   setCurrentPageAction('PendingReport'),
 ];
@@ -20,7 +24,7 @@ const gotoPendingReport = [
 export const gotoPendingReportSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoPendingReport,
+    isLoggedIn: parallel([fetchUserNotificationsSequence, gotoPendingReport]),
     unauthorized: [redirectToCognitoAction],
   },
 ];

@@ -41,8 +41,11 @@ exports.generateTrialCalendarPdfInteractor = async ({
   const contentHtml = await applicationContext
     .getTemplateGenerators()
     .generateTrialCalendarTemplate({
-      formattedTrialSessionDetails: formattedTrialSession,
-      openCases: formattedOpenCases,
+      applicationContext,
+      content: {
+        formattedTrialSessionDetails: formattedTrialSession,
+        openCases: formattedOpenCases,
+      },
     });
 
   return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({

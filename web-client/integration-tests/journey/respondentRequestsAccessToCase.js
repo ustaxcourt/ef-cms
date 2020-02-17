@@ -12,7 +12,7 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       documentTitleTemplate: VALIDATION_ERROR_MESSAGES.documentTitleTemplate,
-      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
       scenario: VALIDATION_ERROR_MESSAGES.scenario,

@@ -31,7 +31,7 @@ export default (test, overrides = {}) => {
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'month',
-      value: '8',
+      value: '13',
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
@@ -45,6 +45,26 @@ export default (test, overrides = {}) => {
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'address1',
+      value: '123 Flavor Ave',
+    });
+
+    await test.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'city',
+      value: 'Seattle',
+    });
+
+    await test.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'state',
+      value: 'WA',
+    });
+
+    await test.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'postalCode',
+      value: '98101',
+    });
+
+    await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'judge',
       value: overrides.judge || {
         name: 'Judge Cohen',
@@ -52,10 +72,17 @@ export default (test, overrides = {}) => {
       },
     });
 
+    if (overrides.trialClerk) {
+      await test.runSequence('updateTrialSessionFormDataSequence', {
+        key: 'trialClerk',
+        value: overrides.trialClerk,
+      });
+    }
+
     await test.runSequence('validateTrialSessionSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      startDate: errorMessages.term, //the term error message is used for the startDate error in validateTrialSessionAction
+      startDate: errorMessages.startDate[1],
       term: errorMessages.term,
       trialLocation: errorMessages.trialLocation,
     });

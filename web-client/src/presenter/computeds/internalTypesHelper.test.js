@@ -1,5 +1,10 @@
-import { getSortFunction, internalTypesHelper } from './internalTypesHelper';
+import { applicationContext } from '../../applicationContext';
+import {
+  getSortFunction,
+  internalTypesHelper as internalTypesHelperComputed,
+} from './internalTypesHelper';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
 const INTERNAL_CATEGORY_MAP = {
   Answer: [
@@ -47,6 +52,19 @@ const INTERNAL_CATEGORY_MAP = {
     },
   ],
 };
+
+const internalTypesHelper = withAppContextDecorator(
+  internalTypesHelperComputed,
+  {
+    ...applicationContext,
+    getConstants: () => {
+      return {
+        ...applicationContext.getConstants(),
+        INTERNAL_CATEGORY_MAP,
+      };
+    },
+  },
+);
 
 describe('internalTypesHelper', () => {
   describe('custom search function', () => {
@@ -123,11 +141,7 @@ describe('internalTypesHelper', () => {
   describe('produces a list', () => {
     it('of value/label objects sorted by their label (default) when no search text is provided', () => {
       const result = runCompute(internalTypesHelper, {
-        state: {
-          constants: {
-            INTERNAL_CATEGORY_MAP,
-          },
-        },
+        state: {},
       });
       const expected = [
         { label: 'Amended Answer', value: 'AA' },
@@ -144,9 +158,6 @@ describe('internalTypesHelper', () => {
       it('and is an empty string', () => {
         const result = runCompute(internalTypesHelper, {
           state: {
-            constants: {
-              INTERNAL_CATEGORY_MAP,
-            },
             screenMetadata: { searchText: '' },
           },
         });
@@ -163,9 +174,6 @@ describe('internalTypesHelper', () => {
       it('and is not matching an event code', () => {
         const result = runCompute(internalTypesHelper, {
           state: {
-            constants: {
-              INTERNAL_CATEGORY_MAP,
-            },
             screenMetadata: { searchText: 'Seriatim' },
           },
         });
@@ -182,9 +190,6 @@ describe('internalTypesHelper', () => {
       it('and matches the beginning of an eventCode', () => {
         const result = runCompute(internalTypesHelper, {
           state: {
-            constants: {
-              INTERNAL_CATEGORY_MAP,
-            },
             screenMetadata: { searchText: 'SA' },
           },
         });
@@ -202,9 +207,6 @@ describe('internalTypesHelper', () => {
       it('and matches an event code exactly', () => {
         const result = runCompute(internalTypesHelper, {
           state: {
-            constants: {
-              INTERNAL_CATEGORY_MAP,
-            },
             screenMetadata: { searchText: 'ATAN' },
           },
         });

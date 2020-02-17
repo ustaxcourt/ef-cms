@@ -81,12 +81,16 @@ exports.sendPetitionToIRSHoldingQueueInteractor = async ({
 
   await Promise.all(caseEntity.getWorkItems().map(processWorkItem));
 
-  return await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity
-      .updateCaseTitleDocketRecord()
-      .updateDocketNumberRecord()
-      .validate()
-      .toRawObject(),
-  });
+  const updatedCase = await applicationContext
+    .getPersistenceGateway()
+    .updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity
+        .updateCaseTitleDocketRecord()
+        .updateDocketNumberRecord()
+        .validate()
+        .toRawObject(),
+    });
+
+  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };

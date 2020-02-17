@@ -157,10 +157,13 @@ exports.runTrialSessionPlanningReportInteractor = async ({
   const contentHtml = await applicationContext
     .getTemplateGenerators()
     .generateTrialSessionPlanningReportTemplate({
-      previousTerms: reportData.previousTerms,
-      rows: reportData.trialLocationData,
-      selectedTerm: term,
-      selectedYear: year,
+      applicationContext,
+      content: {
+        previousTerms: reportData.previousTerms,
+        rows: reportData.trialLocationData,
+        selectedTerm: term,
+        selectedYear: year,
+      },
     });
 
   const pdf = await applicationContext

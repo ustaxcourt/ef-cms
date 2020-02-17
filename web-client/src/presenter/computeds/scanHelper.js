@@ -1,10 +1,12 @@
 import { state } from 'cerebral';
+import getScanModeLabel from '../../utilities/getScanModeLabel';
 
 export const scanHelper = (get, applicationContext) => {
   // Master switch for the time being
   const scanFeatureEnabled = true;
 
-  const user = get(state.user);
+  const { SCAN_MODES } = applicationContext.getConstants();
+  const user = applicationContext.getCurrentUser();
   const initiateScriptLoaded = get(state.scanner.initiateScriptLoaded);
   const configScriptLoaded = get(state.scanner.configScriptLoaded);
   const applicationForWaiverOfFilingFeeFileCompleted = !!get(
@@ -19,6 +21,14 @@ export const scanHelper = (get, applicationContext) => {
     state.form.requestForPlaceOfTrialFile,
   );
 
+  const scanModeOptions = Object.keys(SCAN_MODES).map(scanModeKey => {
+    const scanMode = SCAN_MODES[scanModeKey];
+    return {
+      label: getScanModeLabel(applicationContext, scanMode),
+      value: scanMode,
+    };
+  });
+
   return {
     applicationForWaiverOfFilingFeeFileCompleted,
     hasLoadedScanDependencies: initiateScriptLoaded && configScriptLoaded,
@@ -31,6 +41,7 @@ export const scanHelper = (get, applicationContext) => {
     petitionFileCompleted,
     requestForPlaceOfTrialFileCompleted,
     scanFeatureEnabled,
+    scanModeOptions,
     showScannerSourceModal: get(state.showModal) === 'SelectScannerSourceModal',
     sources: get(state.scanner.sources),
     stinFileCompleted,

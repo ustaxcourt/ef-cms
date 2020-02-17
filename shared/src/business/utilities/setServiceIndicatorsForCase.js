@@ -1,8 +1,5 @@
-const constants = {
-  SI_ELECTRONIC: 'Electronic',
-  SI_NONE: 'None',
-  SI_PAPER: 'Paper',
-};
+const { isEmpty } = require('lodash');
+const { SERVICE_INDICATOR_TYPES } = require('../entities/cases/CaseConstants');
 
 /**
  * sets the service indicators for parties on the given case
@@ -16,53 +13,45 @@ const setServiceIndicatorsForCase = caseDetail => {
     contactSecondary,
     isPaper,
     practitioners,
-    respondents,
   } = caseDetail;
 
   let hasPrimaryPractitioner = false;
   let hasSecondaryPractitioner = false;
 
-  // respondents
-  if (respondents && respondents.length) {
-    respondents.forEach(
-      respondent => (respondent.serviceIndicator = constants.SI_ELECTRONIC),
-    );
-  }
-
   // practitioners
   if (practitioners && practitioners.length) {
     practitioners.forEach(practitioner => {
-      hasPrimaryPractitioner = !!practitioner.representingPrimary;
-      hasSecondaryPractitioner = !!practitioner.representingSecondary;
+      if (practitioner.representingPrimary) {
+        hasPrimaryPractitioner = true;
+      }
 
-      practitioner.serviceIndicator = practitioner.userId
-        ? constants.SI_ELECTRONIC
-        : constants.SI_PAPER;
+      if (practitioner.representingSecondary) {
+        hasSecondaryPractitioner = true;
+      }
     });
   }
 
   // contactPrimary
-  if (contactPrimary) {
+  if (contactPrimary && !contactPrimary.serviceIndicator) {
     if (hasPrimaryPractitioner) {
-      contactPrimary.serviceIndicator = constants.SI_NONE;
+      contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
     } else {
       contactPrimary.serviceIndicator = isPaper
-        ? constants.SI_PAPER
-        : constants.SI_ELECTRONIC;
+        ? SERVICE_INDICATOR_TYPES.SI_PAPER
+        : SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
     }
   }
 
   // contactSecondary
-  if (contactSecondary) {
+  if (!isEmpty(contactSecondary) && !contactSecondary.serviceIndicator) {
     contactSecondary.serviceIndicator = hasSecondaryPractitioner
-      ? constants.SI_NONE
-      : constants.SI_PAPER;
+      ? SERVICE_INDICATOR_TYPES.SI_NONE
+      : SERVICE_INDICATOR_TYPES.SI_PAPER;
   }
 
   return caseDetail;
 };
 
 module.exports = {
-  constants,
   setServiceIndicatorsForCase,
 };

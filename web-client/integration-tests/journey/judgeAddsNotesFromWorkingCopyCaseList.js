@@ -19,7 +19,7 @@ export default test => {
 
     const { caseId } = workingCopyHelper.formattedCases[0];
 
-    await test.runSequence('openAddEditCaseNoteModalFromListSequence', {
+    await test.runSequence('openAddEditUserCaseNoteModalFromListSequence', {
       caseId,
     });
 
@@ -40,12 +40,12 @@ export default test => {
       notes: 'this is a note added from the modal',
     });
 
-    await test.runSequence('updateCaseNoteOnWorkingCopySequence');
+    await test.runSequence('updateUserCaseNoteOnWorkingCopySequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(
-      test.getState(`trialSessionWorkingCopy.caseNotes.${caseId}.notes`),
+      test.getState(`trialSessionWorkingCopy.userNotes.${caseId}.notes`),
     ).toEqual('this is a note added from the modal');
   });
 };

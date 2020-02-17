@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
@@ -63,6 +63,8 @@ CaseExternal.commonRequirements = {
     otherwise: joi.optional().allow(null),
     then: joi.string().required(),
   }),
+  contactPrimary: joi.object().optional(),
+  contactSecondary: joi.object().optional(),
   countryType: joi.string().optional(),
   filingType: joi.string().required(),
   hasIrsNotice: joi.boolean().required(),

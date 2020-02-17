@@ -6,6 +6,9 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
+  const isInternalUser = applicationContext
+    .getUtilities()
+    .isInternalUser(user.role);
 
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
@@ -16,6 +19,8 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const currentPage = get(state.currentPage);
   const isRequestAccessForm = currentPage === 'RequestAccessWizard';
 
+  const isCaseSealed = !!caseDetail.isSealed;
+
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
@@ -23,19 +28,39 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   if (isExternalUser && !userAssociatedWithCase) {
     if (user.role === USER_ROLES.practitioner) {
       showRequestAccessToCaseButton =
-        !pendingAssociation && !isRequestAccessForm;
+        !pendingAssociation && !isRequestAccessForm && !isCaseSealed;
       showPendingAccessToCaseButton = pendingAssociation;
     } else if (user.role === USER_ROLES.respondent) {
-      showFileFirstDocumentButton = !caseHasRespondent;
-      showRequestAccessToCaseButton = caseHasRespondent && !isRequestAccessForm;
+      showFileFirstDocumentButton = !caseHasRespondent && !isCaseSealed;
+      showRequestAccessToCaseButton =
+        caseHasRespondent && !isRequestAccessForm && !isCaseSealed;
     }
   }
 
+  const showConsolidatedCaseIcon = !!caseDetail.leadCaseId;
+
+  const showCreateOrderButton = permissions.COURT_ISSUED_DOCUMENT;
+
+  const showAddDocketEntryButton = permissions.DOCKET_ENTRY;
+
+  const showCaseDetailHeaderMenu = !isExternalUser;
+
+  const showFileDocumentButton =
+    permissions.FILE_EXTERNAL_DOCUMENT && userAssociatedWithCase;
+
   return {
     hidePublicCaseInformation: !isExternalUser,
+    showAddDocketEntryButton,
+    showCaseDetailHeaderMenu,
+    showConsolidatedCaseIcon,
+    showCreateOrderButton,
     showEditCaseButton: permissions.UPDATE_CASE_CONTEXT,
+    showExternalButtons: isExternalUser,
+    showFileDocumentButton,
     showFileFirstDocumentButton,
     showPendingAccessToCaseButton,
     showRequestAccessToCaseButton,
+    showSealedCaseBanner: isCaseSealed,
+    showUploadCourtIssuedDocumentButton: isInternalUser,
   };
 };

@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -30,6 +30,8 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberSuffix = rawWorkItem.docketNumberSuffix;
   this.document = omit(rawWorkItem.document, 'workItems');
+  this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
+  this.highPriority = rawWorkItem.highPriority;
   this.inProgress = rawWorkItem.inProgress;
   this.isInitializeCase = rawWorkItem.isInitializeCase;
   this.isQC = rawWorkItem.isQC;
@@ -38,6 +40,7 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.sentBy = rawWorkItem.sentBy;
   this.sentBySection = rawWorkItem.sentBySection;
   this.sentByUserId = rawWorkItem.sentByUserId;
+  this.trialDate = rawWorkItem.trialDate;
   this.updatedAt = rawWorkItem.updatedAt || createISODateString();
   this.workItemId = rawWorkItem.workItemId || applicationContext.getUniqueId();
   this.messages = (rawWorkItem.messages || []).map(
@@ -97,6 +100,8 @@ joiValidationDecorator(
       .allow(null)
       .optional(),
     document: joi.object().required(),
+    hideFromPendingMessages: joi.boolean().optional(),
+    highPriority: joi.boolean().optional(),
     inProgress: joi.boolean().optional(),
     isInitializeCase: joi.boolean().optional(),
     isQC: joi.boolean().required(),
@@ -114,6 +119,11 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
+    trialDate: joi
+      .date()
+      .iso()
+      .optional()
+      .allow(null),
     updatedAt: joi
       .date()
       .iso()

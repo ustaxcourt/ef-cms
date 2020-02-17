@@ -42,15 +42,15 @@ const MOCK_WORK_ITEMS = [
     workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
   },
 ];
-describe('zip petition documents and send to dummy S3 IRS respository', () => {
-  const deleteWorkItemFromSectionStub = sinon.stub().resolves(null);
-  const zipDocumentsStub = sinon.stub().resolves(null);
-  const deleteDocumentStub = sinon.stub().resolves(null);
-  const updateCaseStub = sinon.stub().resolves(null);
-  const updateWorkItemStub = sinon.stub().resolves(null);
-  const putWorkItemInUsersOutboxStub = sinon.stub().resolves(null);
-  const saveWorkItemForPaperStub = sinon.stub().resolves(null);
-  const getUserByIdStub = sinon.stub().resolves({
+describe('zip petition documents and send to dummy S3 IRS repository', () => {
+  let deleteWorkItemFromSectionStub = sinon.stub().resolves(null);
+  let zipDocumentsStub = sinon.stub().resolves(null);
+  let deleteDocumentStub = sinon.stub().resolves(null);
+  let updateCaseStub = sinon.stub().resolves(null);
+  let updateWorkItemStub = sinon.stub().resolves(null);
+  let putWorkItemInUsersOutboxStub = sinon.stub().resolves(null);
+  let saveWorkItemForPaperStub = sinon.stub().resolves(null);
+  let getUserByIdStub = sinon.stub().resolves({
     name: 'Petitioner',
     section: 'petitions',
     userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -60,6 +60,19 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
   let mockCase;
 
   beforeEach(() => {
+    deleteWorkItemFromSectionStub = sinon.stub().resolves(null);
+    zipDocumentsStub = sinon.stub().resolves(null);
+    deleteDocumentStub = sinon.stub().resolves(null);
+    updateCaseStub = sinon.stub().resolves(null);
+    updateWorkItemStub = sinon.stub().resolves(null);
+    putWorkItemInUsersOutboxStub = sinon.stub().resolves(null);
+    saveWorkItemForPaperStub = sinon.stub().resolves(null);
+    getUserByIdStub = sinon.stub().resolves({
+      name: 'Petitioner',
+      section: 'petitions',
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
     mockCase = MOCK_CASE;
     mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
     applicationContext = {
@@ -177,13 +190,13 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     await runBatchProcessInteractor({
       applicationContext,
     });
-    expect(deleteWorkItemFromSectionStub.getCall(1).args[0]).toMatchObject({
+    expect(deleteWorkItemFromSectionStub.getCall(0).args[0]).toMatchObject({
       workItem: {
         section: 'irsBatchSection',
         workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
       },
     });
-    expect(zipDocumentsStub.getCall(1).args[0]).toMatchObject({
+    expect(zipDocumentsStub.getCall(0).args[0]).toMatchObject({
       fileNames: [
         'Petition.pdf',
         'Statement of Taxpayer Identification.pdf',
@@ -198,10 +211,10 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
       ],
       zipName: '101-18.zip',
     });
-    expect(deleteDocumentStub.getCall(1).args[0]).toMatchObject({
+    expect(deleteDocumentStub.getCall(0).args[0]).toMatchObject({
       key: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
-    expect(updateCaseStub.getCall(1).args[0]).toMatchObject({
+    expect(updateCaseStub.getCall(0).args[0]).toMatchObject({
       caseToUpdate: {
         status: Case.STATUS_TYPES.generalDocket,
       },
@@ -209,9 +222,9 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
   });
 
   it('runs batch process for case in IRS queue without STIN', async () => {
-    mockCase = MOCK_CASE;
+    mockCase = { ...MOCK_CASE };
     mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
-    mockCase.documents.splice(1, 1); //remove STIN document
+    mockCase.documents = mockCase.documents.filter((document, i) => i !== 1);
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
@@ -241,13 +254,13 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     await runBatchProcessInteractor({
       applicationContext,
     });
-    expect(deleteWorkItemFromSectionStub.getCall(2).args[0]).toMatchObject({
+    expect(deleteWorkItemFromSectionStub.getCall(0).args[0]).toMatchObject({
       workItem: {
         section: 'irsBatchSection',
         workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
       },
     });
-    expect(zipDocumentsStub.getCall(2).args[0]).toMatchObject({
+    expect(zipDocumentsStub.getCall(0).args[0]).toMatchObject({
       fileNames: [
         'Petition.pdf',
         'Answer.pdf',
@@ -260,8 +273,8 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
       ],
       zipName: '101-18_Test_Petitioner.zip',
     });
-    expect(deleteDocumentStub.getCall(2)).toEqual(null);
-    expect(updateCaseStub.getCall(2).args[0]).toMatchObject({
+    expect(deleteDocumentStub.getCall(0)).toEqual(null);
+    expect(updateCaseStub.getCall(0).args[0]).toMatchObject({
       caseToUpdate: {
         status: Case.STATUS_TYPES.generalDocket,
       },
@@ -269,7 +282,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
   });
 
   it('runs batch process for case in IRS queue and sends internal message for a paper case', async () => {
-    mockCase = { ...MOCK_CASE, isPaper: true };
+    mockCase = { ...MOCK_CASE, isPaper: true, mailingDate: 'testing' };
     mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
     applicationContext = {
       environment: { stage: 'local' },
@@ -302,13 +315,13 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     await runBatchProcessInteractor({
       applicationContext,
     });
-    expect(deleteWorkItemFromSectionStub.getCall(1).args[0]).toMatchObject({
+    expect(deleteWorkItemFromSectionStub.getCall(0).args[0]).toMatchObject({
       workItem: {
         section: 'irsBatchSection',
         workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
       },
     });
-    expect(zipDocumentsStub.getCall(1).args[0]).toMatchObject({
+    expect(zipDocumentsStub.getCall(0).args[0]).toMatchObject({
       fileNames: [
         'Petition.pdf',
         'Statement of Taxpayer Identification.pdf',
@@ -321,16 +334,182 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
         'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       ],
-      zipName: '101-18.zip',
+      zipName: '101-18_Test_Petitioner.zip',
     });
-    expect(deleteDocumentStub.getCall(1).args[0]).toMatchObject({
+    expect(deleteDocumentStub.getCall(0).args[0]).toMatchObject({
       key: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
-    expect(updateCaseStub.getCall(1).args[0]).toMatchObject({
+    expect(updateCaseStub.getCall(0).args[0]).toMatchObject({
       caseToUpdate: {
         status: Case.STATUS_TYPES.generalDocket,
       },
     });
     expect(saveWorkItemForPaperStub.calledOnce).toEqual(true);
+  });
+
+  it('runs batch process for case in IRS queue with draft documents', async () => {
+    mockCase = MOCK_CASE;
+    mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
+    mockCase.documents = mockCase.documents.filter((document, i) => i !== 1);
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'bob',
+          role: User.ROLES.petitionsClerk,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => {
+        return {
+          deleteDocument: deleteDocumentStub,
+          deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
+          getCaseByCaseId: () => Promise.resolve(mockCase),
+          getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
+          updateCase: updateCaseStub,
+          updateWorkItem: updateWorkItemStub,
+          zipDocuments: zipDocumentsStub,
+        };
+      },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({
+        generateCaseConfirmationPdf: () => {},
+      }),
+    };
+    mockCase.documents.push({
+      createdAt: '2018-12-27T18:06:02.968Z',
+      documentId: '94445562-353d-4f6e-af3e-55ae41de0bc7',
+      documentType: 'O - Order',
+      userId: 'f4a420db-4812-45da-9009-696e38cec98c',
+    });
+    await runBatchProcessInteractor({
+      applicationContext,
+    });
+    expect(deleteWorkItemFromSectionStub.getCall(0).args[0]).toMatchObject({
+      workItem: {
+        section: 'irsBatchSection',
+        workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+      },
+    });
+    expect(zipDocumentsStub.getCall(0).args[0]).toMatchObject({
+      fileNames: [
+        'Petition.pdf',
+        'Answer.pdf',
+        'Proposed Stipulated Decision.pdf',
+        'O - Order.pdf',
+      ],
+      s3Ids: [
+        'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      ],
+      zipName: '101-18_Test_Petitioner.zip',
+    });
+    expect(deleteDocumentStub.getCall(0)).toEqual(null);
+    expect(updateCaseStub.getCall(0).args[0]).toMatchObject({
+      caseToUpdate: {
+        status: Case.STATUS_TYPES.generalDocket,
+      },
+    });
+  });
+
+  it('creates a docket entry for cases that have been paid', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      petitionPaymentDate: '2018-12-27T00:00:00.000Z',
+      petitionPaymentMethod: 'check',
+      petitionPaymentStatus: 'Paid',
+    };
+
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'bob',
+          role: User.ROLES.petitionsClerk,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => {
+        return {
+          deleteDocument: deleteDocumentStub,
+          deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
+          getCaseByCaseId: () => Promise.resolve(mockCase),
+          getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
+          updateCase: updateCaseStub,
+          updateWorkItem: updateWorkItemStub,
+          zipDocuments: zipDocumentsStub,
+        };
+      },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({
+        generateCaseConfirmationPdf: () => {},
+      }),
+      getUtilities: () => ({
+        formatDateString: () => '12/27/18',
+      }),
+    };
+    await runBatchProcessInteractor({
+      applicationContext,
+    });
+    expect(
+      updateCaseStub.getCall(0).args[0].caseToUpdate.docketRecord,
+    ).toContainEqual({
+      description: 'Filing Fee Paid',
+      eventCode: 'FEE',
+      filingDate: '2018-12-27T00:00:00.000Z',
+      index: 4,
+    });
+  });
+
+  it('creates a docket entry for cases that have been paid', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      petitionPaymentStatus: 'Waived',
+      petitionPaymentWaivedDate: '2018-12-27T00:00:00.000Z',
+    };
+
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'bob',
+          role: User.ROLES.petitionsClerk,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => {
+        return {
+          deleteDocument: deleteDocumentStub,
+          deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
+          getCaseByCaseId: () => Promise.resolve(mockCase),
+          getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
+          updateCase: updateCaseStub,
+          updateWorkItem: updateWorkItemStub,
+          zipDocuments: zipDocumentsStub,
+        };
+      },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({
+        generateCaseConfirmationPdf: () => {},
+      }),
+      getUtilities: () => ({
+        formatDateString: () => '12/27/18',
+      }),
+    };
+    await runBatchProcessInteractor({
+      applicationContext,
+    });
+    expect(
+      updateCaseStub.getCall(0).args[0].caseToUpdate.docketRecord,
+    ).toContainEqual({
+      description: 'Filing Fee Waived',
+      eventCode: 'FEEW',
+      filingDate: '2018-12-27T00:00:00.000Z',
+      index: 4,
+    });
   });
 });

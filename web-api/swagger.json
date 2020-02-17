@@ -194,6 +194,46 @@
         }
       }
     },
+    "/api/pending-report": {
+      "get": {
+        "summary": "create a pdf of the pending report",
+        "description": "create a pdf of the pending report.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/run-batch-process": {
       "post": {
         "summary": "run IRS batch process",
@@ -363,7 +403,7 @@
         }
       }
     },
-    "/cases/{caseId}/counsel/{userId}": {
+    "/case-parties/{caseId}/counsel/{userId}": {
       "parameters": [
         {
           "name": "caseId",
@@ -440,7 +480,7 @@
         }
       }
     },
-    "/cases/{caseId}/contact-primary": {
+    "/case-parties/{caseId}/contact-primary": {
       "parameters": [
         {
           "name": "caseId",
@@ -492,11 +532,155 @@
         }
       }
     },
+    "/case-parties/{caseId}/contact-secondary": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["cases"],
+        "summary": "Updates the secondary contact info on a case",
+        "description": "Updates the secondary contact info on a case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/cases/paper": {
       "post": {
         "tags": ["cases"],
         "summary": "create a case from a paper submission",
         "description": "Create a case from a paper submission.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{caseId}/generate-docket-record": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "summary": "create a pdf of the docket record for a case",
+        "description": "create a pdf of the docket record for a case.\n",
+        "produces": ["application/pdf"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public-api/search": {
+      "get": {
+        "tags": ["cases"],
+        "summary": "search for a case by name, country, state, and/or year filed",
+        "description": "Search for a case by name, country, state, and/or year filed.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -709,6 +893,58 @@
         }
       }
     },
+    "/public-api/cases/{caseId}": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["cases"],
+        "summary": "get a case by caseId",
+        "description": "Get a case by caseId.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/cases/{caseId}/block": {
       "parameters": [
         {
@@ -741,6 +977,64 @@
         "tags": ["cases"],
         "summary": "removed the block from a case",
         "description": "removed the block from a case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/{caseId}/remove-pending/{documentId}": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "documentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "delete": {
+        "tags": ["cases"],
+        "summary": "removes a pending item from a case",
+        "description": "removes a pending item from a case.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -904,6 +1198,140 @@
         }
       }
     },
+    "/cases/{caseId}/consolidate-case": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["cases"],
+        "summary": "Consolidates two or more cases associated with the given case ids.",
+        "description": "Consolidates two or more cases associated with the given case ids.\n",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "delete": {
+        "parameters": [
+          {
+            "name": "caseIdsToRemove",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": ["cases"],
+        "summary": "Unconsolidates the cases passed in the query string.",
+        "description": "Unconsolidates the cases passed in the query string.\n",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/{caseId}/consolidated-cases": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["cases"],
+        "summary": "Returns all consolidated cases associated with the given case id.",
+        "description": "Returns all consolidated cases associated with the given case id.\n",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/case-documents/{caseId}/external-document": {
       "parameters": [
         {
@@ -988,6 +1416,58 @@
         "tags": ["documents"],
         "summary": "updates a current docket entry on a case",
         "description": "Updates a docket entry/document and attaches it to a case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-documents/{caseId}/docket-entry-meta": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["documents", "docket record"],
+        "summary": "Updates the docket entry meta data on a case",
+        "description": "Updates the docket entry meta on a case.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -1266,8 +1746,14 @@
         }
       }
     },
-    "/documents/{documentId}/document-download-url": {
+    "/case-documents/{caseId}/{documentId}/document-download-url": {
       "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
         {
           "name": "documentId",
           "in": "path",
@@ -1313,10 +1799,69 @@
         }
       }
     },
-    "/documents/{documentId}/download-policy-url": {
+    "/public-api/{caseId}/{documentId}/public-document-download-url": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "documentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["documents"],
+        "summary": "redirects to the s3 url for downloading a public document",
+        "description": "Create and redirects the user to a pre-signed url for document downloads from S3.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "302": {
+            "description": "302 response",
+            "schema": {
+              "$ref": "#/definitions/policyUrl"
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-documents/{caseId}/{documentId}/download-policy-url": {
       "parameters": [
         {
           "name": "documentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "caseId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1781,6 +2326,64 @@
         }
       }
     },
+    "/case-documents/{caseId}/{documentId}/serve-court-issued": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "documentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["cases"],
+        "summary": "serves a court issued document",
+        "description": "serves a court issued document\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/sections/{section}/messages/sent": {
       "parameters": [
         {
@@ -2018,80 +2621,6 @@
             "schema": {
               "$ref": "#/definitions/case"
             }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users/{userId}/case/{caseId}": {
-      "parameters": [
-        {
-          "name": "userId",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        },
-        {
-          "name": "caseId",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["cases"],
-        "summary": "verify if user is associated with the case",
-        "description": "Verify if user is associated with the case.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/case"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "put": {
-        "tags": ["cases"],
-        "summary": "add practitioner to case if not associated with the case",
-        "description": "Add practitioner to case if not associated with the case.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response"
           }
         },
         "security": [
@@ -2677,64 +3206,6 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/serve": {
-      "parameters": [
-        {
-          "name": "caseId",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        },
-        {
-          "name": "documentId",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "post": {
-        "tags": ["documents"],
-        "summary": "serves the document which will send out emails",
-        "description": "serves the document which will send out emails.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/case"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
     "/case-documents/{caseId}/{documentId}/sign": {
       "parameters": [
         {
@@ -2866,6 +3337,25 @@
         "tags": ["trialsessions"],
         "summary": "creates a new trial session",
         "description": "creates a new trial session.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["trialsessions"],
+        "summary": "updates a trial session",
+        "description": "updates a trial session.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -3113,6 +3603,55 @@
         }
       }
     },
+    "/trial-sessions/{trialSessionId}/generate-notices": {
+      "parameters": [
+        {
+          "name": "trialSessionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["trialsessions"],
+        "summary": "generates notices of trial and standing pretrial document for cases within a given trial session and returns a PDF for any paper service parties associated",
+        "description": "generates notices of trial and standing pretrial document for cases within a given trial session and returns a PDF for any paper service parties associated.\n",
+        "produces": ["application/pdf"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/trial-sessions/{trialSessionId}/getAssociatedCases": {
       "parameters": [
         {
@@ -3285,6 +3824,69 @@
       "post": {
         "summary": "create a pdf of the trial session planning report",
         "description": "create a pdf of the trial session planning report.\n",
+        "produces": ["application/pdf"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-documents/{caseId}/court-issued-docket-entry": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "summary": "creates a docket entry for a court-issued document on the case",
+        "description": "creates a docket entry for a court-issued document on the case.\n",
+        "produces": ["application/pdf"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "updates a docket entry for a court-issued document on the case",
+        "description": "updates a docket entry for a court-issued document on the case.\n",
         "produces": ["application/pdf"],
         "responses": {
           "200": {
@@ -3690,7 +4292,231 @@
         }
       }
     },
-    "/cases/{caseId}/associate-practitioner": {
+    "/case-parties/{caseId}/petition-details": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["cases"],
+        "summary": "updates the petition details on the case",
+        "description": "updates the petition details on the case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-parties/{caseId}/petitioner-info": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["cases"],
+        "summary": "updates the petitioner information on the case",
+        "description": "updates the petitioner information on the case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/{caseId}/qc-complete": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "body",
+          "name": "trial session info",
+          "description": "the trial session info needed to identify and update a trial session",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "qcCompleteForTrial": {
+                "type": "boolean"
+              },
+              "trialSessionId": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "put": {
+        "tags": ["cases"],
+        "summary": "updates the case to be marked as QCed",
+        "description": "updates the case to be marked as QCed.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/{caseId}/seal": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["cases"],
+        "summary": "updates the case as sealed",
+        "description": "updates the case as sealed.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-parties/{caseId}/associate-practitioner": {
       "parameters": [
         {
           "name": "caseId",
@@ -3742,7 +4568,7 @@
         }
       }
     },
-    "/cases/{caseId}/associate-respondent": {
+    "/case-parties/{caseId}/associate-respondent": {
       "parameters": [
         {
           "name": "caseId",
@@ -3865,7 +4691,7 @@
         }
       }
     },
-    "/case-notes/{caseId}": {
+    "/case-notes/{caseId}/user-notes": {
       "parameters": [
         {
           "name": "caseId",
@@ -3883,7 +4709,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseNote"
+              "$ref": "#/definitions/userNote"
             }
           }
         },
@@ -3902,7 +4728,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseNote"
+              "$ref": "#/definitions/userNote"
             }
           }
         },
@@ -3914,8 +4740,79 @@
       },
       "put": {
         "tags": ["caseNotes"],
-        "summary": "update a case note for the logged in user",
-        "description": "update a case note for the logged in user.\n",
+        "summary": "update a user's note for the logged in user",
+        "description": "update a user's note for the logged in user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/userNote"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["caseNotes"],
+        "summary": "delete the user's note for the logged in user",
+        "description": "delete the user's note for the logged in user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/userNote"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-notes/{caseId}": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["caseNotes"],
+        "summary": "update a case procedural note",
+        "description": "update a case procedural note.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -3933,8 +4830,8 @@
       },
       "delete": {
         "tags": ["caseNotes"],
-        "summary": "delete the case note for the logged in user",
-        "description": "delete the case note for the logged in user.\n",
+        "summary": "delete the case procedural note",
+        "description": "delete the case procedural note.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -4165,10 +5062,6 @@
           "type": "string",
           "description": "date case created"
         },
-        "payGovDate": {
-          "type": "string",
-          "description": "the date the pay gov id was updated"
-        },
         "documents": {
           "type": "array",
           "description": "array of rawDocument ids and types associated with the case",
@@ -4190,10 +5083,6 @@
               }
             }
           }
-        },
-        "payGovId": {
-          "type": "string",
-          "description": "the pay gov id generated from pay.gov"
         },
         "caseId": {
           "type": "string",
@@ -4319,7 +5208,7 @@
       },
       "description": "a case deadline"
     },
-    "caseNote": {
+    "userNote": {
       "type": "object",
       "properties": {
         "caseId": {
@@ -4332,10 +5221,24 @@
         },
         "notes": {
           "type": "string",
+          "description": "user's notes for the case"
+        }
+      },
+      "description": "a case user's note"
+    },
+    "caseNote": {
+      "type": "object",
+      "properties": {
+        "caseId": {
+          "type": "string",
+          "description": "id of the case"
+        },
+        "notes": {
+          "type": "string",
           "description": "notes for the case"
         }
       },
-      "description": "a case note"
+      "description": "a case procedural note"
     }
   }
 }

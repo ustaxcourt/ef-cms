@@ -9,7 +9,7 @@
 const getAddressPhoneDiff = ({ newData, oldData }) => {
   const diff = {};
   const fields = Object.keys(newData);
-  fields.map(key => {
+  fields.forEach(key => {
     const oldValue = oldData[key];
     const newValue = newData[key];
     if (oldValue !== newValue) {

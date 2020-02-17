@@ -1,7 +1,8 @@
-service: ef-cms-case-deadlines
+service: ef-cms-case-deadlines-${opt:stageColor}
 plugins:
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
+  - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -28,13 +29,10 @@ custom:
     stages:
       - dev
       - stg
+      - test
       - prod
     dashboards: true
     alarms:
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
       - errorExceptions
     definitions:
       errorExceptions:
@@ -49,10 +47,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:provider.stage}-cloudwatch-alerts
-        notifications:
-          - protocol: email
-            endpoint: jsutton@flexion.us
+        topic: arn:aws:sns:${opt:region}:${opt:accountId}:serverless-alerts-topic-${self:provider.stage}
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -72,14 +67,16 @@ custom:
 
 provider:
   name: aws
+  endpointType: REGIONAL
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
@@ -111,7 +108,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/caseDeadlinesHandlers.js
+    - web-api/${self:provider.dir}/caseDeadlinesHandlers.js
   excludeDevDependencies: true
 
 resources:
@@ -150,60 +147,60 @@ resources:
 
 functions:
   createCaseDeadline:
-    handler: web-api/src/caseDeadlinesHandlers.createCaseDeadlineLambda
+    handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.createCaseDeadlineLambda
     events:
       - http:
           path: /{caseId}
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   getCaseDeadlinesForCase:
-    handler: web-api/src/caseDeadlinesHandlers.getCaseDeadlinesForCaseLambda
+    handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.getCaseDeadlinesForCaseLambda
     events:
       - http:
           path: /{caseId}
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   updateCaseDeadline:
-    handler: web-api/src/caseDeadlinesHandlers.updateCaseDeadlineLambda
+    handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.updateCaseDeadlineLambda
     events:
       - http:
           path: /{caseId}/{caseDeadlineId}
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   deleteCaseDeadline:
-    handler: web-api/src/caseDeadlinesHandlers.deleteCaseDeadlineLambda
+    handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.deleteCaseDeadlineLambda
     events:
       - http:
           path: /{caseId}/{caseDeadlineId}
           method: delete
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   getAllCaseDeadlines:
-    handler: web-api/src/caseDeadlinesHandlers.getAllCaseDeadlinesLambda
+    handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.getAllCaseDeadlinesLambda
     events:
       - http:
           path: /
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:

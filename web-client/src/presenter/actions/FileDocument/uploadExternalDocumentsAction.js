@@ -6,6 +6,9 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.path the next object in the path
+ * @param {Function} providers.store the cerebral store function
  * @returns {object} the next path based on if validation was successful or error
  */
 export const uploadExternalDocumentsAction = async ({
@@ -17,7 +20,7 @@ export const uploadExternalDocumentsAction = async ({
   const { caseId, docketNumber } = get(state.caseDetail);
   const form = get(state.form);
 
-  const documentMetadata = { ...form, docketNumber, caseId };
+  const documentMetadata = { ...form, caseId, docketNumber };
 
   const documentFiles = {
     primary: form.primaryDocumentFile,
@@ -57,7 +60,9 @@ export const uploadExternalDocumentsAction = async ({
   }
 
   const pendingDocuments = caseDetail.documents.filter(
-    document => document.processingStatus === 'pending',
+    document =>
+      document.processingStatus === 'pending' &&
+      document.isFileAttached !== false,
   );
   const addCoversheet = document => {
     return applicationContext.getUseCases().addCoversheetInteractor({

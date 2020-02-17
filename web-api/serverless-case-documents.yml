@@ -1,7 +1,8 @@
-service: ef-cms-case-documents
+service: ef-cms-case-docs-${opt:stageColor}
 plugins:
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
+  - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -28,13 +29,10 @@ custom:
     stages:
       - dev
       - stg
+      - test
       - prod
     dashboards: true
     alarms:
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
       - errorExceptions
     definitions:
       errorExceptions:
@@ -49,10 +47,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:provider.stage}-cloudwatch-alerts
-        notifications:
-          - protocol: email
-            endpoint: jsutton@flexion.us
+        topic: arn:aws:sns:${opt:region}:${opt:accountId}:serverless-alerts-topic-${self:provider.stage}
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -72,14 +67,16 @@ custom:
 
 provider:
   name: aws
+  endpointType: REGIONAL
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
@@ -112,7 +109,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/caseDocumentsHandlers.js
+    - web-api/${self:provider.dir}/caseDocumentsHandlers.js
 
   excludeDevDependencies: true
 
@@ -151,39 +148,43 @@ resources:
             MetricsEnabled: true
 
 functions:
-  serveSignedStipDecision:
-    handler: web-api/src/caseDocumentsHandlers.serveSignedStipDecisionLambda
+  serveCourtIssuedDocument:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.serveCourtIssuedDocumentLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
     events:
       - http:
-          path: /{caseId}/{documentId}/serve
-          method: put
-          cors: true
+          path: /{caseId}/{documentId}/serve-court-issued
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   createWorkItem:
-    handler: web-api/src/caseDocumentsHandlers.createWorkItemLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.createWorkItemLambda
     events:
       - http:
           path: /{caseId}/{documentId}/work-items
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   addCoversheet:
-    handler: web-api/src/caseDocumentsHandlers.addCoversheetLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.addCoversheetLambda
     memorySize: 3008
     timeout: 900
     events:
       - http:
           path: /{caseId}/{documentId}/coversheet
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           # async: true
           authorizer:
             type: COGNITO_USER_POOLS
@@ -191,105 +192,175 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   signDocument:
-    handler: web-api/src/caseDocumentsHandlers.signDocumentLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.signDocumentLambda
     events:
       - http:
           path: /{caseId}/{documentId}/sign
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   archiveDraftDocument:
-    handler: web-api/src/caseDocumentsHandlers.archiveDraftDocumentLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.archiveDraftDocumentLambda
     events:
       - http:
           path: /{caseId}/{documentId}
           method: delete
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
 
   fileExternalDocument:
-    handler: web-api/src/caseDocumentsHandlers.fileExternalDocumentToCaseLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileExternalDocumentToCaseLambda
     events:
       - http:
           path: /{caseId}/external-document
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  fileExternalDocumentToConsolidated:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileExternalDocumentToConsolidatedCasesLambda
+    events:
+      - http:
+          path: /consolidated/{leadCaseId}/external-document
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   fileDocketEntry:
-    handler: web-api/src/caseDocumentsHandlers.fileDocketEntryToCaseLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileDocketEntryToCaseLambda
     events:
       - http:
           path: /{caseId}/docket-entry
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   updateDocketEntry:
-    handler: web-api/src/caseDocumentsHandlers.updateDocketEntryOnCaseLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateDocketEntryOnCaseLambda
     events:
       - http:
           path: /{caseId}/docket-entry
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateDocketEntryMeta:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateDocketEntryMetaLambda
+    events:
+      - http:
+          path: /{caseId}/docket-entry-meta
+          method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   saveIntermediateDocketEntry:
-    handler: web-api/src/caseDocumentsHandlers.saveIntermediateDocketEntryLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.saveIntermediateDocketEntryLambda
     events:
       - http:
           path: /{caseId}/docket-entry-in-progress
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   completeDocketEntryQC:
-    handler: web-api/src/caseDocumentsHandlers.completeDocketEntryQCLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.completeDocketEntryQCLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     events:
       - http:
           path: /{caseId}/docket-entry-complete
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  fileCourtIssuedDocketEntry:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileCourtIssuedDocketEntryLambda
+    events:
+      - http:
+          path: /{caseId}/court-issued-docket-entry
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCourtIssuedDocketEntry:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateCourtIssuedDocketEntryLambda
+    events:
+      - http:
+          path: /{caseId}/court-issued-docket-entry
+          method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   fileCourtIssuedOrder:
-    handler: web-api/src/caseDocumentsHandlers.fileCourtIssuedOrderToCaseLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileCourtIssuedOrderToCaseLambda
     events:
       - http:
           path: /{caseId}/court-issued-order
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   updateCourtIssuedOrder:
-    handler: web-api/src/caseDocumentsHandlers.updateCourtIssuedOrderToCaseLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateCourtIssuedOrderToCaseLambda
     events:
       - http:
           path: /{caseId}/court-issued-orders/{documentId}
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  getDownloadPolicyUrl:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.downloadPolicyUrlLambda
+    events:
+      - http:
+          path: /{caseId}/{documentId}/download-policy-url
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getDocumentDownloadUrl:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.getDocumentDownloadUrlLambda
+    events:
+      - http:
+          path: /{caseId}/{documentId}/document-download-url
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}

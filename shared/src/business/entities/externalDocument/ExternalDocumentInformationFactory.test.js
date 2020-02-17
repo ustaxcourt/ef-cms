@@ -72,6 +72,7 @@ describe('ExternalDocumentInformationFactory', () => {
     describe('Motion Document', () => {
       beforeEach(() => {
         baseDoc.category = 'Motion';
+        baseDoc.documentType = 'Motion for Continuance';
       });
 
       it('should require objections radio be selected', () => {
@@ -79,6 +80,20 @@ describe('ExternalDocumentInformationFactory', () => {
           VALIDATION_ERROR_MESSAGES.objections,
         );
         baseDoc.objections = 'Yes';
+        expect(errors().objections).toEqual(undefined);
+      });
+
+      it('should require objections for an Amended document with a Motion previousDocument', () => {
+        baseDoc.category = 'Miscellaneous';
+        baseDoc.eventCode = 'AMAT';
+        baseDoc.previousDocument = {
+          documentType: 'Motion for Continuance',
+        };
+
+        expect(errors().objections).toEqual(
+          VALIDATION_ERROR_MESSAGES.objections,
+        );
+        baseDoc.objections = 'No';
         expect(errors().objections).toEqual(undefined);
       });
     });
@@ -369,6 +384,57 @@ describe('ExternalDocumentInformationFactory', () => {
       );
       baseDoc.partyRespondent = true;
       expect(errors().partyPrimary).toEqual(undefined);
+    });
+
+    describe('Consolidated Case filing to multiple cases', () => {
+      beforeEach(() => {
+        baseDoc.casesParties = {};
+        baseDoc.selectedCases = ['101-19', '102-19'];
+      });
+
+      it('should require a party per case or partyRespondent to be selected', () => {
+        expect(errors().partyPrimary).toEqual(
+          VALIDATION_ERROR_MESSAGES.partyPrimary,
+        );
+      });
+
+      describe('Respondent Selected', () => {
+        beforeEach(() => {
+          baseDoc.partyRespondent = true;
+        });
+
+        it('should allow having only a respondent as a party to all cases', () => {
+          expect(errors().partyPrimary).toEqual(undefined);
+        });
+      });
+
+      describe('Party per case Selected', () => {
+        beforeEach(() => {
+          baseDoc.casesParties = {
+            '101-19': { partyPrimary: true },
+            '102-19': { partySecondary: true },
+          };
+        });
+
+        it('should allow having a party to all cases', () => {
+          expect(errors().partyPrimary).toEqual(undefined);
+        });
+      });
+
+      describe('Party per selected case not selected', () => {
+        beforeEach(() => {
+          baseDoc.casesParties = {
+            '101-19': { partyPrimary: true },
+            '103-19': { partySecondary: true },
+          };
+        });
+
+        it('should not allow having a insufficient account of parties to all cases', () => {
+          expect(errors().partyPrimary).toEqual(
+            VALIDATION_ERROR_MESSAGES.partyPrimary,
+          );
+        });
+      });
     });
   });
 });

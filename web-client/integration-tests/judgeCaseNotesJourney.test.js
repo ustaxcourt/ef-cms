@@ -1,21 +1,23 @@
 import { setupTest, uploadPetition } from './helpers';
+import calendarClerkLogIn from './journey/calendarClerkLogIn';
+import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
 import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
-import docketClerkViewsAnUpcomingTrialSession from './journey/docketClerkViewsAnUpcomingTrialSession';
+import docketClerkViewsNewTrialSession from './journey/docketClerkViewsNewTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import judgeAddsNotesFromWorkingCopyCaseList from './journey/judgeAddsNotesFromWorkingCopyCaseList';
 import judgeLogIn from './journey/judgeLogIn';
 import judgeSignsOut from './journey/judgeSignsOut';
 import judgeViewsNotesFromCaseDetail from './journey/judgeViewsNotesFromCaseDetail';
 import judgeViewsTrialSessionWorkingCopy from './journey/judgeViewsTrialSessionWorkingCopy';
+import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionerLogin from './journey/petitionerLogIn';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
 import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
-import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
 import userSignsOut from './journey/petitionerSignsOut';
 
@@ -39,16 +41,16 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
   docketClerkLogIn(test);
   docketClerkCreatesATrialSession(test, overrides);
   docketClerkViewsTrialSessionList(test, overrides);
-  docketClerkViewsAnUpcomingTrialSession(test);
+  docketClerkViewsNewTrialSession(test);
   userSignsOut(test);
 
   const caseOverrides = {
     ...overrides,
-    procedureType: 'Small',
-    receivedAtYear: '2019',
-    receivedAtMonth: '01',
-    receivedAtDay: '01',
     caseType: 'Deficiency',
+    procedureType: 'Small',
+    receivedAtDay: '01',
+    receivedAtMonth: '01',
+    receivedAtYear: '2019',
   };
   petitionerLogin(test);
   it('Create case', async () => {
@@ -67,8 +69,12 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
   docketClerkSetsCaseReadyForTrial(test);
   userSignsOut(test);
 
-  petitionsClerkLogIn(test);
-  petitionsClerkSetsATrialSessionsSchedule(test);
+  calendarClerkLogIn(test);
+  markAllCasesAsQCed(test, () => createdCases);
+  userSignsOut(test);
+
+  calendarClerkLogIn(test);
+  calendarClerkSetsATrialSessionsSchedule(test);
   userSignsOut(test);
 
   judgeLogIn(test, 'judgeCohen');

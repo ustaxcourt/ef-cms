@@ -1,4 +1,5 @@
 const {
+  AUTHORIZATION_MAP,
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('./authorizationClientService');
@@ -95,5 +96,13 @@ describe('Authorization client service', () => {
         123456,
       ),
     ).toBeTruthy();
+  });
+
+  it('should contain NO falsy values in the AUTHORIZATION_MAP', async () => {
+    Object.keys(AUTHORIZATION_MAP).forEach(role => {
+      AUTHORIZATION_MAP[role].forEach(permission => {
+        expect(permission).toBeTruthy();
+      });
+    });
   });
 });

@@ -1,5 +1,5 @@
 import { Button } from '../ustc-ui/Button/Button';
-import { CaseDetailHeader } from './CaseDetailHeader';
+import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PDFSignerPageButtons } from './PDFSignerPageButtons';
 import { connect } from '@cerebral/react';
@@ -140,13 +140,18 @@ export const SignOrder = connect(
         <CaseDetailHeader />
         <section className="usa-section grid-container">
           <div className="grid-row margin-bottom-1">
+            <div className="grid-col-12">
+              <h1>Apply Signature</h1>
+            </div>
+          </div>
+          <div className="grid-row margin-bottom-1">
             <div className="grid-col-4">
               <Button
                 link
                 href={`/case-detail/${docketNumber}/documents/${documentId}`}
               >
                 <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
-                Back to Draft
+                Back to Draft Document
               </Button>
             </div>
             <div className="grid-col-4 text-align-center sign-pdf-control">
@@ -154,8 +159,7 @@ export const SignOrder = connect(
             </div>
             <div className="grid-col-4 text-align-right">
               {pdfSignerHelper.isPlaced && (
-                <Button link onClick={() => restart()}>
-                  <FontAwesomeIcon icon={['fas', 'trash']} />
+                <Button link icon="trash" onClick={() => restart()}>
                   Delete Signature
                 </Button>
               )}
@@ -183,7 +187,7 @@ export const SignOrder = connect(
                 >
                   (Signed) {pdfForSigning.nameForSigning}
                   <br />
-                  Chief Judge
+                  {pdfForSigning.nameForSigningLine2}
                 </span>
                 {!process.env.CI && (
                   <canvas

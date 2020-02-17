@@ -50,19 +50,23 @@ exports.updateDocketEntryInteractor = async ({
     {
       ...currentDocument,
       ...documentMetadata,
-      relationship: 'primaryDocument',
       documentId: primaryDocumentFileId,
       documentType: documentMetadata.documentType,
+      relationship: 'primaryDocument',
       userId: user.userId,
+      ...caseEntity.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
     },
     { applicationContext },
   );
-  documentEntity.generateFiledBy(caseToUpdate);
 
   const docketRecordEntry = new DocketRecord({
     description: documentMetadata.documentTitle,
     documentId: documentEntity.documentId,
     editState: JSON.stringify(documentMetadata),
+    eventCode: documentEntity.eventCode,
     filingDate: documentEntity.receivedAt,
   });
 
@@ -79,7 +83,7 @@ exports.updateDocketEntryInteractor = async ({
       workItem: workItemToDelete,
     });
 
-    const workItem = currentDocument.workItems[0];
+    const workItem = documentEntity.getQCWorkItem();
     Object.assign(workItem, {
       assigneeId: null,
       assigneeName: null,

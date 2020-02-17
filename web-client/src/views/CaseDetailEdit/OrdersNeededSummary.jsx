@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { CaseDetailHeader } from '../CaseDetailHeader';
+import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -12,13 +11,8 @@ export const OrdersNeededSummary = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     openCreateOrderChooseTypeModalSequence:
       sequences.openCreateOrderChooseTypeModalSequence,
-    printFromBrowserSequence: sequences.printFromBrowserSequence,
   },
-  ({
-    formattedCaseDetail,
-    openCreateOrderChooseTypeModalSequence,
-    printFromBrowserSequence,
-  }) => {
+  ({ formattedCaseDetail, openCreateOrderChooseTypeModalSequence }) => {
     return (
       <>
         <CaseDetailHeader />
@@ -26,20 +20,7 @@ export const OrdersNeededSummary = connect(
           <SuccessNotification />
           <ErrorNotification />
           <div>
-            <h1>
-              Orders Needed{' '}
-              <div className="display-inline-block margin-left-2 margin-top-neg-1">
-                <Button
-                  link
-                  onClick={() => {
-                    printFromBrowserSequence();
-                  }}
-                >
-                  <FontAwesomeIcon icon="print" size="sm" />
-                  Print
-                </Button>
-              </div>
-            </h1>
+            <h1>Orders Needed</h1>
           </div>
           <div>
             <ul className="usa-list">
@@ -56,7 +37,7 @@ export const OrdersNeededSummary = connect(
                 <li>Order for Ownership Disclosure Statement</li>
               )}
               {formattedCaseDetail.orderForRatification && (
-                <li>Order for Radification of Petition</li>
+                <li>Order for Ratification of Petition</li>
               )}
               {formattedCaseDetail.orderDesignatingPlaceOfTrial && (
                 <li>Order to Change Designated Place of Trial</li>
@@ -72,10 +53,11 @@ export const OrdersNeededSummary = connect(
 
           <div className="margin-top-3">
             <Button
+              icon="clipboard-list"
               id="button-create-order"
               onClick={() => openCreateOrderChooseTypeModalSequence()}
             >
-              <FontAwesomeIcon icon="clipboard-list" size="1x" /> Create Order
+              Create Order or Notice
             </Button>
           </div>
         </section>

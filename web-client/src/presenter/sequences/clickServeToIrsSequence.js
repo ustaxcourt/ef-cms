@@ -1,23 +1,20 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { getFormCombinedWithCaseDetailAction } from '../actions/getFormCombinedWithCaseDetailAction';
+import { saveCaseDetailInternalEditAction } from '../actions/saveCaseDetailInternalEditAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
-import { updateCaseAction } from '../actions/updateCaseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
 
-export const clickServeToIrsSequence = [
-  setWaitingForResponseAction,
+export const clickServeToIrsSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   getFormCombinedWithCaseDetailAction,
   validateCaseDetailAction,
   {
     error: [setValidationAlertErrorsAction],
     success: [
-      updateCaseAction,
+      saveCaseDetailInternalEditAction,
       setShowModalFactoryAction('ServeToIrsModalDialog'),
     ],
   },
-  unsetWaitingForResponseAction,
-];
+]);

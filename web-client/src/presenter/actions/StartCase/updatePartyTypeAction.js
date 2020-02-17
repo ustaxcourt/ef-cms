@@ -8,16 +8,22 @@ import { showContactsHelper } from '../../computeds/showContactsHelper';
  * key/value pair passed in via props
  *
  * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store
+ * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function used
+ * for getting state.form.filingType
  * @param {object} providers.props the cerebral store used for
  * getting props.key and props.value
- * @param {object} providers.get the cerebral get function used
- * for getting state.form.filingType
+ * @param {object} providers.store the cerebral store
  * @returns {object} props
  */
-export const updatePartyTypeAction = async ({ get, props, store }) => {
+export const updatePartyTypeAction = async ({
+  applicationContext,
+  get,
+  props,
+  store,
+}) => {
   let partyType = '';
-  const { COUNTRY_TYPES, PARTY_TYPES } = get(state.constants);
+  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
   if (props.key === 'filingType') {
     if (props.value === 'Myself' || props.value === 'Individual petitioner') {
       partyType = PARTY_TYPES.petitioner;
@@ -29,6 +35,7 @@ export const updatePartyTypeAction = async ({ get, props, store }) => {
         break;
       case 'No':
         partyType = PARTY_TYPES.petitionerSpouse;
+        store.set(state.showModal, 'SpousePermissionConfirmModal');
         break;
     }
   } else if (props.key === 'otherType') {

@@ -1,7 +1,8 @@
-service: ef-cms-case-notes
+service: ef-cms-case-notes-${opt:stageColor}
 plugins:
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
+  - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -28,13 +29,10 @@ custom:
     stages:
       - dev
       - stg
+      - test
       - prod
     dashboards: true
     alarms:
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
       - errorExceptions
     definitions:
       errorExceptions:
@@ -49,10 +47,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:provider.stage}-cloudwatch-alerts
-        notifications:
-          - protocol: email
-            endpoint: jsutton@flexion.us
+        topic: arn:aws:sns:${opt:region}:${opt:accountId}:serverless-alerts-topic-${self:provider.stage}
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -72,14 +67,16 @@ custom:
 
 provider:
   name: aws
+  endpointType: REGIONAL
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
@@ -112,7 +109,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/caseNotesHandlers.js
+    - web-api/${self:provider.dir}/caseNotesHandlers.js
 
   excludeDevDependencies: true
 
@@ -151,48 +148,60 @@ resources:
             MetricsEnabled: true
 
 functions:
-  createCaseNote:
-    handler: web-api/src/caseNotesHandlers.createCaseNoteLambda
+  getUserCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.getUserCaseNoteLambda
     events:
       - http:
-          path: /{caseId}
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getCaseNote:
-    handler: web-api/src/caseNotesHandlers.getCaseNoteLambda
-    events:
-      - http:
-          path: /{caseId}
+          path: /{caseId}/user-notes
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updateCaseNote:
-    handler: web-api/src/caseNotesHandlers.updateCaseNoteLambda
+  updateUserCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.updateUserCaseNoteLambda
     events:
       - http:
-          path: /{caseId}
+          path: /{caseId}/user-notes
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  deleteUserCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.deleteUserCaseNoteLambda
+    events:
+      - http:
+          path: /{caseId}/user-notes
+          method: delete
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   deleteCaseNote:
-    handler: web-api/src/caseNotesHandlers.deleteCaseNoteLambda
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.deleteCaseNoteLambda
     events:
       - http:
           path: /{caseId}
           method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  saveCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.saveCaseNoteLambda
+    events:
+      - http:
+          path: /{caseId}
+          method: put
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS

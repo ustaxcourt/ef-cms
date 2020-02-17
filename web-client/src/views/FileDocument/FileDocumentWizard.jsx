@@ -1,4 +1,4 @@
-import { CaseDetailHeader } from '../CaseDetailHeader';
+import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileDocument } from './FileDocument';
 import { FileDocumentReview } from './FileDocumentReview';
@@ -39,9 +39,7 @@ export const FileDocumentWizard = connect(
               <ViewAllDocuments />
             </Tab>
             <Tab tabName="FileDocument">
-              <div className="grid-container">
-                <FileDocument />
-              </div>
+              <FileDocument />
             </Tab>
             <Tab tabName="FileDocumentReview">
               <div className="grid-container">

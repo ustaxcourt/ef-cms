@@ -1,3 +1,4 @@
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -24,84 +25,14 @@ export const SessionInformationForm = connect(
       <>
         <h2 className="margin-top-0">Session Information</h2>
         <div className="blue-container">
-          <FormGroup errorText={validationErrors.startDate}>
-            <fieldset className="start-date usa-fieldset margin-bottom-0">
-              <legend className="usa-legend" id="start-date-legend">
-                Start date
-              </legend>
-              <div className="usa-memorable-date">
-                <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                  <input
-                    aria-describedby="start-date-legend"
-                    aria-label="month, two digits"
-                    className="usa-input usa-input-inline"
-                    id="start-date-month"
-                    max="12"
-                    min="1"
-                    name="month"
-                    placeholder="MM"
-                    type="number"
-                    value={form.month || ''}
-                    onBlur={() => {
-                      validateTrialSessionSequence();
-                    }}
-                    onChange={e => {
-                      updateTrialSessionFormDataSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                  <input
-                    aria-describedby="start-date-legend"
-                    aria-label="day, two digits"
-                    className="usa-input usa-input-inline"
-                    id="start-date-day"
-                    max="31"
-                    min="1"
-                    name="day"
-                    placeholder="DD"
-                    type="number"
-                    value={form.day || ''}
-                    onBlur={() => {
-                      validateTrialSessionSequence();
-                    }}
-                    onChange={e => {
-                      updateTrialSessionFormDataSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                  <input
-                    aria-describedby="start-date-legend"
-                    aria-label="year, four digits"
-                    className="usa-input usa-input-inline"
-                    id="start-date-year"
-                    max="2200"
-                    min="2019"
-                    name="year"
-                    placeholder="YYYY"
-                    type="number"
-                    value={form.year || ''}
-                    onBlur={() => {
-                      validateTrialSessionSequence();
-                    }}
-                    onChange={e => {
-                      updateTrialSessionFormDataSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-            </fieldset>
-          </FormGroup>
+          <DateInput
+            errorText={validationErrors.startDate}
+            id="start-date"
+            label="Start date"
+            values={form}
+            onBlur={validateTrialSessionSequence}
+            onChange={updateTrialSessionFormDataSequence}
+          />
           <FormGroup errorText={validationErrors.startTime}>
             <fieldset className="start-time usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="start-time-legend">
@@ -203,10 +134,10 @@ export const SessionInformationForm = connect(
                     }}
                   />
                   <label
-                    className="usa-checkbox__label"
+                    className="usa-checkbox__label inline-block"
                     htmlFor="swing-session"
                   >
-                    This is part of a Swing Session
+                    This is part of a Swing session
                   </label>
                 </div>
               </div>

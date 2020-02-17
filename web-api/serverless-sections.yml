@@ -1,9 +1,9 @@
-service: ef-cms-sections
+service: ef-cms-sections-${opt:stageColor}
 plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  # - serverless-plugin-aws-alerts
+  - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -30,13 +30,10 @@ custom:
     stages:
       - dev
       - stg
+      - test
       - prod
     dashboards: true
     alarms:
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
       - errorExceptions
     definitions:
       errorExceptions:
@@ -51,10 +48,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:provider.stage}-cloudwatch-alerts
-        notifications:
-          - protocol: email
-            endpoint: jsutton@flexion.us
+        topic: arn:aws:sns:${opt:region}:${opt:accountId}:serverless-alerts-topic-${self:provider.stage}
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -74,14 +68,16 @@ custom:
 
 provider:
   name: aws
+  endpointType: REGIONAL
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
@@ -111,7 +107,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/sectionsHandlers.js
+    - web-api/${self:provider.dir}/sectionsHandlers.js
 
   excludeDevDependencies: true
 
@@ -151,69 +147,69 @@ resources:
 
 functions:
   getInboxMessagesForSection:
-    handler: web-api/src/sectionsHandlers.getInboxMessagesForSectionLambda
+    handler: web-api/${self:provider.dir}/sectionsHandlers.getInboxMessagesForSectionLambda
     events:
       - http:
           path: /{section}/messages/inbox
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
   getSentMessagesForSection:
-    handler: web-api/src/sectionsHandlers.getSentMessagesForSectionLambda
+    handler: web-api/${self:provider.dir}/sectionsHandlers.getSentMessagesForSectionLambda
     events:
       - http:
           path: /{section}/messages/sent
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
   getDocumentQCBatchedForSection:
-    handler: web-api/src/sectionsHandlers.getDocumentQCBatchedForSectionLambda
+    handler: web-api/${self:provider.dir}/sectionsHandlers.getDocumentQCBatchedForSectionLambda
     events:
       - http:
           path: /{section}/document-qc/batched
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCServedForSection:
-    handler: web-api/src/sectionsHandlers.getDocumentQCServedForSectionLambda
+    handler: web-api/${self:provider.dir}/sectionsHandlers.getDocumentQCServedForSectionLambda
     events:
       - http:
           path: /{section}/document-qc/served
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
   getUsersInSection:
-    handler: web-api/src/sectionsHandlers.getUsersInSectionLambda
+    handler: web-api/${self:provider.dir}/sectionsHandlers.getUsersInSectionLambda
     events:
       - http:
           path: /{section}/users
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCInboxForSection:
-    handler: web-api/src/sectionsHandlers.getDocumentQCInboxForSectionLambda
+    handler: web-api/${self:provider.dir}/sectionsHandlers.getDocumentQCInboxForSectionLambda
     events:
       - http:
           path: /{section}/document-qc/inbox
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:

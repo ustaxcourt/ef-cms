@@ -5,11 +5,13 @@ import { state } from 'cerebral';
  * gets the start case internal form view options based on partyType
  *
  * @param {Function} get the cerebral get function
+ * @param {object} applicationContext the application context
  * @returns {object} object containing the view settings
  */
-export const startCaseInternalHelper = get => {
-  const { PARTY_TYPES } = get(state.constants);
+export const startCaseInternalHelper = (get, applicationContext) => {
+  const { PARTY_TYPES, PAYMENT_STATUS } = applicationContext.getConstants();
   const partyType = get(state.form.partyType);
+  const petitionPaymentStatus = get(state.form.petitionPaymentStatus);
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
 
   let showOwnershipDisclosureStatement = false;
@@ -25,8 +27,12 @@ export const startCaseInternalHelper = get => {
     showOwnershipDisclosureStatement = true;
   }
 
+  const shouldShowIrsNoticeDate = get(state.form.hasVerifiedIrsNotice) === true;
+
   return {
     partyTypes: PARTY_TYPES,
+    shouldShowIrsNoticeDate,
+    showOrderForFilingFee: petitionPaymentStatus === PAYMENT_STATUS.UNPAID,
     showOwnershipDisclosureStatement,
     showPrimaryContact: showContacts.contactPrimary,
     showSecondaryContact: showContacts.contactSecondary,

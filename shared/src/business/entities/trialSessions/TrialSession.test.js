@@ -6,7 +6,7 @@ const VALID_TRIAL_SESSION = {
   startDate: '2025-03-01T00:00:00.000Z',
   term: 'Fall',
   termYear: '2025',
-  trialLocation: 'Birmingham, AL',
+  trialLocation: 'Birmingham, Alabama',
 };
 
 describe('TrialSession entity', () => {
@@ -99,7 +99,9 @@ describe('TrialSession entity', () => {
           applicationContext,
         },
       );
-      expect(trialSession.generateSortKeyPrefix()).toEqual('BirminghamAL-R');
+      expect(trialSession.generateSortKeyPrefix()).toEqual(
+        'BirminghamAlabama-R',
+      );
     });
 
     it('should generate correct sort key prefix for a small trial session', () => {
@@ -112,7 +114,9 @@ describe('TrialSession entity', () => {
           applicationContext,
         },
       );
-      expect(trialSession.generateSortKeyPrefix()).toEqual('BirminghamAL-S');
+      expect(trialSession.generateSortKeyPrefix()).toEqual(
+        'BirminghamAlabama-S',
+      );
     });
 
     it('should generate correct sort key prefix for a hybrid trial session', () => {
@@ -125,7 +129,9 @@ describe('TrialSession entity', () => {
           applicationContext,
         },
       );
-      expect(trialSession.generateSortKeyPrefix()).toEqual('BirminghamAL-H');
+      expect(trialSession.generateSortKeyPrefix()).toEqual(
+        'BirminghamAlabama-H',
+      );
     });
   });
 
@@ -318,6 +324,68 @@ describe('TrialSession entity', () => {
         caseId: '46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5',
       });
       expect(trialSession.caseOrder).toEqual([]);
+    });
+  });
+
+  describe('canSetAsCalendared', () => {
+    it('should be able to set a trial session as calendared if all properties are not empty', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          city: 'Flavortown',
+          judge: { name: 'Judge Armen' },
+          postalCode: '12345',
+          state: 'TN',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.canSetAsCalendared()).toBeTruthy();
+    });
+
+    it('should NOT be able to set a trial session as calendared if one or more properties are not empty', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          city: 'Flavortown',
+          judge: {},
+          postalCode: '12345',
+          state: 'TN',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.canSetAsCalendared()).toBeFalsy();
+    });
+  });
+
+  describe('setNoticesIssued', () => {
+    it('Should set the noticeIssuedDate on the trial session', async () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          city: 'Flavortown',
+          judge: {},
+          postalCode: '12345',
+          state: 'TN',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.noticeIssuedDate).toBeFalsy();
+
+      trialSession.setNoticesIssued();
+
+      expect(trialSession.noticeIssuedDate).toBeTruthy();
     });
   });
 });

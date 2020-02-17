@@ -28,9 +28,9 @@ describe('unprioritizeCaseInteractor', () => {
           getCaseByCaseId: () =>
             Promise.resolve({
               ...MOCK_CASE,
-              status: Case.STATUS_TYPES.generalDocketReadyForTrial,
               highPriority: true,
               highPriorityReason: 'because',
+              status: Case.STATUS_TYPES.generalDocketReadyForTrial,
             }),
           updateCase: ({ caseToUpdate }) => caseToUpdate,
           updateCaseTrialSortMappingRecords: updateCaseTrialSortMappingRecordsMock,
@@ -67,9 +67,9 @@ describe('unprioritizeCaseInteractor', () => {
           getCaseByCaseId: () =>
             Promise.resolve({
               ...MOCK_CASE,
-              status: Case.STATUS_TYPES.new,
               highPriority: true,
               highPriorityReason: 'because',
+              status: Case.STATUS_TYPES.new,
             }),
           updateCase: ({ caseToUpdate }) => caseToUpdate,
           updateCaseTrialSortMappingRecords: updateCaseTrialSortMappingRecordsMock,

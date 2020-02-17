@@ -1,5 +1,6 @@
 import { Button } from '../ustc-ui/Button/Button';
-import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
+import { CaseListRowExternal } from './CaseListRowExternal';
+import { WarningNotification } from './WarningNotification';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -11,6 +12,9 @@ export const CaseListPetitioner = connect(
   ({ formattedCases }) => {
     return (
       <>
+        <WarningNotification
+          alertWarning={{ message: 'Hi', title: 'Hello there' }}
+        />
         <div className="grid-container padding-x-0">
           <div className="grid-row">
             <div className="tablet:grid-col-6 hide-on-mobile">
@@ -38,26 +42,21 @@ export const CaseListPetitioner = connect(
           >
             <thead>
               <tr>
-                <th>Docket Number</th>
-                <th>Case Name</th>
-                <th>Date Filed</th>
+                <th>
+                  <span className="usa-sr-only">Lead Case Indicator</span>
+                </th>
+                <th>Docket number</th>
+                <th>Case title</th>
+                <th>Date filed</th>
               </tr>
             </thead>
             <tbody>
               {formattedCases.map(item => (
-                <tr key={item.docketNumber}>
-                  <td className="hide-on-mobile">
-                    <CaseLink formattedCase={item} />
-                  </td>
-                  <td className="hide-on-mobile">{item.caseName}</td>
-                  <td>{item.createdAtFormatted}</td>
-                  <td className="show-on-mobile">
-                    <div>
-                      <CaseLink formattedCase={item} />
-                    </div>
-                    {item.caseName}
-                  </td>
-                </tr>
+                <CaseListRowExternal
+                  onlyLinkIfRequestedUserAssociated
+                  formattedCase={item}
+                  key={item.caseId}
+                />
               ))}
             </tbody>
           </table>

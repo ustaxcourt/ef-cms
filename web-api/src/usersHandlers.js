@@ -1,6 +1,8 @@
 module.exports = {
   createUserLambda: require('./users/createUserLambda').handler,
   getCasesByUserLambda: require('./cases/getCasesByUserLambda').handler,
+  getConsolidatedCasesByUserLambda: require('./cases/getConsolidatedCasesByUserLambda')
+    .handler,
   getDocumentQCBatchedForUserLambda: require('./workitems/getDocumentQCBatchedForUserLambda')
     .handler,
   getDocumentQCInboxForUserLambda: require('./workitems/getDocumentQCInboxForUserLambda')
@@ -23,7 +25,6 @@ module.exports = {
     .handler,
   updateUserContactInformationLambda: require('./users/updateUserContactInformationLambda')
     .handler,
-  verifyCaseForUserLambda: require('./cases/verifyCaseForUserLambda').handler,
   verifyPendingCaseForUserLambda: require('./cases/verifyPendingCaseForUserLambda')
     .handler,
 };

@@ -109,14 +109,17 @@ const generateHtmlForFilingReceipt = async ({
   const contentHtml = await applicationContext
     .getTemplateGenerators()
     .generatePrintableFilingReceiptTemplate({
-      caption: caseCaption,
-      captionPostfix: caseCaptionPostfix,
-      docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
-      documentsFiledContent,
-      filedAt: applicationContext
-        .getUtilities()
-        .formatDateString(primaryDocument.receivedAt, 'DATE_TIME_TZ'),
-      filedBy: primaryDocument.filedBy,
+      applicationContext,
+      content: {
+        caption: caseCaption,
+        captionPostfix: caseCaptionPostfix,
+        docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
+        documentsFiledContent,
+        filedAt: applicationContext
+          .getUtilities()
+          .formatDateString(primaryDocument.receivedAt, 'DATE_TIME_TZ'),
+        filedBy: primaryDocument.filedBy,
+      },
     });
 
   return { contentHtml, docketNumber };
@@ -151,7 +154,7 @@ exports.generatePrintableFilingReceiptInteractor = async ({
 
   const documentId = applicationContext.getUniqueId();
 
-  await applicationContext.getPersistenceGateway().saveDocument({
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: pdf,
     documentId,

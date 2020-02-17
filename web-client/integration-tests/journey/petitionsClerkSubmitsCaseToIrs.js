@@ -16,7 +16,6 @@ export default test => {
       key: 'irsYear',
       value: '2050',
     });
-    await test.runSequence('autoSaveCaseSequence');
 
     await test.runSequence('clickServeToIrsSequence');
     expect(test.getState('caseDetailErrors')).toEqual({
@@ -27,7 +26,6 @@ export default test => {
       key: 'irsYear',
       value: '2017',
     });
-    await test.runSequence('autoSaveCaseSequence');
 
     await test.runSequence('clickServeToIrsSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});

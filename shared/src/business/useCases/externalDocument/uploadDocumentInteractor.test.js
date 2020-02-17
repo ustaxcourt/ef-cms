@@ -25,6 +25,7 @@ describe('uploadDocumentInteractor', () => {
         userId: 'respondent',
       },
     ],
+    preferredTrialCity: 'Fresno, California',
     role: User.ROLES.petitioner,
     userId: 'petitioner',
   };
@@ -39,7 +40,7 @@ describe('uploadDocumentInteractor', () => {
         };
       },
       getPersistenceGateway: () => ({
-        uploadDocument: async () => caseRecord,
+        uploadDocumentFromClient: async () => caseRecord,
       }),
     };
     let error;
@@ -72,7 +73,7 @@ describe('uploadDocumentInteractor', () => {
           };
         },
         getPersistenceGateway: () => ({
-          uploadDocument: async () => caseRecord,
+          uploadDocumentFromClient: async () => caseRecord,
         }),
       };
       await uploadDocumentInteractor({
@@ -103,7 +104,7 @@ describe('uploadDocumentInteractor', () => {
           };
         },
         getPersistenceGateway: () => ({
-          uploadDocument: async () => caseRecord,
+          uploadDocumentFromClient: async () => caseRecord,
         }),
       };
       await uploadDocumentInteractor({
@@ -145,7 +146,7 @@ describe('uploadDocumentInteractor', () => {
           };
         },
         getPersistenceGateway: () => ({
-          uploadDocument: async () => caseRecord,
+          uploadDocumentFromClient: async () => caseRecord,
         }),
       };
       await uploadDocumentInteractor({

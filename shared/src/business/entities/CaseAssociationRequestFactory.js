@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -16,9 +16,9 @@ CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
   documentTitleTemplate: 'Select a document',
   eventCode: 'Select a document',
   exhibits: 'Enter selection for Exhibits.',
-  scenario: 'Select a document',
   representingPrimary: 'Select a party',
   representingSecondary: 'Select a party',
+  scenario: 'Select a document',
 };
 
 /**
@@ -121,6 +121,8 @@ function CaseAssociationRequestFactory(rawProps) {
     documentTitleTemplate: joi.string().required(),
     documentType: joi.string().required(),
     eventCode: joi.string().required(),
+    partyPractitioner: joi.boolean().optional(),
+    partyRespondent: joi.boolean().optional(),
     primaryDocumentFile: joi.object().required(),
     scenario: joi.string().required(),
   };

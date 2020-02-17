@@ -10,6 +10,6 @@ import { state } from 'cerebral';
 export const setTrialSessionsFiltersAction = ({ props, store }) => {
   store.set(
     state.screenMetadata.trialSessionFilters,
-    pick(props.query, ['trialLocation', 'judge', 'sessionType']),
+    pick(props.query, ['trialLocation', 'judge', 'sessionType', 'status']),
   );
 };

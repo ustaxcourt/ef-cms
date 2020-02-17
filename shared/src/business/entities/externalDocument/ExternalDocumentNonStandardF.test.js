@@ -11,7 +11,7 @@ describe('ExternalDocumentNonStandardF', () => {
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         category: VALIDATION_ERROR_MESSAGES.category,
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
         ordinalValue: VALIDATION_ERROR_MESSAGES.ordinalValue,
         previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
       });
@@ -23,7 +23,7 @@ describe('ExternalDocumentNonStandardF', () => {
         documentTitle: '[First, Second, etc.] Amended [Document Name]',
         documentType: 'Amended',
         ordinalValue: 'First',
-        previousDocument: 'Petition',
+        previousDocument: { documentType: 'Petition' },
         scenario: 'Nonstandard F',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
@@ -31,16 +31,33 @@ describe('ExternalDocumentNonStandardF', () => {
   });
 
   describe('title generation', () => {
-    it('should generate valid title', () => {
+    it('should generate valid title with previousDocument documentType', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Miscellaneous',
         documentTitle: '[First, Second, etc.] Amended [Document Name]',
         documentType: 'Amended',
         ordinalValue: 'First',
-        previousDocument: 'Petition',
+        previousDocument: { documentType: 'Petition' },
         scenario: 'Nonstandard F',
       });
       expect(extDoc.getDocumentTitle()).toEqual('First Amended Petition');
+    });
+
+    it('should generate valid title with previousDocument documentTitle', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Miscellaneous',
+        documentTitle: '[First, Second, etc.] Amended [Document Name]',
+        documentType: 'Amended',
+        ordinalValue: 'First',
+        previousDocument: {
+          documentTitle: 'Stipulation Something',
+          documentType: 'Stipulation',
+        },
+        scenario: 'Nonstandard F',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'First Amended Stipulation Something',
+      );
     });
   });
 });

@@ -2,12 +2,12 @@ const {
   AddPractitionerFactory,
 } = require('../../entities/caseAssociation/AddPractitionerFactory');
 const {
-  validateAddPractitioner,
+  validateAddPractitionerInteractor,
 } = require('./validateAddPractitionerInteractor');
 
-describe('validateAddPractitioner', () => {
+describe('validateAddPractitionerInteractor', () => {
   it('returns the expected errors object on an empty add practitioner', () => {
-    const errors = validateAddPractitioner({
+    const errors = validateAddPractitionerInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           AddPractitionerFactory,
@@ -20,7 +20,7 @@ describe('validateAddPractitioner', () => {
   });
 
   it('returns null when no errors occur', () => {
-    const errors = validateAddPractitioner({
+    const errors = validateAddPractitionerInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           AddPractitionerFactory,

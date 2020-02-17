@@ -12,7 +12,7 @@ exports.customHandle = async (event, fun) => {
   try {
     const pdfBuffer = await fun();
     return {
-      body: pdfBuffer.toString('base64'),
+      body: (pdfBuffer || []).toString('base64'),
       headers: {
         ...headers,
         'Content-Type': 'application/pdf',

@@ -2,20 +2,24 @@ service: ef-cms-clamav
 
 plugins:
   - serverless-prune-plugin
+  - serverless-jetpack
 
 custom:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   prune:
     automatic: true
-    includeLayers: true
     number: 3
+    includeLayers: true
+  jetpack:
+    mode: yarn
 
 provider:
   name: aws
+  endpointType: REGIONAL
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
     serverSideEncryption: AES256
@@ -24,9 +28,8 @@ layers:
   clamav:
     name: ${self:provider.stage}-clamav
     compatibleRuntimes:
-      - nodejs10.x
+      - nodejs12.x
     path: web-api/runtimes/clamav
     package:
       exclude:
         - clamav_lambda_layer.tar.gz
-    retain: true

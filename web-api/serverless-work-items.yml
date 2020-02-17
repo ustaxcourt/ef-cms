@@ -1,9 +1,9 @@
-service: ef-cms-work-items
+service: ef-cms-work-items-${opt:stageColor}
 plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  # - serverless-plugin-aws-alerts
+  - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -30,13 +30,10 @@ custom:
     stages:
       - dev
       - stg
+      - test
       - prod
     dashboards: true
     alarms:
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
       - errorExceptions
     definitions:
       errorExceptions:
@@ -51,10 +48,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:provider.stage}-cloudwatch-alerts
-        notifications:
-          - protocol: email
-            endpoint: jsutton@flexion.us
+        topic: arn:aws:sns:${opt:region}:${opt:accountId}:serverless-alerts-topic-${self:provider.stage}
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -74,14 +68,16 @@ custom:
 
 provider:
   name: aws
+  endpointType: REGIONAL
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
@@ -111,7 +107,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/workItemsHandlers.js
+    - web-api/${self:provider.dir}/workItemsHandlers.js
 
   excludeDevDependencies: true
 
@@ -151,57 +147,57 @@ resources:
 
 functions:
   assignWorkItems:
-    handler: web-api/src/workItemsHandlers.assignWorkItemsLambda
+    handler: web-api/${self:provider.dir}/workItemsHandlers.assignWorkItemsLambda
     events:
       - http:
           path: /
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   getWorkItem:
-    handler: web-api/src/workItemsHandlers.getWorkItemLambda
+    handler: web-api/${self:provider.dir}/workItemsHandlers.getWorkItemLambda
     events:
       - http:
           path: /{workItemId}
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   forwardWorkItem:
-    handler: web-api/src/workItemsHandlers.forwardWorkItemLambda
+    handler: web-api/${self:provider.dir}/workItemsHandlers.forwardWorkItemLambda
     events:
       - http:
           path: /{workItemId}/assignee
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   completeWorkItem:
-    handler: web-api/src/workItemsHandlers.completeWorkItemLambda
+    handler: web-api/${self:provider.dir}/workItemsHandlers.completeWorkItemLambda
     events:
       - http:
           path: /{workItemId}/complete
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   setWorkItemAsRead:
-    handler: web-api/src/workItemsHandlers.setWorkItemAsReadLambda
+    handler: web-api/${self:provider.dir}/workItemsHandlers.setWorkItemAsReadLambda
     events:
       - http:
           path: /{workItemId}/read
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}

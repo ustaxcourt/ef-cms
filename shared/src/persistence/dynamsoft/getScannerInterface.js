@@ -112,7 +112,11 @@ exports.getScannerInterface = () => {
     ret.DWObject = DWObject;
   };
 
-  const startScanSession = ({ applicationContext }) => {
+  const startScanSession = ({ applicationContext, scanMode }) => {
+    const { SCAN_MODES } = applicationContext.getConstants();
+    const duplexEnabled = scanMode === SCAN_MODES.DUPLEX;
+    const feederEnabled = scanMode !== SCAN_MODES.FLATBED;
+
     return new Promise((resolve, reject) => {
       const onScanFinished = () => {
         const count = DWObject.HowManyImagesInBuffer;
@@ -163,12 +167,12 @@ exports.getScannerInterface = () => {
       DWObject.IfShowIndicator = false;
       DWObject.IfShowProgressBar = false;
       DWObject.Resolution = 300;
-      DWObject.IfFeederEnabled = true;
-      DWObject.IfDuplexEnabled = false;
+      DWObject.IfDuplexEnabled = duplexEnabled;
+      DWObject.IfFeederEnabled = feederEnabled;
       DWObject.PixelType = window['EnumDWT_PixelType'].TWPT_RGB;
       DWObject.PageSize = window['EnumDWT_CapSupportedSizes'].TWSS_A4;
 
-      if (!DWObject.IfFeederLoaded) {
+      if (feederEnabled && !DWObject.IfFeederLoaded) {
         DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
         return reject(new Error('no images in buffer'));
       }

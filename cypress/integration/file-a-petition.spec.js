@@ -3,7 +3,7 @@ let createdDocketNumber;
 
 describe('File a petition', function() {
   before(() => {
-    cy.seed();
+    cy.task('seed');
     cy.login('petitioner');
   });
 
@@ -47,7 +47,7 @@ describe('creation form', () => {
     cy.contains('button#submit-case', 'Continue to Step 2 of 5');
   });
 
-  it('shows validation checkmark when Statement of Taxpayer Identification Number file is selected', () => {
+  it('shows validation check mark when Statement of Taxpayer Identification Number file is selected', () => {
     cy.get('label#stin-file-label')
       .scrollIntoView()
       .should('not.have.class', 'validated');
@@ -67,7 +67,7 @@ describe('creation form', () => {
     cy.contains('button#submit-case', 'Continue to Step 3 of 5');
   });
 
-  it('shows validation checkmark when Petition file is selected', () => {
+  it('shows validation check mark when Petition file is selected', () => {
     cy.get('label#petition-file-label')
       .scrollIntoView()
       .should('not.have.class', 'validated');
@@ -184,18 +184,11 @@ describe('creation form', () => {
 describe('can view case detail', () => {
   before(() => {
     cy.viewport(1200, 900);
-    cy.get('#search-field').type(createdDocketNumber);
-    cy.get('#search-input').submit();
+    cy.login('petitioner', `/case-detail/${createdDocketNumber}`);
     cy.url().should('include', 'case-detail');
   });
 
   it('shows docket record table and data', () => {
     cy.get('table.case-detail.docket-record tbody tr').should('exist');
-  });
-
-  it('accordion header expands/collapses', () => {
-    cy.get('#actions-button').should('exist');
-    cy.get('#actions-button').click();
-    cy.get('#paymentInfo').should('be.visible');
   });
 });

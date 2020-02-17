@@ -1,6 +1,12 @@
+import { alertHelper as alertHelperComputed } from './alertHelper';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
-import { alertHelper } from './alertHelper';
+const alertHelper = withAppContextDecorator(alertHelperComputed, {
+  getCurrentUser: () => ({
+    userId: '123',
+  }),
+});
 
 describe('alertHelper', () => {
   it('single message error alert', () => {

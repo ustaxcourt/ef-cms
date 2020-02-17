@@ -1,0 +1,36 @@
+doctype html
+html(lang="en")
+  head
+    title
+      if options.title
+        | #{options.title}
+      else
+        | U.S. Tax Court
+    meta(charset='utf-8')
+    style !{css}
+    if options.styles
+      style !{options.styles}
+
+  body
+    .main
+      if options.overwriteMain
+        | !{content.main}
+
+      else
+        .court-header
+          .us-tax-court-seal
+          h1 United States Tax Court
+          if options.h2
+            h2= options.h2
+          .clear
+
+        .case-information
+          #caption #{content.caption} #{content.captionPostfix}
+          #docket-number Docket Number #{content.docketNumberWithSuffix}
+          .clear
+
+        if options.h3
+          h3= options.h3
+
+        | !{content.main}
+

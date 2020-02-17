@@ -1,11 +1,12 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { waitForRouter } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
 export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
   return it('Petitions clerk creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
-    await test.runSequence('submitPetitionFromPaperSequence');
+    await test.runSequence('navigateToReviewPetitionSequence');
 
     expect(test.getState('alertError.title')).toEqual(
       'Please correct the following errors on the page:',
@@ -24,16 +25,21 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     );
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'month',
+      key: 'dateReceivedMonth',
       value: '01',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'day',
+      key: 'dateReceivedDay',
       value: '01',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'year',
+      key: 'dateReceivedYear',
       value: '2001',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'mailingDate',
+      value: 'Some Day',
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -155,10 +161,19 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('submitPetitionFromPaperSequence');
+    await test.runSequence('navigateToReviewPetitionSequence');
+    await test.runSequence('gotoReviewPetitionSequence');
 
-    expect(test.getState('currentPage')).toEqual('DocumentDetail');
+    expect(test.getState('currentPage')).toEqual('ReviewPetition');
+
+    await test.runSequence('serveToIrsSequence');
+
+    await test.runSequence('gotoCaseDetailSequence');
 
     test.docketNumber = test.getState('caseDetail.docketNumber');
+    test.caseId = test.getState('caseDetail.caseId');
+    expect(test.getState('caseDetail.preferredTrialCity')).toEqual(
+      trialLocation,
+    );
   });
 };

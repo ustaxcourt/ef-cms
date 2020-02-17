@@ -27,6 +27,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         userId: 'respondent',
       },
     ],
+    preferredTrialCity: 'Fresno, California',
     role: User.ROLES.petitioner,
     userId: 'petitioner',
   };
@@ -41,7 +42,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         };
       },
       getPersistenceGateway: () => ({
-        uploadDocument: async () => caseRecord,
+        uploadDocumentFromClient: async () => caseRecord,
       }),
       getUseCases: () => ({
         fileExternalDocumentInteractor: () => {},
@@ -76,7 +77,7 @@ describe('uploadExternalDocumentsInteractor', () => {
           };
         },
         getPersistenceGateway: () => ({
-          uploadDocument: async () => caseRecord,
+          uploadDocumentFromClient: async () => caseRecord,
         }),
         getUseCases: () => ({
           fileExternalDocumentInteractor: () => {},
@@ -112,7 +113,7 @@ describe('uploadExternalDocumentsInteractor', () => {
           };
         },
         getPersistenceGateway: () => ({
-          uploadDocument: async () => caseRecord,
+          uploadDocumentFromClient: async () => caseRecord,
         }),
         getUseCases: () => ({
           fileExternalDocumentInteractor: () => {},
@@ -159,7 +160,7 @@ describe('uploadExternalDocumentsInteractor', () => {
           };
         },
         getPersistenceGateway: () => ({
-          uploadDocument: async () => caseRecord,
+          uploadDocumentFromClient: async () => caseRecord,
         }),
         getUseCases: () => ({
           fileExternalDocumentInteractor: () => {},
@@ -187,5 +188,52 @@ describe('uploadExternalDocumentsInteractor', () => {
       error = err;
     }
     expect(error).toBeUndefined();
+  });
+
+  it('Should call fileExternalDocumentForConsolidatedInteractor if a leadCaseId is provided', async () => {
+    const fileExternalDocumentForConsolidatedInteractorMock = jest.fn();
+    const fileExternalDocumentInteractorMock = jest.fn();
+
+    let applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: User.ROLES.practitioner,
+          userId: 'practitioner',
+        };
+      },
+      getPersistenceGateway: () => ({
+        uploadDocumentFromClient: async () => caseRecord,
+      }),
+      getUseCases: () => ({
+        fileExternalDocumentForConsolidatedInteractor: fileExternalDocumentForConsolidatedInteractorMock,
+        fileExternalDocumentInteractor: () =>
+          fileExternalDocumentInteractorMock,
+        validatePdfInteractor: () => null,
+        virusScanPdfInteractor: () => null,
+      }),
+    };
+    await uploadExternalDocumentsInteractor({
+      applicationContext,
+      documentFiles: {
+        primary: 'something',
+        primarySupporting0: 'something3',
+        secondary: 'something2',
+        secondarySupporting0: 'something4',
+      },
+      documentMetadata: {},
+      leadCaseId: '123',
+      progressFunctions: {
+        primary: 'something',
+        primarySupporting0: 'something3',
+        secondary: 'something2',
+        secondarySupporting0: 'something4',
+      },
+    });
+
+    expect(fileExternalDocumentInteractorMock).not.toHaveBeenCalled();
+    expect(
+      fileExternalDocumentForConsolidatedInteractorMock,
+    ).toHaveBeenCalled();
   });
 });

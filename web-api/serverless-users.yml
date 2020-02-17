@@ -1,9 +1,9 @@
-service: ef-cms-users
+service: ef-cms-users-${opt:stageColor}
 plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  # - serverless-plugin-aws-alerts
+  - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -30,13 +30,10 @@ custom:
     stages:
       - dev
       - stg
+      - test
       - prod
     dashboards: true
     alarms:
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
       - errorExceptions
     definitions:
       errorExceptions:
@@ -51,10 +48,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:provider.stage}-cloudwatch-alerts
-        notifications:
-          - protocol: email
-            endpoint: jsutton@flexion.us
+        topic: arn:aws:sns:${opt:region}:${opt:accountId}:serverless-alerts-topic-${self:provider.stage}
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -74,14 +68,16 @@ custom:
 
 provider:
   name: aws
+  endpointType: REGIONAL
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
@@ -111,7 +107,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/usersHandlers.js
+    - web-api/${self:provider.dir}/usersHandlers.js
   excludeDevDependencies: true
 
 resources:
@@ -150,163 +146,163 @@ resources:
 
 functions:
   getUser:
-    handler: web-api/src/usersHandlers.getUserLambda
+    handler: web-api/${self:provider.dir}/usersHandlers.getUserLambda
     events:
       - http:
           path: /
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   getInternalUsers:
-    handler: web-api/src/usersHandlers.getInternalUsersLambda
+    handler: web-api/${self:provider.dir}/usersHandlers.getInternalUsersLambda
     events:
       - http:
           path: /internal
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   createUser:
-    handler: web-api/src/usersHandlers.createUserLambda
+    handler: web-api/${self:provider.dir}/usersHandlers.createUserLambda
     events:
       - http:
           path: /
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   getCasesByUser:
-    handler: web-api/src/usersHandlers.getCasesByUserLambda
+    handler: web-api/${self:provider.dir}/usersHandlers.getCasesByUserLambda
     events:
       - http:
           path: /{userId}/cases
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  verifyCaseForUser:
-    handler: web-api/src/usersHandlers.verifyCaseForUserLambda
+  getConsolidatedCasesByUser:
+    handler: web-api/${self:provider.dir}/usersHandlers.getConsolidatedCasesByUserLambda
     events:
       - http:
-          path: /{userId}/case/{caseId}
+          path: /{userId}/cases-with-consolidation
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   verifyPendingCaseForUser:
-    handler: web-api/src/usersHandlers.verifyPendingCaseForUserLambda
+    handler: web-api/${self:provider.dir}/usersHandlers.verifyPendingCaseForUserLambda
     events:
       - http:
           path: /{userId}/case/{caseId}/pending
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   practitionerCaseAssociation:
-    handler: web-api/src/usersHandlers.practitionerCaseAssociationLambda
+    handler: web-api/${self:provider.dir}/usersHandlers.practitionerCaseAssociationLambda
     events:
       - http:
           path: /{userId}/case/{caseId}
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   practitionerPendingCaseAssociation:
-    handler: web-api/src/usersHandlers.practitionerPendingCaseAssociationLambda
+    handler: web-api/${self:provider.dir}/usersHandlers.practitionerPendingCaseAssociationLambda
     events:
       - http:
           path: /{userId}/case/{caseId}/pending
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   getInboxMessagesForUser:
-    handler: web-api/src/usersHandlers.getInboxMessagesForUserLambda
+    handler: web-api/${self:provider.dir}/usersHandlers.getInboxMessagesForUserLambda
     events:
       - http:
           path: /{userId}/messages/inbox
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   getSentMessagesForUser:
-    handler: web-api/src/usersHandlers.getSentMessagesForUserLambda
+    handler: web-api/${self:provider.dir}/usersHandlers.getSentMessagesForUserLambda
     events:
       - http:
           path: /{userId}/messages/sent
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCInboxForUser:
-    handler: web-api/src/usersHandlers.getDocumentQCInboxForUserLambda
+    handler: web-api/${self:provider.dir}/usersHandlers.getDocumentQCInboxForUserLambda
     events:
       - http:
           path: /{userId}/document-qc/inbox
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCBatchedForUser:
-    handler: web-api/src/usersHandlers.getDocumentQCBatchedForUserLambda
+    handler: web-api/${self:provider.dir}/usersHandlers.getDocumentQCBatchedForUserLambda
     events:
       - http:
           path: /{userId}/document-qc/batched
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCServedForUser:
-    handler: web-api/src/usersHandlers.getDocumentQCServedForUserLambda
+    handler: web-api/${self:provider.dir}/usersHandlers.getDocumentQCServedForUserLambda
     events:
       - http:
           path: /{userId}/document-qc/served
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   updateUserContactInformation:
-    handler: web-api/src/usersHandlers.updateUserContactInformationLambda
+    handler: web-api/${self:provider.dir}/usersHandlers.updateUserContactInformationLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -315,7 +311,7 @@ functions:
       - http:
           path: /{userId}/contact-info
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           async: true
           authorizer:
             type: COGNITO_USER_POOLS
@@ -323,24 +319,24 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getPractitionersBySearchKey:
-    handler: web-api/src/usersHandlers.getPractitionersBySearchKeyLambda
+    handler: web-api/${self:provider.dir}/usersHandlers.getPractitionersBySearchKeyLambda
     events:
       - http:
           path: /practitioners/search
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   getRespondentsBySearchKey:
-    handler: web-api/src/usersHandlers.getRespondentsBySearchKeyLambda
+    handler: web-api/${self:provider.dir}/usersHandlers.getRespondentsBySearchKeyLambda
     events:
       - http:
           path: /respondents/search
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:

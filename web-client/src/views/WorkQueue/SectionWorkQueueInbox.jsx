@@ -1,5 +1,5 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -7,7 +7,6 @@ import React from 'react';
 export const SectionWorkQueueInbox = connect(
   {
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
-    documentHelper: state.documentHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
@@ -18,7 +17,6 @@ export const SectionWorkQueueInbox = connect(
   },
   ({
     assignSelectedWorkItemsSequence,
-    documentHelper,
     formattedWorkQueue,
     selectAssigneeSequence,
     selectedWorkItems,
@@ -31,15 +29,12 @@ export const SectionWorkQueueInbox = connect(
       <React.Fragment>
         {workQueueHelper.showSendToBar && (
           <div className="action-section">
-            <span
-              aria-label="selected work items count"
-              className="assign-work-item-count"
-            >
-              <FontAwesomeIcon icon="check" />
+            <span className="assign-work-item-count">
+              <Icon aria-label="selected work items count" icon="check" />
               {selectedWorkItems.length}
             </span>
             <select
-              aria-label="select a assignee"
+              aria-label="select an assignee"
               className="usa-select"
               id="options"
               name="options"
@@ -71,13 +66,13 @@ export const SectionWorkQueueInbox = connect(
               {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
               <th aria-label="Docket Number">Docket</th>
               <th>{workQueueHelper.inboxFiledColumnLabel}</th>
-              <th>Case name</th>
+              <th>Case title</th>
               {!workQueueHelper.hideIconColumn && (
                 <th aria-label="Status Icon" className="padding-right-0" />
               )}
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
-              <th>Case Status</th>
+              <th>Case status</th>
               {workQueueHelper.showAssignedToColumn && (
                 <th>{workQueueHelper.assigneeColumnTitle}</th>
               )}
@@ -141,16 +136,15 @@ export const SectionWorkQueueInbox = connect(
                 {!workQueueHelper.hideIconColumn && (
                   <td className="message-queue-row has-icon padding-right-0">
                     {item.showBatchedStatusIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="true"
+                      <Icon
+                        aria-label="batched for IRS"
                         className="iconStatusBatched"
                         icon={['far', 'clock']}
                         size="lg"
                       />
                     )}
                     {item.showRecalledStatusIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="false"
+                      <Icon
                         aria-label="recalled from IRS"
                         className="iconStatusRecalled"
                         icon={['far', 'clock']}
@@ -158,10 +152,18 @@ export const SectionWorkQueueInbox = connect(
                       />
                     )}
                     {item.showUnassignedIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="true"
+                      <Icon
+                        aria-label="unassigned"
                         className="iconStatusUnassigned"
                         icon={['fas', 'question-circle']}
+                        size="lg"
+                      />
+                    )}
+                    {item.showHighPriorityIcon && (
+                      <Icon
+                        aria-label="high priority"
+                        className="iconHighPriority"
+                        icon={['fas', 'exclamation-circle']}
                         size="lg"
                       />
                     )}
@@ -171,23 +173,12 @@ export const SectionWorkQueueInbox = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={documentHelper({
-                        docketNumber: item.docketNumber,
-                        documentId: item.document.documentId,
-                        messageId: item.currentMessage.messageId,
-                        shouldLinkToComplete:
-                          item.document.isFileAttached === false,
-                        shouldLinkToEdit:
-                          workQueueHelper.showEditDocketEntry &&
-                          item.isQC &&
-                          item.document.eventCode !== 'P',
-                      })}
+                      href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}${item.editLink}`}
                       onClick={e => {
                         e.stopPropagation();
                       }}
                     >
-                      {item.document.documentTitle ||
-                        item.document.documentType}
+                      {item.document.descriptionDisplay}
                     </a>
                   </div>
                   {workQueueHelper.showMessageContent && (

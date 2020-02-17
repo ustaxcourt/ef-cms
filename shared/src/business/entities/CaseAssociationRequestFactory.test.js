@@ -34,7 +34,7 @@ describe('CaseAssociationRequestFactory', () => {
 
     it('should require document type', () => {
       expect(errors().documentType).toEqual(
-        VALIDATION_ERROR_MESSAGES.documentType,
+        VALIDATION_ERROR_MESSAGES.documentType[1],
       );
       rawEntity.documentType = 'Entry of Appearance';
       expect(errors().documentType).toEqual(undefined);

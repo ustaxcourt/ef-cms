@@ -1,13 +1,13 @@
 import { state } from 'cerebral';
 
 export const headerHelper = (get, applicationContext) => {
-  const user = get(state.user);
+  const user = applicationContext.getCurrentUser();
+  const userRole = user && user.role;
   const isLoggedIn = !!user;
-  const userRole = get(state.user.role);
   const currentPage = get(state.currentPage) || '';
   const notifications = get(state.notifications);
   const workQueueIsInternal = get(state.workQueueToDisplay.workQueueIsInternal);
-  const USER_ROLES = get(state.constants.USER_ROLES);
+  const { USER_ROLES } = applicationContext.getConstants();
   const permissions = get(state.permissions);
 
   const isOtherUser = role => {
@@ -19,7 +19,6 @@ export const headerHelper = (get, applicationContext) => {
   const isDashboard = currentPage.startsWith('Dashboard');
   const isMessages = currentPage.startsWith('Messages');
 
-  const pageIsInterstitial = currentPage == 'Interstitial';
   const pageIsHome =
     isDashboard ||
     ([
@@ -37,7 +36,6 @@ export const headerHelper = (get, applicationContext) => {
       : '/document-qc/my/inbox',
     pageIsDocumentQC: isMessages && !workQueueIsInternal,
     pageIsHome,
-    pageIsInterstitial,
     pageIsMessages: isMessages && workQueueIsInternal,
     pageIsMyCases:
       isDashboard && applicationContext.getUtilities().isExternalUser(userRole),
@@ -47,7 +45,7 @@ export const headerHelper = (get, applicationContext) => {
       applicationContext.getUtilities().isInternalUser(userRole),
     showAccountMenu: isLoggedIn,
     showDocumentQC: applicationContext.getUtilities().isInternalUser(userRole),
-    showHomeIcon: userRole === USER_ROLES.judge,
+    showHomeIcon: [USER_ROLES.judge, USER_ROLES.chambers].includes(userRole),
     showMessages: applicationContext.getUtilities().isInternalUser(userRole),
     showMessagesIcon: notifications.myInboxUnreadCount > 0,
     showMyCases: applicationContext.getUtilities().isExternalUser(userRole),
@@ -55,8 +53,10 @@ export const headerHelper = (get, applicationContext) => {
     showSearchInHeader:
       user &&
       userRole &&
+      userRole !== USER_ROLES.petitioner &&
       userRole !== USER_ROLES.practitioner &&
       userRole !== USER_ROLES.respondent,
     showTrialSessions: permissions && permissions.TRIAL_SESSIONS,
+    userName: user && user.name,
   };
 };

@@ -1,9 +1,9 @@
-service: ef-cms-documents
+service: ef-cms-documents-${opt:stageColor}
 plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  # - serverless-plugin-aws-alerts
+  - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -30,13 +30,10 @@ custom:
     stages:
       - dev
       - stg
+      - test
       - prod
     dashboards: true
     alarms:
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
       - errorExceptions
     definitions:
       errorExceptions:
@@ -51,10 +48,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:provider.stage}-cloudwatch-alerts
-        notifications:
-          - protocol: email
-            endpoint: jsutton@flexion.us
+        topic: arn:aws:sns:${opt:region}:${opt:accountId}:serverless-alerts-topic-${self:provider.stage}
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -74,14 +68,16 @@ custom:
 
 provider:
   name: aws
+  endpointType: REGIONAL
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
@@ -111,7 +107,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/documentsHandlers.js
+    - web-api/${self:provider.dir}/documentsHandlers.js
 
   excludeDevDependencies: true
 
@@ -150,50 +146,30 @@ resources:
             MetricsEnabled: true
 
 functions:
-  getDownloadPolicyUrl:
-    handler: web-api/src/documentsHandlers.downloadPolicyUrlLambda
-    events:
-      - http:
-          path: /{documentId}/download-policy-url
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   validate:
-    handler: web-api/src/documentsHandlers.validatePdfLambda
+    handler: web-api/${self:provider.dir}/documentsHandlers.validatePdfLambda
     events:
       - http:
           path: /{documentId}/validate
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
     alarms:
       - errorExceptions
 
   getUploadPolicy:
-    handler: web-api/src/documentsHandlers.getUploadPolicyLambda
+    handler: web-api/${self:provider.dir}/documentsHandlers.getUploadPolicyLambda
     events:
       - http:
           path: /{documentId}/upload-policy
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getDocumentDownloadUrl:
-    handler: web-api/src/documentsHandlers.getDocumentDownloadUrlLambda
-    events:
-      - http:
-          path: /{documentId}/document-download-url
-          method: get
-          cors: true
-
   generatePrintableFilingReceiptLambda:
-    handler: web-api/src/documentsHandlers.generatePrintableFilingReceiptLambda
+    handler: web-api/${self:provider.dir}/documentsHandlers.generatePrintableFilingReceiptLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -202,10 +178,10 @@ functions:
       - http:
           path: /filing-receipt-pdf
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
 
   virusScan:
-    handler: web-api/src/documentsHandlers.virusScanPdfLambda
+    handler: web-api/${self:provider.dir}/documentsHandlers.virusScanPdfLambda
     memorySize: 3008
     timeout: 900
     layers:
@@ -214,5 +190,5 @@ functions:
       - http:
           path: /{documentId}/virus-scan
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           async: true

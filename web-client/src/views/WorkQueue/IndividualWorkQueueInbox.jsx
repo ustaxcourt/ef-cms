@@ -1,16 +1,15 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
 export const IndividualWorkQueueInbox = connect(
   {
-    documentHelper: state.documentHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
+  ({ formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -24,7 +23,7 @@ export const IndividualWorkQueueInbox = connect(
                 <span className="padding-left-2px">Docket</span>
               </th>
               <th className="small">Received</th>
-              <th>Case name</th>
+              <th>Case title</th>
               <th aria-label="Status Icon" className="padding-right-0">
                 &nbsp;
               </th>
@@ -53,8 +52,7 @@ export const IndividualWorkQueueInbox = connect(
                   </td>
                   <td className="message-queue-row has-icon padding-right-0">
                     {item.showBatchedStatusIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="false"
+                      <Icon
                         aria-label="batched for IRS"
                         className="iconStatusBatched"
                         icon={['far', 'clock']}
@@ -62,8 +60,7 @@ export const IndividualWorkQueueInbox = connect(
                       />
                     )}
                     {item.showRecalledStatusIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="false"
+                      <Icon
                         aria-label="recalled from IRS"
                         className="iconStatusRecalled"
                         icon={['far', 'clock']}
@@ -71,11 +68,18 @@ export const IndividualWorkQueueInbox = connect(
                       />
                     )}
                     {item.showUnreadStatusIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="false"
+                      <Icon
                         aria-label="unread message"
                         className="iconStatusUnread"
                         icon={['fas', 'envelope']}
+                        size="lg"
+                      />
+                    )}
+                    {item.showHighPriorityIcon && (
+                      <Icon
+                        aria-label="high priority"
+                        className="iconHighPriority"
+                        icon={['fas', 'exclamation-circle']}
                         size="lg"
                       />
                     )}
@@ -86,20 +90,7 @@ export const IndividualWorkQueueInbox = connect(
                         className={
                           item.isRead ? 'case-link' : 'link case-link-bold'
                         }
-                        href={documentHelper({
-                          docketNumber: item.docketNumber,
-                          documentId: item.document.documentId,
-                          messageId: item.currentMessage.messageId,
-                          shouldLinkToComplete:
-                            item.document.isFileAttached === false,
-                          shouldLinkToEdit:
-                            workQueueHelper.showEditDocketEntry &&
-                            item.isQC &&
-                            item.document.eventCode !== 'P',
-                          workItemIdToMarkAsRead: !item.isRead
-                            ? item.workItemId
-                            : null,
-                        })}
+                        href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}${item.editLink}`}
                         onClick={e => {
                           e.stopPropagation();
                         }}

@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -69,7 +69,7 @@ export const SupportingDocumentInclusionsForm = connect(
                 }}
               />
               <label
-                className="usa-checkbox__label"
+                className="usa-checkbox__label inline-block"
                 htmlFor={`${type}-attachments`}
               >
                 Attachment(s)
@@ -92,7 +92,7 @@ export const SupportingDocumentInclusionsForm = connect(
                 }}
               />
               <label
-                className="usa-checkbox__label"
+                className="usa-checkbox__label inline-block"
                 htmlFor={`${type}-certificateOfService`}
               >
                 Certificate Of Service
@@ -101,106 +101,23 @@ export const SupportingDocumentInclusionsForm = connect(
           </fieldset>
         </div>
         {data.certificateOfService && (
-          <FormGroup
-            errorText={
-              validationData && validationData.certificateOfServiceDate
-            }
-          >
-            <fieldset className="service-date usa-fieldset margin-bottom-0">
-              <legend className="usa-legend" id={`${type}-service-date-legend`}>
-                Service date
-              </legend>
-              <div className="usa-memorable-date">
-                <div className="usa-form-group usa-form-group--month">
-                  <label
-                    aria-hidden="true"
-                    className="usa-label"
-                    htmlFor={`${type}-service-date-month`}
-                  >
-                    MM
-                  </label>
-                  <input
-                    aria-describedby={`${type}-service-date-legend`}
-                    aria-label="month, two digits"
-                    className="usa-input usa-input-inline"
-                    id={`${type}-service-date-month`}
-                    max="12"
-                    min="1"
-                    name={`${type}.certificateOfServiceMonth`}
-                    type="number"
-                    value={data.certificateOfServiceMonth || ''}
-                    onBlur={() => {
-                      validateExternalDocumentInformationSequence();
-                    }}
-                    onChange={e => {
-                      updateFileDocumentWizardFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--day">
-                  <label
-                    aria-hidden="true"
-                    className="usa-label"
-                    htmlFor={`${type}-service-date-day`}
-                  >
-                    DD
-                  </label>
-                  <input
-                    aria-describedby={`${type}-service-date-legend`}
-                    aria-label="day, two digits"
-                    className="usa-input usa-input-inline"
-                    id={`${type}-service-date-day`}
-                    max="31"
-                    min="1"
-                    name={`${type}.certificateOfServiceDay`}
-                    type="number"
-                    value={data.certificateOfServiceDay || ''}
-                    onBlur={() => {
-                      validateExternalDocumentInformationSequence();
-                    }}
-                    onChange={e => {
-                      updateFileDocumentWizardFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--year">
-                  <label
-                    aria-hidden="true"
-                    className="usa-label"
-                    htmlFor={`${type}-service-date-year`}
-                  >
-                    YYYY
-                  </label>
-                  <input
-                    aria-describedby={`${type}-service-date-legend`}
-                    aria-label="year, four digits"
-                    className="usa-input usa-input-inline"
-                    id={`${type}-service-date-year`}
-                    max="2100"
-                    min="1900"
-                    name={`${type}.certificateOfServiceYear`}
-                    type="number"
-                    value={data.certificateOfServiceYear || ''}
-                    onBlur={() => {
-                      validateExternalDocumentInformationSequence();
-                    }}
-                    onChange={e => {
-                      updateFileDocumentWizardFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-            </fieldset>
-          </FormGroup>
+          <DateInput
+            errorText={validationData?.certificateOfServiceDate}
+            id={`${type}-service-date`}
+            label="Service date"
+            names={{
+              day: `${type}.certificateOfServiceDay`,
+              month: `${type}.certificateOfServiceMonth`,
+              year: `${type}.certificateOfServiceYear`,
+            }}
+            values={{
+              day: data.certificateOfServiceDay,
+              month: data.certificateOfServiceMonth,
+              year: data.certificateOfServiceYear,
+            }}
+            onBlur={validateExternalDocumentInformationSequence}
+            onChange={updateFileDocumentWizardFormValueSequence}
+          />
         )}
       </>
     );

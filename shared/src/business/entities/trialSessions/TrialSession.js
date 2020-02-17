@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
@@ -6,6 +6,7 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../../utilities/DateHandler');
+const { isEmpty } = require('lodash');
 
 const COMMON_CITIES = [
   { city: 'Birmingham', state: 'Alabama' },
@@ -94,7 +95,11 @@ TrialSession.TRIAL_CITIES = {
   SMALL: SMALL_CITIES,
 };
 
-TrialSession.SESSION_TERMS = ['Winter', 'Fall', 'Spring'];
+TrialSession.TRIAL_CITY_STRINGS = SMALL_CITIES.map(
+  location => `${location.city}, ${location.state}`,
+);
+
+TrialSession.SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
 
 TrialSession.SESSION_TYPES = [
   'Regular',
@@ -104,9 +109,11 @@ TrialSession.SESSION_TYPES = [
   'Motion/Hearing',
 ];
 
-TrialSession.STATUS_TYPES = {
+TrialSession.SESSION_STATUS_GROUPS = {
+  all: 'All',
   closed: 'Closed',
-  upcoming: 'Upcoming',
+  new: 'New',
+  open: 'Open',
 };
 
 TrialSession.validationName = 'TrialSession';
@@ -127,7 +134,13 @@ TrialSession.prototype.init = function(rawSession, { applicationContext }) {
   }
   this.address1 = rawSession.address1;
   this.address2 = rawSession.address2;
-  this.caseOrder = rawSession.caseOrder || [];
+  this.caseOrder = (rawSession.caseOrder || []).map(caseOrder => ({
+    caseId: caseOrder.caseId,
+    disposition: caseOrder.disposition,
+    isManuallyAdded: caseOrder.isManuallyAdded,
+    removedFromTrial: caseOrder.removedFromTrial,
+    removedFromTrialDate: caseOrder.removedFromTrialDate,
+  }));
   this.city = rawSession.city;
   this.courtReporter = rawSession.courtReporter;
   this.courthouseName = rawSession.courthouseName;
@@ -137,12 +150,12 @@ TrialSession.prototype.init = function(rawSession, { applicationContext }) {
   this.judge = rawSession.judge;
   this.maxCases = rawSession.maxCases;
   this.notes = rawSession.notes;
+  this.noticeIssuedDate = rawSession.noticeIssuedDate;
   this.postalCode = rawSession.postalCode;
   this.sessionType = rawSession.sessionType;
   this.startDate = rawSession.startDate;
   this.startTime = rawSession.startTime || '10:00';
   this.state = rawSession.state;
-  this.status = rawSession.status || TrialSession.STATUS_TYPES.upcoming;
   this.swingSession = rawSession.swingSession;
   this.swingSessionId = rawSession.swingSessionId;
   this.term = rawSession.term;
@@ -178,11 +191,23 @@ TrialSession.VALIDATION_ERROR_MESSAGES = {
 
 TrialSession.validationRules = {
   COMMON: {
-    address1: joi.string().optional(),
-    address2: joi.string().optional(),
-    city: joi.string().optional(),
+    address1: joi
+      .string()
+      .allow('')
+      .optional(),
+    address2: joi
+      .string()
+      .allow('')
+      .optional(),
+    city: joi
+      .string()
+      .allow('')
+      .optional(),
     courtReporter: joi.string().optional(),
-    courthouseName: joi.string().optional(),
+    courthouseName: joi
+      .string()
+      .allow('')
+      .optional(),
     createdAt: joi
       .date()
       .iso()
@@ -199,24 +224,24 @@ TrialSession.validationRules = {
       .string()
       .max(400)
       .optional(),
+    noticeIssuedDate: joi
+      .date()
+      .iso()
+      .optional(),
     postalCode: JoiValidationConstants.US_POSTAL_CODE.optional(),
     sessionType: joi
       .string()
-      .valid(TrialSession.SESSION_TYPES)
+      .valid(...TrialSession.SESSION_TYPES)
       .required(),
     startDate: joi
       .date()
       .iso()
       .required(),
     startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES,
-    state: joi.string().optional(),
-    status: joi
+    state: joi
       .string()
-      .valid(
-        Object.keys(TrialSession.STATUS_TYPES).map(
-          key => TrialSession.STATUS_TYPES[key],
-        ),
-      ),
+      .allow('')
+      .optional(),
     swingSession: joi.boolean().optional(),
     swingSessionId: joi.when('swingSession', {
       is: true,
@@ -230,7 +255,7 @@ TrialSession.validationRules = {
     }),
     term: joi
       .string()
-      .valid(TrialSession.SESSION_TERMS)
+      .valid(...TrialSession.SESSION_TERMS)
       .required(),
     termYear: joi.string().required(),
     trialClerk: joi.object().optional(),
@@ -258,6 +283,7 @@ joiValidationDecorator(
           otherwise: joi.optional().allow(null),
           then: joi.string().required(),
         }),
+        isManuallyAdded: joi.boolean().optional(),
         removedFromTrial: joi.boolean().optional(),
         removedFromTrialDate: joi.when('removedFromTrial', {
           is: true,
@@ -270,13 +296,6 @@ joiValidationDecorator(
       }),
     ),
     isCalendared: joi.boolean().required(),
-    status: joi
-      .string()
-      .valid(
-        Object.keys(TrialSession.STATUS_TYPES).map(
-          key => TrialSession.STATUS_TYPES[key],
-        ),
-      ),
   }),
   function() {
     return !this.getFormattedValidationErrors();
@@ -398,6 +417,32 @@ TrialSession.prototype.deleteCaseFromCalendar = function({ caseId }) {
   if (index >= 0) {
     this.caseOrder.splice(index, 1);
   }
+  return this;
+};
+
+/**
+ * checks certain properties of the trial session for emptiness.
+ * if one field is empty (via lodash.isEmpty), the method returns false
+ *
+ * @returns {boolean} TRUE if can set as calendared (properties were all not empty), FALSE otherwise
+ */
+TrialSession.prototype.canSetAsCalendared = function() {
+  return ![
+    this.address1,
+    this.judge,
+    this.city,
+    this.state,
+    this.postalCode,
+  ].some(property => isEmpty(property));
+};
+
+/**
+ * Sets the notice issued date on the trial session
+ *
+ * @returns {TrialSession} the trial session entity
+ */
+TrialSession.prototype.setNoticesIssued = function() {
+  this.noticeIssuedDate = createISODateString();
   return this;
 };
 

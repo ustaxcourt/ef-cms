@@ -17,7 +17,6 @@ const workQueueHelper = withAppContextDecorator(workQueueHelperComputed, {
 const getBaseState = user => {
   globalUser = user;
   return {
-    constants: { USER_ROLES: User.ROLES },
     permissions: getUserPermissions(user),
   };
 };
@@ -96,7 +95,7 @@ describe('workQueueHelper', () => {
     });
   });
 
-  it('shows the start a case button when role is docket clerk', () => {
+  it('does not show the start a case button when role is docket clerk', () => {
     const user = {
       role: User.ROLES.docketClerk,
       userId: '123',
@@ -113,7 +112,7 @@ describe('workQueueHelper', () => {
       },
     });
     expect(result).toMatchObject({
-      showStartCaseButton: true,
+      showStartCaseButton: false,
     });
   });
 
@@ -136,9 +135,47 @@ describe('workQueueHelper', () => {
     expect(result.showCaseStatusColumn).toBeTruthy();
   });
 
+  it('shows the case status column when role is chambers', () => {
+    const user = {
+      role: User.ROLES.chambers,
+      userId: '123',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: { box: 'inbox', queue: 'my' },
+      },
+    });
+    expect(result.showCaseStatusColumn).toBeTruthy();
+  });
+
   it('shows the from column when role is judge', () => {
     const user = {
       role: User.ROLES.judge,
+      userId: '123',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: { box: 'inbox', queue: 'my' },
+      },
+    });
+    expect(result.showFromColumn).toBeTruthy();
+  });
+
+  it('shows the from column when role is chambers', () => {
+    const user = {
+      role: User.ROLES.chambers,
       userId: '123',
     };
     const result = runCompute(workQueueHelper, {

@@ -7,7 +7,7 @@ const {
 
 describe('change the case caption via the case edit page ', () => {
   before(() => {
-    cy.seed();
+    cy.task('seed');
     navigateToDocumentDetail(
       'petitionsclerk',
       '101-19',

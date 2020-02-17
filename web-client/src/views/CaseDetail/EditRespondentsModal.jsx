@@ -1,4 +1,5 @@
 import { ModalDialog } from '../ModalDialog';
+import { ServiceIndicatorRadios } from '../ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -9,8 +10,17 @@ export const EditRespondentsModal = connect(
     confirmSequence: sequences.submitEditRespondentsModalSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
+    validateEditRespondentsSequence: sequences.validateEditRespondentsSequence,
+    validationErrors: state.validationErrors,
   },
-  ({ cancelSequence, confirmSequence, modal, updateModalValueSequence }) => {
+  ({
+    cancelSequence,
+    confirmSequence,
+    modal,
+    updateModalValueSequence,
+    validateEditRespondentsSequence,
+    validationErrors,
+  }) => {
     return (
       <ModalDialog
         cancelLabel="Cancel"
@@ -33,6 +43,18 @@ export const EditRespondentsModal = connect(
                 >
                   {respondent.name} ({respondent.barNumber})
                 </label>
+
+                <div className="margin-top-2">
+                  <ServiceIndicatorRadios
+                    bind={`modal.respondents.${idx}`}
+                    getValidationError={() =>
+                      validationErrors.respondents &&
+                      validationErrors.respondents[idx] &&
+                      validationErrors.respondents[idx].serviceIndicator
+                    }
+                    validateSequence={validateEditRespondentsSequence}
+                  />
+                </div>
               </div>
               <div className="grid-col-4 text-right text-secondary-dark">
                 <div className="usa-checkbox" id={`respondent-${idx}`}>
@@ -50,10 +72,10 @@ export const EditRespondentsModal = connect(
                     }}
                   />
                   <label
-                    className="usa-checkbox__label"
+                    className="usa-checkbox__label inline-block"
                     htmlFor={`remove-respondent-${idx}`}
                   >
-                    Remove from Case
+                    Remove from case
                   </label>
                 </div>
               </div>

@@ -34,11 +34,7 @@ import adcViewsStipulatedDecisionForSigning from './journey/adcViewsStipulatedDe
 
 const test = setupTest({
   useCases: {
-    loadPDFForSigningInteractor: () => {
-      return new Promise(resolve => {
-        resolve(null);
-      });
-    },
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
   },
 });
 
@@ -46,11 +42,7 @@ describe('Sr. Attorney Signs Proposed Stipulated Decision', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
     global.window.pdfjsObj = {
-      getData: () => {
-        return new Promise(resolve => {
-          resolve(new Uint8Array(fakeFile));
-        });
-      },
+      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
     };
   });
 

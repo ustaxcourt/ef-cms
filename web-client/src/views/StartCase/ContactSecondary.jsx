@@ -11,6 +11,7 @@ export const ContactSecondary = connect(
     bind: props.bind,
     constants: state.constants,
     contactsHelper: state[props.contactsHelper],
+    copyPrimaryContactSequence: sequences.copyPrimaryContactSequence,
     data: state[props.bind],
     onBlur: props.onBlur,
     onBlurSequence: sequences[props.onBlur],
@@ -23,24 +24,31 @@ export const ContactSecondary = connect(
     bind,
     constants,
     contactsHelper,
+    copyPrimaryContactSequence,
     data,
     onBlur,
     onBlurSequence,
     onChange,
     onChangeSequence,
     parentView,
+    useSameAsPrimary,
     validationErrors,
+    wrapperClassName,
   }) => {
     return (
       <>
         {parentView === 'StartCase' ? (
-          <h3 className="margin-top-4 padding-left-205">
+          <h3 className="margin-top-4">
             {contactsHelper.contactSecondary.header}
           </h3>
         ) : (
           <h4>{contactsHelper.contactSecondary.header}</h4>
         )}
-        <div className="blue-container contact-group">
+        <div
+          className={
+            wrapperClassName ? wrapperClassName : 'blue-container contact-group'
+          }
+        >
           <FormGroup
             errorText={
               validationErrors.contactSecondary &&
@@ -68,6 +76,27 @@ export const ContactSecondary = connect(
               }}
             />
           </FormGroup>
+          {useSameAsPrimary && (
+            <FormGroup>
+              <input
+                className="usa-checkbox__input"
+                id="use-same-address-above"
+                type="checkbox"
+                value={true}
+                onChange={e => {
+                  if (Boolean(e.target.value) === true) {
+                    copyPrimaryContactSequence();
+                  }
+                }}
+              />
+              <label
+                className="usa-checkbox__label"
+                htmlFor="use-same-address-above"
+              >
+                Use same address &amp; phone number as above
+              </label>
+            </FormGroup>
+          )}
           {contactsHelper.contactSecondary.displayInCareOf && (
             <FormGroup
               errorText={

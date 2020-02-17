@@ -317,23 +317,23 @@ module.exports = [
       'wait for element #react-select-2-input to be visible',
       'click #react-select-2-input',
       'wait for element .select-react-element__menu to be visible',
-      'click #react-select-2-option-85', //Motion for Leave to File Out of Time
+      'click #react-select-2-option-48', //Motion for Leave to File Out of Time
       'wait for element #react-select-3-input to be visible',
       'click #react-select-3-input',
       'wait for element .select-react-element__menu to be visible',
-      'click #react-select-3-option-74', //Motion for Continuance
+      'click #react-select-3-option-37', //Motion for Continuance
       'wait for element #submit-document to be visible',
       'click #submit-document',
       'wait for element #primary-document to be visible',
       'click #primaryDocument-certificateOfService-label',
-      'wait for element fieldset.service-date to be visible',
+      'wait for element .primaryDocument-service-date to be visible',
       'wait for element #add-supporting-document-button to be visible',
       'click element #add-supporting-document-button',
       'wait for element #supporting-document-0-label to be visible',
       'wait for element #secondary-document to be visible',
       'wait for element #secondaryDocument-certificateOfService-label to be visible',
       'click #secondaryDocument-certificateOfService-label',
-      'wait for element fieldset.service-date to be visible',
+      'wait for element .secondaryDocument-service-date to be visible',
       'wait for element #add-secondary-supporting-document-button to be visible',
       'click element #add-secondary-supporting-document-button',
       'wait for element #secondary-supporting-document-0-label to be visible',
@@ -344,4 +344,5 @@ module.exports = [
   },
 
   'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/contacts/primary/edit',
+  'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/contacts/secondary/edit',
 ];

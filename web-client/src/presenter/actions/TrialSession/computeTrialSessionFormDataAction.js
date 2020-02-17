@@ -9,6 +9,7 @@ const computeTerm = ({ month, year }) => {
     const termsByMonth = {
       fall: [9, 10, 11, 12],
       spring: [4, 5, 6],
+      summer: [7, 8],
       winter: [1, 2, 3],
     };
 
@@ -16,10 +17,10 @@ const computeTerm = ({ month, year }) => {
       term = 'Winter';
     } else if (termsByMonth.spring.includes(selectedMonth)) {
       term = 'Spring';
+    } else if (termsByMonth.summer.includes(selectedMonth)) {
+      term = 'Summer';
     } else if (termsByMonth.fall.includes(selectedMonth)) {
       term = 'Fall';
-    } else {
-      term = undefined;
     }
   }
 

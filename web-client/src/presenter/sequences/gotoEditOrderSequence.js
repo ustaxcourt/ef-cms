@@ -20,7 +20,7 @@ const gotoEditOrder = [
   getCaseAction,
   setCaseAction,
   setDocumentToEditAction,
-  ...convertHtml2PdfSequence,
+  convertHtml2PdfSequence,
   setCurrentPageAction('CreateOrder'),
 ];
 

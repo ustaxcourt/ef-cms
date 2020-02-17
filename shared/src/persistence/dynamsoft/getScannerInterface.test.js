@@ -1,5 +1,6 @@
 const { getScannerInterface } = require('./getScannerInterface');
 const { JSDOM } = require('jsdom');
+import { Scan } from '../../business/entities/Scan';
 
 const jsdom = new JSDOM('');
 global.window = jsdom.window;
@@ -17,8 +18,11 @@ const mockCloseSource = jest.fn();
 const mockOpenSource = jest.fn();
 const mockRemoveAllImages = jest.fn();
 
+const { SCAN_MODES } = Scan;
+
 const applicationContext = {
   convertBlobToUInt8Array: () => new Uint8Array([]),
+  getConstants: () => ({ SCAN_MODES }),
   getScannerResourceUri: () => 'abc',
 };
 
@@ -162,7 +166,7 @@ describe('getScannerInterface', () => {
     });
   });
 
-  it('throws an exception if the hopper is empty', async () => {
+  it('throws an exception if the hopper is empty when scanning with the feeder', async () => {
     const scannerAPI = getScannerInterface();
     scannerAPI.setDWObject({
       ...DWObject,
@@ -171,11 +175,80 @@ describe('getScannerInterface', () => {
 
     let error;
     try {
-      await scannerAPI.startScanSession({ applicationContext });
+      await scannerAPI.startScanSession({
+        applicationContext,
+        scanMode: SCAN_MODES.FEEDER,
+      });
     } catch (err) {
       error = err;
     }
     expect(error).toBeDefined();
+  });
+
+  it('does NOT throw an exception if the hopper is empty when scanning with the flatbed', async () => {
+    const scannerAPI = getScannerInterface();
+    scannerAPI.setDWObject({
+      ...DWObject,
+      IfFeederLoaded: false,
+    });
+
+    let error;
+    try {
+      await scannerAPI.startScanSession({
+        applicationContext,
+        scanMode: SCAN_MODES.FLATBED,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeUndefined();
+  });
+
+  it('can enable duplex mode by calling startScanSession with scanMode set to `DUPLEX`', async () => {
+    const scannerAPI = getScannerInterface();
+    scannerAPI.setDWObject(DWObject);
+    expect(DWObject.IfDuplexEnabled).toEqual(false); // default
+
+    await scannerAPI.startScanSession({
+      applicationContext,
+      scanMode: SCAN_MODES.DUPLEX,
+    });
+    expect(DWObject.IfDuplexEnabled).toEqual(true);
+
+    await scannerAPI.startScanSession({
+      applicationContext,
+      scanMode: SCAN_MODES.FLATBED,
+    });
+    expect(DWObject.IfDuplexEnabled).toEqual(false);
+  });
+
+  it('can enable flatbed scanning by calling startScanSession with scanMode set to `FLATBED`', async () => {
+    const scannerAPI = getScannerInterface();
+    scannerAPI.setDWObject(DWObject);
+
+    await scannerAPI.startScanSession({
+      applicationContext,
+      scanMode: SCAN_MODES.FLATBED,
+    });
+    expect(DWObject.IfFeederEnabled).toEqual(false);
+
+    await scannerAPI.startScanSession({
+      applicationContext,
+      scanMode: SCAN_MODES.FEEDER,
+    });
+    expect(DWObject.IfFeederEnabled).toEqual(true);
+  });
+
+  it('should scan from feeder when calling startScanSession with scanMode set to `DUPLEX`', async () => {
+    const scannerAPI = getScannerInterface();
+    scannerAPI.setDWObject(DWObject);
+
+    await scannerAPI.startScanSession({
+      applicationContext,
+      scanMode: SCAN_MODES.DUPLEX,
+    });
+    expect(DWObject.IfDuplexEnabled).toEqual(true);
+    expect(DWObject.IfFeederEnabled).toEqual(true);
   });
 
   it('should attempt to load the dynamsoft libraries', async () => {

@@ -1,15 +1,27 @@
-const _ = require('lodash');
+const {
+  calculateISODate,
+  createISODateString,
+  dateStringsCompared,
+} = require('./DateHandler');
 const { Case } = require('../entities/cases/Case');
+const { cloneDeep, isEmpty } = require('lodash');
+const { Document } = require('../entities/Document');
+const { IRS_BATCH_SYSTEM_SECTION } = require('../entities/WorkQueue');
+
+const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
+  courtIssuedDoc => courtIssuedDoc.documentType,
+);
 
 const formatDocument = (applicationContext, document) => {
-  const result = _.cloneDeep(document);
+  const result = cloneDeep(document);
+
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.createdAt, 'MMDDYY');
 
   result.servedAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(result.servedAt, 'DATE_TIME');
+    .formatDateString(result.servedAt, 'MMDDYY');
 
   result.signedAtFormatted = applicationContext
     .getUtilities()
@@ -18,9 +30,46 @@ const formatDocument = (applicationContext, document) => {
   result.signedAtFormattedTZ = applicationContext
     .getUtilities()
     .formatDateString(result.signedAt, 'DATE_TIME_TZ');
+
+  if (result.certificateOfServiceDate) {
+    result.certificateOfServiceDateFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(result.certificateOfServiceDate, 'MMDDYY');
+  }
+
   result.showServedAt = !!result.servedAt;
   result.isStatusServed = result.status === 'served';
-  result.isPetition = result.documentType === 'Petition';
+  result.isPetition =
+    result.documentType === 'Petition' || result.eventCode === 'P';
+
+  result.isCourtIssuedDocument =
+    !!courtIssuedDocumentTypes.includes(result.documentType) ||
+    result.documentType === 'Stipulated Decision';
+
+  const qcWorkItems = (result.workItems || []).filter(wi => wi.isQC);
+
+  result.qcWorkItemsCompleted = qcWorkItems.reduce((acc, wi) => {
+    return acc && !!wi.completedAt;
+  }, true);
+
+  result.isInProgress =
+    !result.isCourtIssuedDocument && result.isFileAttached === false;
+
+  result.isNotServedCourtIssuedDocument =
+    result.isCourtIssuedDocument && !result.servedAt;
+
+  result.isTranscript = result.eventCode === Document.TRANSCRIPT_EVENT_CODE;
+
+  result.qcWorkItemsUntouched =
+    !!qcWorkItems.length &&
+    qcWorkItems.reduce((acc, wi) => {
+      return (
+        acc &&
+        !wi.isRead &&
+        !wi.completedAt &&
+        wi.section !== IRS_BATCH_SYSTEM_SECTION
+      );
+    }, true);
 
   // Served parties code - R = Respondent, P = Petitioner, B = Both
   if (
@@ -39,7 +88,7 @@ const formatDocument = (applicationContext, document) => {
 };
 
 const formatDocketRecord = (applicationContext, docketRecord) => {
-  const result = _.cloneDeep(docketRecord);
+  const result = cloneDeep(docketRecord);
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.filingDate, 'MMDDYY');
@@ -47,8 +96,23 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
   return result;
 };
 
+const TRANSCRIPT_AGE_DAYS_MIN = 90;
+const documentMeetsAgeRequirements = document => {
+  const transcriptCodes = [Document.TRANSCRIPT_EVENT_CODE];
+  const isTranscript = transcriptCodes.includes(document.eventCode);
+  if (!isTranscript) return true;
+  const availableOnDate = calculateISODate({
+    dateString: document.secondaryDate,
+    howMuch: TRANSCRIPT_AGE_DAYS_MIN,
+    units: 'days',
+  });
+  const rightNow = createISODateString();
+  const meetsTranscriptAgeRequirements = availableOnDate <= rightNow;
+  return meetsTranscriptAgeRequirements;
+};
+
 const formatCaseDeadline = (applicationContext, caseDeadline) => {
-  const result = _.cloneDeep(caseDeadline);
+  const result = cloneDeep(caseDeadline);
   result.deadlineDateFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.deadlineDate, 'MMDDYY');
@@ -69,7 +133,7 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
 
 const formatDocketRecordWithDocument = (
   applicationContext,
-  docketRecords = [],
+  docketRecords,
   documents = [],
 ) => {
   const documentMap = documents.reduce((acc, document) => {
@@ -78,58 +142,63 @@ const formatDocketRecordWithDocument = (
   }, {});
 
   return docketRecords.map(record => {
-    let document;
+    let formattedDocument;
 
     const { index } = record;
 
-    if (record.documentId) {
-      document = documentMap[record.documentId];
+    if (record.documentId && documentMap[record.documentId]) {
+      formattedDocument = formatDocument(
+        applicationContext,
+        documentMap[record.documentId],
+      );
 
-      if (document.certificateOfServiceDate) {
-        document.certificateOfServiceDateFormatted = applicationContext
-          .getUtilities()
-          .formatDateString(document.certificateOfServiceDate, 'MMDDYY');
+      if (
+        formattedDocument.isCourtIssuedDocument &&
+        !formattedDocument.servedAt
+      ) {
+        record.createdAtFormatted = undefined;
       }
 
-      record.filingsAndProceedings = getFilingsAndProceedings(document);
+      record.isAvailableToUser = documentMeetsAgeRequirements(
+        documentMap[record.documentId],
+      );
 
-      if (document.additionalInfo) {
-        record.description += ` ${document.additionalInfo}`;
+      record.filingsAndProceedings = getFilingsAndProceedings(
+        formattedDocument,
+      );
+
+      if (formattedDocument.additionalInfo) {
+        record.description += ` ${formattedDocument.additionalInfo}`;
       }
 
-      document.qcWorkItemsCompleted = (document.workItems || [])
-        .filter(wi => wi.isQC)
-        .reduce((acc, wi) => {
-          return acc && !!wi.completedAt;
-        }, true);
-
-      document.isPetition = document.eventCode === 'P';
-      document.canEdit = !document.isPetition && !document.qcWorkItemsCompleted;
+      formattedDocument.canEdit =
+        !formattedDocument.isPetition &&
+        !formattedDocument.qcWorkItemsCompleted;
     }
 
-    return { document, index, record };
+    return { document: formattedDocument, index, record };
   });
 };
 
-const getFilingsAndProceedings = document => {
+const getFilingsAndProceedings = formattedDocument => {
   //filings and proceedings string
   //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
   const filingsAndProceedingsArray = [
     `${
-      document.certificateOfService
-        ? `(C/S ${document.certificateOfServiceDateFormatted})`
+      formattedDocument.certificateOfService
+        ? `(C/S ${formattedDocument.certificateOfServiceDateFormatted})`
         : ''
     }`,
-    `${document.exhibits ? '(Exhibit(s))' : ''}`,
-    `${document.attachments ? '(Attachment(s))' : ''}`,
+    `${formattedDocument.exhibits ? '(Exhibit(s))' : ''}`,
+    `${formattedDocument.attachments ? '(Attachment(s))' : ''}`,
     `${
-      document.objections === 'Yes'
+      formattedDocument.objections === 'Yes'
         ? '(Objection)'
-        : document.objections === 'No'
+        : formattedDocument.objections === 'No'
         ? '(No Objection)'
         : ''
     }`,
-    `${document.lodged ? '(Lodged)' : ''}`,
+    `${formattedDocument.lodged ? '(Lodged)' : ''}`,
   ];
 
   return filingsAndProceedingsArray.filter(item => item !== '').join(' ');
@@ -146,10 +215,12 @@ const formatCaseDeadlines = (applicationContext, caseDeadlines = []) => {
 };
 
 const formatCase = (applicationContext, caseDetail) => {
-  if (_.isEmpty(caseDetail)) {
+  if (isEmpty(caseDetail)) {
     return {};
   }
-  const result = _.cloneDeep(caseDetail);
+  const formatCaseEntity = new Case(caseDetail, { applicationContext });
+  const result = cloneDeep(caseDetail);
+
   result.docketRecordWithDocument = [];
 
   if (result.documents)
@@ -167,42 +238,31 @@ const formatCase = (applicationContext, caseDetail) => {
     );
   }
 
-  result.pendingItemsDocketEntries = (
-    result.docketRecordWithDocument || []
-  ).filter(entry => entry.document && entry.document.pending);
-
-  const { ORDER_TYPES_MAP } = applicationContext.getConstants();
+  result.pendingItemsDocketEntries = result.docketRecordWithDocument.filter(
+    entry => entry.document && entry.document.pending,
+  );
 
   result.draftDocuments = (result.documents || [])
-    .filter(
-      document =>
-        !document.archived &&
-        ((document.documentType === 'Stipulated Decision' &&
-          !document.documentType.signedAt) ||
-          (!document.servedAt &&
-            ORDER_TYPES_MAP.find(
-              order => order.documentType === document.documentType,
-            ))),
-    )
-    .filter(document => document.documentType !== 'Stipulated Decision'); // TODO: this will be removed when we revisit stipulated decisions
-
-  result.draftDocuments = result.draftDocuments.map(document => ({
-    ...document,
-    signedAtFormatted: applicationContext
-      .getUtilities()
-      .formatDateString(document.signedAt, 'MMDDYY'),
-    signedAtFormattedTZ: applicationContext
-      .getUtilities()
-      .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
-    signUrl:
-      document.documentType === 'Stipulated Decision'
-        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
-    editUrl:
-      document.documentType === 'Stipulated Decision'
-        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
-  }));
+    .filter(document => formatCaseEntity.isDocumentDraft(document.documentId))
+    .map(document => ({
+      ...document,
+      editUrl:
+        document.documentType === 'Stipulated Decision'
+          ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+          : document.documentType === 'MISC - Miscellaneous'
+          ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${document.documentId}`
+          : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
+      signUrl:
+        document.documentType === 'Stipulated Decision'
+          ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+          : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
+      signedAtFormatted: applicationContext
+        .getUtilities()
+        .formatDateString(document.signedAt, 'MMDDYY'),
+      signedAtFormattedTZ: applicationContext
+        .getUtilities()
+        .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
+    }));
 
   // establish an initial sort by ascending index
   result.docketRecordWithDocument.sort((a, b) => {
@@ -235,9 +295,6 @@ const formatCase = (applicationContext, caseDetail) => {
   result.irsDateFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.irsSendDate, 'DATE_TIME');
-  result.payGovDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.payGovDate, 'MMDDYY');
 
   result.docketNumberWithSuffix = `${
     result.docketNumber
@@ -264,7 +321,7 @@ const formatCase = (applicationContext, caseDetail) => {
   result.formattedPreferredTrialCity =
     result.preferredTrialCity || 'No location selected';
 
-  if (result.trialSessionId) {
+  if (result.trialSessionId && result.status !== Case.STATUS_TYPES.closed) {
     if (result.status === Case.STATUS_TYPES.calendared) {
       result.showTrialCalendared = true;
     } else {
@@ -289,11 +346,21 @@ const formatCase = (applicationContext, caseDetail) => {
     } else {
       result.formattedTrialDate = 'Not scheduled';
     }
-  } else if (result.blocked) {
+  } else if (result.blocked || result.automaticBlocked) {
     result.showBlockedFromTrial = true;
-    result.blockedDateFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(result.blockedDate, 'MMDDYY');
+    if (result.blocked) {
+      result.blockedDateFormatted = applicationContext
+        .getUtilities()
+        .formatDateString(result.blockedDate, 'MMDDYY');
+    }
+    if (result.automaticBlocked) {
+      result.automaticBlockedDateFormatted = applicationContext
+        .getUtilities()
+        .formatDateString(result.automaticBlockedDate, 'MMDDYY');
+      if (result.highPriority) {
+        result.showAutomaticBlockedAndHighPriority = true;
+      }
+    }
   } else if (result.highPriority) {
     result.formattedTrialDate = 'Not scheduled';
     result.formattedAssociatedJudge = 'Not assigned';
@@ -302,38 +369,55 @@ const formatCase = (applicationContext, caseDetail) => {
     result.showNotScheduled = true;
   }
 
+  result.isConsolidatedSubCase = !!(
+    result.leadCaseId && result.leadCaseId !== result.caseId
+  );
+
+  result.isLeadCase = !!(
+    result.leadCaseId && result.leadCaseId === result.caseId
+  );
+
+  let paymentDate = '';
+  let paymentMethod = '';
+  if (caseDetail.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
+    paymentDate = applicationContext
+      .getUtilities()
+      .formatDateString(caseDetail.petitionPaymentDate, 'MM/DD/YY');
+    paymentMethod = caseDetail.petitionPaymentMethod;
+  } else if (caseDetail.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED) {
+    paymentDate = applicationContext
+      .getUtilities()
+      .formatDateString(caseDetail.petitionPaymentWaivedDate, 'MM/DD/YY');
+  }
+  result.filingFee = `${caseDetail.petitionPaymentStatus} ${paymentDate} ${paymentMethod}`;
+
+  const caseEntity = new Case(caseDetail, { applicationContext });
+  result.canConsolidate = caseEntity.canConsolidate();
+  result.canUnconsolidate = !!caseEntity.leadCaseId;
+
+  if (result.consolidatedCases) {
+    result.consolidatedCases = result.consolidatedCases.map(
+      consolidatedCase => {
+        return formatCase(applicationContext, consolidatedCase);
+      },
+    );
+  }
+
   return result;
-};
-
-const dateStringsCompared = (a, b) => {
-  const simpleDatePattern = /^(\d{4}-\d{2}-\d{2})/;
-  const simpleDateLength = 10; // e.g. YYYY-MM-DD
-
-  if (a.length == simpleDateLength || b.length == simpleDateLength) {
-    // at least one date has a simple format, compare only year, month, and day
-    const [aSimple, bSimple] = [
-      a.match(simpleDatePattern)[0],
-      b.match(simpleDatePattern)[0],
-    ];
-    if (aSimple.localeCompare(bSimple) == 0) {
-      return 0;
-    }
-  }
-
-  const secondsDifference = 30 * 1000;
-  const aDate = new Date(a);
-  const bDate = new Date(b);
-  if (Math.abs(aDate - bDate) < secondsDifference) {
-    // treat as equal time stamps
-    return 0;
-  }
-  return aDate - bDate;
 };
 
 const getDocketRecordSortFunc = sortBy => {
   const byIndex = (a, b) => a.index - b.index;
-  const byDate = (a, b) =>
-    dateStringsCompared(a.record.filingDate, b.record.filingDate);
+  const byDate = (a, b) => {
+    const compared = dateStringsCompared(
+      a.record.filingDate,
+      b.record.filingDate,
+    );
+    if (compared === 0) {
+      return byIndex(a, b);
+    }
+    return compared;
+  };
 
   switch (sortBy) {
     case 'byIndex': // fall-through
@@ -379,8 +463,12 @@ const getFormattedCaseDetail = ({
 };
 
 module.exports = {
+  TRANSCRIPT_AGE_DAYS_MIN,
+  documentMeetsAgeRequirements,
   formatCase,
   formatCaseDeadlines,
+  formatDocketRecord,
+  formatDocketRecordWithDocument,
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,

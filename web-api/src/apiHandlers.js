@@ -9,6 +9,8 @@ module.exports = {
     .handler,
   generatePdfFromHtmlLambda: require('./cases/generatePdfFromHtmlLambda')
     .handler,
+  generatePrintablePendingReportLambda: require('./pendingItems/generatePrintablePendingReportLambda')
+    .handler,
   generateTrialCalendarPdfLambda: require('./trialSessions/generateTrialCalendarPdfLambda')
     .handler,
   getNotificationsLambda: require('./users/getNotificationsLambda').handler,

@@ -3,8 +3,15 @@ const {
   updateWorkItemCaseStatus,
 } = require('../workitems/updateWorkItemCaseStatus');
 const {
+  updateWorkItemCaseTitle,
+} = require('../workitems/updateWorkItemCaseTitle');
+const {
   updateWorkItemDocketNumberSuffix,
 } = require('../workitems/updateWorkItemDocketNumberSuffix');
+const {
+  updateWorkItemTrialDate,
+} = require('../workitems/updateWorkItemTrialDate');
+
 /**
  * updateCase
  *
@@ -25,7 +32,9 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   const requests = [];
   if (
     oldCase.status !== caseToUpdate.status ||
-    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix
+    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
+    oldCase.caseCaption !== caseToUpdate.caseCaption ||
+    oldCase.trialDate !== caseToUpdate.trialDate
   ) {
     const workItemMappings = await client.query({
       ExpressionAttributeNames: {
@@ -37,29 +46,57 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
       KeyConditionExpression: '#pk = :pk',
       applicationContext,
     });
+
     for (let mapping of workItemMappings) {
-      requests.push(
-        updateWorkItemCaseStatus({
-          applicationContext,
-          caseStatus: caseToUpdate.status,
-          workItemId: mapping.sk,
-        }),
-      );
-      requests.push(
-        updateWorkItemDocketNumberSuffix({
-          applicationContext,
-          docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-          workItemId: mapping.sk,
-        }),
-      );
+      if (oldCase.status !== caseToUpdate.status) {
+        requests.push(
+          updateWorkItemCaseStatus({
+            applicationContext,
+            caseStatus: caseToUpdate.status,
+            workItemId: mapping.sk,
+          }),
+        );
+      }
+      if (oldCase.caseCaption !== caseToUpdate.caseCaption) {
+        requests.push(
+          updateWorkItemCaseTitle({
+            applicationContext,
+            caseTitle: caseToUpdate.caseCaption,
+            workItemId: mapping.sk,
+          }),
+        );
+      }
+      if (oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix) {
+        requests.push(
+          updateWorkItemDocketNumberSuffix({
+            applicationContext,
+            docketNumberSuffix: caseToUpdate.docketNumberSuffix || null,
+            workItemId: mapping.sk,
+          }),
+        );
+      }
+      if (oldCase.trialDate !== caseToUpdate.trialDate) {
+        requests.push(
+          updateWorkItemTrialDate({
+            applicationContext,
+            trialDate: caseToUpdate.trialDate || null,
+            workItemId: mapping.sk,
+          }),
+        );
+      }
     }
   }
+
+  let setLeadCase = caseToUpdate.leadCaseId
+    ? { gsi1pk: caseToUpdate.leadCaseId }
+    : {};
 
   const [results] = await Promise.all([
     client.put({
       Item: {
         pk: caseToUpdate.caseId,
         sk: caseToUpdate.caseId,
+        ...setLeadCase,
         ...caseToUpdate,
       },
       applicationContext,

@@ -1,17 +1,16 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
 export const IndividualWorkQueueBatched = connect(
   {
-    documentHelper: state.documentHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
+  ({ formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -25,7 +24,7 @@ export const IndividualWorkQueueBatched = connect(
                 <span className="padding-left-2px">Docket</span>
               </th>
               <th>Filed</th>
-              <th>Case name</th>
+              <th>Case title</th>
               <th aria-label="Status Icon padding-right-0">&nbsp;</th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
@@ -47,8 +46,7 @@ export const IndividualWorkQueueBatched = connect(
                 </td>
                 <td className="message-queue-row has-icon padding-right-0">
                   {item.showBatchedStatusIcon && (
-                    <FontAwesomeIcon
-                      aria-hidden="false"
+                    <Icon
                       aria-label="batched for IRS"
                       className="iconStatusBatched"
                       icon={['far', 'clock']}
@@ -60,10 +58,7 @@ export const IndividualWorkQueueBatched = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={documentHelper({
-                        docketNumber: item.docketNumber,
-                        documentId: item.document.documentId,
-                      })}
+                      href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}`}
                       onClick={e => {
                         e.stopPropagation();
                       }}

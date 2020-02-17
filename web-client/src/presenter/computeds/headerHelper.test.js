@@ -1,26 +1,22 @@
 import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../applicationContext';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { headerHelper as headerHelperComputed } from './headerHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
-const headerHelper = withAppContextDecorator(headerHelperComputed, {
-  getUtilities: () => {
-    return {
-      isExternalUser: User.isExternalUser,
-      isInternalUser: User.isInternalUser,
-    };
-  },
-});
+const headerHelper = withAppContextDecorator(
+  headerHelperComputed,
+  applicationContext,
+);
 
 const getBaseState = user => {
+  applicationContext.getCurrentUser = () => user;
   return {
-    constants: { USER_ROLES: User.ROLES },
     notifications: {
       unreadCount: 0,
     },
     permissions: getUserPermissions(user),
-    user,
   };
 };
 
@@ -36,11 +32,11 @@ const external = [
 ];
 
 describe('headerHelper', () => {
-  it('should show search in header for users other than practitioners and respondents', () => {
+  it('should show search in header for users other than petitioner, practitioners and respondents', () => {
     let result = runCompute(headerHelper, {
       state: getBaseState({ role: User.ROLES.petitioner }),
     });
-    expect(result.showSearchInHeader).toBeTruthy();
+    expect(result.showSearchInHeader).toBeFalsy();
 
     result = runCompute(headerHelper, {
       state: getBaseState({ role: User.ROLES.petitionsClerk }),

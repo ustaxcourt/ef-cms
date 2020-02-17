@@ -7,11 +7,11 @@ import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { createCaseDeadlineAction } from '../actions/CaseDeadline//createCaseDeadlineAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
+import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateCaseDeadlineAction } from '../actions/CaseDeadline/validateCaseDeadlineAction';
 
 export const createCaseDeadlineSequence = [
@@ -21,11 +21,10 @@ export const createCaseDeadlineSequence = [
   validateCaseDeadlineAction,
   {
     error: [setValidationErrorsAction],
-    success: [
-      setWaitingForResponseAction,
+    success: showProgressSequenceDecorator([
       createCaseDeadlineAction,
       {
-        success: [stopShowValidationAction],
+        success: [stopShowValidationAction, setAlertSuccessAction],
       },
       clearFormAction,
       clearScreenMetadataAction,
@@ -33,7 +32,6 @@ export const createCaseDeadlineSequence = [
       clearModalStateAction,
       refreshCaseAction,
       getCaseDeadlinesForCaseAction,
-      unsetWaitingForResponseAction,
-    ],
+    ]),
   },
 ];

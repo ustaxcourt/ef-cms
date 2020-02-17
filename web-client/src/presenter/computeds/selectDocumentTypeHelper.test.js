@@ -1,18 +1,20 @@
 import { Document } from '../../../../shared/src/business/entities/Document';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
-import { selectDocumentTypeHelper } from './selectDocumentTypeHelper';
+import { selectDocumentTypeHelper as selectDocumentTypeHelperComputed } from './selectDocumentTypeHelper';
+import { withAppContextDecorator } from '../../withAppContext';
 
 // external filing events don't currently contain Nonstandard I, Nonstandard J -- but if they did ...
 Document.CATEGORY_MAP['Miscellaneous'].push({
   category: 'Miscellaneous',
-  documentTitle: '[First, Second, etc.] Amendment to [anything]',
-  documentType: 'Amendment [anything]',
-  eventCode: 'ADMT',
-  labelFreeText: 'What is This Amendment For?',
+  documentTitle: '[First, Second, etc.] Something to [anything]',
+  documentType: 'Something [anything]',
+  eventCode: 'ABCD',
+  labelFreeText: 'What is this something for?',
   labelFreeText2: '',
   labelPreviousDocument: '',
-  ordinalField: 'What Iteration is This Filing?',
+  ordinalField: 'What iteration is this filing?',
   scenario: 'Nonstandard I',
 });
 
@@ -28,11 +30,21 @@ Document.CATEGORY_MAP['Decision'].push({
   scenario: 'Nonstandard J',
 });
 
+const selectDocumentTypeHelper = withAppContextDecorator(
+  selectDocumentTypeHelperComputed,
+  {
+    ...applicationContext,
+    getConstants: () => {
+      return {
+        ...applicationContext.getConstants(),
+        CATEGORY_MAP: Document.CATEGORY_MAP,
+      };
+    },
+  },
+);
+
 const state = {
   caseDetail: MOCK_CASE,
-  constants: {
-    CATEGORY_MAP: Document.CATEGORY_MAP,
-  },
 };
 
 describe('selectDocumentTypeHelper', () => {
@@ -81,9 +93,39 @@ describe('selectDocumentTypeHelper', () => {
       primary: {
         previousDocumentSelectLabel: 'Which document are you objecting to?',
         previouslyFiledDocuments: [
-          'Petition',
-          'Answer',
-          'Proposed Stipulated Decision',
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
+            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentTitle: 'Petition',
+            documentType: 'Petition',
+            eventCode: 'P',
+            processingStatus: 'pending',
+            userId: 'petitioner',
+            workItems: [],
+          },
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
+            documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentTitle: 'Answer',
+            documentType: 'Answer',
+            eventCode: 'A',
+            processingStatus: 'pending',
+            userId: 'petitioner',
+            workItems: [],
+          },
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
+            documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentTitle: 'Proposed Stipulated Decision',
+            documentType: 'Proposed Stipulated Decision',
+            eventCode: 'PSDE',
+            processingStatus: 'pending',
+            userId: 'petitioner',
+            workItems: [],
+          },
         ],
         showNonstandardForm: true,
       },
@@ -102,7 +144,7 @@ describe('selectDocumentTypeHelper', () => {
       primary: {
         showNonstandardForm: true,
         showTextInput: true,
-        textInputLabel: 'What is this Statement for?',
+        textInputLabel: 'What is this statement for?',
       },
     });
   });
@@ -120,9 +162,39 @@ describe('selectDocumentTypeHelper', () => {
         previousDocumentSelectLabel:
           'Which document is this affidavit in support of?',
         previouslyFiledDocuments: [
-          'Petition',
-          'Answer',
-          'Proposed Stipulated Decision',
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
+            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentTitle: 'Petition',
+            documentType: 'Petition',
+            eventCode: 'P',
+            processingStatus: 'pending',
+            userId: 'petitioner',
+            workItems: [],
+          },
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
+            documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentTitle: 'Answer',
+            documentType: 'Answer',
+            eventCode: 'A',
+            processingStatus: 'pending',
+            userId: 'petitioner',
+            workItems: [],
+          },
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
+            documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentTitle: 'Proposed Stipulated Decision',
+            documentType: 'Proposed Stipulated Decision',
+            eventCode: 'PSDE',
+            processingStatus: 'pending',
+            userId: 'petitioner',
+            workItems: [],
+          },
         ],
         showNonstandardForm: true,
         showTextInput: true,
@@ -144,13 +216,43 @@ describe('selectDocumentTypeHelper', () => {
         previousDocumentSelectLabel:
           'Which document is this Certificate of Service for?',
         previouslyFiledDocuments: [
-          'Petition',
-          'Answer',
-          'Proposed Stipulated Decision',
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
+            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentTitle: 'Petition',
+            documentType: 'Petition',
+            eventCode: 'P',
+            processingStatus: 'pending',
+            userId: 'petitioner',
+            workItems: [],
+          },
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
+            documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentTitle: 'Answer',
+            documentType: 'Answer',
+            eventCode: 'A',
+            processingStatus: 'pending',
+            userId: 'petitioner',
+            workItems: [],
+          },
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
+            documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentTitle: 'Proposed Stipulated Decision',
+            documentType: 'Proposed Stipulated Decision',
+            eventCode: 'PSDE',
+            processingStatus: 'pending',
+            userId: 'petitioner',
+            workItems: [],
+          },
         ],
         showDateFields: true,
         showNonstandardForm: true,
-        textInputLabel: 'Date of Service',
+        textInputLabel: 'Date of service',
       },
     });
   });
@@ -168,7 +270,7 @@ describe('selectDocumentTypeHelper', () => {
       primary: {
         showNonstandardForm: true,
         showTrialLocationSelect: true,
-        textInputLabel: 'Requested Location',
+        textInputLabel: 'Requested location',
       },
     });
   });
@@ -186,9 +288,39 @@ describe('selectDocumentTypeHelper', () => {
         ordinalField: 'What iteration is this filing?',
         previousDocumentSelectLabel: 'Which document is this a supplement to?',
         previouslyFiledDocuments: [
-          'Petition',
-          'Answer',
-          'Proposed Stipulated Decision',
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
+            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentTitle: 'Petition',
+            documentType: 'Petition',
+            eventCode: 'P',
+            processingStatus: 'pending',
+            userId: 'petitioner',
+            workItems: [],
+          },
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
+            documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentTitle: 'Answer',
+            documentType: 'Answer',
+            eventCode: 'A',
+            processingStatus: 'pending',
+            userId: 'petitioner',
+            workItems: [],
+          },
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
+            documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentTitle: 'Proposed Stipulated Decision',
+            documentType: 'Proposed Stipulated Decision',
+            eventCode: 'PSDE',
+            processingStatus: 'pending',
+            userId: 'petitioner',
+            workItems: [],
+          },
         ],
         showNonstandardForm: true,
       },
@@ -197,8 +329,8 @@ describe('selectDocumentTypeHelper', () => {
 
   it('should return correct data for Nonstandard G document scenario', () => {
     state.form = {
-      category: 'Answer (filed by respondent only)',
-      documentType: 'Amendment to Answer',
+      category: 'Stipulation',
+      documentType: 'Stipulation of Facts',
     };
     const result = runCompute(selectDocumentTypeHelper, {
       state,
@@ -229,19 +361,21 @@ describe('selectDocumentTypeHelper', () => {
   });
 
   it('should return correct data for Nonstandard I document scenario', () => {
+    // we do not currently have any Nonstandard I documents (this is mocked out at the
+    // top of the file) - leaving this test here in case we add Nonstandard I docs later
     state.form = {
       category: 'Miscellaneous',
-      documentType: 'Amendment [anything]',
+      documentType: 'Something [anything]',
     };
     const result = runCompute(selectDocumentTypeHelper, {
       state,
     });
     expect(result).toEqual({
       primary: {
-        ordinalField: 'What Iteration is This Filing?',
+        ordinalField: 'What iteration is this filing?',
         showNonstandardForm: true,
         showTextInput: true,
-        textInputLabel: 'What is This Amendment For?',
+        textInputLabel: 'What is this something for?',
       },
     });
   });

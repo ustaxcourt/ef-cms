@@ -35,6 +35,14 @@ describe('computeTrialSessionFormDataAction', () => {
       term: 'Spring',
     });
 
+    form.month = '7';
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form },
+    });
+    expect(result.state.form).toMatchObject({
+      term: 'Summer',
+    });
+
     form.month = '2';
     result = await runAction(computeTrialSessionFormDataAction, {
       state: { form },
@@ -54,16 +62,6 @@ describe('computeTrialSessionFormDataAction', () => {
     expect(result.state.form).toMatchObject({
       term: undefined,
       termYear: undefined,
-    });
-
-    form.month = '7';
-    form.year = '2019';
-    result = await runAction(computeTrialSessionFormDataAction, {
-      state: { form },
-    });
-    expect(result.state.form).toMatchObject({
-      term: undefined,
-      termYear: '2019',
     });
 
     form.month = '13';

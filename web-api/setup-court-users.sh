@@ -1,7 +1,10 @@
 #!/bin/bash -e
 ENV=$1
 REGION="us-east-1"
-restApiId=$(aws apigateway get-rest-apis --region="${REGION}" --query "items[?name=='${ENV}-ef-cms-users'].id" --output text)
+
+CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"deployed-stack"},"sk":{"S":"deployed-stack"}}' | jq -r ".Item.current.S")
+
+restApiId=$(aws apigateway get-rest-apis --region="${REGION}" --query "items[?name=='${ENV}-ef-cms-users-${CURRENT_COLOR}'].id" --output text)
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}")
 USER_POOL_ID="${USER_POOL_ID%\"}"
@@ -16,13 +19,17 @@ generate_post_data() {
   role=$2
   section=$3
   name=$4
+  judgeFullName=$5
+  judgeTitle=$6
   cat <<EOF
 {
   "email": "$email",
   "password": "Testing1234$",
   "role": "$role",
   "section": "$section",
-  "name": "$name"
+  "name": "$name",
+  "judgeFullName": "$judgeFullName",
+  "judgeTitle": "$judgeTitle"
 }
 EOF
 }
@@ -32,11 +39,13 @@ createAccount() {
   role=$2
   section=$3
   name=$4
+  judgeFullName=$5
+  judgeTitle=$6
 
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${adminToken}" \
     --request POST \
-    --data "$(generate_post_data "${email}" "${role}" "${section}" "${name}")" \
+    --data "$(generate_post_data "${email}" "${role}" "${section}" "${name}" "${judgeFullName}" "${judgeTitle}")" \
       "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"
 
   response=$(aws cognito-idp admin-initiate-auth \
@@ -55,7 +64,7 @@ createAccount() {
       --region "${REGION}" \
       --challenge-name NEW_PASSWORD_REQUIRED \
       --challenge-responses 'NEW_PASSWORD="Testing1234$",'USERNAME="${email}" \
-      --session "${session}"
+      --session="${session}"
   fi
 }
 
@@ -78,6 +87,8 @@ do
   # placeOfTrial="${ADDR[5]}"
   # realEmail="${ADDR[6]}"
   fakeEmail="${ADDR[7]/$'\r'}"
-  createAccount "${fakeEmail}" "${role}" "${section}" "${name}"
+  judgeFullName="${ADDR[8]/$'\r'}"
+  judgeTitle="${ADDR[9]/$'\r'}"
+  createAccount "${fakeEmail}" "${role}" "${section}" "${name}" "${judgeFullName}" "${judgeTitle}"
 done < court_users.csv
 

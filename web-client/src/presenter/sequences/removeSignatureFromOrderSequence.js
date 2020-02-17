@@ -4,19 +4,17 @@ import { overwriteOrderFileAction } from '../actions/CourtIssuedOrder/overwriteO
 import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { state } from 'cerebral';
 import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
-export const removeSignatureFromOrderSequence = [
+export const removeSignatureFromOrderSequence = showProgressSequenceDecorator([
   clearAlertsAction,
-  setWaitingForResponseAction,
   setDocumentToEditAction,
   ...convertHtml2PdfSequence,
   overwriteOrderFileAction,
   {
-    error: [unsetWaitingForResponseAction], // TODO: show an alert if this occurs?
+    error: [], // TODO: show an alert if this occurs?
     success: [
       submitCourtIssuedOrderAction,
       set(state.alertSuccess, {
@@ -24,7 +22,6 @@ export const removeSignatureFromOrderSequence = [
         title: '',
       }),
       setCaseAction,
-      unsetWaitingForResponseAction,
     ],
   },
-];
+]);

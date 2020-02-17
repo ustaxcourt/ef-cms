@@ -4,6 +4,7 @@
     "documents": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
+        "filingDate": "2019-03-05T17:34:13.490Z",
         "documentType": "Petition",
         "documentTitle": "Petition",
         "filedBy": "Test Petitioner",
@@ -51,6 +52,7 @@
       {
         "processingStatus": "complete",
         "createdAt": "2019-03-05T17:34:13.491Z",
+        "filingDate": "2019-03-05T17:34:13.491Z",
         "documentType": "Statement of Taxpayer Identification",
         "filedBy": "Test Petitioner",
         "workItems": [],
@@ -61,6 +63,7 @@
       {
         "processingStatus": "complete",
         "createdAt": "2019-03-05T17:34:13.491Z",
+        "filingDate": "2019-03-05T17:34:13.491Z",
         "documentType": "Ownership Disclosure Statement",
         "filedBy": "Test Petitioner",
         "workItems": [],
@@ -89,7 +92,6 @@
     "createdAt": "2019-03-05T17:34:13.490Z",
     "receivedAt": "2019-03-05T17:34:13.490Z",
     "noticeOfAttachments": true,
-    "payGovId": null,
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "sk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "filingType": "A business",
@@ -116,10 +118,10 @@
     "orderForAmendedPetition": true,
     "orderToShowCause": true,
     "preferredTrialCity": "Birmingham, Alabama",
-    "payGovDate": null,
     "docketRecord": [
       {
         "description": "Petition",
+        "eventCode": "P",
         "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
         "filingDate": "2019-03-05T17:34:13.490Z",
         "filedBy": "Test Petitioner",
@@ -127,11 +129,13 @@
       },
       {
         "description": "Request for Place of Trial at Birmingham, Alabama",
+        "eventCode": "RQT",
         "filingDate": "2019-03-05T17:34:13.490Z",
         "index": 2
       },
       {
         "description": "Ownership Disclosure Statement",
+        "eventCode": "DISC",
         "documentId": "add36745-8e77-450b-a8dd-6f34272fe1d5",
         "filingDate": "2019-03-05T17:34:13.491Z",
         "filedBy": "Test Petitioner",
@@ -162,6 +166,7 @@
     "document": {
       "createdAt": "2019-03-05T17:34:13.490Z",
       "receivedAt": "2019-03-01T21:40:46.415Z",
+      "filingDate": "2019-03-01T21:40:46.415Z",
       "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
       "documentType": "Petition",
       "documentTitle": "Petition",
@@ -200,6 +205,7 @@
     "document": {
       "createdAt": "2019-03-05T17:34:13.490Z",
       "receivedAt": "2019-03-01T21:40:46.415Z",
+      "filingDate": "2019-03-01T21:40:46.415Z",
       "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
       "documentType": "Petition",
       "documentTitle": "Petition",
@@ -231,6 +237,8 @@
   },
   {
     "createdAt": "2019-08-22T12:47:16.905Z",
+    "caseTitle": "Mufutau Wade",
+    "docketNumber": "104-19",
     "deadlineDate": "2019-08-25T04:00:00.000Z",
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "sk": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057",
@@ -257,6 +265,8 @@
     "pk": "case-deadline-catalog"
   },
   {
+    "caseTitle": "Mufutau Wade",
+    "docketNumber": "104-19",
     "createdAt": "2019-08-22T12:46:01.052Z",
     "deadlineDate": "2019-08-22T04:00:00.000Z",
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
