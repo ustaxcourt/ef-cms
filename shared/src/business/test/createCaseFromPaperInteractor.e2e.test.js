@@ -58,6 +58,11 @@ describe('createCaseFromPaperInteractor integration test', () => {
         petitionFile: { name: 'something' },
         petitionFileSize: 1,
         receivedAt: RECEIVED_DATE,
+        requestForPlaceOfTrialFile: new File(
+          [],
+          'requestForPlaceOfTrialFile.pdf',
+        ),
+        requestForPlaceOfTrialFileSize: 1,
         stinFile: { name: 'something else' },
         stinFileSize: 1,
       },
