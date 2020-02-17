@@ -202,7 +202,11 @@ exports.updateUserContactInformationInteractor = async ({
         applicationContext,
         caseToUpdate: caseEntity.validate().toRawObject(),
       });
-    updatedCases.push(updatedCase);
+
+    const updatedCaseRaw = new Case(updatedCase, { applicationContext })
+      .validate()
+      .toRawObject();
+    updatedCases.push(updatedCaseRaw);
   }
 
   return updatedCases;
