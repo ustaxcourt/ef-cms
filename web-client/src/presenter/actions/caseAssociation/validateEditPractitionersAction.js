@@ -16,15 +16,35 @@ export const validateEditPractitionersAction = ({
   path,
 }) => {
   const { practitioners } = get(state.modal);
+  const { practitioners: oldPractitioners } = get(state.caseDetail);
+
+  const serviceIndicatorError = {
+    serviceIndicator:
+      'You cannot change from paper to electronic service. Select a valid service preference.',
+  };
 
   const errors = [];
   practitioners.forEach(practitioner => {
-    const error = applicationContext
+    let error = applicationContext
       .getUseCases()
       .validateEditPractitionerInteractor({
         applicationContext,
         practitioner,
       });
+
+    const oldPractitioner = oldPractitioners.find(
+      foundPractitioner => foundPractitioner.userId === practitioner.userId,
+    );
+    if (
+      ['Paper', 'None'].includes(oldPractitioner.serviceIndicator) &&
+      practitioner.serviceIndicator === 'Electronic'
+    ) {
+      error = {
+        ...error,
+        ...serviceIndicatorError,
+      };
+    }
+
     errors.push(error);
   });
 

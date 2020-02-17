@@ -11,7 +11,7 @@ const MOCK_TRIAL = {
   startDate: '2025-12-01T00:00:00.000Z',
   term: 'Fall',
   termYear: '2025',
-  trialLocation: 'Birmingham, AL',
+  trialLocation: 'Birmingham, Alabama',
 };
 
 describe('getEligibleCasesForTrialSessionInteractor', () => {

@@ -17,6 +17,7 @@
       {
         "processingStatus": "complete",
         "createdAt": "2019-03-01T21:42:29.073Z",
+        "filingDate": "2019-03-01T21:42:29.073Z",
         "documentType": "Petition",
         "filedBy": "Test Petitioner",
         "workItems": [
@@ -62,6 +63,7 @@
       {
         "processingStatus": "complete",
         "createdAt": "2019-03-05T17:34:13.491Z",
+        "filingDate": "2019-03-05T17:34:13.491Z",
         "documentType": "Statement of Taxpayer Identification",
         "filedBy": "Test Petitioner",
         "workItems": [],
@@ -109,17 +111,18 @@
     "initialTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "preferredTrialCity": "Boise, Idaho",
-    "payGovDate": null,
     "docketRecord": [
       {
         "filingDate": "2019-03-01T21:42:29.073Z",
         "description": "Petition",
+        "eventCode": "P",
         "filedBy": "Test Petitioner",
         "index": 1
       },
       {
         "filingDate": "2019-03-01T21:42:29.073Z",
         "description": "Request for Place of Trial at Boise, Idaho",
+        "eventCode": "RQT",
         "index": 2
       }
     ],
@@ -142,6 +145,7 @@
     "caseStatus": "New",
     "document": {
       "createdAt": "2019-03-01T21:42:29.073Z",
+      "filingDate": "2019-03-01T21:42:29.073Z",
       "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
       "documentType": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -179,6 +183,7 @@
     "caseStatus": "New",
     "document": {
       "receivedAt": "2019-03-01T21:40:46.415Z",
+      "filingDate": "2019-03-01T21:40:46.415Z",
       "createdAt": "2019-03-01T21:42:29.073Z",
       "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
       "documentType": "Petition",
@@ -217,6 +222,7 @@
     "caseStatus": "New",
     "document": {
       "createdAt": "2019-03-01T21:42:29.073Z",
+      "filingDate": "2019-03-01T21:42:29.073Z",
       "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
       "documentType": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",

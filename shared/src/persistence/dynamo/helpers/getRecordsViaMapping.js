@@ -1,5 +1,4 @@
 const client = require('../../dynamodbClientService');
-const { stripInternalKeys } = require('./stripInternalKeys');
 
 exports.getRecordsViaMapping = async ({ applicationContext, key, type }) => {
   const mappings = await client.query({
@@ -28,5 +27,5 @@ exports.getRecordsViaMapping = async ({ applicationContext, key, type }) => {
     ...results.find(r => m.sk === r.pk),
   }));
 
-  return stripInternalKeys(afterMapping);
+  return afterMapping;
 };

@@ -14,8 +14,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
 const formattedCaseInfo = caseInfo => {
   const { servedAt } = caseInfo.documents.find(doc => doc.servedAt);
   const countryName =
-    caseInfo.contactPrimary.countryType != 'domestic' &&
-    caseInfo.contactPrimary.country;
+    caseInfo.contactPrimary.countryType != 'domestic'
+      ? caseInfo.contactPrimary.country
+      : '';
   const formattedInfo = Object.assign(
     {
       caseTitle: caseInfo.caseTitle,
@@ -44,13 +45,11 @@ const generateCaseConfirmationPage = async ({
   applicationContext,
   caseEntity,
 }) => {
-  const {
-    confirmSassContent,
-    confirmTemplateContent,
-    ustcLogoBufferBase64,
-  } = require('./caseConfirmationResources');
+  const confirmSassContent = require('./../../assets/ustcPdf.scss_');
+  const confirmTemplateContent = require('./caseConfirmation.pug_');
+  const ustcLogoBufferBase64 = require('../../../../static/images/ustc_seal.png_');
 
-  const Handlebars = applicationContext.getHandlebars();
+  const pug = applicationContext.getPug();
   const sass = applicationContext.getNodeSass();
 
   const { css } = await new Promise(resolve => {
@@ -58,10 +57,10 @@ const generateCaseConfirmationPage = async ({
       return resolve(result);
     });
   });
-  const compiledFunction = Handlebars.compile(confirmTemplateContent);
+  const compiledFunction = pug.compile(confirmTemplateContent);
   const html = compiledFunction({
     ...formattedCaseInfo(caseEntity),
-    styles: `<style>${css}</style>`,
+    css,
     logo: ustcLogoBufferBase64,
   });
   return html;
@@ -89,15 +88,7 @@ exports.generateCaseConfirmationPdf = async ({
   let result = null;
 
   try {
-    const chromium = applicationContext.getChromium();
-
-    browser = await chromium.puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath,
-      headless: true,
-    });
-
+    browser = await applicationContext.getChromiumBrowser();
     let page = await browser.newPage();
 
     const contentResult = await generateCaseConfirmationPage({
@@ -119,30 +110,19 @@ exports.generateCaseConfirmationPdf = async ({
     }
   }
 
-  const documentId = `case-${caseEntity.docketNumber}-confirmation.pdf`;
+  const caseConfirmationPdfName = caseEntity.getCaseConfirmationGeneratedPdfFileName();
 
   await new Promise(resolve => {
-    const documentsBucket = applicationContext.environment.documentsBucketName;
+    const documentsBucket = applicationContext.getDocumentsBucketName();
     const s3Client = applicationContext.getStorageClient();
 
     const params = {
       Body: result,
       Bucket: documentsBucket,
       ContentType: 'application/pdf',
-      Key: documentId,
+      Key: caseConfirmationPdfName,
     };
 
-    s3Client.upload(params, function() {
-      resolve();
-    });
+    s3Client.upload(params, resolve);
   });
-
-  const {
-    url,
-  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-    applicationContext,
-    documentId,
-  });
-
-  return url;
 };

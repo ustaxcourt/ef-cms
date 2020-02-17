@@ -72,11 +72,8 @@ describe('run trial session planning report', () => {
       },
       getTemplateGenerators: () => {
         return {
-          generateTrialSessionPlanningReportTemplate: ({
-            previousTerms,
-            rows,
-            selectedTerm,
-            selectedYear,
+          generateTrialSessionPlanningReportTemplate: async ({
+            content: { previousTerms, rows, selectedTerm, selectedYear },
           }) => {
             generateTrialSessionPlanningReportTemplateStub();
             return `<!DOCTYPE html>${previousTerms} ${rows} ${selectedTerm} ${selectedYear}</html>`;

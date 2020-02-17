@@ -20,19 +20,19 @@ describe('filePetitionFromPaperInteractor', () => {
     virusScanPdfStub = sinon.stub().resolves(null);
 
     return {
+      environment: { stage: 'local' },
       getCurrentUser: () => ({
-        role: User.ROLES.docketClerk,
-        userId: 'Don Clark',
+        role: User.ROLES.petitionsClerk,
+        userId: 'petitionsClerk',
       }),
       getPersistenceGateway: () => ({
-        uploadDocument: uploadDocumentStub,
+        uploadDocumentFromClient: uploadDocumentStub,
       }),
       getUseCases: () => ({
         createCaseFromPaperInteractor: createCaseStub,
         validatePdfInteractor: validatePdfStub,
         virusScanPdfInteractor: virusScanPdfStub,
       }),
-      environment: { stage: 'local' },
       ...options,
     };
   };

@@ -1,22 +1,16 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
 export const SectionWorkQueueOutbox = connect(
   {
-    documentHelper: state.documentHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({
-    documentHelper,
-    formattedWorkQueue,
-    workQueueHelper,
-    workQueueSectionHelper,
-  }) => {
+  ({ formattedWorkQueue, workQueueHelper, workQueueSectionHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -31,7 +25,7 @@ export const SectionWorkQueueOutbox = connect(
               </th>
               {workQueueHelper.showReceivedColumn && <th>Filed</th>}
               {workQueueHelper.showSentColumn && <th>Sent</th>}
-              <th>Case name</th>
+              <th>Case title</th>
               <th aria-label="Status Icon" className="padding-right-0" />
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
@@ -40,7 +34,7 @@ export const SectionWorkQueueOutbox = connect(
               {workQueueHelper.showAssignedToColumn && (
                 <th>{workQueueHelper.assigneeColumnTitle}</th>
               )}
-              {workQueueHelper.showProcessedByColumn && <th>Processed by</th>}
+              {workQueueHelper.showProcessedByColumn && <th>QC’d by</th>}
               {workQueueHelper.showBatchedByColumn && <th>Batched by</th>}
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
               {workQueueHelper.showServedColumn && <th>Served</th>}
@@ -68,8 +62,8 @@ export const SectionWorkQueueOutbox = connect(
                 </td>
                 <td className="message-queue-row has-icon padding-right-0">
                   {item.showBatchedStatusIcon && (
-                    <FontAwesomeIcon
-                      aria-hidden="true"
+                    <Icon
+                      aria-label="batched for IRS"
                       className="iconStatusBatched"
                       icon={['far', 'clock']}
                       size="lg"
@@ -81,11 +75,7 @@ export const SectionWorkQueueOutbox = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={documentHelper({
-                        docketNumber: item.docketNumber,
-                        documentId: item.document.documentId,
-                        messageId: item.currentMessage.messageId,
-                      })}
+                      href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}${item.editLink}`}
                       onClick={e => {
                         e.stopPropagation();
                       }}

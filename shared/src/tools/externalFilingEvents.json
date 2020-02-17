@@ -1,26 +1,6 @@
 {
   "Answer (filed by respondent only)": [
     {
-      "documentTitle": "Amended Answer",
-      "documentType": "Amended Answer",
-      "category": "Answer (filed by respondent only)",
-      "eventCode": "AA",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "[First, Second, etc.] Amendment to Answer",
-      "documentType": "Amendment to Answer",
-      "category": "Answer (filed by respondent only)",
-      "eventCode": "ATAN",
-      "scenario": "Nonstandard G",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": "What iteration is this filing?"
-    },
-    {
       "documentTitle": "Answer",
       "documentType": "Answer",
       "category": "Answer (filed by respondent only)",
@@ -133,6 +113,16 @@
   ],
   "Appearance and Representation": [
     {
+      "documentTitle": "Designation of Counsel [Name] to Receive Service",
+      "documentType": "Designation of Counsel to Receive Service",
+      "category": "Appearance and Representation",
+      "eventCode": "DSC",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "Name",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Motion to Withdraw as Counsel",
       "documentType": "Motion to Withdraw as Counsel",
       "category": "Appearance and Representation",
@@ -210,7 +200,7 @@
       "documentTitle": "Proposed Stipulated Decision",
       "documentType": "Proposed Stipulated Decision",
       "category": "Decision",
-      "eventCode": "PSDEC",
+      "eventCode": "PSDE",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -242,7 +232,7 @@
       "documentTitle": "[First, Second, etc.] Amended [Document Name]",
       "documentType": "Amended",
       "category": "Miscellaneous",
-      "eventCode": "ADED",
+      "eventCode": "AMAT",
       "scenario": "Nonstandard F",
       "labelPreviousDocument": "Which document are you amending?",
       "labelFreeText": "",
@@ -255,16 +245,16 @@
       "eventCode": "AMDC",
       "scenario": "Nonstandard D",
       "labelPreviousDocument": "Which document is this Certificate of Service for?",
-      "labelFreeText": "Date of Service",
+      "labelFreeText": "Date of service",
       "ordinalField": ""
     },
     {
-      "documentTitle": "[First, Second, etc.] Amendment to [Document Name]",
-      "documentType": "Amendment",
+      "documentTitle": "[First, Second, etc.] Amendment to [anything]",
+      "documentType": "Amendment [anything]",
       "category": "Miscellaneous",
-      "eventCode": "AMNT",
+      "eventCode": "ADMT",
       "scenario": "Nonstandard F",
-      "labelPreviousDocument": "Which document are you amending?",
+      "labelPreviousDocument": "What is this amendment for?",
       "labelFreeText": "",
       "ordinalField": "What iteration is this filing?"
     },
@@ -285,7 +275,7 @@
       "eventCode": "CS",
       "scenario": "Nonstandard D",
       "labelPreviousDocument": "Which document is this Certificate of Service for?",
-      "labelFreeText": "Date of Service",
+      "labelFreeText": "Date of service",
       "ordinalField": ""
     },
     {
@@ -365,26 +355,6 @@
       "eventCode": "RPT",
       "scenario": "Standard",
       "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplemental Brief",
-      "documentType": "Supplemental Brief",
-      "category": "Miscellaneous",
-      "eventCode": "SB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Unredacted [Document Name]",
-      "documentType": "Unredacted",
-      "category": "Miscellaneous",
-      "eventCode": "URED",
-      "scenario": "Nonstandard A",
-      "labelPreviousDocument": "Which document has been unredacted?",
       "labelFreeText": "",
       "ordinalField": ""
     }
@@ -731,16 +701,6 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion for Preliminary Injunction",
-      "documentType": "Motion for Preliminary Injunction",
-      "category": "Motion",
-      "eventCode": "M025",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
       "documentTitle": "Motion for Pretrial Conference",
       "documentType": "Motion for Pretrial Conference",
       "category": "Motion",
@@ -871,7 +831,7 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion to Add Small Tax case Designation",
+      "documentTitle": "Motion to Add Small Tax Case Designation",
       "documentType": "Motion to Add Small Tax case Designation",
       "category": "Motion",
       "eventCode": "M042",
@@ -1017,7 +977,7 @@
       "eventCode": "M058",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
-      "labelFreeText": "Requested Location",
+      "labelFreeText": "Requested location",
       "ordinalField": ""
     },
     {
@@ -1027,7 +987,7 @@
       "eventCode": "M059",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
-      "labelFreeText": "Requested Location",
+      "labelFreeText": "Requested location",
       "ordinalField": ""
     },
     {
@@ -1207,7 +1167,7 @@
       "eventCode": "M126",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Person, Notice, or Year",
+      "labelFreeText": "Person, notice, or year",
       "ordinalField": ""
     },
     {
@@ -1301,8 +1261,8 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(f)(2)",
-      "documentType": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(f)(2)",
+      "documentTitle": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(g)(3)",
+      "documentType": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(g)(3)",
       "category": "Motion",
       "eventCode": "M084",
       "scenario": "Standard",
@@ -1451,20 +1411,10 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion to Seal Case",
-      "documentType": "Motion to Seal Case",
+      "documentTitle": "Motion to Seal",
+      "documentType": "Motion to Seal",
       "category": "Motion",
       "eventCode": "M114",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Motion to Seal Documents",
-      "documentType": "Motion to Seal Documents",
-      "category": "Motion",
-      "eventCode": "M127",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1673,6 +1623,16 @@
       "ordinalField": ""
     },
     {
+      "documentTitle": "Notice of Appeal",
+      "documentType": "Notice of Appeal",
+      "category": "Notice",
+      "eventCode": "NOA",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Notice of Change of Address",
       "documentType": "Notice of Change of Address",
       "category": "Notice",
@@ -1743,26 +1703,6 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Notice of Election to Intervene",
-      "documentType": "Notice of Election to Intervene",
-      "category": "Notice",
-      "eventCode": "NOEI",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Notice of Election to Participate",
-      "documentType": "Notice of Election to Participate",
-      "category": "Notice",
-      "eventCode": "NOEP",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
       "documentTitle": "Notice of Filing of Petition and Right to Intervene",
       "documentType": "Notice of Filing of Petition and Right to Intervene",
       "category": "Notice",
@@ -1800,16 +1740,6 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What do you intend not to file?",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Notice of Intervention",
-      "documentType": "Notice of Intervention",
-      "category": "Notice",
-      "eventCode": "NOI",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
       "ordinalField": ""
     },
     {
@@ -1955,56 +1885,6 @@
   ],
   "Petition": [
     {
-      "documentTitle": "Amended Petition",
-      "documentType": "Amended Petition",
-      "category": "Petition",
-      "eventCode": "PAP",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Amended Petition",
-      "documentType": "Amendment to Amended Petition",
-      "category": "Petition",
-      "eventCode": "PAAP",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Petition",
-      "documentType": "Amendment to Petition",
-      "category": "Petition",
-      "eventCode": "ATP",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Second Amended Petition",
-      "documentType": "Amendment to Second Amended Petition",
-      "category": "Petition",
-      "eventCode": "PASP",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Third Amended Petition",
-      "documentType": "Amendment to Third Amended Petition",
-      "category": "Petition",
-      "eventCode": "PATP",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
       "documentTitle": "Redacted Petition Filed",
       "documentType": "Redacted Petition Filed",
       "category": "Petition",
@@ -2013,99 +1893,9 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": ""
-    },
-    {
-      "documentTitle": "Second Amended Petition",
-      "documentType": "Second Amended Petition",
-      "category": "Petition",
-      "eventCode": "PSAP",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Second Amendment to Petition",
-      "documentType": "Second Amendment to Petition",
-      "category": "Petition",
-      "eventCode": "PSAT",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplement to Petition",
-      "documentType": "Supplement to Petition",
-      "category": "Petition",
-      "eventCode": "PSUP",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Third Amended Petition",
-      "documentType": "Third Amended Petition",
-      "category": "Petition",
-      "eventCode": "PTAP",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Third Amendment to Petition",
-      "documentType": "Third Amendment to Petition",
-      "category": "Petition",
-      "eventCode": "PTAT",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
     }
   ],
   "Pretrial Memorandum": [
-    {
-      "documentTitle": "Amended Prehearing Memorandum",
-      "documentType": "Amended Prehearing Memorandum",
-      "category": "Pretrial Memorandum",
-      "eventCode": "APHM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amended Pretrial Memorandum",
-      "documentType": "Amended Pretrial Memorandum",
-      "category": "Pretrial Memorandum",
-      "eventCode": "APTM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Prehearing Memorandum",
-      "documentType": "Amendment to Prehearing Memorandum",
-      "category": "Pretrial Memorandum",
-      "eventCode": "ATPH",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Pretrial Memorandum",
-      "documentType": "Amendment to Pretrial Memorandum",
-      "category": "Pretrial Memorandum",
-      "eventCode": "ATPM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
     {
       "documentTitle": "Prehearing Memorandum",
       "documentType": "Prehearing Memorandum",
@@ -2125,59 +1915,9 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": ""
-    },
-    {
-      "documentTitle": "Second Supplement to Pretrial Memorandum",
-      "documentType": "Second Supplement to Pretrial Memorandum",
-      "category": "Pretrial Memorandum",
-      "eventCode": "SSPM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplement to Prehearing Memorandum",
-      "documentType": "Supplement to Prehearing Memorandum",
-      "category": "Pretrial Memorandum",
-      "eventCode": "STMP",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplement to Pretrial Memorandum",
-      "documentType": "Supplement to Pretrial Memorandum",
-      "category": "Pretrial Memorandum",
-      "eventCode": "STPM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
     }
   ],
   "Reply": [
-    {
-      "documentTitle": "Amended Reply to Answer",
-      "documentType": "Amended Reply to Answer",
-      "category": "Reply",
-      "eventCode": "RA",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Reply to Answer",
-      "documentType": "Amendment to Reply to Answer",
-      "category": "Reply",
-      "eventCode": "RAA",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
     {
       "documentTitle": "Reply to [Document Name]",
       "documentType": "Reply",
@@ -2185,86 +1925,6 @@
       "eventCode": "REPL",
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which document are you replying to?",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Reply to Amendment to Answer",
-      "documentType": "Reply to Amendment to Answer",
-      "category": "Reply",
-      "eventCode": "RPAA",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Reply to Answer",
-      "documentType": "Reply to Answer",
-      "category": "Reply",
-      "eventCode": "RTA",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Reply to Answer to Amended Petition",
-      "documentType": "Reply to Answer to Amended Petition",
-      "category": "Reply",
-      "eventCode": "RTAA",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Reply to Answer to Amendment to Petition",
-      "documentType": "Reply to Answer to Amendment to Petition",
-      "category": "Reply",
-      "eventCode": "RATA",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Reply to Answer to Petition, as Amended",
-      "documentType": "Reply to Answer to Petition, as Amended",
-      "category": "Reply",
-      "eventCode": "RAPA",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Reply to Answer to Second Amended Petition",
-      "documentType": "Reply to Answer to Second Amended Petition",
-      "category": "Reply",
-      "eventCode": "RTSA",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Reply to Answer to Supplement to Petition",
-      "documentType": "Reply to Answer to Supplement to Petition",
-      "category": "Reply",
-      "eventCode": "RSTA",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Reply to Answer to Third Amended Petition",
-      "documentType": "Reply to Answer to Third Amended Petition",
-      "category": "Reply",
-      "eventCode": "RTAP",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": ""
     },
@@ -2301,23 +1961,13 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Request for Place of Submission of Declaratory Judgment Case",
-      "documentType": "Request for Place of Submission of Declaratory Judgment Case",
-      "category": "Request",
-      "eventCode": "RQSD",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
       "documentTitle": "Request for Place of Trial at [Place]",
       "documentType": "Request for Place of Trial",
       "category": "Request",
       "eventCode": "RQT",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
-      "labelFreeText": "Requested Location",
+      "labelFreeText": "Requested location",
       "ordinalField": ""
     },
     {
@@ -2374,96 +2024,6 @@
     }
   ],
   "Seriatim Brief": [
-    {
-      "documentTitle": "Amended Seriatim Answering Brief",
-      "documentType": "Amended Seriatim Answering Brief",
-      "category": "Seriatim Brief",
-      "eventCode": "ADSA",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amended Seriatim Opening Brief",
-      "documentType": "Amended Seriatim Opening Brief",
-      "category": "Seriatim Brief",
-      "eventCode": "AEDS",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amended Seriatim Reply Brief",
-      "documentType": "Amended Seriatim Reply Brief",
-      "category": "Seriatim Brief",
-      "eventCode": "ADSB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amended Seriatim Sur-Reply Brief",
-      "documentType": "Amended Seriatim Sur-Reply Brief",
-      "category": "Seriatim Brief",
-      "eventCode": "ASRB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amended Seriatim Sur-Reply Memorandum Brief",
-      "documentType": "Amended Seriatim Sur-Reply Memorandum Brief",
-      "category": "Seriatim Brief",
-      "eventCode": "MBAD",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Seriatim Answering Brief",
-      "documentType": "Amendment to Seriatim Answering Brief",
-      "category": "Seriatim Brief",
-      "eventCode": "ADTS",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Seriatim Opening Brief",
-      "documentType": "Amendment to Seriatim Opening Brief",
-      "category": "Seriatim Brief",
-      "eventCode": "ASTF",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Seriatim Sur-Reply Brief",
-      "documentType": "Amendment to Seriatim Sur-Reply Brief",
-      "category": "Seriatim Brief",
-      "eventCode": "ATRB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Seriatim Sur-Reply Memorandum Brief",
-      "documentType": "Amendment to Seriatim Sur-Reply Memorandum Brief",
-      "category": "Seriatim Brief",
-      "eventCode": "MBAT",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
     {
       "documentTitle": "Seriatim Answering Brief",
       "documentType": "Seriatim Answering Brief",
@@ -2543,209 +2103,9 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplement to Seriatim Answering Brief",
-      "documentType": "Supplement to Seriatim Answering Brief",
-      "category": "Seriatim Brief",
-      "eventCode": "STSA",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplement to Seriatim Opening Brief",
-      "documentType": "Supplement to Seriatim Opening Brief",
-      "category": "Seriatim Brief",
-      "eventCode": "STSO",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplement to Seriatim Sur-Reply Brief",
-      "documentType": "Supplement to Seriatim Sur-Reply Brief",
-      "category": "Seriatim Brief",
-      "eventCode": "SSSR",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplement to Seriatim Sur-Reply Memorandum Brief",
-      "documentType": "Supplement to Seriatim Sur-Reply Memorandum Brief",
-      "category": "Seriatim Brief",
-      "eventCode": "MBSR",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
     }
   ],
   "Simultaneous Brief": [
-    {
-      "documentTitle": "Amended Simultaneous Answering Brief",
-      "documentType": "Amended Simultaneous Answering Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "ASAB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amended Simultaneous Answering Memoranda of Law",
-      "documentType": "Amended Simultaneous Answering Memoranda of Law",
-      "category": "Simultaneous Brief",
-      "eventCode": "ASAM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amended Simultaneous Answering Memorandum Brief",
-      "documentType": "Amended Simultaneous Answering Memorandum Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "ASMB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amended Simultaneous Memoranda of Law",
-      "documentType": "Amended Simultaneous Memoranda of Law",
-      "category": "Simultaneous Brief",
-      "eventCode": "ASML",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amended Simultaneous Opening Brief",
-      "documentType": "Amended Simultaneous Opening Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "ASOB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amended Simultaneous Opening Memorandum Brief",
-      "documentType": "Amended Simultaneous Opening Memorandum Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "ASOM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amended Simultaneous Sur-Reply Brief",
-      "documentType": "Amended Simultaneous Sur-Reply Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "AISB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amended Simultaneous Sur-Reply Memorandum Brief",
-      "documentType": "Amended Simultaneous Sur-Reply Memorandum Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "ASRM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Simultaneous Answering Brief",
-      "documentType": "Amendment to Simultaneous Answering Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "ATAB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Simultaneous Answering Memoranda of Law",
-      "documentType": "Amendment to Simultaneous Answering Memoranda of Law",
-      "category": "Simultaneous Brief",
-      "eventCode": "ATAM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Simultaneous Answering Memorandum Brief",
-      "documentType": "Amendment to Simultaneous Answering Memorandum Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "ATMB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Simultaneous Memoranda of Law",
-      "documentType": "Amendment to Simultaneous Memoranda of Law",
-      "category": "Simultaneous Brief",
-      "eventCode": "ATSM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Simultaneous Opening Brief",
-      "documentType": "Amendment to Simultaneous Opening Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "ATOB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Simultaneous Opening Memorandum Brief",
-      "documentType": "Amendment to Simultaneous Opening Memorandum Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "ATOM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Simultaneous Sur-Reply Brief",
-      "documentType": "Amendment to Simultaneous Sur-Reply Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "ATSB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Amendment to Simultaneous Sur-Reply Memorandum Brief",
-      "documentType": "Amendment to Simultaneous Sur-Reply Memorandum Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "ASSM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
     {
       "documentTitle": "Simultaneous Answering Brief",
       "documentType": "Simultaneous Answering Brief",
@@ -2845,86 +2205,6 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplement to Simultaneous Answering Brief",
-      "documentType": "Supplement to Simultaneous Answering Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "SSAB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplement to Simultaneous Answering Memoranda of Law",
-      "documentType": "Supplement to Simultaneous Answering Memoranda of Law",
-      "category": "Simultaneous Brief",
-      "eventCode": "STAM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplement to Simultaneous Answering Memorandum Brief",
-      "documentType": "Supplement to Simultaneous Answering Memorandum Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "SSAM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplement to Simultaneous Memoranda of Law",
-      "documentType": "Supplement to Simultaneous Memoranda of Law",
-      "category": "Simultaneous Brief",
-      "eventCode": "STSM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplement to Simultaneous Opening Brief",
-      "documentType": "Supplement to Simultaneous Opening Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "SSOB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplement to Simultaneous Opening Memorandum Brief",
-      "documentType": "Supplement to Simultaneous Opening Memorandum Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "SSOM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplement to Simultaneous Sur-Reply Brief",
-      "documentType": "Supplement to Simultaneous Sur-Reply Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "SSSB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Supplement to Simultaneous Sur-Reply Memorandum Brief",
-      "documentType": "Supplement to Simultaneous Sur-Reply Memorandum Brief",
-      "category": "Simultaneous Brief",
-      "eventCode": "SSSM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
     }
   ],
   "Statement": [
@@ -2945,7 +2225,7 @@
       "eventCode": "STAT",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What is this Statement for?",
+      "labelFreeText": "What is this statement for?",
       "ordinalField": ""
     },
     {
@@ -2997,7 +2277,7 @@
       "eventCode": "STP",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What is this Stipulation for?",
+      "labelFreeText": "What is this stipulation for?",
       "ordinalField": ""
     },
     {
@@ -3079,16 +2359,6 @@
       "labelPreviousDocument": "",
       "labelFreeText": "Name",
       "ordinalField": ""
-    },
-    {
-      "documentTitle": "[First, Second, etc.] Supplemental Stipulation of Facts",
-      "documentType": "Supplemental Stipulation of Facts",
-      "category": "Stipulation",
-      "eventCode": "SSF",
-      "scenario": "Nonstandard G",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": "What iteration is this filing?"
     }
   ],
   "Supplement": [

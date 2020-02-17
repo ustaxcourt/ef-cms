@@ -1,6 +1,6 @@
-const _ = require('lodash');
 const { assignWorkItemsInteractor } = require('./assignWorkItemsInteractor');
 const { Case } = require('../../entities/cases/Case');
+const { omit } = require('lodash');
 const { User } = require('../../entities/User');
 
 const MOCK_WORK_ITEM = {
@@ -57,7 +57,7 @@ describe('assignWorkItemsInteractor', () => {
       environment: { stage: 'local' },
       getPersistenceGateway: () => {
         return {
-          getWorkItemById: async () => _.omit(MOCK_WORK_ITEM, 'caseId'),
+          getWorkItemById: async () => omit(MOCK_WORK_ITEM, 'caseId'),
         };
       },
       user: {

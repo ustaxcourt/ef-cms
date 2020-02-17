@@ -14,7 +14,7 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       category: VALIDATION_ERROR_MESSAGES.category,
-      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -24,7 +24,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateSelectDocumentTypeSequence');
     expect(test.getState('validationErrors')).toEqual({
-      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -66,7 +66,7 @@ export default (test, fakeFile) => {
     await test.runSequence('selectDocumentSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -91,7 +91,7 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       secondaryDocument: {
         category: VALIDATION_ERROR_MESSAGES.category,
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       },
     });
 
@@ -178,7 +178,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'objections',
-      value: 'no',
+      value: 'No',
     });
 
     await test.runSequence('validateExternalDocumentInformationSequence');
@@ -247,9 +247,13 @@ export default (test, fakeFile) => {
       key: 'supportingDocuments.0.documentType',
       value: 'Affidavit in Support',
     });
+
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocuments.0.previousDocument',
-      value: test.getState('form.documentTitle'),
+      value: {
+        documentTitle: test.getState('form.documentTitle'),
+        documentType: test.getState('form.documentType'),
+      },
     });
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocuments.0.supportingDocument',
@@ -329,7 +333,10 @@ export default (test, fakeFile) => {
     });
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondarySupportingDocuments.0.previousDocument',
-      value: test.getState('form.secondaryDocument.documentTitle'),
+      value: {
+        documentTitle: test.getState('form.secondaryDocument.documentTitle'),
+        documentType: test.getState('form.secondaryDocument.documentType'),
+      },
     });
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondarySupportingDocuments.0.supportingDocument',

@@ -313,6 +313,10 @@ export const ScanBatchPreviewer = connect(
                           </span>
                         )}
                       </td>
+
+                      <td>
+                        <span>{batch.scanModeLabel}</span>
+                      </td>
                       <td>
                         <span>{batch.pages.length} pages</span>
                       </td>
@@ -457,7 +461,7 @@ export const ScanBatchPreviewer = connect(
               </div>
               <div className="grid-col-6 text-right margin-top-2px padding-right-4">
                 <span className="margin-right-1">
-                  Scanner: {scanBatchPreviewerHelper.scannerSource || 'None'}
+                  Scanner: {scanBatchPreviewerHelper.scannerSourceDisplayName}
                 </span>
                 <Button
                   link

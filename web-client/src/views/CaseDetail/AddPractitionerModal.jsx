@@ -1,5 +1,6 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
+import { ServiceIndicatorRadios } from '../ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -40,7 +41,7 @@ export const AddPractitionerModal = connect(
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="counsel-matches-legend">
                 {caseDetailHelper.practitionerSearchResultsCount} Counsel
-                Match(es) Found
+                match(es) found
               </legend>
 
               {caseDetailHelper.practitionerSearchResultsCount === 1 && (
@@ -132,7 +133,10 @@ export const AddPractitionerModal = connect(
                     validateSequence();
                   }}
                 />
-                <label className="usa-checkbox__label" htmlFor="party-primary">
+                <label
+                  className="usa-checkbox__label  inline-block"
+                  htmlFor="party-primary"
+                >
                   {caseDetail.contactPrimary.name}
                 </label>
               </div>
@@ -154,7 +158,7 @@ export const AddPractitionerModal = connect(
                     }}
                   />
                   <label
-                    className="usa-checkbox__label"
+                    className="usa-checkbox__label inline-block"
                     htmlFor="party-secondary"
                   >
                     {caseDetail.contactSecondary.name}
@@ -163,6 +167,11 @@ export const AddPractitionerModal = connect(
               )}
             </fieldset>
           </FormGroup>
+
+          <ServiceIndicatorRadios
+            bind="modal"
+            validationErrors="validationErrors"
+          />
         </div>
       </ModalDialog>
     );

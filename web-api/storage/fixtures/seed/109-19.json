@@ -5,6 +5,7 @@
     "documents": [
       {
         "createdAt": "2019-03-01T21:40:46.415Z",
+        "filingDate": "2019-03-01T21:40:46.415Z",
         "documentType": "Petition",
         "filedBy": "Test Petitioner",
         "processingStatus": "complete",
@@ -52,6 +53,7 @@
       {
         "processingStatus": "complete",
         "createdAt": "2019-03-05T17:34:13.491Z",
+        "filingDate": "2019-03-05T17:34:13.491Z",
         "documentType": "Statement of Taxpayer Identification",
         "filedBy": "Test Petitioner",
         "workItems": [],
@@ -62,6 +64,7 @@
       {
         "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
         "createdAt": "2019-10-07T14:29:30.288Z",
+        "filingDate": "2019-10-07T14:29:30.288Z",
         "docketNumber": "109-19",
         "documentId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
         "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
@@ -108,16 +111,21 @@
       {
         "filingDate": "2019-03-01T21:40:46.415Z",
         "description": "Petition",
+        "eventCode": "P",
         "filedBy": "Test Petitioner",
         "index": 1
       },
       {
         "filingDate": "2019-03-01T21:40:46.415Z",
         "description": "Request for Place of Trial at Birmingham, Alabama",
+        "eventCode": "RQT",
         "index": 2
       }
     ],
     "sk": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
+    "automaticBlocked": true,
+    "automaticBlockedDate": "2019-05-01T21:40:46.415Z",
+    "automaticBlockedReason": "Due Date",
     "blocked": true,
     "blockedDate": "2019-03-01T21:40:46.415Z",
     "blockedReason": "petitioner is in jail",
@@ -141,6 +149,26 @@
     "docketNumber": "109-19",
     "status": "New",
     "associatedJudge": "Chief Judge"
+  },
+  {
+    "caseTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "docketNumber": "109-19",
+    "createdAt": "2019-08-22T12:47:16.905Z",
+    "deadlineDate": "2019-08-25T04:00:00.000Z",
+    "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
+    "sk": "case-deadline-95b46eae-70f0-45df-91de-febdc610fed9",
+    "caseDeadlineId": "95b46eae-70f0-45df-91de-febdc610fed9",
+    "description": "Final status report due to Judge Ashford",
+    "pk": "case-deadline-95b46eae-70f0-45df-91de-febdc610fed9"
+  },
+  {
+    "sk": "case-deadline-95b46eae-70f0-45df-91de-febdc610fed9",
+    "pk": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02|case-deadline"
+  },
+  {
+    "caseDeadlineId": "case-deadline-95b46eae-70f0-45df-91de-febdc610fed9",
+    "sk": "case-deadline-95b46eae-70f0-45df-91de-febdc610fed9",
+    "pk": "case-deadline-catalog"
   },
   {
     "sk": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",

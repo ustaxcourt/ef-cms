@@ -5,12 +5,14 @@ import { PendingReportList } from './PendingReportList';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-// import { sequences } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const PendingReport = connect(
-  {},
-  () => {
+  {
+    formattedPendingItems: state.formattedPendingItems,
+  },
+  ({ formattedPendingItems }) => {
     return (
       <>
         <BigHeader text="Reports" />
@@ -22,9 +24,10 @@ export const PendingReport = connect(
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
               <Button
                 link
+                aria-describedby="pending-report-tab"
                 className="margin-top-2"
+                href={formattedPendingItems.printUrl}
                 icon="print"
-                onClick={() => true}
               >
                 Print Report
               </Button>

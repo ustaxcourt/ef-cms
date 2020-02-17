@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the form's irs notice date and pay gov date based on the caseDetail provided in state.caseDetail
+ * sets the form's dates (split into month/day/year) based on the caseDetail provided in state.caseDetail
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function used for getting the state.caseDetail
@@ -39,16 +39,38 @@ export const setFormForCaseAction = async ({
     store.set(state.form.receivedAtYear, receivedAt.format('YYYY'));
   }
 
-  const payGovDate = applicationContext
+  const petitionPaymentDate = applicationContext
     .getUtilities()
-    .prepareDateFromString(caseDetail.payGovDate, 'YYYY/MM/DD');
+    .prepareDateFromString(caseDetail.petitionPaymentDate, 'YYYY/MM/DD');
   if (
-    payGovDate &&
-    payGovDate.toDate() instanceof Date &&
-    !isNaN(payGovDate.toDate())
+    petitionPaymentDate &&
+    petitionPaymentDate.toDate() instanceof Date &&
+    !isNaN(petitionPaymentDate.toDate())
   ) {
-    store.set(state.form.payGovMonth, payGovDate.format('M'));
-    store.set(state.form.payGovDay, payGovDate.format('D'));
-    store.set(state.form.payGovYear, payGovDate.format('YYYY'));
+    store.set(state.form.paymentDateMonth, petitionPaymentDate.format('M'));
+    store.set(state.form.paymentDateDay, petitionPaymentDate.format('D'));
+    store.set(state.form.paymentDateYear, petitionPaymentDate.format('YYYY'));
+  }
+
+  const petitionPaymentWaivedDate = applicationContext
+    .getUtilities()
+    .prepareDateFromString(caseDetail.petitionPaymentWaivedDate, 'YYYY/MM/DD');
+  if (
+    petitionPaymentWaivedDate &&
+    petitionPaymentWaivedDate.toDate() instanceof Date &&
+    !isNaN(petitionPaymentWaivedDate.toDate())
+  ) {
+    store.set(
+      state.form.paymentDateWaivedMonth,
+      petitionPaymentWaivedDate.format('M'),
+    );
+    store.set(
+      state.form.paymentDateWaivedDay,
+      petitionPaymentWaivedDate.format('D'),
+    );
+    store.set(
+      state.form.paymentDateWaivedYear,
+      petitionPaymentWaivedDate.format('YYYY'),
+    );
   }
 };

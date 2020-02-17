@@ -13,6 +13,7 @@ export const clearAlertsAction = ({ get, props, store }) => {
   if (!saveAlerts) {
     store.unset(state.alertError);
     store.unset(state.alertSuccess);
+    store.unset(state.alertWarning);
   }
   store.set(state.caseDetailErrors, {});
   store.set(state.saveAlertsForNavigation, false);

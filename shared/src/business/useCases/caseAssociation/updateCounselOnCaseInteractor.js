@@ -54,10 +54,16 @@ exports.updateCounselOnCaseInteractor = async ({
     caseEntity.updateRespondent(
       new Respondent({ userId: userToUpdate.userId, ...userData }),
     );
+  } else {
+    throw new Error('User is not a practitioner or respondent');
   }
 
-  return await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
+  const updatedCase = await applicationContext
+    .getPersistenceGateway()
+    .updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+
+  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };

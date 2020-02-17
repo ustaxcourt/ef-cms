@@ -17,7 +17,7 @@ exports.uploadOrderDocumentInteractor = async ({
 
   const orderDocumentId = await applicationContext
     .getPersistenceGateway()
-    .uploadDocument({
+    .uploadDocumentFromClient({
       applicationContext,
       document: documentFile,
       documentId: documentIdToOverwrite,

@@ -17,7 +17,7 @@ export const computeFormDateAction = ({ get, store }) => {
 
     formDate = formDate
       .split('-')
-      .map(segment => (segment = segment.padStart(2, '0')))
+      .map(segment => segment.padStart(2, '0'))
       .join('-');
 
     store.set(state.form.serviceDate, formDate);

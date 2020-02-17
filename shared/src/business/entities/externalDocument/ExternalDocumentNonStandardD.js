@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
@@ -24,7 +24,7 @@ function ExternalDocumentNonStandardD(rawProps) {
 ExternalDocumentNonStandardD.prototype.getDocumentTitle = function() {
   return replaceBracketed(
     this.documentTitle,
-    this.previousDocument,
+    this.previousDocument.documentTitle || this.previousDocument.documentType,
     formatDateString(this.serviceDate, 'MM-DD-YYYY'),
   );
 };
@@ -37,7 +37,13 @@ ExternalDocumentNonStandardD.schema = {
   category: joi.string().required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
-  previousDocument: joi.string().required(),
+  previousDocument: joi
+    .object()
+    .keys({
+      documentTitle: joi.string().optional(),
+      documentType: joi.string().required(),
+    })
+    .required(),
   serviceDate: joi
     .date()
     .iso()

@@ -7,7 +7,7 @@ const MOCK_TRIAL_SESSION = {
   sessionType: 'Regular',
   startDate: '3000-03-01T00:00:00.000Z',
   term: 'Fall',
-  trialLocation: 'Birmingham, AL',
+  trialLocation: 'Birmingham, Alabama',
 };
 
 describe('Get trial sessions', () => {
@@ -62,7 +62,7 @@ describe('Get trial sessions', () => {
       error = err;
     }
     expect(error.message).toContain(
-      'The TrialSession entity was invalid ValidationError: child "maxCases" fails because ["maxCases" is required]',
+      'The TrialSession entity was invalid ValidationError: "maxCases" is required',
     );
   });
 });

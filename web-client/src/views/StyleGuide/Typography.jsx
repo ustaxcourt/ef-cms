@@ -14,12 +14,13 @@ export const Typography = () => (
       <h6>Heading 6</h6>
       <p className="lead">Lead paragraph</p>
       <p>
-        Body copy. A series of sentences together which make a paragraph. Lorem
-        ipsum dolor sit amet, consectetur adipiscing elit. Aliquam a nulla sit
-        amet ex facilisis ultricies. Aliquam erat volutpat. Ut congue augue
-        mauris, id fermentum magna condimentum eu. Aliquam eget augue lacus.
-        Fusce eu urna eros. Sed ornare sed ex non aliquam. Praesent vitae rutrum
-        risus. Nam nibh lorem, laoreet sed magna et, aliquet tristique enim.
+        Body copy. Do not create extra content just to fill the template. You
+        can remove individual components (such as the media block) or
+        sub-components (such as individual menu items in the header) from the
+        template as you implement it. This version gives you a broad idea of the
+        number of things your landing page could include. But never make a page
+        more complex than you need to. If you’re unsure, interview users to find
+        out what they need to know.
       </p>
       <p>
         <a href="#a" name="a">

@@ -1,7 +1,9 @@
-import { Order } from '../../../../../shared/src/business/entities/orders/Order';
+import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { updateCreateOrderModalFormValueAction } from './updateCreateOrderModalFormValueAction';
+
+presenter.providers.applicationContext = applicationContext;
 
 describe('updateCreateOrderModalFormValueAction', () => {
   it('sets state.form values correctly if valid event code is passed in', async () => {
@@ -11,9 +13,6 @@ describe('updateCreateOrderModalFormValueAction', () => {
       },
       props: { key: 'eventCode', value: 'ODD' },
       state: {
-        constants: {
-          ORDER_TYPES_MAP: Order.ORDER_TYPES,
-        },
         form: {},
       },
     });
@@ -33,15 +32,27 @@ describe('updateCreateOrderModalFormValueAction', () => {
       },
       props: { key: 'eventCode', value: 'O' },
       state: {
-        constants: {
-          ORDER_TYPES_MAP: Order.ORDER_TYPES,
-        },
         form: {},
       },
     });
     expect(result.state.form.eventCode).toEqual('O');
     expect(result.state.form.documentTitle).toBeUndefined();
     expect(result.state.form.documentType).toEqual('Order');
+  });
+
+  it('sets state.form values correctly if a generic notice event code is passed in', async () => {
+    const result = await runAction(updateCreateOrderModalFormValueAction, {
+      modules: {
+        presenter,
+      },
+      props: { key: 'eventCode', value: 'NOT' },
+      state: {
+        form: {},
+      },
+    });
+    expect(result.state.form.eventCode).toEqual('NOT');
+    expect(result.state.form.documentTitle).toEqual('Notice');
+    expect(result.state.form.documentType).toEqual('Notice');
   });
 
   it('unsets state.form values if event code is empty', async () => {
@@ -51,9 +62,6 @@ describe('updateCreateOrderModalFormValueAction', () => {
       },
       props: { key: 'eventCode', value: '' },
       state: {
-        constants: {
-          ORDER_TYPES_MAP: Order.ORDER_TYPES,
-        },
         form: {
           documentTitle: 'Order of Dismissal and Decision',
           documentType: 'Order of Dismissal and Decision',
@@ -86,9 +94,6 @@ describe('updateCreateOrderModalFormValueAction', () => {
       },
       props: { key: 'documentTitle', value: 'Order to Do Something' },
       state: {
-        constants: {
-          ORDER_TYPES_MAP: Order.ORDER_TYPES,
-        },
         form: {
           documentType: 'Order',
           eventCode: 'O',
@@ -106,9 +111,6 @@ describe('updateCreateOrderModalFormValueAction', () => {
       },
       props: { key: 'documentTitle', value: '' },
       state: {
-        constants: {
-          ORDER_TYPES_MAP: Order.ORDER_TYPES,
-        },
         form: {
           documentTitle: 'Order to Do Something',
           documentType: 'Order',
@@ -127,9 +129,6 @@ describe('updateCreateOrderModalFormValueAction', () => {
       },
       props: { key: 'eventCode', value: 'O' },
       state: {
-        constants: {
-          ORDER_TYPES_MAP: Order.ORDER_TYPES,
-        },
         form: {
           documentTitle: 'Order of Dismissal and Decision',
           documentType: 'Order of Dismissal and Decision',

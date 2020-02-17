@@ -15,7 +15,7 @@ export const setScannerSourceAction = async ({
   store,
 }) => {
   if (props.scannerSourceName) {
-    const scanner = applicationContext.getScanner();
+    const scanner = await applicationContext.getScanner();
     scanner.setSourceByName(props.scannerSourceName);
 
     await applicationContext.getUseCases().setItemInteractor({
@@ -31,9 +31,16 @@ export const setScannerSourceAction = async ({
       value: props.scannerSourceIndex,
     });
 
+    await applicationContext.getUseCases().setItemInteractor({
+      applicationContext,
+      key: 'scanMode',
+      value: props.scanMode,
+    });
+
     // This may not be necessary
     store.set(state.scanner.scannerSourceName, props.scannerSourceName);
     store.set(state.scanner.scannerSourceIndex, props.scannerSourceIndex);
+    store.set(state.scanner.scanMode, props.scanMode);
   } else {
     // you didn't pick a scanner source
   }

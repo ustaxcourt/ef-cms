@@ -20,12 +20,18 @@ export const getCaseDeadlineFromForm = ({ applicationContext, get, props }) => {
   }
 
   const caseId = get(state.caseDetail.caseId);
+  const caseTitle = get(state.caseDetail.caseTitle);
+  const docketNumber = get(state.caseDetail.docketNumber);
+  const docketNumberSuffix = get(state.caseDetail.docketNumberSuffix);
 
   const caseDeadline = omit(
     {
       ...get(state.form),
-      deadlineDate,
       caseId,
+      caseTitle,
+      deadlineDate,
+      docketNumber,
+      docketNumberSuffix,
     },
     ['day', 'month', 'year', 'searchError'],
   );

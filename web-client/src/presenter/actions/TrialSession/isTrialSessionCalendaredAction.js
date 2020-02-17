@@ -11,7 +11,7 @@ export const isTrialSessionCalendaredAction = ({ path, props }) => {
   const isTrialSessionCalendared = trialSession && trialSession.isCalendared;
 
   if (isTrialSessionCalendared) {
-    return path.yes();
+    return path.yes({ isTrialSessionCalendared: true });
   } else {
     return path.no();
   }

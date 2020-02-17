@@ -12,6 +12,9 @@ describe('submitCaseAssociationRequestAction', () => {
     submitPendingCaseAssociationRequestStub = sinon.stub();
 
     presenter.providers.applicationContext = {
+      getCurrentUser: () => ({
+        email: 'practitioner1@example.com',
+      }),
       getUseCases: () => ({
         submitCaseAssociationRequestInteractor: submitCaseAssociationRequestStub,
         submitPendingCaseAssociationRequestInteractor: submitPendingCaseAssociationRequestStub,

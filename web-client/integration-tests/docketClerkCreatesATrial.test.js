@@ -1,5 +1,6 @@
 import { setupTest } from './helpers';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
+import docketClerkEditsTrialSession from './journey/docketClerkEditsTrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 
@@ -12,4 +13,5 @@ describe('Docket Clerk Creates A Trial', () => {
   docketClerkLogIn(test);
   docketClerkCreatesATrialSession(test);
   docketClerkViewsTrialSessionList(test);
+  docketClerkEditsTrialSession(test);
 });

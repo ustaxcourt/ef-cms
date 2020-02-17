@@ -1,8 +1,8 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { Case } = require('../cases/Case');
+const { DOCKET_NUMBER_MATCHER } = require('../cases/CaseConstants');
 
 TrialSessionWorkingCopy.TRIAL_STATUS_TYPES = [
   'Set for Trial',
@@ -29,7 +29,18 @@ function TrialSessionWorkingCopy(rawSession) {
 
 TrialSessionWorkingCopy.prototype.init = function(rawSession) {
   this.caseMetadata = rawSession.caseMetadata || {};
-  this.filters = rawSession.filters;
+  this.filters = rawSession.filters || {
+    aBasisReached: true,
+    continued: true,
+    dismissed: true,
+    recall: true,
+    rule122: true,
+    setForTrial: true,
+    settled: true,
+    showAll: true,
+    statusUnassigned: true,
+    takenUnderAdvisement: true,
+  };
   this.sessionNotes = rawSession.sessionNotes;
   this.sort = rawSession.sort;
   this.sortOrder = rawSession.sortOrder;
@@ -43,13 +54,27 @@ TrialSessionWorkingCopy.validationRules = {
   caseMetadata: joi
     .object()
     .pattern(
-      Case.docketNumberMatcher, //keys are docket numbers
+      DOCKET_NUMBER_MATCHER, // keys are docket numbers
       joi.object().keys({
         trialStatus: joi.string().optional(),
       }),
     )
     .optional(),
-  filters: joi.object().optional(),
+  filters: joi
+    .object()
+    .keys({
+      aBasisReached: joi.boolean().required(),
+      continued: joi.boolean().required(),
+      dismissed: joi.boolean().required(),
+      recall: joi.boolean().required(),
+      rule122: joi.boolean().required(),
+      setForTrial: joi.boolean().required(),
+      settled: joi.boolean().required(),
+      showAll: joi.boolean().required(),
+      statusUnassigned: joi.boolean().required(),
+      takenUnderAdvisement: joi.boolean().required(),
+    })
+    .required(),
   sessionNotes: joi.string().optional(),
   sort: joi.string().optional(),
   sortOrder: joi.string().optional(),

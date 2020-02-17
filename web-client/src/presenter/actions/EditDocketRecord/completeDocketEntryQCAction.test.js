@@ -15,7 +15,9 @@ describe('completeDocketEntryQCAction', () => {
       ],
     };
 
-    completeDocketEntryQCInteractorMock = jest.fn(() => caseDetail);
+    completeDocketEntryQCInteractorMock = jest.fn(() => ({
+      caseDetail,
+    }));
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({

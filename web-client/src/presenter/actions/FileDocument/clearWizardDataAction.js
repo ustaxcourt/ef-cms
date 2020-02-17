@@ -12,7 +12,7 @@ export const clearWizardDataAction = ({ get, props, store }) => {
 
   switch (props.key) {
     case 'category':
-      pickedDocument = pick(get(state.form), ['category']);
+      pickedDocument = pick(get(state.form), ['category', 'selectedCases']);
       store.set(state.form, pickedDocument);
 
       break;
@@ -21,7 +21,11 @@ export const clearWizardDataAction = ({ get, props, store }) => {
 
       break;
     case 'documentType':
-      pickedDocument = pick(get(state.form), ['category', 'documentType']);
+      pickedDocument = pick(get(state.form), [
+        'category',
+        'documentType',
+        'selectedCases',
+      ]);
       store.set(state.form, pickedDocument);
 
       break;

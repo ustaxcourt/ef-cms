@@ -7,7 +7,7 @@ import React from 'react';
 export const BlockFromTrialModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    confirmSequence: sequences.blockFromTrialSequence,
+    confirmSequence: sequences.blockCaseFromTrialSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateBlockFromTrialSequence: sequences.validateBlockFromTrialSequence,
@@ -26,7 +26,7 @@ export const BlockFromTrialModal = connect(
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         className=""
-        confirmLabel="Block case"
+        confirmLabel="Block Case"
         confirmSequence={confirmSequence}
         title="Block From Trial"
       >

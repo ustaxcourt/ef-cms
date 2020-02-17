@@ -1,5 +1,4 @@
 const {
-  getSectionUsersSelect,
   getWorkItemCheckboxLabel,
   getWorkItemMessage,
   getWorkItemMessages,
@@ -12,7 +11,7 @@ const {
 
 describe('Assign a work item ', () => {
   before(() => {
-    cy.seed();
+    cy.task('seed');
   });
 
   it('views the section inbox', () => {

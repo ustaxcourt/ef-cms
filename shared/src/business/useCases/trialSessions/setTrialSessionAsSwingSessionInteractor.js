@@ -38,8 +38,10 @@ exports.setTrialSessionAsSwingSessionInteractor = async ({
 
   trialSessionEntity.setAsSwingSession(swingSessionId);
 
-  return await applicationContext.getPersistenceGateway().updateTrialSession({
+  await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
+
+  return trialSessionEntity.validate().toRawObject();
 };

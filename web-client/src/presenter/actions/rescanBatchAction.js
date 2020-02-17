@@ -19,14 +19,17 @@ export const rescanBatchAction = async ({
   props,
   store,
 }) => {
+  const { scanMode } = props;
+
   store.set(state.isScanning, true);
   const batchIndex = get(state.batchIndexToRescan);
-  const scanner = applicationContext.getScanner();
+  const scanner = await applicationContext.getScanner();
   scanner.setSourceByIndex(props.scannerSourceIndex);
 
   try {
     const { scannedBuffer: pages } = await scanner.startScanSession({
       applicationContext,
+      scanMode,
     });
     const documentSelectedForScan = get(state.documentSelectedForScan);
     const batches = get(state.batches[documentSelectedForScan]);

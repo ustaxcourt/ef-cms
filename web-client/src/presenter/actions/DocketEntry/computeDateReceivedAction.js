@@ -6,6 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object
  * @param {object} providers.get the cerebral get function
+ * @returns {object} props object
  */
 export const computeDateReceivedAction = ({ get, store }) => {
   let formDate = null;
@@ -18,9 +19,11 @@ export const computeDateReceivedAction = ({ get, store }) => {
 
     formDate = formDate
       .split('-')
-      .map(segment => (segment = segment.padStart(2, '0')))
+      .map(segment => segment.padStart(2, '0'))
       .join('-');
   }
 
   store.set(state.form.dateReceived, formDate);
+
+  return { computedDateReceived: formDate };
 };

@@ -8,7 +8,7 @@ const { fillInAndSubmitForm } = require('../support/pages/start-a-case');
 
 describe('Start a case as a practitioner ', () => {
   before(() => {
-    cy.seed();
+    cy.task('seed');
   });
 
   it('go to the practitioner dashboard and expect that a case list table is displayed with 2 cases', () => {
@@ -24,7 +24,7 @@ describe('Start a case as a practitioner ', () => {
     fillInAndSubmitForm();
   });
 
-  it('expect the cast list to be displayed with 3 items now', () => {
+  it('expect the case list to be displayed with 3 items now', () => {
     getCaseList().should('exist');
     getCaseList().should('have.length', 3);
   });

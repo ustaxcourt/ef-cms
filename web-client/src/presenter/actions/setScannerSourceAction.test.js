@@ -15,6 +15,17 @@ presenter.providers.applicationContext = {
 };
 
 describe('setScannerSourceAction', () => {
+  it('does nothing if scannerSourceName is not in props', async () => {
+    await runAction(setScannerSourceAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+    });
+    expect(mockSetSourceByName).not.toHaveBeenCalled();
+    expect(mockSetItem).not.toHaveBeenCalled();
+  });
+
   it('sets the scanner source from props in local storage', async () => {
     await runAction(setScannerSourceAction, {
       modules: {

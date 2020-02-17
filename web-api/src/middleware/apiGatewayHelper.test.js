@@ -30,12 +30,118 @@ describe('handle', () => {
     });
   });
 
+  it('should filter data based on the fields query string option', async () => {
+    const response = await handle(
+      {
+        queryStringParameters: {
+          fields: 'caseId,docketNumber',
+        },
+      },
+      async () => ({
+        caseId: '1',
+        docketNumber: 'b',
+        gg: undefined,
+        isAwesome: true,
+        something: 'false',
+        yup: null,
+      }),
+    );
+    expect(response).toMatchObject({
+      body: JSON.stringify({
+        caseId: '1',
+        docketNumber: 'b',
+      }),
+    });
+  });
+
+  it('should filter array data based on the fields query string option', async () => {
+    const response = await handle(
+      {
+        queryStringParameters: {
+          fields: 'caseId,docketNumber',
+        },
+      },
+      async () => [
+        {
+          caseId: '1',
+          docketNumber: 'b',
+          gg: undefined,
+          isAwesome: true,
+          something: 'false',
+          yup: null,
+        },
+        {
+          caseId: '2',
+          docketNumber: 'c',
+          gg: undefined,
+          isAwesome: false,
+          something: 'true',
+          yup: null,
+        },
+      ],
+    );
+    expect(response).toMatchObject({
+      body: JSON.stringify([
+        {
+          caseId: '1',
+          docketNumber: 'b',
+        },
+        {
+          caseId: '2',
+          docketNumber: 'c',
+        },
+      ]),
+    });
+  });
+
   it('should return an object representing an 200 status back if the callback function executes successfully', async () => {
     const response = await handle({}, async () => 'success');
     expect(response).toEqual({
       body: JSON.stringify('success'),
       headers: EXPECTED_HEADERS,
       statusCode: '200',
+    });
+  });
+
+  it('should return an object representing 500 status if the function returns an unsanitized entity (response contains private data as defined in app context)', async () => {
+    const response = await handle({}, async () => ({
+      pk: 'this is bad!',
+    }));
+    expect(response).toEqual({
+      body: JSON.stringify('Unsanitized entity'),
+      headers: EXPECTED_HEADERS,
+      statusCode: 500,
+    });
+  });
+
+  it('should return 200 status if response is undefined', async () => {
+    const response = await handle({}, async () => undefined);
+    expect(response).toEqual({
+      body: undefined,
+      headers: EXPECTED_HEADERS,
+      statusCode: '200',
+    });
+  });
+
+  it('should return 200 status if response is an array with an undefined value', async () => {
+    const response = await handle({}, async () => [undefined]);
+    expect(response).toEqual({
+      body: JSON.stringify([undefined]),
+      headers: EXPECTED_HEADERS,
+      statusCode: '200',
+    });
+  });
+
+  it('should return an object representing 500 status if the function returns an unsanitized entity as an array (response contains private data as defined in app context)', async () => {
+    const response = await handle({}, async () => [
+      {
+        pk: 'this is bad!',
+      },
+    ]);
+    expect(response).toEqual({
+      body: JSON.stringify('Unsanitized entity'),
+      headers: EXPECTED_HEADERS,
+      statusCode: 500,
     });
   });
 
@@ -127,13 +233,13 @@ describe('getAuthHeader', () => {
           Authorization: 'bearer ',
         },
         queryStringParameters: {
-          token: 'teoken',
+          token: 'token',
         },
       });
     } catch (err) {
       error = err;
     }
-    expect(response).toEqual('teoken');
+    expect(response).toEqual('token');
     expect(error).toEqual(undefined);
   });
 
@@ -163,13 +269,13 @@ describe('getAuthHeader', () => {
           Authorization: 'bearer ',
         },
         query: {
-          token: 'teoken',
+          token: 'token',
         },
       });
     } catch (err) {
       error = err;
     }
-    expect(response).toEqual('teoken');
+    expect(response).toEqual('token');
     expect(error).toEqual(undefined);
   });
 

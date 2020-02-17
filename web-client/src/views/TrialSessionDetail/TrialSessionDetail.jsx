@@ -9,6 +9,7 @@ import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { TrialSessionDetailHeader } from './TrialSessionDetailHeader';
 import { TrialSessionInformation } from './TrialSessionInformation';
+import { WarningNotification } from '../WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -18,11 +19,13 @@ export const TrialSessionDetail = connect(
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
     showModal: state.showModal,
+    trialSessionDetailsHelper: state.trialSessionDetailsHelper,
   },
   ({
     formattedTrialSessionDetails,
     openSetCalendarModalSequence,
     showModal,
+    trialSessionDetailsHelper,
   }) => (
     <>
       <TrialSessionDetailHeader />
@@ -30,21 +33,22 @@ export const TrialSessionDetail = connect(
       <section className="usa-section grid-container">
         <SuccessNotification />
         <ErrorNotification />
-
+        <WarningNotification />
         <TrialSessionInformation />
-
         {!formattedTrialSessionDetails.isCalendared && (
           <Tabs
             bind="trialSessionDetailsTab.caseList"
             defaultActiveTab="EligibleCases"
           >
-            <Button
-              className="tab-right-button ustc-ui-tabs ustc-ui-tabs--right-button-container"
-              icon="calendar-check"
-              onClick={() => openSetCalendarModalSequence()}
-            >
-              Set Calendar
-            </Button>
+            {trialSessionDetailsHelper.showSetCalendarButton && (
+              <Button
+                className="tab-right-button ustc-ui-tabs ustc-ui-tabs--right-button-container"
+                icon="calendar-check"
+                onClick={() => openSetCalendarModalSequence()}
+              >
+                Set Calendar
+              </Button>
+            )}
             <Tab
               id="eligible-cases-tab"
               tabName="EligibleCases"
@@ -56,10 +60,8 @@ export const TrialSessionDetail = connect(
             </Tab>
           </Tabs>
         )}
-
         {showModal == 'SetCalendarModalDialog' && <SetCalendarModalDialog />}
-
-        {formattedTrialSessionDetails.isCalendared && (
+        {formattedTrialSessionDetails.showOpenCases && (
           <Tabs
             bind="trialSessionDetailsTab.calendaredCaseList"
             defaultActiveTab="OpenCases"
@@ -81,6 +83,18 @@ export const TrialSessionDetail = connect(
             <Tab id="all-cases-tab" tabName="AllCases" title="All Cases">
               <div id="all-cases-tab-content">
                 <AllCases />
+              </div>
+            </Tab>
+          </Tabs>
+        )}
+        {formattedTrialSessionDetails.showOnlyClosedCases && (
+          <Tabs
+            bind="trialSessionDetailsTab.calendaredCaseList"
+            defaultActiveTab="InactiveCases"
+          >
+            <Tab id="inactive-cases-tab" tabName="InactiveCases" title="Cases">
+              <div id="inactive-cases-tab-content">
+                <InactiveCases />
               </div>
             </Tab>
           </Tabs>

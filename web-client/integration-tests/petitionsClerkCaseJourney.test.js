@@ -1,8 +1,6 @@
 import { fakeFile, setupTest } from './helpers';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
-import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
-import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
 
 const test = setupTest();
 
@@ -13,6 +11,7 @@ describe('Case journey', () => {
 
   petitionsClerkLogIn(test);
   petitionsClerkCreatesNewCase(test, fakeFile);
-  petitionsClerkSendsCaseToIRSHoldingQueue(test);
-  petitionsClerkRunsBatchProcess(test);
+  // TODO this test does nothing currently
+  // petitionsClerkUpdatesCaseDetail(test);
+  // petitionsClerkViewsDocketRecordAfterServing(test);
 });

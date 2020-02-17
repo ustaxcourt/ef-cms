@@ -10,7 +10,7 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       category: VALIDATION_ERROR_MESSAGES.category,
-      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -20,7 +20,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateSelectDocumentTypeSequence');
     expect(test.getState('validationErrors')).toEqual({
-      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -77,7 +77,10 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocuments.0.previousDocument',
-      value: 'Motion for Continuance',
+      value: {
+        documentTitle: test.getState('form.documentTitle'),
+        documentType: test.getState('form.documentType'),
+      },
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -100,7 +103,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'objections',
-      value: true,
+      value: 'Yes',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {

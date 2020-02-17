@@ -4,7 +4,7 @@ const {
 
 describe('Filing an Answer', function() {
   before(() => {
-    cy.seed();
+    cy.task('seed');
     cy.login('respondent', '/case-detail/102-19');
   });
 
@@ -14,7 +14,7 @@ describe('Filing an Answer', function() {
 
   it('can select a document type and go to the next step in the wizard', () => {
     cy.get('#react-select-2-input').click();
-    cy.get('#react-select-2-option-44').click();
+    cy.get('#react-select-2-option-6').click();
     cy.get('button#submit-document').click();
   });
 

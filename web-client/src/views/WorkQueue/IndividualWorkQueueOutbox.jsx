@@ -1,22 +1,16 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
 export const IndividualWorkQueueOutbox = connect(
   {
-    documentHelper: state.documentHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({
-    documentHelper,
-    formattedWorkQueue,
-    workQueueHelper,
-    workQueueSectionHelper,
-  }) => {
+  ({ formattedWorkQueue, workQueueHelper, workQueueSectionHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -33,12 +27,14 @@ export const IndividualWorkQueueOutbox = connect(
               {workQueueHelper.showSentColumn && (
                 <th className="small">Sent</th>
               )}
-              <th>Case name</th>
+              <th>Case title</th>
               <th aria-label="Status Icon" className="padding-right-0">
                 &nbsp;
               </th>
               <th>Document</th>
-              {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
+              {!workQueueHelper.hideFiledByColumn && (
+                <th>{workQueueHelper.outboxFiledByColumnLabel} by</th>
+              )}
               {!workQueueHelper.hideCaseStatusColumn && <th>Case status</th>}
               {workQueueHelper.showAssignedToColumn && (
                 <th className="max-width-7">
@@ -73,8 +69,7 @@ export const IndividualWorkQueueOutbox = connect(
                 </td>
                 <td className="message-queue-row has-icon padding-right-0">
                   {item.showBatchedStatusIcon && (
-                    <FontAwesomeIcon
-                      aria-hidden="false"
+                    <Icon
                       aria-label="batched for IRS"
                       className="iconStatusBatched"
                       icon={['far', 'clock']}
@@ -86,12 +81,7 @@ export const IndividualWorkQueueOutbox = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={documentHelper({
-                        docketNumber: item.docketNumber,
-                        documentId: item.document.documentId,
-                        messageId: item.currentMessage.messageId,
-                        workItemIdToMarkAsRead: null,
-                      })}
+                      href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}${item.editLink}`}
                       onClick={e => {
                         e.stopPropagation();
                       }}

@@ -26,19 +26,22 @@ export const completeDocketEntryQCAction = async ({
 
   entryMetadata = {
     ...entryMetadata,
-    docketNumber,
-    documentId,
     caseId,
     createdAt: entryMetadata.dateReceived,
+    docketNumber,
+    documentId,
     receivedAt: entryMetadata.dateReceived,
   };
 
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .completeDocketEntryQCInteractor({
-      applicationContext,
-      entryMetadata,
-    });
+  const {
+    caseDetail,
+    paperServiceDocumentTitle,
+    paperServiceParties,
+    paperServicePdfUrl,
+  } = await applicationContext.getUseCases().completeDocketEntryQCInteractor({
+    applicationContext,
+    entryMetadata,
+  });
 
   const updatedDocument = caseDetail.documents.filter(
     doc => doc.documentId === documentId,
@@ -51,6 +54,9 @@ export const completeDocketEntryQCAction = async ({
     },
     caseDetail,
     caseId: docketNumber,
+    paperServiceDocumentTitle,
+    paperServiceParties,
+    pdfUrl: paperServicePdfUrl,
     updatedDocument,
   };
 };

@@ -19,13 +19,13 @@ export const validatePetitionFromPaperAction = ({
 }) => {
   const petition = get(state.petition);
 
-  const receivedAt = props.computedDate;
+  const receivedAt = props.computedDateReceived;
 
   const form = omit(
     {
       ...get(state.form),
     },
-    ['year', 'month', 'day'],
+    ['dateReceivedYear', 'dateReceivedMonth', 'dateReceivedDay'],
   );
 
   const errors = applicationContext

@@ -25,3 +25,8 @@ variable "post_confirmation_role_arn" {
 variable "cloudwatch_role_arn" {
   type = "string"
 }
+
+variable "es_instance_count" {
+  type = "string"
+  default = "1"
+}

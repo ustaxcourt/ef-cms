@@ -1,3 +1,4 @@
+import { getSupportingDocumentTypeList } from './addDocketEntryHelper';
 import { state } from 'cerebral';
 
 export const supportingDocumentFreeTextTypes = [
@@ -7,7 +8,8 @@ export const supportingDocumentFreeTextTypes = [
 ];
 
 export const fileDocumentHelper = (get, applicationContext) => {
-  const { CATEGORY_MAP, PARTY_TYPES } = get(state.constants);
+  const { formatCase } = applicationContext.getUtilities();
+  const { CATEGORY_MAP, PARTY_TYPES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {};
@@ -18,14 +20,8 @@ export const fileDocumentHelper = (get, applicationContext) => {
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
 
-  const supportingDocumentTypeList = CATEGORY_MAP['Supporting Document'].map(
-    entry => {
-      entry.documentTypeDisplay = entry.documentType.replace(
-        /\sin\sSupport$/i,
-        '',
-      );
-      return entry;
-    },
+  const supportingDocumentTypeList = getSupportingDocumentTypeList(
+    CATEGORY_MAP,
   );
 
   const objectionDocumentTypes = [
@@ -36,6 +32,8 @@ export const fileDocumentHelper = (get, applicationContext) => {
     'Motion to Withdraw as Counsel',
     'Application to Take Deposition',
   ];
+
+  const amendmentEventCodes = ['AMAT', 'ADMT'];
 
   const partyValidationError =
     validationErrors.partyPrimary ||
@@ -91,26 +89,84 @@ export const fileDocumentHelper = (get, applicationContext) => {
     secondarySupportingDocumentCount && secondarySupportingDocumentCount >= 5
   );
 
+  const selectedCasesMap = (form.selectedCases || []).reduce(
+    (acc, docketNumber) => {
+      acc[docketNumber] = true;
+      return acc;
+    },
+    {},
+  );
+
+  const selectedCasesAsCase = (caseDetail.consolidatedCases || [])
+    .reduce((acc, consolidatedCase) => {
+      if (selectedCasesMap[consolidatedCase.docketNumber]) {
+        acc.push({ ...consolidatedCase });
+      }
+      return acc;
+    }, [])
+    .map(consolidatedCase => formatCase(applicationContext, consolidatedCase))
+    .map(consolidatedCase => {
+      consolidatedCase.showSecondaryParty =
+        consolidatedCase.partyType === PARTY_TYPES.petitionerSpouse ||
+        consolidatedCase.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
+      return consolidatedCase;
+    });
+
+  const formattedSelectedCasesAsCase = selectedCasesAsCase.map(selectedCase =>
+    formatCase(applicationContext, selectedCase),
+  );
+
+  let selectedDocketNumbers = get(state.form.selectedCases);
+  let formattedDocketNumbers = null;
+
+  if (selectedDocketNumbers) {
+    // convert to Case entity-like object to use entity method
+    selectedDocketNumbers = selectedDocketNumbers.map(docketNumber => ({
+      docketNumber,
+    }));
+
+    const sortedDocketNumbers = applicationContext
+      .getEntityConstructors()
+      .Case.sortByDocketNumber(selectedDocketNumbers)
+      .map(({ docketNumber }) => docketNumber);
+
+    formattedDocketNumbers = [
+      sortedDocketNumbers.slice(0, -1).join(', '),
+      sortedDocketNumbers.slice(-1)[0],
+    ].join(sortedDocketNumbers.length < 2 ? '' : ' & ');
+  }
+
   let exported = {
     certificateOfServiceDateFormatted,
+    formattedDocketNumbers,
+    formattedSelectedCasesAsCase,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
     partyValidationError,
     primaryDocument: {
-      showObjection: objectionDocumentTypes.includes(form.documentType),
+      showObjection:
+        objectionDocumentTypes.includes(form.documentType) ||
+        (amendmentEventCodes.includes(form.eventCode) &&
+          objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     },
     secondaryDocument: {
       certificateOfServiceDateFormatted: secondaryDocumentCertificateOfServiceDateFormatted,
       showObjection:
         form.secondaryDocument &&
         form.secondaryDocumentFile &&
-        objectionDocumentTypes.includes(form.secondaryDocument.documentType),
+        (objectionDocumentTypes.includes(form.secondaryDocument.documentType) ||
+          (amendmentEventCodes.includes(form.secondaryDocument.eventCode) &&
+            objectionDocumentTypes.includes(
+              form.secondaryDocument.previousDocument?.documentType,
+            ))),
     },
+    selectedCasesAsCase,
     showAddSecondarySupportingDocuments,
     showAddSecondarySupportingDocumentsLimitReached,
     showAddSupportingDocuments,
     showAddSupportingDocumentsLimitReached,
     showFilingIncludes,
+    showMultiDocumentFilingPartyForm: !!form.selectedCases,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentInclusionsForm,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,

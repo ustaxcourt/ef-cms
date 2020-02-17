@@ -1,12 +1,19 @@
+import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
-import { showAppTimeoutModalHelper } from './showAppTimeoutModalHelper';
+import { showAppTimeoutModalHelper as showAppTimeoutModalHelperComputed } from './showAppTimeoutModalHelper';
+import { withAppContextDecorator } from '../../withAppContext';
+
+const showAppTimeoutModalHelper = withAppContextDecorator(
+  showAppTimeoutModalHelperComputed,
+  applicationContext,
+);
 
 describe('showAppTimeoutModalHelper', () => {
   it('shows the modal', () => {
+    applicationContext.getCurrentUser = () => ({});
     const result = runCompute(showAppTimeoutModalHelper, {
       state: {
         showModal: 'AppTimeoutModal',
-        user: {},
       },
     });
 
@@ -14,10 +21,10 @@ describe('showAppTimeoutModalHelper', () => {
   });
 
   it('does not show the modal due to no user', () => {
+    applicationContext.getCurrentUser = () => {};
     const result = runCompute(showAppTimeoutModalHelper, {
       state: {
         showModal: true,
-        user: null,
       },
     });
 
@@ -25,10 +32,10 @@ describe('showAppTimeoutModalHelper', () => {
   });
 
   it('does not show the modal due to different modal state component', () => {
+    applicationContext.getCurrentUser = () => ({});
     const result = runCompute(showAppTimeoutModalHelper, {
       state: {
         showModal: 'IncorrectTimeoutModal',
-        user: {},
       },
     });
 

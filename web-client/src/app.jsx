@@ -51,9 +51,12 @@ import {
   faGavel,
   faHandPaper,
   faHome,
+  faInfoCircle,
   faLaptop,
   faLink,
   faListUl,
+  faLock,
+  faMinusCircle,
   faPaperPlane,
   faPaperclip,
   faPencilAlt,
@@ -68,8 +71,10 @@ import {
   faSlash,
   faSort,
   faSpinner,
+  faStar,
   faStepBackward,
   faStepForward,
+  faStickyNote,
   faSync,
   faThumbtack,
   faTimesCircle,
@@ -94,7 +99,11 @@ const app = {
     const scannerSourceName = await applicationContext
       .getUseCases()
       .getItemInteractor({ applicationContext, key: 'scannerSourceName' });
+    const scanMode = await applicationContext
+      .getUseCases()
+      .getItemInteractor({ applicationContext, key: 'scanMode' });
     presenter.state.scanner = {
+      scanMode,
       scannerSourceName,
     };
 
@@ -147,6 +156,7 @@ const app = {
       faCheckCircleRegular,
       faClipboardList,
       faClock,
+      faMinusCircle,
       faStepForward,
       faStepBackward,
       faClockSolid,
@@ -174,6 +184,7 @@ const app = {
       faLaptop,
       faLink,
       faListUl,
+      faLock,
       faPaperclip,
       faRedoAlt,
       faPaperPlane,
@@ -186,7 +197,9 @@ const app = {
       faSignOutAlt,
       faSlash,
       faSort,
+      faStar,
       faSpinner,
+      faStickyNote,
       faSync,
       faThumbtack,
       faTimesCircle,
@@ -194,6 +207,7 @@ const app = {
       faTrash,
       faUser,
       faUserCheck,
+      faInfoCircle,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {

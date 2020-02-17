@@ -1,5 +1,5 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -7,7 +7,6 @@ import React from 'react';
 export const SectionWorkQueueInProgress = connect(
   {
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
-    documentHelper: state.documentHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
@@ -18,7 +17,6 @@ export const SectionWorkQueueInProgress = connect(
   },
   ({
     assignSelectedWorkItemsSequence,
-    documentHelper,
     formattedWorkQueue,
     selectAssigneeSequence,
     selectedWorkItems,
@@ -31,11 +29,8 @@ export const SectionWorkQueueInProgress = connect(
       <React.Fragment>
         {workQueueHelper.showSendToBar && (
           <div className="action-section">
-            <span
-              aria-label="selected work items count"
-              className="assign-work-item-count"
-            >
-              <FontAwesomeIcon icon="check" />
+            <span className="assign-work-item-count">
+              <Icon aria-label="selected work items count" icon="check" />
               {selectedWorkItems.length}
             </span>
             <select
@@ -71,10 +66,10 @@ export const SectionWorkQueueInProgress = connect(
               {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
               <th aria-label="Docket Number">Docket</th>
               <th>Filed</th>
-              <th>Case name</th>
+              <th>Case title</th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
-              <th>Case Status</th>
+              <th>Case status</th>
               {workQueueHelper.showAssignedToColumn && (
                 <th>{workQueueHelper.assigneeColumnTitle}</th>
               )}
@@ -139,17 +134,7 @@ export const SectionWorkQueueInProgress = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={documentHelper({
-                        docketNumber: item.docketNumber,
-                        documentId: item.document.documentId,
-                        messageId: item.currentMessage.messageId,
-                        shouldLinkToComplete:
-                          item.document.isFileAttached === false,
-                        shouldLinkToEdit:
-                          workQueueHelper.showEditDocketEntry &&
-                          item.isQC &&
-                          item.document.eventCode !== 'P',
-                      })}
+                      href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}${item.editLink}`}
                       onClick={e => {
                         e.stopPropagation();
                       }}

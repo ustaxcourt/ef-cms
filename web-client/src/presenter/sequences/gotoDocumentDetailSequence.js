@@ -1,5 +1,6 @@
 import { clearFormsAction } from '../actions/clearFormsAction';
 import { clearWorkItemActionMapAction } from '../actions/clearWorkItemActionMapAction';
+import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseTypesAction } from '../actions/getCaseTypesAction';
 import { getInternalUsersAction } from '../actions/getInternalUsersAction';
@@ -23,11 +24,13 @@ import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
 import { setWorkItemAction } from '../actions/setWorkItemAction';
 import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
 import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoDocumentDetailSequence = [
   setCurrentPageAction('Interstitial'),
   clearWorkItemActionMapAction,
   clearFormsAction,
+  stopShowValidationAction,
   set(state.documentDetail.tab, 'partyInfo'),
   setDocumentIdAction,
   getCaseAction,
@@ -56,5 +59,6 @@ export const gotoDocumentDetailSequence = [
       ],
       noAction: [],
     },
+    fetchUserNotificationsSequence,
   ]),
 ];

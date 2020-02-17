@@ -42,7 +42,11 @@ exports.sendBulkTemplatedEmail = async ({
       Template: templateName,
     };
 
-    await SES.sendBulkTemplatedEmail(params).promise();
+    applicationContext.logger.info('Bulk Email Params', params);
+
+    const response = await SES.sendBulkTemplatedEmail(params).promise();
+
+    applicationContext.logger.info('Bulk Email Response', response);
   } catch (err) {
     applicationContext.logger.error(err);
   }

@@ -15,6 +15,8 @@ exports.handler = event =>
     const { documentId } = event.pathParameters || {};
 
     applicationContext.logger.info('Event', event);
+    applicationContext.logger.info('User', user);
+
     try {
       const result = await applicationContext
         .getUseCases()
@@ -22,7 +24,6 @@ exports.handler = event =>
           applicationContext,
           documentId,
         });
-      applicationContext.logger.info('User', user);
       applicationContext.logger.info('Validate PDF Result', result);
 
       return result;

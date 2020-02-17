@@ -19,10 +19,12 @@ export const validateAddPractitionerAction = ({
     ...get(state.modal),
   };
 
-  const errors = applicationContext.getUseCases().validateAddPractitioner({
-    applicationContext,
-    counsel,
-  });
+  const errors = applicationContext
+    .getUseCases()
+    .validateAddPractitionerInteractor({
+      applicationContext,
+      counsel,
+    });
 
   if (!errors) {
     return path.success();

@@ -22,6 +22,7 @@ export const generateDocketRecordPdfUrlAction = async ({
       applicationContext,
       caseId: caseDetail.caseId,
       docketRecordSort,
+      includePartyDetail: true,
     });
 
   const pdfFile = new Blob([docketRecordPdf], { type: 'application/pdf' });

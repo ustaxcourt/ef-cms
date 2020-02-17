@@ -1,17 +1,19 @@
 import { setupTest } from './helpers';
 import { uploadPetition } from './helpers';
+import calendarClerkLogIn from './journey/calendarClerkLogIn';
+import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
 import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
-import docketClerkViewsAnUpcomingTrialSession from './journey/docketClerkViewsAnUpcomingTrialSession';
+import docketClerkViewsNewTrialSession from './journey/docketClerkViewsNewTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
+import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionerLogin from './journey/petitionerLogIn';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
 import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
-import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
 import userSignsOut from './journey/petitionerSignsOut';
 
@@ -35,7 +37,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
     docketClerkLogIn(test);
     docketClerkCreatesATrialSession(test, overrides);
     docketClerkViewsTrialSessionList(test, overrides);
-    docketClerkViewsAnUpcomingTrialSession(test);
+    docketClerkViewsNewTrialSession(test);
     userSignsOut(test);
   });
 
@@ -43,11 +45,11 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
     describe(`Case with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 1/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        procedureType: 'Small',
-        receivedAtYear: '2019',
-        receivedAtMonth: '01',
-        receivedAtDay: '01',
         caseType: 'Deficiency',
+        procedureType: 'Small',
+        receivedAtDay: '01',
+        receivedAtMonth: '01',
+        receivedAtYear: '2019',
       };
       petitionerLogin(test);
       it('Create case #1', async () => {
@@ -69,11 +71,11 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
     describe(`Case with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Regular case type with filed date 1/2/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        procedureType: 'Regular',
-        receivedAtYear: '2019',
-        receivedAtMonth: '01',
-        receivedAtDay: '02',
         caseType: 'Deficiency',
+        procedureType: 'Regular',
+        receivedAtDay: '02',
+        receivedAtMonth: '01',
+        receivedAtYear: '2019',
       };
       petitionerLogin(test);
       it('Create case #2', async () => {
@@ -95,11 +97,11 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
     describe(`Case with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 2/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        procedureType: 'Small',
-        receivedAtYear: '2019',
-        receivedAtMonth: '02',
-        receivedAtDay: '01',
         caseType: 'Deficiency',
+        procedureType: 'Small',
+        receivedAtDay: '01',
+        receivedAtMonth: '02',
+        receivedAtYear: '2019',
       };
       petitionerLogin(test);
       it('Create case #3', async () => {
@@ -137,16 +139,25 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
       expect(test.getState('trialSession.eligibleCases.2.caseId')).toEqual(
         createdCases[2],
       );
-      expect(test.getState('trialSession.status')).toEqual('Upcoming');
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
 
     userSignsOut(test);
   });
 
+  describe('Calendar clerk marks all eligible cases as QCed', () => {
+    calendarClerkLogIn(test);
+    markAllCasesAsQCed(test, () => [
+      createdCases[0],
+      createdCases[1],
+      createdCases[2],
+    ]);
+    userSignsOut(test);
+  });
+
   describe(`Set calendar for '${trialLocation}' session`, () => {
-    petitionsClerkLogIn(test);
-    petitionsClerkSetsATrialSessionsSchedule(test);
+    calendarClerkLogIn(test);
+    calendarClerkSetsATrialSessionsSchedule(test);
     userSignsOut(test);
   });
 

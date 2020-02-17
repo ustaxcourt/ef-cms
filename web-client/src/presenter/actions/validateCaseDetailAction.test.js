@@ -28,7 +28,6 @@ describe('validateCaseDetail', () => {
         combinedCaseDetailWithForm: {
           caseId: '123',
           irsNoticeDate: '2009-10-13',
-          payGovDate: '2010-01-01',
         },
       },
       state: {},
@@ -36,7 +35,6 @@ describe('validateCaseDetail', () => {
     expect(validateCaseDetailStub.getCall(0).args[0].caseDetail).toMatchObject({
       caseId: '123',
       irsNoticeDate: '2009-10-13',
-      payGovDate: '2010-01-01',
     });
     expect(successStub.calledOnce).toEqual(true);
   });
@@ -55,9 +53,6 @@ describe('validateCaseDetail', () => {
           irsDay: '13',
           irsMonth: '10',
           irsYear: '2009',
-          payGovDay: '01',
-          payGovMonth: '01',
-          payGovYear: '2010',
         },
       },
     });

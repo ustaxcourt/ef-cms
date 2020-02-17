@@ -7,76 +7,58 @@ export const SelectMulti = () => (
     {/* note: the size attribute MUST be present and greater than 1, but height will be determined by css. */}
     <select className="ustc-select-multi" name="foo" size="2">
       <option name="option" selected="selected" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">
-        Quisque imperdiet quam vel condimentum mattis. Phasellus vel elit nec
-        nibh finibus ultrices.
+        Don’t make it too complicated.
       </option>
     </select>
   </section>

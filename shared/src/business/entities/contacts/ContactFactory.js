@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 
 const {
   JoiValidationConstants,
@@ -6,7 +6,7 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-
+const { SERVICE_INDICATOR_TYPES } = require('../cases/CaseConstants');
 const ContactFactory = {};
 
 ContactFactory.COUNTRY_TYPES = {
@@ -151,9 +151,18 @@ const commonValidationRequirements = {
   address2: joi.string().optional(),
   address3: joi.string().optional(),
   city: joi.string().required(),
+  email: joi.string().optional(),
+  inCareOf: joi.string().optional(),
+  name: joi.string().required(),
+  phone: joi.string().required(),
+  secondaryName: joi.string().optional(),
+  title: joi.string().optional(),
+  serviceIndicator: joi
+    .string()
+    .valid(...Object.values(SERVICE_INDICATOR_TYPES))
+    .optional(),
 };
 const domesticValidationObject = {
-  name: joi.string().required(),
   countryType: joi
     .string()
     .valid(ContactFactory.COUNTRY_TYPES.DOMESTIC)
@@ -161,11 +170,9 @@ const domesticValidationObject = {
   ...commonValidationRequirements,
   state: joi.string().required(),
   postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
-  phone: joi.string().required(),
 };
 
 const internationalValidationObject = {
-  name: joi.string().required(),
   country: joi.string().required(),
   countryType: joi
     .string()
@@ -173,7 +180,6 @@ const internationalValidationObject = {
     .required(),
   ...commonValidationRequirements,
   postalCode: joi.string().required(),
-  phone: joi.string().required(),
 };
 
 /* eslint-enable sort-keys-fix/sort-keys-fix */
@@ -421,6 +427,7 @@ ContactFactory.createContactFactory = ({
       this.phone = rawContact.phone;
       this.postalCode = rawContact.postalCode;
       this.secondaryName = rawContact.secondaryName;
+      this.serviceIndicator = rawContact.serviceIndicator;
       this.state = rawContact.state;
       this.title = rawContact.title;
     }

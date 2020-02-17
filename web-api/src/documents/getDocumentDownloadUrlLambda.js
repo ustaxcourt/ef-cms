@@ -19,6 +19,7 @@ exports.handler = event =>
         .getUseCases()
         .getDownloadPolicyUrlInteractor({
           applicationContext,
+          caseId: event.pathParameters.caseId,
           documentId: event.pathParameters.documentId,
         });
       applicationContext.logger.info('User', user);

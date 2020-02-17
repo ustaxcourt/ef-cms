@@ -27,8 +27,8 @@ export const submitCourtIssuedOrderAction = async ({
 
   documentMetadata = {
     ...documentMetadata,
-    docketNumber,
     caseId,
+    docketNumber,
   };
 
   documentMetadata.draftState = { ...documentMetadata };
@@ -64,5 +64,7 @@ export const submitCourtIssuedOrderAction = async ({
   return {
     caseDetail,
     caseId: docketNumber,
+    documentId,
+    eventCode: documentMetadata.eventCode,
   };
 };

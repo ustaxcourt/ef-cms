@@ -45,4 +45,18 @@ describe('setDocumentDetailPageTitleAction', () => {
       'Docket 123-19 | Document details | U.S. Tax Court',
     );
   });
+
+  it('sets the page title with the docket number and hardcoded "Document details" if there are no documents on the case', async () => {
+    await runAction(setDocumentDetailPageTitleAction, {
+      state: {
+        caseDetail: {
+          docketNumber: '123-19',
+        },
+        documentId: '321-cba-321-cba',
+      },
+    });
+    expect(window.document.title).toEqual(
+      'Docket 123-19 | Document details | U.S. Tax Court',
+    );
+  });
 });

@@ -1,23 +1,25 @@
+import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 export const caseDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const { Case } = applicationContext.getEntityConstructors();
-  const { STATUS_TYPES, USER_ROLES } = get(state.constants);
+  const {
+    PARTY_TYPES,
+    STATUS_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
-  const showActionRequired =
-    !caseDetail.payGovId && user.role === USER_ROLES.petitioner;
   const documentDetailTab =
-    get(state.caseDetailPage.informationTab) || 'docketRecord';
-  const form = get(state.form);
+    get(state.caseDetailPage.primaryTab) || 'docketRecord';
   const currentPage = get(state.currentPage);
-  const caseIsPaid = caseDetail.payGovId && !form.paymentType;
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const modalState = get(state.modal);
+  let showEditPetitionerInformation = false;
   const {
     noticeOfAttachments,
     orderDesignatingPlaceOfTrial,
@@ -29,13 +31,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     orderToShowCause,
   } = caseDetail;
   const permissions = get(state.permissions);
-
-  const showAddDocketEntryButton =
-    permissions.DOCKET_ENTRY && ['CaseDetailInternal'].includes(currentPage);
-  const showCreateOrderButton =
-    permissions.COURT_ISSUED_DOCUMENT &&
-    ['CaseDetailInternal'].includes(currentPage);
-  const showCaseNotes = permissions.TRIAL_SESSION_WORKING_COPY;
+  const showJudgesNotes = permissions.TRIAL_SESSION_WORKING_COPY;
 
   let showFileDocumentButton =
     permissions.FILE_EXTERNAL_DOCUMENT && ['CaseDetail'].includes(currentPage);
@@ -44,6 +40,7 @@ export const caseDetailHelper = (get, applicationContext) => {
   let showCaseDeadlinesInternal = false;
   let showCaseDeadlinesInternalEmpty = false;
   let userHasAccessToCase = false;
+  let showQcWorkItemsUntouchedState = false;
 
   if (isExternalUser) {
     if (userAssociatedWithCase) {
@@ -58,6 +55,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     }
   } else {
     userHasAccessToCase = true;
+    showQcWorkItemsUntouchedState = true;
 
     if (caseDeadlines && caseDeadlines.length > 0) {
       showCaseDeadlinesInternal = true;
@@ -66,7 +64,10 @@ export const caseDetailHelper = (get, applicationContext) => {
     }
   }
 
-  const showCaseNameForPrimary = !get(state.caseDetail.contactSecondary.name);
+  const showCaseNameForPrimary = ![
+    PARTY_TYPES.petitioner,
+    PARTY_TYPES.petitionerDeceasedSpouse,
+  ].includes(caseDetail.partyType);
 
   let showEditContacts = false;
 
@@ -76,6 +77,8 @@ export const caseDetailHelper = (get, applicationContext) => {
     showEditContacts = false;
   } else if (user.role === USER_ROLES.practitioner) {
     showEditContacts = userAssociatedWithCase;
+  } else if (user.role === USER_ROLES.docketClerk) {
+    showEditPetitionerInformation = true;
   }
 
   const showRecallButton = caseDetail.status === STATUS_TYPES.batchedForIRS;
@@ -119,10 +122,13 @@ export const caseDetailHelper = (get, applicationContext) => {
     orderDesignatingPlaceOfTrial,
   ].some(hasOrder => !!hasOrder);
 
+  const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
+
   return {
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     caseDeadlines,
     documentDetailTab,
+    hasConsolidatedCases,
     hasOrders,
     practitionerMatchesFormatted,
     practitionerSearchResultsCount:
@@ -134,33 +140,34 @@ export const caseDetailHelper = (get, applicationContext) => {
       modalState &&
       modalState.respondentMatches &&
       modalState.respondentMatches.length,
-    showActionRequired,
-    showAddDocketEntryButton,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
-    showCaseInformationPublic: isExternalUser,
+    showCaseInformationExternal: isExternalUser,
     showCaseNameForPrimary,
-    showCaseNotes,
-    showCreateOrderButton,
     showDocketRecordInProgressState: !isExternalUser,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContacts,
+    showEditPetitionDetailsButton: permissions.EDIT_PETITION_DETAILS,
+    showEditPetitionerInformation,
     showEditSecondaryContactModal:
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
+    showFilingFeeExternal:
+      isExternalUser && user.role !== USER_ROLES.respondent,
     showIrsServedDate: !!caseDetail.irsSendDate,
-    showPayGovIdInput: form.paymentType == 'payGov',
-    showPaymentOptions: !caseIsPaid,
-    showPaymentRecord: caseIsPaid,
+    showJudgesNotes,
     showPractitionerSection:
       !isExternalUser ||
       (caseDetail.practitioners && !!caseDetail.practitioners.length),
     showPreferredTrialCity: caseDetail.preferredTrialCity,
+    showQcWorkItemsUntouchedState,
     showRecallButton,
     showRespondentSection:
       !isExternalUser ||
       (caseDetail.respondents && !!caseDetail.respondents.length),
+    userCanViewCase:
+      (isExternalUser && userAssociatedWithCase) || !caseDetail.isSealed,
     userHasAccessToCase,
   };
 };

@@ -22,10 +22,12 @@ exports.uploadDocumentInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return await applicationContext.getPersistenceGateway().uploadDocument({
-    applicationContext,
-    document: documentFile,
-    documentId,
-    onUploadProgress,
-  });
+  return await applicationContext
+    .getPersistenceGateway()
+    .uploadDocumentFromClient({
+      applicationContext,
+      document: documentFile,
+      documentId,
+      onUploadProgress,
+    });
 };

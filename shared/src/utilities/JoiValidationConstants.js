@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 exports.JoiValidationConstants = {

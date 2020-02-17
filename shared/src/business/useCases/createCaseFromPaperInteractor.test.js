@@ -84,7 +84,7 @@ describe('createCaseFromPaperInteractor', () => {
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseCaption: 'caseCaption',
-          caseType: 'other',
+          caseType: 'Other',
           contactPrimary: {
             address1: '99 South Oak Lane',
             address2: 'Culpa numquam saepe ',
@@ -101,11 +101,20 @@ describe('createCaseFromPaperInteractor', () => {
           filingType: 'Myself',
           hasIrsNotice: true,
           irsNoticeDate: DATE,
+          mailingDate: 'testing',
           partyType: ContactFactory.PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
           petitionFileSize: 1,
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
           receivedAt: new Date().toISOString(),
+          requestForPlaceOfTrialFile: new File(
+            [],
+            'requestForPlaceOfTrialFile.pdf',
+          ),
+          requestForPlaceOfTrialFileSize: 1,
+          stinFile: new File([], 'stinFile.pdf'),
+          stinFileSize: 1,
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
@@ -114,8 +123,8 @@ describe('createCaseFromPaperInteractor', () => {
       error = e;
     }
 
-    expect(caseFromPaper).toBeDefined();
     expect(error).toBeUndefined();
+    expect(caseFromPaper).toBeDefined();
   });
 
   it('creates a case from paper with a secondary contact', async () => {
@@ -162,7 +171,7 @@ describe('createCaseFromPaperInteractor', () => {
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseCaption: 'caseCaption',
-          caseType: 'other',
+          caseType: 'Other',
           contactPrimary: {
             address1: '99 South Oak Lane',
             address2: 'Culpa numquam saepe ',
@@ -179,11 +188,20 @@ describe('createCaseFromPaperInteractor', () => {
           filingType: 'Myself',
           hasIrsNotice: true,
           irsNoticeDate: DATE,
+          mailingDate: 'test',
           partyType: ContactFactory.PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
           petitionFileSize: 1,
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
           receivedAt: new Date().toISOString(),
+          requestForPlaceOfTrialFile: new File(
+            [],
+            'requestForPlaceOfTrialFile.pdf',
+          ),
+          requestForPlaceOfTrialFileSize: 1,
+          stinFile: new File([], 'stinFile.pdf'),
+          stinFileSize: 1,
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
@@ -192,8 +210,8 @@ describe('createCaseFromPaperInteractor', () => {
       error = e;
     }
 
-    expect(caseFromPaper).toBeDefined();
     expect(error).toBeUndefined();
+    expect(caseFromPaper).toBeDefined();
   });
 
   it('creates a case from paper with a request for place of trial and preferred trial city', async () => {
@@ -240,7 +258,7 @@ describe('createCaseFromPaperInteractor', () => {
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseCaption: 'caseCaption',
-          caseType: 'other',
+          caseType: 'Other',
           contactPrimary: {
             address1: '99 South Oak Lane',
             address2: 'Culpa numquam saepe ',
@@ -257,12 +275,20 @@ describe('createCaseFromPaperInteractor', () => {
           filingType: 'Myself',
           hasIrsNotice: true,
           irsNoticeDate: DATE,
+          mailingDate: 'testing',
           partyType: ContactFactory.PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
           petitionFileSize: 1,
-          preferredTrialCity: 'Chattanooga, TN',
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
           receivedAt: new Date().toISOString(),
+          requestForPlaceOfTrialFile: new File(
+            [],
+            'requestForPlaceOfTrialFile.pdf',
+          ),
+          requestForPlaceOfTrialFileSize: 1,
+          stinFile: new File([], 'stinFile.pdf'),
+          stinFileSize: 1,
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
@@ -271,8 +297,8 @@ describe('createCaseFromPaperInteractor', () => {
       error = e;
     }
 
-    expect(caseFromPaper).toBeDefined();
     expect(error).toBeUndefined();
+    expect(caseFromPaper).toBeDefined();
   });
 
   it('creates a case from paper with Application for Waiver of Filing Fee', async () => {
@@ -320,7 +346,7 @@ describe('createCaseFromPaperInteractor', () => {
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseCaption: 'caseCaption',
-          caseType: 'other',
+          caseType: 'Other',
           contactPrimary: {
             address1: '99 South Oak Lane',
             address2: 'Culpa numquam saepe ',
@@ -337,11 +363,20 @@ describe('createCaseFromPaperInteractor', () => {
           filingType: 'Myself',
           hasIrsNotice: true,
           irsNoticeDate: DATE,
+          mailingDate: 'testing',
           partyType: ContactFactory.PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
           petitionFileSize: 1,
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
           receivedAt: new Date().toISOString(),
+          requestForPlaceOfTrialFile: new File(
+            [],
+            'requestForPlaceOfTrialFile.pdf',
+          ),
+          requestForPlaceOfTrialFileSize: 1,
+          stinFile: new File([], 'stinFile.pdf'),
+          stinFileSize: 1,
         },
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       });
@@ -349,7 +384,7 @@ describe('createCaseFromPaperInteractor', () => {
       error = e;
     }
 
-    expect(caseFromPaper).toBeDefined();
     expect(error).toBeUndefined();
+    expect(caseFromPaper).toBeDefined();
   });
 });

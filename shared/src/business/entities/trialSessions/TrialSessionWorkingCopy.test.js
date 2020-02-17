@@ -17,10 +17,6 @@ describe('TrialSessionWorkingCopy entity', () => {
     it('creates a valid trial session working copy with all values', () => {
       const workingCopy = new TrialSessionWorkingCopy({
         ...VALID_TRIAL_SESSION_WORKING_COPY,
-        filters: {
-          aBasisReached: true,
-          showAll: true,
-        },
         caseMetadata: {
           '101-19': {
             trialStatus: 'recall',
@@ -44,14 +40,14 @@ describe('TrialSessionWorkingCopy entity', () => {
     it('creates an invalid trial session working copy with invalid trialStatus that is not a string', () => {
       const workingCopy = new TrialSessionWorkingCopy({
         ...VALID_TRIAL_SESSION_WORKING_COPY,
-        filters: {
-          aBasisReached: true,
-          showAll: true,
-        },
         caseMetadata: {
           '101-19': {
             trialStatus: 123,
           },
+        },
+        filters: {
+          aBasisReached: true,
+          showAll: true,
         },
       });
       expect(workingCopy.isValid()).toBeFalsy();

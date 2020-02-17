@@ -44,7 +44,7 @@ export const BlockedCasesReport = connect(
                       <tr>
                         <th>Docket</th>
                         <th>Date blocked</th>
-                        <th>Case name</th>
+                        <th>Case title</th>
                         <th>Case status</th>
                         <th>Reason</th>
                       </tr>
@@ -56,10 +56,15 @@ export const BlockedCasesReport = connect(
                             <td>
                               <CaseLink formattedCase={item} />
                             </td>
-                            <td>{item.blockedDateFormatted}</td>
+                            <td>{item.blockedDateEarliest}</td>
                             <td>{item.caseName}</td>
                             <td>{item.status}</td>
-                            <td>{item.blockedReason}</td>
+                            <td>
+                              {item.blockedReason}
+                              {item.blockedReason &&
+                                item.automaticBlockedReason && <br />}
+                              {item.automaticBlockedReason}
+                            </td>
                           </tr>
                         ),
                       )}

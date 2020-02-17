@@ -14,7 +14,7 @@ const replaceWithID = (replacements, domString) => {
   return doc;
 };
 
-export const createOrderAction = ({ applicationContext, get }) => {
+export const createOrderAction = async ({ applicationContext, get }) => {
   let richText = get(state.form.richText) || '';
   let documentTitle = (get(state.form.documentTitle) || '').toUpperCase();
   richText = richText.replace(
@@ -22,11 +22,16 @@ export const createOrderAction = ({ applicationContext, get }) => {
     '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
   );
   const caseCaption = get(state.caseDetail.caseCaption) || '';
+  const isOrderEvent = get(state.form.eventCode) == 'NOT'; // 'NOT' === 'notice'
   let caseCaptionNames = applicationContext.getCaseCaptionNames(caseCaption);
   let caseCaptionPostfix = '';
   if (caseCaptionNames !== caseCaption) {
     caseCaptionNames += ', ';
     caseCaptionPostfix = caseCaption.replace(caseCaptionNames, '');
+  }
+  let signatureForNotice = '';
+  if (isOrderEvent) {
+    signatureForNotice = `<p>${applicationContext.getClerkOfCourtNameForSigning()}<br />Clerk of the Court</p>`;
   }
   const docketNumberWithSuffix = get(
     state.formattedCaseDetail.docketNumberWithSuffix,
@@ -39,6 +44,7 @@ export const createOrderAction = ({ applicationContext, get }) => {
       '#docketNumber': docketNumberWithSuffix,
       '#orderBody': richText,
       '#orderTitleHeader': documentTitle,
+      '#signature': signatureForNotice,
     },
     orderTemplate,
   );
@@ -47,7 +53,7 @@ export const createOrderAction = ({ applicationContext, get }) => {
 
   result = result.replace(
     '/* STYLES_PLACEHOLDER */',
-    applicationContext.getPdfStyles(),
+    await applicationContext.getPdfStyles(),
   );
 
   return { htmlString: result };

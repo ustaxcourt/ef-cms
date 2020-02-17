@@ -1,3 +1,4 @@
+import { canFileInConsolidatedCasesAction } from '../actions/FileDocument/canFileInConsolidatedCasesAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
 import { getPrintableFilingReceiptSequence } from './getPrintableFilingReceiptSequence';
@@ -7,27 +8,39 @@ import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatus
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { submitRespondentCaseAssociationRequestAction } from '../actions/FileDocument/submitRespondentCaseAssociationRequestAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
+import { uploadExternalDocumentsForConsolidatedAction } from '../actions/FileDocument/uploadExternalDocumentsForConsolidatedAction';
 
-export const submitExternalDocumentSequence = [
+const onSuccess = [
+  submitRespondentCaseAssociationRequestAction,
+  setCaseAction,
+  closeFileUploadStatusModalAction,
+  getPrintableFilingReceiptSequence,
+  getFileExternalDocumentAlertSuccessAction,
+  setAlertSuccessAction,
+  setSaveAlertsForNavigationAction,
+  navigateToCaseDetailAction,
+];
+
+export const submitExternalDocumentSequence = showProgressSequenceDecorator([
   openFileUploadStatusModalAction,
-  uploadExternalDocumentsAction,
+  canFileInConsolidatedCasesAction,
   {
-    error: [openFileUploadErrorModal],
-    success: [
-      submitRespondentCaseAssociationRequestAction,
-      setCaseAction,
-      closeFileUploadStatusModalAction,
-      setWaitingForResponseAction,
-      getPrintableFilingReceiptSequence,
-      getFileExternalDocumentAlertSuccessAction,
-      setAlertSuccessAction,
-      setSaveAlertsForNavigationAction,
-      unsetWaitingForResponseAction,
-      navigateToCaseDetailAction,
+    no: [
+      uploadExternalDocumentsAction,
+      {
+        error: [openFileUploadErrorModal],
+        success: onSuccess,
+      },
+    ],
+    yes: [
+      uploadExternalDocumentsForConsolidatedAction,
+      {
+        error: [openFileUploadErrorModal],
+        success: onSuccess,
+      },
     ],
   },
-];
+]);

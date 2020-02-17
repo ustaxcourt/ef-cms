@@ -1,6 +1,13 @@
 import { state } from 'cerebral';
 const docketNumberMatcher = /^(\d{3,5}-\d{2})[XPRWSL]?L?(.*)$/;
 
+export const trimDocketNumberSearch = searchTerm => {
+  const match = docketNumberMatcher.exec(searchTerm.trim());
+  const docketNumber =
+    match && match.length > 1 && match[2] === '' ? match[1] : searchTerm;
+  return docketNumber;
+};
+
 /**
  * sets the state.caseId based on what the search term in the input box was
  *
@@ -11,9 +18,7 @@ const docketNumberMatcher = /^(\d{3,5}-\d{2})[XPRWSL]?L?(.*)$/;
  */
 export const setCaseIdFromSearchAction = ({ get, store }) => {
   const searchTerm = get(state.searchTerm);
-  const match = docketNumberMatcher.exec(searchTerm.trim());
-  const docketNumber =
-    match && match.length > 1 && match[2] === '' ? match[1] : searchTerm;
+  const docketNumber = trimDocketNumberSearch(searchTerm);
   store.set(state.caseId, docketNumber);
   return {
     caseId: docketNumber,

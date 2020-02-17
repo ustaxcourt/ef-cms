@@ -2,8 +2,8 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 /**
  * getInternalUsersInteractor
@@ -22,7 +22,11 @@ exports.getInternalUsersInteractor = async ({ applicationContext }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return applicationContext.getPersistenceGateway().getInternalUsers({
-    applicationContext,
-  });
+  const rawUsers = await applicationContext
+    .getPersistenceGateway()
+    .getInternalUsers({
+      applicationContext,
+    });
+
+  return User.validateRawCollection(rawUsers, { applicationContext });
 };

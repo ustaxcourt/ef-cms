@@ -9,12 +9,10 @@ export const FilingsAndProceedings = connect(
   {
     arrayIndex: props.arrayIndex,
     baseUrl: state.baseUrl,
+    caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
-    docketRecordHelper: state.docketRecordHelper,
-    document: props.document,
-    documentHelper: state.documentHelper,
+    entry: props.entry,
     formattedCaseDetail: state.formattedCaseDetail,
-    record: props.record,
     showDocketRecordDetailModalSequence:
       sequences.showDocketRecordDetailModalSequence,
     token: state.token,
@@ -22,125 +20,87 @@ export const FilingsAndProceedings = connect(
   ({
     arrayIndex,
     baseUrl,
+    caseDetail,
     caseDetailHelper,
-    docketRecordHelper,
-    document,
-    documentHelper,
+    entry,
     formattedCaseDetail,
-    record,
     showDocketRecordDetailModalSequence,
     token,
   }) => {
-    const renderDocumentLink = (
-      documentId,
-      description,
-      isPaper,
-      docketRecordIndex = 0,
-    ) => {
+    const renderDocumentLink = () => {
       return (
-        <React.Fragment>
-          {caseDetailHelper.userHasAccessToCase && (
-            <React.Fragment>
-              <NonMobile>
-                <a
-                  aria-label={`View PDF: ${description}`}
-                  href={`${baseUrl}/documents/${documentId}/document-download-url?token=${token}`}
-                  rel="noreferrer noopener"
-                  target="_blank"
-                >
-                  {isPaper && (
-                    <span className="filing-type-icon-mobile">
-                      <FontAwesomeIcon icon={['fas', 'file-alt']} />
-                    </span>
-                  )}
-                  {description}
-                </a>
-              </NonMobile>
-              <Mobile>
-                <Button
-                  link
-                  aria-roledescription="button to view document details"
-                  className="padding-0 border-0"
-                  onClick={() => {
-                    showDocketRecordDetailModalSequence({
-                      docketRecordIndex,
-                      showModal: 'DocketRecordOverlay',
-                    });
-                  }}
-                >
-                  {description}
-                </Button>
-              </Mobile>
-            </React.Fragment>
-          )}
-          {!caseDetailHelper.userHasAccessToCase && description}
-        </React.Fragment>
+        <>
+          <NonMobile>
+            <a
+              aria-label={`View PDF: ${entry.description}`}
+              href={`${baseUrl}/case-documents/${caseDetail.caseId}/${entry.documentId}/document-download-url?token=${token}`}
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              {entry.isPaper && (
+                <span className="filing-type-icon-mobile">
+                  <FontAwesomeIcon icon={['fas', 'file-alt']} />
+                </span>
+              )}
+              {entry.descriptionDisplay}
+            </a>
+          </NonMobile>
+          <Mobile>
+            <Button
+              link
+              aria-roledescription="button to view document details"
+              className="padding-0 border-0"
+              onClick={() => {
+                showDocketRecordDetailModalSequence({
+                  docketRecordIndex: arrayIndex,
+                  showModal: 'DocketRecordOverlay',
+                });
+              }}
+            >
+              {entry.descriptionDisplay}
+            </Button>
+          </Mobile>
+        </>
       );
     };
 
     return (
-      <React.Fragment>
-        {document &&
-          docketRecordHelper.showDirectDownloadLink &&
-          document.processingStatus === 'complete' &&
-          renderDocumentLink(
-            document.documentId,
-            record.description,
-            document.isPaper,
-            arrayIndex,
-          )}
+      <>
+        {entry.showLinkToDocument && renderDocumentLink()}
 
-        {document &&
-          docketRecordHelper.showDirectDownloadLink &&
-          document.processingStatus !== 'complete' && (
-            <React.Fragment>
-              {caseDetailHelper.showDocketRecordInProgressState && (
-                <span
-                  aria-label="document uploading marker"
-                  className="usa-tag"
-                >
-                  <span aria-hidden="true">Processing</span>
-                </span>
-              )}
-              {record.description}
-            </React.Fragment>
-          )}
+        {entry.showDocumentProcessing && (
+          <>
+            {caseDetailHelper.showDocketRecordInProgressState && (
+              <span aria-label="document uploading marker" className="usa-tag">
+                <span aria-hidden="true">Processing</span>
+              </span>
+            )}
+            {entry.description}
+          </>
+        )}
 
-        {document && docketRecordHelper.showDocumentDetailLink && (
+        {entry.showDocumentEditLink && (
           <a
             aria-label="View PDF"
-            href={documentHelper({
-              docketNumber: formattedCaseDetail.docketNumber,
-              documentId: document.documentId,
-              shouldLinkToComplete: document.isFileAttached === false,
-              shouldLinkToEdit:
-                docketRecordHelper.showEditDocketEntry && document.canEdit,
-            })}
+            href={`/case-detail/${formattedCaseDetail.docketNumber}/documents/${entry.documentId}${entry.editLink}`}
           >
-            {document && document.isPaper && (
+            {entry.isPaper && (
               <span className="filing-type-icon-mobile">
                 <FontAwesomeIcon icon={['fas', 'file-alt']} />
               </span>
             )}
-            {document.documentTitle || record.description}
+            {entry.descriptionDisplay}
           </a>
         )}
 
-        <span> {record.signatory}</span>
+        {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
 
-        {!document && record.description}
+        <span> {entry.signatory}</span>
 
         <span className="filings-and-proceedings">
-          {document &&
-            document.documentTitle &&
-            document.additionalInfo &&
-            ` ${document.additionalInfo}`}
-          {record.filingsAndProceedings && ` ${record.filingsAndProceedings}`}
-          {document &&
-            document.additionalInfo2 &&
-            ` ${document.additionalInfo2}`}
+          {entry.filingsAndProceedingsWithAdditionalInfo}
         </span>
-      </React.Fragment>
+      </>
     );
   },
 );

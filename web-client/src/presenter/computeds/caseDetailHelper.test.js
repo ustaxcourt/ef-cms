@@ -1,4 +1,3 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
@@ -18,7 +17,6 @@ let globalUser;
 const getBaseState = user => {
   globalUser = user;
   return {
-    constants: { STATUS_TYPES: Case.STATUS_TYPES, USER_ROLES: User.ROLES },
     permissions: getUserPermissions(user),
   };
 };
@@ -191,86 +189,6 @@ describe('case detail computed', () => {
     });
     expect(result.userHasAccessToCase).toEqual(false);
     expect(result.showFileDocumentButton).toEqual(false);
-  });
-
-  it('should show add docket entry button if current page is CaseDetailInternal and user role is docketclerk', () => {
-    const user = {
-      role: User.ROLES.docketClerk,
-      userId: '789',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetailInternal',
-        form: {},
-      },
-    });
-    expect(result.showAddDocketEntryButton).toEqual(true);
-  });
-
-  it('should not show add docket entry button if current page is not CaseDetailInternal or user role is not docketclerk', () => {
-    const user = {
-      role: User.ROLES.docketClerk,
-      userId: '789',
-    };
-    let result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetail',
-        form: {},
-      },
-    });
-    expect(result.showAddDocketEntryButton).toEqual(false);
-
-    result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetail',
-        form: {},
-        user: {
-          role: User.ROLES.petitioner,
-          userId: '789',
-        },
-      },
-    });
-    expect(result.showAddDocketEntryButton).toEqual(false);
-  });
-
-  it('should show payment record and not payment options if case is paid', () => {
-    const user = {
-      role: User.ROLES.petitioner,
-      userId: '789',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { payGovId: '123' },
-        currentPage: 'CaseDetail',
-        form: {},
-      },
-    });
-    expect(result.showPaymentRecord).toEqual(true);
-    expect(result.showPaymentOptions).toEqual(false);
-  });
-
-  it('should not show payment record and show payment options if case is not paid', () => {
-    const user = {
-      role: User.ROLES.petitioner,
-      userId: '789',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetail',
-        form: {},
-      },
-    });
-    expect(result.showPaymentRecord).toBeUndefined();
-    expect(result.showPaymentOptions).toEqual(true);
   });
 
   it('should show case deadlines external view for external user who is associated with the case if there are deadlines on the case', () => {
@@ -732,5 +650,114 @@ describe('case detail computed', () => {
 
       expect(result.hasOrders).toEqual(true);
     });
+  });
+
+  it('should show empty state for consolidated cases', () => {
+    const user = {
+      role: User.ROLES.practitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          consolidatedCases: [],
+          noticeOfAttachments: false,
+          orderDesignatingPlaceOfTrial: false,
+          orderForAmendedPetition: false,
+          orderForAmendedPetitionAndFilingFee: false,
+          orderForFilingFee: false,
+          orderForOds: false,
+          orderForRatification: false,
+          orderToChangeDesignatedPlaceOfTrial: false,
+          orderToShowCause: true,
+        },
+        form: {},
+        modal: {},
+      },
+    });
+    expect(result.hasConsolidatedCases).toEqual(false);
+  });
+
+  it('should show edit petition details button if user has EDIT_PETITION_DETAILS permission', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetailInternal',
+        form: {},
+        permissions: { EDIT_PETITION_DETAILS: true },
+      },
+    });
+    expect(result.showEditPetitionDetailsButton).toEqual(true);
+  });
+
+  it('should not show edit petition details button if user does not have EDIT_PETITION_DETAILS permission', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetailInternal',
+        form: {},
+        permissions: { EDIT_PETITION_DETAILS: false },
+      },
+    });
+    expect(result.showEditPetitionDetailsButton).toEqual(false);
+  });
+
+  it('should show the filing fee section for a petitioner user', () => {
+    const user = {
+      role: User.ROLES.petitioner,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetailExternal',
+        form: {},
+      },
+    });
+    expect(result.showFilingFeeExternal).toEqual(true);
+  });
+
+  it('should show the filing fee section for a practitioner user', () => {
+    const user = {
+      role: User.ROLES.practitioner,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetailExternal',
+        form: {},
+      },
+    });
+    expect(result.showFilingFeeExternal).toEqual(true);
+  });
+
+  it('should not show the filing fee section for a respondent user', () => {
+    const user = {
+      role: User.ROLES.respondent,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetailExternal',
+        form: {},
+      },
+    });
+    expect(result.showFilingFeeExternal).toEqual(false);
   });
 });

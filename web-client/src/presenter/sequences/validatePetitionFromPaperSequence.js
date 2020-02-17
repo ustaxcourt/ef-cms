@@ -1,5 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeFormDateAction } from '../actions/computeFormDateAction';
+import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
+import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validatePetitionFromPaperAction } from '../actions/validatePetitionFromPaperAction';
@@ -9,7 +10,8 @@ export const validatePetitionFromPaperSequence = [
   {
     ignore: [],
     validate: [
-      computeFormDateAction,
+      computeDateReceivedAction,
+      computeIrsNoticeDateAction,
       validatePetitionFromPaperAction,
       {
         error: [setValidationErrorsAction],

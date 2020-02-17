@@ -1,17 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Order</title>
     <meta charset="utf-8" />
     <style type="text/css">
       /* STYLES_PLACEHOLDER */
-      @page {
-        margin: 2.25cm 2cm 6cm;
-        size: 8.5in 11in;
-      }
       @page :first {
         margin-top: 1cm;
+        margin-right: 2cm;
         margin-bottom: 2cm;
+        margin-left: 2cm;
+        size: 8.5in 11in;
+      }
+      @page {
+        margin-top: 2.25cm;
+        margin-right: 2cm;
+        margin-bottom: 2cm;
+        margin-left: 2cm;
+        size: 8.5in 11in;
       }
       body {
         font-family: 'nimbus_roman', serif;
@@ -50,6 +56,11 @@
       .more-indent {
         padding-left: 100px;
       }
+      #signature p {
+        width: 33%;
+        margin-top: 30px;
+        float: right;
+      }
     </style>
   </head>
   <body>
@@ -61,7 +72,7 @@
             Washington, DC 20217
           </div>
         </div>
-        <table>
+        <table role="presentation">
           <tbody>
             <tr>
               <td id="caseCaptionNames"></td>
@@ -88,6 +99,7 @@
         <div class="order-title-header" id="orderTitleHeader"></div>
       </div>
       <div id="orderBody"></div>
+      <div id="signature"></div>
     </div>
   </body>
 </html>

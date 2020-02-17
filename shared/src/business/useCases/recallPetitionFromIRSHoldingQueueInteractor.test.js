@@ -6,6 +6,7 @@ const { Document } = require('../entities/Document');
 const { getCaseInteractor } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
+const { NotFoundError } = require('../../errors/errors');
 const { omit } = require('lodash');
 const { User } = require('../entities/User');
 
@@ -24,6 +25,7 @@ const MOCK_WORK_ITEMS = [
       documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
     },
     isInitializeCase: true,
+    isQC: false,
     messages: [
       {
         createdAt: '2018-12-27T18:06:02.968Z',
@@ -167,7 +169,44 @@ describe('Recall petition from IRS Holding Queue', () => {
       error = err;
     }
     expect(error.message).toContain(
-      'The Case entity was invalid ValidationError: child "docketNumber" fails because ["docketNumber" is required]',
+      'The Case entity was invalid ValidationError: "docketNumber" is required',
+    );
+  });
+
+  it('should throw a notfound error when a petition for the caseId does not exist', async () => {
+    const mockCaseId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
+    mockCase.documents[0].workItems = [];
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          role: User.ROLES.petitionsClerk,
+          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+        });
+      },
+      getPersistenceGateway: () => {
+        return {
+          getCaseByCaseId: () => Promise.resolve(omit(mockCase)),
+          getUserById: ({ userId }) => MOCK_USERS[userId],
+          updateWorkItem: async () => null,
+        };
+      },
+      getUseCases: () => ({ getCaseInteractor }),
+    };
+    let error;
+    try {
+      await recallPetitionFromIRSHoldingQueueInteractor({
+        applicationContext,
+        caseId: mockCaseId,
+        userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+      });
+    } catch (err) {
+      error = err;
+    }
+
+    expect(error).toBeInstanceOf(NotFoundError);
+    expect(error.message).toContain(
+      `Petition workItem for Case ${mockCaseId} was not found`,
     );
   });
 });

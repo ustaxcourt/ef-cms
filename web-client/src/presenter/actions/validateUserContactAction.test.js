@@ -13,6 +13,9 @@ presenter.providers.path = {
 let validationResult;
 
 presenter.providers.applicationContext = {
+  getCurrentUser: () => ({
+    userId: '123',
+  }),
   getUseCases: () => {
     return {
       validateUserInteractor: () => {
@@ -40,7 +43,7 @@ describe('validateUserContactAction', () => {
       modules: {
         presenter,
       },
-      state: { user: { name: 'Betty Boop' } },
+      state: {},
     });
     expect(successMock).toHaveBeenCalled();
   });

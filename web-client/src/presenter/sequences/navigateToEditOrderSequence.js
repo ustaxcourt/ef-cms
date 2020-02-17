@@ -23,7 +23,7 @@ export const navigateToEditOrderSequence = [
   getCaseAction,
   setCaseAction,
   setDocumentToEditAction,
-  ...convertHtml2PdfSequence,
+  convertHtml2PdfSequence,
   overwriteOrderFileAction,
   {
     error: [], // TODO: show an alert if this occurs?

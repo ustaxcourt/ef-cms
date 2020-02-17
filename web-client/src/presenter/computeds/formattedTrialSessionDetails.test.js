@@ -10,9 +10,11 @@ const formattedTrialSessionDetails = withAppContextDecorator(
 
 describe('formattedTrialSessionDetails', () => {
   const TRIAL_SESSION = {
+    caseOrder: [],
     city: 'Hartford',
     courtReporter: 'Test Court Reporter',
     irsCalendarAdministrator: 'Test Calendar Admin',
+    isCalendared: false,
     judge: { name: 'Test Judge' },
     postalCode: '12345',
     startDate: '2019-11-25T15:00:00.000Z',
@@ -40,6 +42,8 @@ describe('formattedTrialSessionDetails', () => {
       },
     });
     expect(result).toMatchObject({
+      canDelete: false,
+      canEdit: false,
       formattedCityStateZip: 'Hartford, CT 12345',
       formattedCourtReporter: 'Test Court Reporter',
       formattedIrsCalendarAdministrator: 'Test Calendar Admin',
@@ -49,6 +53,70 @@ describe('formattedTrialSessionDetails', () => {
       formattedTrialClerk: 'Test Trial Clerk',
       noLocationEntered: false,
       showSwingSession: false,
+    });
+  });
+
+  it('trial session can not be edited or deleted when in the past', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          isCalendared: false,
+          startDate: '2000-11-25T15:00:00.000Z',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      canDelete: false,
+      canEdit: false,
+    });
+  });
+
+  it('trial session can be edited only in the future', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          isCalendared: false,
+          startDate: '2090-11-25T15:00:00.000Z',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      canDelete: true,
+      canEdit: true,
+    });
+  });
+
+  it('trial session can not be deleted when calendared but it still can be edited if in the future', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          isCalendared: true,
+          startDate: '2090-11-25T15:00:00.000Z',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      canDelete: false,
+      canEdit: true,
+    });
+  });
+
+  it('trial session can not be deleted or edited when calendared and in the past', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          isCalendared: true,
+          startDate: '2000-11-25T15:00:00.000Z',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      canDelete: false,
+      canEdit: false,
     });
   });
 
@@ -215,10 +283,12 @@ describe('formattedTrialSessionDetails', () => {
             {
               ...MOCK_CASE,
               caseCaption: 'Test Person & Someone Else, Petitioners',
+              caseId: 'ef88c665-4d1d-48a9-898a-eae698187b2b',
               docketNumberSuffix: 'W',
-              status: 'Closed',
+              removedFromTrial: true,
             },
           ],
+          isCalendared: true,
         },
       },
     });
@@ -258,5 +328,36 @@ describe('formattedTrialSessionDetails', () => {
       { docketNumber: '101-18' },
       { docketNumber: '102-19' },
     ]);
+  });
+
+  it('should show open cases when the trial session is calendared and has open cases', () => {
+    let result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          caseOrder: [{ caseId: 'eaff20df-d86e-48ab-adc2-831b6ad7e039' }],
+          isCalendared: true,
+        },
+      },
+    });
+    expect(result.showOpenCases).toEqual(true);
+  });
+
+  it('should show only closed cases when the trial session is calendared and has no open cases', () => {
+    let result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          caseOrder: [
+            {
+              caseId: 'eaff20df-d86e-48ab-adc2-831b6ad7e039',
+              removedFromTrial: true,
+            },
+          ],
+          isCalendared: true,
+        },
+      },
+    });
+    expect(result.showOnlyClosedCases).toEqual(true);
   });
 });

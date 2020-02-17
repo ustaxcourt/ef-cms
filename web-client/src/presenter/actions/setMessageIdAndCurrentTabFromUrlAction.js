@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.messageId
  */
 export const setMessageIdAndCurrentTabFromUrlAction = ({ props, store }) => {
-  store.set(state.messageId, props.messageId);
+  store.set(state.messageId, props.messageId || null);
   if (props.messageId) {
     store.set(state.currentTab, 'Messages');
   }

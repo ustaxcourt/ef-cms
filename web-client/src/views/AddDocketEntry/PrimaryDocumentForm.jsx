@@ -1,3 +1,4 @@
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from './Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
@@ -8,7 +9,6 @@ import {
   onInputChange,
   reactSelectValue,
 } from '../../ustc-ui/utils/documentTypeSelectHelper';
-import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
@@ -70,85 +70,42 @@ export const PrimaryDocumentForm = connect(
             </fieldset>
           </FormGroup>
 
-          <FormGroup errorText={validationErrors.dateReceived}>
-            <fieldset className="usa-fieldset date-received">
-              <legend id="usa-legend date-received-legend">
-                Date received
-              </legend>
-              <div className="usa-memorable-date">
-                <div className="usa-form-group usa-form-group--month">
-                  <input
-                    aria-describedby="date-received-legend"
-                    aria-label="month, two digits"
-                    className="usa-input usa-input--inline"
-                    id="date-received-month"
-                    max="12"
-                    min="1"
-                    name="dateReceivedMonth"
-                    placeholder="MM"
-                    type="number"
-                    value={form.dateReceivedMonth || ''}
-                    onBlur={() => {
-                      validateDocketEntrySequence();
-                    }}
-                    onChange={e => {
-                      updateDocketEntryFormValueSequence({
-                        key: e.target.name,
-                        value: limitLength(e.target.value, 2),
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--day">
-                  <input
-                    aria-describedby="date-received-legend"
-                    aria-label="day, two digits"
-                    className="usa-input usa-input--inline"
-                    id="date-received-day"
-                    max="31"
-                    maxLength="2"
-                    min="1"
-                    name="dateReceivedDay"
-                    placeholder="DD"
-                    type="number"
-                    value={form.dateReceivedDay || ''}
-                    onBlur={() => {
-                      validateDocketEntrySequence();
-                    }}
-                    onChange={e => {
-                      updateDocketEntryFormValueSequence({
-                        key: e.target.name,
-                        value: limitLength(e.target.value, 2),
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--year">
-                  <input
-                    aria-describedby="date-received-legend"
-                    aria-label="year, four digits"
-                    className="usa-input usa-input--inline"
-                    id="date-received-year"
-                    max="2100"
-                    maxLength="4"
-                    min="1900"
-                    name="dateReceivedYear"
-                    placeholder="YYYY"
-                    type="number"
-                    value={form.dateReceivedYear || ''}
-                    onBlur={() => {
-                      validateDocketEntrySequence();
-                    }}
-                    onChange={e => {
-                      updateDocketEntryFormValueSequence({
-                        key: e.target.name,
-                        value: limitLength(e.target.value, 4),
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-            </fieldset>
+          <DateInput
+            errorText={validationErrors.dateReceived}
+            id="date-received"
+            label="Date received"
+            names={{
+              day: 'dateReceivedDay',
+              month: 'dateReceivedMonth',
+              year: 'dateReceivedYear',
+            }}
+            values={{
+              day: form.dateReceivedDay,
+              month: form.dateReceivedMonth,
+              year: form.dateReceivedYear,
+            }}
+            onBlur={validateDocketEntrySequence}
+            onChange={updateDocketEntryFormValueSequence}
+          />
+
+          <FormGroup errorText={validationErrors.mailingDate}>
+            <label className="usa-label" htmlFor="mailing-date">
+              Mailing date <span className="usa-hint">(optional)</span>
+            </label>
+            <input
+              className="usa-input usa-input-inline"
+              id="mailing-date"
+              maxLength="25"
+              name="mailingDate"
+              value={form.mailingDate || ''}
+              onBlur={() => validateDocketEntrySequence()}
+              onChange={e => {
+                updateDocketEntryFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
           </FormGroup>
 
           <FormGroup errorText={validationErrors.eventCode}>
@@ -311,7 +268,7 @@ export const PrimaryDocumentForm = connect(
                 }}
               />
               <label
-                className="usa-checkbox__label"
+                className="usa-checkbox__label inline-block"
                 htmlFor="add-to-coversheet"
               >
                 Add to cover sheet
@@ -347,7 +304,7 @@ export const PrimaryDocumentForm = connect(
             />
           </div>
 
-          <Inclusions />
+          <Inclusions updateSequence="updateDocketEntryFormValueSequence" />
 
           <FormGroup
             className={!addDocketEntryHelper.showObjection && 'margin-bottom-0'}
@@ -377,7 +334,10 @@ export const PrimaryDocumentForm = connect(
                     validateDocketEntrySequence();
                   }}
                 />
-                <label className="usa-checkbox__label" htmlFor="party-primary">
+                <label
+                  className="usa-checkbox__label inline-block"
+                  htmlFor="party-primary"
+                >
                   {caseDetail.contactPrimary.name}
                 </label>
               </div>
@@ -398,7 +358,7 @@ export const PrimaryDocumentForm = connect(
                     }}
                   />
                   <label
-                    className="usa-checkbox__label"
+                    className="usa-checkbox__label inline-block"
                     htmlFor="party-secondary"
                   >
                     {caseDetail.contactSecondary.name}
@@ -421,7 +381,7 @@ export const PrimaryDocumentForm = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label"
+                  className="usa-checkbox__label inline-block"
                   htmlFor="party-respondent"
                 >
                   Respondent
@@ -433,7 +393,7 @@ export const PrimaryDocumentForm = connect(
             <FormGroup errorText={validationErrors.objections}>
               <fieldset className="usa-fieldset margin-bottom-0">
                 <legend className="usa-legend" id="objections-legend">
-                  Are there any objections to this document?
+                  Are there any objections to the granting of this document?
                 </legend>
                 {['Yes', 'No', 'Unknown'].map(option => (
                   <div className="usa-radio" key={option}>
@@ -465,31 +425,38 @@ export const PrimaryDocumentForm = connect(
             </FormGroup>
           )}
 
-          <hr />
-          <div className="usa-form-group">
-            <fieldset className="usa-fieldset">
-              <legend className="usa-legend">Track document?</legend>
-              <div className="usa-checkbox">
-                <input
-                  checked={form.pending || false}
-                  className="usa-checkbox__input"
-                  id="pending"
-                  name="pending"
-                  type="checkbox"
-                  onChange={e => {
-                    updateDocketEntryFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                    validateDocketEntrySequence();
-                  }}
-                />
-                <label className="usa-checkbox__label" htmlFor="pending">
-                  Add to pending report
-                </label>
+          {addDocketEntryHelper.showTrackOption && (
+            <>
+              <hr />
+              <div className="usa-form-group">
+                <fieldset className="usa-fieldset">
+                  <legend className="usa-legend">Track document?</legend>
+                  <div className="usa-checkbox">
+                    <input
+                      checked={form.pending || false}
+                      className="usa-checkbox__input"
+                      id="pending"
+                      name="pending"
+                      type="checkbox"
+                      onChange={e => {
+                        updateDocketEntryFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                        validateDocketEntrySequence();
+                      }}
+                    />
+                    <label
+                      className="usa-checkbox__label inline-block"
+                      htmlFor="pending"
+                    >
+                      Add to pending report
+                    </label>
+                  </div>
+                </fieldset>
               </div>
-            </fieldset>
-          </div>
+            </>
+          )}
         </div>
       </>
     );

@@ -3,8 +3,8 @@ import {
   IRS_BATCH_SYSTEM_SECTION,
   PETITIONS_SECTION,
 } from '../../../../shared/src/business/entities/WorkQueue';
+import { capitalize, cloneDeep, orderBy } from 'lodash';
 import { state } from 'cerebral';
-import _ from 'lodash';
 
 const isDateToday = (date, applicationContext) => {
   const now = applicationContext.getUtilities().formatNow('MMDDYY');
@@ -47,14 +47,28 @@ export const formatWorkItem = ({
   selectedWorkItems = [],
   workQueueIsInternal,
 }) => {
-  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
-  const result = _.cloneDeep(workItem);
+  const {
+    COURT_ISSUED_EVENT_CODES,
+    ORDER_TYPES_MAP,
+    STATUS_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
+
+  const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
+    courtIssuedDoc => courtIssuedDoc.documentType,
+  );
+  const orderDocumentTypes = ORDER_TYPES_MAP.map(
+    orderDoc => orderDoc.documentType,
+  );
+
+  const result = cloneDeep(workItem);
 
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.createdAt, 'MMDDYY');
 
-  result.messages = _.orderBy(result.messages, 'createdAt', 'desc');
+  result.highPriority = !!result.highPriority;
+  result.messages = orderBy(result.messages, 'createdAt', 'desc');
   result.messages.forEach(message => {
     message.createdAtFormatted = formatDateIfToday(
       message.createdAt,
@@ -65,7 +79,7 @@ export const formatWorkItem = ({
       .getUtilities()
       .formatDateString(message.createdAt, 'DATE_TIME_TZ');
   });
-  result.sentBySection = _.capitalize(result.sentBySection);
+  result.sentBySection = capitalize(result.sentBySection);
   result.completedAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.completedAt, 'DATE_TIME');
@@ -74,13 +88,17 @@ export const formatWorkItem = ({
     .formatDateString(result.completedAt, 'DATE_TIME_TZ');
   result.assigneeName = result.assigneeName || 'Unassigned';
 
+  if (result.highPriority) {
+    result.showHighPriorityIcon = true;
+  }
+
   result.showUnreadIndicators = !result.isRead;
-  result.showUnreadStatusIcon = !result.isRead;
+  result.showUnreadStatusIcon = !result.isRead && !result.showHighPriorityIcon;
 
   result.showComplete = !result.isInitializeCase;
   result.showSendTo = !result.isInitializeCase;
 
-  if (result.assigneeName === 'Unassigned') {
+  if (result.assigneeName === 'Unassigned' && !result.showHighPriorityIcon) {
     result.showUnassignedIcon = true;
   }
 
@@ -111,7 +129,7 @@ export const formatWorkItem = ({
   }${result.docketNumberSuffix || ''}`;
 
   result.selected = !!selectedWorkItems.find(
-    workItem => workItem.workItemId == result.workItemId,
+    selectedWorkItem => selectedWorkItem.workItemId == result.workItemId,
   );
 
   result.currentMessage = result.messages[0];
@@ -139,7 +157,94 @@ export const formatWorkItem = ({
     ).createdAtTimeFormattedTZ;
   }
 
+  result.isCourtIssuedDocument = !!courtIssuedDocumentTypes.includes(
+    result.document.documentType,
+  );
+  result.isOrder = !!orderDocumentTypes.includes(result.document.documentType);
+
+  let descriptionDisplay = result.document.documentType;
+
+  if (result.document.documentTitle) {
+    descriptionDisplay = result.document.documentTitle;
+    if (result.document.additionalInfo) {
+      descriptionDisplay += ` ${result.document.additionalInfo}`;
+    }
+  }
+
+  result.document.descriptionDisplay = descriptionDisplay;
+
   return result;
+};
+
+export const getWorkItemDocumentLink = ({
+  applicationContext,
+  permissions,
+  workItem,
+  workQueueToDisplay = {},
+}) => {
+  const { box, queue, workQueueIsInternal } = workQueueToDisplay;
+  const result = cloneDeep(workItem);
+
+  const formattedDocument = applicationContext
+    .getUtilities()
+    .formatDocument(applicationContext, result.document);
+
+  const isInProgress = formattedDocument && formattedDocument.isInProgress;
+
+  const qcWorkItemsUntouched =
+    !isInProgress &&
+    formattedDocument &&
+    !result.isRead &&
+    !result.completedAt &&
+    !result.isCourtIssuedDocument;
+
+  const showDocumentEditLink =
+    formattedDocument &&
+    permissions.UPDATE_CASE &&
+    (!formattedDocument.isInProgress ||
+      (permissions.DOCKET_ENTRY && formattedDocument.isInProgress));
+
+  let editLink; //defaults to doc detail
+  if (
+    showDocumentEditLink &&
+    permissions.DOCKET_ENTRY &&
+    formattedDocument &&
+    !workQueueIsInternal
+  ) {
+    if (
+      formattedDocument.isCourtIssuedDocument &&
+      !formattedDocument.servedAt
+    ) {
+      editLink = '/edit-court-issued';
+    } else if (isInProgress) {
+      editLink = '/complete';
+    } else if (
+      !result.isCourtIssuedDocument &&
+      !result.isOrder &&
+      !formattedDocument.isPetition &&
+      qcWorkItemsUntouched
+    ) {
+      editLink = '/edit';
+    }
+  }
+  if (!editLink) {
+    const messageId = result.messages[0] && result.messages[0].messageId;
+
+    const workItemIdToMarkAsRead = !result.isRead ? result.workItemId : null;
+
+    const markReadPath =
+      workItemIdToMarkAsRead && box === 'inbox' && queue === 'my'
+        ? `/mark/${workItemIdToMarkAsRead}`
+        : '';
+
+    if (messageId && (workQueueIsInternal || permissions.DOCKET_ENTRY)) {
+      editLink = `/messages/${messageId}${markReadPath}`;
+    } else {
+      editLink = `${markReadPath}`;
+    }
+  }
+
+  return editLink;
 };
 
 export const filterWorkItems = ({
@@ -281,9 +386,10 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const workItems = get(state.workQueue);
   const workQueueToDisplay = get(state.workQueueToDisplay);
+  const permissions = get(state.permissions);
   const { workQueueIsInternal } = workQueueToDisplay;
   const selectedWorkItems = get(state.selectedWorkItems);
-  const USER_ROLES = get(state.constants.USER_ROLES);
+  const { USER_ROLES } = applicationContext.getConstants();
 
   let workQueue = workItems
     .filter(
@@ -293,14 +399,21 @@ export const formattedWorkQueue = (get, applicationContext) => {
         workQueueToDisplay,
       }),
     )
-    .map(item =>
-      formatWorkItem({
+    .map(item => {
+      const result = formatWorkItem({
         applicationContext,
         selectedWorkItems,
         workItem: item,
         workQueueIsInternal,
-      }),
-    );
+      });
+      const editLink = getWorkItemDocumentLink({
+        applicationContext,
+        permissions,
+        workItem: item,
+        workQueueToDisplay,
+      });
+      return { ...result, editLink };
+    });
 
   const sortFields = {
     documentQc: {
@@ -372,7 +485,18 @@ export const formattedWorkQueue = (get, applicationContext) => {
       workQueueToDisplay.queue
     ][workQueueToDisplay.box];
 
-  workQueue = _.orderBy(workQueue, [sortField, 'docketNumber'], sortDirection);
+  let highPriorityField = [];
+  let highPriorityDirection = [];
+  if (!workQueueIsInternal && workQueueToDisplay.box == 'inbox') {
+    highPriorityField = ['highPriority', 'trialDate'];
+    highPriorityDirection = ['desc', 'asc'];
+  }
+
+  workQueue = orderBy(
+    workQueue,
+    [...highPriorityField, sortField, 'docketNumber'],
+    [...highPriorityDirection, sortDirection, 'asc'],
+  );
 
   return workQueue;
 };

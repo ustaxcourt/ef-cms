@@ -5,15 +5,18 @@ import sinon from 'sinon';
 
 describe('submitEditRespondentsModalAction', () => {
   let deleteCounselFromCaseInteractorStub;
+  let updateCounselOnCaseInteractorStub;
   let successStub;
 
   beforeEach(() => {
     deleteCounselFromCaseInteractorStub = sinon.stub();
+    updateCounselOnCaseInteractorStub = sinon.stub();
     successStub = sinon.stub();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
         deleteCounselFromCaseInteractor: deleteCounselFromCaseInteractorStub,
+        updateCounselOnCaseInteractor: updateCounselOnCaseInteractorStub,
       }),
     };
 

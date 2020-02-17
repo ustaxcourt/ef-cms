@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
@@ -22,6 +22,8 @@ function CaseInternal(rawCase) {
     rawCase.applicationForWaiverOfFilingFeeFileSize;
   this.caseCaption = rawCase.caseCaption;
   this.caseType = rawCase.caseType;
+  this.filingType = rawCase.filingType;
+  this.mailingDate = rawCase.mailingDate;
   this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
   this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
   this.partyType = rawCase.partyType;
@@ -52,6 +54,7 @@ CaseInternal.VALIDATION_ERROR_MESSAGES = Object.assign(
   {
     petitionFile: 'Upload or scan a petition',
     preferredTrialCity: 'Select a preferred trial location',
+    requestForPlaceOfTrialFile: 'Upload or scan a requested place of trial',
   },
 );
 
@@ -72,6 +75,10 @@ const paperRequirements = joi.object().keys({
   ),
   caseCaption: joi.string().required(),
   caseType: joi.string().required(),
+  mailingDate: joi
+    .string()
+    .max(25)
+    .required(),
   ownershipDisclosureFile: joi.object().optional(),
   ownershipDisclosureFileSize: joi.when('ownershipDisclosureFile', {
     is: joi.exist().not(null),
@@ -95,18 +102,26 @@ const paperRequirements = joi.object().keys({
       .max(MAX_FILE_SIZE_BYTES)
       .integer(),
   }),
-  preferredTrialCity: joi.when('requestForPlaceOfTrialFile', {
-    is: joi.exist().not(null),
-    otherwise: joi.optional().allow(null),
-    then: joi.string().required(),
-  }),
+  preferredTrialCity: joi
+    .alternatives()
+    .conditional('requestForPlaceOfTrialFile', {
+      is: joi.exist().not(null),
+      otherwise: joi.optional().allow(null),
+      then: joi.string().required(),
+    }),
   procedureType: joi.string().required(),
   receivedAt: joi
     .date()
     .iso()
     .max('now')
     .required(),
-  requestForPlaceOfTrialFile: joi.object().optional(),
+  requestForPlaceOfTrialFile: joi
+    .alternatives()
+    .conditional('preferredTrialCity', {
+      is: joi.exist().not(null),
+      otherwise: joi.object().optional(),
+      then: joi.object().required(),
+    }),
   requestForPlaceOfTrialFileSize: joi.when('requestForPlaceOfTrialFile', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
@@ -117,7 +132,7 @@ const paperRequirements = joi.object().keys({
       .max(MAX_FILE_SIZE_BYTES)
       .integer(),
   }),
-  stinFile: joi.object().optional(),
+  stinFile: joi.object().required(),
   stinFileSize: joi.when('stinFile', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),

@@ -13,25 +13,29 @@ exports.generatePdfFromHtmlInteractor = async ({
   contentHtml,
   displayHeaderFooter = true,
   docketNumber,
+  footerHtml,
   headerHtml,
+  overwriteHeader,
 }) => {
   let browser = null;
   let result = null;
 
   try {
     applicationContext.logger.time('Generating PDF From HTML');
-    const chromium = applicationContext.getChromium();
-
-    browser = await chromium.puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath,
-      headless: true,
-    });
-
+    browser = await applicationContext.getChromiumBrowser();
     let page = await browser.newPage();
 
     await page.setContent(contentHtml);
+
+    const headerContent = overwriteHeader
+      ? `${headerHtml ? headerHtml : ''}`
+      : ` <div style="font-size: 8px; font-family: sans-serif; float: right;">
+              Page <span class="pageNumber"></span>
+              of <span class="totalPages"></span>
+            </div>
+            <div style="float: left">
+              ${headerHtml ? headerHtml : `Docket Number: ${docketNumber}`}
+            </div>`;
 
     const headerTemplate = `
       <!doctype html>
@@ -40,21 +44,23 @@ exports.generatePdfFromHtmlInteractor = async ({
         </head>
         <body style="margin: 0px;">
           <div style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
-            <div style="font-size: 8px; font-family: sans-serif; float: right;">
-              Page <span class="pageNumber"></span>
-              of <span class="totalPages"></span>
-            </div>
-            <div style="float: left">
-              ${headerHtml ? headerHtml : `Docket Number: ${docketNumber}`}
-            </div>
+            ${headerContent}
           </div>
         </body>
       </html>
     `;
 
     const footerTemplate = `
-      <div style="font-size:8px !important; color:#000; text-align:center; width:100%; margin-bottom:5px;">Printed <span class="date"></span></div>
-    `;
+      <!doctype html>
+      <html>
+        <head>
+        </head>
+        <body style="margin: 0px;">
+          <div style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
+            ${footerHtml ? footerHtml : ''}
+          </div>
+        </body>
+      </html>`;
 
     result = await page.pdf({
       displayHeaderFooter,

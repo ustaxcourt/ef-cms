@@ -1,7 +1,6 @@
-const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
+const client = require('../../dynamodbClientService');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
-const client = require('../../dynamodbClientService');
 /**
  * getCaseByCaseId
  *
@@ -20,9 +19,6 @@ exports.getCaseByCaseId = ({ applicationContext, caseId }) => {
       applicationContext,
     })
     .then(results =>
-      stripWorkItems(
-        stripInternalKeys(results),
-        applicationContext.isAuthorizedForWorkItems(),
-      ),
+      stripWorkItems(results, applicationContext.isAuthorizedForWorkItems()),
     );
 };

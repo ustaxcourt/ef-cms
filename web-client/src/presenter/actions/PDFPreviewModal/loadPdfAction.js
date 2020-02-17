@@ -21,9 +21,8 @@ export const loadPdfAction = ({ applicationContext, path, props, store }) => {
       const binaryFile = atob(base64File);
 
       try {
-        const pdfDoc = await applicationContext
-          .getPdfJs()
-          .getDocument({ data: binaryFile }).promise;
+        const pdfJs = await applicationContext.getPdfJs();
+        const pdfDoc = await pdfJs.getDocument({ data: binaryFile }).promise;
 
         store.set(state.pdfPreviewModal.pdfDoc, pdfDoc);
         store.set(state.pdfPreviewModal.totalPages, pdfDoc.numPages);

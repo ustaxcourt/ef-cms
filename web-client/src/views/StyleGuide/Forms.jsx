@@ -1,3 +1,4 @@
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import React from 'react';
 
 export const Forms = () => (
@@ -178,7 +179,7 @@ export const Forms = () => (
               type="checkbox"
               value="truth"
             />
-            <label className="usa-checkbox__label" htmlFor="truth">
+            <label className="usa-checkbox__label inline-block" htmlFor="truth">
               Sojourner Truth
             </label>
           </div>
@@ -190,7 +191,10 @@ export const Forms = () => (
               type="checkbox"
               value="douglass"
             />
-            <label className="usa-checkbox__label" htmlFor="douglass">
+            <label
+              className="usa-checkbox__label inline-block"
+              htmlFor="douglass"
+            >
               Frederick Douglass
             </label>
           </div>
@@ -202,7 +206,10 @@ export const Forms = () => (
               type="checkbox"
               value="washington"
             />
-            <label className="usa-checkbox__label" htmlFor="washington">
+            <label
+              className="usa-checkbox__label inline-block"
+              htmlFor="washington"
+            >
               Booker T. Washington
             </label>
           </div>
@@ -214,7 +221,10 @@ export const Forms = () => (
               name="historical-figures-1"
               type="checkbox"
             />
-            <label className="usa-checkbox__label" htmlFor="carver">
+            <label
+              className="usa-checkbox__label inline-block"
+              htmlFor="carver"
+            >
               George Washington Carver
             </label>
           </div>
@@ -304,56 +314,15 @@ export const Forms = () => (
       </div>
 
       <div className="blue-container margin-bottom-4">
-        <fieldset className="usa-fieldset margin-bottom-0">
-          <legend className="usa-legend">Date of birth</legend>
-          <div className="usa-memorable-date">
-            <div className="usa-form-group usa-form-group--month">
-              <label className="usa-label" htmlFor="date_of_birth_1">
-                Month
-              </label>
-              <input
-                aria-describedby="dobHint"
-                className="usa-input usa-input--inline"
-                defaultValue=""
-                id="date_of_birth_1"
-                max="12"
-                min="1"
-                name="date_of_birth_1"
-                type="number"
-              />
-            </div>
-            <div className="usa-form-group usa-form-group--day">
-              <label className="usa-label" htmlFor="date_of_birth_2">
-                Day
-              </label>
-              <input
-                aria-describedby="dobHint"
-                className="usa-input usa-input--inline"
-                defaultValue=""
-                id="date_of_birth_2"
-                max="31"
-                min="1"
-                name="date_of_birth_2"
-                type="number"
-              />
-            </div>
-            <div className="usa-form-group usa-form-group--year">
-              <label className="usa-label" htmlFor="date_of_birth_3">
-                Year
-              </label>
-              <input
-                aria-describedby="dobHint"
-                className="usa-input usa-input--inline"
-                defaultValue=""
-                id="date_of_birth_3"
-                max="2000"
-                min="1900"
-                name="date_of_birth_3"
-                type="number"
-              />
-            </div>
-          </div>
-        </fieldset>
+        <DateInput
+          id="date_of_birth"
+          label="Date of birth"
+          names={{
+            day: 'date_of_birth_1',
+            month: 'date_of_birth_2',
+            year: 'date_of_birth_3',
+          }}
+        />
 
         <fieldset className="usa-fieldset margin-bottom-0">
           <legend className="usa-legend sr-only">Mailing address</legend>

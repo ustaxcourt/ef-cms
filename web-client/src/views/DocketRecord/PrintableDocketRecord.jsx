@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { CaseDetailHeader } from '../CaseDetailHeader';
+import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { connect } from '@cerebral/react';

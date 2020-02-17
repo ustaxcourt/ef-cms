@@ -5,6 +5,7 @@
     "documents": [
       {
         "createdAt": "2019-03-01T21:40:46.415Z",
+        "filingDate": "2019-03-01T21:40:46.415Z",
         "documentType": "Petition",
         "filedBy": "Test Petitioner",
         "processingStatus": "complete",
@@ -51,6 +52,7 @@
       {
         "processingStatus": "complete",
         "createdAt": "2019-03-05T17:34:13.491Z",
+        "filingDate": "2019-03-05T17:34:13.491Z",
         "documentType": "Statement of Taxpayer Identification",
         "filedBy": "Test Petitioner",
         "workItems": [],
@@ -60,6 +62,7 @@
       },
       {
         "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+        "filingDate": "2019-10-07T14:29:30.288Z",
         "createdAt": "2019-10-07T14:29:30.288Z",
         "docketNumber": "101-19",
         "documentId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
@@ -108,11 +111,13 @@
         "filingDate": "2019-03-01T21:40:46.415Z",
         "description": "Petition",
         "filedBy": "Test Petitioner",
+        "eventCode": "P",
         "index": 1
       },
       {
         "filingDate": "2019-03-01T21:40:46.415Z",
         "description": "Request for Place of Trial at Birmingham, Alabama",
+        "eventCode": "RQT",
         "index": 2
       }
     ],
@@ -155,6 +160,7 @@
       "processingStatus": "complete",
       "createdAt": "2019-03-01T21:40:46.415Z",
       "receivedAt": "2019-03-01T21:40:46.415Z",
+      "filingDate": "2019-03-01T21:40:46.415Z",
       "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
       "documentType": "Petition",
       "documentTitle": "Petition",
@@ -193,6 +199,7 @@
     "document": {
       "processingStatus": "complete",
       "receivedAt": "2019-03-01T21:40:46.415Z",
+      "filingDate": "2019-03-01T21:40:46.415Z",
       "createdAt": "2019-03-01T21:40:46.415Z",
       "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
       "documentType": "Petition",

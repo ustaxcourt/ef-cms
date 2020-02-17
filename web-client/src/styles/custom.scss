@@ -71,6 +71,22 @@ hr {
   clear: both;
 }
 
+.sticky-footer {
+  background-color: $color-white;
+
+  &.sticky-footer--space {
+    height: 135px;
+  }
+  &.sticky-footer--container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding-bottom: 1em;
+    border-top: 3px ridge;
+    margin-bottom: 0;
+  }
+}
+
 .label {
   display: block;
   margin-bottom: 5px;
@@ -93,11 +109,6 @@ hr {
 
 .flagged-name {
   color: color($theme-color-secondary)-dark;
-}
-
-#paygov-link-container {
-  padding-bottom: 2rem;
-  text-align: center;
 }
 
 iframe {
@@ -251,8 +262,8 @@ select[disabled] {
   height: 24px;
 }
 
-.required-statement  {
-  font-weight: $font-semibold;
+.required-statement {
+  font-weight: 600;
 }
 
 .usa-accordion__button.font-normal {
@@ -327,10 +338,6 @@ select[disabled] {
 }
 
 .create-case-review {
-  label {
-    margin-bottom: 8px;
-  }
-
   p.address-name {
     margin-bottom: 0px;
   }
@@ -442,6 +449,10 @@ select[disabled] {
 
   .usa-hint {
     margin: 0;
+  }
+
+  &.block {
+    display: block;
   }
 
   svg {
@@ -669,12 +680,6 @@ select.ustc-input-error {
   display: inline-block;
 }
 
-#tabContent-completed,
-#tabContent-inProgress {
-  max-height: 931px;
-  overflow-y: auto;
-}
-
 .ustc-create-message-modal,
 .forward-form {
   .usa-form-group--error input,
@@ -866,6 +871,13 @@ header.usa-header {
   }
 }
 
+.red-warning-header {
+  padding: 5px 0;
+  margin-bottom: 0;
+  background-color: color($theme-color-secondary-dark);
+  color: white;
+}
+
 .big-blue-header {
   padding: 20px 0;
   margin-bottom: 20px;
@@ -884,11 +896,18 @@ header.usa-header {
   button:hover {
     color: $color-primary-alt;
   }
+  .usa-button--outline {
+    background-color: $color-white;
+    color: color($theme-color-primary);
+    &:hover {
+      color: color($theme-color-primary-dark);
+    }
+  }
   .usa-tag {
     background: $color-white;
     color: color($theme-color-primary-darker);
     font-weight: $font-bold;
-
+    white-space: nowrap;
     &.ustc-tag--yellow {
       background: color($theme-color-warning);
     }
@@ -925,7 +944,16 @@ hr.lighter {
   border-top: 1px solid color($theme-color-base-lighter);
 }
 
-.mobile-document-detail-tabs {
+.case-detail-primary-tabs__container {
+  background-color: color($theme-color-primary);
+}
+
+.case-detail-primary-tabs__tabs {
+  max-width: 1440px;
+  padding-right: 2rem;
+  padding-left: 2rem;
+  margin: 0 auto;
+
   @media only screen and (max-width: $medium-screen) {
     nav {
       display: none;
@@ -1269,8 +1297,9 @@ hr.lighter {
   }
 }
 
-.pdf-preview-btn {
+button.usa-button.pdf-preview-btn {
   line-height: 1.4rem;
+  text-align: left;
   word-break: break-all;
 }
 
@@ -1287,6 +1316,22 @@ button.change-scanner-button {
   padding: 10px;
   background-color: color($theme-color-primary-darker);
   color: white;
+
+  a,
+  button {
+    color: $color-white;
+  }
+
+  a:not(.usa-button):hover,
+  button:hover {
+    color: $color-primary-alt;
+  }
+
+  .set-right {
+    padding: 0;
+    margin-top: 5px;
+    float: right;
+  }
 }
 
 .document-select-container {
@@ -1388,6 +1433,10 @@ button.change-scanner-button {
     .right-gray-border {
       border-right: 1px solid color($theme-color-base-light);
     }
+
+    .advanced-search__form-container {
+      height: 326px;
+    }
   }
   /* little screens */
   @media only screen and (max-width: $medium-screen - 1) {
@@ -1399,6 +1448,7 @@ button.change-scanner-button {
 
   .advanced-search__button {
     margin-top: 39px;
+    margin-bottom: 20px;
   }
 }
 
@@ -1416,4 +1466,19 @@ button.change-scanner-button {
   background: color($theme-color-secondary-dark);
   color: white;
   font-size: 14px;
+}
+
+.docket-entry-preview-text {
+  overflow: hidden;
+  width: 600px;
+  max-height: 41px;
+  margin: 0.5rem 0;
+}
+
+#service-parties {
+  font-size: 17px;
+}
+
+.upload-court-document-description-container {
+  min-height: 471px;
 }

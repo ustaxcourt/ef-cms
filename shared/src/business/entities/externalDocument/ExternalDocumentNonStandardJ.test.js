@@ -11,7 +11,7 @@ describe('ExternalDocumentNonStandardJ', () => {
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         category: VALIDATION_ERROR_MESSAGES.category,
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
         freeText: VALIDATION_ERROR_MESSAGES.freeText,
         freeText2: VALIDATION_ERROR_MESSAGES.freeText2,
       });

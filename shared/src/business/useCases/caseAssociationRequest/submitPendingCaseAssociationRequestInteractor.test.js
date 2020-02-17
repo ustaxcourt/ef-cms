@@ -29,9 +29,6 @@ describe('submitPendingCaseAssociationRequest', () => {
           verifyCaseForUser: async () => true,
           verifyPendingCaseForUser: async () => false,
         }),
-        getUseCases: () => ({
-          verifyCaseForUserInteractor: async () => caseRecord,
-        }),
       };
       await submitPendingCaseAssociationRequestInteractor({
         applicationContext,

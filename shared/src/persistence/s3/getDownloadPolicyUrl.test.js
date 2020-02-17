@@ -14,6 +14,21 @@ describe('getDownloadPolicyUrl', () => {
     expect(result).toEqual({ url: 'http://localhost' });
   });
 
+  it('makes a post request to the expected endpoint with the expected data', async () => {
+    const applicationContext = {
+      getDocumentsBucketName: () => 'my-test-bucket',
+      getStorageClient: () => ({
+        getSignedUrl: (method, options, cb) => cb(null, 'http://localhost'),
+      }),
+      getTempDocumentsBucketName: () => 'my-test-temp-bucket',
+    };
+    const result = await getDownloadPolicyUrl({
+      applicationContext,
+      useTempBucket: true,
+    });
+    expect(result).toEqual({ url: 'http://localhost' });
+  });
+
   it('rejects if an error is thrown', async () => {
     const applicationContext = {
       getDocumentsBucketName: () => 'my-test-bucket',

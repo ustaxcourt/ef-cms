@@ -4,7 +4,7 @@ plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
   # - serverless-plugin-bind-deployment-id
-  # - serverless-plugin-aws-alerts
+  - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -28,13 +28,10 @@ custom:
     stages:
       - dev
       - stg
+      - test
       - prod
     dashboards: true
     alarms:
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
       - errorExceptions
     definitions:
       errorExceptions:
@@ -49,10 +46,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:provider.stage}-cloudwatch-alerts
-        notifications:
-          - protocol: email
-            endpoint: jsutton@flexion.us
+        topic: arn:aws:sns:${opt:region}:${opt:accountId}:serverless-alerts-topic-${self:provider.stage}
 
   customDomain:
     domainName: efcms-${self:provider.stage}-ws.${opt:domain}
@@ -73,15 +67,17 @@ custom:
 
 provider:
   name: aws
+  endpointType: REGIONAL
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   websocketApiRouteSelectionExpression: $request.body.action
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
@@ -111,7 +107,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/notificationHandlers.js
+    - web-api/${self:provider.dir}/notificationHandlers.js
 
   excludeDevDependencies: true
 
@@ -150,13 +146,13 @@ resources:
 
 functions:
   connectHandler:
-    handler: web-api/src/notificationHandlers.connectLambda
+    handler: web-api/${self:provider.dir}/notificationHandlers.connectLambda
     events:
       - websocket:
           route: $connect
 
   disconnectHandler:
-    handler: web-api/src/notificationHandlers.disconnectLambda
+    handler: web-api/${self:provider.dir}/notificationHandlers.disconnectLambda
     events:
       - websocket:
           route: $disconnect

@@ -1,5 +1,5 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
-import { extractNotesFromCalendaredCasesAction } from '../actions/TrialSession/extractNotesFromCalendaredCasesAction';
+import { extractUserNotesFromCalendaredCasesAction } from '../actions/TrialSession/extractUserNotesFromCalendaredCasesAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
@@ -36,7 +36,7 @@ const checkUserAssociationAndProceed = [
         yes: [
           getCalendaredCasesForTrialSessionAction,
           setCalendaredCasesOnTrialSessionAction,
-          extractNotesFromCalendaredCasesAction,
+          extractUserNotesFromCalendaredCasesAction,
         ],
       },
       setCurrentPageAction('TrialSessionWorkingCopy'),
@@ -63,7 +63,6 @@ const gotoTrialSessionDetails = [
         'clerkofcourt',
         'docketclerk',
         'petitionsclerk',
-        'trialclerk',
       ],
       gotoTrialSessionDetailSequence,
     ),
@@ -73,6 +72,7 @@ const gotoTrialSessionDetails = [
       ...checkUserAssociationAndProceed,
     ],
     judge: checkUserAssociationAndProceed,
+    trialclerk: checkUserAssociationAndProceed,
   },
 ];
 

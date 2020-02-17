@@ -1,5 +1,6 @@
 import { ContactFactory } from '../../../../../shared/src/business/entities/contacts/ContactFactory';
 import { User } from '../../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { updatePartyTypeAction } from './updatePartyTypeAction';
@@ -8,6 +9,7 @@ import sinon from 'sinon';
 const updateCaseStub = sinon.stub().returns({});
 
 presenter.providers.applicationContext = {
+  ...applicationContext,
   getUseCases: () => ({
     updateCase: updateCaseStub,
   }),
@@ -20,10 +22,6 @@ const getFixtures = (props, state = {}) => ({
   props,
   state: {
     ...state,
-    constants: {
-      COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-      PARTY_TYPES: ContactFactory.PARTY_TYPES,
-    },
     user: {
       role: User.ROLES.petitioner,
     },

@@ -39,18 +39,26 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
+  if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
+    documentMetadata.freeText = documentMetadata.documentTitle;
+  }
+
   const documentEntity = new Document(
     {
       ...documentMetadata,
-      relationship: 'primaryDocument',
       documentId: primaryDocumentFileId,
       documentType: documentMetadata.documentType,
-      userId: user.userId,
       filedBy: user.name,
+      relationship: 'primaryDocument',
+      userId: user.userId,
     },
     { applicationContext },
   );
   documentEntity.setAsProcessingStatusAsCompleted();
+
+  if (documentMetadata.eventCode === 'NOT') {
+    documentEntity.setSigned(authorizedUser.userId);
+  }
 
   caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 

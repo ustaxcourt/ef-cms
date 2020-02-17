@@ -38,5 +38,15 @@ export default (test, overrides = {}) => {
     expect(caseDetail.documents[3].eventCode).toEqual('AFF');
     expect(caseDetail.documents[4].eventCode).toEqual('MISL');
     expect(caseDetail.documents[5].eventCode).toEqual('MISL');
+
+    //verify that the documents were auto-served
+    expect(caseDetail.documents[2].status).toEqual('served');
+    expect(caseDetail.documents[3].status).toEqual('served');
+    expect(caseDetail.documents[4].status).toEqual('served');
+    expect(caseDetail.documents[5].status).toEqual('served');
+    expect(caseDetail.documents[2].servedAt).toBeDefined();
+    expect(caseDetail.documents[3].servedAt).toBeDefined();
+    expect(caseDetail.documents[4].servedAt).toBeDefined();
+    expect(caseDetail.documents[5].servedAt).toBeDefined();
   });
 };

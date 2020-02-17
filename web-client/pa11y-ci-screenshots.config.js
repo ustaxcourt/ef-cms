@@ -1,12 +1,12 @@
 const sanitize = require('sanitize-filename');
 
+const adc = require('./pa11y/pa11y-adc');
 const docketclerk = require('./pa11y/pa11y-docketclerk');
+const judge = require('./pa11y/pa11y-judge');
+const petitioner = require('./pa11y/pa11y-petitioner');
 const petitionsclerk = require('./pa11y/pa11y-petitionsclerk');
 const practitioner = require('./pa11y/pa11y-practitioner');
 const respondent = require('./pa11y/pa11y-respondent');
-const adc = require('./pa11y/pa11y-adc');
-const petitioner = require('./pa11y/pa11y-petitioner');
-const judge = require('./pa11y/pa11y-judge');
 
 const userUrls = [
   ...docketclerk,
@@ -57,7 +57,6 @@ module.exports = {
     'include-warnings': true,
     standard: 'WCAG2AA',
     timeout: 30000,
-    useIncognitoBrowserContext: true,
     wait: 5000,
   },
   urls: screenshotUrls,

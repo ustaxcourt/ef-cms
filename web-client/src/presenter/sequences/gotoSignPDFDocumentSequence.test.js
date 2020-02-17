@@ -5,6 +5,9 @@ import { presenter } from '../presenter';
 let test;
 presenter.providers.applicationContext = {
   ...applicationContext,
+  getCurrentUser: () => ({
+    section: 'chambers',
+  }),
   getUseCases: () => ({
     getCaseInteractor: () => ({
       documents: [

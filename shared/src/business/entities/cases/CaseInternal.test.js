@@ -8,7 +8,7 @@ describe('CaseInternal entity', () => {
     it('creates a valid petition with minimal information', () => {
       const caseInternal = new CaseInternal({
         caseCaption: 'Dr. Leo Marvin, Petitioner',
-        caseType: 'other',
+        caseType: 'Other',
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
@@ -20,11 +20,14 @@ describe('CaseInternal entity', () => {
           postalCode: '05198',
           state: 'AK',
         },
+        mailingDate: 'test',
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitionFile: { anObject: true },
         petitionFileSize: 1,
         procedureType: 'Small',
         receivedAt: new Date().toISOString(),
+        stinFile: { anObject: true },
+        stinFileSize: 1,
       });
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
@@ -114,6 +117,18 @@ describe('CaseInternal entity', () => {
       expect(
         caseInternal.getFormattedValidationErrors().preferredTrialCity,
       ).toEqual(VALIDATION_ERROR_MESSAGES.preferredTrialCity);
+    });
+
+    it('fails validation if preferredTrialCity is set, but requestForPlaceOfTrialFile is not', () => {
+      const caseInternal = new CaseInternal({
+        caseCaption: 'Dr. Guy Fieri, Petitioner',
+        preferredTrialCity: 'Flavortown, AR',
+        receivedAt: new Date().toISOString(),
+      });
+
+      expect(
+        caseInternal.getFormattedValidationErrors().requestForPlaceOfTrialFile,
+      ).toEqual(VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile);
     });
   });
 });

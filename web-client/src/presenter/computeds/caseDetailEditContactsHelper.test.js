@@ -1,16 +1,19 @@
-import { runCompute } from 'cerebral/test';
-
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
-import { caseDetailEditContactsHelper } from './caseDetailEditContactsHelper';
+import { applicationContext } from '../../applicationContext';
+import { caseDetailEditContactsHelper as caseDetailEditContactsHelperComputed } from './caseDetailEditContactsHelper';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
+
+const caseDetailEditContactsHelper = withAppContextDecorator(
+  caseDetailEditContactsHelperComputed,
+  applicationContext,
+);
 
 describe('caseDetailEditContactsHelper', () => {
   it('should validate form view information for party type Conservator', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: { partyType: ContactFactory.PARTY_TYPES.conservator },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -27,9 +30,6 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: { partyType: ContactFactory.PARTY_TYPES.corporation },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -45,9 +45,6 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: { partyType: ContactFactory.PARTY_TYPES.custodian },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -64,9 +61,6 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: { partyType: ContactFactory.PARTY_TYPES.donor },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -82,9 +76,6 @@ describe('caseDetailEditContactsHelper', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.estate,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -105,9 +96,6 @@ describe('caseDetailEditContactsHelper', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -124,9 +112,6 @@ describe('caseDetailEditContactsHelper', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.guardian,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -146,9 +131,6 @@ describe('caseDetailEditContactsHelper', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -166,9 +148,6 @@ describe('caseDetailEditContactsHelper', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -188,9 +167,6 @@ describe('caseDetailEditContactsHelper', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -208,9 +184,6 @@ describe('caseDetailEditContactsHelper', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -230,9 +203,6 @@ describe('caseDetailEditContactsHelper', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -251,9 +221,6 @@ describe('caseDetailEditContactsHelper', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -269,9 +236,6 @@ describe('caseDetailEditContactsHelper', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -297,9 +261,6 @@ describe('caseDetailEditContactsHelper', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -320,9 +281,6 @@ describe('caseDetailEditContactsHelper', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -341,9 +299,6 @@ describe('caseDetailEditContactsHelper', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.transferee,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -359,9 +314,6 @@ describe('caseDetailEditContactsHelper', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.trust,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });

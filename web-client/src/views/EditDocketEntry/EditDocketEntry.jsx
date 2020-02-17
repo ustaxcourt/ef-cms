@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { CaseDetailHeader } from '../CaseDetailHeader';
+import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { CreateMessageModalDialog } from '../DocumentDetail/CreateMessageModalDialog';
 import { DocumentDetailHeader } from '../DocumentDetail/DocumentDetailHeader';
 import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
@@ -8,6 +8,7 @@ import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
+import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -18,6 +19,7 @@ import React from 'react';
 export const EditDocketEntry = connect(
   {
     completeDocketEntryQCSequence: sequences.completeDocketEntryQCSequence,
+    editDocketEntryHelper: state.editDocketEntryHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     openCreateMessageAlongsideDocketRecordQCModalSequence:
       sequences.openCreateMessageAlongsideDocketRecordQCModalSequence,
@@ -25,6 +27,7 @@ export const EditDocketEntry = connect(
   },
   ({
     completeDocketEntryQCSequence,
+    editDocketEntryHelper,
     formCancelToggleCancelSequence,
     openCreateMessageAlongsideDocketRecordQCModalSequence,
     showModal,
@@ -34,6 +37,12 @@ export const EditDocketEntry = connect(
         <CaseDetailHeader />
 
         <section className="usa-section grid-container">
+          {editDocketEntryHelper.showPaperServiceWarning && (
+            <Hint exclamation fullWidth>
+              This document was automatically generated and requires paper
+              service
+            </Hint>
+          )}
           <DocumentDetailHeader />
           <SuccessNotification />
           <ErrorNotification />

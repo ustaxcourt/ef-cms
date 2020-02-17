@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { find } from 'lodash';
 
 /**
  * sets the docketNumber and  petition documentId which is used for routing to the newly created case.
@@ -9,7 +9,7 @@ import _ from 'lodash';
  */
 export const setPetitionIdAction = ({ props }) => {
   const { docketNumber } = props.caseDetail;
-  const { documentId } = _.find(props.caseDetail.documents, {
+  const { documentId } = find(props.caseDetail.documents, {
     documentType: 'Petition',
   });
 

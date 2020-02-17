@@ -1,5 +1,5 @@
 import { ForwardMessage } from '../../../shared/src/business/entities/ForwardMessage';
-import _ from 'lodash';
+import { orderBy } from 'lodash';
 
 const { VALIDATION_ERROR_MESSAGES } = ForwardMessage;
 
@@ -65,7 +65,7 @@ export default test => {
       assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test ADC',
     });
-    const messages = _.orderBy(workItem.messages, 'createdAt', 'desc');
+    const messages = orderBy(workItem.messages, 'createdAt', 'desc');
     expect(messages.length).toEqual(2);
     expect(messages[0]).toMatchObject({
       from: 'Test Docketclerk',

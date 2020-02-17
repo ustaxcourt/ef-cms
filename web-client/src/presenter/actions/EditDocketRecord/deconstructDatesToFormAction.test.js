@@ -1,22 +1,18 @@
 import { applicationContext } from '../../../applicationContext';
 import { deconstructDatesToFormAction } from './deconstructDatesToFormAction';
-import { prepareDateFromString } from '../../../../../shared/src/business/utilities/DateHandler';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 presenter.providers.applicationContext = applicationContext;
 
 describe('deconstructDatesToFormAction', () => {
+  it('returns undefined if no valid date is provided', () => {});
   it('deconstructs the date', async () => {
     const result = await runAction(deconstructDatesToFormAction, {
       modules: {
         presenter: {
           providers: {
-            applicationContext: {
-              getUtilities: () => ({
-                prepareDateFromString,
-              }),
-            },
+            applicationContext,
           },
         },
       },
@@ -48,5 +44,21 @@ describe('deconstructDatesToFormAction', () => {
       },
       year: '2010',
     });
+  });
+  it('deconstructs no dates', async () => {
+    const result = await runAction(deconstructDatesToFormAction, {
+      modules: {
+        presenter: {
+          providers: {
+            applicationContext,
+          },
+        },
+      },
+      props: {
+        docketEntry: {},
+      },
+    });
+
+    expect(result.state.form).toBeUndefined();
   });
 });

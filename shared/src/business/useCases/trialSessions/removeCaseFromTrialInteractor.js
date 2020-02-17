@@ -60,6 +60,12 @@ exports.removeCaseFromTrialInteractor = async ({
 
   caseEntity.removeFromTrial();
 
+  await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
+    applicationContext,
+    caseId,
+    highPriority: false,
+  });
+
   await applicationContext
     .getPersistenceGateway()
     .createCaseTrialSortMappingRecords({
@@ -68,8 +74,12 @@ exports.removeCaseFromTrialInteractor = async ({
       caseSortTags: caseEntity.generateTrialSortTags(),
     });
 
-  return await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
+  const updatedCase = await applicationContext
+    .getPersistenceGateway()
+    .updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+
+  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };

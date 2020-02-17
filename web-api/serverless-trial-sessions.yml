@@ -1,9 +1,9 @@
-service: ef-cms-trial-sessions
+service: ef-cms-trial-sessions-${opt:stageColor}
 plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  # - serverless-plugin-aws-alerts
+  - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -30,13 +30,10 @@ custom:
     stages:
       - dev
       - stg
+      - test
       - prod
     dashboards: true
     alarms:
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
       - errorExceptions
     definitions:
       errorExceptions:
@@ -51,10 +48,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:provider.stage}-cloudwatch-alerts
-        notifications:
-          - protocol: email
-            endpoint: jsutton@flexion.us
+        topic: arn:aws:sns:${opt:region}:${opt:accountId}:serverless-alerts-topic-${self:provider.stage}
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -74,14 +68,16 @@ custom:
 
 provider:
   name: aws
+  endpointType: REGIONAL
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
@@ -107,12 +103,14 @@ provider:
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
+    EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
+    EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
 
 package:
   exclude:
     - ./**
   include:
-    - web-api/src/trialSessionsHandlers.js
+    - web-api/${self:provider.dir}/trialSessionsHandlers.js
 
   excludeDevDependencies: true
 
@@ -152,150 +150,180 @@ resources:
 
 functions:
   getTrialSessions:
-    handler: web-api/src/trialSessionsHandlers.getTrialSessionsLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.getTrialSessionsLambda
     events:
       - http:
           path: /
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
   createTrialSession:
-    handler: web-api/src/trialSessionsHandlers.createTrialSessionLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.createTrialSessionLambda
     events:
       - http:
           path: /
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateTrialSession:
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.updateTrialSessionLambda
+    events:
+      - http:
+          path: /
+          method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   getTrialSessionDetails:
-    handler: web-api/src/trialSessionsHandlers.getTrialSessionDetailsLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.getTrialSessionDetailsLambda
     events:
       - http:
           path: /{trialSessionId}
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  setTrialSessionAsSwingSession:
-    handler: web-api/src/trialSessionsHandlers.setTrialSessionAsSwingSessionLambda
-    events:
-      - http:
-          path: /{trialSessionId}/set-swing-session
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getEligibleCasesForTrialSession:
-    handler: web-api/src/trialSessionsHandlers.getEligibleCasesForTrialSessionLambda
-    events:
-      - http:
-          path: /{trialSessionId}/eligible-cases
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  setTrialSessionCalendar:
-    handler: web-api/src/trialSessionsHandlers.setTrialSessionCalendarLambda
-    events:
-      - http:
-          path: /{trialSessionId}/set-calendar
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-  getCalendaredCasesForTrialSession:
-    handler: web-api/src/trialSessionsHandlers.getCalendaredCasesForTrialSessionLambda
-    events:
-      - http:
-          path: /{trialSessionId}/get-calendared-cases
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getTrialSessionWorkingCopy:
-    handler: web-api/src/trialSessionsHandlers.getTrialSessionWorkingCopyLambda
-    events:
-      - http:
-          path: /{trialSessionId}/working-copy
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  updateTrialSessionWorkingCopy:
-    handler: web-api/src/trialSessionsHandlers.updateTrialSessionWorkingCopyLambda
-    events:
-      - http:
-          path: /{trialSessionId}/working-copy
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  batchDownloadTrialSession:
-    handler: web-api/src/trialSessionsHandlers.batchDownloadTrialSessionLambda
+  setNoticesForCalendaredSession:
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.setNoticesForCalendaredTrialSessionLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
     timeout: 900
     events:
       - http:
-          path: /{trialSessionId}/batch-download/{zipName}
+          path: /{trialSessionId}/generate-notices
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  setTrialSessionAsSwingSession:
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.setTrialSessionAsSwingSessionLambda
+    events:
+      - http:
+          path: /{trialSessionId}/set-swing-session
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getEligibleCasesForTrialSession:
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.getEligibleCasesForTrialSessionLambda
+    events:
+      - http:
+          path: /{trialSessionId}/eligible-cases
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  setTrialSessionCalendar:
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.setTrialSessionCalendarLambda
+    events:
+      - http:
+          path: /{trialSessionId}/set-calendar
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getCalendaredCasesForSession:
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.getCalendaredCasesForTrialSessionLambda
+    events:
+      - http:
+          path: /{trialSessionId}/get-calendared-cases
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getTrialSessionWorkingCopy:
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.getTrialSessionWorkingCopyLambda
+    events:
+      - http:
+          path: /{trialSessionId}/working-copy
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateTrialSessionWorkingCopy:
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.updateTrialSessionWorkingCopyLambda
+    events:
+      - http:
+          path: /{trialSessionId}/working-copy
+          method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  batchDownloadTrialSession:
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.batchDownloadTrialSessionLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: /{trialSessionId}/batch-download
           method: get
           async: true
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
 
   removeCaseFromTrial:
-    handler: web-api/src/trialSessionsHandlers.removeCaseFromTrialLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.removeCaseFromTrialLambda
     events:
       - http:
           path: /{trialSessionId}/remove-case/{caseId}
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   addCaseToTrialSession:
-    handler: web-api/src/trialSessionsHandlers.addCaseToTrialSessionLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.addCaseToTrialSessionLambda
     events:
       - http:
           path: /{trialSessionId}/cases/{caseId}
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
   runTrialSessionPlanningReport:
-    handler: web-api/src/trialSessionsHandlers.runTrialSessionPlanningReportLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.runTrialSessionPlanningReportLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -304,7 +332,19 @@ functions:
       - http:
           path: /planning-report
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  deleteTrialSession:
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.deleteTrialSessionLambda
+    events:
+      - http:
+          path: /{trialSessionId}
+          method: delete
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:

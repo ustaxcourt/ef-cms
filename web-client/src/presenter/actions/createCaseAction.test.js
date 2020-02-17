@@ -8,6 +8,9 @@ let filePetitionInteractorStub;
 let addCoversheetInteractorStub;
 
 presenter.providers.applicationContext = {
+  getCurrentUser: () => ({
+    email: 'petitioner1@example.com',
+  }),
   getUseCases: () => ({
     addCoversheetInteractor: addCoversheetInteractorStub,
     filePetitionInteractor: filePetitionInteractorStub,
@@ -38,9 +41,6 @@ describe('createCaseAction', () => {
           stinFile: {},
           trialCities: [{ city: 'Birmingham', state: 'Alabama' }],
           ...MOCK_CASE,
-        },
-        user: {
-          email: 'petitioner1@example.com',
         },
       },
     });
@@ -73,9 +73,6 @@ describe('createCaseAction', () => {
           stinFile: {},
           trialCities: [{ city: 'Birmingham', state: 'Alabama' }],
           ...MOCK_CASE,
-        },
-        user: {
-          email: 'petitioner1@example.com',
         },
       },
     });

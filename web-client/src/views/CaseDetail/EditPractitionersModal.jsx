@@ -1,5 +1,6 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
+import { ServiceIndicatorRadios } from '../ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -47,6 +48,7 @@ export const EditPractitionersModal = connect(
                   {practitioner.name} ({practitioner.barNumber})
                 </label>
                 <FormGroup
+                  className="margin-bottom-0"
                   errorText={
                     validationErrors &&
                     validationErrors.practitioners &&
@@ -79,7 +81,7 @@ export const EditPractitionersModal = connect(
                         }}
                       />
                       <label
-                        className="usa-checkbox__label"
+                        className="usa-checkbox__label inline-block"
                         htmlFor={`representing-primary-${idx}`}
                       >
                         {caseDetail.contactPrimary.name}
@@ -107,7 +109,7 @@ export const EditPractitionersModal = connect(
                             }}
                           />
                           <label
-                            className="usa-checkbox__label"
+                            className="usa-checkbox__label inline-block"
                             htmlFor={`representing-secondary-${idx}`}
                           >
                             {caseDetail.contactSecondary.name}
@@ -115,6 +117,17 @@ export const EditPractitionersModal = connect(
                         </div>
                       )}
                   </fieldset>
+                  <div className="margin-top-2">
+                    <ServiceIndicatorRadios
+                      bind={`modal.practitioners.${idx}`}
+                      getValidationError={() =>
+                        validationErrors.practitioners &&
+                        validationErrors.practitioners[idx] &&
+                        validationErrors.practitioners[idx].serviceIndicator
+                      }
+                      validateSequence={validateEditPractitionersSequence}
+                    />
+                  </div>
                 </FormGroup>
               </div>
               <div className="grid-col-4 text-right text-secondary-dark">
@@ -133,10 +146,10 @@ export const EditPractitionersModal = connect(
                     }}
                   />
                   <label
-                    className="usa-checkbox__label"
+                    className="usa-checkbox__label inline-block"
                     htmlFor={`remove-practitioner-${idx}`}
                   >
-                    Remove from Case
+                    Remove from case
                   </label>
                 </div>
               </div>

@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
 import { FilingsAndProceedings } from './FilingsAndProceedings';
@@ -9,15 +10,12 @@ import classNames from 'classnames';
 
 export const DocketRecord = connect(
   {
-    caseDetailHelper: state.caseDetailHelper,
-    clearDocumentSequence: sequences.clearDocumentSequence,
     docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     refreshCaseSequence: sequences.refreshCaseSequence,
     showModal: state.showModal,
   },
   ({
-    caseDetailHelper,
     docketRecordHelper,
     formattedCaseDetail,
     refreshCaseSequence,
@@ -34,7 +32,7 @@ export const DocketRecord = connect(
     }, []);
 
     return (
-      <React.Fragment>
+      <>
         <DocketRecordHeader />
 
         <table
@@ -43,8 +41,11 @@ export const DocketRecord = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Number" className="center-column">
-                No.
+              <th className="center-column">
+                <span>
+                  <span className="usa-sr-only">Number</span>
+                  <span aria-hidden="true">No.</span>
+                </span>
               </th>
               <th>Date</th>
               <th className="center-column">Event</th>
@@ -54,71 +55,89 @@ export const DocketRecord = connect(
               <th>Action</th>
               <th>Served</th>
               <th className="center-column">Parties</th>
+              {docketRecordHelper.showEditDocketRecordEntry && <th>&nbsp;</th>}
             </tr>
           </thead>
           <tbody>
-            {formattedCaseDetail.docketRecordWithDocument.map(
-              ({ document, index, record }, arrayIndex) => {
-                const isInProgress =
-                  caseDetailHelper.showDocketRecordInProgressState &&
-                  document &&
-                  document.isFileAttached === false;
+            {formattedCaseDetail.formattedDocketEntries.map(
+              (entry, arrayIndex) => {
                 return (
                   <tr
-                    className={classNames(isInProgress && 'in-progress')}
-                    key={index}
+                    className={classNames(
+                      entry.showInProgress && 'in-progress',
+                      entry.showQcUntouched && 'qc-untouched',
+                    )}
+                    key={entry.index}
                   >
-                    <td className="center-column hide-on-mobile">{index}</td>
+                    <td className="center-column hide-on-mobile">
+                      {entry.index}
+                    </td>
                     <td>
                       <span className="no-wrap">
-                        {record.createdAtFormatted}
+                        {entry.createdAtFormatted}
                       </span>
                     </td>
                     <td className="center-column hide-on-mobile">
-                      {record.eventCode || (document && document.eventCode)}
+                      {entry.eventCode}
                     </td>
                     <td
                       aria-hidden="true"
                       className="filing-type-icon hide-on-mobile"
                     >
-                      {document && document.isPaper && !isInProgress && (
+                      {entry.isPaper && (
                         <FontAwesomeIcon icon={['fas', 'file-alt']} />
                       )}
 
-                      {isInProgress && (
+                      {entry.showInProgress && (
                         <FontAwesomeIcon icon={['fas', 'thumbtack']} />
                       )}
 
-                      {document &&
-                        docketRecordHelper.showDirectDownloadLink &&
-                        caseDetailHelper.showDocketRecordInProgressState &&
-                        document.processingStatus !== 'complete' && (
-                          <FontAwesomeIcon
-                            className="fa-spin spinner"
-                            icon="spinner"
-                          />
-                        )}
+                      {entry.showQcUntouched && (
+                        <FontAwesomeIcon icon={['fa', 'star']} />
+                      )}
+
+                      {entry.showLoadingIcon && (
+                        <FontAwesomeIcon
+                          className="fa-spin spinner"
+                          icon="spinner"
+                        />
+                      )}
                     </td>
                     <td>
                       <FilingsAndProceedings
                         arrayIndex={arrayIndex}
-                        document={document}
-                        record={record}
+                        entry={entry}
                       />
                     </td>
-                    <td className="hide-on-mobile">
-                      {document && document.filedBy}
-                    </td>
-                    <td className="hide-on-mobile">{record.action}</td>
+                    <td className="hide-on-mobile">{entry.filedBy}</td>
+                    <td className="hide-on-mobile">{entry.action}</td>
                     <td>
-                      {document && document.isStatusServed && (
-                        <span>{document.servedAtFormatted}</span>
+                      {entry.showNotServed && (
+                        <span className="text-secondary text-semibold">
+                          Not served
+                        </span>
+                      )}
+                      {entry.showServed && (
+                        <span>{entry.servedAtFormatted}</span>
                       )}
                     </td>
                     <td className="center-column hide-on-mobile">
                       <span className="responsive-label">Parties</span>
-                      {document && document.servedPartiesCode}
+                      {entry.servedPartiesCode}
                     </td>
+                    {docketRecordHelper.showEditDocketRecordEntry && (
+                      <td>
+                        {entry.showEditDocketRecordEntry && (
+                          <Button
+                            link
+                            href={`/case-detail/${formattedCaseDetail.docketNumber}/docket-entry/${entry.index}/edit-meta`}
+                            icon="edit"
+                          >
+                            Edit
+                          </Button>
+                        )}
+                      </td>
+                    )}
                   </tr>
                 );
               },
@@ -126,7 +145,7 @@ export const DocketRecord = connect(
           </tbody>
         </table>
         {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
-      </React.Fragment>
+      </>
     );
   },
 );

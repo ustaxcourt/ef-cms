@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { orderBy } from 'lodash';
 
 /**
  * fetches the sent messages for a use.
@@ -13,6 +13,6 @@ export const getSentMessagesForUserAction = async ({ applicationContext }) => {
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
-  workItems = _.orderBy(workItems, 'createdAt', 'desc');
+  workItems = orderBy(workItems, 'createdAt', 'desc');
   return { workItems };
 };

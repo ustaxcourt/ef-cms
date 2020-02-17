@@ -15,6 +15,9 @@ exports.zipDocuments = ({
   extraFileNames,
   extraFiles,
   fileNames,
+  onEntry,
+  onProgress,
+  onUploadStart,
   s3Ids,
   uploadToTempBucket,
   zipName,
@@ -29,6 +32,8 @@ exports.zipDocuments = ({
     const s3Client = applicationContext.getStorageClient();
 
     const uploadFromStream = s3Client => {
+      if (onUploadStart) onUploadStart();
+
       const pass = new stream.PassThrough();
 
       const params = {
@@ -51,6 +56,8 @@ exports.zipDocuments = ({
         {
           bucket: documentsBucket,
           debug: true,
+          onEntry,
+          onProgress,
           region,
           s3: s3Client,
         },

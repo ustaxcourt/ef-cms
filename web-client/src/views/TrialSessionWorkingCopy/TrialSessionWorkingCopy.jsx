@@ -1,8 +1,8 @@
-import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
 import { AddEditSessionNoteModal } from './AddEditSessionNoteModal';
+import { AddEditUserCaseNoteModal } from './AddEditUserCaseNoteModal';
 import { Button } from '../../ustc-ui/Button/Button';
-import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
 import { DeleteSessionNoteConfirmModal } from './DeleteSessionNoteConfirmModal';
+import { DeleteUserCaseNoteConfirmModal } from './DeleteUserCaseNoteConfirmModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SessionNotes } from './SessionNotes';
@@ -34,7 +34,7 @@ export const TrialSessionWorkingCopy = connect(
           <div className="grid-row">
             <div className="grid-col-9">
               <h2 className="heading-1">
-                {formattedTrialSessionDetails.formattedJudge} - Session Copy
+                {trialSessionHeaderHelper.nameToDisplay} - Session Copy
                 {trialSessionHeaderHelper.showSwitchToSessionDetail && (
                   <a
                     className="button-switch-box margin-left-2"
@@ -52,8 +52,8 @@ export const TrialSessionWorkingCopy = connect(
                 aria-label="Download batch of documents in a trial session"
                 onClick={() =>
                   batchDownloadTrialSessionSequence({
+                    allowRetry: true,
                     trialSessionId: formattedTrialSessionDetails.trialSessionId,
-                    zipName: formattedTrialSessionDetails.zipName,
                   })
                 }
               >
@@ -62,19 +62,18 @@ export const TrialSessionWorkingCopy = connect(
               </Button>
             </div>
           </div>
-
           <SuccessNotification />
           <ErrorNotification />
           <SessionNotes />
           <WorkingCopySessionList />
-          {showModal === 'DeleteCaseNoteConfirmModal' && (
-            <DeleteCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteFromWorkingCopySequence" />
+          {showModal === 'DeleteUserCaseNoteConfirmModal' && (
+            <DeleteUserCaseNoteConfirmModal onConfirmSequence="deleteJudgesCaseNoteFromWorkingCopySequence" />
           )}
           {showModal === 'DeleteSessionNoteConfirmModal' && (
             <DeleteSessionNoteConfirmModal />
           )}
-          {showModal === 'AddEditCaseNoteModal' && (
-            <AddEditCaseNoteModal onConfirmSequence="updateCaseNoteOnWorkingCopySequence" />
+          {showModal === 'AddEditUserCaseNoteModal' && (
+            <AddEditUserCaseNoteModal onConfirmSequence="updateUserCaseNoteOnWorkingCopySequence" />
           )}
           {showModal === 'AddEditSessionNoteModal' && (
             <AddEditSessionNoteModal />

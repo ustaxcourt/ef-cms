@@ -28,6 +28,7 @@ export const loadOriginalProposedStipulatedDecisionAction = async ({
       .getUseCases()
       .loadPDFForSigningInteractor({
         applicationContext,
+        caseId: caseDetail.caseId,
         documentId,
         removeCover: true,
       });

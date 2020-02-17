@@ -5,7 +5,7 @@ export default test => {
     });
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('caseDetail.caseNote.notes')).toEqual(
+    expect(test.getState('caseDetail.judgesNote.notes')).toEqual(
       'this is a note added from the modal',
     );
   });

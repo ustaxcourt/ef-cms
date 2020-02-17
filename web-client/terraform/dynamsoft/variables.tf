@@ -25,3 +25,9 @@ variable "dynamsoft_url" {
 variable "dynamsoft_product_keys" {
   type = "string"
 }
+
+variable "is_dynamsoft_enabled" {
+  default = "1"
+  type = "string"
+ }
+ 

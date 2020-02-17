@@ -7,7 +7,7 @@ const { customHandle } = require('./customHandle');
 jest.mock('./middleware/apiGatewayHelper');
 const { sendError, sendOk } = require('./middleware/apiGatewayHelper');
 
-const fn = async () => Promise.resolve('okay');
+let fn = async () => Promise.resolve('okay');
 const errNotFound = async () => {
   throw new NotFoundError('oh no');
 };
@@ -33,6 +33,12 @@ describe('customHandle', () => {
   });
 
   it('returns pdfBuffers on success', async () => {
+    const result = await customHandle({ source: 'test' }, fn);
+    expect(result.headers['Content-Type']).toBe('application/pdf');
+    expect(sendError).not.toHaveBeenCalled();
+  });
+  it('returns pdfBuffers on success with no value returned from fn', async () => {
+    fn = async () => Promise.resolve();
     const result = await customHandle({ source: 'test' }, fn);
     expect(result.headers['Content-Type']).toBe('application/pdf');
     expect(sendError).not.toHaveBeenCalled();

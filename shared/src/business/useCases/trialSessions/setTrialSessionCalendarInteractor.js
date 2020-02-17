@@ -20,7 +20,7 @@ exports.setTrialSessionCalendarInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -47,19 +47,39 @@ exports.setTrialSessionCalendarInteractor = async ({
       trialSessionId,
     });
 
+  const manuallyAddedQcCompleteCases = [];
+
+  // these cases are already on the caseOrder, so if they have not been QCed we have to remove them
+  manuallyAddedCases.forEach(manualCase => {
+    if (
+      manualCase.qcCompleteForTrial &&
+      manualCase.qcCompleteForTrial[trialSessionId] === true
+    ) {
+      manuallyAddedQcCompleteCases.push(manualCase);
+    } else {
+      trialSessionEntity.deleteCaseFromCalendar({ caseId: manualCase.caseId });
+    }
+  });
+
   let eligibleCasesLimit = trialSessionEntity.maxCases;
 
-  if (manuallyAddedCases && manuallyAddedCases.length > 0) {
-    eligibleCasesLimit -= manuallyAddedCases.length;
+  if (manuallyAddedQcCompleteCases && manuallyAddedQcCompleteCases.length > 0) {
+    eligibleCasesLimit -= manuallyAddedQcCompleteCases.length;
   }
 
-  const eligibleCases = await applicationContext
-    .getPersistenceGateway()
-    .getEligibleCasesForTrialSession({
-      applicationContext,
-      limit: eligibleCasesLimit,
-      skPrefix: trialSessionEntity.generateSortKeyPrefix(),
-    });
+  const eligibleCases = (
+    await applicationContext
+      .getPersistenceGateway()
+      .getEligibleCasesForTrialSession({
+        applicationContext,
+        limit: eligibleCasesLimit,
+        skPrefix: trialSessionEntity.generateSortKeyPrefix(),
+      })
+  ).filter(
+    eligibleCase =>
+      eligibleCase.qcCompleteForTrial &&
+      eligibleCase.qcCompleteForTrial[trialSessionId] === true,
+  );
 
   /**
    * sets a manually added case as calendared with the trial session details
@@ -72,10 +92,18 @@ exports.setTrialSessionCalendarInteractor = async ({
 
     caseEntity.setAsCalendared(trialSessionEntity);
 
-    return applicationContext.getPersistenceGateway().updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
+    return Promise.all([
+      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
+        applicationContext,
+        caseId: caseEntity.caseId,
+        highPriority: true,
+        trialDate: caseEntity.trialDate,
+      }),
+      applicationContext.getPersistenceGateway().updateCase({
+        applicationContext,
+        caseToUpdate: caseEntity.validate().toRawObject(),
+      }),
+    ]);
   };
 
   /**
@@ -92,6 +120,12 @@ exports.setTrialSessionCalendarInteractor = async ({
     trialSessionEntity.addCaseToCalendar(caseEntity);
 
     return Promise.all([
+      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
+        applicationContext,
+        caseId: caseEntity.caseId,
+        highPriority: true,
+        trialDate: caseEntity.trialDate,
+      }),
       applicationContext.getPersistenceGateway().updateCase({
         applicationContext,
         caseToUpdate: caseEntity.validate().toRawObject(),
@@ -106,12 +140,18 @@ exports.setTrialSessionCalendarInteractor = async ({
   };
 
   await Promise.all([
-    ...manuallyAddedCases.map(setManuallyAddedCaseAsCalendared),
+    ...manuallyAddedQcCompleteCases.map(setManuallyAddedCaseAsCalendared),
     ...eligibleCases.map(setTrialSessionCalendarForEligibleCase),
   ]);
 
-  return await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
-    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-  });
+  const updatedTrialSession = await applicationContext
+    .getPersistenceGateway()
+    .updateTrialSession({
+      applicationContext,
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    });
+
+  return new TrialSession(updatedTrialSession, { applicationContext })
+    .validate()
+    .toRawObject();
 };
