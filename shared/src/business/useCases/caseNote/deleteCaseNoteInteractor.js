@@ -37,5 +37,5 @@ exports.deleteCaseNoteInteractor = async ({ applicationContext, caseId }) => {
     applicationContext,
     caseToUpdate,
   });
-  return result;
+  return new Case(result, { applicationContext }).validate().toRawObject();
 };

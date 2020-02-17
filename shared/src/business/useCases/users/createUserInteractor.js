@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 /**
  * createUserInteractor
@@ -17,8 +18,13 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
   if (!isAuthorized(requestUser, ROLE_PERMISSIONS.CREATE_USER)) {
     throw new UnauthorizedError('Unauthorized');
   }
-  return await applicationContext.getPersistenceGateway().createUser({
-    applicationContext,
-    user,
-  });
+
+  const createdUser = await applicationContext
+    .getPersistenceGateway()
+    .createUser({
+      applicationContext,
+      user,
+    });
+
+  return new User(createdUser, { applicationContext }).validate().toRawObject();
 };

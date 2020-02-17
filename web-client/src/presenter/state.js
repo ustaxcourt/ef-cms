@@ -6,6 +6,7 @@ import {
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
+import { addEditUserCaseNoteModalHelper } from './computeds/addEditUserCaseNoteModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { advancedSearchHelper } from './computeds/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
@@ -49,6 +50,7 @@ import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
+import { reviewPetitionHelper } from './computeds/reviewPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { selectDocumentSelectHelper } from './computeds/selectDocumentSelectHelper';
@@ -62,6 +64,7 @@ import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
 import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
+import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
@@ -71,6 +74,7 @@ export const state = {
   addCourtIssuedDocketEntryHelper,
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
+  addEditUserCaseNoteModalHelper,
   addToTrialSessionModalHelper,
   advancedSearchForm: {},
   advancedSearchHelper,
@@ -179,6 +183,7 @@ export const state = {
   previewPdfFile: null,
   procedureTypes: [],
   requestAccessHelper,
+  reviewPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
   scanner: {},
@@ -206,6 +211,7 @@ export const state = {
   trialSessionHeaderHelper,
   trialSessionWorkingCopyHelper,
   trialSessionsHelper,
+  trialSessionsSummaryHelper,
   trialSessionsTab: {
     group: null,
   },

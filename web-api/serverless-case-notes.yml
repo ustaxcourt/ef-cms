@@ -148,11 +148,11 @@ resources:
             MetricsEnabled: true
 
 functions:
-  getJudgesCaseNote:
-    handler: web-api/${self:provider.dir}/caseNotesHandlers.getJudgesCaseNoteLambda
+  getUserCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.getUserCaseNoteLambda
     events:
       - http:
-          path: /judges/{caseId}
+          path: /{caseId}/user-notes
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -160,11 +160,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updateJudgesCaseNote:
-    handler: web-api/${self:provider.dir}/caseNotesHandlers.updateJudgesCaseNoteLambda
+  updateUserCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.updateUserCaseNoteLambda
     events:
       - http:
-          path: /judges/{caseId}
+          path: /{caseId}/user-notes
           method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -172,11 +172,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  deleteJudgesCaseNote:
-    handler: web-api/${self:provider.dir}/caseNotesHandlers.deleteJudgesCaseNoteLambda
+  deleteUserCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.deleteUserCaseNoteLambda
     events:
       - http:
-          path: /judges/{caseId}
+          path: /{caseId}/user-notes
           method: delete
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

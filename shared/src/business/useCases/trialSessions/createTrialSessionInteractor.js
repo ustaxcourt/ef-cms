@@ -57,5 +57,23 @@ exports.createTrialSessionInteractor = async ({
       });
   }
 
-  return createdTrialSession;
+  if (trialSessionEntity.trialClerk && trialSessionEntity.trialClerk.userId) {
+    const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
+      trialSessionId: trialSessionEntity.trialSessionId,
+      userId: trialSessionEntity.trialClerk.userId,
+    });
+
+    await applicationContext
+      .getPersistenceGateway()
+      .createTrialSessionWorkingCopy({
+        applicationContext,
+        trialSessionWorkingCopy: trialSessionWorkingCopyEntity
+          .validate()
+          .toRawObject(),
+      });
+  }
+
+  return new TrialSession(createdTrialSession, { applicationContext })
+    .validate()
+    .toRawObject();
 };

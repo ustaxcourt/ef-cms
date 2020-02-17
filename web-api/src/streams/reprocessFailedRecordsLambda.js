@@ -17,7 +17,6 @@ exports.handler = event =>
           applicationContext,
         });
       applicationContext.logger.info('Results', results);
-      return results;
     } catch (e) {
       applicationContext.logger.error(e);
       throw e;

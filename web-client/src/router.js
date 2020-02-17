@@ -635,19 +635,29 @@ const router = {
             value: `StartCaseStep${step}`,
           });
         } else {
-          switch (step) {
-            case '1':
-              app.getSequence('gotoStartCaseWizardSequence')({
-                step,
-                wizardStep: `StartCaseStep${step}`,
-              });
-              break;
-            default:
-              app.getSequence('navigateToPathSequence')({
-                path: '/file-a-petition/step-1',
-              });
+          if (app.getState('currentPage') !== 'StartCaseInternal') {
+            switch (step) {
+              case '1':
+                app.getSequence('gotoStartCaseWizardSequence')({
+                  step,
+                  wizardStep: `StartCaseStep${step}`,
+                });
+                break;
+              default:
+                app.getSequence('navigateToPathSequence')({
+                  path: '/file-a-petition/step-1',
+                });
+            }
           }
         }
+      }),
+    );
+
+    route(
+      '/review-petition',
+      ifHasAccess(() => {
+        setPageTitle('Review Petition');
+        app.getSequence('gotoReviewPetitionSequence')();
       }),
     );
 

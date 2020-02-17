@@ -72,6 +72,13 @@ export default (test, overrides = {}) => {
       },
     });
 
+    if (overrides.trialClerk) {
+      await test.runSequence('updateTrialSessionFormDataSequence', {
+        key: 'trialClerk',
+        value: overrides.trialClerk,
+      });
+    }
+
     await test.runSequence('validateTrialSessionSequence');
 
     expect(test.getState('validationErrors')).toEqual({

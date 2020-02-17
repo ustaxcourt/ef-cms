@@ -44,6 +44,7 @@ export const RecentMessagesInbox = connect(
                   <td className="message-queue-row">
                     <span>{item.caseTitle}</span>
                   </td>
+
                   <td className="message-queue-row message-queue-document">
                     <div className="message-document-title">
                       <a
