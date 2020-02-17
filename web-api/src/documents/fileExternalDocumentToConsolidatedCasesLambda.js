@@ -1,4 +1,4 @@
-const genericHandler = require('../genericHandler');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * lambda which is used for adding external documents to a set of consolidated cases

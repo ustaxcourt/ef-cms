@@ -1,4 +1,4 @@
-const genericHandler = require('../genericHandler');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * deletes a trial session and all associated working session copies and puts any attached cases back to general docket.

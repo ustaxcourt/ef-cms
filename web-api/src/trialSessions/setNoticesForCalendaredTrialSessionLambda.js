@@ -1,4 +1,4 @@
-const genericHandler = require('../genericHandler');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * used for generating / setting notices of trial on cases set for the given trial session

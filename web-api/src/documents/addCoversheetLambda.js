@@ -1,4 +1,4 @@
-const genericHandler = require('../genericHandler');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * used for adding a coversheet to a new document

@@ -1,4 +1,4 @@
-const genericHandler = require('../genericHandler');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * archives the draft document information from a case
