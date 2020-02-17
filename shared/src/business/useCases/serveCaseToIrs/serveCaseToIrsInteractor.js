@@ -39,6 +39,11 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
 
   addDocketEntryForPaymentStatus({ caseEntity });
 
+  caseEntity
+    .updateCaseTitleDocketRecord()
+    .updateDocketNumberRecord()
+    .validate();
+
   await uploadZipOfDocuments({
     applicationContext,
     caseEntity,
@@ -64,9 +69,30 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     workItem => workItem.isInitializeCase,
   );
 
-  initializeCaseWorkItem.setAsCompleted({
-    message: 'Served on IRS',
-    user,
+  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+    applicationContext,
+    workItem: initializeCaseWorkItem.validate().toRawObject(),
+  });
+
+  initializeCaseWorkItem.assignToUser({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    section: user.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
+
+  initializeCaseWorkItem.section = PETITIONS_SECTION;
+
+  const lastMessage = initializeCaseWorkItem.getLatestMessageEntity();
+  const batchedByUserId = lastMessage.fromUserId;
+  const batchedByName = lastMessage.from;
+
+  initializeCaseWorkItem.setAsSentToIRS({
+    applicationContext,
+    batchedByName,
+    batchedByUserId,
   });
 
   const casePromises = [
@@ -91,8 +117,4 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   ];
 
   await Promise.all(casePromises);
-
-  return {
-    caseDetail: caseEntity.validate().toRawObject(),
-  };
 };
