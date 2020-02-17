@@ -54,7 +54,7 @@ set -- \
 ./node_modules/.bin/sls create_domain "$@" 
 echo "done running create_domain"
 
-ENVIRONMENT="${slsStage}" ./node_modules/.bin/sls deploy "$@" 
+ENVIRONMENT="${slsStage}" ./node_modules/.bin/sls deploy --verbose "$@" 
 echo "done running sls deploy"
 
 echo "slsStage: ${slsStage}"
