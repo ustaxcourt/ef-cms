@@ -1,16 +1,10 @@
-const up = async (documentClient, tableName, forAllRecords) => {
-  await forAllRecords(documentClient, tableName, async item => {
-    if (item.pk.startsWith('judges-case-note')) {
-      item.pk = item.pk.replace('judges-case-note', 'user-case-note');
+const { upGenerator } = require('./utilities');
 
-      await documentClient
-        .put({
-          Item: item,
-          TableName: tableName,
-        })
-        .promise();
-    }
-  });
+const mutateRecord = item => {
+  if (item.pk.startsWith('judges-case-note')) {
+    item.pk = item.pk.replace('judges-case-note', 'user-case-note');
+    return item;
+  }
 };
 
-module.exports = { up };
+module.exports = { mutateRecord, up: upGenerator(mutateRecord) };

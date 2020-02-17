@@ -1,4 +1,7 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -141,6 +144,17 @@ exports.updateUserContactInformationInteractor = async ({
         { applicationContext },
       );
 
+      const servedParties = aggregatePartiesForService(caseEntity);
+
+      changeOfAddressDocument.setAsServed(servedParties.all);
+
+      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        documentEntity: changeOfAddressDocument,
+        servedParties,
+      });
+
       const workItem = new WorkItem(
         {
           assigneeId: null,
@@ -202,7 +216,11 @@ exports.updateUserContactInformationInteractor = async ({
         applicationContext,
         caseToUpdate: caseEntity.validate().toRawObject(),
       });
-    updatedCases.push(updatedCase);
+
+    const updatedCaseRaw = new Case(updatedCase, { applicationContext })
+      .validate()
+      .toRawObject();
+    updatedCases.push(updatedCaseRaw);
   }
 
   return updatedCases;

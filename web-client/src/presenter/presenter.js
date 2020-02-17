@@ -315,7 +315,6 @@ import { updateStateSequence } from './sequences/updateStateSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
 import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserCaseNoteOnWorkingCopySequence';
-import { updateUserContactValueSequence } from './sequences/updateUserContactValueSequence';
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
 import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
 import { validateAddPractitionerSequence } from './sequences/caseAssociation/validateAddPractitionerSequence';
@@ -675,7 +674,6 @@ export const presenter = {
     updateTrialSessionFormDataSequence,
     updateTrialSessionSequence,
     updateUserCaseNoteOnWorkingCopySequence,
-    updateUserContactValueSequence,
     updateWorkingCopySessionNoteSequence,
     uploadCourtIssuedDocumentSequence,
     validateAddPractitionerSequence,
