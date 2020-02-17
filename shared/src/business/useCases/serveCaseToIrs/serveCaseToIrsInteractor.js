@@ -19,7 +19,6 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the id of the case
- * @returns {*}
  */
 exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   const user = applicationContext.getCurrentUser();
@@ -74,25 +73,9 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     workItem: initializeCaseWorkItem.validate().toRawObject(),
   });
 
-  initializeCaseWorkItem.assignToUser({
-    assigneeId: user.userId,
-    assigneeName: user.name,
-    section: user.section,
-    sentBy: user.name,
-    sentBySection: user.section,
-    sentByUserId: user.userId,
-  });
-
-  initializeCaseWorkItem.section = PETITIONS_SECTION;
-
-  const lastMessage = initializeCaseWorkItem.getLatestMessageEntity();
-  const batchedByUserId = lastMessage.fromUserId;
-  const batchedByName = lastMessage.from;
-
-  initializeCaseWorkItem.setAsSentToIRS({
-    applicationContext,
-    batchedByName,
-    batchedByUserId,
+  initializeCaseWorkItem.setAsCompleted({
+    message: 'Served to IRS',
+    user: user,
   });
 
   const casePromises = [
