@@ -14,15 +14,31 @@ const { handle } = require('../middleware/apiGatewayHelper');
 exports.genericHandler = (event, cb, options = {}) => {
   handle(event, async () => {
     const user = options.user || getUserFromAuthHeader(event);
+
+    const logEvent = options.logEvent || false;
+    const logResults = options.logResults || true;
+    const logUser = options.logUser || true;
+    const logEventLabel = options.logEventLabel || 'Event';
     const logResultsLabel = options.logResultsLabel || 'Results';
     const logUserLabel = options.logUserLabel || 'User';
 
     const applicationContext = createApplicationContext(user);
 
     try {
+      if (logEvent) {
+        applicationContext.logger.info(logEventLabel, event);
+      }
+
+      if (logUser) {
+        applicationContext.logger.info(logUserLabel, user);
+      }
+
       const results = await cb({ applicationContext, user });
-      applicationContext.logger.info(logUserLabel, user);
-      applicationContext.logger.info(logResultsLabel, results);
+
+      if (logResults) {
+        applicationContext.logger.info(logResultsLabel, results);
+      }
+
       return results;
     } catch (e) {
       if (!e.skipLogging) {
