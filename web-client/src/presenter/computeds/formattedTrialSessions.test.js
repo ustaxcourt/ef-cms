@@ -235,7 +235,7 @@ describe('formattedTrialSessions', () => {
       'November 25, 2019',
     );
     expect(result.formattedSessions[1].dateFormatted).toEqual(
-      'February 17, 2020',
+      'February 17, 2025',
     );
   });
 
@@ -472,7 +472,7 @@ describe('formattedTrialSessions', () => {
         ],
       },
       {
-        dateFormatted: 'February 17, 2020',
+        dateFormatted: 'February 17, 2025',
         sessions: [
           {
             judge: { name: '6', userId: '6' },
@@ -518,7 +518,7 @@ describe('formattedTrialSessions', () => {
         ],
       },
       {
-        dateFormatted: 'February 17, 2020',
+        dateFormatted: 'February 17, 2025',
         sessions: [
           {
             judge: { name: '6', userId: '6' },
@@ -566,7 +566,7 @@ describe('formattedTrialSessions', () => {
         ],
       },
       {
-        dateFormatted: 'February 17, 2020',
+        dateFormatted: 'February 17, 2025',
         sessions: [
           {
             judge: { name: '6', userId: '6' },
@@ -596,7 +596,7 @@ describe('formattedTrialSessions', () => {
     });
     expect(result.formattedSessions).toMatchObject([
       {
-        dateFormatted: 'February 17, 2020',
+        dateFormatted: 'February 17, 2025',
         sessions: [
           {
             userIsAssignedToSession: false,
