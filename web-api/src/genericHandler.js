@@ -20,7 +20,10 @@ exports.genericHandler = (event, cb) => {
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
     } catch (e) {
-      applicationContext.logger.error(e);
+      if (!e.skipLogging) {
+        // we don't want email alerts to be sent out just because someone searched for a non-existing case
+        applicationContext.logger.error(e);
+      }
       throw e;
     }
   });
