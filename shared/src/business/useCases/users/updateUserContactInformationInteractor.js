@@ -1,10 +1,10 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
 const { addCoverToPdf } = require('../addCoversheetInteractor');
 const { capitalize, clone } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
