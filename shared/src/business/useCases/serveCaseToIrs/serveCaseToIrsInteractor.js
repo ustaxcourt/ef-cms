@@ -9,6 +9,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
+const { Document } = require('../../entities/Document');
 const { PETITIONS_SECTION } = require('../../entities/WorkQueue');
 const { UnauthorizedError } = require('../../../errors/errors');
 
