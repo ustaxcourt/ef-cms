@@ -6,8 +6,7 @@ import { getServeToIrsAlertSuccessAction } from '../actions/StartCaseInternal/ge
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
-import { runBatchProcessAction } from '../actions/runBatchProcessAction';
-import { sendPetitionToIRSHoldingQueueAction } from '../actions/sendPetitionToIRSHoldingQueueAction';
+import { serveCaseToIrsAction } from '../actions/StartCaseInternal/serveCaseToIrsAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
@@ -27,11 +26,19 @@ export const serveToIrsSequence = [
         setPetitionIdAction,
         setDocumentIdAction,
         closeFileUploadStatusModalAction,
-        sendPetitionToIRSHoldingQueueAction,
-        runBatchProcessAction,
-        getServeToIrsAlertSuccessAction,
-        setAlertSuccessAction,
-        navigateToCaseDetailAction,
+        serveCaseToIrsAction,
+        {
+          electronic: [
+            getServeToIrsAlertSuccessAction,
+            setAlertSuccessAction,
+            navigateToCaseDetailAction,
+          ],
+          paper: [
+            getServeToIrsAlertSuccessAction,
+            setAlertSuccessAction,
+            navigateToCaseDetailAction,
+          ],
+        },
       ],
     },
   ]),
