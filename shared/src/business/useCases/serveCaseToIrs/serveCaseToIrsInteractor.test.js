@@ -2,7 +2,6 @@ const sinon = require('sinon');
 const { Case } = require('../../entities/cases/Case');
 const { Document } = require('../../entities/Document');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { omit } = require('lodash');
 const { serveCaseToIrsInteractor } = require('./serveCaseToIrsInteractor');
 const { User } = require('../../entities/User');
 
@@ -50,12 +49,6 @@ describe('serveCaseToIrsInteractor', () => {
   let updateCaseStub = sinon.stub().resolves(null);
   let updateWorkItemStub = sinon.stub().resolves(null);
   let putWorkItemInUsersOutboxStub = sinon.stub().resolves(null);
-  let saveWorkItemForPaperStub = sinon.stub().resolves(null);
-  let getUserByIdStub = sinon.stub().resolves({
-    name: 'Petitioner',
-    section: 'petitions',
-    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-  });
 
   let applicationContext;
   let mockCase;
@@ -67,12 +60,6 @@ describe('serveCaseToIrsInteractor', () => {
     updateCaseStub = sinon.stub().resolves(null);
     updateWorkItemStub = sinon.stub().resolves(null);
     putWorkItemInUsersOutboxStub = sinon.stub().resolves(null);
-    saveWorkItemForPaperStub = sinon.stub().resolves(null);
-    getUserByIdStub = sinon.stub().resolves({
-      name: 'Petitioner',
-      section: 'petitions',
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
 
     mockCase = MOCK_CASE;
     mockCase.documents[0].workItems = MOCK_WORK_ITEMS;

@@ -295,9 +295,7 @@ export const filterWorkItems = ({
         outbox: item => {
           return (
             item.isQC &&
-            (user.role === USER_ROLES.petitionsClerk
-              ? item.section === IRS_BATCH_SYSTEM_SECTION
-              : true) &&
+            (user.role === USER_ROLES.petitionsClerk ? !!item.section : true) &&
             item.completedByUserId &&
             item.completedByUserId === user.userId &&
             !!item.completedAt
@@ -334,9 +332,7 @@ export const filterWorkItems = ({
           return (
             !!item.completedAt &&
             item.isQC &&
-            (user.role === USER_ROLES.petitionsClerk
-              ? item.section === IRS_BATCH_SYSTEM_SECTION
-              : true)
+            (user.role === USER_ROLES.petitionsClerk ? !!item.section : true)
           );
         },
       },
