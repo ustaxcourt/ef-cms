@@ -5,6 +5,10 @@ import {
   formatSession,
   formattedTrialSessions as formattedTrialSessionsComputed,
 } from './formattedTrialSessions';
+import {
+  formatNow,
+  prepareDateFromString,
+} from '../../../../shared/src/business/utilities/DateHandler';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -16,6 +20,13 @@ const formattedTrialSessions = withAppContextDecorator(
   },
 );
 
+const getStartOfWeek = date => {
+  return prepareDateFromString(date)
+    .startOf('isoWeek')
+    .format('MMMM D, YYYY');
+};
+
+let nextYear;
 let currentUser = {};
 
 const testJudgeUser = {
@@ -37,6 +48,7 @@ let TRIAL_SESSIONS_LIST = [];
 
 describe('formattedTrialSessions', () => {
   beforeEach(() => {
+    nextYear = (parseInt(formatNow('YYYY')) + 1).toString();
     currentUser = testJudgeUser;
 
     TRIAL_SESSIONS_LIST = [
@@ -80,7 +92,7 @@ describe('formattedTrialSessions', () => {
       {
         caseOrder: [],
         judge: { name: '6', userId: '6' },
-        startDate: '2025-02-17T15:00:00.000Z',
+        startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: false,
         trialLocation: 'Jacksonville, FL',
       },
@@ -229,13 +241,14 @@ describe('formattedTrialSessions', () => {
         user: testJudgeUser,
       },
     });
+
     expect(result.filteredTrialSessions).toBeDefined();
     expect(result.formattedSessions.length).toBe(2);
     expect(result.formattedSessions[0].dateFormatted).toEqual(
       'November 25, 2019',
     );
     expect(result.formattedSessions[1].dateFormatted).toEqual(
-      'February 17, 2025',
+      getStartOfWeek(result.formattedSessions[1].sessions[0].startDate),
     );
   });
 
@@ -472,7 +485,9 @@ describe('formattedTrialSessions', () => {
         ],
       },
       {
-        dateFormatted: 'February 17, 2025',
+        dateFormatted: getStartOfWeek(
+          result.formattedSessions[1].sessions[0].startDate,
+        ),
         sessions: [
           {
             judge: { name: '6', userId: '6' },
@@ -518,7 +533,9 @@ describe('formattedTrialSessions', () => {
         ],
       },
       {
-        dateFormatted: 'February 17, 2025',
+        dateFormatted: getStartOfWeek(
+          result.formattedSessions[1].sessions[0].startDate,
+        ),
         sessions: [
           {
             judge: { name: '6', userId: '6' },
@@ -566,7 +583,9 @@ describe('formattedTrialSessions', () => {
         ],
       },
       {
-        dateFormatted: 'February 17, 2025',
+        dateFormatted: getStartOfWeek(
+          result.formattedSessions[1].sessions[0].startDate,
+        ),
         sessions: [
           {
             judge: { name: '6', userId: '6' },
@@ -578,6 +597,7 @@ describe('formattedTrialSessions', () => {
   });
 
   it('sets userIsAssignedToSession false if the current user and session have no associated judge', () => {
+    const startDate = `${nextYear}-02-17T15:00:00.000Z`;
     const result = runCompute(formattedTrialSessions, {
       state: {
         ...baseState,
@@ -586,7 +606,7 @@ describe('formattedTrialSessions', () => {
           {
             caseOrder: [],
             judge: undefined,
-            startDate: '2025-02-17T15:00:00.000Z',
+            startDate,
             swingSession: false,
             trialLocation: 'Jacksonville, FL',
           },
@@ -596,7 +616,7 @@ describe('formattedTrialSessions', () => {
     });
     expect(result.formattedSessions).toMatchObject([
       {
-        dateFormatted: 'February 17, 2025',
+        dateFormatted: getStartOfWeek(startDate),
         sessions: [
           {
             userIsAssignedToSession: false,

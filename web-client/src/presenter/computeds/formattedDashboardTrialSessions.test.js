@@ -1,5 +1,6 @@
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
+import { formatNow } from '../../../../shared/src/business/utilities/DateHandler';
 import {
   formatSession,
   formattedDashboardTrialSessions as formattedDashboardTrialSessionsComputed,
@@ -12,10 +13,14 @@ const formattedDashboardTrialSessions = withAppContextDecorator(
   applicationContext,
 );
 
+let nextYear;
+
 let TRIAL_SESSIONS_LIST;
 
 describe('formattedDashboardTrialSessions', () => {
   beforeEach(() => {
+    nextYear = (parseInt(formatNow('YYYY')) + 1).toString();
+
     TRIAL_SESSIONS_LIST = [
       {
         caseOrder: [],
@@ -61,7 +66,7 @@ describe('formattedDashboardTrialSessions', () => {
         caseOrder: [],
         isCalendared: true,
         judge: { name: '6', userId: '6' },
-        startDate: '2025-02-17T15:00:00.000Z',
+        startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: false,
         trialLocation: 'Jacksonville, FL',
       },
@@ -69,7 +74,7 @@ describe('formattedDashboardTrialSessions', () => {
         caseOrder: [],
         isCalendared: true,
         judge: { name: '6', userId: '6' },
-        startDate: '2025-02-17T15:00:00.000Z',
+        startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: false,
         trialLocation: 'Jacksonville, FL',
       },
@@ -77,7 +82,7 @@ describe('formattedDashboardTrialSessions', () => {
         caseOrder: [],
         isCalendared: true,
         judge: { name: '6', userId: '6' },
-        startDate: '2025-02-17T15:00:00.000Z',
+        startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: false,
         trialLocation: 'Jacksonville, FL',
       },
@@ -85,7 +90,7 @@ describe('formattedDashboardTrialSessions', () => {
         caseOrder: [],
         isCalendared: true,
         judge: { name: '6', userId: '6' },
-        startDate: '2025-02-17T15:00:00.000Z',
+        startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: false,
         trialLocation: 'Jacksonville, FL',
       },
@@ -93,7 +98,7 @@ describe('formattedDashboardTrialSessions', () => {
         caseOrder: [],
         isCalendared: true,
         judge: { name: '6', userId: '6' },
-        startDate: '2025-02-17T15:00:00.000Z',
+        startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: false,
         trialLocation: 'Jacksonville, FL',
       },
@@ -101,7 +106,7 @@ describe('formattedDashboardTrialSessions', () => {
         caseOrder: [],
         isCalendared: true,
         judge: { name: '6', userId: '6' },
-        startDate: '2025-02-17T15:00:00.000Z',
+        startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: false,
         trialLocation: 'Jacksonville, FL',
       },
@@ -109,7 +114,7 @@ describe('formattedDashboardTrialSessions', () => {
         caseOrder: [],
         isCalendared: true,
         judge: { name: '6', userId: '6' },
-        startDate: '2025-02-17T15:00:00.000Z',
+        startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: false,
         trialLocation: 'Jacksonville, FL',
       },
@@ -117,7 +122,7 @@ describe('formattedDashboardTrialSessions', () => {
         caseOrder: [],
         isCalendared: true,
         judge: { name: '6', userId: '6' },
-        startDate: '2025-02-17T15:00:00.000Z',
+        startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: false,
         trialLocation: 'Jacksonville, FL',
       },
@@ -125,7 +130,7 @@ describe('formattedDashboardTrialSessions', () => {
         caseOrder: [],
         isCalendared: true,
         judge: { name: '6', userId: '6' },
-        startDate: '2025-02-17T15:00:00.000Z',
+        startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: false,
         trialLocation: 'Jacksonville, FL',
       },
@@ -133,7 +138,7 @@ describe('formattedDashboardTrialSessions', () => {
         caseOrder: [],
         isCalendared: true,
         judge: { name: '6', userId: '6' },
-        startDate: '2025-02-17T15:00:00.000Z',
+        startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: false,
         trialLocation: 'Jacksonville, FL',
       },
@@ -141,7 +146,7 @@ describe('formattedDashboardTrialSessions', () => {
         caseOrder: [],
         isCalendared: true,
         judge: { name: '6', userId: '6' },
-        startDate: '2025-02-17T15:00:00.000Z',
+        startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: false,
         trialLocation: 'Jacksonville, FL',
       },
