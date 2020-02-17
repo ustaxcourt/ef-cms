@@ -7,9 +7,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { createISODateString } = require('../utilities/DateHandler');
-const { PETITIONS_SECTION } = require('../entities/WorkQueue');
+const { Case } = require('../../entities/cases/Case');
+const { createISODateString } = require('../../utilities/DateHandler');
+const { PETITIONS_SECTION } = require('../../entities/WorkQueue');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
