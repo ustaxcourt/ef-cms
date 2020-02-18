@@ -1,13 +1,14 @@
 const joi = require('@hapi/joi');
 const {
+  CHIEF_JUDGE,
+  DOCKET_NUMBER_MATCHER,
+  TRIAL_LOCATION_MATCHER,
+} = require('./CaseConstants');
+const {
   createISODateString,
   formatDateString,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
-const {
-  DOCKET_NUMBER_MATCHER,
-  TRIAL_LOCATION_MATCHER,
-} = require('./CaseConstants');
 const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
@@ -136,7 +137,7 @@ Case.AUTOMATIC_BLOCKED_REASONS = {
   pendingAndDueDate: 'Pending Item and Due Date',
 };
 
-Case.CHIEF_JUDGE = 'Chief Judge';
+Case.CHIEF_JUDGE = CHIEF_JUDGE;
 
 Case.DOCKET_NUMBER_SUFFIXES = ['W', 'P', 'X', 'R', 'SL', 'L', 'S'];
 
