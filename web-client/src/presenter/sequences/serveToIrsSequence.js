@@ -6,7 +6,6 @@ import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction'
 import { getServeToIrsAlertSuccessAction } from '../actions/StartCaseInternal/getServeToIrsAlertSuccessAction';
 import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrintPreviewPreparedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-import { navigateToPrintPreviewAction } from '../actions/navigateToPrintPreviewAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
 import { serveCaseToIrsAction } from '../actions/StartCaseInternal/serveCaseToIrsAction';
@@ -45,7 +44,7 @@ export const serveToIrsSequence = [
         isPrintPreviewPreparedAction,
         {
           no: [],
-          yes: [setShowModalFactoryAction('OpenCaseConfirmationPreviewModal')],
+          yes: [setShowModalFactoryAction('PaperServiceConfirmModal')],
         },
       ],
     },
