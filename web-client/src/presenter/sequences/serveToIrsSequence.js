@@ -4,6 +4,7 @@ import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateRec
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { getServeToIrsAlertSuccessAction } from '../actions/StartCaseInternal/getServeToIrsAlertSuccessAction';
+import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrintPreviewPreparedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { navigateToPrintPreviewAction } from '../actions/navigateToPrintPreviewAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
@@ -15,6 +16,7 @@ import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const serveToIrsSequence = [
@@ -32,19 +34,18 @@ export const serveToIrsSequence = [
         closeFileUploadStatusModalAction,
         serveCaseToIrsAction,
         {
-          electronic: [
-            getServeToIrsAlertSuccessAction,
-            setAlertSuccessAction,
-            navigateToCaseDetailAction,
-          ],
-          paper: [
-            getServeToIrsAlertSuccessAction,
-            setPdfPreviewUrlAction,
-            setAlertSuccessAction,
-            clearModalAction,
-            setSaveAlertsForNavigationAction,
-            navigateToPrintPreviewAction,
-          ],
+          electronic: [],
+          paper: [setPdfPreviewUrlAction],
+        },
+        clearModalAction,
+        getServeToIrsAlertSuccessAction,
+        setAlertSuccessAction,
+        setSaveAlertsForNavigationAction,
+        navigateToCaseDetailAction,
+        isPrintPreviewPreparedAction,
+        {
+          no: [],
+          yes: [setShowModalFactoryAction('OpenCaseConfirmationPreviewModal')],
         },
       ],
     },
