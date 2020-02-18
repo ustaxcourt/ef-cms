@@ -121,6 +121,7 @@ exports.updateSecondaryContactInteractor = async ({
       {
         assigneeId: null,
         assigneeName: null,
+        associatedJudge: caseEntity.associatedJudge,
         caseId,
         caseStatus: caseEntity.status,
         caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
