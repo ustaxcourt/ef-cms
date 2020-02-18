@@ -165,6 +165,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
         {
           assigneeId: qcWorkItemUser.userId,
           assigneeName: qcWorkItemUser.name,
+          associatedJudge: caseEntity.associatedJudge,
           caseId: caseEntity.caseId,
           caseStatus: caseEntity.status,
           caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),

@@ -9,6 +9,7 @@ const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
 User.ROLES = {
   adc: 'adc',
+  admin: 'admin',
   admissionsClerk: 'admissionsclerk',
   calendarClerk: 'calendarclerk',
   chambers: 'chambers',
