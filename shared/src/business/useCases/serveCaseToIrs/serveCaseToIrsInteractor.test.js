@@ -42,19 +42,37 @@ const MOCK_WORK_ITEMS = [
   },
 ];
 
+const MOCK_PDF_DATA =
+  'JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbm' +
+  'd0aCAxMDQKPj4Kc3RyZWFtCniccwrhMlAAwaJ0Ln2P1Jyy1JLM5ERdc0MjCwUjE4WQNC4Q' +
+  '6cNlCFZkqGCqYGSqEJLLZWNuYGZiZmbkYuZsZmlmZGRgZmluDCQNzc3NTM2NzdzMXMxMjQ' +
+  'ztFEKyuEK0uFxDuAAOERdVCmVuZHN0cmVhbQplbmRvYmoKCjYgMCBvYmoKPDwKL0ZpbHRl' +
+  'ciAvRmxhdGVEZWNvZGUKL1R5cGUgL09ialN0bQovTiA0Ci9GaXJzdCAyMAovTGVuZ3RoID' +
+  'IxNQo+PgpzdHJlYW0KeJxVj9GqwjAMhu/zFHkBzTo3nCCCiiKIHPEICuJF3cKoSCu2E8/b' +
+  '20wPIr1p8v9/8kVhgilmGfawX2CGaVrgcAi0/bsy0lrX7IGWpvJ4iJYEN3gEmrrGBlQwGs' +
+  'HHO9VBX1wNrxAqMX87RBD5xpJuddqwd82tjAHxzV1U5LPgy52DKXWnr1Lheg+j/c/pzGVr' +
+  'iqV0VlwZPXGPCJjElw/ybkwUmeoWgxesDXGhHJC/D/iikp1Av80ptKU0FdBEe25pPihAM1' +
+  'u6ytgaaWfs2Hrz35CJT1+EWmAKZW5kc3RyZWFtCmVuZG9iagoKNyAwIG9iago8PAovU2l6' +
+  'ZSA4Ci9Sb290IDIgMCBSCi9GaWx0ZXIgL0ZsYXRlRGVjb2RlCi9UeXBlIC9YUmVmCi9MZW' +
+  '5ndGggMzgKL1cgWyAxIDIgMiBdCi9JbmRleCBbIDAgOCBdCj4+CnN0cmVhbQp4nBXEwREA' +
+  'EBAEsCwz3vrvRmOOyyOoGhZdutHN2MT55fIAVocD+AplbmRzdHJlYW0KZW5kb2JqCgpzdG' +
+  'FydHhyZWYKNTEwCiUlRU9G';
+
 describe('serveCaseToIrsInteractor', () => {
-  let deleteWorkItemFromSectionStub = sinon.stub().resolves(null);
+  let deleteWorkItemFromInboxStub = sinon.stub().resolves(null);
   let zipDocumentsStub = sinon.stub().resolves(null);
   let deleteDocumentStub = sinon.stub().resolves(null);
   let updateCaseStub = sinon.stub().resolves(null);
   let updateWorkItemStub = sinon.stub().resolves(null);
   let putWorkItemInUsersOutboxStub = sinon.stub().resolves(null);
+  let generateCaseConfirmationPdfStub = jest.fn();
+  let appendPaperServiceAddressPageToPdfStub = jest.fn();
 
   let applicationContext;
   let mockCase;
 
   beforeEach(() => {
-    deleteWorkItemFromSectionStub = sinon.stub().resolves(null);
+    deleteWorkItemFromInboxStub = sinon.stub().resolves(null);
     zipDocumentsStub = sinon.stub().resolves(null);
     deleteDocumentStub = sinon.stub().resolves(null);
     updateCaseStub = sinon.stub().resolves(null);
@@ -65,30 +83,6 @@ describe('serveCaseToIrsInteractor', () => {
     mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
     applicationContext = {
       environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return new User({
-          name: 'bob',
-          role: User.ROLES.petitionsClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => {
-        return {
-          deleteDocument: deleteDocumentStub,
-          deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
-          getCaseByCaseId: () => Promise.resolve(mockCase),
-          getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
-
-          putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
-          updateCase: updateCaseStub,
-          updateWorkItem: updateWorkItemStub,
-          zipDocuments: zipDocumentsStub,
-        };
-      },
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      getUseCaseHelpers: () => ({
-        generateCaseConfirmationPdf: () => {},
-      }),
     };
   });
 
@@ -108,5 +102,100 @@ describe('serveCaseToIrsInteractor', () => {
     }
 
     expect(error.message).toContain('Unauthorized');
+  });
+
+  it('should not return a paper service pdf when the case is electronic', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+    };
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'bob',
+          role: User.ROLES.petitionsClerk,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => {
+        return {
+          deleteDocument: deleteDocumentStub,
+          deleteWorkItemFromInbox: deleteWorkItemFromInboxStub,
+          getCaseByCaseId: () => Promise.resolve(mockCase),
+          getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
+          updateCase: updateCaseStub,
+          updateWorkItem: updateWorkItemStub,
+          zipDocuments: zipDocumentsStub,
+        };
+      },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => {
+        return {
+          appendPaperServiceAddressPageToPdf: appendPaperServiceAddressPageToPdfStub,
+          generateCaseConfirmationPdf: generateCaseConfirmationPdfStub,
+        };
+      },
+      getUtilities: () => ({
+        formatDateString: () => '12/27/18',
+      }),
+    };
+
+    const result = await serveCaseToIrsInteractor({
+      applicationContext,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(appendPaperServiceAddressPageToPdfStub).not.toHaveBeenCalled();
+    expect(result).toBeUndefined();
+  });
+
+  it('should return a paper service pdf when the case is paper', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: true,
+      mailingDate: 'some day',
+    };
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'bob',
+          role: User.ROLES.petitionsClerk,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => {
+        return {
+          deleteDocument: deleteDocumentStub,
+          deleteWorkItemFromInbox: deleteWorkItemFromInboxStub,
+          getCaseByCaseId: () => Promise.resolve(mockCase),
+          getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
+          updateCase: updateCaseStub,
+          updateWorkItem: updateWorkItemStub,
+          zipDocuments: zipDocumentsStub,
+        };
+      },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({
+        appendPaperServiceAddressPageToPdf: appendPaperServiceAddressPageToPdfStub,
+        generateCaseConfirmationPdf: () => {
+          return MOCK_PDF_DATA;
+        },
+      }),
+      getUtilities: () => ({
+        formatDateString: () => '12/27/18',
+      }),
+    };
+
+    const result = await serveCaseToIrsInteractor({
+      applicationContext,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(appendPaperServiceAddressPageToPdfStub).toHaveBeenCalled();
+    expect(result).toBeDefined();
   });
 });
