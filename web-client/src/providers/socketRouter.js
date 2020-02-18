@@ -6,6 +6,11 @@ export const socketRouter = (app, onMessageCallbackFn) => {
     const { action } = message;
 
     switch (action) {
+      case 'notice_generation_complete':
+        app.getSequence('noticeGenerationCompleteSequence')({
+          ...message,
+        });
+        break;
       case 'batch_download_ready':
         app.getSequence('batchDownloadReadySequence')({
           ...message,

@@ -134,6 +134,7 @@ import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigat
 import { navigateToPrintableDocketRecordSequence } from './sequences/navigateToPrintableDocketRecordSequence';
 import { navigateToReviewPetitionSequence } from './sequences/navigateToReviewPetitionSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
+import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
 import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNoteModalSequence';
 import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSessionNoteModalSequence';
 import { openAddEditUserCaseNoteModalFromDetailSequence } from './sequences/openAddEditUserCaseNoteModalFromDetailSequence';
@@ -496,6 +497,7 @@ export const presenter = {
     navigateToPrintableDocketRecordSequence,
     navigateToReviewPetitionSequence,
     notFoundErrorSequence,
+    noticeGenerationCompleteSequence,
     openAddEditCaseNoteModalSequence,
     openAddEditSessionNoteModalSequence,
     openAddEditUserCaseNoteModalFromDetailSequence,
