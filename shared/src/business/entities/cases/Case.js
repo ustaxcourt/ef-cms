@@ -1,13 +1,14 @@
 const joi = require('@hapi/joi');
 const {
+  CHIEF_JUDGE,
+  DOCKET_NUMBER_MATCHER,
+  TRIAL_LOCATION_MATCHER,
+} = require('./CaseConstants');
+const {
   createISODateString,
   formatDateString,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
-const {
-  DOCKET_NUMBER_MATCHER,
-  TRIAL_LOCATION_MATCHER,
-} = require('./CaseConstants');
 const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
@@ -136,7 +137,7 @@ Case.AUTOMATIC_BLOCKED_REASONS = {
   pendingAndDueDate: 'Pending Item and Due Date',
 };
 
-Case.CHIEF_JUDGE = 'Chief Judge';
+Case.CHIEF_JUDGE = CHIEF_JUDGE;
 
 Case.DOCKET_NUMBER_SUFFIXES = ['W', 'P', 'X', 'R', 'SL', 'L', 'S'];
 
@@ -226,6 +227,7 @@ function Case(rawCase, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+
   this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
   this.automaticBlocked = rawCase.automaticBlocked;
   this.automaticBlockedDate = rawCase.automaticBlockedDate;
@@ -243,26 +245,26 @@ function Case(rawCase, { applicationContext }) {
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
-  this.mailingDate = rawCase.mailingDate;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
   this.highPriority = rawCase.highPriority;
   this.highPriorityReason = rawCase.highPriorityReason;
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.irsSendDate = rawCase.irsSendDate;
   this.isPaper = rawCase.isPaper;
+  this.isSealed = !!rawCase.sealedDate;
   this.leadCaseId = rawCase.leadCaseId;
+  this.mailingDate = rawCase.mailingDate;
   this.partyType = rawCase.partyType;
-  this.petitionPaymentStatus =
-    rawCase.petitionPaymentStatus || Case.PAYMENT_STATUS.UNPAID;
   this.petitionPaymentDate = rawCase.petitionPaymentDate;
   this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
+  this.petitionPaymentStatus =
+    rawCase.petitionPaymentStatus || Case.PAYMENT_STATUS.UNPAID;
   this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.sealedDate = rawCase.sealedDate;
-  this.isSealed = !!rawCase.sealedDate;
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialLocation = rawCase.trialLocation;
@@ -312,7 +314,7 @@ function Case(rawCase, { applicationContext }) {
 
   if (Array.isArray(rawCase.docketRecord)) {
     this.docketRecord = rawCase.docketRecord.map(
-      docketRecord => new DocketRecord(docketRecord),
+      docketRecord => new DocketRecord(docketRecord, { applicationContext }),
     );
   } else {
     this.docketRecord = [];
@@ -883,19 +885,22 @@ Case.prototype.removePractitioner = function(practitionerToRemove) {
  *
  * @param {object} document the document to add to the case
  */
-Case.prototype.addDocument = function(document) {
+Case.prototype.addDocument = function(document, { applicationContext }) {
   document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 
   this.addDocketRecord(
-    new DocketRecord({
-      description: document.documentType,
-      documentId: document.documentId,
-      eventCode: document.eventCode,
-      filedBy: document.filedBy,
-      filingDate: document.receivedAt || document.createdAt,
-      status: document.status,
-    }),
+    new DocketRecord(
+      {
+        description: document.documentType,
+        documentId: document.documentId,
+        eventCode: document.eventCode,
+        filedBy: document.filedBy,
+        filingDate: document.receivedAt || document.createdAt,
+        status: document.status,
+      },
+      { applicationContext },
+    ),
   );
 };
 
@@ -942,7 +947,7 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateCaseTitleDocketRecord = function() {
+Case.prototype.updateCaseTitleDocketRecord = function({ applicationContext }) {
   const caseTitleRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
   let lastTitle = this.initialTitle;
 
@@ -958,11 +963,14 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
 
   if (hasTitleChanged) {
     this.addDocketRecord(
-      new DocketRecord({
-        description: `Caption of case is amended from '${lastTitle}' to '${this.caseTitle}'`,
-        eventCode: 'MINC',
-        filingDate: createISODateString(),
-      }),
+      new DocketRecord(
+        {
+          description: `Caption of case is amended from '${lastTitle}' to '${this.caseTitle}'`,
+          eventCode: 'MINC',
+          filingDate: createISODateString(),
+        },
+        { applicationContext },
+      ),
     );
   }
 
@@ -973,7 +981,7 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketNumberRecord = function() {
+Case.prototype.updateDocketNumberRecord = function({ applicationContext }) {
   const docketNumberRegex = /^Docket Number is amended from '(.*)' to '(.*)'/;
 
   let lastDocketNumber =
@@ -996,11 +1004,14 @@ Case.prototype.updateDocketNumberRecord = function() {
 
   if (hasDocketNumberChanged) {
     this.addDocketRecord(
-      new DocketRecord({
-        description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
-        eventCode: 'MIND',
-        filingDate: createISODateString(),
-      }),
+      new DocketRecord(
+        {
+          description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
+          eventCode: 'MIND',
+          filingDate: createISODateString(),
+        },
+        { applicationContext },
+      ),
     );
   }
 
@@ -1038,7 +1049,10 @@ Case.prototype.getShowCaseNameForPrimary = function() {
  * @param {string} preferredTrialCity the preferred trial city
  * @returns {Case} the updated case entity
  */
-Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
+Case.prototype.setRequestForTrialDocketRecord = function(
+  preferredTrialCity,
+  { applicationContext },
+) {
   this.preferredTrialCity = preferredTrialCity;
 
   const found = find(this.docketRecord, item =>
@@ -1047,12 +1061,15 @@ Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
 
   if (preferredTrialCity && !found) {
     this.addDocketRecord(
-      new DocketRecord({
-        description: `Request for Place of Trial at ${this.preferredTrialCity}`,
-        eventCode:
-          Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-        filingDate: this.receivedAt || this.createdAt,
-      }),
+      new DocketRecord(
+        {
+          description: `Request for Place of Trial at ${this.preferredTrialCity}`,
+          eventCode:
+            Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          filingDate: this.receivedAt || this.createdAt,
+        },
+        { applicationContext },
+      ),
     );
   }
   return this;

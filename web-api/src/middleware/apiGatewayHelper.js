@@ -30,24 +30,47 @@ exports.handle = async (event, fun) => {
   }
   try {
     let response = await fun();
-    if (applicationContext) {
-      const privateKeys = applicationContext.getPersistencePrivateKeys();
-      (Array.isArray(response) ? response : [response]).forEach(item => {
-        if (item && Object.keys(item).some(key => privateKeys.includes(key))) {
-          throw new UnsanitizedEntityError();
-        }
-      });
-    }
-    if (event.queryStringParameters && event.queryStringParameters.fields) {
-      const { fields } = event.queryStringParameters;
-      const fieldsArr = fields.split(',');
-      if (Array.isArray(response)) {
-        response = response.map(object => pick(object, fieldsArr));
-      } else {
-        response = pick(response, fieldsArr);
+
+    // Check to see if the server responded with a pdf buffer
+    const isPdfBuffer =
+      response != null &&
+      typeof response[Symbol.iterator] === 'function' &&
+      response.indexOf('%PDF-') > -1;
+
+    if (isPdfBuffer) {
+      return {
+        body: (response || []).toString('base64'),
+        headers: {
+          ...headers,
+          'Content-Type': 'application/pdf',
+          'accept-ranges': 'bytes',
+        },
+        isBase64Encoded: true,
+        statusCode: 200,
+      };
+    } else {
+      if (applicationContext) {
+        const privateKeys = applicationContext.getPersistencePrivateKeys();
+        (Array.isArray(response) ? response : [response]).forEach(item => {
+          if (
+            item &&
+            Object.keys(item).some(key => privateKeys.includes(key))
+          ) {
+            throw new UnsanitizedEntityError();
+          }
+        });
       }
+      if (event.queryStringParameters && event.queryStringParameters.fields) {
+        const { fields } = event.queryStringParameters;
+        const fieldsArr = fields.split(',');
+        if (Array.isArray(response)) {
+          response = response.map(object => pick(object, fieldsArr));
+        } else {
+          response = pick(response, fieldsArr);
+        }
+      }
+      return exports.sendOk(response);
     }
-    return exports.sendOk(response);
   } catch (err) {
     if (!process.env.CI && !err.skipLogging) {
       console.error('err', err);

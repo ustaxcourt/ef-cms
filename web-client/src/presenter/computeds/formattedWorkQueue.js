@@ -249,16 +249,31 @@ export const getWorkItemDocumentLink = ({
 
 export const filterWorkItems = ({
   applicationContext,
+  judgeUser,
   user,
   workQueueToDisplay,
 }) => {
-  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const {
+    CHIEF_JUDGE,
+    STATUS_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
 
   const { box, queue, workQueueIsInternal } = workQueueToDisplay;
   let docQCUserSection = user.section;
 
   if (user.section !== PETITIONS_SECTION) {
     docQCUserSection = DOCKET_SECTION;
+  }
+
+  let additionalFilters = () => true;
+
+  if (judgeUser) {
+    additionalFilters = item =>
+      item.associatedJudge && item.associatedJudge === judgeUser.name;
+  } else if (user.role === USER_ROLES.adc) {
+    additionalFilters = item =>
+      !item.associatedJudge || item.associatedJudge === CHIEF_JUDGE;
   }
 
   const filters = {
@@ -325,7 +340,8 @@ export const filterWorkItems = ({
             item.isQC &&
             item.section === docQCUserSection &&
             item.document.isFileAttached !== false &&
-            !item.inProgress
+            !item.inProgress &&
+            additionalFilters(item)
           );
         },
         outbox: item => {
@@ -387,10 +403,13 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const selectedWorkItems = get(state.selectedWorkItems);
   const { USER_ROLES } = applicationContext.getConstants();
 
+  const judgeUser = get(state.judgeUser);
+
   let workQueue = workItems
     .filter(
       filterWorkItems({
         applicationContext,
+        judgeUser,
         user,
         workQueueToDisplay,
       }),

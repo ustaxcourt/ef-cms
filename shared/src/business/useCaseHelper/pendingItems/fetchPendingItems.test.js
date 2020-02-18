@@ -1,11 +1,13 @@
 const AWS = require('aws-sdk');
 const { fetchPendingItems } = require('./fetchPendingItems');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('fetchPendingItems', () => {
   let searchSpy;
 
   const applicationContext = {
+    getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
     getPersistenceGateway: () => ({
       getCaseByCaseId: searchSpy,
     }),
