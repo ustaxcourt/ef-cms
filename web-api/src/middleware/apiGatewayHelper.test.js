@@ -30,6 +30,20 @@ describe('handle', () => {
     });
   });
 
+  it('should handle a response with pdf data', async () => {
+    const response = await handle({}, async () => '%PDF-'); // contains pdf header
+    expect(response).toEqual({
+      body: '%PDF-',
+      headers: {
+        ...EXPECTED_HEADERS,
+        'Content-Type': 'application/pdf',
+        'accept-ranges': 'bytes',
+      },
+      isBase64Encoded: true,
+      statusCode: 200,
+    });
+  });
+
   it('should filter data based on the fields query string option', async () => {
     const response = await handle(
       {
