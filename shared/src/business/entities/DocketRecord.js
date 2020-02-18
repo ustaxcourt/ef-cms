@@ -15,9 +15,6 @@ function DocketRecord(rawDocketRecord, { applicationContext }) {
     throw new TypeError('applicationContext must be defined');
   }
 
-  this.filedBy = rawDocketRecord.filedBy;
-  this.editState = rawDocketRecord.editState;
-
   this.action = rawDocketRecord.action;
   this.description = rawDocketRecord.description;
   this.documentId = rawDocketRecord.documentId;
