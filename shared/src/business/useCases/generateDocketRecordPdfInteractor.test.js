@@ -2,6 +2,7 @@ import { Case } from '../entities/cases/Case';
 import { ContactFactory } from '../entities/contacts/ContactFactory';
 import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
 import { getFormattedCaseDetail } from '../utilities/getFormattedCaseDetail';
+const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('generateDocketRecordPdfInteractor', () => {
   const generatePdfFromHtmlInteractorMock = jest.fn();
@@ -73,6 +74,7 @@ describe('generateDocketRecordPdfInteractor', () => {
         },
       ],
     }),
+    getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
     getEntityConstructors: () => ({
       Case,
     }),
