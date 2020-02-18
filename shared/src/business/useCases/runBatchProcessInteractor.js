@@ -50,21 +50,27 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
 
     if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
       caseEntity.addDocketRecord(
-        new DocketRecord({
-          description: 'Filing Fee Paid',
-          eventCode: 'FEE',
-          filingDate: caseEntity.petitionPaymentDate,
-        }),
+        new DocketRecord(
+          {
+            description: 'Filing Fee Paid',
+            eventCode: 'FEE',
+            filingDate: caseEntity.petitionPaymentDate,
+          },
+          { applicationContext },
+        ),
       );
     } else if (
       caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED
     ) {
       caseEntity.addDocketRecord(
-        new DocketRecord({
-          description: 'Filing Fee Waived',
-          eventCode: 'FEEW',
-          filingDate: caseEntity.petitionPaymentWaivedDate,
-        }),
+        new DocketRecord(
+          {
+            description: 'Filing Fee Waived',
+            eventCode: 'FEEW',
+            filingDate: caseEntity.petitionPaymentWaivedDate,
+          },
+          { applicationContext },
+        ),
       );
     }
 
