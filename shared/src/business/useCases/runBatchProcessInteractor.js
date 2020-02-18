@@ -17,23 +17,30 @@ const { UnauthorizedError } = require('../../errors/errors');
 
 let addDocketEntryForPaymentStatus;
 exports.addDocketEntryForPaymentStatus = addDocketEntryForPaymentStatus = ({
+  applicationContext,
   caseEntity,
 }) => {
   if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
     caseEntity.addDocketRecord(
-      new DocketRecord({
-        description: 'Filing Fee Paid',
-        eventCode: 'FEE',
-        filingDate: caseEntity.petitionPaymentDate,
-      }),
+      new DocketRecord(
+        {
+          description: 'Filing Fee Paid',
+          eventCode: 'FEE',
+          filingDate: caseEntity.petitionPaymentDate,
+        },
+        { applicationContext },
+      ),
     );
   } else if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED) {
     caseEntity.addDocketRecord(
-      new DocketRecord({
-        description: 'Filing Fee Waived',
-        eventCode: 'FEEW',
-        filingDate: caseEntity.petitionPaymentWaivedDate,
-      }),
+      new DocketRecord(
+        {
+          description: 'Filing Fee Waived',
+          eventCode: 'FEEW',
+          filingDate: caseEntity.petitionPaymentWaivedDate,
+        },
+        { applicationContext },
+      ),
     );
   }
 };
@@ -120,7 +127,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
 
     const caseEntity = new Case(caseToBatch, { applicationContext });
 
-    addDocketEntryForPaymentStatus({ caseEntity });
+    addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
 
     if (workItem) {
       await applicationContext
@@ -195,6 +202,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
         {
           assigneeId: qcWorkItemUser.userId,
           assigneeName: qcWorkItemUser.name,
+          associatedJudge: caseEntity.associatedJudge,
           caseId: caseEntity.caseId,
           caseStatus: caseEntity.status,
           caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
