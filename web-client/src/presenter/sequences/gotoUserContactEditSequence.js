@@ -1,10 +1,10 @@
 import { getUserAction } from '../actions/getUserAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setUserAction } from '../actions/setUserAction';
+import { setUserOnFormAction } from '../actions/setUserOnFormAction';
 
 export const gotoUserContactEditSequence = [
   setCurrentPageAction('Interstitial'),
   getUserAction,
-  setUserAction,
+  setUserOnFormAction,
   setCurrentPageAction('UserContactEdit'),
 ];
