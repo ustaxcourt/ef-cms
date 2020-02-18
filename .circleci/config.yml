@@ -204,6 +204,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Setup Env
+          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+      - run:
           name: Build Docker Image
           command: |
             if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
@@ -215,9 +218,6 @@ jobs:
             fi
 
             docker build -t efcms -f Dockerfile .
-      - run:
-          name: Setup Env
-          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: Setup Post Confirmation Arn
           command: echo "export POST_CONFIRMATION_ROLE_ARN=$(./get-post-confirmation-role-arn.sh $CIRCLE_BRANCH)" >> $BASH_ENV
@@ -246,6 +246,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Setup Env
+          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+      - run:
           name: Build Docker Image
           command: |
             if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
@@ -257,9 +260,6 @@ jobs:
             fi
 
             docker build -t efcms -f Dockerfile .
-      - run:
-          name: Setup Env
-          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: 'Deploy - Web API - Layers - Puppeteer - us-east-1'
           command: if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-east-1"; fi;
@@ -318,6 +318,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Setup Env
+          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+      - run:
           name: Build Docker Image
           command: |
             if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
@@ -329,9 +332,6 @@ jobs:
             fi
 
             docker build -t efcms -f Dockerfile .
-      - run:
-          name: Setup Env
-          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: 'Deploy - Web API - Layers - Puppeteer - us-west-1'
           command: if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-west-1"; fi;
@@ -384,6 +384,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Setup Env
+          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+      - run:
           name: Build Docker Image
           command: |
             if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
@@ -395,9 +398,6 @@ jobs:
             fi
 
             docker build -t efcms -f Dockerfile .
-      - run:
-          name: Setup Env
-          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: 'Deploy - Switch environment color'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./switch-environment-color.sh ${ENV}"
