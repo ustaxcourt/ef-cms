@@ -1,6 +1,4 @@
-const createApplicationContext = require('../applicationContext');
-const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
-const { handle } = require('../middleware/apiGatewayHelper');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * used for removing cases from consolidation
@@ -9,26 +7,16 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  handle(event, async () => {
-    const user = getUserFromAuthHeader(event);
-    const applicationContext = createApplicationContext(user);
-    try {
-      const caseIdsToRemove = (
-        event.queryStringParameters.caseIdsToRemove || ''
-      ).split(',');
+  genericHandler(event, async ({ applicationContext }) => {
+    const caseIdsToRemove = (
+      event.queryStringParameters.caseIdsToRemove || ''
+    ).split(',');
 
-      const results = await applicationContext
-        .getUseCases()
-        .removeConsolidatedCasesInteractor({
-          applicationContext,
-          caseId: event.pathParameters.caseId,
-          caseIdsToRemove,
-        });
-      applicationContext.logger.info('User', user);
-      applicationContext.logger.info('Results', results);
-      return results;
-    } catch (e) {
-      applicationContext.logger.error(e);
-      throw e;
-    }
+    return await applicationContext
+      .getUseCases()
+      .removeConsolidatedCasesInteractor({
+        applicationContext,
+        caseId: event.pathParameters.caseId,
+        caseIdsToRemove,
+      });
   });

@@ -24,6 +24,7 @@ const addPetitionDocumentToCase = ({
     {
       assigneeId: null,
       assigneeName: null,
+      associatedJudge: caseToAdd.associatedJudge,
       caseId: caseToAdd.caseId,
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseToAdd)),
@@ -58,7 +59,7 @@ const addPetitionDocumentToCase = ({
   );
 
   documentEntity.addWorkItem(workItemEntity);
-  caseToAdd.addDocument(documentEntity);
+  caseToAdd.addDocument(documentEntity, { applicationContext });
 
   return workItemEntity;
 };
@@ -170,12 +171,15 @@ exports.createCaseInteractor = async ({
   });
 
   caseToAdd.addDocketRecord(
-    new DocketRecord({
-      description: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
-      eventCode:
-        Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-      filingDate: caseToAdd.createdAt,
-    }),
+    new DocketRecord(
+      {
+        description: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
+        eventCode:
+          Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+        filingDate: caseToAdd.createdAt,
+      },
+      { applicationContext },
+    ),
   );
 
   const stinDocumentEntity = new Document(
@@ -219,7 +223,7 @@ exports.createCaseInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(odsDocumentEntity);
+    caseToAdd.addDocument(odsDocumentEntity, { applicationContext });
   }
 
   await applicationContext.getPersistenceGateway().createCase({

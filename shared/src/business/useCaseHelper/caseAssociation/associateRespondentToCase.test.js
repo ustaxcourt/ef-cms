@@ -3,6 +3,7 @@ const {
 } = require('../../entities/cases/CaseConstants');
 const { associateRespondentToCase } = require('./associateRespondentToCase');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
+const { MOCK_USERS } = require('../../../test/mockUsers');
 const { User } = require('../../entities/User');
 
 describe('associateRespondentToCase', () => {
@@ -42,6 +43,7 @@ describe('associateRespondentToCase', () => {
     };
 
     applicationContext = {
+      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       getPersistenceGateway: () => ({
         associateUserWithCase: associateUserWithCaseSpy,
         getCaseByCaseId: async () => caseRecord,
@@ -73,6 +75,7 @@ describe('associateRespondentToCase', () => {
     };
 
     applicationContext = {
+      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       getPersistenceGateway: () => ({
         associateUserWithCase: associateUserWithCaseSpy,
         getCaseByCaseId: async () => caseRecord,
