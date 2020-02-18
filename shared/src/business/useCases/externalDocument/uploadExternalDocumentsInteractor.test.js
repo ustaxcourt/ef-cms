@@ -27,6 +27,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         userId: 'respondent',
       },
     ],
+    preferredTrialCity: 'Fresno, California',
     role: User.ROLES.petitioner,
     userId: 'petitioner',
   };

@@ -209,8 +209,8 @@ describe('selectDocumentTypeHelper', () => {
 
   it('should return correct data for Nonstandard G document scenario', () => {
     state.form = {
-      category: 'Answer (filed by respondent only)',
-      documentType: 'Amendment to Answer',
+      category: 'Stipulation',
+      documentType: 'Stipulation of Facts',
     };
     const result = runCompute(selectDocumentTypeHelper, {
       state,

@@ -39,16 +39,12 @@ export const ConfirmModal = connect(
 
     const runCancelSequence = event => {
       event.stopPropagation();
-      if (onCancel) {
-        onCancel.call();
-      }
+      onCancel?.call();
     };
 
     const runConfirmSequence = event => {
       event.stopPropagation();
-      if (onConfirm) {
-        onConfirm.call();
-      }
+      onConfirm?.call();
     };
 
     useEffect(() => {
@@ -95,13 +91,10 @@ export const ConfirmModal = connect(
                 <Button
                   link
                   className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
+                  icon="times-circle"
                   onClick={runCancelSequence}
                 >
                   Close
-                  <FontAwesomeIcon
-                    className="margin-right-0 margin-left-1"
-                    icon="times-circle"
-                  />
                 </Button>
               </div>
             )}

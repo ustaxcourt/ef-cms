@@ -39,3 +39,12 @@ module.exports.createUsers = async () => {
     }),
   );
 };
+
+module.exports.asUserFromEmail = async (email, callback) => {
+  const asUser = usersByEmail[email];
+  if (!asUser) {
+    throw new Error('User not found');
+  }
+  const applicationContext = createApplicationContext(asUser);
+  return await callback(applicationContext);
+};

@@ -11,14 +11,9 @@ export const OrdersNeededSummary = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     openCreateOrderChooseTypeModalSequence:
       sequences.openCreateOrderChooseTypeModalSequence,
-    printFromBrowserSequence: sequences.printFromBrowserSequence,
     showModal: state.showModal,
   },
-  ({
-    formattedCaseDetail,
-    openCreateOrderChooseTypeModalSequence,
-    printFromBrowserSequence,
-  }) => {
+  ({ formattedCaseDetail, openCreateOrderChooseTypeModalSequence }) => {
     return (
       <>
         <CaseDetailHeader />
@@ -26,20 +21,7 @@ export const OrdersNeededSummary = connect(
           <SuccessNotification />
           <ErrorNotification />
           <div>
-            <h1>
-              Orders Needed{' '}
-              <div className="display-inline-block margin-left-2 margin-top-neg-1">
-                <Button
-                  link
-                  icon="print"
-                  onClick={() => {
-                    printFromBrowserSequence();
-                  }}
-                >
-                  Print
-                </Button>
-              </div>
-            </h1>
+            <h1>Orders Needed</h1>
           </div>
           <div>
             <ul className="usa-list">

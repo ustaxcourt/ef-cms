@@ -16,6 +16,7 @@ custom:
 
 provider:
   name: aws
+  endpointType: REGIONAL
   stage: ${self:custom.stage}
   region: ${self:custom.region}
   runtime: nodejs12.x

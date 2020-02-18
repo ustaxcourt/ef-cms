@@ -311,7 +311,7 @@ export const PrimaryDocumentForm = connect(
                 }}
               />
               <label
-                className="usa-checkbox__label"
+                className="usa-checkbox__label inline-block"
                 htmlFor="add-to-coversheet"
               >
                 Add to cover sheet
@@ -374,7 +374,10 @@ export const PrimaryDocumentForm = connect(
                     saveIntermediateDocketEntrySequence();
                   }}
                 />
-                <label className="usa-checkbox__label" htmlFor="party-primary">
+                <label
+                  className="usa-checkbox__label inline-block"
+                  htmlFor="party-primary"
+                >
                   {caseDetail.contactPrimary.name}
                 </label>
               </div>
@@ -395,7 +398,7 @@ export const PrimaryDocumentForm = connect(
                     }}
                   />
                   <label
-                    className="usa-checkbox__label"
+                    className="usa-checkbox__label inline-block"
                     htmlFor="party-secondary"
                   >
                     {caseDetail.contactSecondary.name}
@@ -418,7 +421,7 @@ export const PrimaryDocumentForm = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label"
+                  className="usa-checkbox__label inline-block"
                   htmlFor="party-respondent"
                 >
                   Respondent
@@ -482,7 +485,10 @@ export const PrimaryDocumentForm = connect(
                         saveIntermediateDocketEntrySequence();
                       }}
                     />
-                    <label className="usa-checkbox__label" htmlFor="pending">
+                    <label
+                      className="usa-checkbox__label inline-block"
+                      htmlFor="pending"
+                    >
                       Add to pending report
                     </label>
                   </div>

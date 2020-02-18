@@ -1,5 +1,12 @@
 [
   {
+    "role": "admin",
+    "name": "Test Admin",
+    "section": "admin",
+    "userId": "86c3f87b-350b-477d-92c3-43bd095cb006",
+    "email": "admin"
+  },
+  {
     "role": "docketclerk",
     "name": "Test Docketclerk",
     "section": "docket",

@@ -21,7 +21,7 @@ exports.handler = event =>
       return results;
     } catch (e) {
       // we don't want email alerts to be sent out just because someone searched for a non-existing case
-      if (!e.message.includes('was not found.')) {
+      if (!e.skipLogging) {
         applicationContext.logger.error(e);
       }
       throw e;

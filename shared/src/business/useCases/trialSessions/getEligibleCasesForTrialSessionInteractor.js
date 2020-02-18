@@ -51,20 +51,20 @@ exports.getEligibleCasesForTrialSessionInteractor = async ({
 
   trialSessionEntity.validate();
 
-  const eligibleCases = await applicationContext
-    .getPersistenceGateway()
-    .getEligibleCasesForTrialSession({
-      applicationContext,
-      limit:
-        trialSessionEntity.maxCases +
-        ELIGIBLE_CASES_BUFFER -
-        calendaredCases.length,
-      skPrefix: trialSessionEntity.generateSortKeyPrefix(),
-    });
+  const eligibleCases = (
+    await applicationContext
+      .getPersistenceGateway()
+      .getEligibleCasesForTrialSession({
+        applicationContext,
+        limit:
+          trialSessionEntity.maxCases +
+          ELIGIBLE_CASES_BUFFER -
+          calendaredCases.length,
+        skPrefix: trialSessionEntity.generateSortKeyPrefix(),
+      })
+  ).map(rawCase =>
+    new Case(rawCase, { applicationContext }).validate().toRawObject(),
+  );
 
-  return calendaredCases
-    .concat(eligibleCases)
-    .map(rawCase =>
-      new Case(rawCase, { applicationContext }).validate().toRawObject(),
-    );
+  return calendaredCases.concat(eligibleCases);
 };

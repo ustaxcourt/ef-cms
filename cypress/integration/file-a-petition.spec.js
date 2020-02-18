@@ -47,7 +47,7 @@ describe('creation form', () => {
     cy.contains('button#submit-case', 'Continue to Step 2 of 5');
   });
 
-  it('shows validation checkmark when Statement of Taxpayer Identification Number file is selected', () => {
+  it('shows validation check mark when Statement of Taxpayer Identification Number file is selected', () => {
     cy.get('label#stin-file-label')
       .scrollIntoView()
       .should('not.have.class', 'validated');
@@ -67,7 +67,7 @@ describe('creation form', () => {
     cy.contains('button#submit-case', 'Continue to Step 3 of 5');
   });
 
-  it('shows validation checkmark when Petition file is selected', () => {
+  it('shows validation check mark when Petition file is selected', () => {
     cy.get('label#petition-file-label')
       .scrollIntoView()
       .should('not.have.class', 'validated');

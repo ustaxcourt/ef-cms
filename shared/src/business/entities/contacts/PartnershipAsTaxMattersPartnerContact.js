@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const { ContactFactory } = require('./ContactFactory');
 
 /**

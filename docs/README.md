@@ -39,3 +39,6 @@ Flexion maintains [a collection of UX documentation](https://github.com/flexion/
 ## Glossary of terminology
 
 This project involves a great deal of specialized legal and court terminology. A [glossary of terminology](https://github.com/flexion/ef-cms/wiki/Glossary) is found on Flexion's wiki.
+
+## Developer Check Lists
+Various check lists that can help you out when developing on this project and doing things such as adding a new endpoint or creating a new stack. [`CHECKLISTS.md`](CHECKLISTS.md).

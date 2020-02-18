@@ -110,7 +110,7 @@
         "isPaper": true,
         "attachments": true,
         "serviceDate": null,
-        "documentType": "Amendment to Simultaneous Opening Brief",
+        "documentType": "Simultaneous Answering Brief",
         "partyPrimary": true,
         "receivedAt": "2001-10-10",
         "createdAt": "2019-08-14T20:35:52.858Z",
@@ -118,7 +118,7 @@
         "filedBy": "Resp. & Petr. Samson Workman",
         "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
         "additionalInfo": "abc",
-        "documentTitle": "Amendment to Simultaneous Opening Brief",
+        "documentTitle": "Simultaneous Answering Brief",
         "relationship": "primaryDocument",
         "additionalInfo2": "123",
         "practitioner": [],
@@ -130,7 +130,7 @@
               "isPaper": true,
               "attachments": true,
               "serviceDate": null,
-              "documentType": "Amendment to Simultaneous Opening Brief",
+              "documentType": "Simultaneous Answering Brief",
               "partyPrimary": true,
               "receivedAt": "2001-10-10",
               "createdAt": "2019-08-14T20:35:52.858Z",
@@ -138,7 +138,7 @@
               "filedBy": "Resp. & Petr. Samson Workman",
               "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
               "additionalInfo": "abc",
-              "documentTitle": "Amendment to Simultaneous Opening Brief",
+              "documentTitle": "Simultaneous Answering Brief",
               "relationship": "primaryDocument",
               "additionalInfo2": "123",
               "practitioner": [],
@@ -170,7 +170,7 @@
                 "createdAt": "2019-08-14T20:35:52.915Z",
                 "messageId": "4905e4ed-c5f6-42f3-b078-61d8cebde6b0",
                 "from": "Test Docketclerk",
-                "message": "Amendment to Simultaneous Opening Brief filed by Docketclerk is ready for review.",
+                "message": "Simultaneous Answering Brief filed by Docketclerk is ready for review.",
                 "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416"
               }
             ],
@@ -226,6 +226,7 @@
     "respondents": [
       {
         "role": "respondent",
+        "serviceIndicator": "Electronic",
         "name": "Test Respondent",
         "custom:role": "respondent",
         "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
@@ -250,26 +251,30 @@
     "docketRecord": [
       {
         "description": "Petition",
+        "eventCode": "P",
         "index": 1,
         "filingDate": "2019-03-01T22:53:50.098Z",
         "filedBy": "Test Petitioner"
       },
       {
         "description": "Request for Place of Trial at Mobile, Alabama",
+        "eventCode": "RQT",
         "filingDate": "2019-03-01T22:53:50.097Z",
         "index": 2
       },
       {
         "description": "Answer",
+        "eventCode": "A",
         "index": 3,
         "filingDate": "2019-03-01T22:54:05.993Z",
         "filedBy": "Test Respondent"
       },
       {
-        "description": "Amendment to Simultaneous Opening Brief",
+        "description": "Simultaneous Answering Brief",
+        "eventCode": "SIAB",
         "index": 4,
         "documentId": "dc2664a1-f552-418f-bcc7-8a67f4246568",
-        "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"ATOB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Amendment to Simultaneous Opening Brief\",\"documentType\":\"Amendment to Simultaneous Opening Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyRespondent\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"caseId\":\"491b05b4-483f-4b85-8dd7-2dd4c069eb50\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
+        "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"ATOB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Simultaneous Answering Brief\",\"documentType\":\"Simultaneous Answering Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyRespondent\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"caseId\":\"491b05b4-483f-4b85-8dd7-2dd4c069eb50\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
         "filingDate": "2001-10-10T23:54:05.993Z"
       }
     ],
@@ -559,7 +564,6 @@
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-08-08T14:33:24.183Z"
   },
-
   {
     "docketNumberSuffix": "S",
     "caseStatus": "New",

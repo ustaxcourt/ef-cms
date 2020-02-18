@@ -178,7 +178,7 @@ export const Forms = () => (
               type="checkbox"
               value="truth"
             />
-            <label className="usa-checkbox__label" htmlFor="truth">
+            <label className="usa-checkbox__label inline-block" htmlFor="truth">
               Sojourner Truth
             </label>
           </div>
@@ -190,7 +190,10 @@ export const Forms = () => (
               type="checkbox"
               value="douglass"
             />
-            <label className="usa-checkbox__label" htmlFor="douglass">
+            <label
+              className="usa-checkbox__label inline-block"
+              htmlFor="douglass"
+            >
               Frederick Douglass
             </label>
           </div>
@@ -202,7 +205,10 @@ export const Forms = () => (
               type="checkbox"
               value="washington"
             />
-            <label className="usa-checkbox__label" htmlFor="washington">
+            <label
+              className="usa-checkbox__label inline-block"
+              htmlFor="washington"
+            >
               Booker T. Washington
             </label>
           </div>
@@ -214,7 +220,10 @@ export const Forms = () => (
               name="historical-figures-1"
               type="checkbox"
             />
-            <label className="usa-checkbox__label" htmlFor="carver">
+            <label
+              className="usa-checkbox__label inline-block"
+              htmlFor="carver"
+            >
               George Washington Carver
             </label>
           </div>

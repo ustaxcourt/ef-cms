@@ -79,6 +79,8 @@
     "noticeOfAttachments": false,
     "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "caseCaption": "Caryn Wall, Petitioner",
+    "initialTitle": "Caryn Wall, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "caseTitle": "Caryn Wall, Petitioner v. Commissioner of Internal Revenue, Respondent",
     "sk": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "filingType": "Individual petitioner",
     "orderForOds": false,
@@ -91,6 +93,7 @@
     "practitioners": [
       {
         "role": "practitioner",
+        "serviceIndicator": "Electronic",
         "contact": {
           "address1": "234 Main St",
           "address2": "Apartment 4",
@@ -118,6 +121,7 @@
     "docketRecord": [
       {
         "description": "Petition",
+        "eventCode": "P",
         "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
         "filingDate": "2019-03-27T21:53:00.297Z",
         "filedBy": "Test Practitioner",
@@ -126,6 +130,7 @@
       {
         "description": "Request for Place of Trial at Jackson, Mississippi",
         "filingDate": "2019-03-27T21:53:00.297Z",
+        "eventCode": "RQT",
         "index": 2
       }
     ],

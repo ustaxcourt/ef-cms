@@ -133,11 +133,11 @@ describe('validatePetitionDetailsAction', () => {
       },
       state: {
         caseDetail: MOCK_CASE,
-        form: { preferredTrialCity: 'Somewhere, USA' },
+        form: { preferredTrialCity: 'Fresno, California' },
       },
     });
     expect(validateCaseDetailStub.mock.calls[0][0].caseDetail).toMatchObject({
-      preferredTrialCity: 'Somewhere, USA',
+      preferredTrialCity: 'Fresno, California',
     });
     expect(successStub).toHaveBeenCalled();
   });

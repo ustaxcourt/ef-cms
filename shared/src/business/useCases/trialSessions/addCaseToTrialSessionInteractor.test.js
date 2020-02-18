@@ -9,7 +9,7 @@ const MOCK_TRIAL = {
   startDate: '2025-12-01T00:00:00.000Z',
   term: 'Fall',
   termYear: '2025',
-  trialLocation: 'Birmingham, AL',
+  trialLocation: 'Birmingham, Alabama',
 };
 
 describe('addCaseToTrialSessionInteractor', () => {
@@ -118,6 +118,7 @@ describe('addCaseToTrialSessionInteractor', () => {
             caseOrder: [{ caseId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb' }],
             isCalendared: true,
           }),
+          setPriorityOnAllWorkItems: () => null,
           updateCase: obj => obj.caseToUpdate,
           updateTrialSession: () => null,
         }),
@@ -131,9 +132,43 @@ describe('addCaseToTrialSessionInteractor', () => {
       associatedJudge: Case.CHIEF_JUDGE,
       status: 'Calendared',
       trialDate: '2025-12-01T00:00:00.000Z',
-      trialLocation: 'Birmingham, AL',
+      trialLocation: 'Birmingham, Alabama',
       trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
       trialTime: '10:00',
+    });
+  });
+
+  it('sets work items to high priority if the trial session is calendared', async () => {
+    const setPriorityOnAllWorkItemsSpy = jest.fn();
+
+    await addCaseToTrialSessionInteractor({
+      applicationContext: {
+        getCurrentUser: () => ({
+          role: User.ROLES.petitionsClerk,
+          userId: '8675309b-18d0-43ec-bafb-654e83405411',
+        }),
+        getPersistenceGateway: () => ({
+          deleteCaseTrialSortMappingRecords: () => null,
+          getCaseByCaseId: () => MOCK_CASE,
+          getTrialSessionById: () => ({
+            ...MOCK_TRIAL,
+            caseOrder: [{ caseId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb' }],
+            isCalendared: true,
+          }),
+          setPriorityOnAllWorkItems: setPriorityOnAllWorkItemsSpy,
+          updateCase: obj => obj.caseToUpdate,
+          updateTrialSession: () => null,
+        }),
+        getUniqueId: () => '8675309b-18d0-43ec-bafb-654e83405411',
+      },
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+    });
+
+    expect(setPriorityOnAllWorkItemsSpy).toBeCalled();
+    expect(setPriorityOnAllWorkItemsSpy.mock.calls[0][0]).toMatchObject({
+      highPriority: true,
+      trialDate: '2025-12-01T00:00:00.000Z',
     });
   });
 });

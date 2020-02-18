@@ -14,5 +14,6 @@ export const trialSessionDetailsHelper = get => {
   return {
     eligibleCaseQcCompleteCount,
     showQcComplete,
+    showSetCalendarButton: permissions.SET_TRIAL_SESSION_CALENDAR,
   };
 };
