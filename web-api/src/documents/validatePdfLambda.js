@@ -1,6 +1,4 @@
-const createApplicationContext = require('../applicationContext');
-const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
-const { handle } = require('../middleware/apiGatewayHelper');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * used for sanitizing PDF documents
@@ -9,26 +7,18 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  handle(event, async () => {
-    const user = getUserFromAuthHeader(event);
-    const applicationContext = createApplicationContext(user);
-    const { documentId } = event.pathParameters || {};
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      const { documentId } = event.pathParameters || {};
 
-    applicationContext.logger.info('Event', event);
-    applicationContext.logger.info('User', user);
-
-    try {
-      const result = await applicationContext
-        .getUseCases()
-        .validatePdfInteractor({
-          applicationContext,
-          documentId,
-        });
-      applicationContext.logger.info('Validate PDF Result', result);
-
-      return result;
-    } catch (e) {
-      applicationContext.logger.error(e);
-      throw e;
-    }
-  });
+      return await applicationContext.getUseCases().validatePdfInteractor({
+        applicationContext,
+        documentId,
+      });
+    },
+    {
+      logEvent: true,
+      logResultsLabel: 'Validate PDF Result',
+    },
+  );

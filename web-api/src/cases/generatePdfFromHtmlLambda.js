@@ -1,6 +1,4 @@
-const createApplicationContext = require('../applicationContext');
-const { customHandle } = require('../customHandle');
-const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * used for generating a printable PDF of a docket record
@@ -8,11 +6,8 @@ const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-
 exports.handler = event =>
-  customHandle(event, async () => {
-    const user = getUserFromAuthHeader(event);
-    const applicationContext = createApplicationContext(user);
+  genericHandler(event, async ({ applicationContext }) => {
     const {
       contentHtml,
       displayHeaderFooter,
@@ -20,21 +15,13 @@ exports.handler = event =>
       headerHtml,
     } = JSON.parse(event.body);
 
-    try {
-      const result = await applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor({
-          applicationContext,
-          contentHtml,
-          displayHeaderFooter,
-          docketNumber,
-          headerHtml,
-        });
-      applicationContext.logger.info('User', user);
-      applicationContext.logger.info('Docket Number', docketNumber);
-      return result;
-    } catch (e) {
-      applicationContext.logger.error(e);
-      throw e;
-    }
+    return await applicationContext
+      .getUseCases()
+      .generatePdfFromHtmlInteractor({
+        applicationContext,
+        contentHtml,
+        displayHeaderFooter,
+        docketNumber,
+        headerHtml,
+      });
   });
