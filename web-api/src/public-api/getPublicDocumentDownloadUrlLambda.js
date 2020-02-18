@@ -1,4 +1,5 @@
-const { genericHandler } = require('../genericHandler');
+const createApplicationContext = require('../applicationContext');
+const { redirect } = require('../middleware/apiGatewayHelper');
 
 /**
  * used for fetching a single case
@@ -7,19 +8,20 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext
+  redirect(event, async () => {
+    const applicationContext = createApplicationContext({});
+    try {
+      const results = await applicationContext
         .getUseCases()
         .getPublicDownloadPolicyUrlInteractor({
           applicationContext,
           caseId: event.pathParameters.caseId,
           documentId: event.pathParameters.documentId,
         });
-    },
-    {
-      isPublicUser: true,
-      user: {},
-    },
-  );
+      applicationContext.logger.info('Results', results);
+      return results;
+    } catch (e) {
+      applicationContext.logger.error(e);
+      throw e;
+    }
+  });
