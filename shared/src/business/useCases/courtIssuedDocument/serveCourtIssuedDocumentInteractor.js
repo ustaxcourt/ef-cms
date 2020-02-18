@@ -140,10 +140,13 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     workItemToUpdate,
   });
 
-  const updatedDocketRecordEntity = new DocketRecord({
-    ...docketEntry,
-    filingDate: createISODateString(),
-  });
+  const updatedDocketRecordEntity = new DocketRecord(
+    {
+      ...docketEntry,
+      filingDate: createISODateString(),
+    },
+    { applicationContext },
+  );
   updatedDocketRecordEntity.validate();
 
   caseEntity.updateDocketRecordEntry(updatedDocketRecordEntity);
