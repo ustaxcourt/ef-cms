@@ -1,3 +1,4 @@
+import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
@@ -11,6 +12,7 @@ import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatus
 import { serveCaseToIrsAction } from '../actions/StartCaseInternal/serveCaseToIrsAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setCaseConfirmationFormDocumentTitleAction } from '../actions/StartCaseInternal/setCaseConfirmationFormDocumentTitleAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
@@ -44,7 +46,11 @@ export const serveToIrsSequence = [
         isPrintPreviewPreparedAction,
         {
           no: [],
-          yes: [setShowModalFactoryAction('PaperServiceConfirmModal')],
+          yes: [
+            clearFormAction,
+            setCaseConfirmationFormDocumentTitleAction,
+            setShowModalFactoryAction('PaperServiceConfirmModal'),
+          ],
         },
       ],
     },
