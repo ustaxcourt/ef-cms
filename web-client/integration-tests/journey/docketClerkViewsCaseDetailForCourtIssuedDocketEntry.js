@@ -17,6 +17,6 @@ export default test => {
     });
 
     //a pending message should not have been created
-    expect(result.length).toEqual(1);
+    expect(result.length).toEqual(0);
   });
 };
