@@ -1,4 +1,8 @@
 const {
+  calculateISODate,
+  createISODateString,
+} = require('../../utilities/DateHandler');
+const {
   updateUserContactInformationInteractor,
 } = require('./updateUserContactInformationInteractor');
 const { Case } = require('../../entities/cases/Case');
@@ -113,7 +117,13 @@ describe('updateUserContactInformationInteractor', () => {
     });
   });
 
-  it('updates the user and practitioners in the case', async () => {
+  it('updates the user and practitioners in the case but does not update cases that have been closed for more than 6 months', async () => {
+    const lastYear = calculateISODate({
+      dateString: createISODateString(),
+      howMuch: -1,
+      units: 'years',
+    });
+    console.log('lastYear', lastYear);
     getCasesByUserStub = jest.fn().mockResolvedValue([
       {
         ...MOCK_CASE,
@@ -123,6 +133,17 @@ describe('updateUserContactInformationInteractor', () => {
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
           },
         ],
+      },
+      {
+        ...MOCK_CASE,
+        closedDate: lastYear,
+        practitioners: [
+          {
+            contact: {},
+            userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+          },
+        ],
+        status: Case.STATUS_TYPES.closed,
       },
     ]);
 
@@ -137,6 +158,7 @@ describe('updateUserContactInformationInteractor', () => {
       contact: contactInfo,
     });
     expect(updateCaseSpy).toHaveBeenCalled();
+    expect(updateCaseSpy.mock.calls.length).toEqual(1);
     expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
       practitioners: [
         {

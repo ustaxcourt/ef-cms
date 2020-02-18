@@ -237,6 +237,7 @@ function Case(rawCase, { applicationContext }) {
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
   this.caseNote = rawCase.caseNote;
   this.caseType = rawCase.caseType;
+  this.closedDate = rawCase.closedDate;
   this.createdAt = rawCase.createdAt || createISODateString();
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
@@ -430,6 +431,14 @@ joiValidationDecorator(
       .string()
       .valid(...Case.CASE_TYPES)
       .required(),
+    closedDate: joi.when('status', {
+      is: Case.STATUS_TYPES.closed,
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .date()
+        .iso()
+        .required(),
+    }),
     contactPrimary: joi.object().required(),
     contactSecondary: joi
       .object()
@@ -900,6 +909,7 @@ Case.prototype.addDocumentWithoutDocketRecord = function(document) {
 };
 
 Case.prototype.closeCase = function() {
+  this.closedDate = createISODateString();
   this.status = Case.STATUS_TYPES.closed;
   this.unsetAsBlocked();
   this.unsetAsHighPriority();
@@ -1469,6 +1479,8 @@ Case.prototype.setCaseStatus = function(caseStatus) {
     ].includes(caseStatus)
   ) {
     this.associatedJudge = Case.CHIEF_JUDGE;
+  } else if (caseStatus === Case.STATUS_TYPES.closed) {
+    this.closeCase();
   }
   return this;
 };
