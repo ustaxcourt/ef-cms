@@ -48,22 +48,18 @@ describe('DocketRecord', () => {
       ).toBeFalsy();
     });
 
-    it(
-      'fails validation if a description is omitted',
-      () => {
-        expect(
-          new DocketRecord(
-            {
-              eventCode: 'O',
-              filingDate: new Date('2000-01-01').toISOString(),
-              index: 0,
-            },
-            { applicationContext },
-          ).isValid(),
-        ).toBeFalsy();
-      },
-      { applicationContext },
-    );
+    it('fails validation if a description is omitted', () => {
+      expect(
+        new DocketRecord(
+          {
+            eventCode: 'O',
+            filingDate: new Date('2000-01-01').toISOString(),
+            index: 0,
+          },
+          { applicationContext },
+        ).isValid(),
+      ).toBeFalsy();
+    });
 
     it('fails validation if an eventCode is omitted', () => {
       expect(
