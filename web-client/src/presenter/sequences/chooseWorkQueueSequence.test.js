@@ -12,6 +12,7 @@ presenter.providers.applicationContext = {
   getUniqueId: () => new Date().getTime(),
   getUseCases: () => ({
     getInboxMessagesForSectionInteractor: getInboxMessagesForSectionStub,
+    getJudgeForUserChambersInteractor: () => null,
     getNotificationsInteractor: () => {
       return {};
     },

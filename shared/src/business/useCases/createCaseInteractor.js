@@ -24,6 +24,7 @@ const addPetitionDocumentToCase = ({
     {
       assigneeId: null,
       assigneeName: null,
+      associatedJudge: caseToAdd.associatedJudge,
       caseId: caseToAdd.caseId,
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseToAdd)),

@@ -1,8 +1,4 @@
-const createApplicationContext = require('../applicationContext');
-const {
-  getUserFromAuthHeader,
-  handle,
-} = require('../middleware/apiGatewayHelper');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * used for generating a printable filing receipt PDF
@@ -11,22 +7,13 @@ const {
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  handle(event, async () => {
-    const user = getUserFromAuthHeader(event);
-    const applicationContext = createApplicationContext(user);
-    try {
-      const { documents } = JSON.parse(event.body);
-      const results = await applicationContext
-        .getUseCases()
-        .generatePrintableFilingReceiptInteractor({
-          applicationContext,
-          documents,
-        });
-      applicationContext.logger.info('User', user);
-      applicationContext.logger.info('Case ID', documents.caseId);
-      return results;
-    } catch (e) {
-      applicationContext.logger.error(e);
-      throw e;
-    }
+  genericHandler(event, async ({ applicationContext }) => {
+    const { documents } = JSON.parse(event.body);
+
+    return await applicationContext
+      .getUseCases()
+      .generatePrintableFilingReceiptInteractor({
+        applicationContext,
+        documents,
+      });
   });

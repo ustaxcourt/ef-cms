@@ -22,6 +22,13 @@ const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
   ...applicationContext,
 });
 
+const WORK_ITEM_ID_1 = '06f09800-2f9c-4040-b133-10966fbf6179';
+const WORK_ITEM_ID_2 = '00557601-2dab-44bc-a5cf-7d1a115bd08d';
+const WORK_ITEM_ID_3 = 'a066204a-6c86-499e-9d98-b45a8f7bf86f';
+const WORK_ITEM_ID_4 = '4bd51fb7-fc46-4d4d-a506-08d48afcf46d';
+
+const JUDGE_USER_ID_1 = '89c956aa-65c6-4632-a6c8-7f0c6162d615';
+
 const petitionsClerkUser = {
   role: User.ROLES.petitionsClerk,
   section: 'petitions',
@@ -541,6 +548,94 @@ describe('formatted work queue computed', () => {
       ...FORMATTED_WORK_ITEM,
       section: 'docket',
     });
+  });
+
+  it('filters items based on associatedJudge for a given judge or chambers user', () => {
+    const judgeUser = {
+      name: 'Test Judge',
+      role: User.ROLES.judge,
+      userId: JUDGE_USER_ID_1,
+    };
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(judgeUser),
+        judgeUser,
+        workQueue: [
+          {
+            ...qcWorkItem,
+            workItemId: WORK_ITEM_ID_1,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: judgeUser.name,
+            workItemId: WORK_ITEM_ID_2,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: 'Test Judge 2',
+            workItemId: WORK_ITEM_ID_3,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: Case.CHIEF_JUDGE,
+            workItemId: WORK_ITEM_ID_4,
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+
+    expect(result.length).toEqual(1);
+    expect(result[0].workItemId).toEqual(WORK_ITEM_ID_2);
+  });
+
+  it('filters items based on associatedJudge for an adc user', () => {
+    const adcUser = {
+      name: 'Test ADC',
+      role: User.ROLES.adc,
+      userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
+    };
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(adcUser),
+        workQueue: [
+          {
+            ...qcWorkItem,
+            workItemId: WORK_ITEM_ID_1,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: 'Test Judge',
+            workItemId: WORK_ITEM_ID_2,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: 'Test Judge 2',
+            workItemId: WORK_ITEM_ID_3,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: Case.CHIEF_JUDGE,
+            workItemId: WORK_ITEM_ID_4,
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+
+    expect(result.length).toEqual(2);
+    expect(result[0].workItemId).toEqual(WORK_ITEM_ID_1);
+    expect(result[1].workItemId).toEqual(WORK_ITEM_ID_4);
   });
 
   it('sorts high priority work items to the start of the list - qc, my, inbox', () => {

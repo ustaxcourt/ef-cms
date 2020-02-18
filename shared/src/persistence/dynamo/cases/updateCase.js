@@ -1,5 +1,8 @@
 const client = require('../../dynamodbClientService');
 const {
+  updateWorkItemAssociatedJudge,
+} = require('../workitems/updateWorkItemAssociatedJudge');
+const {
   updateWorkItemCaseStatus,
 } = require('../workitems/updateWorkItemCaseStatus');
 const {
@@ -80,6 +83,15 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           updateWorkItemTrialDate({
             applicationContext,
             trialDate: caseToUpdate.trialDate || null,
+            workItemId: mapping.sk,
+          }),
+        );
+      }
+      if (oldCase.associatedJudge !== caseToUpdate.associatedJudge) {
+        requests.push(
+          updateWorkItemAssociatedJudge({
+            applicationContext,
+            associatedJudge: caseToUpdate.associatedJudge,
             workItemId: mapping.sk,
           }),
         );
