@@ -1,4 +1,11 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
+  calculateISODate,
+  createISODateString,
+} = require('../../utilities/DateHandler');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -90,7 +97,22 @@ exports.updateUserContactInformationInteractor = async ({
       caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     };
 
-    if (caseEntity.status !== Case.STATUS_TYPES.closed) {
+    let closedMoreThan6Months;
+    if (caseEntity.status === Case.STATUS_TYPES.closed) {
+      const maxClosedDate = calculateISODate({
+        dateString: caseEntity.closedDate,
+        howMuch: 6,
+        units: 'months',
+      });
+      const rightNow = createISODateString();
+      closedMoreThan6Months = maxClosedDate <= rightNow;
+    }
+
+    const shouldGenerateNotice = caseEntity.status !== Case.STATUS_TYPES.closed;
+    const shouldUpdateCase =
+      !closedMoreThan6Months || caseEntity.status !== Case.STATUS_TYPES.closed;
+
+    if (shouldGenerateNotice) {
       const documentType = applicationContext
         .getUtilities()
         .getDocumentTypeForAddressChange({
@@ -141,10 +163,22 @@ exports.updateUserContactInformationInteractor = async ({
         { applicationContext },
       );
 
+      const servedParties = aggregatePartiesForService(caseEntity);
+
+      changeOfAddressDocument.setAsServed(servedParties.all);
+
+      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        documentEntity: changeOfAddressDocument,
+        servedParties,
+      });
+
       const workItem = new WorkItem(
         {
           assigneeId: null,
           assigneeName: null,
+          associatedJudge: caseEntity.associatedJudge,
           caseId: caseEntity.caseId,
           caseStatus: caseEntity.status,
           caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
@@ -196,13 +230,19 @@ exports.updateUserContactInformationInteractor = async ({
       });
     }
 
-    const updatedCase = await applicationContext
-      .getPersistenceGateway()
-      .updateCase({
-        applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
-      });
-    updatedCases.push(updatedCase);
+    if (shouldUpdateCase) {
+      const updatedCase = await applicationContext
+        .getPersistenceGateway()
+        .updateCase({
+          applicationContext,
+          caseToUpdate: caseEntity.validate().toRawObject(),
+        });
+
+      const updatedCaseRaw = new Case(updatedCase, { applicationContext })
+        .validate()
+        .toRawObject();
+      updatedCases.push(updatedCaseRaw);
+    }
   }
 
   return updatedCases;
