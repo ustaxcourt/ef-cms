@@ -205,7 +205,16 @@ jobs:
       - checkout
       - run:
           name: Build Docker Image
-          command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../clamav && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
+          command: |
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
+              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+            fi
+
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
+              cd web-api/runtimes/clamav && ./build.sh && cd ../../.. 
+            fi
+
+            docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
@@ -238,7 +247,16 @@ jobs:
       - checkout
       - run:
           name: Build Docker Image
-          command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../clamav && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
+          command: |
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
+              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+            fi
+
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
+              cd web-api/runtimes/clamav && ./build.sh && cd ../../.. 
+            fi
+
+            docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
@@ -301,7 +319,16 @@ jobs:
       - checkout
       - run:
           name: Build Docker Image
-          command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../clamav && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
+          command: |
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
+              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+            fi
+
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
+              cd web-api/runtimes/clamav && ./build.sh && cd ../../.. 
+            fi
+
+            docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
@@ -358,7 +385,16 @@ jobs:
       - checkout
       - run:
           name: Build Docker Image
-          command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../clamav && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
+          command: |
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
+              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+            fi
+
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
+              cd web-api/runtimes/clamav && ./build.sh && cd ../../.. 
+            fi
+
+            docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
