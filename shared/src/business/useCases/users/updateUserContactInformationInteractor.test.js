@@ -123,7 +123,11 @@ describe('updateUserContactInformationInteractor', () => {
       howMuch: -1,
       units: 'years',
     });
-    console.log('lastYear', lastYear);
+    const yesterday = calculateISODate({
+      dateString: createISODateString(),
+      howMuch: -1,
+      units: 'days',
+    });
     getCasesByUserStub = jest.fn().mockResolvedValue([
       {
         ...MOCK_CASE,
@@ -145,6 +149,17 @@ describe('updateUserContactInformationInteractor', () => {
         ],
         status: Case.STATUS_TYPES.closed,
       },
+      {
+        ...MOCK_CASE,
+        closedDate: yesterday,
+        practitioners: [
+          {
+            contact: {},
+            userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+          },
+        ],
+        status: Case.STATUS_TYPES.closed,
+      },
     ]);
 
     await updateUserContactInformationInteractor({
@@ -158,8 +173,16 @@ describe('updateUserContactInformationInteractor', () => {
       contact: contactInfo,
     });
     expect(updateCaseSpy).toHaveBeenCalled();
-    expect(updateCaseSpy.mock.calls.length).toEqual(1);
+    expect(updateCaseSpy.mock.calls.length).toEqual(2);
     expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
+      practitioners: [
+        {
+          contact: contactInfo,
+          userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+        },
+      ],
+    });
+    expect(updateCaseSpy.mock.calls[1][0].caseToUpdate).toMatchObject({
       practitioners: [
         {
           contact: contactInfo,
