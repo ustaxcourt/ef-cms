@@ -23,7 +23,6 @@ exports.handler = event =>
           trialSessionId: event.pathParameters.trialSessionId,
         });
       applicationContext.logger.info('User', user);
-      applicationContext.logger.info('Results', results);
       return results;
     } catch (e) {
       applicationContext.logger.error(e);
