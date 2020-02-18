@@ -83,6 +83,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     {
       assigneeId: null,
       assigneeName: null,
+      associatedJudge: caseToUpdate.associatedJudge,
       caseId: caseId,
       caseStatus: caseToUpdate.status,
       caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
