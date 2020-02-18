@@ -3,6 +3,7 @@ const {
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
 const { Case } = require('../../entities/cases/Case');
+const { MOCK_USERS } = require('../../../test/mockUsers');
 const { updateCaseAutomaticBlock } = require('./updateCaseAutomaticBlock');
 
 describe('updateCaseAutomaticBlock', () => {
@@ -15,6 +16,7 @@ describe('updateCaseAutomaticBlock', () => {
     jest.clearAllMocks();
 
     applicationContext = {
+      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       getPersistenceGateway: () => ({
         createCaseTrialSortMappingRecords: createCaseTrialSortMappingRecordsMock,
         deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsMock,

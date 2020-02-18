@@ -131,13 +131,16 @@ exports.completeDocketEntryQCInteractor = async ({
     },
   };
 
-  const docketRecordEntry = new DocketRecord({
-    description: updatedDocumentTitle,
-    documentId: updatedDocument.documentId,
-    editState: '{}',
-    eventCode: updatedDocument.eventCode,
-    filingDate: updatedDocument.receivedAt,
-  });
+  const docketRecordEntry = new DocketRecord(
+    {
+      description: updatedDocumentTitle,
+      documentId: updatedDocument.documentId,
+      editState: '{}',
+      eventCode: updatedDocument.eventCode,
+      filingDate: updatedDocument.receivedAt,
+    },
+    { applicationContext },
+  );
 
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
   caseEntity.updateDocument(updatedDocument);
@@ -272,7 +275,7 @@ exports.completeDocketEntryQCInteractor = async ({
 
     noticeUpdatedDocument.setAsServed(servedParties.all);
 
-    caseEntity.addDocument(noticeUpdatedDocument);
+    caseEntity.addDocument(noticeUpdatedDocument, { applicationContext });
 
     const { Body: pdfData } = await applicationContext
       .getStorageClient()

@@ -226,16 +226,18 @@ function Case(rawCase, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+
   this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
-  this.automaticBlocked = rawCase.automaticBlocked;
-  this.automaticBlockedDate = rawCase.automaticBlockedDate;
-  this.automaticBlockedReason = rawCase.automaticBlockedReason;
+  this.caseNote = rawCase.caseNote;
   this.blocked = rawCase.blocked;
   this.blockedDate = rawCase.blockedDate;
   this.blockedReason = rawCase.blockedReason;
+  this.automaticBlocked = rawCase.automaticBlocked;
+  this.automaticBlockedDate = rawCase.automaticBlockedDate;
+  this.automaticBlockedReason = rawCase.automaticBlockedReason;
   this.caseCaption = rawCase.caseCaption;
+  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
-  this.caseNote = rawCase.caseNote;
   this.caseType = rawCase.caseType;
   this.createdAt = rawCase.createdAt || createISODateString();
   this.docketNumber = rawCase.docketNumber;
@@ -258,7 +260,6 @@ function Case(rawCase, { applicationContext }) {
   this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
-  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.sealedDate = rawCase.sealedDate;
   this.isSealed = !!rawCase.sealedDate;
@@ -311,7 +312,7 @@ function Case(rawCase, { applicationContext }) {
 
   if (Array.isArray(rawCase.docketRecord)) {
     this.docketRecord = rawCase.docketRecord.map(
-      docketRecord => new DocketRecord(docketRecord),
+      docketRecord => new DocketRecord(docketRecord, { applicationContext }),
     );
   } else {
     this.docketRecord = [];
@@ -874,19 +875,22 @@ Case.prototype.removePractitioner = function(practitionerToRemove) {
  *
  * @param {object} document the document to add to the case
  */
-Case.prototype.addDocument = function(document) {
+Case.prototype.addDocument = function(document, { applicationContext }) {
   document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 
   this.addDocketRecord(
-    new DocketRecord({
-      description: document.documentType,
-      documentId: document.documentId,
-      eventCode: document.eventCode,
-      filedBy: document.filedBy,
-      filingDate: document.receivedAt || document.createdAt,
-      status: document.status,
-    }),
+    new DocketRecord(
+      {
+        description: document.documentType,
+        documentId: document.documentId,
+        eventCode: document.eventCode,
+        filedBy: document.filedBy,
+        filingDate: document.receivedAt || document.createdAt,
+        status: document.status,
+      },
+      { applicationContext },
+    ),
   );
 };
 
@@ -932,7 +936,7 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateCaseTitleDocketRecord = function() {
+Case.prototype.updateCaseTitleDocketRecord = function({ applicationContext }) {
   const caseTitleRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
   let lastTitle = this.initialTitle;
 
@@ -948,11 +952,14 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
 
   if (hasTitleChanged) {
     this.addDocketRecord(
-      new DocketRecord({
-        description: `Caption of case is amended from '${lastTitle}' to '${this.caseTitle}'`,
-        eventCode: 'MINC',
-        filingDate: createISODateString(),
-      }),
+      new DocketRecord(
+        {
+          description: `Caption of case is amended from '${lastTitle}' to '${this.caseTitle}'`,
+          eventCode: 'MINC',
+          filingDate: createISODateString(),
+        },
+        { applicationContext },
+      ),
     );
   }
 
@@ -963,7 +970,7 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketNumberRecord = function() {
+Case.prototype.updateDocketNumberRecord = function({ applicationContext }) {
   const docketNumberRegex = /^Docket Number is amended from '(.*)' to '(.*)'/;
 
   let lastDocketNumber =
@@ -986,11 +993,14 @@ Case.prototype.updateDocketNumberRecord = function() {
 
   if (hasDocketNumberChanged) {
     this.addDocketRecord(
-      new DocketRecord({
-        description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
-        eventCode: 'MIND',
-        filingDate: createISODateString(),
-      }),
+      new DocketRecord(
+        {
+          description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
+          eventCode: 'MIND',
+          filingDate: createISODateString(),
+        },
+        { applicationContext },
+      ),
     );
   }
 
@@ -1028,7 +1038,10 @@ Case.prototype.getShowCaseNameForPrimary = function() {
  * @param {string} preferredTrialCity the preferred trial city
  * @returns {Case} the updated case entity
  */
-Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
+Case.prototype.setRequestForTrialDocketRecord = function(
+  preferredTrialCity,
+  { applicationContext },
+) {
   this.preferredTrialCity = preferredTrialCity;
 
   const found = find(this.docketRecord, item =>
@@ -1037,12 +1050,15 @@ Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
 
   if (preferredTrialCity && !found) {
     this.addDocketRecord(
-      new DocketRecord({
-        description: `Request for Place of Trial at ${this.preferredTrialCity}`,
-        eventCode:
-          Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-        filingDate: this.receivedAt || this.createdAt,
-      }),
+      new DocketRecord(
+        {
+          description: `Request for Place of Trial at ${this.preferredTrialCity}`,
+          eventCode:
+            Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          filingDate: this.receivedAt || this.createdAt,
+        },
+        { applicationContext },
+      ),
     );
   }
   return this;
