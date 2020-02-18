@@ -228,41 +228,41 @@ function Case(rawCase, { applicationContext }) {
   }
 
   this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
-  this.caseNote = rawCase.caseNote;
-  this.blocked = rawCase.blocked;
-  this.blockedDate = rawCase.blockedDate;
-  this.blockedReason = rawCase.blockedReason;
   this.automaticBlocked = rawCase.automaticBlocked;
   this.automaticBlockedDate = rawCase.automaticBlockedDate;
   this.automaticBlockedReason = rawCase.automaticBlockedReason;
+  this.blocked = rawCase.blocked;
+  this.blockedDate = rawCase.blockedDate;
+  this.blockedReason = rawCase.blockedReason;
   this.caseCaption = rawCase.caseCaption;
-  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
+  this.caseNote = rawCase.caseNote;
   this.caseType = rawCase.caseType;
   this.createdAt = rawCase.createdAt || createISODateString();
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
-  this.mailingDate = rawCase.mailingDate;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
   this.highPriority = rawCase.highPriority;
   this.highPriorityReason = rawCase.highPriorityReason;
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.irsSendDate = rawCase.irsSendDate;
   this.isPaper = rawCase.isPaper;
+  this.isSealed = !!rawCase.sealedDate;
   this.leadCaseId = rawCase.leadCaseId;
+  this.mailingDate = rawCase.mailingDate;
   this.partyType = rawCase.partyType;
-  this.petitionPaymentStatus =
-    rawCase.petitionPaymentStatus || Case.PAYMENT_STATUS.UNPAID;
   this.petitionPaymentDate = rawCase.petitionPaymentDate;
   this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
+  this.petitionPaymentStatus =
+    rawCase.petitionPaymentStatus || Case.PAYMENT_STATUS.UNPAID;
   this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
+  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.sealedDate = rawCase.sealedDate;
-  this.isSealed = !!rawCase.sealedDate;
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialLocation = rawCase.trialLocation;
