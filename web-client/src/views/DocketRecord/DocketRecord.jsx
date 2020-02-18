@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
 import { FilingsAndProceedings } from './FilingsAndProceedings';
@@ -9,11 +10,17 @@ import classNames from 'classnames';
 
 export const DocketRecord = connect(
   {
+    docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     refreshCaseSequence: sequences.refreshCaseSequence,
     showModal: state.showModal,
   },
-  ({ formattedCaseDetail, refreshCaseSequence, showModal }) => {
+  ({
+    docketRecordHelper,
+    formattedCaseDetail,
+    refreshCaseSequence,
+    showModal,
+  }) => {
     useEffect(() => {
       const interval = setInterval(() => {
         refreshCaseSequence();
@@ -48,6 +55,7 @@ export const DocketRecord = connect(
               <th>Action</th>
               <th>Served</th>
               <th className="center-column">Parties</th>
+              {docketRecordHelper.showEditDocketRecordEntry && <th>&nbsp;</th>}
             </tr>
           </thead>
           <tbody>
@@ -117,6 +125,19 @@ export const DocketRecord = connect(
                       <span className="responsive-label">Parties</span>
                       {entry.servedPartiesCode}
                     </td>
+                    {docketRecordHelper.showEditDocketRecordEntry && (
+                      <td>
+                        {entry.showEditDocketRecordEntry && (
+                          <Button
+                            link
+                            href={`/case-detail/${formattedCaseDetail.docketNumber}/docket-entry/${entry.index}/edit-meta`}
+                            icon="edit"
+                          >
+                            Edit
+                          </Button>
+                        )}
+                      </td>
+                    )}
                   </tr>
                 );
               },

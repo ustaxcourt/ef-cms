@@ -28,6 +28,7 @@ exports.casePublicSearchInteractor = async providers => {
         'docketNumber',
         'docketNumberSuffix',
         'receivedAt',
+        'sealedDate',
       ],
       query: {
         bool: {
@@ -77,13 +78,12 @@ exports.casePublicSearchInteractor = async providers => {
     }
   }
 
-  // TODO - Filter items, so we only return cases
   const filteredCases = foundCases.filter(item => {
-    return item.docketNumber && item.caseCaption; // TODO - This is not accurate
+    return !item.sealedDate && item.docketNumber && item.caseCaption;
   });
 
   const makeSafe = item =>
-    new PublicCase(item, { applicationContext }).toRawObject();
+    new PublicCase(item, { applicationContext }).validate().toRawObject();
 
   return filteredCases.map(makeSafe);
 };

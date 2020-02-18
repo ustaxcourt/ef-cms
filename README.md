@@ -36,7 +36,7 @@ API | Front-End | Shared Code
 
 The fork of this project in which the bulk of development is occurring is [Flexion’s fork](https://github.com/flexion/ef-cms).
 
-Artifacts for ongoing development such as designs, research data, user workflows etc. are located in the [wiki](https://github.com/flexion/ef-cms/wiki).
+Artifacts for ongoing development, such as designs, research data, user workflows etc., are located in the [wiki](https://github.com/flexion/ef-cms/wiki).
 
 ## Technical overview
 
@@ -84,7 +84,7 @@ Once [you have Docker installed](https://docs.docker.com/install/), the followin
 Within Docker, you should allocate 4 CPUs, 16 GB of RAM, and 4 GB of swap. With fewer resources, the software is likely to fail to run with errors that don’t make it obvious what the problem is.
 
 ### ECR
-ECR is Amazon’s docker container registry that holds images for `ef-cms` builds on CircleCI. Currently, images can be managed in the AWS ECR console under the `ef-cms-us-east-1`. If you need to update the Docker image, you can do so (with appropriate permissions) by running `./docker-to-ecr.sh`. This command will build an image per the `Dockerfile-CI` config, tag it as `latest` and push it to the repo in ECR.
+ECR is Amazon’s Docker container registry that holds images for `ef-cms` builds on CircleCI. Currently, images can be managed in the AWS ECR console under the `ef-cms-us-east-1`. If you need to update the Docker image, you can do so (with appropriate permissions) by running `./docker-to-ecr.sh`. This command will build an image per the `Dockerfile-CI` config, tag it as `latest` and push it to the repo in ECR.
 
 ## Running this project locally without Docker
 
@@ -224,8 +224,8 @@ See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
 ## Testing / Coverage Tips
 
 - Run all tests with `npm run test`
-- The web client, api, and shared code can be tested with `npm run test:client`, `npm run test:api`, and `npm run test:shared`, respectively.
-- TIP: When working through a single test, you can run a single test with `jest /path/to/test/file.js` (you may need to `npm -i -g jest`). Additionally, you can use `--watch` and `--coverage` flags to to continually run the specified test on save and provide a coverage report. For example: `jest /path/to/test/file.js --watch --coverage`
+- The web client, API, and shared code can be tested with `npm run test:client`, `npm run test:api`, and `npm run test:shared`, respectively
+- Tip: When working through a single test, you can run a single test with `jest /path/to/test/file.js` (you may need to `npm -i -g jest`). Additionally, you can use `--watch` and `--coverage` flags to to continually run the specified test on save and provide a coverage report. For example: `jest /path/to/test/file.js --watch --coverage`
 
 Example coverage output:
 ```
@@ -236,7 +236,7 @@ All files |        0 |        0 |        0 |        0 |                   |
 ----------|----------|----------|----------|----------|-------------------|
 ```
 - Stmts: % of statements executed in the code
-- Branch: % of control structures (for example, if statements) executed in the code
+- Branch: % of control structures (for example, `if` statements) executed in the code
 - Funcs: % of functions executed in the code
 - Uncovered Line #s: lines not covered by tests
 

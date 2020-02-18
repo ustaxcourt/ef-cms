@@ -113,12 +113,14 @@
       {
         "filingDate": "2019-03-01T21:42:29.073Z",
         "description": "Petition",
+        "eventCode": "P",
         "filedBy": "Test Petitioner",
         "index": 1
       },
       {
         "filingDate": "2019-03-01T21:42:29.073Z",
         "description": "Request for Place of Trial at Boise, Idaho",
+        "eventCode": "RQT",
         "index": 2
       }
     ],

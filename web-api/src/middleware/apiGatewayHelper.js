@@ -3,7 +3,7 @@ const {
   NotFoundError,
   UnauthorizedError,
 } = require('../../../shared/src/errors/errors');
-
+const { pick } = require('lodash');
 const headers = {
   'Access-Control-Allow-Origin': '*',
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
@@ -26,10 +26,19 @@ exports.handle = async (event, fun) => {
     return exports.sendOk('Lambda is warm!');
   }
   try {
-    const response = await fun();
+    let response = await fun();
+    if (event.queryStringParameters && event.queryStringParameters.fields) {
+      const { fields } = event.queryStringParameters;
+      const fieldsArr = fields.split(',');
+      if (Array.isArray(response)) {
+        response = response.map(object => pick(object, fieldsArr));
+      } else {
+        response = pick(response, fieldsArr);
+      }
+    }
     return exports.sendOk(response);
   } catch (err) {
-    if (!process.env.CI) {
+    if (!process.env.CI && !err.skipLogging) {
       console.error('err', err);
     }
     if (err instanceof NotFoundError) {

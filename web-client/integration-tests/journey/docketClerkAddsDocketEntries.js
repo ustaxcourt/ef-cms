@@ -88,7 +88,7 @@ export default (test, fakeFile) => {
     //secondary document
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'secondaryDocument.eventCode',
-      value: 'ASTF',
+      value: 'APPW',
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {

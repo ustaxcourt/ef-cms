@@ -822,7 +822,7 @@ describe('document detail helper', () => {
   });
 
   describe('showEditDocketEntry and showEditCourtIssuedDocketEntry', () => {
-    it('should set showEditDocketEntry false and showEditCourtIssuedDocketEntry true when the the document is a signed stipulated decision with a docket entry and the user has the DOCKET_ENTRY permission', async () => {
+    it('should set showEditDocketEntry false and showEditCourtIssuedDocketEntry true when the document is a signed stipulated decision with a docket entry and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -857,7 +857,7 @@ describe('document detail helper', () => {
       expect(result.showEditCourtIssuedDocketEntry).toEqual(true);
     });
 
-    it('should set showEditDocketEntry false when the the document is an unsigned stipulated decision and the user has the DOCKET_ENTRY permission', async () => {
+    it('should set showEditDocketEntry false when the document is an unsigned stipulated decision and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -886,7 +886,7 @@ describe('document detail helper', () => {
       expect(result.showEditDocketEntry).toEqual(false);
     });
 
-    it('should set showEditDocketEntry true when the the document is a served order and the user has the DOCKET_ENTRY permission', async () => {
+    it('should set showEditDocketEntry true when the non QCed document is a served order and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -902,6 +902,25 @@ describe('document detail helper', () => {
                 documentId: 'abc',
                 documentType: 'Order of Dismissal',
                 servedAt: getDateISO(),
+                workItems: [
+                  {
+                    caseStatus: Case.STATUS_TYPES.new,
+                    document: {
+                      receivedAt: '2018-11-21T20:49:28.192Z',
+                    },
+                    isQC: true,
+                    messages: [
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+                        message: 'Served on IRS',
+                      },
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+                        message: 'Test',
+                      },
+                    ],
+                  },
+                ],
               },
             ],
             status: Case.STATUS_TYPES.new,
@@ -916,7 +935,57 @@ describe('document detail helper', () => {
       expect(result.showEditDocketEntry).toEqual(true);
     });
 
-    it('should set showEditDocketEntry false when the the document is an unserved order and the user has the DOCKET_ENTRY permission', async () => {
+    it('should set showEditDocketEntry false on a QCed document even when it is a served order and the user has the DOCKET_ENTRY permission', async () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [],
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Order of Dismissal',
+                servedAt: getDateISO(),
+                workItems: [
+                  {
+                    caseStatus: Case.STATUS_TYPES.new,
+                    completedAt: '2018-11-21T20:49:28.192Z',
+                    document: {
+                      receivedAt: '2018-11-21T20:49:28.192Z',
+                    },
+                    isQC: true,
+                    messages: [
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+                        message: 'Served on IRS',
+                      },
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+                        message: 'Test',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          permissions: { DOCKET_ENTRY: true },
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showEditDocketEntry).toEqual(false);
+    });
+
+    it('should set showEditDocketEntry false when the document is an unserved order and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -945,7 +1014,7 @@ describe('document detail helper', () => {
       expect(result.showEditDocketEntry).toEqual(false);
     });
 
-    it('should set showEditDocketEntry false when the the document is petition and the user has the DOCKET_ENTRY permission', async () => {
+    it('should set showEditDocketEntry false when the document is petition and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
