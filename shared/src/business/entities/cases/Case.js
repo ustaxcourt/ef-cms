@@ -227,16 +227,24 @@ function Case(rawCase, { applicationContext }) {
     throw new TypeError('applicationContext must be defined');
   }
 
-  this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
-  this.automaticBlocked = rawCase.automaticBlocked;
-  this.automaticBlockedDate = rawCase.automaticBlockedDate;
-  this.automaticBlockedReason = rawCase.automaticBlockedReason;
-  this.blocked = rawCase.blocked;
-  this.blockedDate = rawCase.blockedDate;
-  this.blockedReason = rawCase.blockedReason;
+  if (User.isInternalUser(applicationContext.getCurrentUser().role)) {
+    this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
+    this.automaticBlocked = rawCase.automaticBlocked;
+    this.automaticBlockedDate = rawCase.automaticBlockedDate;
+    this.automaticBlockedReason = rawCase.automaticBlockedReason;
+    this.blocked = rawCase.blocked;
+    this.blockedDate = rawCase.blockedDate;
+    this.blockedReason = rawCase.blockedReason;
+    this.caseNote = rawCase.caseNote;
+    this.highPriority = rawCase.highPriority;
+    this.highPriorityReason = rawCase.highPriorityReason;
+    this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
+    this.status = rawCase.status || Case.STATUS_TYPES.new;
+    this.userId = rawCase.userId;
+  }
+
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
-  this.caseNote = rawCase.caseNote;
   this.caseType = rawCase.caseType;
   this.closedDate = rawCase.closedDate;
   this.createdAt = rawCase.createdAt || createISODateString();
@@ -245,8 +253,6 @@ function Case(rawCase, { applicationContext }) {
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
-  this.highPriority = rawCase.highPriority;
-  this.highPriorityReason = rawCase.highPriorityReason;
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.irsSendDate = rawCase.irsSendDate;
   this.isPaper = rawCase.isPaper;
@@ -261,15 +267,12 @@ function Case(rawCase, { applicationContext }) {
   this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
-  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.sealedDate = rawCase.sealedDate;
-  this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialLocation = rawCase.trialLocation;
   this.trialSessionId = rawCase.trialSessionId;
   this.trialTime = rawCase.trialTime;
-  this.userId = rawCase.userId;
 
   this.initialDocketNumberSuffix =
     rawCase.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
@@ -356,7 +359,7 @@ joiValidationDecorator(
   joi.object().keys({
     associatedJudge: joi
       .string()
-      .required()
+      .optional()
       .meta({ tags: ['Restricted'] })
       .description('Judge assigned to this case. Defaults to Chief Judge.'),
     automaticBlocked: joi
@@ -652,7 +655,7 @@ joiValidationDecorator(
       .description('Procedure type of the case.'),
     qcCompleteForTrial: joi
       .object()
-      .required()
+      .optional()
       .meta({ tags: ['Restricted'] })
       .description(
         'QC Checklist object that must be completed before the case can go to trial.',
@@ -678,7 +681,7 @@ joiValidationDecorator(
     status: joi
       .string()
       .valid(...Object.values(Case.STATUS_TYPES))
-      .required()
+      .optional()
       .meta({ tags: ['Restricted'] })
       .description('Status of the case.'),
     trialDate: joi
