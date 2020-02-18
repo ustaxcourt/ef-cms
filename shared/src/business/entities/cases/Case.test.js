@@ -321,6 +321,36 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeTruthy();
     });
 
+    it('Creates an invalid case with closed status and no closed date', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          status: Case.STATUS_TYPES.closed,
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        closedDate: expect.anything(),
+      });
+    });
+
+    it('Creates a valid case with closed status and a closed date', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          closedDate: '2019-03-01T21:40:46.415Z',
+          status: Case.STATUS_TYPES.closed,
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
+
     it('Creates a valid case with sealedDate set to a valid date', () => {
       const myCase = new Case(
         {
@@ -1494,7 +1524,7 @@ describe('Case entity', () => {
   });
 
   describe('closeCase', () => {
-    it('should update the status of the case to closed', () => {
+    it('should update the status of the case to closed and add a closedDate', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -1513,6 +1543,7 @@ describe('Case entity', () => {
         blocked: false,
         blockedDate: undefined,
         blockedReason: undefined,
+        closedDate: expect.anything(),
         highPriority: false,
         highPriorityReason: undefined,
         status: Case.STATUS_TYPES.closed,
@@ -1996,7 +2027,9 @@ describe('Case entity', () => {
       expect(updatedCase.associatedJudge).toEqual(Case.CHIEF_JUDGE);
     });
 
-    it('should update the case status and leave the associated judge unchanged if the new status is Closed', () => {
+    it('should update the case status, leave the associated judge unchanged, and call closeCase if the new status is Closed', () => {
+      const closeCaseSpy = jest.spyOn(Case.prototype, 'closeCase');
+
       const updatedCase = new Case(
         {
           ...MOCK_CASE,
@@ -2011,6 +2044,8 @@ describe('Case entity', () => {
 
       expect(updatedCase.status).toEqual(Case.STATUS_TYPES.closed);
       expect(updatedCase.associatedJudge).toEqual('Judge Buch');
+      expect(closeCaseSpy).toBeCalled();
+      closeCaseSpy.mockRestore();
     });
   });
 
