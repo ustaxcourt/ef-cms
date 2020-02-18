@@ -133,7 +133,7 @@ describe('genericHandler', () => {
     expect(logged.includes('Who did the thing')).toBeTruthy();
   });
 
-  it('returns the results of a successful exectution', async () => {
+  it('returns the results of a successful execution', async () => {
     const callback = () => {
       return Promise.resolve('some data');
     };
