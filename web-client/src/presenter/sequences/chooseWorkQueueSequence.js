@@ -8,10 +8,12 @@ import { getDocumentQCServedForSectionAction } from '../actions/getDocumentQCSer
 import { getDocumentQCServedForUserAction } from '../actions/getDocumentQCServedForUserAction';
 import { getInboxMessagesForSectionAction } from '../actions/getInboxMessagesForSectionAction';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
+import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { getSentMessagesForSectionAction } from '../actions/getSentMessagesForSectionAction';
 import { getSentMessagesForUserAction } from '../actions/getSentMessagesForUserAction';
 import { parallel } from 'cerebral/factories';
+import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
 import { setSectionInboxCountAction } from '../actions/setSectionInboxCountAction';
 import { setWorkItemsAction } from '../actions/setWorkItemsAction';
@@ -19,6 +21,8 @@ import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const chooseWorkQueueSequence = showProgressSequenceDecorator([
   clearWorkQueueAction,
+  getJudgeForCurrentUserAction,
+  setJudgeUserAction,
   parallel([
     [getNotificationsAction, setNotificationsAction],
     [
