@@ -18,7 +18,7 @@ presenter.providers.applicationContext = {
   }),
   getUseCases: () => {
     return {
-      validateUserInteractor: () => {
+      validateUserContactInteractor: () => {
         return validationResult;
       },
     };
@@ -32,7 +32,7 @@ describe('validateUserContactAction', () => {
       modules: {
         presenter,
       },
-      state: {},
+      state: { form: { contact: {} } },
     });
     expect(errorMock).toHaveBeenCalled();
   });
@@ -43,7 +43,7 @@ describe('validateUserContactAction', () => {
       modules: {
         presenter,
       },
-      state: {},
+      state: { form: { contact: {} } },
     });
     expect(successMock).toHaveBeenCalled();
   });
