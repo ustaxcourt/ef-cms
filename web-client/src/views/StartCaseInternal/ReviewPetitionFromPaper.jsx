@@ -27,6 +27,8 @@ const ConfirmServeToIrsModal = () => (
 export const ReviewPetitionFromPaper = connect(
   {
     constants: state.constants,
+    createCaseFromPaperAndServeToIrsSequence:
+      sequences.createCaseFromPaperAndServeToIrsSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     goBackToStartCaseInternalSequence:
@@ -34,18 +36,17 @@ export const ReviewPetitionFromPaper = connect(
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewPetitionFromPaperHelper: state.reviewPetitionFromPaperHelper,
-    serveToIrsSequence: sequences.serveToIrsSequence,
     showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
   },
   ({
     constants,
+    createCaseFromPaperAndServeToIrsSequence,
     form,
     formCancelToggleCancelSequence,
     goBackToStartCaseInternalSequence,
     openConfirmServeToIrsModalSequence,
     reviewPetitionFromPaperHelper,
-    serveToIrsSequence,
     showModal,
     startCaseHelper,
   }) => {
@@ -373,7 +374,9 @@ export const ReviewPetitionFromPaper = connect(
         )}
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal confirmSequence={serveToIrsSequence} />
+          <FileUploadErrorModal
+            confirmSequence={createCaseFromPaperAndServeToIrsSequence}
+          />
         )}
         {showModal == 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
