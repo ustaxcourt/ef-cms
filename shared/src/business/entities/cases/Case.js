@@ -229,8 +229,6 @@ function Case(rawCase, { applicationContext }) {
     throw new TypeError('applicationContext must be defined');
   }
 
-  console.log('rawCase.status', rawCase.status);
-
   this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
   this.automaticBlocked = rawCase.automaticBlocked;
   this.automaticBlockedDate = rawCase.automaticBlockedDate;

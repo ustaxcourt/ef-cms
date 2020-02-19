@@ -293,8 +293,6 @@ exports.createCaseFromPaperInteractor = async ({
     caseToAdd.addDocument(odsDocumentEntity, { applicationContext });
   }
 
-  console.log('caseToAdd', caseToAdd);
-
   await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
     caseToCreate: caseToAdd.validate().toRawObject(),
