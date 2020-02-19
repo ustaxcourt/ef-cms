@@ -114,6 +114,7 @@ exports.createCaseFromPaperInteractor = async ({
       docketNumber,
       ...petitionEntity.toRawObject(),
       isPaper: true,
+      status: petitionMetadata.status || null,
       userId: user.userId,
     },
     {
@@ -122,7 +123,6 @@ exports.createCaseFromPaperInteractor = async ({
   );
 
   caseToAdd.caseCaption = petitionEntity.caseCaption;
-  caseToAdd.setCaseStatus(petitionMetadata.status);
 
   let partySecondary = false;
   if (
