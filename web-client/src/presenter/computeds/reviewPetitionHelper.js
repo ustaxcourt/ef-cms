@@ -8,6 +8,7 @@ export const reviewPetitionHelper = (get, applicationContext) => {
     irsNoticeDate,
     mailingDate,
     petitionPaymentStatus,
+    ...form
   } = get(state.form);
 
   const { PAYMENT_STATUS } = applicationContext.getConstants();
@@ -33,8 +34,29 @@ export const reviewPetitionHelper = (get, applicationContext) => {
       .formatDateString(irsNoticeDate, 'MMDDYYYY');
   }
 
+  // orders needed summary
+  let hasOrders = false;
+
+  [
+    'orderForAmendedPetition',
+    'orderForAmendedPetitionAndFilingFee',
+    'orderForFilingFee',
+    'orderForOds',
+    'orderForRatification',
+    'orderDesignatingPlaceOfTrial',
+    'orderToShowCause',
+    'noticeOfAttachments',
+  ].forEach(key => {
+    const boolValue = Boolean(form[key]);
+
+    if (boolValue) {
+      hasOrders = true;
+    }
+  });
+
   return {
     hasIrsNoticeFormatted,
+    hasOrders,
     irsNoticeDateFormatted,
     mailingDateFormatted,
     petitionPaymentStatusFormatted,

@@ -50,7 +50,9 @@ export const ReviewPetition = connect(
             </h2>
           </Focus>
 
-          <OrdersNeededSummary data={form} />
+          {reviewPetitionHelper.hasOrders && (
+            <OrdersNeededSummary data={form} />
+          )}
 
           <div className="grid-container padding-x-0 create-case-review">
             <div className="grid-row grid-gap">
