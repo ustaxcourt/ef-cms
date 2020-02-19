@@ -109,7 +109,6 @@ describe('assignWorkItemsInteractor integration test', () => {
       {
         assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Petitionsclerk',
-        caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
         document: {

@@ -119,16 +119,16 @@ Case.CASE_CAPTION_POSTFIX = 'v. Commissioner of Internal Revenue, Respondent';
 
 Case.ANSWER_DOCUMENT_CODES = [
   'A',
-  'AAPN',
-  'ATAP',
   'AAAP',
+  'AAPN',
   'AATP',
-  'APA',
-  'ATSP',
   'AATS',
-  'ASUP',
-  'ASAP',
   'AATT',
+  'APA',
+  'ASAP',
+  'ASUP',
+  'ATAP',
+  'ATSP',
 ];
 
 Case.AUTOMATIC_BLOCKED_REASONS = {
@@ -240,9 +240,11 @@ function Case(rawCase, { applicationContext }) {
     this.highPriority = rawCase.highPriority;
     this.highPriorityReason = rawCase.highPriorityReason;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
-    this.status = rawCase.status || Case.STATUS_TYPES.new;
-    this.userId = rawCase.userId;
   }
+
+  // TODO: as part of the security task, these values also need to be restricted
+  this.status = rawCase.status || Case.STATUS_TYPES.new;
+  this.userId = rawCase.userId;
 
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
