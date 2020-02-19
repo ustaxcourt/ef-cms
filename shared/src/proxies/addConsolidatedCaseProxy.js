@@ -17,6 +17,6 @@ exports.addConsolidatedCaseInteractor = ({
   return put({
     applicationContext,
     body: { caseIdToConsolidateWith },
-    endpoint: `/cases/${caseId}/consolidate-case`,
+    endpoint: `/case-meta/${caseId}/consolidate-case`,
   });
 };
