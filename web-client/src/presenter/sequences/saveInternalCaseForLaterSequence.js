@@ -1,3 +1,4 @@
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
@@ -9,9 +10,11 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setFormCaseStatusToInProgressAction } from '../actions/StartCaseInternal/setFormCaseStatusToInProgressAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const saveInternalCaseForLaterSequence = [
+  clearAlertsAction,
   computeDateReceivedAction,
   computeIrsNoticeDateAction,
   setFormCaseStatusToInProgressAction,
@@ -25,6 +28,7 @@ export const saveInternalCaseForLaterSequence = [
         setDocumentIdAction,
         closeFileUploadStatusModalAction,
         setAlertSuccessAction,
+        setSaveAlertsForNavigationAction,
         navigateToCaseDetailAction,
       ],
     },
