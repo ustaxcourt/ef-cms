@@ -4,6 +4,7 @@ import {
   PETITIONS_SECTION,
 } from '../../../../shared/src/business/entities/WorkQueue';
 import { capitalize, cloneDeep, orderBy } from 'lodash';
+import { filterQcItemsByAssociatedJudge } from '../utilities/filterQcItemsByAssociatedJudge';
 import { state } from 'cerebral';
 
 const isDateToday = (date, applicationContext) => {
@@ -253,11 +254,7 @@ export const filterWorkItems = ({
   user,
   workQueueToDisplay,
 }) => {
-  const {
-    CHIEF_JUDGE,
-    STATUS_TYPES,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
 
   const { box, queue, workQueueIsInternal } = workQueueToDisplay;
   let docQCUserSection = user.section;
@@ -266,15 +263,10 @@ export const filterWorkItems = ({
     docQCUserSection = DOCKET_SECTION;
   }
 
-  let additionalFilters = () => true;
-
-  if (judgeUser) {
-    additionalFilters = item =>
-      item.associatedJudge && item.associatedJudge === judgeUser.name;
-  } else if (user.role === USER_ROLES.adc) {
-    additionalFilters = item =>
-      !item.associatedJudge || item.associatedJudge === CHIEF_JUDGE;
-  }
+  let additionalFilters = filterQcItemsByAssociatedJudge({
+    applicationContext,
+    judgeUser,
+  });
 
   const filters = {
     documentQc: {
