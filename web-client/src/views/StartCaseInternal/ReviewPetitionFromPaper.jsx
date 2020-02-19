@@ -13,7 +13,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const ReviewPetition = connect(
+export const ReviewPetitionFromPaper = connect(
   {
     constants: state.constants,
     form: state.form,
@@ -22,7 +22,7 @@ export const ReviewPetition = connect(
       sequences.goBackToStartCaseInternalSequence,
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
-    reviewPetitionHelper: state.reviewPetitionHelper,
+    reviewPetitionFromPaperHelper: state.reviewPetitionFromPaperHelper,
     serveToIrsSequence: sequences.serveToIrsSequence,
     showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
@@ -33,7 +33,7 @@ export const ReviewPetition = connect(
     formCancelToggleCancelSequence,
     goBackToStartCaseInternalSequence,
     openConfirmServeToIrsModalSequence,
-    reviewPetitionHelper,
+    reviewPetitionFromPaperHelper,
     serveToIrsSequence,
     showModal,
     startCaseHelper,
@@ -115,7 +115,7 @@ export const ReviewPetition = connect(
                           >
                             Date recieved
                           </label>
-                          {reviewPetitionHelper.receivedAtFormatted}
+                          {reviewPetitionFromPaperHelper.receivedAtFormatted}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
                           <label
@@ -144,7 +144,7 @@ export const ReviewPetition = connect(
                           >
                             Mailing date
                           </label>
-                          {reviewPetitionHelper.mailingDateFormatted}
+                          {reviewPetitionFromPaperHelper.mailingDateFormatted}
                         </div>
 
                         <div className="margin-top-3 margin-bottom-2">
@@ -164,7 +164,9 @@ export const ReviewPetition = connect(
                           >
                             Filing fee
                           </label>
-                          {reviewPetitionHelper.petitionPaymentStatusFormatted}
+                          {
+                            reviewPetitionFromPaperHelper.petitionPaymentStatusFormatted
+                          }
                         </div>
                       </div>
                     </div>
@@ -189,7 +191,7 @@ export const ReviewPetition = connect(
                           >
                             Notice attached to petition?
                           </label>
-                          {reviewPetitionHelper.hasIrsNoticeFormatted}
+                          {reviewPetitionFromPaperHelper.hasIrsNoticeFormatted}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
                           <label
@@ -202,7 +204,7 @@ export const ReviewPetition = connect(
                         </div>
                       </div>
                       <div className="tablet:grid-col-4 margin-bottom-1">
-                        {reviewPetitionHelper.shouldShowIrsNoticeDate && (
+                        {reviewPetitionFromPaperHelper.shouldShowIrsNoticeDate && (
                           <div>
                             <label
                               className="usa-label usa-label-display"
@@ -210,7 +212,9 @@ export const ReviewPetition = connect(
                             >
                               Date of notice
                             </label>
-                            {reviewPetitionHelper.irsNoticeDateFormatted}
+                            {
+                              reviewPetitionFromPaperHelper.irsNoticeDateFormatted
+                            }
                           </div>
                         )}
                       </div>

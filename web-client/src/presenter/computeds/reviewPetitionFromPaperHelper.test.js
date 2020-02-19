@@ -1,12 +1,12 @@
 import { applicationContext } from '../../applicationContext';
-import { reviewPetitionHelper as reviewPetitionHelperComputed } from './reviewPetitionHelper';
+import { reviewPetitionFromPaperHelper as reviewPetitionFromPaperHelperComputed } from './reviewPetitionFromPaperHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const { PAYMENT_STATUS } = applicationContext.getConstants();
 
-const reviewPetitionHelper = withAppContextDecorator(
-  reviewPetitionHelperComputed,
+const reviewPetitionFromPaperHelper = withAppContextDecorator(
+  reviewPetitionFromPaperHelperComputed,
   {
     ...applicationContext,
     getConstants: () => {
@@ -17,9 +17,9 @@ const reviewPetitionHelper = withAppContextDecorator(
   },
 );
 
-describe('reviewPetitionHelper', () => {
+describe('reviewPetitionFromPaperHelper', () => {
   it('returns defaults when there is no form', () => {
-    const result = runCompute(reviewPetitionHelper, {
+    const result = runCompute(reviewPetitionFromPaperHelper, {
       state: {
         form: {},
       },
@@ -35,7 +35,7 @@ describe('reviewPetitionHelper', () => {
   });
 
   it('returns defaults when there is no form', () => {
-    const result = runCompute(reviewPetitionHelper, {
+    const result = runCompute(reviewPetitionFromPaperHelper, {
       state: {
         form: {
           dateReceived: '2020-01-05T03:30:45.007Z',
