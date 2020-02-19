@@ -114,6 +114,7 @@ exports.createCaseFromPaperInteractor = async ({
       docketNumber,
       ...petitionEntity.toRawObject(),
       isPaper: true,
+      status: petitionMetadata.status || null,
       userId: user.userId,
     },
     {

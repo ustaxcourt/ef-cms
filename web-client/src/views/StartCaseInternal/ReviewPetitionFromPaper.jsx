@@ -31,11 +31,11 @@ export const ReviewPetitionFromPaper = connect(
       sequences.createCaseFromPaperAndServeToIrsSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    goBackToStartCaseInternalSequence:
-      sequences.goBackToStartCaseInternalSequence,
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewPetitionFromPaperHelper: state.reviewPetitionFromPaperHelper,
+    saveInternalCaseForLaterSequence:
+      sequences.saveInternalCaseForLaterSequence,
     showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
   },
@@ -44,9 +44,9 @@ export const ReviewPetitionFromPaper = connect(
     createCaseFromPaperAndServeToIrsSequence,
     form,
     formCancelToggleCancelSequence,
-    goBackToStartCaseInternalSequence,
     openConfirmServeToIrsModalSequence,
     reviewPetitionFromPaperHelper,
+    saveInternalCaseForLaterSequence,
     showModal,
     startCaseHelper,
   }) => {
@@ -62,7 +62,9 @@ export const ReviewPetitionFromPaper = connect(
             </h2>
           </Focus>
 
-          <OrdersNeededSummary data={form} />
+          {reviewPetitionFromPaperHelper.hasOrders && (
+            <OrdersNeededSummary data={form} />
+          )}
 
           <div className="grid-container padding-x-0 create-case-review">
             <div className="grid-row grid-gap">
@@ -355,9 +357,10 @@ export const ReviewPetitionFromPaper = connect(
             </Button>
             <Button
               secondary
-              onClick={() => goBackToStartCaseInternalSequence()}
+              id="save-for-later"
+              onClick={() => saveInternalCaseForLaterSequence()}
             >
-              Back
+              Save for Later
             </Button>
             <Button
               link
