@@ -122,6 +122,7 @@ exports.createCaseFromPaperInteractor = async ({
   );
 
   caseToAdd.caseCaption = petitionEntity.caseCaption;
+  caseToAdd.setCaseStatus(petitionMetadata.status);
 
   let partySecondary = false;
   if (
@@ -291,6 +292,8 @@ exports.createCaseFromPaperInteractor = async ({
 
     caseToAdd.addDocument(odsDocumentEntity, { applicationContext });
   }
+
+  console.log('caseToAdd', caseToAdd);
 
   await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
