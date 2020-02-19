@@ -18,11 +18,11 @@ export const ReviewPetition = connect(
     constants: state.constants,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    goBackToStartCaseInternalSequence:
-      sequences.goBackToStartCaseInternalSequence,
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewPetitionHelper: state.reviewPetitionHelper,
+    saveInternalCaseForLaterSequence:
+      sequences.saveInternalCaseForLaterSequence,
     serveToIrsSequence: sequences.serveToIrsSequence,
     showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
@@ -31,9 +31,9 @@ export const ReviewPetition = connect(
     constants,
     form,
     formCancelToggleCancelSequence,
-    goBackToStartCaseInternalSequence,
     openConfirmServeToIrsModalSequence,
     reviewPetitionHelper,
+    saveInternalCaseForLaterSequence,
     serveToIrsSequence,
     showModal,
     startCaseHelper,
@@ -341,9 +341,10 @@ export const ReviewPetition = connect(
             </Button>
             <Button
               secondary
-              onClick={() => goBackToStartCaseInternalSequence()}
+              id="save-for-later"
+              onClick={() => saveInternalCaseForLaterSequence()}
             >
-              Back
+              Save for Later
             </Button>
             <Button
               link
