@@ -58,7 +58,6 @@ export const gotoCaseDetailSequence = [
       [
         'adc',
         'admissionsclerk',
-        'calendarclerk',
         'clerkofcourt',
         'docketclerk',
         'petitionsclerk',
