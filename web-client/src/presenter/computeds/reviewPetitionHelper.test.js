@@ -26,6 +26,7 @@ describe('reviewPetitionHelper', () => {
     });
     expect(result).toEqual({
       hasIrsNoticeFormatted: 'No',
+      hasOrders: false,
       irsNoticeDateFormatted: undefined,
       mailingDateFormatted: undefined,
       petitionPaymentStatusFormatted: 'Not paid',
@@ -34,7 +35,7 @@ describe('reviewPetitionHelper', () => {
     });
   });
 
-  it('returns defaults when there is no form', () => {
+  it('return formatted/computed values based on form inputs', () => {
     const result = runCompute(reviewPetitionHelper, {
       state: {
         form: {
@@ -49,11 +50,32 @@ describe('reviewPetitionHelper', () => {
 
     expect(result).toEqual({
       hasIrsNoticeFormatted: 'Yes',
+      hasOrders: false,
       irsNoticeDateFormatted: '01/04/2020',
       mailingDateFormatted: '01/04/2020',
       petitionPaymentStatusFormatted: 'Paid',
       receivedAtFormatted: '01/04/2020',
       shouldShowIrsNoticeDate: true,
+    });
+  });
+
+  it('should show orders needed summary if there are orders selected', () => {
+    const result = runCompute(reviewPetitionHelper, {
+      state: {
+        form: {
+          orderForFilingFee: true,
+        },
+      },
+    });
+
+    expect(result).toEqual({
+      hasIrsNoticeFormatted: 'No',
+      hasOrders: true,
+      irsNoticeDateFormatted: undefined,
+      mailingDateFormatted: undefined,
+      petitionPaymentStatusFormatted: 'Not paid',
+      receivedAtFormatted: undefined,
+      shouldShowIrsNoticeDate: false,
     });
   });
 });
