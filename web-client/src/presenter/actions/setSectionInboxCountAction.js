@@ -18,7 +18,7 @@ export const setSectionInboxCountAction = ({
 }) => {
   const judgeUser = get(state.judgeUser);
 
-  let additionalFilters = filterQcItemsByAssociatedJudge({
+  const additionalFilters = filterQcItemsByAssociatedJudge({
     applicationContext,
     judgeUser,
   });
