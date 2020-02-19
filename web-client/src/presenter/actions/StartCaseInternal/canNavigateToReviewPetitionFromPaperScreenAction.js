@@ -3,6 +3,6 @@ import { chooseByTruthyStateActionFactory } from '../editUploadCourtIssuedDocume
 /**
  * allow navigation if the form is filled in. This is to prevent refresh staying on the page.
  */
-export const canNavigateToReviewPetitionScreenAction = chooseByTruthyStateActionFactory(
+export const canNavigateToReviewPetitionFromPaperScreenAction = chooseByTruthyStateActionFactory(
   'form.partyType',
 );
