@@ -11,7 +11,6 @@ const {
 const {
   getSentMessagesForUserInteractor,
 } = require('../useCases/workitems/getSentMessagesForUserInteractor');
-const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
