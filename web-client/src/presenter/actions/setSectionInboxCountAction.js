@@ -1,3 +1,4 @@
+import { filterQcItemsByAssociatedJudge } from '../utilities/filterQcItemsByAssociatedJudge';
 import { state } from 'cerebral';
 
 /**
@@ -15,19 +16,12 @@ export const setSectionInboxCountAction = ({
   props,
   store,
 }) => {
-  const currentUser = applicationContext.getCurrentUser();
-  const { CHIEF_JUDGE, USER_ROLES } = applicationContext.getConstants();
   const judgeUser = get(state.judgeUser);
 
-  let additionalFilters = () => true;
-
-  if (judgeUser) {
-    additionalFilters = item =>
-      item.associatedJudge && item.associatedJudge === judgeUser.name;
-  } else if (currentUser.role === USER_ROLES.adc) {
-    additionalFilters = item =>
-      !item.associatedJudge || item.associatedJudge === CHIEF_JUDGE;
-  }
+  let additionalFilters = filterQcItemsByAssociatedJudge({
+    applicationContext,
+    judgeUser,
+  });
 
   const workQueueIsInternal = get(state.workQueueToDisplay.workQueueIsInternal);
   store.set(
