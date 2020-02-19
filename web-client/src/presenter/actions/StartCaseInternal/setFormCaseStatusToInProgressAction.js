@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets contactSecondary with contact prop
+ * sets form.status to corresponding value for Case status type of "in progress"
  *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props
