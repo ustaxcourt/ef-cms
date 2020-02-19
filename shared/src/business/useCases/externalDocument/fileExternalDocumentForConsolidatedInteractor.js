@@ -171,6 +171,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
               {
                 assigneeId: null,
                 assigneeName: null,
+                associatedJudge: caseEntity.associatedJudge,
                 caseId: caseEntity.caseId,
                 caseStatus: caseEntity.status,
                 caseTitle: Case.getCaseCaptionNames(
@@ -245,12 +246,15 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           }
         }
 
-        const docketRecordEntity = new DocketRecord({
-          description: metadata.documentTitle,
-          documentId: documentEntity.documentId,
-          eventCode: documentEntity.eventCode,
-          filingDate: documentEntity.receivedAt,
-        });
+        const docketRecordEntity = new DocketRecord(
+          {
+            description: metadata.documentTitle,
+            documentId: documentEntity.documentId,
+            eventCode: documentEntity.eventCode,
+            filingDate: documentEntity.receivedAt,
+          },
+          { applicationContext },
+        );
 
         caseEntity.addDocketRecord(docketRecordEntity);
 

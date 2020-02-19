@@ -27,11 +27,11 @@ export const workQueueHelper = (get, applicationContext) => {
   ].includes(user.role);
   const workQueueTitle = `${
     showIndividualWorkQueue
-      ? 'My'
+      ? 'My '
       : userIsOther && !workQueueIsInternal
-      ? 'Docket'
-      : 'Section'
-  } ${workQueueType}`;
+      ? ''
+      : 'Section '
+  }${workQueueType}`;
   const permissions = get(state.permissions);
 
   const inboxFiledColumnLabel = workQueueIsInternal ? 'Received' : 'Filed';

@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const reviewPetitionHelper = (get, applicationContext) => {
+export const reviewPetitionFromPaperHelper = (get, applicationContext) => {
   let irsNoticeDateFormatted;
   const {
     dateReceived,

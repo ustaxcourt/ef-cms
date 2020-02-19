@@ -11,6 +11,6 @@ const { put } = require('./requests');
 exports.sealCaseInteractor = ({ applicationContext, caseId }) => {
   return put({
     applicationContext,
-    endpoint: `/cases/${caseId}/seal`,
+    endpoint: `/case-meta/${caseId}/seal`,
   });
 };

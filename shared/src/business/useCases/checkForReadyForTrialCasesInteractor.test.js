@@ -4,6 +4,7 @@ const {
 } = require('./checkForReadyForTrialCasesInteractor');
 const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('checkForReadyForTrialCasesInteractor', () => {
   let applicationContext;
@@ -16,6 +17,8 @@ describe('checkForReadyForTrialCasesInteractor', () => {
         createCaseTrialSortMappingRecords: () => {},
         getAllCatalogCases: getAllCatalogCasesSpy,
         getCaseByCaseId: () => MOCK_CASE,
+        getCurrentUser: () =>
+          MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
         updateCase: () => {},
       }),
       logger: {
@@ -70,6 +73,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
   it("should only check cases that are 'general docket not at issue'", async () => {
     updateCaseSpy = sinon.spy();
     applicationContext = {
+      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       getPersistenceGateway: () => ({
         createCaseTrialSortMappingRecords: () => {},
         getAllCatalogCases: () => [
@@ -100,6 +104,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
   it("should not update case to 'ready for trial' if it does not have answer document", async () => {
     updateCaseSpy = sinon.spy();
     applicationContext = {
+      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       getPersistenceGateway: () => ({
         getAllCatalogCases: () => [
           { caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' },
@@ -149,6 +154,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     updateCaseSpy = sinon.spy();
     applicationContext = {
+      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       getPersistenceGateway: () => ({
         createCaseTrialSortMappingRecords: () => {},
         getAllCatalogCases: () => [
