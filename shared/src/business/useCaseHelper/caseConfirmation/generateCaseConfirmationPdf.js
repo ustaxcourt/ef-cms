@@ -125,4 +125,5 @@ exports.generateCaseConfirmationPdf = async ({
 
     s3Client.upload(params, resolve);
   });
+  return result;
 };
