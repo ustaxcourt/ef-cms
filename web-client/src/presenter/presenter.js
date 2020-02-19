@@ -207,6 +207,7 @@ import { selectDocumentSequence } from './sequences/selectDocumentSequence';
 import { selectScannerSequence } from './sequences/selectScannerSequence';
 import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
+import { serveCaseToIrsSequence } from './sequences/serveCaseToIrsSequence';
 import { serveCourtIssuedDocumentSequence } from './sequences/serveCourtIssuedDocumentSequence';
 import { serveToIrsSequence } from './sequences/serveToIrsSequence';
 import { setCanvasForPDFSigningSequence } from './sequences/setCanvasForPDFSigningSequence';
@@ -568,6 +569,7 @@ export const presenter = {
     selectScannerSequence,
     selectSecondaryDocumentSequence,
     selectWorkItemSequence,
+    serveCaseToIrsSequence,
     serveCourtIssuedDocumentSequence,
     serveToIrsSequence,
     setCanvasForPDFSigningSequence,
