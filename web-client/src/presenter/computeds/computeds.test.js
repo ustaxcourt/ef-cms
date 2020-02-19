@@ -1,10 +1,17 @@
-import { runCompute } from 'cerebral/test';
-
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
+import { applicationContext } from '../../applicationContext';
 import { formattedCases as formattedCasesComputed } from './formattedCaseDetail';
+import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const formattedCases = withAppContextDecorator(formattedCasesComputed);
+applicationContext.getCurrentUser = () =>
+  MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'];
+
+const formattedCases = withAppContextDecorator(
+  formattedCasesComputed,
+  applicationContext,
+);
 
 describe('formatted case details computed', () => {
   it('formats the date in a list of cases', () => {
