@@ -1,7 +1,7 @@
 import { AddressDisplay } from '../CaseDetail/PetitionerInformation';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDifferenceModalOverlay } from '../StartCase/CaseDifferenceModalOverlay';
-import { ConfirmServeToIrsModal } from './ConfirmServeToIrsModal';
+import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
@@ -13,9 +13,22 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+const ConfirmServeToIrsModal = () => (
+  <ConfirmModal
+    cancelLabel="No, Take Me Back"
+    confirmLabel="Yes, Serve"
+    preventCancelOnBlur={true}
+    title="Are You Sure You Want to Serve This Petition to the IRS?"
+    onCancelSequence="clearModalSequence"
+    onConfirmSequence="createCaseFromPaperAndServeToIrsSequence"
+  ></ConfirmModal>
+);
+
 export const ReviewPetitionFromPaper = connect(
   {
     constants: state.constants,
+    createCaseFromPaperAndServeToIrsSequence:
+      sequences.createCaseFromPaperAndServeToIrsSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     goBackToStartCaseInternalSequence:
@@ -23,18 +36,17 @@ export const ReviewPetitionFromPaper = connect(
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewPetitionFromPaperHelper: state.reviewPetitionFromPaperHelper,
-    serveToIrsSequence: sequences.serveToIrsSequence,
     showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
   },
   ({
     constants,
+    createCaseFromPaperAndServeToIrsSequence,
     form,
     formCancelToggleCancelSequence,
     goBackToStartCaseInternalSequence,
     openConfirmServeToIrsModalSequence,
     reviewPetitionFromPaperHelper,
-    serveToIrsSequence,
     showModal,
     startCaseHelper,
   }) => {
@@ -362,7 +374,9 @@ export const ReviewPetitionFromPaper = connect(
         )}
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal confirmSequence={serveToIrsSequence} />
+          <FileUploadErrorModal
+            confirmSequence={createCaseFromPaperAndServeToIrsSequence}
+          />
         )}
         {showModal == 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
