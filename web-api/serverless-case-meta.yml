@@ -151,7 +151,7 @@ resources:
 
 functions:
   updateCaseTrialSortTags:
-    handler: web-api/${self:provider.dir}/casesHandlers.updateCaseTrialSortTagsLambda
+    handler: web-api/${self:provider.dir}/caseMetaHandlers.updateCaseTrialSortTagsLambda
     events:
       - http:
           path: /{caseId}/update-case-trial-sort-tags
@@ -163,7 +163,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   blockCaseFromTrial:
-    handler: web-api/${self:provider.dir}/casesHandlers.blockCaseFromTrialLambda
+    handler: web-api/${self:provider.dir}/caseMetaHandlers.blockCaseFromTrialLambda
     events:
       - http:
           path: /{caseId}/block
@@ -175,7 +175,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   unblockCaseFromTrial:
-    handler: web-api/${self:provider.dir}/casesHandlers.unblockCaseFromTrialLambda
+    handler: web-api/${self:provider.dir}/caseMetaHandlers.unblockCaseFromTrialLambda
     events:
       - http:
           path: /{caseId}/block
@@ -187,7 +187,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   prioritizeCase:
-    handler: web-api/${self:provider.dir}/casesHandlers.prioritizeCaseLambda
+    handler: web-api/${self:provider.dir}/caseMetaHandlers.prioritizeCaseLambda
     events:
       - http:
           path: /{caseId}/high-priority
@@ -199,7 +199,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   unprioritizeCase:
-    handler: web-api/${self:provider.dir}/casesHandlers.unprioritizeCaseLambda
+    handler: web-api/${self:provider.dir}/caseMetaHandlers.unprioritizeCaseLambda
     events:
       - http:
           path: /{caseId}/high-priority
@@ -211,7 +211,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCaseContext:
-    handler: web-api/${self:provider.dir}/casesHandlers.updateCaseContextLambda
+    handler: web-api/${self:provider.dir}/caseMetaHandlers.updateCaseContextLambda
     events:
       - http:
           path: /{caseId}/case-context
@@ -223,7 +223,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   addConsolidatedCase:
-    handler: web-api/${self:provider.dir}/casesHandlers.addConsolidatedCaseLambda
+    handler: web-api/${self:provider.dir}/caseMetaHandlers.addConsolidatedCaseLambda
     events:
       - http:
           path: /{caseId}/consolidate-case
@@ -235,7 +235,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   removeConsolidatedCases:
-    handler: web-api/${self:provider.dir}/casesHandlers.removeConsolidatedCasesLambda
+    handler: web-api/${self:provider.dir}/caseMetaHandlers.removeConsolidatedCasesLambda
     events:
       - http:
           path: /{caseId}/consolidate-case
@@ -247,7 +247,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateQcCompleteForTrial:
-    handler: web-api/${self:provider.dir}/casesHandlers.updateQcCompleteForTrialLambda
+    handler: web-api/${self:provider.dir}/caseMetaHandlers.updateQcCompleteForTrialLambda
     events:
       - http:
           path: /{caseId}/qc-complete
@@ -259,7 +259,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   sealCase:
-    handler: web-api/${self:provider.dir}/casesHandlers.sealCaseLambda
+    handler: web-api/${self:provider.dir}/caseMetaHandlers.sealCaseLambda
     events:
       - http:
           path: /{caseId}/seal
