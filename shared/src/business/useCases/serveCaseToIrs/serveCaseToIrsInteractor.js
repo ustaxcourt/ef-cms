@@ -43,8 +43,8 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   addDocketEntryForPaymentStatus({ caseEntity });
 
   caseEntity
-    .updateCaseTitleDocketRecord()
-    .updateDocketNumberRecord()
+    .updateCaseTitleDocketRecord({ applicationContext })
+    .updateDocketNumberRecord({ applicationContext })
     .validate();
 
   await uploadZipOfDocuments({
