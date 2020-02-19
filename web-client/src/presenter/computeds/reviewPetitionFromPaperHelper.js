@@ -35,9 +35,7 @@ export const reviewPetitionFromPaperHelper = (get, applicationContext) => {
   }
 
   // orders needed summary
-  let hasOrders = false;
-
-  [
+  let hasOrders = [
     'orderForAmendedPetition',
     'orderForAmendedPetitionAndFilingFee',
     'orderForFilingFee',
@@ -46,13 +44,7 @@ export const reviewPetitionFromPaperHelper = (get, applicationContext) => {
     'orderDesignatingPlaceOfTrial',
     'orderToShowCause',
     'noticeOfAttachments',
-  ].forEach(key => {
-    const boolValue = Boolean(form[key]);
-
-    if (boolValue) {
-      hasOrders = true;
-    }
-  });
+  ].some(key => Boolean(form[key]));
 
   return {
     hasIrsNoticeFormatted,
