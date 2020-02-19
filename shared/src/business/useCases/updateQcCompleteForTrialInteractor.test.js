@@ -38,8 +38,8 @@ describe('updateQcCompleteForTrialInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: User.ROLES.calendarClerk,
-          userId: 'calendarClerk',
+          role: User.ROLES.petitionsClerk,
+          userId: 'petitionsClerk',
         };
       },
       getPersistenceGateway: () => {

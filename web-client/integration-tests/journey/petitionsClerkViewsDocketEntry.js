@@ -3,7 +3,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export default (test, draftOrderIndex) => {
-  return it('Calendar Clerk views the docket entry for the given document', async () => {
+  return it('Petitions Clerk views the docket entry for the given document', async () => {
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
