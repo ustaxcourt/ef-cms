@@ -30,7 +30,14 @@
     "startDate": "2020-11-27T05:00:00.000Z",
     "isCalendared": true,
     "maxCases": 100,
-    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc"
+    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "trialClerk": {
+      "name": "Test Trial Clerk",
+      "section": "trialClerks",
+      "role": "trialclerk",
+      "userId": "f0a1e52a-876f-4c03-853c-f66e407e5a1e",
+      "email": "trialclerk"
+    }
   },
   {
     "pk": "trial-session-working-copy|959c4338-0fac-42eb-b0eb-d53b8d0195cc",
