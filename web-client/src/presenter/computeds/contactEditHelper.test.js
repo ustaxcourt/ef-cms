@@ -32,7 +32,7 @@ describe('contactEditHelper', () => {
     expect(result.contactPrimary.showInCareOf).toBeTruthy();
   });
 
-  it('should set primary showInCareOf to true when the caseDetail partType is estateWithoutExecutor', () => {
+  it('should set contactPrimary.showInCareOf to true when the caseDetail partyType is estateWithoutExecutor', () => {
     let testState = {
       ...state,
       caseDetail: {

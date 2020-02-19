@@ -698,7 +698,10 @@ describe('getFormattedCaseDetail', () => {
 
 describe('documentMeetsAgeRequirements', () => {
   it('indicates success if document is not a transcript', () => {
-    const result = documentMeetsAgeRequirements({ eventCode: 'BANANA' });
+    const nonTranscriptEventCode = 'BANANA'; // this is not a transcript event code - to think otherwise would just be bananas.
+    const result = documentMeetsAgeRequirements({
+      eventCode: nonTranscriptEventCode,
+    });
     expect(result).toBeTruthy();
   });
   it(`indicates success if document is a transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {

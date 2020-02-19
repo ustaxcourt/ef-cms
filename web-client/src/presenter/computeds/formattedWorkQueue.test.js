@@ -1026,7 +1026,7 @@ describe('formatted work queue computed', () => {
   });
 
   describe('formatWorkItem', () => {
-    it('should return createdAtFormatted as MMDDYY format', () => {
+    it('should return createdAtFormatted as MM/DD/YY format', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         createdAt: '2019-02-28T21:14:39.488Z',
@@ -1094,7 +1094,7 @@ describe('formatted work queue computed', () => {
       expect(result.assigneeName).toEqual('Unassigned');
     });
 
-    it('should show the high priority when the work item is high priority', () => {
+    it('should show the high priority icon when the work item is high priority', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         highPriority: false,
@@ -1283,7 +1283,7 @@ describe('formatted work queue computed', () => {
       expect(result.docketNumberWithSuffix).toEqual('123-45S');
     });
 
-    it('should return selected as true workItemId is found in selectedWorkItems', () => {
+    it('should return selected as true if workItemId is found in selectedWorkItems', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         workItemId: '123',
