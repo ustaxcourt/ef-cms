@@ -48,6 +48,7 @@ Case.STATUS_TYPES = {
   closed: 'Closed',
   generalDocket: 'General Docket - Not at Issue',
   generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)',
+  inProgress: 'In Progress',
   jurisdictionRetained: 'Jurisdiction Retained',
   new: 'New',
   onAppeal: 'On Appeal',
@@ -227,6 +228,8 @@ function Case(rawCase, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+
+  console.log('rawCase.status', rawCase.status);
 
   this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
   this.automaticBlocked = rawCase.automaticBlocked;
