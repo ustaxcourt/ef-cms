@@ -21,6 +21,6 @@ exports.updateCaseContextInteractor = ({
   return put({
     applicationContext,
     body: { associatedJudge, caseCaption, caseStatus },
-    endpoint: `/cases/${caseId}/case-context`,
+    endpoint: `/case-meta/${caseId}/case-context`,
   });
 };
