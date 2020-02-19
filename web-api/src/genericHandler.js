@@ -21,9 +21,9 @@ exports.genericHandler = (event, cb, options = {}) => {
       isPublicUser,
       logEvent = false,
       logEventLabel = 'Event',
-      logResults = false,
+      logResults = true,
       logResultsLabel = 'Results',
-      logUser = false,
+      logUser = true,
       logUserLabel = 'User',
     } = options;
 
