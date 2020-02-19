@@ -162,7 +162,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('navigateToReviewPetitionFromPaperSequence');
-    await test.runSequence('gotoReviewPetitionSequence');
+    await test.runSequence('gotoReviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetition');
 
