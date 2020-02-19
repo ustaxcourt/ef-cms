@@ -1,5 +1,6 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
+import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
@@ -23,6 +24,7 @@ import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 export const createCaseFromPaperAndServeToIrsSequence = [
   computeDateReceivedAction,
   computeIrsNoticeDateAction,
+  clearPdfPreviewUrlAction,
   showProgressSequenceDecorator([
     openFileUploadStatusModalAction,
     createCaseFromPaperAction,
