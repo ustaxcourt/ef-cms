@@ -1,9 +1,9 @@
-import { navigateToReviewPetitionAction } from './navigateToReviewPetitionAction';
+import { navigateToReviewPetitionFromPaperAction } from './navigateToReviewPetitionFromPaperAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
 
-describe('navigateToReviewPetitionAction', () => {
+describe('navigateToReviewPetitionFromPaperAction', () => {
   let routeStub;
 
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('navigateToReviewPetitionAction', () => {
   });
 
   it('navigates to review petition url', async () => {
-    await runAction(navigateToReviewPetitionAction, {
+    await runAction(navigateToReviewPetitionFromPaperAction, {
       modules: {
         presenter,
       },

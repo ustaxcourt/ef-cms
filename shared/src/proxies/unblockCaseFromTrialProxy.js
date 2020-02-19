@@ -12,6 +12,6 @@ exports.unblockCaseFromTrialInteractor = ({ applicationContext, caseId }) => {
   return remove({
     applicationContext,
     body: {},
-    endpoint: `/cases/${caseId}/block`,
+    endpoint: `/case-meta/${caseId}/block`,
   });
 };

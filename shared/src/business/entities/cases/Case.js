@@ -40,21 +40,21 @@ Case.PAYMENT_STATUS = {
 };
 
 Case.STATUS_TYPES = {
-  assignedCase: 'Assigned - Case',
-  assignedMotion: 'Assigned - Motion',
-  batchedForIRS: 'Batched for IRS',
-  calendared: 'Calendared',
-  cav: 'CAV',
-  closed: 'Closed',
-  generalDocket: 'General Docket - Not at Issue',
-  generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)',
+  assignedCase: 'Assigned - Case', // Case has been assigned to a judge
+  assignedMotion: 'Assigned - Motion', // Someone has requested a judge for the case
+  batchedForIRS: 'Batched for IRS', // TODO: delete
+  calendared: 'Calendared', // Case has been scheduled for trial
+  cav: 'CAV', // Core alternative valuation
+  closed: 'Closed', // Judge has made a ruling to clode the case
+  generalDocket: 'General Docket - Not at Issue', // Submitted to the IRS
+  generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)', // Case is ready for trial
   inProgress: 'In Progress',
-  jurisdictionRetained: 'Jurisdiction Retained',
-  new: 'New',
-  onAppeal: 'On Appeal',
-  recalled: 'Recalled',
-  rule155: 'Rule 155',
-  submitted: 'Submitted',
+  jurisdictionRetained: 'Jurisdiction Retained', // Jurisdiction of a case is retained by a specific judge — usually after the case is on a judge’s trial calendar
+  new: 'New', // Case has not beed QCed
+  onAppeal: 'On Appeal', // After the trial, the case has gone to the appeals court
+  recalled: 'Recalled', // TODO: delete
+  rule155: 'Rule 155', // Where  the  Court  has  filed  or stated its opinion or issued a dispositive order determining the  issues  in  a  case,  it  may  withhold  entry  of  its  decision  for  the purpose of permitting the parties to submit computations pursuant  to  the  Court’s  determination  of  the  issues,  showing  the correct amount to be included in the decision.
+  submitted: 'Submitted', // TODO: delete
 };
 
 Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
@@ -120,16 +120,16 @@ Case.CASE_CAPTION_POSTFIX = 'v. Commissioner of Internal Revenue, Respondent';
 
 Case.ANSWER_DOCUMENT_CODES = [
   'A',
-  'AAPN',
-  'ATAP',
   'AAAP',
+  'AAPN',
   'AATP',
-  'APA',
-  'ATSP',
   'AATS',
-  'ASUP',
-  'ASAP',
   'AATT',
+  'APA',
+  'ASAP',
+  'ASUP',
+  'ATAP',
+  'ATSP',
 ];
 
 Case.AUTOMATIC_BLOCKED_REASONS = {
@@ -229,16 +229,27 @@ function Case(rawCase, { applicationContext }) {
     throw new TypeError('applicationContext must be defined');
   }
 
-  this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
+  if (User.isInternalUser(applicationContext.getCurrentUser().role)) {
+    this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
+    this.caseNote = rawCase.caseNote;
+    this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
+  }
+
+  // TODO: as part of the security task, these values also need to be restricted
   this.automaticBlocked = rawCase.automaticBlocked;
   this.automaticBlockedDate = rawCase.automaticBlockedDate;
   this.automaticBlockedReason = rawCase.automaticBlockedReason;
   this.blocked = rawCase.blocked;
   this.blockedDate = rawCase.blockedDate;
   this.blockedReason = rawCase.blockedReason;
+  this.highPriority = rawCase.highPriority;
+  this.highPriorityReason = rawCase.highPriorityReason;
+
+  this.status = rawCase.status || Case.STATUS_TYPES.new;
+  this.userId = rawCase.userId;
+
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
-  this.caseNote = rawCase.caseNote;
   this.caseType = rawCase.caseType;
   this.closedDate = rawCase.closedDate;
   this.createdAt = rawCase.createdAt || createISODateString();
@@ -247,8 +258,6 @@ function Case(rawCase, { applicationContext }) {
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
-  this.highPriority = rawCase.highPriority;
-  this.highPriorityReason = rawCase.highPriorityReason;
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.irsSendDate = rawCase.irsSendDate;
   this.isPaper = rawCase.isPaper;
@@ -263,15 +272,12 @@ function Case(rawCase, { applicationContext }) {
   this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
-  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.sealedDate = rawCase.sealedDate;
-  this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialLocation = rawCase.trialLocation;
   this.trialSessionId = rawCase.trialSessionId;
   this.trialTime = rawCase.trialTime;
-  this.userId = rawCase.userId;
 
   this.initialDocketNumberSuffix =
     rawCase.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
@@ -358,7 +364,7 @@ joiValidationDecorator(
   joi.object().keys({
     associatedJudge: joi
       .string()
-      .required()
+      .optional()
       .meta({ tags: ['Restricted'] })
       .description('Judge assigned to this case. Defaults to Chief Judge.'),
     automaticBlocked: joi
@@ -654,7 +660,7 @@ joiValidationDecorator(
       .description('Procedure type of the case.'),
     qcCompleteForTrial: joi
       .object()
-      .required()
+      .optional()
       .meta({ tags: ['Restricted'] })
       .description(
         'QC Checklist object that must be completed before the case can go to trial.',
@@ -680,7 +686,7 @@ joiValidationDecorator(
     status: joi
       .string()
       .valid(...Object.values(Case.STATUS_TYPES))
-      .required()
+      .optional()
       .meta({ tags: ['Restricted'] })
       .description('Status of the case.'),
     trialDate: joi
