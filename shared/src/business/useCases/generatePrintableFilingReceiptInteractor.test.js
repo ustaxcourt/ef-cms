@@ -4,6 +4,7 @@ import {
   generatePrintableFilingReceiptInteractor,
 } from './generatePrintableFilingReceiptInteractor';
 import { getFormattedCaseDetail } from '../utilities/getFormattedCaseDetail';
+const { MOCK_USERS } = require('../../test/mockUsers');
 
 let generatePdfFromHtmlInteractorMock;
 let generatePrintableFilingReceiptTemplateMock;
@@ -62,6 +63,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
           },
         ],
       }),
+      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       getEntityConstructors: () => ({
         Case,
       }),
