@@ -34,7 +34,9 @@ export const ReviewPetitionFromPaper = connect(
     openConfirmServeToIrsModalSequence,
     reviewPetitionFromPaperHelper,
     saveInternalCaseForLaterSequence,
+    serveToIrsSequence,
     showModal,
+    startCaseHelper,
   }) => {
     return (
       <>
@@ -48,7 +50,7 @@ export const ReviewPetitionFromPaper = connect(
             </h2>
           </Focus>
 
-          {reviewPetitionHelper.hasOrders && (
+          {reviewPetitionFromPaperHelper.hasOrders && (
             <OrdersNeededSummary data={form} />
           )}
 
