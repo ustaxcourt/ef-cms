@@ -154,9 +154,15 @@ exports.updateUserContactInformationInteractor = async ({
           additionalInfo: `for ${user.name}`,
           caseId: caseEntity.caseId,
           documentId: newDocumentId,
+          documentTitle: documentType.title,
           documentType: documentType.title,
           eventCode: documentType.eventCode,
-          filedBy: user.name,
+          practitioner: [
+            {
+              name: user.name,
+              partyPractitioner: true,
+            },
+          ],
           processingStatus: 'complete',
           userId: user.userId,
         },
