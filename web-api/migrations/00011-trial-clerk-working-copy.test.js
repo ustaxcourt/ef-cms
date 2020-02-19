@@ -1,7 +1,10 @@
+const createApplicationContext = require('../src/applicationContext');
 const { addWorkingCopy } = require('./00011-trial-clerk-working-copy');
 
+const applicationContext = createApplicationContext({});
+
 let queryMock;
-let documentClient;
+let documentClient = applicationContext.getDocumentClient();
 let foundWorkingCopy;
 
 const TRIAL_CLERK_USER_ID_1 = 'e23f4957-1473-4fc5-878a-df6492d6bd8a';
@@ -19,11 +22,19 @@ const tableName = 'Test';
 describe("create working copy for assigned trial clerk when it doesn't exist", () => {
   beforeEach(() => {
     foundWorkingCopy = null;
-    queryMock = jest.fn(() => foundWorkingCopy);
+    queryMock = jest.fn(() => {
+      const Items = [];
+      if (foundWorkingCopy) {
+        Items.push(foundWorkingCopy);
+      }
+      return {
+        promise: () => ({
+          Items,
+        }),
+      };
+    });
 
-    documentClient = {
-      query: queryMock,
-    };
+    documentClient.query = queryMock;
   });
 
   it('does not proceed if the item is NOT a trialSession record', async () => {
