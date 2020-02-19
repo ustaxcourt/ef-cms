@@ -139,6 +139,19 @@ const router = {
     );
 
     route(
+      '/case-detail/*/documents/*/review',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Document detail review`,
+        );
+        app.getSequence('gotoReviewSavedPetitionSequence')({
+          docketNumber,
+          documentId,
+        });
+      }, ROLE_PERMISSIONS.UPDATE_CASE),
+    );
+
+    route(
       '/case-detail/*/documents/*/complete',
       ifHasAccess((docketNumber, documentId) => {
         setPageTitle(
