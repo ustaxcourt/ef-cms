@@ -74,6 +74,126 @@ describe('workQueueHelper', () => {
     });
   });
 
+  it('returns My Messages for workQueueTitle if showing individual internal work queue', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: {
+          queue: 'my',
+          workQueueIsInternal: true,
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      workQueueTitle: 'My Messages',
+    });
+  });
+
+  it('returns Section Messages for workQueueTitle if showing section internal work queue', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: {
+          queue: 'section',
+          workQueueIsInternal: true,
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      workQueueTitle: 'Section Messages',
+    });
+  });
+
+  it('returns My Document QC for workQueueTitle if showing individual non-internal work queue', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: {
+          queue: 'my',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      workQueueTitle: 'My Document QC',
+    });
+  });
+
+  it('returns Document QC for workQueueTitle if showing section non-internal work queue and current user is not a docket or petitions clerk', () => {
+    const user = {
+      role: User.ROLES.adc,
+      userId: '123',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: {
+          queue: 'section',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      workQueueTitle: 'Document QC',
+    });
+  });
+
+  it('returns Section Document QC for workQueueTitle if showing section non-internal work queue and current user is a docket clerk', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '123',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: {
+          queue: 'section',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      workQueueTitle: 'Section Document QC',
+    });
+  });
+
   it('shows the start a case button when role is petitions clerk', () => {
     const user = {
       role: User.ROLES.petitionsClerk,
