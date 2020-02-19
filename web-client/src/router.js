@@ -657,7 +657,7 @@ const router = {
       '/review-petition',
       ifHasAccess(() => {
         setPageTitle('Review Petition');
-        app.getSequence('gotoReviewPetitionSequence')();
+        app.getSequence('gotoReviewPetitionFromPaperSequence')();
       }),
     );
 
