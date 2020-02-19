@@ -1,4 +1,6 @@
 const isCaseRecord = item => !!item.caseType;
+const isTrialSessionRecord = item =>
+  !!item.caseOrder && !!item.trialSessionId && !!item.maxCases;
 
 const forAllRecords = async (documentClient, tableName, cb) => {
   let hasMoreResults = true;
@@ -28,7 +30,7 @@ const upGenerator = mutateFunction => async (
   forAllRecords,
 ) => {
   await forAllRecords(documentClient, tableName, async item => {
-    const updatedItem = mutateFunction(item);
+    const updatedItem = await mutateFunction(item, documentClient, tableName);
     if (updatedItem) {
       await documentClient
         .put({
@@ -40,4 +42,9 @@ const upGenerator = mutateFunction => async (
   });
 };
 
-module.exports = { forAllRecords, isCaseRecord, upGenerator };
+module.exports = {
+  forAllRecords,
+  isCaseRecord,
+  isTrialSessionRecord,
+  upGenerator,
+};

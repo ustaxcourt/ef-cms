@@ -945,7 +945,7 @@
         }
       }
     },
-    "/cases/{caseId}/block": {
+    "/case-meta/{caseId}/block": {
       "parameters": [
         {
           "name": "caseId",
@@ -1074,7 +1074,7 @@
         }
       }
     },
-    "/cases/{caseId}/high-priority": {
+    "/case-meta/{caseId}/high-priority": {
       "parameters": [
         {
           "name": "caseId",
@@ -1145,7 +1145,7 @@
         }
       }
     },
-    "/cases/{caseId}/case-context": {
+    "/case-meta/{caseId}/case-context": {
       "parameters": [
         {
           "name": "caseId",
@@ -1198,7 +1198,7 @@
         }
       }
     },
-    "/cases/{caseId}/consolidate-case": {
+    "/case-meta/{caseId}/consolidate-case": {
       "parameters": [
         {
           "name": "caseId",
@@ -4448,7 +4448,7 @@
         }
       }
     },
-    "/cases/{caseId}/qc-complete": {
+    "/case-meta/{caseId}/qc-complete": {
       "parameters": [
         {
           "name": "caseId",
@@ -4516,7 +4516,7 @@
         }
       }
     },
-    "/cases/{caseId}/seal": {
+    "/case-meta/{caseId}/seal": {
       "parameters": [
         {
           "name": "caseId",

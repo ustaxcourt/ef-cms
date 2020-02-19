@@ -17,6 +17,6 @@ exports.removeConsolidatedCasesInteractor = ({
   const caseIdList = caseIdsToRemove.join(',');
   return remove({
     applicationContext,
-    endpoint: `/cases/${caseId}/consolidate-case?caseIdsToRemove=${caseIdList}`,
+    endpoint: `/case-meta/${caseId}/consolidate-case?caseIdsToRemove=${caseIdList}`,
   });
 };
