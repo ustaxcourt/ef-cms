@@ -158,7 +158,7 @@
     "dynamo:admin": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin",
     "dynamo:export": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop node web-api/dynamo-export.js > ./web-api/storage/fixtures/efcms.json",
     "dynamo:import": "pushd ./web-api && node ./create-dynamo-tables.js && node ./seed-dynamo.js ./storage/fixtures/efcms.json && popd",
-    "dynamo:migrate:local":"./web-api/run-umzug.sh local",
+    "dynamo:migrate:local": "./web-api/run-umzug.sh local",
     "lint:css:fix": "npm run lint:css -- --fix",
     "lint:css": "stylelint web-client/src/**/*.scss",
     "lint:fix": "run-p lint:css:fix lint:js:fix",
