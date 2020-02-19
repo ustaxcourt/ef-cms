@@ -19,6 +19,6 @@ exports.updateQcCompleteForTrialInteractor = ({
   return put({
     applicationContext,
     body: { qcCompleteForTrial, trialSessionId },
-    endpoint: `/cases/${caseId}/qc-complete`,
+    endpoint: `/case-meta/${caseId}/qc-complete`,
   });
 };
