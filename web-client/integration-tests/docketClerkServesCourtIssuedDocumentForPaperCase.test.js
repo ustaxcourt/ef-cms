@@ -40,10 +40,10 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkSignsOut(test);
 
   docketClerkLogIn(test);
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
+  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test, 0);
   docketClerkViewsDraftOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
+  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test, 0);
   docketClerkServesOrderWithPaperService(test, 0);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(
     test,
