@@ -2,7 +2,7 @@ import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAct
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
-import { navigateToReviewPetitionAction } from '../actions/StartCaseInternal/navigateToReviewPetitionAction';
+import { navigateToReviewPetitionFromPaperAction } from '../actions/StartCaseInternal/navigateToReviewPetitionFromPaperAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -27,7 +27,10 @@ export const navigateToReviewPetitionFromPaperSequence = [
           setValidationErrorsAction,
           setValidationAlertErrorsAction,
         ],
-        success: [stopShowValidationAction, navigateToReviewPetitionAction],
+        success: [
+          stopShowValidationAction,
+          navigateToReviewPetitionFromPaperAction,
+        ],
       },
     ],
   },
