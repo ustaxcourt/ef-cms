@@ -6,5 +6,5 @@
  * @returns {Promise} async action
  */
 export const navigateToReviewPetitionFromPaperAction = async ({ router }) => {
-  await router.route('/review-petition');
+  await router.route('file-a-petition/review-petition');
 };
