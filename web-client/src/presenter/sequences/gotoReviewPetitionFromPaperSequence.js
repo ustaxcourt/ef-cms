@@ -1,11 +1,12 @@
 import { canNavigateToReviewPetitionFromPaperScreenAction } from '../actions/StartCaseInternal/canNavigateToReviewPetitionFromPaperScreenAction';
-import { gotoDashboardSequence } from './gotoDashboardSequence';
+import { getInitialNextStepAction } from '../actions/StartCaseInternal/getInitialNextStepAction';
+import { navigateToStartCaseWizardNextStepAction } from '../actions/StartCase/navigateToStartCaseWizardNextStepAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
 export const gotoReviewPetitionFromPaperSequence = [
   canNavigateToReviewPetitionFromPaperScreenAction,
   {
-    no: [gotoDashboardSequence],
-    yes: [setCurrentPageAction('ReviewPetition')],
+    no: [getInitialNextStepAction, navigateToStartCaseWizardNextStepAction],
+    yes: [setCurrentPageAction('ReviewPetitionFromPaper')],
   },
 ];
