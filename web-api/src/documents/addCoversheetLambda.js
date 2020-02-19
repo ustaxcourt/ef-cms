@@ -19,6 +19,6 @@ exports.handler = event =>
       });
     },
     {
-      // logEvent: true,
+      logEvent: true,
     },
   );
