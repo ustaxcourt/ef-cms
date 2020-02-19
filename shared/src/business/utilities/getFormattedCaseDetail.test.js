@@ -11,6 +11,10 @@ import {
 } from './getFormattedCaseDetail';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import { calculateISODate, createISODateString } from './DateHandler';
+const { MOCK_USERS } = require('../../test/mockUsers');
+
+applicationContext.getCurrentUser = () =>
+  MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'];
 
 const mockCaseDetailBase = {
   caseId: '123-456-abc-def',

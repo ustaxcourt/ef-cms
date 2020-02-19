@@ -1,4 +1,5 @@
 import { CerebralTest } from 'cerebral/test';
+import { User } from '../../../../shared/src/business/entities/User';
 import { presenter } from '../presenter';
 import sinon from 'sinon';
 
@@ -8,10 +9,12 @@ const getInboxMessagesForSectionStub = sinon
   .stub()
   .returns([{ document: { isFileAttached: true }, isQC: false }]);
 presenter.providers.applicationContext = {
+  getConstants: () => ({ USER_ROLES: User.ROLES }),
   getCurrentUser: setCurrentUserStub,
   getUniqueId: () => new Date().getTime(),
   getUseCases: () => ({
     getInboxMessagesForSectionInteractor: getInboxMessagesForSectionStub,
+    getJudgeForUserChambersInteractor: () => null,
     getNotificationsInteractor: () => {
       return {};
     },

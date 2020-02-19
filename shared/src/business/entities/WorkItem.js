@@ -2,6 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { CHIEF_JUDGE } = require('./cases/CaseConstants');
 const { createISODateString } = require('../utilities/DateHandler');
 const { IRS_BATCH_SYSTEM_SECTION, PETITIONS_SECTION } = require('./WorkQueue');
 const { Message } = require('./Message');
@@ -17,6 +18,7 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.associatedJudge = rawWorkItem.associatedJudge || CHIEF_JUDGE;
   this.assigneeId = rawWorkItem.assigneeId;
   this.assigneeName = rawWorkItem.assigneeName;
   this.caseId = rawWorkItem.caseId;
@@ -63,6 +65,7 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional(), // should be a Message entity at some point
+    associatedJudge: joi.string().required(),
     caseId: joi
       .string()
       .uuid({

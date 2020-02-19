@@ -18,15 +18,15 @@ export const StartCaseInternal = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     generateInternalCaseCaptionSequence:
       sequences.generateInternalCaseCaptionSequence,
-    navigateToReviewPetitionSequence:
-      sequences.navigateToReviewPetitionSequence,
+    navigateToReviewPetitionFromPaperSequence:
+      sequences.navigateToReviewPetitionFromPaperSequence,
     showModal: state.showModal,
   },
   ({
     documentSelectedForScan,
     formCancelToggleCancelSequence,
     generateInternalCaseCaptionSequence,
-    navigateToReviewPetitionSequence,
+    navigateToReviewPetitionFromPaperSequence,
     showModal,
   }) => {
     return (
@@ -102,7 +102,7 @@ export const StartCaseInternal = connect(
                   id="submit-case"
                   type="button"
                   onClick={() => {
-                    navigateToReviewPetitionSequence();
+                    navigateToReviewPetitionFromPaperSequence();
                   }}
                 >
                   Review Petition

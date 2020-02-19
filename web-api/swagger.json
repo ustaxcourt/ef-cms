@@ -945,7 +945,7 @@
         }
       }
     },
-    "/cases/{caseId}/block": {
+    "/case-meta/{caseId}/block": {
       "parameters": [
         {
           "name": "caseId",
@@ -1074,7 +1074,7 @@
         }
       }
     },
-    "/cases/{caseId}/high-priority": {
+    "/case-meta/{caseId}/high-priority": {
       "parameters": [
         {
           "name": "caseId",
@@ -1145,7 +1145,7 @@
         }
       }
     },
-    "/cases/{caseId}/case-context": {
+    "/case-meta/{caseId}/case-context": {
       "parameters": [
         {
           "name": "caseId",
@@ -1198,7 +1198,7 @@
         }
       }
     },
-    "/cases/{caseId}/consolidate-case": {
+    "/case-meta/{caseId}/consolidate-case": {
       "parameters": [
         {
           "name": "caseId",
@@ -2692,6 +2692,58 @@
         "responses": {
           "200": {
             "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/contact-info": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["user"],
+        "summary": "updates a user's contact information",
+        "description": "updates a user's contact information.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
           }
         },
         "security": [
@@ -4396,7 +4448,7 @@
         }
       }
     },
-    "/cases/{caseId}/qc-complete": {
+    "/case-meta/{caseId}/qc-complete": {
       "parameters": [
         {
           "name": "caseId",
@@ -4464,7 +4516,7 @@
         }
       }
     },
-    "/cases/{caseId}/seal": {
+    "/case-meta/{caseId}/seal": {
       "parameters": [
         {
           "name": "caseId",
