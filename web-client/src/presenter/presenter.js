@@ -245,7 +245,6 @@ import { state } from './state';
 import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolidatedCaseSequence';
 import { submitCaseAdvancedSearchSequence } from './sequences/submitCaseAdvancedSearchSequence';
 import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAssociationRequestSequence';
-import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
 import { submitCaseDocketNumberSearchSequence } from './sequences/submitCaseDocketNumberSearchSequence';
 import { submitCaseSearchForConsolidationSequence } from './sequences/submitCaseSearchForConsolidationSequence';
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
@@ -610,7 +609,6 @@ export const presenter = {
     submitAddConsolidatedCaseSequence,
     submitCaseAdvancedSearchSequence,
     submitCaseAssociationRequestSequence,
-    submitCaseDetailEditSaveSequence,
     submitCaseDocketNumberSearchSequence,
     submitCaseSearchForConsolidationSequence,
     submitCaseSearchSequence,
