@@ -139,10 +139,6 @@ export const documentDetailHelper = (get, applicationContext) => {
       (isOrder && !isDocumentOnDocketRecord) ||
       (isCourtIssuedDocument && !isDocumentOnDocketRecord));
 
-  const showServeToIrsButton =
-    newOrInProgressStatus.includes(caseDetail.status) &&
-    formattedDocument.isPetition &&
-    user.role === USER_ROLES.petitionsClerk;
   const showRecallButton =
     caseDetail.status === STATUS_TYPES.batchedForIRS &&
     formattedDocument.isPetition;
@@ -197,7 +193,6 @@ export const documentDetailHelper = (get, applicationContext) => {
     showPrintCaseConfirmationButton,
     showRecallButton,
     showRemoveSignature: isOrder && document.eventCode !== 'NOT' && isSigned,
-    showServeToIrsButton,
     showSignDocumentButton,
     showSignedAt: isOrder && isSigned,
     showViewOrdersNeededButton,

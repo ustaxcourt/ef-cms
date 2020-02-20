@@ -39,7 +39,6 @@ export default test => {
       value: '2017',
     });
 
-    await test.runSequence('clickServeToIrsSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
 
     await test.runSequence('navigateToReviewSavedPetitionSequence');
