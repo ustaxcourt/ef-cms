@@ -12,6 +12,6 @@ exports.unprioritizeCaseInteractor = ({ applicationContext, caseId }) => {
   return remove({
     applicationContext,
     body: {},
-    endpoint: `/cases/${caseId}/high-priority`,
+    endpoint: `/case-meta/${caseId}/high-priority`,
   });
 };
