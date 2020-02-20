@@ -28,11 +28,11 @@ exports.genericHandler = (event, cb, options = {}) => {
     } = options;
 
     try {
-      if (logEvent) {
+      if (logEvent && applicationContext) {
         applicationContext.logger.info(logEventLabel, event);
       }
 
-      if (logUser) {
+      if (logUser && applicationContext) {
         let userToLog = user;
         if (isPublicUser) {
           userToLog = 'Public User';
@@ -42,7 +42,7 @@ exports.genericHandler = (event, cb, options = {}) => {
 
       const results = await cb({ applicationContext, user });
 
-      if (logResults) {
+      if (logResults && applicationContext) {
         applicationContext.logger.info(logResultsLabel, results);
       }
 

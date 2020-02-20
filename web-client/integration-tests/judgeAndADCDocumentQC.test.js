@@ -6,10 +6,6 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import calendarClerkLogIn from './journey/calendarClerkLogIn';
-import calendarClerkManuallyAddsCaseToCalendaredTrialSession from './journey/calendarClerkManuallyAddsCaseToCalendaredTrialSession';
-import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
-import calendarClerkSignsOut from './journey/calendarClerkSignsOut';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSignsOut from './journey/docketClerkSignsOut';
@@ -17,6 +13,10 @@ import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSes
 import petitionerFilesDocumentForCase from './journey/petitionerFilesDocumentForCase';
 import petitionerLogIn from './journey/petitionerLogIn';
 import petitionerSignsOut from './journey/petitionerSignsOut';
+import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkManuallyAddsCaseToCalendaredTrialSession from './journey/petitionsClerkManuallyAddsCaseToCalendaredTrialSession';
+import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 
 const test = setupTest();
 
@@ -55,11 +55,11 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   docketClerkViewsTrialSessionList(test);
   docketClerkSignsOut(test);
 
-  calendarClerkLogIn(test);
-  calendarClerkSetsATrialSessionsSchedule(test);
-  calendarClerkManuallyAddsCaseToCalendaredTrialSession(test, 0);
-  calendarClerkManuallyAddsCaseToCalendaredTrialSession(test, 1);
-  calendarClerkSignsOut(test);
+  petitionsClerkLogIn(test);
+  petitionsClerkSetsATrialSessionsSchedule(test);
+  petitionsClerkManuallyAddsCaseToCalendaredTrialSession(test, 0);
+  petitionsClerkManuallyAddsCaseToCalendaredTrialSession(test, 1);
+  petitionsClerkSignsOut(test);
 
   it("Get judge's document qc section inbox after", async () => {
     await loginAs(test, 'judgeCohen');
