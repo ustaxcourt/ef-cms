@@ -51,5 +51,5 @@ exports.getReviewPetitionButton = () => {
 };
 
 exports.getSaveForLaterButton = () => {
-  return cy.contains('button', 'Save For Later');
+  return cy.contains('button', 'Save for Later');
 };
