@@ -29,7 +29,6 @@ const goToMessages = [
         'admin',
         'adc',
         'admissionsclerk',
-        'calendarclerk',
         'chambers',
         'clerkofcourt',
         'floater',

@@ -59,8 +59,8 @@ describe('setTrialSessionCalendarInteractor', () => {
     applicationContext = {
       getCurrentUser: () => {
         return new User({
-          name: 'calendarClerk',
-          role: User.ROLES.calendarClerk,
+          name: 'petitionsClerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -107,8 +107,8 @@ describe('setTrialSessionCalendarInteractor', () => {
     applicationContext = {
       getCurrentUser: () => {
         return new User({
-          name: 'calendarClerk',
-          role: User.ROLES.calendarClerk,
+          name: 'petitionsClerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -152,8 +152,8 @@ describe('setTrialSessionCalendarInteractor', () => {
     applicationContext = {
       getCurrentUser: () => {
         return new User({
-          name: 'calendarClerk',
-          role: User.ROLES.calendarClerk,
+          name: 'petitionsClerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },

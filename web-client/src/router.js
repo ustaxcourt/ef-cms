@@ -654,7 +654,7 @@ const router = {
     );
 
     route(
-      '/review-petition',
+      'file-a-petition/review-petition',
       ifHasAccess(() => {
         setPageTitle('Review Petition');
         app.getSequence('gotoReviewPetitionFromPaperSequence')();
