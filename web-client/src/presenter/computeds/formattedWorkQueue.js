@@ -51,8 +51,6 @@ export const formatWorkItem = ({
   const {
     COURT_ISSUED_EVENT_CODES,
     ORDER_TYPES_MAP,
-    STATUS_TYPES,
-    USER_ROLES,
   } = applicationContext.getConstants();
 
   const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
