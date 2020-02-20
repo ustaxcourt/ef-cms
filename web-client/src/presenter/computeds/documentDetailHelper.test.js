@@ -569,7 +569,7 @@ describe('document detail helper', () => {
   });
 
   describe('showServeToIrsButton and showRecallButton', () => {
-    it('should set showServeToIrsButton true and showRecallButton false when case status is new', () => {
+    it('should set showRecallButton false when case status is new', () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -593,11 +593,10 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showServeToIrsButton).toEqual(true);
       expect(result.showRecallButton).toEqual(false);
     });
 
-    it('should set showServeToIrsButton true and showRecallButton false when case status is inProgress', () => {
+    it('should set showRecallButton false when case status is inProgress', () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -621,7 +620,6 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showServeToIrsButton).toEqual(true);
       expect(result.showRecallButton).toEqual(false);
     });
 
@@ -649,7 +647,6 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showServeToIrsButton).toEqual(false);
       expect(result.showRecallButton).toEqual(true);
     });
 
@@ -677,7 +674,6 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showServeToIrsButton).toEqual(false);
       expect(result.showRecallButton).toEqual(false);
     });
 
@@ -705,7 +701,6 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showServeToIrsButton).toEqual(false);
       expect(result.showRecallButton).toEqual(false);
     });
 
@@ -733,7 +728,6 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showServeToIrsButton).toEqual(false);
       expect(result.showRecallButton).toEqual(false);
     });
   });
