@@ -40,7 +40,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   }, {});
 
   // orders needed summary
-  let hasOrders = [
+  const hasOrders = [
     'orderForAmendedPetition',
     'orderForAmendedPetitionAndFilingFee',
     'orderForFilingFee',
