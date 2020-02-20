@@ -59,7 +59,6 @@ const gotoTrialSessionDetails = [
       [
         'adc',
         'admissionsclerk',
-        'calendarclerk',
         'clerkofcourt',
         'docketclerk',
         'petitionsclerk',
