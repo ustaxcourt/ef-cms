@@ -14,6 +14,10 @@ const MOCK_USER = { name: 'Test User', userId: '1' };
 let logged = [];
 let lastLoggedValue;
 
+// Suppress console output in test runner (RAE SAID THIS WOULD BE COOL)
+console.error = () => null;
+console.info = () => null;
+
 let applicationContext = {};
 let logErrorMock;
 
