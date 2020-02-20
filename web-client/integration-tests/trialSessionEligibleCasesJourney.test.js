@@ -12,6 +12,7 @@ import petitionerLogin from './journey/petitionerLogIn';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
 import userSignsOut from './journey/petitionerSignsOut';
 
@@ -59,8 +60,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       userSignsOut(test);
       petitionsClerkLogIn(test);
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
-      // petitionsClerkSendsCaseToIRSHoldingQueue(test);
-      // petitionsClerkRunsBatchProcess(test);
+      petitionsClerkSubmitsCaseToIrs(test);
       userSignsOut(test);
       docketClerkLogIn(test);
       docketClerkSetsCaseReadyForTrial(test);
@@ -85,8 +85,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       userSignsOut(test);
       petitionsClerkLogIn(test);
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
-      // petitionsClerkSendsCaseToIRSHoldingQueue(test);
-      // petitionsClerkRunsBatchProcess(test);
+      petitionsClerkSubmitsCaseToIrs(test);
       userSignsOut(test);
       docketClerkLogIn(test);
       docketClerkSetsCaseReadyForTrial(test);
@@ -111,8 +110,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       userSignsOut(test);
       petitionsClerkLogIn(test);
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
-      // petitionsClerkSendsCaseToIRSHoldingQueue(test);
-      // petitionsClerkRunsBatchProcess(test);
+      petitionsClerkSubmitsCaseToIrs(test);
       userSignsOut(test);
       docketClerkLogIn(test);
       docketClerkSetsCaseReadyForTrial(test);
@@ -137,8 +135,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       userSignsOut(test);
       petitionsClerkLogIn(test);
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
-      // petitionsClerkSendsCaseToIRSHoldingQueue(test);
-      // petitionsClerkRunsBatchProcess(test);
+      petitionsClerkSubmitsCaseToIrs(test);
       userSignsOut(test);
       docketClerkLogIn(test);
       docketClerkSetsCaseReadyForTrial(test);
@@ -163,8 +160,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       userSignsOut(test);
       petitionsClerkLogIn(test);
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
-      // petitionsClerkSendsCaseToIRSHoldingQueue(test);
-      // petitionsClerkRunsBatchProcess(test);
+      petitionsClerkSubmitsCaseToIrs(test);
       userSignsOut(test);
       docketClerkLogIn(test);
       docketClerkSetsCaseReadyForTrial(test);
