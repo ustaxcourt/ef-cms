@@ -162,7 +162,6 @@ import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getU
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
 import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCaseProxy';
-import { recallPetitionFromIRSHoldingQueueInteractor } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshTokenInteractor } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { removeCaseFromTrialInteractor } from '../../shared/src/proxies/trialSessions/removeCaseFromTrialProxy';
 import { removeCasePendingItemInteractor } from '../../shared/src/proxies/removeCasePendingItemProxy';
@@ -175,7 +174,6 @@ import { saveCaseDetailInternalEditInteractor } from '../../shared/src/proxies/s
 import { saveCaseNoteInteractor } from '../../shared/src/proxies/caseNote/saveCaseNoteProxy';
 import { saveIntermediateDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/saveIntermediateDocketEntryProxy';
 import { sealCaseInteractor } from '../../shared/src/proxies/sealCaseProxy';
-import { sendPetitionToIRSHoldingQueueInteractor } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { serveCaseToIrsInteractor } from '../../shared/src/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
@@ -342,7 +340,6 @@ const allUseCases = {
   getWorkItemInteractor,
   loadPDFForSigningInteractor,
   prioritizeCaseInteractor,
-  recallPetitionFromIRSHoldingQueueInteractor,
   refreshTokenInteractor,
   removeCaseFromTrialInteractor,
   removeCasePendingItemInteractor,
@@ -354,7 +351,6 @@ const allUseCases = {
   saveCaseNoteInteractor,
   saveIntermediateDocketEntryInteractor,
   sealCaseInteractor,
-  sendPetitionToIRSHoldingQueueInteractor,
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,
   setItemInteractor,

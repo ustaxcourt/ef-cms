@@ -533,8 +533,6 @@ const {
   putWorkItemInUsersOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInUsersOutbox');
 const {
-  recallPetitionFromIRSHoldingQueueInteractor,
-} = require('../../shared/src/business/useCases/recallPetitionFromIRSHoldingQueueInteractor');
 const {
   removeCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor');
@@ -593,8 +591,6 @@ const {
   sendNotificationToUser,
 } = require('../../shared/src/notifications/sendNotificationToUser');
 const {
-  sendPetitionToIRSHoldingQueueInteractor,
-} = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
   sendServedPartiesEmails,
 } = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
@@ -1129,7 +1125,6 @@ module.exports = (appContextUser = {}) => {
         onDisconnectInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
-        recallPetitionFromIRSHoldingQueueInteractor,
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
@@ -1141,7 +1136,6 @@ module.exports = (appContextUser = {}) => {
         saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
         sealCaseInteractor,
-        sendPetitionToIRSHoldingQueueInteractor,
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
         setNoticesForCalendaredTrialSessionInteractor,

@@ -47,7 +47,6 @@ import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkAssignsWorkItemToOther from './journey/petitionsClerkAssignsWorkItemToOther';
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
-import petitionsClerkIrsHoldingQueue from './journey/petitionsClerkIrsHoldingQueue';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesCaseDetail from './journey/petitionsClerkUpdatesCaseDetail';
@@ -140,7 +139,6 @@ describe('Case journey', () => {
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkUpdatesCaseDetail(test);
   petitionsClerkSubmitsCaseToIrs(test);
-  petitionsClerkIrsHoldingQueue(test);
 
   respondentLogIn(test);
   respondentViewsDashboard(test);

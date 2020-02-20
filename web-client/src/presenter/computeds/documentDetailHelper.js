@@ -48,7 +48,7 @@ export const documentDetailHelper = (get, applicationContext) => {
   const STIPULATED_DECISION_DOCUMENT_TYPE = 'Stipulated Decision';
   const MISCELLANEOUS_DOCUMENT_TYPE = 'MISC - Miscellaneous';
 
-  const newOrRecalledStatus = [STATUS_TYPES.new, STATUS_TYPES.recalled];
+  const newOrInProgress = [STATUS_TYPES.new, STATUS_TYPES.inProgress];
 
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
@@ -140,14 +140,11 @@ export const documentDetailHelper = (get, applicationContext) => {
       (isCourtIssuedDocument && !isDocumentOnDocketRecord));
 
   const showServeToIrsButton =
-    newOrRecalledStatus.includes(caseDetail.status) &&
+    newOrInProgress.includes(caseDetail.status) &&
     formattedDocument.isPetition &&
     user.role === USER_ROLES.petitionsClerk;
-  const showRecallButton =
-    caseDetail.status === STATUS_TYPES.batchedForIRS &&
-    formattedDocument.isPetition;
 
-  const showCaseDetailsEdit = newOrRecalledStatus.includes(caseDetail.status);
+  const showCaseDetailsEdit = newOrInProgress.includes(caseDetail.status);
   const showCaseDetailsView = [STATUS_TYPES.batchedForIRS].includes(
     caseDetail.status,
   );
@@ -195,7 +192,6 @@ export const documentDetailHelper = (get, applicationContext) => {
       formattedDocument.isPetition === false &&
       !formattedDocument.isCourtIssuedDocument,
     showPrintCaseConfirmationButton,
-    showRecallButton,
     showRemoveSignature: isOrder && document.eventCode !== 'NOT' && isSigned,
     showServeToIrsButton,
     showSignDocumentButton,
