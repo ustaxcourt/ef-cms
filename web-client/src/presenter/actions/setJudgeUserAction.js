@@ -10,5 +10,7 @@ import { state } from 'cerebral';
 export const setJudgeUserAction = ({ props, store }) => {
   if (props.judgeUser) {
     store.set(state.judgeUser, props.judgeUser);
+  } else {
+    store.unset(state.judgeUser);
   }
 };
