@@ -233,12 +233,13 @@ function Case(rawCase, { applicationContext }) {
     this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
     this.caseNote = rawCase.caseNote;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
+
+    this.automaticBlocked = rawCase.automaticBlocked;
+    this.automaticBlockedDate = rawCase.automaticBlockedDate;
+    this.automaticBlockedReason = rawCase.automaticBlockedReason;
   }
 
   // TODO: as part of the security task, these values also need to be restricted
-  this.automaticBlocked = rawCase.automaticBlocked;
-  this.automaticBlockedDate = rawCase.automaticBlockedDate;
-  this.automaticBlockedReason = rawCase.automaticBlockedReason;
   this.blocked = rawCase.blocked;
   this.blockedDate = rawCase.blockedDate;
   this.blockedReason = rawCase.blockedReason;
