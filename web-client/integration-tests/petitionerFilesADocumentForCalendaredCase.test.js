@@ -1,4 +1,4 @@
-import { fakeFile, setupTest, uploadPetition } from './helpers';
+import { fakeFile, setupTest, uploadPetition, wait } from './helpers';
 
 import calendarClerkLogIn from './journey/calendarClerkLogIn';
 import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
@@ -47,6 +47,7 @@ describe('petitioner files document', () => {
       value: test.trialSessionId,
     });
     await test.runSequence('addCaseToTrialSessionSequence');
+    await wait(5000);
   });
   userSignsOut(test);
 

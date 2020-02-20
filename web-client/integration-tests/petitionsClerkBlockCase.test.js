@@ -5,6 +5,7 @@ import {
   setupTest,
   uploadProposedStipulatedDecision,
   viewCaseDetail,
+  wait,
 } from './helpers';
 import calendarClerkLogIn from './journey/calendarClerkLogIn';
 import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
@@ -165,6 +166,7 @@ describe('Blocking a Case', () => {
     });
 
     await test.runSequence('addCaseToTrialSessionSequence');
+    await wait(3000);
   });
 
   petitionsClerkCreatesACaseDeadline(test);

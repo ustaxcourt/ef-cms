@@ -9,14 +9,14 @@ import Devtools from 'cerebral/devtools';
 /**
  * Initializes the app with dev environment context
  */
-let debugTools = null;
+let options = {
+  returnSequencePromise: true,
+};
 if (process.env.USTC_DEBUG) {
-  debugTools = {
-    devtools: Devtools({
-      allowedTypes: [Blob, User, Case],
-      host: 'localhost:8585',
-    }),
-  };
+  options.devtools = Devtools({
+    allowedTypes: [Blob, User, Case],
+    host: 'localhost:8585',
+  });
 }
 
-app.initialize(applicationContext, debugTools);
+app.initialize(applicationContext, options);

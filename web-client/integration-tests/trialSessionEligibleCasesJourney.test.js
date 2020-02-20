@@ -1,5 +1,5 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
-import { setupTest } from './helpers';
+import { setupTest, wait } from './helpers';
 import { uploadPetition } from './helpers';
 import calendarClerkLogIn from './journey/calendarClerkLogIn';
 import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
@@ -412,6 +412,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       test.setState('modal.trialSessionId', test.trialSessionId);
 
       await test.runSequence('addCaseToTrialSessionSequence');
+      await wait(5000);
 
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
