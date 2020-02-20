@@ -17,6 +17,10 @@ const EXPECTED_HEADERS = {
   'X-Content-Type-Options': 'nosniff',
 };
 
+// Suppress console output in test runner (RAE SAID THIS WOULD BE COOL)
+console.error = () => null;
+console.info = () => null;
+
 describe('handle', () => {
   it('should return warm up string if warm up source is passed in', async () => {
     const response = await handle(
