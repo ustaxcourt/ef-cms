@@ -331,18 +331,6 @@ const {
   getConsolidatedCasesByUserInteractor,
 } = require('../../shared/src/business/useCases/getConsolidatedCasesByUserInteractor');
 const {
-  getDocumentQCBatchedForSection,
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForSection');
-const {
-  getDocumentQCBatchedForSectionInteractor,
-} = require('../../shared/src/business/useCases/workitems/getDocumentQCBatchedForSectionInteractor');
-const {
-  getDocumentQCBatchedForUser,
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForUser');
-const {
-  getDocumentQCBatchedForUserInteractor,
-} = require('../../shared/src/business/useCases/workitems/getDocumentQCBatchedForUserInteractor');
-const {
   getDocumentQCInboxForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
 const {
@@ -544,9 +532,6 @@ const {
 const {
   reprocessFailedRecordsInteractor,
 } = require('../../shared/src/business/useCases/reprocessFailedRecordsInteractor');
-const {
-  runBatchProcessInteractor,
-} = require('../../shared/src/business/useCases/runBatchProcessInteractor');
 const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
@@ -910,8 +895,6 @@ module.exports = (appContextUser = {}) => {
         getCaseDeadlinesByCaseId,
         getCasesByLeadCaseId,
         getCasesByUser,
-        getDocumentQCBatchedForSection,
-        getDocumentQCBatchedForUser,
         getDocumentQCInboxForSection,
         getDocumentQCInboxForUser,
         getDocumentQCServedForSection,
@@ -1092,8 +1075,6 @@ module.exports = (appContextUser = {}) => {
         getCasesByUserInteractor,
         getConsolidatedCasesByCaseInteractor,
         getConsolidatedCasesByUserInteractor,
-        getDocumentQCBatchedForSectionInteractor,
-        getDocumentQCBatchedForUserInteractor,
         getDocumentQCInboxForSectionInteractor,
         getDocumentQCInboxForUserInteractor,
         getDocumentQCServedForSectionInteractor,
@@ -1127,7 +1108,6 @@ module.exports = (appContextUser = {}) => {
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
         reprocessFailedRecordsInteractor,
-        runBatchProcessInteractor,
         runTrialSessionPlanningReportInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,

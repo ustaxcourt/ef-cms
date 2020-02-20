@@ -526,12 +526,10 @@ const router = {
           'document-qc/my/inbox',
           'document-qc/my/inProgress',
           'document-qc/my/outbox',
-          'document-qc/my/batched',
           'document-qc/section',
           'document-qc/section/inbox',
           'document-qc/section/inProgress',
           'document-qc/section/outbox',
-          'document-qc/section/batched',
         ];
 
         if (path && !validPaths.includes(path)) {
@@ -702,11 +700,9 @@ const router = {
           'messages/my',
           'messages/my/inbox',
           'messages/my/outbox',
-          'messages/my/batched',
           'messages/section',
           'messages/section/inbox',
           'messages/section/outbox',
-          'messages/section/batched',
         ];
 
         if (path && !validPaths.includes(path)) {

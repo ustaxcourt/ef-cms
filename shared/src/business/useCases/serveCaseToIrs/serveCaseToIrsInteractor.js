@@ -1,8 +1,4 @@
-const {
-  addDocketEntryForPaymentStatus,
-  deleteStinIfAvailable,
-  uploadZipOfDocuments,
-} = require('../runBatchProcessInteractor');
+const sanitize = require('sanitize-filename');
 const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
@@ -16,6 +12,78 @@ const { Document } = require('../../entities/Document');
 const { PDFDocument } = require('pdf-lib');
 const { PETITIONS_SECTION } = require('../../entities/WorkQueue');
 const { UnauthorizedError } = require('../../../errors/errors');
+
+exports.addDocketEntryForPaymentStatus = ({
+  applicationContext,
+  caseEntity,
+}) => {
+  const { DocketRecord } = applicationContext.getEntityConstructors();
+
+  if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
+    caseEntity.addDocketRecord(
+      new DocketRecord(
+        {
+          description: 'Filing Fee Paid',
+          eventCode: 'FEE',
+          filingDate: caseEntity.petitionPaymentDate,
+        },
+        { applicationContext },
+      ),
+    );
+  } else if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED) {
+    caseEntity.addDocketRecord(
+      new DocketRecord(
+        {
+          description: 'Filing Fee Waived',
+          eventCode: 'FEEW',
+          filingDate: caseEntity.petitionPaymentWaivedDate,
+        },
+        { applicationContext },
+      ),
+    );
+  }
+};
+
+exports.uploadZipOfDocuments = async ({ applicationContext, caseEntity }) => {
+  const s3Ids = caseEntity.documents
+    .filter(document => !caseEntity.isDocumentDraft(document.documentId))
+    .map(document => document.documentId);
+  const fileNames = caseEntity.documents.map(
+    document => `${document.documentType}.pdf`,
+  );
+  let zipName = sanitize(`${caseEntity.docketNumber}`);
+
+  if (caseEntity.contactPrimary && caseEntity.contactPrimary.name) {
+    zipName += sanitize(
+      `_${caseEntity.contactPrimary.name.replace(/\s/g, '_')}`,
+    );
+  }
+  zipName += '.zip';
+
+  await applicationContext.getPersistenceGateway().zipDocuments({
+    applicationContext,
+    fileNames,
+    s3Ids,
+    zipName,
+  });
+
+  return { fileNames, s3Ids, zipName };
+};
+
+exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
+  const stinDocument = caseEntity.documents.find(
+    document =>
+      document.documentType ===
+      Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
+  );
+
+  if (stinDocument) {
+    await applicationContext.getPersistenceGateway().deleteDocument({
+      applicationContext,
+      key: stinDocument.documentId,
+    });
+  }
+};
 
 /**
  * serveCaseToIrsInteractor
@@ -40,19 +108,19 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
 
   const caseEntity = new Case(caseToBatch, { applicationContext });
 
-  addDocketEntryForPaymentStatus({ caseEntity });
+  exports.addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
 
   caseEntity
     .updateCaseTitleDocketRecord({ applicationContext })
     .updateDocketNumberRecord({ applicationContext })
     .validate();
 
-  await uploadZipOfDocuments({
+  await exports.uploadZipOfDocuments({
     applicationContext,
     caseEntity,
   });
 
-  await deleteStinIfAvailable({ applicationContext, caseEntity });
+  await exports.deleteStinIfAvailable({ applicationContext, caseEntity });
 
   caseEntity.markAsSentToIRS(createISODateString());
 

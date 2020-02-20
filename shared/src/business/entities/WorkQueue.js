@@ -6,8 +6,9 @@ exports.CALENDAR_SECTION = 'calendar';
 exports.CHAMBERS_SECTION = 'chambers';
 exports.CLERK_OF_COURT_SECTION = 'clerkofcourt';
 exports.DOCKET_SECTION = 'docket';
-exports.IRS_BATCH_SYSTEM_SECTION = 'irsBatchSection';
 exports.PETITIONS_SECTION = 'petitions';
+exports.IN_PROGRESS_SECTION = 'inProgress';
+exports.IRS_SYSTEM_SECTION = 'irsSystem';
 exports.TRIAL_CLERKS_SECTION = 'trialClerks';
 
 exports.ARMENS_CHAMBERS_SECTION = 'armensChambers';
@@ -48,7 +49,6 @@ exports.SECTIONS = sortBy([
   exports.CHAMBERS_SECTION,
   exports.CLERK_OF_COURT_SECTION,
   exports.DOCKET_SECTION,
-  // intentionally leaving out IRS_BATCH_SYSTEM_SECTION since that is an internal section
   exports.PETITIONS_SECTION,
   exports.TRIAL_CLERKS_SECTION,
 ]);

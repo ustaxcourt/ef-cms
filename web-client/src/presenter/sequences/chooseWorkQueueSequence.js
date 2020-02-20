@@ -1,7 +1,5 @@
 import { chooseWorkQueueAction } from '../actions/chooseWorkQueueAction';
 import { clearWorkQueueAction } from '../actions/clearWorkQueueAction';
-import { getDocumentQCBatchedForSectionAction } from '../actions/getDocumentQCBatchedForSectionAction';
-import { getDocumentQCBatchedForUserAction } from '../actions/getDocumentQCBatchedForUserAction';
 import { getDocumentQCInboxForSectionAction } from '../actions/getDocumentQCInboxForSectionAction';
 import { getDocumentQCInboxForUserAction } from '../actions/getDocumentQCInboxForUserAction';
 import { getDocumentQCServedForSectionAction } from '../actions/getDocumentQCServedForSectionAction';
@@ -28,10 +26,6 @@ export const chooseWorkQueueSequence = showProgressSequenceDecorator([
     [
       chooseWorkQueueAction,
       {
-        documentqcmybatched: [
-          getDocumentQCBatchedForUserAction,
-          setWorkItemsAction,
-        ],
         documentqcmyinProgress: [
           getDocumentQCInboxForUserAction,
           setWorkItemsAction,
@@ -42,10 +36,6 @@ export const chooseWorkQueueSequence = showProgressSequenceDecorator([
         ],
         documentqcmyoutbox: [
           getDocumentQCServedForUserAction,
-          setWorkItemsAction,
-        ],
-        documentqcsectionbatched: [
-          getDocumentQCBatchedForSectionAction,
           setWorkItemsAction,
         ],
         documentqcsectioninProgress: [

@@ -42,7 +42,6 @@ Case.PAYMENT_STATUS = {
 Case.STATUS_TYPES = {
   assignedCase: 'Assigned - Case', // Case has been assigned to a judge
   assignedMotion: 'Assigned - Motion', // Someone has requested a judge for the case
-  batchedForIRS: 'Batched for IRS', // TODO: delete
   calendared: 'Calendared', // Case has been scheduled for trial
   cav: 'CAV', // Core alternative valuation
   closed: 'Closed', // Judge has made a ruling to close the case
@@ -1024,15 +1023,6 @@ Case.prototype.updateDocketNumberRecord = function({ applicationContext }) {
   return this;
 };
 
-/**
- *
- * @returns {Case} the updated case entity
- */
-Case.prototype.sendToIRSHoldingQueue = function() {
-  this.status = Case.STATUS_TYPES.batchedForIRS;
-  return this;
-};
-
 Case.prototype.getDocumentById = function({ documentId }) {
   return this.documents.find(document => document.documentId === documentId);
 };
@@ -1603,7 +1593,6 @@ Case.prototype.getConsolidationStatus = function({ caseEntity }) {
  */
 Case.prototype.canConsolidate = function(caseToConsolidate) {
   const ineligibleStatusTypes = [
-    Case.STATUS_TYPES.batchedForIRS,
     Case.STATUS_TYPES.new,
     Case.STATUS_TYPES.inProgress,
     Case.STATUS_TYPES.generalDocket,

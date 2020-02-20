@@ -57,7 +57,6 @@ import respondentAddsAnswer from './journey/respondentAddsAnswer';
 import respondentAddsMotion from './journey/respondentAddsMotion';
 import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
 import respondentLogIn from './journey/respondentLogIn';
-import respondentViewsCaseDetailOfBatchedCase from './journey/respondentViewsCaseDetailOfBatchedCase';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
 
 let test;
@@ -142,7 +141,6 @@ describe('Case journey', () => {
 
   respondentLogIn(test);
   respondentViewsDashboard(test);
-  respondentViewsCaseDetailOfBatchedCase(test);
   respondentAddsAnswer(test, fakeFile);
   respondentAddsStipulatedDecision(test, fakeFile);
   respondentAddsMotion(test, fakeFile);
