@@ -17,6 +17,7 @@ const { Document } = require('../../entities/Document');
 const { isEqual } = require('lodash');
 const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
@@ -148,20 +149,32 @@ exports.updateUserContactInformationInteractor = async ({
 
       const newDocumentId = applicationContext.getUniqueId();
 
-      const changeOfAddressDocument = new Document(
-        {
-          addToCoversheet: true,
-          additionalInfo: `for ${user.name}`,
-          caseId: caseEntity.caseId,
-          documentId: newDocumentId,
-          documentType: documentType.title,
-          eventCode: documentType.eventCode,
-          filedBy: user.name,
-          processingStatus: 'complete',
-          userId: user.userId,
-        },
-        { applicationContext },
-      );
+      const documentData = {
+        addToCoversheet: true,
+        additionalInfo: `for ${user.name}`,
+        caseId: caseEntity.caseId,
+        documentId: newDocumentId,
+        documentTitle: documentType.title,
+        documentType: documentType.title,
+        eventCode: documentType.eventCode,
+        processingStatus: 'complete',
+        userId: user.userId,
+      };
+
+      if (user.role === User.ROLES.practitioner) {
+        documentData.practitioner = [
+          {
+            name: user.name,
+            partyPractitioner: true,
+          },
+        ];
+      } else if (user.role === User.ROLES.respondent) {
+        documentData.partyRespondent = true;
+      }
+
+      const changeOfAddressDocument = new Document(documentData, {
+        applicationContext,
+      });
 
       const servedParties = aggregatePartiesForService(caseEntity);
 
