@@ -13,6 +13,7 @@ import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 
 import petitionsClerkCompletesAndSetsTrialSession from './journey/petitionsClerkCompletesAndSetsTrialSession';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkViewsDocketRecordAfterSettingTrial from './journey/petitionsClerkViewsDocketRecordAfterSettingTrial';
 
 import userSignsOut from './journey/petitionerSignsOut';
@@ -47,8 +48,7 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
     userSignsOut(test);
 
     petitionsClerkLogIn(test);
-    // petitionsClerkSendsCaseToIRSHoldingQueue(test);
-    // petitionsClerkRunsBatchProcess(test);
+    petitionsClerkSubmitsCaseToIrs(test);
     userSignsOut(test);
 
     docketClerkLogIn(test);
