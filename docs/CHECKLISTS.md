@@ -16,7 +16,7 @@ Due to our code architecture, adding a new endpoint is an involved process.  The
 All of our endpoints are split into multiple AWS CloudFormation stacks and hosted behind a single domain with base path mapping records.  Sometimes the stacks will get too large and you will start running into AWS limits.  Often you need to split your existing stack into 2 smaller stacks.  This check list can be followed to ensure you don't forget any of the steps.
 
 - [ ] create a new `*Handlers.js` file, your functions for your new `serverless-*.yml` must point to this handlers
-- [ ] creating a new `serverless-*.yml` file in the `./web-api` directory (copy an existing one and modify as needed)
+- [ ] create a new `serverless-*.yml` file in the `./web-api` directory (copy an existing one and modify as needed)
   - [ ] change the service name to something unique
   - [ ] change the `customDomain.basePath` to be something unique
   - [ ] change `serverless-offline.port` to be a new unique port
@@ -25,4 +25,4 @@ All of our endpoints are split into multiple AWS CloudFormation stacks and hoste
 - [ ] create a new `./web-api/run-serverless*.sh` script (chmod 755 or copy an existing script) and modify it to use the new `*Handlers.js` file
 - [ ] update `./web-api/run-local.sh` to include your new serverless service
 - [ ] update `package.json` to have a new build method `build:api:YOUR_NEW_STACK`
-- [ ] update `.circleci/config.json` to deploy the new stack to both `us-east-1` and `us-west-1`
+- [ ] update `.circleci/config.yml` to deploy the new stack to both `us-east-1` and `us-west-1`
