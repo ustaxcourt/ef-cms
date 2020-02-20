@@ -201,6 +201,7 @@ import { saveCaseAndServeToIrsSequence } from './sequences/saveCaseAndServeToIrs
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
 import { saveIntermediateDocketEntrySequence } from './sequences/saveIntermediateDocketEntrySequence';
 import { saveInternalCaseForLaterSequence } from './sequences/saveInternalCaseForLaterSequence';
+import { saveSavedCaseForLaterSequence } from './sequences/saveSavedCaseForLaterSequence';
 import { scannerShutdownSequence } from './sequences/scannerShutdownSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { sealCaseSequence } from './sequences/sealCaseSequence';
@@ -567,6 +568,7 @@ export const presenter = {
     saveDocumentSigningSequence,
     saveIntermediateDocketEntrySequence,
     saveInternalCaseForLaterSequence,
+    saveSavedCaseForLaterSequence,
     scannerShutdownSequence,
     scannerStartupSequence,
     sealCaseSequence,
