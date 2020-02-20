@@ -14,14 +14,11 @@ export const CaseDetailEdit = connect(
     navigateToReviewSavedPetitionSequence:
       sequences.navigateToReviewSavedPetitionSequence,
     screenMetadata: state.screenMetadata,
-    submitCaseDetailEditSaveSequence:
-      sequences.submitCaseDetailEditSaveSequence,
   },
   ({
     navigateBackSequence,
     navigateToReviewSavedPetitionSequence,
     screenMetadata,
-    submitCaseDetailEditSaveSequence,
   }) => {
     return (
       <div noValidate id="case-edit-form" role="form">
