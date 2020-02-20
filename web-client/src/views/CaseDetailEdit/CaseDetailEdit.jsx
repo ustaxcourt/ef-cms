@@ -11,16 +11,14 @@ import React from 'react';
 export const CaseDetailEdit = connect(
   {
     navigateBackSequence: sequences.navigateBackSequence,
+    navigateToReviewSavedPetitionSequence:
+      sequences.navigateToReviewSavedPetitionSequence,
     screenMetadata: state.screenMetadata,
-    submitCaseDetailEditSaveSequence:
-      sequences.submitCaseDetailEditSaveSequence,
-    waitingForResponse: state.waitingForResponse,
   },
   ({
     navigateBackSequence,
+    navigateToReviewSavedPetitionSequence,
     screenMetadata,
-    submitCaseDetailEditSaveSequence,
-    waitingForResponse,
   }) => {
     return (
       <div noValidate id="case-edit-form" role="form">
@@ -42,14 +40,13 @@ export const CaseDetailEdit = connect(
         </Tabs>
 
         <Button
-          aria-disabled={waitingForResponse ? 'true' : 'false'}
-          disabled={waitingForResponse}
-          secondary={!waitingForResponse}
+          id="submit-case"
           type="button"
-          onClick={() => submitCaseDetailEditSaveSequence()}
+          onClick={() => {
+            navigateToReviewSavedPetitionSequence();
+          }}
         >
-          {waitingForResponse && <div className="spinner" />}
-          Save
+          Review Petition
         </Button>
         <Button link onClick={() => navigateBackSequence()}>
           Cancel
