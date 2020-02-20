@@ -1,5 +1,5 @@
 /**
- * returns the yes path when a primaryDocumentFile is set, or the no path otherwise
+ * returns the paper or electronic path depending on if the notice had paper service
  *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props
