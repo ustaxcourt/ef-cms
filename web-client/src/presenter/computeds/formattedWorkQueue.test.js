@@ -638,6 +638,50 @@ describe('formatted work queue computed', () => {
     expect(result[1].workItemId).toEqual(WORK_ITEM_ID_4);
   });
 
+  it('filters items based on in progress cases for a petitionsclerk', () => {
+    const petitionsClerkUser = {
+      name: 'Test PetitionsClerk',
+      role: User.ROLES.petitionsClerk,
+      userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
+    };
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        workQueue: [
+          {
+            ...qcWorkItem,
+            workItemId: WORK_ITEM_ID_1,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: 'Test Judge',
+            workItemId: WORK_ITEM_ID_2,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: 'Test Judge 2',
+            workItemId: WORK_ITEM_ID_3,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: Case.CHIEF_JUDGE,
+            caseStatus: Case.STATUS_TYPES.inProgress,
+            workItemId: WORK_ITEM_ID_4,
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inProgress',
+          queue: 'section',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+
+    expect(result.length).toEqual(1);
+    expect(result[0].workItemId).toEqual(WORK_ITEM_ID_4);
+  });
+
   it('sorts high priority work items to the start of the list - qc, my, inbox', () => {
     const result = runCompute(formattedWorkQueue, {
       state: {
