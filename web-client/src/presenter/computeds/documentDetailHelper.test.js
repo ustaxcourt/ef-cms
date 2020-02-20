@@ -180,7 +180,7 @@ describe('document detail helper', () => {
     expect(result.showCaseDetailsEdit).toEqual(true);
   });
 
-  it('sets the showCaseDetailsEdit boolean true when case status recalled', () => {
+  it('sets the showCaseDetailsEdit boolean true when case status inProgress', () => {
     const user = {
       role: User.ROLES.petitionsClerk,
       userId: '123',
@@ -191,7 +191,7 @@ describe('document detail helper', () => {
         caseDetail: {
           docketRecord: [],
           documents: [{ documentId: 'abc' }],
-          status: Case.STATUS_TYPES.recalled,
+          status: Case.STATUS_TYPES.inProgress,
         },
         documentId: 'abc',
         workItemActions: {
@@ -597,7 +597,7 @@ describe('document detail helper', () => {
       expect(result.showRecallButton).toEqual(false);
     });
 
-    it('should set showServeToIrsButton true and showRecallButton false when case status is recalled', () => {
+    it('should set showServeToIrsButton true and showRecallButton false when case status is inProgress', () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -613,7 +613,7 @@ describe('document detail helper', () => {
                 documentType: 'Petition',
               },
             ],
-            status: Case.STATUS_TYPES.recalled,
+            status: Case.STATUS_TYPES.inProgress,
           },
           documentId: 'abc',
           workItemActions: {
@@ -766,7 +766,7 @@ describe('document detail helper', () => {
       expect(result.showDocumentInfoTab).toEqual(false);
     });
 
-    it('should be true if document is a petition and status is New, Recalled, or Batched for IRS', () => {
+    it('should be true if document is a petition and status is New, In Progress, or Batched for IRS', () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -782,7 +782,7 @@ describe('document detail helper', () => {
                 documentType: 'Petition',
               },
             ],
-            status: Case.STATUS_TYPES.recalled,
+            status: Case.STATUS_TYPES.inProgress,
           },
           documentId: 'abc',
           workItemActions: {

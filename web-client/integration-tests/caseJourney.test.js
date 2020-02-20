@@ -68,6 +68,7 @@ presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
   createObjectURL: () => '/test-url',
   externalRoute: () => {},
+  revokeObjectURL: () => {},
   route: async url => {
     if (url === `/case-detail/${test.docketNumber}`) {
       await test.runSequence('gotoCaseDetailSequence', {
@@ -140,7 +141,6 @@ describe('Case journey', () => {
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkUpdatesCaseDetail(test);
   petitionsClerkSubmitsCaseToIrs(test);
-  petitionsClerkIrsHoldingQueue(test);
 
   respondentLogIn(test);
   respondentViewsDashboard(test);
