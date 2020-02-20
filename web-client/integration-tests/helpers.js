@@ -14,7 +14,10 @@ import {
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { runCompute } from 'cerebral/test';
+import { socketProvider } from '../src/providers/socket';
+import { socketRouter } from '../src/providers/socketRouter';
 import { withAppContextDecorator } from '../src/withAppContext';
+
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormData from 'form-data';
 const {
@@ -330,8 +333,6 @@ exports.uploadPetition = async (test, overrides = {}) => {
 
   await test.runSequence('submitFilePetitionSequence');
 
-  await exports.waitForRouter();
-
   return test.getState('caseDetail');
 };
 
@@ -351,7 +352,14 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   global.File = () => {
     return fakeFile;
   };
+  global.WebSocket = require('websocket').w3cwebsocket;
   presenter.providers.applicationContext = applicationContext;
+
+  const { initialize: initializeSocketProvider, start, stop } = socketProvider({
+    socketRouter,
+  });
+  presenter.providers.socket = { start, stop };
+
   const originalUseCases = applicationContext.getUseCases();
   presenter.providers.applicationContext.getUseCases = () => {
     return {
@@ -427,7 +435,9 @@ exports.setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
-  test = CerebralTest(presenter);
+  test = CerebralTest(presenter, { returnSequencePromise: false });
+  test.getSequence = name => obj => test.runSequence(name, obj);
+  initializeSocketProvider(test);
 
   global.window = {
     DOMParser: () => {
@@ -506,6 +516,12 @@ exports.viewDocumentDetailMessage = async ({
 exports.waitForRouter = () => {
   return new Promise(resolve => {
     setImmediate(() => resolve(true));
+  });
+};
+
+exports.wait = time => {
+  return new Promise(resolve => {
+    setTimeout(resolve, time);
   });
 };
 

@@ -1,6 +1,5 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { getAddCaseToTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/getAddCaseToTrialSessionCalendarAlertWarningAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getNoticeGenerationSuccessMessageAction } from '../actions/TrialSession/getNoticeGenerationSuccessMessageAction';
 import { hasPaperAction } from '../actions/hasPaperAction';
@@ -10,6 +9,7 @@ import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setAlternateBackLocationAction } from '../actions/setAlternateBackLocationAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
+import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
 import { stopWebSocketConnectionAction } from '../actions/webSocketConnection/stopWebSocketConnectionAction';
 
 export const noticeGenerationCompleteSequence = [
@@ -29,7 +29,7 @@ export const noticeGenerationCompleteSequence = [
       ...setPdfPreviewUrlSequence,
       setAlternateBackLocationAction,
       navigateToPdfPreviewAction,
-      getAddCaseToTrialSessionCalendarAlertWarningAction,
+      setTrialSessionCalendarAlertWarningAction,
       setAlertWarningAction,
     ],
   },
