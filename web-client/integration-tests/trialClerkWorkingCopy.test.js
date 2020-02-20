@@ -9,9 +9,8 @@ import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionerLogin from './journey/petitionerLogIn';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
-import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
-import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
 import trialClerkAddsNotesFromWorkingCopyCaseList from './journey/trialClerkAddsNotesFromWorkingCopyCaseList';
 import trialClerkLogIn from './journey/trialClerkLogIn';
@@ -65,8 +64,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
 
   petitionsClerkLogIn(test);
   petitionsClerkUpdatesFiledBy(test, caseOverrides);
-  petitionsClerkSendsCaseToIRSHoldingQueue(test);
-  petitionsClerkRunsBatchProcess(test);
+  petitionsClerkSubmitsCaseToIrs(test);
   userSignsOut(test);
 
   docketClerkLogIn(test);

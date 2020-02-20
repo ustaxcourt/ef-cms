@@ -40,7 +40,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
 
   const caseEntity = new Case(caseToBatch, { applicationContext });
 
-  addDocketEntryForPaymentStatus({ caseEntity });
+  addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
 
   caseEntity
     .updateCaseTitleDocketRecord({ applicationContext })
