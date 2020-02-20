@@ -1,5 +1,4 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { IRS_BATCH_SYSTEM_SECTION } from '../../../../shared/src/business/entities/WorkQueue';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { cloneDeep } from 'lodash';
@@ -256,40 +255,6 @@ describe('formatted work queue computed', () => {
     expect(result2[0].showSendTo).toBeFalsy();
     expect(result2[0].showComplete).toBeFalsy();
   });
-  it('sets showBatchedStatusIcon to false when caseStatus is NOT batchedForIRS', () => {
-    // workItem.caseStatus is generalDocket
-    workItem.isInitializeCase = true;
-    const result2 = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [],
-        workQueue: [workItem],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'my',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-    expect(result2[0].showBatchedStatusIcon).toBeFalsy();
-  });
-  it('sets showBatchedStatusIcon to true when caseStatus is batchedForIRS', () => {
-    workItem.isInitializeCase = true;
-    workItem.caseStatus = Case.STATUS_TYPES.batchedForIRS;
-    const result2 = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [],
-        workQueue: [workItem],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'my',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-    expect(result2[0].showBatchedStatusIcon).toBeTruthy();
-  });
 
   it('filters the workitems for section QC inbox', () => {
     const result = runCompute(formattedWorkQueue, {
@@ -368,74 +333,6 @@ describe('formatted work queue computed', () => {
     expect(result[0]).toMatchObject({
       ...FORMATTED_WORK_ITEM,
       section: 'docket',
-    });
-  });
-
-  it('filters the workitems for section batched', () => {
-    const result = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [
-          {
-            ...qcWorkItem,
-            caseStatus: Case.STATUS_TYPES.batchedForIRS,
-            section: IRS_BATCH_SYSTEM_SECTION,
-          },
-        ],
-        workQueue: [
-          {
-            ...qcWorkItem,
-            caseStatus: Case.STATUS_TYPES.batchedForIRS,
-            section: IRS_BATCH_SYSTEM_SECTION,
-          },
-        ],
-        workQueueToDisplay: {
-          box: 'batched',
-          queue: 'section',
-          workQueueIsInternal: false,
-        },
-      },
-    });
-
-    expect(result[0]).toMatchObject({
-      ...FORMATTED_WORK_ITEM,
-      caseStatus: Case.STATUS_TYPES.batchedForIRS,
-      section: IRS_BATCH_SYSTEM_SECTION,
-    });
-  });
-
-  it('filters the workitems for my batched', () => {
-    const result = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [
-          {
-            ...qcWorkItem,
-            caseStatus: Case.STATUS_TYPES.batchedForIRS,
-            section: IRS_BATCH_SYSTEM_SECTION,
-            sentByUserId: petitionsClerkUser.userId,
-          },
-        ],
-        workQueue: [
-          {
-            ...qcWorkItem,
-            caseStatus: Case.STATUS_TYPES.batchedForIRS,
-            section: IRS_BATCH_SYSTEM_SECTION,
-            sentByUserId: petitionsClerkUser.userId,
-          },
-        ],
-        workQueueToDisplay: {
-          box: 'batched',
-          queue: 'my',
-          workQueueIsInternal: false,
-        },
-      },
-    });
-
-    expect(result[0]).toMatchObject({
-      ...FORMATTED_WORK_ITEM,
-      caseStatus: Case.STATUS_TYPES.batchedForIRS,
-      section: IRS_BATCH_SYSTEM_SECTION,
     });
   });
 
@@ -1262,40 +1159,6 @@ describe('formatted work queue computed', () => {
       expect(result.showUnassignedIcon).toBeFalsy();
     });
 
-    it('should show status icons based on caseStatus for a petitions clerk', () => {
-      const applicationContextPetitionsClerk = {
-        ...applicationContext,
-        getCurrentUser: () => petitionsClerkUser,
-      };
-
-      const workItem = {
-        ...FORMATTED_WORK_ITEM,
-        caseStatus: Case.STATUS_TYPES.generalDocket,
-      };
-
-      let result = formatWorkItem({
-        applicationContext: applicationContextPetitionsClerk,
-        workItem,
-      });
-      expect(result.showBatchedStatusIcon).toEqual(false);
-
-      workItem.caseStatus = Case.STATUS_TYPES.new;
-
-      result = formatWorkItem({
-        applicationContext: applicationContextPetitionsClerk,
-        workItem,
-      });
-      expect(result.showBatchedStatusIcon).toEqual(false);
-
-      workItem.caseStatus = 'Something Else (so use the default)';
-
-      result = formatWorkItem({
-        applicationContext: applicationContextPetitionsClerk,
-        workItem,
-      });
-      expect(result.showBatchedStatusIcon).toEqual(false);
-    });
-
     it('should return docketNumberWithSuffix as a combination of the docketNumber and docketNumberSuffix', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
@@ -1445,22 +1308,6 @@ describe('formatted work queue computed', () => {
       expect(result.historyMessages[0].messageId).toEqual(
         result.messages[1].messageId,
       );
-    });
-
-    it('should set batchedAt when the messages contain a Petition batched for IRS', () => {
-      const workItem = {
-        ...FORMATTED_WORK_ITEM,
-        messages: [
-          ...FORMATTED_WORK_ITEM.messages,
-          {
-            createdAt: '2018-12-24T18:05:54.166Z',
-            message: 'Petition batched for IRS',
-          },
-        ],
-      };
-
-      const result = formatWorkItem({ applicationContext, workItem });
-      expect(result.batchedAt).toEqual('12/24/18 1:05 pm ET');
     });
 
     it('should return isCourtIssuedDocument as true when the documentType is a court issued document type', () => {

@@ -133,8 +133,6 @@ import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUse
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getConsolidatedCasesByUserInteractor } from '../../shared/src/proxies/getConsolidatedCasesByUserProxy';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
-import { getDocumentQCBatchedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForSectionProxy';
-import { getDocumentQCBatchedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForUserProxy';
 import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
 import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForUserProxy';
 import { getDocumentQCServedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
@@ -168,7 +166,6 @@ import { removeCasePendingItemInteractor } from '../../shared/src/proxies/remove
 import { removeConsolidatedCasesInteractor } from '../../shared/src/proxies/removeConsolidatedCasesProxy';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
-import { runBatchProcessInteractor } from '../../shared/src/proxies/runBatchProcessProxy';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxies/trialSessions/runTrialSessionPlanningReportProxy';
 import { saveCaseDetailInternalEditInteractor } from '../../shared/src/proxies/saveCaseDetailInternalEditProxy';
 import { saveCaseNoteInteractor } from '../../shared/src/proxies/caseNote/saveCaseNoteProxy';
@@ -312,8 +309,6 @@ const allUseCases = {
   getCasesByUserInteractor,
   getConsolidatedCasesByCaseInteractor,
   getConsolidatedCasesByUserInteractor,
-  getDocumentQCBatchedForSectionInteractor,
-  getDocumentQCBatchedForUserInteractor,
   getDocumentQCInboxForSectionInteractor,
   getDocumentQCInboxForUserInteractor,
   getDocumentQCServedForSectionInteractor,
@@ -345,7 +340,6 @@ const allUseCases = {
   removeCasePendingItemInteractor,
   removeConsolidatedCasesInteractor,
   removeItemInteractor,
-  runBatchProcessInteractor,
   runTrialSessionPlanningReportInteractor,
   saveCaseDetailInternalEditInteractor,
   saveCaseNoteInteractor,

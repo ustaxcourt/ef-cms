@@ -193,7 +193,6 @@ import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
-import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
 import { saveIntermediateDocketEntrySequence } from './sequences/saveIntermediateDocketEntrySequence';
@@ -555,7 +554,6 @@ export const presenter = {
     resetHeaderAccordionsSequence,
     reviewExternalDocumentInformationSequence,
     reviewRequestAccessInformationSequence,
-    runBatchProcessSequence,
     runTrialSessionPlanningReportSequence,
     saveDocumentSigningSequence,
     saveIntermediateDocketEntrySequence,

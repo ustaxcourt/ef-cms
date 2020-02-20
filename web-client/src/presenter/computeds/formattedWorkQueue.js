@@ -1,6 +1,5 @@
 import {
   DOCKET_SECTION,
-  IRS_BATCH_SYSTEM_SECTION,
   PETITIONS_SECTION,
 } from '../../../../shared/src/business/entities/WorkQueue';
 import { capitalize, cloneDeep, orderBy } from 'lodash';
@@ -124,16 +123,6 @@ export const formatWorkItem = ({
   );
   result.historyMessages = result.messages.slice(1);
 
-  if (
-    result.messages.find(
-      message => message.message == 'Petition batched for IRS',
-    )
-  ) {
-    result.batchedAt = result.messages.find(
-      message => message.message == 'Petition batched for IRS',
-    ).createdAtTimeFormattedTZ;
-  }
-
   result.isCourtIssuedDocument = !!courtIssuedDocumentTypes.includes(
     result.document.documentType,
   );
@@ -247,15 +236,6 @@ export const filterWorkItems = ({
   const filters = {
     documentQc: {
       my: {
-        batched: item => {
-          return (
-            !item.completedAt &&
-            item.isQC &&
-            item.sentByUserId === user.userId &&
-            item.section === IRS_BATCH_SYSTEM_SECTION &&
-            item.caseStatus === STATUS_TYPES.batchedForIRS
-          );
-        },
         inProgress: item => {
           return (
             item.assigneeId === user.userId &&
@@ -286,14 +266,6 @@ export const filterWorkItems = ({
         },
       },
       section: {
-        batched: item => {
-          return (
-            !item.completedAt &&
-            item.isQC &&
-            item.section === IRS_BATCH_SYSTEM_SECTION &&
-            item.caseStatus === STATUS_TYPES.batchedForIRS
-          );
-        },
         inProgress: item => {
           return (
             !item.completedAt &&
@@ -401,7 +373,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const sortFields = {
     documentQc: {
       my: {
-        batched: 'batchedAt',
         inProgress: 'receivedAt',
         inbox: 'receivedAt',
         outbox:
@@ -410,7 +381,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
             : 'receivedAt',
       },
       section: {
-        batched: 'batchedAt',
         inProgress: 'receivedAt',
         inbox: 'receivedAt',
         outbox:
@@ -434,13 +404,11 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const sortDirections = {
     documentQc: {
       my: {
-        batched: 'asc',
         inProgress: 'asc',
         inbox: 'asc',
         outbox: 'desc',
       },
       section: {
-        batched: 'asc',
         inProgress: 'asc',
         inbox: 'asc',
         outbox: 'desc',

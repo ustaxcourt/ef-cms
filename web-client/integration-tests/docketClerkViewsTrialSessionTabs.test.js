@@ -12,8 +12,6 @@ import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkManuallyAddsCaseToTrial from './journey/petitionsClerkManuallyAddsCaseToTrial';
 import petitionsClerkManuallyRemovesCaseFromTrial from './journey/petitionsClerkManuallyRemovesCaseFromTrial';
-import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
-import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkViewsATrialSessionsEligibleCases from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
 import userSignsOut from './journey/petitionerSignsOut';
@@ -47,8 +45,8 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
 
     userSignsOut(test);
     petitionsClerkLogIn(test);
-    petitionsClerkSendsCaseToIRSHoldingQueue(test);
-    petitionsClerkRunsBatchProcess(test);
+    // petitionsClerkSendsCaseToIRSHoldingQueue(test);
+    // petitionsClerkRunsBatchProcess(test);
     userSignsOut(test);
     docketClerkLogIn(test);
     docketClerkSetsCaseReadyForTrial(test);

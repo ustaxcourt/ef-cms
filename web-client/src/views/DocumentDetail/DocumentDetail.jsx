@@ -68,10 +68,7 @@ export const DocumentDetail = connect(
                 aria-labelledby="tab-document-info"
                 id="tab-document-info-panel"
               >
-                {documentDetailHelper.showCaseDetailsEdit && <CaseDetailEdit />}
-                {documentDetailHelper.showCaseDetailsView && (
-                  <CaseDetailReadOnly />
-                )}
+                <CaseDetailEdit />
               </div>
             </Tab>
           )}

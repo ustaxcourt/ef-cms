@@ -145,16 +145,12 @@ export const documentDetailHelper = (get, applicationContext) => {
     user.role === USER_ROLES.petitionsClerk;
 
   const showCaseDetailsEdit = newOrInProgress.includes(caseDetail.status);
-  const showCaseDetailsView = [STATUS_TYPES.batchedForIRS].includes(
-    caseDetail.status,
-  );
+
   const showDocumentInfoTab =
-    formattedDocument.isPetition &&
-    (showCaseDetailsEdit || showCaseDetailsView);
+    formattedDocument.isPetition && showCaseDetailsEdit;
 
   const showViewOrdersNeededButton =
-    (document.status === 'served' ||
-      caseDetail.status === STATUS_TYPES.batchedForIRS) &&
+    document.status === 'served' &&
     user.role === USER_ROLES.petitionsClerk &&
     formattedDocument.isPetition;
 
@@ -175,7 +171,6 @@ export const documentDetailHelper = (get, applicationContext) => {
     },
     showAddCourtIssuedDocketEntryButton,
     showCaseDetailsEdit,
-    showCaseDetailsView,
     showConfirmEditOrder: isSigned && isOrder,
     showCreatedFiled: (!isOrder && !isCourtIssuedDocument) || isDraftDocument,
     showDocumentInfoTab,

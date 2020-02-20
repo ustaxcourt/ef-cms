@@ -226,30 +226,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  sendToIRS:
-    handler: web-api/${self:provider.dir}/casesHandlers.sendPetitionToIRSHoldingQueueLambda
-    events:
-      - http:
-          path: /{caseId}/send-to-irs-holding-queue
-          method: post
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  recallFromIRS:
-    handler: web-api/${self:provider.dir}/casesHandlers.recallPetitionFromIRSHoldingQueueLambda
-    events:
-      - http:
-          path: /{caseId}/recall-from-irs-holding-queue
-          method: delete
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   getBlockedCases:
     handler: web-api/${self:provider.dir}/casesHandlers.getBlockedCasesLambda
     events:

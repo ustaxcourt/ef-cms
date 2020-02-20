@@ -28,9 +28,6 @@ export const IndividualWorkQueueOutbox = connect(
                 <th className="small">Sent</th>
               )}
               <th>Case title</th>
-              <th aria-label="Status Icon" className="padding-right-0">
-                &nbsp;
-              </th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && (
                 <th>{workQueueHelper.outboxFiledByColumnLabel} by</th>
@@ -66,16 +63,6 @@ export const IndividualWorkQueueOutbox = connect(
                 )}
                 <td className="message-queue-row message-queue-case-title">
                   {item.caseTitle}
-                </td>
-                <td className="message-queue-row has-icon padding-right-0">
-                  {item.showBatchedStatusIcon && (
-                    <Icon
-                      aria-label="batched for IRS"
-                      className="iconStatusBatched"
-                      icon={['far', 'clock']}
-                      size="lg"
-                    />
-                  )}
                 </td>
                 <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">

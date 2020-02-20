@@ -51,14 +51,6 @@ export const IndividualWorkQueueInbox = connect(
                     {item.caseTitle}
                   </td>
                   <td className="message-queue-row has-icon padding-right-0">
-                    {item.showBatchedStatusIcon && (
-                      <Icon
-                        aria-label="batched for IRS"
-                        className="iconStatusBatched"
-                        icon={['far', 'clock']}
-                        size="lg"
-                      />
-                    )}
                     {item.showUnreadStatusIcon && (
                       <Icon
                         aria-label="unread message"
