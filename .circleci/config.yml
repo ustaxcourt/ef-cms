@@ -139,6 +139,7 @@ jobs:
             npm run build:all
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-1.txt &
             ./wait-until-services.sh
+            ./wait-until.sh http://localhost:9000
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 15
             npm run test:pa11y:1 --node-flags --max-old-space-size=1024
@@ -148,6 +149,7 @@ jobs:
             npm run build:all
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-2.txt &
             ./wait-until-services.sh
+            ./wait-until.sh http://localhost:9000
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 15
             npm run test:pa11y:2 --node-flags --max-old-space-size=1024
@@ -157,6 +159,7 @@ jobs:
             npm run build:all
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-2.txt &
             ./wait-until-services.sh
+            ./wait-until.sh http://localhost:9000
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 15
             npm run test:pa11y:3 --node-flags --max-old-space-size=1024
@@ -192,6 +195,7 @@ jobs:
 
             TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000  AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop npx run-p start:api:ci start:client:ci > /dev/null &
             ./wait-until-services.sh
+            ./wait-until.sh http://localhost:9000
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
             npm run cypress
@@ -214,7 +218,7 @@ jobs:
             fi
 
             if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
-              cd web-api/runtimes/clamav && ./build.sh && cd ../../.. 
+              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
             fi
 
             docker build -t efcms -f Dockerfile .
@@ -256,7 +260,7 @@ jobs:
             fi
 
             if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
-              cd web-api/runtimes/clamav && ./build.sh && cd ../../.. 
+              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
             fi
 
             docker build -t efcms -f Dockerfile .
@@ -331,7 +335,7 @@ jobs:
             fi
 
             if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
-              cd web-api/runtimes/clamav && ./build.sh && cd ../../.. 
+              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
             fi
 
             docker build -t efcms -f Dockerfile .
@@ -400,7 +404,7 @@ jobs:
             fi
 
             if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
-              cd web-api/runtimes/clamav && ./build.sh && cd ../../.. 
+              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
             fi
 
             docker build -t efcms -f Dockerfile .
@@ -445,7 +449,7 @@ jobs:
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd web-api && ./setup-court-users.sh ${ENV}"
       - run:
           name: 'Deploy - Web API - Run Migrations'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "npm run build:assets && ./web-api/run-umzug.sh ${ENV}"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "DYNAMODB_ENDPOINT=dynamodb.us-east-1.amazonaws.com" --rm efcms /bin/sh -c "npm run build:assets && ./web-api/run-umzug.sh ${ENV}"
       - run:
           name: 'Deploy - Web API - Smoke Tests - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && node smoke-tests.js ${ENV} us-east-1"
