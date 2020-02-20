@@ -145,6 +145,7 @@ const router = {
           `${getPageTitleDocketPrefix(docketNumber)} Document detail review`,
         );
         app.getSequence('gotoReviewSavedPetitionSequence')({
+          caseId: docketNumber,
           docketNumber,
           documentId,
         });
