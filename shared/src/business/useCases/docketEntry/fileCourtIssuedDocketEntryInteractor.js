@@ -127,13 +127,16 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
   });
 
   caseEntity.addDocketRecord(
-    new DocketRecord({
-      description: documentMeta.generatedDocumentTitle,
-      documentId: documentEntity.documentId,
-      editState: JSON.stringify(documentMeta),
-      eventCode: documentEntity.eventCode,
-      filingDate: documentEntity.date || createISODateString(),
-    }),
+    new DocketRecord(
+      {
+        description: documentMeta.generatedDocumentTitle,
+        documentId: documentEntity.documentId,
+        editState: JSON.stringify(documentMeta),
+        eventCode: documentEntity.eventCode,
+        filingDate: documentEntity.date || createISODateString(),
+      },
+      { applicationContext },
+    ),
   );
 
   caseEntity = await applicationContext

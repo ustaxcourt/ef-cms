@@ -10,7 +10,11 @@ const { getAllEventCodes } = require('../../utilities/getAllEventCodes');
  * @param {object} rawDocketRecord the raw docket record data
  * @constructor
  */
-function DocketRecord(rawDocketRecord) {
+function DocketRecord(rawDocketRecord, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
+
   this.action = rawDocketRecord.action;
   this.description = rawDocketRecord.description;
   this.documentId = rawDocketRecord.documentId;
@@ -57,6 +61,7 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional()
+      .meta({ tags: ['Restricted'] })
       .description('JSON representation of the in-progress edit of this item.'),
     eventCode: joi
       .string()
@@ -69,6 +74,7 @@ joiValidationDecorator(
       .string()
       .optional()
       .allow(null)
+      .meta({ tags: ['Restricted'] })
       .description('ID of the user that filed this Docket Record item.'),
     filingDate: joi
       .date()

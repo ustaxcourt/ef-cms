@@ -1,7 +1,7 @@
 import { AddressDisplay } from '../CaseDetail/PetitionerInformation';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDifferenceModalOverlay } from '../StartCase/CaseDifferenceModalOverlay';
-import { ConfirmServeToIrsModal } from './ConfirmServeToIrsModal';
+import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
@@ -13,28 +13,40 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const ReviewPetition = connect(
+const ConfirmServeToIrsModal = () => (
+  <ConfirmModal
+    cancelLabel="No, Take Me Back"
+    confirmLabel="Yes, Serve"
+    preventCancelOnBlur={true}
+    title="Are You Sure You Want to Serve This Petition to the IRS?"
+    onCancelSequence="clearModalSequence"
+    onConfirmSequence="createCaseFromPaperAndServeToIrsSequence"
+  ></ConfirmModal>
+);
+
+export const ReviewPetitionFromPaper = connect(
   {
     constants: state.constants,
+    createCaseFromPaperAndServeToIrsSequence:
+      sequences.createCaseFromPaperAndServeToIrsSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    goBackToStartCaseInternalSequence:
-      sequences.goBackToStartCaseInternalSequence,
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
-    reviewPetitionHelper: state.reviewPetitionHelper,
-    serveToIrsSequence: sequences.serveToIrsSequence,
+    reviewPetitionFromPaperHelper: state.reviewPetitionFromPaperHelper,
+    saveInternalCaseForLaterSequence:
+      sequences.saveInternalCaseForLaterSequence,
     showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
   },
   ({
     constants,
+    createCaseFromPaperAndServeToIrsSequence,
     form,
     formCancelToggleCancelSequence,
-    goBackToStartCaseInternalSequence,
     openConfirmServeToIrsModalSequence,
-    reviewPetitionHelper,
-    serveToIrsSequence,
+    reviewPetitionFromPaperHelper,
+    saveInternalCaseForLaterSequence,
     showModal,
     startCaseHelper,
   }) => {
@@ -50,7 +62,9 @@ export const ReviewPetition = connect(
             </h2>
           </Focus>
 
-          <OrdersNeededSummary data={form} />
+          {reviewPetitionFromPaperHelper.hasOrders && (
+            <OrdersNeededSummary data={form} />
+          )}
 
           <div className="grid-container padding-x-0 create-case-review">
             <div className="grid-row grid-gap">
@@ -115,7 +129,7 @@ export const ReviewPetition = connect(
                           >
                             Date recieved
                           </label>
-                          {reviewPetitionHelper.receivedAtFormatted}
+                          {reviewPetitionFromPaperHelper.receivedAtFormatted}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
                           <label
@@ -144,7 +158,7 @@ export const ReviewPetition = connect(
                           >
                             Mailing date
                           </label>
-                          {reviewPetitionHelper.mailingDateFormatted}
+                          {reviewPetitionFromPaperHelper.mailingDateFormatted}
                         </div>
 
                         <div className="margin-top-3 margin-bottom-2">
@@ -164,7 +178,9 @@ export const ReviewPetition = connect(
                           >
                             Filing fee
                           </label>
-                          {reviewPetitionHelper.petitionPaymentStatusFormatted}
+                          {
+                            reviewPetitionFromPaperHelper.petitionPaymentStatusFormatted
+                          }
                         </div>
                       </div>
                     </div>
@@ -189,7 +205,7 @@ export const ReviewPetition = connect(
                           >
                             Notice attached to petition?
                           </label>
-                          {reviewPetitionHelper.hasIrsNoticeFormatted}
+                          {reviewPetitionFromPaperHelper.hasIrsNoticeFormatted}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
                           <label
@@ -202,7 +218,7 @@ export const ReviewPetition = connect(
                         </div>
                       </div>
                       <div className="tablet:grid-col-4 margin-bottom-1">
-                        {reviewPetitionHelper.shouldShowIrsNoticeDate && (
+                        {reviewPetitionFromPaperHelper.shouldShowIrsNoticeDate && (
                           <div>
                             <label
                               className="usa-label usa-label-display"
@@ -210,7 +226,9 @@ export const ReviewPetition = connect(
                             >
                               Date of notice
                             </label>
-                            {reviewPetitionHelper.irsNoticeDateFormatted}
+                            {
+                              reviewPetitionFromPaperHelper.irsNoticeDateFormatted
+                            }
                           </div>
                         )}
                       </div>
@@ -339,9 +357,10 @@ export const ReviewPetition = connect(
             </Button>
             <Button
               secondary
-              onClick={() => goBackToStartCaseInternalSequence()}
+              id="save-for-later"
+              onClick={() => saveInternalCaseForLaterSequence()}
             >
-              Back
+              Save for Later
             </Button>
             <Button
               link
@@ -358,7 +377,9 @@ export const ReviewPetition = connect(
         )}
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal confirmSequence={serveToIrsSequence} />
+          <FileUploadErrorModal
+            confirmSequence={createCaseFromPaperAndServeToIrsSequence}
+          />
         )}
         {showModal == 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />

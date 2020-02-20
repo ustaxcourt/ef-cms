@@ -14,6 +14,6 @@ exports.updateCaseTrialSortTagsInteractor = ({
 }) => {
   return put({
     applicationContext,
-    endpoint: `/cases/${caseId}/update-case-trial-sort-tags`,
+    endpoint: `/case-meta/${caseId}/update-case-trial-sort-tags`,
   });
 };

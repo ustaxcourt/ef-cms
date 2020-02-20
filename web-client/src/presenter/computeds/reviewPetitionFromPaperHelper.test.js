@@ -1,12 +1,12 @@
 import { applicationContext } from '../../applicationContext';
-import { reviewPetitionHelper as reviewPetitionHelperComputed } from './reviewPetitionHelper';
+import { reviewPetitionFromPaperHelper as reviewPetitionFromPaperHelperComputed } from './reviewPetitionFromPaperHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const { PAYMENT_STATUS } = applicationContext.getConstants();
 
-const reviewPetitionHelper = withAppContextDecorator(
-  reviewPetitionHelperComputed,
+const reviewPetitionFromPaperHelper = withAppContextDecorator(
+  reviewPetitionFromPaperHelperComputed,
   {
     ...applicationContext,
     getConstants: () => {
@@ -17,15 +17,16 @@ const reviewPetitionHelper = withAppContextDecorator(
   },
 );
 
-describe('reviewPetitionHelper', () => {
+describe('reviewPetitionFromPaperHelper', () => {
   it('returns defaults when there is no form', () => {
-    const result = runCompute(reviewPetitionHelper, {
+    const result = runCompute(reviewPetitionFromPaperHelper, {
       state: {
         form: {},
       },
     });
     expect(result).toEqual({
       hasIrsNoticeFormatted: 'No',
+      hasOrders: false,
       irsNoticeDateFormatted: undefined,
       mailingDateFormatted: undefined,
       petitionPaymentStatusFormatted: 'Not paid',
@@ -34,8 +35,8 @@ describe('reviewPetitionHelper', () => {
     });
   });
 
-  it('returns defaults when there is no form', () => {
-    const result = runCompute(reviewPetitionHelper, {
+  it('return formatted/computed values based on form inputs', () => {
+    const result = runCompute(reviewPetitionFromPaperHelper, {
       state: {
         form: {
           dateReceived: '2020-01-05T03:30:45.007Z',
@@ -49,11 +50,32 @@ describe('reviewPetitionHelper', () => {
 
     expect(result).toEqual({
       hasIrsNoticeFormatted: 'Yes',
+      hasOrders: false,
       irsNoticeDateFormatted: '01/04/2020',
       mailingDateFormatted: '01/04/2020',
       petitionPaymentStatusFormatted: 'Paid',
       receivedAtFormatted: '01/04/2020',
       shouldShowIrsNoticeDate: true,
+    });
+  });
+
+  it('should show orders needed summary if there are orders selected', () => {
+    const result = runCompute(reviewPetitionFromPaperHelper, {
+      state: {
+        form: {
+          orderForFilingFee: true,
+        },
+      },
+    });
+
+    expect(result).toEqual({
+      hasIrsNoticeFormatted: 'No',
+      hasOrders: true,
+      irsNoticeDateFormatted: undefined,
+      mailingDateFormatted: undefined,
+      petitionPaymentStatusFormatted: 'Not paid',
+      receivedAtFormatted: undefined,
+      shouldShowIrsNoticeDate: false,
     });
   });
 });

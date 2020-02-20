@@ -17,6 +17,6 @@ exports.blockCaseFromTrialInteractor = ({
   return post({
     applicationContext,
     body: { reason },
-    endpoint: `/cases/${caseId}/block`,
+    endpoint: `/case-meta/${caseId}/block`,
   });
 };

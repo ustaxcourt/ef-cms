@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const reviewPetitionHelper = (get, applicationContext) => {
+export const reviewPetitionFromPaperHelper = (get, applicationContext) => {
   let irsNoticeDateFormatted;
   const {
     dateReceived,
@@ -8,6 +8,7 @@ export const reviewPetitionHelper = (get, applicationContext) => {
     irsNoticeDate,
     mailingDate,
     petitionPaymentStatus,
+    ...form
   } = get(state.form);
 
   const { PAYMENT_STATUS } = applicationContext.getConstants();
@@ -33,8 +34,21 @@ export const reviewPetitionHelper = (get, applicationContext) => {
       .formatDateString(irsNoticeDate, 'MMDDYYYY');
   }
 
+  // orders needed summary
+  let hasOrders = [
+    'orderForAmendedPetition',
+    'orderForAmendedPetitionAndFilingFee',
+    'orderForFilingFee',
+    'orderForOds',
+    'orderForRatification',
+    'orderDesignatingPlaceOfTrial',
+    'orderToShowCause',
+    'noticeOfAttachments',
+  ].some(key => Boolean(form[key]));
+
   return {
     hasIrsNoticeFormatted,
+    hasOrders,
     irsNoticeDateFormatted,
     mailingDateFormatted,
     petitionPaymentStatusFormatted,

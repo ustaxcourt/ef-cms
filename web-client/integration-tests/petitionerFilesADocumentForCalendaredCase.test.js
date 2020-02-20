@@ -1,7 +1,5 @@
 import { fakeFile, setupTest, uploadPetition, wait } from './helpers';
 
-import calendarClerkLogIn from './journey/calendarClerkLogIn';
-import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkRemovesCaseFromTrial from './journey/docketClerkRemovesCaseFromTrial';
@@ -11,6 +9,7 @@ import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSes
 import petitionerFilesDocumentForCase from './journey/petitionerFilesDocumentForCase';
 import petitionerLogIn from './journey/petitionerLogIn';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
@@ -32,11 +31,8 @@ describe('petitioner files document', () => {
   docketClerkViewsTrialSessionList(test);
   userSignsOut(test);
 
-  calendarClerkLogIn(test);
-  calendarClerkSetsATrialSessionsSchedule(test);
-  userSignsOut(test);
-
   petitionsClerkLogIn(test);
+  petitionsClerkSetsATrialSessionsSchedule(test);
   it('manually add the case to the session', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
