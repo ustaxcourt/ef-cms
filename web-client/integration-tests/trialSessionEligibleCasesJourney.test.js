@@ -1,8 +1,6 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { setupTest } from './helpers';
 import { uploadPetition } from './helpers';
-import calendarClerkLogIn from './journey/calendarClerkLogIn';
-import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
 import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
@@ -15,6 +13,7 @@ import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
 import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
+import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
 import userSignsOut from './journey/petitionerSignsOut';
 
@@ -284,7 +283,7 @@ describe('Trial Session Eligible Cases Journey', () => {
   });
 
   describe('Calendar clerk marks all eligible cases as QCed', () => {
-    calendarClerkLogIn(test);
+    petitionsClerkLogIn(test);
     markAllCasesAsQCed(test, () => [
       createdCases[0],
       createdCases[1],
@@ -295,8 +294,8 @@ describe('Trial Session Eligible Cases Journey', () => {
   });
 
   describe(`Set calendar for '${trialLocation}' session`, () => {
-    calendarClerkLogIn(test);
-    calendarClerkSetsATrialSessionsSchedule(test);
+    petitionsClerkLogIn(test);
+    petitionsClerkSetsATrialSessionsSchedule(test);
     userSignsOut(test);
   });
 
