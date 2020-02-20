@@ -302,7 +302,8 @@ export const filterWorkItems = ({
             item.isQC &&
             item.section === user.section &&
             item.document.isFileAttached !== false &&
-            !item.inProgress
+            !item.inProgress &&
+            item.caseStatus !== STATUS_TYPES.inProgress
           );
         },
         outbox: item => {
@@ -344,7 +345,8 @@ export const filterWorkItems = ({
             item.section === docQCUserSection &&
             item.document.isFileAttached !== false &&
             !item.inProgress &&
-            additionalFilters(item)
+            additionalFilters(item) &&
+            item.caseStatus !== STATUS_TYPES.inProgress
           );
         },
         outbox: item => {

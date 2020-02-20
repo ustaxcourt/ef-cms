@@ -72,7 +72,9 @@ export const IndividualWorkQueueInProgress = connect(
                       {item.document.filedBy}
                     </td>
                   )}
-                  <td className="message-queue-row">{item.caseStatus}</td>
+                  {workQueueHelper.showCaseStatusColumn && (
+                    <td className="message-queue-row">{item.caseStatus}</td>
+                  )}
                   {!workQueueHelper.hideFromColumn && (
                     <td className="message-queue-row from">
                       {item.currentMessage.from}
