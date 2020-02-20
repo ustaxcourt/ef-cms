@@ -15,7 +15,7 @@ describe('CourtIssuedDocumentDefault', () => {
 
     it('should be valid when all fields are present', () => {
       const document = CourtIssuedDocumentFactory.get({
-        documentTitle: 'Order [Anything]',
+        documentTitle: '[Anything]',
         documentType: 'Order',
       });
       expect(document.getFormattedValidationErrors()).toEqual(null);
