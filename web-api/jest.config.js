@@ -5,6 +5,7 @@ module.exports = {
     'migrations/*.js',
     'migrations/utilities.js',
     'src/customHandle.js',
+    'src/genericHandler.js',
     'src/apiGatewayHelper.js',
   ],
   coverageDirectory: './coverage',
