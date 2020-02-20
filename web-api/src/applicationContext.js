@@ -533,7 +533,6 @@ const {
   putWorkItemInUsersOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInUsersOutbox');
 const {
-const {
   removeCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor');
 const {
@@ -590,7 +589,6 @@ const {
 const {
   sendNotificationToUser,
 } = require('../../shared/src/notifications/sendNotificationToUser');
-const {
 const {
   sendServedPartiesEmails,
 } = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
