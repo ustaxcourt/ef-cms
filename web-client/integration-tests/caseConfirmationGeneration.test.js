@@ -40,6 +40,9 @@ describe('Case Confirmation', () => {
     petitionerCreatesNewCase(test, fakeFile);
     userSignsOut(test);
     petitionsClerkLogIn(test);
+    // petitionsClerkViewsPetitionDocumentDetail(test);
+    // petitionsClerkServesPetitionToIRS(test);
+    // petitionsClerkSavesPetitionForLater(test);
     // petitionsClerkSendsCaseToIRSHoldingQueue(test);
     // petitionsClerkRunsBatchProcess(test);
     userSignsOut(test);
