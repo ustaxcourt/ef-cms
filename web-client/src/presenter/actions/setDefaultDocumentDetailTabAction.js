@@ -24,7 +24,7 @@ export const setDefaultDocumentDetailTabAction = ({
     document.documentType === 'Petition' &&
     [
       STATUS_TYPES.new,
-      STATUS_TYPES.recalled,
+      STATUS_TYPES.inProgress,
       STATUS_TYPES.batchedForIRS,
     ].includes(caseDetail.status);
 
