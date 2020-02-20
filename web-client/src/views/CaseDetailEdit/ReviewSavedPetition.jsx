@@ -47,7 +47,6 @@ export const ReviewSavedPetition = connect(
     showModal,
     startCaseHelper,
   }) => {
-    console.log('form', form);
     return (
       <>
         <section
@@ -60,7 +59,9 @@ export const ReviewSavedPetition = connect(
             </h2>
           </Focus>
 
-          <OrdersNeededSummary data={form} />
+          {reviewSavedPetitionHelper.hasOrders && (
+            <OrdersNeededSummary data={form} />
+          )}
 
           <div className="grid-container padding-x-0 create-case-review">
             <div className="grid-row grid-gap">

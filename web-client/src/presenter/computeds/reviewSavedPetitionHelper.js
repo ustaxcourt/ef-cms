@@ -2,13 +2,15 @@ import { state } from 'cerebral';
 
 export const reviewSavedPetitionHelper = (get, applicationContext) => {
   let irsNoticeDateFormatted;
+
+  const form = get(state.form);
   const {
     documents,
     hasVerifiedIrsNotice,
     irsNoticeDate,
     petitionPaymentStatus,
     receivedAt,
-  } = get(state.form);
+  } = form;
 
   const {
     INITIAL_DOCUMENT_TYPES,
@@ -31,10 +33,23 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
       .getUtilities()
       .formatDateString(irsNoticeDate, 'MMDDYYYY');
   }
-  const documentsByType = documents.reduce((acc, document) => {
+
+  const documentsByType = (documents || []).reduce((acc, document) => {
     acc[document.documentType] = document;
     return acc;
   }, {});
+
+  // orders needed summary
+  let hasOrders = [
+    'orderForAmendedPetition',
+    'orderForAmendedPetitionAndFilingFee',
+    'orderForFilingFee',
+    'orderForOds',
+    'orderForRatification',
+    'orderDesignatingPlaceOfTrial',
+    'orderToShowCause',
+    'noticeOfAttachments',
+  ].some(key => Boolean(form[key]));
 
   const petitionFile =
     documentsByType[INITIAL_DOCUMENT_TYPES.petition.documentType];
@@ -46,6 +61,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
 
   return {
     hasIrsNoticeFormatted,
+    hasOrders,
     irsNoticeDateFormatted,
     ownershipDisclosureFile,
     petitionFile,
