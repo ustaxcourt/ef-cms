@@ -282,11 +282,17 @@ export const filterWorkItems = ({
         },
         inProgress: item => {
           return (
-            item.assigneeId === user.userId &&
-            !item.completedAt &&
-            item.isQC &&
-            item.section === user.section &&
-            (item.document.isFileAttached === false || item.inProgress)
+            // DocketClerks
+            (item.assigneeId === user.userId &&
+              user.role === USER_ROLES.docketClerk &&
+              !item.completedAt &&
+              item.isQC &&
+              item.section === user.section &&
+              (item.document.isFileAttached === false || item.inProgress)) ||
+            // PetitionsClerks
+            (item.assigneeId === user.userId &&
+              user.role === USER_ROLES.petitionsClerk &&
+              item.caseStatus === STATUS_TYPES.inProgress)
           );
         },
         inbox: item => {
@@ -296,7 +302,8 @@ export const filterWorkItems = ({
             item.isQC &&
             item.section === user.section &&
             item.document.isFileAttached !== false &&
-            !item.inProgress
+            !item.inProgress &&
+            item.caseStatus !== STATUS_TYPES.inProgress
           );
         },
         outbox: item => {
@@ -320,10 +327,15 @@ export const filterWorkItems = ({
         },
         inProgress: item => {
           return (
-            !item.completedAt &&
-            item.isQC &&
-            item.section === user.section &&
-            (item.document.isFileAttached === false || item.inProgress)
+            // DocketClerks
+            (!item.completedAt &&
+              user.role === USER_ROLES.docketClerk &&
+              item.isQC &&
+              item.section === user.section &&
+              (item.document.isFileAttached === false || item.inProgress)) ||
+            // PetitionsClerks
+            (user.role === USER_ROLES.petitionsClerk &&
+              item.caseStatus === STATUS_TYPES.inProgress)
           );
         },
         inbox: item => {
@@ -333,7 +345,8 @@ export const filterWorkItems = ({
             item.section === docQCUserSection &&
             item.document.isFileAttached !== false &&
             !item.inProgress &&
-            additionalFilters(item)
+            additionalFilters(item) &&
+            item.caseStatus !== STATUS_TYPES.inProgress
           );
         },
         outbox: item => {
