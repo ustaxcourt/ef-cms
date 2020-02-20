@@ -7,12 +7,11 @@ import petitionerNavigatesToCreateCase from './journey/petitionerNavigatesToCrea
 import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
-import petitionsClerkIrsHoldingQueue from './journey/petitionsClerkIrsHoldingQueue';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
-import petitionsClerkRunsIrsBatch from './journey/petitionsClerkRunsIrsBatch';
+// import petitionsClerkRunsIrsBatch from './journey/petitionsClerkRunsIrsBatch';
 import petitionsClerkSelectsFirstPetitionOnMyDocumentQC from './journey/petitionsClerkSelectsFirstPetitionOnMyDocumentQC';
 import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
-import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
+// import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkViewsMyDocumentQC from './journey/petitionsClerkViewsMyDocumentQC';
 import petitionsClerkViewsSectionDocumentQC from './journey/petitionsClerkViewsSectionDocumentQC';
 
@@ -35,8 +34,7 @@ describe('INDIVIDUAL DOC QC: Petition Gets Batched and Served', () => {
   petitionsClerkAssignsWorkItemToSelf(test);
   petitionsClerkViewsMyDocumentQC(test);
   petitionsClerkSelectsFirstPetitionOnMyDocumentQC(test);
-  petitionsClerkSubmitsCaseToIrs(test);
-  petitionsClerkIrsHoldingQueue(test);
-  petitionsClerkRunsIrsBatch(test);
+  // petitionsClerkSubmitsCaseToIrs(test);
+  // petitionsClerkRunsIrsBatch(test);
   petitionsClerkSignsOut(test);
 });
