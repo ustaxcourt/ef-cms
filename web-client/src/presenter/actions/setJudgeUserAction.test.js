@@ -15,7 +15,7 @@ describe('setJudgeUserAction', () => {
     expect(state.judgeUser).toMatchObject(mockUser);
   });
 
-  fit('unsets state.judgeUser when props.judgeUser is not provided', async () => {
+  it('unsets state.judgeUser when props.judgeUser is not provided', async () => {
     const params = {
       props: {},
       state: {
