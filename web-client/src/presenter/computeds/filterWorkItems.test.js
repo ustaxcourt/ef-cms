@@ -255,6 +255,11 @@ describe('filterWorkItems', () => {
   let workQueueOutbox;
 
   beforeEach(() => {
+    applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.docketClerk,
+      userId: '7f87f5d1-dfce-4515-a1e4-5231ceac61bb',
+    });
+
     workItemPetitionsMyMessagesInbox = generateWorkItem({
       assigneeId: petitionsClerk1.userId,
       completedAt: null,

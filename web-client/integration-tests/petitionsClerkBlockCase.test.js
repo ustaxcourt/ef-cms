@@ -7,9 +7,6 @@ import {
   viewCaseDetail,
   wait,
 } from './helpers';
-import calendarClerkLogIn from './journey/calendarClerkLogIn';
-import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
-import calendarClerkSignsOut from './journey/calendarClerkSignsOut';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
@@ -22,6 +19,7 @@ import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase
 import petitionsClerkDeletesCaseDeadline from './journey/petitionsClerkDeletesCaseDeadline';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkRemovesPendingItemFromCase from './journey/petitionsClerkRemovesPendingItemFromCase';
+import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkUnblocksCase from './journey/petitionsClerkUnblocksCase';
 import petitionsClerkViewsATrialSessionsEligibleCases from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
@@ -183,15 +181,10 @@ describe('Blocking a Case', () => {
 
     expect(test.getState('blockedCases')).toMatchObject([]);
   });
-  petitionsClerkSignsOut(test);
 
-  //add deadline for a calendared case - it shouldn't actually be set to blocked
-  calendarClerkLogIn(test);
   markAllCasesAsQCed(test, () => [test.caseId]);
-  calendarClerkSetsATrialSessionsSchedule(test);
-  calendarClerkSignsOut(test);
+  petitionsClerkSetsATrialSessionsSchedule(test);
 
-  petitionsClerkLogIn(test);
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with no blocked cases', async () => {
     // we need to wait for elasticsearch to get updated by the processing stream lambda

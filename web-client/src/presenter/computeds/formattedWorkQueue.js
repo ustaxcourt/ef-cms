@@ -4,6 +4,7 @@ import {
   PETITIONS_SECTION,
 } from '../../../../shared/src/business/entities/WorkQueue';
 import { capitalize, cloneDeep, orderBy } from 'lodash';
+import { filterQcItemsByAssociatedJudge } from '../utilities/filterQcItemsByAssociatedJudge';
 import { state } from 'cerebral';
 
 const isDateToday = (date, applicationContext) => {
@@ -249,6 +250,7 @@ export const getWorkItemDocumentLink = ({
 
 export const filterWorkItems = ({
   applicationContext,
+  judgeUser,
   user,
   workQueueToDisplay,
 }) => {
@@ -260,6 +262,11 @@ export const filterWorkItems = ({
   if (user.section !== PETITIONS_SECTION) {
     docQCUserSection = DOCKET_SECTION;
   }
+
+  let additionalFilters = filterQcItemsByAssociatedJudge({
+    applicationContext,
+    judgeUser,
+  });
 
   const filters = {
     documentQc: {
@@ -295,9 +302,7 @@ export const filterWorkItems = ({
         outbox: item => {
           return (
             item.isQC &&
-            (user.role === USER_ROLES.petitionsClerk
-              ? item.section === IRS_BATCH_SYSTEM_SECTION
-              : true) &&
+            (user.role === USER_ROLES.petitionsClerk ? !!item.section : true) &&
             item.completedByUserId &&
             item.completedByUserId === user.userId &&
             !!item.completedAt
@@ -327,16 +332,15 @@ export const filterWorkItems = ({
             item.isQC &&
             item.section === docQCUserSection &&
             item.document.isFileAttached !== false &&
-            !item.inProgress
+            !item.inProgress &&
+            additionalFilters(item)
           );
         },
         outbox: item => {
           return (
             !!item.completedAt &&
             item.isQC &&
-            (user.role === USER_ROLES.petitionsClerk
-              ? item.section === IRS_BATCH_SYSTEM_SECTION
-              : true)
+            (user.role === USER_ROLES.petitionsClerk ? !!item.section : true)
           );
         },
       },
@@ -391,10 +395,13 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const selectedWorkItems = get(state.selectedWorkItems);
   const { USER_ROLES } = applicationContext.getConstants();
 
+  const judgeUser = get(state.judgeUser);
+
   let workQueue = workItems
     .filter(
       filterWorkItems({
         applicationContext,
+        judgeUser,
         user,
         workQueueToDisplay,
       }),

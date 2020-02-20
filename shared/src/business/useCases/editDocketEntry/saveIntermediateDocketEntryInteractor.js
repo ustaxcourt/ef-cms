@@ -39,10 +39,13 @@ exports.saveIntermediateDocketEntryInteractor = async ({
     entry => entry.documentId === entryMetadata.documentId,
   );
 
-  const docketRecordEntry = new DocketRecord({
-    ...initialDocketEntry,
-    editState: JSON.stringify(entryMetadata),
-  });
+  const docketRecordEntry = new DocketRecord(
+    {
+      ...initialDocketEntry,
+      editState: JSON.stringify(entryMetadata),
+    },
+    { applicationContext },
+  );
 
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
 

@@ -30,7 +30,7 @@ export const CaseDetailPendingReportList = connect(
             href={`/case-detail/${formattedCaseDetail.docketNumber}/pending-report`}
             icon="print"
           >
-            Print Report
+            Printable Report
           </Button>
         </div>
         <table

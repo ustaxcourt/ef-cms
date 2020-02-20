@@ -152,7 +152,7 @@ exports.updateSecondaryContactInteractor = async ({
     workItem.addMessage(message);
     changeOfAddressDocument.addWorkItem(workItem);
 
-    caseEntity.addDocument(changeOfAddressDocument);
+    caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
 
     const docketRecordPdfWithCover = await addCoverToPdf({
       applicationContext,
