@@ -1,5 +1,5 @@
 export default (test, overrides = {}) => {
-  return it('Calendar clerk views docket record for a case after calendaring', async () => {
+  return it('Petitions clerk views docket record for a case after calendaring', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });

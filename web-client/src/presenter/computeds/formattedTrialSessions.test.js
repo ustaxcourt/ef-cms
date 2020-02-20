@@ -611,7 +611,7 @@ describe('formattedTrialSessions', () => {
             trialLocation: 'Jacksonville, FL',
           },
         ],
-        user: { role: User.ROLES.calendarClerk, userId: '1' },
+        user: { role: User.ROLES.petitionsClerk, userId: '1' },
       },
     });
     expect(result.formattedSessions).toMatchObject([

@@ -43,7 +43,6 @@ export const gotoStartCaseWizardSequence = [
       [
         'adc',
         'admissionsclerk',
-        'calendarclerk',
         'chambers',
         'clerkofcourt',
         'docketclerk',
