@@ -1,3 +1,4 @@
+import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
@@ -43,6 +44,7 @@ const gotoCaseDetailInternalWithNotes = [
 export const gotoCaseDetailSequence = [
   setCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
+  clearFormAction,
   closeMobileMenuAction,
   setDefaultCaseDetailTabAction,
   getCaseAction,
