@@ -8,9 +8,6 @@ import { DocumentDetailHeader } from './DocumentDetailHeader';
 import { DocumentDisplayIframe } from './DocumentDisplayIframe';
 import { DocumentMessages } from './DocumentMessages';
 import { ErrorNotification } from '../ErrorNotification';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { RecallPetitionModalDialog } from '../RecallPetitionModalDialog';
-import { ServeToIrsModalDialog } from '../ServeToIrsModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -43,7 +40,6 @@ export const DocumentDetail = connect(
     navigateToPathSequence,
     navigateToPrintableCaseConfirmationSequence,
     removeSignatureFromOrderSequence,
-    setModalDialogNameSequence,
     showModal,
   }) => {
     const renderParentTabs = () => {
@@ -188,22 +184,6 @@ export const DocumentDetail = connect(
                 Print Confirmation
               </Button>
             )}
-            {documentDetailHelper.showRecallButton && (
-              <span className="recall-button-box">
-                <FontAwesomeIcon icon={['far', 'clock']} size="lg" />
-                <span className="batched-message">Batched for IRS</span>
-                <Button
-                  className="recall-petition"
-                  onClick={() =>
-                    setModalDialogNameSequence({
-                      showModal: 'RecallPetitionModalDialog',
-                    })
-                  }
-                >
-                  Recall
-                </Button>
-              </span>
-            )}
             {documentDetailHelper.showSignDocumentButton && (
               <Button
                 className="serve-to-irs margin-right-0"
@@ -245,10 +225,6 @@ export const DocumentDetail = connect(
             </div>
           </div>
         </section>
-        {showModal === 'ServeToIrsModalDialog' && <ServeToIrsModalDialog />}
-        {showModal === 'RecallPetitionModalDialog' && (
-          <RecallPetitionModalDialog />
-        )}
         {showModal === 'ArchiveDraftDocumentModal' && (
           <ArchiveDraftDocumentModal />
         )}

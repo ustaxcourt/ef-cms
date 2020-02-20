@@ -81,8 +81,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showEditPetitionerInformation = true;
   }
 
-  const showRecallButton = caseDetail.status === STATUS_TYPES.batchedForIRS;
-
   const practitionerMatchesFormatted =
     modalState && modalState.practitionerMatches;
   if (practitionerMatchesFormatted) {
@@ -162,7 +160,6 @@ export const caseDetailHelper = (get, applicationContext) => {
       (caseDetail.practitioners && !!caseDetail.practitioners.length),
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,
-    showRecallButton,
     showRespondentSection:
       !isExternalUser ||
       (caseDetail.respondents && !!caseDetail.respondents.length),

@@ -61,7 +61,6 @@ export default test => {
     });
     expect(documentDetailHelperBatched.showCaseDetailsView).toEqual(true);
     expect(documentDetailHelperBatched.showCaseDetailsEdit).toEqual(false);
-    expect(documentDetailHelperBatched.showRecallButton).toEqual(true);
 
     await test.runSequence('submitRecallPetitionFromIRSHoldingQueueSequence');
     await test.runSequence('gotoMessagesSequence');
@@ -122,7 +121,6 @@ export default test => {
 
     expect(documentDetailHelperRecalled.showCaseDetailsView).toEqual(false);
     expect(documentDetailHelperRecalled.showCaseDetailsEdit).toEqual(true);
-    expect(documentDetailHelperRecalled.showRecallButton).toEqual(false);
 
     // assign to another petitionsclerk
     workItem = test.getState('workQueue').find(item => {
