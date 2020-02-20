@@ -17,5 +17,11 @@ export default (test, createdDocketNumberIndex) => {
     expect(changeOfAddressDocument.servedAt).toBeDefined();
 
     expect(changeOfAddressDocument).toBeDefined();
+
+    expect(changeOfAddressDocument.documentTitle).toBe(
+      'Notice of Change of Address',
+    );
+    expect(changeOfAddressDocument.additionalInfo).toBe('for Test Respondent');
+    expect(changeOfAddressDocument.filedBy).toBe('Resp.');
   });
 };
