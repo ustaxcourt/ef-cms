@@ -1,9 +1,5 @@
 import { fakeFile, setupTest } from './helpers';
 
-// calendarClerk
-import calendarClerkLogIn from './journey/calendarClerkLogIn';
-import calendarClerkSignsOut from './journey/calendarClerkSignsOut';
-import calendarClerkViewsDocketEntry from './journey/calendarClerkViewsDocketEntry';
 // docketClerk
 import docketClerkAddsDocketEntryFromOrder from './journey/docketClerkAddsDocketEntryFromOrder';
 import docketClerkAddsDocketEntryFromOrderOfDismissal from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
@@ -18,6 +14,7 @@ import docketClerkViewsSavedCourtIssuedDocketEntryInProgress from './journey/doc
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
+import petitionsClerkViewsDocketEntry from './journey/petitionsClerkViewsDocketEntry';
 import petitionsClerkViewsDraftOrder from './journey/petitionsClerkViewsDraftOrder';
 // petitioner
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
@@ -74,9 +71,9 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkViewsSavedCourtIssuedDocketEntryInProgress(test, 1);
   docketClerkSignsOut(test);
 
-  calendarClerkLogIn(test);
-  calendarClerkViewsDocketEntry(test, 1);
-  calendarClerkSignsOut(test);
+  petitionsClerkLogIn(test);
+  petitionsClerkViewsDocketEntry(test, 1);
+  petitionsClerkSignsOut(test);
 
   petitionerLogin(test);
   petitionerViewsCaseDetail(test, { documentCount: 4 });
