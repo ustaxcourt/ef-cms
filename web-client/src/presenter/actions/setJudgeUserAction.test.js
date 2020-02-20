@@ -14,4 +14,17 @@ describe('setJudgeUserAction', () => {
     });
     expect(state.judgeUser).toMatchObject(mockUser);
   });
+
+  it('unsets state.judgeUser when props.judgeUser is not provided', async () => {
+    const params = {
+      props: {},
+      state: {
+        judgeUser: mockUser,
+      },
+    };
+
+    const result = await runAction(setJudgeUserAction, params);
+
+    expect(result.state.judgeUser).toBeUndefined();
+  });
 });
