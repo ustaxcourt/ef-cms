@@ -12,6 +12,11 @@ const MOCK_EVENT = {
 const MOCK_USER = { name: 'Test User', userId: '1' };
 
 let logged = [];
+let lastLoggedValue;
+
+// Suppress console output in test runner (RAE SAID THIS WOULD BE COOL)
+console.error = () => null;
+console.info = () => null;
 
 let applicationContext = {};
 let logErrorMock;
@@ -19,12 +24,14 @@ let logErrorMock;
 describe('genericHandler', () => {
   beforeEach(() => {
     logErrorMock = jest.fn();
+    lastLoggedValue = null;
 
     logged = [];
     applicationContext.logger = {
       error: logErrorMock,
-      info: label => {
+      info: (label, value) => {
         logged.push(label);
+        lastLoggedValue = value;
       },
     };
   });
@@ -48,6 +55,20 @@ describe('genericHandler', () => {
     expect(logErrorMock).toHaveBeenCalled();
   });
 
+  it('defaults the options param to an empty object if not provided', async () => {
+    let errors;
+    const callback = () => null;
+
+    try {
+      return genericHandler({ ...MOCK_EVENT }, callback);
+    } catch (err) {
+      errors = err;
+    }
+
+    expect(errors).toBeFalsy();
+    expect(logErrorMock).not.toHaveBeenCalled();
+  });
+
   it('does not call application.logger.error if the skipLogging flag is present on the error', async () => {
     let errors;
 
@@ -67,6 +88,7 @@ describe('genericHandler', () => {
 
     expect(errors).toBeTruthy();
     expect(logErrorMock).toHaveBeenCalled();
+    expect(errors.message).toEqual('Test Error');
   });
 
   it('can take a user override in the options param', async () => {
@@ -131,6 +153,20 @@ describe('genericHandler', () => {
     expect(logged.includes('The thing that happened')).toBeTruthy();
     expect(logged.includes('The stuff that came out')).toBeTruthy();
     expect(logged.includes('Who did the thing')).toBeTruthy();
+  });
+
+  it('logs the user as Public User when isPublicUser is true and logUser is not false (default is true)', async () => {
+    const callback = () => null;
+
+    await genericHandler(MOCK_EVENT, callback, {
+      applicationContext,
+      isPublicUser: true,
+      logResults: false, // by default, this is true - setting to false so only the user is logged (defaults to true)
+      user: {},
+    });
+
+    expect(logged.includes('User')).toBeTruthy();
+    expect(lastLoggedValue).toEqual('Public User');
   });
 
   it('returns the results of a successful execution', async () => {
