@@ -1,7 +1,8 @@
 const {
   getCaseTitleContaining,
   getCaseTitleTextArea,
-  getSaveButton,
+  getReviewPetitionButton,
+  getSaveForLaterButton,
   navigateTo: navigateToDocumentDetail,
 } = require('../support/pages/document-detail');
 
@@ -16,7 +17,8 @@ describe('change the case caption via the case edit page ', () => {
     getCaseTitleTextArea()
       .clear()
       .type('hello world');
-    getSaveButton().click();
+    getReviewPetitionButton().click();
+    getSaveForLaterButton().click();
   });
 
   it('updates the case title header', () => {
