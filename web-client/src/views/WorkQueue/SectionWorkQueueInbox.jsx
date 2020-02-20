@@ -143,14 +143,6 @@ export const SectionWorkQueueInbox = connect(
                         size="lg"
                       />
                     )}
-                    {item.showRecalledStatusIcon && (
-                      <Icon
-                        aria-label="recalled from IRS"
-                        className="iconStatusRecalled"
-                        icon={['far', 'clock']}
-                        size="lg"
-                      />
-                    )}
                     {item.showUnassignedIcon && (
                       <Icon
                         aria-label="unassigned"

@@ -291,25 +291,6 @@ describe('formatted work queue computed', () => {
     expect(result2[0].showBatchedStatusIcon).toBeTruthy();
   });
 
-  it('sets showBatchedStatusIcon to recalled', () => {
-    workItem.isInitializeCase = true;
-    workItem.caseStatus = Case.STATUS_TYPES.recalled;
-    const result2 = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [],
-        workQueue: [workItem],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'my',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-    expect(result2[0].showRecalledStatusIcon).toBeTruthy();
-    expect(result2[0].showUnreadIndicators).toEqual(true);
-  });
-
   it('filters the workitems for section QC inbox', () => {
     const result = runCompute(formattedWorkQueue, {
       state: {
@@ -1289,34 +1270,14 @@ describe('formatted work queue computed', () => {
 
       const workItem = {
         ...FORMATTED_WORK_ITEM,
-        caseStatus: Case.STATUS_TYPES.batchedForIRS,
+        caseStatus: Case.STATUS_TYPES.generalDocket,
       };
 
       let result = formatWorkItem({
         applicationContext: applicationContextPetitionsClerk,
         workItem,
       });
-      expect(result.showBatchedStatusIcon).toEqual(true);
-      expect(result.showUnreadStatusIcon).toEqual(false);
-      expect(result.showUnassignedIcon).toEqual(false);
-
-      workItem.caseStatus = Case.STATUS_TYPES.recalled;
-
-      result = formatWorkItem({
-        applicationContext: applicationContextPetitionsClerk,
-        workItem,
-      });
-      expect(result.showRecalledStatusIcon).toEqual(true);
-      expect(result.showUnreadStatusIcon).toEqual(false);
-
-      workItem.caseStatus = Case.STATUS_TYPES.generalDocket;
-
-      result = formatWorkItem({
-        applicationContext: applicationContextPetitionsClerk,
-        workItem,
-      });
       expect(result.showBatchedStatusIcon).toEqual(false);
-      expect(result.showRecalledStatusIcon).toEqual(false);
 
       workItem.caseStatus = Case.STATUS_TYPES.new;
 
@@ -1325,7 +1286,6 @@ describe('formatted work queue computed', () => {
         workItem,
       });
       expect(result.showBatchedStatusIcon).toEqual(false);
-      expect(result.showRecalledStatusIcon).toEqual(false);
 
       workItem.caseStatus = 'Something Else (so use the default)';
 
@@ -1334,33 +1294,6 @@ describe('formatted work queue computed', () => {
         workItem,
       });
       expect(result.showBatchedStatusIcon).toEqual(false);
-      expect(result.showRecalledStatusIcon).toEqual(false);
-    });
-
-    it('should NOT show recalled status or batched status icons if the user is not a petitions clerk', () => {
-      const applicationContextPetitionsClerk = {
-        ...applicationContext,
-        getCurrentUser: () => docketClerkUser,
-      };
-
-      const workItem = {
-        ...FORMATTED_WORK_ITEM,
-        caseStatus: Case.STATUS_TYPES.batchedForIRS,
-      };
-
-      let result = formatWorkItem({
-        applicationContext: applicationContextPetitionsClerk,
-        workItem,
-      });
-      expect(result.showBatchedStatusIcon).toEqual(false);
-
-      workItem.caseStatus = Case.STATUS_TYPES.recalled;
-
-      result = formatWorkItem({
-        applicationContext: applicationContextPetitionsClerk,
-        workItem,
-      });
-      expect(result.showRecalledStatusIcon).toEqual(false);
     });
 
     it('should return docketNumberWithSuffix as a combination of the docketNumber and docketNumberSuffix', () => {

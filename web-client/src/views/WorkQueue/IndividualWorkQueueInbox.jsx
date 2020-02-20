@@ -59,14 +59,6 @@ export const IndividualWorkQueueInbox = connect(
                         size="lg"
                       />
                     )}
-                    {item.showRecalledStatusIcon && (
-                      <Icon
-                        aria-label="recalled from IRS"
-                        className="iconStatusRecalled"
-                        icon={['far', 'clock']}
-                        size="lg"
-                      />
-                    )}
                     {item.showUnreadStatusIcon && (
                       <Icon
                         aria-label="unread message"

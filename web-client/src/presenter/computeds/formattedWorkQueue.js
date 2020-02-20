@@ -103,28 +103,6 @@ export const formatWorkItem = ({
     result.showUnassignedIcon = true;
   }
 
-  switch (result.caseStatus.trim()) {
-    case STATUS_TYPES.batchedForIRS:
-      result.showBatchedStatusIcon = true;
-      result.showUnreadStatusIcon = false;
-      result.showUnassignedIcon = false;
-      break;
-    case STATUS_TYPES.recalled:
-      result.showRecalledStatusIcon = true;
-      result.showUnreadStatusIcon = false;
-      break;
-    case STATUS_TYPES.generalDocket:
-    case STATUS_TYPES.new:
-    default:
-      result.showBatchedStatusIcon = false;
-      result.showRecalledStatusIcon = false;
-  }
-
-  if (applicationContext.getCurrentUser().role !== USER_ROLES.petitionsClerk) {
-    result.showRecalledStatusIcon = false;
-    result.showBatchedStatusIcon = false;
-  }
-
   result.docketNumberWithSuffix = `${
     result.docketNumber
   }${result.docketNumberSuffix || ''}`;
