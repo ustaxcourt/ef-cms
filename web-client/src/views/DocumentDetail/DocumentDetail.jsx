@@ -2,7 +2,6 @@ import { ArchiveDraftDocumentModal } from '../DraftDocuments/ArchiveDraftDocumen
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailEdit } from '../CaseDetailEdit/CaseDetailEdit';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
-import { CaseDetailReadOnly } from './CaseDetailReadOnly';
 import { ConfirmEditModal } from '../DraftDocuments/ConfirmEditModal';
 import { DocumentDetailHeader } from './DocumentDetailHeader';
 import { DocumentDisplayIframe } from './DocumentDisplayIframe';
