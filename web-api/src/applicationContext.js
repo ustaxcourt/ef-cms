@@ -734,6 +734,7 @@ const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { exec } = require('child_process');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 const { User } = require('../../shared/src/business/entities/User');
+const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 
 // increase the timeout for zip uploads to S3
 AWS.config.httpOptions.timeout = 300000;
@@ -836,6 +837,7 @@ module.exports = (appContextUser = {}) => {
       ExternalDocumentFactory,
       TrialSession,
       User,
+      WorkItem,
     }),
     getMigrations: () => ({
       migrateCaseInteractor,
