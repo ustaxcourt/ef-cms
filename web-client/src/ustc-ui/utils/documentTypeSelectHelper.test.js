@@ -205,7 +205,7 @@ describe('documentTypeSelectHelper', () => {
   describe('courtIssuedDocketEntryOnChange', () => {
     it('should call update sequence multiple times with correct props followed by validate sequence if "action" is "select-option"', () => {
       const inputValue = {
-        documentTitle: 'Order [Anything]',
+        documentTitle: '[Anything]',
         documentType: 'Order',
         eventCode: 'O',
         scenario: 'Type A',
