@@ -6,7 +6,7 @@ import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
-import docketClerkViewsAnUpcomingTrialSession from './journey/docketClerkViewsAnUpcomingTrialSession';
+import docketClerkViewsNewTrialSession from './journey/docketClerkViewsNewTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionerLogin from './journey/petitionerLogIn';
@@ -37,7 +37,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
     docketClerkLogIn(test);
     docketClerkCreatesATrialSession(test, overrides);
     docketClerkViewsTrialSessionList(test, overrides);
-    docketClerkViewsAnUpcomingTrialSession(test);
+    docketClerkViewsNewTrialSession(test);
     userSignsOut(test);
   });
 
@@ -139,7 +139,6 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
       expect(test.getState('trialSession.eligibleCases.2.caseId')).toEqual(
         createdCases[2],
       );
-      expect(test.getState('trialSession.status')).toEqual('Upcoming');
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
 

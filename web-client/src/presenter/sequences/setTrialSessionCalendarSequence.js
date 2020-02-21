@@ -14,13 +14,11 @@ import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setTrialSessionCalendarAction } from '../actions/TrialSession/setTrialSessionCalendarAction';
 import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const setTrialSessionCalendarSequence = [
+export const setTrialSessionCalendarSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   clearScreenMetadataAction,
-  setWaitingForResponseAction,
   setTrialSessionCalendarAction,
   getTrialSessionDetailsAction,
   setTrialSessionDetailsAction,
@@ -33,7 +31,7 @@ export const setTrialSessionCalendarSequence = [
       setAlertSuccessAction,
     ],
     paper: [
-      ...setPdfPreviewUrlSequence,
+      setPdfPreviewUrlSequence,
       setAlternateBackLocationAction,
       setTrialSessionCalendarAlertWarningAction,
       setAlertWarningAction,
@@ -41,5 +39,4 @@ export const setTrialSessionCalendarSequence = [
     ],
   },
   clearModalAction,
-  unsetWaitingForResponseAction,
-];
+]);

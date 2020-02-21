@@ -6,13 +6,11 @@ import { setDefaultServiceIndicatorAction } from '../actions/setDefaultServiceIn
 import { setRespondentsAction } from '../actions/ManualAssociation/setRespondentsAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const openAddRespondentModalSequence = [
+export const openAddRespondentModalSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   clearModalStateAction,
-  setWaitingForResponseAction,
   setDefaultServiceIndicatorAction('modal'),
   getRespondentsBySearchKeyAction,
   {
@@ -26,5 +24,4 @@ export const openAddRespondentModalSequence = [
       },
     ],
   },
-  unsetWaitingForResponseAction,
-];
+]);

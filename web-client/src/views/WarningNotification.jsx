@@ -63,6 +63,7 @@ export const WarningNotification = connect(
                       link
                       className="no-underline padding-0"
                       icon="times-circle"
+                      iconRight={true}
                       onClick={() => dismissAlertSequence()}
                     >
                       Dismiss

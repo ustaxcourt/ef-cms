@@ -14,20 +14,18 @@ describe('primePropsFromEditDocketEntryMetaModalAction', () => {
       {
         modules: { presenter },
         state: {
-          modal: {
+          caseDetail: {
             caseId: '456',
-            docketRecordIndex: 1,
-            form: { something: '123' },
           },
+          form: { index: 1, something: '123' },
         },
       },
     );
 
     expect(result.output).toEqual({
       caseId: '456',
-      docketRecordEntry: { something: '123' },
+      docketRecordEntry: { index: 1, something: '123' },
       docketRecordIndex: 1,
-      fromModal: true,
     });
   });
 
@@ -37,17 +35,16 @@ describe('primePropsFromEditDocketEntryMetaModalAction', () => {
       {
         modules: { presenter },
         state: {
-          modal: {
+          caseDetail: {
             caseId: '456',
-            docketRecordIndex: 1,
-            form: {
-              someEmptyString: '', // should be removed
-              someObj: {
-                someNestedEmptyString: '', // should be removed
-              },
-              something: '123',
+          },
+          form: {
+            index: 1,
+            someEmptyString: '', // should be removed
+            someObj: {
+              someNestedEmptyString: '', // should be removed
             },
-            fromModal: true,
+            something: '123',
           },
         },
       },
@@ -55,9 +52,8 @@ describe('primePropsFromEditDocketEntryMetaModalAction', () => {
 
     expect(result.output).toEqual({
       caseId: '456',
-      docketRecordEntry: { someObj: {}, something: '123' },
+      docketRecordEntry: { index: 1, someObj: {}, something: '123' },
       docketRecordIndex: 1,
-      fromModal: true,
     });
   });
 });

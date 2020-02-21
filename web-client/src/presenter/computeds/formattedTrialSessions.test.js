@@ -1,15 +1,28 @@
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import {
+  filterFormattedSessionsByStatus,
   formatSession,
   formattedTrialSessions as formattedTrialSessionsComputed,
 } from './formattedTrialSessions';
+import {
+  formatNow,
+  prepareDateFromString,
+} from '../../../../shared/src/business/utilities/DateHandler';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const formattedTrialSessions = withAppContextDecorator(
   formattedTrialSessionsComputed,
 );
+
+const getStartOfWeek = date => {
+  return prepareDateFromString(date)
+    .startOf('isoWeek')
+    .format('MMMM D, YYYY');
+};
+
+let nextYear;
 
 const testJudgeUser = {
   role: User.ROLES.judge,
@@ -21,46 +34,166 @@ const baseState = {
   judgeUser: testJudgeUser,
 };
 
+let TRIAL_SESSIONS_LIST = [];
+
 describe('formattedTrialSessions', () => {
-  const TRIAL_SESSIONS_LIST = [
-    {
-      judge: { name: '1', userId: '1' },
-      startDate: '2019-11-25T15:00:00.000Z',
-      swingSession: true,
-      trialLocation: 'Hartford, Connecticut',
-    },
-    {
-      judge: { name: '2', userId: '2' },
-      startDate: '2019-11-25T15:00:00.000Z',
-      swingSession: true,
-      trialLocation: 'Knoxville, TN',
-    },
-    {
-      judge: { name: '3', userId: '3' },
-      noticeIssuedDate: '2019-07-25T15:00:00.000Z',
-      startDate: '2019-11-27T15:00:00.000Z',
-      swingSession: true,
-      trialLocation: 'Jacksonville, FL',
-    },
-    {
-      judge: { name: '4', userId: '4' },
-      startDate: '2019-11-27T15:00:00.000Z',
-      swingSession: true,
-      trialLocation: 'Memphis, TN',
-    },
-    {
-      judge: { name: '5', userId: '5' },
-      startDate: '2019-11-25T15:00:00.000Z',
-      swingSession: false,
-      trialLocation: 'Anchorage, AK',
-    },
-    {
-      judge: { name: '6', userId: '6' },
-      startDate: '2020-02-17T15:00:00.000Z',
-      swingSession: false,
-      trialLocation: 'Jacksonville, FL',
-    },
-  ];
+  beforeEach(() => {
+    nextYear = (parseInt(formatNow('YYYY')) + 1).toString();
+
+    TRIAL_SESSIONS_LIST = [
+      {
+        caseOrder: [],
+        judge: { name: '1', userId: '1' },
+        startDate: '2019-11-25T15:00:00.000Z',
+        swingSession: true,
+        trialLocation: 'Hartford, Connecticut',
+      },
+      {
+        caseOrder: [],
+        judge: { name: '2', userId: '2' },
+        startDate: '2019-11-25T15:00:00.000Z',
+        swingSession: true,
+        trialLocation: 'Knoxville, TN',
+      },
+      {
+        caseOrder: [],
+        judge: { name: '3', userId: '3' },
+        noticeIssuedDate: '2019-07-25T15:00:00.000Z',
+        startDate: '2019-11-27T15:00:00.000Z',
+        swingSession: true,
+        trialLocation: 'Jacksonville, FL',
+      },
+      {
+        caseOrder: [],
+        judge: { name: '4', userId: '4' },
+        startDate: '2019-11-27T15:00:00.000Z',
+        swingSession: true,
+        trialLocation: 'Memphis, TN',
+      },
+      {
+        caseOrder: [],
+        judge: { name: '5', userId: '5' },
+        startDate: '2019-11-25T15:00:00.000Z',
+        swingSession: false,
+        trialLocation: 'Anchorage, AK',
+      },
+      {
+        caseOrder: [],
+        judge: { name: '6', userId: '6' },
+        startDate: `${nextYear}-02-17T15:00:00.000Z`,
+        swingSession: false,
+        trialLocation: 'Jacksonville, FL',
+      },
+    ];
+  });
+
+  describe('filterFormattedSessionsByStatus', () => {
+    let trialTerms;
+
+    beforeEach(() => {
+      trialTerms = [
+        {
+          dateFormatted: 'October 1, 2022',
+          sessions: [...TRIAL_SESSIONS_LIST],
+        },
+        {
+          dateFormatted: 'November 1, 2022',
+          sessions: [...TRIAL_SESSIONS_LIST],
+        },
+        {
+          dateFormatted: 'December 1, 2022',
+          sessions: [...TRIAL_SESSIONS_LIST],
+        },
+      ];
+    });
+
+    it('filters closed cases when all trial session cases are inactive', () => {
+      const sessions = trialTerms[0].sessions.slice(0);
+      sessions[0] = {
+        ...sessions[0],
+        caseOrder: [
+          { docketNumber: '123-19', removedFromTrial: true },
+          { docketNumber: '234-19', removedFromTrial: true },
+        ],
+      };
+      trialTerms[0].sessions = sessions;
+
+      const results = filterFormattedSessionsByStatus(
+        trialTerms,
+        applicationContext,
+      );
+
+      expect(results.Closed.length).toEqual(1);
+      expect(results.Closed).toEqual([
+        {
+          ...trialTerms[0],
+          sessions: [sessions[0]],
+        },
+      ]);
+    });
+
+    it('filters open trial sessions', () => {
+      const sessions = trialTerms[0].sessions.slice(0);
+      sessions[0] = {
+        ...sessions[0],
+        isCalendared: true,
+      };
+      trialTerms[0].sessions = sessions;
+
+      const results = filterFormattedSessionsByStatus(
+        trialTerms,
+        applicationContext,
+      );
+
+      expect(results.Open.length).toEqual(1);
+      expect(results.Open).toEqual([
+        {
+          ...trialTerms[0],
+          sessions: [sessions[0]],
+        },
+      ]);
+    });
+
+    it('filters new trial sessions', () => {
+      TRIAL_SESSIONS_LIST.forEach(session => (session.isCalendared = true));
+      const sessions = trialTerms[0].sessions.slice(0);
+      sessions[0] = {
+        ...sessions[0],
+        isCalendared: false,
+      };
+      trialTerms[0].sessions = sessions;
+
+      const results = filterFormattedSessionsByStatus(
+        trialTerms,
+        applicationContext,
+      );
+
+      expect(results.New.length).toEqual(1);
+      expect(results.New).toEqual([
+        {
+          ...trialTerms[0],
+          sessions: [sessions[0]],
+        },
+      ]);
+    });
+
+    it('filters all trial sessions (returns everything) with the sessionStatus on the session', () => {
+      const results = filterFormattedSessionsByStatus(
+        trialTerms,
+        applicationContext,
+      );
+
+      const getSessionCount = trialTerms => {
+        let count = 0;
+        trialTerms.forEach(term => (count += term.sessions.length));
+        return count;
+      };
+
+      expect(results.All.length).toEqual(trialTerms.length);
+      expect(getSessionCount(results.All)).toEqual(getSessionCount(trialTerms));
+      expect(results.All[0].sessions[0]).toHaveProperty('sessionStatus');
+    });
+  });
 
   it('does not error if user is undefined', () => {
     let error;
@@ -96,12 +229,13 @@ describe('formattedTrialSessions', () => {
         user: testJudgeUser,
       },
     });
+    expect(result.filteredTrialSessions).toBeDefined();
     expect(result.formattedSessions.length).toBe(2);
     expect(result.formattedSessions[0].dateFormatted).toEqual(
       'November 25, 2019',
     );
     expect(result.formattedSessions[1].dateFormatted).toEqual(
-      'February 17, 2020',
+      getStartOfWeek(result.formattedSessions[1].sessions[0].startDate),
     );
   });
 
@@ -129,9 +263,28 @@ describe('formattedTrialSessions', () => {
     expect(result.formattedSessions.length).toBe(2);
   });
 
+  it('does NOT return the unassigned judge filter on trial sessions tabs other than "new"', () => {
+    let result = runCompute(formattedTrialSessions, {
+      state: {
+        ...baseState,
+        screenMetadata: {
+          trialSessionFilters: { judge: { userId: 'unassigned' } },
+        },
+        trialSessions: TRIAL_SESSIONS_LIST,
+        trialSessionsTab: {
+          group: 'open',
+        },
+        user: testJudgeUser,
+      },
+    });
+
+    expect(result.formattedSessions.length).toBe(2);
+  });
+
   it('shows swing session option only if matching term and term year is found', () => {
     const trialSessions = [
       {
+        caseOrder: [],
         judge: { name: '1', userId: '1' },
         startDate: '2019-11-25T15:00:00.000Z',
         term: 'Fall',
@@ -139,6 +292,7 @@ describe('formattedTrialSessions', () => {
         trialLocation: 'Denver, CO',
       },
       {
+        caseOrder: [],
         judge: { name: '2', userId: '2' },
         startDate: '2019-04-25T15:00:00.000Z',
         term: 'Spring',
@@ -190,30 +344,42 @@ describe('formattedTrialSessions', () => {
   it('returns sessionsByTerm with only sessions in that term if form.term is set', () => {
     const trialSessions = [
       {
+        caseOrder: [],
         judge: { name: '1', userId: '1' },
         startDate: '2019-11-25T15:00:00.000Z',
         term: 'Winter',
         trialLocation: 'Denver, CO',
       },
       {
+        caseOrder: [],
         judge: { name: '2', userId: '2' },
         startDate: '2019-11-25T15:00:00.000Z',
         term: 'Spring',
         trialLocation: 'Jacksonville, FL',
       },
       {
+        caseOrder: [],
+        judge: { name: '2', userId: '2' },
+        startDate: '2019-11-25T15:00:00.000Z',
+        term: 'Summer',
+        trialLocation: 'Jacksonville, FL',
+      },
+      {
+        caseOrder: [],
         judge: { name: '3', userId: '3' },
         startDate: '2019-11-25T15:00:00.000Z',
         term: 'Fall',
         trialLocation: 'Houston, TX',
       },
       {
+        caseOrder: [],
         judge: { name: '4', userId: '4' },
         startDate: '2019-11-25T15:00:00.000Z',
         term: 'Winter',
         trialLocation: 'Birmingham, Alabama',
       },
       {
+        caseOrder: [],
         judge: { name: '5', userId: '5' },
         startDate: '2019-11-25T15:00:00.000Z',
         term: 'Winter',
@@ -232,28 +398,37 @@ describe('formattedTrialSessions', () => {
     });
     expect(result.sessionsByTerm).toEqual([
       {
+        caseOrder: [],
         formattedStartDate: '11/25/19',
         judge: { name: '4', userId: '4' },
+        sessionStatus: 'New',
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
+        startOfWeekSortable: '20191125',
         term: 'Winter',
         trialLocation: 'Birmingham, Alabama',
         userIsAssignedToSession: false,
       },
       {
+        caseOrder: [],
         formattedStartDate: '11/25/19',
         judge: { name: '1', userId: '1' },
+        sessionStatus: 'New',
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
+        startOfWeekSortable: '20191125',
         term: 'Winter',
         trialLocation: 'Denver, CO',
         userIsAssignedToSession: true,
       },
       {
+        caseOrder: [],
         formattedStartDate: '11/25/19',
         judge: { name: '5', userId: '5' },
+        sessionStatus: 'New',
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
+        startOfWeekSortable: '20191125',
         term: 'Winter',
         trialLocation: 'Seattle, WA',
         userIsAssignedToSession: false,
@@ -297,7 +472,9 @@ describe('formattedTrialSessions', () => {
         ],
       },
       {
-        dateFormatted: 'February 17, 2020',
+        dateFormatted: getStartOfWeek(
+          result.formattedSessions[1].sessions[0].startDate,
+        ),
         sessions: [
           {
             judge: { name: '6', userId: '6' },
@@ -343,7 +520,9 @@ describe('formattedTrialSessions', () => {
         ],
       },
       {
-        dateFormatted: 'February 17, 2020',
+        dateFormatted: getStartOfWeek(
+          result.formattedSessions[1].sessions[0].startDate,
+        ),
         sessions: [
           {
             judge: { name: '6', userId: '6' },

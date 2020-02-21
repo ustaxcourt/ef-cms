@@ -5,10 +5,9 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateTrialSessionPlanningAction } from '../actions/validateTrialSessionPlanningAction';
 
 export const runTrialSessionPlanningReportSequence = [
@@ -16,16 +15,14 @@ export const runTrialSessionPlanningReportSequence = [
   validateTrialSessionPlanningAction,
   {
     error: [setValidationErrorsAction],
-    success: [
+    success: showProgressSequenceDecorator([
       clearModalAction,
-      setWaitingForResponseAction,
       runTrialSessionPlanningReportAction,
       clearModalStateAction,
       ...setPdfPreviewUrlSequence,
       setCurrentPageAction('TrialSessionPlanningReport'),
-      unsetWaitingForResponseAction,
       setAlertSuccessAction,
       stopShowValidationAction,
-    ],
+    ]),
   },
 ];

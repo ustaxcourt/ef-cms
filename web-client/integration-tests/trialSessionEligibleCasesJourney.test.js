@@ -7,7 +7,7 @@ import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
-import docketClerkViewsAnUpcomingTrialSession from './journey/docketClerkViewsAnUpcomingTrialSession';
+import docketClerkViewsNewTrialSession from './journey/docketClerkViewsNewTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionerLogin from './journey/petitionerLogIn';
@@ -39,7 +39,7 @@ describe('Trial Session Eligible Cases Journey', () => {
     docketClerkLogIn(test);
     docketClerkCreatesATrialSession(test, overrides);
     docketClerkViewsTrialSessionList(test, overrides);
-    docketClerkViewsAnUpcomingTrialSession(test);
+    docketClerkViewsNewTrialSession(test);
     userSignsOut(test);
   });
 
@@ -196,7 +196,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('trialSession.eligibleCases.3.caseId')).toEqual(
         createdCases[1],
       );
-      expect(test.getState('trialSession.status')).toEqual('Upcoming');
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
 
@@ -241,7 +240,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('trialSession.eligibleCases.3.caseId')).toEqual(
         createdCases[0],
       );
-      expect(test.getState('trialSession.status')).toEqual('Upcoming');
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
 
@@ -279,7 +277,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('trialSession.eligibleCases.3.caseId')).toEqual(
         createdCases[1],
       );
-      expect(test.getState('trialSession.status')).toEqual('Upcoming');
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
 

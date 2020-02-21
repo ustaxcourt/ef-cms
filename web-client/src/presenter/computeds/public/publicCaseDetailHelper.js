@@ -60,12 +60,14 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
           !document ||
           (document &&
             (!document.isCourtIssuedDocument ||
-              document.isNotServedCourtIssuedDocument)),
+              document.isNotServedCourtIssuedDocument ||
+              document.isTranscript)),
         showLinkToDocument:
           document &&
           document.processingStatus === 'complete' &&
           document.isCourtIssuedDocument &&
-          !document.isNotServedCourtIssuedDocument,
+          !document.isNotServedCourtIssuedDocument &&
+          !document.isTranscript,
         showNotServed: document && document.isNotServedCourtIssuedDocument,
         showServed: document && document.isStatusServed,
         signatory: record.signatory,

@@ -35,6 +35,7 @@ export const updatePartyTypeAction = async ({
         break;
       case 'No':
         partyType = PARTY_TYPES.petitionerSpouse;
+        store.set(state.showModal, 'SpousePermissionConfirmModal');
         break;
     }
   } else if (props.key === 'otherType') {

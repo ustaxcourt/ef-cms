@@ -9,8 +9,9 @@ import { state } from 'cerebral';
  * @returns {object} object containing the view settings
  */
 export const startCaseInternalHelper = (get, applicationContext) => {
-  const { PARTY_TYPES } = applicationContext.getConstants();
+  const { PARTY_TYPES, PAYMENT_STATUS } = applicationContext.getConstants();
   const partyType = get(state.form.partyType);
+  const petitionPaymentStatus = get(state.form.petitionPaymentStatus);
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
 
   let showOwnershipDisclosureStatement = false;
@@ -26,8 +27,12 @@ export const startCaseInternalHelper = (get, applicationContext) => {
     showOwnershipDisclosureStatement = true;
   }
 
+  const shouldShowIrsNoticeDate = get(state.form.hasVerifiedIrsNotice) === true;
+
   return {
     partyTypes: PARTY_TYPES,
+    shouldShowIrsNoticeDate,
+    showOrderForFilingFee: petitionPaymentStatus === PAYMENT_STATUS.UNPAID,
     showOwnershipDisclosureStatement,
     showPrimaryContact: showContacts.contactPrimary,
     showSecondaryContact: showContacts.contactSecondary,

@@ -8,9 +8,13 @@ export const TrialSessionsSummary = connect(
       state.formattedDashboardTrialSessions.formattedRecentSessions,
     formattedUpcomingSessions:
       state.formattedDashboardTrialSessions.formattedUpcomingSessions,
-    user: state.user,
+    trialSessionsSummaryHelper: state.trialSessionsSummaryHelper,
   },
-  ({ formattedRecentSessions, formattedUpcomingSessions, user }) => {
+  ({
+    formattedRecentSessions,
+    formattedUpcomingSessions,
+    trialSessionsSummaryHelper,
+  }) => {
     return (
       <div aria-label="trial sessions" className="card" id="sessions-summary">
         <div className="grid-container content-wrapper gray">
@@ -21,7 +25,7 @@ export const TrialSessionsSummary = connect(
             <div className="tablet:grid-col-4">
               <a
                 className="usa-link float-right"
-                href={`/trial-sessions?judge[userId]=${user.userId}`}
+                href={`/trial-sessions?judge[userId]=${trialSessionsSummaryHelper.judgeUserId}`}
               >
                 View All
               </a>
@@ -54,16 +58,8 @@ export const TrialSessionsSummary = connect(
             )}
           </div>
           <div className="grid-row underlined margin-top-4">
-            <div className="tablet:grid-col-8">
+            <div className="tablet:grid-col-12">
               <h3>Recent Trial Sessions</h3>
-            </div>
-            <div className="tablet:grid-col-4">
-              <a
-                className="usa-link float-right"
-                href={`/trial-sessions?type=recent&judge[userId]=${user.userId}`}
-              >
-                View All
-              </a>
             </div>
           </div>
           <div className="margin-bottom-0" role="list">

@@ -1,9 +1,8 @@
 import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
-import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const IRSNotice = connect(
   {
@@ -85,87 +84,24 @@ export const IRSNotice = connect(
 
     const renderIrsNoticeDate = () => {
       return (
-        <FormGroup errorText={caseDetailErrors.irsNoticeDate}>
-          <fieldset className="usa-fieldset margin-bottom-0">
-            <legend className="usa-legend" id="date-of-notice-legend">
-              Date of notice <span className="usa-hint">(optional)</span>
-            </legend>
-            <div className="usa-memorable-date">
-              <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                <input
-                  aria-describedby="date-of-notice-legend"
-                  aria-label="month, two digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    caseDetailErrors.irsNoticeDate && 'usa-input--error',
-                  )}
-                  id="date-of-notice-month"
-                  max="12"
-                  min="1"
-                  name="irsMonth"
-                  placeholder="MM"
-                  type="number"
-                  value={form.irsMonth || ''}
-                  onBlur={() => validateCaseDetailSequence()}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                <input
-                  aria-describedby="date-of-notice-legend"
-                  aria-label="day, two digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    caseDetailErrors.irsNoticeDate && 'usa-input--error',
-                  )}
-                  id="date-of-notice-day"
-                  max="31"
-                  min="1"
-                  name="irsDay"
-                  placeholder="DD"
-                  type="number"
-                  value={form.irsDay || ''}
-                  onBlur={() => validateCaseDetailSequence()}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                <input
-                  aria-describedby="date-of-notice-legend"
-                  aria-label="year, four digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    caseDetailErrors.irsNoticeDate && 'usa-input--error',
-                  )}
-                  id="date-of-notice-year"
-                  max="2100"
-                  min="1900"
-                  name="irsYear"
-                  placeholder="YYYY"
-                  type="number"
-                  value={form.irsYear || ''}
-                  onBlur={() => validateCaseDetailSequence()}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </fieldset>
-        </FormGroup>
+        <DateInput
+          errorText={caseDetailErrors.irsNoticeDate}
+          id="date-of-notice"
+          label="Date of notice"
+          names={{
+            day: 'irsDay',
+            month: 'irsMonth',
+            year: 'irsYear',
+          }}
+          optional={true}
+          values={{
+            day: form.irsDay,
+            month: form.irsMonth,
+            year: form.irsYear,
+          }}
+          onBlur={validateCaseDetailSequence}
+          onChange={updateFormValueSequence}
+        />
       );
     };
 

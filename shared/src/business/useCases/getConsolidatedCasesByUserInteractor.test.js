@@ -1,6 +1,7 @@
 const {
   getConsolidatedCasesByUserInteractor,
 } = require('./getConsolidatedCasesByUserInteractor');
+const { MOCK_CASE } = require('../../test/mockCase');
 
 describe('getConsolidatedCasesByUserInteractor', () => {
   beforeEach(() => {});
@@ -10,35 +11,41 @@ describe('getConsolidatedCasesByUserInteractor', () => {
       getPersistenceGateway: () => ({
         getCasesByLeadCaseId: ({ leadCaseId }) => {
           const casesByLeadCaseId = {
-            '001': [
+            'e1f7668e-4504-4f33-8c5a-d4dc17f009ee': [
               {
-                caseId: '001',
-                leadCaseId: '001',
+                ...MOCK_CASE,
+                caseId: 'e1f7668e-4504-4f33-8c5a-d4dc17f009ee',
+                leadCaseId: 'e1f7668e-4504-4f33-8c5a-d4dc17f009ee',
               },
               {
-                caseId: '002',
-                leadCaseId: '001',
+                ...MOCK_CASE,
+                caseId: 'bd6d4823-92bc-4ea7-a3af-179a07dfda9e',
+                docketNumber: '234-02',
+                leadCaseId: 'e1f7668e-4504-4f33-8c5a-d4dc17f009ee',
+              },
+              {
+                ...MOCK_CASE,
+                caseId: '6ddedc7e-6947-4cfd-a143-833f6de24e95',
+                docketNumber: '345-01',
+                leadCaseId: 'e1f7668e-4504-4f33-8c5a-d4dc17f009ee',
+              },
+              {
+                ...MOCK_CASE,
+                caseId: '8453c80c-b1d5-4975-899c-419ff323a506',
+                docketNumber: '456-01',
+                leadCaseId: 'e1f7668e-4504-4f33-8c5a-d4dc17f009ee',
               },
             ],
-            '123': [
+            'f6a764ed-f826-41d4-8214-74e959b19ac1': [
               {
-                caseId: '123',
-                leadCaseId: '123',
+                ...MOCK_CASE,
+                caseId: 'f6a764ed-f826-41d4-8214-74e959b19ac1',
+                leadCaseId: 'f6a764ed-f826-41d4-8214-74e959b19ac1',
               },
               {
-                caseId: '234',
-                docketNumber: '234-02',
-                leadCaseId: '123',
-              },
-              {
-                caseId: '345',
-                docketNumber: '345-01',
-                leadCaseId: '123',
-              },
-              {
-                caseId: '456',
-                docketNumber: '456-01',
-                leadCaseId: '123',
+                ...MOCK_CASE,
+                caseId: '9a1ee699-90d7-4439-a6a8-f910d3441af4',
+                leadCaseId: 'f6a764ed-f826-41d4-8214-74e959b19ac1',
               },
             ],
           };
@@ -46,22 +53,26 @@ describe('getConsolidatedCasesByUserInteractor', () => {
         },
         getCasesByUser: ({ userId }) => {
           const casesByUserId = {
-            123: [
+            '74fa8ba9-4f05-45db-9e2d-260a306d0b5e': [
               {
-                caseId: '123',
-                leadCaseId: '123',
+                ...MOCK_CASE,
+                caseId: 'e1f7668e-4504-4f33-8c5a-d4dc17f009ee',
+                leadCaseId: 'e1f7668e-4504-4f33-8c5a-d4dc17f009ee',
               },
               {
-                caseId: '345',
+                ...MOCK_CASE,
+                caseId: '6ddedc7e-6947-4cfd-a143-833f6de24e95',
               },
               {
-                caseId: '002',
-                leadCaseId: '001',
+                ...MOCK_CASE,
+                caseId: '9a1ee699-90d7-4439-a6a8-f910d3441af4',
+                leadCaseId: 'f6a764ed-f826-41d4-8214-74e959b19ac1',
               },
             ],
-            234: [
+            'ab2dc429-9055-429f-a7a9-06d3d5324b97': [
               {
-                caseId: '456',
+                ...MOCK_CASE,
+                caseId: '8453c80c-b1d5-4975-899c-419ff323a506',
                 leadCaseId: '',
               },
             ],
@@ -74,51 +85,51 @@ describe('getConsolidatedCasesByUserInteractor', () => {
 
     const cases = await getConsolidatedCasesByUserInteractor({
       applicationContext,
-      userId: '123',
+      userId: '74fa8ba9-4f05-45db-9e2d-260a306d0b5e',
     });
 
     expect(cases.length).toBeGreaterThan(0);
-    expect(cases).toEqual([
+    expect(cases).toMatchObject([
       {
-        caseId: '123',
+        caseId: 'e1f7668e-4504-4f33-8c5a-d4dc17f009ee',
         consolidatedCases: [
           {
-            caseId: '345',
+            caseId: '6ddedc7e-6947-4cfd-a143-833f6de24e95',
             docketNumber: '345-01',
             isRequestingUserAssociated: true,
-            leadCaseId: '123',
+            leadCaseId: 'e1f7668e-4504-4f33-8c5a-d4dc17f009ee',
           },
           {
-            caseId: '456',
+            caseId: '8453c80c-b1d5-4975-899c-419ff323a506',
             docketNumber: '456-01',
             isRequestingUserAssociated: false,
-            leadCaseId: '123',
+            leadCaseId: 'e1f7668e-4504-4f33-8c5a-d4dc17f009ee',
           },
           {
-            caseId: '234',
+            caseId: 'bd6d4823-92bc-4ea7-a3af-179a07dfda9e',
             docketNumber: '234-02',
             isRequestingUserAssociated: false,
-            leadCaseId: '123',
+            leadCaseId: 'e1f7668e-4504-4f33-8c5a-d4dc17f009ee',
           },
         ],
         isRequestingUserAssociated: true,
-        leadCaseId: '123',
+        leadCaseId: 'e1f7668e-4504-4f33-8c5a-d4dc17f009ee',
       },
       {
-        caseId: '345',
+        caseId: '6ddedc7e-6947-4cfd-a143-833f6de24e95',
         isRequestingUserAssociated: true,
       },
       {
-        caseId: '001',
+        caseId: 'f6a764ed-f826-41d4-8214-74e959b19ac1',
         consolidatedCases: [
           {
-            caseId: '002',
+            caseId: '9a1ee699-90d7-4439-a6a8-f910d3441af4',
             isRequestingUserAssociated: true,
-            leadCaseId: '001',
+            leadCaseId: 'f6a764ed-f826-41d4-8214-74e959b19ac1',
           },
         ],
         isRequestingUserAssociated: false,
-        leadCaseId: '001',
+        leadCaseId: 'f6a764ed-f826-41d4-8214-74e959b19ac1',
       },
     ]);
   });

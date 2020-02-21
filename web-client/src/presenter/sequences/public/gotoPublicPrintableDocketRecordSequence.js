@@ -4,16 +4,15 @@ import { setBaseUrlAction } from '../../actions/setBaseUrlAction';
 import { setCaseAction } from '../../actions/setCaseAction';
 import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from '../setPdfPreviewUrlSequence';
-import { setWaitingForResponseAction } from '../../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../../utilities/sequenceHelpers';
 
-export const gotoPublicPrintableDocketRecordSequence = [
-  setWaitingForResponseAction,
-  getPublicCaseAction,
-  setCaseAction,
-  setBaseUrlAction,
-  generatePublicDocketRecordPdfUrlAction,
-  setPdfPreviewUrlSequence,
-  setCurrentPageAction('PublicPrintableDocketRecord'),
-  unsetWaitingForResponseAction,
-];
+export const gotoPublicPrintableDocketRecordSequence = showProgressSequenceDecorator(
+  [
+    getPublicCaseAction,
+    setCaseAction,
+    setBaseUrlAction,
+    generatePublicDocketRecordPdfUrlAction,
+    setPdfPreviewUrlSequence,
+    setCurrentPageAction('PublicPrintableDocketRecord'),
+  ],
+);

@@ -27,6 +27,9 @@ exports.getBlockedCasesInteractor = async ({
   const body = await applicationContext.getSearchClient().search({
     body: {
       _source: [
+        'automaticBlocked',
+        'automaticBlockedDate',
+        'automaticBlockedReason',
         'blocked',
         'blockedDate',
         'blockedReason',
@@ -38,8 +41,15 @@ exports.getBlockedCasesInteractor = async ({
       query: {
         bool: {
           must: [
-            { match: { 'blocked.BOOL': true } },
             { match: { 'preferredTrialCity.S': trialLocation } },
+            {
+              bool: {
+                should: [
+                  { match: { 'automaticBlocked.BOOL': true } },
+                  { match: { 'blocked.BOOL': true } },
+                ],
+              },
+            },
           ],
         },
       },
@@ -48,14 +58,10 @@ exports.getBlockedCasesInteractor = async ({
     index: 'efcms',
   });
 
-  const foundCases = [];
-  const hits = get(body, 'hits.hits');
-
-  if (hits && hits.length > 0) {
-    hits.forEach(hit => {
-      foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
-    });
-  }
+  const hits = get(body, 'hits.hits', []);
+  const foundCases = hits.map(hit =>
+    AWS.DynamoDB.Converter.unmarshall(hit['_source']),
+  );
 
   return foundCases;
 };

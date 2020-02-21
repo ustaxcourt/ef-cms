@@ -1,14 +1,14 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.form.startTime values to a default 10:00am value
+ * sets the state.form.startTime values to previously entered and saved value
  *
  * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store
  * @param {object} providers.props the cerebral props object
+ * @param {object} providers.store the cerebral store
  */
-export const setTrialStartTimeAction = ({ store }) => {
-  store.set(state.form.startTimeExtension, 'am');
-  store.set(state.form.startTimeHours, '10');
-  store.set(state.form.startTimeMinutes, '00');
+export const setTrialStartTimeAction = ({ props, store }) => {
+  store.set(state.form.startTimeExtension, props.startTimeExtension);
+  store.set(state.form.startTimeHours, props.startTimeHours);
+  store.set(state.form.startTimeMinutes, props.startTimeMinutes);
 };

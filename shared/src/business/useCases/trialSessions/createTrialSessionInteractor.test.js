@@ -140,7 +140,7 @@ describe('createTrialSessionInteractor', () => {
         });
       },
       getPersistenceGateway: () => ({
-        createTrialSession: trial => trial,
+        createTrialSession: trial => trial.trialSession,
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
@@ -153,7 +153,7 @@ describe('createTrialSessionInteractor', () => {
       },
     });
 
-    expect(result.trialSession.isCalendared).toEqual(true);
+    expect(result.isCalendared).toEqual(true);
   });
 
   it('sets the trial session as calendared if it is a Special session type', async () => {
@@ -166,7 +166,7 @@ describe('createTrialSessionInteractor', () => {
         });
       },
       getPersistenceGateway: () => ({
-        createTrialSession: trial => trial,
+        createTrialSession: trial => trial.trialSession,
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
@@ -179,7 +179,7 @@ describe('createTrialSessionInteractor', () => {
       },
     });
 
-    expect(result.trialSession.isCalendared).toEqual(true);
+    expect(result.isCalendared).toEqual(true);
   });
 
   it('does not set the trial session as calendared if it is a Regular session type', async () => {
@@ -192,7 +192,7 @@ describe('createTrialSessionInteractor', () => {
         });
       },
       getPersistenceGateway: () => ({
-        createTrialSession: trial => trial,
+        createTrialSession: trial => trial.trialSession,
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
@@ -202,6 +202,6 @@ describe('createTrialSessionInteractor', () => {
       trialSession: MOCK_TRIAL,
     });
 
-    expect(result.trialSession.isCalendared).toEqual(false);
+    expect(result.isCalendared).toEqual(false);
   });
 });

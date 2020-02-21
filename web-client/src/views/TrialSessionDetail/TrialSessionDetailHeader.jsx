@@ -1,7 +1,6 @@
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const TrialSessionDetailHeader = connect(
   {
@@ -13,16 +12,10 @@ export const TrialSessionDetailHeader = connect(
         <div className="grid-container">
           <div className="margin-bottom-1">
             <h1 tabIndex="-1">{formattedTrialSessionDetails.trialLocation}</h1>
-            <span
-              className={classNames(
-                'usa-tag',
-                !formattedTrialSessionDetails.isCalendared &&
-                  'ustc-tag--yellow',
-              )}
-            >
+            <span className="usa-tag">
               <span aria-hidden="true">
                 {formattedTrialSessionDetails.formattedTerm}:{' '}
-                {formattedTrialSessionDetails.status}
+                {formattedTrialSessionDetails.computedStatus}
               </span>
             </span>
           </div>
