@@ -206,6 +206,9 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
+  DocketRecord,
+} = require('../../shared/src/business/entities/DocketRecord');
+const {
   ExternalDocumentFactory,
 } = require('../../shared/src/business/entities/externalDocument/ExternalDocumentFactory');
 const {
@@ -829,6 +832,7 @@ module.exports = (appContextUser = {}) => {
       CaseInternal: CaseInternal,
       CaseSearch,
       ContactFactory,
+      DocketRecord,
       ExternalDocumentFactory,
       TrialSession,
       User,
