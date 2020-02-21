@@ -1,3 +1,4 @@
+import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { canSetTrialSessionToCalendarAction } from './canSetTrialSessionToCalendarAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
@@ -13,6 +14,10 @@ describe('canSetTrialSessionToCalendarAction', () => {
     pathYesStub = jest.fn();
 
     presenter.providers.applicationContext = {
+      getEntityConstructors: () => ({
+        TrialSession,
+      }),
+      getUniqueId: () => 'easy-as-abc-123',
       getUseCases: () => ({
         canSetTrialSessionAsCalendaredInteractor: canSetTrialSessionAsCalendaredInteractorStub,
       }),

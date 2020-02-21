@@ -10,7 +10,7 @@ export default (test, overrides = {}) => {
 
     expect(test.getState('alertWarning')).toEqual({
       message:
-        'You must provide an address and judge to be able to set this trial session ',
+        'You must provide an address and a judge to be able to set this trial session ',
       title: 'This trial session requires additional information',
     });
 
