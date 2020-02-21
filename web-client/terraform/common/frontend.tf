@@ -152,6 +152,12 @@ resource "aws_cloudfront_distribution" "distribution" {
     default_ttl            = "${var.cloudfront_default_ttl}"
     max_ttl                = "${var.cloudfront_max_ttl}"
 
+    lambda_function_association {
+      event_type   = "viewer-response"
+      lambda_arn   = "${aws_lambda_function.header_security_lambda.qualified_arn}"
+      include_body = false
+    }
+
     forwarded_values {
       query_string = false
 
