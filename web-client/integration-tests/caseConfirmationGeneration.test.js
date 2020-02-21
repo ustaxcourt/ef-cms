@@ -7,8 +7,7 @@ import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCa
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
 import petitionsClerkGetsMyMessagesInboxCount from './journey/petitionsClerkGetsMyMessagesInboxCount';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
-import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
-import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
+import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkViewsMyMessagesInbox from './journey/petitionsClerkViewsMyMessagesInbox';
 import userNavigatesToCreateCaseConfirmation from './journey/userNavigatesToCreateCaseConfirmation';
 import userSignsOut from './journey/petitionerSignsOut';
@@ -28,8 +27,7 @@ describe('Case Confirmation', () => {
     petitionerCreatesNewCase(test, fakeFile);
     userSignsOut(test);
     petitionsClerkLogIn(test);
-    petitionsClerkSendsCaseToIRSHoldingQueue(test);
-    petitionsClerkRunsBatchProcess(test);
+    petitionsClerkSubmitsCaseToIrs(test);
     userNavigatesToCreateCaseConfirmation(test);
     userSignsOut(test);
   });
@@ -42,8 +40,7 @@ describe('Case Confirmation', () => {
     petitionerCreatesNewCase(test, fakeFile);
     userSignsOut(test);
     petitionsClerkLogIn(test);
-    petitionsClerkSendsCaseToIRSHoldingQueue(test);
-    petitionsClerkRunsBatchProcess(test);
+    petitionsClerkSubmitsCaseToIrs(test);
     userSignsOut(test);
     petitionerLogin(test);
     userNavigatesToCreateCaseConfirmation(test);
