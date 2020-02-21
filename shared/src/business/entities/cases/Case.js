@@ -98,21 +98,7 @@ Case.CASE_TYPES_MAP = {
   workerClassification: 'Worker Classification',
 };
 
-Case.CASE_TYPES = [
-  Case.CASE_TYPES_MAP.cdp,
-  Case.CASE_TYPES_MAP.deficiency,
-  Case.CASE_TYPES_MAP.djExemptOrg,
-  Case.CASE_TYPES_MAP.djRetirementPlan,
-  Case.CASE_TYPES_MAP.innocentSpouse,
-  Case.CASE_TYPES_MAP.interestAbatement,
-  Case.CASE_TYPES_MAP.other,
-  Case.CASE_TYPES_MAP.partnershipSection1101,
-  Case.CASE_TYPES_MAP.partnershipSection6226,
-  Case.CASE_TYPES_MAP.partnershipSection6228,
-  Case.CASE_TYPES_MAP.passport,
-  Case.CASE_TYPES_MAP.whistleblower,
-  Case.CASE_TYPES_MAP.workerClassification,
-];
+Case.CASE_TYPES = Object.values(Case.CASE_TYPES_MAP);
 
 // This is the order that they appear in the UI
 Case.PROCEDURE_TYPES = ['Regular', 'Small'];
