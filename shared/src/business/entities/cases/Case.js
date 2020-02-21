@@ -80,21 +80,23 @@ Case.STATUS_TYPES_MANUAL_UPDATE = [
 Case.ANSWER_CUTOFF_AMOUNT = 45;
 Case.ANSWER_CUTOFF_UNIT = 'day';
 
-Case.CASE_TYPES = [
-  'Deficiency',
-  'CDP (Lien/Levy)',
-  'Innocent Spouse',
-  'Partnership (Section 6226)',
-  'Partnership (Section 6228)',
-  'Partnership (BBA Section 1101)',
-  'Whistleblower',
-  'Worker Classification',
-  'Declaratory Judgment (Retirement Plan)',
-  'Declaratory Judgment (Exempt Organization)',
-  'Passport',
-  'Interest Abatement',
-  'Other',
-];
+Case.CASE_TYPES_MAP = {
+  cdp: 'CDP (Lien/Levy)',
+  deficiency: 'Deficiency',
+  djExemptOrg: 'Declaratory Judgment (Exempt Organization)',
+  djRetirementPlan: 'Declaratory Judgment (Retirement Plan)',
+  innocentSpouse: 'Innocent Spouse',
+  interestAbatement: 'Interest Abatement',
+  other: 'Other',
+  partnershipSection1101: 'Partnership (BBA Section 1101)',
+  partnershipSection6226: 'Partnership (Section 6226)',
+  partnershipSection6228: 'Partnership (Section 6228)',
+  passport: 'Passport',
+  whistleblower: 'Whistleblower',
+  workerClassification: 'Worker Classification',
+};
+
+Case.CASE_TYPES = Object.values(Case.CASE_TYPES_MAP);
 
 // This is the order that they appear in the UI
 Case.PROCEDURE_TYPES = ['Regular', 'Small'];
