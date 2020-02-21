@@ -14,7 +14,5 @@ exports.validateCourtIssuedDocketEntryInteractor = ({
     .getEntityConstructors()
     .CourtIssuedDocumentFactory.get(entryMetadata);
 
-  if (courtIssuedDocument) {
-    return courtIssuedDocument.getFormattedValidationErrors();
-  }
+  return courtIssuedDocument.getFormattedValidationErrors();
 };

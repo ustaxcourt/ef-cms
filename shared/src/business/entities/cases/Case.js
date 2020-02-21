@@ -42,7 +42,6 @@ Case.PAYMENT_STATUS = {
 Case.STATUS_TYPES = {
   assignedCase: 'Assigned - Case', // Case has been assigned to a judge
   assignedMotion: 'Assigned - Motion', // Someone has requested a judge for the case
-  batchedForIRS: 'Batched for IRS', // TODO: delete
   calendared: 'Calendared', // Case has been scheduled for trial
   cav: 'CAV', // Core alternative valuation
   closed: 'Closed', // Judge has made a ruling to close the case
@@ -52,7 +51,6 @@ Case.STATUS_TYPES = {
   jurisdictionRetained: 'Jurisdiction Retained', // Jurisdiction of a case is retained by a specific judge — usually after the case is on a judge’s trial calendar
   new: 'New', // Case has not been QCed
   onAppeal: 'On Appeal', // After the trial, the case has gone to the appeals court
-  recalled: 'Recalled', // TODO: delete
   rule155: 'Rule 155', // Where the Court has filed or stated its opinion or issued a dispositive order determining the issues in a case, it may withhold entry of its decision for the purpose of permitting the parties to submit computations pursuant to the Court’s determination of the issues, showing the correct amount to be included in the decision.
   submitted: 'Submitted', // Submitted to the judge for decision
 };
@@ -1027,20 +1025,6 @@ Case.prototype.updateDocketNumberRecord = function({ applicationContext }) {
   return this;
 };
 
-/**
- *
- * @returns {Case} the updated case entity
- */
-Case.prototype.sendToIRSHoldingQueue = function() {
-  this.status = Case.STATUS_TYPES.batchedForIRS;
-  return this;
-};
-
-Case.prototype.recallFromIRSHoldingQueue = function() {
-  this.status = Case.STATUS_TYPES.recalled;
-  return this;
-};
-
 Case.prototype.getDocumentById = function({ documentId }) {
   return this.documents.find(document => document.documentId === documentId);
 };
@@ -1611,9 +1595,8 @@ Case.prototype.getConsolidationStatus = function({ caseEntity }) {
  */
 Case.prototype.canConsolidate = function(caseToConsolidate) {
   const ineligibleStatusTypes = [
-    Case.STATUS_TYPES.batchedForIRS,
     Case.STATUS_TYPES.new,
-    Case.STATUS_TYPES.recalled,
+    Case.STATUS_TYPES.inProgress,
     Case.STATUS_TYPES.generalDocket,
     Case.STATUS_TYPES.closed,
     Case.STATUS_TYPES.onAppeal,

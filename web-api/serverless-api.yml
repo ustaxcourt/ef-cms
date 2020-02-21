@@ -148,22 +148,6 @@ resources:
             MetricsEnabled: true
 
 functions:
-  runBatchProcess:
-    handler: web-api/${self:provider.dir}/apiHandlers.runBatchProcessLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: run-batch-process
-          method: post
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   getNotifications:
     handler: web-api/${self:provider.dir}/apiHandlers.getNotificationsLambda
     events:
