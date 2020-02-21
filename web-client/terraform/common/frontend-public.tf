@@ -113,11 +113,6 @@ resource "aws_cloudfront_distribution" "public_distribution" {
       origin_protocol_policy = "http-only"
       origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
     }
-
-    custom_header {
-      name = "x-allowed-domain"
-      value = "${var.environment}.${var.dns_domain}"
-    }
   }
 
 
@@ -130,11 +125,6 @@ resource "aws_cloudfront_distribution" "public_distribution" {
       https_port             = "443"
       origin_protocol_policy = "http-only"
       origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
-    }
-
-    custom_header {
-      name = "x-allowed-domain"
-      value = "${var.environment}.${var.dns_domain}"
     }
   }
 
