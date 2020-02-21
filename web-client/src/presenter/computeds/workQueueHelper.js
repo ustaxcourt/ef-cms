@@ -48,10 +48,7 @@ export const workQueueHelper = (get, applicationContext) => {
       }/${queue}/${box}`;
     },
     hideCaseStatusColumn: userIsPetitionsClerk && isDisplayingQC,
-    hideFiledByColumn: !(
-      isDisplayingQC &&
-      (userIsDocketClerk || userIsPetitionsClerk)
-    ),
+    hideFiledByColumn: !(isDisplayingQC && userIsDocketClerk),
     hideFromColumn: isDisplayingQC,
     hideIconColumn: !workQueueIsInternal && userIsOther,
     hideSectionColumn: isDisplayingQC,
@@ -77,7 +74,8 @@ export const workQueueHelper = (get, applicationContext) => {
     showCaseStatusColumn: isJudge || userIsChambers,
     showEditDocketEntry: permissions.DOCKET_ENTRY,
     showFromColumn: isJudge || userIsChambers,
-    showInProgressTab: isDisplayingQC && userIsDocketClerk,
+    showInProgressTab:
+      isDisplayingQC && (userIsDocketClerk || userIsPetitionsClerk),
     showInbox,
     showIndividualWorkQueue,
     showMessageContent: !isDisplayingQC,
@@ -85,7 +83,9 @@ export const workQueueHelper = (get, applicationContext) => {
     showMyQueueToggle:
       workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,
     showOutbox,
-    showProcessedByColumn: isDisplayingQC && userIsDocketClerk && showOutbox,
+    showProcessedByColumn:
+      (isDisplayingQC && userIsDocketClerk && showOutbox) ||
+      (userIsPetitionsClerk && showInProgress),
     showReceivedColumn: isDisplayingQC,
     showSectionSentTab:
       workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,

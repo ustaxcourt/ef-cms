@@ -52,7 +52,7 @@ Case.STATUS_TYPES = {
   new: 'New', // Case has not been QCed
   onAppeal: 'On Appeal', // After the trial, the case has gone to the appeals court
   rule155: 'Rule 155', // Where the Court has filed or stated its opinion or issued a dispositive order determining the issues in a case, it may withhold entry of its decision for the purpose of permitting the parties to submit computations pursuant to the Court’s determination of the issues, showing the correct amount to be included in the decision.
-  submitted: 'Submitted', // Submitted to a Judge
+  submitted: 'Submitted', // Submitted to the judge for decision
 };
 
 Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
