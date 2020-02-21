@@ -3,8 +3,6 @@ module.exports = {
   getCasesByUserLambda: require('./cases/getCasesByUserLambda').handler,
   getConsolidatedCasesByUserLambda: require('./cases/getConsolidatedCasesByUserLambda')
     .handler,
-  getDocumentQCBatchedForUserLambda: require('./workitems/getDocumentQCBatchedForUserLambda')
-    .handler,
   getDocumentQCInboxForUserLambda: require('./workitems/getDocumentQCInboxForUserLambda')
     .handler,
   getDocumentQCServedForUserLambda: require('./workitems/getDocumentQCServedForUserLambda')
