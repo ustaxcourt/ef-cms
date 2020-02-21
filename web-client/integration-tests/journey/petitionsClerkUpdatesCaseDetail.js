@@ -120,7 +120,6 @@ export default test => {
     });
     await test.runSequence('navigateToReviewSavedPetitionSequence');
 
-    console.log(test.getState('caseDetail'));
     expect(test.getState('caseDetailErrors')).toEqual({
       petitionPaymentDate: VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
       petitionPaymentMethod: VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,

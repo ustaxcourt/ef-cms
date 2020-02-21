@@ -143,21 +143,14 @@ export const documentDetailHelper = (get, applicationContext) => {
     newOrInProgressStatus.includes(caseDetail.status) &&
     formattedDocument.isPetition &&
     user.role === USER_ROLES.petitionsClerk;
-  const showRecallButton =
-    caseDetail.status === STATUS_TYPES.batchedForIRS &&
-    formattedDocument.isPetition;
 
   const showCaseDetailsEdit = newOrInProgressStatus.includes(caseDetail.status);
-  const showCaseDetailsView = [STATUS_TYPES.batchedForIRS].includes(
-    caseDetail.status,
-  );
+
   const showDocumentInfoTab =
-    formattedDocument.isPetition &&
-    (showCaseDetailsEdit || showCaseDetailsView);
+    formattedDocument.isPetition && showCaseDetailsEdit;
 
   const showViewOrdersNeededButton =
-    (document.status === 'served' ||
-      caseDetail.status === STATUS_TYPES.batchedForIRS) &&
+    document.status === 'served' &&
     user.role === USER_ROLES.petitionsClerk &&
     formattedDocument.isPetition;
 
@@ -178,7 +171,6 @@ export const documentDetailHelper = (get, applicationContext) => {
     },
     showAddCourtIssuedDocketEntryButton,
     showCaseDetailsEdit,
-    showCaseDetailsView,
     showConfirmEditOrder: isSigned && isOrder,
     showCreatedFiled: (!isOrder && !isCourtIssuedDocument) || isDraftDocument,
     showDocumentInfoTab,
@@ -195,7 +187,6 @@ export const documentDetailHelper = (get, applicationContext) => {
       formattedDocument.isPetition === false &&
       !formattedDocument.isCourtIssuedDocument,
     showPrintCaseConfirmationButton,
-    showRecallButton,
     showRemoveSignature: isOrder && document.eventCode !== 'NOT' && isSigned,
     showServeToIrsButton,
     showSignDocumentButton,
