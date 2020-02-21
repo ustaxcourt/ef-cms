@@ -403,4 +403,29 @@ describe('workQueueHelper', () => {
     });
     expect(result.inboxFiledColumnLabel).toEqual('Received');
   });
+
+  it('shows in progress petitions for a petitionsclerk', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: {
+          box: 'inProgress',
+          queue: 'section',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+
+    expect(result.showProcessedByColumn).toEqual(true);
+    expect(result.showInProgressTab).toEqual(true);
+  });
 });

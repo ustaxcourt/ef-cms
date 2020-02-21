@@ -48,7 +48,7 @@ export const documentDetailHelper = (get, applicationContext) => {
   const STIPULATED_DECISION_DOCUMENT_TYPE = 'Stipulated Decision';
   const MISCELLANEOUS_DOCUMENT_TYPE = 'MISC - Miscellaneous';
 
-  const newOrRecalledStatus = [STATUS_TYPES.new, STATUS_TYPES.recalled];
+  const newOrInProgressStatus = [STATUS_TYPES.new, STATUS_TYPES.inProgress];
 
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
@@ -140,14 +140,14 @@ export const documentDetailHelper = (get, applicationContext) => {
       (isCourtIssuedDocument && !isDocumentOnDocketRecord));
 
   const showServeToIrsButton =
-    newOrRecalledStatus.includes(caseDetail.status) &&
+    newOrInProgressStatus.includes(caseDetail.status) &&
     formattedDocument.isPetition &&
     user.role === USER_ROLES.petitionsClerk;
   const showRecallButton =
     caseDetail.status === STATUS_TYPES.batchedForIRS &&
     formattedDocument.isPetition;
 
-  const showCaseDetailsEdit = newOrRecalledStatus.includes(caseDetail.status);
+  const showCaseDetailsEdit = newOrInProgressStatus.includes(caseDetail.status);
   const showCaseDetailsView = [STATUS_TYPES.batchedForIRS].includes(
     caseDetail.status,
   );

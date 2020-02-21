@@ -15,7 +15,7 @@ export default test => {
       key: 'orderForAmendedPetition',
       value: true,
     });
-    await test.runSequence('submitCaseDetailEditSaveSequence');
+    await test.runSequence('saveSavedCaseForLaterSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
 
     const caseHelper = runCompute(caseDetailHelper, {

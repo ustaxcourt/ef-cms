@@ -51,6 +51,7 @@ import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewMod
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewPetitionFromPaperHelper } from './computeds/reviewPetitionFromPaperHelper';
+import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { selectDocumentSelectHelper } from './computeds/selectDocumentSelectHelper';
@@ -184,6 +185,7 @@ export const state = {
   procedureTypes: [],
   requestAccessHelper,
   reviewPetitionFromPaperHelper,
+  reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
   scanner: {},

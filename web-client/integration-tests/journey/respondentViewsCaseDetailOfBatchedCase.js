@@ -9,7 +9,7 @@ export default test => {
     expect(test.getState('currentPage')).toEqual('CaseDetail');
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
     expect(test.getState('caseDetail.status')).toEqual(
-      Case.STATUS_TYPES.batchedForIRS,
+      Case.STATUS_TYPES.generalDocket,
     );
     expect(test.getState('caseDetail.documents').length).toEqual(2);
   });
