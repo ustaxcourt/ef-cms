@@ -279,18 +279,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getDocumentQCBatchedForUser:
-    handler: web-api/${self:provider.dir}/usersHandlers.getDocumentQCBatchedForUserLambda
-    events:
-      - http:
-          path: /{userId}/document-qc/batched
-          method: get
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   getDocumentQCServedForUser:
     handler: web-api/${self:provider.dir}/usersHandlers.getDocumentQCServedForUserLambda
     events:

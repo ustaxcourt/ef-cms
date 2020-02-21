@@ -183,31 +183,5 @@ describe('WorkItem', () => {
       });
       expect(workItem.messages.length === 0).toBe(true);
     });
-
-    it('a message should be added when set as sentToIRS', () => {
-      const workItem = new WorkItem(
-        {
-          assigneeId: 'bob',
-          assigneeName: 'bob',
-          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          caseStatus: Case.STATUS_TYPES.batchedForIRS,
-          caseTitle: 'testing',
-          docketNumber: '101-18',
-          docketNumberSuffix: 'S',
-          document: {},
-          isQC: true,
-          messages: [],
-          sentBy: 'bob',
-        },
-        { applicationContext },
-      );
-      workItem.setAsSentToIRS({
-        applicationContext,
-        batchedByName: 'bob',
-        batchedByUserId: 'abc',
-      });
-      expect(workItem.messages.length === 1).toBe(true);
-      expect(workItem.completedMessage).toEqual('Served on IRS');
-    });
   });
 });

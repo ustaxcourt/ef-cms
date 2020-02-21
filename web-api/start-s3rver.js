@@ -15,7 +15,6 @@ new S3rver({
       name: process.env.TEMP_DOCUMENTS_BUCKET_NAME,
     },
   ],
-  cors: 'wat',
   directory: 'web-api/storage/s3',
   hostname: 'localhost',
   port: 9000,

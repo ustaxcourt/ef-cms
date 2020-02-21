@@ -28,7 +28,7 @@ describe('updateCourtIssuedDocketEntryAction', () => {
         form: {
           attachments: false,
           date: '2019-01-01T00:00:00.000Z',
-          documentTitle: 'Order [Anything]',
+          documentTitle: '[Anything]',
           documentType: 'O - Order',
           eventCode: 'O',
           freeText: 'Testing',

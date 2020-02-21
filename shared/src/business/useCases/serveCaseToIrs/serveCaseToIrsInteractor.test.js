@@ -1,5 +1,6 @@
 const sinon = require('sinon');
 const { Case } = require('../../entities/cases/Case');
+const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { serveCaseToIrsInteractor } = require('./serveCaseToIrsInteractor');
@@ -10,7 +11,7 @@ const MOCK_WORK_ITEMS = [
     assigneeId: null,
     assigneeName: 'IRSBatchSystem',
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    caseStatus: Case.STATUS_TYPES.batchedForIRS,
+    caseStatus: Case.STATUS_TYPES.inProgress,
     completedAt: '2018-12-27T18:06:02.968Z',
     completedBy: 'Petitioner',
     completedByUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -118,6 +119,10 @@ describe('serveCaseToIrsInteractor', () => {
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
+      getEntityConstructors: () => ({
+        Case,
+        DocketRecord,
+      }),
       getPersistenceGateway: () => {
         return {
           deleteDocument: deleteDocumentStub,
@@ -166,6 +171,10 @@ describe('serveCaseToIrsInteractor', () => {
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
+      getEntityConstructors: () => ({
+        Case,
+        DocketRecord,
+      }),
       getPersistenceGateway: () => {
         return {
           deleteDocument: deleteDocumentStub,
