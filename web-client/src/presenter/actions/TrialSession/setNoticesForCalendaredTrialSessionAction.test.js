@@ -4,8 +4,6 @@ import { setNoticesForCalendaredTrialSessionAction } from './setNoticesForCalend
 
 describe('setNoticesForCalendaredTrialSessionAction', () => {
   let setNoticesForCalendaredTrialSessionInteractorStub;
-  let pathPaperStub;
-  let pathElectronicStub;
   let createObjectURLStub;
 
   beforeEach(() => {
@@ -15,8 +13,6 @@ describe('setNoticesForCalendaredTrialSessionAction', () => {
     setNoticesForCalendaredTrialSessionInteractorStub = jest
       .fn()
       .mockReturnValue(null);
-    pathPaperStub = jest.fn();
-    pathElectronicStub = jest.fn();
     createObjectURLStub = jest.fn();
 
     presenter.providers.router = {
