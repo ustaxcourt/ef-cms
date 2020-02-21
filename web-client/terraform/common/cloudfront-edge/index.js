@@ -10,6 +10,8 @@ exports.handler = (event, context, callback) => {
   const { response } = event.Records[0].cf;
   const { headers } = response;
 
+  const allowedDomain = `*${headers['x-allowed-domain']}`;
+
   //Set new headers
   headers['strict-transport-security'] = [
     {
@@ -20,8 +22,7 @@ exports.handler = (event, context, callback) => {
   headers['content-security-policy'] = [
     {
       key: 'Content-Security-Policy',
-      value:
-        "default-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'",
+      value: `default-src '${allowedDomain}'; img-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'`,
     },
   ];
   headers['x-content-type-options'] = [
