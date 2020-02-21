@@ -444,27 +444,21 @@ TrialSession.prototype.canSetAsCalendared = function() {
 TrialSession.prototype.getEmptyFields = function() {
   let missingFields = [];
 
-  if (isEmpty(this.address1)) {
-    missingFields.push('address');
+  if (
+    [this.address1, this.city, this.state, this.postalCode].some(property =>
+      isEmpty(property),
+    )
+  ) {
+    missingFields.push('an address');
   }
 
   if (isEmpty(this.judge)) {
-    missingFields.push('judge');
+    missingFields.push('a judge');
   }
 
-  if (isEmpty(this.city)) {
-    missingFields.push('city');
-  }
-
-  if (isEmpty(this.state)) {
-    missingFields.push('state');
-  }
-
-  if (isEmpty(this.postalCode)) {
-    missingFields.push('postal code');
-  }
-
-  return missingFields.join(', ');
+  return missingFields.length > 1
+    ? missingFields.join(' and ')
+    : missingFields.join(' ');
 };
 
 /**
