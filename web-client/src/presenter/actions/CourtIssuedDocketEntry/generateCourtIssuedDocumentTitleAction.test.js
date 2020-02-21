@@ -27,7 +27,7 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
       },
       state: {
         form: {
-          documentTitle: 'Order [Anything]',
+          documentTitle: '[Anything]',
           documentType: 'Order',
           freeText: 'for something',
           scenario: 'Type A',
@@ -61,7 +61,7 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
       state: {
         form: {
           attachments: true,
-          documentTitle: 'Order [Anything]',
+          documentTitle: '[Anything]',
           documentType: 'Order',
           freeText: 'for something',
           scenario: 'Type A',
@@ -94,7 +94,7 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
       },
       state: {
         form: {
-          documentTitle: 'Order [Anything]',
+          documentTitle: '[Anything]',
           documentType: 'Order',
           freeText: 'for something',
           generatedDocumentTitle: 'Order for something',
