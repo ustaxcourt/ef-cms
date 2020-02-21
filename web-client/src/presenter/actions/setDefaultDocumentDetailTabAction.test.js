@@ -23,6 +23,22 @@ describe('setDefaultDocumentDetailTab', () => {
     expect(state.currentTab).toEqual('Document Info');
   });
 
+  it('returns "Document Info" when the case status is in progress and the document type is Petition', async () => {
+    const { state } = await runAction(setDefaultDocumentDetailTabAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          documents: [{ documentId: 'abc', documentType: 'Petition' }],
+          status: Case.STATUS_TYPES.inProgress,
+        },
+        documentId: 'abc',
+      },
+    });
+    expect(state.currentTab).toEqual('Document Info');
+  });
+
   it('returns "Messages" when the case status is new and the document type is Answer', async () => {
     const { state } = await runAction(setDefaultDocumentDetailTabAction, {
       modules: {

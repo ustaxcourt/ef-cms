@@ -206,6 +206,9 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
+  DocketRecord,
+} = require('../../shared/src/business/entities/DocketRecord');
+const {
   ExternalDocumentFactory,
 } = require('../../shared/src/business/entities/externalDocument/ExternalDocumentFactory');
 const {
@@ -330,18 +333,6 @@ const {
 const {
   getConsolidatedCasesByUserInteractor,
 } = require('../../shared/src/business/useCases/getConsolidatedCasesByUserInteractor');
-const {
-  getDocumentQCBatchedForSection,
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForSection');
-const {
-  getDocumentQCBatchedForSectionInteractor,
-} = require('../../shared/src/business/useCases/workitems/getDocumentQCBatchedForSectionInteractor');
-const {
-  getDocumentQCBatchedForUser,
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForUser');
-const {
-  getDocumentQCBatchedForUserInteractor,
-} = require('../../shared/src/business/useCases/workitems/getDocumentQCBatchedForUserInteractor');
 const {
   getDocumentQCInboxForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
@@ -533,9 +524,6 @@ const {
   putWorkItemInUsersOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInUsersOutbox');
 const {
-  recallPetitionFromIRSHoldingQueueInteractor,
-} = require('../../shared/src/business/useCases/recallPetitionFromIRSHoldingQueueInteractor');
-const {
   removeCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor');
 const {
@@ -547,9 +535,6 @@ const {
 const {
   reprocessFailedRecordsInteractor,
 } = require('../../shared/src/business/useCases/reprocessFailedRecordsInteractor');
-const {
-  runBatchProcessInteractor,
-} = require('../../shared/src/business/useCases/runBatchProcessInteractor');
 const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
@@ -592,9 +577,6 @@ const {
 const {
   sendNotificationToUser,
 } = require('../../shared/src/notifications/sendNotificationToUser');
-const {
-  sendPetitionToIRSHoldingQueueInteractor,
-} = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
   sendServedPartiesEmails,
 } = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
@@ -752,6 +734,7 @@ const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { exec } = require('child_process');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 const { User } = require('../../shared/src/business/entities/User');
+const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 
 // increase the timeout for zip uploads to S3
 AWS.config.httpOptions.timeout = 300000;
@@ -850,9 +833,11 @@ module.exports = (appContextUser = {}) => {
       CaseInternal: CaseInternal,
       CaseSearch,
       ContactFactory,
+      DocketRecord,
       ExternalDocumentFactory,
       TrialSession,
       User,
+      WorkItem,
     }),
     getMigrations: () => ({
       migrateCaseInteractor,
@@ -916,8 +901,6 @@ module.exports = (appContextUser = {}) => {
         getCaseDeadlinesByCaseId,
         getCasesByLeadCaseId,
         getCasesByUser,
-        getDocumentQCBatchedForSection,
-        getDocumentQCBatchedForUser,
         getDocumentQCInboxForSection,
         getDocumentQCInboxForUser,
         getDocumentQCServedForSection,
@@ -1098,8 +1081,6 @@ module.exports = (appContextUser = {}) => {
         getCasesByUserInteractor,
         getConsolidatedCasesByCaseInteractor,
         getConsolidatedCasesByUserInteractor,
-        getDocumentQCBatchedForSectionInteractor,
-        getDocumentQCBatchedForUserInteractor,
         getDocumentQCInboxForSectionInteractor,
         getDocumentQCInboxForUserInteractor,
         getDocumentQCServedForSectionInteractor,
@@ -1129,19 +1110,16 @@ module.exports = (appContextUser = {}) => {
         onDisconnectInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
-        recallPetitionFromIRSHoldingQueueInteractor,
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
         reprocessFailedRecordsInteractor,
-        runBatchProcessInteractor,
         runTrialSessionPlanningReportInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,
         saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
         sealCaseInteractor,
-        sendPetitionToIRSHoldingQueueInteractor,
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
         setNoticesForCalendaredTrialSessionInteractor,
