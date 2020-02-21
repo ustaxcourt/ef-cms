@@ -1,3 +1,4 @@
+import { assignPetitionToAuthenicatedUserAction } from '../actions/WorkItem/assignPetitionToAuthenicatedUserAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
@@ -24,6 +25,7 @@ export const saveInternalCaseForLaterSequence = [
       error: [openFileUploadErrorModal],
       success: [
         setCaseAction,
+        assignPetitionToAuthenicatedUserAction,
         setPetitionIdAction,
         setDocumentIdAction,
         closeFileUploadStatusModalAction,
