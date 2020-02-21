@@ -5,7 +5,6 @@ export default test => {
     await test.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: test.trialSessionId,
     });
-
     await test.runSequence('setTrialSessionCalendarSequence');
     await wait(5000);
   });
