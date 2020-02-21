@@ -1,4 +1,4 @@
-import { wait } from '../helpers';
+import { flushPromises, wait } from '../helpers';
 
 export default test => {
   return it('Petitions Clerk Sets A Trial Sessions Schedule', async () => {
@@ -7,6 +7,6 @@ export default test => {
     });
 
     await test.runSequence('setTrialSessionCalendarSequence');
-    await wait(10000);
+    await wait(5000);
   });
 };

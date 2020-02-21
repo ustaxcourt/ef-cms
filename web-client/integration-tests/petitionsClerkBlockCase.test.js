@@ -164,7 +164,7 @@ describe('Blocking a Case', () => {
     });
 
     await test.runSequence('addCaseToTrialSessionSequence');
-    await wait(10000);
+    await wait(5000);
   });
 
   petitionsClerkCreatesACaseDeadline(test);

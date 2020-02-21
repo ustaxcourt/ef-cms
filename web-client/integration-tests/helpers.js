@@ -342,7 +342,7 @@ exports.loginAs = async (test, user) => {
     value: user,
   });
   await test.runSequence('submitLoginSequence');
-  await exports.waitForRouter();
+  await exports.wait(2000);
 };
 
 exports.setupTest = ({ useCases = {} } = {}) => {
@@ -435,7 +435,7 @@ exports.setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
-  test = CerebralTest(presenter, { returnSequencePromise: false });
+  test = CerebralTest(presenter);
   test.getSequence = name => obj => test.runSequence(name, obj);
   initializeSocketProvider(test);
 
@@ -519,7 +519,7 @@ exports.waitForRouter = () => {
   });
 };
 
-exports.flushPromises = () => new Promise(setImmediate);
+exports.flushPromises = () => new Promise(resolve => setImmediate(resolve));
 
 exports.wait = time => {
   return new Promise(resolve => {
