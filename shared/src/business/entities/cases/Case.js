@@ -82,20 +82,36 @@ Case.STATUS_TYPES_MANUAL_UPDATE = [
 Case.ANSWER_CUTOFF_AMOUNT = 45;
 Case.ANSWER_CUTOFF_UNIT = 'day';
 
+Case.CASE_TYPES_MAP = {
+  cdp: 'CDP (Lien/Levy)',
+  deficiency: 'Deficiency',
+  djExemptOrg: 'Declaratory Judgment (Exempt Organization)',
+  djRetirementPlan: 'Declaratory Judgment (Retirement Plan)',
+  innocentSpouse: 'Innocent Spouse',
+  interestAbatement: 'Interest Abatement',
+  other: 'Other',
+  partnershipSection1101: 'Partnership (BBA Section 1101)',
+  partnershipSection6226: 'Partnership (Section 6226)',
+  partnershipSection6228: 'Partnership (Section 6228)',
+  passport: 'Passport',
+  whistleblower: 'Whistleblower',
+  workerClassification: 'Worker Classification',
+};
+
 Case.CASE_TYPES = [
-  'Deficiency',
-  'CDP (Lien/Levy)',
-  'Innocent Spouse',
-  'Partnership (Section 6226)',
-  'Partnership (Section 6228)',
-  'Partnership (BBA Section 1101)',
-  'Whistleblower',
-  'Worker Classification',
-  'Declaratory Judgment (Retirement Plan)',
-  'Declaratory Judgment (Exempt Organization)',
-  'Passport',
-  'Interest Abatement',
-  'Other',
+  Case.CASE_TYPES_MAP.cdp,
+  Case.CASE_TYPES_MAP.deficiency,
+  Case.CASE_TYPES_MAP.djExemptOrg,
+  Case.CASE_TYPES_MAP.djRetirementPlan,
+  Case.CASE_TYPES_MAP.innocentSpouse,
+  Case.CASE_TYPES_MAP.interestAbatement,
+  Case.CASE_TYPES_MAP.other,
+  Case.CASE_TYPES_MAP.partnershipSection1101,
+  Case.CASE_TYPES_MAP.partnershipSection6226,
+  Case.CASE_TYPES_MAP.partnershipSection6228,
+  Case.CASE_TYPES_MAP.passport,
+  Case.CASE_TYPES_MAP.whistleblower,
+  Case.CASE_TYPES_MAP.workerClassification,
 ];
 
 // This is the order that they appear in the UI
