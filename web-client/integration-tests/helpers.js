@@ -519,6 +519,8 @@ exports.waitForRouter = () => {
   });
 };
 
+exports.flushPromises = () => new Promise(setImmediate);
+
 exports.wait = time => {
   return new Promise(resolve => {
     setTimeout(resolve, time);
