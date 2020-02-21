@@ -1,5 +1,5 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
-import { fakeFile, setupTest, waitForRouter } from './helpers';
+import { fakeFile, setupTest, wait, waitForRouter } from './helpers';
 
 const DOCKET_CLERK_1_ID = '2805d1ab-18d0-43ec-bafb-654e83405416';
 const MESSAGE = 'new test message';
@@ -16,6 +16,7 @@ async function loginAs(user) {
     value: user,
   });
   await test.runSequence('submitLoginSequence');
+  await wait(2000);
 }
 
 /**

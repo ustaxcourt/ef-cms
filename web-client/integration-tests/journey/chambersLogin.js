@@ -1,5 +1,6 @@
 import { applicationContext } from '../../src/applicationContext';
 import { userMap } from '../../../shared/src/test/mockUserTokenMap';
+import { wait } from '../helpers';
 
 export default (test, token = 'armensChambers') => {
   it('the chambers user logs in', async () => {
@@ -8,6 +9,7 @@ export default (test, token = 'armensChambers') => {
       value: token,
     });
     await test.runSequence('submitLoginSequence');
+    await wait(2000);
     expect(test.getState('user.userId')).toEqual(userMap[token].userId);
     expect(applicationContext.getCurrentUser()).toBeDefined();
     expect(applicationContext.getCurrentUser().userId).toEqual(
