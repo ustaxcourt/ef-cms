@@ -7,7 +7,6 @@ exports.CHAMBERS_SECTION = 'chambers';
 exports.CLERK_OF_COURT_SECTION = 'clerkofcourt';
 exports.DOCKET_SECTION = 'docket';
 exports.PETITIONS_SECTION = 'petitions';
-exports.IN_PROGRESS_SECTION = 'inProgress';
 exports.IRS_SYSTEM_SECTION = 'irsSystem';
 exports.TRIAL_CLERKS_SECTION = 'trialClerks';
 

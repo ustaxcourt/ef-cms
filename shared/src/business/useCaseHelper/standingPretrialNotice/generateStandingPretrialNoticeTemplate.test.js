@@ -45,10 +45,10 @@ describe('generateStandingPretrialNoticeTemplate', () => {
 
     // TODO: Flesh this out further when template is done
     expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
-    //expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
-    //expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
-    //expect(result.indexOf('City')).toBeGreaterThan(-1);
-    //expect(result.indexOf('ST')).toBeGreaterThan(-1);
+    expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
+    expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
+    expect(result.indexOf('City')).toBeGreaterThan(-1);
+    expect(result.indexOf('ST')).toBeGreaterThan(-1);
     expect(result.indexOf('Guy Fieri')).toBeGreaterThan(-1);
     expect(result.indexOf('STANDING PRETRIAL NOTICE')).toBeGreaterThan(-1);
   });
@@ -83,10 +83,10 @@ describe('generateStandingPretrialNoticeTemplate', () => {
 
     // TODO: Flesh this out further when template is done
     expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
-    //expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
-    //expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
-    //expect(result.indexOf('City')).toBeGreaterThan(-1);
-    //expect(result.indexOf('ST')).toBeGreaterThan(-1);
+    expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
+    expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
+    expect(result.indexOf('City')).toBeGreaterThan(-1);
+    expect(result.indexOf('ST')).toBeGreaterThan(-1);
     expect(result.indexOf('Guy Fieri')).toEqual(-1);
     expect(result.indexOf('STANDING PRETRIAL NOTICE')).toBeGreaterThan(-1);
   });

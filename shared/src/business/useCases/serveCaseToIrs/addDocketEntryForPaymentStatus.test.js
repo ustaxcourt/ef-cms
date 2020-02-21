@@ -39,7 +39,7 @@ describe('addDocketEntryForPaymentStatus', () => {
     expect(addedDocketRecord.filingDate).toEqual('Today');
   });
 
-  it('adds a docketRecord for a waved petition payment', async () => {
+  it('adds a docketRecord for a waived petition payment', async () => {
     caseEntity = new Case(
       {
         ...MOCK_CASE,

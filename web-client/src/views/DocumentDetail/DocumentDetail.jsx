@@ -184,7 +184,6 @@ export const DocumentDetail = connect(
               </Button>
             )}
 
-            {/* TODO: move me */}
             {documentDetailHelper.showServeToIrsButton && (
               <Button
                 className="serve-to-irs margin-right-0"
