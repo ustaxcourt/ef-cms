@@ -2,7 +2,6 @@ import { ArchiveDraftDocumentModal } from '../DraftDocuments/ArchiveDraftDocumen
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailEdit } from '../CaseDetailEdit/CaseDetailEdit';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
-import { CaseDetailReadOnly } from './CaseDetailReadOnly';
 import { ConfirmEditModal } from '../DraftDocuments/ConfirmEditModal';
 import { DocumentDetailHeader } from './DocumentDetailHeader';
 import { DocumentDisplayIframe } from './DocumentDisplayIframe';
@@ -27,7 +26,6 @@ export const DocumentDetail = connect(
       sequences.navigateToPrintableCaseConfirmationSequence,
     removeSignatureFromOrderSequence:
       sequences.removeSignatureFromOrderSequence,
-    setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     showModal: state.showModal,
   },
   ({
@@ -66,10 +64,7 @@ export const DocumentDetail = connect(
                 aria-labelledby="tab-document-info"
                 id="tab-document-info-panel"
               >
-                {documentDetailHelper.showCaseDetailsEdit && <CaseDetailEdit />}
-                {documentDetailHelper.showCaseDetailsView && (
-                  <CaseDetailReadOnly />
-                )}
+                <CaseDetailEdit />
               </div>
             </Tab>
           )}
