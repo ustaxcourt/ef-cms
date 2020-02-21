@@ -6,7 +6,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { Document } = require('../../entities/Document');
 const { PDFDocument } = require('pdf-lib');
@@ -17,7 +16,7 @@ exports.addDocketEntryForPaymentStatus = ({
   applicationContext,
   caseEntity,
 }) => {
-  const { DocketRecord } = applicationContext.getEntityConstructors();
+  const { Case, DocketRecord } = applicationContext.getEntityConstructors();
 
   if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
     caseEntity.addDocketRecord(
@@ -106,6 +105,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
       caseId: caseId,
     });
 
+  const { Case } = applicationContext.getEntityConstructors();
   const caseEntity = new Case(caseToBatch, { applicationContext });
 
   exports.addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
