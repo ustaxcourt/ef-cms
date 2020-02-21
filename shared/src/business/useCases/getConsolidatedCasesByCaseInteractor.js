@@ -1,3 +1,5 @@
+const { Case } = require('../entities/cases/Case');
+
 /**
  * getConsolidatedCasesByCaseInteractor
  *
@@ -10,8 +12,12 @@ exports.getConsolidatedCasesByCaseInteractor = async ({
   applicationContext,
   caseId,
 }) => {
-  return await applicationContext.getPersistenceGateway().getCasesByLeadCaseId({
-    applicationContext,
-    leadCaseId: caseId,
-  });
+  const consolidatedCases = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByLeadCaseId({
+      applicationContext,
+      leadCaseId: caseId,
+    });
+
+  return Case.validateRawCollection(consolidatedCases, { applicationContext });
 };

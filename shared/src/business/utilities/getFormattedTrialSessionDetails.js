@@ -1,4 +1,4 @@
-const { compact } = require('lodash');
+const { compact, isEmpty, isEqual } = require('lodash');
 
 exports.formatCase = ({ applicationContext, caseItem }) => {
   caseItem.docketNumberWithSuffix = `${
@@ -16,6 +16,10 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
 };
 
 exports.compareCasesByDocketNumber = (a, b) => {
+  if (!a || !a.docketNumber || !b || !b.docketNumber) {
+    return 0;
+  }
+
   const [numberA, yearA] = a.docketNumber.split('-');
   const [numberB, yearB] = b.docketNumber.split('-');
 
@@ -31,27 +35,31 @@ exports.formattedTrialSessionDetails = ({
   applicationContext,
   trialSession,
 }) => {
-  const { STATUS_TYPES } = applicationContext.getConstants();
   if (!trialSession) return undefined;
 
   trialSession.formattedEligibleCases = (
     trialSession.eligibleCases || []
   ).map(caseItem => exports.formatCase({ applicationContext, caseItem }));
+
   trialSession.allCases = (trialSession.calendaredCases || [])
     .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
     .sort(exports.compareCasesByDocketNumber);
+
   trialSession.openCases = trialSession.allCases.filter(
-    item =>
-      item.status !== STATUS_TYPES.closed && item.removedFromTrial !== true,
+    item => item.removedFromTrial !== true,
   );
   trialSession.inactiveCases = trialSession.allCases.filter(
-    item =>
-      item.status === STATUS_TYPES.closed || item.removedFromTrial === true,
+    item => item.removedFromTrial === true,
   );
 
   trialSession.formattedTerm = `${
     trialSession.term
   } ${trialSession.termYear.substr(-2)}`;
+
+  trialSession.computedStatus = exports.getTrialSessionStatus({
+    applicationContext,
+    session: trialSession,
+  });
 
   trialSession.formattedStartDate = applicationContext
     .getUtilities()
@@ -107,4 +115,22 @@ exports.formattedTrialSessionDetails = ({
     .replace(/,/g, '');
 
   return trialSession;
+};
+
+exports.getTrialSessionStatus = ({ applicationContext, session }) => {
+  const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
+
+  const allCases = session.caseOrder || [];
+  const inactiveCases = allCases.filter(
+    sessionCase => sessionCase.removedFromTrial === true,
+  );
+
+  if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
+    // TODO: Move to constants, on the entity?
+    return SESSION_STATUS_GROUPS.closed;
+  } else if (session.isCalendared) {
+    return SESSION_STATUS_GROUPS.open;
+  } else if (!session.isCalendared) {
+    return SESSION_STATUS_GROUPS.new;
+  }
 };

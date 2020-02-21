@@ -44,7 +44,7 @@ export const CaseDetailReadOnlyPartyInformation = connect(
         <h3>Party Information</h3>
         <div>
           <span className="label">Party type</span>
-          <p>{formattedCaseDetail.partyType || 'My Party Type'}</p>
+          <p>{formattedCaseDetail.partyType || 'My Party type'}</p>
         </div>
 
         {caseDetailEditHelper.showPrimaryContact && (

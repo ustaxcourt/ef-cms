@@ -18,6 +18,7 @@ export const workQueueHelper = (get, applicationContext) => {
     : qcUnreadCount;
   const workQueueType = workQueueIsInternal ? 'Messages' : 'Document QC';
   const isDisplayingQC = !workQueueIsInternal;
+  const userIsChambers = user.role === USER_ROLES.chambers;
   const userIsPetitionsClerk = user.role === USER_ROLES.petitionsClerk;
   const userIsDocketClerk = user.role === USER_ROLES.docketClerk;
   const userIsOther = ![
@@ -34,8 +35,11 @@ export const workQueueHelper = (get, applicationContext) => {
   const permissions = get(state.permissions);
 
   const inboxFiledColumnLabel = workQueueIsInternal ? 'Received' : 'Filed';
+  const outboxFiledByColumnLabel = userIsPetitionsClerk ? 'Processed' : 'Filed';
 
   const showStartCaseButton = permissions.START_PAPER_CASE && isDisplayingQC;
+
+  const showCaseTitle = !userIsChambers;
 
   return {
     assigneeColumnTitle: isDisplayingQC ? 'Assigned to' : 'To',
@@ -46,7 +50,10 @@ export const workQueueHelper = (get, applicationContext) => {
       }/${queue}/${box}`;
     },
     hideCaseStatusColumn: userIsPetitionsClerk && isDisplayingQC,
-    hideFiledByColumn: !(isDisplayingQC && userIsDocketClerk),
+    hideFiledByColumn: !(
+      isDisplayingQC &&
+      (userIsDocketClerk || userIsPetitionsClerk)
+    ),
     hideFromColumn: isDisplayingQC,
     hideIconColumn: !workQueueIsInternal && userIsOther,
     hideSectionColumn: isDisplayingQC,
@@ -54,6 +61,7 @@ export const workQueueHelper = (get, applicationContext) => {
     inboxFiledColumnLabel,
     isDisplayingQC,
     linkToDocumentMessages: !isDisplayingQC,
+    outboxFiledByColumnLabel,
     queueEmptyMessage: workQueueIsInternal
       ? 'There are no messages.'
       : 'There are no documents.',
@@ -69,8 +77,8 @@ export const workQueueHelper = (get, applicationContext) => {
         !userIsOther) ||
       !isDisplayingQC,
     showBatchedByColumn: isDisplayingQC && userIsPetitionsClerk && showOutbox,
-    showBatchedForIRSTab: userIsPetitionsClerk && workQueueIsInternal === false,
     showCaseStatusColumn: isJudge,
+    showCaseTitle,
     showEditDocketEntry: permissions.DOCKET_ENTRY,
     showFromColumn: isJudge,
     showInProgressTab: isDisplayingQC && userIsDocketClerk,
@@ -83,7 +91,6 @@ export const workQueueHelper = (get, applicationContext) => {
     showOutbox,
     showProcessedByColumn: isDisplayingQC && userIsDocketClerk && showOutbox,
     showReceivedColumn: isDisplayingQC,
-    showRunBatchIRSProcessButton: permissions.UPDATE_CASE,
     showSectionSentTab:
       workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',

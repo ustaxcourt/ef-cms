@@ -539,6 +539,9 @@ const {
   removeCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor');
 const {
+  removeCasePendingItemInteractor,
+} = require('../../shared/src/business/useCases/removeCasePendingItemInteractor');
+const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
 const {
@@ -638,6 +641,9 @@ const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
+  updateCaseAutomaticBlock,
+} = require('../../shared/src/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
+const {
   updateCaseContextInteractor,
 } = require('../../shared/src/business/useCases/updateCaseContextInteractor');
 const {
@@ -691,6 +697,9 @@ const {
 const {
   updateQcCompleteForTrialInteractor,
 } = require('../../shared/src/business/useCases/updateQcCompleteForTrialInteractor');
+const {
+  updateSecondaryContactInteractor,
+} = require('../../shared/src/business/useCases/updateSecondaryContactInteractor');
 const {
   updateTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
@@ -960,6 +969,7 @@ module.exports = (appContextUser = {}) => {
         zipDocuments,
       };
     },
+    getPersistencePrivateKeys: () => ['pk', 'sk', 'gsi1pk'],
     getPug: () => {
       // Notice: this require is here to only have the lambdas that need it call it.
       // This dependency is only available on lambdas with the 'puppeteer' layer,
@@ -1030,6 +1040,7 @@ module.exports = (appContextUser = {}) => {
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
         sendServedPartiesEmails,
+        updateCaseAutomaticBlock,
       };
     },
     getUseCases: () => {
@@ -1117,6 +1128,7 @@ module.exports = (appContextUser = {}) => {
         processStreamRecordsInteractor,
         recallPetitionFromIRSHoldingQueueInteractor,
         removeCaseFromTrialInteractor,
+        removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
         reprocessFailedRecordsInteractor,
         runBatchProcessInteractor,
@@ -1149,6 +1161,7 @@ module.exports = (appContextUser = {}) => {
         updatePetitionerInformationInteractor,
         updatePrimaryContactInteractor,
         updateQcCompleteForTrialInteractor,
+        updateSecondaryContactInteractor,
         updateTrialSessionInteractor,
         updateTrialSessionWorkingCopyInteractor,
         updateUserContactInformationInteractor,

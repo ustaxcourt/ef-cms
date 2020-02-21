@@ -10,8 +10,8 @@ export const DeleteTrialSessionModal = connect(
   ({ formattedTrialSessionDetails }) => {
     return (
       <ConfirmModal
-        cancelLabel="No, cancel"
-        confirmLabel="Yes, delete"
+        cancelLabel="No, Cancel"
+        confirmLabel="Yes, Delete"
         title={'Are you sure you want to delete this trial session?'}
         onCancelSequence="clearModalSequence"
         onConfirmSequence="deleteTrialSessionSequence"

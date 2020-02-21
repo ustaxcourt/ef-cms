@@ -1,6 +1,7 @@
 import { Case } from '../entities/cases/Case';
-import { applicationContext } from '../../../../web-client/src/applicationContext';
 import {
+  TRANSCRIPT_AGE_DAYS_MIN,
+  documentMeetsAgeRequirements,
   formatCase,
   formatCaseDeadlines,
   formatDocument,
@@ -8,6 +9,8 @@ import {
   getFormattedCaseDetail,
   sortDocketRecords,
 } from './getFormattedCaseDetail';
+import { applicationContext } from '../../../../web-client/src/applicationContext';
+import { calculateISODate, createISODateString } from './DateHandler';
 
 const mockCaseDetailBase = {
   caseId: '123-456-abc-def',
@@ -348,18 +351,67 @@ describe('formatCase', () => {
     expect(result.irsNoticeDateFormatted).toEqual('No notice provided');
   });
 
-  it('should format blockedDate when blocked is true', () => {
-    const result = formatCase(applicationContext, {
-      ...mockCaseDetail,
-      blocked: true,
-      blockedDate: getDateISO(),
+  describe('should indicate blocked status', () => {
+    it('should format blockedDate and automaticBlockedDate when blocked and automaticBlocked are true', () => {
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        automaticBlocked: true,
+        automaticBlockedDate: '2020-01-06T11:12:13.007Z',
+        automaticBlockedReason: 'for reasons',
+        blocked: true,
+        blockedDate: getDateISO(),
+        blockedReason: 'for reasons',
+      });
+
+      expect(result).toMatchObject({
+        automaticBlockedDateFormatted: applicationContext
+          .getUtilities()
+          .formatDateString('2020-01-06T11:12:13.007Z', 'MMDDYY'),
+        blockedDateFormatted: applicationContext
+          .getUtilities()
+          .formatDateString(getDateISO(), 'MMDDYY'),
+        showBlockedFromTrial: true,
+      });
+    });
+    it('should format blockedDate and when blocked is true', () => {
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        blocked: true,
+        blockedDate: getDateISO(),
+        blockedReason: 'for reasons',
+      });
+
+      expect(result).toMatchObject({
+        blockedDateFormatted: applicationContext
+          .getUtilities()
+          .formatDateString(getDateISO(), 'MMDDYY'),
+        showBlockedFromTrial: true,
+      });
     });
 
-    expect(result.blockedDateFormatted).toEqual(
-      applicationContext
-        .getUtilities()
-        .formatDateString(getDateISO(), 'MMDDYY'),
-    );
+    it('should show automatic blocked and high priority indicator if the case is automaticBlocked and highPriority', () => {
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        automaticBlocked: true,
+        automaticBlockedDate: '2020-01-06T11:12:13.007Z',
+        automaticBlockedReason: 'for reasons',
+        highPriority: true,
+      });
+
+      expect(result.showAutomaticBlockedAndHighPriority).toBeTruthy();
+    });
+
+    it('should not show automatic blocked and high priority indicator if the case is automaticBlocked but not highPriority', () => {
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        automaticBlocked: true,
+        automaticBlockedDate: '2020-01-06T11:12:13.007Z',
+        automaticBlockedReason: 'for reasons',
+        highPriority: false,
+      });
+
+      expect(result.showAutomaticBlockedAndHighPriority).toBeFalsy();
+    });
   });
 
   it('should format trial details if case status is calendared', () => {
@@ -613,6 +665,12 @@ describe('getFormattedCaseDetail', () => {
             documentId: 'd-2-3-4',
             documentType: 'Stipulated Decision',
           },
+          {
+            archived: false,
+            createdAt: getDateISO(),
+            documentId: 'd-3-4-5',
+            documentType: 'MISC - Miscellaneous',
+          },
         ],
       },
       docketRecordSort: 'byDate',
@@ -629,7 +687,41 @@ describe('getFormattedCaseDetail', () => {
         signUrl: '/case-detail/123-45/documents/d-2-3-4/sign',
         signedAtFormatted: undefined,
       },
+      {
+        editUrl: '/case-detail/123-45/edit-upload-court-issued/d-3-4-5',
+        signUrl: '/case-detail/123-45/edit-order/d-3-4-5/sign',
+        signedAtFormatted: undefined,
+      },
     ]);
+  });
+});
+
+describe('documentMeetsAgeRequirements', () => {
+  it('indicates success if document is not a transcript', () => {
+    const nonTranscriptEventCode = 'BANANA'; // this is not a transcript event code - to think otherwise would just be bananas.
+    const result = documentMeetsAgeRequirements({
+      eventCode: nonTranscriptEventCode,
+    });
+    expect(result).toBeTruthy();
+  });
+  it(`indicates success if document is a transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
+    const result = documentMeetsAgeRequirements({
+      eventCode: 'TRAN',
+      secondaryDate: '2010-01-01T01:02:03.007Z', // 10yr old transcript
+    });
+    expect(result).toBeTruthy();
+  });
+  it(`indicates failure if document is a transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
+    const aShortTimeAgo = calculateISODate({
+      dateString: createISODateString(),
+      howMuch: -12,
+      units: 'hours',
+    });
+    const result = documentMeetsAgeRequirements({
+      eventCode: 'TRAN',
+      secondaryDate: aShortTimeAgo,
+    });
+    expect(result).toBeFalsy();
   });
 });
 
@@ -709,6 +801,46 @@ describe('sortDocketRecords', () => {
         },
       ],
       'Desc',
+    );
+
+    expect(result[0].index).toEqual('1');
+  });
+
+  it('should evaluate sort items by index if sorted by date and item dates match', () => {
+    const result = sortDocketRecords(
+      [
+        {
+          index: '2',
+          record: {
+            filingDate: '2019-08-03',
+          },
+        },
+        {
+          index: '1',
+          record: {
+            filingDate: '2019-08-03',
+          },
+        },
+        {
+          index: '4',
+          record: {
+            filingDate: '2019-08-03',
+          },
+        },
+        {
+          index: '3',
+          record: {
+            filingDate: '2019-08-03T00:06:44.000Z',
+          },
+        },
+        {
+          index: '5',
+          record: {
+            filingDate: '2019-09-01T00:01:12.025Z',
+          },
+        },
+      ],
+      'byDate',
     );
 
     expect(result[0].index).toEqual('1');

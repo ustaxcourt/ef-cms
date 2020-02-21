@@ -41,7 +41,7 @@ export const AddPractitionerModal = connect(
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="counsel-matches-legend">
                 {caseDetailHelper.practitionerSearchResultsCount} Counsel
-                Match(es) Found
+                match(es) found
               </legend>
 
               {caseDetailHelper.practitionerSearchResultsCount === 1 && (

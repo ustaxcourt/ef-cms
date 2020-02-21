@@ -5,6 +5,7 @@ const {
 const { IRS_BATCH_SYSTEM_SECTION } = require('../../entities/WorkQueue');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
@@ -30,9 +31,13 @@ exports.getDocumentQCServedForUserInteractor = async ({
       userId,
     });
 
-  return workItems.filter(workItem =>
+  const filteredWorkItems = workItems.filter(workItem =>
     user.role === User.ROLES.petitionsClerk
       ? workItem.section === IRS_BATCH_SYSTEM_SECTION
       : true,
   );
+
+  return WorkItem.validateRawCollection(filteredWorkItems, {
+    applicationContext,
+  });
 };

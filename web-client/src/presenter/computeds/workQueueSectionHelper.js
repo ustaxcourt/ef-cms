@@ -42,7 +42,7 @@ export const workQueueSectionHelper = () => {
       parisChambers: 'Paris’ Chambers',
       pughsChambers: 'Pugh’s Chambers',
       ruwesChambers: 'Ruwe’s Chambers',
-      thortonsChambers: 'Thorton’s Chambers',
+      thorntonsChambers: 'Thornton’s Chambers',
       urdasChambers: 'Urda’s Chambers',
       vasquezsChambers: 'Vasquez’s Chambers',
       wellsChambers: 'Wells’ Chambers',

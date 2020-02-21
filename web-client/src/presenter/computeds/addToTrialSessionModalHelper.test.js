@@ -12,35 +12,30 @@ describe('add to trial session modal helper', () => {
     {
       sessionType: 'Small',
       startDate: '2019-05-01T21:40:46.415Z',
-      status: 'Upcoming',
       trialLocation: 'Boise, Idaho',
       trialSessionId: '4',
     },
     {
       sessionType: 'Regular',
       startDate: '2019-03-01T21:40:46.415Z',
-      status: 'Upcoming',
       trialLocation: 'Birmingham, Alabama',
       trialSessionId: '1',
     },
     {
       sessionType: 'Hybrid',
       startDate: '2018-02-01T21:40:46.415Z',
-      status: 'Upcoming',
       trialLocation: 'Mobile, Alabama',
       trialSessionId: '2',
     },
     {
       sessionType: 'Special',
       startDate: '2019-01-01T21:40:46.415Z',
-      status: 'Upcoming',
       trialLocation: 'Birmingham, Alabama',
       trialSessionId: '3',
     },
     {
       sessionType: 'Motion/Hearing',
       startDate: '2018-12-01T21:40:46.415Z',
-      status: 'Upcoming',
       trialLocation: 'Mobile, Alabama',
       trialSessionId: '5',
     },
@@ -60,7 +55,7 @@ describe('add to trial session modal helper', () => {
     expect(result.trialSessionsFormattedByState).toBeFalsy();
   });
 
-  it('should filter out trial sessions that do not have the status Upcoming', () => {
+  it('should filter out trial sessions that are closed', () => {
     const result = runCompute(addToTrialSessionModalHelper, {
       state: {
         caseDetail: { preferredTrialCity: 'Birmingham, Alabama' },
@@ -70,7 +65,6 @@ describe('add to trial session modal helper', () => {
           trialSessions: [
             ...trialSessions,
             {
-              status: 'Closed',
               trialLocation: 'Nashville, Tennessee',
               trialSessionId: '6',
             },
@@ -210,7 +204,6 @@ describe('add to trial session modal helper', () => {
               isCalendared: false,
               sessionType: 'Small',
               startDate: '2019-05-01T21:40:46.415Z',
-              status: 'Upcoming',
               trialLocation: 'Boise, Idaho',
               trialSessionId: '6',
             },

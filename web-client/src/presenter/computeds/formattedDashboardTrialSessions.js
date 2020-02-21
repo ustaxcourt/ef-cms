@@ -9,8 +9,18 @@ export const formatSession = (session, applicationContext) => {
 };
 
 export const formattedDashboardTrialSessions = (get, applicationContext) => {
+  const { role, userId } = applicationContext.getCurrentUser();
+  const {
+    SESSION_STATUS_GROUPS,
+    USER_ROLES,
+  } = applicationContext.getConstants();
+  const chambersJudgeUser = get(state.judgeUser);
+  const isChambersUser = role === USER_ROLES.chambers;
+  const judgeUserId =
+    isChambersUser && chambersJudgeUser ? chambersJudgeUser.userId : userId;
+
   const judgeFilterFn = session =>
-    session.judge && session.judge.userId === userId;
+    session.judge && session.judge.userId === judgeUserId;
   const formatSessionFn = session => formatSession(session, applicationContext);
   const partitionFn = session =>
     applicationContext
@@ -18,8 +28,14 @@ export const formattedDashboardTrialSessions = (get, applicationContext) => {
       .prepareDateFromString(session.startDate)
       .isBefore();
 
-  const { userId } = applicationContext.getCurrentUser();
-  const trialSessions = get(state.trialSessions);
+  const trialSessions = get(state.trialSessions).filter(session => {
+    return (
+      applicationContext
+        .getUtilities()
+        .getTrialSessionStatus({ applicationContext, session }) ===
+      SESSION_STATUS_GROUPS.open
+    );
+  });
 
   //partition
   let [recentSessions, upcomingSessions] = partition(

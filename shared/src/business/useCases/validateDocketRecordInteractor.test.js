@@ -18,4 +18,22 @@ describe('validateDocketRecordInteractor', () => {
       Object.keys(DocketRecord.VALIDATION_ERROR_MESSAGES),
     );
   });
+
+  it('returns null when there are no errors', () => {
+    const result = validateDocketRecordInteractor({
+      applicationContext: {
+        getEntityConstructors: () => ({
+          DocketRecord,
+        }),
+      },
+      docketRecord: {
+        description: 'Test Description',
+        eventCode: 'O',
+        filingDate: '2020-01-01',
+        index: '1',
+      },
+    });
+
+    expect(result).toEqual(null);
+  });
 });
