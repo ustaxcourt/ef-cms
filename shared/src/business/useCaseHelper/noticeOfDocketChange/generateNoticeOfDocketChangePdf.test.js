@@ -106,8 +106,6 @@ describe('generateNoticeOfDocketChangePdf', () => {
       error = err;
     }
 
-    console.log('error', error);
-
     expect(error).toBeDefined();
     expect(chromiumBrowserMock.close).not.toHaveBeenCalled();
   });
