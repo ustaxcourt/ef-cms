@@ -50,6 +50,14 @@ describe('generateCaseConfirmationPdf', () => {
     jest.restoreAllMocks();
   });
 
+  it('fails to get chromium browser', async () => {
+    jest
+      .spyOn(applicationContext, 'getChromiumBrowser')
+      .mockImplementation(() => null);
+
+    expect(chromiumBrowserMock.close).not.toHaveBeenCalled();
+  });
+
   it('requires permissions', async () => {
     isAuthorized.mockReturnValue(false);
     let result, error;
@@ -78,6 +86,9 @@ describe('generateCaseConfirmationPdf', () => {
         applicationContext,
         caseEntity: {
           ...MOCK_CASE,
+          contactPrimary: {
+            countryType: 'domestic',
+          },
           documents: [{ servedAt: '2009-09-17T08:06:07.530Z' }],
         },
       });
@@ -94,6 +105,10 @@ describe('generateCaseConfirmationPdf', () => {
       applicationContext,
       caseEntity: {
         ...MOCK_CASE,
+        contactPrimary: {
+          country: 'Canada',
+          countryType: 'international',
+        },
         documents: [{ servedAt: '2009-09-17T08:06:07.530Z' }],
         getCaseConfirmationGeneratedPdfFileName() {
           return '';
