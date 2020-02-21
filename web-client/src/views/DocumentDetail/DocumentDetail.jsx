@@ -7,7 +7,6 @@ import { DocumentDetailHeader } from './DocumentDetailHeader';
 import { DocumentDisplayIframe } from './DocumentDisplayIframe';
 import { DocumentMessages } from './DocumentMessages';
 import { ErrorNotification } from '../ErrorNotification';
-import { ServeToIrsModalDialog } from '../ServeToIrsModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -18,7 +17,6 @@ export const DocumentDetail = connect(
   {
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
-    clickServeToIrsSequence: sequences.clickServeToIrsSequence,
     documentDetailHelper: state.documentDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     gotoOrdersNeededSequence: sequences.gotoOrdersNeededSequence,
@@ -33,7 +31,6 @@ export const DocumentDetail = connect(
   ({
     caseDetail,
     caseDetailHelper,
-    clickServeToIrsSequence,
     documentDetailHelper,
     formattedCaseDetail,
     gotoOrdersNeededSequence,
@@ -169,7 +166,6 @@ export const DocumentDetail = connect(
                 Edit
               </Button>
             )}
-
             {documentDetailHelper.showPrintCaseConfirmationButton && (
               <Button
                 className="margin-right-0"
@@ -181,16 +177,6 @@ export const DocumentDetail = connect(
                 }}
               >
                 Print Confirmation
-              </Button>
-            )}
-
-            {documentDetailHelper.showServeToIrsButton && (
-              <Button
-                className="serve-to-irs margin-right-0"
-                icon={['fas', 'clock']}
-                onClick={() => clickServeToIrsSequence()}
-              >
-                Serve to IRS
               </Button>
             )}
             {documentDetailHelper.showSignDocumentButton && (
@@ -234,7 +220,6 @@ export const DocumentDetail = connect(
             </div>
           </div>
         </section>
-        {showModal === 'ServeToIrsModalDialog' && <ServeToIrsModalDialog />}
         {showModal === 'ArchiveDraftDocumentModal' && (
           <ArchiveDraftDocumentModal />
         )}
