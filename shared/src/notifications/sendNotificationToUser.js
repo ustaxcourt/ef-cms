@@ -28,6 +28,9 @@ const sendNotificationToConnection = async ({
           sk: connection.sk,
         },
       });
+    } else {
+      // what if error doesn't conform to the above?
+      throw err;
     }
     // TODO: what if error doesn't conform to the above?
   }
@@ -56,7 +59,7 @@ exports.sendNotificationToUser = async ({
 
   const messageStringified = JSON.stringify(message);
 
-  for (let connection of connections) {
+  for (const connection of connections) {
     await sendNotificationToConnection({
       applicationContext,
       connection,

@@ -356,6 +356,15 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   presenter.providers.applicationContext = applicationContext;
 
   const { initialize: initializeSocketProvider, start, stop } = socketProvider({
+    onMessageCallbackFn: () => {
+      if (test.socketMessageCallback) {
+        console.log('callback', new Date().toString()); // FIXME: remove consoles if this is working correctly?
+        test.socketMessageCallback();
+        delete test.socketMessageCallback;
+      } else {
+        console.log('no callback present', new Date().toString());
+      }
+    },
     socketRouter,
   });
   presenter.providers.socket = { start, stop };
