@@ -1,5 +1,5 @@
 import { applicationContext } from '../../../applicationContext';
-import { assignPetitionToAuthenicatedUserAction } from './assignPetitionToAuthenicatedUserAction';
+import { assignPetitionToAuthenticatedUserAction } from './assignPetitionToAuthenticatedUserAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
@@ -18,13 +18,13 @@ presenter.providers.applicationContext = {
   }),
 };
 
-describe('assignPetitionToAuthenicatedUserAction', () => {
+describe('assignPetitionToAuthenticatedUserAction', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
   it('should not assign the workitem if the qc work item is not present', async () => {
-    await runAction(assignPetitionToAuthenicatedUserAction, {
+    await runAction(assignPetitionToAuthenticatedUserAction, {
       modules: {
         presenter,
       },
@@ -34,7 +34,7 @@ describe('assignPetitionToAuthenicatedUserAction', () => {
   });
 
   it('should assign the workitem if the qc work item is present', async () => {
-    await runAction(assignPetitionToAuthenicatedUserAction, {
+    await runAction(assignPetitionToAuthenticatedUserAction, {
       modules: {
         presenter,
       },

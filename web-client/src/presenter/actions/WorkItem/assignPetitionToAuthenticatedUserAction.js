@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get helper function
  * @returns {Promise} async action
  */
-export const assignPetitionToAuthenicatedUserAction = async ({
+export const assignPetitionToAuthenticatedUserAction = async ({
   applicationContext,
   get,
 }) => {
