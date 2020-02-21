@@ -23,8 +23,7 @@ exports.sendNotificationToUser = async ({
 
   const messageStringified = JSON.stringify(message);
 
-  const sendNotificationToConnection = connection => {
-    let result;
+  const sendNotificationToConnection = async connection => {
     try {
       const { endpoint } = connection;
 
@@ -32,7 +31,7 @@ exports.sendNotificationToUser = async ({
         endpoint,
       });
 
-      result = notificationClient
+      await notificationClient
         .postToConnection({
           ConnectionId: connection.sk,
           Data: messageStringified,
@@ -40,18 +39,21 @@ exports.sendNotificationToUser = async ({
         .promise();
     } catch (err) {
       if (err.statusCode === 410) {
-        result = client.delete({
+        await client.delete({
           applicationContext,
           key: {
             pk: connection.pk,
             sk: connection.sk,
           },
         });
+      } else {
+        // what if error doesn't conform to the above?
+        throw err;
       }
-      // TODO: what if error doesn't conform to the above?
     }
-    return result;
   };
 
-  return Promise.all(connections.map(sendNotificationToConnection));
+  for (const connection of connections) {
+    await sendNotificationToConnection(connection);
+  }
 };
