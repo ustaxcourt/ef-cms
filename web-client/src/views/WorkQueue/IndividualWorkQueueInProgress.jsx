@@ -21,13 +21,14 @@ export const IndividualWorkQueueInProgress = connect(
               <th aria-label="Docket Number" colSpan="2">
                 <span className="padding-left-2px">Docket</span>
               </th>
-              <th>Filed</th>
+              <th>Received</th>
               <th>Case title</th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
-              <th>Case status</th>
+              {workQueueHelper.showCaseStatusColumn && <th>Case status</th>}
               {!workQueueHelper.hideFromColumn && <th>From</th>}
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
+              {workQueueHelper.showProcessedByColumn && <th>Processed by</th>}
             </tr>
           </thead>
           {formattedWorkQueue.map((item, idx) => {
@@ -71,7 +72,9 @@ export const IndividualWorkQueueInProgress = connect(
                       {item.document.filedBy}
                     </td>
                   )}
-                  <td className="message-queue-row">{item.caseStatus}</td>
+                  {workQueueHelper.showCaseStatusColumn && (
+                    <td className="message-queue-row">{item.caseStatus}</td>
+                  )}
                   {!workQueueHelper.hideFromColumn && (
                     <td className="message-queue-row from">
                       {item.currentMessage.from}
@@ -79,6 +82,9 @@ export const IndividualWorkQueueInProgress = connect(
                   )}
                   {!workQueueHelper.hideSectionColumn && (
                     <td className="message-queue-row">{item.sentBySection}</td>
+                  )}
+                  {workQueueHelper.showProcessedByColumn && (
+                    <td>{item.assigneeName}</td>
                   )}
                 </tr>
               </tbody>
