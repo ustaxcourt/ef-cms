@@ -359,7 +359,6 @@ exports.setupTest = ({ useCases = {} } = {}) => {
     socketRouter,
   });
   presenter.providers.socket = { start, stop };
-  test.closeSocket = stop;
 
   const originalUseCases = applicationContext.getUseCases();
   presenter.providers.applicationContext.getUseCases = () => {
@@ -438,6 +437,7 @@ exports.setupTest = ({ useCases = {} } = {}) => {
 
   test = CerebralTest(presenter);
   test.getSequence = name => obj => test.runSequence(name, obj);
+  test.closeSocket = stop;
   initializeSocketProvider(test);
 
   global.window = {
