@@ -129,6 +129,8 @@ describe('utilities', () => {
     it('run migration if records were found with the mutator', async () => {
       let mutateFunctionStub = jest.fn().mockReturnValue({
         caseId: 'case-id-123',
+        pk: '123',
+        sk: '123',
       });
 
       await upGenerator(mutateFunctionStub)(
@@ -140,6 +142,23 @@ describe('utilities', () => {
       expect(scanStub).toHaveBeenCalled();
       expect(putStub).toHaveBeenCalled();
       expect(putStub.mock.calls.length).toBe(2);
+    });
+
+    it('throw an error and do not run migration if record returned from the mutator does not have dynamo keys', async () => {
+      let mutateFunctionStub = jest.fn().mockReturnValue({
+        caseId: 'case-id-123',
+      });
+
+      await expect(
+        upGenerator(mutateFunctionStub)(
+          documentClient,
+          'efcms-local',
+          forAllRecords,
+        ),
+      ).rejects.toThrow('data must contain pk, sk, or gsi1pk');
+
+      expect(scanStub).toHaveBeenCalled();
+      expect(putStub).not.toHaveBeenCalled();
     });
   });
 });

@@ -12,6 +12,9 @@ describe('service indicator respondents migration', () => {
   let putStub;
 
   beforeEach(() => {
+    MOCK_CASE.pk = '3a45813b-8b4d-4a2e-bfc5-729e85c2332c';
+    MOCK_CASE.sk = '3a45813b-8b4d-4a2e-bfc5-729e85c2332c';
+
     scanStub = jest.fn().mockReturnValue({
       promise: async () => ({
         Items: [MOCK_DOCUMENTS[0]],
