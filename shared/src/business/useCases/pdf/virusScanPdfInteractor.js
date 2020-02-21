@@ -10,7 +10,9 @@ const tmp = require('tmp');
  * @returns {object} errors (null if no errors)
  */
 exports.virusScanPdfInteractor = async ({ applicationContext, documentId }) => {
-  applicationContext.logger.time('Fetching S3 File');
+  applicationContext.logger.time(
+    `Fetching S3 File for Virus Scan ${documentId}`,
+  );
   let { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
@@ -18,7 +20,9 @@ exports.virusScanPdfInteractor = async ({ applicationContext, documentId }) => {
       Key: documentId,
     })
     .promise();
-  applicationContext.logger.timeEnd('Fetching S3 File');
+  applicationContext.logger.timeEnd(
+    `Fetching S3 File for Virus Scan ${documentId}`,
+  );
 
   const inputPdf = tmp.fileSync();
   fs.writeSync(inputPdf.fd, Buffer.from(pdfData));
