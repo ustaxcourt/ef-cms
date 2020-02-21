@@ -1,20 +1,16 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { getCachedScannerSourceAction } from '../actions/getCachedScannerSourceAction';
 import { getScannerSourcesAction } from '../actions/getScannerSourcesAction';
-import { rescanBatchAction } from '../actions/rescanBatchAction';
-
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
-import { waitForSpinnerAction } from '../actions/waitForSpinnerAction';
-
 import { handleInvalidScannerSourceAction } from '../actions/handleInvalidScannerSourceAction';
 import { handleScanErrorAction } from '../actions/handleScanErrorAction';
+import { rescanBatchAction } from '../actions/rescanBatchAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { validateScannerSourceAction } from '../actions/validateScannerSourceAction';
+import { waitForSpinnerAction } from '../actions/waitForSpinnerAction';
 
-export const rescanBatchSequence = [
+export const rescanBatchSequence = showProgressSequenceDecorator([
   clearModalAction,
-  setWaitingForResponseAction,
   waitForSpinnerAction,
   getCachedScannerSourceAction,
   {
@@ -36,5 +32,4 @@ export const rescanBatchSequence = [
       setShowModalFactoryAction('SelectScannerSourceModal'),
     ],
   },
-  unsetWaitingForResponseAction,
-];
+]);

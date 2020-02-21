@@ -2,6 +2,7 @@ import { Address } from './StartCase/Address';
 import { Button } from '../ustc-ui/Button/Button';
 import { Country } from './StartCase/Country';
 import { ErrorNotification } from './ErrorNotification';
+import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { InternationalAddress } from './StartCase/InternationalAddress';
@@ -11,12 +12,10 @@ import React from 'react';
 
 export const PrimaryContactEdit = connect(
   {
-    cancelEditPrimaryContactSequence:
-      sequences.cancelEditPrimaryContactSequence,
     caseDetail: state.caseDetail,
-    caseDetailHelper: state.caseDetailHelper,
-    formattedCaseDetail: state.formattedCaseDetail,
-    primaryContactEditHelper: state.primaryContactEditHelper,
+    contactEditHelper: state.contactEditHelper,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    showModal: state.showModal,
     submitEditPrimaryContactSequence:
       sequences.submitEditPrimaryContactSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
@@ -24,11 +23,10 @@ export const PrimaryContactEdit = connect(
     validationErrors: state.validationErrors,
   },
   ({
-    cancelEditPrimaryContactSequence,
     caseDetail,
-    caseDetailHelper,
-    formattedCaseDetail,
-    primaryContactEditHelper,
+    contactEditHelper,
+    formCancelToggleCancelSequence,
+    showModal,
     submitEditPrimaryContactSequence,
     updateCaseValueSequence,
     validatePrimaryContactSequence,
@@ -62,24 +60,13 @@ export const PrimaryContactEdit = connect(
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
               <p className="usa-label">Contact name</p>
-              <p className="margin-top-0">
-                {caseDetailHelper.showCaseNameForPrimary
-                  ? formattedCaseDetail.caseName
-                  : caseDetail.contactPrimary.name}
-              </p>
+              <p className="margin-top-0">{caseDetail.contactPrimary.name}</p>
             </div>
 
-            {primaryContactEditHelper.showInCareOf && (
-              <FormGroup
-                errorText={
-                  validationErrors.contactPrimary &&
-                  validationErrors.contactPrimary.inCareOf
-                }
-              >
+            {contactEditHelper.contactPrimary?.showInCareOf && (
+              <FormGroup errorText={validationErrors.contactPrimary?.inCareOf}>
                 <label className="usa-label" htmlFor="inCareOf">
-                  <span>
-                    In care of <span className="usa-hint">(your name)</span>
-                  </span>
+                  <span>In care of</span>
                 </label>
                 <input
                   autoCapitalize="none"
@@ -161,14 +148,17 @@ export const PrimaryContactEdit = connect(
           <Button
             link
             onClick={() => {
-              cancelEditPrimaryContactSequence({
-                caseId: caseDetail.docketNumber,
-              });
+              formCancelToggleCancelSequence();
+              return false;
             }}
           >
             Cancel
           </Button>
         </section>
+
+        {showModal === 'FormCancelModalDialog' && (
+          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+        )}
       </>
     );
   },

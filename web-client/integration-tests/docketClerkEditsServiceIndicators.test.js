@@ -15,7 +15,11 @@ import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 
-const test = setupTest();
+const test = setupTest({
+  useCases: {
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
+  },
+});
 test.draftOrders = [];
 
 describe('Docket Clerk edits service indicators for petitioner, practitioner, and respondent', () => {

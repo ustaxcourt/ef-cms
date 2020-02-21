@@ -3,18 +3,54 @@
 ### associatedJudge
 
 
-Defaults to Chief Judge.
+Judge assigned to this case. Defaults to Chief Judge.
+
+
+Restricted
 
 > `string` | required
+
+### automaticBlocked
+
+
+Temporarily blocked from trial due to a pending item or due date.
+
+> `boolean` | optional
+
+### automaticBlockedDate
+
+> `any`
+
+
+If `automaticBlocked` = `true`, then this field is `date` and is `required.` 
+
+
+Otherwise, this field is `any` and is `optional`. `null` is allowed.
+
+### automaticBlockedReason
+
+> `any`
+
+
+If `automaticBlocked` = `true`, then this field is `string` and is `required.` 
+
+
+Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 ### blocked
 
 
 Temporarily blocked from trial.
 
+
+Restricted
+
 > `boolean` | optional
 
 ### blockedDate
+
+
+Restricted
 
 > `any`
 
@@ -25,6 +61,9 @@ If `blocked` = `true`, then this field is `date` and is `required.`
 Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 ### blockedReason
+
+
+Restricted
 
 > `any`
 
@@ -44,11 +83,14 @@ The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mar
 ### caseId
 
 
-Unique Case ID only used by the system.
+Unique case ID only used by the system.
 
 > `string` | required
 
 ### caseNote
+
+
+Restricted
 
 > `string` | optional
 
@@ -93,7 +135,7 @@ When the case was added to the system.
 ### docketNumber
 
 
-Unique Case ID in XXXXX-YY format.
+Unique case ID in XXXXX-YY format.
 
 > `string` | required
 
@@ -121,7 +163,7 @@ Unique Case ID in XXXXX-YY format.
 ### docketRecord
 
 
-List of DocketRecord Entities for the Case.
+List of DocketRecord Entities for the case.
 
 > `array` | required
 
@@ -136,7 +178,7 @@ At least `1` item(s) must be selected.
 ### documents
 
 
-List of Document Entities for the Case.
+List of Document Entities for the case.
 
 > `array` | required
 
@@ -174,9 +216,15 @@ At least `1` item(s) must be selected.
 
 ### highPriority
 
+
+Restricted
+
 > `boolean` | optional
 
 ### highPriorityReason
+
+
+Restricted
 
 > `any`
 
@@ -188,11 +236,17 @@ Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 ### initialDocketNumberSuffix
 
+
+Case docket number suffix before modification.
+
 > `string` | optional
 
 ##### Can be null.
 
 ### initialTitle
+
+
+Case title before modification.
 
 > `string` | optional
 
@@ -201,7 +255,7 @@ Otherwise, this field is `any` and is `optional`. `null` is allowed.
 ### irsNoticeDate
 
 
-Last date that the Petitioner is allowed to file before.
+Last date that the petitioner is allowed to file before.
 
 > `date` | optional
 
@@ -210,7 +264,7 @@ Last date that the Petitioner is allowed to file before.
 ### irsSendDate
 
 
-When the Case was sent to the IRS by the Court.
+When the case was sent to the IRS by the court.
 
 > `date` | optional
 
@@ -221,11 +275,14 @@ When the Case was sent to the IRS by the Court.
 ### leadCaseId
 
 
-If this Case is consolidated, this is the ID of the lead Case. It is the lowest Docket Number in the consolidated group.
+If this case is consolidated, this is the ID of the lead case. It is the lowest docket number in the consolidated group.
 
 > `string` | optional
 
 ### mailingDate
+
+
+Date that petition was mailed to the court.
 
 > `any`
 
@@ -237,41 +294,71 @@ Otherwise, this field is `string` and is `optional`. `null` is allowed.
 
 ### noticeOfAttachments
 
+
+Reminder for clerks to review the notice of attachments.
+
 > `boolean` | optional
 
 ### noticeOfTrialDate
+
+
+Reminder for clerks to review the notice of trial date.
 
 > `date` | optional
 
 ### orderForAmendedPetition
 
+
+Reminder for clerks to review the order for amended Petition.
+
 > `boolean` | optional
 
 ### orderForAmendedPetitionAndFilingFee
+
+
+Reminder for clerks to review the order for amended Petition And filing fee.
 
 > `boolean` | optional
 
 ### orderForFilingFee
 
+
+Reminder for clerks to review the order for filing fee.
+
 > `boolean` | optional
 
 ### orderForOds
+
+
+Reminder for clerks to review the order for ODS.
 
 > `boolean` | optional
 
 ### orderForRatification
 
+
+Reminder for clerks to review the Order for Ratification.
+
 > `boolean` | optional
 
 ### orderToChangeDesignatedPlaceOfTrial
+
+
+Reminder for clerks to review the Order to Change Designated Place Of Trial.
 
 > `boolean` | optional
 
 ### orderToShowCause
 
+
+Reminder for clerks to review the Order to Show Cause.
+
 > `boolean` | optional
 
 ### partyType
+
+
+Party type of the case petitioner.
 
 > `string` | required
 
@@ -299,6 +386,9 @@ Otherwise, this field is `string` and is `optional`. `null` is allowed.
 
 ### petitionPaymentStatus
 
+
+Status of the case fee payment.
+
 > `string` | required
 
 ##### Allowed Values
@@ -310,6 +400,9 @@ Otherwise, this field is `string` and is `optional`. `null` is allowed.
 
 ### petitionPaymentDate
 
+
+When the petitioner payed the case fee.
+
 > `any`
 
 
@@ -319,6 +412,9 @@ If `petitionPaymentStatus` = `Paid`, then this field is `date` and is `required.
 Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
 ### petitionPaymentMethod
+
+
+How the petitioner payed the case fee.
 
 > `any`
 
@@ -330,6 +426,9 @@ Otherwise, this field is `string` and is `optional`. `null` is allowed.
 
 ### petitionPaymentWaivedDate
 
+
+When the case fee was waived.
+
 > `any`
 
 
@@ -340,9 +439,15 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
 ### practitioners
 
+
+List of practitioners associated with the case.
+
 > `array` | optional
 
 ### preferredTrialCity
+
+
+Where the petitioner would prefer to hold the case trial.
 
 > `conditional` | required
 
@@ -443,6 +548,9 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
 ### procedureType
 
+
+Procedure type of the case.
+
 > `string` | required
 
 ##### Allowed Values
@@ -454,14 +562,17 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 ### qcCompleteForTrial
 
 
-QC Checklist object that must be completed before the Case can go to trial.
+QC Checklist object that must be completed before the case can go to trial.
+
+
+Restricted
 
 > `object` | required
 
 ### receivedAt
 
 
-When the case was received by the Court.
+When the case was received by the court.
 
 > `date` | required
 
@@ -469,15 +580,27 @@ When the case was received by the Court.
 
 ### respondents
 
+
+List of respondents (from the IRS) associated with the case.
+
 > `array` | optional
 
 ### sealedDate
+
+
+When the case was sealed from the public.
 
 > `date` | optional
 
 ##### Can be null.
 
 ### status
+
+
+Status of the case.
+
+
+Restricted
 
 > `string` | required
 
@@ -501,11 +624,17 @@ When the case was received by the Court.
 
 ### trialDate
 
+
+When this case goes to trial.
+
 > `date` | optional
 
 ##### Can be null.
 
 ### trialLocation
+
+
+Where this case goes to trial. This may be different that the preferred trial location.
 
 > `conditional` | optional
 
@@ -606,9 +735,15 @@ When the case was received by the Court.
 
 ### trialSessionId
 
+
+The unique ID of the trial session associated with this case.
+
 > `string` | optional
 
 ### trialTime
+
+
+Time of day when this case goes to trial.
 
 > `string` | optional
 
@@ -620,10 +755,19 @@ When the case was received by the Court.
 ### userId
 
 
-The ID of the User who added the Case to the System.
+The unique ID of the User who added the case to the system.
+
+
+Restricted
 
 > `string` | optional
 
 ### workItems
+
+
+List of system messages associated with this case.
+
+
+Restricted
 
 > `array` | optional

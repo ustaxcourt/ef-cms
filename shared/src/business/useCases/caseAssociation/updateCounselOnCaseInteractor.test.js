@@ -23,7 +23,7 @@ const mockPetitioners = [{ role: User.ROLES.petitioner, userId: '111' }];
 
 describe('updateCounselOnCaseInteractor', () => {
   beforeEach(() => {
-    updateCaseMock = jest.fn();
+    updateCaseMock = jest.fn().mockImplementation(v => v.caseToUpdate);
 
     applicationContext = {
       getCurrentUser: () => ({

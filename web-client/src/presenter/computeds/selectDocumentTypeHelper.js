@@ -118,10 +118,7 @@ export const getPreviouslyFiledDocuments = (
       document =>
         !documentIdWhitelist ||
         documentIdWhitelist.includes(document.documentId),
-    )
-    .map(document => {
-      return document.documentTitle || document.documentType;
-    });
+    );
 };
 
 export const selectDocumentTypeHelper = (get, applicationContext) => {

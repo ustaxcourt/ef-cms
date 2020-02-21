@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
 const { CaseDeadline } = require('../../entities/CaseDeadline');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -30,6 +31,26 @@ exports.createCaseDeadlineInteractor = async ({
   await applicationContext.getPersistenceGateway().createCaseDeadline({
     applicationContext,
     caseDeadline: newCaseDeadline.validate().toRawObject(),
+  });
+
+  const caseDetail = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({
+      applicationContext,
+      caseId: caseDeadline.caseId,
+    });
+  let caseEntity = new Case(caseDetail, { applicationContext });
+
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+    });
+
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
   return newCaseDeadline;

@@ -1,5 +1,4 @@
 const client = require('../../dynamodbClientService');
-const { stripInternalKeys } = require('../helpers/stripInternalKeys');
 
 exports.getEligibleCasesForTrialCity = async ({
   applicationContext,
@@ -20,5 +19,5 @@ exports.getEligibleCasesForTrialCity = async ({
     applicationContext,
   });
 
-  return stripInternalKeys(eligibleCases);
+  return eligibleCases;
 };

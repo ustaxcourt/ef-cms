@@ -42,7 +42,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const document = caseEntity.getDocumentById({
     documentId,
@@ -56,6 +56,11 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
+  let secondaryDate;
+  if (documentMeta.eventCode === Document.TRANSCRIPT_EVENT_CODE) {
+    secondaryDate = documentMeta.date;
+  }
+
   const documentEntity = new Document(
     {
       ...omit(document, 'filedBy'),
@@ -67,6 +72,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       freeText: documentMeta.freeText,
       isFileAttached: true,
       scenario: documentMeta.scenario,
+      secondaryDate,
       serviceStamp: documentMeta.serviceStamp,
       userId: user.userId,
     },
@@ -128,6 +134,13 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       filingDate: documentEntity.date || createISODateString(),
     }),
   );
+
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+    });
 
   const saveItems = [
     applicationContext.getPersistenceGateway().createUserInboxRecord({

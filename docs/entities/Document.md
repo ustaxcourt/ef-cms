@@ -18,6 +18,9 @@
 
 ### caseId
 
+
+Unique ID of the associated Case.
+
 > `string` | optional
 
 ### certificateOfService
@@ -36,21 +39,41 @@ Otherwise, this field is `any` and is `optional`.
 
 ### createdAt
 
+
+When the Document was added to the system.
+
 > `date` | required
 
 ### docketNumber
 
+
+Docket Number of the associated Case in XXXXX-YY format.
+
 > `string` | optional
 
+##### Regex Pattern
+
+
+`/^(\d{3,5}-\d{2})$/`
+
 ### documentId
+
+
+ID of the associated PDF document in the S3 bucket.
 
 > `string` | required
 
 ### documentTitle
 
+
+The title of this document.
+
 > `string` | optional
 
 ### documentType
+
+
+The type of this document.
 
 > `string` | required
 
@@ -345,30 +368,30 @@ Otherwise, this field is `any` and is `optional`.
  - `Decision`
  - `O - Order`
  - `OAJ - Order that case is assigned`
- - `OAL - Order that the letter "L" is added to Docket Number`
+ - `OAL - Order that the letter "L" is added to Docket number`
  - `OAP - Order for Amended Petition`
  - `OAPF - Order for Amended Petition and Filing Fee`
- - `OAR - Order that the letter "R" is added to the Docket Number`
- - `OAS - Order that the letter "S" is added to the Docket Number`
- - `OASL - Order that the letters "SL" are added to the Docket Number`
- - `OAW - Order that the letter "W" is added to the Docket Number`
- - `OAX - Order that the letter "X" is added to the Docket Number`
+ - `OAR - Order that the letter "R" is added to the Docket number`
+ - `OAS - Order that the letter "S" is added to the Docket number`
+ - `OASL - Order that the letters "SL" are added to the Docket number`
+ - `OAW - Order that the letter "W" is added to the Docket number`
+ - `OAX - Order that the letter "X" is added to the Docket number`
  - `OCA - Order that caption of case is amended`
  - `OD - Order of Dismissal Entered,`
  - `ODD - Order of Dismissal and Decision Entered,`
- - `ODL - Order that the letter "L" is deleted from the Docket Number`
- - `ODP - Order that the letter "P" is deleted from the Docket Number`
- - `ODR - Order that the letter "R" is deleted from the Docket Number`
- - `ODS - Order that the letter "S" is deleted from the Docket Number`
- - `ODSL - Order that the letters "SL" are deleted from the Docket Number`
- - `ODW - Order that the letter "W" is deleted from the Docket Number`
- - `ODX - Order that the letter "X" is deleted from the Docket Number`
+ - `ODL - Order that the letter "L" is deleted from the Docket number`
+ - `ODP - Order that the letter "P" is deleted from the Docket number`
+ - `ODR - Order that the letter "R" is deleted from the Docket number`
+ - `ODS - Order that the letter "S" is deleted from the Docket number`
+ - `ODSL - Order that the letters "SL" are deleted from the Docket number`
+ - `ODW - Order that the letter "W" is deleted from the Docket number`
+ - `ODX - Order that the letter "X" is deleted from the Docket number`
  - `OF - Order for Filing Fee`
  - `OFAB - Order fixing amount of bond`
  - `OFFX - Order time is extended for petr(s) to pay the filing fee`
  - `OFWD - Order for Filing Fee. Application waiver of Filing Fee is denied.`
  - `OFX - Order time is extended for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee`
- - `OIP - Order that the letter "P" is added to the Docket Number`
+ - `OIP - Order that the letter "P" is added to the Docket number`
  - `OJR - Order that jurisdiction is retained`
  - `OODS - Order for Ownership Disclosure Statement`
  - `OPFX - Order time is extended for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee`
@@ -398,11 +421,12 @@ Otherwise, this field is `any` and is `optional`.
  - `RTRA - Revised Transcript`
  - `TRAN - Transcript`
  - `SPTO - Standing Pre-Trial Order`
+ - `MISC - Miscellaneous`
  - `Stipulated Decision`
  - `Notice of Docket Change`
  - `Notice of Trial`
- - `Standing Pretrial Order`
  - `Standing Pretrial Notice`
+ - `Standing Pretrial Order`
 
 ### draftState
 
@@ -421,6 +445,13 @@ Otherwise, this field is `any` and is `optional`.
 > `string` | optional
 
 ##### Can be .
+
+### filingDate
+
+
+Date that this Document was filed.
+
+> `date` | required
 
 ### freeText
 
@@ -442,7 +473,19 @@ Otherwise, this field is `any` and is `optional`.
 
 > `boolean` | optional
 
+### judge
+
+
+The judge associated with the document.
+
+> `string` | optional
+
+##### Can be null.
+
 ### lodged
+
+
+A lodged document is awaiting action by the judge to enact or refuse.
 
 > `boolean` | optional
 
@@ -476,7 +519,7 @@ Otherwise, this field is `any` and is `optional`.
 
 ### previousDocument
 
-> `string` | optional
+> `object` | optional
 
 ### processingStatus
 
@@ -507,6 +550,13 @@ Otherwise, this field is `any` and is `optional`.
 ### scenario
 
 > `string` | optional
+
+### secondaryDate
+
+
+A secondary date associated with the document, typically related to time-restricted availability.
+
+> `date` | optional
 
 ### secondaryDocument
 

@@ -8,6 +8,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
@@ -40,5 +41,5 @@ exports.getDocumentQCInboxForSectionInteractor = async ({
       section: sectionToShow,
     });
 
-  return workItems;
+  return WorkItem.validateRawCollection(workItems, { applicationContext });
 };

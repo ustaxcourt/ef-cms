@@ -5,6 +5,7 @@
     "documents": [
       {
         "createdAt": "2019-03-27T21:53:00.297Z",
+        "filingDate": "2019-03-27T21:53:00.297Z",
         "documentType": "Petition",
         "filedBy": "Test Practitioner",
         "processingStatus": "complete",
@@ -50,6 +51,7 @@
       {
         "processingStatus": "complete",
         "createdAt": "2019-03-27T21:53:00.298Z",
+        "filingDate": "2019-03-27T21:53:00.298Z",
         "documentType": "Statement of Taxpayer Identification",
         "filedBy": "Test Practitioner",
         "workItems": [],
@@ -157,6 +159,7 @@
     "document": {
       "createdAt": "2019-03-27T21:53:00.297Z",
       "receivedAt": "2019-03-01T21:40:46.415Z",
+      "filingDate": "2019-03-01T21:40:46.415Z",
       "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
       "documentType": "Petition",
       "documentTitle": "Petition",
@@ -194,6 +197,7 @@
     "document": {
       "createdAt": "2019-03-27T21:53:00.297Z",
       "receivedAt": "2019-03-01T21:40:46.415Z",
+      "filingDate": "2019-03-01T21:40:46.415Z",
       "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
       "documentType": "Petition",
       "documentTitle": "Petition",

@@ -1,4 +1,3 @@
-import { IndividualWorkQueueBatched } from './IndividualWorkQueueBatched';
 import { IndividualWorkQueueInProgress } from './IndividualWorkQueueInProgress';
 import { IndividualWorkQueueInbox } from './IndividualWorkQueueInbox';
 import { IndividualWorkQueueOutbox } from './IndividualWorkQueueOutbox';
@@ -41,17 +40,6 @@ export const IndividualWorkQueue = connect(
           >
             <div id="section-in-progress-tab-content">
               <IndividualWorkQueueInProgress />
-            </div>
-          </Tab>
-        )}
-        {workQueueHelper.showBatchedForIRSTab && (
-          <Tab
-            id="section-batched-for-irs-tab"
-            tabName="batched"
-            title="Batched for IRS"
-          >
-            <div id="section-batched-for-irs-tab-content">
-              <IndividualWorkQueueBatched />
             </div>
           </Tab>
         )}

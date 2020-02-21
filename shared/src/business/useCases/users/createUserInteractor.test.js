@@ -28,7 +28,7 @@ describe('create user', () => {
     const userToCreate = { userId: 'petitionsclerk1@example.com' };
     const user = await createUserInteractor({
       applicationContext,
-      userToCreate,
+      user: userToCreate,
     });
     expect(user).not.toBeUndefined();
   });
@@ -58,7 +58,7 @@ describe('create user', () => {
     try {
       await createUserInteractor({
         applicationContext,
-        userToCreate,
+        user: userToCreate,
       });
     } catch (err) {
       error = err;

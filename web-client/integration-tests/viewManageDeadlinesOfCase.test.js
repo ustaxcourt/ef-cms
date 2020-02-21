@@ -12,6 +12,7 @@ import petitionsClerkEditsCaseDeadline from './journey/petitionsClerkEditsCaseDe
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkViewCaseDeadline from './journey/petitionsClerkViewCaseDeadline';
 import petitionsClerkViewsCaseWithNoDeadlines from './journey/petitionsClerkViewsCaseWithNoDeadlines';
+import petitionsClerkViewsDeadlineReport from './journey/petitionsClerkViewsDeadlineReport';
 import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
@@ -67,6 +68,12 @@ describe('View and manage the deadlines of a case', () => {
   describe('View a case with no deadlines', () => {
     petitionsClerkLogIn(test);
     petitionsClerkViewsCaseWithNoDeadlines(test);
+    userSignsOut(test);
+  });
+
+  describe('View the deadlines report', () => {
+    petitionsClerkLogIn(test);
+    petitionsClerkViewsDeadlineReport(test);
     userSignsOut(test);
   });
 });

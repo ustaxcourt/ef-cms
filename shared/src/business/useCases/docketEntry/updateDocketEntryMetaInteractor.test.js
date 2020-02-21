@@ -17,6 +17,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       {
         documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
         documentType: 'Order',
+        filingDate: '2019-01-01T00:01:00.000Z',
         servedAt: '2019-01-01T00:01:00.000Z',
         servedParties: ['Some Party'],
         userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
@@ -24,6 +25,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       {
         documentId: '111ba5a9-b37b-479d-9201-067ec6e33111',
         documentType: 'Order',
+        filingDate: '2019-01-01T00:01:00.000Z',
         servedAt: '2019-01-02T00:01:00.000Z',
         servedParties: ['Some Other Party'],
         userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
@@ -46,6 +48,13 @@ describe('updateDocketEntryMetaInteractor', () => {
         filedBy: 'Test User',
         filingDate: '2019-01-02T00:01:00.000Z',
         index: 1,
+      },
+      {
+        description: 'Test Entry 2',
+        eventCode: 'O',
+        filedBy: 'Test User',
+        filingDate: '2019-01-02T00:01:00.000Z',
+        index: 2,
       },
     ];
 
@@ -255,6 +264,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
+        filingDate: '2019-01-01T00:01:00.000Z', // unchanged from current filingDate
         servedAt: '2019-01-01T00:01:00.000Z', // unchanged from current servedAt
       },
       docketRecordIndex: 0,
@@ -274,5 +284,28 @@ describe('updateDocketEntryMetaInteractor', () => {
     });
 
     expect(updateCaseMock).toHaveBeenCalled();
+  });
+
+  it('should not throw an error when a null certificate of service date is passed for a docket entry without an associated document', async () => {
+    let error;
+
+    try {
+      await updateDocketEntryMetaInteractor({
+        applicationContext,
+        caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
+        docketEntryMeta: {
+          action: 'asdf',
+          certificateOfServiceDate: null,
+          description: 'Request for Place of Trial at Houston, Texas',
+          eventCode: 'RQT',
+          filingDate: '2020-02-03',
+        },
+        docketRecordIndex: 2,
+      });
+    } catch (e) {
+      error = e;
+    }
+
+    expect(error).toBeUndefined();
   });
 });

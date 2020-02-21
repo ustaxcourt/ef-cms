@@ -1,17 +1,21 @@
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseDetailSubnavTabs = connect(
-  { caseDetailSubnavHelper: state.caseDetailSubnavHelper },
-  ({ caseDetailSubnavHelper }) => {
+  {
+    caseDetailSubnavHelper: state.caseDetailSubnavHelper,
+    clearAlertSequence: sequences.clearAlertSequence,
+  },
+  ({ caseDetailSubnavHelper, clearAlertSequence }) => {
     return (
       <div className="case-detail-primary-tabs__container">
         <div className="case-detail-primary-tabs__tabs">
           <Tabs
             bind="caseDetailPage.primaryTab"
             className="container-tabs-dark"
+            onSelect={() => clearAlertSequence()}
           >
             <Tab
               className="padding-left-2"

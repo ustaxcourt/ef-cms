@@ -99,7 +99,7 @@ TrialSession.TRIAL_CITY_STRINGS = SMALL_CITIES.map(
   location => `${location.city}, ${location.state}`,
 );
 
-TrialSession.SESSION_TERMS = ['Winter', 'Fall', 'Spring'];
+TrialSession.SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
 
 TrialSession.SESSION_TYPES = [
   'Regular',
@@ -109,9 +109,11 @@ TrialSession.SESSION_TYPES = [
   'Motion/Hearing',
 ];
 
-TrialSession.STATUS_TYPES = {
+TrialSession.SESSION_STATUS_GROUPS = {
+  all: 'All',
   closed: 'Closed',
-  upcoming: 'Upcoming',
+  new: 'New',
+  open: 'Open',
 };
 
 TrialSession.validationName = 'TrialSession';
@@ -154,7 +156,6 @@ TrialSession.prototype.init = function(rawSession, { applicationContext }) {
   this.startDate = rawSession.startDate;
   this.startTime = rawSession.startTime || '10:00';
   this.state = rawSession.state;
-  this.status = rawSession.status || TrialSession.STATUS_TYPES.upcoming;
   this.swingSession = rawSession.swingSession;
   this.swingSessionId = rawSession.swingSessionId;
   this.term = rawSession.term;
@@ -241,13 +242,6 @@ TrialSession.validationRules = {
       .string()
       .allow('')
       .optional(),
-    status: joi
-      .string()
-      .valid(
-        ...Object.keys(TrialSession.STATUS_TYPES).map(
-          key => TrialSession.STATUS_TYPES[key],
-        ),
-      ),
     swingSession: joi.boolean().optional(),
     swingSessionId: joi.when('swingSession', {
       is: true,
@@ -302,13 +296,6 @@ joiValidationDecorator(
       }),
     ),
     isCalendared: joi.boolean().required(),
-    status: joi
-      .string()
-      .valid(
-        ...Object.keys(TrialSession.STATUS_TYPES).map(
-          key => TrialSession.STATUS_TYPES[key],
-        ),
-      ),
   }),
   function() {
     return !this.getFormattedValidationErrors();

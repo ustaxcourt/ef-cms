@@ -1,6 +1,10 @@
+const {
+  calculateISODate,
+  createISODateString,
+  dateStringsCompared,
+} = require('./DateHandler');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty } = require('lodash');
-const { dateStringsCompared } = require('./DateHandler');
 const { Document } = require('../entities/Document');
 const { IRS_BATCH_SYSTEM_SECTION } = require('../entities/WorkQueue');
 
@@ -54,6 +58,8 @@ const formatDocument = (applicationContext, document) => {
   result.isNotServedCourtIssuedDocument =
     result.isCourtIssuedDocument && !result.servedAt;
 
+  result.isTranscript = result.eventCode === Document.TRANSCRIPT_EVENT_CODE;
+
   result.qcWorkItemsUntouched =
     !!qcWorkItems.length &&
     qcWorkItems.reduce((acc, wi) => {
@@ -90,6 +96,21 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
   return result;
 };
 
+const TRANSCRIPT_AGE_DAYS_MIN = 90;
+const documentMeetsAgeRequirements = document => {
+  const transcriptCodes = [Document.TRANSCRIPT_EVENT_CODE];
+  const isTranscript = transcriptCodes.includes(document.eventCode);
+  if (!isTranscript) return true;
+  const availableOnDate = calculateISODate({
+    dateString: document.secondaryDate,
+    howMuch: TRANSCRIPT_AGE_DAYS_MIN,
+    units: 'days',
+  });
+  const rightNow = createISODateString();
+  const meetsTranscriptAgeRequirements = availableOnDate <= rightNow;
+  return meetsTranscriptAgeRequirements;
+};
+
 const formatCaseDeadline = (applicationContext, caseDeadline) => {
   const result = cloneDeep(caseDeadline);
   result.deadlineDateFormatted = applicationContext
@@ -112,7 +133,7 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
 
 const formatDocketRecordWithDocument = (
   applicationContext,
-  docketRecords = [],
+  docketRecords,
   documents = [],
 ) => {
   const documentMap = documents.reduce((acc, document) => {
@@ -137,6 +158,10 @@ const formatDocketRecordWithDocument = (
       ) {
         record.createdAtFormatted = undefined;
       }
+
+      record.isAvailableToUser = documentMeetsAgeRequirements(
+        documentMap[record.documentId],
+      );
 
       record.filingsAndProceedings = getFilingsAndProceedings(
         formattedDocument,
@@ -224,6 +249,8 @@ const formatCase = (applicationContext, caseDetail) => {
       editUrl:
         document.documentType === 'Stipulated Decision'
           ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+          : document.documentType === 'MISC - Miscellaneous'
+          ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${document.documentId}`
           : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
       signUrl:
         document.documentType === 'Stipulated Decision'
@@ -319,11 +346,21 @@ const formatCase = (applicationContext, caseDetail) => {
     } else {
       result.formattedTrialDate = 'Not scheduled';
     }
-  } else if (result.blocked) {
+  } else if (result.blocked || result.automaticBlocked) {
     result.showBlockedFromTrial = true;
-    result.blockedDateFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(result.blockedDate, 'MMDDYY');
+    if (result.blocked) {
+      result.blockedDateFormatted = applicationContext
+        .getUtilities()
+        .formatDateString(result.blockedDate, 'MMDDYY');
+    }
+    if (result.automaticBlocked) {
+      result.automaticBlockedDateFormatted = applicationContext
+        .getUtilities()
+        .formatDateString(result.automaticBlockedDate, 'MMDDYY');
+      if (result.highPriority) {
+        result.showAutomaticBlockedAndHighPriority = true;
+      }
+    }
   } else if (result.highPriority) {
     result.formattedTrialDate = 'Not scheduled';
     result.formattedAssociatedJudge = 'Not assigned';
@@ -371,8 +408,16 @@ const formatCase = (applicationContext, caseDetail) => {
 
 const getDocketRecordSortFunc = sortBy => {
   const byIndex = (a, b) => a.index - b.index;
-  const byDate = (a, b) =>
-    dateStringsCompared(a.record.filingDate, b.record.filingDate);
+  const byDate = (a, b) => {
+    const compared = dateStringsCompared(
+      a.record.filingDate,
+      b.record.filingDate,
+    );
+    if (compared === 0) {
+      return byIndex(a, b);
+    }
+    return compared;
+  };
 
   switch (sortBy) {
     case 'byIndex': // fall-through
@@ -418,6 +463,8 @@ const getFormattedCaseDetail = ({
 };
 
 module.exports = {
+  TRANSCRIPT_AGE_DAYS_MIN,
+  documentMeetsAgeRequirements,
   formatCase,
   formatCaseDeadlines,
   formatDocketRecord,

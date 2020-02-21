@@ -166,6 +166,22 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  updateSecondaryContact:
+    handler: web-api/${self:provider.dir}/casePartiesHandlers.updateSecondaryContactLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: /{caseId}/contact-secondary
+          method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   associatePractitionerWithCase:
     handler: web-api/${self:provider.dir}/casePartiesHandlers.associatePractitionerWithCaseLambda
     events:

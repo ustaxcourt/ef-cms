@@ -35,6 +35,7 @@ export const completeDocketEntryQCAction = async ({
 
   const {
     caseDetail,
+    paperServiceDocumentTitle,
     paperServiceParties,
     paperServicePdfUrl,
   } = await applicationContext.getUseCases().completeDocketEntryQCInteractor({
@@ -53,6 +54,7 @@ export const completeDocketEntryQCAction = async ({
     },
     caseDetail,
     caseId: docketNumber,
+    paperServiceDocumentTitle,
     paperServiceParties,
     pdfUrl: paperServicePdfUrl,
     updatedDocument,

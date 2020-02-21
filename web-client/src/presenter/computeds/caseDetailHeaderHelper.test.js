@@ -351,4 +351,46 @@ describe('caseDetailHeaderHelper', () => {
     });
     expect(result.showFileDocumentButton).toEqual(false);
   });
+
+  it('should show the Upload PDF button in the action menu if the user is a court user', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        permissions: {
+          FILE_EXTERNAL_DOCUMENT: true,
+        },
+        screenMetadata: { isAssociated: false },
+      },
+    });
+
+    expect(result.showUploadCourtIssuedDocumentButton).toEqual(true);
+  });
+
+  it('should NOT show the Upload PDF button in the action menu if the user is not a court user', () => {
+    const user = {
+      role: User.ROLES.petitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        permissions: {
+          FILE_EXTERNAL_DOCUMENT: true,
+        },
+        screenMetadata: { isAssociated: false },
+      },
+    });
+
+    expect(result.showUploadCourtIssuedDocumentButton).toEqual(false);
+  });
 });

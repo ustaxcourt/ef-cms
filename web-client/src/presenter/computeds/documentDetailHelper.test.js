@@ -1525,7 +1525,7 @@ describe('document detail helper', () => {
   });
 
   describe('showPrintCaseConfirmationButton', () => {
-    it("should show the 'print confirmation' button if a document has been served and the document is a petition ", () => {
+    it("should show the 'Print Confirmation' button if a document has been served and the document is a petition ", () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -1551,7 +1551,7 @@ describe('document detail helper', () => {
       expect(result.showPrintCaseConfirmationButton).toEqual(true);
     });
 
-    it("should not show the 'print confirmation' button if a document has not been served", () => {
+    it("should not show the 'Print Confirmation' button if a document has not been served", () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -1577,7 +1577,7 @@ describe('document detail helper', () => {
       expect(result.showPrintCaseConfirmationButton).toEqual(false);
     });
 
-    it("should not show the 'print confirmation' button if the document is not a petition ", () => {
+    it("should not show the 'Print Confirmation' button if the document is not a petition ", () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -1783,6 +1783,91 @@ describe('document detail helper', () => {
       });
 
       expect(result.isDraftDocument).toEqual(false);
+    });
+
+    describe('editUrl', () => {
+      it('should go to the sign url when the document is a stip decision', () => {
+        const user = {
+          role: User.ROLES.petitionsClerk,
+          userId: '123',
+        };
+        const result = runCompute(documentDetailHelper, {
+          state: {
+            ...getBaseState(user),
+            caseDetail: {
+              docketRecord: [],
+              documents: [
+                {
+                  documentId: 'abc',
+                  documentType: 'Stipulated Decision',
+                },
+              ],
+            },
+            documentId: 'abc',
+            user,
+          },
+        });
+
+        expect(result.isDraftDocument).toEqual(true);
+        expect(result.formattedDocument.editUrl).toContain(
+          '/documents/abc/sign',
+        );
+      });
+
+      it('should go to the edit upload pdf url when the document is a Miscellaneous document', () => {
+        const user = {
+          role: User.ROLES.petitionsClerk,
+          userId: '123',
+        };
+        const result = runCompute(documentDetailHelper, {
+          state: {
+            ...getBaseState(user),
+            caseDetail: {
+              docketRecord: [],
+              documents: [
+                {
+                  documentId: 'abc',
+                  documentType: 'MISC - Miscellaneous',
+                },
+              ],
+            },
+            documentId: 'abc',
+            user,
+          },
+        });
+
+        expect(result.isDraftDocument).toEqual(true);
+        expect(result.formattedDocument.editUrl).toContain(
+          '/edit-upload-court-issued/abc',
+        );
+      });
+
+      it('should go to the edit order url when the document is a Order document', () => {
+        const user = {
+          role: User.ROLES.petitionsClerk,
+          userId: '123',
+        };
+        const result = runCompute(documentDetailHelper, {
+          state: {
+            ...getBaseState(user),
+            caseDetail: {
+              docketNumber: '123-20',
+              docketRecord: [],
+              documents: [
+                {
+                  documentId: 'abc',
+                  documentType: 'OAP - Order for Amended Petition',
+                },
+              ],
+            },
+            documentId: 'abc',
+            user,
+          },
+        });
+
+        expect(result.isDraftDocument).toEqual(true);
+        expect(result.formattedDocument.editUrl).toContain('/edit-order/abc');
+      });
     });
   });
 });

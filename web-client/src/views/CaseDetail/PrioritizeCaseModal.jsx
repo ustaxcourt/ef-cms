@@ -26,7 +26,7 @@ export const PrioritizeCaseModal = connect(
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         className=""
-        confirmLabel="Mark high priority"
+        confirmLabel="Mark High Priority"
         confirmSequence={confirmSequence}
         title="Mark as High Priority"
       >

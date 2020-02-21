@@ -1,4 +1,4 @@
-import { find, includes, orderBy } from 'lodash';
+import { find, orderBy } from 'lodash';
 import { state } from 'cerebral';
 
 import {
@@ -61,6 +61,8 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     'Application to Take Deposition',
   ];
 
+  const amendmentEventCodes = ['AMAT', 'ADMT'];
+
   const partyValidationError =
     validationErrors &&
     (validationErrors.partyPrimary ||
@@ -112,17 +114,6 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     secondaryCategoryInformation,
   );
 
-  const previousDocument =
-    form.previousDocument &&
-    find(
-      caseDetail.documents,
-      doc =>
-        includes(documentIdWhitelist, doc.documentId) &&
-        (doc.documentTitle || doc.documentType) === form.previousDocument,
-    );
-  const showSupportingInclusions =
-    previousDocument && previousDocument.relationship !== 'secondaryDocument';
-
   if (optionsForCategory.showSecondaryDocumentSelect) {
     optionsForCategory.showSecondaryDocumentSelect = false;
     optionsForCategory.showSecondaryDocumentForm = true;
@@ -139,7 +130,10 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     primary: optionsForCategory,
     secondary: secondaryOptionsForCategory,
     showDateReceivedEdit,
-    showObjection: objectionDocumentTypes.includes(form.documentType),
+    showObjection:
+      objectionDocumentTypes.includes(form.documentType) ||
+      (amendmentEventCodes.includes(form.eventCode) &&
+        objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryParty,
@@ -149,7 +143,6 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     ),
     showSupportingDocumentSelect: form.documentType && form.documentType !== '',
     showSupportingDocumentValid: !!form.supportingDocumentFile,
-    showSupportingInclusions,
     showTrackOption,
     supportingDocumentTypeList,
   };
