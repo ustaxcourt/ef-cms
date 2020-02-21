@@ -26,10 +26,15 @@ export const canSetTrialSessionToCalendarAction = async ({
     return path.yes();
   }
 
+  const { TrialSession } = applicationContext.getEntityConstructors();
+  const trialSessionEntity = new TrialSession(trialSession, {
+    applicationContext,
+  });
+  const emptyFields = trialSessionEntity.getEmptyFields();
+
   return path.no({
     alertWarning: {
-      message:
-        'You must provide an address and judge to be able to set this trial session ',
+      message: `You must provide ${emptyFields} to be able to set this trial session `,
       title: 'This trial session requires additional information',
     },
   });

@@ -437,6 +437,37 @@ TrialSession.prototype.canSetAsCalendared = function() {
 };
 
 /**
+ * Returns certain properties of the trial session that are empty as a comma separated string.
+ *
+ * @returns {string} Property names of the trial session that are empty, comma separated
+ */
+TrialSession.prototype.getEmptyFields = function() {
+  let missingFields = [];
+
+  if (isEmpty(this.address1)) {
+    missingFields.push('address');
+  }
+
+  if (isEmpty(this.judge)) {
+    missingFields.push('judge');
+  }
+
+  if (isEmpty(this.city)) {
+    missingFields.push('city');
+  }
+
+  if (isEmpty(this.state)) {
+    missingFields.push('state');
+  }
+
+  if (isEmpty(this.postalCode)) {
+    missingFields.push('postal code');
+  }
+
+  return missingFields.join(', ');
+};
+
+/**
  * Sets the notice issued date on the trial session
  *
  * @returns {TrialSession} the trial session entity
