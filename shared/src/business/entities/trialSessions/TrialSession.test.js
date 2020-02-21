@@ -366,14 +366,10 @@ describe('TrialSession entity', () => {
   });
 
   describe('getEmptyFields', () => {
-    it('should return address when street address is empty', () => {
+    it('should return all missing fields as a list', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
-          city: 'Flavortown',
-          judge: { name: 'Judge Armen' },
-          postalCode: '12345',
-          state: 'TN',
         },
         {
           applicationContext,
@@ -382,48 +378,16 @@ describe('TrialSession entity', () => {
 
       const result = trialSession.getEmptyFields();
 
-      expect(result).toEqual('an address');
+      expect(result).toMatchObject([
+        'address1',
+        'city',
+        'state',
+        'postalCode',
+        'judge',
+      ]);
     });
 
-    it('should return address when city is empty', () => {
-      const trialSession = new TrialSession(
-        {
-          ...VALID_TRIAL_SESSION,
-          address1: '123 Flavor Ave',
-          judge: { name: 'Judge Armen' },
-          postalCode: '12345',
-          state: 'TN',
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      const result = trialSession.getEmptyFields();
-
-      expect(result).toEqual('an address');
-    });
-
-    it('should return address when postal code is empty', () => {
-      const trialSession = new TrialSession(
-        {
-          ...VALID_TRIAL_SESSION,
-          address1: '123 Flavor Ave',
-          city: 'Flavortown',
-          judge: { name: 'Judge Armen' },
-          state: 'TN',
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      const result = trialSession.getEmptyFields();
-
-      expect(result).toEqual('an address');
-    });
-
-    it('should return address when state is empty', () => {
+    it('should return an empty list when all required fields as set', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
@@ -431,24 +395,6 @@ describe('TrialSession entity', () => {
           city: 'Flavortown',
           judge: { name: 'Judge Armen' },
           postalCode: '12345',
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      const result = trialSession.getEmptyFields();
-
-      expect(result).toEqual('an address');
-    });
-
-    it('should return judge when a judge has not been set', () => {
-      const trialSession = new TrialSession(
-        {
-          ...VALID_TRIAL_SESSION,
-          address1: '123 Flavor Ave',
-          city: 'Flavortown',
-          postalCode: '12345',
           state: 'TN',
         },
         {
@@ -458,25 +404,7 @@ describe('TrialSession entity', () => {
 
       const result = trialSession.getEmptyFields();
 
-      expect(result).toEqual('a judge');
-    });
-
-    it('should return address and judge when a both address and judge have not been set', () => {
-      const trialSession = new TrialSession(
-        {
-          ...VALID_TRIAL_SESSION,
-          address1: '123 Flavor Ave',
-          postalCode: '12345',
-          state: 'TN',
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      const result = trialSession.getEmptyFields();
-
-      expect(result).toEqual('an address and a judge');
+      expect(result).toMatchObject([]);
     });
   });
 

@@ -116,6 +116,14 @@ TrialSession.SESSION_STATUS_GROUPS = {
   open: 'Open',
 };
 
+TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING = [
+  'address1',
+  'city',
+  'state',
+  'postalCode',
+  'judge',
+];
+
 TrialSession.validationName = 'TrialSession';
 
 /**
@@ -427,38 +435,20 @@ TrialSession.prototype.deleteCaseFromCalendar = function({ caseId }) {
  * @returns {boolean} TRUE if can set as calendared (properties were all not empty), FALSE otherwise
  */
 TrialSession.prototype.canSetAsCalendared = function() {
-  return ![
-    this.address1,
-    this.judge,
-    this.city,
-    this.state,
-    this.postalCode,
-  ].some(property => isEmpty(property));
+  return isEmpty(this.getEmptyFields());
 };
 
 /**
- * Returns certain properties of the trial session that are empty as a comma separated string.
+ * Returns certain properties of the trial session that are empty as a list.
  *
- * @returns {string} Property names of the trial session that are empty, comma separated
+ * @returns {Array} A list of property names of the trial session that are empty
  */
 TrialSession.prototype.getEmptyFields = function() {
-  let missingFields = [];
+  const missingProperties = TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING.filter(
+    property => isEmpty(this[property]),
+  );
 
-  if (
-    [this.address1, this.city, this.state, this.postalCode].some(property =>
-      isEmpty(property),
-    )
-  ) {
-    missingFields.push('an address');
-  }
-
-  if (isEmpty(this.judge)) {
-    missingFields.push('a judge');
-  }
-
-  return missingFields.length > 1
-    ? missingFields.join(' and ')
-    : missingFields.join(' ');
+  return missingProperties;
 };
 
 /**

@@ -31,10 +31,25 @@ export const canSetTrialSessionToCalendarAction = async ({
     applicationContext,
   });
   const emptyFields = trialSessionEntity.getEmptyFields();
+  const addressProperties = ['address1', 'city', 'state', 'postalCode'];
+  const missingAddressProperties = addressProperties.filter(property =>
+    emptyFields.includes(property),
+  );
+  const missingFieldsForWarningMessage = [];
+
+  if (emptyFields.includes('judge')) {
+    missingFieldsForWarningMessage.push('a judge');
+  }
+
+  if (missingAddressProperties.length > 0) {
+    missingFieldsForWarningMessage.unshift('an address');
+  }
 
   return path.no({
     alertWarning: {
-      message: `You must provide ${emptyFields} to be able to set this trial session `,
+      message: `You must provide ${missingFieldsForWarningMessage.join(
+        ' and ',
+      )} to be able to set this trial session `,
       title: 'This trial session requires additional information',
     },
   });
