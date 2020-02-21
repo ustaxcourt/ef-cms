@@ -7,6 +7,10 @@ import userSignsOut from './journey/petitionerSignsOut';
 const test = setupTest();
 
 describe('petitions clerk case search', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   petitionsClerkLogIn(test);
   petitionsClerkCreatesNewCase(test, fakeFile);
   petitionsClerkAdvancedSearchForCase(test);

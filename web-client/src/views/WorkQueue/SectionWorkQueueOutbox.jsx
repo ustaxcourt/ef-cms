@@ -1,5 +1,4 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -26,7 +25,6 @@ export const SectionWorkQueueOutbox = connect(
               {workQueueHelper.showReceivedColumn && <th>Filed</th>}
               {workQueueHelper.showSentColumn && <th>Sent</th>}
               <th>Case title</th>
-              <th aria-label="Status Icon" className="padding-right-0" />
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
               {!workQueueHelper.hideCaseStatusColumn && <th>Case status</th>}
@@ -35,7 +33,6 @@ export const SectionWorkQueueOutbox = connect(
                 <th>{workQueueHelper.assigneeColumnTitle}</th>
               )}
               {workQueueHelper.showProcessedByColumn && <th>QC’d by</th>}
-              {workQueueHelper.showBatchedByColumn && <th>Batched by</th>}
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
               {workQueueHelper.showServedColumn && <th>Served</th>}
             </tr>
@@ -60,17 +57,6 @@ export const SectionWorkQueueOutbox = connect(
                 <td className="message-queue-row message-queue-case-title">
                   {item.caseTitle}
                 </td>
-                <td className="message-queue-row has-icon padding-right-0">
-                  {item.showBatchedStatusIcon && (
-                    <Icon
-                      aria-label="batched for IRS"
-                      className="iconStatusBatched"
-                      icon={['far', 'clock']}
-                      size="lg"
-                    />
-                  )}
-                </td>
-
                 <td className="message-queue-row">
                   <div className="message-document-title">
                     <a
@@ -110,9 +96,6 @@ export const SectionWorkQueueOutbox = connect(
                   </td>
                 )}
                 {workQueueHelper.showProcessedByColumn && (
-                  <td className="message-queue-row">{item.completedBy}</td>
-                )}
-                {workQueueHelper.showBatchedByColumn && (
                   <td className="message-queue-row">{item.completedBy}</td>
                 )}
                 {!workQueueHelper.hideSectionColumn && (

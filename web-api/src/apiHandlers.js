@@ -14,7 +14,6 @@ module.exports = {
   generateTrialCalendarPdfLambda: require('./trialSessions/generateTrialCalendarPdfLambda')
     .handler,
   getNotificationsLambda: require('./users/getNotificationsLambda').handler,
-  runBatchProcessLambda: require('./cases/runBatchProcessLambda').handler,
   swaggerJsonLambda: require('./swagger/swaggerJsonLambda').handler,
   swaggerLambda: require('./swagger/swaggerLambda').handler,
 };

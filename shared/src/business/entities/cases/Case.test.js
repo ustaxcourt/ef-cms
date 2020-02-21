@@ -735,16 +735,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('sendToIRSHoldingQueue', () => {
-    it('sets status for irs batch', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      caseRecord.sendToIRSHoldingQueue();
-      expect(caseRecord.status).toEqual(Case.STATUS_TYPES.batchedForIRS);
-    });
-  });
-
   describe('setRequestForTrialDocketRecord', () => {
     it('sets request for trial docket record when it does not already exist', () => {
       const caseRecord = new Case(MOCK_CASE, {
@@ -1548,16 +1538,6 @@ describe('Case entity', () => {
         highPriorityReason: undefined,
         status: Case.STATUS_TYPES.closed,
       });
-    });
-  });
-
-  describe('recallFromIRSHoldingQueue', () => {
-    it('should update the status of the case to recalled', () => {
-      const myCase = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      myCase.recallFromIRSHoldingQueue();
-      expect(myCase.status).toEqual(Case.STATUS_TYPES.recalled);
     });
   });
 
