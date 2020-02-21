@@ -18,7 +18,7 @@ const mutateRecord = item => {
       .validate()
       .toRawObject();
 
-    return caseEntity;
+    return { ...item, ...caseEntity };
   }
 };
 
