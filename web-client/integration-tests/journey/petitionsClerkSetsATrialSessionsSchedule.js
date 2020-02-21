@@ -7,6 +7,6 @@ export default test => {
     });
 
     await test.runSequence('setTrialSessionCalendarSequence');
-    await wait(4000);
+    await wait(10000);
   });
 };
