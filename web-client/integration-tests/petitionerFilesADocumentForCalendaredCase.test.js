@@ -19,6 +19,10 @@ describe('petitioner files document', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   petitionerLogIn(test);
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test);

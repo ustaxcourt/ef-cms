@@ -31,6 +31,10 @@ describe('Blocking a Case', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   const trialLocation = `Charleston, West Virginia, ${Date.now()}`;
   const overrides = {
     trialLocation,

@@ -23,6 +23,10 @@ describe('Trial Session Eligible Cases Journey', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   const trialLocation = `Madison, Wisconsin, ${Date.now()}`;
   const overrides = {
     maxCases: 3,
@@ -122,7 +126,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         ...overrides,
         caseType: 'CDP (Lien/Levy)',
         procedureType: 'Small',
-        receivedAtDay: '01',
+        receivedAtDay: '01', //
         receivedAtMonth: '02',
         receivedAtYear: '2019',
       };
