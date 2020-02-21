@@ -11,14 +11,15 @@ exports.handler = (event, context, callback) => {
   const { headers } = response;
   const { headers: requestHeaders } = request;
 
-  const allowedDomainValue =
+  let allowedDomain = '';
+  if (
     requestHeaders['x-allowed-domain'] &&
     requestHeaders['x-allowed-domain'][0] &&
-    requestHeaders['x-allowed-domain'][0].value;
-
-  const allowedDomainString = allowedDomainValue
-    ? `*${allowedDomainValue}`
-    : '';
+    requestHeaders['x-allowed-domain'][0].value
+  ) {
+    allowedDomain = requestHeaders['x-allowed-domain'][0].value;
+  }
+  const allowedDomainString = allowedDomain ? `*${allowedDomain}` : '';
 
   //Set new headers
   headers['strict-transport-security'] = [
@@ -30,7 +31,8 @@ exports.handler = (event, context, callback) => {
   headers['content-security-policy'] = [
     {
       key: 'Content-Security-Policy',
-      value: `default-src 'self' ${allowedDomainString}; img-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'`,
+      //      value: `default-src 'self' ${allowedDomainString}; img-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'`,
+      value: `default-src 'self' ${allowedDomainString};`,
     },
   ];
   headers['x-content-type-options'] = [
