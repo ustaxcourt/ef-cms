@@ -31,13 +31,6 @@ resource "aws_iam_role_policy" "header_security_lambda_policy" {
         {
             "Effect": "Allow",
             "Action": [
-                "*"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
               "logs:CreateLogGroup",
               "logs:CreateLogStream",
               "logs:PutLogEvents"
