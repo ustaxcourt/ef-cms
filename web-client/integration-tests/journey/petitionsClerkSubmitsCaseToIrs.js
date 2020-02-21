@@ -39,8 +39,6 @@ export default test => {
       value: '2017',
     });
 
-    expect(test.getState('caseDetailErrors')).toEqual({});
-
     await test.runSequence('navigateToReviewSavedPetitionSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
     await test.runSequence('saveCaseAndServeToIrsSequence');
