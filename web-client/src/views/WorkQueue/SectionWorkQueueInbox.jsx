@@ -135,22 +135,6 @@ export const SectionWorkQueueInbox = connect(
                 </td>
                 {!workQueueHelper.hideIconColumn && (
                   <td className="message-queue-row has-icon padding-right-0">
-                    {item.showBatchedStatusIcon && (
-                      <Icon
-                        aria-label="batched for IRS"
-                        className="iconStatusBatched"
-                        icon={['far', 'clock']}
-                        size="lg"
-                      />
-                    )}
-                    {item.showRecalledStatusIcon && (
-                      <Icon
-                        aria-label="recalled from IRS"
-                        className="iconStatusRecalled"
-                        icon={['far', 'clock']}
-                        size="lg"
-                      />
-                    )}
                     {item.showUnassignedIcon && (
                       <Icon
                         aria-label="unassigned"

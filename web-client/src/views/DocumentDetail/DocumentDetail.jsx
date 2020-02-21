@@ -2,15 +2,11 @@ import { ArchiveDraftDocumentModal } from '../DraftDocuments/ArchiveDraftDocumen
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailEdit } from '../CaseDetailEdit/CaseDetailEdit';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
-import { CaseDetailReadOnly } from './CaseDetailReadOnly';
 import { ConfirmEditModal } from '../DraftDocuments/ConfirmEditModal';
 import { DocumentDetailHeader } from './DocumentDetailHeader';
 import { DocumentDisplayIframe } from './DocumentDisplayIframe';
 import { DocumentMessages } from './DocumentMessages';
 import { ErrorNotification } from '../ErrorNotification';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { RecallPetitionModalDialog } from '../RecallPetitionModalDialog';
-import { ServeToIrsModalDialog } from '../ServeToIrsModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -21,7 +17,6 @@ export const DocumentDetail = connect(
   {
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
-    clickServeToIrsSequence: sequences.clickServeToIrsSequence,
     documentDetailHelper: state.documentDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     gotoOrdersNeededSequence: sequences.gotoOrdersNeededSequence,
@@ -31,13 +26,11 @@ export const DocumentDetail = connect(
       sequences.navigateToPrintableCaseConfirmationSequence,
     removeSignatureFromOrderSequence:
       sequences.removeSignatureFromOrderSequence,
-    setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     showModal: state.showModal,
   },
   ({
     caseDetail,
     caseDetailHelper,
-    clickServeToIrsSequence,
     documentDetailHelper,
     formattedCaseDetail,
     gotoOrdersNeededSequence,
@@ -45,7 +38,6 @@ export const DocumentDetail = connect(
     navigateToPathSequence,
     navigateToPrintableCaseConfirmationSequence,
     removeSignatureFromOrderSequence,
-    setModalDialogNameSequence,
     showModal,
   }) => {
     const renderParentTabs = () => {
@@ -72,10 +64,7 @@ export const DocumentDetail = connect(
                 aria-labelledby="tab-document-info"
                 id="tab-document-info-panel"
               >
-                {documentDetailHelper.showCaseDetailsEdit && <CaseDetailEdit />}
-                {documentDetailHelper.showCaseDetailsView && (
-                  <CaseDetailReadOnly />
-                )}
+                <CaseDetailEdit />
               </div>
             </Tab>
           )}
@@ -177,7 +166,6 @@ export const DocumentDetail = connect(
                 Edit
               </Button>
             )}
-
             {documentDetailHelper.showPrintCaseConfirmationButton && (
               <Button
                 className="margin-right-0"
@@ -190,32 +178,6 @@ export const DocumentDetail = connect(
               >
                 Print Confirmation
               </Button>
-            )}
-
-            {documentDetailHelper.showServeToIrsButton && (
-              <Button
-                className="serve-to-irs margin-right-0"
-                icon={['fas', 'clock']}
-                onClick={() => clickServeToIrsSequence()}
-              >
-                Serve to IRS
-              </Button>
-            )}
-            {documentDetailHelper.showRecallButton && (
-              <span className="recall-button-box">
-                <FontAwesomeIcon icon={['far', 'clock']} size="lg" />
-                <span className="batched-message">Batched for IRS</span>
-                <Button
-                  className="recall-petition"
-                  onClick={() =>
-                    setModalDialogNameSequence({
-                      showModal: 'RecallPetitionModalDialog',
-                    })
-                  }
-                >
-                  Recall
-                </Button>
-              </span>
             )}
             {documentDetailHelper.showSignDocumentButton && (
               <Button
@@ -258,10 +220,6 @@ export const DocumentDetail = connect(
             </div>
           </div>
         </section>
-        {showModal === 'ServeToIrsModalDialog' && <ServeToIrsModalDialog />}
-        {showModal === 'RecallPetitionModalDialog' && (
-          <RecallPetitionModalDialog />
-        )}
         {showModal === 'ArchiveDraftDocumentModal' && (
           <ArchiveDraftDocumentModal />
         )}

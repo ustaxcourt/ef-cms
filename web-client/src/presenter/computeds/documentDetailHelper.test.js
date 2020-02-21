@@ -568,176 +568,6 @@ describe('document detail helper', () => {
     });
   });
 
-  describe('showServeToIrsButton and showRecallButton', () => {
-    it('should set showServeToIrsButton true and showRecallButton false when case status is new', () => {
-      const user = {
-        role: User.ROLES.petitionsClerk,
-        userId: '123',
-      };
-      const result = runCompute(documentDetailHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketRecord: [],
-            documents: [
-              {
-                documentId: 'abc',
-                documentType: 'Petition',
-              },
-            ],
-            status: Case.STATUS_TYPES.new,
-          },
-          documentId: 'abc',
-          workItemActions: {
-            abc: 'complete',
-          },
-        },
-      });
-      expect(result.showServeToIrsButton).toEqual(true);
-      expect(result.showRecallButton).toEqual(false);
-    });
-
-    it('should set showServeToIrsButton true and showRecallButton false when case status is inProgress', () => {
-      const user = {
-        role: User.ROLES.petitionsClerk,
-        userId: '123',
-      };
-      const result = runCompute(documentDetailHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketRecord: [],
-            documents: [
-              {
-                documentId: 'abc',
-                documentType: 'Petition',
-              },
-            ],
-            status: Case.STATUS_TYPES.inProgress,
-          },
-          documentId: 'abc',
-          workItemActions: {
-            abc: 'complete',
-          },
-        },
-      });
-      expect(result.showServeToIrsButton).toEqual(true);
-      expect(result.showRecallButton).toEqual(false);
-    });
-
-    it('should set showServeToIrsButton false and showRecallButton true when case status is Batched for IRS', () => {
-      const user = {
-        role: User.ROLES.petitionsClerk,
-        userId: '123',
-      };
-      const result = runCompute(documentDetailHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketRecord: [],
-            documents: [
-              {
-                documentId: 'abc',
-                documentType: 'Petition',
-              },
-            ],
-            status: Case.STATUS_TYPES.batchedForIRS,
-          },
-          documentId: 'abc',
-          workItemActions: {
-            abc: 'complete',
-          },
-        },
-      });
-      expect(result.showServeToIrsButton).toEqual(false);
-      expect(result.showRecallButton).toEqual(true);
-    });
-
-    it('should set showServeToIrsButton false and showRecallButton false when case status is general docket', () => {
-      const user = {
-        role: User.ROLES.petitionsClerk,
-        userId: '123',
-      };
-      const result = runCompute(documentDetailHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketRecord: [],
-            documents: [
-              {
-                documentId: 'abc',
-                documentType: 'Petition',
-              },
-            ],
-            status: Case.STATUS_TYPES.generalDocket,
-          },
-          documentId: 'abc',
-          workItemActions: {
-            abc: 'complete',
-          },
-        },
-      });
-      expect(result.showServeToIrsButton).toEqual(false);
-      expect(result.showRecallButton).toEqual(false);
-    });
-
-    it('should set showServeToIrsButton false and showRecallButton false if document type is not a petition', () => {
-      const user = {
-        role: User.ROLES.petitionsClerk,
-        userId: '123',
-      };
-      const result = runCompute(documentDetailHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketRecord: [],
-            documents: [
-              {
-                documentId: 'abc',
-                documentType: 'Answer',
-              },
-            ],
-            status: Case.STATUS_TYPES.batchedForIRS,
-          },
-          documentId: 'abc',
-          workItemActions: {
-            abc: 'complete',
-          },
-        },
-      });
-      expect(result.showServeToIrsButton).toEqual(false);
-      expect(result.showRecallButton).toEqual(false);
-    });
-
-    it('should not show the showServeToIrsButton or the showRecallButton for a docketclerk', () => {
-      const user = {
-        role: User.ROLES.docketClerk,
-        userId: '123',
-      };
-      const result = runCompute(documentDetailHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketRecord: [],
-            documents: [
-              {
-                documentId: 'abc',
-                documentType: 'Petition',
-              },
-            ],
-            status: Case.STATUS_TYPES.new,
-          },
-          documentId: 'abc',
-          workItemActions: {
-            abc: 'complete',
-          },
-        },
-      });
-      expect(result.showServeToIrsButton).toEqual(false);
-      expect(result.showRecallButton).toEqual(false);
-    });
-  });
-
   describe('showDocumentInfoTab', () => {
     it('should be false if document is not a petition', () => {
       const user = {
@@ -755,7 +585,7 @@ describe('document detail helper', () => {
                 documentType: 'NotAPetition',
               },
             ],
-            status: Case.STATUS_TYPES.recalled,
+            status: Case.STATUS_TYPES.new,
           },
           documentId: 'abc',
           workItemActions: {
@@ -793,7 +623,7 @@ describe('document detail helper', () => {
       expect(result.showDocumentInfoTab).toEqual(true);
     });
 
-    it('should be false if document is a petition and status is not New, Recalled, or Batched for IRS', () => {
+    it('should be false if document is a petition and status is not New or In Progress', () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
