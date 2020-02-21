@@ -7,8 +7,11 @@
  */
 exports.handler = (event, context, callback) => {
   //Get contents of response
-  const { response } = event.Records[0].cf;
+  const { request, response } = event.Records[0].cf;
   const { headers } = response;
+  const { headers: requestHeaders } = request;
+
+  const allowedDomain = `*${requestHeaders['x-allowed-domain'].value}`;
 
   //Set new headers
   headers['strict-transport-security'] = [
@@ -20,8 +23,7 @@ exports.handler = (event, context, callback) => {
   headers['content-security-policy'] = [
     {
       key: 'Content-Security-Policy',
-      value:
-        "default-src 'self' *-exp.ustc-case-mgmt.flexion.us; img-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'",
+      value: `default-src 'self' '${allowedDomain}'; img-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'`,
     },
   ];
   headers['x-content-type-options'] = [
