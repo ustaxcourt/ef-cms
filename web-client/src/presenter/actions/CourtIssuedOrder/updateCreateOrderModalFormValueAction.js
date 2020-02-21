@@ -25,12 +25,12 @@ export const updateCreateOrderModalFormValueAction = ({
         return item.eventCode === eventCode;
       });
       store.set(state.form.documentType, entry.documentType);
-      if (eventCode !== 'O' && eventCode !== 'NOT') {
-        store.set(state.form.documentTitle, entry.documentTitle);
-      } else if (eventCode === 'NOT') {
+      if (eventCode === 'NOT') {
         store.set(state.form.documentTitle, 'Notice');
+      } else if (eventCode === 'O') {
+        store.set(state.form.documentTitle, 'Order');
       } else {
-        store.unset(state.form.documentTitle);
+        store.set(state.form.documentTitle, entry.documentTitle);
       }
     } else {
       store.unset(state.form.eventCode);
