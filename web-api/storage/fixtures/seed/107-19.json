@@ -42,6 +42,7 @@
       "workItems": [],
       "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
       "receivedAt": "2019-08-16T17:29:10.132Z",
+      "filingDate": "2019-08-16T17:29:10.132Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "gsi1pk": "workitem-63d7c79e-1313-4969-9bf5-9170af46997c",
@@ -104,6 +105,7 @@
       "workItems": [],
       "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
       "receivedAt": "2019-08-16T17:29:10.132Z",
+      "filingDate": "2019-08-16T17:29:10.132Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "gsi1pk": "workitem-63d7c79e-1313-4969-9bf5-9170af46997c",
@@ -179,6 +181,7 @@
               "workItems": [],
               "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
               "receivedAt": "2019-08-16T17:29:10.132Z",
+              "filingDate": "2019-08-16T17:29:10.132Z",
               "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
             },
             "section": "irsBatchSection",
@@ -229,6 +232,7 @@
         "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
         "servedAt": "2019-08-16T17:30:10.526Z",
         "receivedAt": "2019-08-16T17:29:10.132Z",
+        "filingDate": "2019-08-16T17:29:10.132Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "status": "served"
       },
@@ -242,6 +246,7 @@
         "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
         "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
         "receivedAt": "2019-08-16T17:29:10.133Z",
+        "filingDate": "2019-08-16T17:29:10.133Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "status": "served"
       },
@@ -255,6 +260,7 @@
         "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
         "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
         "receivedAt": "2019-08-16T17:29:10.133Z",
+        "filingDate": "2019-08-16T17:29:10.133Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "status": "served"
       }
@@ -387,6 +393,7 @@
       "workItems": [],
       "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
       "receivedAt": "2019-08-16T17:29:10.132Z",
+      "filingDate": "2019-08-16T17:29:10.132Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "section": "irsBatchSection",
@@ -443,6 +450,8 @@
     "pk": "107-19|case"
   },
   {
+    "caseTitle": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "docketNumber": "107-19",
     "createdAt": "2019-08-22T12:51:32.434Z",
     "deadlineDate": "2019-08-22T04:00:00.000Z",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",

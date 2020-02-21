@@ -1,13 +1,12 @@
 import { CourtIssuedNonstandardForm } from '../CourtIssuedDocketEntry/CourtIssuedNonstandardForm';
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { classNames } from 'classnames';
 import { connect } from '@cerebral/react';
 import {
   courtIssuedDocketEntryOnChange,
   onInputChange,
   reactSelectValue,
 } from '../../ustc-ui/utils/documentTypeSelectHelper';
-import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
@@ -33,87 +32,23 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
   }) => {
     return (
       <div className="blue-container">
-        <FormGroup errorText={validationErrors.filingDate}>
-          <fieldset className="usa-fieldset margin-bottom-0">
-            <legend className="usa-legend" id="filing-date-legend">
-              Filing Date
-            </legend>
-            <div className="usa-memorable-date">
-              <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                <input
-                  aria-describedby="filing-date-legend"
-                  aria-label="month, two digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    validationErrors.filingDate && 'usa-error',
-                  )}
-                  id="filing-date-month"
-                  max="12"
-                  maxLength="2"
-                  min="1"
-                  name="filingDateMonth"
-                  type="number"
-                  value={form.filingDateMonth || ''}
-                  onBlur={() => validateDocketRecordSequence()}
-                  onChange={e => {
-                    updateCourtIssuedDocketEntryFormValueSequence({
-                      key: e.target.name,
-                      value: limitLength(e.target.value, 2),
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                <input
-                  aria-describedby="filing-date-legend"
-                  aria-label="day, two digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    validationErrors.filingDate && 'usa-error',
-                  )}
-                  id="filing-date-day"
-                  max="31"
-                  maxLength="2"
-                  min="1"
-                  name="filingDateDay"
-                  type="number"
-                  value={form.filingDateDay || ''}
-                  onBlur={() => validateDocketRecordSequence()}
-                  onChange={e => {
-                    updateCourtIssuedDocketEntryFormValueSequence({
-                      key: e.target.name,
-                      value: limitLength(e.target.value, 2),
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                <input
-                  aria-describedby="filing-date-legend"
-                  aria-label="year, four digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    validationErrors.filingDate && 'usa-error',
-                  )}
-                  id="filing-date-year"
-                  max="2100"
-                  maxLength="4"
-                  min="1900"
-                  name="filingDateYear"
-                  type="number"
-                  value={form.filingDateYear || ''}
-                  onBlur={() => validateDocketRecordSequence()}
-                  onChange={e => {
-                    updateCourtIssuedDocketEntryFormValueSequence({
-                      key: e.target.name,
-                      value: limitLength(e.target.value, 4),
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </fieldset>
-        </FormGroup>
+        <DateInput
+          errorText={validationErrors.filingDate}
+          id="filing-date"
+          label="Filed date"
+          names={{
+            day: 'filingDateDay',
+            month: 'filingDateMonth',
+            year: 'filingDateYear',
+          }}
+          values={{
+            day: form.filingDateDay,
+            month: form.filingDateMonth,
+            year: form.filingDateYear,
+          }}
+          onBlur={validateDocketRecordSequence}
+          onChange={updateCourtIssuedDocketEntryFormValueSequence}
+        />
 
         <FormGroup errorText={validationErrors.documentType}>
           <label
@@ -121,7 +56,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
             htmlFor="document-type"
             id="document-type-label"
           >
-            Document Type
+            Document type
           </label>
           <Select
             aria-labelledby="document-type-label"

@@ -13,4 +13,6 @@ module.exports = {
     .handler,
   updatePrimaryContactLambda: require('./cases/updatePrimaryContactLambda')
     .handler,
+  updateSecondaryContactLambda: require('./cases/updateSecondaryContactLambda')
+    .handler,
 };

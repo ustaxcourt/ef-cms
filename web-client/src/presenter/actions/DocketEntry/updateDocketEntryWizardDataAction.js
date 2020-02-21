@@ -58,10 +58,7 @@ export const updateDocketEntryWizardDataAction = ({
             includes(filedDocumentIds, doc.documentId),
           );
           if (previousDocument) {
-            store.set(
-              state.form.previousDocument,
-              previousDocument.documentTitle,
-            );
+            store.set(state.form.previousDocument, previousDocument);
 
             store.merge(state.form, get(state.screenMetadata.primary));
           }

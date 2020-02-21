@@ -95,7 +95,7 @@ describe('workQueueHelper', () => {
     });
   });
 
-  it('shows the start a case button when role is docket clerk', () => {
+  it('does not show the start a case button when role is docket clerk', () => {
     const user = {
       role: User.ROLES.docketClerk,
       userId: '123',
@@ -112,7 +112,7 @@ describe('workQueueHelper', () => {
       },
     });
     expect(result).toMatchObject({
-      showStartCaseButton: true,
+      showStartCaseButton: false,
     });
   });
 
@@ -244,5 +244,51 @@ describe('workQueueHelper', () => {
       },
     });
     expect(result.inboxFiledColumnLabel).toEqual('Received');
+  });
+
+  it('shows the case title column if the user role is not chambers', () => {
+    let user = {
+      role: User.ROLES.chambers,
+      userId: '123',
+    };
+
+    let result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+          workQueueIsInternal: true,
+        },
+      },
+    });
+    expect(result.showCaseTitle).toEqual(false);
+
+    user = {
+      role: User.ROLES.judge,
+      userId: '123',
+    };
+
+    result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+          workQueueIsInternal: true,
+        },
+      },
+    });
+    expect(result.showCaseTitle).toEqual(true);
   });
 });

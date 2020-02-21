@@ -45,5 +45,5 @@ exports.saveCaseNoteInteractor = async ({
     caseToUpdate,
   });
 
-  return result;
+  return new Case(result, { applicationContext }).validate().toRawObject();
 };

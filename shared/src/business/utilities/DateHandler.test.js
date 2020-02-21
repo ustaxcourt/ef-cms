@@ -28,6 +28,28 @@ describe('DateHandler', () => {
     });
   });
 
+  describe('calculateISODate', () => {
+    it('returns the dateString param exactly as provided when the `howMuch` param is omitted', () => {
+      const result = DateHandler.calculateISODate({ dateString: '12/1/1901' });
+      expect(result).toEqual('12/1/1901');
+    });
+    it('calculates dates with positive adjustment', () => {
+      const result = DateHandler.calculateISODate({
+        dateString: '2000-01-01T00:00:00.000Z',
+        howMuch: 20,
+        units: 'days',
+      });
+      expect(result).toEqual('2000-01-21T00:00:00.000Z');
+    });
+    it('calculates dates with negative adjustment', () => {
+      const result = DateHandler.calculateISODate({
+        dateString: '2000-01-21T00:00:00.000Z',
+        howMuch: -20,
+        units: 'days',
+      });
+      expect(result).toEqual('2000-01-01T00:00:00.000Z');
+    });
+  });
   describe('createISODateString', () => {
     it('creates a date anew', () => {
       const myDate = DateHandler.createISODateString();
@@ -54,6 +76,19 @@ describe('DateHandler', () => {
         '2001-01-01T00:00:00.000Z',
       ); // Jan 1, 2001 at the stroke of midnight, GMT
       expect(myDate).toBe('2001-01-01T00:00:00.000Z');
+    });
+  });
+
+  describe('deconstructDate', () => {
+    it('returns month, day, and year when provided a valid ISO timestamp', () => {
+      const input = '2019-10-30T12:39:54.007Z';
+      const result = DateHandler.deconstructDate(input);
+      expect(result).toMatchObject({ day: '30', month: '10', year: '2019' });
+    });
+    it('returns undefined if given a value not representative of an ISO timestamp', () => {
+      const input = '';
+      const result = DateHandler.deconstructDate(input);
+      expect(result).toBeUndefined();
     });
   });
 

@@ -4,18 +4,15 @@ import { defaultUpdateCaseModalValuesAction } from '../actions/defaultUpdateCase
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
-export const openUpdateCaseModalSequence = [
+export const openUpdateCaseModalSequence = showProgressSequenceDecorator([
   stopShowValidationAction,
-  setWaitingForResponseAction,
   clearFormAction,
   clearAlertsAction,
   defaultUpdateCaseModalValuesAction,
   getUsersInSectionAction({ section: 'judge' }),
   setUsersByKeyAction('modal.judgeUsers'),
-  unsetWaitingForResponseAction,
   setShowModalFactoryAction('UpdateCaseModalDialog'),
-];
+]);

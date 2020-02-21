@@ -2,17 +2,14 @@ import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessions
 import { set } from 'cerebral/factories';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setTrialSessionsOnModalAction } from '../actions/TrialSession/setTrialSessionsOnModalAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
-export const openAddToTrialModalSequence = [
+export const openAddToTrialModalSequence = showProgressSequenceDecorator([
   stopShowValidationAction,
-  setWaitingForResponseAction,
   getTrialSessionsAction,
-  unsetWaitingForResponseAction,
   setTrialSessionsOnModalAction,
   set(state.modal.showAllLocations, false),
   setShowModalFactoryAction('AddToTrialModal'),
-];
+]);

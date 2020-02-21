@@ -142,6 +142,17 @@ module.exports = [
   },
   {
     actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #blocked-from-trial-header to be visible',
+    ],
+    notes:
+      'checks a11y of case information overview tab for a case with a manual and automatic block',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=case-information-tab-blocked',
+  },
+  {
+    actions: [
       'wait for #tab-in-progress to be visible',
       'click element #tab-in-progress',
     ],
@@ -270,7 +281,7 @@ module.exports = [
 
   /* trial sessions */
   {
-    actions: ['wait for table#upcoming-sessions to be visible'],
+    actions: ['wait for #trial-sessions-tabs to be visible'],
     notes: 'checks a11y of trial sessions table list',
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-sessions&info=list-trial-sessions',

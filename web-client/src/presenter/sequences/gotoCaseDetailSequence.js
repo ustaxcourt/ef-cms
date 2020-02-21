@@ -1,15 +1,18 @@
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
+import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/caseConsolidation/getConsolidatedCasesByCaseAction';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
+import { parallel } from 'cerebral/factories';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
+import { setCaseDetailPageTabUnfrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabUnfrozenAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/caseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
@@ -61,7 +64,7 @@ export const gotoCaseDetailSequence = [
         'petitionsclerk',
         'trialclerk',
       ],
-      gotoCaseDetailInternal,
+      parallel([gotoCaseDetailInternal, fetchUserNotificationsSequence]),
     ),
     ...takePathForRoles(
       ['petitioner', 'practitioner', 'respondent'],
@@ -70,4 +73,5 @@ export const gotoCaseDetailSequence = [
     chambers: gotoCaseDetailInternalWithNotes,
     judge: gotoCaseDetailInternalWithNotes,
   },
+  setCaseDetailPageTabUnfrozenAction,
 ];
