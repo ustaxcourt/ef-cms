@@ -1,6 +1,5 @@
 const {
   DOCKET_SECTION,
-  IRS_BATCH_SYSTEM_SECTION,
   PETITIONS_SECTION,
 } = require('../../entities/WorkQueue');
 const {
@@ -30,7 +29,7 @@ exports.getDocumentQCInboxForSectionInteractor = async ({
   }
 
   let sectionToShow = section;
-  if (section !== IRS_BATCH_SYSTEM_SECTION && section !== PETITIONS_SECTION) {
+  if (section !== PETITIONS_SECTION) {
     sectionToShow = DOCKET_SECTION;
   }
 
