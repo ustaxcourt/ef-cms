@@ -3,7 +3,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * getInboxMessagesForSectionInteractor
@@ -22,6 +21,8 @@ exports.getInboxMessagesForSectionInteractor = async ({
   if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const { WorkItem } = applicationContext.getEntityConstructors();
 
   const workItems = await applicationContext
     .getPersistenceGateway()
