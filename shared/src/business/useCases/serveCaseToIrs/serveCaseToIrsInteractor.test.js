@@ -120,6 +120,7 @@ describe('serveCaseToIrsInteractor', () => {
         });
       },
       getEntityConstructors: () => ({
+        Case,
         DocketRecord,
       }),
       getPersistenceGateway: () => {
@@ -171,6 +172,7 @@ describe('serveCaseToIrsInteractor', () => {
         });
       },
       getEntityConstructors: () => ({
+        Case,
         DocketRecord,
       }),
       getPersistenceGateway: () => {
