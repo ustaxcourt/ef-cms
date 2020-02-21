@@ -22,15 +22,7 @@ export const setDefaultDocumentDetailTabAction = ({
 
   const showDocumentInfoTab =
     document.documentType === 'Petition' &&
-<<<<<<< HEAD
-    [
-      STATUS_TYPES.new,
-      STATUS_TYPES.inProgress,
-      STATUS_TYPES.batchedForIRS,
-    ].includes(caseDetail.status);
-=======
     [STATUS_TYPES.new, STATUS_TYPES.inProgress].includes(caseDetail.status);
->>>>>>> 7a8d384ef13385e6bac1dd386126cad50eea3d84
 
   store.set(
     state.currentTab,
