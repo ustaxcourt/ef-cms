@@ -1,5 +1,4 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
