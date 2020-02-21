@@ -5,7 +5,7 @@ const createWebSocketClient = token => {
   return socket;
 };
 
-export const socketProvider = ({ socketRouter }) => {
+export const socketProvider = ({ onMessageCallbackFn, socketRouter }) => {
   let app;
   let socket;
 
@@ -22,7 +22,7 @@ export const socketProvider = ({ socketRouter }) => {
     }
 
     socket = createWebSocketClient(token);
-    socket.onmessage = socketRouter(app);
+    socket.onmessage = socketRouter(app, onMessageCallbackFn);
   };
 
   const initialize = _app => {
