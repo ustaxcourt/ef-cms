@@ -46,7 +46,7 @@
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "gsi1pk": "workitem-63d7c79e-1313-4969-9bf5-9170af46997c",
-    "section": "irsBatchSection",
+    "section": "irsSystem",
     "workItemId": "63d7c79e-1313-4969-9bf5-9170af46997c",
     "isInitializeCase": true,
     "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
@@ -65,24 +65,6 @@
         "from": "Test Petitioner",
         "message": "Petition filed by Tatum Craig, Wayne Obrien, Partnership Representative is ready for review.",
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      },
-      {
-        "createdAt": "2019-08-16T17:29:35.546Z",
-        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "a0fbdd5b-916a-42b4-bf27-3a45bfd76597",
-        "from": "Test Petitionsclerk",
-        "to": "IRS Holding Queue",
-        "message": "Petition batched for IRS",
-        "toUserId": "63784910-c1af-4476-8988-a02f92da8e09"
-      },
-      {
-        "createdAt": "2019-08-16T17:30:10.526Z",
-        "fromUserId": "63784910-c1af-4476-8988-a02f92da8e09",
-        "messageId": "67671e36-2518-4fce-903c-34557eccb04a",
-        "from": "IRS Holding Queue",
-        "to": null,
-        "message": "Served on IRS",
-        "toUserId": null
       }
     ],
     "pk": "section-outbox-petitions",
@@ -109,7 +91,7 @@
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "gsi1pk": "workitem-63d7c79e-1313-4969-9bf5-9170af46997c",
-    "section": "irsBatchSection",
+    "section": "irsSystem",
     "workItemId": "63d7c79e-1313-4969-9bf5-9170af46997c",
     "isInitializeCase": true,
     "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
@@ -128,24 +110,6 @@
         "from": "Test Petitioner",
         "message": "Petition filed by Tatum Craig, Wayne Obrien, Partnership Representative is ready for review.",
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      },
-      {
-        "createdAt": "2019-08-16T17:29:35.546Z",
-        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "a0fbdd5b-916a-42b4-bf27-3a45bfd76597",
-        "from": "Test Petitionsclerk",
-        "to": "IRS Holding Queue",
-        "message": "Petition batched for IRS",
-        "toUserId": "63784910-c1af-4476-8988-a02f92da8e09"
-      },
-      {
-        "createdAt": "2019-08-16T17:30:10.526Z",
-        "fromUserId": "63784910-c1af-4476-8988-a02f92da8e09",
-        "messageId": "67671e36-2518-4fce-903c-34557eccb04a",
-        "from": "IRS Holding Queue",
-        "to": null,
-        "message": "Served on IRS",
-        "toUserId": null
       }
     ],
     "pk": "user-outbox-3805d1ab-18d0-43ec-bafb-654e83405416",
@@ -170,7 +134,7 @@
           {
             "completedAt": "2019-08-16T17:30:10.526Z",
             "docketNumberSuffix": "L",
-            "caseStatus": "Batched for IRS",
+            "caseStatus": "In Progress",
             "completedMessage": "Served on IRS",
             "document": {
               "eventCode": "P",
@@ -184,7 +148,7 @@
               "filingDate": "2019-08-16T17:29:10.132Z",
               "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
             },
-            "section": "irsBatchSection",
+            "section": "irsSystem",
             "workItemId": "63d7c79e-1313-4969-9bf5-9170af46997c",
             "isInitializeCase": true,
             "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
@@ -202,24 +166,6 @@
                 "from": "Test Petitioner",
                 "message": "Petition filed by Tatum Craig, Wayne Obrien, Partnership Representative is ready for review.",
                 "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-              },
-              {
-                "createdAt": "2019-08-16T17:29:35.546Z",
-                "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-                "messageId": "a0fbdd5b-916a-42b4-bf27-3a45bfd76597",
-                "from": "Test Petitionsclerk",
-                "to": "IRS Holding Queue",
-                "message": "Petition batched for IRS",
-                "toUserId": "63784910-c1af-4476-8988-a02f92da8e09"
-              },
-              {
-                "createdAt": "2019-08-16T17:30:10.526Z",
-                "fromUserId": "63784910-c1af-4476-8988-a02f92da8e09",
-                "messageId": "67671e36-2518-4fce-903c-34557eccb04a",
-                "from": "IRS Holding Queue",
-                "to": null,
-                "message": "Served on IRS",
-                "toUserId": null
               }
             ],
             "docketNumber": "107-19",
@@ -382,7 +328,7 @@
   {
     "completedAt": "2019-08-16T17:30:10.526Z",
     "docketNumberSuffix": "L",
-    "caseStatus": "Batched for IRS",
+    "caseStatus": "In Progress",
     "completedMessage": "Served on IRS",
     "document": {
       "eventCode": "P",
@@ -396,7 +342,7 @@
       "filingDate": "2019-08-16T17:29:10.132Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
-    "section": "irsBatchSection",
+    "section": "irsSystem",
     "workItemId": "63d7c79e-1313-4969-9bf5-9170af46997c",
     "isInitializeCase": true,
     "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
@@ -415,24 +361,6 @@
         "from": "Test Petitioner",
         "message": "Petition filed by Tatum Craig, Wayne Obrien, Partnership Representative is ready for review.",
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      },
-      {
-        "createdAt": "2019-08-16T17:29:35.546Z",
-        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "a0fbdd5b-916a-42b4-bf27-3a45bfd76597",
-        "from": "Test Petitionsclerk",
-        "to": "IRS Holding Queue",
-        "message": "Petition batched for IRS",
-        "toUserId": "63784910-c1af-4476-8988-a02f92da8e09"
-      },
-      {
-        "createdAt": "2019-08-16T17:30:10.526Z",
-        "fromUserId": "63784910-c1af-4476-8988-a02f92da8e09",
-        "messageId": "67671e36-2518-4fce-903c-34557eccb04a",
-        "from": "IRS Holding Queue",
-        "to": null,
-        "message": "Served on IRS",
-        "toUserId": null
       }
     ],
     "pk": "workitem-63d7c79e-1313-4969-9bf5-9170af46997c",
