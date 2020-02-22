@@ -207,6 +207,7 @@ functions:
       - http:
           path: /{trialSessionId}/generate-notices
           method: post
+          async: true
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS

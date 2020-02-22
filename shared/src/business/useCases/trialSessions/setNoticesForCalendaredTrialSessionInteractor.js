@@ -284,10 +284,37 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     });
   }
 
-  if (newPdfDoc.getPages().length) {
+  let hasPaper = newPdfDoc.getPages().length;
+  let documentId = null;
+  let pdfUrl = null;
+  if (hasPaper) {
     const paperServicePdfData = await newPdfDoc.save();
-    const paperServicePdfBuffer = Buffer.from(paperServicePdfData);
+    documentId = applicationContext.getUniqueId();
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: paperServicePdfData,
+      documentId,
+      useTempBucket: true,
+    });
+    hasPaper = true;
 
-    return paperServicePdfBuffer;
+    pdfUrl = (
+      await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+        applicationContext,
+        documentId,
+        useTempBucket: true,
+      })
+    ).url;
   }
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'notice_generation_complete',
+      documentId,
+      hasPaper,
+      pdfUrl,
+    },
+    userId: user.userId,
+  });
 };

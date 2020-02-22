@@ -25,6 +25,10 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   const caseCount = 2;
   const trialLocation = `Albuquerque, New Mexico, ${Date.now()}`;
   const overrides = {
