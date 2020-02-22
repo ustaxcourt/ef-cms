@@ -1,3 +1,5 @@
+import { wait } from '../helpers';
+
 export default test => {
   return it('the adc logs in', async () => {
     await test.runSequence('updateFormValueSequence', {
@@ -5,5 +7,6 @@ export default test => {
       value: 'adc',
     });
     await test.runSequence('submitLoginSequence');
+    await wait(2000);
   });
 };

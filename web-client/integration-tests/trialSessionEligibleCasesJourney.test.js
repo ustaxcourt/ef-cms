@@ -1,5 +1,5 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
-import { setupTest } from './helpers';
+import { setupTest, wait } from './helpers';
 import { uploadPetition } from './helpers';
 import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
@@ -21,6 +21,10 @@ const test = setupTest();
 describe('Trial Session Eligible Cases Journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   const trialLocation = `Madison, Wisconsin, ${Date.now()}`;
@@ -122,7 +126,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         ...overrides,
         caseType: 'CDP (Lien/Levy)',
         procedureType: 'Small',
-        receivedAtDay: '01',
+        receivedAtDay: '01', //
         receivedAtMonth: '02',
         receivedAtYear: '2019',
       };
@@ -405,6 +409,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       test.setState('modal.trialSessionId', test.trialSessionId);
 
       await test.runSequence('addCaseToTrialSessionSequence');
+      await wait(5000);
 
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],

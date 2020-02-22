@@ -14,7 +14,10 @@ import {
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { runCompute } from 'cerebral/test';
+import { socketProvider } from '../src/providers/socket';
+import { socketRouter } from '../src/providers/socketRouter';
 import { withAppContextDecorator } from '../src/withAppContext';
+
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormData from 'form-data';
 const {
@@ -329,9 +332,7 @@ exports.uploadPetition = async (test, overrides = {}) => {
   });
 
   await test.runSequence('submitFilePetitionSequence');
-
-  await exports.waitForRouter();
-
+  await exports.wait(4000);
   return test.getState('caseDetail');
 };
 
@@ -341,7 +342,7 @@ exports.loginAs = async (test, user) => {
     value: user,
   });
   await test.runSequence('submitLoginSequence');
-  await exports.waitForRouter();
+  await exports.wait(2000);
 };
 
 exports.setupTest = ({ useCases = {} } = {}) => {
@@ -351,7 +352,14 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   global.File = () => {
     return fakeFile;
   };
+  global.WebSocket = require('websocket').w3cwebsocket;
   presenter.providers.applicationContext = applicationContext;
+
+  const { initialize: initializeSocketProvider, start, stop } = socketProvider({
+    socketRouter,
+  });
+  presenter.providers.socket = { start, stop };
+
   const originalUseCases = applicationContext.getUseCases();
   presenter.providers.applicationContext.getUseCases = () => {
     return {
@@ -428,6 +436,9 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   });
 
   test = CerebralTest(presenter);
+  test.getSequence = name => obj => test.runSequence(name, obj);
+  test.closeSocket = stop;
+  initializeSocketProvider(test);
 
   global.window = {
     DOMParser: () => {
@@ -506,6 +517,14 @@ exports.viewDocumentDetailMessage = async ({
 exports.waitForRouter = () => {
   return new Promise(resolve => {
     setImmediate(() => resolve(true));
+  });
+};
+
+exports.flushPromises = () => new Promise(resolve => setImmediate(resolve));
+
+exports.wait = time => {
+  return new Promise(resolve => {
+    setTimeout(resolve, time);
   });
 };
 

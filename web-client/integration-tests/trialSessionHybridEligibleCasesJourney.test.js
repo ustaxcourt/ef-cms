@@ -22,6 +22,9 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
   const trialLocation = `Despacito, Texas, ${Date.now()}`;
   const overrides = {
     maxCases: 2,
