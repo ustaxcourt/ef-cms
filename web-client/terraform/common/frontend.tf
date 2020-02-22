@@ -120,7 +120,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
     custom_header {
       name = "x-allowed-domain"
-      value = "${var.environment}.${var.dns_domain}"
+      value = "${var.dns_domain}"
     } 
   }
 
@@ -138,7 +138,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
     custom_header {
       name = "x-allowed-domain"
-      value = "${var.environment}.${var.dns_domain}"
+      value = "${var.dns_domain}"
     } 
   }
 
