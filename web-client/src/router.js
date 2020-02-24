@@ -751,6 +751,14 @@ const router = {
     );
 
     route(
+      '/reports/case-inventory-report',
+      ifHasAccess(() => {
+        setPageTitle('Case Inventory Report');
+        app.getSequence('gotoCaseInventoryReportSequence')();
+      }),
+    );
+
+    route(
       '/reports/case-deadlines',
       ifHasAccess(() => {
         setPageTitle('Case deadlines');
