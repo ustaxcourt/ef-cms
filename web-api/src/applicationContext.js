@@ -319,6 +319,12 @@ const {
   getCaseInteractor,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
 const {
+  getCaseInventoryReport,
+} = require('../../shared/src/business/useCaseHelper/caseInventoryReport/getCaseInventoryReport');
+const {
+  getCaseInventoryReportInteractor,
+} = require('../../shared/src/business/useCases/getCaseInventoryReportInteractor');
+const {
   getCasesByLeadCaseId,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadCaseId');
 const {
@@ -1025,6 +1031,7 @@ module.exports = (appContextUser = {}) => {
         generateCaseConfirmationPdf,
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
+        getCaseInventoryReport,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
       };
@@ -1078,6 +1085,7 @@ module.exports = (appContextUser = {}) => {
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
         getCaseInteractor,
+        getCaseInventoryReportInteractor,
         getCasesByUserInteractor,
         getConsolidatedCasesByCaseInteractor,
         getConsolidatedCasesByUserInteractor,
