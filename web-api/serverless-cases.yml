@@ -265,3 +265,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  getCaseInventoryReport:
+    handler: web-api/${self:provider.dir}/casesHandlers.getCaseInventoryReportLambda
+    events:
+      - http:
+          path: /case-inventory-report
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
