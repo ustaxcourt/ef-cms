@@ -1,3 +1,5 @@
+import { wait } from '../helpers';
+
 export default (test, createdCasesIndex) => {
   return it('Petitions clerk manually adds a case to an calendared trial session', async () => {
     const caseToAdd = test.createdCases[createdCasesIndex];
@@ -19,6 +21,7 @@ export default (test, createdCasesIndex) => {
     });
 
     await test.runSequence('addCaseToTrialSessionSequence');
+    await wait(5000);
 
     expect(test.getState('caseDetail.trialDate')).toBeDefined();
   });

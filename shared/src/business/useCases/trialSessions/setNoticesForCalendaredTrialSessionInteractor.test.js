@@ -104,9 +104,13 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
+      getNotificationGateway: () => ({
+        sendNotificationToUser: () => null,
+      }),
       getPersistenceGateway: () => ({
         deleteCaseTrialSortMappingRecords: () => {},
         getCalendaredCasesForTrialSession: () => calendaredCases,
+        getDownloadPolicyUrl: () => 'http://example.com',
         getTrialSessionById: () => trialSession,
         saveDocumentFromLambda: saveDocumentFromLambdaMock,
         updateCase: ({ caseToUpdate }) => {
@@ -276,15 +280,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
-  });
-
-  it('Should return data with paper service documents to be printed if there are parties that receive paper service', async () => {
-    const result = await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-
-    expect(result).toBeDefined();
   });
 
   it('Should set the noticeIssuedDate on the trial session and then call updateTrialSession', async () => {

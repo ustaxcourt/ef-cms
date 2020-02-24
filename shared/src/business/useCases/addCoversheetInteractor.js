@@ -545,14 +545,14 @@ exports.addCoversheetInteractor = async ({
   caseId,
   documentId,
 }) => {
-  applicationContext.logger.time('Fetching the Case');
+  applicationContext.logger.time(`Fetching the Case for ${caseId}`);
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
       applicationContext,
       caseId,
     });
-  applicationContext.logger.timeEnd('Fetching the Case');
+  applicationContext.logger.timeEnd(`Fetching the Case for ${caseId}`);
 
   const caseEntity = new Case(caseRecord, { applicationContext });
 
@@ -564,7 +564,9 @@ exports.addCoversheetInteractor = async ({
     document => document.documentId === documentId,
   );
 
-  applicationContext.logger.time('Fetching S3 File');
+  applicationContext.logger.time(
+    `Fetching S3 File for Coversheet ${documentId}`,
+  );
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
@@ -572,7 +574,9 @@ exports.addCoversheetInteractor = async ({
       Key: documentId,
     })
     .promise();
-  applicationContext.logger.timeEnd('Fetching S3 File');
+  applicationContext.logger.timeEnd(
+    `Fetching S3 File for Coversheet ${documentId}`,
+  );
 
   const newPdfData = await exports.addCoverToPdf({
     applicationContext,
@@ -583,7 +587,7 @@ exports.addCoversheetInteractor = async ({
 
   documentEntity.setAsProcessingStatusAsCompleted();
 
-  applicationContext.logger.time('Updating Document Status');
+  applicationContext.logger.time(`Updating Document Status for ${documentId}`);
   await applicationContext
     .getPersistenceGateway()
     .updateDocumentProcessingStatus({
@@ -591,15 +595,17 @@ exports.addCoversheetInteractor = async ({
       caseId,
       documentIndex,
     });
-  applicationContext.logger.timeEnd('Updating Document Status');
+  applicationContext.logger.timeEnd(
+    `Updating Document Status for ${documentId}`,
+  );
 
-  applicationContext.logger.time('Saving S3 Document');
+  applicationContext.logger.time(`Saving S3 Document for ${documentId}`);
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: newPdfData,
     documentId,
   });
-  applicationContext.logger.timeEnd('Saving S3 Document');
+  applicationContext.logger.timeEnd(`Saving S3 Document for ${documentId}`);
 
   return newPdfData;
 };
