@@ -31,7 +31,7 @@ exports.handler = (event, context, callback) => {
   headers['content-security-policy'] = [
     {
       key: 'Content-Security-Policy',
-      value: `default-src 'self'; connect-src https://${allowedDomainString}; img-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'`,
+      value: `default-src 'self'; connect-src https://${allowedDomainString} https://*.amazoncognito.com; img-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'`,
     },
   ];
   headers['x-content-type-options'] = [
