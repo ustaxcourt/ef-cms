@@ -108,7 +108,7 @@ createManyAccounts() {
   emailPrefix=$2
   role=$2
   section=$3
-  for i in $(seq 1 ${numAccounts});
+  for i in $(seq 1 "${numAccounts}");
   do
     createAccount "${emailPrefix}${i}@example.com" "${role}" "${i}" "" "${section}"
   done

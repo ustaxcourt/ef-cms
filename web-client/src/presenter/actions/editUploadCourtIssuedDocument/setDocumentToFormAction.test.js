@@ -29,7 +29,7 @@ describe('setDocumentToFormAction', () => {
     expect(result.state.form).toEqual(documentToMatch);
   });
 
-  it('does nothing if documentId isdoes not match a document', async () => {
+  it('does nothing if documentId does not match a document', async () => {
     const result = await runAction(setDocumentToFormAction, {
       props: {
         caseDetail: {
