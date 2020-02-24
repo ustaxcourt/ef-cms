@@ -401,6 +401,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
 
       await test.runSequence('addCaseToTrialSessionSequence');
+      await wait(1000);
 
       expect(test.getState('validationErrors')).toEqual({
         trialSessionId: 'Select a Trial Session',

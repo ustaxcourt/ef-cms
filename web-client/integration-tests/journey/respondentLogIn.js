@@ -8,6 +8,5 @@ export default (test, token = 'respondent') => {
       value: token,
     });
     await test.runSequence('submitLoginSequence');
-    // await wait(2000);
   });
 };
