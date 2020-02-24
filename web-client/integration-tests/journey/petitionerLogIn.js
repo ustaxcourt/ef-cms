@@ -8,7 +8,7 @@ export default test => {
       value: 'petitioner',
     });
     await test.runSequence('submitLoginSequence');
-    await wait(2000);
+    // await wait(2000);
     expect(test.getState('user.userId')).toEqual(
       '7805d1ab-18d0-43ec-bafb-654e83405416',
     );

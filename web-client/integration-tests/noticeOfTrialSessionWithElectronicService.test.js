@@ -74,7 +74,7 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
   markAllCasesAsQCed(test, () => {
     return [createdCases[0], createdCases[1]];
   });
-  petitionsClerkCompletesAndSetsTrialSession(test);
+  petitionsClerkCompletesAndSetsTrialSession(test); //
   petitionsClerkViewsDocketRecordAfterSettingTrial(test, {
     documentTitle: 'Standing Pretrial Order', // this is the default, but setting so it's more explicit
   });

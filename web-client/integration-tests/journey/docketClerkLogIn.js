@@ -9,7 +9,7 @@ export default (test, token = 'docketclerk') => {
       value: token,
     });
     await test.runSequence('submitLoginSequence');
-    await wait(2000);
+    // await wait(2000);
     expect(test.getState('user.userId')).toEqual(userMap[token].userId);
     expect(applicationContext.getCurrentUser()).toBeDefined();
     expect(applicationContext.getCurrentUser().userId).toEqual(

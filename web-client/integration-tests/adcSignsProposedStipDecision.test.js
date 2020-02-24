@@ -31,7 +31,7 @@ import adcSignsOut from './journey/adcSignsOut';
 import adcVerifiesStipulatedDecisionDoesNotExistInInbox from './journey/adcVerifiesStipulatedDecisionDoesNotExistInInbox';
 import adcVerifiesStipulatedDecisionExistsInOutbox from './journey/adcVerifiesStipulatedDecisionExistsInOutbox';
 import adcViewsStipulatedDecisionForSigning from './journey/adcViewsStipulatedDecisionForSigning';
-
+//
 const test = setupTest({
   useCases: {
     loadPDFForSigningInteractor: () => Promise.resolve(null),

@@ -7,6 +7,6 @@ export default test => {
       value: 'adc',
     });
     await test.runSequence('submitLoginSequence');
-    await wait(2000);
+    // await wait(2000);
   });
 };
