@@ -1,25 +1,25 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { applicationContext } from '../../applicationContext';
-import { caseInventoryHelper as caseInventoryHelperComputed } from './caseInventoryHelper';
+import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from './caseInventoryReportHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const caseInventoryHelper = withAppContextDecorator(
-  caseInventoryHelperComputed,
+const caseInventoryReportHelper = withAppContextDecorator(
+  caseInventoryReportHelperComputed,
   {
     ...applicationContext,
   },
 );
 
-describe('caseInventoryHelper', () => {
+describe('caseInventoryReportHelper', () => {
   it('should return all case statuses', () => {
-    const result = runCompute(caseInventoryHelper);
+    const result = runCompute(caseInventoryReportHelper);
 
     expect(result.caseStatuses).toEqual(Case.STATUS_TYPES);
   });
 
   it('should return all judges from state along with Chief Judge sorted alphabetically', () => {
-    const result = runCompute(caseInventoryHelper, {
+    const result = runCompute(caseInventoryReportHelper, {
       state: {
         judges: [
           { name: 'Joseph Dredd' },
@@ -38,7 +38,7 @@ describe('caseInventoryHelper', () => {
   });
 
   it('should return a result count for filtered cases', () => {
-    const result = runCompute(caseInventoryHelper);
+    const result = runCompute(caseInventoryReportHelper);
 
     expect(result.resultCount).toEqual(0);
   });

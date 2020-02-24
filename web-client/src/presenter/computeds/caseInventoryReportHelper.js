@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const caseInventoryHelper = (get, applicationContext) => {
+export const caseInventoryReportHelper = (get, applicationContext) => {
   const { STATUS_TYPES } = applicationContext.getConstants();
 
   const judges = (get(state.judges) || [])

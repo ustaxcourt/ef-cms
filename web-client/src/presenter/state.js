@@ -19,7 +19,7 @@ import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
-import { caseInventoryHelper } from './computeds/caseInventoryHelper';
+import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
@@ -106,7 +106,7 @@ export const state = {
   caseDetailPage: {},
   caseDetailSubnavHelper,
   caseInformationHelper,
-  caseInventoryHelper,
+  caseInventoryReportHelper,
   caseTypeDescriptionHelper,
   caseTypes: [],
   cases: [],
