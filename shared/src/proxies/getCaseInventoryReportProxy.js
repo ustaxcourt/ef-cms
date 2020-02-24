@@ -19,6 +19,6 @@ exports.getCaseInventoryReportInteractor = ({
 
   return get({
     applicationContext,
-    endpoint: `/case-inventory-report${queryString}`,
+    endpoint: `/case-inventory-report?${queryString}`,
   });
 };
