@@ -6,8 +6,8 @@ const { get } = require('lodash');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.judge the optional judge filter
- * @param {string} providers.caseId the optional caseId filter
+ * @param {string} providers.associatedJudge the optional judge filter
+ * @param {string} providers.status the optional status filter
  * @returns {Array} the pending items found
  */
 exports.getCaseInventoryReport = async ({
@@ -54,6 +54,7 @@ exports.getCaseInventoryReport = async ({
     .search(searchParameters);
 
   const hits = get(body, 'hits.hits');
+  const totalCount = get(body, 'hits.total.value');
 
   if (hits && hits.length > 0) {
     hits.forEach(hit => {
@@ -61,5 +62,8 @@ exports.getCaseInventoryReport = async ({
     });
   }
 
-  return foundCases;
+  return {
+    foundCases,
+    totalCount,
+  };
 };
