@@ -87,8 +87,9 @@ describe('Blocking a Case', () => {
   petitionsClerkSignsOut(test);
 
   //automatic block with a pending item
+  loginAs(test, 'respondent');
+
   it('respondent uploads a proposed stipulated decision (pending item)', async () => {
-    await loginAs(test, 'respondent');
     await viewCaseDetail({
       docketNumber: setupTest.docketNumber,
       test,

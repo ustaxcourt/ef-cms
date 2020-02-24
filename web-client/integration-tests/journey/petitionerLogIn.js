@@ -1,5 +1,4 @@
 import { applicationContext } from '../../src/applicationContext';
-import { wait } from '../helpers';
 
 export default test => {
   return it('petitioner logs in', async () => {

@@ -335,12 +335,14 @@ exports.uploadPetition = async (test, overrides = {}) => {
   return test.getState('caseDetail');
 };
 
-exports.loginAs = async (test, user) => {
-  await test.runSequence('updateFormValueSequence', {
-    key: 'name',
-    value: user,
+exports.loginAs = (test, user) => {
+  return it(`login as ${user}`, async () => {
+    await test.runSequence('updateFormValueSequence', {
+      key: 'name',
+      value: user,
+    });
+    await test.runSequence('submitLoginSequence');
   });
-  await test.runSequence('submitLoginSequence');
 };
 
 exports.setupTest = ({ useCases = {} } = {}) => {
@@ -352,7 +354,6 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   };
   global.WebSocket = require('websocket').w3cwebsocket;
   presenter.providers.applicationContext = applicationContext;
-
   const { initialize: initializeSocketProvider, start, stop } = socketProvider({
     socketRouter,
   });
@@ -436,6 +437,8 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   test = CerebralTest(presenter);
   test.getSequence = name => obj => test.runSequence(name, obj);
   test.closeSocket = stop;
+  test.applicationContext = applicationContext;
+
   initializeSocketProvider(test);
 
   global.window = {
