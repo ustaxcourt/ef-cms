@@ -24,41 +24,43 @@ describe('petitioner files document', () => {
   });
 
   petitionerLogIn(test);
+  it('a', () => console.time('uploadPetition'));
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test);
     test.docketNumber = caseDetail.docketNumber;
   });
+  it('a', () => console.timeEnd('uploadPetition'));
   userSignsOut(test);
 
-  docketClerkLogIn(test);
-  docketClerkCreatesATrialSession(test);
-  docketClerkViewsTrialSessionList(test);
-  userSignsOut(test);
+  // docketClerkLogIn(test);
+  // docketClerkCreatesATrialSession(test);
+  // docketClerkViewsTrialSessionList(test);
+  // userSignsOut(test);
 
-  petitionsClerkLogIn(test);
-  petitionsClerkSetsATrialSessionsSchedule(test);
-  it('manually add the case to the session', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-    await test.runSequence('openAddToTrialModalSequence');
-    await test.runSequence('updateModalValueSequence', {
-      key: 'trialSessionId',
-      value: test.trialSessionId,
-    });
+  // petitionsClerkLogIn(test);
+  // petitionsClerkSetsATrialSessionsSchedule(test);
+  // it('manually add the case to the session', async () => {
+  //   await test.runSequence('gotoCaseDetailSequence', {
+  //     docketNumber: test.docketNumber,
+  //   });
+  //   await test.runSequence('openAddToTrialModalSequence');
+  //   await test.runSequence('updateModalValueSequence', {
+  //     key: 'trialSessionId',
+  //     value: test.trialSessionId,
+  //   });
 
-    await test.runSequence('addCaseToTrialSessionSequence');
-    await wait(5000);
-  });
-  userSignsOut(test);
+  //   await test.runSequence('addCaseToTrialSessionSequence');
+  //   await wait(5000);
+  // });
+  // userSignsOut(test);
 
-  petitionerLogIn(test);
-  petitionerFilesDocumentForCase(test, fakeFile);
-  userSignsOut(test);
-
-  docketClerkLogIn(test);
-  docketClerkViewsSectionInboxHighPriority(test);
-  docketClerkRemovesCaseFromTrial(test);
-  docketClerkViewsSectionInboxNotHighPriority(test);
-  userSignsOut(test);
+  // petitionerLogIn(test);
+  // petitionerFilesDocumentForCase(test, fakeFile);
+  // userSignsOut(test);
+  // //
+  // docketClerkLogIn(test);
+  // docketClerkViewsSectionInboxHighPriority(test);
+  // docketClerkRemovesCaseFromTrial(test);
+  // docketClerkViewsSectionInboxNotHighPriority(test);
+  // userSignsOut(test);
 });
