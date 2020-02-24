@@ -1,9 +1,9 @@
-#!/bin/bash 
+#!/bin/bash
 ENV=$1
 
-subscriptions=$(aws sns list-subscriptions-by-topic \
+aws sns list-subscriptions-by-topic \
   --topic-arn="arn:aws:sns:us-east-1:$AWS_ACCOUNT_ID:serverless-alerts-topic-$ENV" \
-  --region us-east-1 | grep "ustaxcourt@flexion.us")
+  --region us-east-1 | grep "ustaxcourt@flexion.us"
 code=$?
 
 if [ "${code}" -ne "0" ]; then
