@@ -341,7 +341,6 @@ exports.loginAs = async (test, user) => {
     value: user,
   });
   await test.runSequence('submitLoginSequence');
-  await exports.wait(2000);
 };
 
 exports.setupTest = ({ useCases = {} } = {}) => {
