@@ -40,8 +40,8 @@ export const ReportsMenu = connect(
           <ul className="usa-nav__submenu">
             <li className="usa-nav__submenu-item">
               <a
-                href="/reports/case-inventory"
-                id="case-inventory"
+                href="/reports/case-inventory-report"
+                id="case-inventory-report"
                 onClick={() => {
                   resetHeaderAccordionsSequence();
                   toggleMobileMenuSequence();

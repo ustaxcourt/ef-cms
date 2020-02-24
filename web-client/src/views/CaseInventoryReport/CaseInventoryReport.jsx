@@ -5,11 +5,11 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const CaseInventory = connect(
+export const CaseInventoryReport = connect(
   {
-    caseInventoryHelper: state.caseInventoryHelper,
+    caseInventoryReportHelper: state.caseInventoryReportHelper,
   },
-  ({ caseInventoryHelper }) => {
+  ({ caseInventoryReportHelper }) => {
     return (
       <>
         <BigHeader text="Reports" />
@@ -42,7 +42,7 @@ export const CaseInventory = connect(
                 placeHolder="- Judge -"
               >
                 <option value="">-Judge-</option>
-                {caseInventoryHelper.judges.map((judge, idx) => (
+                {caseInventoryReportHelper.judges.map((judge, idx) => (
                   <option key={idx} value={judge}>
                     {judge}
                   </option>
@@ -60,21 +60,23 @@ export const CaseInventory = connect(
                 placeHolder="- Judge -"
               >
                 <option value="">-Status-</option>
-                {Object.keys(caseInventoryHelper.caseStatuses).map(key => {
-                  const value = caseInventoryHelper.caseStatuses[key];
-                  return (
-                    <option key={key} value={key}>
-                      {value}
-                    </option>
-                  );
-                })}
+                {Object.keys(caseInventoryReportHelper.caseStatuses).map(
+                  key => {
+                    const value = caseInventoryReportHelper.caseStatuses[key];
+                    return (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    );
+                  },
+                )}
               </BindedSelect>
             </div>
           </div>
 
           <div className="grid-row grid-gap margin-top-1">
             <div className="grid-col-12 text-align-right">
-              Count: {caseInventoryHelper.resultCount}
+              Count: {caseInventoryReportHelper.resultCount}
             </div>
           </div>
 

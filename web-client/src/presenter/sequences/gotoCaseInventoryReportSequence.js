@@ -9,20 +9,23 @@ import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
-const gotoCaseInventory = [
+const gotoCaseInventoryReport = [
   setCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
   closeMobileMenuAction,
   clearErrorAlertsAction,
   getSetJudgesSequence,
   getAllCaseDeadlinesAction,
-  setCurrentPageAction('CaseInventory'),
+  setCurrentPageAction('CaseInventoryReport'),
 ];
 
-export const gotoCaseInventorySequence = [
+export const gotoCaseInventoryReportSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: parallel([fetchUserNotificationsSequence, gotoCaseInventory]),
+    isLoggedIn: parallel([
+      fetchUserNotificationsSequence,
+      gotoCaseInventoryReport,
+    ]),
     unauthorized: [redirectToCognitoAction],
   },
 ];
