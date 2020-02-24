@@ -26,7 +26,7 @@ describe('getCaseInventoryReportInteractor', () => {
 
   it('throws an error if user is not authorized for case inventory report', async () => {
     user = {
-      role: User.ROLES.petitioner,
+      role: User.ROLES.petitioner, //petitioner does not have CASE_INVENTORY_REPORT permission
       userId: '8e20dd1b-d142-40f4-8362-6297f1be68bf',
     };
 

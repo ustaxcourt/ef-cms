@@ -39,6 +39,7 @@ describe('getCaseInventoryReport', () => {
               _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
             },
           ],
+          total: { value: '2' },
         },
       };
     });
@@ -55,10 +56,13 @@ describe('getCaseInventoryReport', () => {
       },
     ]);
 
-    expect(results).toEqual([
-      { associatedJudge: 'Chief Judge', caseId: '1', status: 'New' },
-      { associatedJudge: 'Chief Judge', caseId: '2', status: 'Closed' },
-    ]);
+    expect(results).toEqual({
+      foundCases: [
+        { associatedJudge: 'Chief Judge', caseId: '1', status: 'New' },
+        { associatedJudge: 'Chief Judge', caseId: '2', status: 'Closed' },
+      ],
+      totalCount: '2',
+    });
   });
 
   it('calls search function with correct params when provided a status and returns records', async () => {
@@ -70,6 +74,7 @@ describe('getCaseInventoryReport', () => {
               _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
             },
           ],
+          total: { value: '1' },
         },
       };
     });
@@ -86,9 +91,12 @@ describe('getCaseInventoryReport', () => {
       },
     ]);
 
-    expect(results).toEqual([
-      { associatedJudge: 'Chief Judge', caseId: '1', status: 'New' },
-    ]);
+    expect(results).toEqual({
+      foundCases: [
+        { associatedJudge: 'Chief Judge', caseId: '1', status: 'New' },
+      ],
+      totalCount: '1',
+    });
   });
 
   it('calls search function with correct params when provided a judge and status and returns records', async () => {
@@ -103,6 +111,7 @@ describe('getCaseInventoryReport', () => {
               _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
             },
           ],
+          total: { value: '2' },
         },
       };
     });
@@ -123,10 +132,13 @@ describe('getCaseInventoryReport', () => {
       },
     ]);
 
-    expect(results).toEqual([
-      { associatedJudge: 'Chief Judge', caseId: '1', status: 'New' },
-      { associatedJudge: 'Chief Judge', caseId: '2', status: 'Closed' },
-    ]);
+    expect(results).toEqual({
+      foundCases: [
+        { associatedJudge: 'Chief Judge', caseId: '1', status: 'New' },
+        { associatedJudge: 'Chief Judge', caseId: '2', status: 'Closed' },
+      ],
+      totalCount: '2',
+    });
   });
 
   it('returns an empty array when no hits are returned from the search client', async () => {
@@ -135,6 +147,7 @@ describe('getCaseInventoryReport', () => {
         hits: {
           hits: [],
         },
+        total: { value: '0' },
       };
     });
 
@@ -150,6 +163,6 @@ describe('getCaseInventoryReport', () => {
       },
     ]);
 
-    expect(results).toEqual([]);
+    expect(results).toEqual({ foundCases: [], totalCount: undefined });
   });
 });
