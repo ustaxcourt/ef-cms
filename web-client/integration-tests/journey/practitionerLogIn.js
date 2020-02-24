@@ -7,6 +7,6 @@ export default (test, token = 'practitioner') => {
       value: token,
     });
     await test.runSequence('submitLoginSequence');
-    await wait(2000);
+    // await wait(2000);
   });
 };

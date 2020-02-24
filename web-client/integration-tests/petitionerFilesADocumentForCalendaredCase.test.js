@@ -48,7 +48,7 @@ describe('petitioner files document', () => {
     });
 
     await test.runSequence('addCaseToTrialSessionSequence');
-    // await wait(5000);
+    await wait(1000);
   });
   userSignsOut(test);
 
