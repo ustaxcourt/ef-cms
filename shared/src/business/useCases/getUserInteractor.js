@@ -13,5 +13,5 @@ exports.getUserInteractor = async ({ applicationContext }) => {
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  return new User(user).toRawObject();
+  return new User(user).validate().toRawObject();
 };
