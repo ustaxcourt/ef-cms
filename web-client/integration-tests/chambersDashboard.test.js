@@ -20,7 +20,7 @@ import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 
 const test = setupTest();
 
-describe('Chambers dashbaord', () => {
+describe('Chambers dashboard', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
