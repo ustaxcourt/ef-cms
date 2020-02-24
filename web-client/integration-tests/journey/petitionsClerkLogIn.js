@@ -1,3 +1,5 @@
+import { wait } from '../helpers';
+
 export default (test, role = 'petitionsclerk') => {
   return it('Petitions clerk logs in', async () => {
     await test.runSequence('updateFormValueSequence', {
@@ -5,5 +7,6 @@ export default (test, role = 'petitionsclerk') => {
       value: role,
     });
     await test.runSequence('submitLoginSequence');
+    await wait(2000);
   });
 };

@@ -9,6 +9,9 @@ describe('qc complete for trial migration', () => {
   let putStub;
 
   beforeEach(() => {
+    MOCK_CASE.pk = '3a45813b-8b4d-4a2e-bfc5-729e85c2332c';
+    MOCK_CASE.sk = '3a45813b-8b4d-4a2e-bfc5-729e85c2332c';
+
     putStub = jest.fn().mockReturnValue({
       promise: async () => ({}),
     });

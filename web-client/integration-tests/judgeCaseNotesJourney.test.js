@@ -26,6 +26,9 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
   const trialLocation = `Boise, Idaho, ${Date.now()}`;
   const overrides = {
     maxCases: 3,
