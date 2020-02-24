@@ -651,7 +651,7 @@ joiValidationDecorator(
         joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS, null),
         joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
       )
-      .required()
+      .optional()
       .description('Where the petitioner would prefer to hold the case trial.'),
     procedureType: joi
       .string()

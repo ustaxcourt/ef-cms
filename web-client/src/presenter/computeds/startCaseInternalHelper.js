@@ -28,11 +28,15 @@ export const startCaseInternalHelper = (get, applicationContext) => {
   }
 
   const shouldShowIrsNoticeDate = get(state.form.hasVerifiedIrsNotice) === true;
+  const showOrderForRequestedTrialLocation = !get(
+    state.form.preferredTrialCity,
+  );
 
   return {
     partyTypes: PARTY_TYPES,
     shouldShowIrsNoticeDate,
     showOrderForFilingFee: petitionPaymentStatus === PAYMENT_STATUS.UNPAID,
+    showOrderForRequestedTrialLocation,
     showOwnershipDisclosureStatement,
     showPrimaryContact: showContacts.contactPrimary,
     showSecondaryContact: showContacts.contactSecondary,

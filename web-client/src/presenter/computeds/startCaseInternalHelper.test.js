@@ -278,4 +278,15 @@ describe('case detail edit computed', () => {
     });
     expect(result.showOrderForFilingFee).toBeFalsy();
   });
+
+  it('sets showOrderForRequestedTrialLocation true if Requested Trial Location is specified', () => {
+    const result = runCompute(startCaseInternalHelper, {
+      state: {
+        form: {
+          preferredTrialCity: 'FlavorTown',
+        },
+      },
+    });
+    expect(result.showOrderForRequestedTrialLocation).toBeTruthy();
+  });
 });
