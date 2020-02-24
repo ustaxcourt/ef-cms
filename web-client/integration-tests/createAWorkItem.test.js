@@ -87,8 +87,9 @@ describe('Create a work item', () => {
   let docketNumber;
   let petitionDocument;
 
+  loginAs(test, 'petitioner');
+
   it('create the case for this test', async () => {
-    await loginAs(test, 'petitioner');
     await uploadPetition(test);
   });
 
@@ -97,9 +98,9 @@ describe('Create a work item', () => {
     petitionDocument = findByDocumentType(test, 'Petition');
   });
 
-  it('login as a petitionsclerk and create a new work item on the petition document', async () => {
-    await loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk');
 
+  it('login as a petitionsclerk and create a new work item on the petition document', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: docketNumber,
       documentId: petitionDocument.documentId,
@@ -130,9 +131,7 @@ describe('Create a work item', () => {
     expect(workItemFromSectionOutbox).toBeDefined();
   });
 
-  it('login as the docketclerk1 (who we created the new work item for)', async () => {
-    await loginAs(test, 'docketclerk1');
-  });
+  loginAs(test, 'docketclerk1');
 
   it('verify the work item exists on the docket section inbox', async () => {
     const workItemFromSectionInbox = await findWorkItemInWorkQueue({
