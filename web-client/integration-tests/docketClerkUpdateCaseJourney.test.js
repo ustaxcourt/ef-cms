@@ -26,6 +26,10 @@ describe('docket clerk update case journey', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   it('login as a petitioner and create a case', async () => {
     await loginAs(test, 'petitioner');
     const caseDetail = await uploadPetition(test, overrides);

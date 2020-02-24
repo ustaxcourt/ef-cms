@@ -1,5 +1,6 @@
 import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from '../../src/presenter/computeds/addToTrialSessionModalHelper';
 import { runCompute } from 'cerebral/test';
+import { wait } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const addToTrialSessionModalHelper = withAppContextDecorator(
@@ -44,5 +45,6 @@ export default test => {
     expect(modalHelper.showSessionNotSetAlert).toEqual(true);
 
     await test.runSequence('addCaseToTrialSessionSequence');
+    await wait(5000);
   });
 };

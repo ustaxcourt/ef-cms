@@ -10,5 +10,5 @@ export const navigateToFirstResultCaseDetailAction = async ({
   props,
   router,
 }) => {
-  router.route(`/case-detail/${props.searchResults[0].docketNumber}`);
+  await router.route(`/case-detail/${props.searchResults[0].docketNumber}`);
 };
