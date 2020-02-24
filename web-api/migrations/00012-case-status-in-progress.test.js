@@ -1,10 +1,9 @@
 const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { forAllRecords } = require('./utilities');
 const { MOCK_CASE } = require('../../shared/src/test/mockCase');
-const { MOCK_DOCUMENTS } = require('../../shared/src/test/mockDocuments');
-const { up } = require('./00010-closed-date');
+const { up } = require('./00012-case-status-in-progress');
 
-describe('closed date migration', () => {
+describe('in progress case status migration', () => {
   let applicationContext;
   let scanStub;
   let putStub;
@@ -15,7 +14,7 @@ describe('closed date migration', () => {
 
     scanStub = jest.fn().mockReturnValue({
       promise: async () => ({
-        Items: [MOCK_DOCUMENTS[0]],
+        Items: [MOCK_CASE],
       }),
     });
 
@@ -37,18 +36,6 @@ describe('closed date migration', () => {
   it('should not update the item when it is not a case', async () => {
     scanStub = jest.fn().mockReturnValue({
       promise: async () => ({
-        Items: [MOCK_DOCUMENTS[0]],
-      }),
-    });
-
-    await up(applicationContext.getDocumentClient(), '', forAllRecords);
-
-    expect(putStub.mock.calls.length).toBe(0);
-  });
-
-  it('should not update the item when its status is not closed', async () => {
-    scanStub = jest.fn().mockReturnValue({
-      promise: async () => ({
         Items: [MOCK_CASE],
       }),
     });
@@ -58,14 +45,13 @@ describe('closed date migration', () => {
     expect(putStub.mock.calls.length).toBe(0);
   });
 
-  it('should not update the item when its status is closed and it has a closedDate', async () => {
+  it('should not update the item when its status is already in progress', async () => {
     scanStub = jest.fn().mockReturnValue({
       promise: async () => ({
         Items: [
           {
             ...MOCK_CASE,
-            closedDate: '2019-03-01T21:40:46.415Z',
-            status: Case.STATUS_TYPES.closed,
+            status: Case.STATUS_TYPES.inProgress,
           },
         ],
       }),
@@ -76,13 +62,13 @@ describe('closed date migration', () => {
     expect(putStub.mock.calls.length).toBe(0);
   });
 
-  it('should update the item with a closedDate if its status is closed and it does not have a closedDate', async () => {
+  it('should update the item when its status is batched for IRS', async () => {
     scanStub = jest.fn().mockReturnValue({
       promise: async () => ({
         Items: [
           {
             ...MOCK_CASE,
-            status: Case.STATUS_TYPES.closed,
+            status: 'Batched for IRS',
           },
         ],
       }),
@@ -90,6 +76,23 @@ describe('closed date migration', () => {
 
     await up(applicationContext.getDocumentClient(), '', forAllRecords);
 
-    expect(putStub.mock.calls[0][0].Item.closedDate).toBeDefined();
+    expect(putStub.mock.calls.length).toBe(1);
+  });
+
+  it('should update the item when its status is recalled', async () => {
+    scanStub = jest.fn().mockReturnValue({
+      promise: async () => ({
+        Items: [
+          {
+            ...MOCK_CASE,
+            status: 'Recalled',
+          },
+        ],
+      }),
+    });
+
+    await up(applicationContext.getDocumentClient(), '', forAllRecords);
+
+    expect(putStub.mock.calls.length).toBe(1);
   });
 });

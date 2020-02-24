@@ -1,3 +1,4 @@
+import { assignPetitionToAuthenticatedUserAction } from '../actions/WorkItem/assignPetitionToAuthenticatedUserAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
 import { getFormCombinedWithCaseDetailAction } from '../actions/getFormCombinedWithCaseDetailAction';
@@ -14,5 +15,6 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
   getFormCombinedWithCaseDetailAction,
   saveCaseDetailInternalEditAction,
   setCaseAction,
+  assignPetitionToAuthenticatedUserAction,
   navigateToCaseDetailAction,
 ]);
