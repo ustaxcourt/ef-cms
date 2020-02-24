@@ -933,49 +933,7 @@ describe('formattedCaseDetail', () => {
       ]);
     });
 
-    it('populates editLink for docket clerks', () => {
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail,
-          caseDetailErrors: {},
-        },
-      });
-      expect(result.formattedDraftDocuments).toMatchObject([
-        {
-          createdAtFormatted: '02/28/19',
-          descriptionDisplay: 'Order to do something',
-          documentId: 'd-1-2-3',
-          documentType: 'Order',
-          editLink: '',
-          isCourtIssuedDocument: false,
-          isInProgress: false,
-          isNotServedCourtIssuedDocument: false,
-          isPetition: false,
-          isStatusServed: false,
-          showDocumentEditLink: true,
-          signedAtFormatted: undefined,
-          signedAtFormattedTZ: undefined,
-        },
-        {
-          createdAtFormatted: '02/28/19',
-          descriptionDisplay: 'Stipulated Decision',
-          documentId: 'd-2-3-4',
-          documentType: 'Stipulated Decision',
-          editLink: '',
-          isCourtIssuedDocument: true,
-          isInProgress: false,
-          isNotServedCourtIssuedDocument: true,
-          isPetition: false,
-          isStatusServed: false,
-          showDocumentEditLink: true,
-          signedAtFormatted: undefined,
-          signedAtFormattedTZ: undefined,
-        },
-      ]);
-    });
-
-    it('does not populate editLink for judges', () => {
+    it('does not populate editLink for draft documents', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(judgeUser),

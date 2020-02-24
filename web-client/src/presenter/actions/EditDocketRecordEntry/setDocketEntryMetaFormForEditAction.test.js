@@ -63,7 +63,7 @@ describe('setDocketEntryMetaFormForEditAction', () => {
     };
   });
 
-  it('populate state.form with the docket record meta based on the provided props.index', async () => {
+  it('populates state.form with the docket record meta based on the provided props.docketRecordIndex', async () => {
     const result = await runAction(setDocketEntryMetaFormForEditAction, {
       modules: { presenter },
       props: {
@@ -77,7 +77,7 @@ describe('setDocketEntryMetaFormForEditAction', () => {
     expect(result.state.form).toMatchObject({ index: 1 });
   });
 
-  it('populate state.form with the docket record meta and associated document meta if the docket record has a document', async () => {
+  it('populates state.form with the docket record meta and associated document meta if the docket record has a document', async () => {
     const result = await runAction(setDocketEntryMetaFormForEditAction, {
       modules: { presenter },
       props: {
@@ -96,7 +96,7 @@ describe('setDocketEntryMetaFormForEditAction', () => {
     });
   });
 
-  it('populate state.form with deconstructed certificateOfServiceDate and filingDate if present', async () => {
+  it('populates state.form with deconstructed certificateOfServiceDate and filingDate if present', async () => {
     const result = await runAction(setDocketEntryMetaFormForEditAction, {
       modules: { presenter },
       props: {
@@ -138,7 +138,7 @@ describe('setDocketEntryMetaFormForEditAction', () => {
     expect(result.state.form.servedPartiesCode).toEqual('');
   });
 
-  it('gets computes the servedPartiesCode from documentDetail when NOT present on docketRecordEntry', async () => {
+  it('computes the servedPartiesCode from documentDetail when NOT present on docketRecordEntry', async () => {
     const result = await runAction(setDocketEntryMetaFormForEditAction, {
       modules: { presenter },
       props: {
