@@ -42,6 +42,19 @@ export const ReportsMenu = connect(
         {isExpanded && (
           <ul className="usa-nav__submenu">
             <li className="usa-nav__submenu-item">
+              <Button
+                link
+                id="case-inventory-btn"
+                onClick={() => {
+                  resetHeaderAccordionsSequence();
+                  toggleMobileMenuSequence();
+                  openCaseInventoryReportModalSequence();
+                }}
+              >
+                Case Inventory
+              </Button>
+            </li>
+            <li className="usa-nav__submenu-item">
               <a
                 href="/reports/blocked-cases"
                 id="all-blocked-cases"
@@ -88,19 +101,6 @@ export const ReportsMenu = connect(
                 }}
               >
                 Trial Session Planning
-              </Button>
-            </li>
-            <li className="usa-nav__submenu-item">
-              <Button
-                link
-                id="case-inventory-btn"
-                onClick={() => {
-                  resetHeaderAccordionsSequence();
-                  toggleMobileMenuSequence();
-                  openCaseInventoryReportModalSequence();
-                }}
-              >
-                Case Inventory
               </Button>
             </li>
           </ul>
