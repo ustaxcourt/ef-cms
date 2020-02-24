@@ -32,6 +32,9 @@ const upGenerator = mutateFunction => async (
   await forAllRecords(documentClient, tableName, async item => {
     const updatedItem = await mutateFunction(item, documentClient, tableName);
     if (updatedItem) {
+      if (!updatedItem.pk && !updatedItem.sk && !updatedItem.gsi1pk) {
+        throw new Error('data must contain pk, sk, or gsi1pk');
+      }
       await documentClient
         .put({
           Item: updatedItem,
