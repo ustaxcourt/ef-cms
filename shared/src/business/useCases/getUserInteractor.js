@@ -1,4 +1,3 @@
-const { Judge } = require('../entities/Judge');
 const { User } = require('../entities/User');
 
 /**
@@ -14,9 +13,5 @@ exports.getUserInteractor = async ({ applicationContext }) => {
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  if (user.role === User.ROLES.judge) {
-    return new Judge(user).toRawObject();
-  } else {
-    return new User(user).toRawObject();
-  }
+  return new User(user).validate().toRawObject();
 };
