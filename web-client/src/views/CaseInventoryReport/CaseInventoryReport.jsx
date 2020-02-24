@@ -33,9 +33,9 @@ export const CaseInventoryReport = connect(
             </div>
             <div className="grid-col-3">
               <BindedSelect
-                ariaDescribedBy="case-deadlines-tab filterHeading"
+                ariaDescribedBy="filterHeading"
                 ariaLabel="judge"
-                bind="screenMetadata.caseDeadlinesFilter.judge"
+                bind="screenMetadata.caseInventoryReport.judge"
                 className="select-left"
                 id="judgeFilter"
                 name="judge"
@@ -51,13 +51,13 @@ export const CaseInventoryReport = connect(
             </div>
             <div className="grid-col-3">
               <BindedSelect
-                ariaDescribedBy="case-deadlines-tab filterHeading"
-                ariaLabel="judge"
-                bind="screenMetadata.caseDeadlinesFilter.judge"
+                ariaDescribedBy="filterHeading"
+                ariaLabel="status"
+                bind="screenMetadata.caseInventoryReport.judge"
                 className="select-left"
-                id="judgeFilter"
-                name="judge"
-                placeHolder="- Judge -"
+                id="statusFilter"
+                name="status"
+                placeHolder="- Status -"
               >
                 <option value="">-Status-</option>
                 {Object.keys(caseInventoryReportHelper.caseStatuses).map(
