@@ -8,6 +8,7 @@ import { BlockedCasesReport } from './BlockedCasesReport/BlockedCasesReport';
 import { CaseDeadlines } from './CaseDeadlines/CaseDeadlines';
 import { CaseDetail } from './CaseDetail/CaseDetail';
 import { CaseDetailInternal } from './CaseDetail/CaseDetailInternal';
+import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryReportModal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
@@ -162,6 +163,9 @@ export const AppComponent = connect(
         <Loading />
         {showModal === 'TrialSessionPlanningModal' && (
           <TrialSessionPlanningModal />
+        )}
+        {showModal === 'CaseInventoryReportModal' && (
+          <CaseInventoryReportModal />
         )}
         {showModal === 'FileCompressionErrorModal' && (
           <FileCompressionErrorModal />
