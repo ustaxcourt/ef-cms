@@ -60,3 +60,9 @@ Unique Case ID in XXXXX-YY format.
 
 
 `/^(\d{3,5}-\d{2})$/`
+
+### docketNumberSuffix
+
+> `string` | optional
+
+##### Can be null.

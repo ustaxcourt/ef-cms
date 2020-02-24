@@ -230,12 +230,12 @@ function Case(rawCase, { applicationContext }) {
   }
 
   if (User.isInternalUser(applicationContext.getCurrentUser().role)) {
-    this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
     this.caseNote = rawCase.caseNote;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   }
 
   // TODO: as part of the security task, these values also need to be restricted
+  this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
   this.automaticBlocked = rawCase.automaticBlocked;
   this.automaticBlockedDate = rawCase.automaticBlockedDate;
   this.automaticBlockedReason = rawCase.automaticBlockedReason;
