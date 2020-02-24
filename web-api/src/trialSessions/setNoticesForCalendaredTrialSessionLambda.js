@@ -9,7 +9,6 @@ const { genericHandler } = require('../genericHandler');
 exports.handler = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { caseId } = JSON.parse(event.body);
-
     return await applicationContext
       .getUseCases()
       .setNoticesForCalendaredTrialSessionInteractor({

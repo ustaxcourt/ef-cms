@@ -1,4 +1,4 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition, wait } from './helpers';
 import respondentLogIn from './journey/respondentLogIn';
 import respondentSignsOut from './journey/respondentSignsOut';
 import respondentUpdatesAddress from './journey/respondentUpdatesAddress';
@@ -18,6 +18,7 @@ describe('Modify Respondent Contact Information', () => {
     it(`create case #${i} and associate a respondent`, async () => {
       await loginAs(test, 'petitioner');
       caseDetail = await uploadPetition(test);
+      await wait(1000);
       test.createdDocketNumbers.push(caseDetail.docketNumber);
       await loginAs(test, 'petitionsclerk');
       await test.runSequence('gotoCaseDetailSequence', {

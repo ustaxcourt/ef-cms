@@ -24,6 +24,11 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
+
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   test.createdCases = [];
   let judgeDocketSectionQCInboxCountBefore;
   let adcDocketSectionQCInboxCountBefore;

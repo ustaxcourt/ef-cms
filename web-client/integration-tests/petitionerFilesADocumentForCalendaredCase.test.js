@@ -1,4 +1,4 @@
-import { fakeFile, setupTest, uploadPetition } from './helpers';
+import { fakeFile, setupTest, uploadPetition, wait } from './helpers';
 
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
@@ -17,6 +17,10 @@ const test = setupTest();
 describe('petitioner files document', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   petitionerLogIn(test);
@@ -42,7 +46,9 @@ describe('petitioner files document', () => {
       key: 'trialSessionId',
       value: test.trialSessionId,
     });
+
     await test.runSequence('addCaseToTrialSessionSequence');
+    await wait(5000);
   });
   userSignsOut(test);
 
