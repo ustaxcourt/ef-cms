@@ -89,6 +89,8 @@ resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
 }
 
 resource "aws_cloudfront_distribution" "distribution" {
+  wait_for_deployment = false
+  
   origin_group {
     origin_id = "group-${var.environment}.${var.dns_domain}"
 
@@ -115,6 +117,11 @@ resource "aws_cloudfront_distribution" "distribution" {
       origin_protocol_policy = "http-only"
       origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
     }
+
+    custom_header {
+      name = "x-allowed-domain"
+      value = "${var.dns_domain}"
+    } 
   }
 
 
@@ -128,6 +135,11 @@ resource "aws_cloudfront_distribution" "distribution" {
       origin_protocol_policy = "http-only"
       origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
     }
+
+    custom_header {
+      name = "x-allowed-domain"
+      value = "${var.dns_domain}"
+    } 
   }
 
   custom_error_response = [
@@ -151,6 +163,12 @@ resource "aws_cloudfront_distribution" "distribution" {
     min_ttl                = 0
     default_ttl            = "${var.cloudfront_default_ttl}"
     max_ttl                = "${var.cloudfront_max_ttl}"
+
+    lambda_function_association {
+      event_type   = "origin-response"
+      lambda_arn   = "${aws_lambda_function.header_security_lambda.qualified_arn}"
+      include_body = false
+    }
 
     forwarded_values {
       query_string = false
