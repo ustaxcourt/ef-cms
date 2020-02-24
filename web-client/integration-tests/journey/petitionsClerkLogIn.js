@@ -7,6 +7,6 @@ export default (test, role = 'petitionsclerk') => {
       value: role,
     });
     await test.runSequence('submitLoginSequence');
-    await wait(2000);
+    // await wait(2000);
   });
 };

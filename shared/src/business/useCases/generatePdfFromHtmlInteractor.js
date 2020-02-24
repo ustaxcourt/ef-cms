@@ -21,7 +21,6 @@ exports.generatePdfFromHtmlInteractor = async ({
   let result = null;
 
   try {
-    applicationContext.logger.time('Generating PDF From HTML');
     browser = await applicationContext.getChromiumBrowser();
     let page = await browser.newPage();
 
@@ -81,6 +80,5 @@ exports.generatePdfFromHtmlInteractor = async ({
       await browser.close();
     }
   }
-  applicationContext.logger.timeEnd('Generating PDF From HTML');
   return result;
 };
