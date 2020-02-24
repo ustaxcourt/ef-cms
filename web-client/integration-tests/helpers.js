@@ -332,7 +332,6 @@ exports.uploadPetition = async (test, overrides = {}) => {
   });
 
   await test.runSequence('submitFilePetitionSequence');
-  // await exports.wait(500);
   return test.getState('caseDetail');
 };
 
