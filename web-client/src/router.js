@@ -751,6 +751,14 @@ const router = {
     );
 
     route(
+      '/reports/case-inventory',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`Docket ${docketNumber}`);
+        app.getSequence('gotoCaseInventorySequence')();
+      }),
+    );
+
+    route(
       '/reports/case-deadlines',
       ifHasAccess(() => {
         setPageTitle('Case deadlines');
