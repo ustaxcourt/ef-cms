@@ -1,7 +1,6 @@
 import { confirmInitiateServiceModalHelper } from '../../src/presenter/computeds/confirmInitiateServiceModalHelper';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
-import { waitForRouter } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export default (test, draftOrderIndex) => {
@@ -44,8 +43,6 @@ export default (test, draftOrderIndex) => {
       { name: 'Test Person, Petitioner' },
     ]);
     await test.runSequence('serveCourtIssuedDocumentSequence');
-
-    await waitForRouter();
 
     expect(test.getState('currentPage')).toEqual('PrintPreview');
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
