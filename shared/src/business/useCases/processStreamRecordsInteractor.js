@@ -49,5 +49,5 @@ exports.processStreamRecordsInteractor = async ({
   }
 
   applicationContext.logger.info('Time', createISODateString());
-  return results;
+  return results.length;
 };

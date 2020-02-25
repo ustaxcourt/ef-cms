@@ -49,6 +49,6 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
     }
 
     applicationContext.logger.info('Time', createISODateString());
-    return results;
+    return results.length;
   }
 };
