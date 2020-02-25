@@ -87,7 +87,7 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
   markAllCasesAsQCed(test, () => {
     return [createdCases[0], createdCases[1]];
   });
-  petitionsClerkCompletesAndSetsTrialSession(test, overrides); //
+  petitionsClerkCompletesAndSetsTrialSession(test, overrides);
   petitionsClerkViewsDocketRecordAfterSettingTrial(test, {
     documentTitle: 'Standing Pretrial Notice',
   });
