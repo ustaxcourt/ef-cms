@@ -6,6 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {Function} providers.applicationContext application context to get Case entity
  * @param {Function} providers.get the cerebral get function
+ * @param {Function} providers.props the cerebral props object
  * @returns {object} contains the caseCaption
  */
 export const getCaseCaptionForCaseInfoTabAction = ({

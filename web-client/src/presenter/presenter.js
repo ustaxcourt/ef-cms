@@ -132,6 +132,7 @@ import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
+import { navigateToEditSavedDocumentDetailSequence } from './sequences/navigateToEditSavedDocumentDetailSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintPreviewSequence } from './sequences/navigateToPrintPreviewSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
@@ -498,6 +499,7 @@ export const presenter = {
     navigateBackSequence,
     navigateToCaseDetailSequence,
     navigateToEditOrderSequence,
+    navigateToEditSavedDocumentDetailSequence,
     navigateToPathSequence,
     navigateToPrintPreviewSequence,
     navigateToPrintableCaseConfirmationSequence,

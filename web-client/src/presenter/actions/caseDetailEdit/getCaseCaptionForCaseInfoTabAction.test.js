@@ -8,7 +8,7 @@ presenter.providers.applicationContext = applicationContext;
 describe('getCaseCaptionForCaseInfoTabAction', () => {
   const { Case, ContactFactory } = applicationContext.getEntityConstructors();
 
-  it('should return just the respondent when party type has not been selected', async () => {
+  it('should return just the postfix when party type has not been selected', async () => {
     const result = await runAction(getCaseCaptionForCaseInfoTabAction, {
       modules: {
         presenter,
