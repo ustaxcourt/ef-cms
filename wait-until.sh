@@ -1,6 +1,6 @@
 #!/bin/bash
 url=$1
-max_tries=900
+max_tries=200
 try_count=0
 check_code=${2:-"200"}
 is_ws=${3:-"false"}
