@@ -31,7 +31,7 @@ echo "killing s3rver if already running"
 pkill -f s3rver
 
 echo "starting s3rver"
-node ./web-api/start-s3rver &
+node ./web-api/start-s3rver.js &
 S3RVER_PID=$!
 
 if [ ! -z "$RESUME" ]; then
