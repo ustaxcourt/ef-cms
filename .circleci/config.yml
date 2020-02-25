@@ -183,7 +183,7 @@ jobs:
           at: ~/
       - run:
           name: Create Cypress Artifacts Directory
-          command: mkdir /root/project/cypress/videos/
+          command: mkdir /tmp/cypress
       - run:
           name: Cypress
           command: |
@@ -193,7 +193,7 @@ jobs:
               ./node_modules/.bin/cypress install
             fi
 
-            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000  AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop npx run-p start:api:ci start:client:ci > /root/project/cypress/videos/cypress-output.txt &
+            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000  AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop npx run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
