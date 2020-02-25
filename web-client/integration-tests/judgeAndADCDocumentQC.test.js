@@ -33,14 +33,14 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   let judgeDocketSectionQCInboxCountBefore;
   let adcDocketSectionQCInboxCountBefore;
 
+  loginAs(test, 'judgeCohen');
   it("Get judge's document qc section inbox before", async () => {
-    await loginAs(test, 'judgeCohen');
     await getFormattedDocumentQCSectionInbox(test);
     judgeDocketSectionQCInboxCountBefore = getInboxCount(test);
   });
 
+  loginAs(test, 'adc');
   it("Get adc's document qc section inbox before", async () => {
-    await loginAs(test, 'adc');
     await getFormattedDocumentQCSectionInbox(test);
     adcDocketSectionQCInboxCountBefore = getInboxCount(test);
   });
@@ -66,8 +66,8 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   petitionsClerkManuallyAddsCaseToCalendaredTrialSession(test, 1);
   petitionsClerkSignsOut(test);
 
+  loginAs(test, 'judgeCohen');
   it("Get judge's document qc section inbox after", async () => {
-    await loginAs(test, 'judgeCohen');
     await getFormattedDocumentQCSectionInbox(test);
     const judgeDocketSectionQCInboxCountAfter = getInboxCount(test);
     expect(judgeDocketSectionQCInboxCountAfter).toBe(
@@ -75,8 +75,8 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
     );
   });
 
+  loginAs(test, 'adc');
   it("Get adc's document qc section inbox after", async () => {
-    await loginAs(test, 'adc');
     await getFormattedDocumentQCSectionInbox(test);
     const adcDocketSectionQCInboxCountAfter = getInboxCount(test);
     expect(adcDocketSectionQCInboxCountAfter).toBe(
