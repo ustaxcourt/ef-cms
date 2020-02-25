@@ -8,7 +8,7 @@ Judge assigned to this case. Defaults to Chief Judge.
 
 Restricted
 
-> `string` | required
+> `string` | optional
 
 ### automaticBlocked
 
@@ -101,19 +101,19 @@ Restricted
 ##### Allowed Values
 
 
- - `Deficiency`
  - `CDP (Lien/Levy)`
- - `Innocent Spouse`
- - `Partnership (Section 6226)`
- - `Partnership (Section 6228)`
- - `Partnership (BBA Section 1101)`
- - `Whistleblower`
- - `Worker Classification`
- - `Declaratory Judgment (Retirement Plan)`
+ - `Deficiency`
  - `Declaratory Judgment (Exempt Organization)`
- - `Passport`
+ - `Declaratory Judgment (Retirement Plan)`
+ - `Innocent Spouse`
  - `Interest Abatement`
  - `Other`
+ - `Partnership (BBA Section 1101)`
+ - `Partnership (Section 6226)`
+ - `Partnership (Section 6228)`
+ - `Passport`
+ - `Whistleblower`
+ - `Worker Classification`
 
 ### contactPrimary
 
@@ -567,7 +567,7 @@ QC Checklist object that must be completed before the case can go to trial.
 
 Restricted
 
-> `object` | required
+> `object` | optional
 
 ### receivedAt
 
@@ -602,25 +602,34 @@ Status of the case.
 
 Restricted
 
-> `string` | required
+> `string` | optional
 
 ##### Allowed Values
 
 
  - `Assigned - Case`
  - `Assigned - Motion`
- - `Batched for IRS`
  - `Calendared`
  - `CAV`
  - `Closed`
  - `General Docket - Not at Issue`
  - `General Docket - At Issue (Ready for Trial)`
+ - `In Progress`
  - `Jurisdiction Retained`
  - `New`
  - `On Appeal`
- - `Recalled`
  - `Rule 155`
  - `Submitted`
+
+### closedDate
+
+> `any`
+
+
+If `status` = `Closed`, then this field is `date` and is `required.` 
+
+
+Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 ### trialDate
 

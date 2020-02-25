@@ -29,9 +29,9 @@ describe('DateHandler', () => {
   });
 
   describe('calculateISODate', () => {
-    it('calculates dates with zero adjustment', () => {
-      const result = DateHandler.calculateISODate({ dateString: 'x' });
-      expect(result).toEqual('x');
+    it('returns the dateString param exactly as provided when the `howMuch` param is omitted', () => {
+      const result = DateHandler.calculateISODate({ dateString: '12/1/1901' });
+      expect(result).toEqual('12/1/1901');
     });
     it('calculates dates with positive adjustment', () => {
       const result = DateHandler.calculateISODate({

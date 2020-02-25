@@ -4,6 +4,8 @@ module.exports = {
     .handler,
   createCaseLambda: require('./cases/createCaseLambda').handler,
   getBlockedCasesLambda: require('./cases/getBlockedCasesLambda').handler,
+  getCaseInventoryReportLambda: require('./cases/getCaseInventoryReportLambda')
+    .handler,
   getCaseLambda: require('./cases/getCaseLambda').handler,
   getConsolidatedCasesByCaseLambda: require('./cases/getConsolidatedCasesByCaseLambda')
     .handler,

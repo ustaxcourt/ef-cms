@@ -8,6 +8,7 @@ import { BlockedCasesReport } from './BlockedCasesReport/BlockedCasesReport';
 import { CaseDeadlines } from './CaseDeadlines/CaseDeadlines';
 import { CaseDetail } from './CaseDetail/CaseDetail';
 import { CaseDetailInternal } from './CaseDetail/CaseDetailInternal';
+import { CaseInventoryReport } from './CaseInventoryReport/CaseInventoryReport';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
@@ -72,6 +73,7 @@ const pages = {
   CaseDeadlines,
   CaseDetail,
   CaseDetailInternal,
+  CaseInventoryReport,
   CaseSearchNoMatches,
   CourtIssuedDocketEntry,
   CreateOrder,

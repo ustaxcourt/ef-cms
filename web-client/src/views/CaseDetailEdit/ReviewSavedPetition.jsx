@@ -322,6 +322,7 @@ export const ReviewSavedPetition = connect(
                               <Button
                                 link
                                 className="pdf-preview-btn padding-0"
+                                href={`/case-detail/${reviewSavedPetitionHelper.petitionFile.caseId}/documents/${reviewSavedPetitionHelper.petitionFile.documentId}`}
                               >
                                 Petition
                               </Button>
@@ -349,6 +350,7 @@ export const ReviewSavedPetition = connect(
                                 <Button
                                   link
                                   className="pdf-preview-btn padding-0"
+                                  href={`/case-detail/${reviewSavedPetitionHelper.stinFile.caseId}/documents/${reviewSavedPetitionHelper.stinFile.documentId}`}
                                 >
                                   Statement of Taxpayer Identification
                                 </Button>
@@ -377,6 +379,7 @@ export const ReviewSavedPetition = connect(
                                 <Button
                                   link
                                   className="pdf-preview-btn padding-0"
+                                  href={`/case-detail/${reviewSavedPetitionHelper.requestForPlaceOfTrialFile.caseId}/documents/${reviewSavedPetitionHelper.requestForPlaceOfTrialFile.documentId}`}
                                 >
                                   Request for Place of Trial
                                 </Button>
@@ -405,6 +408,7 @@ export const ReviewSavedPetition = connect(
                                 <Button
                                   link
                                   className="pdf-preview-btn padding-0"
+                                  href={`/cases/${reviewSavedPetitionHelper.ownershipDisclosureFile.caseId}/documents/${reviewSavedPetitionHelper.ownershipDisclosureFile.documentId}`}
                                 >
                                   Ownership Disclosure Statement
                                 </Button>
