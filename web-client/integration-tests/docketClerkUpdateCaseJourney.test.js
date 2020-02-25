@@ -8,6 +8,7 @@ import docketClerkViewsEligibleCasesForTrialSession from './journey/docketClerkV
 import docketClerkViewsInactiveCasesForTrialSession from './journey/docketClerkViewsInactiveCasesForTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
+import petitionerLogIn from './journey/petitionerLogIn';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import userSignsOut from './journey/petitionerSignsOut';
@@ -30,8 +31,9 @@ describe('docket clerk update case journey', () => {
     test.closeSocket();
   });
 
-  it('login as a petitioner and create a case', async () => {
-    await loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner');
+
+  it('create a case', async () => {
     const caseDetail = await uploadPetition(test, overrides);
     test.caseId = caseDetail.caseId;
     test.docketNumber = caseDetail.docketNumber;

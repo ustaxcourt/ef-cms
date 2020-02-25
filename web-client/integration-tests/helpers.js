@@ -332,17 +332,17 @@ exports.uploadPetition = async (test, overrides = {}) => {
   });
 
   await test.runSequence('submitFilePetitionSequence');
-  await exports.wait(4000);
   return test.getState('caseDetail');
 };
 
-exports.loginAs = async (test, user) => {
-  await test.runSequence('updateFormValueSequence', {
-    key: 'name',
-    value: user,
+exports.loginAs = (test, user) => {
+  return it(`login as ${user}`, async () => {
+    await test.runSequence('updateFormValueSequence', {
+      key: 'name',
+      value: user,
+    });
+    await test.runSequence('submitLoginSequence');
   });
-  await test.runSequence('submitLoginSequence');
-  await exports.wait(2000);
 };
 
 exports.setupTest = ({ useCases = {} } = {}) => {
@@ -354,7 +354,6 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   };
   global.WebSocket = require('websocket').w3cwebsocket;
   presenter.providers.applicationContext = applicationContext;
-
   const { initialize: initializeSocketProvider, start, stop } = socketProvider({
     socketRouter,
   });
@@ -438,6 +437,8 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   test = CerebralTest(presenter);
   test.getSequence = name => obj => test.runSequence(name, obj);
   test.closeSocket = stop;
+  test.applicationContext = applicationContext;
+
   initializeSocketProvider(test);
 
   global.window = {
@@ -506,21 +507,6 @@ exports.viewDocumentDetailMessage = async ({
     workItemIdToMarkAsRead,
   });
 };
-
-/**
- * This is needed because some sequences run router.route which runs another test.runSequence which
- * adds a new entry on the node event loop and causes the tests to continue running even though the sequence is
- * not yet done.
- *
- * @returns {Promise} resolves when the setImmediate is done
- */
-exports.waitForRouter = () => {
-  return new Promise(resolve => {
-    setImmediate(() => resolve(true));
-  });
-};
-
-exports.flushPromises = () => new Promise(resolve => setImmediate(resolve));
 
 exports.wait = time => {
   return new Promise(resolve => {
