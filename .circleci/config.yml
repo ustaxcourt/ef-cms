@@ -182,6 +182,9 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /root/project/cypress/videos/
+      - run:
           name: Cypress
           command: |
             npm run build:all &&
