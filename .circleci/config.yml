@@ -200,6 +200,8 @@ jobs:
             npm run cypress
       - store_artifacts:
           path: /root/project/cypress/videos/
+      - store_artifacts:
+          path: /tmp/cypress
 
   pre-deploy:
     machine:
