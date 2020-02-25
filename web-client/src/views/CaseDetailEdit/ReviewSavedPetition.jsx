@@ -29,8 +29,8 @@ export const ReviewSavedPetition = connect(
     constants: state.constants,
     documentId: state.documentId,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    gotoEditSavedDocumentDetailSequence:
-      sequences.gotoEditSavedDocumentDetailSequence,
+    navigateToEditSavedDocumentDetailSequence:
+      sequences.navigateToEditSavedDocumentDetailSequence,
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper: state.reviewSavedPetitionHelper,
@@ -44,7 +44,7 @@ export const ReviewSavedPetition = connect(
     constants,
     documentId,
     formCancelToggleCancelSequence,
-    gotoEditSavedDocumentDetailSequence,
+    navigateToEditSavedDocumentDetailSequence,
     openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper,
     saveCaseAndServeToIrsSequence,
@@ -83,7 +83,7 @@ export const ReviewSavedPetition = connect(
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         icon="edit"
                         onClick={() => {
-                          gotoEditSavedDocumentDetailSequence({
+                          navigateToEditSavedDocumentDetailSequence({
                             caseId,
                             documentId,
                             tab: 'partyInfo',
@@ -155,7 +155,7 @@ export const ReviewSavedPetition = connect(
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         icon="edit"
                         onClick={() => {
-                          gotoEditSavedDocumentDetailSequence({
+                          navigateToEditSavedDocumentDetailSequence({
                             caseId,
                             documentId,
                             tab: 'caseInfo',
@@ -250,7 +250,7 @@ export const ReviewSavedPetition = connect(
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         icon="edit"
                         onClick={() => {
-                          gotoEditSavedDocumentDetailSequence({
+                          navigateToEditSavedDocumentDetailSequence({
                             caseId,
                             documentId,
                             tab: 'irsNotice',

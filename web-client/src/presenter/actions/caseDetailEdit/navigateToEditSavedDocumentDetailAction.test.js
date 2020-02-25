@@ -61,7 +61,7 @@ describe('navigateToEditSavedDocumentDetailAction', () => {
     expect(routeStub).not.toHaveBeenCalled();
   });
 
-  it('does not navigate to the edit saved document detail view if document id is not provided', async () => {
+  it('does not navigate to the edit saved document detail view if docketNumber is not provided', async () => {
     await runAction(navigateToEditSavedDocumentDetailAction, {
       modules: { presenter },
       state: {
