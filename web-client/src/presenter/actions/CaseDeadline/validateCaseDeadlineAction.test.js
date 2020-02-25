@@ -36,7 +36,7 @@ describe('validateCaseDeadlineAction', () => {
     };
   });
 
-  it('should call the path success when no errors are found', async () => {
+  it('should call the success path when no errors are found', async () => {
     validateCaseDeadlineStub.returns(null);
     await runAction(validateCaseDeadlineAction, {
       modules: {
@@ -50,7 +50,7 @@ describe('validateCaseDeadlineAction', () => {
     expect(successStub.calledOnce).toEqual(true);
   });
 
-  it('should call the path error when any errors are found', async () => {
+  it('should call the error path when any errors are found', async () => {
     validateCaseDeadlineStub.returns('error');
     await runAction(validateCaseDeadlineAction, {
       modules: {
