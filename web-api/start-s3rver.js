@@ -21,7 +21,6 @@ new S3rver({
   directory: 'web-api/storage/s3',
   hostname: 'localhost',
   port: 9000,
-  resetOnClose: true,
   serviceEndpoint: 'localhost',
   silent: false,
 }).run((error, props) => {
