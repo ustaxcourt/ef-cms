@@ -16,7 +16,7 @@ describe('validateCaseInventoryReportModalAction', () => {
     };
   });
 
-  it('should call the path success when no errors are found', async () => {
+  it('should call the success path when no errors are found', async () => {
     await runAction(validateCaseInventoryReportModalAction, {
       modules: {
         presenter,
@@ -32,7 +32,7 @@ describe('validateCaseInventoryReportModalAction', () => {
     expect(successStub).toBeCalled();
   });
 
-  it('should call the path error when any errors are found', async () => {
+  it('should call the error path when any errors are found', async () => {
     await runAction(validateCaseInventoryReportModalAction, {
       modules: {
         presenter,

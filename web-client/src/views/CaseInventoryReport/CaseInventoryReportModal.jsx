@@ -7,10 +7,9 @@ import classNames from 'classnames';
 
 export const CaseInventoryReportModal = connect(
   {
-    STATUS_TYPES: state.constants.STATUS_TYPES,
     cancelSequence: sequences.clearModalSequence,
+    caseInventoryReportHelper: state.caseInventoryReportHelper,
     confirmSequence: sequences.getCaseInventoryReportSequence,
-    judges: state.judges,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateCaseInventoryReportModalSequence:
@@ -19,9 +18,8 @@ export const CaseInventoryReportModal = connect(
   },
   ({
     cancelSequence,
+    caseInventoryReportHelper,
     confirmSequence,
-    judges,
-    STATUS_TYPES,
     updateModalValueSequence,
     validateCaseInventoryReportModalSequence,
     validationErrors,
@@ -59,11 +57,13 @@ export const CaseInventoryReportModal = connect(
                 }}
               >
                 <option value="">- Select -</option>
-                {Object.values(STATUS_TYPES).map(status => (
-                  <option key={status} value={status}>
-                    {status}
-                  </option>
-                ))}
+                {Object.values(caseInventoryReportHelper.caseStatuses).map(
+                  status => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  ),
+                )}
               </select>
             </fieldset>
           </FormGroup>
@@ -88,10 +88,9 @@ export const CaseInventoryReportModal = connect(
                 }}
               >
                 <option value="">- Select -</option>
-                <option value="Chief Judge">Chief Judge</option>
-                {judges.map(judge => (
-                  <option key={judge.name} value={judge.name}>
-                    {judge.name}
+                {caseInventoryReportHelper.judges.map(judge => (
+                  <option key={judge} value={judge}>
+                    {judge}
                   </option>
                 ))}
               </select>
