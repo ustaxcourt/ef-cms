@@ -43,6 +43,7 @@ export const CaseInventoryReportModal = connect(
                 Select case status
               </legend>
               <select
+                aria-labelledby="case-status"
                 className={classNames(
                   'usa-select',
                   validationErrors.status && 'usa-select--error',
@@ -74,6 +75,7 @@ export const CaseInventoryReportModal = connect(
                 Select Judge
               </legend>
               <select
+                aria-labelledby="associated-judge"
                 className={classNames(
                   'usa-select',
                   validationErrors.associatedJudge && 'usa-select--error',
