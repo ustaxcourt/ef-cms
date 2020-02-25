@@ -7,6 +7,10 @@ echo "starting dynamo"
 DYNAMO_PID=$!
 ./wait-until.sh http://localhost:8000/shell
 
+echo "killing elasticsearch if already running"
+pkill -f elasticsearch
+
+echo "starting elasticsearch"
 ./web-api/start-elasticsearch.sh &
 ESEARCH_PID=$!
 ./wait-until.sh http://localhost:9200/ 200
@@ -23,6 +27,10 @@ export S3_ENDPOINT=http://localhost:9000
 export DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1
 export TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1
 
+echo "killing s3rver if already running"
+pkill -f s3rver
+
+echo "starting s3rver"
 node ./web-api/start-s3rver &
 S3RVER_PID=$!
 
