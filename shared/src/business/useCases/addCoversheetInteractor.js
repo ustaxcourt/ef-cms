@@ -2,6 +2,10 @@ const { Case } = require('../entities/cases/Case');
 const { coverLogo } = require('../assets/coverLogo');
 const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 
+const {
+  generateCoverPagePdf,
+} = require('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
+
 /**
  * a helper function which assembles the correct data to be used in the generation of a PDF
  *
@@ -527,6 +531,40 @@ exports.addCoverToPdf = async ({
     contentCertificateOfService,
     contentDateServed,
   ].map(cont => drawContent(coverPage, cont));
+
+  const content = await generateCoverPagePdf({
+    applicationContext,
+    content: {
+      caseCaptionPet: contentCaseCaptionPet.content,
+      caseCaptionResp: contentCaseCaptionResp.content,
+      certificateOfService: contentCertificateOfService.content,
+      dateFiled: contentDateFiled.content,
+      dateFiledLabel: contentDateFiledLabel.content,
+      dateLodged: contentDateLodged.content,
+      dateLodgedLabel: contentDateLodgedLabel.content,
+      dateReceived: contentDateReceived.content,
+      dateReceivedLabel: contentDateReceivedLabel.content,
+      dateServed: contentDateServed.content,
+      docketNumber: contentDocketNumber.content,
+      documentTitle: contentDocumentTitle.content,
+      electronicallyFiled: contentElectronicallyFiled.content,
+      mailingDate: contentMailingDate.content,
+      petitionerLabel: contentPetitionerLabel.content,
+      respondentLabel: contentRespondentLabel.content,
+      vLabel: contentVLabel.content,
+    },
+  });
+
+  const coverPageDocument = await PDFDocument.load(content);
+
+  const coverPageDocumentPages = await pdfDoc.copyPages(
+    coverPageDocument,
+    coverPageDocument.getPageIndices(),
+  );
+
+  const coverPagePuppeteer = coverPageDocumentPages[0];
+
+  pdfDoc.insertPage(0, coverPagePuppeteer);
 
   return pdfDoc.save();
 };
