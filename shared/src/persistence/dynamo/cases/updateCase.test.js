@@ -59,6 +59,7 @@ describe('updateCase', () => {
     await updateCase({
       applicationContext,
       caseToUpdate: {
+        associatedJudge: 'Judge Buch',
         caseCaption: 'New caption',
         caseId: '123',
         docketNumber: '101-18',
@@ -90,6 +91,28 @@ describe('updateCase', () => {
     expect(updateStub.mock.calls[3][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':trialDate': '2019-03-01T21:40:46.415Z',
+      },
+    });
+    expect(updateStub.mock.calls[4][0]).toMatchObject({
+      ExpressionAttributeValues: {
+        ':associatedJudge': 'Judge Buch',
+      },
+    });
+  });
+
+  it('updates associated judge on work items', async () => {
+    await updateCase({
+      applicationContext,
+      caseToUpdate: {
+        associatedJudge: 'Judge Buch',
+        caseId: '123',
+        docketNumberSuffix: null,
+        status: Case.STATUS_TYPES.generalDocket,
+      },
+    });
+    expect(updateStub.mock.calls[0][0]).toMatchObject({
+      ExpressionAttributeValues: {
+        ':associatedJudge': 'Judge Buch',
       },
     });
   });
