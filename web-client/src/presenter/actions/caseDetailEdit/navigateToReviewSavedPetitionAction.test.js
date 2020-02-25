@@ -1,13 +1,12 @@
 import { navigateToReviewSavedPetitionAction } from './navigateToReviewSavedPetitionAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 describe('navigateToReviewSavedPetitionAction', () => {
   let routeStub;
 
   beforeEach(() => {
-    routeStub = sinon.stub();
+    routeStub = jest.fn();
 
     presenter.providers.router = {
       route: routeStub,
@@ -20,11 +19,11 @@ describe('navigateToReviewSavedPetitionAction', () => {
         presenter,
       },
       state: {
-        caseDetail: { caseId: '123' },
+        caseDetail: { docketNumber: '123-20' },
         documentId: 'abc',
       },
     });
 
-    expect(routeStub.calledOnce).toEqual(true);
+    expect(routeStub).toHaveBeenCalled();
   });
 });
