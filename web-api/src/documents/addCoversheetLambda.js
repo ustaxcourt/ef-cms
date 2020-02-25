@@ -18,7 +18,5 @@ exports.handler = event =>
         documentId,
       });
     },
-    {
-      logEvent: true,
-    },
+    { logEvent: true, logResults: false },
   );
