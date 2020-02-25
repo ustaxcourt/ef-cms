@@ -71,7 +71,6 @@ import { generateInternalCaseCaptionSequence } from './sequences/generateInterna
 import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getBlockedCasesByTrialLocationSequence } from './sequences/getBlockedCasesByTrialLocationSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
-import { goBackToDocumentDetailSequence } from './sequences/goBackToDocumentDetailSequence';
 import { goBackToStartCaseInternalSequence } from './sequences/goBackToStartCaseInternalSequence';
 import { gotoAddCourtIssuedDocketEntrySequence } from './sequences/gotoAddCourtIssuedDocketEntrySequence';
 import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequence';
@@ -93,6 +92,7 @@ import { gotoEditDocketEntrySequence } from './sequences/gotoEditDocketEntrySequ
 import { gotoEditOrderSequence } from './sequences/gotoEditOrderSequence';
 import { gotoEditPetitionDetailsSequence } from './sequences/gotoEditPetitionDetailsSequence';
 import { gotoEditPetitionerInformationSequence } from './sequences/gotoEditPetitionerInformationSequence';
+import { gotoEditSavedDocumentDetailSequence } from './sequences/gotoEditSavedDocumentDetailSequence';
 import { gotoEditTrialSessionSequence } from './sequences/gotoEditTrialSessionSequence';
 import { gotoEditUploadCourtIssuedDocumentSequence } from './sequences/gotoEditUploadCourtIssuedDocumentSequence';
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
@@ -435,7 +435,6 @@ export const presenter = {
     generatePdfFromScanSessionSequence,
     getBlockedCasesByTrialLocationSequence,
     getUsersInSectionSequence,
-    goBackToDocumentDetailSequence,
     goBackToStartCaseInternalSequence,
     gotoAddCourtIssuedDocketEntrySequence,
     gotoAddDocketEntrySequence,
@@ -457,6 +456,7 @@ export const presenter = {
     gotoEditOrderSequence,
     gotoEditPetitionDetailsSequence,
     gotoEditPetitionerInformationSequence,
+    gotoEditSavedDocumentDetailSequence,
     gotoEditTrialSessionSequence,
     gotoEditUploadCourtIssuedDocumentSequence,
     gotoFileDocumentSequence,

@@ -3,14 +3,14 @@ import { state } from 'cerebral';
 export const reviewSavedPetitionHelper = (get, applicationContext) => {
   let irsNoticeDateFormatted;
 
-  const form = get(state.form);
   const {
     documents,
     hasVerifiedIrsNotice,
     irsNoticeDate,
     petitionPaymentStatus,
     receivedAt,
-  } = form;
+    ...caseDetail
+  } = get(state.caseDetail);
 
   const {
     INITIAL_DOCUMENT_TYPES,
@@ -49,7 +49,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     'orderDesignatingPlaceOfTrial',
     'orderToShowCause',
     'noticeOfAttachments',
-  ].some(key => Boolean(form[key]));
+  ].some(key => Boolean(caseDetail[key]));
 
   const petitionFile =
     documentsByType[INITIAL_DOCUMENT_TYPES.petition.documentType];
