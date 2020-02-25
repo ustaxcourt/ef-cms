@@ -14,8 +14,8 @@ describe('Modify Practitioner Contact Information', () => {
   test.createdDocketNumbers = [];
 
   for (let i = 0; i < 3; i++) {
+    loginAs(test, 'practitioner');
     it(`login as a practitioner and create case #${i}`, async () => {
-      await loginAs(test, 'practitioner');
       caseDetail = await uploadPetition(test);
       test.createdDocketNumbers.push(caseDetail.docketNumber);
     });

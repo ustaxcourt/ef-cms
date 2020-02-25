@@ -11,14 +11,15 @@ describe('docket clerk edits a petition payment fee', () => {
 
   let caseDetail;
 
+  loginAs(test, 'petitioner');
+
   it('login as a tax payer and create a case', async () => {
-    await loginAs(test, 'petitioner');
     caseDetail = await uploadPetition(test);
   });
 
-  it('login as the docketclerk and edit the case petition payment fee', async () => {
-    await loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk');
 
+  it('login as the docketclerk and edit the case petition payment fee', async () => {
     await test.runSequence('gotoEditPetitionDetailsSequence', {
       docketNumber: caseDetail.docketNumber,
     });

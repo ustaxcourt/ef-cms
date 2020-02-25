@@ -25,8 +25,8 @@ describe('Modify Petitioner Contact Information', () => {
 
   let caseDetail;
 
+  loginAs(test, 'petitioner');
   it('login as a tax payer and create a case', async () => {
-    await loginAs(test, 'petitioner');
     caseDetail = await uploadPetition(test, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
