@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * Sets the state.form.caseCaption to the props.caseCaption passed in.
+ * sets startInternalCase tab to props tab
  *
  * @param {object} providers the providers object
  * @param {Function} providers.props the cerebral props object used for passing in props.caseCaption
