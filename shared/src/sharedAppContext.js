@@ -13,7 +13,7 @@ const getCognitoLoginUrl = () => {
 
 const getPublicSiteUrl = () => {
   if (process.env.USTC_ENV === 'prod') {
-    return 'https://https://ui-public-dev.ustc-case-mgmt.flexion.us/';
+    return 'https://ui-public-dev.ustc-case-mgmt.flexion.us/';
   } else {
     return process.env.PUBLIC_SITE_URL || 'http://localhost:5678/';
   }
