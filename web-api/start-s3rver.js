@@ -23,10 +23,10 @@ new S3rver({
   port: 9000,
   serviceEndpoint: 'localhost',
   silent: false,
-}).run((error, { address, port }) => {
+}).run((error, props) => {
   if (error) {
     console.error('error', error);
   } else {
-    console.info(`S3rver listening on ${address}:${port}.`);
+    console.info(`S3rver listening on ${props.address}:${props.port}.`);
   }
 });
