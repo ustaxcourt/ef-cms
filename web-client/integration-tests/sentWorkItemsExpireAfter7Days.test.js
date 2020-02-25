@@ -23,8 +23,11 @@ describe('verify old sent work items do not show up in the outbox', () => {
 
   beforeEach(async () => {
     jest.setTimeout(30000);
+  });
 
-    await loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner');
+
+  it('creates the case', async () => {
     caseDetail = await uploadPetition(test);
 
     const applicationContext = applicationContextFactory({
@@ -108,9 +111,9 @@ describe('verify old sent work items do not show up in the outbox', () => {
     });
   });
 
-  it('the petitionsclerk user should have the expected work items equal to or new than 7 days', async () => {
-    await loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk');
 
+  it('the petitionsclerk user should have the expected work items equal to or new than 7 days', async () => {
     const myOutbox = (await getFormattedMyOutbox(test)).filter(
       item => item.docketNumber === caseDetail.docketNumber,
     );
