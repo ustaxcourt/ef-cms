@@ -17,8 +17,9 @@ export const navigateToEditSavedDocumentDetailAction = async ({
 
   if (documentId && docketNumber) {
     await router.route(
-      `/case-detail/${docketNumber}/documents/${documentId}/edit-saved${tab &&
-        `?tab=${tab}`}`,
+      `/case-detail/${docketNumber}/documents/${documentId}/edit-saved${
+        tab ? `?tab=${tab}` : ''
+      }`,
     );
   }
 };
