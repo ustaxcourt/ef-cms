@@ -33,6 +33,7 @@ pkill -f s3rver
 echo "starting s3rver"
 node ./web-api/start-s3rver.js &
 S3RVER_PID=$!
+./wait-until.sh http://localhost:9000/ 200
 
 if [ ! -z "$RESUME" ]; then
   echo "Resuming operation with previous s3 and dynamo data"
