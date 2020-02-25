@@ -100,4 +100,5 @@ if [ ! -e "$CIRCLECI" ]; then
   pkill -P $DYNAMO_PID
   pkill -P $ESEARCH_PID
 fi
-kill $S3RVER_PID
+
+pkill -P $S3RVER_PID
