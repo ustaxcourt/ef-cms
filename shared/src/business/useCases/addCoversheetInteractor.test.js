@@ -252,7 +252,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.caseCaptionPostfix).toEqual('Petitioners');
     });
 
-    it('generates cover sheet data appropriate for a single petitioners', async () => {
+    it('generates cover sheet data appropriate for a single petitioner', async () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {

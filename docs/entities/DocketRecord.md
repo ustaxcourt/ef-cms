@@ -30,6 +30,9 @@ ID of the associated PDF document in the S3 bucket.
 
 JSON representation of the in-progress edit of this item.
 
+
+Restricted
+
 > `string` | optional
 
 ##### Can be null.
@@ -390,6 +393,9 @@ Code associated with the event that resulted in this item being added to the Doc
 
 
 ID of the user that filed this Docket Record item.
+
+
+Restricted
 
 > `string` | optional
 
