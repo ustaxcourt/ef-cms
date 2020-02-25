@@ -127,7 +127,7 @@ export const ReviewPetitionFromPaper = connect(
                             className="usa-label usa-label-display"
                             htmlFor="filing-type"
                           >
-                            Date recieved
+                            Date received
                           </label>
                           {reviewPetitionFromPaperHelper.receivedAtFormatted}
                         </div>
