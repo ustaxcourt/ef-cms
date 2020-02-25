@@ -27,9 +27,9 @@ describe('a docketclerk user creates a new message for another docketclerk user'
   let myCountBefore;
   let myInboxWorkItem;
 
-  it('login as the docketclerk and cache the initial inbox counts', async () => {
-    await loginAs(test, 'docketclerk1');
+  loginAs(test, 'docketclerk1');
 
+  it('login as the docketclerk and cache the initial inbox counts', async () => {
     await getFormattedDocumentQCSectionInbox(test);
     qcSectionInboxCountBefore = getInboxCount(test);
 
@@ -39,8 +39,9 @@ describe('a docketclerk user creates a new message for another docketclerk user'
     notificationsBefore = getNotifications(test);
   });
 
+  loginAs(test, 'petitioner');
+
   it('login as a tax payer and create a case', async () => {
-    await loginAs(test, 'petitioner');
     caseDetail = await uploadPetition(test);
   });
 
@@ -48,8 +49,9 @@ describe('a docketclerk user creates a new message for another docketclerk user'
     await uploadExternalDecisionDocument(test);
   });
 
+  loginAs(test, 'docketclerk');
+
   it('login as the docketclerk and verify there is a message in the qc section inbox entries', async () => {
-    await loginAs(test, 'docketclerk');
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
       test,
     );
@@ -127,8 +129,9 @@ describe('a docketclerk user creates a new message for another docketclerk user'
     });
   });
 
+  loginAs(test, 'docketclerk1');
+
   it('login as docketclerk1 and verify we have a message in my inbox', async () => {
-    await loginAs(test, 'docketclerk1');
     const myInbox = await getFormattedMyInbox(test);
     myInboxWorkItem = myInbox.find(
       workItem => workItem.caseId === caseDetail.caseId,
