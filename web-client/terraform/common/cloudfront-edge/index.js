@@ -37,7 +37,7 @@ exports.handler = (event, context, callback) => {
   const contentSecurityPolicy = [
     "base-uri 'none' resource://pdf.js",
     `connect-src ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrl} ${localUrl} ${localWebsocketUrl}`,
-    `default-src ${applicationUrl} data: blob:`,
+    `default-src ${applicationUrl} ${s3Url} data: blob:`,
     `form-action ${applicationUrl}`,
     "object-src 'none'",
     `script-src 'self' ${dynamsoftUrl} 'unsafe-inline' resource://pdf.js`,
