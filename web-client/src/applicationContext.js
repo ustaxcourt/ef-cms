@@ -159,6 +159,7 @@ import { getUserInteractor } from '../../shared/src/proxies/users/getUserProxy';
 import { getUserPermissions } from '../../shared/src/authorization/getUserPermissions';
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
+import { initHoneybadger } from '../../shared/src/tools/honeybadger';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
 import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCaseProxy';
 import { refreshTokenInteractor } from '../../shared/src/business/useCases/refreshTokenInteractor';
@@ -586,6 +587,7 @@ const applicationContext = {
       sortDocketRecords,
     };
   },
+  initHoneybadger,
   setCurrentUser,
   setCurrentUserToken,
 };

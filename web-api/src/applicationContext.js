@@ -741,6 +741,7 @@ const {
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { exec } = require('child_process');
+const { initHoneybadger } = require('../../shared/src/tools/honeybadger');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 const { User } = require('../../shared/src/business/entities/User');
 const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
@@ -1165,6 +1166,7 @@ module.exports = (appContextUser = {}) => {
         setServiceIndicatorsForCase,
       };
     },
+    initHoneybadger,
     isAuthorized,
     isAuthorizedForWorkItems: () =>
       isAuthorized(user, ROLE_PERMISSIONS.WORKITEM),
