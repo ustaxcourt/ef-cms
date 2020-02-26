@@ -1,6 +1,7 @@
 import { BigHeader } from '../BigHeader';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -105,7 +106,9 @@ export const CaseInventoryReport = connect(
                   {caseInventoryReportHelper.formattedReportData.map(
                     (row, idx) => (
                       <tr key={idx}>
-                        <td>{row.docketNumberWithSuffix}</td>
+                        <td>
+                          <CaseLink formattedCase={row} />
+                        </td>
                         <td>{row.caseName}</td>
                         {caseInventoryReportHelper.showJudgeColumn && (
                           <td>{row.associatedJudge}</td>
