@@ -8,8 +8,11 @@ import { state } from 'cerebral';
  */
 export const navigateToReviewSavedPetitionAction = async ({ get, router }) => {
   const documentId = get(state.documentId);
-  const caseId = get(state.caseDetail.caseId);
-  if (documentId && caseId) {
-    await router.route(`/case-detail/${caseId}/documents/${documentId}/review`);
+  const docketNumber = get(state.caseDetail.docketNumber);
+
+  if (documentId && docketNumber) {
+    await router.route(
+      `/case-detail/${docketNumber}/documents/${documentId}/review`,
+    );
   }
 };

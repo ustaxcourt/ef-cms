@@ -15,7 +15,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
 
-  const { Document } = applicationContext.getEntityConstructors();
+  const { Case, Document } = applicationContext.getEntityConstructors();
   const systemGeneratedEventCodes = Object.keys(
     Document.SYSTEM_GENERATED_DOCUMENT_TYPES,
   ).map(key => {
@@ -93,6 +93,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
             document.isInProgress));
 
       let editLink = ''; //defaults to doc detail
+
       if (
         showDocumentEditLink &&
         (permissions.DOCKET_ENTRY || permissions.CREATE_ORDER_DOCKET_ENTRY) &&
@@ -108,6 +109,11 @@ export const formattedCaseDetail = (get, applicationContext) => {
           qcWorkItemsUntouched
         ) {
           editLink = '/edit';
+        } else if (
+          document.isPetition &&
+          caseDetail.status === Case.STATUS_TYPES.inProgress
+        ) {
+          editLink = '/edit-saved';
         }
       }
 
