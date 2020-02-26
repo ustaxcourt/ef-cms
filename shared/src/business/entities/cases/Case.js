@@ -47,7 +47,6 @@ Case.STATUS_TYPES = {
   closed: 'Closed', // Judge has made a ruling to close the case
   generalDocket: 'General Docket - Not at Issue', // Submitted to the IRS
   generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)', // Case is ready for trial
-  inProgress: 'In Progress', // Case has been saved for later
   jurisdictionRetained: 'Jurisdiction Retained', // Jurisdiction of a case is retained by a specific judge — usually after the case is on a judge’s trial calendar
   new: 'New', // Case has not been QCed
   onAppeal: 'On Appeal', // After the trial, the case has gone to the appeals court
@@ -1596,7 +1595,6 @@ Case.prototype.getConsolidationStatus = function({ caseEntity }) {
 Case.prototype.canConsolidate = function(caseToConsolidate) {
   const ineligibleStatusTypes = [
     Case.STATUS_TYPES.new,
-    Case.STATUS_TYPES.inProgress,
     Case.STATUS_TYPES.generalDocket,
     Case.STATUS_TYPES.closed,
     Case.STATUS_TYPES.onAppeal,
