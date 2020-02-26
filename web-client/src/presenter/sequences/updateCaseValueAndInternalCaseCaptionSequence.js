@@ -1,7 +1,7 @@
-import { generateInternalCaseCaptionSequence } from './generateInternalCaseCaptionSequence';
+import { generateCaseCaptionForSavedPetitionSequence } from './generateCaseCaptionForSavedPetitionSequence';
 import { updateCaseValueSequence } from './updateCaseValueSequence';
 
 export const updateCaseValueAndInternalCaseCaptionSequence = [
   updateCaseValueSequence,
-  generateInternalCaseCaptionSequence,
+  generateCaseCaptionForSavedPetitionSequence,
 ];
