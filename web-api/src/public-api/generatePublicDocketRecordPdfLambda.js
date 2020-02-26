@@ -21,7 +21,5 @@ exports.handler = event =>
           includePartyDetail: false,
         });
     },
-    {
-      user: {},
-    },
+    { logResults: false, user: {} },
   );

@@ -6,6 +6,8 @@ import classNames from 'classnames';
 
 export const ReportsMenu = connect(
   {
+    openCaseInventoryReportModalSequence:
+      sequences.openCaseInventoryReportModalSequence,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
     pageIsReports: state.headerHelper.pageIsReports,
@@ -15,6 +17,7 @@ export const ReportsMenu = connect(
   },
   ({
     isExpanded,
+    openCaseInventoryReportModalSequence,
     openTrialSessionPlanningModalSequence,
     pageIsReports,
     resetHeaderAccordionsSequence,
@@ -39,16 +42,17 @@ export const ReportsMenu = connect(
         {isExpanded && (
           <ul className="usa-nav__submenu">
             <li className="usa-nav__submenu-item">
-              <a
-                href="/reports/case-inventory-report"
-                id="case-inventory-report"
+              <Button
+                link
+                id="case-inventory-btn"
                 onClick={() => {
                   resetHeaderAccordionsSequence();
                   toggleMobileMenuSequence();
+                  openCaseInventoryReportModalSequence();
                 }}
               >
                 Case Inventory
-              </a>
+              </Button>
             </li>
             <li className="usa-nav__submenu-item">
               <a

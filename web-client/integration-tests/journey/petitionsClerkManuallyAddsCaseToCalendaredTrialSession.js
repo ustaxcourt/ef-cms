@@ -21,7 +21,7 @@ export default (test, createdCasesIndex) => {
     });
 
     await test.runSequence('addCaseToTrialSessionSequence');
-    await wait(5000);
+    await wait(1000);
 
     expect(test.getState('caseDetail.trialDate')).toBeDefined();
   });

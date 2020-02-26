@@ -32,7 +32,7 @@ describe('validateAddPractitioner', () => {
     };
   });
 
-  it('should call the path success when no errors are found', async () => {
+  it('should call the success path when no errors are found', async () => {
     validateAddPractitionerInteractorStub.returns(null);
     await runAction(validateAddPractitionerAction, {
       modules: {
@@ -46,7 +46,7 @@ describe('validateAddPractitioner', () => {
     expect(successStub.calledOnce).toEqual(true);
   });
 
-  it('should call the path error when any errors are found', async () => {
+  it('should call the error path when any errors are found', async () => {
     validateAddPractitionerInteractorStub.returns('error');
     await runAction(validateAddPractitionerAction, {
       modules: {

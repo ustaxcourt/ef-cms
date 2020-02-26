@@ -28,8 +28,8 @@ describe('Docket Clerk seals a case', () => {
     jest.setTimeout(30000);
   });
 
+  loginAs(test, 'petitioner');
   it('login as a petitioner and create a case', async () => {
-    await loginAs(test, 'petitioner');
     const caseDetail = await uploadPetition(test, {
       contactSecondary: {
         address1: '734 Cowley Parkway',

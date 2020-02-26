@@ -1,5 +1,4 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { waitForRouter } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -162,6 +161,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+
     await test.runSequence('gotoReviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
