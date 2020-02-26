@@ -10,15 +10,12 @@ import React from 'react';
 
 export const CaseDetailEdit = connect(
   {
-    generateCaseCaptionForSavedPetitionSequence:
-      sequences.generateCaseCaptionForSavedPetitionSequence,
     navigateBackSequence: sequences.navigateBackSequence,
     navigateToReviewSavedPetitionSequence:
       sequences.navigateToReviewSavedPetitionSequence,
     screenMetadata: state.screenMetadata,
   },
   ({
-    generateCaseCaptionForSavedPetitionSequence,
     navigateBackSequence,
     navigateToReviewSavedPetitionSequence,
     screenMetadata,
