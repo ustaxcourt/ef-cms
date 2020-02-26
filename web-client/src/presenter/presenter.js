@@ -291,6 +291,7 @@ import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAs
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
 import { updateCaseNoteSequence } from './sequences/updateCaseNoteSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
+import { updateCaseValueAndInternalCaseCaptionSequence } from './sequences/updateCaseValueAndInternalCaseCaptionSequence';
 import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByIndexSequence';
 import { updateCaseValueSequence } from './sequences/updateCaseValueSequence';
 import { updateCaseWorkingCopyUserNoteSequence } from './sequences/updateCaseWorkingCopyUserNoteSequence';
@@ -304,6 +305,7 @@ import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNu
 import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
 import { updateFormPartyTypeSequence } from './sequences/updateFormPartyTypeSequence';
+import { updateFormValueAndInternalCaseCaptionSequence } from './sequences/updateFormValueAndInternalCaseCaptionSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateForwardFormValueSequence } from './sequences/updateForwardFormValueSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
@@ -659,6 +661,7 @@ export const presenter = {
     updateCaseDeadlineSequence,
     updateCaseNoteSequence,
     updateCasePartyTypeSequence,
+    updateCaseValueAndInternalCaseCaptionSequence,
     updateCaseValueByIndexSequence,
     updateCaseValueSequence,
     updateCaseWorkingCopyUserNoteSequence,
@@ -672,6 +675,7 @@ export const presenter = {
     updateDocumentValueSequence,
     updateFileDocumentWizardFormValueSequence,
     updateFormPartyTypeSequence,
+    updateFormValueAndInternalCaseCaptionSequence,
     updateFormValueSequence,
     updateForwardFormValueSequence,
     updateJudgesCaseNoteOnCaseDetailSequence,
