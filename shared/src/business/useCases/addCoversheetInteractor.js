@@ -1,6 +1,5 @@
 const { Case } = require('../entities/cases/Case');
-const { coverLogo } = require('../assets/coverLogo');
-const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
+const { PDFDocument } = require('pdf-lib');
 
 const {
   generateCoverPagePdf,
@@ -137,7 +136,7 @@ exports.addCoverToPdf = async ({
     }
   };
 
-  const content = await generateCoverPagePdf({
+  const coverPagePdf = await generateCoverPagePdf({
     applicationContext,
     content: {
       caseCaptionPet: getContentByKey('caseCaptionPetitioner'),
@@ -160,16 +159,13 @@ exports.addCoverToPdf = async ({
     },
   });
 
-  const coverPageDocument = await PDFDocument.load(content);
-
+  const coverPageDocument = await PDFDocument.load(coverPagePdf);
   const coverPageDocumentPages = await pdfDoc.copyPages(
     coverPageDocument,
     coverPageDocument.getPageIndices(),
   );
 
-  const coverPagePuppeteer = coverPageDocumentPages[0];
-
-  pdfDoc.insertPage(0, coverPagePuppeteer);
+  pdfDoc.insertPage(0, coverPageDocumentPages[0]);
 
   return pdfDoc.save();
 };
@@ -188,14 +184,12 @@ exports.addCoversheetInteractor = async ({
   caseId,
   documentId,
 }) => {
-  applicationContext.logger.time(`Fetching the Case for ${caseId}`);
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
       applicationContext,
       caseId,
     });
-  applicationContext.logger.timeEnd(`Fetching the Case for ${caseId}`);
 
   const caseEntity = new Case(caseRecord, { applicationContext });
 
@@ -207,9 +201,6 @@ exports.addCoversheetInteractor = async ({
     document => document.documentId === documentId,
   );
 
-  applicationContext.logger.time(
-    `Fetching S3 File for Coversheet ${documentId}`,
-  );
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
@@ -217,9 +208,6 @@ exports.addCoversheetInteractor = async ({
       Key: documentId,
     })
     .promise();
-  applicationContext.logger.timeEnd(
-    `Fetching S3 File for Coversheet ${documentId}`,
-  );
 
   const newPdfData = await exports.addCoverToPdf({
     applicationContext,
@@ -230,7 +218,6 @@ exports.addCoversheetInteractor = async ({
 
   documentEntity.setAsProcessingStatusAsCompleted();
 
-  applicationContext.logger.time(`Updating Document Status for ${documentId}`);
   await applicationContext
     .getPersistenceGateway()
     .updateDocumentProcessingStatus({
@@ -238,17 +225,12 @@ exports.addCoversheetInteractor = async ({
       caseId,
       documentIndex,
     });
-  applicationContext.logger.timeEnd(
-    `Updating Document Status for ${documentId}`,
-  );
 
-  applicationContext.logger.time(`Saving S3 Document for ${documentId}`);
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: newPdfData,
     documentId,
   });
-  applicationContext.logger.timeEnd(`Saving S3 Document for ${documentId}`);
 
   return newPdfData;
 };
