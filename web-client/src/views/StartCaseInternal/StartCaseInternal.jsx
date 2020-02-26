@@ -16,8 +16,6 @@ export const StartCaseInternal = connect(
   {
     documentSelectedForScan: state.documentSelectedForScan,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    generateInternalCaseCaptionSequence:
-      sequences.generateInternalCaseCaptionSequence,
     navigateToReviewPetitionFromPaperSequence:
       sequences.navigateToReviewPetitionFromPaperSequence,
     showModal: state.showModal,
@@ -25,7 +23,6 @@ export const StartCaseInternal = connect(
   ({
     documentSelectedForScan,
     formCancelToggleCancelSequence,
-    generateInternalCaseCaptionSequence,
     navigateToReviewPetitionFromPaperSequence,
     showModal,
   }) => {
