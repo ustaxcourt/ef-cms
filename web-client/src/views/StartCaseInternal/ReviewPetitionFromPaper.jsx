@@ -191,7 +191,7 @@ export const ReviewPetitionFromPaper = connect(
                           >
                             Mailing date
                           </label>
-                          {reviewPetitionFromPaperHelper.mailingDateFormatted}
+                          {form.mailingDate}
                         </div>
 
                         <div className="margin-top-3 margin-bottom-2">
