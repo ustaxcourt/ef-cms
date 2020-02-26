@@ -11,7 +11,7 @@ const MOCK_WORK_ITEMS = [
     assigneeId: null,
     assigneeName: 'IRSBatchSystem',
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    caseStatus: Case.STATUS_TYPES.inProgress,
+    caseStatus: Case.STATUS_TYPES.new,
     completedAt: '2018-12-27T18:06:02.968Z',
     completedBy: 'Petitioner',
     completedByUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
