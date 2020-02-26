@@ -1,12 +1,16 @@
-export const initHoneybadger = config => {
+exports.initHoneybadger = useOnError => {
+  const Honeybadger = require('honeybadger');
   const devApiKey = '5299c7e0';
-  const Honeybadger = require('path/to/honeybadger');
-  Honeybadger.configure({
+
+  const config = {
     apiKey: devApiKey, // TODO: should be set elsewhere
     environment: 'dev',
-    onerror: true, // do not use window.onerror for reporting
-    ...config,
-  });
+  };
+  if (useOnError) {
+    Honeybadger.configure(config);
+  } else {
+    Honeybadger.factory(config);
+  }
 
   return Honeybadger;
 };
