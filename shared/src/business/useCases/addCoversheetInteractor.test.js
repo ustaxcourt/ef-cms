@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const sinon = require('sinon');
 const {
   addCoversheetInteractor,
   generateCoverSheetData,
@@ -13,6 +12,7 @@ const {
 } = require('../utilities/DateHandler');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { getChromiumBrowser } = require('../utilities/getChromiumBrowser');
 const { MOCK_USERS } = require('../../test/mockUsers');
 const { PDFDocument } = require('pdf-lib');
 
@@ -76,56 +76,65 @@ describe('addCoversheetInteractor', () => {
     partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
   };
 
-  const updateDocumentProcessingStatusStub = sinon.stub().resolves(null);
-  const getObjectStub = sinon.stub().returns({
+  const updateDocumentProcessingStatusStub = jest.fn(() => null);
+  const getObjectStub = jest.fn(() => ({
     promise: async () => ({
       Body: testPdfDoc,
     }),
-  });
+  }));
+
+  let getChromiumBrowserStub;
+  let getCaseByCaseIdStub;
+  let saveDocumentFromLambdaStub;
+  let applicationContext;
 
   beforeEach(() => {
     testPdfDoc = testPdfDocBytes();
+
+    getChromiumBrowserStub = jest.fn(async () => {
+      return await getChromiumBrowser();
+    });
+
+    applicationContext = {
+      environment: { documentsBucketName: 'documents' },
+      getCaseCaptionNames: Case.getCaseCaptionNames,
+      getChromiumBrowser: getChromiumBrowserStub,
+      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      getPersistenceGateway: () => ({
+        getCaseByCaseId: getCaseByCaseIdStub,
+        saveDocumentFromLambda: saveDocumentFromLambdaStub,
+        updateDocumentProcessingStatus: updateDocumentProcessingStatusStub,
+      }),
+      getStorageClient: () => ({
+        getObject: getObjectStub,
+      }),
+      getUtilities: () => {
+        return {
+          createISODateString,
+          formatDateString,
+          formatNow,
+          prepareDateFromString,
+        };
+      },
+      logger: {
+        error: e => console.log(e),
+        time: () => null,
+        timeEnd: () => null,
+      },
+    };
   });
 
   it('adds a cover page to a pdf document', async () => {
-    const getCaseByCaseIdStub = sinon.stub().resolves(testingCaseData);
-
-    const saveDocumentFromLambdaStub = sinon
-      .stub()
-      .callsFake(({ document: newPdfData }) => {
-        fs.writeFileSync(
-          testOutputPath + 'addCoverToPDFDocument_1.pdf',
-          newPdfData,
-        );
-      });
+    getCaseByCaseIdStub = jest.fn(() => testingCaseData);
+    saveDocumentFromLambdaStub = jest.fn(({ document: newPdfData }) => {
+      fs.writeFileSync(
+        testOutputPath + 'addCoverToPDFDocument_1.pdf',
+        newPdfData,
+      );
+    });
 
     const params = {
-      applicationContext: {
-        environment: { documentsBucketName: 'documents' },
-        getCaseCaptionNames: Case.getCaseCaptionNames,
-        getCurrentUser: () =>
-          MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-        getPersistenceGateway: () => ({
-          getCaseByCaseId: getCaseByCaseIdStub,
-          saveDocumentFromLambda: saveDocumentFromLambdaStub,
-          updateDocumentProcessingStatus: updateDocumentProcessingStatusStub,
-        }),
-        getStorageClient: () => ({
-          getObject: getObjectStub,
-        }),
-        getUtilities: () => {
-          return {
-            createISODateString,
-            formatDateString,
-            formatNow,
-            prepareDateFromString,
-          };
-        },
-        logger: {
-          time: () => null,
-          timeEnd: () => null,
-        },
-      },
+      applicationContext,
       caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
@@ -134,49 +143,22 @@ describe('addCoversheetInteractor', () => {
 
     const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
-    expect(saveDocumentFromLambdaStub.calledOnce).toBeTruthy();
+    expect(saveDocumentFromLambdaStub).toHaveBeenCalled();
     expect(newPdfDocPages.length).toEqual(2);
+    expect(getChromiumBrowserStub).toHaveBeenCalled();
   });
 
   it('adds a cover page to a pdf document with optional data', async () => {
-    const getCaseByCaseIdStub = sinon.stub().resolves(optionalTestingCaseData);
-
-    const saveDocumentFromLambdaStub = sinon
-      .stub()
-      .callsFake(({ document: newPdfData }) => {
-        fs.writeFileSync(
-          testOutputPath + 'addCoverToPDFDocument_2.pdf',
-          newPdfData,
-        );
-      });
+    getCaseByCaseIdStub = jest.fn(() => optionalTestingCaseData);
+    saveDocumentFromLambdaStub = jest.fn(({ document: newPdfData }) => {
+      fs.writeFileSync(
+        testOutputPath + 'addCoverToPDFDocument_2.pdf',
+        newPdfData,
+      );
+    });
 
     const params = {
-      applicationContext: {
-        environment: { documentsBucketName: 'documents' },
-        getCaseCaptionNames: Case.getCaseCaptionNames,
-        getCurrentUser: () =>
-          MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-        getPersistenceGateway: () => ({
-          getCaseByCaseId: getCaseByCaseIdStub,
-          saveDocumentFromLambda: saveDocumentFromLambdaStub,
-          updateDocumentProcessingStatus: updateDocumentProcessingStatusStub,
-        }),
-        getStorageClient: () => ({
-          getObject: getObjectStub,
-        }),
-        getUtilities: () => {
-          return {
-            createISODateString,
-            formatDateString,
-            formatNow,
-            prepareDateFromString,
-          };
-        },
-        logger: {
-          time: () => null,
-          timeEnd: () => null,
-        },
-      },
+      applicationContext,
       caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
     };
@@ -185,7 +167,7 @@ describe('addCoversheetInteractor', () => {
 
     const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
-    expect(saveDocumentFromLambdaStub.calledOnce).toBeTruthy();
+    expect(saveDocumentFromLambdaStub).toHaveBeenCalled();
     expect(newPdfDocPages.length).toEqual(2);
   });
 
