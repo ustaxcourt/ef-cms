@@ -301,6 +301,7 @@ import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNu
 import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
 import { updateFormPartyTypeSequence } from './sequences/updateFormPartyTypeSequence';
+import { updateFormValueAndInternalCaseCaptionSequence } from './sequences/updateFormValueAndInternalCaseCaptionSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateForwardFormValueSequence } from './sequences/updateForwardFormValueSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
@@ -666,6 +667,7 @@ export const presenter = {
     updateDocumentValueSequence,
     updateFileDocumentWizardFormValueSequence,
     updateFormPartyTypeSequence,
+    updateFormValueAndInternalCaseCaptionSequence,
     updateFormValueSequence,
     updateForwardFormValueSequence,
     updateJudgesCaseNoteOnCaseDetailSequence,

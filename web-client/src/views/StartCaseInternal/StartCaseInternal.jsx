@@ -48,9 +48,6 @@ export const StartCaseInternal = connect(
                 <Tabs
                   bind="startCaseInternal.tab"
                   className="container-tabs no-full-border-bottom flex tab-button-h3"
-                  onSelect={tab => {
-                    generateInternalCaseCaptionSequence({ tab });
-                  }}
                 >
                   <Tab id="tab-parties" tabName="partyInfo" title="Parties">
                     <Parties />
