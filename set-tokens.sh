@@ -17,4 +17,4 @@ response=$(aws cognito-idp admin-initiate-auth \
 
 PETITIONS_CLERK_TOKEN=$(echo $response | jq -r '.AuthenticationResult.IdToken')
 
-export PETITIONS_CLERK_TOKEN
+export PETITIONS_CLERK_TOKEN="${PETITIONS_CLERK_TOKEN}"
