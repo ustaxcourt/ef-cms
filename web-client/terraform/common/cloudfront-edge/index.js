@@ -35,7 +35,7 @@ exports.handler = (event, context, callback) => {
   const localWebsocketUrl = 'ws://127.0.0.1:*';
   const s3Url = 'https://s3.us-east-1.amazonaws.com';
   const contentSecurityPolicy = [
-    "base-uri 'none' resource://pdf.js",
+    'base-uri resource://pdf.js',
     `connect-src ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrl} ${localUrl} ${localWebsocketUrl}`,
     `default-src ${applicationUrl} ${s3Url} data: blob:`,
     `form-action ${applicationUrl}`,
@@ -46,7 +46,7 @@ exports.handler = (event, context, callback) => {
   headers['content-security-policy'] = [
     {
       key: 'Content-Security-Policy',
-      value: "default-src 'self'",
+      value: contentSecurityPolicy.join('; '),
     },
   ];
   headers['x-content-type-options'] = [
