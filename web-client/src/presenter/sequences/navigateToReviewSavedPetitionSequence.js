@@ -5,7 +5,6 @@ import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErr
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { updateFormWithCaseDetailAction } from '../actions/caseDetailEdit/updateFormWithCaseDetailAction';
 import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
 
 export const navigateToReviewSavedPetitionSequence = showProgressSequenceDecorator(
@@ -16,11 +15,7 @@ export const navigateToReviewSavedPetitionSequence = showProgressSequenceDecorat
     validateCaseDetailAction,
     {
       error: [setValidationAlertErrorsAction],
-      success: [
-        stopShowValidationAction,
-        updateFormWithCaseDetailAction,
-        navigateToReviewSavedPetitionAction,
-      ],
+      success: [stopShowValidationAction, navigateToReviewSavedPetitionAction],
     },
   ],
 );
