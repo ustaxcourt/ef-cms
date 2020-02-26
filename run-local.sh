@@ -32,7 +32,7 @@ pkill -f s3rver
 
 echo "starting s3rver"
 rm -rf ./web-api/storage/s3/*
-npx s3rver -d ./web-api/storage/s3 -p 9000 --service-endpoint localhost --configure-bucket $DOCUMENTS_BUCKET_NAME ./web-api/cors-policy.xml --configure-bucket $TEMP_DOCUMENTS_BUCKET_NAME ./web-api/cors-policy.xml &
+node ./web-api/start-s3rver &
 S3RVER_PID=$!
 ./wait-until.sh http://localhost:9000/ 200
 
