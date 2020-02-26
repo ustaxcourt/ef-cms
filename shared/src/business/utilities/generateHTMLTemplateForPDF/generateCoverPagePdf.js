@@ -5,7 +5,6 @@ const ustcLogoBufferBase64 = require('../../../../static/images/ustc_seal.png_')
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.content the html content for the cover sheet
- * @param {boolean} providers.displayHeaderFooter boolean to determine if the header and footer should be displayed
  * @returns {Buffer} the pdf as a binary buffer
  */
 exports.generateCoverPagePdf = async ({ applicationContext, content }) => {
@@ -58,36 +57,34 @@ exports.generateCoverPagePdf = async ({ applicationContext, content }) => {
         <div class="width-half float-left">
           <div class="width-half float-left"><img src="${ustcLogoBufferBase64}" width="80" height="80"/></div>
           <div class="width-half float-right text-center">
-            <b>${content.dateReceivedLabel}</b>
+            <b>Received</b>
             <br />
             ${content.dateReceived}
           </div>
           <div class="clear"></div>
         </div>
         <div class="width-half float-right text-center">
-          <b>${content.dateFiledLabel}</b>
-          <b>${content.dateLodgedLabel}</b>
+          <b>${content.dateFiledLodgedLabel}</b>
           <br />
-          ${content.dateFiled}
-          ${content.dateLodged}
+          ${content.dateFiledLodged}
         </div>
         <div class="clear"></div>
       </div>
 
       <div style="margin-top: 40px; font-size:${fontSizeCaption}px;">
         <div class="width-60 float-left">
-          ${content.caseCaptionPet}
+          ${content.caseCaptionPetitioner}
           <br /><br />
           <div class="text-indent">
             ${content.petitionerLabel}
-          <br /><br />
-          ${content.vLabel}
+            <br /><br />
+            v.
           </div>
           <br />
-          ${content.caseCaptionResp}
+          ${content.caseCaptionRespondent}
           <br /><br />
           <div class="text-indent">
-            ${content.respondentLabel}
+            Respondent
           </div>
         </div>
         <div class="width-40 float-right" style="padding-top:40px;">
