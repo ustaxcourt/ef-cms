@@ -1,4 +1,4 @@
-import { forEach, set } from 'lodash';
+import { forEach, isEmpty, set } from 'lodash';
 import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import route from 'riot-route';
@@ -135,6 +135,32 @@ const router = {
           docketNumber,
           documentId,
         });
+      }, ROLE_PERMISSIONS.UPDATE_CASE),
+    );
+
+    route(
+      '/case-detail/*/documents/*/edit-saved..',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(
+            docketNumber,
+          )} Edit saved document details`,
+        );
+
+        if (!isEmpty(app.getState('form'))) {
+          const { tab } = route.query();
+
+          app.getSequence('gotoEditSavedDocumentDetailSequence')({
+            docketNumber,
+            documentId,
+            tab,
+          });
+        } else {
+          app.getSequence('gotoDocumentDetailSequence')({
+            docketNumber,
+            documentId,
+          });
+        }
       }, ROLE_PERMISSIONS.UPDATE_CASE),
     );
 
