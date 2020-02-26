@@ -6,7 +6,7 @@ import { app } from './app';
 import { applicationContext } from './applicationContext';
 import Devtools from 'cerebral/devtools';
 
-const honeybadger = applicationContext.initHoneybadger({ onerror: true });
+applicationContext.initHoneybadger({ onerror: true });
 
 /**
  * Initializes the app with dev environment context
