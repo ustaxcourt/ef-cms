@@ -2,14 +2,20 @@ import { BigHeader } from '../BigHeader';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseInventoryReport = connect(
   {
     caseInventoryReportHelper: state.caseInventoryReportHelper,
+    getCaseInventoryReportSequence: sequences.getCaseInventoryReportSequence,
+    screenMetadata: state.screenMetadata,
   },
-  ({ caseInventoryReportHelper }) => {
+  ({
+    caseInventoryReportHelper,
+    getCaseInventoryReportSequence,
+    screenMetadata,
+  }) => {
     return (
       <>
         <BigHeader text="Reports" />
@@ -19,7 +25,7 @@ export const CaseInventoryReport = connect(
 
             <Button
               link
-              className="float-right"
+              className="float-right margin-right-0"
               icon="print"
               onClick={() => null}
             >
@@ -35,13 +41,14 @@ export const CaseInventoryReport = connect(
               <BindedSelect
                 ariaDescribedBy="filterHeading"
                 ariaLabel="judge"
-                bind="screenMetadata.caseInventoryReport.judge"
+                bind="screenMetadata.associatedJudge"
                 className="select-left"
                 id="judgeFilter"
-                name="judge"
-                placeHolder="- Judge -"
+                name="associatedJudge"
+                value={screenMetadata.associatedJudge}
+                onChange={() => getCaseInventoryReportSequence()}
               >
-                <option value="">-Judge-</option>
+                <option value="">- Judge -</option>
                 {caseInventoryReportHelper.judges.map((judge, idx) => (
                   <option key={idx} value={judge}>
                     {judge}
@@ -53,30 +60,29 @@ export const CaseInventoryReport = connect(
               <BindedSelect
                 ariaDescribedBy="filterHeading"
                 ariaLabel="status"
-                bind="screenMetadata.caseInventoryReport.judge"
+                bind="screenMetadata.status"
                 className="select-left"
                 id="statusFilter"
                 name="status"
-                placeHolder="- Status -"
+                value={screenMetadata.status}
+                onChange={() => getCaseInventoryReportSequence()}
               >
-                <option value="">-Status-</option>
-                {Object.keys(caseInventoryReportHelper.caseStatuses).map(
-                  key => {
-                    const value = caseInventoryReportHelper.caseStatuses[key];
-                    return (
-                      <option key={key} value={key}>
-                        {value}
-                      </option>
-                    );
-                  },
-                )}
+                <option value="">- Status -</option>
+                {caseInventoryReportHelper.caseStatuses.map(status => {
+                  return (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  );
+                })}
               </BindedSelect>
             </div>
           </div>
 
           <div className="grid-row grid-gap margin-top-1">
             <div className="grid-col-12 text-align-right">
-              Count: {caseInventoryReportHelper.resultCount}
+              <span className="text-semibold">Count:</span>{' '}
+              {caseInventoryReportHelper.resultCount}
             </div>
           </div>
 
@@ -90,7 +96,17 @@ export const CaseInventoryReport = connect(
                     <th>Judge</th>
                   </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                  {caseInventoryReportHelper.formattedReportData.map(
+                    (row, idx) => (
+                      <tr key={idx}>
+                        <td>{row.docketNumberWithSuffix}</td>
+                        <td>{row.caseName}</td>
+                        <td>{row.associatedJudge}</td>
+                      </tr>
+                    ),
+                  )}
+                </tbody>
               </table>
             </div>
           </div>
