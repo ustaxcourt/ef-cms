@@ -139,7 +139,6 @@ jobs:
             npm run build:all
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-1.txt &
             ./wait-until-services.sh
-            ./wait-until.sh http://localhost:9000
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 15
             npm run test:pa11y:1 --node-flags --max-old-space-size=1024
@@ -149,7 +148,6 @@ jobs:
             npm run build:all
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-2.txt &
             ./wait-until-services.sh
-            ./wait-until.sh http://localhost:9000
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 15
             npm run test:pa11y:2 --node-flags --max-old-space-size=1024
@@ -157,9 +155,8 @@ jobs:
           name: Pa11y - Web Client 3
           command: |
             npm run build:all
-            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-2.txt &
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-3.txt &
             ./wait-until-services.sh
-            ./wait-until.sh http://localhost:9000
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 15
             npm run test:pa11y:3 --node-flags --max-old-space-size=1024
@@ -185,6 +182,9 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
           name: Cypress
           command: |
             npm run build:all &&
@@ -193,14 +193,15 @@ jobs:
               ./node_modules/.bin/cypress install
             fi
 
-            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000  AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop npx run-p start:api:ci start:client:ci > /dev/null &
+            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000 AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SLS_DEPLOYMENT_BUCKET=noop npx run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
-            ./wait-until.sh http://localhost:9000
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
             npm run cypress
       - store_artifacts:
           path: /root/project/cypress/videos/
+      - store_artifacts:
+          path: /tmp/cypress
 
   pre-deploy:
     machine:

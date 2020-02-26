@@ -67,6 +67,7 @@ import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCou
 import { fetchPendingItemsSequence } from './sequences/pending/fetchPendingItemsSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
+import { generateCaseCaptionForSavedPetitionSequence } from './sequences/generateCaseCaptionForSavedPetitionSequence';
 import { generateInternalCaseCaptionSequence } from './sequences/generateInternalCaseCaptionSequence';
 import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getBlockedCasesByTrialLocationSequence } from './sequences/getBlockedCasesByTrialLocationSequence';
@@ -94,6 +95,7 @@ import { gotoEditDocketEntrySequence } from './sequences/gotoEditDocketEntrySequ
 import { gotoEditOrderSequence } from './sequences/gotoEditOrderSequence';
 import { gotoEditPetitionDetailsSequence } from './sequences/gotoEditPetitionDetailsSequence';
 import { gotoEditPetitionerInformationSequence } from './sequences/gotoEditPetitionerInformationSequence';
+import { gotoEditSavedDocumentDetailSequence } from './sequences/gotoEditSavedDocumentDetailSequence';
 import { gotoEditTrialSessionSequence } from './sequences/gotoEditTrialSessionSequence';
 import { gotoEditUploadCourtIssuedDocumentSequence } from './sequences/gotoEditUploadCourtIssuedDocumentSequence';
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
@@ -131,6 +133,7 @@ import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
+import { navigateToEditSavedDocumentDetailSequence } from './sequences/navigateToEditSavedDocumentDetailSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintPreviewSequence } from './sequences/navigateToPrintPreviewSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
@@ -434,6 +437,7 @@ export const presenter = {
     fetchPendingItemsSequence,
     fetchUserNotificationsSequence,
     formCancelToggleCancelSequence,
+    generateCaseCaptionForSavedPetitionSequence,
     generateInternalCaseCaptionSequence,
     generatePdfFromScanSessionSequence,
     getBlockedCasesByTrialLocationSequence,
@@ -461,6 +465,7 @@ export const presenter = {
     gotoEditOrderSequence,
     gotoEditPetitionDetailsSequence,
     gotoEditPetitionerInformationSequence,
+    gotoEditSavedDocumentDetailSequence,
     gotoEditTrialSessionSequence,
     gotoEditUploadCourtIssuedDocumentSequence,
     gotoFileDocumentSequence,
@@ -498,6 +503,7 @@ export const presenter = {
     navigateBackSequence,
     navigateToCaseDetailSequence,
     navigateToEditOrderSequence,
+    navigateToEditSavedDocumentDetailSequence,
     navigateToPathSequence,
     navigateToPrintPreviewSequence,
     navigateToPrintableCaseConfirmationSequence,

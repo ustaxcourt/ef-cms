@@ -25,9 +25,12 @@ const ConfirmServeToIrsModal = () => (
 
 export const ReviewSavedPetition = connect(
   {
+    caseDetail: state.caseDetail,
     constants: state.constants,
-    form: state.form,
+    documentId: state.documentId,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    navigateToEditSavedDocumentDetailSequence:
+      sequences.navigateToEditSavedDocumentDetailSequence,
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper: state.reviewSavedPetitionHelper,
@@ -37,9 +40,11 @@ export const ReviewSavedPetition = connect(
     startCaseHelper: state.startCaseHelper,
   },
   ({
+    caseDetail,
     constants,
-    form,
+    documentId,
     formCancelToggleCancelSequence,
+    navigateToEditSavedDocumentDetailSequence,
     openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper,
     saveCaseAndServeToIrsSequence,
@@ -47,6 +52,8 @@ export const ReviewSavedPetition = connect(
     showModal,
     startCaseHelper,
   }) => {
+    const { caseId } = caseDetail;
+
     return (
       <>
         <section
@@ -60,7 +67,7 @@ export const ReviewSavedPetition = connect(
           </Focus>
 
           {reviewSavedPetitionHelper.hasOrders && (
-            <OrdersNeededSummary data={form} />
+            <OrdersNeededSummary data={caseDetail} />
           )}
 
           <div className="grid-container padding-x-0 create-case-review">
@@ -68,7 +75,24 @@ export const ReviewSavedPetition = connect(
               <div className="tablet:grid-col-7 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">Parties</h3>
+                    <h3 className="underlined">
+                      Parties
+                      <Button
+                        link
+                        aria-label="edit parties"
+                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        icon="edit"
+                        onClick={() => {
+                          navigateToEditSavedDocumentDetailSequence({
+                            caseId,
+                            documentId,
+                            tab: 'partyInfo',
+                          });
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </h3>
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-4 margin-bottom-1">
                         <label
@@ -77,7 +101,7 @@ export const ReviewSavedPetition = connect(
                         >
                           Party type
                         </label>
-                        {form.partyType}
+                        {caseDetail.partyType}
                       </div>
                       <div className="tablet:grid-col-4 margin-bottom-1">
                         <label
@@ -86,13 +110,17 @@ export const ReviewSavedPetition = connect(
                         >
                           Petitioner’s contact information
                         </label>
-                        {form.contactPrimary && (
+                        {caseDetail.contactPrimary && (
                           <address aria-labelledby="primary-label">
-                            {AddressDisplay(form.contactPrimary, constants, {
-                              nameOverride:
-                                startCaseHelper.showCaseNameForPrimary &&
-                                startCaseHelper.caseName,
-                            })}
+                            {AddressDisplay(
+                              caseDetail.contactPrimary,
+                              constants,
+                              {
+                                nameOverride:
+                                  startCaseHelper.showCaseNameForPrimary &&
+                                  startCaseHelper.caseName,
+                              },
+                            )}
                           </address>
                         )}
                       </div>
@@ -105,7 +133,10 @@ export const ReviewSavedPetition = connect(
                             >
                               Spouse’s contact information
                             </label>
-                            {AddressDisplay(form.contactSecondary, constants)}
+                            {AddressDisplay(
+                              caseDetail.contactSecondary,
+                              constants,
+                            )}
                           </>
                         )}
                       </div>
@@ -116,7 +147,24 @@ export const ReviewSavedPetition = connect(
               <div className="tablet:grid-col-5 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">Case Information</h3>
+                    <h3 className="underlined">
+                      Case Information
+                      <Button
+                        link
+                        aria-label="edit case information"
+                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        icon="edit"
+                        onClick={() => {
+                          navigateToEditSavedDocumentDetailSequence({
+                            caseId,
+                            documentId,
+                            tab: 'caseInfo',
+                          });
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </h3>
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-6 margin-bottom-05">
                         <div className="margin-top-3 margin-bottom-2">
@@ -124,7 +172,7 @@ export const ReviewSavedPetition = connect(
                             className="usa-label usa-label-display"
                             htmlFor="filing-type"
                           >
-                            Date recieved
+                            Date received
                           </label>
                           {reviewSavedPetitionHelper.receivedAtFormatted}
                         </div>
@@ -135,7 +183,7 @@ export const ReviewSavedPetition = connect(
                           >
                             Case caption
                           </label>
-                          {form.caseCaption}
+                          {caseDetail.caseCaption}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
                           <label
@@ -144,30 +192,21 @@ export const ReviewSavedPetition = connect(
                           >
                             Requested trial location
                           </label>
-                          {form.preferredTrialCity}
+                          {caseDetail.preferredTrialCity}
                         </div>
                       </div>
                       <div className="tablet:grid-col-6 margin-bottom-1">
-                        {form.mailingDate && (
+                        {caseDetail.mailingDate && (
                           <div className="margin-top-3 margin-bottom-2">
                             <label
                               className="usa-label usa-label-display"
-                              htmlFor="filing-location"
+                              htmlFor="mailing-date"
                             >
                               Mailing date
                             </label>
-                            {form.mailingDate}
+                            {caseDetail.mailingDate}
                           </div>
                         )}
-                        <div className="margin-top-3 margin-bottom-2">
-                          <label
-                            className="usa-label usa-label-display"
-                            htmlFor="filing-location"
-                          >
-                            Mailing date
-                          </label>
-                          {form.mailingDate || 'N/A'}
-                        </div>
 
                         <div className="margin-top-3 margin-bottom-2">
                           <label
@@ -176,7 +215,7 @@ export const ReviewSavedPetition = connect(
                           >
                             Case procedure
                           </label>
-                          {form.procedureType}
+                          {caseDetail.procedureType}
                         </div>
 
                         <div className="margin-top-3 margin-bottom-2">
@@ -203,7 +242,24 @@ export const ReviewSavedPetition = connect(
               <div className="tablet:grid-col-7 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">IRS Notice</h3>
+                    <h3 className="underlined">
+                      IRS Notice
+                      <Button
+                        link
+                        aria-label="edit IRS notice information"
+                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        icon="edit"
+                        onClick={() => {
+                          navigateToEditSavedDocumentDetailSequence({
+                            caseId,
+                            documentId,
+                            tab: 'irsNotice',
+                          });
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </h3>
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-4 margin-bottom-1">
                         <div>
@@ -222,7 +278,7 @@ export const ReviewSavedPetition = connect(
                           >
                             Type of notice/case
                           </label>
-                          {form.caseType}
+                          {caseDetail.caseType}
                         </div>
                       </div>
                       <div className="tablet:grid-col-4 margin-bottom-1">
