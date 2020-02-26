@@ -197,7 +197,11 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
+            ps aux | grep node
+            ps aux | grep s3rver
             npm run cypress
+            ps aux | grep node
+            ps aux | grep s3rver
       - store_artifacts:
           path: /root/project/cypress/videos/
       - store_artifacts:
