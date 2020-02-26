@@ -248,7 +248,8 @@ export const filterWorkItems = ({
             // PetitionsClerks
             (item.assigneeId === user.userId &&
               user.role === USER_ROLES.petitionsClerk &&
-              item.caseStatus === STATUS_TYPES.inProgress)
+              item.caseStatus === STATUS_TYPES.new &&
+              !item.document.isStatusServed)
           );
         },
         inbox: item => {
@@ -259,7 +260,7 @@ export const filterWorkItems = ({
             item.section === user.section &&
             item.document.isFileAttached !== false &&
             !item.inProgress &&
-            item.caseStatus !== STATUS_TYPES.inProgress
+            !item.document.isStatusServed
           );
         },
         outbox: item => {
@@ -283,7 +284,8 @@ export const filterWorkItems = ({
               (item.document.isFileAttached === false || item.inProgress)) ||
             // PetitionsClerks
             (user.role === USER_ROLES.petitionsClerk &&
-              item.caseStatus === STATUS_TYPES.inProgress)
+              item.caseStatus === STATUS_TYPES.new &&
+              !item.document.isStatusServed)
           );
         },
         inbox: item => {
@@ -294,7 +296,7 @@ export const filterWorkItems = ({
             item.document.isFileAttached !== false &&
             !item.inProgress &&
             additionalFilters(item) &&
-            item.caseStatus !== STATUS_TYPES.inProgress
+            !item.document.isStatusServed
           );
         },
         outbox: item => {

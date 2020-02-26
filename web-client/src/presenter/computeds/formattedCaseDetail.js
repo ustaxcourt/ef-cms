@@ -109,10 +109,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
           qcWorkItemsUntouched
         ) {
           editLink = '/edit';
-        } else if (
-          document.isPetition &&
-          caseDetail.status === Case.STATUS_TYPES.inProgress
-        ) {
+        } else if (document.isPetition && !document.servedAt) {
           editLink = '/edit-saved';
         }
       }

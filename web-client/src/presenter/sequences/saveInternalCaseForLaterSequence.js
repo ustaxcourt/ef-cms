@@ -9,7 +9,6 @@ import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
-import { setFormCaseStatusToInProgressAction } from '../actions/StartCaseInternal/setFormCaseStatusToInProgressAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -18,7 +17,6 @@ export const saveInternalCaseForLaterSequence = [
   clearAlertsAction,
   computeDateReceivedAction,
   computeIrsNoticeDateAction,
-  setFormCaseStatusToInProgressAction,
   showProgressSequenceDecorator([
     createCaseFromPaperAction,
     {
