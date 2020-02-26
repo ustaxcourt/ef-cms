@@ -231,14 +231,12 @@ exports.completeDocketEntryQCInteractor = async ({
 
       const paperServicePdfId = applicationContext.getUniqueId();
 
-      applicationContext.logger.time('Saving S3 Document');
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: paperServicePdfData,
         documentId: paperServicePdfId,
         useTempBucket: true,
       });
-      applicationContext.logger.timeEnd('Saving S3 Document');
 
       const {
         url,
@@ -295,13 +293,11 @@ exports.completeDocketEntryQCInteractor = async ({
       serviceStampText: `Served ${serviceStampDate}`,
     });
 
-    applicationContext.logger.time('Saving S3 Document');
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: newPdfData,
       documentId: noticeUpdatedDocument.documentId,
     });
-    applicationContext.logger.timeEnd('Saving S3 Document');
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
@@ -327,14 +323,12 @@ exports.completeDocketEntryQCInteractor = async ({
       const paperServicePdfData = await newPdfDoc.save();
       const paperServicePdfId = applicationContext.getUniqueId();
 
-      applicationContext.logger.time('Saving S3 Document');
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: paperServicePdfData,
         documentId: paperServicePdfId,
         useTempBucket: true,
       });
-      applicationContext.logger.timeEnd('Saving S3 Document');
 
       const {
         url,

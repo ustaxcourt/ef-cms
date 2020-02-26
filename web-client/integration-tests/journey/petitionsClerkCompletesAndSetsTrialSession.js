@@ -51,7 +51,7 @@ export default (test, overrides = {}) => {
     expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
 
     await test.runSequence('setTrialSessionCalendarSequence');
-    await wait(5000);
+    await wait(1000); // we need to wait for some reason
 
     if (overrides.hasPaper) {
       expect(test.getState('currentPage')).toEqual('SimplePdfPreviewPage');

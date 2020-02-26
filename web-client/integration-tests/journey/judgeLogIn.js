@@ -7,6 +7,5 @@ export default (test, name = 'judgeArmen') => {
       value: name,
     });
     await test.runSequence('submitLoginSequence');
-    await wait(2000);
   });
 };
