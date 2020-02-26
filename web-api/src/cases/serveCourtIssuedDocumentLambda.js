@@ -7,14 +7,18 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  genericHandler(event, async ({ applicationContext }) => {
-    const { caseId, documentId } = event.pathParameters;
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      const { caseId, documentId } = event.pathParameters;
 
-    return await applicationContext
-      .getUseCases()
-      .serveCourtIssuedDocumentInteractor({
-        applicationContext,
-        caseId,
-        documentId,
-      });
-  });
+      return await applicationContext
+        .getUseCases()
+        .serveCourtIssuedDocumentInteractor({
+          applicationContext,
+          caseId,
+          documentId,
+        });
+    },
+    { logResults: false },
+  );

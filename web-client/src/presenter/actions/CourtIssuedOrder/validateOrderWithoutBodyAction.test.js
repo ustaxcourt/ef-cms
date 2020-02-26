@@ -33,7 +33,7 @@ describe('validateOrderWithoutBodyAction', () => {
     };
   });
 
-  it('should call the path success when no errors are found', async () => {
+  it('should call the success path when no errors are found', async () => {
     validateOrderWithoutBodyStub.returns(null);
     await runAction(validateOrderWithoutBodyAction, {
       modules: {
@@ -47,7 +47,7 @@ describe('validateOrderWithoutBodyAction', () => {
     expect(successStub.calledOnce).toEqual(true);
   });
 
-  it('should call the path error when any errors are found', async () => {
+  it('should call the error path when any errors are found', async () => {
     validateOrderWithoutBodyStub.returns('error');
     await runAction(validateOrderWithoutBodyAction, {
       modules: {

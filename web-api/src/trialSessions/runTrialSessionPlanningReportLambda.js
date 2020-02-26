@@ -17,7 +17,5 @@ exports.handler = event =>
           ...JSON.parse(event.body),
         });
     },
-    {
-      logResults: false,
-    },
+    { logResults: false },
   );
