@@ -39,7 +39,7 @@ describe('validateTrialSessionAction', () => {
     };
   });
 
-  it('should call the path success when no errors are found', async () => {
+  it('should call the success path when no errors are found', async () => {
     validateTrialSessionStub.returns(null);
     await runAction(validateTrialSessionAction, {
       modules: {
@@ -53,7 +53,7 @@ describe('validateTrialSessionAction', () => {
     expect(successStub.calledOnce).toEqual(true);
   });
 
-  it('should call the path error when any errors are found', async () => {
+  it('should call the error path when any errors are found', async () => {
     validateTrialSessionStub.returns({ some: 'error' });
     await runAction(validateTrialSessionAction, {
       modules: {
@@ -67,7 +67,7 @@ describe('validateTrialSessionAction', () => {
     expect(errorStub.calledOnce).toEqual(true);
   });
 
-  it('should call the path error when term is summer', async () => {
+  it('should call the error path when term is summer', async () => {
     validateTrialSessionStub.returns({ term: 'error' });
     await runAction(validateTrialSessionAction, {
       modules: {
