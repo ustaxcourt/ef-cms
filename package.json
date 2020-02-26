@@ -210,5 +210,8 @@
   "staticFiles": {
     "staticPath": "node_modules/pdfjs-dist/build",
     "watcherGlob": false
+  },
+  "dependencies": {
+    "honeybadger-js": "^2.1.3"
   }
 }
