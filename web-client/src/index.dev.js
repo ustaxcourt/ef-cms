@@ -4,7 +4,10 @@ import { Case } from '../../shared/src/business/entities/cases/Case';
 import { User } from '../../shared/src/business/entities/User';
 import { app } from './app';
 import { applicationContext } from './applicationContext';
+import { initHoneybadger } from './honeybadger';
 import Devtools from 'cerebral/devtools';
+
+initHoneybadger();
 
 /**
  * Initializes the app with dev environment context
