@@ -93,7 +93,12 @@ export const CaseInventoryReport = connect(
                   <tr>
                     <th>Docket</th>
                     <th>Case title</th>
-                    <th>Judge</th>
+                    {caseInventoryReportHelper.showJudgeColumn && (
+                      <th>Judge</th>
+                    )}
+                    {caseInventoryReportHelper.showStatusColumn && (
+                      <th>Case status</th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -102,7 +107,12 @@ export const CaseInventoryReport = connect(
                       <tr key={idx}>
                         <td>{row.docketNumberWithSuffix}</td>
                         <td>{row.caseName}</td>
-                        <td>{row.associatedJudge}</td>
+                        {caseInventoryReportHelper.showJudgeColumn && (
+                          <td>{row.associatedJudge}</td>
+                        )}
+                        {caseInventoryReportHelper.showStatusColumn && (
+                          <td>{row.status}</td>
+                        )}
                       </tr>
                     ),
                   )}
