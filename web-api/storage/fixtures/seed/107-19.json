@@ -134,7 +134,7 @@
           {
             "completedAt": "2019-08-16T17:30:10.526Z",
             "docketNumberSuffix": "L",
-            "caseStatus": "In Progress",
+            "caseStatus": "New",
             "completedMessage": "Served on IRS",
             "document": {
               "eventCode": "P",
@@ -328,7 +328,7 @@
   {
     "completedAt": "2019-08-16T17:30:10.526Z",
     "docketNumberSuffix": "L",
-    "caseStatus": "In Progress",
+    "caseStatus": "New",
     "completedMessage": "Served on IRS",
     "document": {
       "eventCode": "P",

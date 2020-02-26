@@ -51,7 +51,7 @@ describe('in progress case status migration', () => {
         Items: [
           {
             ...MOCK_CASE,
-            status: Case.STATUS_TYPES.inProgress,
+            status: Case.STATUS_TYPES.new,
           },
         ],
       }),
