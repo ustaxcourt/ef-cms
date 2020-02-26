@@ -19,7 +19,11 @@ const caseInventoryReportHelper = withAppContextDecorator(
 
 describe('caseInventoryReportHelper', () => {
   it('should return all case statuses', () => {
-    const result = runCompute(caseInventoryReportHelper);
+    const result = runCompute(caseInventoryReportHelper, {
+      state: {
+        screenMetadata: {},
+      },
+    });
 
     expect(result.caseStatuses).toEqual(Object.values(Case.STATUS_TYPES));
   });
@@ -32,6 +36,7 @@ describe('caseInventoryReportHelper', () => {
           { name: 'Judith Blum' },
           { name: 'Roy Scream' },
         ],
+        screenMetadata: {},
       },
     });
 
@@ -43,12 +48,39 @@ describe('caseInventoryReportHelper', () => {
     ]);
   });
 
+  it('should return showJudgeColumn and showStatusColumn true if associatedJudge and status are not set on screenMetadata', () => {
+    const result = runCompute(caseInventoryReportHelper, {
+      state: {
+        screenMetadata: {},
+      },
+    });
+
+    expect(result).toMatchObject({
+      showJudgeColumn: true,
+      showStatusColumn: true,
+    });
+  });
+
+  it('should return showJudgeColumn and showStatusColumn false if associatedJudge and status are set on screenMetadata', () => {
+    const result = runCompute(caseInventoryReportHelper, {
+      state: {
+        screenMetadata: { associatedJudge: 'Chief Judge', status: 'New' },
+      },
+    });
+
+    expect(result).toMatchObject({
+      showJudgeColumn: false,
+      showStatusColumn: false,
+    });
+  });
+
   it('should return a result count from caseInventoryReportData', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
           totalCount: '1',
         },
+        screenMetadata: {},
       },
     });
 
@@ -73,6 +105,7 @@ describe('caseInventoryReportHelper', () => {
             },
           ],
         },
+        screenMetadata: {},
       },
     });
 

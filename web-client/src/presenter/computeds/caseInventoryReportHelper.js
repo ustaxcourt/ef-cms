@@ -9,6 +9,8 @@ export const caseInventoryReportHelper = (get, applicationContext) => {
     .concat('Chief Judge')
     .sort();
 
+  const { associatedJudge, status } = get(state.screenMetadata);
+
   const resultCount = get(state.caseInventoryReportData.totalCount);
 
   const reportData = get(state.caseInventoryReportData.foundCases) || [];
@@ -22,5 +24,7 @@ export const caseInventoryReportHelper = (get, applicationContext) => {
     formattedReportData,
     judges,
     resultCount,
+    showJudgeColumn: !associatedJudge,
+    showStatusColumn: !status,
   };
 };
