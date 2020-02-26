@@ -31,16 +31,15 @@ echo "killing s3rver if already running"
 pkill -f s3rver
 
 echo "starting s3rver"
-node ./web-api/start-s3rver.js &
+rm -rf ./web-api/storage/s3/*
+npx s3rver -d ./web-api/storage/s3 -p 9000 --service-endpoint localhost --configure-bucket $DOCUMENTS_BUCKET_NAME ./web-api/cors-policy.xml --configure-bucket $TEMP_DOCUMENTS_BUCKET_NAME ./web-api/cors-policy.xml &
+ls -la ./web-api/storage/s3/$DOCUMENTS_BUCKET_NAME
 S3RVER_PID=$!
 ./wait-until.sh http://localhost:9000/ 200
 
 if [ ! -z "$RESUME" ]; then
   echo "Resuming operation with previous s3 and dynamo data"
 else
-  echo "seeding s3"
-  npm run seed:s3
-
   echo "creating & seeding dynamo tables"
   npm run seed:db
 fi
