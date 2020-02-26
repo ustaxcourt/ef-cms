@@ -4,7 +4,9 @@ const S3rver = require('s3rver');
 
 console.log('starting s3rver');
 
-const corsPolicy = fs.readFileSync(`${__dirname}/cors-policy.xml`, 'utf-8');
+const corsPolicy = fs.readFileSync(`${__dirname}/cors-policy.xml`);
+
+console.log('corsPolicy', corsPolicy);
 
 new S3rver({
   configureBuckets: [
