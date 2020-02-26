@@ -2,7 +2,7 @@
   {
     "completedAt": "2019-08-16T19:22:13.925Z",
     "docketNumberSuffix": null,
-    "caseStatus": "In Progress",
+    "caseStatus": "New",
     "completedMessage": "Served on IRS",
     "document": {
       "eventCode": "P",
@@ -59,7 +59,7 @@
           {
             "completedAt": "2019-08-16T19:22:13.925Z",
             "docketNumberSuffix": null,
-            "caseStatus": "In Progress",
+            "caseStatus": "New",
             "completedMessage": "Served on IRS",
             "document": {
               "eventCode": "P",
