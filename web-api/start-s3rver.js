@@ -4,17 +4,16 @@ const S3rver = require('s3rver');
 
 console.log('starting s3rver');
 
-const corsPolicy = fs.readFileSync('web-api/cors-policy.xml');
-const webPolicy = fs.readFileSync('web-api/web-policy.xml');
+const corsPolicy = fs.readFileSync(`${__dirname}/cors-policy.xml`, 'utf-8');
 
 new S3rver({
   configureBuckets: [
     {
-      configs: [corsPolicy, webPolicy],
+      configs: [corsPolicy],
       name: process.env.DOCUMENTS_BUCKET_NAME,
     },
     {
-      configs: [corsPolicy, webPolicy],
+      configs: [corsPolicy],
       name: process.env.TEMP_DOCUMENTS_BUCKET_NAME,
     },
   ],
