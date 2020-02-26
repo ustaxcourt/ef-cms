@@ -52,7 +52,7 @@ export const StartCaseInternal = connect(
                     generateInternalCaseCaptionSequence({ tab });
                   }}
                 >
-                  <Tab id="tab-parties" tabName="parties" title="Parties">
+                  <Tab id="tab-parties" tabName="partyInfo" title="Parties">
                     <Parties />
                   </Tab>
                   <Tab id="tab-case-info" tabName="caseInfo" title="Case Info">

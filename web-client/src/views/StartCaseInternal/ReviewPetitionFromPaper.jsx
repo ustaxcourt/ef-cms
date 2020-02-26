@@ -31,6 +31,8 @@ export const ReviewPetitionFromPaper = connect(
       sequences.createCaseFromPaperAndServeToIrsSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    goBackToStartCaseInternalSequence:
+      sequences.goBackToStartCaseInternalSequence,
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewPetitionFromPaperHelper: state.reviewPetitionFromPaperHelper,
@@ -44,6 +46,7 @@ export const ReviewPetitionFromPaper = connect(
     createCaseFromPaperAndServeToIrsSequence,
     form,
     formCancelToggleCancelSequence,
+    goBackToStartCaseInternalSequence,
     openConfirmServeToIrsModalSequence,
     reviewPetitionFromPaperHelper,
     saveInternalCaseForLaterSequence,
@@ -71,7 +74,22 @@ export const ReviewPetitionFromPaper = connect(
               <div className="tablet:grid-col-7 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">Parties</h3>
+                    <h3 className="underlined">
+                      Parties
+                      <Button
+                        link
+                        aria-label="edit party information"
+                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        icon="edit"
+                        onClick={() => {
+                          goBackToStartCaseInternalSequence({
+                            tab: 'partyInfo',
+                          });
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </h3>
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-4 margin-bottom-1">
                         <label
@@ -119,7 +137,22 @@ export const ReviewPetitionFromPaper = connect(
               <div className="tablet:grid-col-5 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">Case Information</h3>
+                    <h3 className="underlined">
+                      Case Information
+                      <Button
+                        link
+                        aria-label="edit case information"
+                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        icon="edit"
+                        onClick={() => {
+                          goBackToStartCaseInternalSequence({
+                            tab: 'caseInfo',
+                          });
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </h3>
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-6 margin-bottom-05">
                         <div className="margin-top-3 margin-bottom-2">
@@ -195,7 +228,22 @@ export const ReviewPetitionFromPaper = connect(
               <div className="tablet:grid-col-7 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">IRS Notice</h3>
+                    <h3 className="underlined">
+                      IRS Notice
+                      <Button
+                        link
+                        aria-label="edit IRS notice information"
+                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        icon="edit"
+                        onClick={() => {
+                          goBackToStartCaseInternalSequence({
+                            tab: 'irsNotice',
+                          });
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </h3>
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-4 margin-bottom-1">
                         <div>
@@ -239,7 +287,22 @@ export const ReviewPetitionFromPaper = connect(
               <div className="tablet:grid-col-5 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">Attachments</h3>
+                    <h3 className="underlined">
+                      Attachments
+                      <Button
+                        link
+                        aria-label="edit attachments"
+                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        icon="edit"
+                        onClick={() => {
+                          goBackToStartCaseInternalSequence({
+                            tab: 'partyInfo',
+                          });
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </h3>
                     <div>
                       <div className="margin-top-3 margin-bottom-2">
                         <label
