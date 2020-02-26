@@ -31,7 +31,8 @@ echo "killing s3rver if already running"
 pkill -f s3rver
 
 echo "starting s3rver"
-npx s3rver -p 9000 -d ./web-api/storage/s3 --configure-bucket $DOCUMENTS_BUCKET_NAME ./web-api/cors-policy.xml --configure-bucket $TEMP_DOCUMENTS_BUCKET_NAME ./web-api/cors-policy.xml
+npx s3rver -p 9000 -d ./web-api/storage/s3 --configure-bucket $DOCUMENTS_BUCKET_NAME ./web-api/cors-policy.xml --configure-bucket $TEMP_DOCUMENTS_BUCKET_NAME ./web-api/cors-policy.xml &
+STORAGE_PID=$!
 ./wait-until.sh http://localhost:9000/ 200
 
 if [ ! -z "$RESUME" ]; then
@@ -108,3 +109,5 @@ if [ ! -e "$CIRCLECI" ]; then
   pkill -P $DYNAMO_PID
   pkill -P $ESEARCH_PID
 fi
+
+pkill -P $STORAGE_PID
