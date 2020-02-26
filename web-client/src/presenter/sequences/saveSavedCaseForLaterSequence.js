@@ -5,13 +5,11 @@ import { getFormCombinedWithCaseDetailAction } from '../actions/getFormCombinedW
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { saveCaseDetailInternalEditAction } from '../actions/saveCaseDetailInternalEditAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setFormCaseStatusToInProgressAction } from '../actions/StartCaseInternal/setFormCaseStatusToInProgressAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
   computeDateReceivedAction,
   computeIrsNoticeDateAction,
-  setFormCaseStatusToInProgressAction,
   getFormCombinedWithCaseDetailAction,
   saveCaseDetailInternalEditAction,
   setCaseAction,
