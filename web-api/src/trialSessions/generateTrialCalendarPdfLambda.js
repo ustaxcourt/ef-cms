@@ -19,7 +19,5 @@ exports.handler = event =>
           trialSessionId,
         });
     },
-    {
-      logResults: false,
-    },
+    { logResults: false },
   );

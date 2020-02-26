@@ -31,7 +31,7 @@ describe('validateDocketEntryAction', () => {
     };
   });
 
-  it('should call the path success when no errors are found', async () => {
+  it('should call the success path when no errors are found', async () => {
     validateDocketEntryStub.returns(null);
     await runAction(validateDocketEntryAction, {
       modules: {
@@ -45,7 +45,7 @@ describe('validateDocketEntryAction', () => {
     expect(successStub.calledOnce).toEqual(true);
   });
 
-  it('should call the path error when any errors are found', async () => {
+  it('should call the error path when any errors are found', async () => {
     validateDocketEntryStub.returns('error');
     await runAction(validateDocketEntryAction, {
       modules: {
