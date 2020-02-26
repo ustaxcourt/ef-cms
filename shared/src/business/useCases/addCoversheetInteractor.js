@@ -38,14 +38,14 @@ exports.generateCoverSheetData = ({
         applicationContext
           .getUtilities()
           .formatDateString(documentEntity.createdAt, 'MMDDYYYY')) ||
-      null;
+      '';
   } else {
     dateReceivedFormatted =
       (documentEntity.createdAt &&
         applicationContext
           .getUtilities()
           .formatDateString(documentEntity.createdAt, 'MM/DD/YYYY hh:mm a')) ||
-      null;
+      '';
   }
 
   const dateFiledFormatted =
@@ -53,7 +53,7 @@ exports.generateCoverSheetData = ({
       applicationContext
         .getUtilities()
         .formatDateString(documentEntity.filingDate, 'MMDDYYYY')) ||
-    null;
+    '';
 
   const caseCaption = caseEntity.caseCaption || Case.getCaseCaption(caseEntity);
   let caseCaptionNames = applicationContext.getCaseCaptionNames(caseCaption);
@@ -69,21 +69,25 @@ exports.generateCoverSheetData = ({
     documentTitle += ` ${documentEntity.additionalInfo}`;
   }
 
+  const docketNumberWithSuffix =
+    caseEntity.docketNumber + (caseEntity.docketNumberSuffix || '');
+
   const coverSheetData = {
     caseCaptionPetitioner: caseCaptionNames,
-    caseCaptionPostfix,
     caseCaptionRespondent: 'Commissioner of Internal Revenue',
-    dateFiled: isLodged ? '' : dateFiledFormatted,
-    dateLodged: isLodged ? dateFiledFormatted : '',
+    certificateOfService:
+      documentEntity.certificateOfService === true
+        ? 'Certificate of Service'
+        : '',
+    dateFiledLodged: dateFiledFormatted,
+    dateFiledLodgedLabel: isLodged ? 'Lodged' : 'Filed',
     dateReceived: dateReceivedFormatted,
     dateServed: dateServedFormatted,
-    docketNumber:
-      caseEntity.docketNumber + (caseEntity.docketNumberSuffix || ''),
+    docketNumber: `Docket Number: ${docketNumberWithSuffix}`,
     documentTitle,
-    includesCertificateOfService:
-      documentEntity.certificateOfService === true ? true : false,
+    electronicallyFiled: documentEntity.isPaper ? '' : 'Electronically Filed',
     mailingDate: documentEntity.mailingDate || '',
-    originallyFiledElectronically: !documentEntity.isPaper,
+    petitionerLabel: caseCaptionPostfix,
   };
   return coverSheetData;
 };
@@ -103,8 +107,6 @@ exports.addCoverToPdf = async ({
   documentEntity,
   pdfData,
 }) => {
-  const isLodged = documentEntity.lodged;
-
   const coverSheetData = exports.generateCoverSheetData({
     applicationContext,
     caseEntity,
@@ -116,47 +118,9 @@ exports.addCoverToPdf = async ({
   // allow GC to clear original loaded pdf data
   pdfData = null;
 
-  const getContentByKey = key => {
-    const coverSheetDatumValue = coverSheetData[key];
-    switch (key) {
-      case 'includesCertificateOfService':
-        if (coverSheetDatumValue) {
-          return 'Certificate of Service';
-        } else {
-          return '';
-        }
-      case 'originallyFiledElectronically':
-        if (coverSheetDatumValue) {
-          return 'Electronically Filed';
-        } else {
-          return '';
-        }
-      default:
-        return coverSheetDatumValue.toString();
-    }
-  };
-
   const coverPagePdf = await generateCoverPagePdf({
     applicationContext,
-    content: {
-      caseCaptionPet: getContentByKey('caseCaptionPetitioner'),
-      caseCaptionResp: getContentByKey('caseCaptionRespondent'),
-      certificateOfService: getContentByKey('includesCertificateOfService'),
-      dateFiled: getContentByKey('dateFiled'),
-      dateFiledLabel: isLodged ? '' : 'Filed',
-      dateLodged: getContentByKey('dateLodged'),
-      dateLodgedLabel: isLodged ? 'Lodged' : '',
-      dateReceived: getContentByKey('dateReceived'),
-      dateReceivedLabel: 'Received',
-      dateServed: getContentByKey('dateServed'),
-      docketNumber: `Docket Number: ${getContentByKey('docketNumber')}`,
-      documentTitle: getContentByKey('documentTitle'),
-      electronicallyFiled: getContentByKey('originallyFiledElectronically'),
-      mailingDate: getContentByKey('mailingDate'),
-      petitionerLabel: getContentByKey('caseCaptionPostfix'),
-      respondentLabel: 'Respondent',
-      vLabel: 'v.',
-    },
+    content: coverSheetData,
   });
 
   const coverPageDocument = await PDFDocument.load(coverPagePdf);
