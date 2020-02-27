@@ -12,6 +12,7 @@
           {
             "docketNumberSuffix": "S",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "createdAt": "2019-03-01T22:53:50.098Z",
               "documentType": "Petition",
@@ -72,6 +73,7 @@
           {
             "docketNumberSuffix": "S",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "createdAt": "2019-03-01T22:54:05.993Z",
               "documentType": "Answer",
@@ -129,6 +131,7 @@
           {
             "docketNumberSuffix": "S",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "isPaper": true,
               "attachments": true,
@@ -306,6 +309,7 @@
     "gsi1pk": "workitem-9055257a-0a95-4b80-a728-5bb754c60e59",
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "filingDate": "2019-03-01T21:40:46.415Z",
@@ -345,6 +349,7 @@
     "gsi1pk": "workitem-9055257a-0a95-4b80-a728-5bb754c60e59",
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "receivedAt": "2019-03-01T21:40:46.415Z",
@@ -384,6 +389,7 @@
     "gsi1pk": "workitem-337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
       "receivedAt": "2019-03-01T21:40:46.415Z",
@@ -422,6 +428,7 @@
     "pk": "workitem-337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "filingDate": "2019-03-01T22:54:05.993Z",
       "createdAt": "2019-03-01T22:54:05.993Z",
@@ -461,6 +468,7 @@
   {
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
@@ -500,6 +508,7 @@
   {
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
@@ -539,6 +548,7 @@
   {
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
     "caseTitle": "Samson Workman",
     "document": {
@@ -578,6 +588,7 @@
   {
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
@@ -617,6 +628,7 @@
   {
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",

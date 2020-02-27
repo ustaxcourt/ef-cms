@@ -91,6 +91,7 @@ exports.updateDocketEntryInteractor = async ({
       assigneeId: null,
       assigneeName: null,
       caseId: caseId,
+      caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
       docketNumber: caseToUpdate.docketNumber,
       docketNumberSuffix: caseToUpdate.docketNumberSuffix,

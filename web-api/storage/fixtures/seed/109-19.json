@@ -13,6 +13,7 @@
           {
             "docketNumberSuffix": "W",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "createdAt": "2019-03-01T21:40:46.415Z",
               "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",

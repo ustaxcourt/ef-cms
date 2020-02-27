@@ -11,6 +11,7 @@
   {
     "docketNumberSuffix": "L",
     "caseStatus": "Calendared",
+    "caseIsInProgress": false,
     "document": {
       "eventCode": "P",
       "createdAt": "2020-01-23T21:44:54.043Z",
@@ -56,6 +57,7 @@
   {
     "docketNumberSuffix": "L",
     "caseStatus": "Calendared",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-2a3955ca-baad-4ca7-be23-d862d2ef5310",
     "document": {
       "hasSupportingDocuments": false,
@@ -118,6 +120,7 @@
   {
     "docketNumberSuffix": "L",
     "caseStatus": "Calendared",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-2a3955ca-baad-4ca7-be23-d862d2ef5310",
     "document": {
       "hasSupportingDocuments": false,
@@ -172,6 +175,7 @@
   {
     "docketNumberSuffix": "L",
     "caseStatus": "Calendared",
+    "caseIsInProgress": false,
     "document": {
       "eventCode": "P",
       "createdAt": "2020-01-23T21:44:54.043Z",
@@ -234,6 +238,7 @@
           {
             "docketNumberSuffix": "L",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "eventCode": "P",
               "createdAt": "2020-01-23T21:44:54.043Z",
@@ -350,6 +355,7 @@
           {
             "docketNumberSuffix": "L",
             "caseStatus": "Calendared",
+            "caseIsInProgress": false,
             "document": {
               "hasSupportingDocuments": false,
               "attachments": false,

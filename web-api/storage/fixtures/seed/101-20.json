@@ -14,6 +14,7 @@
           {
             "docketNumberSuffix": "S",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "eventCode": "P",
               "createdAt": "2020-01-02T16:05:45.979Z",

@@ -13,6 +13,7 @@
           {
             "docketNumberSuffix": null,
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "createdAt": "2019-03-27T21:53:00.297Z",
               "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
@@ -156,6 +157,7 @@
     "pk": "section-petitions",
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "createdAt": "2019-03-27T21:53:00.297Z",
       "receivedAt": "2019-03-01T21:40:46.415Z",
@@ -194,6 +196,7 @@
     "gsi1pk": "workitem-98c7130f-f924-423f-9f2c-89f0616f446a",
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "createdAt": "2019-03-27T21:53:00.297Z",
       "receivedAt": "2019-03-01T21:40:46.415Z",

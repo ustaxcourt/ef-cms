@@ -155,6 +155,7 @@ exports.completeDocketEntryQCInteractor = async ({
 
     Object.assign(workItemToUpdate, {
       caseId: caseId,
+      caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
       docketNumber: caseToUpdate.docketNumber,
       docketNumberSuffix: caseToUpdate.docketNumberSuffix,

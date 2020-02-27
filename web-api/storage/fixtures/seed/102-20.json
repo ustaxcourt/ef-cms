@@ -2,6 +2,7 @@
   {
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "document": {
       "eventCode": "P",
@@ -62,6 +63,7 @@
   {
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "document": {
       "eventCode": "P",
@@ -118,6 +120,7 @@
           {
             "docketNumberSuffix": "S",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "eventCode": "P",
               "createdAt": "2020-01-21T16:41:39.481Z",

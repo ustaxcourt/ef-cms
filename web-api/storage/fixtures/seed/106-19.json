@@ -2,6 +2,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
     "document": {
       "createdAt": "2019-07-12T17:09:41.026Z",
@@ -57,6 +58,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -94,6 +96,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -131,6 +134,7 @@
     "completedAt": "2019-07-12T17:11:27.244Z",
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "completedMessage": "completed",
     "gsi1pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
@@ -186,6 +190,7 @@
     "completedAt": "2019-07-12T17:11:27.244Z",
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "completedMessage": "completed",
     "gsi1pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
@@ -240,6 +245,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -276,6 +282,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
     "document": {
       "createdAt": "2019-07-12T17:09:41.026Z",
@@ -315,6 +322,7 @@
     "completedAt": "2019-07-12T17:11:27.244Z",
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "completedMessage": "completed",
     "gsi1pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
@@ -369,6 +377,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -405,6 +414,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -441,6 +451,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -491,6 +502,7 @@
           {
             "docketNumberSuffix": null,
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "createdAt": "2019-07-12T17:09:41.026Z",
               "processingStatus": "pending",
@@ -554,6 +566,7 @@
             "completedAt": "2019-07-12T17:11:27.244Z",
             "docketNumberSuffix": null,
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "completedMessage": "completed",
             "document": {
               "isPaper": true,
@@ -605,6 +618,7 @@
           {
             "docketNumberSuffix": null,
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "createdAt": "2019-07-12T17:11:26.955Z",
               "documentType": "Proposed Stipulated Decision",
@@ -727,6 +741,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -765,6 +780,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -803,6 +819,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -845,6 +862,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
