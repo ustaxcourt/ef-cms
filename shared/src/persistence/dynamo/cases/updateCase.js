@@ -41,7 +41,8 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
     oldCase.caseCaption !== caseToUpdate.caseCaption ||
     oldCase.trialDate !== caseToUpdate.trialDate ||
-    oldCase.associatedJudge !== caseToUpdate.associatedJudge
+    oldCase.associatedJudge !== caseToUpdate.associatedJudge ||
+    oldCase.caseIsInProgress !== caseToUpdate.caseIsInProgress
   ) {
     const workItemMappings = await client.query({
       ExpressionAttributeNames: {
