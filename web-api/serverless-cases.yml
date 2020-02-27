@@ -226,18 +226,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getBlockedCases:
-    handler: web-api/${self:provider.dir}/casesHandlers.getBlockedCasesLambda
-    events:
-      - http:
-          path: /blocked/{trialLocation}
-          method: get
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   getConsolidatedCasesByCase:
     handler: web-api/${self:provider.dir}/casesHandlers.getConsolidatedCasesByCaseLambda
     events:
@@ -260,18 +248,6 @@ functions:
       - http:
           path: /{caseId}/serve-to-irs
           method: post
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getCaseInventoryReport:
-    handler: web-api/${self:provider.dir}/casesHandlers.getCaseInventoryReportLambda
-    events:
-      - http:
-          path: /case-inventory-report
-          method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
