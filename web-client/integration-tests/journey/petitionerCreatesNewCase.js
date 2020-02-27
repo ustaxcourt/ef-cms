@@ -34,7 +34,8 @@ export default (test, fakeFile, overrides = {}) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
-      value: 'Test Person',
+      value:
+        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
     });
 
     await test.runSequence('updateFormValueSequence', {
