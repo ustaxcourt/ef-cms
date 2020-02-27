@@ -15,7 +15,5 @@ export const getInternalCaseCaptionForCaseInfoTabAction = ({
   const { Case } = applicationContext.getEntityConstructors();
   let caseCaption = Case.getCaseCaption(get(state.form)) || '';
 
-  caseCaption += ` ${Case.CASE_CAPTION_POSTFIX}`;
-
   return { caseCaption };
 };
