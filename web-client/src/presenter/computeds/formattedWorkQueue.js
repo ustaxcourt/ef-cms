@@ -197,7 +197,11 @@ export const getWorkItemDocumentLink = ({
     permissions.UPDATE_CASE &&
     formattedDocument
   ) {
-    if (formattedDocument.isPetition && result.caseIsInProgress) {
+    if (
+      formattedDocument.isPetition &&
+      result.caseIsInProgress &&
+      !formattedDocument.servedAt
+    ) {
       editLink = '/review';
     }
   }
