@@ -30,7 +30,11 @@ exports.getCaseInventoryReport = async ({
       _source: source,
       query: {
         bool: {
-          must: [],
+          must: [
+            {
+              exists: { field: 'caseType.S' },
+            },
+          ],
         },
       },
       size: 5000,
