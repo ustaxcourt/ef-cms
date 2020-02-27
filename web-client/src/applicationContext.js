@@ -1,3 +1,4 @@
+const Honeybadger = require('honeybadger-js'); // browser version
 import {
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
@@ -159,7 +160,6 @@ import { getUserInteractor } from '../../shared/src/proxies/users/getUserProxy';
 import { getUserPermissions } from '../../shared/src/authorization/getUserPermissions';
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
-import { initHoneybadger } from '../../shared/src/tools/honeybadger';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
 import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCaseProxy';
 import { refreshTokenInteractor } from '../../shared/src/business/useCases/refreshTokenInteractor';
@@ -587,7 +587,18 @@ const applicationContext = {
       sortDocketRecords,
     };
   },
-  initHoneybadger,
+  initHoneybadger: () => {
+    if (process.env.USTC_ENV !== 'dev' && process.env.ENV) {
+      const apiKey = process.env['HONEYBADGER_API_KEY_' + process.env.ENV];
+
+      const config = {
+        apiKey,
+        environment: 'client',
+      };
+      Honeybadger.configure(config);
+      return Honeybadger;
+    }
+  },
   setCurrentUser,
   setCurrentUserToken,
 };

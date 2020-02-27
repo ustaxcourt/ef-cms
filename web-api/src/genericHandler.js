@@ -52,7 +52,7 @@ exports.genericHandler = (event, cb, options = {}) => {
       if (!e.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case
         applicationContext.logger.error(e);
-        honeybadger.notify(e);
+        honeybadger && honeybadger.notify(e);
       }
       throw e;
     }
