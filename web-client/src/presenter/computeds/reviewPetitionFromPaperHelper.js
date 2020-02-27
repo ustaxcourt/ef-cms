@@ -6,16 +6,11 @@ export const reviewPetitionFromPaperHelper = (get, applicationContext) => {
     dateReceived,
     hasVerifiedIrsNotice,
     irsNoticeDate,
-    mailingDate,
     petitionPaymentStatus,
     ...form
   } = get(state.form);
 
   const { PAYMENT_STATUS } = applicationContext.getConstants();
-
-  const mailingDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(mailingDate, 'MMDDYYYY');
 
   const receivedAtFormatted = applicationContext
     .getUtilities()
@@ -50,7 +45,6 @@ export const reviewPetitionFromPaperHelper = (get, applicationContext) => {
     hasIrsNoticeFormatted,
     hasOrders,
     irsNoticeDateFormatted,
-    mailingDateFormatted,
     petitionPaymentStatusFormatted,
     receivedAtFormatted,
     shouldShowIrsNoticeDate,

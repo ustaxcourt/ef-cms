@@ -13,9 +13,6 @@ describe('getCaseCaptionForCaseInfoTabAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        tab: 'partyInfo',
-      },
       state: {
         caseDetail: {
           partyType: '',
@@ -31,9 +28,6 @@ describe('getCaseCaptionForCaseInfoTabAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        tab: 'partyInfo',
-      },
       state: {
         caseDetail: {
           contactPrimary: {
@@ -47,26 +41,5 @@ describe('getCaseCaptionForCaseInfoTabAction', () => {
     expect(result.output.caseCaption).toBe(
       `Guy Fieri, Petitioner ${Case.CASE_CAPTION_POSTFIX}`,
     );
-  });
-
-  it('should not return a generated case caption when party type has been selected but the prop is not partyInfo', async () => {
-    const result = await runAction(getCaseCaptionForCaseInfoTabAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        tab: 'parties',
-      },
-      state: {
-        caseDetail: {
-          contactPrimary: {
-            name: 'Guy Fieri',
-          },
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
-        },
-      },
-    });
-
-    expect(result.output).toBeUndefined();
   });
 });
