@@ -544,6 +544,7 @@ describe('formatted work queue computed', () => {
           {
             ...qcWorkItem,
             associatedJudge: Case.CHIEF_JUDGE,
+            caseIsInProgress: true,
             caseStatus: Case.STATUS_TYPES.new,
             document: {
               ...qcWorkItem.document,
