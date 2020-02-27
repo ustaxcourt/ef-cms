@@ -24,14 +24,13 @@ describe('reviewSavedPetitionHelper', () => {
   it('returns defaults when there is no form', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: {},
+        caseDetail: {},
       },
     });
     expect(result).toEqual({
       hasIrsNoticeFormatted: 'No',
       hasOrders: false,
       irsNoticeDateFormatted: undefined,
-      mailingDateFormatted: undefined,
       ownershipDisclosureFile: undefined,
       petitionFile: undefined,
       petitionPaymentStatusFormatted: 'Not paid',
@@ -45,7 +44,7 @@ describe('reviewSavedPetitionHelper', () => {
   it('returns defaults when the are values', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        form: {
+        caseDetail: {
           documents: [
             { documentType: INITIAL_DOCUMENT_TYPES.petition.documentType },
             {

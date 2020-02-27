@@ -24,6 +24,7 @@ custom:
     number: 3
 
   serverless-offline:
+    skipCacheInvalidation: ${opt:skipCacheInvalidation}
     host: 0.0.0.0
     port: 3001
 
@@ -207,50 +208,6 @@ functions:
       - http:
           path: docket-record-pdf
           method: post
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  generateTrialCalendarPdfLambda:
-    handler: web-api/${self:provider.dir}/apiHandlers.generateTrialCalendarPdfLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: trial-calendar-pdf
-          method: post
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  fetchPendingItemsLambda:
-    handler: web-api/${self:provider.dir}/apiHandlers.fetchPendingItemsLambda
-    events:
-      - http:
-          path: pending-items
-          method: get
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  generatePrintablePendingReport:
-    handler: web-api/${self:provider.dir}/apiHandlers.generatePrintablePendingReportLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: pending-report
-          method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS

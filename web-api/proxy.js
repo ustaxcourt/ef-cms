@@ -23,6 +23,7 @@ const PROXY_DESTINATIONS = {
   '/migrate': `http://${PROXY_HOST}:3030`,
   '/notifications': `http://${PROXY_HOST}:3011`,
   '/public-api': `http://${PROXY_HOST}:3013`,
+  '/reports': `http://${PROXY_HOST}:3016`,
   '/sections': `http://${PROXY_HOST}:3006`,
   '/streams': `http://${PROXY_HOST}:3012`,
   '/trial-sessions': `http://${PROXY_HOST}:3007`,

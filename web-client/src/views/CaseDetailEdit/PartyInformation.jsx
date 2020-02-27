@@ -130,7 +130,7 @@ export const PartyInformation = connect(
               showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
               showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
               onBlur="validateCaseDetailSequence"
-              onChange="updateCaseValueSequence"
+              onChange="updateCaseValueAndInternalCaseCaptionSequence"
             />
           </div>
         )}
