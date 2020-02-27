@@ -48,8 +48,6 @@ export const documentDetailHelper = (get, applicationContext) => {
   const STIPULATED_DECISION_DOCUMENT_TYPE = 'Stipulated Decision';
   const MISCELLANEOUS_DOCUMENT_TYPE = 'MISC - Miscellaneous';
 
-  const newOrInProgressStatus = [STATUS_TYPES.new, STATUS_TYPES.inProgress];
-
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
   const documentId = get(state.documentId);
@@ -139,7 +137,7 @@ export const documentDetailHelper = (get, applicationContext) => {
       (isOrder && !isDocumentOnDocketRecord) ||
       (isCourtIssuedDocument && !isDocumentOnDocketRecord));
 
-  const showCaseDetailsEdit = newOrInProgressStatus.includes(caseDetail.status);
+  const showCaseDetailsEdit = caseDetail.status === STATUS_TYPES.new;
 
   const showDocumentInfoTab =
     formattedDocument.isPetition && showCaseDetailsEdit;
