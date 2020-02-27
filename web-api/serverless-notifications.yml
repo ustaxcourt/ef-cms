@@ -20,6 +20,7 @@ custom:
     number: 3
 
   serverless-offline:
+    skipCacheInvalidation: ${opt:skipCacheInvalidation}
     host: 0.0.0.0
     port: 3020 # this port really isn't used, but needs to be unique to prevent address in use errors
     websocketPort: 3011
