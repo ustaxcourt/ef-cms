@@ -1,5 +1,5 @@
 const querystring = require('querystring');
-const { get } = require('./requests');
+const { get } = require('../requests');
 
 /**
  * getCaseInventoryReportInteractor
@@ -19,6 +19,6 @@ exports.getCaseInventoryReportInteractor = ({
 
   return get({
     applicationContext,
-    endpoint: `/cases/case-inventory-report?${queryString}`,
+    endpoint: `/reports/case-inventory-report?${queryString}`,
   });
 };
