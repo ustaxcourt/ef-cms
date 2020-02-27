@@ -18,7 +18,7 @@ export const PDFPreviewButton = connect(
     showModal,
     title,
   }) => {
-    console.log('title is', title);
+    const modalId = `PDFPreviewModal-${title}`;
     return (
       <>
         <Button
@@ -27,12 +27,12 @@ export const PDFPreviewButton = connect(
           icon={['fas', 'file-pdf']}
           iconColor="blue"
           onClick={() => {
-            return openPdfPreviewModalSequence({ file });
+            return openPdfPreviewModalSequence({ file, modalId });
           }}
         >
           {file.name || file.documentType || title}
         </Button>
-        {showModal === 'PDFPreviewModal' &&
+        {showModal == modalId &&
           (pdfPreviewModalHelper.displayErrorText ? (
             <PDFPreviewErrorModal title={title} />
           ) : (
