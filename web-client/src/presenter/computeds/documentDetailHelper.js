@@ -37,7 +37,6 @@ export const documentDetailHelper = (get, applicationContext) => {
     COURT_ISSUED_EVENT_CODES,
     ORDER_TYPES_MAP,
     STATUS_TYPES,
-    USER_ROLES,
   } = applicationContext.getConstants();
   const orderDocumentTypes = ORDER_TYPES_MAP.map(
     orderType => orderType.documentType,
