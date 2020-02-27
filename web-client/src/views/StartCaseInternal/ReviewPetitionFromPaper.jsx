@@ -180,7 +180,9 @@ export const ReviewPetitionFromPaper = connect(
                           >
                             Requested trial location
                           </label>
-                          {form.preferredTrialCity}
+                          {
+                            reviewPetitionFromPaperHelper.preferredTrialCityFormatted
+                          }
                         </div>
                       </div>
                       <div className="tablet:grid-col-6 margin-bottom-1">
