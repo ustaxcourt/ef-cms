@@ -21,33 +21,26 @@ exports.updateQcCompleteForTrialInteractor = async ({
   qcCompleteForTrial,
   trialSessionId,
 }) => {
-  console.time('stuff');
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_QC_COMPLETE)) {
     throw new UnauthorizedError('Unauthorized for trial session QC complete');
   }
 
-  console.time('oldCase');
   const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({ applicationContext, caseId });
-  console.timeEnd('oldCase');
 
   const newCase = new Case(oldCase, { applicationContext });
 
   newCase.setQcCompleteForTrial({ qcCompleteForTrial, trialSessionId });
 
-  console.time('updateCase');
   const updatedCase = await applicationContext
     .getPersistenceGateway()
     .updateCase({
       applicationContext,
       caseToUpdate: newCase.validate().toRawObject(),
     });
-  console.timeEnd('updateCase');
-
-  console.timeEnd('stuff');
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };

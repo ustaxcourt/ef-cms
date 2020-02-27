@@ -21,9 +21,9 @@ const gotoTrialSessionDetails = [
   clearErrorAlertsAction,
   setTrialSessionIdAction,
   parallel([
-    [getTrialSessionDetailsAction, setTrialSessionDetailsAction],
-    [getUsersInSectionAction({}), setUsersByKeyAction('sectionUsers')],
     [
+      getTrialSessionDetailsAction,
+      setTrialSessionDetailsAction,
       isTrialSessionCalendaredAction,
       {
         no: [
@@ -36,7 +36,9 @@ const gotoTrialSessionDetails = [
         ],
       },
     ],
+    [getUsersInSectionAction({}), setUsersByKeyAction('sectionUsers')],
   ]),
+
   setCurrentPageAction('TrialSessionDetail'),
 ];
 

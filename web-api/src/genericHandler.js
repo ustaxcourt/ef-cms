@@ -13,7 +13,6 @@ const { handle } = require('./middleware/apiGatewayHelper');
 
 exports.genericHandler = (event, cb, options = {}) => {
   return handle(event, async () => {
-    console.time('GG');
     const user = options.user || getUserFromAuthHeader(event);
     const applicationContext =
       options.applicationContext || createApplicationContext(user); // This is mostly for testing purposes
@@ -47,7 +46,6 @@ exports.genericHandler = (event, cb, options = {}) => {
         applicationContext.logger.info(logResultsLabel, results);
       }
 
-      console.timeEnd('GG');
       return results;
     } catch (e) {
       if (!e.skipLogging) {
