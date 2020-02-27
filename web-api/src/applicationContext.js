@@ -1,5 +1,6 @@
 /* eslint-disable security/detect-object-injection, security/detect-child-process, spellcheck/spell-checker */
 const AWSXRay = require('aws-xray-sdk');
+const Honeybadger = require('honeybadger'); // node version
 
 const AWS =
   process.env.NODE_ENV === 'production'
@@ -737,7 +738,6 @@ const {
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { exec } = require('child_process');
-const { initHoneybadger } = require('../../shared/src/tools/honeybadger');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 const { User } = require('../../shared/src/business/entities/User');
 const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
@@ -1162,7 +1162,18 @@ module.exports = (appContextUser = {}) => {
         setServiceIndicatorsForCase,
       };
     },
-    initHoneybadger,
+    initHoneybadger: () => {
+      if (process.env.NODE_ENV === 'production' && process.env.ENV) {
+        const apiKey = process.env['HONEYBADGER_API_KEY_' + process.env.ENV];
+
+        const config = {
+          apiKey,
+          environment: 'api',
+        };
+        Honeybadger.configure(config);
+        return Honeybadger;
+      }
+    },
     isAuthorized,
     isAuthorizedForWorkItems: () =>
       isAuthorized(user, ROLE_PERMISSIONS.WORKITEM),
