@@ -383,6 +383,13 @@ exports.setupTest = ({ useCases = {} } = {}) => {
             workQueueIsInternal: false,
           });
           break;
+        case '/document-qc':
+          await test.runSequence('gotoMessagesSequence', {
+            box: 'inbox',
+            queue: 'my',
+            workQueueIsInternal: false,
+          });
+          break;
         case '/document-qc/my/inbox':
           await test.runSequence('gotoMessagesSequence', {
             box: 'inbox',
