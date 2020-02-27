@@ -20,10 +20,12 @@ console.info = () => null;
 
 let applicationContext = {};
 let logErrorMock;
+let honeybadgerNotifyMock;
 
 describe('genericHandler', () => {
   beforeEach(() => {
     logErrorMock = jest.fn();
+    honeybadgerNotifyMock = jest.fn();
     lastLoggedValue = null;
 
     logged = [];
@@ -34,61 +36,50 @@ describe('genericHandler', () => {
         lastLoggedValue = value;
       },
     };
+
+    applicationContext.initHoneybadger = () => ({
+      notify: honeybadgerNotifyMock,
+    });
   });
 
   it('returns an error if the callback throws', async () => {
-    let errors;
-
     const callback = () => {
       return Promise.reject(new Error('Test Error'));
     };
 
-    try {
-      return genericHandler(MOCK_EVENT, callback, {
-        applicationContext,
-      });
-    } catch (err) {
-      errors = err;
-    }
+    const response = await genericHandler(MOCK_EVENT, callback, {
+      applicationContext,
+    });
 
-    expect(errors).toBeTruthy();
+    expect(response.statusCode).toEqual('400');
+    expect(JSON.parse(response.body)).toEqual('Test Error');
     expect(logErrorMock).toHaveBeenCalled();
+    expect(honeybadgerNotifyMock).toHaveBeenCalled();
   });
 
   it('defaults the options param to an empty object if not provided', async () => {
-    let errors;
     const callback = () => null;
 
-    try {
-      return genericHandler({ ...MOCK_EVENT }, callback);
-    } catch (err) {
-      errors = err;
-    }
+    await genericHandler({ ...MOCK_EVENT }, callback);
 
-    expect(errors).toBeFalsy();
     expect(logErrorMock).not.toHaveBeenCalled();
   });
 
   it('does not call application.logger.error if the skipLogging flag is present on the error', async () => {
-    let errors;
-
     const callback = () => {
       const error = new Error('Test Error');
       error.skipLogging = true;
-      return Promise.reject(error);
+      throw error;
     };
 
-    try {
-      return genericHandler({ ...MOCK_EVENT }, callback, {
-        applicationContext,
-      });
-    } catch (err) {
-      errors = err;
-    }
+    const response = await genericHandler({ ...MOCK_EVENT }, callback, {
+      applicationContext,
+    });
 
-    expect(errors).toBeTruthy();
-    expect(logErrorMock).toHaveBeenCalled();
-    expect(errors.message).toEqual('Test Error');
+    expect(response.statusCode).toEqual('400');
+    expect(JSON.parse(response.body)).toEqual('Test Error');
+    expect(logErrorMock).not.toHaveBeenCalled();
+    expect(honeybadgerNotifyMock).not.toHaveBeenCalled();
   });
 
   it('can take a user override in the options param', async () => {
