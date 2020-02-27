@@ -22,7 +22,7 @@ describe('generateInternalCaseCaptionSequence', () => {
     });
 
     expect(test.getState('form.caseCaption')).toBe(
-      `Carl Fredricksen, Petitioner ${Case.CASE_CAPTION_POSTFIX}`,
+      'Carl Fredricksen, Petitioner',
     );
   });
 });
