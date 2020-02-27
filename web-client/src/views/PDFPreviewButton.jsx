@@ -9,36 +9,34 @@ export const PDFPreviewButton = connect(
   {
     openPdfPreviewModalSequence: sequences.openPdfPreviewModalSequence,
     pdfPreviewModalHelper: state.pdfPreviewModalHelper,
-    previewPdfFile: state.previewPdfFile,
     showModal: state.showModal,
   },
   ({
     file,
     openPdfPreviewModalSequence,
     pdfPreviewModalHelper,
-    previewPdfFile,
     showModal,
     title,
   }) => {
+    console.log('title is', title);
     return (
       <>
         <Button
           link
           className="pdf-preview-btn padding-0"
-          onClick={() => openPdfPreviewModalSequence({ file })}
+          icon={['fas', 'file-pdf']}
+          iconColor="blue"
+          onClick={() => {
+            return openPdfPreviewModalSequence({ file });
+          }}
         >
-          {file.name}
+          {file.name || file.documentType || title}
         </Button>
         {showModal === 'PDFPreviewModal' &&
-          previewPdfFile === file &&
           (pdfPreviewModalHelper.displayErrorText ? (
             <PDFPreviewErrorModal title={title} />
           ) : (
-            <PDFPreviewModal
-              pdfFile={file}
-              preventScrolling={false}
-              title={title}
-            />
+            <PDFPreviewModal preventScrolling={false} title={title} />
           ))}
       </>
     );

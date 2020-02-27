@@ -15,6 +15,7 @@ export const PDFPreviewModal = connect(
     loadPdfSequence: sequences.loadPdfSequence,
     pdfPreviewModal: state.pdfPreviewModal,
     pdfPreviewModalHelper: state.pdfPreviewModalHelper,
+    previewPdfFile: state.previewPdfFile,
     setPageSequence: sequences.setPageSequence,
     totalPages: state.pdfPreviewModal.totalPages,
   },
@@ -23,9 +24,9 @@ export const PDFPreviewModal = connect(
     confirmSequence,
     currentPage,
     loadPdfSequence,
-    pdfFile,
     pdfPreviewModal,
     pdfPreviewModalHelper,
+    previewPdfFile,
     setPageSequence,
     title,
     totalPages,
@@ -35,10 +36,9 @@ export const PDFPreviewModal = connect(
     useEffect(() => {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
-
       loadPdfSequence({
         ctx,
-        file: pdfFile,
+        file: previewPdfFile,
       });
     }, []);
 
@@ -53,14 +53,16 @@ export const PDFPreviewModal = connect(
       >
         <Mobile>
           <div className="modal-mobile-header">
-            <h3 onClick={() => cancelSequence()}>
-              <FontAwesomeIcon
-                className="back"
-                icon={['fas', 'caret-left']}
-                size="lg"
-              />
+            <Button
+              link
+              className="back heading-3"
+              icon={['fas', 'caret-left']}
+              iconColor="white"
+              iconSize="lg"
+              onClick={() => cancelSequence()}
+            >
               Back to Review Your Filing
-            </h3>
+            </Button>
           </div>
           <h2 aria-hidden="true" className="modal-mobile-title">
             {title}

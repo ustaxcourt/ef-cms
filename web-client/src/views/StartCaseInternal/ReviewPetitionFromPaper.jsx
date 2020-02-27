@@ -5,7 +5,6 @@ import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { OrdersNeededSummary } from './OrdersNeededSummary';
 import { PDFPreviewButton } from '../PDFPreviewButton';
@@ -313,12 +312,6 @@ export const ReviewPetitionFromPaper = connect(
                         </label>
                         <div className="grid-row">
                           <div className="grid-col flex-auto">
-                            <FontAwesomeIcon
-                              className="fa-icon-blue"
-                              icon={['fas', 'file-pdf']}
-                            />
-                          </div>
-                          <div className="grid-col flex-fill">
                             <PDFPreviewButton
                               file={form.petitionFile}
                               title="Petition"
@@ -336,12 +329,6 @@ export const ReviewPetitionFromPaper = connect(
                         <div>
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
-                              <FontAwesomeIcon
-                                className="fa-icon-blue"
-                                icon={['fas', 'file-pdf']}
-                              />
-                            </div>
-                            <div className="grid-col flex-fill">
                               <PDFPreviewButton
                                 file={form.stinFile}
                                 title="Statement of Taxpayer Identification"
@@ -361,12 +348,6 @@ export const ReviewPetitionFromPaper = connect(
                           <div>
                             <div className="grid-row">
                               <div className="grid-col flex-auto">
-                                <FontAwesomeIcon
-                                  className="fa-icon-blue"
-                                  icon={['fas', 'file-pdf']}
-                                />
-                              </div>
-                              <div className="grid-col flex-fill">
                                 <PDFPreviewButton
                                   file={form.requestForPlaceOfTrialFile}
                                   title="Request for Place of Trial"
@@ -387,12 +368,6 @@ export const ReviewPetitionFromPaper = connect(
                           <div>
                             <div className="grid-row">
                               <div className="grid-col flex-auto">
-                                <FontAwesomeIcon
-                                  className="fa-icon-blue"
-                                  icon={['fas', 'file-pdf']}
-                                />
-                              </div>
-                              <div className="grid-col flex-fill">
                                 <PDFPreviewButton
                                   file={form.ownershipDisclosureFile}
                                   title="Ownership Disclosure Statement"
