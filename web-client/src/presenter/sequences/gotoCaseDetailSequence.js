@@ -65,7 +65,7 @@ export const gotoCaseDetailSequence = [
         'petitionsclerk',
         'trialclerk',
       ],
-      parallel([gotoCaseDetailInternal, fetchUserNotificationsSequence]),
+      [parallel([gotoCaseDetailInternal, fetchUserNotificationsSequence])],
     ),
     ...takePathForRoles(
       ['petitioner', 'practitioner', 'respondent'],
