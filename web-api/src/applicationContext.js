@@ -1,14 +1,10 @@
 /* eslint-disable security/detect-object-injection, security/detect-child-process, spellcheck/spell-checker */
-// const AWSXRay = require('aws-xray-sdk');
-//
-// const AWS =
-//   process.env.NODE_ENV === 'production'
-//     ? AWSXRay.captureAWS(require('aws-sdk'))
-//     : require('aws-sdk');
+const AWSXRay = require('aws-xray-sdk');
 
-const AWS = require('aws-sdk');
-
-// ^ must come first --------------------
+const AWS =
+  process.env.NODE_ENV === 'production'
+    ? AWSXRay.captureAWS(require('aws-sdk'))
+    : require('aws-sdk');
 
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
 

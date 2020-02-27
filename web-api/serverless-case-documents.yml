@@ -22,6 +22,7 @@ custom:
     number: 3
 
   serverless-offline:
+    skipCacheInvalidation: ${opt:skipCacheInvalidation}
     host: 0.0.0.0
     port: 3008
 
@@ -178,6 +179,8 @@ functions:
 
   addCoversheet:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.addCoversheetLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
     timeout: 900
     events:
