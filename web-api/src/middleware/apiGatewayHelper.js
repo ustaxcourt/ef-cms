@@ -24,7 +24,6 @@ exports.headers = headers;
  * @returns {object} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handle = async (event, fun) => {
-  console.time('handle');
   const applicationContext = createApplicationContext({});
   if (event.source === 'serverless-plugin-warmup') {
     return exports.sendOk('Lambda is warm!');
@@ -65,7 +64,6 @@ exports.handle = async (event, fun) => {
           response = pick(response, fieldsArr);
         }
       }
-      console.timeEnd('handle');
 
       return exports.sendOk(response);
     }
