@@ -16,15 +16,18 @@ const gotoPendingReport = [
   clearFormAction,
   closeMobileMenuAction,
   clearErrorAlertsAction,
-  getSetJudgesSequence,
-  fetchPendingItemsSequence,
+  parallel([
+    fetchUserNotificationsSequence,
+    getSetJudgesSequence,
+    fetchPendingItemsSequence,
+  ]),
   setCurrentPageAction('PendingReport'),
 ];
 
 export const gotoPendingReportSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: parallel([fetchUserNotificationsSequence, gotoPendingReport]),
+    isLoggedIn: gotoPendingReport,
     unauthorized: [redirectToCognitoAction],
   },
 ];
