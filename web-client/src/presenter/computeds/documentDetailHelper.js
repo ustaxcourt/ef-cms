@@ -142,11 +142,6 @@ export const documentDetailHelper = (get, applicationContext) => {
   const showDocumentInfoTab =
     formattedDocument.isPetition && showCaseDetailsEdit;
 
-  const showViewOrdersNeededButton =
-    document.status === 'served' &&
-    user.role === USER_ROLES.petitionsClerk &&
-    formattedDocument.isPetition;
-
   const showPrintCaseConfirmationButton =
     document.status === 'served' && formattedDocument.isPetition === true;
 
@@ -183,6 +178,5 @@ export const documentDetailHelper = (get, applicationContext) => {
     showRemoveSignature: isOrder && document.eventCode !== 'NOT' && isSigned,
     showSignDocumentButton,
     showSignedAt: isOrder && isSigned,
-    showViewOrdersNeededButton,
   };
 };
