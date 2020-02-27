@@ -192,6 +192,14 @@ export const getWorkItemDocumentLink = ({
     ) {
       editLink = '/edit';
     }
+  } else if (
+    showDocumentEditLink &&
+    permissions.UPDATE_CASE &&
+    formattedDocument
+  ) {
+    if (formattedDocument.isPetition && result.caseIsInProgress) {
+      editLink = '/review';
+    }
   }
   if (!editLink) {
     const messageId = result.messages[0] && result.messages[0].messageId;
