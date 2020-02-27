@@ -192,12 +192,11 @@ export const getWorkItemDocumentLink = ({
     ) {
       editLink = '/edit';
     }
-  } else if (
-    showDocumentEditLink &&
-    permissions.UPDATE_CASE &&
-    formattedDocument
-  ) {
-    if (
+  } else if(
+      showDocumentEditLink &&
+      permissions.UPDATE_CASE &&
+      formattedDocument &&
+      !workQueueIsInternal && 
       formattedDocument.isPetition &&
       result.caseIsInProgress &&
       !formattedDocument.servedAt
