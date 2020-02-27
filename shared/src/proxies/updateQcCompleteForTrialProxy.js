@@ -10,15 +10,18 @@ const { put } = require('./requests');
  * @param {string} providers.trialSessionId the id of the trial session to update
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateQcCompleteForTrialInteractor = ({
+exports.updateQcCompleteForTrialInteractor = async ({
   applicationContext,
   caseId,
   qcCompleteForTrial,
   trialSessionId,
 }) => {
-  return put({
+  console.time('qc-complete');
+  const results = await put({
     applicationContext,
     body: { qcCompleteForTrial, trialSessionId },
     endpoint: `/case-meta/${caseId}/qc-complete`,
   });
+  console.timeEnd('qc-complete');
+  return results;
 };
