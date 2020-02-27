@@ -16,7 +16,7 @@ export default test => {
 
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
       key: 'petitionerName',
-      value: 'Test',
+      value: 'Stormborn',
     });
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
       key: 'yearFiledMin',
