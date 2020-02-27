@@ -59,6 +59,7 @@ set -- \
   --noTimeout \
   --region us-east-1 \
   --run_dir "${RUN_DIR}" \
+  --skipCacheInvalidation "${SKIP_CACHE_INVALIDATION}" \
   --stage local \
   --stageColor "blue" \
   --dynamo_stream_arn "arn:aws:dynamodb:ddblocal:000000000000:table/efcms-local/stream/*" \
