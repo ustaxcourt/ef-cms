@@ -360,8 +360,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
 
   const judgeUser = get(state.judgeUser);
 
-  console.log('workQueue', workItems);
-
   let workQueue = workItems
     .filter(
       filterWorkItems({
