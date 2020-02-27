@@ -17,7 +17,7 @@ exports.generateTrialCalendarPdfInteractor = ({
     body: {
       trialSessionId,
     },
-    endpoint: '/api/trial-calendar-pdf',
+    endpoint: '/reports/trial-calendar-pdf',
     headers: {
       Accept: 'application/pdf',
     },

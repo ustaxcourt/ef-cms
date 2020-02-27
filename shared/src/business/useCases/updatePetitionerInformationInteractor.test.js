@@ -70,6 +70,13 @@ let userObj = userData;
 const applicationContext = {
   environment: { stage: 'local' },
   getCaseCaptionNames: Case.getCaseCaptionNames,
+  getChromiumBrowser: () => ({
+    close: () => null,
+    newPage: () => ({
+      pdf: () => fakeData,
+      setContent: () => null,
+    }),
+  }),
   getCurrentUser: () => {
     return new User(userObj);
   },
@@ -107,6 +114,7 @@ const applicationContext = {
     };
   },
   logger: {
+    error: e => console.log(e),
     time: () => null,
     timeEnd: () => null,
   },

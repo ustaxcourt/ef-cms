@@ -23,6 +23,7 @@ custom:
     number: 3
 
   serverless-offline:
+    skipCacheInvalidation: ${opt:skipCacheInvalidation}
     host: 0.0.0.0
     port: 3007
 
@@ -316,22 +317,6 @@ functions:
     events:
       - http:
           path: /{trialSessionId}/cases/{caseId}
-          method: post
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  runTrialSessionPlanningReport:
-    handler: web-api/${self:provider.dir}/trialSessionsHandlers.runTrialSessionPlanningReportLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: /planning-report
           method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
