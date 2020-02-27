@@ -249,7 +249,7 @@ export const filterWorkItems = ({
             (item.assigneeId === user.userId &&
               user.role === USER_ROLES.petitionsClerk &&
               item.caseStatus === STATUS_TYPES.new &&
-              !item.document.isStatusServed)
+              item.caseIsInProgress === true)
           );
         },
         inbox: item => {
@@ -260,7 +260,7 @@ export const filterWorkItems = ({
             item.section === user.section &&
             item.document.isFileAttached !== false &&
             !item.inProgress &&
-            !item.document.isStatusServed
+            item.caseIsInProgress !== true
           );
         },
         outbox: item => {
@@ -285,7 +285,7 @@ export const filterWorkItems = ({
             // PetitionsClerks
             (user.role === USER_ROLES.petitionsClerk &&
               item.caseStatus === STATUS_TYPES.new &&
-              !item.document.isStatusServed)
+              item.caseIsInProgress === true)
           );
         },
         inbox: item => {
@@ -296,7 +296,7 @@ export const filterWorkItems = ({
             item.document.isFileAttached !== false &&
             !item.inProgress &&
             additionalFilters(item) &&
-            !item.document.isStatusServed
+            item.caseIsInProgress !== true
           );
         },
         outbox: item => {
@@ -359,6 +359,8 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const { USER_ROLES } = applicationContext.getConstants();
 
   const judgeUser = get(state.judgeUser);
+
+  console.log('workQueue', workItems);
 
   let workQueue = workItems
     .filter(

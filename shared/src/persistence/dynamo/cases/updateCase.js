@@ -3,6 +3,9 @@ const {
   updateWorkItemAssociatedJudge,
 } = require('../workitems/updateWorkItemAssociatedJudge');
 const {
+  updateWorkItemCaseIsInProgress,
+} = require('../workitems/updateWorkItemCaseIsInProgress');
+const {
   updateWorkItemCaseStatus,
 } = require('../workitems/updateWorkItemCaseStatus');
 const {
@@ -93,6 +96,15 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           updateWorkItemAssociatedJudge({
             applicationContext,
             associatedJudge: caseToUpdate.associatedJudge,
+            workItemId: mapping.sk,
+          }),
+        );
+      }
+      if (oldCase.inProgress !== caseToUpdate.inProgress) {
+        requests.push(
+          updateWorkItemCaseIsInProgress({
+            applicationContext,
+            caseIsInProgress: caseToUpdate.inProgress,
             workItemId: mapping.sk,
           }),
         );

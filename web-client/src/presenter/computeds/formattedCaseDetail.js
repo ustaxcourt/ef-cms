@@ -15,7 +15,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
 
-  const { Case, Document } = applicationContext.getEntityConstructors();
+  const { Document } = applicationContext.getEntityConstructors();
   const systemGeneratedEventCodes = Object.keys(
     Document.SYSTEM_GENERATED_DOCUMENT_TYPES,
   ).map(key => {

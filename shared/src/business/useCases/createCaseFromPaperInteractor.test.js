@@ -3,7 +3,6 @@ const uuid = require('uuid');
 const {
   createCaseFromPaperInteractor,
 } = require('./createCaseFromPaperInteractor');
-const { Case } = require('../entities/cases/Case');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { UnauthorizedError } = require('../../errors/errors');

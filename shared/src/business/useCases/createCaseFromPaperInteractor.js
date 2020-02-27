@@ -23,6 +23,7 @@ const addPetitionDocumentWithWorkItemToCase = ({
       assigneeName: user.name,
       associatedJudge: caseToAdd.associatedJudge,
       caseId: caseToAdd.caseId,
+      caseIsInProgress: caseToAdd.inProgress,
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseToAdd)),
       docketNumber: caseToAdd.docketNumber,
@@ -113,6 +114,7 @@ exports.createCaseFromPaperInteractor = async ({
     {
       docketNumber,
       ...petitionEntity.toRawObject(),
+      inProgress: petitionMetadata.inProgress,
       isPaper: true,
       status: petitionMetadata.status || null,
       userId: user.userId,

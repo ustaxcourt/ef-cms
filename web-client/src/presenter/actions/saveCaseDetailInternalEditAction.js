@@ -25,6 +25,9 @@ export const saveCaseDetailInternalEditAction = async ({
       caseToUpdate,
     });
 
+  console.log('caseToUpdate', caseToUpdate);
+  console.log('caseDetail', caseDetail);
+
   if (caseDetail.status === STATUS_TYPES.generalDocketReadyForTrial) {
     await applicationContext.getUseCases().updateCaseTrialSortTagsInteractor({
       applicationContext,
