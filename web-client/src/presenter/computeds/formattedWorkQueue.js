@@ -192,17 +192,16 @@ export const getWorkItemDocumentLink = ({
     ) {
       editLink = '/edit';
     }
-  } else if(
-      showDocumentEditLink &&
-      permissions.UPDATE_CASE &&
-      formattedDocument &&
-      !workQueueIsInternal && 
-      formattedDocument.isPetition &&
-      result.caseIsInProgress &&
-      !formattedDocument.servedAt
-    ) {
-      editLink = '/review';
-    }
+  } else if (
+    showDocumentEditLink &&
+    permissions.UPDATE_CASE &&
+    formattedDocument &&
+    !workQueueIsInternal &&
+    formattedDocument.isPetition &&
+    result.caseIsInProgress &&
+    !formattedDocument.servedAt
+  ) {
+    editLink = '/review';
   }
   if (!editLink) {
     const messageId = result.messages[0] && result.messages[0].messageId;
