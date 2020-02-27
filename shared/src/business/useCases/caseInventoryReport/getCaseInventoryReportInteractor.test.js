@@ -1,7 +1,7 @@
 const {
   getCaseInventoryReportInteractor,
 } = require('./getCaseInventoryReportInteractor');
-const { User } = require('../entities/User');
+const { User } = require('../../entities/User');
 
 describe('getCaseInventoryReportInteractor', () => {
   let applicationContext;
