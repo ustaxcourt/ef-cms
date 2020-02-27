@@ -39,6 +39,7 @@ import { OrdersNeededSummary } from './CaseDetailEdit/OrdersNeededSummary';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintPreview } from './CourtIssuedDocketEntry/PrintPreview';
+import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
@@ -101,6 +102,7 @@ const pages = {
   PendingReport,
   PrimaryContactEdit,
   PrintPreview,
+  PrintableCaseInventoryReport,
   PrintableDocketRecord,
   PrintableTrialCalendar,
   RequestAccessWizard,
