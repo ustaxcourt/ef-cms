@@ -97,6 +97,8 @@ echo "starting case meta service"
 npx sls offline start "$@" --config web-api/serverless-case-meta.yml &
 echo "starting migrate service"
 npx sls offline start "$@" --config web-api/serverless-migrate.yml &
+echo "starting reports service"
+npx sls offline start "$@" --config web-api/serverless-reports.yml &
 
 echo "starting proxy"
 node ./web-api/proxy.js
