@@ -34,11 +34,11 @@ export const CaseInventoryReport = connect(
             </Button>
           </div>
 
-          <div className="grid-row grid-gap padding-top-3 padding-bottom-1">
-            <div className="grid-col-2 padding-top-05">
+          <div className="grid-row grid-gap-2 padding-top-3 padding-bottom-1">
+            <div className="grid-col-1 padding-top-05">
               <h3 id="filterHeading">Filter by</h3>
             </div>
-            <div className="grid-col-3">
+            <div className="grid-col-2">
               <BindedSelect
                 ariaDescribedBy="filterHeading"
                 ariaLabel="judge"
@@ -57,7 +57,7 @@ export const CaseInventoryReport = connect(
                 ))}
               </BindedSelect>
             </div>
-            <div className="grid-col-3">
+            <div className="grid-col-2">
               <BindedSelect
                 ariaDescribedBy="filterHeading"
                 ariaLabel="status"
