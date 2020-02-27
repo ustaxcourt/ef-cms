@@ -1,4 +1,4 @@
-const { get } = require('./requests');
+const { get } = require('../requests');
 
 /**
  * getBlockedCasesInteractor
@@ -11,6 +11,6 @@ const { get } = require('./requests');
 exports.getBlockedCasesInteractor = ({ applicationContext, trialLocation }) => {
   return get({
     applicationContext,
-    endpoint: `/cases/blocked/${trialLocation}`,
+    endpoint: `/reports/blocked/${trialLocation}`,
   });
 };
