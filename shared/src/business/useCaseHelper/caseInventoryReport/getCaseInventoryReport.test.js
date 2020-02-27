@@ -52,7 +52,7 @@ describe('getCaseInventoryReport', () => {
     expect(searchSpy).toHaveBeenCalled();
     expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
       {
-        exists: { field: 'caseType.S' },
+        match: { 'entityName.S': 'Case' },
       },
       {
         match_phrase: { 'associatedJudge.S': 'Chief Judge' },
@@ -90,7 +90,7 @@ describe('getCaseInventoryReport', () => {
     expect(searchSpy).toHaveBeenCalled();
     expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
       {
-        exists: { field: 'caseType.S' },
+        match: { 'entityName.S': 'Case' },
       },
       {
         match_phrase: { 'status.S': 'New' },
@@ -131,7 +131,7 @@ describe('getCaseInventoryReport', () => {
     expect(searchSpy).toHaveBeenCalled();
     expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
       {
-        exists: { field: 'caseType.S' },
+        match: { 'entityName.S': 'Case' },
       },
       {
         match_phrase: { 'associatedJudge.S': 'Chief Judge' },
@@ -168,7 +168,7 @@ describe('getCaseInventoryReport', () => {
     expect(searchSpy).toHaveBeenCalled();
     expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
       {
-        exists: { field: 'caseType.S' },
+        match: { 'entityName.S': 'Case' },
       },
       {
         match_phrase: { 'associatedJudge.S': 'Chief Judge' },

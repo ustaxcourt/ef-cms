@@ -65,6 +65,7 @@
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Interest Abatement",
+    "entityName": "Case",
     "contactPrimary": {
       "address3": "Aliquam molestias fu",
       "address2": "Est asperiores ullam",
