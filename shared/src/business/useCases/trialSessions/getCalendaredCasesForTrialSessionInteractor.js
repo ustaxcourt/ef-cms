@@ -22,22 +22,14 @@ exports.getCalendaredCasesForTrialSessionInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const judgeUser = await applicationContext
-    .getUseCases()
-    .getJudgeForUserChambersInteractor({ applicationContext, user });
-
-  // any user with permission can fetch the calendared cases, but a judge
-  // userId is required for case notes.
-  const userId = judgeUser ? judgeUser.userId : user.userId;
-
-  const casesWithNotes = await applicationContext
+  const cases = await applicationContext
     .getPersistenceGateway()
     .getCalendaredCasesForTrialSession({
       applicationContext,
       trialSessionId,
     });
 
-  return casesWithNotes.map(caseWithAdditionalProperties => {
+  return cases.map(caseWithAdditionalProperties => {
     // TODO: revisit this approach.  I think our persistence layer is returning more than it should?
     const {
       disposition,
