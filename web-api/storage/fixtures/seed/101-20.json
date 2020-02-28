@@ -87,6 +87,7 @@
     "partyType": "Petitioner",
     "receivedAt": "2020-01-02T16:05:45.978Z",
     "caseType": "Deficiency",
+    "sortableDocketNumber": "20101",
     "entityName": "Case",
     "trialLocation": "Houston, Texas",
     "orderDesignatingPlaceOfTrial": false,
