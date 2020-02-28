@@ -176,12 +176,13 @@ describe('Blocking a Case', () => {
   it('petitions clerk views blocked report with no blocked cases', async () => {
     await test.runSequence('gotoBlockedCasesReportSequence');
 
+    await wait(1000);
+
     await test.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
       value: trialLocation,
     });
 
-    await wait(1000);
     expect(test.getState('blockedCases')).toMatchObject([]);
   });
 
@@ -191,6 +192,8 @@ describe('Blocking a Case', () => {
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with no blocked cases', async () => {
     await test.runSequence('gotoBlockedCasesReportSequence');
+
+    await wait(1000);
 
     await test.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
