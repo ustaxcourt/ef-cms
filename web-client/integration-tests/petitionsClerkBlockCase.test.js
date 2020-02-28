@@ -28,7 +28,7 @@ const test = setupTest();
 
 describe('Blocking a Case', () => {
   beforeAll(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(50000);
   });
 
   afterAll(() => {

@@ -40,7 +40,7 @@ exports.getCaseInventoryReport = async ({
         bool: {
           must: [
             {
-              exists: { field: 'caseType.S' },
+              match: { 'entityName.S': 'Case' },
             },
           ],
         },
