@@ -4,6 +4,7 @@ import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultTrialStartTimeAction } from '../actions/setDefaultTrialStartTimeAction';
@@ -16,11 +17,14 @@ const gotoAddTrialSession = [
   stopShowValidationAction,
   clearFormAction,
   clearScreenMetadataAction,
-  getTrialSessionsAction,
-  setTrialSessionsAction,
-  getSetJudgesSequence,
-  getUsersInSectionAction({ section: 'trialClerks' }),
-  setUsersByKeyAction('trialClerks'),
+  parallel([
+    [getTrialSessionsAction, setTrialSessionsAction],
+    getSetJudgesSequence,
+    [
+      getUsersInSectionAction({ section: 'trialClerks' }),
+      setUsersByKeyAction('trialClerks'),
+    ],
+  ]),
   setDefaultTrialStartTimeAction,
   setCurrentPageAction('AddTrialSession'),
 ];
