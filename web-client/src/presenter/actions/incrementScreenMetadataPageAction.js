@@ -4,7 +4,6 @@ import { state } from 'cerebral';
  * increments screenMetadata.page by one, saving to state
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
  * @param {Function} providers.store the cerebral store function failure)
  */
