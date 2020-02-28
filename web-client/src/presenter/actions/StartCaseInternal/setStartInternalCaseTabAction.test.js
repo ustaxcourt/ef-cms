@@ -7,6 +7,6 @@ describe('setStartInternalCaseTabAction', () => {
       props: { tab: 'caseInfo' },
     });
 
-    expect(result.state.startInternalCase.tab).toEqual('caseInfo');
+    expect(result.state.startCaseInternal.tab).toEqual('caseInfo');
   });
 });
