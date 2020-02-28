@@ -10,10 +10,17 @@ applicationContext.getCurrentUser = () => ({
   userId: '5d66d122-8417-427b-9048-c1ba8ab1ea68',
 });
 
+const testCaseInventoryPageSize = 25;
+
+const constants = {
+  ...applicationContext.getConstants(),
+  CASE_INVENTORY_PAGE_SIZE: testCaseInventoryPageSize,
+};
 const caseInventoryReportHelper = withAppContextDecorator(
   caseInventoryReportHelperComputed,
   {
     ...applicationContext,
+    getConstants: () => constants,
   },
 );
 
@@ -120,5 +127,84 @@ describe('caseInventoryReportHelper', () => {
         docketNumberWithSuffix: '123-20',
       },
     ]);
+  });
+
+  it('should return the nextPageSize as a calculation of the number of results on the next page', () => {
+    let result = runCompute(caseInventoryReportHelper, {
+      state: {
+        caseInventoryReportData: {
+          foundCases: [],
+          totalCount: testCaseInventoryPageSize * 3, // three pages of data
+        },
+        screenMetadata: {
+          page: 1, // the next page should be a full testCaseInventoryPageSize set of results
+        },
+      },
+    });
+
+    expect(result.nextPageSize).toEqual(testCaseInventoryPageSize);
+
+    result = runCompute(caseInventoryReportHelper, {
+      state: {
+        caseInventoryReportData: {
+          foundCases: [],
+          totalCount: testCaseInventoryPageSize + 1, // 1 more than a full page means a second page with 1 result
+        },
+        screenMetadata: {
+          page: 1,
+        },
+      },
+    });
+
+    expect(result.nextPageSize).toEqual(1);
+
+    const lastFullPage = 3;
+    const totalCount = testCaseInventoryPageSize * lastFullPage + 1; // we want to see 1 result on the last page
+
+    result = runCompute(caseInventoryReportHelper, {
+      state: {
+        caseInventoryReportData: {
+          foundCases: [],
+          totalCount,
+        },
+        screenMetadata: {
+          page: lastFullPage + 1, // Last page of results (where there should be only one result)
+        },
+      },
+    });
+
+    expect(result.nextPageSize).toEqual(0);
+  });
+
+  it('should show the load more button when there are more results to load', () => {
+    const result = runCompute(caseInventoryReportHelper, {
+      state: {
+        caseInventoryReportData: {
+          foundCases: [],
+          totalCount: 200,
+        },
+        screenMetadata: {
+          page: 1,
+        },
+      },
+    });
+
+    expect(result.showLoadMoreButton).toBeTruthy();
+  });
+
+  it('should NOT show the load more button when there are NO MORE results to load', () => {
+    const result = runCompute(caseInventoryReportHelper, {
+      state: {
+        caseInventoryReportData: {
+          foundCases: [],
+          totalCount: testCaseInventoryPageSize,
+        },
+        screenMetadata: {
+          page: 1,
+        },
+      },
+    });
+
+    expect(result.showLoadMoreButton).toBeFalsy();
   });
 });

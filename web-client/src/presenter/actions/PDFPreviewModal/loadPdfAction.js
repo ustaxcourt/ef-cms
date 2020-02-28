@@ -10,6 +10,7 @@ import { state } from 'cerebral';
  */
 export const loadPdfAction = ({ applicationContext, path, props, store }) => {
   const { ctx, file } = props;
+  const isBase64Encoded = typeof file === 'string' && file.startsWith('data');
 
   store.set(state.pdfPreviewModal.ctx, ctx);
 
@@ -17,8 +18,13 @@ export const loadPdfAction = ({ applicationContext, path, props, store }) => {
     const reader = new (applicationContext.getFileReader())();
 
     reader.onload = async () => {
-      const base64File = reader.result.replace(/[^,]+,/, '');
-      const binaryFile = atob(base64File);
+      let binaryFile;
+      if (isBase64Encoded) {
+        const base64File = reader.result.replace(/[^,]+,/, '');
+        binaryFile = atob(base64File);
+      } else {
+        binaryFile = reader.result;
+      }
 
       try {
         const pdfJs = await applicationContext.getPdfJs();
@@ -40,6 +46,10 @@ export const loadPdfAction = ({ applicationContext, path, props, store }) => {
       reject(path.error());
     };
 
-    reader.readAsDataURL(file);
+    if (isBase64Encoded) {
+      reader.readAsDataURL(file);
+    } else {
+      reader.readAsArrayBuffer(file);
+    }
   });
 };
