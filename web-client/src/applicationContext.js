@@ -161,6 +161,7 @@ import { getUserInteractor } from '../../shared/src/proxies/users/getUserProxy';
 import { getUserPermissions } from '../../shared/src/authorization/getUserPermissions';
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
+import { loadPDFForPreviewInteractor } from '../../shared/src/business/useCases/loadPDFForPreviewInteractor';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
 import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCaseProxy';
 import { refreshTokenInteractor } from '../../shared/src/business/useCases/refreshTokenInteractor';
@@ -339,6 +340,7 @@ const allUseCases = {
   getUserInteractor,
   getUsersInSectionInteractor,
   getWorkItemInteractor,
+  loadPDFForPreviewInteractor,
   loadPDFForSigningInteractor,
   prioritizeCaseInteractor,
   refreshTokenInteractor,
@@ -441,6 +443,7 @@ const applicationContext = {
     (process.env.USTC_DEBUG ? i => i : deepFreeze)({
       BUSINESS_TYPES: ContactFactory.BUSINESS_TYPES,
       CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
+      CASE_INVENTORY_PAGE_SIZE: 2,
       CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
       CATEGORIES: Document.CATEGORIES,
       CATEGORY_MAP: Document.CATEGORY_MAP,

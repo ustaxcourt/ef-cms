@@ -86,6 +86,7 @@
     "partyType": "Petitioner",
     "receivedAt": "2019-12-11T15:25:55.006Z",
     "caseType": "CDP (Lien/Levy)",
+    "sortableDocketNumber": 19000112,
     "entityName": "Case",
     "orderDesignatingPlaceOfTrial": false,
     "contactPrimary": {

@@ -9,6 +9,8 @@ import React from 'react';
 export const CaseInventoryReport = connect(
   {
     caseInventoryReportHelper: state.caseInventoryReportHelper,
+    caseInventoryReportLoadMoreSequence:
+      sequences.caseInventoryReportLoadMoreSequence,
     getCaseInventoryReportSequence: sequences.getCaseInventoryReportSequence,
     gotoPrintableCaseInventoryReportSequence:
       sequences.gotoPrintableCaseInventoryReportSequence,
@@ -16,6 +18,7 @@ export const CaseInventoryReport = connect(
   },
   ({
     caseInventoryReportHelper,
+    caseInventoryReportLoadMoreSequence,
     getCaseInventoryReportSequence,
     gotoPrintableCaseInventoryReportSequence,
     screenMetadata,
@@ -124,6 +127,11 @@ export const CaseInventoryReport = connect(
                   )}
                 </tbody>
               </table>
+              {caseInventoryReportHelper.showLoadMoreButton && (
+                <Button onClick={() => caseInventoryReportLoadMoreSequence()}>
+                  Load {caseInventoryReportHelper.nextPageSize} More
+                </Button>
+              )}
             </div>
           </div>
         </section>
