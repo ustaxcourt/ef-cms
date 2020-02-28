@@ -588,15 +588,17 @@ const applicationContext = {
   },
   initHoneybadger: async () => {
     if (process.env.USTC_ENV !== 'dev' && process.env.ENV) {
-      const Honeybadger = await import('honeybadger-js'); // browser version
       const apiKey = process.env['HONEYBADGER_API_KEY_' + process.env.ENV];
+      if (apiKey) {
+        const Honeybadger = await import('honeybadger-js'); // browser version
 
-      const config = {
-        apiKey,
-        environment: 'client',
-      };
-      Honeybadger.configure(config);
-      return Honeybadger;
+        const config = {
+          apiKey,
+          environment: 'client',
+        };
+        Honeybadger.configure(config);
+        return Honeybadger;
+      }
     }
   },
   setCurrentUser,
