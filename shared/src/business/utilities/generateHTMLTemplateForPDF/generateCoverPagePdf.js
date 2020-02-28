@@ -29,7 +29,7 @@ exports.generateCoverPagePdf = async ({ applicationContext, content }) => {
         }
 
         .width-60 {
-          width: 60%;
+          width: 40%;
         }
 
         .width-40 {

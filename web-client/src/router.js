@@ -549,14 +549,6 @@ const router = {
     );
 
     route(
-      '/case-detail/*/orders-needed',
-      ifHasAccess(docketNumber => {
-        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Orders needed`);
-        app.getSequence('gotoOrdersNeededSequence')({ docketNumber });
-      }),
-    );
-
-    route(
       '/document-qc..',
       ifHasAccess(() => {
         const path = route._.getPathFromBase();

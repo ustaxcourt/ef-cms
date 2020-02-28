@@ -13,6 +13,7 @@
           {
             "docketNumberSuffix": "W",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "createdAt": "2019-03-01T21:40:46.415Z",
               "filingDate": "2019-03-01T21:40:46.415Z",
