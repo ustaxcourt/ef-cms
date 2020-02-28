@@ -6,8 +6,9 @@ const { get } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.associatedJudge the judge to filter by
- * @param {string} providers.status the status to filter by
+ * @param {string} providers.associatedJudge the optional judge filter
+ * @param {number} providers.page the page to retrieve
+ * @param {string} providers.status the optional status filter
  * @returns {Promise<*>} the promise of the api call
  */
 exports.getCaseInventoryReportInteractor = ({

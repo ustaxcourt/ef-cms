@@ -32,20 +32,18 @@ describe('getCaseInventoryReport', () => {
   };
 
   it('calls search function with correct params when provided a judge and returns records', async () => {
-    searchSpy = jest.fn(async () => {
-      return {
-        hits: {
-          hits: [
-            {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
-            },
-            {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
-            },
-          ],
-          total: { value: '2' },
-        },
-      };
+    searchSpy = jest.fn().mockResolvedValue({
+      hits: {
+        hits: [
+          {
+            _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
+          },
+          {
+            _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
+          },
+        ],
+        total: { value: '2' },
+      },
     });
 
     const results = await getCaseInventoryReport({
@@ -73,17 +71,15 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls search function with correct params when provided a status and returns records', async () => {
-    searchSpy = jest.fn(async () => {
-      return {
-        hits: {
-          hits: [
-            {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
-            },
-          ],
-          total: { value: '1' },
-        },
-      };
+    searchSpy = jest.fn().mockResolvedValue({
+      hits: {
+        hits: [
+          {
+            _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
+          },
+        ],
+        total: { value: '1' },
+      },
     });
 
     const results = await getCaseInventoryReport({
@@ -110,20 +106,18 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls search function with correct params when provided a judge and status and returns records', async () => {
-    searchSpy = jest.fn(async () => {
-      return {
-        hits: {
-          hits: [
-            {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
-            },
-            {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
-            },
-          ],
-          total: { value: '2' },
-        },
-      };
+    searchSpy = jest.fn().mockResolvedValue({
+      hits: {
+        hits: [
+          {
+            _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
+          },
+          {
+            _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
+          },
+        ],
+        total: { value: '2' },
+      },
     });
 
     const results = await getCaseInventoryReport({
@@ -155,7 +149,7 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls the search function with a default page size if one is not provided', async () => {
-    searchSpy = jest.fn(async () => {});
+    searchSpy = jest.fn();
 
     await getCaseInventoryReport({
       applicationContext,
@@ -169,7 +163,7 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls the search function with the given page size', async () => {
-    searchSpy = jest.fn(async () => {});
+    searchSpy = jest.fn();
 
     await getCaseInventoryReport({
       applicationContext,
@@ -182,7 +176,7 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls the search function with max page size if the given page size exceeds the max page size', async () => {
-    searchSpy = jest.fn(async () => {});
+    searchSpy = jest.fn();
 
     await getCaseInventoryReport({
       applicationContext,
@@ -197,7 +191,7 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls the search function with a default starting index (`from` param) of 0 if one is not provided', async () => {
-    searchSpy = jest.fn(async () => {});
+    searchSpy = jest.fn();
 
     await getCaseInventoryReport({
       applicationContext,
@@ -209,7 +203,7 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls the search function with the given starting index (`from` param)', async () => {
-    searchSpy = jest.fn(async () => {});
+    searchSpy = jest.fn();
 
     await getCaseInventoryReport({
       applicationContext,
@@ -222,13 +216,11 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('returns an empty array when no hits are returned from the search client', async () => {
-    searchSpy = jest.fn(async () => {
-      return {
-        hits: {
-          hits: [],
-        },
-        total: { value: '0' },
-      };
+    searchSpy = jest.fn().mockResolvedValue({
+      hits: {
+        hits: [],
+      },
+      total: { value: '0' },
     });
 
     const results = await getCaseInventoryReport({

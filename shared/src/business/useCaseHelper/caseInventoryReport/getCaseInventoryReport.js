@@ -7,8 +7,10 @@ const { get } = require('lodash');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.associatedJudge the optional judge filter
+ * @param {number} providers.from the item index to start from
+ * @param {number} providers.pageSize the number of items to retrieve
  * @param {string} providers.status the optional status filter
- * @returns {Array} the pending items found
+ * @returns {object} the items found and the total count
  */
 exports.getCaseInventoryReport = async ({
   applicationContext,
