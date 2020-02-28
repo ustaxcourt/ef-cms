@@ -35,7 +35,6 @@ exports.getCalendaredCasesForTrialSessionInteractor = async ({
     .getCalendaredCasesForTrialSession({
       applicationContext,
       trialSessionId,
-      userId,
     });
 
   return casesWithNotes.map(caseWithAdditionalProperties => {

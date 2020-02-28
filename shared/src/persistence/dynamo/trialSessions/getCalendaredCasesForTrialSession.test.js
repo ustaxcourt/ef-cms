@@ -50,23 +50,4 @@ describe('getCalendaredCasesForTrialSession', () => {
       { ...MOCK_CASE, disposition: 'something', removedFromTrial: true },
     ]);
   });
-
-  it('should get the cases calendared for a trial session and the case notes if a userId is passed in', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-    };
-    const result = await getCalendaredCasesForTrialSession({
-      applicationContext,
-      userId: '123',
-    });
-    expect(result).toMatchObject([
-      {
-        ...MOCK_CASE,
-        disposition: 'something',
-        removedFromTrial: true,
-      },
-    ]);
-  });
 });

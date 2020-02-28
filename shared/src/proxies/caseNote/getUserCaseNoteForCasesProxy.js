@@ -5,7 +5,7 @@ const { get } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the case id to get notes for the logged in user
+ * @param {Array<string>} providers.caseIds the case ids to get notes for
  * @returns {Promise<*>} the promise of the api call
  */
 exports.getUserCaseNoteForCasesInteractor = ({

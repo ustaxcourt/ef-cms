@@ -2,9 +2,9 @@
  * Fetches the cases notes
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext needed for getting the getCase use case
- * @param {object} providers.props the cerebral props object containing the props.trialSessionId
- * @returns {object} contains the eligible cases for a trial sessions
+ * @param {object} providers.applicationContext needed for getting cases notes via getUserCaseNoteForCasesInteractor
+ * @param {object} providers.props the cerebral props object containing the props.trialSession
+ * @returns {object} contains the notes for all cases
  */
 export const getUserCaseNoteForCasesAction = async ({
   applicationContext,
