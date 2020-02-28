@@ -181,6 +181,7 @@ describe('Blocking a Case', () => {
       value: trialLocation,
     });
 
+    await wait(1000);
     expect(test.getState('blockedCases')).toMatchObject([]);
   });
 
