@@ -1350,7 +1350,7 @@ describe('Case entity', () => {
     });
 
     it('returns a sortable docket number from the case docketNumber property', () => {
-      const myCase = new Case(
+      let myCase = new Case(
         {
           ...MOCK_CASE,
           docketNumber: '105-19',
@@ -1359,7 +1359,29 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.generateSortableDocketNumber()).toEqual(19105);
+      expect(myCase.generateSortableDocketNumber()).toEqual(19000105);
+
+      myCase = new Case(
+        {
+          ...MOCK_CASE,
+          docketNumber: '2635-19',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.generateSortableDocketNumber()).toEqual(19002635);
+
+      myCase = new Case(
+        {
+          ...MOCK_CASE,
+          docketNumber: '112635-19',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.generateSortableDocketNumber()).toEqual(19112635);
     });
   });
 
