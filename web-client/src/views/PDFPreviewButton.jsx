@@ -2,6 +2,7 @@ import { Button } from '../ustc-ui/Button/Button';
 import { PDFPreviewErrorModal } from './PDFPreviewErrorModal';
 import { PDFPreviewModal } from './PDFPreviewModal';
 import { connect } from '@cerebral/react';
+import { getStringAbbreviation } from '../utilities/getStringAbbreviation';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -19,6 +20,8 @@ export const PDFPreviewButton = connect(
     title,
   }) => {
     const modalId = `PDFPreviewModal-${title}`;
+    const fullTitle = file.name || file.documentType || title;
+    const abbrevTitle = getStringAbbreviation(fullTitle, 50);
     return (
       <>
         <Button
@@ -26,11 +29,12 @@ export const PDFPreviewButton = connect(
           className="pdf-preview-btn padding-0"
           icon={['fas', 'file-pdf']}
           iconColor="blue"
+          title={fullTitle}
           onClick={() => {
             return openPdfPreviewModalSequence({ file, modalId });
           }}
         >
-          {file.name || file.documentType || title}
+          {abbrevTitle}
         </Button>
         {showModal == modalId &&
           (pdfPreviewModalHelper.displayErrorText ? (
