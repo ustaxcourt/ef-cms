@@ -9,9 +9,11 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.associatedJudge the judge to filter by
- * @param {string} providers.status the status to filter by
- * @returns {object} the case data
+ * @param {string} providers.associatedJudge the optional judge filter
+ * @param {number} providers.from the item index to start from
+ * @param {number} providers.pageSize the number of items to retrieve
+ * @param {string} providers.status the optional status filter
+ * @returns {object} the report data
  */
 exports.getCaseInventoryReportInteractor = async ({
   applicationContext,
