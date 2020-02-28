@@ -14,6 +14,6 @@ exports.handler = event =>
       .getUseCases()
       .getUserCaseNoteForCasesInteractor({
         applicationContext,
-        caseIds,
+        caseIds: caseIds.split(','),
       });
   });

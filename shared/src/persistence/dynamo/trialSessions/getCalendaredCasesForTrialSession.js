@@ -28,21 +28,5 @@ exports.getCalendaredCasesForTrialSession = async ({
     ...results.find(r => myCase.caseId === r.pk),
   }));
 
-  let notes = [];
-  if (userId) {
-    notes = await client.batchGet({
-      applicationContext,
-      keys: caseOrder.map(myCase => ({
-        pk: `user-case-note|${myCase.caseId}`,
-        sk: userId,
-      })),
-    });
-  }
-
-  const calendaredCasesWithNotes = afterMapping.map(calendaredCase => ({
-    ...calendaredCase,
-    notes: notes.find(note => note.caseId === calendaredCase.caseId),
-  }));
-
-  return calendaredCasesWithNotes;
+  return afterMapping;
 };

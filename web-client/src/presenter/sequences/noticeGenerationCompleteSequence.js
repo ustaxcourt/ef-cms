@@ -16,16 +16,15 @@ export const noticeGenerationCompleteSequence = [
   stopWebSocketConnectionAction,
   getCaseAction,
   setCaseAction,
+  clearModalStateAction,
+  clearModalAction,
   hasPaperAction,
   {
     electronic: [
-      clearModalStateAction,
-      clearModalAction,
       getNoticeGenerationSuccessMessageAction,
       setAlertSuccessAction,
     ],
     paper: [
-      clearModalStateAction,
       ...setPdfPreviewUrlSequence,
       setAlternateBackLocationAction,
       navigateToPdfPreviewAction,

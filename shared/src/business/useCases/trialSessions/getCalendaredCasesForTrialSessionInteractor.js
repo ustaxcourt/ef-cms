@@ -43,7 +43,6 @@ exports.getCalendaredCasesForTrialSessionInteractor = async ({
     const {
       disposition,
       isManuallyAdded,
-      notes,
       removedFromTrial,
       removedFromTrialDate,
     } = caseWithAdditionalProperties;
@@ -54,7 +53,6 @@ exports.getCalendaredCasesForTrialSessionInteractor = async ({
         .toRawObject(),
       disposition,
       isManuallyAdded,
-      notes,
       removedFromTrial,
       removedFromTrialDate,
     };
