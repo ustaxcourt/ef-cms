@@ -1,7 +1,7 @@
 import { BigHeader } from '../BigHeader';
-import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { ErrorNotification } from '../ErrorNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -27,6 +27,8 @@ export const CaseInventoryReport = connect(
       <>
         <BigHeader text="Reports" />
         <section className="usa-section grid-container">
+          <ErrorNotification />
+
           <div className="title">
             <h1>Case Inventory</h1>
 
@@ -45,15 +47,19 @@ export const CaseInventoryReport = connect(
               <h3 id="filterHeading">Filter by</h3>
             </div>
             <div className="grid-col-2">
-              <BindedSelect
+              <select
                 ariaDescribedBy="filterHeading"
                 ariaLabel="judge"
-                bind="screenMetadata.associatedJudge"
-                className="select-left"
+                className="usa-select select-left"
                 id="judgeFilter"
                 name="associatedJudge"
                 value={screenMetadata.associatedJudge}
-                onChange={() => getCaseInventoryReportSequence()}
+                onChange={e =>
+                  getCaseInventoryReportSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  })
+                }
               >
                 <option value="">- Judge -</option>
                 {caseInventoryReportHelper.judges.map((judge, idx) => (
@@ -61,18 +67,22 @@ export const CaseInventoryReport = connect(
                     {judge}
                   </option>
                 ))}
-              </BindedSelect>
+              </select>
             </div>
             <div className="grid-col-2">
-              <BindedSelect
+              <select
                 ariaDescribedBy="filterHeading"
                 ariaLabel="status"
-                bind="screenMetadata.status"
-                className="select-left"
+                className="usa-select select-left"
                 id="statusFilter"
                 name="status"
                 value={screenMetadata.status}
-                onChange={() => getCaseInventoryReportSequence()}
+                onChange={e =>
+                  getCaseInventoryReportSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  })
+                }
               >
                 <option value="">- Status -</option>
                 {caseInventoryReportHelper.caseStatuses.map(status => {
@@ -82,7 +92,7 @@ export const CaseInventoryReport = connect(
                     </option>
                   );
                 })}
-              </BindedSelect>
+              </select>
             </div>
           </div>
 
