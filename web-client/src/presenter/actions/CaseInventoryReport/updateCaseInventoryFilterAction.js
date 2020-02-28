@@ -1,10 +1,11 @@
 import { state } from 'cerebral';
 
 /**
- * get the case inventory report data
+ * update case inventory filters on state.screenMetadata - do not allow user to clear the last filter
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.path the cerebral path object
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
  */
