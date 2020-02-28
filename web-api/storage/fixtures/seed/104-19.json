@@ -77,6 +77,7 @@
     "orderForFilingFee": true,
     "partyType": "Corporation",
     "caseType": "Innocent Spouse",
+    "entityName": "Case",
     "contactPrimary": {
       "inCareOf": "Abdul Barlow",
       "address3": "Reprehenderit conseq",

@@ -201,6 +201,7 @@
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Deficiency",
+    "entityName": "Case",
     "contactPrimary": {
       "address3": "Officiis sit consect",
       "address2": "Eiusmod officiis dol",
