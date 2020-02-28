@@ -28,7 +28,7 @@ exports.handler = event =>
       return results;
     } catch (e) {
       applicationContext.logger.error(e);
-      honeybadger.notify(e);
+      honeybadger && honeybadger.notify(e);
       throw e;
     }
   });

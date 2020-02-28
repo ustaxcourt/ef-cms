@@ -1173,13 +1173,14 @@ module.exports = (appContextUser = {}) => {
     initHoneybadger: () => {
       if (process.env.NODE_ENV === 'production' && process.env.ENV) {
         const apiKey = process.env['HONEYBADGER_API_KEY_' + process.env.ENV];
-
-        const config = {
-          apiKey,
-          environment: 'api',
-        };
-        Honeybadger.configure(config);
-        return Honeybadger;
+        if (apiKey) {
+          const config = {
+            apiKey,
+            environment: 'api',
+          };
+          Honeybadger.configure(config);
+          return Honeybadger;
+        }
       }
     },
     isAuthorized,
