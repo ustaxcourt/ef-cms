@@ -28,7 +28,7 @@ export const caseInventoryReportHelper = (get, applicationContext) => {
       : (page || 1) * CASE_INVENTORY_PAGE_SIZE;
 
   if (displayedCount > resultCount) {
-    displayedCount = resultCount; // TODO: write a test for this
+    displayedCount = resultCount;
   }
 
   const notDisplayedCount = resultCount - displayedCount;
