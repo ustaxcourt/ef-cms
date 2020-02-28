@@ -1,4 +1,3 @@
-const Honeybadger = require('honeybadger-js'); // browser version
 import {
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
@@ -587,8 +586,9 @@ const applicationContext = {
       sortDocketRecords,
     };
   },
-  initHoneybadger: () => {
+  initHoneybadger: async () => {
     if (process.env.USTC_ENV !== 'dev' && process.env.ENV) {
+      const Honeybadger = await import('honeybadger-js'); // browser version
       const apiKey = process.env['HONEYBADGER_API_KEY_' + process.env.ENV];
 
       const config = {
