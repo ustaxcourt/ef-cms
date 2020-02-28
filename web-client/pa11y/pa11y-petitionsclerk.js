@@ -294,29 +294,6 @@ module.exports = [
   },
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-session-detail/5b18af9e-4fbd-459b-8db7-7b15108c7fa5&info=non-calendared-case',
 
-  /* misc */
-  {
-    actions: [
-      'wait for #button-create-order to be visible',
-      'click element #button-create-order',
-      'wait for #eventCode to be visible',
-      'set field #eventCode to O',
-      'check field #eventCode',
-    ],
-    notes: 'checks a11y of create order modal',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/orders-needed&info=create-order',
-  },
-  {
-    actions: [
-      'wait for ul.usa-list to be visible',
-      'wait for #button-create-order to be visible',
-    ],
-    notes: 'checks a11y of orders needed summary',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/orders-needed&info=orders-needed-summary',
-  },
-
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-order/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/sign',
   {
     actions: [

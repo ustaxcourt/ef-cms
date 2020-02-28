@@ -35,7 +35,6 @@ import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { Messages } from './Messages/Messages';
-import { OrdersNeededSummary } from './CaseDetailEdit/OrdersNeededSummary';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintPreview } from './CourtIssuedDocketEntry/PrintPreview';
@@ -97,7 +96,6 @@ const pages = {
   Loading,
   LogIn,
   Messages,
-  OrdersNeededSummary,
   PendingReport,
   PrimaryContactEdit,
   PrintPreview,
