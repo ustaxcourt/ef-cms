@@ -16,6 +16,8 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.getCaseInventoryReportInteractor = async ({
   applicationContext,
   associatedJudge,
+  from,
+  pageSize,
   status,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -28,7 +30,11 @@ exports.getCaseInventoryReportInteractor = async ({
     throw new Error('Either judge or status must be provided');
   }
 
-  return await applicationContext
-    .getUseCaseHelpers()
-    .getCaseInventoryReport({ applicationContext, associatedJudge, status });
+  return await applicationContext.getUseCaseHelpers().getCaseInventoryReport({
+    applicationContext,
+    associatedJudge,
+    from,
+    pageSize,
+    status,
+  });
 };

@@ -13,9 +13,17 @@ const { get } = require('../requests');
 exports.getCaseInventoryReportInteractor = ({
   applicationContext,
   associatedJudge,
+  page = 1,
   status,
 }) => {
-  const queryString = querystring.stringify({ associatedJudge, status });
+  const { CASE_INVENTORY_PAGE_SIZE } = applicationContext.getConstants();
+  const from = (page - 1) * CASE_INVENTORY_PAGE_SIZE;
+  const queryString = querystring.stringify({
+    associatedJudge,
+    from,
+    pageSize: CASE_INVENTORY_PAGE_SIZE,
+    status,
+  });
 
   return get({
     applicationContext,

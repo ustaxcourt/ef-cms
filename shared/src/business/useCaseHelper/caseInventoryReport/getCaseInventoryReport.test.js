@@ -4,8 +4,12 @@ const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('getCaseInventoryReport', () => {
   let searchSpy;
+  const CASE_INVENTORY_MAX_PAGE_SIZE = 10;
 
   const applicationContext = {
+    getConstants: () => ({
+      CASE_INVENTORY_MAX_PAGE_SIZE,
+    }),
     getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
     getPersistenceGateway: () => ({
       getCaseByCaseId: searchSpy,
@@ -148,6 +152,73 @@ describe('getCaseInventoryReport', () => {
       ],
       totalCount: '2',
     });
+  });
+
+  it('calls the search function with a default page size if one is not provided', async () => {
+    searchSpy = jest.fn(async () => {});
+
+    await getCaseInventoryReport({
+      applicationContext,
+      associatedJudge: 'Chief Judge',
+      status: 'New',
+    });
+
+    expect(searchSpy.mock.calls[0][0].body.size).toEqual(
+      CASE_INVENTORY_MAX_PAGE_SIZE,
+    );
+  });
+
+  it('calls the search function with the given page size', async () => {
+    searchSpy = jest.fn(async () => {});
+
+    await getCaseInventoryReport({
+      applicationContext,
+      associatedJudge: 'Chief Judge',
+      pageSize: 3,
+      status: 'New',
+    });
+
+    expect(searchSpy.mock.calls[0][0].body.size).toEqual(3);
+  });
+
+  it('calls the search function with max page size if the given page size exceeds the max page size', async () => {
+    searchSpy = jest.fn(async () => {});
+
+    await getCaseInventoryReport({
+      applicationContext,
+      associatedJudge: 'Chief Judge',
+      pageSize: 11,
+      status: 'New',
+    });
+
+    expect(searchSpy.mock.calls[0][0].body.size).toEqual(
+      CASE_INVENTORY_MAX_PAGE_SIZE,
+    );
+  });
+
+  it('calls the search function with a default starting index (`from` param) of 0 if one is not provided', async () => {
+    searchSpy = jest.fn(async () => {});
+
+    await getCaseInventoryReport({
+      applicationContext,
+      associatedJudge: 'Chief Judge',
+      status: 'New',
+    });
+
+    expect(searchSpy.mock.calls[0][0].body.from).toEqual(0);
+  });
+
+  it('calls the search function with the given starting index (`from` param)', async () => {
+    searchSpy = jest.fn(async () => {});
+
+    await getCaseInventoryReport({
+      applicationContext,
+      associatedJudge: 'Chief Judge',
+      from: 11,
+      status: 'New',
+    });
+
+    expect(searchSpy.mock.calls[0][0].body.from).toEqual(11);
   });
 
   it('returns an empty array when no hits are returned from the search client', async () => {
