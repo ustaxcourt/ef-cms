@@ -29,6 +29,7 @@ describe('reviewPetitionFromPaperHelper', () => {
       hasOrders: false,
       irsNoticeDateFormatted: undefined,
       petitionPaymentStatusFormatted: 'Not paid',
+      preferredTrialCityFormatted: 'No requested place of trial',
       receivedAtFormatted: undefined,
       shouldShowIrsNoticeDate: false,
     });
@@ -43,6 +44,7 @@ describe('reviewPetitionFromPaperHelper', () => {
           irsNoticeDate: '2020-01-05T03:30:45.007Z',
           mailingDate: '2020-01-05T03:30:45.007Z',
           petitionPaymentStatus: PAYMENT_STATUS.PAID,
+          preferredTrialCity: 'Cooper Station',
         },
       },
     });
@@ -52,6 +54,7 @@ describe('reviewPetitionFromPaperHelper', () => {
       hasOrders: false,
       irsNoticeDateFormatted: '01/04/2020',
       petitionPaymentStatusFormatted: 'Paid',
+      preferredTrialCityFormatted: 'Cooper Station',
       receivedAtFormatted: '01/04/2020',
       shouldShowIrsNoticeDate: true,
     });
@@ -71,6 +74,7 @@ describe('reviewPetitionFromPaperHelper', () => {
       hasOrders: true,
       irsNoticeDateFormatted: undefined,
       petitionPaymentStatusFormatted: 'Not paid',
+      preferredTrialCityFormatted: 'No requested place of trial',
       receivedAtFormatted: undefined,
       shouldShowIrsNoticeDate: false,
     });
