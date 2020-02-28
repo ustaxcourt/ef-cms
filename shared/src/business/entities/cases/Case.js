@@ -1243,6 +1243,7 @@ Case.prototype.generateSortableDocketNumber = function() {
   }
   // Note: This does not yet take into account pre-2000's years
   const docketNumberSplit = this.docketNumber.split('-');
+  docketNumberSplit[0] = docketNumberSplit[0].padStart(6, '0');
   return parseInt(`${docketNumberSplit[1]}${docketNumberSplit[0]}`);
 };
 
