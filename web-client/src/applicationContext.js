@@ -439,6 +439,7 @@ const applicationContext = {
     (process.env.USTC_DEBUG ? i => i : deepFreeze)({
       BUSINESS_TYPES: ContactFactory.BUSINESS_TYPES,
       CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
+      CASE_INVENTORY_PAGE_SIZE: 2,
       CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
       CATEGORIES: Document.CATEGORIES,
       CATEGORY_MAP: Document.CATEGORY_MAP,
