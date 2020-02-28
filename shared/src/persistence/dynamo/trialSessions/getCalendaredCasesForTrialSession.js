@@ -3,7 +3,6 @@ const client = require('../../dynamodbClientService');
 exports.getCalendaredCasesForTrialSession = async ({
   applicationContext,
   trialSessionId,
-  userId,
 }) => {
   const trialSession = await client.get({
     Key: {

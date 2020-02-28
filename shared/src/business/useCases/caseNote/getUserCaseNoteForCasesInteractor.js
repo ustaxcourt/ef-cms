@@ -10,7 +10,7 @@ const { UserCaseNote } = require('../../entities/notes/UserCaseNote');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to get notes for
+ * @param {string} providers.caseIds the ids of the cases to get notes for
  * @returns {object} the case note object if one is found
  */
 exports.getUserCaseNoteForCasesInteractor = async ({
