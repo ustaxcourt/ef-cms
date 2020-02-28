@@ -791,6 +791,7 @@ module.exports = (appContextUser = {}) => {
     getCaseCaptionNames: Case.getCaseCaptionNames,
     getChromiumBrowser,
     getConstants: () => ({
+      CASE_INVENTORY_MAX_PAGE_SIZE: 5000,
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
     }),
     getCurrentUser,

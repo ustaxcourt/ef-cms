@@ -4,9 +4,10 @@ import { runAction } from 'cerebral/test';
 
 describe('getCaseInventoryReportAction', () => {
   let applicationContext;
-  const getCaseInventoryReportInteractorMock = jest
-    .fn()
-    .mockReturnValue({ totalCases: 12 });
+  const getCaseInventoryReportInteractorMock = jest.fn().mockReturnValue({
+    foundCases: [{ docketNumber: '123-20' }],
+    totalCount: 12,
+  });
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -37,6 +38,9 @@ describe('getCaseInventoryReportAction', () => {
       associatedJudge: 'Chief Judge',
       status: 'New',
     });
-    expect(result.state.caseInventoryReportData).toEqual({ totalCases: 12 });
+    expect(result.state.caseInventoryReportData).toEqual({
+      foundCases: [{ docketNumber: '123-20' }],
+      totalCount: 12,
+    });
   });
 });
