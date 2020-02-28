@@ -38,6 +38,7 @@ export const updateUserContactInformationAction = async ({
     }
   }
 
+  // TODO: refactor and use web sockets to redirect back to dashboard?
   // we wait 2 seconds because we are hitting an "async: true" endpoint which means we will get a response
   // back instantly which means the user's address on the dashboard might not be updated yet.
   await new Promise(resolve => setTimeout(resolve, 2000));
