@@ -544,7 +544,12 @@ describe('formatted work queue computed', () => {
           {
             ...qcWorkItem,
             associatedJudge: Case.CHIEF_JUDGE,
-            caseStatus: Case.STATUS_TYPES.inProgress,
+            caseIsInProgress: true,
+            caseStatus: Case.STATUS_TYPES.new,
+            document: {
+              ...qcWorkItem.document,
+              status: 'processing',
+            },
             workItemId: WORK_ITEM_ID_4,
           },
         ],
@@ -1039,6 +1044,35 @@ describe('formatted work queue computed', () => {
         },
       });
       expect(result).toEqual('/edit');
+    });
+
+    it('should return editLink as /review if the box is my inProgress and user is petitionsClerk', () => {
+      const { permissions } = getBaseState(petitionsClerkUser);
+
+      const result = getWorkItemDocumentLink({
+        applicationContext,
+        permissions,
+        workItem: {
+          ...baseWorkItem,
+          caseIsInProgress: true,
+          document: {
+            ...baseDocument,
+            documentType: 'Petition',
+            eventCode: 'P',
+            pending: false,
+          },
+          isInitializeCase: false,
+          isQC: true, // in QC state - should show in QC boxes
+          messages: [baseMessage],
+          section: 'petitions',
+        },
+        workQueueToDisplay: {
+          box: 'inProgress',
+          queue: 'my',
+          workQueueIsInternal: false,
+        },
+      });
+      expect(result).toEqual('/review');
     });
   });
 

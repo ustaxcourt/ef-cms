@@ -236,6 +236,9 @@ const {
   generateCaseConfirmationPdf,
 } = require('../../shared/src/business/useCaseHelper/caseConfirmation/generateCaseConfirmationPdf');
 const {
+  generateCaseInventoryReportPdf,
+} = require('../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf');
+const {
   generateChangeOfAddressTemplate,
   generateNoticeOfTrialIssuedTemplate,
   generatePrintableDocketRecordTemplate,
@@ -261,6 +264,9 @@ const {
 const {
   generatePendingReportPdf,
 } = require('../../shared/src/business/useCaseHelper/pendingReport/generatePendingReportPdf');
+const {
+  generatePrintableCaseInventoryReportInteractor,
+} = require('../../shared/src/business/useCases/caseInventoryReport/generatePrintableCaseInventoryReportInteractor');
 const {
   generatePrintableFilingReceiptInteractor,
 } = require('../../shared/src/business/useCases/generatePrintableFilingReceiptInteractor');
@@ -320,7 +326,7 @@ const {
 } = require('../../shared/src/business/useCaseHelper/caseInventoryReport/getCaseInventoryReport');
 const {
   getCaseInventoryReportInteractor,
-} = require('../../shared/src/business/useCases/getCaseInventoryReportInteractor');
+} = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
 const {
   getCasesByLeadCaseId,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadCaseId');
@@ -1013,6 +1019,7 @@ module.exports = (appContextUser = {}) => {
         appendPaperServiceAddressPageToPdf,
         fetchPendingItems,
         generateCaseConfirmationPdf,
+        generateCaseInventoryReportPdf,
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
         getCaseInventoryReport,
@@ -1059,6 +1066,7 @@ module.exports = (appContextUser = {}) => {
         generateNoticeOfTrialIssuedInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
+        generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
         generateStandingPretrialNoticeInteractor,

@@ -150,7 +150,7 @@
         }
       }
     },
-    "/api/pending-items": {
+    "/reports/pending-items": {
       "get": {
         "tags": [],
         "summary": "get all pending items",
@@ -194,7 +194,7 @@
         }
       }
     },
-    "/api/pending-report": {
+    "/reports/pending-report": {
       "get": {
         "summary": "create a pdf of the pending report",
         "description": "create a pdf of the pending report.\n",
@@ -319,7 +319,7 @@
         }
       }
     },
-    "/api/trial-calendar-pdf": {
+    "/reports/trial-calendar-pdf": {
       "post": {
         "summary": "create a pdf of the trial session calendar",
         "description": "create a pdf of the trial session calendar.\n",
@@ -764,7 +764,7 @@
         }
       }
     },
-    "/cases/blocked/{trialLocation}": {
+    "/reports/blocked/{trialLocation}": {
       "parameters": [
         {
           "name": "trialLocation",
@@ -3768,7 +3768,7 @@
         }
       }
     },
-    "/trial-sessions/planning-report": {
+    "/reports/planning-report": {
       "post": {
         "summary": "create a pdf of the trial session planning report",
         "description": "create a pdf of the trial session planning report.\n",

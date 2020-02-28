@@ -6,13 +6,14 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
- * @returns {object} the report data
+ * @param {object} providers.store the cerebral store object
  */
 export const getCaseInventoryReportAction = async ({
   applicationContext,
   get,
+  store,
 }) => {
-  const { associatedJudge, status } = get(state.modal);
+  const { associatedJudge, status } = get(state.screenMetadata);
 
   const reportData = await applicationContext
     .getUseCases()
@@ -22,5 +23,5 @@ export const getCaseInventoryReportAction = async ({
       status,
     });
 
-  return { reportData };
+  store.set(state.caseInventoryReportData, reportData);
 };

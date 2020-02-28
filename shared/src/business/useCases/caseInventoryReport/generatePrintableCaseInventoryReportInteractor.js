@@ -1,19 +1,19 @@
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../errors/errors');
+} = require('../../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * getCaseInventoryReportInteractor
+ * generatePrintableCaseInventoryReportInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.associatedJudge the judge to filter by
  * @param {string} providers.status the status to filter by
- * @returns {object} the case data
+ * @returns {Array} the url of the document
  */
-exports.getCaseInventoryReportInteractor = async ({
+exports.generatePrintableCaseInventoryReportInteractor = async ({
   applicationContext,
   associatedJudge,
   status,
@@ -28,7 +28,15 @@ exports.getCaseInventoryReportInteractor = async ({
     throw new Error('Either judge or status must be provided');
   }
 
-  return await applicationContext
+  const results = await applicationContext
     .getUseCaseHelpers()
     .getCaseInventoryReport({ applicationContext, associatedJudge, status });
+
+  return await applicationContext
+    .getUseCaseHelpers()
+    .generateCaseInventoryReportPdf({
+      applicationContext,
+      cases: results.foundCases,
+      filters: { associatedJudge, status },
+    });
 };
