@@ -46,6 +46,9 @@ exports.getCaseInventoryReport = async ({
         },
       },
       size,
+      sort: [
+        { sortableDocketNumber: { order: 'asc', unmapped_type: 'integer' } },
+      ],
     },
     index: 'efcms',
   };

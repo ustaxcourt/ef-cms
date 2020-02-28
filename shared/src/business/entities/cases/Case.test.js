@@ -1359,7 +1359,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.generateSortableDocketNumber()).toEqual('19105');
+      expect(myCase.generateSortableDocketNumber()).toEqual(19105);
     });
   });
 

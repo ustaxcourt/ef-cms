@@ -65,7 +65,7 @@
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Interest Abatement",
-    "sortableDocketNumber": "19105",
+    "sortableDocketNumber": 19105,
     "entityName": "Case",
     "contactPrimary": {
       "address3": "Aliquam molestias fu",

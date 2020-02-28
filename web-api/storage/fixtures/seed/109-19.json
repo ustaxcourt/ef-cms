@@ -92,7 +92,7 @@
     "partyType": "Petitioner",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "caseType": "Whistleblower",
-    "sortableDocketNumber": "19109",
+    "sortableDocketNumber": 19109,
     "entityName": "Case",
     "contactPrimary": {
       "address3": "Architecto assumenda",

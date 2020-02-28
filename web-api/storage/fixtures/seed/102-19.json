@@ -77,7 +77,7 @@
     "partyType": "Petitioner & spouse",
     "isSpouseDeceased": "No",
     "caseType": "Passport",
-    "sortableDocketNumber": "19102",
+    "sortableDocketNumber": 19102,
     "entityName": "Case",
     "contactPrimary": {
       "address3": "Dolor ea elit dolor",
