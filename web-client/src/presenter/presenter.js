@@ -19,6 +19,7 @@ import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequen
 import { cancelAddDraftDocumentSequence } from './sequences/cancelAddDraftDocumentSequence';
 import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryContactSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
+import { caseInventoryReportLoadMoreSequence } from './sequences/caseInventoryReportLoadMoreSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStepSequence';
 import { chooseStartCaseWizardStepSequence } from './sequences/chooseStartCaseWizardStepSequence';
@@ -391,6 +392,7 @@ export const presenter = {
     cancelAddDraftDocumentSequence,
     cancelEditPrimaryContactSequence,
     cancelFileUploadSequence,
+    caseInventoryReportLoadMoreSequence,
     cerebralBindSimpleSetStateSequence,
     chooseModalWizardStepSequence,
     chooseStartCaseWizardStepSequence,
