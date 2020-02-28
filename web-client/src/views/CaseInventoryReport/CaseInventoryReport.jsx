@@ -9,11 +9,14 @@ import React from 'react';
 export const CaseInventoryReport = connect(
   {
     caseInventoryReportHelper: state.caseInventoryReportHelper,
+    caseInventoryReportLoadMoreSequence:
+      sequences.caseInventoryReportLoadMoreSequence,
     getCaseInventoryReportSequence: sequences.getCaseInventoryReportSequence,
     screenMetadata: state.screenMetadata,
   },
   ({
     caseInventoryReportHelper,
+    caseInventoryReportLoadMoreSequence,
     getCaseInventoryReportSequence,
     screenMetadata,
   }) => {
@@ -121,6 +124,11 @@ export const CaseInventoryReport = connect(
                   )}
                 </tbody>
               </table>
+              {caseInventoryReportHelper.showLoadMoreButton && (
+                <Button onClick={() => caseInventoryReportLoadMoreSequence()}>
+                  Load {caseInventoryReportHelper.nextPageSize} More
+                </Button>
+              )}
             </div>
           </div>
         </section>
