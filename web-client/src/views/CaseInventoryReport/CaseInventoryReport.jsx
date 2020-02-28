@@ -10,11 +10,14 @@ export const CaseInventoryReport = connect(
   {
     caseInventoryReportHelper: state.caseInventoryReportHelper,
     getCaseInventoryReportSequence: sequences.getCaseInventoryReportSequence,
+    gotoPrintableCaseInventoryReportSequence:
+      sequences.gotoPrintableCaseInventoryReportSequence,
     screenMetadata: state.screenMetadata,
   },
   ({
     caseInventoryReportHelper,
     getCaseInventoryReportSequence,
+    gotoPrintableCaseInventoryReportSequence,
     screenMetadata,
   }) => {
     return (
@@ -28,7 +31,7 @@ export const CaseInventoryReport = connect(
               link
               className="float-right margin-right-0"
               icon="print"
-              onClick={() => null}
+              onClick={() => gotoPrintableCaseInventoryReportSequence()}
             >
               Printable Report
             </Button>
