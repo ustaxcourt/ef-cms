@@ -160,6 +160,7 @@ import { getUserInteractor } from '../../shared/src/proxies/users/getUserProxy';
 import { getUserPermissions } from '../../shared/src/authorization/getUserPermissions';
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
+import { loadPDFForPreviewInteractor } from '../../shared/src/business/useCases/loadPDFForPreviewInteractor';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
 import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCaseProxy';
 import { refreshTokenInteractor } from '../../shared/src/business/useCases/refreshTokenInteractor';
@@ -337,6 +338,7 @@ const allUseCases = {
   getUserInteractor,
   getUsersInSectionInteractor,
   getWorkItemInteractor,
+  loadPDFForPreviewInteractor,
   loadPDFForSigningInteractor,
   prioritizeCaseInteractor,
   refreshTokenInteractor,
