@@ -1,6 +1,5 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
@@ -17,12 +16,13 @@ export const PrintableCaseInventoryReport = connect(
         <div className="grid-container print-docket-record">
           <Button
             link
+            aria-label="back to case inventory"
             className="margin-bottom-3"
+            icon={['fa', 'arrow-alt-circle-left']}
             onClick={() => {
               gotoCaseInventoryReportSequence();
             }}
           >
-            <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
             Back to Case Inventory
           </Button>
           <PdfPreview />
