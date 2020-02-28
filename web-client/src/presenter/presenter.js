@@ -102,7 +102,6 @@ import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoMessagesSequence } from './sequences/gotoMessagesSequence';
-import { gotoOrdersNeededSequence } from './sequences/gotoOrdersNeededSequence';
 import { gotoPdfPreviewSequence } from './sequences/gotoPdfPreviewSequence';
 import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence';
 import { gotoPrimaryContactEditSequence } from './sequences/gotoPrimaryContactEditSequence';
@@ -251,6 +250,7 @@ import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolid
 import { submitCaseAdvancedSearchSequence } from './sequences/submitCaseAdvancedSearchSequence';
 import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAssociationRequestSequence';
 import { submitCaseDocketNumberSearchSequence } from './sequences/submitCaseDocketNumberSearchSequence';
+import { submitCaseInventoryReportModalSequence } from './sequences/submitCaseInventoryReportModalSequence';
 import { submitCaseSearchForConsolidationSequence } from './sequences/submitCaseSearchForConsolidationSequence';
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
@@ -474,7 +474,6 @@ export const presenter = {
     gotoIdleLogoutSequence,
     gotoLoginSequence,
     gotoMessagesSequence,
-    gotoOrdersNeededSequence,
     gotoPdfPreviewSequence,
     gotoPendingReportSequence,
     gotoPrimaryContactEditSequence,
@@ -621,6 +620,7 @@ export const presenter = {
     submitCaseAdvancedSearchSequence,
     submitCaseAssociationRequestSequence,
     submitCaseDocketNumberSearchSequence,
+    submitCaseInventoryReportModalSequence,
     submitCaseSearchForConsolidationSequence,
     submitCaseSearchSequence,
     submitCompleteSequence,

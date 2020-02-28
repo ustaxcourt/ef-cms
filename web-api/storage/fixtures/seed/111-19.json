@@ -13,6 +13,7 @@
           {
             "docketNumberSuffix": "L",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "eventCode": "P",
               "createdAt": "2019-12-11T15:25:09.285Z",

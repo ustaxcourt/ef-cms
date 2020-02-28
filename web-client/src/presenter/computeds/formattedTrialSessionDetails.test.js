@@ -242,7 +242,8 @@ describe('formattedTrialSessionDetails', () => {
             MOCK_CASE,
             {
               ...MOCK_CASE,
-              caseCaption: 'Test Person & Someone Else, Petitioners',
+              caseCaption:
+                'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons & Someone Else, Petitioners',
               docketNumberSuffix: 'W',
             },
             {
@@ -265,7 +266,7 @@ describe('formattedTrialSessionDetails', () => {
       '101-18W',
     );
     expect(result.formattedEligibleCases[1].caseCaptionNames).toEqual(
-      'Test Person & Someone Else',
+      'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons & Someone Else',
     );
     expect(result.formattedEligibleCases[2].docketNumberWithSuffix).toEqual(
       '103-19',
@@ -282,7 +283,8 @@ describe('formattedTrialSessionDetails', () => {
             MOCK_CASE,
             {
               ...MOCK_CASE,
-              caseCaption: 'Test Person & Someone Else, Petitioners',
+              caseCaption:
+                'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons & Someone Else, Petitioners',
               caseId: 'ef88c665-4d1d-48a9-898a-eae698187b2b',
               docketNumberSuffix: 'W',
               removedFromTrial: true,
@@ -297,7 +299,7 @@ describe('formattedTrialSessionDetails', () => {
     expect(result.allCases[0].caseCaptionNames).toEqual('Test Petitioner');
     expect(result.allCases[1].docketNumberWithSuffix).toEqual('101-18W');
     expect(result.allCases[1].caseCaptionNames).toEqual(
-      'Test Person & Someone Else',
+      'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons & Someone Else',
     );
 
     expect(result.openCases.length).toEqual(1);

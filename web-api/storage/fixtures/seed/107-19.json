@@ -32,6 +32,7 @@
     "completedAt": "2019-08-16T17:30:10.526Z",
     "docketNumberSuffix": "L",
     "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "caseIsInProgress": false,
     "completedMessage": "Served on IRS",
     "document": {
       "eventCode": "P",
@@ -77,6 +78,7 @@
     "completedAt": "2019-08-16T17:30:10.526Z",
     "docketNumberSuffix": "L",
     "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "caseIsInProgress": false,
     "completedMessage": "Served on IRS",
     "document": {
       "eventCode": "P",
@@ -134,7 +136,8 @@
           {
             "completedAt": "2019-08-16T17:30:10.526Z",
             "docketNumberSuffix": "L",
-            "caseStatus": "In Progress",
+            "caseStatus": "New",
+            "caseIsInProgress": false,
             "completedMessage": "Served on IRS",
             "document": {
               "eventCode": "P",
@@ -328,7 +331,8 @@
   {
     "completedAt": "2019-08-16T17:30:10.526Z",
     "docketNumberSuffix": "L",
-    "caseStatus": "In Progress",
+    "caseStatus": "New",
+    "caseIsInProgress": false,
     "completedMessage": "Served on IRS",
     "document": {
       "eventCode": "P",
