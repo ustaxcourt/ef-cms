@@ -194,6 +194,7 @@
     "partyType": "Petitioner",
     "receivedAt": "2020-01-21T16:41:39.474Z",
     "caseType": "Innocent Spouse",
+    "entityName": "Case",
     "orderDesignatingPlaceOfTrial": false,
     "createdAt": "2020-01-21T16:41:39.474Z",
     "contactPrimary": {
