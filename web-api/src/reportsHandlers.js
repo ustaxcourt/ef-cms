@@ -1,6 +1,8 @@
 module.exports = {
   fetchPendingItemsLambda: require('./pendingItems/fetchPendingItemsLambda')
     .handler,
+  generatePrintableCaseInventoryReportLambda: require('./reports/generatePrintableCaseInventoryReportLambda')
+    .handler,
   generatePrintablePendingReportLambda: require('./pendingItems/generatePrintablePendingReportLambda')
     .handler,
   generateTrialCalendarPdfLambda: require('./trialSessions/generateTrialCalendarPdfLambda')

@@ -7,6 +7,7 @@ export const reviewPetitionFromPaperHelper = (get, applicationContext) => {
     hasVerifiedIrsNotice,
     irsNoticeDate,
     petitionPaymentStatus,
+    preferredTrialCity,
     ...form
   } = get(state.form);
 
@@ -22,6 +23,10 @@ export const reviewPetitionFromPaperHelper = (get, applicationContext) => {
 
   const petitionPaymentStatusFormatted =
     petitionPaymentStatus === PAYMENT_STATUS.PAID ? 'Paid' : 'Not paid';
+
+  const preferredTrialCityFormatted = preferredTrialCity
+    ? preferredTrialCity
+    : 'No requested place of trial';
 
   if (shouldShowIrsNoticeDate) {
     irsNoticeDateFormatted = applicationContext
@@ -46,6 +51,7 @@ export const reviewPetitionFromPaperHelper = (get, applicationContext) => {
     hasOrders,
     irsNoticeDateFormatted,
     petitionPaymentStatusFormatted,
+    preferredTrialCityFormatted,
     receivedAtFormatted,
     shouldShowIrsNoticeDate,
   };
