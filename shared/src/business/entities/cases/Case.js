@@ -227,6 +227,7 @@ function Case(rawCase, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.entityName = 'Case';
 
   if (User.isInternalUser(applicationContext.getCurrentUser().role)) {
     this.caseNote = rawCase.caseNote;
@@ -481,6 +482,10 @@ joiValidationDecorator(
       .min(1)
       .required()
       .description('List of Document Entities for the case.'),
+    entityName: joi
+      .string()
+      .valid('Case')
+      .required(),
     filingType: joi
       .string()
       .valid(

@@ -85,6 +85,7 @@
     "partyType": "Petitioner",
     "receivedAt": "2019-12-11T15:25:09.284Z",
     "caseType": "CDP (Lien/Levy)",
+    "entityName": "Case",
     "orderDesignatingPlaceOfTrial": false,
     "contactPrimary": {
       "city": "Flavortown",
