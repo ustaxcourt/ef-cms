@@ -6,9 +6,9 @@ import { runAction } from 'cerebral/test';
 presenter.providers.applicationContext = applicationContext;
 
 describe('getInternalCaseCaptionForCaseInfoTabAction', () => {
-  const { Case, ContactFactory } = applicationContext.getEntityConstructors();
+  const { ContactFactory } = applicationContext.getEntityConstructors();
 
-  it('should return just the respondent when party type has not been selected', async () => {
+  it('should return an empty string when party type has not been selected', async () => {
     const result = await runAction(getInternalCaseCaptionForCaseInfoTabAction, {
       modules: {
         presenter,
@@ -20,7 +20,7 @@ describe('getInternalCaseCaptionForCaseInfoTabAction', () => {
       },
     });
 
-    expect(result.output.caseCaption).toBe(` ${Case.CASE_CAPTION_POSTFIX}`);
+    expect(result.output.caseCaption).toBe('');
   });
 
   it('should return a generated case caption when party type has been selected', async () => {
@@ -38,8 +38,6 @@ describe('getInternalCaseCaptionForCaseInfoTabAction', () => {
       },
     });
 
-    expect(result.output.caseCaption).toBe(
-      `Carl Fredricksen, Petitioner ${Case.CASE_CAPTION_POSTFIX}`,
-    );
+    expect(result.output.caseCaption).toBe('Carl Fredricksen, Petitioner');
   });
 });
