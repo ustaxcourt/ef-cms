@@ -65,7 +65,6 @@ describe('getCalendaredCasesForTrialSession', () => {
       {
         ...MOCK_CASE,
         disposition: 'something',
-        notes: { notes: 'hey this is a note' },
         removedFromTrial: true,
       },
     ]);
