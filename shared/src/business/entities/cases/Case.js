@@ -692,7 +692,7 @@ joiValidationDecorator(
       .allow(null)
       .description('When the case was sealed from the public.'),
     sortableDocketNumber: joi
-      .string()
+      .number()
       .required()
       .description('A sortable representation of the docket number'),
     status: joi
@@ -1243,7 +1243,7 @@ Case.prototype.generateSortableDocketNumber = function() {
   }
   // Note: This does not yet take into account pre-2000's years
   const docketNumberSplit = this.docketNumber.split('-');
-  return `${docketNumberSplit[1]}${docketNumberSplit[0]}`;
+  return parseInt(`${docketNumberSplit[1]}${docketNumberSplit[0]}`);
 };
 
 /**

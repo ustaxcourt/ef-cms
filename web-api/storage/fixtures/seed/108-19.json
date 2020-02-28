@@ -130,7 +130,7 @@
     "associatedJudge": "Judge Armen",
     "irsSendDate": "2019-08-16T19:22:13.919Z",
     "caseType": "Worker Classification",
-    "sortableDocketNumber": "19108",
+    "sortableDocketNumber": 19108,
     "entityName": "Case",
     "trialLocation": "Houston, Texas",
     "contactPrimary": {
