@@ -149,6 +149,18 @@ resources:
             MetricsEnabled: true
 
 functions:
+  getUserCaseNoteForCases:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.getUserCaseNoteForCasesLambda
+    events:
+      - http:
+          path: /batch-cases/{caseIds}/user-notes
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getUserCaseNote:
     handler: web-api/${self:provider.dir}/caseNotesHandlers.getUserCaseNoteLambda
     events:
