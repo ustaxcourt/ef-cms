@@ -262,6 +262,9 @@ const {
   generatePDFFromJPGDataInteractor,
 } = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
 const {
+  generatePdfReportInteractor,
+} = require('../../shared/src/business/useCases/generatePdfReportInteractor');
+const {
   generatePendingReportPdf,
 } = require('../../shared/src/business/useCaseHelper/pendingReport/generatePendingReportPdf');
 const {
@@ -1074,6 +1077,7 @@ module.exports = (appContextUser = {}) => {
         generateNoticeOfTrialIssuedInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
+        generatePdfReportInteractor,
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
