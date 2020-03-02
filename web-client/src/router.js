@@ -723,6 +723,11 @@ const router = {
       app.getSequence('gotoStyleGuideSequence')();
     });
 
+    route('/accessibility-statement', () => {
+      setPageTitle('Accessibility statement');
+      app.getSequence('gotoAccessibilityStatementSequence')();
+    });
+
     route(
       '/messages..',
       ifHasAccess(() => {
@@ -845,7 +850,6 @@ const router = {
       }
 
       if (process.env.COGNITO) {
-        // USTC_ENV is undefined in prod
         setPageTitle('Dashboard');
         app.getSequence('gotoDashboardSequence')();
       } else {

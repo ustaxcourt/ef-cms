@@ -1,5 +1,6 @@
 /* eslint-disable security/detect-object-injection, security/detect-child-process, spellcheck/spell-checker */
 const AWSXRay = require('aws-xray-sdk');
+const Honeybadger = require('honeybadger'); // node version
 
 const AWS =
   process.env.NODE_ENV === 'production'
@@ -477,6 +478,12 @@ const {
   getUserCaseNote,
 } = require('../../shared/src/persistence/dynamo/userCaseNotes/getUserCaseNote');
 const {
+  getUserCaseNoteForCases,
+} = require('../../shared/src/persistence/dynamo/userCaseNotes/getUserCaseNoteForCases');
+const {
+  getUserCaseNoteForCasesInteractor,
+} = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteForCasesInteractor');
+const {
   getUserCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor');
 const {
@@ -918,6 +925,7 @@ module.exports = (appContextUser = {}) => {
         getUploadPolicy,
         getUserById,
         getUserCaseNote,
+        getUserCaseNoteForCases,
         getUsersBySearchKey,
         getUsersInSection,
         getWebSocketConnectionByConnectionId,
@@ -1102,6 +1110,7 @@ module.exports = (appContextUser = {}) => {
         getTrialSessionWorkingCopyInteractor,
         getTrialSessionsInteractor,
         getUploadPolicyInteractor,
+        getUserCaseNoteForCasesInteractor,
         getUserCaseNoteInteractor,
         getUserInteractor,
         getUsersInSectionInteractor,
@@ -1169,6 +1178,19 @@ module.exports = (appContextUser = {}) => {
         prepareDateFromString,
         setServiceIndicatorsForCase,
       };
+    },
+    initHoneybadger: () => {
+      if (process.env.NODE_ENV === 'production' && process.env.ENV) {
+        const apiKey = process.env['HONEYBADGER_API_KEY_' + process.env.ENV];
+        if (apiKey) {
+          const config = {
+            apiKey,
+            environment: 'api',
+          };
+          Honeybadger.configure(config);
+          return Honeybadger;
+        }
+      }
     },
     isAuthorized,
     isAuthorizedForWorkItems: () =>

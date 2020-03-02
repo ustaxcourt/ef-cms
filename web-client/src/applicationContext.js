@@ -39,6 +39,7 @@ import {
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
+import { getUserCaseNoteForCasesInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteForCasesProxy';
 import { validateDocketRecordInteractor } from '../../shared/src/business/useCases/validateDocketRecordInteractor';
 const {
   getJudgeForUserChambersInteractor,
@@ -334,6 +335,7 @@ const allUseCases = {
   getTrialSessionDetailsInteractor,
   getTrialSessionWorkingCopyInteractor,
   getTrialSessionsInteractor,
+  getUserCaseNoteForCasesInteractor,
   getUserCaseNoteInteractor,
   getUserInteractor,
   getUsersInSectionInteractor,
@@ -590,6 +592,21 @@ const applicationContext = {
       setServiceIndicatorsForCase,
       sortDocketRecords,
     };
+  },
+  initHoneybadger: async () => {
+    if (process.env.USTC_ENV === 'prod' && process.env.ENV) {
+      const apiKey = process.env['HONEYBADGER_API_KEY_' + process.env.ENV];
+      if (apiKey) {
+        const Honeybadger = await import('honeybadger-js'); // browser version
+
+        const config = {
+          apiKey,
+          environment: 'client',
+        };
+        Honeybadger.configure(config);
+        return Honeybadger;
+      }
+    }
   },
   setCurrentUser,
   setCurrentUserToken,

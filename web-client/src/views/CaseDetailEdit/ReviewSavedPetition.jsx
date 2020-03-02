@@ -1,5 +1,6 @@
 import { AddressDisplay } from '../CaseDetail/PetitionerInformation';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { CaseDifferenceModalOverlay } from '../StartCase/CaseDifferenceModalOverlay';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
@@ -56,6 +57,7 @@ export const ReviewSavedPetition = connect(
 
     return (
       <>
+        <CaseDetailHeader />
         <section
           className="usa-section grid-container"
           id="ustc-start-a-case-form"
