@@ -56,87 +56,34 @@ exports.generatePendingReportPdf = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let browser = null;
-  let result = null;
+  let formattedPendingItems = pendingItems.map(pendingItem => ({
+    ...pendingItem,
+    associatedJudgeFormatted: pendingItem.associatedJudge.replace(
+      /^Judge\s+/,
+      '',
+    ),
+    caseCaptionNames: applicationContext.getCaseCaptionNames(
+      pendingItem.caseCaption || '',
+    ),
+    formattedFiledDate: applicationContext
+      .getUtilities()
+      .formatDateString(pendingItem.receivedAt, 'MMDDYY'),
+    formattedName: pendingItem.documentTitle || pendingItem.documentType,
+  }));
 
-  try {
-    browser = await applicationContext.getChromiumBrowser();
-    let page = await browser.newPage();
-
-    let formattedPendingItems = pendingItems.map(pendingItem => ({
-      ...pendingItem,
-      associatedJudgeFormatted: pendingItem.associatedJudge.replace(
-        /^Judge\s+/,
-        '',
-      ),
-      caseCaptionNames: applicationContext.getCaseCaptionNames(
-        pendingItem.caseCaption || '',
-      ),
-      formattedFiledDate: applicationContext
-        .getUtilities()
-        .formatDateString(pendingItem.receivedAt, 'MMDDYY'),
-      formattedName: pendingItem.documentTitle || pendingItem.documentType,
-    }));
-
-    const contentResult = await generatePendingReportPage({
-      applicationContext,
-      pendingItems: formattedPendingItems,
-      reportTitle,
-    });
-    await page.setContent(contentResult);
-
-    result = await page.pdf({
-      displayHeaderFooter: true,
-      footerTemplate: `
-        <div style="font-size:8px !important; color:#000; text-align:center; width:100%; margin-bottom:5px;">Printed <span class="date"></span></div>
-      `,
-      format: 'letter',
-      headerTemplate: `<!doctype html>
-        <html>
-          <head>
-          </head>
-          <body style="margin: 0px;">
-            <div style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 1cm; margin-top: 25px;">
-              <div style="font-size: 8px; font-family: sans-serif; float: right;">
-                Page <span class="pageNumber"></span>
-                of <span class="totalPages"></span>
-              </div>
-            </div>
-          </body>
-        </html>
-      `,
-      margin: {
-        bottom: '100px',
-        top: '80px',
-      },
-    });
-  } catch (error) {
-    applicationContext.logger.error(error);
-    throw error;
-  } finally {
-    if (browser !== null) {
-      await browser.close();
-    }
-  }
-
-  const documentId = `pending-report-${applicationContext.getUniqueId()}.pdf`;
-
-  await new Promise(resolve => {
-    const documentsBucket =
-      applicationContext.environment.tempDocumentsBucketName;
-    const s3Client = applicationContext.getStorageClient();
-
-    const params = {
-      Body: result,
-      Bucket: documentsBucket,
-      ContentType: 'application/pdf',
-      Key: documentId,
-    };
-
-    s3Client.upload(params, function() {
-      resolve();
-    });
+  const contentHtml = await generatePendingReportPage({
+    applicationContext,
+    pendingItems: formattedPendingItems,
+    reportTitle,
   });
+
+  const documentId = await applicationContext
+    .getUseCases()
+    .generatePdfReportInteractor({
+      applicationContext,
+      contentHtml,
+      documentIdPrefix: 'pending-report',
+    });
 
   const {
     url,

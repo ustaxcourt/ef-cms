@@ -56,92 +56,39 @@ exports.generateCaseInventoryReportPdf = async ({
     throw new UnauthorizedError('Unauthorized for case inventory report');
   }
 
-  let browser = null;
-  let result = null;
+  let formattedCases = cases
+    .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
+    .map(caseItem => ({
+      ...caseItem,
+      caseCaptionNames: applicationContext.getCaseCaptionNames(
+        caseItem.caseCaption || '',
+      ),
+    }));
 
-  try {
-    browser = await applicationContext.getChromiumBrowser();
-    let page = await browser.newPage();
-
-    let formattedCases = cases
-      .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
-      .map(caseItem => ({
-        ...caseItem,
-        caseCaptionNames: applicationContext.getCaseCaptionNames(
-          caseItem.caseCaption || '',
-        ),
-      }));
-
-    let reportTitle;
-    if (filters.status) {
-      reportTitle = filters.status;
-    }
-    if (filters.status && filters.associatedJudge) {
-      reportTitle += ' - ';
-    }
-    if (filters.associatedJudge) {
-      reportTitle += filters.associatedJudge;
-    }
-
-    const contentResult = await generateCaseInventoryReportPage({
-      applicationContext,
-      formattedCases,
-      reportTitle,
-    });
-    await page.setContent(contentResult);
-
-    result = await page.pdf({
-      displayHeaderFooter: true,
-      footerTemplate: `
-        <div style="font-size:8px !important; color:#000; text-align:center; width:100%; margin-bottom:5px;">Printed <span class="date"></span></div>
-      `,
-      format: 'letter',
-      headerTemplate: `<!doctype html>
-        <html>
-          <head>
-          </head>
-          <body style="margin: 0px;">
-            <div style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 1cm; margin-top: 25px;">
-              <div style="font-size: 8px; font-family: sans-serif; float: right;">
-                Page <span class="pageNumber"></span>
-                of <span class="totalPages"></span>
-              </div>
-            </div>
-          </body>
-        </html>
-      `,
-      margin: {
-        bottom: '100px',
-        top: '80px',
-      },
-    });
-  } catch (error) {
-    applicationContext.logger.error(error);
-    throw error;
-  } finally {
-    if (browser !== null) {
-      await browser.close();
-    }
+  let reportTitle;
+  if (filters.status) {
+    reportTitle = filters.status;
+  }
+  if (filters.status && filters.associatedJudge) {
+    reportTitle += ' - ';
+  }
+  if (filters.associatedJudge) {
+    reportTitle += filters.associatedJudge;
   }
 
-  const documentId = `case-inventory-${applicationContext.getUniqueId()}.pdf`;
-
-  await new Promise(resolve => {
-    const documentsBucket =
-      applicationContext.environment.tempDocumentsBucketName;
-    const s3Client = applicationContext.getStorageClient();
-
-    const params = {
-      Body: result,
-      Bucket: documentsBucket,
-      ContentType: 'application/pdf',
-      Key: documentId,
-    };
-
-    s3Client.upload(params, function() {
-      resolve();
-    });
+  const contentHtml = await generateCaseInventoryReportPage({
+    applicationContext,
+    formattedCases,
+    reportTitle,
   });
+
+  const documentId = await applicationContext
+    .getUseCases()
+    .generatePdfReportInteractor({
+      applicationContext,
+      contentHtml,
+      documentIdPrefix: 'case-inventory',
+    });
 
   const {
     url,
