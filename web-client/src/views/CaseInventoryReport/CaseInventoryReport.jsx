@@ -45,7 +45,7 @@ export const CaseInventoryReport = connect(
             </div>
             <div className="grid-col-2">
               <select
-                aria-described-by="filterHeading"
+                aria-describedby="filterHeading"
                 aria-label="judge"
                 className="usa-select select-left"
                 id="judgeFilter"
@@ -68,7 +68,7 @@ export const CaseInventoryReport = connect(
             </div>
             <div className="grid-col-2">
               <select
-                aria-described-by="filterHeading"
+                aria-describedby="filterHeading"
                 aria-label="status"
                 className="usa-select select-left"
                 id="statusFilter"
