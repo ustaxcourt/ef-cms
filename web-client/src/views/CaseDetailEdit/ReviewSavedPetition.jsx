@@ -64,7 +64,7 @@ export const ReviewSavedPetition = connect(
         >
           <Focus>
             <h2 id="file-a-document-header" tabIndex="-1">
-              Review The Petition
+              Review the Petition
             </h2>
           </Focus>
 
