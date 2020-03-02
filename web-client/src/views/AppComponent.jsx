@@ -1,3 +1,4 @@
+import { AccessibilityStatement } from './Accessibility/AccessibilityStatement';
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
@@ -65,6 +66,7 @@ import { state } from 'cerebral';
 import React, { useEffect } from 'react';
 
 const pages = {
+  AccessibilityStatement,
   AddDocketEntry,
   AddTrialSession,
   AdvancedSearch,
