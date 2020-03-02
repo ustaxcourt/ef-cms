@@ -3,7 +3,6 @@ import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { FiledInMultiCasesReview } from './FiledInMultiCasesReview';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { MultiDocumentPartiesFilingReview } from './MultiDocumentPartiesFilingReview';
 import { PDFPreviewButton } from '../PDFPreviewButton';
@@ -67,12 +66,6 @@ export const FileDocumentReview = connect(
                         </label>
                         <div className="grid-row">
                           <div className="grid-col flex-auto">
-                            <FontAwesomeIcon
-                              className="fa-icon-blue"
-                              icon={['fas', 'file-pdf']}
-                            />
-                          </div>
-                          <div className="grid-col flex-fill">
                             <PDFPreviewButton
                               file={form.primaryDocumentFile}
                               title={form.documentTitle}
@@ -135,12 +128,6 @@ export const FileDocumentReview = connect(
                               </label>
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
-                                  <FontAwesomeIcon
-                                    className="fa-icon-blue"
-                                    icon={['fas', 'file-pdf']}
-                                  />
-                                </div>
-                                <div className="grid-col flex-fill">
                                   <PDFPreviewButton
                                     file={item.supportingDocumentFile}
                                     title={item.documentTitle}
@@ -195,12 +182,6 @@ export const FileDocumentReview = connect(
                                 <React.Fragment>
                                   <div className="grid-row">
                                     <div className="grid-col flex-auto">
-                                      <FontAwesomeIcon
-                                        className="fa-icon-blue"
-                                        icon={['fas', 'file-pdf']}
-                                      />
-                                    </div>
-                                    <div className="grid-col flex-fill">
                                       <PDFPreviewButton
                                         file={form.secondaryDocumentFile}
                                         title={
@@ -274,12 +255,6 @@ export const FileDocumentReview = connect(
                               </label>
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
-                                  <FontAwesomeIcon
-                                    className="fa-icon-blue"
-                                    icon={['fas', 'file-pdf']}
-                                  />
-                                </div>
-                                <div className="grid-col flex-fill">
                                   <PDFPreviewButton
                                     file={item.supportingDocumentFile}
                                     title={item.documentTitle}

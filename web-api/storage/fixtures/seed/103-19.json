@@ -201,6 +201,8 @@
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Deficiency",
+    "sortableDocketNumber": 19000103,
+    "entityName": "Case",
     "contactPrimary": {
       "address3": "Officiis sit consect",
       "address2": "Eiusmod officiis dol",

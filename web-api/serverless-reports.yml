@@ -174,7 +174,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  generatePrintableCaseInventoryReportLambda:
+  generatePrintableCaseInventoryReport:
     handler: web-api/${self:provider.dir}/reportsHandlers.generatePrintableCaseInventoryReportLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest

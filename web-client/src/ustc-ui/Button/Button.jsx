@@ -10,6 +10,7 @@ export const Button = props => {
     icon,
     iconColor, // e.g. blue
     iconRight = false,
+    iconSize = '1x',
     link,
     marginDirection = 'right',
     secondary,
@@ -34,11 +35,11 @@ export const Button = props => {
   return (
     <Element className={classes} {...remainingProps}>
       {icon && !iconRight && (
-        <FontAwesomeIcon className={iconClasses} icon={icon} size="1x" />
+        <FontAwesomeIcon className={iconClasses} icon={icon} size={iconSize} />
       )}
       {children}
       {icon && iconRight && (
-        <FontAwesomeIcon className={iconClasses} icon={icon} size="1x" />
+        <FontAwesomeIcon className={iconClasses} icon={icon} size={iconSize} />
       )}
     </Element>
   );

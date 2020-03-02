@@ -2,7 +2,6 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@cerebral/react';
@@ -68,12 +67,6 @@ export const RequestAccessReview = connect(
                         </label>
                         <div className="grid-row">
                           <div className="grid-col flex-auto">
-                            <FontAwesomeIcon
-                              className="fa-icon-blue"
-                              icon={['fas', 'file-pdf']}
-                            />
-                          </div>
-                          <div className="grid-col flex-fill">
                             <PDFPreviewButton
                               file={form.primaryDocumentFile}
                               title={form.documentTitle}
@@ -136,12 +129,6 @@ export const RequestAccessReview = connect(
                               </label>
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
-                                  <FontAwesomeIcon
-                                    className="fa-icon-blue"
-                                    icon={['fas', 'file-pdf']}
-                                  />
-                                </div>
-                                <div className="grid-col flex-fill">
                                   <PDFPreviewButton
                                     file={item.supportingDocumentFile}
                                     title={item.documentTitle}

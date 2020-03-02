@@ -93,6 +93,8 @@
     "partyType": "Petitioner",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "caseType": "Whistleblower",
+    "sortableDocketNumber": 19000110,
+    "entityName": "Case",
     "contactPrimary": {
       "address3": "Architecto assumenda",
       "address2": "Suscipit animi solu",
