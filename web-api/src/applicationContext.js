@@ -262,6 +262,9 @@ const {
   generatePDFFromJPGDataInteractor,
 } = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
 const {
+  generatePdfReportInteractor,
+} = require('../../shared/src/business/useCases/generatePdfReportInteractor');
+const {
   generatePendingReportPdf,
 } = require('../../shared/src/business/useCaseHelper/pendingReport/generatePendingReportPdf');
 const {
@@ -1074,6 +1077,7 @@ module.exports = (appContextUser = {}) => {
         generateNoticeOfTrialIssuedInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
+        generatePdfReportInteractor,
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
@@ -1181,7 +1185,8 @@ module.exports = (appContextUser = {}) => {
     },
     initHoneybadger: () => {
       if (process.env.NODE_ENV === 'production' && process.env.ENV) {
-        const apiKey = process.env['HONEYBADGER_API_KEY_' + process.env.ENV];
+        const apiKey =
+          process.env['HONEYBADGER_API_KEY_' + process.env.ENV.toUpperCase()];
         if (apiKey) {
           const config = {
             apiKey,
