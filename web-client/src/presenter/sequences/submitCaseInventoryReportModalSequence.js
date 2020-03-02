@@ -1,3 +1,4 @@
+import { clearCaseInventoryReportDataAction } from '../actions/CaseInventoryReport/clearCaseInventoryReportDataAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { getCaseInventoryReportAction } from '../actions/CaseInventoryReport/getCaseInventoryReportAction';
@@ -13,6 +14,7 @@ export const submitCaseInventoryReportModalSequence = [
   {
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
+      clearCaseInventoryReportDataAction,
       clearModalAction,
       getCaseInventoryReportAction,
       clearModalStateAction,

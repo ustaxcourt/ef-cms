@@ -723,6 +723,11 @@ const router = {
       app.getSequence('gotoStyleGuideSequence')();
     });
 
+    route('/accessibility-statement', () => {
+      setPageTitle('Accessibility statement');
+      app.getSequence('gotoAccessibilityStatementSequence')();
+    });
+
     route(
       '/messages..',
       ifHasAccess(() => {
