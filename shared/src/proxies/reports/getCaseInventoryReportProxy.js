@@ -6,16 +6,25 @@ const { get } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.associatedJudge the judge to filter by
- * @param {string} providers.status the status to filter by
+ * @param {string} providers.associatedJudge the optional judge filter
+ * @param {number} providers.page the page to retrieve
+ * @param {string} providers.status the optional status filter
  * @returns {Promise<*>} the promise of the api call
  */
 exports.getCaseInventoryReportInteractor = ({
   applicationContext,
   associatedJudge,
+  page = 1,
   status,
 }) => {
-  const queryString = querystring.stringify({ associatedJudge, status });
+  const { CASE_INVENTORY_PAGE_SIZE } = applicationContext.getConstants();
+  const from = (page - 1) * CASE_INVENTORY_PAGE_SIZE;
+  const queryString = querystring.stringify({
+    associatedJudge,
+    from,
+    pageSize: CASE_INVENTORY_PAGE_SIZE,
+    status,
+  });
 
   return get({
     applicationContext,

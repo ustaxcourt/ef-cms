@@ -28,7 +28,7 @@ const test = setupTest();
 
 describe('Blocking a Case', () => {
   beforeAll(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(50000);
   });
 
   afterAll(() => {
@@ -176,6 +176,8 @@ describe('Blocking a Case', () => {
   it('petitions clerk views blocked report with no blocked cases', async () => {
     await test.runSequence('gotoBlockedCasesReportSequence');
 
+    await wait(1000);
+
     await test.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
       value: trialLocation,
@@ -190,6 +192,8 @@ describe('Blocking a Case', () => {
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with no blocked cases', async () => {
     await test.runSequence('gotoBlockedCasesReportSequence');
+
+    await wait(1000);
 
     await test.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',

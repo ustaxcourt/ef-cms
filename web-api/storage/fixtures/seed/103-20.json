@@ -421,6 +421,8 @@
     "partyType": "Petitioner",
     "receivedAt": "2020-01-23T21:44:54.034Z",
     "caseType": "CDP (Lien/Levy)",
+    "sortableDocketNumber": 20000103,
+    "entityName": "Case",
     "trialLocation": "Houston, Texas",
     "orderDesignatingPlaceOfTrial": false,
     "contactPrimary": {

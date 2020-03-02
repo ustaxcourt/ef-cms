@@ -77,6 +77,8 @@
     "orderForFilingFee": true,
     "partyType": "Corporation",
     "caseType": "Innocent Spouse",
+    "sortableDocketNumber": 19000104,
+    "entityName": "Case",
     "contactPrimary": {
       "inCareOf": "Abdul Barlow",
       "address3": "Reprehenderit conseq",

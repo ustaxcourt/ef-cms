@@ -670,6 +670,8 @@
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Innocent Spouse",
+    "sortableDocketNumber": 19000106,
+    "entityName": "Case",
     "contactPrimary": {
       "address3": "Saepe proident enim",
       "address2": "Nostrud sint lorem u",

@@ -478,6 +478,12 @@ const {
   getUserCaseNote,
 } = require('../../shared/src/persistence/dynamo/userCaseNotes/getUserCaseNote');
 const {
+  getUserCaseNoteForCases,
+} = require('../../shared/src/persistence/dynamo/userCaseNotes/getUserCaseNoteForCases');
+const {
+  getUserCaseNoteForCasesInteractor,
+} = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteForCasesInteractor');
+const {
   getUserCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor');
 const {
@@ -792,6 +798,7 @@ module.exports = (appContextUser = {}) => {
     getCaseCaptionNames: Case.getCaseCaptionNames,
     getChromiumBrowser,
     getConstants: () => ({
+      CASE_INVENTORY_MAX_PAGE_SIZE: 5000,
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
     }),
     getCurrentUser,
@@ -918,6 +925,7 @@ module.exports = (appContextUser = {}) => {
         getUploadPolicy,
         getUserById,
         getUserCaseNote,
+        getUserCaseNoteForCases,
         getUsersBySearchKey,
         getUsersInSection,
         getWebSocketConnectionByConnectionId,
@@ -1102,6 +1110,7 @@ module.exports = (appContextUser = {}) => {
         getTrialSessionWorkingCopyInteractor,
         getTrialSessionsInteractor,
         getUploadPolicyInteractor,
+        getUserCaseNoteForCasesInteractor,
         getUserCaseNoteInteractor,
         getUserInteractor,
         getUsersInSectionInteractor,
