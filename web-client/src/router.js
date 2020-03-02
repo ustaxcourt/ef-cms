@@ -845,7 +845,6 @@ const router = {
       }
 
       if (process.env.COGNITO) {
-        // USTC_ENV is undefined in prod
         setPageTitle('Dashboard');
         app.getSequence('gotoDashboardSequence')();
       } else {
