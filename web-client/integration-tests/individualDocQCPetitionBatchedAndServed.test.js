@@ -1,15 +1,11 @@
-import { fakeFile, setupTest } from './helpers';
+import { fakeFile, loginAs, setupTest } from './helpers';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerLogIn from './journey/petitionerLogIn';
 import petitionerNavigatesToCreateCase from './journey/petitionerNavigatesToCreateCase';
-import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSelectsFirstPetitionOnMyDocumentQC from './journey/petitionsClerkSelectsFirstPetitionOnMyDocumentQC';
-import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkViewsMyDocumentQC from './journey/petitionsClerkViewsMyDocumentQC';
 import petitionsClerkViewsSectionDocumentQC from './journey/petitionsClerkViewsSectionDocumentQC';
@@ -21,18 +17,17 @@ describe('INDIVIDUAL DOC QC: Petition Gets Served', () => {
     jest.setTimeout(30000);
   });
 
-  petitionerLogIn(test);
+  loginAs(test, 'petitioner');
   petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
   petitionerViewsDashboard(test);
-  petitionerSignsOut(test);
-  petitionsClerkLogIn(test);
+
+  loginAs(test, 'petitionsclerk');
   petitionsClerkViewsSectionDocumentQC(test);
   petitionsClerkAssignsWorkItemToSelf(test);
   petitionsClerkViewsMyDocumentQC(test);
   petitionsClerkSelectsFirstPetitionOnMyDocumentQC(test);
   petitionsClerkSubmitsCaseToIrs(test);
-  petitionsClerkSignsOut(test);
 });
