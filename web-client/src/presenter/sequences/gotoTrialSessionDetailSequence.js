@@ -5,6 +5,8 @@ import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSe
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
+import { mergeCaseOrderIntoCalendaredCasesAction } from '../actions/TrialSession/mergeCaseOrderIntoCalendaredCasesAction';
+import { mergeCaseOrderIntoEligibleCasesAction } from '../actions/TrialSession/mergeCaseOrderIntoEligibleCasesAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
@@ -29,10 +31,12 @@ const gotoTrialSessionDetails = [
         no: [
           getEligibleCasesForTrialSessionAction,
           setEligibleCasesOnTrialSessionAction,
+          mergeCaseOrderIntoEligibleCasesAction,
         ],
         yes: [
           getCalendaredCasesForTrialSessionAction,
           setCalendaredCasesOnTrialSessionAction,
+          mergeCaseOrderIntoCalendaredCasesAction,
         ],
       },
     ],

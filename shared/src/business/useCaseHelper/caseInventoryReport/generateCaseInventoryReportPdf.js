@@ -65,7 +65,7 @@ exports.generateCaseInventoryReportPdf = async ({
       ),
     }));
 
-  let reportTitle;
+  let reportTitle = '';
   if (filters.status) {
     reportTitle = filters.status;
   }
