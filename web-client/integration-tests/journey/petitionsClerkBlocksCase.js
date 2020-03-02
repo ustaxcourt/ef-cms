@@ -1,4 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { wait } from '../helpers';
 
 export default (test, trialLocation) => {
   return it('Petitions clerk blocks the case', async () => {
@@ -27,7 +28,7 @@ export default (test, trialLocation) => {
     expect(test.getState('caseDetail').blockedReason).toEqual('just because');
 
     // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await wait(3000);
 
     await test.runSequence('gotoBlockedCasesReportSequence');
 

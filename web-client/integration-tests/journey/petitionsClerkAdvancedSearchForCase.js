@@ -1,10 +1,11 @@
 import { CaseSearch } from '../../../shared/src/business/entities/cases/CaseSearch';
 import { ContactFactory } from '../../../shared/src/business/entities/contacts/ContactFactory';
+import { wait } from '../helpers';
 
 export default test => {
   return it('petitions clerk performs an advanced search for a case', async () => {
     // we need to wait for elasticsearch to get updated by the processing stream lambda after creating the case
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await wait(3000);
 
     await test.runSequence('gotoAdvancedSearchSequence');
 
