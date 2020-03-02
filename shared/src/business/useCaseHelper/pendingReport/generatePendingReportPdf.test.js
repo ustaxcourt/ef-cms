@@ -250,6 +250,8 @@ describe('generatePendingReportPdf', () => {
   });
 
   it('returns the pdf buffer produced by the generator', async () => {
+    const generatePdfReportInteractorMock = jest.fn();
+
     const result = await generatePendingReportPdf({
       applicationContext: {
         environment: {
@@ -272,6 +274,9 @@ describe('generatePendingReportPdf', () => {
           upload: (params, callback) => callback(),
         }),
         getUniqueId: () => 'uniqueId',
+        getUseCases: () => ({
+          generatePdfReportInteractor: generatePdfReportInteractorMock,
+        }),
         getUtilities: () => ({ formatDateString }),
         logger: { error: () => {}, info: () => {} },
       },
@@ -326,7 +331,5 @@ describe('generatePendingReportPdf', () => {
         reportTitle: 'something',
       }),
     ).rejects.toThrow();
-
-    expect(loggerErrorMock).toHaveBeenCalled();
   });
 });
