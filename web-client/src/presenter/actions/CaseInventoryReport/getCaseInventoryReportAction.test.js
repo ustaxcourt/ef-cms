@@ -43,4 +43,22 @@ describe('getCaseInventoryReportAction', () => {
       totalCount: 12,
     });
   });
+
+  it('should not call the use case and should unset caseInventoryReportData on state if screenMetadata does not contain associatedJudge or status', async () => {
+    const result = await runAction(getCaseInventoryReportAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseInventoryReportData: {
+          foundCases: [{ docketNumber: '123-20' }],
+          totalCount: 1,
+        },
+        screenMetadata: {},
+      },
+    });
+
+    expect(getCaseInventoryReportInteractorMock).not.toBeCalled();
+    expect(result.state.caseInventoryReportData).toBeUndefined();
+  });
 });
