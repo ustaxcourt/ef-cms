@@ -8,7 +8,7 @@ import React from 'react';
  * @returns {React.Fragment} the accessibility markup content
  */
 export const AccessibilityStatement = () => (
-  <div className="grid-container">
+  <div className="grid-container a11y-statement">
     <h2>
       Accessibility Statement for{' '}
       <span className="basic-information website-name">
@@ -34,7 +34,7 @@ export const AccessibilityStatement = () => (
       </span>
       :
     </p>
-    <ul className="organizational-effort accessibility-measures">
+    <ul className="usa-list organizational-effort accessibility-measures">
       <li>Include accessibility as part of our mission statement.</li>
       <li>Include accessibility throughout our internal policies.</li>
       <li>Assign clear accessibility targets and responsibilities.</li>
@@ -87,7 +87,7 @@ export const AccessibilityStatement = () => (
       </span>
       :
     </p>
-    <ul className="basic-information feedback h-card">
+    <ul className="usa-list basic-information feedback h-card">
       <li>
         Phone: <span className="phone-number p-tel">(202) 521-0700</span>
       </li>
@@ -124,7 +124,7 @@ export const AccessibilityStatement = () => (
       </span>{' '}
       is designed to be compatible with the following assistive technologies:
     </p>
-    <ul className="technical-information compatible-environments">
+    <ul className="usa-list technical-information compatible-environments">
       <li>Google Chrome with voiceOver Utility on MacOS</li>
       <li>Safari with voiceOver Utility on MacOS</li>
       <li>Microsoft Edge on MacOS, Windows</li>
@@ -149,7 +149,7 @@ export const AccessibilityStatement = () => (
       combination of web browser and any assistive technologies or plugins
       installed on your computer:
     </p>
-    <ul className="technical-information technologies-used">
+    <ul className="usa-list technical-information technologies-used">
       <li>HTML</li>
       <li>WAI-ARIA</li>
       <li>CSS</li>
@@ -176,7 +176,7 @@ export const AccessibilityStatement = () => (
       </span>
       :
     </p>
-    <ol className="technical-information accessibility-limitations">
+    <ol className="usa-list technical-information accessibility-limitations">
       <li>
         <strong>
           Portable Document Format (PDF) files displayed in the browser
@@ -198,7 +198,7 @@ export const AccessibilityStatement = () => (
       </span>{' '}
       by the following approaches:
     </p>
-    <ul className="technical-information assessment-approaches">
+    <ul className="usa-list technical-information assessment-approaches">
       <li>Self-evaluation</li>
       <li>
         Integrated testing environment analyzing interface using the “Pa11y”
@@ -213,7 +213,7 @@ export const AccessibilityStatement = () => (
       </span>{' '}
       is available at:
     </p>
-    <ul className="technical-information related-evidence-other">
+    <ul className="usa-list technical-information related-evidence-other">
       <li>
         <a href="https://github.com/ustaxcourt/ef-cms/tree/master/docs">
           https://github.com/ustaxcourt/ef-cms/tree/master/docs
