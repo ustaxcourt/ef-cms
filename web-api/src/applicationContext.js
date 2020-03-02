@@ -1181,7 +1181,8 @@ module.exports = (appContextUser = {}) => {
     },
     initHoneybadger: () => {
       if (process.env.NODE_ENV === 'production' && process.env.ENV) {
-        const apiKey = process.env['HONEYBADGER_API_KEY_' + process.env.ENV];
+        const apiKey =
+          process.env['HONEYBADGER_API_KEY_' + process.env.ENV.toUpperCase()];
         if (apiKey) {
           const config = {
             apiKey,
