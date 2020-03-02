@@ -15,21 +15,24 @@ export const getCaseInventoryReportAction = async ({
 }) => {
   const { associatedJudge, page, status } = get(state.screenMetadata);
 
-  const reportData = await applicationContext
-    .getUseCases()
-    .getCaseInventoryReportInteractor({
-      applicationContext,
-      associatedJudge,
-      page,
-      status,
-    });
+  if (associatedJudge || status) {
+    const reportData = await applicationContext
+      .getUseCases()
+      .getCaseInventoryReportInteractor({
+        applicationContext,
+        associatedJudge,
+        page,
+        status,
+      });
+    const currentData = get(state.caseInventoryReportData) || {};
 
-  const currentData = get(state.caseInventoryReportData) || {};
+    const results = {
+      foundCases: (currentData.foundCases || []).concat(reportData.foundCases),
+      totalCount: reportData.totalCount,
+    };
 
-  const results = {
-    foundCases: (currentData.foundCases || []).concat(reportData.foundCases),
-    totalCount: reportData.totalCount,
-  };
-
-  store.set(state.caseInventoryReportData, results);
+    store.set(state.caseInventoryReportData, results);
+  } else {
+    store.unset(state.caseInventoryReportData);
+  }
 };
