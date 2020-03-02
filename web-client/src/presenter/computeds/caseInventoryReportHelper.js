@@ -14,7 +14,17 @@ export const caseInventoryReportHelper = (get, applicationContext) => {
 
   const { associatedJudge, page, status } = get(state.screenMetadata);
 
+  let showResultsTable = false;
+  let showSelectFilterMessage = false;
+  let showNoResultsMessage = false;
   const resultCount = get(state.caseInventoryReportData.totalCount);
+  if (resultCount) {
+    showResultsTable = true;
+  } else if (!associatedJudge && !status) {
+    showSelectFilterMessage = true;
+  } else {
+    showNoResultsMessage = true;
+  }
 
   const reportData = get(state.caseInventoryReportData.foundCases) || [];
 
@@ -48,6 +58,9 @@ export const caseInventoryReportHelper = (get, applicationContext) => {
     resultCount,
     showJudgeColumn: !associatedJudge,
     showLoadMoreButton,
+    showNoResultsMessage,
+    showResultsTable,
+    showSelectFilterMessage,
     showStatusColumn: !status,
   };
 };

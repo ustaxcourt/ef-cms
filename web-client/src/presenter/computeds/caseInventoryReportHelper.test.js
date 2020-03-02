@@ -207,4 +207,59 @@ describe('caseInventoryReportHelper', () => {
 
     expect(result.showLoadMoreButton).toBeFalsy();
   });
+
+  it('should show the no results message if a filter is selected but totalCount is 0', () => {
+    const result = runCompute(caseInventoryReportHelper, {
+      state: {
+        caseInventoryReportData: {
+          foundCases: [],
+          totalCount: 0,
+        },
+        screenMetadata: {
+          associatedJudge: 'Chief Judge',
+          page: 1,
+        },
+      },
+    });
+
+    expect(result.showNoResultsMessage).toBeTruthy();
+    expect(result.showSelectFilterMessage).toBeFalsy();
+    expect(result.showResultsTable).toBeFalsy();
+  });
+
+  it('should show the select a filter message if totalCount is 0 and a filter is not selected', () => {
+    const result = runCompute(caseInventoryReportHelper, {
+      state: {
+        caseInventoryReportData: {
+          foundCases: [],
+          totalCount: 0,
+        },
+        screenMetadata: {
+          page: 1,
+        },
+      },
+    });
+
+    expect(result.showSelectFilterMessage).toBeTruthy();
+    expect(result.showNoResultsMessage).toBeFalsy();
+    expect(result.showResultsTable).toBeFalsy();
+  });
+
+  it('should show the results table if totalCount is not 0', () => {
+    const result = runCompute(caseInventoryReportHelper, {
+      state: {
+        caseInventoryReportData: {
+          foundCases: [{ docketNumber: '123-20' }],
+          totalCount: 1,
+        },
+        screenMetadata: {
+          page: 1,
+        },
+      },
+    });
+
+    expect(result.showResultsTable).toBeTruthy();
+    expect(result.showSelectFilterMessage).toBeFalsy();
+    expect(result.showNoResultsMessage).toBeFalsy();
+  });
 });
