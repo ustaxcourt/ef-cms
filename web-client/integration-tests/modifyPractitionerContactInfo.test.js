@@ -1,5 +1,4 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import practitionerSignsOut from './journey/practitionerSignsOut';
 import practitionerUpdatesAddress from './journey/practitionerUpdatesAddress';
 import practitionerViewsCaseDetailNoticeOfChangeOfAddress from './journey/practitionerViewsCaseDetailNoticeOfChangeOfAddress';
 
@@ -25,5 +24,4 @@ describe('Modify Practitioner Contact Information', () => {
   for (let i = 0; i < 3; i++) {
     practitionerViewsCaseDetailNoticeOfChangeOfAddress(test, i);
   }
-  practitionerSignsOut(test);
 });
