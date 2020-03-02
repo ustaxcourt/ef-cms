@@ -8,8 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.calendaredCases
  */
 export const mergeCaseOrderIntoEligibleCasesAction = ({ get, store }) => {
-  const { caseOrder } = get(state.trialSession);
-  const { eligibleCases } = get(state.trialSession);
+  const { caseOrder, eligibleCases } = get(state.trialSession);
 
   for (const eligibleCase of eligibleCases) {
     const order = caseOrder.find(o => o.caseId === eligibleCase.caseId);
