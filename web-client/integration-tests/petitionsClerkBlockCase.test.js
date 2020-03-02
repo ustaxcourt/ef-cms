@@ -57,7 +57,7 @@ describe('Blocking a Case', () => {
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with an automatically blocked case for due date', async () => {
     // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await wait(3000);
 
     await test.runSequence('gotoBlockedCasesReportSequence');
 
@@ -93,7 +93,7 @@ describe('Blocking a Case', () => {
   loginAs(test, 'petitionsclerk');
   it('petitions clerk views blocked report with an automatically blocked case for pending item', async () => {
     // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await wait(3000);
 
     await test.runSequence('gotoBlockedCasesReportSequence');
 
@@ -120,7 +120,7 @@ describe('Blocking a Case', () => {
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with an automatically and manually blocked case', async () => {
     // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 4000));
+    await wait(4000);
 
     await test.runSequence('gotoBlockedCasesReportSequence');
 
