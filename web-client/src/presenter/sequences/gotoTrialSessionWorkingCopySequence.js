@@ -10,6 +10,7 @@ import { gotoTrialSessionDetailSequence } from './gotoTrialSessionDetailSequence
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
 import { isUserAssociatedWithTrialSessionAction } from '../actions/TrialSession/isUserAssociatedWithTrialSessionAction';
+import { mergeCaseOrderIntoCalendaredCasesAction } from '../actions/TrialSession/mergeCaseOrderIntoCalendaredCasesAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
@@ -38,6 +39,7 @@ const checkUserAssociationAndProceed = [
         yes: [
           getCalendaredCasesForTrialSessionAction,
           setCalendaredCasesOnTrialSessionAction,
+          mergeCaseOrderIntoCalendaredCasesAction,
           getUserCaseNoteForCasesAction,
           setCaseNotesOntoCalendaredCasesAction,
           extractUserNotesFromCalendaredCasesAction,
