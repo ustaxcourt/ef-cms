@@ -1,5 +1,6 @@
 /* eslint-disable security/detect-object-injection, security/detect-child-process, spellcheck/spell-checker */
 const AWSXRay = require('aws-xray-sdk');
+const Honeybadger = require('honeybadger'); // node version
 
 const AWS =
   process.env.NODE_ENV === 'production'
@@ -1177,6 +1178,19 @@ module.exports = (appContextUser = {}) => {
         prepareDateFromString,
         setServiceIndicatorsForCase,
       };
+    },
+    initHoneybadger: () => {
+      if (process.env.NODE_ENV === 'production' && process.env.ENV) {
+        const apiKey = process.env['HONEYBADGER_API_KEY_' + process.env.ENV];
+        if (apiKey) {
+          const config = {
+            apiKey,
+            environment: 'api',
+          };
+          Honeybadger.configure(config);
+          return Honeybadger;
+        }
+      }
     },
     isAuthorized,
     isAuthorizedForWorkItems: () =>
