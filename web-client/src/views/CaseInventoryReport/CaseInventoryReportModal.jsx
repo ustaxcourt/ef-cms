@@ -47,6 +47,7 @@ export const CaseInventoryReportModal = connect(
                   'usa-select',
                   validationErrors.status && 'usa-select--error',
                 )}
+                id="select-case-inventory-status"
                 name="status"
                 onChange={e => {
                   updateScreenMetadataSequence({
@@ -79,6 +80,7 @@ export const CaseInventoryReportModal = connect(
                   'usa-select',
                   validationErrors.associatedJudge && 'usa-select--error',
                 )}
+                id="select-case-inventory-judge"
                 name="associatedJudge"
                 onChange={e => {
                   updateScreenMetadataSequence({
