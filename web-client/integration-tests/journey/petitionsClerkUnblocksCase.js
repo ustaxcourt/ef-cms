@@ -1,4 +1,4 @@
-import { wait } from '../helpers';
+import { refreshElasticsearchIndex } from '../helpers';
 
 export default (test, trialLocation, checkReport = true) => {
   return it('Petitions clerk unblocks the case', async () => {
@@ -16,8 +16,7 @@ export default (test, trialLocation, checkReport = true) => {
     expect(test.getState('caseDetail').blockedReason).toBeUndefined();
 
     if (checkReport) {
-      // we need to wait for elasticsearch to get updated by the processing stream lambda
-      await wait(5000);
+      await refreshElasticsearchIndex();
 
       await test.runSequence('gotoBlockedCasesReportSequence');
 
