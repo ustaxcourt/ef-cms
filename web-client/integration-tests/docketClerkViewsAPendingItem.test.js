@@ -7,6 +7,7 @@ import {
   uploadPetition,
   uploadProposedStipulatedDecision,
   viewCaseDetail,
+  wait,
 } from './helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -76,7 +77,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     expect(formatted.pendingItemsDocketEntries.length).toEqual(1);
 
     // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await wait(3000);
 
     await test.runSequence('gotoPendingReportSequence');
     const currentPendingItemsCount = (test.getState('pendingItems') || [])

@@ -8,10 +8,6 @@ import {
 
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 
-// Docket clerk
-import docketClerkLogIn from '../integration-tests/journey/docketClerkLogIn';
-import docketClerkSignsOut from '../integration-tests/journey/docketClerkSignsOut';
-
 // Public User
 import docketClerkSealsCase from '../integration-tests/journey/docketClerkSealsCase';
 import unauthedUserNavigatesToPublicSite from './journey/unauthedUserNavigatesToPublicSite';
@@ -48,9 +44,8 @@ describe('Petitioner creates cases to search for', () => {
 });
 
 describe('Docket clerk seals the case (should not be viewable to the public)', () => {
-  docketClerkLogIn(testClient);
+  loginAs(testClient, 'docketclerk');
   docketClerkSealsCase(testClient);
-  docketClerkSignsOut(testClient);
 });
 
 describe('Unauthed user searches for a sealed case by docket number', () => {
