@@ -95,7 +95,7 @@ export const CaseInventoryReport = connect(
 
           <div className="grid-row grid-gap margin-top-1">
             <div className="grid-col-12">
-              <table className="usa-table row-border-only subsection work-queue deadlines">
+              <table className="usa-table row-border-only subsection case-inventory">
                 <thead>
                   <tr>
                     <th>Docket</th>
