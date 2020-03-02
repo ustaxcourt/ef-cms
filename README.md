@@ -93,9 +93,11 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 - Node v12.13.1
 - npm v6.12.1
 - ClamAV v0.101.2 (see Setup below)
+-  Java 11
 
 ### Setup
 
+- Install the JDK from https://www.oracle.com/java/technologies/javase-jdk13-downloads.html
 For ClamAV, macOS users can do the following:
 - `brew install clamav`
 - `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`
@@ -111,7 +113,7 @@ Both the front-end (`/web-client`) and API (`/web-api`) share code that exists i
 
 ##### Other Start Commands
 
-- Run `cd web-client && npm start:client:no-scanner` to start the UI without Dynamsoft (or if you don't have a scanner)
+- Run `cd web-client && npm run start:client:no-scanner` to start the UI without Dynamsoft (or if you don't have a scanner)
 - Run `npm run start:public` to start the UI for the public access portion of the site
 
 #### Terminal B
