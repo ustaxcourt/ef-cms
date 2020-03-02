@@ -16,7 +16,7 @@ export const setCaseNotesOntoCalendaredCasesAction = ({
   const calendaredCases = get(state.trialSession.calendaredCases);
   for (const note of props.notes) {
     const calendaredCase = calendaredCases.find(
-      calendaredCase => calendaredCase.caseId === note.caseId,
+      foundCalendaredCase => foundCalendaredCase.caseId === note.caseId,
     );
     Object.assign(calendaredCase, {
       notes: note,
