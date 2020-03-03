@@ -12,6 +12,10 @@ describe('setFormContactSecondaryAddressAction', () => {
       },
       state: {
         form: {
+          contactPrimary: {
+            city: 'Flavortown',
+            name: 'Guy Fieri',
+          },
           contactSecondary: {
             city: 'Greenbough',
             inCareOf: 'Jennay',
