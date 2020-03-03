@@ -1,4 +1,5 @@
 module.exports = {
+  createAttorneyUserLambda: require('./users/createAttorneyUserLambda').handler,
   createUserLambda: require('./users/createUserLambda').handler,
   getCasesByUserLambda: require('./cases/getCasesByUserLambda').handler,
   getConsolidatedCasesByUserLambda: require('./cases/getConsolidatedCasesByUserLambda')
