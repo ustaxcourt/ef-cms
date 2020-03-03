@@ -993,7 +993,7 @@ describe('Case entity', () => {
   describe('updateDocketNumberRecord records suffix changes', () => {
     it('should create a docket record when the suffix updates', () => {
       const caseToVerify = new Case(
-        { docketNumber: '123-19' },
+        { docketNumber: '123-19', status: Case.STATUS_TYPES.generalDocket },
         {
           applicationContext,
         },
@@ -1035,6 +1035,7 @@ describe('Case entity', () => {
                 "Docket Number is amended from '123-19B' to '123-19P'",
             },
           ],
+          status: Case.STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1101,6 +1102,7 @@ describe('Case entity', () => {
           caseCaption: 'A New Caption',
           initialTitle:
             'Caption v. Commissioner of Internal Revenue, Respondent',
+          status: Case.STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1154,6 +1156,7 @@ describe('Case entity', () => {
           ],
           initialTitle:
             'Caption v. Commissioner of Internal Revenue, Respondent',
+          status: Case.STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
