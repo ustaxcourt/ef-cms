@@ -1,5 +1,10 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
-import { loginAs, setupTest, uploadPetition, wait } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
@@ -108,8 +113,7 @@ describe('case inventory report journey', () => {
   });
 
   it('get the updated case inventory counts', async () => {
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await wait(3000);
+    await refreshElasticsearchIndex();
 
     //New (+1 from initial)
     await test.runSequence('openCaseInventoryReportModalSequence');
