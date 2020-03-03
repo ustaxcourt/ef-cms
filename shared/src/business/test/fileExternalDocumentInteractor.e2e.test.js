@@ -8,6 +8,9 @@ const {
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
+const {
+  updateCaseAutomaticBlock,
+} = require('../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
@@ -30,6 +33,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
     });
     applicationContext.getUseCaseHelpers = () => ({
       sendServedPartiesEmails: jest.fn(),
+      updateCaseAutomaticBlock,
     });
   });
 
@@ -99,7 +103,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentTitle: 'Brief in Support of Petition',
           documentType: 'Brief in Support',
           eventCode: 'BRF',
-          previousDocument: 'Petition',
+          previousDocument: { documentType: 'Petition' },
           scenario: 'Nonstandard A',
         },
         secondarySupportingDocuments: [
@@ -107,7 +111,10 @@ describe('fileExternalDocumentInteractor integration test', () => {
             documentTitle: 'Brief in Support of Amended Answer',
             documentType: 'Brief in Support',
             eventCode: 'BRF',
-            previousDocument: 'Amended Answer',
+            previousDocument: {
+              documentTitle: 'Amended Answer',
+              documentType: 'Amended',
+            },
             scenario: 'Nonstandard A',
           },
         ],
@@ -117,7 +124,10 @@ describe('fileExternalDocumentInteractor integration test', () => {
             documentTitle: 'Brief in Support of Amended Answer',
             documentType: 'Brief in Support',
             eventCode: 'BRF',
-            previousDocument: 'Amended Answer',
+            previousDocument: {
+              documentTitle: 'Amended Answer',
+              documentType: 'Amended',
+            },
             scenario: 'Nonstandard A',
           },
         ],
@@ -277,7 +287,10 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',
           partyPrimary: true,
-          previousDocument: 'Amended Answer',
+          previousDocument: {
+            documentTitle: 'Amended Answer',
+            documentType: 'Amended',
+          },
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [
@@ -293,7 +306,10 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 documentTitle: 'Brief in Support of Amended Answer',
                 documentType: 'Brief in Support',
                 partyPrimary: true,
-                previousDocument: 'Amended Answer',
+                previousDocument: {
+                  documentTitle: 'Amended Answer',
+                  documentType: 'Amended',
+                },
                 scenario: 'Nonstandard A',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
               },
@@ -317,7 +333,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentType: 'Brief in Support',
           lodged: true,
           partyPrimary: true,
-          previousDocument: 'Petition',
+          previousDocument: { documentType: 'Petition' },
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [
@@ -333,7 +349,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 documentType: 'Brief in Support',
                 lodged: true,
                 partyPrimary: true,
-                previousDocument: 'Petition',
+                previousDocument: { documentType: 'Petition' },
                 scenario: 'Nonstandard A',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
               },
@@ -357,7 +373,10 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentType: 'Brief in Support',
           lodged: true,
           partyPrimary: true,
-          previousDocument: 'Amended Answer',
+          previousDocument: {
+            documentTitle: 'Amended Answer',
+            documentType: 'Amended',
+          },
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [
@@ -373,7 +392,10 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 documentType: 'Brief in Support',
                 lodged: true,
                 partyPrimary: true,
-                previousDocument: 'Amended Answer',
+                previousDocument: {
+                  documentTitle: 'Amended Answer',
+                  documentType: 'Amended',
+                },
                 scenario: 'Nonstandard A',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
               },
@@ -473,7 +495,10 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',
           partyPrimary: true,
-          previousDocument: 'Amended Answer',
+          previousDocument: {
+            documentTitle: 'Amended Answer',
+            documentType: 'Amended',
+          },
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
@@ -501,7 +526,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentType: 'Brief in Support',
           lodged: true,
           partyPrimary: true,
-          previousDocument: 'Petition',
+          previousDocument: { documentType: 'Petition' },
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
@@ -529,7 +554,10 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentType: 'Brief in Support',
           lodged: true,
           partyPrimary: true,
-          previousDocument: 'Amended Answer',
+          previousDocument: {
+            documentTitle: 'Amended Answer',
+            documentType: 'Amended',
+          },
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },

@@ -1,6 +1,5 @@
 const client = require('../../dynamodbClientService');
 const { pick } = require('lodash');
-const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 exports.getAllCaseDeadlines = async ({ applicationContext }) => {
   const mappings = await client.query({
@@ -61,8 +60,9 @@ exports.getAllCaseDeadlines = async ({ applicationContext }) => {
       'contactPrimary',
       'contactSecondary',
     ]),
+    associatedJudge: caseMap[m.caseId].associatedJudge,
     caseTitle: caseMap[m.caseId].caseCaption,
   }));
 
-  return stripInternalKeys(afterCaseMapping);
+  return afterCaseMapping;
 };

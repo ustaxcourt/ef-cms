@@ -172,7 +172,7 @@ const router = {
         );
         app.getSequence('gotoEditDocketEntryMetaSequence')({
           docketNumber,
-          docketRecordIndex,
+          docketRecordIndex: +docketRecordIndex,
         });
       }),
     );
@@ -351,12 +351,46 @@ const router = {
     );
 
     route(
+      '/case-detail/*/contacts/secondary/edit',
+      ifHasAccess(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Secondary contact`,
+        );
+        app.getSequence('gotoSecondaryContactEditSequence')({ docketNumber });
+      }),
+    );
+
+    route(
       '/case-detail/*/create-order',
       ifHasAccess(docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
         );
         app.getSequence('gotoCreateOrderSequence')({ docketNumber });
+      }),
+    );
+
+    route(
+      '/case-detail/*/upload-court-issued',
+      ifHasAccess(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Upload a document`,
+        );
+        app.getSequence('gotoUploadCourtIssuedDocumentSequence')({
+          docketNumber,
+        });
+      }),
+    );
+    route(
+      '/case-detail/*/edit-upload-court-issued/*',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Upload a document`,
+        );
+        app.getSequence('gotoEditUploadCourtIssuedDocumentSequence')({
+          docketNumber,
+          documentId,
+        });
       }),
     );
 
@@ -431,9 +465,9 @@ const router = {
       '/case-detail/*/pending-report',
       ifHasAccess(docketNumber => {
         setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Case Confirmation`,
+          `${getPageTitleDocketPrefix(docketNumber)} Pending Report`,
         );
-        app.getSequence('gotoPrintablePendingReportSequence')({
+        app.getSequence('gotoPrintablePendingReportForCaseSequence')({
           caseIdFilter: true,
           docketNumber,
         });
@@ -519,7 +553,7 @@ const router = {
 
           app.getSequence('gotoMessagesSequence')(routeArgs);
         }
-        setPageTitle('Messages');
+        setPageTitle('Document QC');
       }),
     );
 
@@ -559,12 +593,14 @@ const router = {
     route(
       '/trial-sessions..',
       ifHasAccess(() => {
-        var query = {};
+        const trialSessionFilter = {};
         forEach(route.query(), (value, key) => {
-          set(query, key, value);
+          set(trialSessionFilter, key, value);
         });
         setPageTitle('Trial sessions');
-        app.getSequence('gotoTrialSessionsSequence')({ query });
+        app.getSequence('gotoTrialSessionsSequence')({
+          query: trialSessionFilter,
+        });
       }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
     );
 
@@ -612,6 +648,14 @@ const router = {
               });
           }
         }
+      }),
+    );
+
+    route(
+      '/review-petition',
+      ifHasAccess(() => {
+        setPageTitle('Review Petition');
+        app.getSequence('gotoReviewPetitionSequence')();
       }),
     );
 

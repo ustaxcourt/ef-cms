@@ -133,8 +133,23 @@ export const CaseDetailHeaderMenu = connect(
                       link
                       href={`/case-detail/${caseDetail.docketNumber}/add-docket-entry`}
                       icon="plus-circle"
+                      id="menu-button-add-docket-entry"
                     >
                       Add Docket Entry
+                    </Button>
+                  </li>
+                )}
+                {caseDetailHeaderHelper.showUploadCourtIssuedDocumentButton && (
+                  <li className="usa-nav__submenu-item">
+                    <Button
+                      link
+                      className="fa-icon-blue"
+                      href={`/case-detail/${caseDetail.docketNumber}/upload-court-issued`}
+                      icon="file-pdf"
+                      iconColor="blue"
+                      id="menu-button-upload-pdf"
+                    >
+                      Upload PDF
                     </Button>
                   </li>
                 )}

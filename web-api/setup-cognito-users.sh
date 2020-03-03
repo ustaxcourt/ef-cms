@@ -104,10 +104,11 @@ createAccount() {
 }
 
 createManyAccounts() {
-  emailPrefix=$1
-  role=$1
-  section=$2
-  for i in $(seq 1 30);
+  numAccounts=$1
+  emailPrefix=$2
+  role=$2
+  section=$3
+  for i in $(seq 1 "${numAccounts}");
   do
     createAccount "${emailPrefix}${i}@example.com" "${role}" "${i}" "" "${section}"
   done
@@ -151,14 +152,14 @@ createJudgeAccount() {
 createAdmin "ustcadmin@example.com" "admin" "admin"
 
 createAccount "migrator@example.com" "admin" "" "" "admin"
-createManyAccounts "adc" "adc"
-createManyAccounts "admissionsclerk" "admissions"
-createManyAccounts "calendarclerk" "calendar"
-createManyAccounts "clerkofcourt" "clerkofcourt"
-createManyAccounts "docketclerk" "docket"
-createManyAccounts "petitioner" "petitioner"
-createManyAccounts "petitionsclerk" "petitions"
-createManyAccounts "trialclerk" "trialClerks"
+createManyAccounts "10" "adc" "adc"
+createManyAccounts "10" "admissionsclerk" "admissions"
+createManyAccounts "10" "calendarclerk" "calendar"
+createManyAccounts "10" "clerkofcourt" "clerkofcourt"
+createManyAccounts "10" "docketclerk" "docket"
+createManyAccounts "10" "petitionsclerk" "petitions"
+createManyAccounts "10" "trialclerk" "trialClerks"
+createManyAccounts "30" "petitioner" "petitioner"
 createChambersAccount "ashfordsChambers" "chambers"
 createChambersAccount "buchsChambers" "chambers"
 createChambersAccount "cohensChambers" "chambers"

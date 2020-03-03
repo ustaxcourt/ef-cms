@@ -17,20 +17,22 @@ export default test => {
     expect(test.getState('caseDetail.contactPrimary.name')).toBeDefined();
     expect(test.getState('caseDetail.contactPrimary.address1')).toBeUndefined();
 
-    expect(test.getState('caseDetail.docketRecord').length).toEqual(3);
+    expect(test.getState('caseDetail.docketRecord').length).toEqual(4);
     expect(test.getState('caseDetail.docketRecord')).toMatchObject([
       { description: 'Petition' },
       { description: 'Request for Place of Trial at Seattle, Washington' },
       { description: 'Order of Dismissal Entered, Judge Buch for Something' },
+      { description: 'Transcript of Anything on 01-01-2019' },
     ]);
 
-    expect(test.getState('caseDetail.documents').length).toEqual(3);
+    expect(test.getState('caseDetail.documents').length).toEqual(4);
     expect(test.getState('caseDetail.documents')).toMatchObject([
       {
         documentType: 'Petition',
       },
       { documentType: 'Statement of Taxpayer Identification' },
       { documentType: 'OD - Order of Dismissal Entered,' },
+      { documentType: 'TRAN - Transcript' },
     ]);
 
     const helper = runCompute(publicCaseDetailHelper, {
@@ -56,6 +58,13 @@ export default test => {
         hasDocument: true,
         showDocumentDescriptionWithoutLink: false,
         showLinkToDocument: true,
+        showServed: true,
+      },
+      {
+        description: 'Transcript of Anything on 01-01-2019',
+        hasDocument: true,
+        showDocumentDescriptionWithoutLink: true,
+        showLinkToDocument: false,
         showServed: true,
       },
     ]);

@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
@@ -30,5 +31,5 @@ exports.getSentMessagesForSectionInteractor = async ({
       section,
     });
 
-  return workItems;
+  return WorkItem.validateRawCollection(workItems, { applicationContext });
 };

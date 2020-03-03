@@ -19,11 +19,15 @@ exports.getConsolidatedCasesByUserInteractor = async ({
     .getPersistenceGateway()
     .getCasesByUser({ applicationContext, userId });
 
-  if (userCases.length) {
+  const userCasesValidated = Case.validateRawCollection(userCases, {
+    applicationContext,
+  });
+
+  if (userCasesValidated.length) {
     const caseMapping = {};
     const leadCaseIdsToGet = [];
 
-    userCases.forEach(caseRecord => {
+    userCasesValidated.forEach(caseRecord => {
       const { caseId, leadCaseId } = caseRecord;
 
       caseRecord.isRequestingUserAssociated = true;
@@ -49,8 +53,13 @@ exports.getConsolidatedCasesByUserInteractor = async ({
           leadCaseId,
         });
 
+      const consolidatedCasesValidated = Case.validateRawCollection(
+        consolidatedCases,
+        { applicationContext },
+      );
+
       if (!caseMapping[leadCaseId]) {
-        const leadCase = consolidatedCases.find(
+        const leadCase = consolidatedCasesValidated.find(
           consolidatedCase => consolidatedCase.caseId === leadCaseId,
         );
         leadCase.isRequestingUserAssociated = false;
@@ -58,7 +67,7 @@ exports.getConsolidatedCasesByUserInteractor = async ({
       }
 
       const caseConsolidatedCases = [];
-      consolidatedCases.forEach(consolidatedCase => {
+      consolidatedCasesValidated.forEach(consolidatedCase => {
         consolidatedCase.isRequestingUserAssociated = !!userCaseIdsMap[
           consolidatedCase.caseId
         ];

@@ -5,7 +5,6 @@ const {
 const {
   createMappingRecord,
 } = require('../../dynamo/helpers/createMappingRecord');
-const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 /**
@@ -44,8 +43,5 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
     }),
   ]);
 
-  return stripWorkItems(
-    stripInternalKeys(results),
-    applicationContext.isAuthorizedForWorkItems(),
-  );
+  return stripWorkItems(results, applicationContext.isAuthorizedForWorkItems());
 };

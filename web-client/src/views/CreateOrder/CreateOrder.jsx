@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { SuccessNotification } from '../SuccessNotification';
@@ -12,22 +11,23 @@ import React from 'react';
 
 export const CreateOrder = connect(
   {
+    convertHtml2PdfAndOpenInNewTabSequence:
+      sequences.convertHtml2PdfAndOpenInNewTabSequence,
     convertHtml2PdfSequence: sequences.convertHtml2PdfSequence,
     createOrderHelper: state.createOrderHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    pdfPreviewUrl: state.pdfPreviewUrl,
     showModal: state.showModal,
     submitCourtIssuedOrderSequence: sequences.submitCourtIssuedOrderSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   ({
+    convertHtml2PdfAndOpenInNewTabSequence,
     convertHtml2PdfSequence,
     createOrderHelper,
     form,
     formCancelToggleCancelSequence,
-    pdfPreviewUrl,
     showModal,
     submitCourtIssuedOrderSequence,
     updateFormValueSequence,
@@ -57,11 +57,11 @@ export const CreateOrder = connect(
                 <Button
                   link
                   className="margin-top-105 minw-10"
+                  icon="sync"
                   onClick={() => {
                     convertHtml2PdfSequence();
                   }}
                 >
-                  <FontAwesomeIcon icon="sync" size="sm" />
                   Refresh
                 </Button>
               </div>
@@ -89,7 +89,7 @@ export const CreateOrder = connect(
                     submitCourtIssuedOrderSequence();
                   }}
                 >
-                  Save Order
+                  Save
                 </Button>
                 <Button
                   link
@@ -104,9 +104,9 @@ export const CreateOrder = connect(
               <div className="grid-col-4">
                 <Button
                   secondary
-                  href={pdfPreviewUrl}
-                  rel="noopener noreferrer"
-                  target="_blank"
+                  onClick={() => {
+                    convertHtml2PdfAndOpenInNewTabSequence();
+                  }}
                 >
                   View Full PDF
                 </Button>

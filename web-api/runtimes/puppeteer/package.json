@@ -16,7 +16,7 @@
     "chrome-aws-lambda": "~2.0.0",
     "pug": "^2.0.3",
     "puppeteer-core": "~1.18",
-    "handlebars":"~4.5.1",
-    "node-sass":"~4.13.0"
+    "handlebars": "~4.5.1",
+    "node-sass": "~4.13.0"
   }
 }

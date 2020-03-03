@@ -33,6 +33,10 @@ const docketClerkUser = {
   role: User.ROLES.docketClerk,
   userId: '234',
 };
+const judgeUser = {
+  role: User.ROLES.judge,
+  userId: '345',
+};
 
 describe('formattedCaseDetail', () => {
   it('does not error and returns expected empty values on empty caseDetail', () => {
@@ -844,83 +848,132 @@ describe('formattedCaseDetail', () => {
     });
   });
 
-  it('formats draft documents', () => {
-    const caseDetail = {
-      caseCaption: 'Brett Osborne, Petitioner',
-      docketRecord: [
-        {
-          description: 'Petition',
-          documentId: 'Petition',
-          filedBy: 'Jessica Frase Marine',
-          filingDate: '2019-02-28T21:14:39.488Z',
-        },
-      ],
-      documents: [
-        {
-          createdAt: '2019-02-28T21:14:39.488Z',
-          documentId: 'Petition',
-          documentType: 'Petition',
-          showValidationInput: '2019-02-28T21:14:39.488Z',
-          status: 'served',
-        },
-        {
-          archived: false,
-          createdAt: '2019-02-28T21:14:39.488Z',
-          documentId: 'd-1-2-3',
-          documentTitle: 'Order to do something',
-          documentType: 'Order',
-        },
-        {
-          archived: false,
-          createdAt: '2019-02-28T21:14:39.488Z',
-          documentId: 'd-2-3-4',
-          documentTitle: 'Stipulated Decision',
-          documentType: 'Stipulated Decision',
-        },
-      ],
-      hasIrsNotice: false,
-      hasVerifiedIrsNotice: false,
-      petitioners: [{ name: 'bob' }],
-    };
-    const result = runCompute(formattedCaseDetail, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        caseDetail,
-        caseDetailErrors: {},
-      },
+  describe('draft documents', () => {
+    let caseDetail;
+
+    beforeEach(() => {
+      caseDetail = {
+        caseCaption: 'Brett Osborne, Petitioner',
+        docketRecord: [
+          {
+            description: 'Petition',
+            documentId: 'Petition',
+            filedBy: 'Jessica Frase Marine',
+            filingDate: '2019-02-28T21:14:39.488Z',
+          },
+        ],
+        documents: [
+          {
+            createdAt: '2019-02-28T21:14:39.488Z',
+            documentId: 'Petition',
+            documentType: 'Petition',
+            showValidationInput: '2019-02-28T21:14:39.488Z',
+            status: 'served',
+          },
+          {
+            archived: false,
+            createdAt: '2019-02-28T21:14:39.488Z',
+            documentId: 'd-1-2-3',
+            documentTitle: 'Order to do something',
+            documentType: 'Order',
+          },
+          {
+            archived: false,
+            createdAt: '2019-02-28T21:14:39.488Z',
+            documentId: 'd-2-3-4',
+            documentTitle: 'Stipulated Decision',
+            documentType: 'Stipulated Decision',
+          },
+        ],
+        hasIrsNotice: false,
+        hasVerifiedIrsNotice: false,
+        petitioners: [{ name: 'bob' }],
+      };
     });
-    expect(result.formattedDraftDocuments).toMatchObject([
-      {
-        createdAtFormatted: '02/28/19',
-        descriptionDisplay: 'Order to do something',
-        documentId: 'd-1-2-3',
-        documentType: 'Order',
-        editLink: '',
-        isCourtIssuedDocument: false,
-        isInProgress: false,
-        isNotServedCourtIssuedDocument: false,
-        isPetition: false,
-        isStatusServed: false,
-        showDocumentEditLink: true,
-        signedAtFormatted: undefined,
-        signedAtFormattedTZ: undefined,
-      },
-      {
-        createdAtFormatted: '02/28/19',
-        descriptionDisplay: 'Stipulated Decision',
-        documentId: 'd-2-3-4',
-        documentType: 'Stipulated Decision',
-        editLink: '',
-        isCourtIssuedDocument: true,
-        isInProgress: false,
-        isNotServedCourtIssuedDocument: true,
-        isPetition: false,
-        isStatusServed: false,
-        showDocumentEditLink: true,
-        signedAtFormatted: undefined,
-        signedAtFormattedTZ: undefined,
-      },
-    ]);
+
+    it('formats draft documents', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+        },
+      });
+      expect(result.formattedDraftDocuments).toMatchObject([
+        {
+          createdAtFormatted: '02/28/19',
+          descriptionDisplay: 'Order to do something',
+          documentId: 'd-1-2-3',
+          documentType: 'Order',
+          editLink: '',
+          isCourtIssuedDocument: false,
+          isInProgress: false,
+          isNotServedCourtIssuedDocument: false,
+          isPetition: false,
+          isStatusServed: false,
+          showDocumentEditLink: true,
+          signedAtFormatted: undefined,
+          signedAtFormattedTZ: undefined,
+        },
+        {
+          createdAtFormatted: '02/28/19',
+          descriptionDisplay: 'Stipulated Decision',
+          documentId: 'd-2-3-4',
+          documentType: 'Stipulated Decision',
+          editLink: '',
+          isCourtIssuedDocument: true,
+          isInProgress: false,
+          isNotServedCourtIssuedDocument: true,
+          isPetition: false,
+          isStatusServed: false,
+          showDocumentEditLink: true,
+          signedAtFormatted: undefined,
+          signedAtFormattedTZ: undefined,
+        },
+      ]);
+    });
+
+    it('does not populate editLink for draft documents', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(judgeUser),
+          caseDetail,
+          caseDetailErrors: {},
+        },
+      });
+      expect(result.formattedDraftDocuments).toMatchObject([
+        {
+          createdAtFormatted: '02/28/19',
+          descriptionDisplay: 'Order to do something',
+          documentId: 'd-1-2-3',
+          documentType: 'Order',
+          editLink: '',
+          isCourtIssuedDocument: false,
+          isInProgress: false,
+          isNotServedCourtIssuedDocument: false,
+          isPetition: false,
+          isStatusServed: false,
+          showDocumentEditLink: true,
+          signedAtFormatted: undefined,
+          signedAtFormattedTZ: undefined,
+        },
+        {
+          createdAtFormatted: '02/28/19',
+          descriptionDisplay: 'Stipulated Decision',
+          documentId: 'd-2-3-4',
+          documentType: 'Stipulated Decision',
+          editLink: '',
+          isCourtIssuedDocument: true,
+          isInProgress: false,
+          isNotServedCourtIssuedDocument: true,
+          isPetition: false,
+          isStatusServed: false,
+          showDocumentEditLink: true,
+          signedAtFormatted: undefined,
+          signedAtFormattedTZ: undefined,
+        },
+      ]);
+    });
   });
 
   describe('consolidatedCases', () => {
@@ -998,6 +1051,21 @@ describe('formattedCaseDetail', () => {
             description: 'Filing Fee Paid',
             filingDate: '2019-06-19T17:29:13.120Z',
           },
+          {
+            description: 'System Generated',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
+          {
+            description: 'Court Issued - Not Served',
+            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
+          {
+            description: 'Court Issued - Served',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
         ],
         documents: [
           {
@@ -1009,6 +1077,44 @@ describe('formattedCaseDetail', () => {
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
             workItems: [{ isQC: true }],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            documentTitle: 'System Generated',
+            documentType: 'Notice of Trial',
+            eventCode: 'NDT',
+            workItems: [{ isQC: true }],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            documentTitle: 'Court Issued - Not Served',
+            documentType: 'O - Order',
+            eventCode: 'O',
+            isCourtIssuedDocument: true,
+            workItems: [
+              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
+            ],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            documentTitle: 'Court Issued - Served',
+            documentType: 'O - Order',
+            eventCode: 'O',
+            isCourtIssuedDocument: true,
+            servedAt: '2019-06-19T17:29:13.120Z',
+            status: 'served',
+            workItems: [
+              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
+            ],
           },
         ],
       };
@@ -1085,6 +1191,57 @@ describe('formattedCaseDetail', () => {
 
       expect(
         result.formattedDocketEntries[1].showEditDocketRecordEntry,
+      ).toEqual(true);
+    });
+
+    it('should not show the edit button if the docket entry has a system generated document', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+        },
+      });
+
+      expect(
+        result.formattedDocketEntries[2].showEditDocketRecordEntry,
+      ).toEqual(false);
+    });
+
+    it('should NOT show the edit button if the docket entry has an unserved court issued document', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+        },
+      });
+
+      expect(
+        result.formattedDocketEntries[3].showEditDocketRecordEntry,
+      ).toEqual(false);
+    });
+
+    it('should show the edit button if the docket entry has a served court issued document', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+        },
+      });
+
+      expect(
+        result.formattedDocketEntries[4].showEditDocketRecordEntry,
       ).toEqual(true);
     });
   });

@@ -25,6 +25,10 @@ describe('getTrialSessionById', () => {
       applicationContext,
       trialSessionId: '123',
     });
-    expect(result).toEqual({ trialSessionId: '123' });
+    expect(result).toEqual({
+      pk: 'trial-session-123',
+      sk: 'trial-session-123',
+      trialSessionId: '123',
+    });
   });
 });

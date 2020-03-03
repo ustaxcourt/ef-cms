@@ -19,20 +19,9 @@ jobs:
           key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
           paths:
             - '.git'
-      - restore_cache:
-          name: NPM - Restoring Cache
-          keys:
-            - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - npm-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: NPM - Install
-          command: npm i && npm rebuild node-sass
-      - save_cache:
-          name: NPM - Save to Cache
-          paths:
-            - node_modules # location depends on npm version
-          key: npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          command: npm ci && npm rebuild node-sass
       - persist_to_workspace:
           root: ~/
           paths:
@@ -106,7 +95,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+    resource_class: 2xlarge
     steps:
       - attach_workspace:
           at: ~/
@@ -115,7 +104,7 @@ jobs:
           command: |
             AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /dev/null &
             ./wait-until.sh http://localhost:3000/api/swagger
-            npm run test:client
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run test:client
       - run:
           name: Web Client - SonarQube
           command: |
@@ -137,7 +126,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
-    resource_class: xlarge
+    resource_class: 2xlarge
     steps:
       - attach_workspace:
           at: ~/
@@ -151,7 +140,7 @@ jobs:
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-1.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 5
+            sleep 15
             npm run test:pa11y:1 --node-flags --max-old-space-size=1024
       - run:
           name: Pa11y - Web Client 2
@@ -160,13 +149,22 @@ jobs:
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-2.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 5
+            sleep 15
             npm run test:pa11y:2 --node-flags --max-old-space-size=1024
+      - run:
+          name: Pa11y - Web Client 3
+          command: |
+            npm run build:all
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-2.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 15
+            npm run test:pa11y:3 --node-flags --max-old-space-size=1024
       - run:
           name: Pa11y - Public Site
           command: |
             AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public > /tmp/pa11y/pa11y-server-public.txt &
-            sleep 5
+            sleep 15
             npm run test:pa11y:public
       - store_artifacts:
           path: /tmp/pa11y
@@ -192,7 +190,7 @@ jobs:
               ./node_modules/.bin/cypress install
             fi
 
-            SLS_DEBUG=* RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /dev/null &
+            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000  AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop npx run-p start:api:ci start:client:ci > /dev/null &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
@@ -200,7 +198,7 @@ jobs:
       - store_artifacts:
           path: /root/project/cypress/videos/
 
-  deploy-ui:
+  pre-deploy:
     machine:
       docker_layer_caching: true
     steps:
@@ -232,12 +230,6 @@ jobs:
       - run:
           name: Setup Elasticsearch Index Settings
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/setup-elasticsearch-index.sh ${ENV}"
-      - run:
-          name: 'Deploy - Web Client - S3'
-          command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
-      - run:
-          name: 'Deploy - Public Web Client - S3'
-          command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist-public.sh $ENV && aws s3 sync dist-public s3://ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist-public s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
 
   deploy-api-east:
     machine:
@@ -359,6 +351,27 @@ jobs:
           name: 'Deploy - Web API - Serverless - Notifications - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-notifications.sh ${ENV} us-west-1"
 
+  switch-and-deploy-ui:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run:
+          name: Build Docker Image
+          command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../clamav && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
+      - run:
+          name: Setup Env
+          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+      - run:
+          name: 'Deploy - Switch environment color'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./switch-environment-color.sh ${ENV}"
+      - run:
+          name: 'Deploy - Web Client - S3'
+          command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
+      - run:
+          name: 'Deploy - Public Web Client - S3'
+          command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist-public.sh $ENV && aws s3 sync dist-public s3://ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist-public s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
+
   post-deploy:
     machine:
       docker_layer_caching: true
@@ -370,9 +383,6 @@ jobs:
       - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-      - run:
-          name: 'Deploy - Switch environment color'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./switch-environment-color.sh ${ENV}"
       - run:
           name: 'Deploy - Web API - Route53'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./setup-regional-route53.sh ${ENV}"
@@ -424,7 +434,7 @@ workflows:
       - e2e-cypress:
           requires:
             - bundle
-      - deploy-ui:
+      - pre-deploy:
           requires:
             - build-shared
             - build-api
@@ -433,23 +443,17 @@ workflows:
             - e2e-cypress
       - deploy-api-west:
           requires:
-            - build-shared
-            - build-api
-            - build-client
-            - e2e-pa11y
-            - e2e-cypress
+            - pre-deploy
       - deploy-api-east:
           requires:
-            - build-shared
-            - build-api
-            - build-client
-            - e2e-pa11y
-            - e2e-cypress
-      - post-deploy:
+            - pre-deploy
+      - switch-and-deploy-ui:
           requires:
-            - deploy-ui
             - deploy-api-west
             - deploy-api-east
+      - post-deploy:
+          requires:
+            - switch-and-deploy-ui
     triggers:
       - schedule:
           cron: '0 12-23 * * 1-5'
@@ -499,7 +503,7 @@ workflows:
             branches:
               ignore:
                 - develop
-      - deploy-ui:
+      - pre-deploy:
           requires:
             - build-shared
             - build-api
@@ -515,11 +519,7 @@ workflows:
                 - experimental
       - deploy-api-east:
           requires:
-            - build-shared
-            - build-api
-            - build-client
-            - e2e-pa11y
-            - e2e-cypress
+            - pre-deploy
           filters:
             branches:
               only:
@@ -529,11 +529,18 @@ workflows:
                 - experimental
       - deploy-api-west:
           requires:
-            - build-shared
-            - build-api
-            - build-client
-            - e2e-pa11y
-            - e2e-cypress
+            - pre-deploy
+          filters:
+            branches:
+              only:
+                - staging
+                - test
+                - master
+                - experimental
+      - switch-and-deploy-ui:
+          requires:
+            - deploy-api-west
+            - deploy-api-east
           filters:
             branches:
               only:
@@ -543,9 +550,7 @@ workflows:
                 - experimental
       - post-deploy:
           requires:
-            - deploy-ui
-            - deploy-api-west
-            - deploy-api-east
+            - switch-and-deploy-ui
           filters:
             branches:
               only:

@@ -10,7 +10,7 @@ describe('CourtIssuedDocumentTypeE', () => {
       });
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
-        date: VALIDATION_ERROR_MESSAGES.date[1],
+        date: VALIDATION_ERROR_MESSAGES.date[2],
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
       });
     });
@@ -36,7 +36,7 @@ describe('CourtIssuedDocumentTypeE', () => {
     it('should be valid when all fields are present', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
-        date: '2025-04-10T00:00:00-05:00',
+        date: '2025-04-10T04:00:00.000Z',
         documentTitle:
           'Order time is extended to [Date] for petr(s) to pay the filing fee',
         documentType:
@@ -51,7 +51,7 @@ describe('CourtIssuedDocumentTypeE', () => {
     it('should generate valid title', () => {
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,
-        date: '2025-04-10T00:00:00-05:00',
+        date: '2025-04-10T04:00:00.000Z',
         documentTitle:
           'Order time is extended to [Date] for petr(s) to pay the filing fee',
         documentType:

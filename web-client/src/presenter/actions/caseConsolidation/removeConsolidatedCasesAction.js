@@ -18,13 +18,11 @@ export const removeConsolidatedCasesAction = async ({
     .filter(([, shouldRemove]) => shouldRemove)
     .map(([caseIdToRemove]) => caseIdToRemove);
 
-  const result = await applicationContext
-    .getUseCases()
-    .removeConsolidatedCasesInteractor({
-      applicationContext,
-      caseId,
-      caseIdsToRemove,
-    });
+  await applicationContext.getUseCases().removeConsolidatedCasesInteractor({
+    applicationContext,
+    caseId,
+    caseIdsToRemove,
+  });
 
   return {
     alertSuccess: {
@@ -32,6 +30,5 @@ export const removeConsolidatedCasesAction = async ({
         'You can view your updates to the consolidated cases below under Case Information',
       title: 'Your Changes Have Been Saved',
     },
-    result,
   };
 };

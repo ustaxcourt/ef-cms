@@ -49,7 +49,7 @@ exports.fileDocketEntryInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
   const workItems = [];
 
   const {
@@ -182,6 +182,13 @@ exports.fileDocketEntryInteractor = async ({
       );
     }
   });
+
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+    });
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

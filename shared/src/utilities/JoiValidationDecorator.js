@@ -45,8 +45,9 @@ function getFormattedValidationErrorsHelper(entity) {
         ) {
           errors[key] = errorObject.message;
           break;
-        } else {
+        } else if (typeof errorObject !== 'object') {
           errors[key] = errorObject;
+          break;
         }
       }
     } else if (errorMap) {
@@ -188,7 +189,7 @@ exports.joiValidationDecorator = function(
     collection,
     { applicationContext },
   ) {
-    return collection.map(entity =>
+    return (collection || []).map(entity =>
       new entityConstructor(entity, { applicationContext })
         .validate()
         .toRawObject(),
