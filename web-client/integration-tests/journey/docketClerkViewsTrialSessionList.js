@@ -19,7 +19,6 @@ export default (test, overrides = {}) => {
 
     const trialSession = find(formatted.sessionsByTerm, {
       sessionType: overrides.sessionType || 'Hybrid',
-      status: 'Upcoming',
       trialLocation: overrides.trialLocation || 'Seattle, Washington',
     });
     test.trialSessionId = trialSession && trialSession.trialSessionId;

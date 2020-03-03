@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.caseTypes based on the props.caseTypes passed in
+ * generates an action for setting the page
  *
  * @param {string} page the name of the page to set
  * @returns {Promise} async action

@@ -31,7 +31,7 @@ export default (test, overrides = {}) => {
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'month',
-      value: '8',
+      value: '13',
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
@@ -75,7 +75,7 @@ export default (test, overrides = {}) => {
     await test.runSequence('validateTrialSessionSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      startDate: errorMessages.term, //the term error message is used for the startDate error in validateTrialSessionAction
+      startDate: errorMessages.startDate[1],
       term: errorMessages.term,
       trialLocation: errorMessages.trialLocation,
     });

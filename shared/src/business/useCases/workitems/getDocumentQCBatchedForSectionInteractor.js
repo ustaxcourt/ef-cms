@@ -2,10 +2,10 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
 const { IRS_BATCH_SYSTEM_SECTION } = require('../../entities/WorkQueue');
 const { UnauthorizedError } = require('../../../errors/errors');
-
-const { Case } = require('../../entities/cases/Case');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
@@ -33,9 +33,13 @@ exports.getDocumentQCBatchedForSectionInteractor = async ({
       section,
     });
 
-  return workItems.filter(
+  const filteredWorkItems = workItems.filter(
     workItem =>
       workItem.section === IRS_BATCH_SYSTEM_SECTION &&
       workItem.caseStatus === Case.STATUS_TYPES.batchedForIRS,
   );
+
+  return WorkItem.validateRawCollection(filteredWorkItems, {
+    applicationContext,
+  });
 };

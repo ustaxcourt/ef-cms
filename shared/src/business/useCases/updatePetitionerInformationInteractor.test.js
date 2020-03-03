@@ -10,6 +10,7 @@ const {
 const {
   updatePetitionerInformationInteractor,
 } = require('./updatePetitionerInformationInteractor');
+const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { SERVICE_INDICATOR_TYPES } = require('../entities/cases/CaseConstants');
@@ -68,6 +69,7 @@ const userData = {
 let userObj = userData;
 const applicationContext = {
   environment: { stage: 'local' },
+  getCaseCaptionNames: Case.getCaseCaptionNames,
   getCurrentUser: () => {
     return new User(userObj);
   },
@@ -163,13 +165,49 @@ describe('update petitioner contact information on a case', () => {
     expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
   });
 
-  it('updates petitioner contact when secondary contact info changes, serves the generated notice, and returns the download URL for the paper notice', async () => {
-    const result = await updatePetitionerInformationInteractor({
+  it('updates petitioner contact when secondary contact info changes and does not generate or serve a notice if the secondary contact was not previously present', async () => {
+    await updatePetitionerInformationInteractor({
       applicationContext,
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactPrimary: MOCK_CASE.contactPrimary,
       contactSecondary: {
         address1: '789 Division St',
+        city: 'Somewhere',
+        countryType: 'domestic',
+        name: 'Test Petitioner',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+    });
+    expect(updateCaseStub).toHaveBeenCalled();
+    expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
+    expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
+    expect(sendServedPartiesEmailsMock).not.toHaveBeenCalled();
+  });
+
+  it('updates petitioner contact when secondary contact info changes, serves the generated notice, and returns the download URL for the paper notice if the contactSecondary was previously on the case', async () => {
+    persistenceGateway.getCaseByCaseId = () => ({
+      ...MOCK_CASE,
+      contactSecondary: {
+        address1: '789 Division St',
+        city: 'Somewhere',
+        countryType: 'domestic',
+        name: 'Test Petitioner',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+    });
+
+    const result = await updatePetitionerInformationInteractor({
+      applicationContext,
+      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      contactPrimary: MOCK_CASE.contactPrimary,
+      contactSecondary: {
+        address1: '789 Division St APT 123', //changed address1
         city: 'Somewhere',
         countryType: 'domestic',
         name: 'Test Petitioner',

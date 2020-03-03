@@ -11,10 +11,10 @@ export const ConfirmEditModal = connect(
   ({ cancelSequence, confirmSequence }) => {
     return (
       <ModalDialog
-        cancelLabel="No, take me back"
+        cancelLabel="No, Take Me Back"
         cancelSequence={cancelSequence}
         className=""
-        confirmLabel="Yes, continue"
+        confirmLabel="Yes, Continue"
         confirmSequence={confirmSequence}
         message="Are you sure you want to edit this document?"
         title="Editing This Document Will Remove Signature"

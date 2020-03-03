@@ -5,11 +5,11 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoPrimaryContactEdit = [
   setCurrentPageAction('Interstitial'),
-  startShowValidationAction,
+  stopShowValidationAction,
   clearFormAction,
   clearScreenMetadataAction,
   getCaseAction,

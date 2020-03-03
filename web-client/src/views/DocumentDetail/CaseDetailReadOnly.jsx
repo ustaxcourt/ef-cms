@@ -16,7 +16,7 @@ export const CaseDetailReadOnly = connect(
           <h3>Case Information</h3>
           <div className="label">Case procedure</div>
           <p>{formattedCaseDetail.procedureType} Tax Case</p>
-          <div className="label">Trial Location</div>
+          <div className="label">Trial location</div>
           <p>{formattedCaseDetail.preferredTrialCity}</p>
         </div>
 
@@ -26,7 +26,7 @@ export const CaseDetailReadOnly = connect(
           <span className="label">Notice/case type</span>
           <p>{formattedCaseDetail.caseType}</p>
 
-          <div className="label">Notice Date</div>
+          <div className="label">Notice date</div>
           <p>{formattedCaseDetail.irsNoticeDateFormatted}</p>
         </div>
       </React.Fragment>

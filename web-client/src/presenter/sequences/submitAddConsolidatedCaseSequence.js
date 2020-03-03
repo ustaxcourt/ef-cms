@@ -9,16 +9,14 @@ import { setAddConsolidatedCaseSuccessMessageAction } from '../actions/caseConso
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/caseConsolidation/setConsolidatedCasesForCaseAction';
 import { setModalErrorAction } from '../actions/setModalErrorAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const submitAddConsolidatedCaseSequence = [
   primePropsForCanConsolidateAction,
   canConsolidateAction,
   {
     error: [setModalErrorAction],
-    success: [
-      setWaitingForResponseAction,
+    success: showProgressSequenceDecorator([
       addConsolidatedCaseAction,
       refreshCaseAction,
       getConsolidatedCasesByCaseAction,
@@ -27,7 +25,6 @@ export const submitAddConsolidatedCaseSequence = [
       clearModalStateAction,
       setAddConsolidatedCaseSuccessMessageAction,
       setAlertSuccessAction,
-      unsetWaitingForResponseAction,
-    ],
+    ]),
   },
 ];

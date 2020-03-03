@@ -1,14 +1,12 @@
-const isCaseRecord = item => !!item.caseType; // only case records have a caseType defined
-
 const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../shared/src/business/entities/cases/CaseConstants');
+const { isCaseRecord } = require('./utilities');
 
-const { forAllRecords } = require('./00004-service-indicator');
-
-const up = async (documentClient, tableName) => {
+const up = async (documentClient, tableName, forAllRecords) => {
   await forAllRecords(documentClient, tableName, async item => {
     if (!isCaseRecord(item)) return;
+    if (!item.respondents) return;
 
     item.respondents.forEach(respondent => {
       if (!respondent.serviceIndicator) {

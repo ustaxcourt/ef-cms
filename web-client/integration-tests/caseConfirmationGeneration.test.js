@@ -20,7 +20,7 @@ describe('Case Confirmation', () => {
     jest.setTimeout(30000);
   });
 
-  describe('Petitoner creates a case / Petitionsclerk Sends to Holding Queue / User then has access to case confirmation', () => {
+  describe('Petitioner creates a case / Petitionsclerk Sends to Holding Queue / Petitionsclerk then has access to case confirmation', () => {
     petitionerLogin(test);
     petitionerNavigatesToCreateCase(test);
     petitionerChoosesProcedureType(test);
@@ -29,6 +29,23 @@ describe('Case Confirmation', () => {
     userSignsOut(test);
     petitionsClerkLogIn(test);
     petitionsClerkSendsCaseToIRSHoldingQueue(test);
+    petitionsClerkRunsBatchProcess(test);
+    userNavigatesToCreateCaseConfirmation(test);
+    userSignsOut(test);
+  });
+
+  describe('Petitioner creates a case / Petitionsclerk Sends to Holding Queue / Petitioner then has access to case confirmation', () => {
+    petitionerLogin(test);
+    petitionerNavigatesToCreateCase(test);
+    petitionerChoosesProcedureType(test);
+    petitionerChoosesCaseType(test);
+    petitionerCreatesNewCase(test, fakeFile);
+    userSignsOut(test);
+    petitionsClerkLogIn(test);
+    petitionsClerkSendsCaseToIRSHoldingQueue(test);
+    petitionsClerkRunsBatchProcess(test);
+    userSignsOut(test);
+    petitionerLogin(test);
     userNavigatesToCreateCaseConfirmation(test);
     userSignsOut(test);
   });
@@ -38,10 +55,6 @@ describe('Case Confirmation', () => {
     petitionsClerkCreatesNewCase(test, fakeFile);
     petitionsClerkViewsMyMessagesInbox(test, true);
     petitionsClerkGetsMyMessagesInboxCount(test);
-    petitionsClerkSendsCaseToIRSHoldingQueue(test);
-    petitionsClerkRunsBatchProcess(test);
-    petitionsClerkViewsMyMessagesInbox(test);
-    petitionsClerkGetsMyMessagesInboxCount(test, 1);
     userNavigatesToCreateCaseConfirmation(test);
     userSignsOut(test);
   });

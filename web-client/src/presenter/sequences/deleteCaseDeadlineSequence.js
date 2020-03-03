@@ -5,12 +5,10 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { deleteCaseDeadlineAction } from '../actions/CaseDeadline//deleteCaseDeadlineAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const deleteCaseDeadlineSequence = [
+export const deleteCaseDeadlineSequence = showProgressSequenceDecorator([
   clearAlertsAction,
-  setWaitingForResponseAction,
   deleteCaseDeadlineAction,
   {
     success: [],
@@ -20,5 +18,4 @@ export const deleteCaseDeadlineSequence = [
   clearModalAction,
   refreshCaseAction,
   getCaseDeadlinesForCaseAction,
-  unsetWaitingForResponseAction,
-];
+]);

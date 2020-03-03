@@ -13,6 +13,7 @@
       "workItems": [],
       "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
       "receivedAt": "2019-08-16T19:21:46.146Z",
+      "filingDate": "2019-08-16T19:21:46.146Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "section": "irsBatchSection",
@@ -87,6 +88,7 @@
               "workItems": [],
               "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
               "receivedAt": "2019-08-16T19:21:46.146Z",
+              "filingDate": "2019-08-16T19:21:46.146Z",
               "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
             },
             "section": "irsBatchSection",
@@ -137,6 +139,7 @@
         "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
         "servedAt": "2019-08-16T19:22:13.925Z",
         "receivedAt": "2019-08-16T19:21:46.146Z",
+        "filingDate": "2019-08-16T19:21:46.146Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "status": "served"
       },
@@ -150,6 +153,7 @@
         "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
         "documentId": "3adb712b-d0c5-40e8-98c1-d2f38757e27a",
         "receivedAt": "2019-08-16T19:21:46.147Z",
+        "filingDate": "2019-08-16T19:21:46.147Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "status": "served"
       }
@@ -237,6 +241,7 @@
       "workItems": [],
       "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
       "receivedAt": "2019-08-16T19:21:46.146Z",
+      "filingDate": "2019-08-16T19:21:46.146Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "gsi1pk": "workitem-ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
@@ -299,6 +304,7 @@
       "workItems": [],
       "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
       "receivedAt": "2019-08-16T19:21:46.146Z",
+      "filingDate": "2019-08-16T19:21:46.146Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "gsi1pk": "workitem-ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",

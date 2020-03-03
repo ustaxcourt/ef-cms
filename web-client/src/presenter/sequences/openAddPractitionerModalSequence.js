@@ -6,13 +6,11 @@ import { setDefaultServiceIndicatorAction } from '../actions/setDefaultServiceIn
 import { setPractitionersAction } from '../actions/ManualAssociation/setPractitionersAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const openAddPractitionerModalSequence = [
+export const openAddPractitionerModalSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   clearModalStateAction,
-  setWaitingForResponseAction,
   setDefaultServiceIndicatorAction('modal'),
   getPractitionersBySearchKeyAction,
   {
@@ -26,5 +24,4 @@ export const openAddPractitionerModalSequence = [
       },
     ],
   },
-  unsetWaitingForResponseAction,
-];
+]);

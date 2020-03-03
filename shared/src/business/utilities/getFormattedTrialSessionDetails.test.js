@@ -1,12 +1,17 @@
-import { Case } from '../entities/cases/Case';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { formattedTrialSessionDetails } from './getFormattedTrialSessionDetails';
+import { TrialSession } from '../entities/trialSessions/TrialSession';
+const { SESSION_STATUS_GROUPS } = TrialSession;
+import {
+  formattedTrialSessionDetails,
+  getTrialSessionStatus,
+} from './getFormattedTrialSessionDetails';
 import { omit } from 'lodash';
 
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 
 describe('formattedTrialSessionDetails', () => {
   const TRIAL_SESSION = {
+    caseOrder: [],
     city: 'Hartford',
     courtReporter: 'Test Court Reporter',
     irsCalendarAdministrator: 'Test Calendar Admin',
@@ -203,7 +208,6 @@ describe('formattedTrialSessionDetails', () => {
             caseCaption: 'Test Person & Someone Else, Petitioners',
             docketNumber: '102-17',
             docketNumberSuffix: 'W',
-            status: Case.STATUS_TYPES.closed,
           },
           {
             ...MOCK_CASE,
@@ -227,11 +231,11 @@ describe('formattedTrialSessionDetails', () => {
     expect(result.allCases[2].docketNumberWithSuffix).toEqual('101-18');
     expect(result.allCases[2].caseCaptionNames).toEqual('Test Petitioner');
 
-    expect(result.openCases.length).toEqual(1);
-    expect(result.inactiveCases.length).toEqual(2);
-    expect(result.openCases[0].docketNumberWithSuffix).toEqual('101-18');
+    expect(result.openCases.length).toEqual(2);
+    expect(result.inactiveCases.length).toEqual(1);
+    expect(result.openCases[0].docketNumberWithSuffix).toEqual('102-17W');
+    expect(result.openCases[1].docketNumberWithSuffix).toEqual('101-18');
     expect(result.inactiveCases[0].docketNumberWithSuffix).toEqual('101-16S');
-    expect(result.inactiveCases[1].docketNumberWithSuffix).toEqual('102-17W');
   });
 
   it('sorts calendared cases by docket number', () => {
@@ -255,5 +259,92 @@ describe('formattedTrialSessionDetails', () => {
       { docketNumber: '101-18' },
       { docketNumber: '102-19' },
     ]);
+  });
+
+  it('sets computedStatus to New if the session is not calendared', () => {
+    let result = formattedTrialSessionDetails({
+      applicationContext,
+      trialSession: {
+        ...TRIAL_SESSION,
+        isCalendared: false,
+      },
+    });
+    expect(result.computedStatus).toEqual(SESSION_STATUS_GROUPS.new);
+  });
+
+  it('sets computedStatus to Open if the session is calendared and calendaredCases contains open cases', () => {
+    let result = formattedTrialSessionDetails({
+      applicationContext,
+      trialSession: {
+        ...TRIAL_SESSION,
+        calendaredCases: [
+          {
+            caseId: MOCK_CASE.caseId,
+          },
+        ],
+        isCalendared: true,
+      },
+    });
+    expect(result.computedStatus).toEqual(SESSION_STATUS_GROUPS.open);
+  });
+
+  it('sets computedStatus to Closed if the session is calendared and caseOrder contains only cases with removedFromTrial = true', () => {
+    let result = formattedTrialSessionDetails({
+      applicationContext,
+      trialSession: {
+        ...TRIAL_SESSION,
+        caseOrder: [
+          {
+            caseId: MOCK_CASE.caseId,
+            removedFromTrial: true,
+          },
+        ],
+        isCalendared: true,
+      },
+    });
+    expect(result.computedStatus).toEqual(SESSION_STATUS_GROUPS.closed);
+  });
+
+  describe('getTrialSessionStatus', () => {
+    it('returns `Closed` when all trial session cases are inactive / removed from trial', () => {
+      const session = {
+        caseOrder: [
+          { docketNumber: '123-19', removedFromTrial: true },
+          { docketNumber: '234-19', removedFromTrial: true },
+        ],
+      };
+
+      const results = getTrialSessionStatus({ applicationContext, session });
+
+      expect(results).toEqual(SESSION_STATUS_GROUPS.closed);
+    });
+
+    it('returns `Open` when a trial session is calendared and does not meet conditions for `Closed` status', () => {
+      const session = {
+        caseOrder: [
+          { docketNumber: '123-19' },
+          { docketNumber: '234-19', removedFromTrial: true },
+        ],
+        isCalendared: true,
+      };
+
+      const results = getTrialSessionStatus({ applicationContext, session });
+
+      expect(results).toEqual(SESSION_STATUS_GROUPS.open);
+    });
+
+    it('returns `New` when a trial session is calendared and does not meet conditions for `Closed` status', () => {
+      const session = {
+        caseOrder: [
+          { docketNumber: '123-19' },
+          { docketNumber: '234-19', removedFromTrial: true },
+        ],
+        isCalendared: false,
+      };
+
+      const results = getTrialSessionStatus({ applicationContext, session });
+
+      expect(results).toEqual(SESSION_STATUS_GROUPS.new);
+    });
   });
 });

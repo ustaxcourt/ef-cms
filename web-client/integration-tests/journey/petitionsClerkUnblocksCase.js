@@ -1,4 +1,4 @@
-export default test => {
+export default (test, trialLocation, checkReport = true) => {
   return it('Petitions clerk unblocks the case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -13,16 +13,18 @@ export default test => {
     expect(test.getState('caseDetail').blocked).toBeFalsy();
     expect(test.getState('caseDetail').blockedReason).toBeUndefined();
 
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    if (checkReport) {
+      // we need to wait for elasticsearch to get updated by the processing stream lambda
+      await new Promise(resolve => setTimeout(resolve, 5000));
 
-    await test.runSequence('gotoBlockedCasesReportSequence');
+      await test.runSequence('gotoBlockedCasesReportSequence');
 
-    await test.runSequence('getBlockedCasesByTrialLocationSequence', {
-      key: 'trialLocation',
-      value: 'Jackson, Mississippi',
-    });
+      await test.runSequence('getBlockedCasesByTrialLocationSequence', {
+        key: 'trialLocation',
+        value: trialLocation,
+      });
 
-    expect(test.getState('blockedCases')).toMatchObject([]);
+      expect(test.getState('blockedCases')).toMatchObject([]);
+    }
   });
 };

@@ -34,7 +34,7 @@ export const SearchByDocketNumber = connect(
                 clearDocketNumberSearchFormSequence();
               }}
             >
-              Clear search
+              Clear Search
             </Button>
           </NonMobile>
         </div>
@@ -97,7 +97,7 @@ export const SearchByDocketNumber = connect(
                       clearDocketNumberSearchFormSequence();
                     }}
                   >
-                    Clear search
+                    Clear Search
                   </Button>
                 </div>
               </div>

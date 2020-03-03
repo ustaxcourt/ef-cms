@@ -23,9 +23,23 @@ describe('batchDownloadTrialSessionInteractor', () => {
     loggerMock = jest.fn();
     sendNotificationToUserMock = jest.fn();
 
+    const mockCase = {
+      ...MOCK_CASE,
+    };
+
+    mockCase.docketRecord = [
+      ...mockCase.docketRecord,
+      {
+        description: 'fourth record',
+        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        eventCode: 'SDEC',
+        filingDate: '2018-03-01T00:03:00.000Z',
+        index: 4,
+      },
+    ];
     getCalendaredCasesForTrialSessionMock = jest.fn(() => [
       {
-        ...MOCK_CASE,
+        ...mockCase,
       },
     ]);
     applicationContext = {

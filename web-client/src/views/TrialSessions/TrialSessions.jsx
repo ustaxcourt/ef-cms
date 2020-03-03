@@ -3,17 +3,18 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
-import { UpcomingTrialSessions } from './UpcomingTrialSessions';
+import { TrialSessionsTable } from './TrialSessionsTable';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const TrialSessions = connect(
   {
+    defaultTab: state.screenMetadata.trialSessionFilters.status,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
   },
-  ({ openTrialSessionPlanningModalSequence }) => {
+  ({ defaultTab, openTrialSessionPlanningModalSequence }) => {
     return (
       <>
         <BigHeader text="Trial Sessions" />
@@ -21,7 +22,11 @@ export const TrialSessions = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <Tabs bind="trialSessionsTab.group" defaultActiveTab="Upcoming">
+          <Tabs
+            bind="trialSessionsTab.group"
+            defaultActiveTab={defaultTab || 'open'}
+            id="trial-sessions-tabs"
+          >
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
               <Button
                 link
@@ -40,13 +45,17 @@ export const TrialSessions = connect(
             >
               Add Trial Session
             </Button>
-
-            <Tab
-              id="upcoming-trial-sessions-tab"
-              tabName="Upcoming"
-              title="Upcoming"
-            >
-              <UpcomingTrialSessions />
+            <Tab id="new-trial-sessions-tab" tabName="new" title="New">
+              <TrialSessionsTable filter="New" />
+            </Tab>
+            <Tab id="open-trial-sessions-tab" tabName="open" title="Open">
+              <TrialSessionsTable filter="Open" />
+            </Tab>
+            <Tab id="closed-trial-sessions-tab" tabName="closed" title="Closed">
+              <TrialSessionsTable filter="Closed" />
+            </Tab>
+            <Tab id="all-trial-sessions-tab" tabName="all" title="All">
+              <TrialSessionsTable filter="All" />
             </Tab>
           </Tabs>
         </section>

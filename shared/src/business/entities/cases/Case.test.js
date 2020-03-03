@@ -262,6 +262,36 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeTruthy();
     });
 
+    it('Creates a valid case with automaticBlocked set to true and a valid automaticBlockedReason and automaticBlockedDate', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          automaticBlocked: true,
+          automaticBlockedDate: '2019-03-01T21:42:29.073Z',
+          automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
+
+    it('Creates a valid case with automaticBlocked set to true and an invalid automaticBlockedReason and automaticBlockedDate', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          automaticBlocked: true,
+          automaticBlockedDate: '2019-03-01T21:42:29.073Z',
+          automaticBlockedReason: 'Some Other Reason Not Valid',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
+    });
+
     it('Creates an invalid case with highPriority set to true but no highPriorityReason', () => {
       const myCase = new Case(
         {
@@ -1383,7 +1413,7 @@ describe('Case entity', () => {
       expect(myCase.trialTime).toBeTruthy();
     });
 
-    it('should set all trial session fields but not set the case as calendared if the trial session is not calendared', () => {
+    it('should set all trial session fields but not set the case as calendared or associated judge if the trial session is not calendared', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -1409,7 +1439,7 @@ describe('Case entity', () => {
 
       expect(myCase.status).toEqual(Case.STATUS_TYPES.new);
       expect(myCase.trialDate).toBeTruthy();
-      expect(myCase.associatedJudge).toBeTruthy();
+      expect(myCase.associatedJudge).toEqual(Case.CHIEF_JUDGE);
       expect(myCase.trialLocation).toBeTruthy();
       expect(myCase.trialSessionId).toBeTruthy();
       expect(myCase.trialTime).toBeTruthy();
@@ -1653,6 +1683,53 @@ describe('Case entity', () => {
       expect(caseToUpdate.blocked).toBeFalsy();
       expect(caseToUpdate.blockedReason).toBeUndefined();
       expect(caseToUpdate.blockedDate).toBeUndefined();
+    });
+  });
+
+  describe('updateAutomaticBlocked', () => {
+    it('sets the case as automaticBlocked with a valid blocked reason', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToUpdate.automaticBlocked).toBeFalsy();
+
+      caseToUpdate.updateAutomaticBlocked({});
+
+      expect(caseToUpdate.automaticBlocked).toEqual(true);
+      expect(caseToUpdate.automaticBlockedReason).toEqual(
+        Case.AUTOMATIC_BLOCKED_REASONS.pending,
+      );
+      expect(caseToUpdate.automaticBlockedDate).toBeDefined();
+      expect(caseToUpdate.isValid()).toBeTruthy();
+    });
+  });
+
+  describe('unupdateAutomaticBlocked', () => {
+    it('unsets the case as automatic blocked', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE_WITHOUT_PENDING,
+          automaticBlocked: true,
+          automaticBlockedReason: 'because reasons',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToUpdate.automaticBlocked).toBeTruthy();
+
+      caseToUpdate.updateAutomaticBlocked({});
+
+      expect(caseToUpdate.automaticBlocked).toBeFalsy();
+      expect(caseToUpdate.automaticBlockedReason).toBeUndefined();
+      expect(caseToUpdate.automaticBlockedDate).toBeUndefined();
     });
   });
 
@@ -2548,6 +2625,22 @@ describe('Case entity', () => {
 
     expect(caseEntity.getFormattedValidationErrors()).toEqual({
       'docketRecord[1]': '"docketRecord[1]" contains a duplicate value',
+    });
+  });
+
+  describe('getCaseConfirmationGeneratedPdfFileName', () => {
+    it('generates the correct name for the case confirmation pdf', () => {
+      const caseToVerify = new Case(
+        {
+          docketNumber: '123-20',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(caseToVerify.getCaseConfirmationGeneratedPdfFileName()).toEqual(
+        'case-123-20-confirmation.pdf',
+      );
     });
   });
 });

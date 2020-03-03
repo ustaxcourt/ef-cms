@@ -30,15 +30,11 @@ export const AddTrialSession = connect(
         <BigHeader text="Create Trial Session" />
 
         <section className="usa-section grid-container DocumentDetail">
-          <form
+          <div
             noValidate
             aria-labelledby="start-case-header"
             className="usa-form maxw-none"
             role="form"
-            onSubmit={e => {
-              e.preventDefault();
-              submitTrialSessionSequence();
-            }}
           >
             {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog onCancelSequence="closeModalAndReturnToTrialSessionsSequence" />
@@ -76,16 +72,24 @@ export const AddTrialSession = connect(
               </div>
             </div>
 
-            <Button type="submit">Add Session</Button>
+            <Button
+              type="button"
+              onClick={() => {
+                submitTrialSessionSequence();
+              }}
+            >
+              Add Session
+            </Button>
             <Button
               link
+              type="button"
               onClick={() => {
                 formCancelToggleCancelSequence();
               }}
             >
               Cancel
             </Button>
-          </form>
+          </div>
         </section>
       </>
     );

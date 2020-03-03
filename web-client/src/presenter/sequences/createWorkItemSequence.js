@@ -10,10 +10,9 @@ import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateWorkItemFromPropsOrModalOrFormAction } from '../actions/WorkItem/updateWorkItemFromPropsOrModalOrFormAction';
 import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
 
@@ -23,8 +22,7 @@ export const createWorkItemSequence = [
   validateInitialWorkItemMessageAction,
   {
     error: [setValidationErrorsByFlagAction],
-    success: [
-      setWaitingForResponseAction,
+    success: showProgressSequenceDecorator([
       createWorkItemAction,
       stopShowValidationAction,
       setAlertSuccessAction,
@@ -36,8 +34,7 @@ export const createWorkItemSequence = [
       clearModalAction,
       clearModalStateAction,
       refreshCaseAction,
-      unsetWaitingForResponseAction,
       navigateToMessagesAction,
-    ],
+    ]),
   },
 ];

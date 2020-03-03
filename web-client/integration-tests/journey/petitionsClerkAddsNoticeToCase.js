@@ -53,5 +53,11 @@ export default test => {
     test.documentId = first(draftDocuments)
       ? first(draftDocuments).documentId
       : undefined;
+
+    expect(test.currentRouteUrl).toEqual(
+      `/case-detail/${test.getState('caseDetail.caseId')}/documents/${
+        test.documentId
+      }`,
+    );
   });
 };

@@ -4,9 +4,41 @@ module.exports.createCase1 = async () => {
   let caseDetail;
 
   await asUserFromEmail('petitioner', async applicationContext => {
+    const petitionFile = Buffer.from(
+      'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=',
+      'base64',
+      {
+        type: 'application/pdf',
+      },
+    );
+    petitionFile.name = 'petitionFile.pdf';
+    const petitionFileId = applicationContext.getUniqueId();
+
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: petitionFile,
+      documentId: petitionFileId,
+    });
+
+    const stinFile = Buffer.from(
+      'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=',
+      'base64',
+      {
+        type: 'application/pdf',
+      },
+    );
+    stinFile.name = 'stinFile.pdf';
+    const stinFileId = applicationContext.getUniqueId();
+
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: stinFile,
+      documentId: stinFileId,
+    });
+
     caseDetail = await applicationContext.getUseCases().createCaseInteractor({
       applicationContext,
-      petitionFileId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+      petitionFileId,
       petitionMetadata: {
         caseType: 'Whistleblower',
         contactPrimary: {
@@ -27,7 +59,7 @@ module.exports.createCase1 = async () => {
         preferredTrialCity: 'Birmingham, Alabama',
         procedureType: 'Regular',
       },
-      stinFileId: 'b1aa4aa2-c214-424c-8870-d0049c5744d8',
+      stinFileId,
     });
 
     const addCoversheet = document => {
@@ -72,5 +104,30 @@ module.exports.createCase1 = async () => {
       originalDocumentId: documentId,
       signedDocumentId: documentId,
     });
+  });
+
+  await asUserFromEmail('docketclerk', async applicationContext => {
+    const { caseId, docketNumber } = caseDetail;
+
+    const documentMetadata = {
+      caseId,
+      docketNumber,
+      documentTitle: 'Something',
+      documentType: 'MISC - Miscellaneous',
+      eventCode: 'MISC',
+      freeText: 'Something',
+      scenario: 'Type A',
+    };
+
+    documentMetadata.draftState = { ...documentMetadata };
+    const documentId = 'dd219579-9f1a-49e3-a092-f79164631ae8';
+
+    caseDetail = await applicationContext
+      .getUseCases()
+      .fileCourtIssuedOrderInteractor({
+        applicationContext,
+        documentMetadata,
+        primaryDocumentFileId: documentId,
+      });
   });
 };

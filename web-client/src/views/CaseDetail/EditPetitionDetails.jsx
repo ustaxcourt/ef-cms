@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PetitionPaymentForm } from './PetitionPaymentForm';
@@ -9,7 +10,6 @@ import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const EditPetitionDetails = connect(
   {
@@ -54,87 +54,23 @@ export const EditPetitionDetails = connect(
                 onChange="updateFormValueSequence"
               />
 
-              <FormGroup errorText={validationErrors.irsNoticeDate}>
-                <fieldset className="usa-fieldset margin-bottom-0">
-                  <legend className="usa-legend" id="date-of-notice-legend">
-                    Date of notice
-                  </legend>
-                  <div className="usa-memorable-date">
-                    <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                      <input
-                        aria-describedby="date-of-notice-legend"
-                        aria-label="month, two digits"
-                        className={classNames(
-                          'usa-input usa-input--inline',
-                          validationErrors.irsNoticeDate && 'usa-input--error',
-                        )}
-                        id="date-of-notice-month"
-                        max="12"
-                        min="1"
-                        name="irsMonth"
-                        placeholder="MM"
-                        type="number"
-                        value={form.irsMonth || ''}
-                        onBlur={() => validatePetitionDetailsSequence()}
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                    </div>
-                    <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                      <input
-                        aria-describedby="date-of-notice-legend"
-                        aria-label="day, two digits"
-                        className={classNames(
-                          'usa-input usa-input--inline',
-                          validationErrors.irsNoticeDate && 'usa-input--error',
-                        )}
-                        id="date-of-notice-day"
-                        max="31"
-                        min="1"
-                        name="irsDay"
-                        placeholder="DD"
-                        type="number"
-                        value={form.irsDay || ''}
-                        onBlur={() => validatePetitionDetailsSequence()}
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                    </div>
-                    <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                      <input
-                        aria-describedby="date-of-notice-legend"
-                        aria-label="year, four digits"
-                        className={classNames(
-                          'usa-input usa-input--inline',
-                          validationErrors.irsNoticeDate && 'usa-input--error',
-                        )}
-                        id="date-of-notice-year"
-                        max="2100"
-                        min="1900"
-                        name="irsYear"
-                        placeholder="YYYY"
-                        type="number"
-                        value={form.irsYear || ''}
-                        onBlur={() => validatePetitionDetailsSequence()}
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                    </div>
-                  </div>
-                </fieldset>
-              </FormGroup>
+              <DateInput
+                errorText={validationErrors.irsNoticeDate}
+                id="date-of-notice"
+                label="Date of notice"
+                names={{
+                  day: 'irsDay',
+                  month: 'irsMonth',
+                  year: 'irsYear',
+                }}
+                values={{
+                  day: form.irsDay,
+                  month: form.irsMonth,
+                  year: form.irsYear,
+                }}
+                onBlur={validatePetitionDetailsSequence}
+                onChange={updateFormValueSequence}
+              />
 
               <ProcedureType
                 legend="Case procedure"

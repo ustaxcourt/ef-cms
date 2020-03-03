@@ -18,14 +18,23 @@ import docketClerkServesOrder from '../integration-tests/journey/docketClerkServ
 import docketClerkSignsOut from '../integration-tests/journey/docketClerkSignsOut';
 
 // Public User
+import docketClerkAddsTranscriptDocketEntryFromOrder from '../integration-tests/journey/docketClerkAddsTranscriptDocketEntryFromOrder';
 import unauthedUserNavigatesToPublicSite from './journey/unauthedUserNavigatesToPublicSite';
 import unauthedUserSearchesByDocketNumber from './journey/unauthedUserSearchesByDocketNumber';
 import unauthedUserSearchesByMeta from './journey/unauthedUserSearchesByMeta';
 import unauthedUserViewsCaseDetail from './journey/unauthedUserViewsCaseDetail';
 import unauthedUserViewsPrintableDocketRecord from './journey/unauthedUserViewsPrintableDocketRecord';
 
-const test = setupTest();
-const testClient = setupTestClient();
+const test = setupTest({
+  useCases: {
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
+  },
+});
+const testClient = setupTestClient({
+  useCases: {
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
+  },
+});
 testClient.draftOrders = [];
 
 describe('Petitioner creates cases to search for', () => {
@@ -56,6 +65,22 @@ describe('Docket clerk creates and serves an order (should be viewable to the pu
   });
   docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 1);
   docketClerkServesOrder(testClient, 1);
+  docketClerkSignsOut(testClient);
+});
+
+describe('Docket clerk creates and serves a transcript (should not be viewable to the public)', () => {
+  docketClerkLogIn(testClient);
+  docketClerkCreatesAnOrder(testClient, {
+    documentTitle: 'Order of Dismissal',
+    eventCode: 'OD',
+    expectedDocumentType: 'Order of Dismissal',
+  });
+  docketClerkAddsTranscriptDocketEntryFromOrder(testClient, 2, {
+    day: '01',
+    month: '01',
+    year: '2019',
+  });
+  docketClerkServesOrder(testClient, 2);
   docketClerkSignsOut(testClient);
 });
 

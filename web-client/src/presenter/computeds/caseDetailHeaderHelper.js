@@ -6,6 +6,9 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
+  const isInternalUser = applicationContext
+    .getUtilities()
+    .isInternalUser(user.role);
 
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
@@ -58,5 +61,6 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     showPendingAccessToCaseButton,
     showRequestAccessToCaseButton,
     showSealedCaseBanner: isCaseSealed,
+    showUploadCourtIssuedDocumentButton: isInternalUser,
   };
 };

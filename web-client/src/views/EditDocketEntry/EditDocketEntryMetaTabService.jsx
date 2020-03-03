@@ -2,106 +2,23 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const EditDocketEntryMetaTabService = connect(
   {
     form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateDocketEntryMetaDocumentFormValueSequence:
+      sequences.updateDocketEntryMetaDocumentFormValueSequence,
     validationErrors: state.modal.validationErrors,
-    validationSequence:
-      sequences[state.editDocketEntryMetaHelper].validationSequenceName,
+    validationSequence: sequences.validateDocketRecordSequence,
   },
-  ({ form, updateFormValueSequence, validationErrors, validationSequence }) => {
+  ({
+    form,
+    updateDocketEntryMetaDocumentFormValueSequence,
+    validationErrors,
+    validationSequence,
+  }) => {
     return (
       <div className="blue-container">
-        <FormGroup errorText={validationErrors && validationErrors.servedDate}>
-          <fieldset className="usa-fieldset margin-bottom-0">
-            <legend className="usa-legend" id="served-date-legend">
-              Served Date
-            </legend>
-            <div className="usa-memorable-date">
-              <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                <input
-                  aria-describedby="served-date-legend"
-                  aria-label="month, two digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    validationErrors &&
-                      validationErrors.servedDate &&
-                      'usa-input--error',
-                  )}
-                  id="served-date-month"
-                  max="12"
-                  min="1"
-                  name="servedDateMonth"
-                  placeholder="MM"
-                  type="number"
-                  value={form.servedDateMonth || ''}
-                  onBlur={() => validationSequence()}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                <input
-                  aria-describedby="served-date-legend"
-                  aria-label="day, two digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    validationErrors &&
-                      validationErrors.servedDate &&
-                      'usa-input--error',
-                  )}
-                  id="served-date-day"
-                  max="31"
-                  min="1"
-                  name="servedDateDay"
-                  placeholder="DD"
-                  type="number"
-                  value={form.servedDateDat || ''}
-                  onBlur={() => validationSequence()}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                <input
-                  aria-describedby="served-date-legend"
-                  aria-label="year, four digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    validationErrors &&
-                      validationErrors.servedDate &&
-                      'usa-input--error',
-                  )}
-                  id="served-date-year"
-                  max="2100"
-                  min="1900"
-                  name="servedDateYear"
-                  placeholder="YYYY"
-                  type="number"
-                  value={form.servedDateYear || ''}
-                  onBlur={() => validationSequence()}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </fieldset>
-        </FormGroup>
         <FormGroup
           errorText={validationErrors && validationErrors.servedPartiesCode}
         >
@@ -109,18 +26,18 @@ export const EditDocketEntryMetaTabService = connect(
             className="usa-fieldset margin-bottom-2"
             id="served-parties-radios"
           >
-            <legend htmlFor="served-parties-radios">Parties Served</legend>
+            <legend htmlFor="served-parties-radios">Parties served</legend>
             <div className="usa-radio">
               <input
                 aria-describedby="served-parties-radios"
-                checked={form.eventCode === 'P'}
+                checked={form.servedPartiesCode === 'P'}
                 className="usa-radio__input"
                 id="served-parties-p"
-                name="eventCode"
+                name="servedPartiesCode"
                 type="radio"
                 value="P"
                 onChange={e => {
-                  updateFormValueSequence({
+                  updateDocketEntryMetaDocumentFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
@@ -138,14 +55,14 @@ export const EditDocketEntryMetaTabService = connect(
             <div className="usa-radio">
               <input
                 aria-describedby="served-parties-radios"
-                checked={form.eventCode === 'R'}
+                checked={form.servedPartiesCode === 'R'}
                 className="usa-radio__input"
                 id="served-parties-r"
-                name="eventCode"
+                name="servedPartiesCode"
                 type="radio"
                 value="R"
                 onChange={e => {
-                  updateFormValueSequence({
+                  updateDocketEntryMetaDocumentFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
@@ -154,7 +71,7 @@ export const EditDocketEntryMetaTabService = connect(
               />
               <label
                 className="usa-radio__label"
-                htmlFor="served-parties-pr"
+                htmlFor="served-parties-r"
                 id="served-parties-r-label"
               >
                 Respondent
@@ -163,14 +80,14 @@ export const EditDocketEntryMetaTabService = connect(
             <div className="usa-radio">
               <input
                 aria-describedby="served-parties-radios"
-                checked={form.eventCode === 'B'}
+                checked={form.servedPartiesCode === 'B'}
                 className="usa-radio__input"
                 id="served-parties-b"
-                name="eventCode"
+                name="servedPartiesCode"
                 type="radio"
                 value="B"
                 onChange={e => {
-                  updateFormValueSequence({
+                  updateDocketEntryMetaDocumentFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });

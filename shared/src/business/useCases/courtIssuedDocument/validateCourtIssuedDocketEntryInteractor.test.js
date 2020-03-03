@@ -9,7 +9,7 @@ const {
 } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 
 describe('validateCourtIssuedDocketEntryInteractor', () => {
-  it('returns null errors on empty entryMetadata', () => {
+  it('returns default errors on empty entryMetadata', () => {
     const errors = validateCourtIssuedDocketEntryInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
@@ -19,7 +19,10 @@ describe('validateCourtIssuedDocketEntryInteractor', () => {
       entryMetadata: {},
     });
 
-    expect(errors).toBeUndefined();
+    expect(errors).toEqual({
+      documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+    });
   });
 
   it('returns expected errors when only scenario is set', () => {

@@ -89,6 +89,7 @@ export const ConfirmModal = connect(
             {!noCloseBtn && (
               <div className="mobile-lg:grid-col-3">
                 <Button
+                  iconRight
                   link
                   className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
                   icon="times-circle"

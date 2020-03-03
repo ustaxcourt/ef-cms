@@ -41,7 +41,7 @@ function PublicCase(rawCase, { applicationContext }) {
   // rawCase.documents is not returned in elasticsearch queries due to _source definition
   this.documents = (rawCase.documents || [])
     .map(document => new PublicDocument(document, { applicationContext }))
-    .filter(document => !isPrivateDocument(document, this.docketRecord));
+    .filter(document => !isDraftDocument(document, this.docketRecord));
 }
 
 const publicCaseSchema = {
@@ -92,7 +92,7 @@ joiValidationDecorator(
   {},
 );
 
-const isPrivateDocument = function(document, docketRecord) {
+const isDraftDocument = function(document, docketRecord) {
   const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');
   const courtIssuedDocumentTypes = map(
     Document.COURT_ISSUED_EVENT_CODES,
@@ -108,10 +108,35 @@ const isPrivateDocument = function(document, docketRecord) {
     docketEntry => docketEntry.documentId === document.documentId,
   );
 
+  const isPublicDocumentType =
+    isStipDecision || isOrder || isCourtIssuedDocument;
+
+  return isPublicDocumentType && !isDocumentOnDocketRecord;
+};
+
+const isPrivateDocument = function(document, docketRecord) {
+  const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');
+  const courtIssuedDocumentTypes = map(
+    Document.COURT_ISSUED_EVENT_CODES,
+    'documentType',
+  );
+
+  const isStipDecision = document.documentType === 'Stipulated Decision';
+  const isTranscript = document.eventCode === Document.TRANSCRIPT_EVENT_CODE;
+  const isOrder = orderDocumentTypes.includes(document.documentType);
+  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+    document.documentType,
+  );
+  const isDocumentOnDocketRecord = docketRecord.find(
+    docketEntry => docketEntry.documentId === document.documentId,
+  );
+
+  const isPublicDocumentType =
+    (isStipDecision || isOrder || isCourtIssuedDocument) && !isTranscript;
+
   return (
-    (isStipDecision || isOrder || isCourtIssuedDocument) &&
-    !isDocumentOnDocketRecord
+    (isPublicDocumentType && !isDocumentOnDocketRecord) || !isPublicDocumentType
   );
 };
 
-module.exports = { PublicCase, isPrivateDocument };
+module.exports = { PublicCase, isDraftDocument, isPrivateDocument };

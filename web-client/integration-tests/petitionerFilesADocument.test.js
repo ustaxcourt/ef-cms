@@ -3,6 +3,7 @@ import petitionerCancelsCreateCase from './journey/petitionerCancelsCreateCase';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
+import petitionerFilesAmendedMotion from './journey/petitionerFilesAmendedMotion';
 import petitionerFilesDocumentForCase from './journey/petitionerFilesDocumentForCase';
 import petitionerLogin from './journey/petitionerLogIn';
 import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
@@ -28,5 +29,6 @@ describe('petitioner files document', () => {
   petitionerViewsCaseDetail(test);
   petitionerFilesDocumentForCase(test, fakeFile);
   petitionerViewsCaseDetailAfterFilingDocument(test);
+  petitionerFilesAmendedMotion(test, fakeFile);
   petitionerSignsOut(test);
 });
