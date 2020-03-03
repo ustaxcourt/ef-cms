@@ -9,8 +9,8 @@ const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
  * @param {string} providers.caseId the case id to get
  * @returns {object} the case details
  */
-exports.getCaseByCaseId = ({ applicationContext, caseId }) => {
-  return client
+exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
+  const theCase = await client
     .get({
       Key: {
         pk: caseId,
@@ -21,4 +21,22 @@ exports.getCaseByCaseId = ({ applicationContext, caseId }) => {
     .then(results =>
       stripWorkItems(results, applicationContext.isAuthorizedForWorkItems()),
     );
+
+  const docketRecord = await client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `case|${caseId}`,
+      ':prefix': 'docket-record',
+    },
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+    applicationContext,
+  });
+
+  return {
+    ...theCase,
+    docketRecord: docketRecord.length ? docketRecord : theCase.docketRecord, // this is temp until sesed data fixed
+  };
 };
