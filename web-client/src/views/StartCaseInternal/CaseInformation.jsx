@@ -158,7 +158,7 @@ export const CaseInformation = connect(
                 className="usa-checkbox__label inline-block"
                 htmlFor="order-for-requested-trial-location"
               >
-                Order for Requested Trial Location
+                Order Designating Place or Trial
               </label>
             </div>
           </FormGroup>
