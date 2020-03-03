@@ -13,8 +13,8 @@ describe('setFormContactSecondaryAddressAction', () => {
       state: {
         form: {
           contactSecondary: {
-            careOf: 'Jennay',
             city: 'Greenbough',
+            inCareOf: 'Jennay',
             name: 'Forrest',
           },
         },
@@ -26,8 +26,8 @@ describe('setFormContactSecondaryAddressAction', () => {
       name: 'Guy Fieri',
     });
     expect(result.state.form.contactSecondary).toMatchObject({
-      careOf: 'Jennay',
       city: 'Flavortown',
+      inCareOf: 'Jennay',
       name: 'Forrest',
     });
   });
