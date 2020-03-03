@@ -1,7 +1,7 @@
 import { wait } from '../helpers';
 
 export default (test, createdCasesIndex) => {
-  return it('Petitions clerk manually adds a case to an calendared trial session', async () => {
+  return it('Petitions clerk manually adds a case to a calendared trial session', async () => {
     const caseToAdd = test.createdCases[createdCasesIndex];
 
     await test.runSequence('gotoCaseDetailSequence', {
