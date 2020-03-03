@@ -1,10 +1,7 @@
-import { Address } from './StartCase/Address';
 import { Button } from '../ustc-ui/Button/Button';
-import { Country } from './StartCase/Country';
 import { ErrorNotification } from './ErrorNotification';
-import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../ustc-ui/Hint/Hint';
-import { InternationalAddress } from './StartCase/InternationalAddress';
+import { UserContactEditForm } from './UserContactEditForm';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -25,12 +22,7 @@ export const UserContactEdit = connect(
     submitUpdateUserContactInformationSequence,
     updateFormValueSequence,
     validateUserContactSequence,
-    validationErrors,
   }) => {
-    const type = 'contact';
-    const bind = 'form';
-    const onBlur = 'validateUserContactSequence';
-
     return (
       <>
         <div className="big-blue-header">
@@ -59,57 +51,13 @@ export const UserContactEdit = connect(
                 {form.name} ({form.barNumber})
               </p>
             </div>
-
-            <Country
-              bind={bind}
-              type={type}
-              onBlur={onBlur}
-              onChange="updateFormValueSequence"
-              onChangeCountryType="countryTypeUserContactChangeSequence"
+            <UserContactEditForm
+              bind="form"
+              type="contact"
+              updateSequence={updateFormValueSequence}
+              validateSequence={validateUserContactSequence}
+              onBlurSequence={validateUserContactSequence}
             />
-            {form.contact.countryType === 'domestic' ? (
-              <Address
-                bind={bind}
-                type={type}
-                onBlur={onBlur}
-                onChange="updateFormValueSequence"
-              />
-            ) : (
-              <InternationalAddress
-                bind={bind}
-                type={type}
-                onBlur={onBlur}
-                onChange="updateFormValueSequence"
-              />
-            )}
-            <FormGroup
-              errorText={
-                validationErrors &&
-                validationErrors.contact &&
-                validationErrors.contact.phone
-              }
-            >
-              <label className="usa-label" htmlFor="phone">
-                Phone number
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input max-width-200"
-                id="phone"
-                name="contact.phone"
-                type="tel"
-                value={form.contact.phone || ''}
-                onBlur={() => {
-                  validateUserContactSequence();
-                }}
-                onChange={e => {
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </FormGroup>
           </div>
           <Button
             onClick={() => {
