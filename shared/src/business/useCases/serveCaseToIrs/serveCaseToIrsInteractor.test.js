@@ -281,11 +281,18 @@ describe('serveCaseToIrsInteractor', () => {
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
+    const documentWithServedParties = updateCaseStub.mock.calls[0][0].caseToUpdate.documents.find(
+      document => document.documentType === Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+    );
+
     expect(result).toBeDefined();
     expect(
       updateCaseStub.mock.calls[0][0].caseToUpdate.documents.every(
         document => document.status === 'served',
       ),
     ).toEqual(true);
+    expect(
+    documentWithServedParties.servedParties
+    ).toBeDefined();
   });
 });
