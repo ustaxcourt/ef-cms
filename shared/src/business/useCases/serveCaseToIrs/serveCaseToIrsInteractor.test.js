@@ -282,7 +282,9 @@ describe('serveCaseToIrsInteractor', () => {
     });
 
     const documentWithServedParties = updateCaseStub.mock.calls[0][0].caseToUpdate.documents.find(
-      document => document.documentType === Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+      document =>
+        document.documentType ===
+        Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
     );
 
     expect(result).toBeDefined();
@@ -291,8 +293,6 @@ describe('serveCaseToIrsInteractor', () => {
         document => document.status === 'served',
       ),
     ).toEqual(true);
-    expect(
-    documentWithServedParties.servedParties
-    ).toBeDefined();
+    expect(documentWithServedParties.servedParties).toBeDefined();
   });
 });
