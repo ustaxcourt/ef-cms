@@ -11,12 +11,27 @@ describe('setFormContactSecondaryAddressAction', () => {
         },
       },
       state: {
-        form: { contactSecondary: { city: 'Greenbough', name: 'Forrest' } },
+        form: {
+          contactPrimary: {
+            city: 'Flavortown',
+            name: 'Guy Fieri',
+          },
+          contactSecondary: {
+            city: 'Greenbough',
+            inCareOf: 'Jennay',
+            name: 'Forrest',
+          },
+        },
       },
     });
 
+    expect(result.state.form.contactPrimary).toMatchObject({
+      city: 'Flavortown',
+      name: 'Guy Fieri',
+    });
     expect(result.state.form.contactSecondary).toMatchObject({
       city: 'Flavortown',
+      inCareOf: 'Jennay',
       name: 'Forrest',
     });
   });
