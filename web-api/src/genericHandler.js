@@ -43,11 +43,22 @@ exports.genericHandler = (event, cb, options = {}) => {
 
       const results = await cb({ applicationContext, user });
 
-      if (logResults && applicationContext) {
-        applicationContext.logger.info(logResultsLabel, results);
+      let returnResults = results;
+      if (results && results.entityName) {
+        const entityConstructor = applicationContext.getEntityByName(
+          results.entityName,
+        );
+        returnResults = new entityConstructor(results, {
+          applicationContext,
+          filtered: true,
+        });
       }
 
-      return results;
+      if (logResults && applicationContext) {
+        applicationContext.logger.info(logResultsLabel, returnResults);
+      }
+
+      return returnResults;
     } catch (e) {
       if (!e.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case
