@@ -55,7 +55,7 @@ response=$(aws cognito-idp admin-initiate-auth \
   --client-id "${CLIENT_ID}" \
   --region "${REGION}" \
   --auth-flow ADMIN_NO_SRP_AUTH \
-  --auth-parameters USERNAME="ustcadmin@example.com"',PASSWORD'="${USTC_ADMIN_PASS}")
+  --auth-parameters USERNAME="petitionsclerk1@example.com"',PASSWORD'="Testing1234$")
 adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 echo $adminToken
 
