@@ -12,6 +12,7 @@ export const CaseInfo = connect(
     caseDetail: state.caseDetail,
     caseDetailEditHelper: state.caseDetailEditHelper,
     caseDetailErrors: state.caseDetailErrors,
+    constants: state.constants,
     form: state.form,
     token: state.token,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
@@ -23,6 +24,7 @@ export const CaseInfo = connect(
     caseDetail,
     caseDetailEditHelper,
     caseDetailErrors,
+    constants,
     form,
     token,
     updateCaseValueSequence,
@@ -31,6 +33,28 @@ export const CaseInfo = connect(
   }) => {
     return (
       <div className="blue-container">
+        <div className="subsection">
+          <div className="usa-form-group">
+            <label className="usa-label" htmlFor="case-caption">
+              Case caption
+            </label>
+            <textarea
+              className="usa-textarea"
+              id="case-caption"
+              name="caseCaption"
+              value={caseDetail.caseCaption}
+              onChange={e => {
+                updateCaseValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
+            <span className="display-inline-block margin-top-1">
+              {constants.CASE_CAPTION_POSTFIX}
+            </span>
+          </div>
+        </div>
         {caseDetail.isPaper && (
           <>
             <DateInput
