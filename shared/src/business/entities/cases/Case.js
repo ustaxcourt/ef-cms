@@ -980,9 +980,12 @@ Case.prototype.updateCaseTitleDocketRecord = function({ applicationContext }) {
     }
   });
 
-  const hasTitleChanged = this.initialTitle && lastTitle !== this.caseTitle;
+  const needsTitleChangedRecord =
+    this.initialTitle &&
+    lastTitle !== this.caseTitle &&
+    this.status !== Case.STATUS_TYPES.new;
 
-  if (hasTitleChanged) {
+  if (needsTitleChangedRecord) {
     this.addDocketRecord(
       new DocketRecord(
         {
@@ -1021,9 +1024,11 @@ Case.prototype.updateDocketNumberRecord = function({ applicationContext }) {
     }
   });
 
-  const hasDocketNumberChanged = lastDocketNumber !== newDocketNumber;
+  const needsDocketNumberChangeRecord =
+    lastDocketNumber !== newDocketNumber &&
+    this.status !== Case.STATUS_TYPES.new;
 
-  if (hasDocketNumberChanged) {
+  if (needsDocketNumberChangeRecord) {
     this.addDocketRecord(
       new DocketRecord(
         {

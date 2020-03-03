@@ -4,8 +4,10 @@ import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/compute
 import { getFormCombinedWithCaseDetailAction } from '../actions/getFormCombinedWithCaseDetailAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { saveCaseDetailInternalEditAction } from '../actions/saveCaseDetailInternalEditAction';
+import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseInProgressAction } from '../actions/StartCaseInternal/setCaseInProgressAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
@@ -16,5 +18,7 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
   saveCaseDetailInternalEditAction,
   setCaseAction,
   assignPetitionToAuthenticatedUserAction,
+  setAlertSuccessAction,
+  setSaveAlertsForNavigationAction,
   navigateToCaseDetailAction,
 ]);

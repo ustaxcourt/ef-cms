@@ -1,4 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { refreshElasticsearchIndex } from '../helpers';
 
 export default (test, trialLocation) => {
   return it('Petitions clerk blocks the case', async () => {
@@ -26,8 +27,7 @@ export default (test, trialLocation) => {
     expect(test.getState('caseDetail').blocked).toBeTruthy();
     expect(test.getState('caseDetail').blockedReason).toEqual('just because');
 
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await refreshElasticsearchIndex();
 
     await test.runSequence('gotoBlockedCasesReportSequence');
 

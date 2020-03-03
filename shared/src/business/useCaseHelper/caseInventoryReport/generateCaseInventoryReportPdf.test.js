@@ -36,9 +36,12 @@ describe('generateCaseInventoryReportPdf', () => {
   let applicationContext;
   let user;
   let loggerErrorMock = jest.fn();
+  let generatePdfReportInteractorMock;
 
   beforeEach(() => {
     user = { role: User.ROLES.petitionsClerk, userId: 'petitionsClerk' };
+
+    generatePdfReportInteractorMock = jest.fn();
 
     applicationContext = {
       environment: {
@@ -59,6 +62,9 @@ describe('generateCaseInventoryReportPdf', () => {
         upload: (params, callback) => callback(),
       }),
       getUniqueId: () => 'uniqueId',
+      getUseCases: () => ({
+        generatePdfReportInteractor: generatePdfReportInteractorMock,
+      }),
       getUtilities: () => ({ formatDateString }),
       logger: { error: loggerErrorMock, info: () => {} },
     };
@@ -75,7 +81,17 @@ describe('generateCaseInventoryReportPdf', () => {
     ).rejects.toThrow('Unauthorized for case inventory report');
   });
 
-  it('returns the pdf buffer produced by chromium', async () => {
+  it('calls the pdf report generator', async () => {
+    await generateCaseInventoryReportPdf({
+      applicationContext,
+      cases: mockCases,
+      filters: { associatedJudge: 'Chief Judge' },
+    });
+
+    expect(generatePdfReportInteractorMock).toHaveBeenCalled();
+  });
+
+  it('returns the pdf buffer produced by the generator', async () => {
     const result = await generateCaseInventoryReportPdf({
       applicationContext,
       cases: mockCases,
@@ -85,10 +101,11 @@ describe('generateCaseInventoryReportPdf', () => {
     expect(result).toEqual('https://www.example.com');
   });
 
-  it('should catch, log, and rethrow an error thrown by chromium', async () => {
-    applicationContext.getChromiumBrowser = () => {
-      throw new Error('bad!');
-    };
+  it('should catch, log, and rethrow an error thrown by the generator', async () => {
+    generatePdfReportInteractorMock = jest
+      .fn()
+      .mockRejectedValue(new Error('bad!'));
+
     await expect(
       generateCaseInventoryReportPdf({
         applicationContext,
@@ -96,7 +113,5 @@ describe('generateCaseInventoryReportPdf', () => {
         filters: { associatedJudge: 'Chief Judge' },
       }),
     ).rejects.toThrow('bad!');
-
-    expect(loggerErrorMock).toHaveBeenCalled();
   });
 });
