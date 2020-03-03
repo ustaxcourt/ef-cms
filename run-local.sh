@@ -32,7 +32,7 @@ pkill -f s3rver
 
 echo "starting s3rver"
 rm -rf ./web-api/storage/s3/*
-node ./web-api/start-s3rver &
+npm run start:s3rver &
 S3RVER_PID=$!
 ./wait-until.sh http://localhost:9000/ 200
 
