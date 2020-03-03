@@ -1,6 +1,5 @@
-import { fakeFile, setupTest } from './helpers';
+import { fakeFile, loginAs, setupTest } from './helpers';
 import petitionsClerkCreatesNewCaseAndSavesForLater from './journey/petitionsClerkCreatesNewCaseAndSavesForLater';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 
 const test = setupTest();
 
@@ -9,6 +8,6 @@ describe('Case journey', () => {
     jest.setTimeout(30000);
   });
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkCreatesNewCaseAndSavesForLater(test, fakeFile);
 });

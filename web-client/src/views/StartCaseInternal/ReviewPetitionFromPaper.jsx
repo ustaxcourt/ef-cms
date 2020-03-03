@@ -1,4 +1,5 @@
 import { AddressDisplay } from '../CaseDetail/PetitionerInformation';
+import { BigHeader } from './../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDifferenceModalOverlay } from '../StartCase/CaseDifferenceModalOverlay';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
@@ -54,13 +55,14 @@ export const ReviewPetitionFromPaper = connect(
   }) => {
     return (
       <>
+        <BigHeader text="Create Case" />
         <section
           className="usa-section grid-container"
           id="ustc-start-a-case-form"
         >
           <Focus>
             <h2 id="file-a-document-header" tabIndex="-1">
-              Review The Petition
+              Review the Petition
             </h2>
           </Focus>
 
