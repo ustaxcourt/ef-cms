@@ -133,7 +133,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     const initialDocument = caseEntity.documents.find(
       document => document.documentType === initialDocumentType.documentType,
     );
-    
+
     if (initialDocument) {
       const initialDocumentEntity = new Document(initialDocument, {
         applicationContext,
