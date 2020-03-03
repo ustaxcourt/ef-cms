@@ -260,6 +260,7 @@ import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
 import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIssuedDocketEntrySequence';
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
+import { submitCreateAttorneyUserSequence } from './sequences/submitCreateAttorneyUserSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
@@ -634,6 +635,7 @@ export const presenter = {
     submitCompleteSequence,
     submitCourtIssuedDocketEntrySequence,
     submitCourtIssuedOrderSequence,
+    submitCreateAttorneyUserSequence,
     submitCreateOrderModalSequence,
     submitDocketEntrySequence,
     submitEditDocketEntryMetaSequence,
