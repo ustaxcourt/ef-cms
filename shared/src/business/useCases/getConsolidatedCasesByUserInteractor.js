@@ -3,10 +3,10 @@ const { Case } = require('../entities/cases/Case');
 /**
  * getConsolidatedCasesByUserInteractor
  *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
+ * @param {Object} providers the providers object
+ * @param {Object} providers.applicationContext the application context
  * @param {string} providers.userId id of the user to get cases for
- * @returns {Array<object>} the cases the user is associated with
+ * @returns {Array<Object>} the cases the user is associated with
  */
 exports.getConsolidatedCasesByUserInteractor = async ({
   applicationContext,
@@ -55,7 +55,7 @@ exports.getConsolidatedCasesByUserInteractor = async ({
 
       const consolidatedCasesValidated = Case.validateRawCollection(
         consolidatedCases,
-        { applicationContext },
+        { applicationContext, filtered: true },
       );
 
       if (!caseMapping[leadCaseId]) {

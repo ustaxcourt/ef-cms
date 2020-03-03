@@ -22,6 +22,16 @@ let applicationContext = {};
 let logErrorMock;
 let honeybadgerNotifyMock;
 
+/**
+ * @param raw
+ */
+function MockEntity(raw, { filtered = false }) {
+  if (!filtered) {
+    this.private = raw.private;
+  }
+  this.public = raw.public;
+}
+
 describe('genericHandler', () => {
   beforeEach(() => {
     logErrorMock = jest.fn();
@@ -40,6 +50,8 @@ describe('genericHandler', () => {
     applicationContext.initHoneybadger = () => ({
       notify: honeybadgerNotifyMock,
     });
+
+    applicationContext.getEntityByName = () => MockEntity;
   });
 
   it('returns an error if the callback throws', async () => {
@@ -173,14 +185,41 @@ describe('genericHandler', () => {
     expect(JSON.parse(result.body)).toEqual('some data');
   });
 
-  describe('dataSecurityFilter', () => {
-    function MockEntity(raw, { filtered = false }) {
-      if (!filtered) {
-        this.private = raw.private;
-      }
-      this.public = raw.public;
-    }
+  it('returns the results of a successful execution without attempting to filter if skipFiltering is true', async () => {
+    const callback = () => {
+      return Promise.resolve({ data: 'some data', entityName: 'Case' });
+    };
 
+    const result = await genericHandler(MOCK_EVENT, callback, {
+      applicationContext,
+      skipFiltering: true,
+      user: MOCK_USER,
+    });
+
+    expect(JSON.parse(result.body)).toEqual({
+      data: 'some data',
+      entityName: 'Case',
+    });
+  });
+
+  it('returns the results of a successful execution and filters via entity constructor if the return data contains entityName', async () => {
+    const callback = () => {
+      return Promise.resolve({
+        data: 'some data',
+        entityName: 'Case',
+        public: 'public data',
+      });
+    };
+
+    const result = await genericHandler(MOCK_EVENT, callback, {
+      applicationContext,
+      user: MOCK_USER,
+    });
+
+    expect(JSON.parse(result.body)).toEqual({ public: 'public data' });
+  });
+
+  describe('dataSecurityFilter', () => {
     beforeEach(() => {
       applicationContext = {
         getEntityByName: () => MockEntity,
