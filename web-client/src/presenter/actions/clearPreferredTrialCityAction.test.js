@@ -7,6 +7,6 @@ describe.only('clearPreferredTrialCityAction', () => {
       state: { form: { preferredTrialCity: 'Birmingham, Alabama' } },
     });
 
-    expect(result.state.form.preferredTrialCity).toEqual(null);
+    expect(result.state.form.preferredTrialCity).toEqual(undefined);
   });
 });
