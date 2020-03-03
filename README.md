@@ -206,15 +206,6 @@ Install the following for best results:
 - https://atom.io/packages/linter-eslint
 - https://atom.io/packages/prettier-atom (enable ESLint and StyleLint integrations in settings)
 
-## Forked dependencies
-
-The software has several dependencies that required minor modifications to suit our needs. In some cases, those are urgent security-related modifications that we needed to make immediately, rather than waiting for those dependencies to be patched. In other cases, they're customizations that package maintainers are not interested in making. In both scenarios, those repositories have been forked within the U.S. Tax Court's GitHub organization, and the modifications made there. Those repositories are:
-
-- [serverless-s3-local](https://github.com/ustaxcourt/serverless-s3-local)
-- [s3rver](https://github.com/ustaxcourt/s3rver)
-
-_If these repositories are deleted, the build will fail._ To verify that these repositories are still required, see each of the `package.json` files in the repo (e.g., `find . -name package.json -exec grep "github:ustaxcourt" {} \; |awk 'BEGIN {FS=": ";}{print$2}' |uniq`). Note that `s3rver` is a dependency of `serverless-s3-local`, and so it will not be found in our `package.json` files.
-
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
