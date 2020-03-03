@@ -1,4 +1,3 @@
-import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -11,10 +10,9 @@ import { state } from 'cerebral';
  */
 export const setFormContactSecondaryAddressAction = ({ get, props, store }) => {
   const { contact } = props;
-  // overwrite everything but the name
   store.set(state.form.contactSecondary, {
+    ...contact,
     inCareOf: get(state.form.contactSecondary.inCareOf),
     name: get(state.form.contactSecondary.name),
-    ...omit(contact, ['name']),
   });
 };
