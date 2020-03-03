@@ -595,10 +595,15 @@ const applicationContext = {
   },
   initHoneybadger: async () => {
     if (process.env.USTC_ENV === 'prod' && process.env.ENV) {
+      const stagingApiKey = process.env.CIRCLE_HONEYBADGER_API_KEY_STG;
+      const devApiKey = process.env.CIRCLE_HONEYBADGER_API_KEY_DEV;
       const apiKey =
-        process.env[
-          'CIRCLE_HONEYBADGER_API_KEY_' + process.env.ENV.toUpperCase()
-        ];
+        process.env.ENV === 'stg'
+          ? stagingApiKey
+          : process.env.ENV === 'dev'
+          ? devApiKey
+          : null;
+
       if (apiKey) {
         const Honeybadger = await import('honeybadger-js'); // browser version
 
