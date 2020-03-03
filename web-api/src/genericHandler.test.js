@@ -22,9 +22,6 @@ let applicationContext = {};
 let logErrorMock;
 let honeybadgerNotifyMock;
 
-/**
- * @param raw
- */
 function MockEntity(raw, { filtered = false }) {
   if (!filtered) {
     this.private = raw.private;
