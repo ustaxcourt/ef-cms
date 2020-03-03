@@ -1,4 +1,4 @@
-import { clone } from 'lodash';
+import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -10,8 +10,11 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 export const setFormContactSecondaryAddressAction = ({ get, props, store }) => {
-  const { contact } = clone(props);
+  const { contact } = props;
   // overwrite everything but the name
-  contact.name = get(state.form.contactSecondary.name);
-  store.set(state.form.contactSecondary, contact);
+  store.set(state.form.contactSecondary, {
+    inCareOf: get(state.form.contactSecondary.inCareOf),
+    name: get(state.form.contactSecondary.name),
+    ...omit(contact, ['name']),
+  });
 };
