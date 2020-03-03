@@ -51,6 +51,7 @@ exports.genericHandler = (event, cb, options = {}) => {
       logResultsLabel = 'Results',
       logUser = true,
       logUserLabel = 'User',
+      skipFiltering,
     } = options;
 
     try {
@@ -68,9 +69,11 @@ exports.genericHandler = (event, cb, options = {}) => {
 
       const results = await cb({ applicationContext, user });
 
-      const returnResults = exports.dataSecurityFilter(results, {
-        applicationContext,
-      });
+      const returnResults = !skipFiltering
+        ? exports.dataSecurityFilter(results, {
+            applicationContext,
+          })
+        : results;
 
       if (logResults && applicationContext) {
         applicationContext.logger.info(logResultsLabel, returnResults);
