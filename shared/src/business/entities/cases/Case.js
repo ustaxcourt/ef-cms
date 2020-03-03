@@ -221,7 +221,7 @@ Case.validationName = 'Case';
  * Case Entity
  * Represents a Case that has already been accepted into the system.
  *
- * @param {Object} rawCase the raw case data
+ * @param {object} rawCase the raw case data
  * @constructor
  */
 function Case(rawCase, { applicationContext, filtered = false }) {
@@ -231,7 +231,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.entityName = 'Case';
 
   if (
-    filtered &&
+    !filtered ||
     User.isInternalUser(applicationContext.getCurrentUser().role)
   ) {
     this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
@@ -762,7 +762,7 @@ joiValidationDecorator(
 /**
  * builds the case caption from case contact name(s) based on party type
  *
- * @param {Object} rawCase the raw case data
+ * @param {object} rawCase the raw case data
  * @returns {string} the generated case caption
  */
 Case.getCaseCaption = function(rawCase) {
@@ -905,7 +905,7 @@ Case.prototype.removePractitioner = function(practitionerToRemove) {
 
 /**
  *
- * @param {Object} document the document to add to the case
+ * @param {object} document the document to add to the case
  */
 Case.prototype.addDocument = function(document, { applicationContext }) {
   document.caseId = this.caseId;
@@ -928,7 +928,7 @@ Case.prototype.addDocument = function(document, { applicationContext }) {
 
 /**
  *
- * @param {Object} document the document to add to the case
+ * @param {object} document the document to add to the case
  */
 Case.prototype.addDocumentWithoutDocketRecord = function(document) {
   document.caseId = this.caseId;
@@ -1258,7 +1258,7 @@ Case.prototype.generateSortableDocketNumber = function() {
 /**
  * generates sort tags used for sorting trials for calendaring
  *
- * @returns {Object} the sort tags
+ * @returns {object} the sort tags
  */
 Case.prototype.generateTrialSortTags = function() {
   const {
@@ -1311,7 +1311,7 @@ Case.prototype.generateTrialSortTags = function() {
 /**
  * set as calendared
  *
- * @param {Object} trialSessionEntity - the trial session that is associated with the case
+ * @param {object} trialSessionEntity - the trial session that is associated with the case
  * @returns {Case} the updated case entity
  */
 Case.prototype.setAsCalendared = function(trialSessionEntity) {
@@ -1335,8 +1335,8 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
 /**
  * returns true if the case is associated with the userId
  *
- * @param {Object} arguments arguments
- * @param {Object} arguments.caseRaw raw case details
+ * @param {object} arguments arguments
+ * @param {object} arguments.caseRaw raw case details
  * @param {string} arguments.userId id of the user account
  * @returns {boolean} if the case is associated
  */
@@ -1417,7 +1417,7 @@ Case.prototype.unsetAsBlocked = function() {
  * update as automaticBlocked with an automaticBlockedReason based on
  * provided case deadlines and pending items
  *
- * @param {Object} caseDeadlines - the case deadlines
+ * @param {object} caseDeadlines - the case deadlines
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateAutomaticBlocked = function({ caseDeadlines }) {
@@ -1556,8 +1556,8 @@ Case.prototype.setCaseTitle = function(caseCaption) {
 /**
  * get case contacts
  *
- * @param {Object} shape specific contact params to be returned
- * @returns {Object} object containing case contacts
+ * @param {object} shape specific contact params to be returned
+ * @returns {object} object containing case contacts
  */
 Case.prototype.getCaseContacts = function(shape) {
   const caseContacts = {};
@@ -1578,8 +1578,8 @@ Case.prototype.getCaseContacts = function(shape) {
 /**
  * get consolidation status between current case entity and another case entity
  *
- * @param {Object} caseEntity the pending case entity to check
- * @returns {Object} object with canConsolidate flag and reason string
+ * @param {object} caseEntity the pending case entity to check
+ * @returns {object} object with canConsolidate flag and reason string
  */
 Case.prototype.getConsolidationStatus = function({ caseEntity }) {
   let canConsolidate = true;
@@ -1626,7 +1626,7 @@ Case.prototype.getConsolidationStatus = function({ caseEntity }) {
  * checks case eligibility for consolidation by the current case's status
  *
  * @returns {boolean} true if eligible for consolidation, false otherwise
- * @param {Object} caseToConsolidate (optional) case to check for consolidation eligibility
+ * @param {object} caseToConsolidate (optional) case to check for consolidation eligibility
  */
 Case.prototype.canConsolidate = function(caseToConsolidate) {
   const ineligibleStatusTypes = [
@@ -1736,7 +1736,7 @@ Case.prototype.setNoticeOfTrialDate = function() {
 /**
  * sets the qc complete for trial boolean for a case
  *
- * @param {Object} providers the providers object
+ * @param {object} providers the providers object
  * @param {boolean} providers.qcCompleteForTrial the value to set for qcCompleteForTrial
  * @param {string} providers.trialSessionId the id of the trial session to set qcCompleteForTrial for
  * @returns {Case} this case entity
