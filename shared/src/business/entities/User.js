@@ -15,6 +15,8 @@ User.ROLES = {
   clerkOfCourt: 'clerkofcourt',
   docketClerk: 'docketclerk',
   floater: 'floater',
+  inactivePractitioner: 'inactivePractitioner',
+  inactiveRespondent: 'inactiveRespondent',
   judge: 'judge',
   petitioner: 'petitioner',
   petitionsClerk: 'petitionsclerk',
