@@ -269,26 +269,30 @@
       }
     ],
     "hasPendingItems": false,
-    "docketRecord": [
-      {
-        "eventCode": "P",
-        "description": "Petition",
-        "index": 1,
-        "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
-        "filingDate": "2020-01-21T16:41:39.481Z",
-        "filedBy": "Petr. Eve Brewer"
-      },
-      {
-        "eventCode": "RQT",
-        "description": "Request for Place of Trial at Nashville, Tennessee",
-        "index": 2,
-        "filingDate": "2020-01-21T16:41:39.474Z"
-      }
-    ],
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "docketNumber": "102-20",
     "status": "New"
+  },
+  {
+    "eventCode": "P",
+    "description": "Petition",
+    "index": 1,
+    "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
+    "filingDate": "2020-01-21T16:41:39.481Z",
+    "filedBy": "Petr. Eve Brewer",
+    "docketRecordId": "48f4a2be-6395-4fc0-9439-f99e365c38ff",
+    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "sk": "docket-record|48f4a2be-6395-4fc0-9439-f99e365c38ff"
+  },
+  {
+    "eventCode": "RQT",
+    "description": "Request for Place of Trial at Nashville, Tennessee",
+    "index": 2,
+    "filingDate": "2020-01-21T16:41:39.474Z",
+    "docketRecordId": "f15a6532-9805-479b-ae45-e8f112153d2a",
+    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "sk": "docket-record|f15a6532-9805-479b-ae45-e8f112153d2a"
   },
   {
     "sk": "77d8449a-ffe1-48e5-b056-a6112a819a4b",
