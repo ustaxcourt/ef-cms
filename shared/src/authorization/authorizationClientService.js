@@ -104,6 +104,8 @@ const AUTHORIZATION_MAP = {
     ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY,
   ],
   floater: allInternalUserPermissions,
+  inactivePractitioner: [],
+  inactiveRespondent: [],
   judge: [
     ...allInternalUserPermissions,
     ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION,
