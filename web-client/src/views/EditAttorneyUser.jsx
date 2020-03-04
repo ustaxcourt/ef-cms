@@ -71,23 +71,7 @@ export const EditAttorneyUser = connect(
                 <label className="usa-label" htmlFor="email">
                   Email
                 </label>
-                <input
-                  autoCapitalize="none"
-                  className="usa-input"
-                  id="email"
-                  name="email"
-                  type="text"
-                  value={form.email || ''}
-                  onBlur={() => {
-                    validateAttorneyUserSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
+                <p>{form.email}</p>
               </FormGroup>
 
               <FormGroup>

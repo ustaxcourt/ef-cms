@@ -277,6 +277,7 @@ import { submitForwardSequence } from './sequences/submitForwardSequence';
 import { submitLoginSequence } from './sequences/submitLoginSequence';
 import { submitRemoveConsolidatedCasesSequence } from './sequences/submitRemoveConsolidatedCasesSequence';
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
+import { submitUpdateAttorneyUserSequence } from './sequences/submitUpdateAttorneyUserSequence';
 import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModalSequence';
 import { submitUpdateUserContactInformationSequence } from './sequences/submitUpdateUserContactInformationSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
@@ -656,6 +657,7 @@ export const presenter = {
     submitLoginSequence,
     submitRemoveConsolidatedCasesSequence,
     submitTrialSessionSequence,
+    submitUpdateAttorneyUserSequence,
     submitUpdateCaseModalSequence,
     submitUpdateUserContactInformationSequence,
     toggleBetaBarSequence,

@@ -10,6 +10,6 @@ exports.handler = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext.getUseCases().updateAttorneyUserInteractor({
       applicationContext,
-      user: JSON.parse(event.body),
+      user: JSON.parse(event.body).user,
     });
   });

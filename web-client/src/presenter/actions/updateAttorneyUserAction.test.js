@@ -1,20 +1,20 @@
-import { createAttorneyUserAction } from './createAttorneyUserAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
+import { updateAttorneyUserAction } from './updateAttorneyUserAction';
 
-describe('createAttorneyUserAction', () => {
-  let createAttorneyUserInteractorMock;
+describe('updateAttorneyUserAction', () => {
+  let updateAttorneyUserInteractorMock;
   let successMock;
   let errorMock;
 
   beforeEach(() => {
-    createAttorneyUserInteractorMock = jest.fn();
+    updateAttorneyUserInteractorMock = jest.fn();
     successMock = jest.fn();
     errorMock = jest.fn();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        createAttorneyUserInteractor: createAttorneyUserInteractorMock,
+        updateAttorneyUserInteractor: updateAttorneyUserInteractorMock,
       }),
     };
 
@@ -23,8 +23,9 @@ describe('createAttorneyUserAction', () => {
       success: successMock,
     };
   });
-  it('calls the create attorney user interactor', async () => {
-    await runAction(createAttorneyUserAction, {
+
+  it('calls the update attorney user interactor', async () => {
+    await runAction(updateAttorneyUserAction, {
       modules: {
         presenter,
       },
@@ -35,15 +36,16 @@ describe('createAttorneyUserAction', () => {
       },
     });
 
-    expect(createAttorneyUserInteractorMock).toHaveBeenCalled();
+    expect(updateAttorneyUserInteractorMock).toHaveBeenCalled();
+    expect(successMock).toHaveBeenCalled();
   });
 
   it('returns path.error if the use case throws an error', async () => {
-    createAttorneyUserInteractorMock = jest.fn().mockImplementation(() => {
+    updateAttorneyUserInteractorMock = jest.fn().mockImplementation(() => {
       throw new Error('bad!');
     });
 
-    await runAction(createAttorneyUserAction, {
+    await runAction(updateAttorneyUserAction, {
       modules: {
         presenter,
       },
@@ -54,7 +56,7 @@ describe('createAttorneyUserAction', () => {
       },
     });
 
-    expect(createAttorneyUserInteractorMock).toHaveBeenCalled();
+    expect(updateAttorneyUserInteractorMock).toHaveBeenCalled();
     expect(errorMock).toHaveBeenCalled();
   });
 });
