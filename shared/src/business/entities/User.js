@@ -53,7 +53,10 @@ const userDecorator = (obj, rawObj) => {
 };
 
 const userValidation = {
-  barNumber: joi.string().optional(),
+  barNumber: joi
+    .string()
+    .optional()
+    .allow(null),
   contact: joi
     .object()
     .keys({
