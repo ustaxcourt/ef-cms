@@ -2,7 +2,7 @@ import { assignPetitionToAuthenticatedUserAction } from '../actions/WorkItem/ass
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
 import { getFormCombinedWithCaseDetailAction } from '../actions/getFormCombinedWithCaseDetailAction';
-import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
+import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { saveCaseDetailInternalEditAction } from '../actions/saveCaseDetailInternalEditAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -20,5 +20,5 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
   assignPetitionToAuthenticatedUserAction,
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
-  navigateToCaseDetailAction,
+  navigateToDocumentQCAction,
 ]);
