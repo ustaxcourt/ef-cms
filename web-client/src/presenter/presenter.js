@@ -94,6 +94,7 @@ import { gotoCreateAttorneyUserSequence } from './sequences/gotoCreateAttorneyUs
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
 import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequence';
+import { gotoEditAttorneyUserSequence } from './sequences/gotoEditAttorneyUserSequence';
 import { gotoEditCourtIssuedDocketEntrySequence } from './sequences/gotoEditCourtIssuedDocketEntrySequence';
 import { gotoEditDocketEntryMetaSequence } from './sequences/gotoEditDocketEntryMetaSequence';
 import { gotoEditDocketEntrySequence } from './sequences/gotoEditDocketEntrySequence';
@@ -474,6 +475,7 @@ export const presenter = {
     gotoCreateOrderSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
+    gotoEditAttorneyUserSequence,
     gotoEditCourtIssuedDocketEntrySequence,
     gotoEditDocketEntryMetaSequence,
     gotoEditDocketEntrySequence,

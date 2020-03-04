@@ -23,6 +23,7 @@ import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocumentDetail } from './DocumentDetail/DocumentDetail';
+import { EditAttorneyUser } from './EditAttorneyUser';
 import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
@@ -92,6 +93,7 @@ const pages = {
   DashboardPractitioner,
   DashboardRespondent,
   DocumentDetail,
+  EditAttorneyUser,
   EditDocketEntry,
   EditDocketEntryMeta,
   EditPetitionDetails,

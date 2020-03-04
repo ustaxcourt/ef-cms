@@ -565,6 +565,14 @@ const router = {
     );
 
     route(
+      '/users/edit-attorney/*',
+      ifHasAccess(userId => {
+        setPageTitle('EF-CMS User Management - Edit Attorney User');
+        app.getSequence('gotoEditAttorneyUserSequence')({ userId });
+      }),
+    );
+
+    route(
       '/document-qc..',
       ifHasAccess(() => {
         const path = route._.getPathFromBase();

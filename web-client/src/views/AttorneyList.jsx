@@ -39,10 +39,7 @@ export const AttorneyList = connect(
                 <tr className="attorney-user-row">
                   <td>{item.name}</td>
                   <td>
-                    <Button
-                      link
-                      href={`/users/edit-attorney-user/${item.userId}`}
-                    >
+                    <Button link href={`/users/edit-attorney/${item.userId}`}>
                       {item.barNumber}
                     </Button>
                   </td>
