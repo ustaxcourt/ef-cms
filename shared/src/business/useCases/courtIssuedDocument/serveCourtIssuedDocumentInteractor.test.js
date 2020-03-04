@@ -57,11 +57,13 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   const documentsWithCaseClosingEventCodes = ENTERED_AND_SERVED_EVENT_CODES.map(
     eventCode => {
       const documentId = uuidv4();
+      const docketRecordId = uuidv4();
 
       const index = dynamicallyGeneratedDocketEntries.length + 2; // 2 statically set docket records per case;
 
       dynamicallyGeneratedDocketEntries.push({
         description: `Docket Record ${index}`,
+        docketRecordId,
         documentId,
         eventCode: 'O',
         filingDate: createISODateString(),
@@ -101,6 +103,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketRecord: [
         {
           description: 'Docket Record 0',
+          docketRecordId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           eventCode: 'O',
           filingDate: createISODateString(),
@@ -108,6 +111,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         {
           description: 'Docket Record 1',
+          docketRecordId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
           documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
           eventCode: 'OAJ',
           filingDate: createISODateString(),
@@ -164,6 +168,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketRecord: [
         {
           description: 'Docket Record 0',
+          docketRecordId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           eventCode: 'O',
           filingDate: createISODateString(),
@@ -171,6 +176,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         {
           description: 'Docket Record 0',
+          docketRecordId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
           documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
           eventCode: 'OAJ',
           filingDate: createISODateString(),

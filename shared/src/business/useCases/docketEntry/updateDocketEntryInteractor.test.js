@@ -31,6 +31,7 @@ describe('updateDocketEntryInteractor', () => {
     docketRecord: [
       {
         description: 'first record',
+        docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
         documentId: '8675309b-18d0-43ec-bafb-654e83405411',
         eventCode: 'P',
         filingDate: '2018-03-01T00:01:00.000Z',
