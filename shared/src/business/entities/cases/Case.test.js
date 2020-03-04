@@ -1049,9 +1049,13 @@ describe('Case entity', () => {
   });
 
   describe('updateDocketNumberRecord records suffix changes', () => {
-    it('should create a docket record when the suffix updates', () => {
+    it('should create a docket record when the suffix updates for an electronically created case', () => {
       const caseToVerify = new Case(
-        { docketNumber: '123-19', status: Case.STATUS_TYPES.generalDocket },
+        {
+          docketNumber: '123-19',
+          status: Case.STATUS_TYPES.generalDocket,
+          isPaper: false,
+        },
         {
           applicationContext,
         },
@@ -1062,6 +1066,23 @@ describe('Case entity', () => {
         applicationContext,
       });
       expect(caseToVerify.docketRecord.length).toEqual(1);
+    });
+
+    it('should not create a docket record when the suffix updates but the case was created from paper', () => {
+      const caseToVerify = new Case(
+        {
+          docketNumber: '123-19',
+          status: Case.STATUS_TYPES.generalDocket,
+          isPaper: true,
+        },
+        {
+          applicationContext,
+        },
+      );
+      caseToVerify.updateDocketNumberRecord({
+        applicationContext,
+      });
+      expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
     it('should not create a docket record if suffix has not changed', () => {
