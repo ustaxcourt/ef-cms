@@ -3,7 +3,7 @@ import { Country } from './StartCase/Country';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './StartCase/InternationalAddress';
 import { connect } from '@cerebral/react';
-import { props, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const UserContactEditForm = connect(
@@ -11,6 +11,8 @@ export const UserContactEditForm = connect(
     bind: props.bind,
     form: state.form,
     onBlur: props.onBlurSequence,
+    onBlurValidationSequence: sequences[props.onBlurSequence],
+    onChangeUpdateSequence: sequences[props.updateSequence],
     type: props.type,
     updateSequence: props.updateSequence,
     validateSequence: props.validateSequence,
@@ -20,9 +22,10 @@ export const UserContactEditForm = connect(
     bind,
     form,
     onBlur,
+    onBlurValidationSequence,
+    onChangeUpdateSequence,
     type,
     updateSequence,
-    validateSequence,
     validationErrors,
   }) => {
     return (
@@ -31,7 +34,7 @@ export const UserContactEditForm = connect(
           bind={bind}
           type={type}
           onBlur={onBlur}
-          onChange="updateSequence"
+          onChange={updateSequence}
           onChangeCountryType="countryTypeUserContactChangeSequence"
         />
         {form.contact.countryType === 'domestic' ? (
@@ -39,14 +42,14 @@ export const UserContactEditForm = connect(
             bind={bind}
             type={type}
             onBlur={onBlur}
-            onChange="updateSequence"
+            onChange={updateSequence}
           />
         ) : (
           <InternationalAddress
             bind={bind}
             type={type}
             onBlur={onBlur}
-            onChange="updateSequence"
+            onChange={updateSequence}
           />
         )}
         <FormGroup
@@ -67,10 +70,10 @@ export const UserContactEditForm = connect(
             type="tel"
             value={form.contact.phone || ''}
             onBlur={() => {
-              validateSequence();
+              onBlurValidationSequence();
             }}
             onChange={e => {
-              updateSequence({
+              onChangeUpdateSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
