@@ -1,8 +1,11 @@
 export default test => {
   return it('Petitions clerk edits an case and saves for later', async () => {
+    test.docketNumber = test.getState('cases.0.docketNumber');
+    test.documentId = test.getState('cases.0.documents.0.documentId');
+
     await test.runSequence('gotoDocumentDetailSequence', {
-      docketNumber: '140-20',
-      documentId: 'f5a9aeda-7c65-4b0c-bc07-1646facacb68',
+      docketNumber: test.docketNumber,
+      documentId: test.documentId,
     });
 
     await test.runSequence('updateFormValueSequence', {

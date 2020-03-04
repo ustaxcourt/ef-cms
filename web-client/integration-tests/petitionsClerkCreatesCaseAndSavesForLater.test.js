@@ -1,4 +1,4 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import petitionsClerkCreatesNewCaseAndSavesForLater from './journey/petitionsClerkCreatesNewCaseAndSavesForLater';
 import petitionsClerkEditsAnExistingCaseAndSavesForLater from './journey/petitionsClerkEditsAnExistingCaseAndSavesForLater';
 
@@ -12,5 +12,11 @@ describe('Case journey', () => {
   loginAs(test, 'petitionsclerk');
   petitionsClerkCreatesNewCaseAndSavesForLater(test, fakeFile);
 
+  loginAs(test, 'petitioner');
+  it('Create case', async () => {
+    await uploadPetition(test);
+  });
+
+  loginAs(test, 'petitionsclerk');
   petitionsClerkEditsAnExistingCaseAndSavesForLater(test);
 });
