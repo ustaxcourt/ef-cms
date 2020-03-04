@@ -8,9 +8,9 @@ const { User } = require('../../entities/User');
 /**
  * createAttorneyUserInteractor
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.applicationContext the application context
- * @param {Object} providers.user the user data
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.user the user data
  * @returns {Promise} the promise of the createUser call
  */
 exports.createAttorneyUserInteractor = async ({ applicationContext, user }) => {
