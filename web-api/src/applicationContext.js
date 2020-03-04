@@ -805,6 +805,10 @@ let s3Cache;
 let sesCache;
 let searchClientCache;
 
+const entitiesByName = {
+  Case: Case,
+};
+
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
@@ -862,6 +866,9 @@ module.exports = (appContextUser = {}) => {
         });
       }
       return sesCache;
+    },
+    getEntityByName: name => {
+      return entitiesByName[name];
     },
     getEntityConstructors: () => ({
       Case,

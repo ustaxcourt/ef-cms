@@ -124,6 +124,8 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
 
   caseEntity.markAsSentToIRS(createISODateString());
 
+  const servedParties = aggregatePartiesForService(caseEntity);
+
   Object.keys(Document.INITIAL_DOCUMENT_TYPES).map(initialDocumentTypeKey => {
     const initialDocumentType =
       Document.INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
@@ -136,7 +138,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
       const initialDocumentEntity = new Document(initialDocument, {
         applicationContext,
       });
-      initialDocumentEntity.setAsServed();
+      initialDocumentEntity.setAsServed(servedParties.all);
       caseEntity.updateDocument(initialDocumentEntity);
     }
   });
