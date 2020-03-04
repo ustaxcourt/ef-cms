@@ -18,7 +18,7 @@ export const headerHelper = (get, applicationContext) => {
   const isTrialSessions = currentPage.includes('TrialSession');
   const isDashboard = currentPage.startsWith('Dashboard');
   const isMessages = currentPage.startsWith('Messages');
-  const isCreateAttorney = currentPage.startsWith('CreateAttorneyUse');
+  const isCreateAttorney = currentPage.startsWith('CreateAttorneyUser');
 
   const pageIsHome =
     isDashboard ||
