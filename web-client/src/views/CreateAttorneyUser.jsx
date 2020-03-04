@@ -89,8 +89,8 @@ export const CreateAttorneyUser = connect(
                 formatter={role => capitalize(role)}
                 id="role"
                 keys={v => v}
-                label="Select section"
-                name="section"
+                label="Select role"
+                name="role"
                 values={createAttorneyUserHelper.roles}
                 onChange={e => {
                   updateFormValueSequence({
@@ -126,6 +126,7 @@ export const CreateAttorneyUser = connect(
 
               <UserContactEditForm
                 bind="form"
+                changeCountryTypeSequence="countryTypeFormContactChangeSequence"
                 type="contact"
                 updateSequence="updateFormValueSequence"
                 validateSequence="validateAttorneyUserSequence"

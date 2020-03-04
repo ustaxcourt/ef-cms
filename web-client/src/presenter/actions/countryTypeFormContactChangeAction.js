@@ -1,12 +1,12 @@
 import { state } from 'cerebral';
 
 /**
- * used for when the country type is changed on the edit user contact info sequence.
+ * unsets form contact info when countryType changes
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object
  */
-export const countryTypeUserContactChangeAction = ({ store }) => {
+export const countryTypeFormContactChangeAction = ({ store }) => {
   [
     'address1',
     'address2',
@@ -17,7 +17,7 @@ export const countryTypeUserContactChangeAction = ({ store }) => {
     'state',
     'city',
   ].forEach(field => {
-    store.unset(state.user.contact[field]);
+    store.unset(state.form.contact[field]);
   });
 
   store.set(state.validationErrors.contact, {});

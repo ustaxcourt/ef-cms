@@ -53,6 +53,7 @@ export const UserContactEdit = connect(
             </div>
             <UserContactEditForm
               bind="form"
+              changeCountryTypeSequence="countryTypeUserContactChangeSequence"
               type="contact"
               updateSequence={updateFormValueSequence}
               validateSequence="validateUserContactSequence"

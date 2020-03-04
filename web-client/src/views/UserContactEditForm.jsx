@@ -9,6 +9,7 @@ import React from 'react';
 export const UserContactEditForm = connect(
   {
     bind: props.bind,
+    changeCountryTypeSequence: props.changeCountryTypeSequence,
     form: state.form,
     onBlur: props.onBlurSequence,
     onBlurValidationSequence: sequences[props.onBlurSequence],
@@ -20,6 +21,7 @@ export const UserContactEditForm = connect(
   },
   ({
     bind,
+    changeCountryTypeSequence,
     form,
     onBlur,
     onBlurValidationSequence,
@@ -35,7 +37,7 @@ export const UserContactEditForm = connect(
           type={type}
           onBlur={onBlur}
           onChange={updateSequence}
-          onChangeCountryType="countryTypeUserContactChangeSequence"
+          onChangeCountryType={changeCountryTypeSequence}
         />
         {form.contact.countryType === 'domestic' ? (
           <Address
