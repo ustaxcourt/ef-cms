@@ -2,6 +2,7 @@ import { AccessibilityStatement } from './Accessibility/AccessibilityStatement';
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
+import { AttorneyList } from './AttorneyList';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
@@ -72,6 +73,7 @@ const pages = {
   AddDocketEntry,
   AddTrialSession,
   AdvancedSearch,
+  AttorneyList,
   BeforeStartingCase,
   BeforeYouFileADocument,
   BlockedCasesReport,
