@@ -15,6 +15,8 @@ User.ROLES = {
   clerkOfCourt: 'clerkofcourt',
   docketClerk: 'docketclerk',
   floater: 'floater',
+  inactivePractitioner: 'inactivePractitioner',
+  inactiveRespondent: 'inactiveRespondent',
   judge: 'judge',
   petitioner: 'petitioner',
   petitionsClerk: 'petitionsclerk',
@@ -140,7 +142,7 @@ const VALIDATION_ERROR_MESSAGES = {
 /**
  * constructor
  *
- * @param {object} rawUser the raw user data
+ * @param {Object} rawUser the raw user data
  * @constructor
  */
 function User(rawUser) {

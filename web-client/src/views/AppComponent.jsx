@@ -15,6 +15,7 @@ import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
+import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
 import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
@@ -81,6 +82,7 @@ const pages = {
   CourtIssuedDocketEntry,
   CreateOrder,
   DashboardChambers,
+  DashboardInactive,
   DashboardJudge,
   DashboardPetitioner,
   DashboardPractitioner,
