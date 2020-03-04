@@ -13,6 +13,7 @@ import { CaseInventoryReport } from './CaseInventoryReport/CaseInventoryReport';
 import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryReportModal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
+import { CreateAttorneyUser } from './CreateAttorneyUser';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
@@ -80,6 +81,7 @@ const pages = {
   CaseInventoryReport,
   CaseSearchNoMatches,
   CourtIssuedDocketEntry,
+  CreateAttorneyUser,
   CreateOrder,
   DashboardChambers,
   DashboardInactive,

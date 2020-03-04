@@ -132,6 +132,20 @@ const NavigationItems = (
           <ReportsMenu isExpanded={isReportsMenuOpen} />
         </li>
       )}
+      {helper.showCreateAttorney && (
+        <li className={classNames('usa-nav__primary-item')}>
+          <a
+            className={classNames(
+              'usa-nav__link',
+              helper.pageIsCreateAttorney && 'usa-current',
+            )}
+            href="/users/create-attorney"
+            onClick={() => toggleMobileMenuSequence()}
+          >
+            Create Attorney
+          </a>
+        </li>
+      )}
     </ul>
   );
 };
@@ -142,6 +156,7 @@ export const Header = connect(
     helper: state.headerHelper,
     isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
     isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
+    isUsersMenuOpen: state.menuHelper.isUsersMenuOpen,
     mobileMenu: state.mobileMenu,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,

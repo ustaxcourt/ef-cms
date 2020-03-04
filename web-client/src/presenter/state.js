@@ -25,6 +25,7 @@ import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentT
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactEditHelper } from './computeds/contactEditHelper';
 import { contactsHelper } from './computeds/contactsHelper';
+import { createAttorneyUserHelper } from './computeds/createAttorneyUserHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
@@ -116,6 +117,7 @@ export const state = {
   confirmInitiateServiceModalHelper,
   contactEditHelper,
   contactsHelper,
+  createAttorneyUserHelper,
   createOrderHelper,
   currentPage: 'Interstitial',
   currentPageHeader: '',

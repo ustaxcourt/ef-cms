@@ -22,6 +22,12 @@ let applicationContext = {};
 let logErrorMock;
 let honeybadgerNotifyMock;
 
+/**
+ * returns a mock entity object
+ *
+ * @param {object} raw the raw entity data to return
+ * @param {object} options additional options for the returned mock entity
+ */
 function MockEntity(raw, { filtered = false }) {
   if (!filtered) {
     this.private = raw.private;
