@@ -39,7 +39,7 @@ const BetaBar = toggleBetaBarSequence => {
 
 const NavigationItems = (
   helper,
-  { isReportsMenuOpen, isUsersMenuOpen, toggleMobileMenuSequence },
+  { isReportsMenuOpen, toggleMobileMenuSequence },
 ) => {
   return (
     <ul className="usa-nav__primary usa-accordion ustc-navigation-items">
