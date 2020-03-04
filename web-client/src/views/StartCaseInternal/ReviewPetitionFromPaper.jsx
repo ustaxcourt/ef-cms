@@ -172,7 +172,7 @@ export const ReviewPetitionFromPaper = connect(
                           >
                             Case caption
                           </label>
-                          {form.caseCaption}
+                          {form.caseCaption} {constants.CASE_CAPTION_POSTFIX}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
                           <label
