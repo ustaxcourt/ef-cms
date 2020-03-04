@@ -82,6 +82,7 @@ import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequen
 import { gotoAddTrialSessionSequence } from './sequences/gotoAddTrialSessionSequence';
 import { gotoAdvancedSearchSequence } from './sequences/gotoAdvancedSearchSequence';
 import { gotoAllCaseDeadlinesSequence } from './sequences/gotoAllCaseDeadlinesSequence';
+import { gotoAttorneyListSequence } from './sequences/gotoAttorneyListSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoBeforeYouFileDocumentSequence } from './sequences/gotoBeforeYouFileDocumentSequence';
 import { gotoBlockedCasesReportSequence } from './sequences/gotoBlockedCasesReportSequence';
@@ -461,6 +462,7 @@ export const presenter = {
     gotoAddTrialSessionSequence,
     gotoAdvancedSearchSequence,
     gotoAllCaseDeadlinesSequence,
+    gotoAttorneyListSequence,
     gotoBeforeStartCaseSequence,
     gotoBeforeYouFileDocumentSequence,
     gotoBlockedCasesReportSequence,
