@@ -86,6 +86,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         getCaseByCaseId: getCaseCaseIdNumberMock,
         updateCase: updateCaseMock,
       }),
+      getUniqueId: () => 'unique-id-1',
       getUseCases: () => ({
         addCoversheetInteractor: addCoversheetInteractorMock,
       }),

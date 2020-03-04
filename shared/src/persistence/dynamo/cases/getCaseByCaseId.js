@@ -22,21 +22,30 @@ exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
       stripWorkItems(results, applicationContext.isAuthorizedForWorkItems()),
     );
 
-  const docketRecord = await client.query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${caseId}`,
-      ':prefix': 'docket-record',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    applicationContext,
-  });
+  let docketRecord = [];
 
-  return {
-    ...theCase,
-    docketRecord: docketRecord.length ? docketRecord : theCase.docketRecord, // this is temp until sesed data fixed
-  };
+  if (theCase) {
+    docketRecord = await client.query({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+        '#sk': 'sk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `case|${theCase.caseId}`,
+        ':prefix': 'docket-record',
+      },
+      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+      applicationContext,
+    });
+
+    docketRecord =
+      docketRecord.length > 0 ? docketRecord : theCase.docketRecord;
+
+    return {
+      ...theCase,
+      docketRecord, // this is temp until sesed data fixed
+    };
+  } else {
+    return null;
+  }
 };

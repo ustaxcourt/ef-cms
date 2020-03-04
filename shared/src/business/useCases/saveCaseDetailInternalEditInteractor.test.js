@@ -60,6 +60,7 @@ describe('updateCase', () => {
           updateCase: () => Promise.resolve(MOCK_CASE),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {

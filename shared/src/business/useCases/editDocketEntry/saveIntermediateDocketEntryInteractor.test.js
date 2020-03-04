@@ -92,6 +92,7 @@ describe('saveIntermediateDocketEntryInteractor', () => {
           updateCase: async () => caseRecord,
           updateWorkItem: jest.fn(),
         }),
+        getUniqueId: () => 'unique-id-1',
       };
       await saveIntermediateDocketEntryInteractor({
         applicationContext,
@@ -138,6 +139,7 @@ describe('saveIntermediateDocketEntryInteractor', () => {
           updateCase: updateCaseSpy,
           updateWorkItem: jest.fn(),
         }),
+        getUniqueId: () => 'unique-id-1',
       };
       await saveIntermediateDocketEntryInteractor({
         applicationContext,

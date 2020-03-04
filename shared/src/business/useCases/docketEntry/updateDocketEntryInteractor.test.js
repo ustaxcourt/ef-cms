@@ -89,6 +89,7 @@ describe('updateDocketEntryInteractor', () => {
           saveWorkItemForNonPaper: async () => caseRecord,
           updateCase: async () => caseRecord,
         }),
+        getUniqueId: () => 'unique-id-1',
       };
       await updateDocketEntryInteractor({
         applicationContext,
@@ -133,6 +134,7 @@ describe('updateDocketEntryInteractor', () => {
           saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
           updateCase: updateCaseSpy,
         }),
+        getUniqueId: () => 'unique-id-1',
       };
       await updateDocketEntryInteractor({
         applicationContext,
@@ -184,6 +186,7 @@ describe('updateDocketEntryInteractor', () => {
           saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
           updateCase: updateCaseSpy,
         }),
+        getUniqueId: () => 'unique-id-1',
       };
       await updateDocketEntryInteractor({
         applicationContext,
@@ -238,6 +241,7 @@ describe('updateDocketEntryInteractor', () => {
 
           updateCase: updateCaseSpy,
         }),
+        getUniqueId: () => 'unique-id-1',
       };
       await updateDocketEntryInteractor({
         applicationContext,

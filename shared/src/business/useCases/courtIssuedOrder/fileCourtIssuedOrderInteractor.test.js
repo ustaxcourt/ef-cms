@@ -69,6 +69,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         getUserById: async () => currentUser,
         updateCase: updateCaseSpy,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
   });
 

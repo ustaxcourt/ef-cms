@@ -67,6 +67,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
           getUserById: async () => ({ name: 'bob' }),
           updateCase: async () => caseRecord,
         }),
+        getUniqueId: () => 'unique-id-1',
       };
       await updateCourtIssuedOrderInteractor({
         applicationContext,
@@ -104,6 +105,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
           }),
           updateCase: updateCaseSpy,
         }),
+        getUniqueId: () => 'unique-id-1',
       };
       await updateCourtIssuedOrderInteractor({
         applicationContext,

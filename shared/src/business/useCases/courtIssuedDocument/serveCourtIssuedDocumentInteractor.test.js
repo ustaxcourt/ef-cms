@@ -278,6 +278,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       getStorageClient: () => ({
         getObject: getObjectMock,
       }),
+      getUniqueId: () => 'unique-id-1',
       getUseCaseHelpers: () => ({
         appendPaperServiceAddressPageToPdf: appendPaperServiceAddressPageToPdfMock,
         generatePaperServiceAddressPagePdf: generatePaperServiceAddressPagePdfMock,

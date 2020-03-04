@@ -24,6 +24,7 @@ describe('unblockCaseFromTrialInteractor', () => {
           updateCase: ({ caseToUpdate }) => caseToUpdate,
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const result = await unblockCaseFromTrialInteractor({
       applicationContext,
@@ -49,6 +50,7 @@ describe('unblockCaseFromTrialInteractor', () => {
           userId: 'nope',
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {

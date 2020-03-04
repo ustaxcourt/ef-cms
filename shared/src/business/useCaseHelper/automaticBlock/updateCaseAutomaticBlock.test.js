@@ -22,6 +22,7 @@ describe('updateCaseAutomaticBlock', () => {
         deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsMock,
         getCaseDeadlinesByCaseId: getCaseDeadlinesByCaseIdMock,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
   });
 

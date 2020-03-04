@@ -16,6 +16,7 @@ describe('addDocketEntryForPaymentStatus', () => {
         Case,
         DocketRecord,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
 
     caseEntity = new Case(
