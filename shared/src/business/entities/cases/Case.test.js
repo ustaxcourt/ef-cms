@@ -127,6 +127,64 @@ describe('Case entity', () => {
     });
   });
 
+  describe('filtered', () => {
+    it('does not return private data if filtered is true and the user is external', () => {
+      applicationContext.getCurrentUser = () =>
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f']; //petitioner user
+
+      const myCase = new Case(
+        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      expect(Object.keys(myCase)).not.toContain('associatedJudge');
+    });
+
+    it('returns private data if filtered is true and the user is internal', () => {
+      applicationContext.getCurrentUser = () =>
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f']; //docketclerk user
+
+      const myCase = new Case(
+        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      expect(Object.keys(myCase)).toContain('associatedJudge');
+    });
+
+    it('returns private data if filtered is false and the user is external', () => {
+      applicationContext.getCurrentUser = () =>
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f']; //petitioner user
+
+      const myCase = new Case(
+        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        {
+          applicationContext,
+          filtered: false,
+        },
+      );
+      expect(Object.keys(myCase)).toContain('associatedJudge');
+    });
+
+    it('returns private data if filtered is false and the user is internal', () => {
+      applicationContext.getCurrentUser = () =>
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f']; //docketclerk user
+
+      const myCase = new Case(
+        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        {
+          applicationContext,
+          filtered: false,
+        },
+      );
+      expect(Object.keys(myCase)).toContain('associatedJudge');
+    });
+  });
+
   describe('isValid', () => {
     it('Creates a valid case', () => {
       const myCase = new Case(MOCK_CASE, {
