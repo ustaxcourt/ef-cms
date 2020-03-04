@@ -19,11 +19,15 @@ exports.updateAttorneyUserInteractor = async ({ applicationContext, user }) => {
     throw new UnauthorizedError('Unauthorized for updating attorney user');
   }
 
+  const validatedUserData = new User(user, { applicationContext })
+    .validate()
+    .toRawObject();
+
   const updatedUser = await applicationContext
     .getPersistenceGateway()
     .updateAttorneyUser({
       applicationContext,
-      user,
+      user: validatedUserData,
     });
 
   return new User(updatedUser, { applicationContext }).validate().toRawObject();
