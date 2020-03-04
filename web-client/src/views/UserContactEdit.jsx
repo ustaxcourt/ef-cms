@@ -55,8 +55,8 @@ export const UserContactEdit = connect(
               bind="form"
               type="contact"
               updateSequence={updateFormValueSequence}
-              validateSequence={validateUserContactSequence}
-              onBlurSequence={validateUserContactSequence}
+              validateSequence="validateUserContactSequence"
+              onBlurSequence="validateUserContactSequence"
             />
           </div>
           <Button
