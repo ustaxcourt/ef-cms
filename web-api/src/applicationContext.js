@@ -833,7 +833,7 @@ module.exports = (appContextUser = {}) => {
               },
             }),
           }),
-          adminGetUser: Username => ({
+          adminGetUser: ({ Username }) => ({
             promise: () => ({
               Username,
             }),
