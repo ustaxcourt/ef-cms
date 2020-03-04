@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const express = require('express');
 const isReachable = require('is-reachable');
-const proxy = require('http-proxy-middleware');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 // https://github.com/chimurai/http-proxy-middleware#options
 
@@ -45,7 +45,7 @@ const proxyMain = async () => {
     console.log('Router:', router);
   }
 
-  const proxyObj = proxy('**', {
+  const proxyObj = createProxyMiddleware('**', {
     headers: {
       Connection: 'keep-alive',
     },
