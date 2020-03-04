@@ -1,6 +1,8 @@
 import { Button } from '../ustc-ui/Button/Button';
+import { ErrorNotification } from './ErrorNotification';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { Select } from '../ustc-ui/Select/Select';
+import { SuccessNotification } from './SuccessNotification';
 import { UserContactEditForm } from './UserContactEditForm';
 import { capitalize } from 'lodash';
 import { connect } from '@cerebral/react';
@@ -34,6 +36,11 @@ export const CreateAttorneyUser = connect(
             <h1>Create Attorney User</h1>
           </div>
         </div>
+
+        <section className="grid-container">
+          <SuccessNotification />
+          <ErrorNotification />
+        </section>
 
         <div className="grid-container">
           <div className="grid-row">

@@ -17,13 +17,20 @@ export const createAttorneyUserAction = async ({
   const user = get(state.form);
 
   try {
-    const result = await applicationContext
+    const attorneyUser = await applicationContext
       .getUseCases()
       .createAttorneyUserInteractor({
         applicationContext,
         user,
       });
-    return path.success({ attorneyUser: result });
+    return path.success({
+      alertSuccess: {
+        message:
+          'The user has been notified via the email addressed provided that they can no login to the system. You may continue creating Attorney Users with the form below.',
+        title: 'The Attorney User has been added.',
+      },
+      attorneyUser,
+    });
   } catch (err) {
     return path.error();
   }
