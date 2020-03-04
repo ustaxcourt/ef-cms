@@ -93,6 +93,7 @@ describe('updateCase', () => {
           updateCase: () => Promise.resolve(MOCK_CASE),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {
@@ -124,6 +125,7 @@ describe('updateCase', () => {
           updateCase: () => Promise.resolve(MOCK_CASE),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let updatedCase;
 
@@ -159,6 +161,7 @@ describe('updateCase', () => {
           updateCase: () => Promise.resolve(MOCK_CASE),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
 
     const updatedCase = await saveCaseDetailInternalEditInteractor({
@@ -226,6 +229,7 @@ describe('updateCase', () => {
           updateCase: () => Promise.resolve(MOCK_CASE),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
 
     let error = null;
@@ -259,6 +263,7 @@ describe('updateCase', () => {
           updateCase: () => Promise.resolve(MOCK_CASE),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {
@@ -289,6 +294,7 @@ describe('updateCase', () => {
           updateCase: () => Promise.resolve(MOCK_CASE),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {

@@ -54,7 +54,7 @@ describe('Update case trial sort tags', () => {
 
   it('throws unauthorized error if user is unauthorized', async () => {
     applicationContext.getCurrentUser = () => {
-      return { userId: 'notauser' };getUniqueId: () => 'unique-id-1',
+      return { userId: 'notauser' };
     };
     let error;
     try {
@@ -119,6 +119,7 @@ describe('Update case trial sort tags', () => {
             Promise.resolve(new Case(caseToUpdate, { applicationContext })),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {
