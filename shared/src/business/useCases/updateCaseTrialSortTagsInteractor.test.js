@@ -29,6 +29,7 @@ describe('Update case trial sort tags', () => {
           updateCaseTrialSortMappingRecords: updateCaseTrialSortMappingRecordsStub,
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
   });
 
@@ -53,7 +54,7 @@ describe('Update case trial sort tags', () => {
 
   it('throws unauthorized error if user is unauthorized', async () => {
     applicationContext.getCurrentUser = () => {
-      return { userId: 'notauser' };
+      return { userId: 'notauser' };getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {
@@ -83,6 +84,7 @@ describe('Update case trial sort tags', () => {
           updateCase: () => null,
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {

@@ -36,6 +36,7 @@ describe('updateCase', () => {
       environment: {
         stage: 'local',
       },
+      getUniqueId: () => 'unique-id-1',
     };
   });
 
