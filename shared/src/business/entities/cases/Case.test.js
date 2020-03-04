@@ -1053,8 +1053,8 @@ describe('Case entity', () => {
       const caseToVerify = new Case(
         {
           docketNumber: '123-19',
-          status: Case.STATUS_TYPES.generalDocket,
           isPaper: false,
+          status: Case.STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1072,8 +1072,8 @@ describe('Case entity', () => {
       const caseToVerify = new Case(
         {
           docketNumber: '123-19',
-          status: Case.STATUS_TYPES.generalDocket,
           isPaper: true,
+          status: Case.STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
