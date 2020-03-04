@@ -31,7 +31,7 @@ export const headerHelper = (get, applicationContext) => {
   const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
   const isBlockedCasesReport = currentPage.includes('BlockedCasesReport');
 
-  const showCreateAttorney = permissions && permissions.CREATE_ATTORNEY_USER;
+  const showCreateAttorney = permissions && permissions.MANAGE_ATTORNEY_USERS;
 
   return {
     defaultQCBoxPath: isOtherUser(userRole)
