@@ -1,6 +1,4 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import calendarClerkLogIn from './journey/calendarClerkLogIn';
-import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSignsOut from './journey/docketClerkSignsOut';
@@ -10,6 +8,9 @@ import docketClerkViewsEligibleCasesForTrialSession from './journey/docketClerkV
 import docketClerkViewsInactiveCasesForTrialSession from './journey/docketClerkViewsInactiveCasesForTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
+import petitionerLogIn from './journey/petitionerLogIn';
+import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
@@ -26,8 +27,13 @@ describe('docket clerk update case journey', () => {
     jest.setTimeout(30000);
   });
 
-  it('login as a petitioner and create a case', async () => {
-    await loginAs(test, 'petitioner');
+  afterAll(() => {
+    test.closeSocket();
+  });
+
+  loginAs(test, 'petitioner');
+
+  it('create a case', async () => {
     const caseDetail = await uploadPetition(test, overrides);
     test.caseId = caseDetail.caseId;
     test.docketNumber = caseDetail.docketNumber;
@@ -39,9 +45,9 @@ describe('docket clerk update case journey', () => {
   docketClerkViewsTrialSessionList(test, overrides);
   docketClerkViewsEligibleCasesForTrialSession(test);
 
-  calendarClerkLogIn(test);
+  petitionsClerkLogIn(test);
   markAllCasesAsQCed(test, () => [test.caseId]);
-  calendarClerkSetsATrialSessionsSchedule(test);
+  petitionsClerkSetsATrialSessionsSchedule(test);
   userSignsOut(test);
 
   docketClerkLogIn(test);

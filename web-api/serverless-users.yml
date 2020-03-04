@@ -102,6 +102,8 @@ provider:
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
+    EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
+    EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
 
 package:
   exclude:
@@ -270,18 +272,6 @@ functions:
     events:
       - http:
           path: /{userId}/document-qc/inbox
-          method: get
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCBatchedForUser:
-    handler: web-api/${self:provider.dir}/usersHandlers.getDocumentQCBatchedForUserLambda
-    events:
-      - http:
-          path: /{userId}/document-qc/batched
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

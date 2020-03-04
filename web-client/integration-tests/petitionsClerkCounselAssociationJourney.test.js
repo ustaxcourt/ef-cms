@@ -16,6 +16,10 @@ import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDeta
 const test = setupTest();
 
 describe('Petitions Clerk Counsel Association Journey', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   petitionerLogin(test);
   it('Create test case', async () => {
     await uploadPetition(test, {

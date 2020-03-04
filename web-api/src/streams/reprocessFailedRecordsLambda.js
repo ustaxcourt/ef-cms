@@ -1,5 +1,4 @@
-const createApplicationContext = require('../applicationContext');
-const { handle } = require('../middleware/apiGatewayHelper');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * used for processing failed stream records
@@ -8,18 +7,17 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  handle(event, async () => {
-    const applicationContext = createApplicationContext({});
-    try {
-      const results = await applicationContext
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      return await applicationContext
         .getUseCases()
         .reprocessFailedRecordsInteractor({
           applicationContext,
         });
-      applicationContext.logger.info('Results', results);
-      return results;
-    } catch (e) {
-      applicationContext.logger.error(e);
-      throw e;
-    }
-  });
+    },
+    {
+      logUser: false,
+      user: {},
+    },
+  );

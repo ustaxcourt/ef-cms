@@ -1,6 +1,4 @@
-const createApplicationContext = require('../applicationContext');
-const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
-const { handle } = require('../middleware/apiGatewayHelper');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * save the information about a new websocket connection
@@ -8,25 +6,13 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handler = event => {
-  return handle(event, async () => {
-    const user = getUserFromAuthHeader(event);
-    const applicationContext = createApplicationContext(user);
-    try {
-      const endpoint = event.requestContext.domainName;
-      const results = await applicationContext
-        .getUseCases()
-        .onConnectInteractor({
-          applicationContext,
-          connectionId: event.requestContext.connectionId,
-          endpoint,
-        });
-      applicationContext.logger.info('User', user);
-      applicationContext.logger.info('Results', results);
-      return results;
-    } catch (e) {
-      applicationContext.logger.error(e);
-      throw e;
-    }
+exports.handler = event =>
+  genericHandler(event, async ({ applicationContext }) => {
+    const endpoint = event.requestContext.domainName;
+
+    return await applicationContext.getUseCases().onConnectInteractor({
+      applicationContext,
+      connectionId: event.requestContext.connectionId,
+      endpoint,
+    });
   });
-};

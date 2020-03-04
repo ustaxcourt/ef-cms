@@ -35,7 +35,6 @@ const goToDashboard = [
         'admin',
         'adc',
         'admissionsclerk',
-        'calendarclerk',
         'clerkofcourt',
         'docketclerk',
         'floater',

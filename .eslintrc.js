@@ -138,7 +138,6 @@ module.exports = {
           'booleans',
           'buch',
           'buchs',
-          'calendarclerk',
           'cancelable',
           'carluzzo',
           'carluzzos',

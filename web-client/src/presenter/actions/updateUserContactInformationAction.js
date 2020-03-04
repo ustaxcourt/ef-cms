@@ -1,23 +1,29 @@
+import { state } from 'cerebral';
+
 /**
  * updates primary contact information
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context used for getting the getUser use case
+ * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.path the next path in the sequence to call
  * @returns {object} alertSuccess, caseId, tab
  */
 export const updateUserContactInformationAction = async ({
   applicationContext,
+  get,
   path,
 }) => {
-  const { contact, userId } = applicationContext.getCurrentUser();
+  const formUser = get(state.form);
+  const currentUser = applicationContext.getCurrentUser();
 
   try {
     await applicationContext
       .getUseCases()
       .updateUserContactInformationInteractor({
         applicationContext,
-        contactInfo: contact,
-        userId,
+        contactInfo: formUser.contact,
+        userId: currentUser.userId,
       });
   } catch (err) {
     if (

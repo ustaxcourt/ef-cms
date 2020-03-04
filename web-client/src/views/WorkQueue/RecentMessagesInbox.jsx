@@ -22,7 +22,7 @@ export const RecentMessagesInbox = connect(
                 <span className="padding-left-2px">Docket</span>
               </th>
               <th className="small">Received</th>
-              {workQueueHelper.showCaseTitle && <th>Case title</th>}
+              <th>Case title</th>
               <th>Document</th>
               {workQueueHelper.showCaseStatusColumn && (
                 <th className="no-wrap">Case status</th>
@@ -41,11 +41,9 @@ export const RecentMessagesInbox = connect(
                   <td className="message-queue-row small">
                     <span className="no-wrap">{item.received}</span>
                   </td>
-                  {workQueueHelper.showCaseTitle && (
-                    <td className="message-queue-row">
-                      <span>{item.caseTitle}</span>
-                    </td>
-                  )}
+                  <td className="message-queue-row">
+                    <span>{item.caseTitle}</span>
+                  </td>
 
                   <td className="message-queue-row message-queue-document">
                     <div className="message-document-title">

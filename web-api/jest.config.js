@@ -1,5 +1,15 @@
 module.exports = {
   collectCoverage: true,
+  collectCoverageFrom: [
+    'switch-environment-color.js',
+    'migrations/*.js',
+    'src/**/*.js',
+    '!src/applicationContext.js',
+    '!src/**/*Handlers.js',
+    '!src/**/*Lambda.js',
+    '!src/**/*.test.js',
+  ],
+
   coverageDirectory: './coverage',
   coverageThreshold: {
     global: {

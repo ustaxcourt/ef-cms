@@ -2,6 +2,7 @@ const {
   getConsolidatedCasesByCaseInteractor,
 } = require('./getConsolidatedCasesByCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('getConsolidatedCasesByCaseInteractor', () => {
   let applicationContext;
@@ -22,6 +23,7 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
     ]);
 
     applicationContext = {
+      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       getPersistenceGateway: () => ({
         getCasesByLeadCaseId: getCasesByLeadCaseIdStub,
       }),

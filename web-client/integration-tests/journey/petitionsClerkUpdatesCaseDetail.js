@@ -6,34 +6,6 @@ export default test => {
   return it('Petitions clerk updates case detail', async () => {
     expect(test.getState('caseDetailErrors')).toEqual({});
 
-    await test.runSequence('updateCaseValueSequence', {
-      key: 'hasIrsNotice',
-      value: false,
-    });
-
-    await test.runSequence('submitCaseDetailEditSaveSequence');
-    expect(test.getState('caseDetailErrors')).toEqual({});
-
-    // irsNoticeDate - valid
-    await test.runSequence('updateFormValueSequence', {
-      key: 'hasIrsNotice',
-      value: true,
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'irsYear',
-      value: '2018',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'irsMonth',
-      value: '12',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'irsDay',
-      value: '24',
-    });
-    await test.runSequence('submitCaseDetailEditSaveSequence');
-    expect(test.getState('caseDetailErrors')).toEqual({});
-
     // irsNoticeDate - invalid
     await test.runSequence('updateFormValueSequence', {
       key: 'hasIrsNotice',
@@ -51,7 +23,8 @@ export default test => {
       key: 'irsDay',
       value: '24',
     });
-    await test.runSequence('submitCaseDetailEditSaveSequence');
+    await test.runSequence('navigateToReviewSavedPetitionSequence');
+
     expect(test.getState('caseDetailErrors')).toEqual({
       irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[1],
     });
@@ -73,8 +46,29 @@ export default test => {
       key: 'irsDay',
       value: '24',
     });
-    await test.runSequence('submitCaseDetailEditSaveSequence');
+    await test.runSequence('validateCaseDetailSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
+
+    // irsNoticeDate - valid
+    await test.runSequence('updateFormValueSequence', {
+      key: 'hasIrsNotice',
+      value: true,
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsYear',
+      value: '2018',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsMonth',
+      value: '12',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsDay',
+      value: '24',
+    });
+    await test.runSequence('validateCaseDetailSequence');
+    expect(test.getState('caseDetailErrors')).toEqual({});
+
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2018',
@@ -87,8 +81,16 @@ export default test => {
       key: 'irsDay',
       value: '24',
     });
-    await test.runSequence('submitCaseDetailEditSaveSequence');
+    await test.runSequence('validateCaseDetailSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
+
+    await test.runSequence('navigateToReviewSavedPetitionSequence');
+    await test.runSequence('saveSavedCaseForLaterSequence');
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(null);
 
     // irsNoticeDate - valid
@@ -108,7 +110,7 @@ export default test => {
       key: 'irsDay',
       value: '24',
     });
-    await test.runSequence('submitCaseDetailEditSaveSequence');
+    await test.runSequence('validateCaseDetailSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
 
     // petitionPaymentDate
@@ -116,7 +118,8 @@ export default test => {
       key: 'petitionPaymentStatus',
       value: Case.PAYMENT_STATUS.PAID,
     });
-    await test.runSequence('submitCaseDetailEditSaveSequence');
+    await test.runSequence('navigateToReviewSavedPetitionSequence');
+
     expect(test.getState('caseDetailErrors')).toEqual({
       petitionPaymentDate: VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
       petitionPaymentMethod: VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
@@ -138,7 +141,7 @@ export default test => {
       key: 'paymentDateDay',
       value: '24',
     });
-    await test.runSequence('submitCaseDetailEditSaveSequence');
+    await test.runSequence('validateCaseDetailSequence');
 
     expect(test.getState('caseDetailErrors')).toEqual({});
 
@@ -152,7 +155,7 @@ export default test => {
       value: '',
     });
 
-    await test.runSequence('submitCaseDetailEditSaveSequence');
+    await test.runSequence('navigateToReviewSavedPetitionSequence');
     expect(test.getState('caseDetailErrors')).toEqual({
       caseType: VALIDATION_ERROR_MESSAGES.caseType,
       procedureType: VALIDATION_ERROR_MESSAGES.procedureType,
@@ -175,7 +178,8 @@ export default test => {
       value: 'Regular',
     });
     //submit and route to case detail
-    await test.runSequence('submitCaseDetailEditSaveSequence');
+    await test.runSequence('navigateToReviewSavedPetitionSequence');
+    await test.runSequence('saveSavedCaseForLaterSequence');
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

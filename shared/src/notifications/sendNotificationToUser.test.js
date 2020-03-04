@@ -41,7 +41,7 @@ let applicationContext = {
       throw notificationError;
     })
     .mockImplementationOnce(() => {
-      throw new Error('some other error');
+      throw notificationError;
     })
     .mockImplementation(() => {
       return { postToConnection };
@@ -68,7 +68,7 @@ describe('send websocket notification to browser', () => {
       userId: 'userId-000-000-0000',
     });
     expect(postToConnection.mock.calls.length).toBe(2);
-    expect(deleteStub.callCount).toBe(1);
+    expect(deleteStub.callCount).toBe(2);
   });
 
   it('throws exception', async () => {

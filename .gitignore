@@ -17,7 +17,7 @@ cypress/videos
 dist-public/
 dist/
 gen.conf
-graph-generators/*png
+graph-generators/*.jpg
 graph-generators/node_modules/
 lambda-policy.json
 node_modules/
@@ -37,3 +37,4 @@ web-client/coverage-unit/*
 web-client/pa11y/pa11y-screenshots
 web-client/reports
 web-client/tests_output/
+web-client/terraform/common/cloudfront-edge/index.js.zip

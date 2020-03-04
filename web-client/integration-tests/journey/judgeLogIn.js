@@ -1,3 +1,5 @@
+import { wait } from '../helpers';
+
 export default (test, name = 'judgeArmen') => {
   return it('Judge logs in', async () => {
     await test.runSequence('updateFormValueSequence', {
