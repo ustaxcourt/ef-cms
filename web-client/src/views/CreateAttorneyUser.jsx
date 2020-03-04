@@ -126,11 +126,10 @@ export const CreateAttorneyUser = connect(
 
               <UserContactEditForm
                 bind="form"
-                changeCountryTypeSequence="countryTypeFormContactChangeSequence"
+                changeCountryTypeSequenceName="countryTypeUserContactChangeSequence"
                 type="contact"
-                updateSequence="updateFormValueSequence"
-                validateSequence="validateAttorneyUserSequence"
-                onBlurSequence="validateAttorneyUserSequence"
+                onBlurSequenceName="validateAttorneyUserSequence"
+                onChangeSequenceName="updateFormValueSequence"
               />
 
               <Button
