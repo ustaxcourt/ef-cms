@@ -49,6 +49,7 @@ import { convertHtml2PdfAndOpenInNewTabSequence } from './sequences/convertHtml2
 import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
 import { copyPrimaryContactSequence } from './sequences/copyPrimaryContactSequence';
 import { countryTypeChangeSequence } from './sequences/countryTypeChangeSequence';
+import { countryTypeFormContactChangeSequence } from './sequences/countryTypeFormContactChangeSequence';
 import { countryTypeUserContactChangeSequence } from './sequences/countryTypeUserContactChangeSequence';
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
 import { createCaseFromPaperAndServeToIrsSequence } from './sequences/createCaseFromPaperAndServeToIrsSequence';
@@ -427,6 +428,7 @@ export const presenter = {
     convertHtml2PdfSequence,
     copyPrimaryContactSequence,
     countryTypeChangeSequence,
+    countryTypeFormContactChangeSequence,
     countryTypeUserContactChangeSequence,
     createCaseDeadlineSequence,
     createCaseFromPaperAndServeToIrsSequence,
