@@ -192,6 +192,7 @@ import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { unblockCaseFromTrialInteractor } from '../../shared/src/proxies/unblockCaseFromTrialProxy';
 import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritizeCaseProxy';
+import { updateAttorneyUserInteractor } from '../../shared/src/proxies/updateAttorneyUserProxy';
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
@@ -369,6 +370,7 @@ const allUseCases = {
   submitPendingCaseAssociationRequestInteractor,
   unblockCaseFromTrialInteractor,
   unprioritizeCaseInteractor,
+  updateAttorneyUserInteractor,
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseTrialSortTagsInteractor,
