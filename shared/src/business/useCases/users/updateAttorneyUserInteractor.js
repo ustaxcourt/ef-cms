@@ -6,22 +6,22 @@ const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 /**
- * createAttorneyUserInteractor
+ * updateAttorneyUserInteractor
  *
  * @param {Object} providers the providers object
  * @param {Object} providers.applicationContext the application context
  * @param {Object} providers.user the user data
  * @returns {Promise} the promise of the createUser call
  */
-exports.createAttorneyUserInteractor = async ({ applicationContext, user }) => {
+exports.updateAttorneyUserInteractor = async ({ applicationContext, user }) => {
   const requestUser = applicationContext.getCurrentUser();
   if (!isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_ATTORNEY_USERS)) {
-    throw new UnauthorizedError('Unauthorized for creating attorney user');
+    throw new UnauthorizedError('Unauthorized for updating attorney user');
   }
 
   const createdUser = await applicationContext
     .getPersistenceGateway()
-    .createAttorneyUser({
+    .updateAttorneyUser({
       applicationContext,
       user,
     });

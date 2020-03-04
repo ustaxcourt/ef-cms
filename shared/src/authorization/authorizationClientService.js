@@ -12,7 +12,6 @@ const ROLE_PERMISSIONS = {
   CASE_NOTES: 'CASE_NOTES',
   CONSOLIDATE_CASES: 'CONSOLIDATE_CASES',
   COURT_ISSUED_DOCUMENT: 'COURT_ISSUED_DOCUMENT',
-  CREATE_ATTORNEY_USER: 'CREATE_ATTORNEY_USER',
   CREATE_ORDER_DOCKET_ENTRY: 'CREATE_ORDER_DOCKET_ENTRY',
   CREATE_USER: 'CREATE_USER',
   DOCKET_ENTRY: 'DOCKET_ENTRY',
@@ -23,6 +22,7 @@ const ROLE_PERMISSIONS = {
   GET_CASE: 'GET_CASE',
   GET_READ_MESSAGES: 'GET_READ_MESSAGES',
   GET_USERS_IN_SECTION: 'GET_USERS_IN_SECTION',
+  MANAGE_ATTORNEY_USERS: 'MANAGE_ATTORNEY_USERS',
   MIGRATE_CASE: 'MIGRATE_CASE',
   PENDING_ITEMS: 'PENDING_ITEMS',
   PETITION: 'PETITION',
@@ -55,7 +55,7 @@ const allInternalUserPermissions = [
   ROLE_PERMISSIONS.CASE_INVENTORY_REPORT,
   ROLE_PERMISSIONS.CONSOLIDATE_CASES,
   ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT,
-  ROLE_PERMISSIONS.CREATE_ATTORNEY_USER,
+  ROLE_PERMISSIONS.MANAGE_ATTORNEY_USERS,
   ROLE_PERMISSIONS.GET_CASE,
   ROLE_PERMISSIONS.GET_READ_MESSAGES,
   ROLE_PERMISSIONS.GET_USERS_IN_SECTION,
@@ -155,7 +155,7 @@ exports.AUTHORIZATION_MAP = AUTHORIZATION_MAP;
 /**
  * Checks user permissions for an action
  *
- * @param {object} user the user to check for authorization
+ * @param {Object} user the user to check for authorization
  * @param {string} action the action to verify if the user is authorized for
  * @param {string} owner the user id of the owner of the item to verify
  * @returns {boolean} true if user is authorized, false otherwise
