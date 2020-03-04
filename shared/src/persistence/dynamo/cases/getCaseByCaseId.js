@@ -39,8 +39,22 @@ exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
     applicationContext,
   });
 
+  const documents = await client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `case|${theCase.caseId}`,
+      ':prefix': 'document',
+    },
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+    applicationContext,
+  });
+
   return {
     ...theCase,
     docketRecord: docketRecord.length > 0 ? docketRecord : theCase.docketRecord, // this is temp until sesed data fixed
+    documents: documents.length > 0 ? documents : theCase.documents, // this is temp until sesed data fixed
   };
 };
