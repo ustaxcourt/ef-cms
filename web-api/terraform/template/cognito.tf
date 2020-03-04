@@ -23,7 +23,11 @@ resource "aws_cognito_user_pool" "pool" {
 
   admin_create_user_config {
     allow_admin_create_user_only = false
-    unused_account_validity_days = 0
+    invite_message_template {
+      sms_message = "Your username is {username} and temporary password is {####}."
+      email_subject = "U.S. Tax Court account creation"
+      email_message = "An account has been created for you on the <a href='https://ui-dev.ustc-case-mgmt.flexion.us/'>U.S. Tax Court site</a>. Your username is {username} and temporary password is {####}. Please log in and change your password."
+    }
   }
 
   schema {

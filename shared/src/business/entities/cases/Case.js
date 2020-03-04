@@ -224,27 +224,28 @@ Case.validationName = 'Case';
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function Case(rawCase, { applicationContext }) {
+function Case(rawCase, { applicationContext, filtered = false }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
   this.entityName = 'Case';
 
-  if (User.isInternalUser(applicationContext.getCurrentUser().role)) {
+  if (
+    !filtered ||
+    User.isInternalUser(applicationContext.getCurrentUser().role)
+  ) {
+    this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
+    this.automaticBlocked = rawCase.automaticBlocked;
+    this.automaticBlockedDate = rawCase.automaticBlockedDate;
+    this.automaticBlockedReason = rawCase.automaticBlockedReason;
+    this.blocked = rawCase.blocked;
+    this.blockedDate = rawCase.blockedDate;
+    this.blockedReason = rawCase.blockedReason;
     this.caseNote = rawCase.caseNote;
+    this.highPriority = rawCase.highPriority;
+    this.highPriorityReason = rawCase.highPriorityReason;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   }
-
-  // TODO: as part of the security task, these values also need to be restricted
-  this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
-  this.automaticBlocked = rawCase.automaticBlocked;
-  this.automaticBlockedDate = rawCase.automaticBlockedDate;
-  this.automaticBlockedReason = rawCase.automaticBlockedReason;
-  this.blocked = rawCase.blocked;
-  this.blockedDate = rawCase.blockedDate;
-  this.blockedReason = rawCase.blockedReason;
-  this.highPriority = rawCase.highPriority;
-  this.highPriorityReason = rawCase.highPriorityReason;
 
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.userId = rawCase.userId;
