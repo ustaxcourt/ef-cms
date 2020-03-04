@@ -3,6 +3,7 @@ const { MOCK_USERS } = require('../../test/mockUsers');
 
 const applicationContext = {
   getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+  getUniqueId: () => 'unique-id-1',
 };
 
 describe('DocketRecord', () => {

@@ -17,6 +17,7 @@ const {
 const {
   updateWorkItemTrialDate,
 } = require('../workitems/updateWorkItemTrialDate');
+const { differenceWith, isEqual } = require('lodash');
 
 /**
  * updateCase
@@ -36,6 +37,26 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   });
 
   const requests = [];
+
+  let updatedDocketRecord = differenceWith(
+    caseToUpdate.docketRecord,
+    oldCase.docketRecord,
+    isEqual,
+  );
+
+  updatedDocketRecord.forEach(docketEntry => {
+    requests.push(
+      client.put({
+        Item: {
+          pk: `case|${caseToUpdate.caseId}`,
+          sk: `docket-record|${docketEntry.docketRecordId}`,
+          ...docketEntry,
+        },
+        applicationContext,
+      }),
+    );
+  });
+
   if (
     oldCase.status !== caseToUpdate.status ||
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||

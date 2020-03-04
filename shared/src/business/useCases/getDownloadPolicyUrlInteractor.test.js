@@ -21,6 +21,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         getDownloadPolicyUrl: () => 'localhost',
         verifyCaseForUser: verifyCaseForUserMock,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
   });
 
