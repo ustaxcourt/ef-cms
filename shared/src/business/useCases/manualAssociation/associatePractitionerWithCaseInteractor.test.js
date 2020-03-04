@@ -59,6 +59,7 @@ describe('associateRespondentWithCaseInteractor', () => {
           updateCase: async () => caseRecord,
           verifyCaseForUser: async () => true,
         }),
+        getUniqueId: () => 'unique-id-1',
       };
       await associatePractitionerWithCaseInteractor({
         applicationContext,
@@ -94,6 +95,7 @@ describe('associateRespondentWithCaseInteractor', () => {
         updateCase: updateCaseSpy,
         verifyCaseForUser: async () => false,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
 
     await associatePractitionerWithCaseInteractor({

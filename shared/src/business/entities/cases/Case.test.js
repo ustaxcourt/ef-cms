@@ -884,6 +884,7 @@ describe('Case entity', () => {
       const updatedDocketEntry = new DocketRecord(
         {
           description: 'second record now updated',
+          docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
           documentId: '8675309b-28d0-43ec-bafb-654e83405412',
           filingDate: '2018-03-02T22:22:00.000Z',
           index: 7,

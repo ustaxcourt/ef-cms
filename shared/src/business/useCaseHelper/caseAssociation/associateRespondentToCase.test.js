@@ -50,6 +50,7 @@ describe('associateRespondentToCase', () => {
         updateCase: updateCaseSpy,
         verifyCaseForUser: verifyCaseForUserSpy,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
 
     await associateRespondentToCase({
@@ -82,6 +83,7 @@ describe('associateRespondentToCase', () => {
         updateCase: updateCaseSpy,
         verifyCaseForUser: verifyCaseForUserSpy,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
 
     await associateRespondentToCase({
