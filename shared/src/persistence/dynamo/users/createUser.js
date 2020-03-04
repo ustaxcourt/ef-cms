@@ -128,7 +128,7 @@ exports.createUser = async ({ applicationContext, user }) => {
     userId = response.Username;
   }
 
-  return await this.createUserRecords({
+  return await exports.createUserRecords({
     applicationContext,
     user,
     userId,
