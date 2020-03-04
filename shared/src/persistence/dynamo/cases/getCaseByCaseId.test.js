@@ -71,6 +71,12 @@ describe('getCaseByCaseId', () => {
           sk: '123',
         },
       ],
+      documents: [
+        {
+          pk: '123',
+          sk: '123',
+        },
+      ],
       pk: '123',
       sk: '123',
       status: 'New',

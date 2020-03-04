@@ -35,6 +35,16 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
         applicationContext,
       }),
     ),
+    ...caseToCreate.documents.map(document =>
+      client.put({
+        Item: {
+          pk: `case|${caseToCreate.caseId}`,
+          sk: `document|${document.documentId}`,
+          ...document,
+        },
+        applicationContext,
+      }),
+    ),
     createMappingRecord({
       applicationContext,
       pkId: caseToCreate.userId,
