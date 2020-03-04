@@ -27,7 +27,15 @@ generate_post_data() {
   "role": "$role",
   "section": "$section",
   "name": "$name",
-  "barNumber": "$barNumber"
+  "barNumber": "$barNumber",
+  "contact": {
+    "address1": "123 Main St",
+    "city": "Tallahassee",
+    "countryType": "domestic",
+    "phone": "+1 (555) 555-5555",
+    "postalCode": "09988",
+    "state": "FL"
+  }
 }
 EOF
 }
