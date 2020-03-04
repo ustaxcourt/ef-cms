@@ -10,6 +10,7 @@ import React from 'react';
 export const CaseInformation = connect(
   {
     clearPreferredTrialCitySequence: sequences.clearPreferredTrialCitySequence,
+    constants: state.constants,
     form: state.form,
     startCaseInternalHelper: state.startCaseInternalHelper,
     trialCitiesHelper: state.trialCitiesHelper,
@@ -20,6 +21,7 @@ export const CaseInformation = connect(
   },
   ({
     clearPreferredTrialCitySequence,
+    constants,
     form,
     startCaseInternalHelper,
     trialCitiesHelper,
@@ -84,6 +86,9 @@ export const CaseInformation = connect(
               });
             }}
           />
+          <span className="display-inline-block margin-top-1">
+            {constants.CASE_CAPTION_POSTFIX}
+          </span>
         </FormGroup>
         <ProcedureType
           legend="Case procedure"
