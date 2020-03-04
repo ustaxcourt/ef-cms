@@ -140,7 +140,6 @@ respondent1 - respondent4
 ```
 adc
 admissionsclerk
-calendarclerk
 clerkofcourt
 docketclerk
 docketclerk1
@@ -176,7 +175,6 @@ respondent1@example.com – respondent10@example.com
 ```
 adc1@example.com – adc5@example.com
 admissionsclerk1@example.com – admissionsclerk5@example.com
-calendarclerk1@example.com – calendarclerk5@example.com
 clerkofcourt1@example.com – clerkofcourt5@example.com
 docketclerk1@example.com – docketclerk5@example.com
 petitionsclerk1@example.com – petitionsclerk5@example.com

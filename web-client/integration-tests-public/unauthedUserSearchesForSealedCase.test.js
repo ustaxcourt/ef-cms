@@ -27,8 +27,9 @@ describe('Petitioner creates cases to search for', () => {
     jest.setTimeout(10000);
   });
 
+  loginAs(testClient, 'petitioner');
+
   it('Create case', async () => {
-    await loginAs(testClient, 'petitioner');
     const caseDetail = await uploadPetition(testClient, {
       contactSecondary: {
         address1: '734 Cowley Parkway',

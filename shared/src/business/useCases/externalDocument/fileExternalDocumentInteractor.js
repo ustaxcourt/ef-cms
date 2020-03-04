@@ -133,6 +133,7 @@ exports.fileExternalDocumentInteractor = async ({
         {
           assigneeId: null,
           assigneeName: null,
+          associatedJudge: caseToUpdate.associatedJudge,
           caseId: caseId,
           caseStatus: caseToUpdate.status,
           caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
@@ -168,12 +169,15 @@ exports.fileExternalDocumentInteractor = async ({
       workItems.push(workItem);
       caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
-      const docketRecordEntity = new DocketRecord({
-        description: metadata.documentTitle,
-        documentId: documentEntity.documentId,
-        eventCode: documentEntity.eventCode,
-        filingDate: documentEntity.receivedAt,
-      });
+      const docketRecordEntity = new DocketRecord(
+        {
+          description: metadata.documentTitle,
+          documentId: documentEntity.documentId,
+          eventCode: documentEntity.eventCode,
+          filingDate: documentEntity.receivedAt,
+        },
+        { applicationContext },
+      );
       caseEntity.addDocketRecord(docketRecordEntity);
 
       if (documentEntity.isAutoServed()) {

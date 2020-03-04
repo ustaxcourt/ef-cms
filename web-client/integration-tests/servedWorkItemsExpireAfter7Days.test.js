@@ -24,8 +24,11 @@ describe('verify old served work items do not show up in the outbox', () => {
 
   beforeEach(async () => {
     jest.setTimeout(300000);
+  });
 
-    await loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner');
+
+  it('creates a case', async () => {
     caseDetail = await uploadPetition(test);
 
     const applicationContext = applicationContextFactory({
@@ -111,9 +114,9 @@ describe('verify old served work items do not show up in the outbox', () => {
     });
   });
 
-  it('the petitionsclerk user should have the expected work items equal to or new than 7 days', async () => {
-    await loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk');
 
+  it('the petitionsclerk user should have the expected work items equal to or new than 7 days', async () => {
     const myOutbox = (await getFormattedDocumentQCMyOutbox(test)).filter(
       item => item.docketNumber === caseDetail.docketNumber,
     );
@@ -125,9 +128,9 @@ describe('verify old served work items do not show up in the outbox', () => {
       myOutbox.find(item => item.workItemId === workItemId7),
     ).toBeDefined();
 
-    const sectionOutbox = (await getFormattedDocumentQCSectionOutbox(
-      test,
-    )).filter(item => item.docketNumber === caseDetail.docketNumber);
+    const sectionOutbox = (
+      await getFormattedDocumentQCSectionOutbox(test)
+    ).filter(item => item.docketNumber === caseDetail.docketNumber);
     expect(sectionOutbox.length).toEqual(2);
     expect(
       sectionOutbox.find(item => item.workItemId === workItemId6),

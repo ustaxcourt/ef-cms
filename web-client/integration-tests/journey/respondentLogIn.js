@@ -1,3 +1,5 @@
+import { wait } from '../helpers';
+
 export default (test, token = 'respondent') => {
   return it('Respondent logs in', async () => {
     await test.runSequence('gotoLoginSequence');

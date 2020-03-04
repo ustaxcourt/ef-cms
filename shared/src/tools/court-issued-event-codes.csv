@@ -1,5 +1,5 @@
 CODE,DOCKET ENTRY LANGUAGE,Display in Dropdown ,Nonstandard type ,What is this order for? ,Judge's name ,Date,Docket number(s),Trial location (dropdown) ,Concatenated Docket Entry ,Served Stamp 
-O,ORDER *ANYTHING*,O - Order ,Type A ,[Anything],,,,,Order [Anything],Served OR Entered and Served 
+O,ORDER *ANYTHING*,O - Order ,Type A ,[Anything],,,,,[Anything],Served OR Entered and Served 
 OAJ,ORDER that case is assigned to *JUDGE* . *ANYTHING*,OAJ - Order that case is assigned ,Type B,[Anything],[Judge Name],,,,Order [Judge name] [Anything],Served 
 OAL,"ORDER that the letter ""L"" is added to the Dkt. No. *ANYTHING*","OAL - Order that the letter ""L"" is added to Docket number ",Type C,,,,[Docket number],,"Order that the letter ""L"" is added to Docket number [Anything]",Served 
 OAP,ORDER for Amended Petition on *DATE*. *ANY*,OAP - Order for Amended Petition ,Type D,[Anything],,[Date],,,Order for Amended Petition on [Date] [Anything],Served 
@@ -40,7 +40,7 @@ OAD,"ORDER AND DECISION Entered,, *ANY* *JUDGE*. *ANYTHING*","OAD - Order and De
 ODJ,"ORDER OF DISMISSAL FOR LACK OF JURISDICTION Entered,, *JUDGE*. *ANYTHING*","ODJ - Order of Dismissal for Lack of Jurisdiction Entered,",Type B,[Anything],[Judge name],,,,"Order of Dismissal for Lack of Jurisdiction Entered, [Judge Name] [Anything]",Entered and Served 
 SDEC,"STIPULATED DECISION Entered, *JUDGE*. *ANYTHING*","SDEC - Stipulated Decision Entered,",Type B,[Anything],[Judge name],,,,"Stipulated Decision Entered, [Judge Name] [Anything]",Entered and Served 
 MOP ,Memorandum Opinion [judge],MOP - Memorandum Opinion ,Type B,[Anything],[Judge name],,,,Memorandum Opinion [judge],
-NOT ,Notice [Anything],NOT - Notice ,Type A ,[Anything],,,,,Notice [Anything],
+NOT ,Notice [Anything],NOT - Notice ,Type A ,[Anything],,,,,[Anything],
 SOP ,Summary Opinion [judge],Summary Opinion ,Type B,[Anything],[Judge name],,,,Summary Opinion [judge],
 WRIT ,Writ of Habeas Corpus Ad Testificandum [anything],Writ of Habeas Corpus Ad Testificandum ,Type A ,[Anything] ,,,,,Writ of Habeas Corpus Ad Testificandum [anything],
 CTRA,Corrected Transcript of [Date],CTRA - Corrected Transcript ,Type E ,,,[Date],,,Corrected Transcipt of [Date] ,

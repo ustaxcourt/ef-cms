@@ -1,13 +1,14 @@
 const joi = require('@hapi/joi');
 const {
+  CHIEF_JUDGE,
+  DOCKET_NUMBER_MATCHER,
+  TRIAL_LOCATION_MATCHER,
+} = require('./CaseConstants');
+const {
   createISODateString,
   formatDateString,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
-const {
-  DOCKET_NUMBER_MATCHER,
-  TRIAL_LOCATION_MATCHER,
-} = require('./CaseConstants');
 const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
@@ -39,20 +40,19 @@ Case.PAYMENT_STATUS = {
 };
 
 Case.STATUS_TYPES = {
-  assignedCase: 'Assigned - Case',
-  assignedMotion: 'Assigned - Motion',
-  batchedForIRS: 'Batched for IRS',
-  calendared: 'Calendared',
-  cav: 'CAV',
-  closed: 'Closed',
-  generalDocket: 'General Docket - Not at Issue',
-  generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)',
-  jurisdictionRetained: 'Jurisdiction Retained',
-  new: 'New',
-  onAppeal: 'On Appeal',
-  recalled: 'Recalled',
-  rule155: 'Rule 155',
-  submitted: 'Submitted',
+  assignedCase: 'Assigned - Case', // Case has been assigned to a judge
+  assignedMotion: 'Assigned - Motion', // Someone has requested a judge for the case
+  calendared: 'Calendared', // Case has been scheduled for trial
+  cav: 'CAV', // Core alternative valuation
+  closed: 'Closed', // Judge has made a ruling to close the case
+  generalDocket: 'General Docket - Not at Issue', // Submitted to the IRS
+  generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)', // Case is ready for trial
+  inProgress: 'In Progress', // Case has been saved for later
+  jurisdictionRetained: 'Jurisdiction Retained', // Jurisdiction of a case is retained by a specific judge — usually after the case is on a judge’s trial calendar
+  new: 'New', // Case has not been QCed
+  onAppeal: 'On Appeal', // After the trial, the case has gone to the appeals court
+  rule155: 'Rule 155', // Where the Court has filed or stated its opinion or issued a dispositive order determining the issues in a case, it may withhold entry of its decision for the purpose of permitting the parties to submit computations pursuant to the Court’s determination of the issues, showing the correct amount to be included in the decision.
+  submitted: 'Submitted', // Submitted to the judge for decision
 };
 
 Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
@@ -80,21 +80,23 @@ Case.STATUS_TYPES_MANUAL_UPDATE = [
 Case.ANSWER_CUTOFF_AMOUNT = 45;
 Case.ANSWER_CUTOFF_UNIT = 'day';
 
-Case.CASE_TYPES = [
-  'Deficiency',
-  'CDP (Lien/Levy)',
-  'Innocent Spouse',
-  'Partnership (Section 6226)',
-  'Partnership (Section 6228)',
-  'Partnership (BBA Section 1101)',
-  'Whistleblower',
-  'Worker Classification',
-  'Declaratory Judgment (Retirement Plan)',
-  'Declaratory Judgment (Exempt Organization)',
-  'Passport',
-  'Interest Abatement',
-  'Other',
-];
+Case.CASE_TYPES_MAP = {
+  cdp: 'CDP (Lien/Levy)',
+  deficiency: 'Deficiency',
+  djExemptOrg: 'Declaratory Judgment (Exempt Organization)',
+  djRetirementPlan: 'Declaratory Judgment (Retirement Plan)',
+  innocentSpouse: 'Innocent Spouse',
+  interestAbatement: 'Interest Abatement',
+  other: 'Other',
+  partnershipSection1101: 'Partnership (BBA Section 1101)',
+  partnershipSection6226: 'Partnership (Section 6226)',
+  partnershipSection6228: 'Partnership (Section 6228)',
+  passport: 'Passport',
+  whistleblower: 'Whistleblower',
+  workerClassification: 'Worker Classification',
+};
+
+Case.CASE_TYPES = Object.values(Case.CASE_TYPES_MAP);
 
 // This is the order that they appear in the UI
 Case.PROCEDURE_TYPES = ['Regular', 'Small'];
@@ -118,16 +120,16 @@ Case.CASE_CAPTION_POSTFIX = 'v. Commissioner of Internal Revenue, Respondent';
 
 Case.ANSWER_DOCUMENT_CODES = [
   'A',
-  'AAPN',
-  'ATAP',
   'AAAP',
+  'AAPN',
   'AATP',
-  'APA',
-  'ATSP',
   'AATS',
-  'ASUP',
-  'ASAP',
   'AATT',
+  'APA',
+  'ASAP',
+  'ASUP',
+  'ATAP',
+  'ATSP',
 ];
 
 Case.AUTOMATIC_BLOCKED_REASONS = {
@@ -136,7 +138,7 @@ Case.AUTOMATIC_BLOCKED_REASONS = {
   pendingAndDueDate: 'Pending Item and Due Date',
 };
 
-Case.CHIEF_JUDGE = 'Chief Judge';
+Case.CHIEF_JUDGE = CHIEF_JUDGE;
 
 Case.DOCKET_NUMBER_SUFFIXES = ['W', 'P', 'X', 'R', 'SL', 'L', 'S'];
 
@@ -226,6 +228,13 @@ function Case(rawCase, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+
+  if (User.isInternalUser(applicationContext.getCurrentUser().role)) {
+    this.caseNote = rawCase.caseNote;
+    this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
+  }
+
+  // TODO: as part of the security task, these values also need to be restricted
   this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
   this.automaticBlocked = rawCase.automaticBlocked;
   this.automaticBlockedDate = rawCase.automaticBlockedDate;
@@ -233,41 +242,42 @@ function Case(rawCase, { applicationContext }) {
   this.blocked = rawCase.blocked;
   this.blockedDate = rawCase.blockedDate;
   this.blockedReason = rawCase.blockedReason;
+  this.highPriority = rawCase.highPriority;
+  this.highPriorityReason = rawCase.highPriorityReason;
+
+  this.status = rawCase.status || Case.STATUS_TYPES.new;
+  this.userId = rawCase.userId;
+
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
-  this.caseNote = rawCase.caseNote;
   this.caseType = rawCase.caseType;
+  this.closedDate = rawCase.closedDate;
   this.createdAt = rawCase.createdAt || createISODateString();
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
-  this.mailingDate = rawCase.mailingDate;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
-  this.highPriority = rawCase.highPriority;
-  this.highPriorityReason = rawCase.highPriorityReason;
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.irsSendDate = rawCase.irsSendDate;
   this.isPaper = rawCase.isPaper;
+  this.isSealed = !!rawCase.sealedDate;
   this.leadCaseId = rawCase.leadCaseId;
+  this.mailingDate = rawCase.mailingDate;
   this.partyType = rawCase.partyType;
-  this.petitionPaymentStatus =
-    rawCase.petitionPaymentStatus || Case.PAYMENT_STATUS.UNPAID;
   this.petitionPaymentDate = rawCase.petitionPaymentDate;
   this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
+  this.petitionPaymentStatus =
+    rawCase.petitionPaymentStatus || Case.PAYMENT_STATUS.UNPAID;
   this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
-  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.sealedDate = rawCase.sealedDate;
-  this.isSealed = !!rawCase.sealedDate;
-  this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialLocation = rawCase.trialLocation;
   this.trialSessionId = rawCase.trialSessionId;
   this.trialTime = rawCase.trialTime;
-  this.userId = rawCase.userId;
 
   this.initialDocketNumberSuffix =
     rawCase.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
@@ -311,7 +321,7 @@ function Case(rawCase, { applicationContext }) {
 
   if (Array.isArray(rawCase.docketRecord)) {
     this.docketRecord = rawCase.docketRecord.map(
-      docketRecord => new DocketRecord(docketRecord),
+      docketRecord => new DocketRecord(docketRecord, { applicationContext }),
     );
   } else {
     this.docketRecord = [];
@@ -354,7 +364,7 @@ joiValidationDecorator(
   joi.object().keys({
     associatedJudge: joi
       .string()
-      .required()
+      .optional()
       .meta({ tags: ['Restricted'] })
       .description('Judge assigned to this case. Defaults to Chief Judge.'),
     automaticBlocked: joi
@@ -430,6 +440,14 @@ joiValidationDecorator(
       .string()
       .valid(...Case.CASE_TYPES)
       .required(),
+    closedDate: joi.when('status', {
+      is: Case.STATUS_TYPES.closed,
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .date()
+        .iso()
+        .required(),
+    }),
     contactPrimary: joi.object().required(),
     contactSecondary: joi
       .object()
@@ -633,7 +651,7 @@ joiValidationDecorator(
         joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS, null),
         joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
       )
-      .required()
+      .optional()
       .description('Where the petitioner would prefer to hold the case trial.'),
     procedureType: joi
       .string()
@@ -642,7 +660,7 @@ joiValidationDecorator(
       .description('Procedure type of the case.'),
     qcCompleteForTrial: joi
       .object()
-      .required()
+      .optional()
       .meta({ tags: ['Restricted'] })
       .description(
         'QC Checklist object that must be completed before the case can go to trial.',
@@ -668,7 +686,7 @@ joiValidationDecorator(
     status: joi
       .string()
       .valid(...Object.values(Case.STATUS_TYPES))
-      .required()
+      .optional()
       .meta({ tags: ['Restricted'] })
       .description('Status of the case.'),
     trialDate: joi
@@ -874,19 +892,22 @@ Case.prototype.removePractitioner = function(practitionerToRemove) {
  *
  * @param {object} document the document to add to the case
  */
-Case.prototype.addDocument = function(document) {
+Case.prototype.addDocument = function(document, { applicationContext }) {
   document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 
   this.addDocketRecord(
-    new DocketRecord({
-      description: document.documentType,
-      documentId: document.documentId,
-      eventCode: document.eventCode,
-      filedBy: document.filedBy,
-      filingDate: document.receivedAt || document.createdAt,
-      status: document.status,
-    }),
+    new DocketRecord(
+      {
+        description: document.documentType,
+        documentId: document.documentId,
+        eventCode: document.eventCode,
+        filedBy: document.filedBy,
+        filingDate: document.receivedAt || document.createdAt,
+        status: document.status,
+      },
+      { applicationContext },
+    ),
   );
 };
 
@@ -900,6 +921,7 @@ Case.prototype.addDocumentWithoutDocketRecord = function(document) {
 };
 
 Case.prototype.closeCase = function() {
+  this.closedDate = createISODateString();
   this.status = Case.STATUS_TYPES.closed;
   this.unsetAsBlocked();
   this.unsetAsHighPriority();
@@ -932,7 +954,7 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateCaseTitleDocketRecord = function() {
+Case.prototype.updateCaseTitleDocketRecord = function({ applicationContext }) {
   const caseTitleRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
   let lastTitle = this.initialTitle;
 
@@ -948,11 +970,14 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
 
   if (hasTitleChanged) {
     this.addDocketRecord(
-      new DocketRecord({
-        description: `Caption of case is amended from '${lastTitle}' to '${this.caseTitle}'`,
-        eventCode: 'MINC',
-        filingDate: createISODateString(),
-      }),
+      new DocketRecord(
+        {
+          description: `Caption of case is amended from '${lastTitle}' to '${this.caseTitle}'`,
+          eventCode: 'MINC',
+          filingDate: createISODateString(),
+        },
+        { applicationContext },
+      ),
     );
   }
 
@@ -963,7 +988,7 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketNumberRecord = function() {
+Case.prototype.updateDocketNumberRecord = function({ applicationContext }) {
   const docketNumberRegex = /^Docket Number is amended from '(.*)' to '(.*)'/;
 
   let lastDocketNumber =
@@ -986,28 +1011,17 @@ Case.prototype.updateDocketNumberRecord = function() {
 
   if (hasDocketNumberChanged) {
     this.addDocketRecord(
-      new DocketRecord({
-        description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
-        eventCode: 'MIND',
-        filingDate: createISODateString(),
-      }),
+      new DocketRecord(
+        {
+          description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
+          eventCode: 'MIND',
+          filingDate: createISODateString(),
+        },
+        { applicationContext },
+      ),
     );
   }
 
-  return this;
-};
-
-/**
- *
- * @returns {Case} the updated case entity
- */
-Case.prototype.sendToIRSHoldingQueue = function() {
-  this.status = Case.STATUS_TYPES.batchedForIRS;
-  return this;
-};
-
-Case.prototype.recallFromIRSHoldingQueue = function() {
-  this.status = Case.STATUS_TYPES.recalled;
   return this;
 };
 
@@ -1028,7 +1042,10 @@ Case.prototype.getShowCaseNameForPrimary = function() {
  * @param {string} preferredTrialCity the preferred trial city
  * @returns {Case} the updated case entity
  */
-Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
+Case.prototype.setRequestForTrialDocketRecord = function(
+  preferredTrialCity,
+  { applicationContext },
+) {
   this.preferredTrialCity = preferredTrialCity;
 
   const found = find(this.docketRecord, item =>
@@ -1037,12 +1054,15 @@ Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
 
   if (preferredTrialCity && !found) {
     this.addDocketRecord(
-      new DocketRecord({
-        description: `Request for Place of Trial at ${this.preferredTrialCity}`,
-        eventCode:
-          Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-        filingDate: this.receivedAt || this.createdAt,
-      }),
+      new DocketRecord(
+        {
+          description: `Request for Place of Trial at ${this.preferredTrialCity}`,
+          eventCode:
+            Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          filingDate: this.receivedAt || this.createdAt,
+        },
+        { applicationContext },
+      ),
     );
   }
   return this;
@@ -1469,6 +1489,8 @@ Case.prototype.setCaseStatus = function(caseStatus) {
     ].includes(caseStatus)
   ) {
     this.associatedJudge = Case.CHIEF_JUDGE;
+  } else if (caseStatus === Case.STATUS_TYPES.closed) {
+    this.closeCase();
   }
   return this;
 };
@@ -1573,9 +1595,8 @@ Case.prototype.getConsolidationStatus = function({ caseEntity }) {
  */
 Case.prototype.canConsolidate = function(caseToConsolidate) {
   const ineligibleStatusTypes = [
-    Case.STATUS_TYPES.batchedForIRS,
     Case.STATUS_TYPES.new,
-    Case.STATUS_TYPES.recalled,
+    Case.STATUS_TYPES.inProgress,
     Case.STATUS_TYPES.generalDocket,
     Case.STATUS_TYPES.closed,
     Case.STATUS_TYPES.onAppeal,

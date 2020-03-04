@@ -9,12 +9,12 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props that contain the props.nextStep
  * @param {object} providers.store the cerebral store function to store state.wizardStep
  */
-export const navigateToStartCaseWizardNextStepAction = ({
+export const navigateToStartCaseWizardNextStepAction = async ({
   props,
   router,
   store,
 }) => {
   const { nextStep } = props;
   store.set(state.wizardStep, `StartCaseStep${nextStep}`);
-  router.route(`/file-a-petition/step-${nextStep}`);
+  await router.route(`/file-a-petition/step-${nextStep}`);
 };

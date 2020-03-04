@@ -12,6 +12,7 @@ exports.validateDocketRecordInteractor = ({
 }) => {
   const errors = new (applicationContext.getEntityConstructors().DocketRecord)(
     docketRecord,
+    { applicationContext },
   ).getFormattedValidationErrors();
 
   return errors || null;

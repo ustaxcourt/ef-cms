@@ -7,9 +7,6 @@ adc;adc;Karen;Walkenhorst;Karen Walkenhorst;kwalkenhorst;kwalkenhorst@ustaxcourt
 adc;adc;Fig;Ruggieri;Fig Ruggieri;fruggieri;fruggieri@ustaxcourt.gov;fruggieri@example.com;;
 admissions;admissionsclerk;Charlotte;Oliver;Charlotte Oliver;coliver;coliver@ustaxcourt.gov;coliver@example.com;;
 admissions;admissionsclerk;Veronica;Tippett;Veronica Tippett;vtippett;vtippett@ustaxcourt.gov;vtippett@example.com;;
-calendar;calendarclerk;Kayla;Merchlinsky;Kayla Merchlinsky;kmerchlinsky;kmerchlinsky@ustaxcourt.gov;kmerchlinsky@example.com;;
-calendar;calendarclerk;Mary;Reid;Mary Reid;mreid;mreid@ustaxcourt.gov;mreid@example.com;;
-calendar;calendarclerk;Barbara;Wooten;Barbara Wooten;bwooten;bwooten@ustaxcourt.gov;bwooten@example.com;;
 clerkofcourt;clerkofcourt;Stephanie;Servoss;Stephanie Servoss;sservoss;sservoss@ustaxcourt.gov;sservoss@example.com;;
 clerkofcourt;clerkofcourt;Jessica;Marine;Jessica Marine;jfmarine;jfmarine@ustaxcourt.gov;jfmarine@example.com;;
 docket;docketclerk;Patricia;Anchors;Patricia Anchors;panchors;panchors@ustaxcourt.gov;panchors@example.com;;
@@ -33,6 +30,9 @@ petitions;petitionsclerk;Kendra;Harris;Kendra Harris;kharris;kharris@ustaxcourt.
 petitions;petitionsclerk;Tabitha;Hubbard;Tabitha Hubbard;thubbard;thubbard@ustaxcourt.gov;thubbard@example.com;;
 petitions;petitionsclerk;Justine;Miles;Justine Miles;jcmiles;jcmiles@ustaxcourt.gov;jcmiles@example.com;;
 petitions;petitionsclerk;Antoinette;Mitchell;Antoinette Mitchell;amitchell;amitchell@ustaxcourt.gov;amitchell@example.com;;
+petitions;petitionsclerk;Kayla;Merchlinsky;Kayla Merchlinsky;kmerchlinsky;kmerchlinsky@ustaxcourt.gov;kmerchlinsky@example.com;;
+petitions;petitionsclerk;Mary;Reid;Mary Reid;mreid;mreid@ustaxcourt.gov;mreid@example.com;;
+petitions;petitionsclerk;Barbara;Wooten;Barbara Wooten;bwooten;bwooten@ustaxcourt.gov;bwooten@example.com;;
 trialClerks;trialclerk;Emily;Lacy;Emily Lacy;elacy;elacy@ustaxcourt.gov;elacy@example.com;;
 trialClerks;trialclerk;Aisha;Miller;Aisha Miller;amiller;amiller@ustaxcourt.gov;amiller@example.com;;
 trialClerks;trialclerk;Mason;Smith;Mason Smith;msmith;msmith@ustaxcourt.gov;msmith@example.com;;
@@ -82,7 +82,7 @@ halpernsChambers;judge;Judge;Halpern;Judge Halpern;jhalpern;jhalpern@ustaxcourt.
 halpernsChambers;chambers;Velinda;Morton;Velinda Morton;vmorton;vmorton@ustaxcourt.gov;vmorton@example.com;;
 halpernsChambers;chambers;Michael;Schultz;Michael Schultz;mschultz;mschultz@ustaxcourt.gov;mschultz@example.com;;
 holmesChambers;judge;Judge;Holmes;Judge Holmes;jholmes;jholmes@ustaxcourt.gov;jholmes@example.com;Mark V. Holmes;Judge
-holmesChambers;chambers;Michelle;Alvarez;Michelle Alvarez;malverez;malverez@ustaxcourt.gov;malverez@example.com;;
+holmesChambers;chambers;Michelle;Alvarez;Michelle Alvarez;malvarez;malvarez@ustaxcourt.gov;malvarez@example.com;;
 holmesChambers;chambers;Ryan;Daily;Ryan Daily;rdaily;rdaily@ustaxcourt.gov;rdaily@example.com;;
 holmesChambers;chambers;Christina;Strasser;Christina Strasser;cstrasser;cstrasser@ustaxcourt.gov;cstrasser@example.com;;
 jonesChambers;judge;Judge;Jones;Judge Jones;jjones;jjones@ustaxcourt.gov;jjones@example.com;Courtney D. Jones;Judge

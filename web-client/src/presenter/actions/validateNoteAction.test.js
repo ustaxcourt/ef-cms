@@ -31,7 +31,7 @@ describe('validateNote', () => {
     };
   });
 
-  it('should call the path success when no errors are found', async () => {
+  it('should call the success path when no errors are found', async () => {
     validateNoteStub.returns(null);
     await runAction(validateNoteAction, {
       modules: {
@@ -45,7 +45,7 @@ describe('validateNote', () => {
     expect(successStub.calledOnce).toEqual(true);
   });
 
-  it('should call the path error when any errors are found', async () => {
+  it('should call the error path when any errors are found', async () => {
     validateNoteStub.returns('error');
     await runAction(validateNoteAction, {
       modules: {

@@ -9,8 +9,8 @@ const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
 User.ROLES = {
   adc: 'adc',
+  admin: 'admin',
   admissionsClerk: 'admissionsclerk',
-  calendarClerk: 'calendarclerk',
   chambers: 'chambers',
   clerkOfCourt: 'clerkofcourt',
   docketClerk: 'docketclerk',
@@ -43,6 +43,10 @@ const userDecorator = (obj, rawObj) => {
       postalCode: rawObj.contact.postalCode,
       state: rawObj.contact.state,
     };
+  }
+  if (obj.role === User.ROLES.judge) {
+    obj.judgeFullName = rawObj.judgeFullName;
+    obj.judgeTitle = rawObj.judgeTitle;
   }
 };
 
@@ -99,6 +103,16 @@ const userValidation = {
     })
     .optional(),
   email: joi.string().optional(),
+  judgeFullName: joi.when('role', {
+    is: User.ROLES.judge,
+    otherwise: joi.optional().allow(null),
+    then: joi.string().optional(),
+  }),
+  judgeTitle: joi.when('role', {
+    is: User.ROLES.judge,
+    otherwise: joi.optional().allow(null),
+    then: joi.string().optional(),
+  }),
   name: joi.string().optional(),
   role: joi
     .string()
@@ -158,7 +172,6 @@ User.isInternalUser = function(role) {
   const internalRoles = [
     User.ROLES.adc,
     User.ROLES.admissionsClerk,
-    User.ROLES.calendarClerk,
     User.ROLES.chambers,
     User.ROLES.clerkOfCourt,
     User.ROLES.docketClerk,

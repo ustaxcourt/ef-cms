@@ -3,7 +3,7 @@ import { Case } from '../../../shared/src/business/entities/cases/Case';
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
 export default test => {
-  return it('Petitions clerk submits case to IRS holding queue', async () => {
+  return it('Petitions clerk submits case to IRS', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'irsDay',
       value: '24',
@@ -16,8 +16,20 @@ export default test => {
       key: 'irsYear',
       value: '2050',
     });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'paymentDateYear',
+      value: '2018',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'paymentDateMonth',
+      value: '12',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'paymentDateDay',
+      value: '24',
+    });
 
-    await test.runSequence('clickServeToIrsSequence');
+    await test.runSequence('navigateToReviewSavedPetitionSequence');
     expect(test.getState('caseDetailErrors')).toEqual({
       irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[0].message,
     });
@@ -27,21 +39,21 @@ export default test => {
       value: '2017',
     });
 
-    await test.runSequence('clickServeToIrsSequence');
+    await test.runSequence('navigateToReviewSavedPetitionSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
+    await test.runSequence('saveCaseAndServeToIrsSequence');
 
-    await test.runSequence('submitPetitionToIRSHoldingQueueSequence');
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
 
     // check that save occurred
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
       '2017-12-24T05:00:00.000Z',
     );
     expect(test.getState('caseDetail.status')).toEqual(
-      Case.STATUS_TYPES.batchedForIRS,
+      Case.STATUS_TYPES.generalDocket,
     );
-    expect(test.getState('alertSuccess.title')).toEqual(
-      'The petition is now batched for IRS service.',
-    );
-    expect(test.getState('caseDetailErrors')).toEqual({});
   });
 };

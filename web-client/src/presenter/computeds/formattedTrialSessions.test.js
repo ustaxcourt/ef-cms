@@ -14,6 +14,10 @@ import { withAppContextDecorator } from '../../withAppContext';
 
 const formattedTrialSessions = withAppContextDecorator(
   formattedTrialSessionsComputed,
+  {
+    ...applicationContext,
+    getCurrentUser: () => currentUser,
+  },
 );
 
 const getStartOfWeek = date => {
@@ -23,10 +27,16 @@ const getStartOfWeek = date => {
 };
 
 let nextYear;
+let currentUser = {};
 
 const testJudgeUser = {
   role: User.ROLES.judge,
   userId: '1',
+};
+
+const testTrialClerkUser = {
+  role: User.ROLES.trialClerk,
+  userId: '10',
 };
 
 const baseState = {
@@ -39,6 +49,7 @@ let TRIAL_SESSIONS_LIST = [];
 describe('formattedTrialSessions', () => {
   beforeEach(() => {
     nextYear = (parseInt(formatNow('YYYY')) + 1).toString();
+    currentUser = testJudgeUser;
 
     TRIAL_SESSIONS_LIST = [
       {
@@ -53,6 +64,7 @@ describe('formattedTrialSessions', () => {
         judge: { name: '2', userId: '2' },
         startDate: '2019-11-25T15:00:00.000Z',
         swingSession: true,
+        trialClerk: { name: '10', userId: '10' },
         trialLocation: 'Knoxville, TN',
       },
       {
@@ -229,6 +241,7 @@ describe('formattedTrialSessions', () => {
         user: testJudgeUser,
       },
     });
+
     expect(result.filteredTrialSessions).toBeDefined();
     expect(result.formattedSessions.length).toBe(2);
     expect(result.formattedSessions[0].dateFormatted).toEqual(
@@ -526,6 +539,86 @@ describe('formattedTrialSessions', () => {
         sessions: [
           {
             judge: { name: '6', userId: '6' },
+            userIsAssignedToSession: false,
+          },
+        ],
+      },
+    ]);
+  });
+
+  it('sets userIsAssignedToSession true for sessions the current trial clerk user is assigned to', () => {
+    currentUser = testTrialClerkUser;
+
+    const result = runCompute(formattedTrialSessions, {
+      state: {
+        ...baseState,
+        judgeUser: undefined,
+        trialSessions: TRIAL_SESSIONS_LIST,
+      },
+    });
+    expect(result.formattedSessions).toMatchObject([
+      {
+        dateFormatted: 'November 25, 2019',
+        sessions: [
+          {
+            judge: { name: '5', userId: '5' },
+            userIsAssignedToSession: false,
+          },
+          {
+            judge: { name: '1', userId: '1' },
+            userIsAssignedToSession: false,
+          },
+          {
+            trialClerk: { name: '10', userId: '10' },
+            userIsAssignedToSession: true,
+          },
+          {
+            judge: { name: '3', userId: '3' },
+            userIsAssignedToSession: false,
+          },
+          {
+            judge: { name: '4', userId: '4' },
+            userIsAssignedToSession: false,
+          },
+        ],
+      },
+      {
+        dateFormatted: getStartOfWeek(
+          result.formattedSessions[1].sessions[0].startDate,
+        ),
+        sessions: [
+          {
+            judge: { name: '6', userId: '6' },
+            userIsAssignedToSession: false,
+          },
+        ],
+      },
+    ]);
+  });
+
+  it('sets userIsAssignedToSession false if the current user and session have no associated judge', () => {
+    const startDate = `${nextYear}-02-17T15:00:00.000Z`;
+    const result = runCompute(formattedTrialSessions, {
+      state: {
+        ...baseState,
+        judgeUser: undefined,
+        trialSessions: [
+          {
+            caseOrder: [],
+            judge: undefined,
+            startDate,
+            swingSession: false,
+            trialLocation: 'Jacksonville, FL',
+          },
+        ],
+        user: { role: User.ROLES.petitionsClerk, userId: '1' },
+      },
+    });
+    expect(result.formattedSessions).toMatchObject([
+      {
+        dateFormatted: getStartOfWeek(startDate),
+        sessions: [
+          {
             userIsAssignedToSession: false,
           },
         ],

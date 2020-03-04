@@ -10,17 +10,18 @@ import React from 'react';
 
 export const CaseDetailEdit = connect(
   {
+    generateCaseCaptionForSavedPetitionSequence:
+      sequences.generateCaseCaptionForSavedPetitionSequence,
     navigateBackSequence: sequences.navigateBackSequence,
+    navigateToReviewSavedPetitionSequence:
+      sequences.navigateToReviewSavedPetitionSequence,
     screenMetadata: state.screenMetadata,
-    submitCaseDetailEditSaveSequence:
-      sequences.submitCaseDetailEditSaveSequence,
-    waitingForResponse: state.waitingForResponse,
   },
   ({
+    generateCaseCaptionForSavedPetitionSequence,
     navigateBackSequence,
+    navigateToReviewSavedPetitionSequence,
     screenMetadata,
-    submitCaseDetailEditSaveSequence,
-    waitingForResponse,
   }) => {
     return (
       <div noValidate id="case-edit-form" role="form">
@@ -29,6 +30,9 @@ export const CaseDetailEdit = connect(
           bind="documentDetail.tab"
           className="container-tabs tab-button-h3"
           id="case-detail-tabs"
+          onSelect={tab => {
+            generateCaseCaptionForSavedPetitionSequence({ tab });
+          }}
         >
           <Tab id="tab-parties" tabName="partyInfo" title="Parties">
             <PartyInformation />
@@ -42,14 +46,13 @@ export const CaseDetailEdit = connect(
         </Tabs>
 
         <Button
-          aria-disabled={waitingForResponse ? 'true' : 'false'}
-          disabled={waitingForResponse}
-          secondary={!waitingForResponse}
+          id="submit-case"
           type="button"
-          onClick={() => submitCaseDetailEditSaveSequence()}
+          onClick={() => {
+            navigateToReviewSavedPetitionSequence();
+          }}
         >
-          {waitingForResponse && <div className="spinner" />}
-          Save
+          Review Petition
         </Button>
         <Button link onClick={() => navigateBackSequence()}>
           Cancel
