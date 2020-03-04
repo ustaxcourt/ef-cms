@@ -12,16 +12,12 @@ export const UserContactEdit = connect(
     navigateBackSequence: sequences.navigateBackSequence,
     submitUpdateUserContactInformationSequence:
       sequences.submitUpdateUserContactInformationSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
-    validateUserContactSequence: sequences.validateUserContactSequence,
     validationErrors: state.validationErrors,
   },
   ({
     form,
     navigateBackSequence,
     submitUpdateUserContactInformationSequence,
-    updateFormValueSequence,
-    validateUserContactSequence,
   }) => {
     return (
       <>
@@ -53,11 +49,10 @@ export const UserContactEdit = connect(
             </div>
             <UserContactEditForm
               bind="form"
-              changeCountryTypeSequence="countryTypeUserContactChangeSequence"
+              changeCountryTypeSequenceName="countryTypeUserContactChangeSequence"
               type="contact"
-              updateSequence={updateFormValueSequence}
-              validateSequence="validateUserContactSequence"
-              onBlurSequence="validateUserContactSequence"
+              onBlurSequenceName="validateUserContactSequence"
+              onChangeSequenceName="updateFormValueSequence"
             />
           </div>
           <Button

@@ -11,23 +11,22 @@ export const UserContactEditForm = connect(
     bind: props.bind,
     changeCountryTypeSequence: props.changeCountryTypeSequence,
     form: state.form,
-    onBlur: props.onBlurSequence,
-    onBlurValidationSequence: sequences[props.onBlurSequence],
-    onChangeUpdateSequence: sequences[props.updateSequence],
+    onBlurSequenceName: props.onBlurSequenceName,
+    onBlurValidationSequence: sequences[props.onBlurSequenceName],
+    onChangeSequenceName: props.onChangeSequenceName,
+    onChangeUpdateSequence: sequences[props.onChangeSequenceName],
     type: props.type,
-    updateSequence: props.updateSequence,
-    validateSequence: props.validateSequence,
     validationErrors: state.validationErrors,
   },
   ({
     bind,
     changeCountryTypeSequence,
     form,
-    onBlur,
+    onBlurSequenceName,
     onBlurValidationSequence,
+    onChangeSequenceName,
     onChangeUpdateSequence,
     type,
-    updateSequence,
     validationErrors,
   }) => {
     return (
@@ -35,23 +34,23 @@ export const UserContactEditForm = connect(
         <Country
           bind={bind}
           type={type}
-          onBlur={onBlur}
-          onChange={updateSequence}
+          onBlur={onBlurSequenceName}
+          onChange={onChangeSequenceName}
           onChangeCountryType={changeCountryTypeSequence}
         />
         {form.contact.countryType === 'domestic' ? (
           <Address
             bind={bind}
             type={type}
-            onBlur={onBlur}
-            onChange={updateSequence}
+            onBlur={onBlurSequenceName}
+            onChange={onChangeSequenceName}
           />
         ) : (
           <InternationalAddress
             bind={bind}
             type={type}
-            onBlur={onBlur}
-            onChange={updateSequence}
+            onBlur={onBlurSequenceName}
+            onChange={onChangeSequenceName}
           />
         )}
         <FormGroup
