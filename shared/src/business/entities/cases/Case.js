@@ -1111,10 +1111,24 @@ Case.prototype.addDocketRecord = function(docketRecordEntity) {
  */
 Case.prototype.updateDocketRecordEntry = function(updatedDocketEntry) {
   const foundEntry = this.docketRecord.find(
-    entry => entry.documentId === updatedDocketEntry.documentId,
+    entry => entry.docketRecordId === updatedDocketEntry.docketRecordId,
   );
   if (foundEntry) Object.assign(foundEntry, updatedDocketEntry);
   return this;
+};
+
+/**
+ * finds a docket record by its documentId
+ *
+ * @param {string} documentId the document id
+ * @returns {DocketRecord|undefined} the updated case entity
+ */
+Case.prototype.getDocketRecordByDocumentId = function(documentId) {
+  const foundEntry = this.docketRecord.find(
+    entry => entry.documentId === documentId,
+  );
+
+  return foundEntry;
 };
 
 /**
