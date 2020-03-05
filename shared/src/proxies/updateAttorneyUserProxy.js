@@ -5,7 +5,7 @@ const { put } = require('./requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.user the user data
+ * @param {object} providers.user the user data
  * @returns {Promise<object>} the updated user data
  */
 exports.updateAttorneyUserInteractor = ({ applicationContext, user }) => {
