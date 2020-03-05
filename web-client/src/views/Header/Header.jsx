@@ -139,10 +139,9 @@ const NavigationItems = (
               'usa-nav__link',
               helper.pageIsCreateAttorney && 'usa-current',
             )}
-            href="/users/create-attorney"
-            onClick={() => toggleMobileMenuSequence()}
+            href="/users/attorney-list"
           >
-            Create Attorney
+            User Management
           </a>
         </li>
       )}

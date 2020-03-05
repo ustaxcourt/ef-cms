@@ -2,6 +2,7 @@ import { AccessibilityStatement } from './Accessibility/AccessibilityStatement';
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
+import { AttorneyList } from './AttorneyList';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
@@ -22,6 +23,7 @@ import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocumentDetail } from './DocumentDetail/DocumentDetail';
+import { EditAttorneyUser } from './EditAttorneyUser';
 import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
@@ -72,6 +74,7 @@ const pages = {
   AddDocketEntry,
   AddTrialSession,
   AdvancedSearch,
+  AttorneyList,
   BeforeStartingCase,
   BeforeYouFileADocument,
   BlockedCasesReport,
@@ -90,6 +93,7 @@ const pages = {
   DashboardPractitioner,
   DashboardRespondent,
   DocumentDetail,
+  EditAttorneyUser,
   EditDocketEntry,
   EditDocketEntryMeta,
   EditPetitionDetails,

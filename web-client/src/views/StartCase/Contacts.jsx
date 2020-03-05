@@ -2,13 +2,10 @@ import { ContactPrimary } from './ContactPrimary';
 import { ContactSecondary } from './ContactSecondary';
 import { ServiceIndicatorRadios } from '../ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
-import { props } from 'cerebral';
 import React from 'react';
 
 export const Contacts = connect(
-  {
-    ...props,
-  },
+  {},
   ({
     bind,
     contactsHelper,

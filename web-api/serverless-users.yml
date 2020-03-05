@@ -162,6 +162,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  getUserById:
+    handler: web-api/${self:provider.dir}/usersHandlers.getUserByIdLambda
+    events:
+      - http:
+          path: /{userId}
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getInternalUsers:
     handler: web-api/${self:provider.dir}/usersHandlers.getInternalUsersLambda
     events:

@@ -15,6 +15,9 @@ describe('Case journey', () => {
   loginAs(test, 'petitioner');
   it('Create case', async () => {
     await uploadPetition(test);
+
+    test.docketNumber = test.getState('cases.0.docketNumber');
+    test.documentId = test.getState('cases.0.documents.0.documentId');
   });
 
   loginAs(test, 'petitionsclerk');

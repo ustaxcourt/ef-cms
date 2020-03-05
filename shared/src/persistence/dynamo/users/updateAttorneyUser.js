@@ -73,11 +73,11 @@ exports.updateUserRecords = async ({
 };
 
 exports.updateAttorneyUser = async ({ applicationContext, user }) => {
-  let userId;
+  const { userId } = user;
 
   const oldUser = await getUserById({
     applicationContext,
-    userId: user.userId,
+    userId,
   });
 
   try {
@@ -104,13 +104,11 @@ exports.updateAttorneyUser = async ({ applicationContext, user }) => {
         })
         .promise();
     }
-
-    userId = response.Username;
   } catch (error) {
     applicationContext.logger.error(error);
   }
 
-  return await this.updateUserRecords({
+  return await exports.updateUserRecords({
     applicationContext,
     oldUser,
     updatedUser: user,
