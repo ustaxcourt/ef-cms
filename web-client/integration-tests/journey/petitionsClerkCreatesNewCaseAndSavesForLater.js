@@ -1,3 +1,5 @@
+import { Case } from '../../../shared/src/business/entities/cases/Case';
+
 const {
   ContactFactory,
 } = require('../../../shared/src/business/entities/contacts/ContactFactory');
@@ -210,18 +212,59 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
     expect(test.getState('startCaseInternal.tab')).toBe('partyInfo');
 
-    await test.runSequence('updateFormValueAndInternalCaseCaptionSequence', {
-      key: 'contactPrimary.address1',
-      value: '123 Something Street',
+    await test.runSequence('goBackToStartCaseInternalSequence', {
+      tab: 'caseInfo',
+    });
+
+    expect(test.getState('currentPage')).toEqual('StartCaseInternal');
+    expect(test.getState('startCaseInternal.tab')).toBe('caseInfo');
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'caseCaption',
+      value: 'One fish, two fish',
     });
 
     await test.runSequence('gotoReviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+    expect(test.getState('form.caseCaption')).toBe('One fish, two fish');
 
-    expect(test.getState('form.contactPrimary.address1')).toBe(
-      '123 Something Street',
+    await test.runSequence('goBackToStartCaseInternalSequence', {
+      tab: 'irsNotice',
+    });
+
+    expect(test.getState('currentPage')).toEqual('StartCaseInternal');
+    expect(test.getState('startCaseInternal.tab')).toBe('irsNotice');
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'caseType',
+      value: Case.CASE_TYPES_MAP.interestAbatement,
+    });
+
+    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+
+    expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+    expect(test.getState('form.caseType')).toBe(
+      Case.CASE_TYPES_MAP.interestAbatement,
     );
+
+    await test.runSequence('goBackToStartCaseInternalSequence', {
+      tab: 'partyInfo',
+    });
+
+    expect(test.getState('currentPage')).toEqual('StartCaseInternal');
+    expect(test.getState('startCaseInternal.tab')).toBe('partyInfo');
+
+    fakeFile.name = 'differentFakeFile.pdf';
+    await test.runSequence('updateFormValueSequence', {
+      key: 'stinFile',
+      value: fakeFile,
+    });
+
+    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+
+    expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+    expect(test.getState('form.stinFile').name).toBe('differentFakeFile.pdf');
 
     await test.runSequence('saveInternalCaseForLaterSequence');
 
