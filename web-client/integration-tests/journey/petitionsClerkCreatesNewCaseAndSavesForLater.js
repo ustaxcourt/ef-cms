@@ -79,7 +79,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     },
     {
       key: 'partyType',
-      value: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      value: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
     },
     {
       key: 'contactPrimary.countryType',
@@ -114,6 +114,10 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       key: 'contactSecondary.name',
       value: 'Julius Lenhart',
     },
+    {
+      key: 'contactSecondary.inCareOf',
+      value: 'Nora Stanton Barney',
+    },
   ];
 
   return it('Petitions clerk creates a new case and saves for later', async () => {
@@ -135,7 +139,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     await test.runSequence('validatePetitionFromPaperSequence');
 
     expect(test.getState('form.caseCaption')).toBe(
-      'Shawn Johnson & Julius Lenhart, Petitioners',
+      'Shawn Johnson & Julius Lenhart, Deceased, Shawn Johnson, Surviving Spouse, Petitioners',
     );
 
     expect(test.getState('form.contactSecondary.address1')).toBe(
@@ -162,13 +166,17 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       test.getState('form.contactPrimary.phone'),
     );
 
+    expect(test.getState('form.contactSecondary.inCareOf')).toBe(
+      'Nora Stanton Barney',
+    );
+
     await test.runSequence('updateFormValueAndInternalCaseCaptionSequence', {
       key: 'contactPrimary.name',
       value: 'Ada Lovelace',
     });
 
     expect(test.getState('form.caseCaption')).toBe(
-      'Ada Lovelace & Julius Lenhart, Petitioners',
+      'Ada Lovelace & Julius Lenhart, Deceased, Ada Lovelace, Surviving Spouse, Petitioners',
     );
 
     const updatedCaseCaption = 'Ada Lovelace is awesome';
