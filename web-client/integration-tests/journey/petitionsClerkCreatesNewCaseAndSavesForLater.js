@@ -199,10 +199,29 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
     await test.runSequence('gotoReviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+
+    await test.runSequence('goBackToStartCaseInternalSequence', {
+      tab: 'partyInfo',
+    });
+
+    expect(test.getState('currentPage')).toEqual('StartCaseInternal');
+    expect(test.getState('startCaseInternal.tab')).toBe('partyInfo');
+
+    await test.runSequence('updateFormValueAndInternalCaseCaptionSequence', {
+      key: 'contactPrimary.address1',
+      value: '123 Something Street',
+    });
+
+    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+
+    expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+
+    expect(test.getState('form.contactPrimary.address1')).toBe(
+      '123 Something Street',
+    );
 
     await test.runSequence('saveInternalCaseForLaterSequence');
 
