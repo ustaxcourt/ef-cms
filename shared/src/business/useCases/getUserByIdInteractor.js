@@ -8,7 +8,7 @@ const { User } = require('../entities/User');
 /**
  * getUserByIdInteractor
  *
- * @param {object} user the user to get
+ * @param {object} userId the id for the user to get
  * @returns {User} the retrieved user
  */
 exports.getUserByIdInteractor = async ({ applicationContext, userId }) => {
