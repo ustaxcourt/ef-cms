@@ -162,6 +162,15 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       test.getState('form.contactPrimary.phone'),
     );
 
+    await test.runSequence('updateFormValueAndInternalCaseCaptionSequence', {
+      key: 'contactPrimary.name',
+      value: 'Ada Lovelace',
+    });
+
+    expect(test.getState('form.caseCaption')).toBe(
+      'Ada Lovelace & Julius Lenhart, Petitioners',
+    );
+
     expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
 
