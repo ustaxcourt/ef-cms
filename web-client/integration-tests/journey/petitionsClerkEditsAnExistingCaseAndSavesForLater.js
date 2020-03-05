@@ -1,8 +1,5 @@
 export default test => {
-  return it('Petitions clerk edits an case and saves for later', async () => {
-    test.docketNumber = test.getState('cases.0.docketNumber');
-    test.documentId = test.getState('cases.0.documents.0.documentId');
-
+  return it('Petitions clerk edits an existing case and saves for later', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
       documentId: test.documentId,

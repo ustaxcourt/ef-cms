@@ -7,6 +7,8 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function used for getting petition
+ * @param {object} providers.path the next object in the path
+ * @param {object} providers.store the cerebral store object
  * @returns {object} the next path based on if creation was successful or error
  */
 export const createCaseAction = async ({

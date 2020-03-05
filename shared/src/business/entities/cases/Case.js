@@ -462,7 +462,9 @@ joiValidationDecorator(
       .date()
       .iso()
       .required()
-      .description('When the case was added to the system.'),
+      .description(
+        'When the paper or electronic case was added to the system. This value cannot be edited.',
+      ),
     docketNumber: joi
       .string()
       .regex(DOCKET_NUMBER_MATCHER)
@@ -678,8 +680,9 @@ joiValidationDecorator(
       .date()
       .iso()
       .required()
-      .allow(null)
-      .description('When the case was received by the court.'),
+      .description(
+        'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
+      ),
     respondents: joi
       .array()
       .optional()
@@ -982,9 +985,7 @@ Case.prototype.updateCaseTitleDocketRecord = function({ applicationContext }) {
   });
 
   const needsTitleChangedRecord =
-    this.initialTitle &&
-    lastTitle !== this.caseTitle &&
-    this.status !== Case.STATUS_TYPES.new;
+    this.initialTitle && lastTitle !== this.caseTitle && !this.isPaper;
 
   if (needsTitleChangedRecord) {
     this.addDocketRecord(
@@ -1026,8 +1027,7 @@ Case.prototype.updateDocketNumberRecord = function({ applicationContext }) {
   });
 
   const needsDocketNumberChangeRecord =
-    lastDocketNumber !== newDocketNumber &&
-    this.status !== Case.STATUS_TYPES.new;
+    lastDocketNumber !== newDocketNumber && !this.isPaper;
 
   if (needsDocketNumberChangeRecord) {
     this.addDocketRecord(
@@ -1112,10 +1112,24 @@ Case.prototype.addDocketRecord = function(docketRecordEntity) {
  */
 Case.prototype.updateDocketRecordEntry = function(updatedDocketEntry) {
   const foundEntry = this.docketRecord.find(
-    entry => entry.documentId === updatedDocketEntry.documentId,
+    entry => entry.docketRecordId === updatedDocketEntry.docketRecordId,
   );
   if (foundEntry) Object.assign(foundEntry, updatedDocketEntry);
   return this;
+};
+
+/**
+ * finds a docket record by its documentId
+ *
+ * @param {string} documentId the document id
+ * @returns {DocketRecord|undefined} the updated case entity
+ */
+Case.prototype.getDocketRecordByDocumentId = function(documentId) {
+  const foundEntry = this.docketRecord.find(
+    entry => entry.documentId === documentId,
+  );
+
+  return foundEntry;
 };
 
 /**

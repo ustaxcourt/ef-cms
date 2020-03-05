@@ -77,7 +77,11 @@ describe('docket clerk edits a petition payment fee', () => {
       '2001-01-01T05:00:00.000Z',
     );
 
-    expect(test.getState('caseDetail.docketRecord')).toContainEqual({
+    expect(
+      test
+        .getState('caseDetail.docketRecord')
+        .find(r => r.description === 'Filing Fee Paid'),
+    ).toMatchObject({
       description: 'Filing Fee Paid',
       eventCode: 'FEE',
       filingDate: '2001-01-01T05:00:00.000Z',

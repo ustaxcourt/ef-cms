@@ -7,7 +7,12 @@ describe('getCasesByLeadCaseId', () => {
   it('attempts to retrieve the cases by leadCaseId', async () => {
     queryStub = jest.fn(() => ({
       promise: async () => ({
-        Items: [{ pk: '123', sk: 'abc' }],
+        Items: [
+          {
+            pk: '123',
+            sk: 'abc',
+          },
+        ],
       }),
     }));
 
@@ -25,7 +30,13 @@ describe('getCasesByLeadCaseId', () => {
       leadCaseId: 'abc',
     });
     expect(queryStub).toHaveBeenCalled();
-    expect(result).toEqual([{ pk: '123', sk: 'abc' }]);
+    expect(result).toEqual([
+      {
+        docketRecord: [{ pk: '123', sk: 'abc' }],
+        pk: '123',
+        sk: 'abc',
+      },
+    ]);
   });
 
   it('returns an empty array when no items are returned', async () => {

@@ -18,6 +18,7 @@ export const headerHelper = (get, applicationContext) => {
   const isTrialSessions = currentPage.includes('TrialSession');
   const isDashboard = currentPage.startsWith('Dashboard');
   const isMessages = currentPage.startsWith('Messages');
+  const isCreateAttorney = currentPage.startsWith('CreateAttorneyUser');
 
   const pageIsHome =
     isDashboard ||
@@ -30,10 +31,13 @@ export const headerHelper = (get, applicationContext) => {
   const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
   const isBlockedCasesReport = currentPage.includes('BlockedCasesReport');
 
+  const showCreateAttorney = permissions && permissions.MANAGE_ATTORNEY_USERS;
+
   return {
     defaultQCBoxPath: isOtherUser(userRole)
       ? '/document-qc/section/inbox'
       : '/document-qc/my/inbox',
+    pageIsCreateAttorney: isCreateAttorney,
     pageIsDocumentQC: isMessages && !workQueueIsInternal,
     pageIsHome,
     pageIsMessages: isMessages && workQueueIsInternal,
@@ -44,6 +48,7 @@ export const headerHelper = (get, applicationContext) => {
       isTrialSessions &&
       applicationContext.getUtilities().isInternalUser(userRole),
     showAccountMenu: isLoggedIn,
+    showCreateAttorney,
     showDocumentQC: applicationContext.getUtilities().isInternalUser(userRole),
     showHomeIcon: [USER_ROLES.judge, USER_ROLES.chambers].includes(userRole),
     showMessages: applicationContext.getUtilities().isInternalUser(userRole),

@@ -49,7 +49,7 @@ export const OrdersNeededSummary = ({ data }) => {
                     <div>Order for Ratification of Petition</div>
                   )}
                   {data.orderForRequestedTrialLocation && (
-                    <div>Order for Requested Trial Location</div>
+                    <div>Order Designating Place of Trial</div>
                   )}
                   {data.orderToShowCause && <div>Order to Show Cause</div>}
                 </div>
