@@ -14,9 +14,7 @@ const mutateRecord = item => {
   ) {
     item.closedDate = createISODateString();
 
-    const caseEntity = new Case(item, { applicationContext })
-      .validate()
-      .toRawObject();
+    const caseEntity = new Case(item, { applicationContext }).toRawObject();
 
     const itemToPut = {
       ...item,
