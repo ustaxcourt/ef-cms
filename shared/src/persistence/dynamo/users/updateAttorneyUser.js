@@ -110,7 +110,7 @@ exports.updateAttorneyUser = async ({ applicationContext, user }) => {
     applicationContext.logger.error(error);
   }
 
-  return await this.updateUserRecords({
+  return await exports.updateUserRecords({
     applicationContext,
     oldUser,
     updatedUser: user,

@@ -485,6 +485,9 @@ const {
   getUserById,
 } = require('../../shared/src/persistence/dynamo/users/getUserById');
 const {
+  getUserByIdInteractor,
+} = require('../../shared/src/business/useCases/getUserByIdInteractor');
+const {
   getUserCaseNote,
 } = require('../../shared/src/persistence/dynamo/userCaseNotes/getUserCaseNote');
 const {
@@ -1168,6 +1171,7 @@ module.exports = (appContextUser = {}) => {
         getTrialSessionWorkingCopyInteractor,
         getTrialSessionsInteractor,
         getUploadPolicyInteractor,
+        getUserByIdInteractor,
         getUserCaseNoteForCasesInteractor,
         getUserCaseNoteInteractor,
         getUserInteractor,
