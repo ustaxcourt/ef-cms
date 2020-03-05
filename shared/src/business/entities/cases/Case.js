@@ -462,7 +462,9 @@ joiValidationDecorator(
       .date()
       .iso()
       .required()
-      .description('When the case was added to the system.'),
+      .description(
+        'When the paper or electronic case was added to the system. This value cannot be edited.',
+      ),
     docketNumber: joi
       .string()
       .regex(DOCKET_NUMBER_MATCHER)
@@ -678,8 +680,9 @@ joiValidationDecorator(
       .date()
       .iso()
       .required()
-      .allow(null)
-      .description('When the case was received by the court.'),
+      .description(
+        'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
+      ),
     respondents: joi
       .array()
       .optional()
