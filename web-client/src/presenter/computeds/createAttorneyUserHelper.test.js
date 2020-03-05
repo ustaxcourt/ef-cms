@@ -22,6 +22,8 @@ describe('createAttorneyUserHelper', () => {
     expect(result.roles).toEqual([
       User.ROLES.practitioner,
       User.ROLES.respondent,
+      User.ROLES.inactivePractitioner,
+      User.ROLES.inactiveRespondent,
     ]);
   });
 });
