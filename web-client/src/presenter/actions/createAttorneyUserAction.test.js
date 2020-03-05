@@ -37,4 +37,24 @@ describe('createAttorneyUserAction', () => {
 
     expect(createAttorneyUserInteractorMock).toHaveBeenCalled();
   });
+
+  it('returns path.error if the use case throws an error', async () => {
+    createAttorneyUserInteractorMock = jest.fn().mockImplementation(() => {
+      throw new Error('bad!');
+    });
+
+    await runAction(createAttorneyUserAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          user: {},
+        },
+      },
+    });
+
+    expect(createAttorneyUserInteractorMock).toHaveBeenCalled();
+    expect(errorMock).toHaveBeenCalled();
+  });
 });

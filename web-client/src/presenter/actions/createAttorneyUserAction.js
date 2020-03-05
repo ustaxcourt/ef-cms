@@ -5,7 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
- * @param {object} providers.get the cerebral get function
+ * @param {Function} providers.get the cerebral get function
  * @param {object} providers.path the next object in the path
  */
 
