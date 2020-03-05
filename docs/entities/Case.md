@@ -128,7 +128,7 @@ Restricted
 ### createdAt
 
 
-When the case was added to the system.
+When the paper or electronic case was added to the system. This value cannot be edited.
 
 > `date` | required
 
@@ -578,11 +578,9 @@ Restricted
 ### receivedAt
 
 
-When the case was received by the court.
+When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.
 
 > `date` | required
-
-##### Can be null.
 
 ### respondents
 

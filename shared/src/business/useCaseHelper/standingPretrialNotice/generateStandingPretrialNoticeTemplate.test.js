@@ -43,17 +43,24 @@ describe('generateStandingPretrialNoticeTemplate', () => {
       },
     });
 
-    // TODO: Flesh this out further when template is done
     expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
     expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
     expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
+    expect(result.indexOf('Courthouse Name')).toBeGreaterThan(-1);
+    expect(result.indexOf('Address 1')).toBeGreaterThan(-1);
+    expect(result.indexOf('Address 2')).toBeGreaterThan(-1);
     expect(result.indexOf('City')).toBeGreaterThan(-1);
     expect(result.indexOf('ST')).toBeGreaterThan(-1);
-    expect(result.indexOf('Guy Fieri')).toBeGreaterThan(-1);
     expect(result.indexOf('STANDING PRETRIAL NOTICE')).toBeGreaterThan(-1);
+    expect(result.indexOf('10:00 AM')).toBeGreaterThan(-1);
+    expect(result.indexOf('Sunday, February 2, 2020')).toBeGreaterThan(-1);
+    expect(
+      result.indexOf('Their name and phone number is Guy Fieri (123-456-7890)'),
+    ).toBeGreaterThan(-1);
+    expect(result.indexOf('(Signed) Test Judge')).toBeGreaterThan(-1);
   });
 
-  it('Returns HTML with the given case and trial session data with an incorrect respondent structure', async () => {
+  it('does not return respondent information if the respondents field is NOT an array of respondent objects', async () => {
     const result = await generateStandingPretrialNoticeTemplate({
       applicationContext,
       content: {
@@ -69,6 +76,7 @@ describe('generateStandingPretrialNoticeTemplate', () => {
           judge: { name: 'Test Judge' },
           postalCode: '12345',
           respondents: {
+            // will be ignored since it's not an array
             contact: {
               phone: '123-456-7890',
             },
@@ -81,13 +89,20 @@ describe('generateStandingPretrialNoticeTemplate', () => {
       },
     });
 
-    // TODO: Flesh this out further when template is done
     expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
     expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
     expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
+    expect(result.indexOf('Courthouse Name')).toBeGreaterThan(-1);
+    expect(result.indexOf('Address 1')).toBeGreaterThan(-1);
+    expect(result.indexOf('Address 2')).toBeGreaterThan(-1);
     expect(result.indexOf('City')).toBeGreaterThan(-1);
     expect(result.indexOf('ST')).toBeGreaterThan(-1);
-    expect(result.indexOf('Guy Fieri')).toEqual(-1);
     expect(result.indexOf('STANDING PRETRIAL NOTICE')).toBeGreaterThan(-1);
+    expect(result.indexOf('10:00 AM')).toBeGreaterThan(-1);
+    expect(result.indexOf('Sunday, February 2, 2020')).toBeGreaterThan(-1);
+    expect(
+      result.indexOf('Their name and phone number is Guy Fieri (123-456-7890)'),
+    ).toEqual(-1);
+    expect(result.indexOf('(Signed) Test Judge')).toBeGreaterThan(-1);
   });
 });
