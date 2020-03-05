@@ -4,11 +4,8 @@ const { isCaseRecord, upGenerator } = require('./utilities');
 const applicationContext = createApplicationContext({});
 
 const mutateRecord = async (item, documentClient, tableName) => {
-  console.log('documents', item);
   if (isCaseRecord(item)) {
     const caseEntity = new Case(item, { applicationContext });
-
-    console.log('documents', caseEntity.documents);
 
     for (const document of caseEntity.documents) {
       await documentClient
