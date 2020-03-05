@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const uuidv4 = require('uuid/v4');
 const {
   ENTERED_AND_SERVED_EVENT_CODES,
 } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
@@ -13,6 +12,7 @@ const { createISODateString } = require('../../utilities/DateHandler');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { Document } = require('../../entities/Document');
 const { User } = require('../../entities/User');
+const { v4: uuidv4 } = require('uuid');
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../../test-output/');

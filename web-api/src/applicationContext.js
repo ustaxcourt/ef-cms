@@ -13,7 +13,7 @@ const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
 const util = require('util');
-const uuidv4 = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
 const {
   addCaseToTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/addCaseToTrialSessionInteractor');
