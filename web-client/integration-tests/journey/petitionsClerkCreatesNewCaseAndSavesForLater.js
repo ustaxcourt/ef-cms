@@ -44,6 +44,14 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: 1,
     },
     {
+      key: 'odsFile',
+      value: fakeFile,
+    },
+    {
+      key: 'odsFileSize',
+      value: 1,
+    },
+    {
       key: 'ownershipDisclosureFile',
       value: fakeFile,
     },
@@ -265,6 +273,30 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
     expect(test.getState('form.stinFile').name).toBe('differentFakeFile.pdf');
+
+    await test.runSequence('openPdfPreviewModalSequence', {
+      file: test.getState('form.petitionFile'),
+      modalId: 'PDFPreviewModal-petitionFile',
+    });
+    expect(test.getState('showModal')).toBe('PDFPreviewModal-petitionFile');
+    await test.runSequence('dismissModalSequence');
+    expect(test.getState('showModal')).toBe('');
+
+    await test.runSequence('openPdfPreviewModalSequence', {
+      file: test.getState('form.stinFile'),
+      modalId: 'PDFPreviewModal-stinFile',
+    });
+    expect(test.getState('showModal')).toBe('PDFPreviewModal-stinFile');
+    await test.runSequence('dismissModalSequence');
+    expect(test.getState('showModal')).toBe('');
+
+    await test.runSequence('openPdfPreviewModalSequence', {
+      file: test.getState('form.odsFile'),
+      modalId: 'PDFPreviewModal-odsFile',
+    });
+    expect(test.getState('showModal')).toBe('PDFPreviewModal-odsFile');
+    await test.runSequence('dismissModalSequence');
+    expect(test.getState('showModal')).toBe('');
 
     await test.runSequence('saveInternalCaseForLaterSequence');
 
