@@ -134,10 +134,12 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     );
     await test.runSequence('validatePetitionFromPaperSequence');
 
+    // scenario 3
     expect(test.getState('form.caseCaption')).toBe(
       'Shawn Johnson & Julius Lenhart, Petitioners',
     );
 
+    // scenario 2
     expect(test.getState('form.contactSecondary.address1')).toBe(
       test.getState('form.contactPrimary.address1'),
     );
@@ -162,6 +164,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       test.getState('form.contactPrimary.phone'),
     );
 
+    // scenario 4
     await test.runSequence('updateFormValueAndInternalCaseCaptionSequence', {
       key: 'contactPrimary.name',
       value: 'Ada Lovelace',
@@ -170,6 +173,25 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('form.caseCaption')).toBe(
       'Ada Lovelace & Julius Lenhart, Petitioners',
     );
+
+    // scenario 5
+    const updatedCaseCaption = 'Ada Lovelace is awesome';
+    await test.runSequence('updateFormValueSequence', {
+      key: 'caseCaption',
+      value: updatedCaseCaption,
+    });
+
+    expect(test.getState('form.caseCaption')).toBe(updatedCaseCaption);
+
+    //scenario 6
+    await test.runSequence('updateFormValueSequence', {
+      key: 'petitionFile',
+      value: fakeFile,
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'stinFile',
+      value: fakeFile,
+    });
 
     expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
