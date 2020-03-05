@@ -22,7 +22,9 @@ const mutateRecord = async (item, documentClient, tableName) => {
 
     delete caseEntity.documents;
 
-    return { ...item, ...caseEntity.toRawObject() };
+    console.log(`removing documents[] from case ${item.caseId}`);
+
+    return { ...item, ...caseEntity.toRawObject(false) };
   }
 };
 

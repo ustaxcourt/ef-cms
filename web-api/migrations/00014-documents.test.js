@@ -1,6 +1,6 @@
 const { forAllRecords } = require('./utilities');
 const { MOCK_CASE } = require('../../shared/src/test/mockCase');
-const { up } = require('./00013-docket-record');
+const { up } = require('./00014-documents');
 
 describe('document refactoring migration', () => {
   let applicationContext;
@@ -75,6 +75,6 @@ describe('document refactoring migration', () => {
 
     await up(applicationContext.getDocumentClient(), '', forAllRecords);
 
-    expect(putStub.mock.calls.length).toBe(4);
+    expect(putStub.mock.calls.length).toBe(5);
   });
 });
