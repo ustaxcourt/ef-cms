@@ -298,6 +298,20 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     await test.runSequence('dismissModalSequence');
     expect(test.getState('showModal')).toBe('');
 
+    await test.runSequence('goBackToStartCaseInternalSequence', {
+      tab: 'partyInfo',
+    }); // click Edit button
+    expect(test.getState('currentPage')).toEqual('StartCaseInternal');
+
+    await test.runSequence('selectDocumentForScanSequence', {
+      documentSelectedForScan: 'Petition',
+    }); // clicked the Petition file tab ? FIXME is it actually "Petition"?
+    await test.runSequence('openConfirmDeletePDFModalSequence'); // opens delete modal confirmation
+    await test.runSequence('removeScannedPdfSequence'); // click confirm button
+    expect(
+      test.getState('form.documentSelectedForScan.Petition'),
+    ).toBeUndefined();
+
     await test.runSequence('saveInternalCaseForLaterSequence');
 
     expect(test.getState('currentPage')).toEqual('Messages');
