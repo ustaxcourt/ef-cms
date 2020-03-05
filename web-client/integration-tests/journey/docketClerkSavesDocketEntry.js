@@ -32,6 +32,8 @@ export default (test, isAddAnother = true) => {
       },
     );
 
-    test.docketRecordEntry = caseDetailFormatted.docketRecordWithDocument.pop();
+    test.docketRecordEntry = caseDetailFormatted.docketRecord.find(
+      entry => entry.description === 'Administrative Record',
+    );
   });
 };
