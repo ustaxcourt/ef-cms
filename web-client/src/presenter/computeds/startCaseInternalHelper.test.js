@@ -290,7 +290,7 @@ describe('case detail edit computed', () => {
     expect(result.showOrderForRequestedTrialLocation).toBe(true);
   });
 
-  it('sets showOrderForRequestedTrialLocation true if Requested Trial Location is not specified', () => {
+  it('sets showOrderForRequestedTrialLocation false if Requested Trial Location is specified', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         form: {

@@ -15,7 +15,7 @@ const { User } = require('../../entities/User');
  */
 exports.createAttorneyUserInteractor = async ({ applicationContext, user }) => {
   const requestUser = applicationContext.getCurrentUser();
-  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.CREATE_ATTORNEY_USER)) {
+  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_ATTORNEY_USERS)) {
     throw new UnauthorizedError('Unauthorized for creating attorney user');
   }
 

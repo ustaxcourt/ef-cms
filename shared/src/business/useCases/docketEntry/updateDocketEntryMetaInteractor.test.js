@@ -35,6 +35,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     docketRecord = [
       {
         description: 'Test Entry 0',
+        docketRecordId: '000ba5a9-b37b-479d-9201-067ec6e33000',
         documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
         eventCode: 'P',
         filedBy: 'Test User',
@@ -43,6 +44,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       },
       {
         description: 'Test Entry 1',
+        docketRecordId: '111ba5a9-b37b-479d-9201-067ec6e33111',
         documentId: '111ba5a9-b37b-479d-9201-067ec6e33111',
         eventCode: 'O',
         filedBy: 'Test User',
@@ -86,6 +88,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         getCaseByCaseId: getCaseCaseIdNumberMock,
         updateCase: updateCaseMock,
       }),
+      getUniqueId: () => 'unique-id-1',
       getUseCases: () => ({
         addCoversheetInteractor: addCoversheetInteractorMock,
       }),

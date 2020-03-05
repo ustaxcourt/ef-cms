@@ -485,6 +485,9 @@ const {
   getUserById,
 } = require('../../shared/src/persistence/dynamo/users/getUserById');
 const {
+  getUserByIdInteractor,
+} = require('../../shared/src/business/useCases/getUserByIdInteractor');
+const {
   getUserCaseNote,
 } = require('../../shared/src/persistence/dynamo/userCaseNotes/getUserCaseNote');
 const {
@@ -650,6 +653,12 @@ const {
 const {
   unprioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/unprioritizeCaseInteractor');
+const {
+  updateAttorneyUser,
+} = require('../../shared/src/persistence/dynamo/users/updateAttorneyUser');
+const {
+  updateAttorneyUserInteractor,
+} = require('../../shared/src/business/useCases/users/updateAttorneyUserInteractor');
 const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
@@ -827,6 +836,14 @@ module.exports = (appContextUser = {}) => {
               },
             }),
           }),
+          adminGetUser: ({ Username }) => ({
+            promise: () => ({
+              Username,
+            }),
+          }),
+          adminUpdateUserAttributes: () => ({
+            promise: () => {},
+          }),
         };
       } else {
         return new CognitoIdentityServiceProvider({
@@ -984,6 +1001,7 @@ module.exports = (appContextUser = {}) => {
         saveWorkItemForPaper,
         setPriorityOnAllWorkItems,
         setWorkItemAsRead,
+        updateAttorneyUser,
         updateCase,
         updateCaseDeadline,
         updateCaseTrialSortMappingRecords,
@@ -1153,6 +1171,7 @@ module.exports = (appContextUser = {}) => {
         getTrialSessionWorkingCopyInteractor,
         getTrialSessionsInteractor,
         getUploadPolicyInteractor,
+        getUserByIdInteractor,
         getUserCaseNoteForCasesInteractor,
         getUserCaseNoteInteractor,
         getUserInteractor,
@@ -1182,6 +1201,7 @@ module.exports = (appContextUser = {}) => {
         submitPendingCaseAssociationRequestInteractor,
         unblockCaseFromTrialInteractor,
         unprioritizeCaseInteractor,
+        updateAttorneyUserInteractor,
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
         updateCaseTrialSortTagsInteractor,
