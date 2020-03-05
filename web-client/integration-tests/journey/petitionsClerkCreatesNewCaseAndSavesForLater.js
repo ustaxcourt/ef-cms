@@ -1,4 +1,13 @@
+const {
+  ContactFactory,
+} = require('../../../shared/src/business/entities/contacts/ContactFactory');
+
 export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
+  const primaryContactName = {
+    key: 'contactPrimary.name',
+    value: 'Shawn Johnson',
+  };
+
   const formValues = [
     {
       key: 'dateReceivedMonth',
@@ -15,10 +24,6 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     {
       key: 'mailingDate',
       value: 'Some Day',
-    },
-    {
-      key: 'caseCaption',
-      value: 'Test Person, Deceased, Test Person, Surviving Spouse, Petitioner',
     },
     {
       key: 'petitionFile',
@@ -74,7 +79,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     },
     {
       key: 'partyType',
-      value: 'Petitioner',
+      value: ContactFactory.PARTY_TYPES.petitionerSpouse,
     },
     {
       key: 'contactPrimary.countryType',
@@ -84,10 +89,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       key: 'contactPrimary.country',
       value: 'Switzerland',
     },
-    {
-      key: 'contactPrimary.name',
-      value: 'Test Person',
-    },
+    primaryContactName,
     {
       key: 'contactPrimary.address1',
       value: '123 Abc Ln',
@@ -108,6 +110,10 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       key: 'contactPrimary.phone',
       value: '1234567890',
     },
+    {
+      key: 'contactSecondary.name',
+      value: 'Julius Lenhart',
+    },
   ];
 
   return it('Petitions clerk creates a new case and saves for later', async () => {
@@ -117,11 +123,44 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
     expect(test.getState('startCaseInternal.tab')).toBe('partyInfo');
 
-    formValues.forEach(async item => {
+    for (const item of formValues) {
       await test.runSequence('updateFormValueSequence', item);
-    });
+    }
 
+    await test.runSequence('copyPrimaryContactSequence');
+    await test.runSequence(
+      'updateFormValueAndInternalCaseCaptionSequence',
+      primaryContactName,
+    );
     await test.runSequence('validatePetitionFromPaperSequence');
+
+    expect(test.getState('form.caseCaption')).toBe(
+      'Shawn Johnson & Julius Lenhart, Petitioners',
+    );
+
+    expect(test.getState('form.contactSecondary.address1')).toBe(
+      test.getState('form.contactPrimary.address1'),
+    );
+
+    expect(test.getState('form.contactSecondary.city')).toBe(
+      test.getState('form.contactPrimary.city'),
+    );
+
+    expect(test.getState('form.contactSecondary.country')).toBe(
+      test.getState('form.contactPrimary.country'),
+    );
+
+    expect(test.getState('form.contactSecondary.postalCode')).toBe(
+      test.getState('form.contactPrimary.postalCode'),
+    );
+
+    expect(test.getState('form.contactSecondary.email')).toBe(
+      test.getState('form.contactPrimary.email'),
+    );
+
+    expect(test.getState('form.contactSecondary.phone')).toBe(
+      test.getState('form.contactPrimary.phone'),
+    );
 
     expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
