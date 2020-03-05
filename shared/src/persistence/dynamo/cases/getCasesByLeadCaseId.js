@@ -30,5 +30,5 @@ exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
     items.map(getCaseDocuments({ applicationContext })),
   );
 
-  return Promise.all(items.map(getCaseDocketRecord({ applicationContext })));
+  return items;
 };
