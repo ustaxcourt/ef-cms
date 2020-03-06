@@ -549,6 +549,30 @@ const router = {
     );
 
     route(
+      '/users/attorney-list',
+      ifHasAccess(() => {
+        setPageTitle('EF-CMS User Management - Attorney List');
+        app.getSequence('gotoAttorneyListSequence')();
+      }),
+    );
+
+    route(
+      '/users/create-attorney',
+      ifHasAccess(() => {
+        setPageTitle('EF-CMS User Management - Create Attorney User');
+        app.getSequence('gotoCreateAttorneyUserSequence')();
+      }),
+    );
+
+    route(
+      '/users/edit-attorney/*',
+      ifHasAccess(userId => {
+        setPageTitle('EF-CMS User Management - Edit Attorney User');
+        app.getSequence('gotoEditAttorneyUserSequence')({ userId });
+      }),
+    );
+
+    route(
       '/document-qc..',
       ifHasAccess(() => {
         const path = route._.getPathFromBase();

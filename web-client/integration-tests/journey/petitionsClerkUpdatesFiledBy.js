@@ -22,6 +22,9 @@ export default (test, overrides = {}) => {
     });
 
     await test.runSequence('saveSavedCaseForLaterSequence');
+    await test.runSequence('navigateToPathSequence', {
+      path: `/case-detail/${test.caseId}`,
+    });
 
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
