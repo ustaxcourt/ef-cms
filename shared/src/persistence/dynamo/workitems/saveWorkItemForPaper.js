@@ -1,6 +1,3 @@
-const {
-  createMappingRecord,
-} = require('../../dynamo/helpers/createMappingRecord');
 const { createSectionInboxRecord } = require('./createSectionInboxRecord');
 const { createUserInboxRecord } = require('./createUserInboxRecord');
 const { put } = require('../../dynamodbClientService');

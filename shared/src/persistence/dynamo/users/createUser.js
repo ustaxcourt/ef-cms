@@ -1,8 +1,5 @@
 const AWS = require('aws-sdk');
 const client = require('../../dynamodbClientService');
-const {
-  createMappingRecord,
-} = require('../../dynamo/helpers/createMappingRecord');
 const { User } = require('../../../business/entities/User');
 
 exports.createUserRecords = async ({ applicationContext, user, userId }) => {

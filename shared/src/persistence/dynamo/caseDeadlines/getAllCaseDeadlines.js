@@ -13,6 +13,8 @@ exports.getAllCaseDeadlines = async ({ applicationContext }) => {
     applicationContext,
   });
 
+  console.log('mappings', mappings);
+
   // get all case deadlines
 
   const ids = mappings.map(metadata => metadata.caseDeadlineId);
@@ -25,9 +27,12 @@ exports.getAllCaseDeadlines = async ({ applicationContext }) => {
     })),
   });
 
+  console.log('results', results);
   const afterMapping = ids.map(m => ({
-    ...results.find(r => m === r.pk),
+    ...results.find(r => m === r.caseDeadlineId),
   }));
+
+  console.log('afterMapping', afterMapping);
 
   // get the needed cases info data for caseDeadlines
 
@@ -37,6 +42,7 @@ exports.getAllCaseDeadlines = async ({ applicationContext }) => {
       return acc;
     }, {}),
   );
+  console.log('caseIds', caseIds);
 
   const caseResults = await client.batchGet({
     applicationContext,
@@ -46,10 +52,14 @@ exports.getAllCaseDeadlines = async ({ applicationContext }) => {
     })),
   });
 
+  console.log('caseResults', caseResults);
+
   const caseMap = caseResults.reduce((acc, item) => {
     acc[item.caseId] = item;
     return acc;
   }, {});
+
+  console.log('caseMap', caseMap);
 
   const afterCaseMapping = afterMapping.map(m => ({
     ...m,

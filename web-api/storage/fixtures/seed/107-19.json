@@ -239,7 +239,7 @@
     "noticeOfAttachments": false,
     "caseCaption": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "sk": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "filingType": "A business",
     "orderForOds": false,
     "orderForRatification": false,
@@ -299,7 +299,7 @@
       }
     ],
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "docketNumber": "107-19",
     "status": "General Docket - At Issue (Ready for Trial)",
     "associatedJudge": "Chief Judge"
