@@ -15,30 +15,30 @@ describe('getInternalUsers', () => {
   beforeEach(() => {
     sinon.stub(client, 'query').resolves([
       {
-        pk: 'petitions|user',
+        pk: 'section|petitions',
         userId: 'petitionsclerk1',
       },
       {
-        pk: 'docket|user',
+        pk: 'section|docket',
         userId: 'docketclerk1',
       },
       {
-        pk: 'adc|user',
+        pk: 'section|adc',
         userId: 'adc1',
       },
     ]);
 
     sinon.stub(client, 'batchGet').resolves([
       {
-        pk: 'petitions|user',
+        pk: 'section|petitions',
         userId: 'petitionsclerk1',
       },
       {
-        pk: 'docket|user',
+        pk: 'section|docket',
         userId: 'docketclerk1',
       },
       {
-        pk: 'adc|user',
+        pk: 'section|adc',
         userId: 'adc1',
       },
     ]);

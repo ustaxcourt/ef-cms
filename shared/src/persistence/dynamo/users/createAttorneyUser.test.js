@@ -60,7 +60,7 @@ describe('createAttorneyUser', () => {
     });
     expect(putStub.getCall(3).args[0]).toMatchObject({
       Item: {
-        pk: 'PT1234|practitioner',
+        pk: 'practitioner|PT1234',
         sk: userId,
       },
       TableName: 'efcms-dev',

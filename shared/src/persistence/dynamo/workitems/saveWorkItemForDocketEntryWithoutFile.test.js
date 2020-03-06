@@ -68,8 +68,8 @@ describe('saveWorkItemForDocketEntryWithoutFile', () => {
     });
     expect(putStub.getCall(3).args[0]).toMatchObject({
       Item: {
-        pk: 'work-itme|123',
-        sk: 'case|456',
+        pk: 'case|456',
+        sk: 'work-item|123',
       },
     });
   });
