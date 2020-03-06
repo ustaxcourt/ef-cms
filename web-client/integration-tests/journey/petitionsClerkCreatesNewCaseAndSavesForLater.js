@@ -428,11 +428,6 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'orderDesignatingPlaceOfTrial',
-      value: true,
-    });
-
-    await test.runSequence('updateFormValueSequence', {
       key: 'orderForAmendedPetition',
       value: true,
     });
@@ -471,7 +466,6 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
     expect(test.getState('form.noticeOfAttachments')).toBe(true);
-    expect(test.getState('form.orderDesignatingPlaceOfTrial')).toBe(true);
     expect(test.getState('form.orderForAmendedPetition')).toBe(true);
     expect(test.getState('form.orderForAmendedPetitionAndFilingFee')).toBe(
       true,

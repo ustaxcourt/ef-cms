@@ -9,8 +9,8 @@ describe('Case journey', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitionsclerk');
-  petitionsClerkCreatesNewCaseAndSavesForLater(test, fakeFile);
+  // loginAs(test, 'petitionsclerk');
+  // petitionsClerkCreatesNewCaseAndSavesForLater(test, fakeFile);
 
   loginAs(test, 'petitioner');
   it('Create case', async () => {
@@ -18,6 +18,7 @@ describe('Case journey', () => {
 
     test.docketNumber = test.getState('cases.0.docketNumber');
     test.documentId = test.getState('cases.0.documents.0.documentId');
+    test.caseId = test.getState('cases.0.caseId');
   });
 
   loginAs(test, 'petitionsclerk');

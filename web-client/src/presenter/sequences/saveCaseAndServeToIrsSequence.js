@@ -19,14 +19,23 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const saveCaseAndServeToIrsSequence = [
+  async () =>
+    await new Promise(resolve =>
+      setTimeout(() => {
+        () => console.log('here 4'), resolve();
+      }, 500),
+    ),
   clearPdfPreviewUrlAction,
   showProgressSequenceDecorator([
     setCaseNotInProgressAction,
     getFormCombinedWithCaseDetailAction,
+    () => console.log('here'),
     saveCaseDetailInternalEditAction,
     setCaseAction,
+    () => console.log('here 2'),
     setPetitionIdAction,
     setDocumentIdAction,
+    () => console.log('here 3'),
     serveCaseToIrsAction,
     {
       electronic: [],
@@ -34,9 +43,17 @@ export const saveCaseAndServeToIrsSequence = [
     },
     clearModalAction,
     getServeToIrsAlertSuccessAction,
+    () => console.log('here 5'),
+
     setAlertSuccessAction,
+    () => console.log('here 6'),
+
     setSaveAlertsForNavigationAction,
+    () => console.log('here 7'),
+
     navigateToCaseDetailAction,
+    () => console.log('here 8'),
+
     isPrintPreviewPreparedAction,
     {
       no: [],

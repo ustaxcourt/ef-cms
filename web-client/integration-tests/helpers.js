@@ -406,7 +406,11 @@ export const setupTest = ({ useCases = {} } = {}) => {
             workQueueIsInternal: true,
           });
           break;
+        case `/case-detail/${test.caseId}`:
+        // fall through
         case `/case-detail/${test.docketNumber}`:
+          console.log('navigating to case detail');
+
           await test.runSequence('gotoCaseDetailSequence', {
             docketNumber: test.docketNumber,
           });
@@ -431,6 +435,8 @@ export const setupTest = ({ useCases = {} } = {}) => {
           await test.runSequence('gotoDashboardSequence');
           break;
         default:
+          console.trace('hit the default', url, test.docketNumber);
+
           break;
       }
     },
