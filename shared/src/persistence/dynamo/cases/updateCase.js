@@ -79,12 +79,13 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     });
 
     for (let mapping of workItemMappings) {
+      const [, workItemId] = mapping.sk.split('|');
       if (oldCase.status !== caseToUpdate.status) {
         requests.push(
           updateWorkItemCaseStatus({
             applicationContext,
             caseStatus: caseToUpdate.status,
-            workItemId: mapping.sk,
+            workItemId,
           }),
         );
       }
@@ -93,7 +94,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           updateWorkItemCaseTitle({
             applicationContext,
             caseTitle: caseToUpdate.caseCaption,
-            workItemId: mapping.sk,
+            workItemId,
           }),
         );
       }
@@ -102,7 +103,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           updateWorkItemDocketNumberSuffix({
             applicationContext,
             docketNumberSuffix: caseToUpdate.docketNumberSuffix || null,
-            workItemId: mapping.sk,
+            workItemId,
           }),
         );
       }
@@ -111,7 +112,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           updateWorkItemTrialDate({
             applicationContext,
             trialDate: caseToUpdate.trialDate || null,
-            workItemId: mapping.sk,
+            workItemId,
           }),
         );
       }
@@ -120,7 +121,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           updateWorkItemAssociatedJudge({
             applicationContext,
             associatedJudge: caseToUpdate.associatedJudge,
-            workItemId: mapping.sk,
+            workItemId,
           }),
         );
       }
@@ -129,7 +130,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           updateWorkItemCaseIsInProgress({
             applicationContext,
             caseIsInProgress: caseToUpdate.inProgress,
-            workItemId: mapping.sk,
+            workItemId,
           }),
         );
       }
