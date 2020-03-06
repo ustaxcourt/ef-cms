@@ -12,6 +12,9 @@ exports.getCasesByUser = async ({ applicationContext, userId }) => {
     prefix: 'case',
   });
 
+  console.log('LECASES', cases);
+  console.log('userId', userId);
+
   cases = await Promise.all(
     cases.map(getCaseDocketRecord({ applicationContext })),
   );

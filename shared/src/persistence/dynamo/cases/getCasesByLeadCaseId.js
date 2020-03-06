@@ -25,6 +25,9 @@ exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
     applicationContext,
   });
 
+  console.log('leadCaseId', leadCaseId);
+  console.log(items);
+
   items = await Promise.all(
     items.map(getCaseDocketRecord({ applicationContext })),
   );
