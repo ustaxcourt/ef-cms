@@ -4,7 +4,7 @@ const { isCaseRecord, upGenerator } = require('./utilities');
 const applicationContext = createApplicationContext({});
 
 const mutateRecord = item => {
-  if (isCaseRecord(item)) {
+  if (isCaseRecord(item) && item.docketRecord) {
     item.docketRecord.forEach(docketEntry => {
       // Case.documents[].filingDate = Case.docketRecord[].filingDate
       if (item.documents && docketEntry.documentId) {
@@ -16,9 +16,7 @@ const mutateRecord = item => {
       }
     });
 
-    const caseEntity = new Case(item, { applicationContext })
-      .validate()
-      .toRawObject();
+    const caseEntity = new Case(item, { applicationContext }).toRawObject();
 
     const itemToPut = {
       ...item,

@@ -8,15 +8,16 @@ const mutateRecord = item => {
     isCaseRecord(item) &&
     ['Batched for IRS', 'Recalled'].includes(item.status)
   ) {
+    console.log(
+      `updating Batched/Recalled case status to new for ${item.caseId}`,
+    );
     const caseEntity = new Case(
       {
         ...item,
         status: Case.STATUS_TYPES.new,
       },
       { applicationContext },
-    )
-      .validate()
-      .toRawObject();
+    ).toRawObject();
 
     return { ...item, ...caseEntity };
   }

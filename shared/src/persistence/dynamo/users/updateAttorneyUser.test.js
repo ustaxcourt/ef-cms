@@ -81,13 +81,13 @@ describe('updateAttorneyUser', () => {
     });
     expect(putStub.mock.calls[2][0]).toMatchObject({
       Item: {
-        pk: 'Test Practitioner|inactivePractitioner',
+        pk: 'inactivePractitioner|Test Practitioner',
         sk: userId,
       },
     });
     expect(putStub.mock.calls[3][0]).toMatchObject({
       Item: {
-        pk: 'PT1234|inactivePractitioner',
+        pk: 'inactivePractitioner|PT1234',
         sk: userId,
       },
     });

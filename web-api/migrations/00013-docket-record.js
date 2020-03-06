@@ -9,6 +9,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
 
     for (const record of caseEntity.docketRecord) {
       const docketRecordId = applicationContext.getUniqueId();
+      console.log(`adding docket-record ${docketRecordId}`);
       await documentClient
         .put({
           Item: {
@@ -22,6 +23,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
         .promise();
     }
 
+    console.log(`removing docketRecord[] from case ${item.caseId}`);
     delete caseEntity.docketRecord;
 
     return { ...item, ...caseEntity.toRawObject() };

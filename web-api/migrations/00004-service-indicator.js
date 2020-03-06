@@ -14,9 +14,7 @@ const mutateRecord = item => {
       }
     });
 
-    const caseEntity = new Case(item, { applicationContext })
-      .validate()
-      .toRawObject();
+    const caseEntity = new Case(item, { applicationContext }).toRawObject();
 
     const itemToPut = {
       ...item,

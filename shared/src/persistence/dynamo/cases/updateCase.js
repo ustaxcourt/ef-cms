@@ -38,7 +38,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
 
   const requests = [];
 
-  let updatedDocketRecord = differenceWith(
+  const updatedDocketRecord = differenceWith(
     caseToUpdate.docketRecord,
     oldCase.docketRecord,
     isEqual,
@@ -51,6 +51,63 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           pk: `case|${caseToUpdate.caseId}`,
           sk: `docket-record|${docketEntry.docketRecordId}`,
           ...docketEntry,
+        },
+        applicationContext,
+      }),
+    );
+  });
+
+  const updatedDocuments = differenceWith(
+    caseToUpdate.documents,
+    oldCase.documents,
+    isEqual,
+  );
+
+  updatedDocuments.forEach(document => {
+    requests.push(
+      client.put({
+        Item: {
+          pk: `case|${caseToUpdate.caseId}`,
+          sk: `document|${document.documentId}`,
+          ...document,
+        },
+        applicationContext,
+      }),
+    );
+  });
+
+  const updatedRespondents = differenceWith(
+    caseToUpdate.respondents,
+    oldCase.respondents,
+    isEqual,
+  );
+
+  updatedRespondents.forEach(respondent => {
+    requests.push(
+      client.put({
+        Item: {
+          pk: `case|${caseToUpdate.caseId}`,
+          sk: `respondent|${respondent.userId}`,
+          ...respondent,
+        },
+        applicationContext,
+      }),
+    );
+  });
+
+  const updatedPractitioners = differenceWith(
+    caseToUpdate.practitioners,
+    oldCase.practitioners,
+    isEqual,
+  );
+
+  updatedPractitioners.forEach(practitioner => {
+    requests.push(
+      client.put({
+        Item: {
+          pk: `case|${caseToUpdate.caseId}`,
+          sk: `practitioner|${practitioner.userId}`,
+          ...practitioner,
         },
         applicationContext,
       }),
