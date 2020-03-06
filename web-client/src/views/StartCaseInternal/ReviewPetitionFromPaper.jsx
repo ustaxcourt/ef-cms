@@ -67,7 +67,7 @@ export const ReviewPetitionFromPaper = connect(
           </Focus>
 
           {reviewPetitionFromPaperHelper.hasOrders && (
-            <OrdersNeededSummary data={form} />
+            <OrdersNeededSummary caseInformation={form} />
           )}
 
           <div className="grid-container padding-x-0 create-case-review">
