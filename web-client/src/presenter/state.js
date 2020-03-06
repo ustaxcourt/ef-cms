@@ -10,7 +10,6 @@ import { addEditUserCaseNoteModalHelper } from './computeds/addEditUserCaseNoteM
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { advancedSearchHelper } from './computeds/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
-import { attorneyListHelper } from './computeds/attorneyListHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
@@ -89,7 +88,6 @@ export const state = {
     documentTitle: null,
   },
   assigneeId: null,
-  attorneyListHelper,
   batchDownloadHelper,
   batchDownloads: {},
   batchIndexToRescan: null,
