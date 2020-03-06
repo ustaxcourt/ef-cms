@@ -4,7 +4,7 @@ plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  - serverless-plugin-aws-alerts
+  # - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -106,6 +106,8 @@ provider:
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
+    CIRCLE_HONEYBADGER_API_KEY_DEV: ${opt:circleHoneybadgerApiKeyDev}
+    CIRCLE_HONEYBADGER_API_KEY_STG: ${opt:circleHoneybadgerApiKeyStg}
 
 package:
   exclude:

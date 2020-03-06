@@ -2,6 +2,7 @@ import { AccessibilityStatement } from './Accessibility/AccessibilityStatement';
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
+import { AttorneyList } from './AttorneyList';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
@@ -13,13 +14,16 @@ import { CaseInventoryReport } from './CaseInventoryReport/CaseInventoryReport';
 import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryReportModal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
+import { CreateAttorneyUser } from './CreateAttorneyUser';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
+import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
 import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocumentDetail } from './DocumentDetail/DocumentDetail';
+import { EditAttorneyUser } from './EditAttorneyUser';
 import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
@@ -70,6 +74,7 @@ const pages = {
   AddDocketEntry,
   AddTrialSession,
   AdvancedSearch,
+  AttorneyList,
   BeforeStartingCase,
   BeforeYouFileADocument,
   BlockedCasesReport,
@@ -79,13 +84,16 @@ const pages = {
   CaseInventoryReport,
   CaseSearchNoMatches,
   CourtIssuedDocketEntry,
+  CreateAttorneyUser,
   CreateOrder,
   DashboardChambers,
+  DashboardInactive,
   DashboardJudge,
   DashboardPetitioner,
   DashboardPractitioner,
   DashboardRespondent,
   DocumentDetail,
+  EditAttorneyUser,
   EditDocketEntry,
   EditDocketEntryMeta,
   EditPetitionDetails,

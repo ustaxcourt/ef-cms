@@ -15,6 +15,8 @@ User.ROLES = {
   clerkOfCourt: 'clerkofcourt',
   docketClerk: 'docketclerk',
   floater: 'floater',
+  inactivePractitioner: 'inactivePractitioner',
+  inactiveRespondent: 'inactiveRespondent',
   judge: 'judge',
   petitioner: 'petitioner',
   petitionsClerk: 'petitionsclerk',
@@ -51,7 +53,10 @@ const userDecorator = (obj, rawObj) => {
 };
 
 const userValidation = {
-  barNumber: joi.string().optional(),
+  barNumber: joi
+    .string()
+    .optional()
+    .allow(null),
   contact: joi
     .object()
     .keys({

@@ -3,7 +3,7 @@
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting the getCase use case
- * @param {Function} providers.path provides execution path choices depending on success of search
+ * @param {object} providers.path provides execution path choices depending on the existence of the case
  * @param {object} providers.props the cerebral props object containing props.docketNumber
  * @returns {object} contains the caseDetail returned from the use case
  */

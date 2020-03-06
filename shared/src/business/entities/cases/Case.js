@@ -224,27 +224,28 @@ Case.validationName = 'Case';
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function Case(rawCase, { applicationContext }) {
+function Case(rawCase, { applicationContext, filtered = false }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
   this.entityName = 'Case';
 
-  if (User.isInternalUser(applicationContext.getCurrentUser().role)) {
+  if (
+    !filtered ||
+    User.isInternalUser(applicationContext.getCurrentUser().role)
+  ) {
+    this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
+    this.automaticBlocked = rawCase.automaticBlocked;
+    this.automaticBlockedDate = rawCase.automaticBlockedDate;
+    this.automaticBlockedReason = rawCase.automaticBlockedReason;
+    this.blocked = rawCase.blocked;
+    this.blockedDate = rawCase.blockedDate;
+    this.blockedReason = rawCase.blockedReason;
     this.caseNote = rawCase.caseNote;
+    this.highPriority = rawCase.highPriority;
+    this.highPriorityReason = rawCase.highPriorityReason;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   }
-
-  // TODO: as part of the security task, these values also need to be restricted
-  this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
-  this.automaticBlocked = rawCase.automaticBlocked;
-  this.automaticBlockedDate = rawCase.automaticBlockedDate;
-  this.automaticBlockedReason = rawCase.automaticBlockedReason;
-  this.blocked = rawCase.blocked;
-  this.blockedDate = rawCase.blockedDate;
-  this.blockedReason = rawCase.blockedReason;
-  this.highPriority = rawCase.highPriority;
-  this.highPriorityReason = rawCase.highPriorityReason;
 
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.userId = rawCase.userId;
@@ -461,7 +462,9 @@ joiValidationDecorator(
       .date()
       .iso()
       .required()
-      .description('When the case was added to the system.'),
+      .description(
+        'When the paper or electronic case was added to the system. This value cannot be edited.',
+      ),
     docketNumber: joi
       .string()
       .regex(DOCKET_NUMBER_MATCHER)
@@ -677,8 +680,9 @@ joiValidationDecorator(
       .date()
       .iso()
       .required()
-      .allow(null)
-      .description('When the case was received by the court.'),
+      .description(
+        'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
+      ),
     respondents: joi
       .array()
       .optional()
@@ -981,9 +985,7 @@ Case.prototype.updateCaseTitleDocketRecord = function({ applicationContext }) {
   });
 
   const needsTitleChangedRecord =
-    this.initialTitle &&
-    lastTitle !== this.caseTitle &&
-    this.status !== Case.STATUS_TYPES.new;
+    this.initialTitle && lastTitle !== this.caseTitle && !this.isPaper;
 
   if (needsTitleChangedRecord) {
     this.addDocketRecord(
@@ -1025,8 +1027,7 @@ Case.prototype.updateDocketNumberRecord = function({ applicationContext }) {
   });
 
   const needsDocketNumberChangeRecord =
-    lastDocketNumber !== newDocketNumber &&
-    this.status !== Case.STATUS_TYPES.new;
+    lastDocketNumber !== newDocketNumber && !this.isPaper;
 
   if (needsDocketNumberChangeRecord) {
     this.addDocketRecord(

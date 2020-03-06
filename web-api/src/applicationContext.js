@@ -13,6 +13,7 @@ const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
 const util = require('util');
+const uuidv4 = require('uuid/v4');
 const {
   addCaseToTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/addCaseToTrialSessionInteractor');
@@ -88,6 +89,12 @@ const {
 const {
   ContactFactory,
 } = require('../../shared/src/business/entities/contacts/ContactFactory');
+const {
+  createAttorneyUser,
+} = require('../../shared/src/persistence/dynamo/users/createAttorneyUser');
+const {
+  createAttorneyUserInteractor,
+} = require('../../shared/src/business/useCases/users/createAttorneyUserInteractor');
 const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
@@ -478,6 +485,9 @@ const {
   getUserById,
 } = require('../../shared/src/persistence/dynamo/users/getUserById');
 const {
+  getUserByIdInteractor,
+} = require('../../shared/src/business/useCases/getUserByIdInteractor');
+const {
   getUserCaseNote,
 } = require('../../shared/src/persistence/dynamo/userCaseNotes/getUserCaseNote');
 const {
@@ -644,6 +654,12 @@ const {
   unprioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/unprioritizeCaseInteractor');
 const {
+  updateAttorneyUser,
+} = require('../../shared/src/persistence/dynamo/users/updateAttorneyUser');
+const {
+  updateAttorneyUserInteractor,
+} = require('../../shared/src/business/useCases/users/updateAttorneyUserInteractor');
+const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
@@ -760,7 +776,13 @@ const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 // increase the timeout for zip uploads to S3
 AWS.config.httpOptions.timeout = 300000;
 
-const { DynamoDB, EnvironmentCredentials, S3, SES } = AWS;
+const {
+  CognitoIdentityServiceProvider,
+  DynamoDB,
+  EnvironmentCredentials,
+  S3,
+  SES,
+} = AWS;
 const execPromise = util.promisify(exec);
 
 const environment = {
@@ -792,6 +814,10 @@ let s3Cache;
 let sesCache;
 let searchClientCache;
 
+const entitiesByName = {
+  Case: Case,
+};
+
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
@@ -800,6 +826,31 @@ module.exports = (appContextUser = {}) => {
     environment,
     getCaseCaptionNames: Case.getCaseCaptionNames,
     getChromiumBrowser,
+    getCognito: () => {
+      if (environment.stage === 'local') {
+        return {
+          adminCreateUser: () => ({
+            promise: () => ({
+              User: {
+                Username: uuidv4(),
+              },
+            }),
+          }),
+          adminGetUser: ({ Username }) => ({
+            promise: () => ({
+              Username,
+            }),
+          }),
+          adminUpdateUserAttributes: () => ({
+            promise: () => {},
+          }),
+        };
+      } else {
+        return new CognitoIdentityServiceProvider({
+          region: 'us-east-1',
+        });
+      }
+    },
     getConstants: () => ({
       CASE_INVENTORY_MAX_PAGE_SIZE: 5000,
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
@@ -832,6 +883,9 @@ module.exports = (appContextUser = {}) => {
         });
       }
       return sesCache;
+    },
+    getEntityByName: name => {
+      return entitiesByName[name];
     },
     getEntityConstructors: () => ({
       Case,
@@ -875,6 +929,7 @@ module.exports = (appContextUser = {}) => {
         addWorkItemToSectionInbox,
         associateUserWithCase,
         associateUserWithCasePending,
+        createAttorneyUser,
         createCase,
         createCaseCatalogRecord,
         createCaseDeadline,
@@ -946,6 +1001,7 @@ module.exports = (appContextUser = {}) => {
         saveWorkItemForPaper,
         setPriorityOnAllWorkItems,
         setWorkItemAsRead,
+        updateAttorneyUser,
         updateCase,
         updateCaseDeadline,
         updateCaseTrialSortMappingRecords,
@@ -1054,6 +1110,7 @@ module.exports = (appContextUser = {}) => {
         checkForReadyForTrialCasesInteractor,
         completeDocketEntryQCInteractor,
         completeWorkItemInteractor,
+        createAttorneyUserInteractor,
         createCaseDeadlineInteractor,
         createCaseFromPaperInteractor,
         createCaseInteractor,
@@ -1114,6 +1171,7 @@ module.exports = (appContextUser = {}) => {
         getTrialSessionWorkingCopyInteractor,
         getTrialSessionsInteractor,
         getUploadPolicyInteractor,
+        getUserByIdInteractor,
         getUserCaseNoteForCasesInteractor,
         getUserCaseNoteInteractor,
         getUserInteractor,
@@ -1143,6 +1201,7 @@ module.exports = (appContextUser = {}) => {
         submitPendingCaseAssociationRequestInteractor,
         unblockCaseFromTrialInteractor,
         unprioritizeCaseInteractor,
+        updateAttorneyUserInteractor,
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
         updateCaseTrialSortTagsInteractor,
@@ -1185,10 +1244,15 @@ module.exports = (appContextUser = {}) => {
     },
     initHoneybadger: () => {
       if (process.env.NODE_ENV === 'production' && process.env.ENV) {
+        const stagingApiKey = process.env.CIRCLE_HONEYBADGER_API_KEY_STG;
+        const devApiKey = process.env.CIRCLE_HONEYBADGER_API_KEY_DEV;
         const apiKey =
-          process.env[
-            'CIRCLE_HONEYBADGER_API_KEY_' + process.env.ENV.toUpperCase()
-          ];
+          process.env.ENV === 'stg'
+            ? stagingApiKey
+            : process.env.ENV === 'dev'
+            ? devApiKey
+            : null;
+
         if (apiKey) {
           const config = {
             apiKey,
