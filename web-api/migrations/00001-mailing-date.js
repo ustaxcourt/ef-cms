@@ -8,9 +8,7 @@ const mutateRecord = item => {
     console.log(`adding mailingDate to a paper case of "${item.caseId}"`);
     item.mailingDate = '01/01/2010';
 
-    const caseEntity = new Case(item, { applicationContext })
-      .validate()
-      .toRawObject();
+    const caseEntity = new Case(item, { applicationContext }).toRawObject();
 
     const itemToPut = {
       ...item,

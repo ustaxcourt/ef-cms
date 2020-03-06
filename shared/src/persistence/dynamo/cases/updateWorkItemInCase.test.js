@@ -39,8 +39,8 @@ describe('updateWorkItemInCase', () => {
         ':workItem': { assigneeId: 'bob', workItemId: '456' },
       },
       Key: {
-        pk: '123',
-        sk: '123',
+        pk: 'case|123',
+        sk: 'case|123',
       },
       UpdateExpression: 'SET #documents[0].#workItems[0] = :workItem',
       applicationContext: { environment: { stage: 'dev' } },

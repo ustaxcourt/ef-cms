@@ -7,26 +7,24 @@ const mutateRecord = async (item, documentClient, tableName) => {
   if (isCaseRecord(item)) {
     const caseEntity = new Case(item, { applicationContext });
 
-    for (const record of caseEntity.docketRecord) {
-      const docketRecordId = applicationContext.getUniqueId();
-      console.log(`adding docket-record ${docketRecordId}`);
+    for (const document of caseEntity.documents) {
       await documentClient
         .put({
           Item: {
-            ...record,
-            docketRecordId,
+            ...document,
             pk: `case|${item.caseId}`,
-            sk: `docket-record|${docketRecordId}`,
+            sk: `document|${document.documentId}`,
           },
           TableName: tableName,
         })
         .promise();
     }
 
-    console.log(`removing docketRecord[] from case ${item.caseId}`);
-    delete caseEntity.docketRecord;
+    delete caseEntity.documents;
 
-    return { ...item, ...caseEntity.toRawObject() };
+    console.log(`removing documents[] from case ${item.caseId}`);
+
+    return { ...item, ...caseEntity.toRawObject(false) };
   }
 };
 

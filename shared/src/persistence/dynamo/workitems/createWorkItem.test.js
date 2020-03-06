@@ -68,8 +68,8 @@ describe('createWorkItem', () => {
     });
     expect(putStub.getCall(1).args[0]).toMatchObject({
       Item: {
-        pk: '123|workItem',
-        sk: 'a_id',
+        pk: 'case|123',
+        sk: 'work-item|a_id',
       },
       TableName: 'efcms-dev',
     });
@@ -82,7 +82,7 @@ describe('createWorkItem', () => {
     });
     expect(putStub.getCall(2).args[0]).toMatchObject({
       Item: {
-        pk: 'user-123',
+        pk: 'user|123',
         sk: 'work-item|a_id',
         workItemId: 'a_id',
       },
