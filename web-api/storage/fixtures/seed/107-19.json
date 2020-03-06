@@ -251,53 +251,6 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Las Vegas, Nevada",
-    "respondents": [
-      {
-        "role": "respondent",
-        "serviceIndicator": "Electronic",
-        "barNumber": "RT6789",
-        "contact": {
-          "address1": "234 Main St",
-          "address2": "Apartment 4",
-          "address3": "Under the stairs",
-          "city": "Chicago",
-          "countryType": "domestic",
-          "phone": "+1 (555) 555-5555",
-          "postalCode": "61234",
-          "state": "IL"
-        },
-        "sk": "5805d1ab-18d0-43ec-bafb-654e83405416",
-        "name": "Test Respondent",
-        "section": "respondent",
-        "pk": "5805d1ab-18d0-43ec-bafb-654e83405416",
-        "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-        "email": "respondent"
-      }
-    ],
-    "practitioners": [
-      {
-        "serviceIndicator": "Electronic",
-        "role": "practitioner",
-        "section": "practitioner",
-        "representingPrimary": true,
-        "contact": {
-          "address1": "234 Main St",
-          "address2": "Apartment 4",
-          "address3": "Under the stairs",
-          "city": "Chicago",
-          "countryType": "domestic",
-          "phone": "+1 (555) 555-5555",
-          "postalCode": "61234",
-          "state": "IL"
-        },
-        "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "barNumber": "PT1234",
-        "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "name": "Test Practitioner",
-        "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "email": "practitioner"
-      }
-    ],
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "docketNumber": "107-19",
@@ -409,5 +362,48 @@
   {
     "sk": "case-deadline-307fd0e4-eeed-41bc-bbc3-a9555fccc231",
     "pk": "58c1f7a3-8062-42f0-a73e-8bd69b419878|case-deadline"
+  },
+  {
+    "role": "respondent",
+    "serviceIndicator": "Electronic",
+    "barNumber": "RT6789",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test Respondent",
+    "sk": "respondent|56c90084-7162-4d23-86d2-c6ce4d784f58",
+    "section": "respondent",
+    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "respondent"
+  },
+  {
+    "role": "practitioner",
+    "serviceIndicator": "Electronic",
+    "barNumber": "PT1234",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test Practitioner",
+    "sk": "practitioner|ce0dd045-87d2-4a28-8fd4-05bef9272f9f",
+    "section": "practitioner",
+    "representingPrimary": true,
+    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "practitioner"
   }
 ]
