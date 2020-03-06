@@ -4,50 +4,9 @@ const fs = require('fs');
 const parse = require('csv-parse');
 const {
   createISODateString,
-} = require('../../shared/src/business/utilities/DateHandler');
-const {
-  gatherRecords,
-  getCsvOptions,
-} = require('../../shared/src/tools/helpers');
-const { getUserToken } = require('../storage/scripts/loadTest/loadTestHelpers');
-
-const USAGE = `
-Usage: node createAttorneyUsers.js spreadsheet.csv
-`;
-
-const files = [];
-process.argv.forEach((val, index) => {
-  if (index > 1) {
-    files.push(val);
-  }
-});
-
-const csvColumns = [
-  'barNumber',
-  'lastName',
-  'firstName',
-  'middleName',
-  'suffix',
-  'firmName',
-  'address1',
-  'address2',
-  'city',
-  'state',
-  'postalCode',
-  'unformattedAdmissionsDate',
-  'originalBarState',
-  'birthYear',
-  'practitionerType',
-  'admissionsStatus',
-  'email',
-  'alternateEmail',
-  'phone',
-  'additionalPhone',
-  'isIrsEmployee',
-  'isDojEmployee',
-];
-
-const csvOptions = getCsvOptions(csvColumns);
+} = require('../shared/src/business/utilities/DateHandler');
+const { gatherRecords, getCsvOptions } = require('../shared/src/tools/helpers');
+const { getUserToken } = require('./storage/scripts/loadTest/loadTestHelpers');
 
 const formatRecord = record => {
   const nameArray = [
@@ -84,16 +43,50 @@ const formatRecord = record => {
   return record;
 };
 
-const cognito = new AWS.CognitoIdentityServiceProvider({
-  region: process.env.REGION,
-});
-
+/* istanbul ignore next */
 /* eslint no-console: "off"*/
 (async () => {
+  const files = [];
+  process.argv.forEach((val, index) => {
+    if (index > 1) {
+      files.push(val);
+    }
+  });
+
+  const csvColumns = [
+    'barNumber',
+    'lastName',
+    'firstName',
+    'middleName',
+    'suffix',
+    'firmName',
+    'address1',
+    'address2',
+    'city',
+    'state',
+    'postalCode',
+    'unformattedAdmissionsDate',
+    'originalBarState',
+    'birthYear',
+    'practitionerType',
+    'admissionsStatus',
+    'email',
+    'alternateEmail',
+    'phone',
+    'additionalPhone',
+    'isIrsEmployee',
+    'isDojEmployee',
+  ];
+
+  const csvOptions = getCsvOptions(csvColumns);
+
   if (files.length < 1) {
-    console.log(USAGE);
     return;
   }
+
+  const cognito = new AWS.CognitoIdentityServiceProvider({
+    region: process.env.REGION,
+  });
   const apigateway = new AWS.APIGateway({
     region: process.env.REGION,
   });
@@ -141,3 +134,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
     });
   });
 })();
+
+module.exports = {
+  formatRecord,
+};
