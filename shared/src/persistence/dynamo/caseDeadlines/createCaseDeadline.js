@@ -14,21 +14,24 @@ const {
  * @param {object} providers.caseDeadline the case deadline data
  */
 exports.createCaseDeadline = async ({ applicationContext, caseDeadline }) => {
-  const caseDeadlineId = `case-deadline-${caseDeadline.caseDeadlineId}`;
+  const { caseDeadlineId } = caseDeadline;
+  console.log('caseDeadlineId', caseDeadlineId);
+  console.log('caseDeadline', caseDeadline);
   await client.put({
     Item: {
-      pk: caseDeadlineId,
-      sk: caseDeadlineId,
+      pk: `case-deadline|${caseDeadlineId}`,
+      sk: `case-deadline|${caseDeadlineId}`,
       ...caseDeadline,
     },
     applicationContext,
   });
 
-  await createMappingRecord({
+  await client.put({
+    Item: {
+      pk: `case|${caseDeadline.caseId}`,
+      sk: `case-deadline|${caseDeadlineId}`,
+    },
     applicationContext,
-    pkId: caseDeadline.caseId,
-    skId: caseDeadlineId,
-    type: 'case-deadline',
   });
 
   await createCaseDeadlineCatalogRecord({

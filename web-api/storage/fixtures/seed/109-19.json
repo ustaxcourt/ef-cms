@@ -110,7 +110,7 @@
     "createdAt": "2019-03-01T21:40:46.415Z",
     "receivedAt": "2019-03-01T21:40:46.415Z",
     "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
-    "sk": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
+    "sk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
     "automaticBlocked": true,
     "automaticBlockedDate": "2019-05-01T21:40:46.415Z",
     "automaticBlockedReason": "Due Date",
@@ -121,7 +121,7 @@
     "caseTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
     "initialTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
     "filingType": "Myself",
-    "pk": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
+    "pk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
     "hasIrsNotice": false,
     "petitioners": [
       {
@@ -163,22 +163,22 @@
     "createdAt": "2019-08-22T12:47:16.905Z",
     "deadlineDate": "2019-08-25T04:00:00.000Z",
     "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
-    "sk": "case-deadline-95b46eae-70f0-45df-91de-febdc610fed9",
+    "sk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
     "caseDeadlineId": "95b46eae-70f0-45df-91de-febdc610fed9",
     "description": "Final status report due to Judge Ashford",
-    "pk": "case-deadline-95b46eae-70f0-45df-91de-febdc610fed9"
+    "pk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9"
   },
   {
-    "sk": "case-deadline-95b46eae-70f0-45df-91de-febdc610fed9",
-    "pk": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02|case-deadline"
+    "sk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
+    "pk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02"
   },
   {
-    "caseDeadlineId": "case-deadline-95b46eae-70f0-45df-91de-febdc610fed9",
-    "sk": "case-deadline-95b46eae-70f0-45df-91de-febdc610fed9",
-    "pk": "case-deadline-catalog"
+    "caseDeadlineId": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
+    "sk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
+    "pk": "case-deadline|catalog"
   },
   {
-    "sk": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
-    "pk": "109-19|case"
+    "sk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
+    "pk": "case-by-docket-number|109-19"
   }
 ]

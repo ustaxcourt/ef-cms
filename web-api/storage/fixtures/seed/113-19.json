@@ -80,7 +80,7 @@
         "documentId": "3cf1f474-1dcd-47aa-8455-8f9a93d80183"
       }
     ],
-    "gsi1pk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "gsi1pk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "receivedAt": "2019-12-11T16:02:31.173Z",
@@ -102,7 +102,7 @@
     "noticeOfAttachments": false,
     "caseCaption": "Letti Toretto, Petitioner",
     "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
-    "sk": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "sk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -120,7 +120,7 @@
     "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
     "leadCaseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
-    "pk": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "pk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
     "docketNumber": "113-19",
     "status": "Submitted"
   },
@@ -145,11 +145,11 @@
     "sk": "docket-record|4760bafd-e75e-4924-8072-bdbef4739011"
   },
   {
-    "sk": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
-    "pk": "113-19|case"
+    "sk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "pk": "case-by-docket-number|113-19"
   },
   {
-    "sk": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
   }
 ]

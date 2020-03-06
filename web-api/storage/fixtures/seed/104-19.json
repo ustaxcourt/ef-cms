@@ -160,17 +160,17 @@
     "sk": "docket-record|3ca965eb-98e4-41ab-a091-da592462b709"
   },
   {
-    "sk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "sk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "pk": "104-19|case"
+    "sk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "pk": "case-by-docket-number|104-19"
   },
   {
-    "sk": "workitem-e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
-    "gsi1pk": "workitem-e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
-    "pk": "section-petitions",
+    "sk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "gsi1pk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "pk": "section|petitions",
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -208,9 +208,9 @@
     "updatedAt": "2019-03-05T17:34:13.490Z"
   },
   {
-    "sk": "workitem-e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
-    "pk": "workitem-e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
-    "gsi1pk": "workitem-e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "sk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "pk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "gsi1pk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -253,27 +253,27 @@
     "docketNumber": "104-19",
     "deadlineDate": "2019-08-25T04:00:00.000Z",
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "sk": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "sk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
     "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
     "description": "Final status report due to Judge Ashford",
-    "pk": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057"
+    "pk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057"
   },
   {
-    "sk": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "pk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05|case-deadline"
+    "sk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "pk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05"
   },
   {
-    "sk": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "pk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05|case-deadline"
+    "sk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "pk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05"
   },
   {
-    "caseDeadlineId": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "sk": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "sk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
     "pk": "case-deadline-catalog"
   },
   {
-    "caseDeadlineId": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "sk": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "sk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
     "pk": "case-deadline-catalog"
   },
   {
@@ -282,10 +282,10 @@
     "createdAt": "2019-08-22T12:46:01.052Z",
     "deadlineDate": "2019-08-22T04:00:00.000Z",
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "sk": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "sk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
     "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
     "description": "Pre-trial memorandum due",
-    "pk": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa"
+    "pk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa"
   },
   {
     "sk": "case-5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",

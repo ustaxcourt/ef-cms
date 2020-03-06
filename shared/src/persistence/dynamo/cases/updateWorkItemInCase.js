@@ -25,8 +25,8 @@ exports.updateWorkItemInCase = async ({
       ':workItem': workItem,
     },
     Key: {
-      pk: caseToUpdate.caseId,
-      sk: caseToUpdate.caseId,
+      pk: `case|${caseToUpdate.caseId}`,
+      sk: `case|${caseToUpdate.caseId}`,
     },
     UpdateExpression: `SET #documents[${documentIndex}].#workItems[${workItemIndex}] = :workItem`,
     applicationContext,

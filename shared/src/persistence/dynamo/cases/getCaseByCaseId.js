@@ -13,8 +13,8 @@ exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
   const theCase = await client
     .get({
       Key: {
-        pk: caseId,
-        sk: caseId,
+        pk: `case|${caseId}`,
+        sk: `case|${caseId}`,
       },
       applicationContext,
     })

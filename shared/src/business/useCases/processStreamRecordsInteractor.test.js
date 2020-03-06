@@ -40,7 +40,7 @@ describe('processStreamRecordsInteractor', () => {
       recordsToProcess: [
         {
           dynamodb: {
-            Keys: { pk: { S: 'workitem-123' } },
+            Keys: { pk: { S: 'work-item|123' } },
             NewImage: { caseId: { S: '4' } },
           },
           eventName: 'MODIFY',
@@ -85,8 +85,8 @@ describe('processStreamRecordsInteractor', () => {
         },
         {
           dynamodb: {
-            Keys: { pk: { S: 'workitem-123' } },
-            NewImage: { caseId: { S: '4' }, pk: { S: 'workitem-123' } },
+            Keys: { pk: { S: 'work-item|123' } },
+            NewImage: { caseId: { S: '4' }, pk: { S: 'work-item|123' } },
           },
           eventName: 'MODIFY',
         },

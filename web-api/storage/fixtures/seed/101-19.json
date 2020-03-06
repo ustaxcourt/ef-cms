@@ -128,12 +128,12 @@
     "createdAt": "2019-03-01T21:40:46.415Z",
     "receivedAt": "2019-03-01T21:40:46.415Z",
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-    "sk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "sk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "caseCaption": "Brett Osborne, Petitioner",
     "caseTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
     "initialTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
     "filingType": "Myself",
-    "pk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "pk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "hasIrsNotice": false,
     "petitioners": [
       {
@@ -151,16 +151,16 @@
     "associatedJudge": "Chief Judge"
   },
   {
-    "sk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "sk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-    "pk": "101-19|case"
+    "sk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "pk": "case-by-docket-number|101-19"
   },
   {
-    "sk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
-    "pk": "section-petitions",
+    "sk": "work-item|2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "pk": "section|petitions",
     "docketNumberSuffix": "W",
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -185,7 +185,7 @@
     "createdAt": "2019-03-01T21:40:46.415Z",
     "assigneeName": null,
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-    "gsi1pk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "gsi1pk": "work-item|2611344f-f7bf-4f47-8ba0-60c70cb25446",
     "caseTitle": "Brett Osborne",
     "messages": [
       {
@@ -200,8 +200,8 @@
     "updatedAt": "2019-03-01T21:40:46.415Z"
   },
   {
-    "sk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
-    "pk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "sk": "work-item|2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "pk": "work-item|2611344f-f7bf-4f47-8ba0-60c70cb25446",
     "docketNumberSuffix": "W",
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -226,7 +226,7 @@
     "createdAt": "2019-03-01T21:40:46.415Z",
     "assigneeName": null,
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-    "gsi1pk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "gsi1pk": "work-item|2611344f-f7bf-4f47-8ba0-60c70cb25446",
     "caseTitle": "Brett Osborne",
     "messages": [
       {
@@ -241,7 +241,7 @@
     "updatedAt": "2019-03-01T21:40:46.415Z"
   },
   {
-    "sk": "case-2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "sk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "pk": "catalog"
   }

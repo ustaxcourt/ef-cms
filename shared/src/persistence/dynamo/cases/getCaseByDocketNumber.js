@@ -18,8 +18,8 @@ exports.getCaseByDocketNumber = async ({
 }) => {
   const theCase = await getRecordViaMapping({
     applicationContext,
-    key: docketNumber,
-    type: 'case',
+    pk: `case-by-docket-number|${docketNumber}`,
+    prefix: 'case',
   }).then(aCase =>
     stripWorkItems(aCase, applicationContext.isAuthorizedForWorkItems()),
   );

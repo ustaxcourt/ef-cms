@@ -14,8 +14,8 @@ exports.updateDocumentProcessingStatus = async ({
       ':status': 'complete',
     },
     Key: {
-      pk: caseId,
-      sk: caseId,
+      pk: `case|${caseId}`,
+      sk: `case|${caseId}`,
     },
     UpdateExpression: `SET #documents[${documentIndex}].#processingStatus = :status`,
     applicationContext,

@@ -17,17 +17,18 @@ exports.saveWorkItemForPaper = async ({ applicationContext, workItem }) => {
   return Promise.all([
     put({
       Item: {
-        pk: `workitem-${workItem.workItemId}`,
-        sk: `workitem-${workItem.workItemId}`,
+        pk: `work-item|${workItem.workItemId}`,
+        sk: `work-item|${workItem.workItemId}`,
         ...workItem,
       },
       applicationContext,
     }),
-    createMappingRecord({
+    put({
+      Item: {
+        pk: `case|${workItem.caseId}`,
+        sk: `work-item|${workItem.workItemId}`,
+      },
       applicationContext,
-      pkId: workItem.caseId,
-      skId: workItem.workItemId,
-      type: 'workItem',
     }),
     createUserInboxRecord({
       applicationContext,

@@ -28,8 +28,8 @@ describe('updateWorkItem', () => {
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
         assigneeId: 'bob',
-        pk: 'workitem-123',
-        sk: 'workitem-123',
+        pk: 'work-item|123',
+        sk: 'work-item|123',
         workItemId: '123',
       },
       applicationContext: { environment: { stage: 'dev' } },

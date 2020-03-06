@@ -18,7 +18,7 @@ exports.deleteTrialSessionWorkingCopy = async ({
     applicationContext,
     key: {
       pk: `trial-session-working-copy|${trialSessionId}`,
-      sk: `${userId}`,
+      sk: `user|${userId}`,
     },
   });
 };

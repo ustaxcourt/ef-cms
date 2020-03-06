@@ -3,30 +3,30 @@
     "sk": "LasVegasNevada-H-B-20190816132910-58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "pk": "eligible-for-trial-case-catalog",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "gsi1pk": "eligible-for-trial-case-catalog-58c1f7a3-8062-42f0-a73e-8bd69b419878"
+    "gsi1pk": "eligible-for-trial-case-catalog|58c1f7a3-8062-42f0-a73e-8bd69b419878"
   },
   {
     "sk": "LasVegasNevada-R-B-20190816132910-58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "pk": "eligible-for-trial-case-catalog",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "gsi1pk": "eligible-for-trial-case-catalog-58c1f7a3-8062-42f0-a73e-8bd69b419878"
+    "gsi1pk": "eligible-for-trial-case-catalog|58c1f7a3-8062-42f0-a73e-8bd69b419878"
   },
   {
     "sk": "63d7c79e-1313-4969-9bf5-9170af46997c",
     "pk": "58c1f7a3-8062-42f0-a73e-8bd69b419878|workItem"
   },
   {
-    "sk": "case-58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "pk": "catalog"
   },
   {
-    "sk": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "pk": "5805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "sk": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "pk": "9805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "completedAt": "2019-08-16T17:30:10.526Z",
@@ -46,7 +46,7 @@
       "filingDate": "2019-08-16T17:29:10.132Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
-    "gsi1pk": "workitem-63d7c79e-1313-4969-9bf5-9170af46997c",
+    "gsi1pk": "work-item|63d7c79e-1313-4969-9bf5-9170af46997c",
     "section": "irsSystem",
     "workItemId": "63d7c79e-1313-4969-9bf5-9170af46997c",
     "isInitializeCase": true,
@@ -68,7 +68,7 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-outbox-petitions",
+    "pk": "section-outbox|petitions",
     "docketNumber": "107-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk",
@@ -92,7 +92,7 @@
       "filingDate": "2019-08-16T17:29:10.132Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
-    "gsi1pk": "workitem-63d7c79e-1313-4969-9bf5-9170af46997c",
+    "gsi1pk": "work-item|63d7c79e-1313-4969-9bf5-9170af46997c",
     "section": "irsSystem",
     "workItemId": "63d7c79e-1313-4969-9bf5-9170af46997c",
     "isInitializeCase": true,
@@ -366,7 +366,7 @@
     "createdAt": "2019-08-16T17:29:10.133Z",
     "assigneeName": "IRS Holding Queue",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "sk": "workitem-63d7c79e-1313-4969-9bf5-9170af46997c",
+    "sk": "work-item|63d7c79e-1313-4969-9bf5-9170af46997c",
     "messages": [
       {
         "createdAt": "2019-08-16T17:29:10.133Z",
@@ -376,19 +376,19 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "workitem-63d7c79e-1313-4969-9bf5-9170af46997c",
+    "pk": "work-item|63d7c79e-1313-4969-9bf5-9170af46997c",
     "docketNumber": "107-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk",
     "updatedAt": "2019-08-16T17:29:10.133Z"
   },
   {
-    "sk": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "sk": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "pk": "107-19|case"
+    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "case-by-docket-number|107-19"
   },
   {
     "caseTitle": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
@@ -396,18 +396,18 @@
     "createdAt": "2019-08-22T12:51:32.434Z",
     "deadlineDate": "2019-08-22T04:00:00.000Z",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "sk": "case-deadline-307fd0e4-eeed-41bc-bbc3-a9555fccc231",
+    "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
     "caseDeadlineId": "307fd0e4-eeed-41bc-bbc3-a9555fccc231",
     "description": "Filing fee due",
-    "pk": "case-deadline-307fd0e4-eeed-41bc-bbc3-a9555fccc231"
+    "pk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231"
   },
   {
-    "caseDeadlineId": "case-deadline-307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "sk": "case-deadline-307fd0e4-eeed-41bc-bbc3-a9555fccc231",
+    "caseDeadlineId": "307fd0e4-eeed-41bc-bbc3-a9555fccc231",
+    "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
     "pk": "case-deadline-catalog"
   },
   {
-    "sk": "case-deadline-307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "pk": "58c1f7a3-8062-42f0-a73e-8bd69b419878|case-deadline"
+    "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
+    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878"
   }
 ]

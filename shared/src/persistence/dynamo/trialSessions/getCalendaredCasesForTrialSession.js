@@ -6,8 +6,8 @@ exports.getCalendaredCasesForTrialSession = async ({
 }) => {
   const trialSession = await client.get({
     Key: {
-      pk: `trial-session-${trialSessionId}`,
-      sk: `trial-session-${trialSessionId}`,
+      pk: `trial-session|${trialSessionId}`,
+      sk: `trial-session|${trialSessionId}`,
     },
     applicationContext,
   });
@@ -16,16 +16,20 @@ exports.getCalendaredCasesForTrialSession = async ({
 
   const results = await client.batchGet({
     applicationContext,
-    keys: caseOrder.map(myCase => ({
-      pk: myCase.caseId,
-      sk: myCase.caseId,
+    keys: caseOrder.map(({ caseId }) => ({
+      pk: `case|${caseId}`,
+      sk: `case|${caseId}`,
     })),
   });
 
+  console.log('all cases', results);
+
   const afterMapping = caseOrder.map(myCase => ({
     ...myCase,
-    ...results.find(r => myCase.caseId === r.pk),
+    ...results.find(r => myCase.caseId === r.caseId),
   }));
+
+  console.log('afterMapping', afterMapping);
 
   return afterMapping;
 };

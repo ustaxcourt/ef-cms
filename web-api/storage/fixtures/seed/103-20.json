@@ -1,12 +1,12 @@
 [
   {
-    "sk": "case-24fcb050-9c95-4d69-a149-96acba0196b8",
+    "sk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
     "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
     "pk": "catalog"
   },
   {
-    "sk": "24fcb050-9c95-4d69-a149-96acba0196b8",
-    "pk": "103-20|case"
+    "sk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "pk": "case-by-docket-number|103-20"
   },
   {
     "docketNumberSuffix": "L",
@@ -27,7 +27,7 @@
       "filingDate": "2020-01-23T21:44:54.043Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
-    "gsi1pk": "workitem-1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
+    "gsi1pk": "work-item|1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
     "caseTitle": "Reuben Blair",
     "section": "petitions",
     "trialDate": "2020-11-27T05:00:00.000Z",
@@ -40,7 +40,7 @@
     "highPriority": true,
     "assigneeName": null,
     "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
-    "sk": "workitem-1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
+    "sk": "work-item|1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
     "messages": [
       {
         "createdAt": "2020-01-23T21:44:54.044Z",
@@ -50,7 +50,7 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-petitions",
+    "pk": "section|petitions",
     "docketNumber": "103-20",
     "updatedAt": "2020-01-23T21:44:54.044Z"
   },
@@ -58,7 +58,7 @@
     "docketNumberSuffix": "L",
     "caseStatus": "Calendared",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-2a3955ca-baad-4ca7-be23-d862d2ef5310",
+    "gsi1pk": "work-item|2a3955ca-baad-4ca7-be23-d862d2ef5310",
     "document": {
       "hasSupportingDocuments": false,
       "attachments": false,
@@ -95,7 +95,7 @@
     "highPriority": true,
     "assigneeName": null,
     "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
-    "sk": "workitem-2a3955ca-baad-4ca7-be23-d862d2ef5310",
+    "sk": "work-item|2a3955ca-baad-4ca7-be23-d862d2ef5310",
     "messages": [
       {
         "createdAt": "2020-01-23T21:45:34.521Z",
@@ -105,23 +105,23 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "workitem-2a3955ca-baad-4ca7-be23-d862d2ef5310",
+    "pk": "work-item|2a3955ca-baad-4ca7-be23-d862d2ef5310",
     "docketNumber": "103-20",
     "updatedAt": "2020-01-23T21:45:34.520Z"
   },
   {
-    "sk": "1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
-    "pk": "24fcb050-9c95-4d69-a149-96acba0196b8|workItem"
+    "sk": "work-item|1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
+    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8"
   },
   {
-    "sk": "2a3955ca-baad-4ca7-be23-d862d2ef5310",
-    "pk": "24fcb050-9c95-4d69-a149-96acba0196b8|workItem"
+    "sk": "work-item|2a3955ca-baad-4ca7-be23-d862d2ef5310",
+    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8"
   },
   {
     "docketNumberSuffix": "L",
     "caseStatus": "Calendared",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-2a3955ca-baad-4ca7-be23-d862d2ef5310",
+    "gsi1pk": "work-item|2a3955ca-baad-4ca7-be23-d862d2ef5310",
     "document": {
       "hasSupportingDocuments": false,
       "attachments": false,
@@ -158,7 +158,7 @@
     "highPriority": true,
     "assigneeName": null,
     "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
-    "sk": "workitem-2a3955ca-baad-4ca7-be23-d862d2ef5310",
+    "sk": "work-item|2a3955ca-baad-4ca7-be23-d862d2ef5310",
     "messages": [
       {
         "createdAt": "2020-01-23T21:45:34.521Z",
@@ -168,7 +168,7 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-docket",
+    "pk": "section|docket",
     "docketNumber": "103-20",
     "updatedAt": "2020-01-23T21:45:34.520Z"
   },
@@ -191,7 +191,7 @@
       "filingDate": "2020-01-23T21:44:54.043Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
-    "gsi1pk": "workitem-1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
+    "gsi1pk": "work-item|1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
     "caseTitle": "Reuben Blair",
     "section": "petitions",
     "trialDate": "2020-11-27T05:00:00.000Z",
@@ -204,7 +204,7 @@
     "highPriority": true,
     "assigneeName": null,
     "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
-    "sk": "workitem-1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
+    "sk": "work-item|1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
     "messages": [
       {
         "createdAt": "2020-01-23T21:44:54.044Z",
@@ -214,13 +214,13 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "workitem-1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
+    "pk": "work-item|1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
     "docketNumber": "103-20",
     "updatedAt": "2020-01-23T21:44:54.044Z"
   },
   {
-    "sk": "24fcb050-9c95-4d69-a149-96acba0196b8",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "associatedJudge": "Judge Armen",
@@ -443,7 +443,7 @@
     "trialTime": "10:00",
     "caseCaption": "Reuben Blair, Petitioner",
     "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
-    "sk": "24fcb050-9c95-4d69-a149-96acba0196b8",
+    "sk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -463,7 +463,7 @@
     "practitioners": [],
     "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "24fcb050-9c95-4d69-a149-96acba0196b8",
+    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
     "docketNumber": "103-20",
     "status": "Calendared"
   },

@@ -20,8 +20,8 @@ exports.getAllCaseDeadlines = async ({ applicationContext }) => {
   const results = await client.batchGet({
     applicationContext,
     keys: ids.map(id => ({
-      pk: id,
-      sk: id,
+      pk: `case-deadline|${id}`,
+      sk: `case-deadline|${id}`,
     })),
   });
 
@@ -41,8 +41,8 @@ exports.getAllCaseDeadlines = async ({ applicationContext }) => {
   const caseResults = await client.batchGet({
     applicationContext,
     keys: caseIds.map(id => ({
-      pk: id,
-      sk: id,
+      pk: `case|${id}`,
+      sk: `case|${id}`,
     })),
   });
 
