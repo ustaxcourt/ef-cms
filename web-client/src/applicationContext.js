@@ -88,6 +88,7 @@ import {
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { completeDocketEntryQCInteractor } from '../../shared/src/proxies/editDocketEntry/completeDocketEntryQCProxy';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
+import { createAttorneyUserInteractor } from '../../shared/src/proxies/createAttorneyUserProxy';
 import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
@@ -156,6 +157,7 @@ import { getSentMessagesForUserInteractor } from '../../shared/src/proxies/worki
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
 import { getTrialSessionsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
+import { getUserByIdInteractor } from '../../shared/src/proxies/users/getUserByIdProxy';
 import { getUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteProxy';
 import { getUserInteractor } from '../../shared/src/proxies/users/getUserProxy';
 import { getUserPermissions } from '../../shared/src/authorization/getUserPermissions';
@@ -190,6 +192,7 @@ import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { unblockCaseFromTrialInteractor } from '../../shared/src/proxies/unblockCaseFromTrialProxy';
 import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritizeCaseProxy';
+import { updateAttorneyUserInteractor } from '../../shared/src/proxies/updateAttorneyUserProxy';
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
@@ -275,6 +278,7 @@ const allUseCases = {
   caseAdvancedSearchInteractor,
   completeDocketEntryQCInteractor,
   completeWorkItemInteractor,
+  createAttorneyUserInteractor,
   createCaseDeadlineInteractor,
   createCaseFromPaperInteractor,
   createCaseInteractor,
@@ -335,6 +339,7 @@ const allUseCases = {
   getTrialSessionDetailsInteractor,
   getTrialSessionWorkingCopyInteractor,
   getTrialSessionsInteractor,
+  getUserByIdInteractor,
   getUserCaseNoteForCasesInteractor,
   getUserCaseNoteInteractor,
   getUserInteractor,
@@ -365,6 +370,7 @@ const allUseCases = {
   submitPendingCaseAssociationRequestInteractor,
   unblockCaseFromTrialInteractor,
   unprioritizeCaseInteractor,
+  updateAttorneyUserInteractor,
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseTrialSortTagsInteractor,
@@ -595,10 +601,15 @@ const applicationContext = {
   },
   initHoneybadger: async () => {
     if (process.env.USTC_ENV === 'prod' && process.env.ENV) {
+      const stagingApiKey = process.env.CIRCLE_HONEYBADGER_API_KEY_STG;
+      const devApiKey = process.env.CIRCLE_HONEYBADGER_API_KEY_DEV;
       const apiKey =
-        process.env[
-          'CIRCLE_HONEYBADGER_API_KEY_' + process.env.ENV.toUpperCase()
-        ];
+        process.env.ENV === 'stg'
+          ? stagingApiKey
+          : process.env.ENV === 'dev'
+          ? devApiKey
+          : null;
+
       if (apiKey) {
         const Honeybadger = await import('honeybadger-js'); // browser version
 

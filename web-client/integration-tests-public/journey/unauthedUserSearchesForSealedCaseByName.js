@@ -1,8 +1,8 @@
-import { wait } from '../../integration-tests/helpers';
+import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
 export default test => {
   return it('Search for sealed case by name', async () => {
-    await wait(3000);
+    await refreshElasticsearchIndex(3000);
 
     const queryParams = {
       petitionerName: 'NOTAREALNAMEFORTESTINGPUBLIC',

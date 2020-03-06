@@ -17,6 +17,7 @@ import { runCompute } from 'cerebral/test';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { withAppContextDecorator } from '../src/withAppContext';
+import axios from 'axios';
 
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormData from 'form-data';
@@ -517,6 +518,11 @@ export const wait = time => {
   return new Promise(resolve => {
     setTimeout(resolve, time);
   });
+};
+
+export const refreshElasticsearchIndex = async () => {
+  await axios.post('http://localhost:9200/efcms/_refresh');
+  return await wait(1500);
 };
 
 export const base64ToUInt8Array = b64 => {

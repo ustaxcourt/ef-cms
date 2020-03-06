@@ -127,6 +127,64 @@ describe('Case entity', () => {
     });
   });
 
+  describe('filtered', () => {
+    it('does not return private data if filtered is true and the user is external', () => {
+      applicationContext.getCurrentUser = () =>
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f']; //petitioner user
+
+      const myCase = new Case(
+        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      expect(Object.keys(myCase)).not.toContain('associatedJudge');
+    });
+
+    it('returns private data if filtered is true and the user is internal', () => {
+      applicationContext.getCurrentUser = () =>
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f']; //docketclerk user
+
+      const myCase = new Case(
+        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      expect(Object.keys(myCase)).toContain('associatedJudge');
+    });
+
+    it('returns private data if filtered is false and the user is external', () => {
+      applicationContext.getCurrentUser = () =>
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f']; //petitioner user
+
+      const myCase = new Case(
+        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        {
+          applicationContext,
+          filtered: false,
+        },
+      );
+      expect(Object.keys(myCase)).toContain('associatedJudge');
+    });
+
+    it('returns private data if filtered is false and the user is internal', () => {
+      applicationContext.getCurrentUser = () =>
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f']; //docketclerk user
+
+      const myCase = new Case(
+        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        {
+          applicationContext,
+          filtered: false,
+        },
+      );
+      expect(Object.keys(myCase)).toContain('associatedJudge');
+    });
+  });
+
   describe('isValid', () => {
     it('Creates a valid case', () => {
       const myCase = new Case(MOCK_CASE, {
@@ -826,6 +884,7 @@ describe('Case entity', () => {
       const updatedDocketEntry = new DocketRecord(
         {
           description: 'second record now updated',
+          docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
           documentId: '8675309b-28d0-43ec-bafb-654e83405412',
           filingDate: '2018-03-02T22:22:00.000Z',
           index: 7,
@@ -991,9 +1050,13 @@ describe('Case entity', () => {
   });
 
   describe('updateDocketNumberRecord records suffix changes', () => {
-    it('should create a docket record when the suffix updates', () => {
+    it('should create a docket record when the suffix updates for an electronically created case', () => {
       const caseToVerify = new Case(
-        { docketNumber: '123-19', status: Case.STATUS_TYPES.generalDocket },
+        {
+          docketNumber: '123-19',
+          isPaper: false,
+          status: Case.STATUS_TYPES.generalDocket,
+        },
         {
           applicationContext,
         },
@@ -1004,6 +1067,23 @@ describe('Case entity', () => {
         applicationContext,
       });
       expect(caseToVerify.docketRecord.length).toEqual(1);
+    });
+
+    it('should not create a docket record when the suffix updates but the case was created from paper', () => {
+      const caseToVerify = new Case(
+        {
+          docketNumber: '123-19',
+          isPaper: true,
+          status: Case.STATUS_TYPES.generalDocket,
+        },
+        {
+          applicationContext,
+        },
+      );
+      caseToVerify.updateDocketNumberRecord({
+        applicationContext,
+      });
+      expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
     it('should not create a docket record if suffix has not changed', () => {

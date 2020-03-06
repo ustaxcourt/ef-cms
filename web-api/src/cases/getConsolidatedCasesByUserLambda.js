@@ -19,5 +19,5 @@ exports.handler = event =>
           userId,
         });
     },
-    { logResults: false },
+    { logResults: false, skipFiltering: true },
   );

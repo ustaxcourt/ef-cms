@@ -2,7 +2,7 @@ import { runAction } from 'cerebral/test';
 import { setCaseCaptionForCaseInfoTabAction } from './setCaseCaptionForCaseInfoTabAction';
 
 describe('setCaseCaptionForCaseInfoTabAction', () => {
-  it('should set state.caseDetail.caseCaption to the passed in props.caseCaption if the tab is caseInfo', async () => {
+  it('should set state.form.caseCaption to the passed in props.caseCaption', async () => {
     const result = await runAction(setCaseCaptionForCaseInfoTabAction, {
       props: {
         caseCaption: 'something something',

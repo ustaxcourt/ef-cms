@@ -83,6 +83,7 @@ describe('associatePractitionerToCase', () => {
         updateCase: updateCaseSpy,
         verifyCaseForUser: verifyCaseForUserSpy,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
   });
 

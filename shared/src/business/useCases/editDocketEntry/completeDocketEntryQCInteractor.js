@@ -131,8 +131,13 @@ exports.completeDocketEntryQCInteractor = async ({
     },
   };
 
+  const existingDocketRecordEntry = caseEntity.getDocketRecordByDocumentId(
+    updatedDocument.documentId,
+  );
+
   const docketRecordEntry = new DocketRecord(
     {
+      ...existingDocketRecordEntry,
       description: updatedDocumentTitle,
       documentId: updatedDocument.documentId,
       editState: '{}',

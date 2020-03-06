@@ -3,11 +3,11 @@ import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/prese
 import {
   fakeFile,
   loginAs,
+  refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
   uploadProposedStipulatedDecision,
   viewCaseDetail,
-  wait,
 } from './helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -76,8 +76,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(1);
 
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await wait(3000);
+    await refreshElasticsearchIndex();
 
     await test.runSequence('gotoPendingReportSequence');
     const currentPendingItemsCount = (test.getState('pendingItems') || [])
