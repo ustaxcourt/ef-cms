@@ -5,11 +5,12 @@ import { PractitionerSearchForm } from './PractitionerSearchForm';
 import { SearchResults } from './SearchResults';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const AdvancedSearch = connect(
   {
+    advancedSearchHelper: state.advancedSearchHelper,
     submitCaseAdvancedSearchSequence:
       sequences.submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence:
@@ -20,6 +21,7 @@ export const AdvancedSearch = connect(
       sequences.submitPractitionerNameSearchSequence,
   },
   ({
+    advancedSearchHelper,
     submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence,
     submitPractitionerBarNumberSearchSequence,
@@ -51,20 +53,22 @@ export const AdvancedSearch = connect(
                 }
               />
             </Tab>
-            <Tab
-              id="tab-practitioner"
-              tabName="practitioner"
-              title="Practitioner"
-            >
-              <PractitionerSearchForm
-                submitPractitionerBarNumberSearchSequence={
-                  submitPractitionerBarNumberSearchSequence
-                }
-                submitPractitionerNameSearchSequence={
-                  submitPractitionerNameSearchSequence
-                }
-              />
-            </Tab>
+            {advancedSearchHelper.showPractitionerSearch && (
+              <Tab
+                id="tab-practitioner"
+                tabName="practitioner"
+                title="Practitioner"
+              >
+                <PractitionerSearchForm
+                  submitPractitionerBarNumberSearchSequence={
+                    submitPractitionerBarNumberSearchSequence
+                  }
+                  submitPractitionerNameSearchSequence={
+                    submitPractitionerNameSearchSequence
+                  }
+                />
+              </Tab>
+            )}
           </Tabs>
 
           <SearchResults />
