@@ -1,5 +1,4 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { navigateToAttorneyListAction } from '../actions/navigateToAttorneyListAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -19,11 +18,7 @@ export const submitUpdateAttorneyUserSequence = [
       updateAttorneyUserAction,
       {
         error: [],
-        success: [
-          setAlertSuccessAction,
-          setSaveAlertsForNavigationAction,
-          navigateToAttorneyListAction,
-        ],
+        success: [setAlertSuccessAction, setSaveAlertsForNavigationAction],
       },
     ],
   },
