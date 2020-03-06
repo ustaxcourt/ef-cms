@@ -1,10 +1,8 @@
-const uuid = require('uuid');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { migrateCaseInteractor } = require('./migrateCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase.js');
 const { User } = require('../entities/User');
 
-const MOCK_CASE_ID = '413f62ce-d7c8-446e-aeda-14a2a625a626';
 const DATE = '2018-11-21T20:49:28.192Z';
 
 let applicationContext;
@@ -17,7 +15,6 @@ let createdCases;
 
 describe('migrateCaseInteractor', () => {
   beforeEach(() => {
-    uuid.v4 = jest.fn(() => MOCK_CASE_ID);
     window.Date.prototype.toISOString = jest.fn(() => DATE);
 
     adminUser = new User({

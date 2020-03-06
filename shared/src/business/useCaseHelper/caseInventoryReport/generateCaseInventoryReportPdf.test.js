@@ -37,11 +37,15 @@ describe('generateCaseInventoryReportPdf', () => {
   let user;
   let loggerErrorMock = jest.fn();
   let generatePdfReportInteractorMock;
+  let generatedHtml;
 
   beforeEach(() => {
     user = { role: User.ROLES.petitionsClerk, userId: 'petitionsClerk' };
 
-    generatePdfReportInteractorMock = jest.fn();
+    generatedHtml = '';
+    generatePdfReportInteractorMock = jest.fn(({ contentHtml }) => {
+      generatedHtml = contentHtml;
+    });
 
     applicationContext = {
       environment: {
@@ -57,7 +61,13 @@ describe('generateCaseInventoryReportPdf', () => {
           url: 'https://www.example.com',
         }),
       }),
-      getPug: () => ({ compile: () => () => '' }),
+      getPug: () => ({
+        compile: () => ({ showJudgeColumn, showStatusColumn }) => {
+          const judgeColumn = showJudgeColumn ? '<th>Judge</th>' : '';
+          const statusColumn = showStatusColumn ? '<th>Case Status</th>' : '';
+          return `${judgeColumn} ${statusColumn}`;
+        },
+      }),
       getStorageClient: () => ({
         upload: (params, callback) => callback(),
       }),
@@ -113,5 +123,38 @@ describe('generateCaseInventoryReportPdf', () => {
         filters: { associatedJudge: 'Chief Judge' },
       }),
     ).rejects.toThrow('bad!');
+  });
+
+  it('should hide the status column if the status filter is set', async () => {
+    await generateCaseInventoryReportPdf({
+      applicationContext,
+      cases: mockCases,
+      filters: { status: 'New' },
+    });
+
+    expect(generatedHtml.includes('<th>Judge</th>')).toBeTruthy();
+    expect(generatedHtml.includes('<th>Case Status</th>')).toBeFalsy();
+  });
+
+  it('should hide the judge column if the judge filter is set', async () => {
+    await generateCaseInventoryReportPdf({
+      applicationContext,
+      cases: mockCases,
+      filters: { associatedJudge: 'Chief Judge' },
+    });
+
+    expect(generatedHtml.includes('<th>Case Status</th>')).toBeTruthy();
+    expect(generatedHtml.includes('<th>Judge</th>')).toBeFalsy();
+  });
+
+  it('should hide the judge and status columns if the associatedJudge and status filters are set', async () => {
+    await generateCaseInventoryReportPdf({
+      applicationContext,
+      cases: mockCases,
+      filters: { associatedJudge: 'Chief Judge', status: 'New' },
+    });
+
+    expect(generatedHtml.includes('<th>Judge</th>')).toBeFalsy();
+    expect(generatedHtml.includes('<th>Case Status</th>')).toBeFalsy();
   });
 });

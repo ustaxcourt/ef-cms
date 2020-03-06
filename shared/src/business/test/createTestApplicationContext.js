@@ -1,6 +1,5 @@
 const DateHandler = require('../utilities/DateHandler');
 const docketNumberGenerator = require('../../persistence/dynamo/cases/docketNumberGenerator');
-const uuidv4 = require('uuid/v4');
 const {
   addWorkItemToSectionInbox,
 } = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
@@ -49,6 +48,7 @@ const {
 const {
   saveWorkItemForNonPaper,
 } = require('../../persistence/dynamo/workitems/saveWorkItemForNonPaper');
+const { v4: uuidv4 } = require('uuid');
 
 const {
   createSectionInboxRecord,

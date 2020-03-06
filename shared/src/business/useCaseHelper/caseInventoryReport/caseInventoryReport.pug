@@ -16,10 +16,16 @@ html(lang="en")
           tr
             th Docket
             th Case title
-            th Case status
+            if showStatusColumn
+              th Case status
+            if showJudgeColumn
+              th Judge
         tbody
           each formattedCase in formattedCases
             tr
               td.no-wrap #{formattedCase.docketNumber}#{formattedCase.docketNumberSuffix}
               td= formattedCase.caseCaptionNames
-              td= formattedCase.status
+              if showStatusColumn
+                td= formattedCase.status
+              if showJudgeColumn
+                td= formattedCase.associatedJudge
