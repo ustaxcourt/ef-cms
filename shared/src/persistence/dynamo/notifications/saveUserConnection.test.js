@@ -28,10 +28,11 @@ describe('saveUserConnection', () => {
     });
     expect(putStub).toHaveBeenCalledWith({
       Item: {
+        connectionId: 'abc',
         endpoint: {},
-        gsi1pk: 'abc',
-        pk: 'connections-123',
-        sk: 'abc',
+        gsi1pk: 'connection|abc',
+        pk: 'user|123',
+        sk: 'connection|abc',
         ttl: expect.anything(),
       },
       TableName: 'efcms-dev',

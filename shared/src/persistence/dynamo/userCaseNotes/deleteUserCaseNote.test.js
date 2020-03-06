@@ -30,7 +30,7 @@ describe('deleteUserCaseNote', () => {
     expect(deleteStub.getCall(0).args[0]).toMatchObject({
       Key: {
         pk: 'user-case-note|456',
-        sk: '123',
+        sk: 'user|123',
       },
       TableName: 'efcms-dev',
     });

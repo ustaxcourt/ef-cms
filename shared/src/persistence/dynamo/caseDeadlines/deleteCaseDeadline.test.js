@@ -37,7 +37,7 @@ describe('deleteCaseDeadline', () => {
 
     expect(deleteStub.getCall(1).args[0]).toMatchObject({
       Key: {
-        pk: 'user|456',
+        pk: 'case|456',
         sk: 'case-deadline|123',
       },
       TableName: 'efcms-dev',

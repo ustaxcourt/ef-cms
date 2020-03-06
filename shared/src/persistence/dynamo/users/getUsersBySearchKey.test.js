@@ -15,7 +15,7 @@ describe('getUsersBySearchKey', () => {
       {
         barNumber: 'PT1234',
         name: 'Test Practitioner',
-        pk: '9805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user|9805d1ab-18d0-43ec-bafb-654e83405416',
         role: User.ROLES.practitioner,
         section: 'practitioner',
         sk: '9805d1ab-18d0-43ec-bafb-654e83405416',
@@ -45,7 +45,7 @@ describe('getUsersBySearchKey', () => {
       {
         barNumber: 'PT1234',
         name: 'Test Practitioner',
-        pk: '9805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user|9805d1ab-18d0-43ec-bafb-654e83405416',
         role: User.ROLES.practitioner,
         section: 'practitioner',
         sk: '9805d1ab-18d0-43ec-bafb-654e83405416',

@@ -68,8 +68,8 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
     });
     expect(putStub.getCall(3).args[0]).toMatchObject({
       Item: {
-        pk: '456|workItem',
-        sk: '123',
+        pk: 'case|456',
+        sk: 'work-item|123',
       },
     });
   });

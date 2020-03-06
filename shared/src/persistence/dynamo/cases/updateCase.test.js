@@ -52,8 +52,8 @@ describe('updateCase', () => {
       },
     });
     expect(putStub.mock.calls[0][0].Item).toMatchObject({
-      pk: '123',
-      sk: '123',
+      pk: 'case|123',
+      sk: 'case|123',
     });
   });
 
@@ -73,8 +73,8 @@ describe('updateCase', () => {
       },
     });
     expect(putStub.mock.calls[0][0].Item).toMatchObject({
-      pk: '123',
-      sk: '123',
+      pk: 'case|123',
+      sk: 'case|123',
     });
     expect(updateStub.mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
@@ -135,8 +135,8 @@ describe('updateCase', () => {
       },
     });
     expect(putStub.mock.calls[0][0].Item).toMatchObject({
-      pk: '123',
-      sk: '123',
+      pk: 'case|123',
+      sk: 'case|123',
     });
     expect(updateStub).not.toBeCalled();
   });

@@ -29,7 +29,7 @@ describe('deleteWorkItemFromInbox', () => {
     });
     expect(deleteStub.getCall(0).args[0]).toMatchObject({
       Key: {
-        pk: 'user-1805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
         sk: 'work-item|123',
       },
     });
