@@ -52,16 +52,16 @@ describe('respondents refactoring migration', () => {
             ...MOCK_CASE,
             respondents: [
               {
-                respondentId: 'abc-123',
+                userId: 'abc-123',
               },
               {
-                respondentId: 'def-321',
+                userId: 'def-321',
               },
               {
-                respondentId: 'def-321',
+                userId: 'def-321',
               },
               {
-                respondentId: 'def-321',
+                userId: 'def-321',
               },
             ],
           },

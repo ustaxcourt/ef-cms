@@ -16,11 +16,13 @@ const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
  * @returns {object} the case data
  */
 exports.createCase = async ({ applicationContext, caseToCreate }) => {
+  console.log('NEW CASE', caseToCreate);
+
   const [results] = await Promise.all([
     client.put({
       Item: {
-        pk: caseToCreate.caseId,
-        sk: caseToCreate.caseId,
+        pk: `case|${caseToCreate.caseId}`,
+        sk: `case|${caseToCreate.caseId}`,
         ...caseToCreate,
       },
       applicationContext,
@@ -45,6 +47,26 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
         applicationContext,
       }),
     ),
+    ...caseToCreate.respondents.map(respondent =>
+      client.put({
+        Item: {
+          pk: `case|${caseToCreate.caseId}`,
+          sk: `respondent|${respondent.userId}`,
+          ...respondent,
+        },
+        applicationContext,
+      }),
+    ),
+    ...caseToCreate.practitioners.map(practitioner =>
+      client.put({
+        Item: {
+          pk: `case|${caseToCreate.caseId}`,
+          sk: `practitioner|${practitioner.userId}`,
+          ...practitioner,
+        },
+        applicationContext,
+      }),
+    ),
     createMappingRecord({
       applicationContext,
       pkId: caseToCreate.userId,
@@ -62,6 +84,8 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
       caseId: caseToCreate.caseId,
     }),
   ]);
+
+  console.log('results', results);
 
   return stripWorkItems(results, applicationContext.isAuthorizedForWorkItems());
 };

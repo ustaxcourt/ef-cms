@@ -8,13 +8,12 @@ const mutateRecord = async (item, documentClient, tableName) => {
     const caseEntity = new Case(item, { applicationContext });
 
     for (const practitioner of caseEntity.practitioners) {
-      const practitionerId = applicationContext.getUniqueId();
       await documentClient
         .put({
           Item: {
             ...practitioner,
             pk: `case|${item.caseId}`,
-            sk: `practitioner|${practitionerId}`,
+            sk: `practitioner|${practitioner.userId}`,
           },
           TableName: tableName,
         })
