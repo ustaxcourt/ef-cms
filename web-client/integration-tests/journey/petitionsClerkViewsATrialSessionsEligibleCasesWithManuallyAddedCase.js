@@ -7,7 +7,6 @@ export default (test, expectedCount) => {
     await test.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: test.trialSessionId,
     });
-    console.log('we are there');
 
     const eligibleCases = test.getState('trialSession.eligibleCases');
 

@@ -4,7 +4,6 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export default (test, expectedCount) => {
   return it('Petitions Clerk Views A Trial Sessions Eligible Cases', async () => {
-    console.log('test.trialSessionId', test.trialSessionId);
     await test.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: test.trialSessionId,
     });

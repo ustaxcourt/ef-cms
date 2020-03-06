@@ -22,14 +22,10 @@ exports.getCalendaredCasesForTrialSession = async ({
     })),
   });
 
-  console.log('all cases', results);
-
   const afterMapping = caseOrder.map(myCase => ({
     ...myCase,
     ...results.find(r => myCase.caseId === r.caseId),
   }));
-
-  console.log('afterMapping', afterMapping);
 
   return afterMapping;
 };
