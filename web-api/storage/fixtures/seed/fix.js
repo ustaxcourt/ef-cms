@@ -1,5 +1,5 @@
 const fs = require('fs');
-const uuidv4 = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
 const files = [
   './101-19.json',
   './101-20.json',
