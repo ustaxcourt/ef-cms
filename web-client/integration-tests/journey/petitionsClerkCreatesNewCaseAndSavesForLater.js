@@ -300,11 +300,36 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
 
     await test.runSequence('goBackToStartCaseInternalSequence', {
       tab: 'partyInfo',
-    }); // click Edit button
+    });
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
 
-    await test.runSequence('openConfirmDeletePDFModalSequence'); // opens delete modal confirmation
-    await test.runSequence('removeScannedPdfSequence'); // click confirm button
+    await test.runSequence('openConfirmDeletePDFModalSequence');
+    await test.runSequence('removeScannedPdfSequence');
+    expect(test.getState('form.petitionFile')).toBeUndefined();
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'petitionFile',
+      value: fakeFile,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'petitionFileSize',
+      value: 1,
+    });
+
+    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+
+    expect(test.getState('form.petitionFile')).toBe(fakeFile);
+
+    await test.runSequence('goBackToStartCaseInternalSequence', {
+      tab: 'partyInfo',
+    });
+    expect(test.getState('currentPage')).toEqual('StartCaseInternal');
+
+    await test.setState('documentSelectedForScan', 'stinFile');
+    await test.runSequence('openConfirmDeletePDFModalSequence');
+    await test.runSequence('removeScannedPdfSequence');
     expect(test.getState('form.stinFile')).toBeUndefined();
 
     await test.runSequence('updateFormValueSequence', {
@@ -312,10 +337,84 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: fakeFile,
     });
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'stinFileSize',
+      value: 1,
+    });
+
     await test.runSequence('gotoReviewPetitionFromPaperSequence');
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
     expect(test.getState('form.stinFile')).toBe(fakeFile);
+
+    await test.runSequence('goBackToStartCaseInternalSequence', {
+      tab: 'partyInfo',
+    });
+    expect(test.getState('currentPage')).toEqual('StartCaseInternal');
+
+    await test.setState(
+      'documentSelectedForScan',
+      'requestForPlaceOfTrialFile',
+    );
+    await test.runSequence('openConfirmDeletePDFModalSequence');
+    await test.runSequence('removeScannedPdfSequence');
+    expect(test.getState('form.requestForPlaceOfTrialFile')).toBeUndefined();
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'requestForPlaceOfTrialFile',
+      value: fakeFile,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'requestForPlaceOfTrialFileSize',
+      value: 1,
+    });
+
+    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+
+    expect(test.getState('form.requestForPlaceOfTrialFile')).toBe(fakeFile);
+
+    await test.setState('documentSelectedForScan', 'odsFile');
+    await test.runSequence('openConfirmDeletePDFModalSequence');
+    await test.runSequence('removeScannedPdfSequence');
+    expect(test.getState('form.odsFile')).toBeUndefined();
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'odsFile',
+      value: fakeFile,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'odsFileSize',
+      value: 1,
+    });
+
+    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+
+    expect(test.getState('form.odsFile')).toBe(fakeFile);
+
+    // TODO - Refactor how tab selection sets documentSelectedForScan
+    await test.setState('documentSelectedForScan', 'apwFile');
+    await test.runSequence('openConfirmDeletePDFModalSequence');
+    await test.runSequence('removeScannedPdfSequence');
+    expect(test.getState('form.apwFile')).toBeUndefined();
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'apwFile',
+      value: fakeFile,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'apwFileSize',
+      value: 1,
+    });
+
+    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+
+    expect(test.getState('form.apwFile')).toBe(fakeFile);
 
     await test.runSequence('saveInternalCaseForLaterSequence');
 
