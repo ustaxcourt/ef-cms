@@ -35,6 +35,7 @@ rm -rf ./web-api/storage/s3/*
 npm run start:s3rver &
 S3RVER_PID=$!
 ./wait-until.sh http://localhost:9000/ 200
+npm run seed:s3
 
 if [ ! -z "$RESUME" ]; then
   echo "Resuming operation with previous s3 and dynamo data"

@@ -41,12 +41,12 @@ describe('submitCaseAssociationRequest', () => {
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           };
         },
-
         getPersistenceGateway: () => ({
           getCaseByCaseId: async () => caseRecord,
           updateCase: async () => caseRecord,
           verifyCaseForUser: async () => true,
         }),
+        getUniqueId: () => 'unique-id-1',
       };
       await submitCaseAssociationRequestInteractor({
         applicationContext,
@@ -94,6 +94,7 @@ describe('submitCaseAssociationRequest', () => {
         updateCase: updateCaseSpy,
         verifyCaseForUser: verifyCaseForUserSpy,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
 
     await submitCaseAssociationRequestInteractor({
@@ -153,6 +154,7 @@ describe('submitCaseAssociationRequest', () => {
         updateCase: updateCaseSpy,
         verifyCaseForUser: verifyCaseForUserSpy,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
 
     await submitCaseAssociationRequestInteractor({
@@ -202,6 +204,7 @@ describe('submitCaseAssociationRequest', () => {
         updateCase: updateCaseSpy,
         verifyCaseForUser: verifyCaseForUserSpy,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
 
     await submitCaseAssociationRequestInteractor({

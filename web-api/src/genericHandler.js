@@ -2,6 +2,31 @@ const createApplicationContext = require('./applicationContext');
 const { getUserFromAuthHeader } = require('./middleware/apiGatewayHelper');
 const { handle } = require('./middleware/apiGatewayHelper');
 
+exports.dataSecurityFilter = (data, { applicationContext }) => {
+  let returnData = data;
+  if (data && Array.isArray(data) && data.length && data[0].entityName) {
+    const entityConstructor = applicationContext.getEntityByName(
+      data[0].entityName,
+    );
+    returnData = data.map(
+      result =>
+        new entityConstructor(result, {
+          applicationContext,
+          filtered: true,
+        }),
+    );
+  } else if (data && data.entityName) {
+    const entityConstructor = applicationContext.getEntityByName(
+      data.entityName,
+    );
+    returnData = new entityConstructor(data, {
+      applicationContext,
+      filtered: true,
+    });
+  }
+  return returnData;
+};
+
 /**
  * generic handler function for use in lambdas
  *
@@ -26,6 +51,7 @@ exports.genericHandler = (event, cb, options = {}) => {
       logResultsLabel = 'Results',
       logUser = true,
       logUserLabel = 'User',
+      skipFiltering,
     } = options;
 
     try {
@@ -43,11 +69,17 @@ exports.genericHandler = (event, cb, options = {}) => {
 
       const results = await cb({ applicationContext, user });
 
+      const returnResults = !skipFiltering
+        ? exports.dataSecurityFilter(results, {
+            applicationContext,
+          })
+        : results;
+
       if (logResults && applicationContext) {
-        applicationContext.logger.info(logResultsLabel, results);
+        applicationContext.logger.info(logResultsLabel, returnResults);
       }
 
-      return results;
+      return returnResults;
     } catch (e) {
       if (!e.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case

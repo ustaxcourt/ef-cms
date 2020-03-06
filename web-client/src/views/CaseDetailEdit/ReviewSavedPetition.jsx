@@ -185,7 +185,8 @@ export const ReviewSavedPetition = connect(
                           >
                             Case caption
                           </label>
-                          {caseDetail.caseCaption}
+                          {caseDetail.caseCaption}{' '}
+                          {constants.CASE_CAPTION_POSTFIX}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
                           <label

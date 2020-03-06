@@ -29,6 +29,7 @@ describe('Update case trial sort tags', () => {
           updateCaseTrialSortMappingRecords: updateCaseTrialSortMappingRecordsStub,
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
   });
 
@@ -83,6 +84,7 @@ describe('Update case trial sort tags', () => {
           updateCase: () => null,
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {
@@ -117,6 +119,7 @@ describe('Update case trial sort tags', () => {
             Promise.resolve(new Case(caseToUpdate, { applicationContext })),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {

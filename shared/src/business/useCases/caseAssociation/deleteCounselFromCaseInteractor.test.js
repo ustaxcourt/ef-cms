@@ -48,6 +48,7 @@ describe('deleteCounselFromCaseInteractor', () => {
         },
         updateCase: updateCaseMock,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
   });
 
@@ -56,6 +57,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       getCurrentUser: () => ({
         role: User.ROLES.petitioner,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {

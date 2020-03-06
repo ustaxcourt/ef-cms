@@ -3,7 +3,7 @@ plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  - serverless-plugin-aws-alerts
+  # - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -160,6 +160,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  getUserById:
+    handler: web-api/${self:provider.dir}/usersHandlers.getUserByIdLambda
+    events:
+      - http:
+          path: /{userId}
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getInternalUsers:
     handler: web-api/${self:provider.dir}/usersHandlers.getInternalUsersLambda
     events:
@@ -178,6 +190,30 @@ functions:
       - http:
           path: /
           method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createAttorneyUser:
+    handler: web-api/${self:provider.dir}/usersHandlers.createAttorneyUserLambda
+    events:
+      - http:
+          path: /attorney
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateAttorneyUser:
+    handler: web-api/${self:provider.dir}/usersHandlers.updateAttorneyUserLambda
+    events:
+      - http:
+          path: /attorney
+          method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS

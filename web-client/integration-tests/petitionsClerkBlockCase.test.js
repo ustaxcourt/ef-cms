@@ -2,10 +2,10 @@ import { Case } from '../../shared/src/business/entities/cases/Case';
 import {
   fakeFile,
   loginAs,
+  refreshElasticsearchIndex,
   setupTest,
   uploadProposedStipulatedDecision,
   viewCaseDetail,
-  wait,
 } from './helpers';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
@@ -56,8 +56,7 @@ describe('Blocking a Case', () => {
   //automatic block with a due date
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with an automatically blocked case for due date', async () => {
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await wait(3000);
+    await refreshElasticsearchIndex();
 
     await test.runSequence('gotoBlockedCasesReportSequence');
 
@@ -92,8 +91,7 @@ describe('Blocking a Case', () => {
 
   loginAs(test, 'petitionsclerk');
   it('petitions clerk views blocked report with an automatically blocked case for pending item', async () => {
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await wait(3000);
+    await refreshElasticsearchIndex();
 
     await test.runSequence('gotoBlockedCasesReportSequence');
 
@@ -119,8 +117,7 @@ describe('Blocking a Case', () => {
   petitionsClerkBlocksCase(test, trialLocation);
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with an automatically and manually blocked case', async () => {
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await wait(4000);
+    await refreshElasticsearchIndex();
 
     await test.runSequence('gotoBlockedCasesReportSequence');
 
@@ -162,14 +159,14 @@ describe('Blocking a Case', () => {
     });
 
     await test.runSequence('addCaseToTrialSessionSequence');
-    await wait(1000);
+    await refreshElasticsearchIndex();
   });
 
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with no blocked cases', async () => {
     await test.runSequence('gotoBlockedCasesReportSequence');
 
-    await wait(1000);
+    await refreshElasticsearchIndex();
 
     await test.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
@@ -186,7 +183,7 @@ describe('Blocking a Case', () => {
   it('petitions clerk views blocked report with no blocked cases', async () => {
     await test.runSequence('gotoBlockedCasesReportSequence');
 
-    await wait(1000);
+    await refreshElasticsearchIndex();
 
     await test.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',

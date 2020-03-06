@@ -29,7 +29,9 @@ export default (test, overrides = {}) => {
     //verify that event codes were added to initial documents/docket entries
     expect(caseDetail.documents[0].eventCode).toEqual('P');
     expect(caseDetail.documents[1].eventCode).toEqual('STIN');
-    expect(caseDetail.docketRecord[1].eventCode).toEqual('RQT');
+    expect(
+      caseDetailFormatted.docketRecordWithDocument[1].record.eventCode,
+    ).toEqual('RQT');
 
     expect(caseDetail.preferredTrialCity).toEqual('Seattle, Washington');
   });

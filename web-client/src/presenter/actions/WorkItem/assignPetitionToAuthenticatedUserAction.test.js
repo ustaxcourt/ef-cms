@@ -42,7 +42,7 @@ describe('assignPetitionToAuthenticatedUserAction', () => {
         caseDetail: {
           documents: [
             {
-              docuementType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+              documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
               workItems: [{ isQC: true, workItemId: '123' }],
             },
           ],
@@ -50,6 +50,6 @@ describe('assignPetitionToAuthenticatedUserAction', () => {
       },
     });
 
-    expect(assignWorkItemsInteractorStub).not.toHaveBeenCalled();
+    expect(assignWorkItemsInteractorStub).toHaveBeenCalled();
   });
 });

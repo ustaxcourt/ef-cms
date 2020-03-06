@@ -61,6 +61,7 @@ describe('updateCounselOnCaseInteractor', () => {
         },
         updateCase: updateCaseMock,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
   });
 
