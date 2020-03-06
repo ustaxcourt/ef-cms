@@ -8,15 +8,16 @@ const applicationContext = createApplicationContext({});
 
 const mutateRecord = item => {
   if (isCaseRecord(item) && item.respondents) {
+    console.log(
+      `setting respondents' serviceIndiator to SI_ELECTRONIC for ${item.caseId}`,
+    );
     item.respondents.forEach(respondent => {
       if (!respondent.serviceIndicator) {
         respondent.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
       }
     });
 
-    const caseEntity = new Case(item, { applicationContext })
-      .validate()
-      .toRawObject();
+    const caseEntity = new Case(item, { applicationContext }).toRawObject();
 
     const itemToPut = {
       ...item,

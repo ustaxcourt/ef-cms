@@ -95,30 +95,6 @@
     "petitionPaymentWaivedDate": "2019-03-27T21:53:00.297Z",
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
-    "practitioners": [
-      {
-        "role": "practitioner",
-        "serviceIndicator": "Electronic",
-        "contact": {
-          "address1": "234 Main St",
-          "address2": "Apartment 4",
-          "address3": "Under the stairs",
-          "city": "Chicago",
-          "countryType": "domestic",
-          "phone": "+1 (555) 555-5555",
-          "postalCode": "61234",
-          "state": "IL"
-        },
-        "representingPrimary": true,
-        "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "name": "Test Practitioner",
-        "section": "practitioner",
-        "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "email": "practitioner",
-        "barNumber": "PT1234"
-      }
-    ],
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -239,5 +215,27 @@
     "sk": "case-6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "pk": "catalog"
+  },
+  {
+    "role": "practitioner",
+    "serviceIndicator": "Electronic",
+    "barNumber": "PT1234",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test Practitioner",
+    "sk": "practitioner|e262e713-603a-4d52-8b70-4b6d7191e3ec",
+    "section": "practitioner",
+    "representingPrimary": true,
+    "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "practitioner"
   }
 ]

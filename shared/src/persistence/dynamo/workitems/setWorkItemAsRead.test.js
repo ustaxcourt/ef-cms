@@ -26,7 +26,7 @@ describe('setWorkItemAsRead', () => {
     });
     expect(updateStub.getCall(0).args[0]).toMatchObject({
       Key: {
-        pk: 'user-123',
+        pk: 'user|123',
         sk: 'work-item|abc',
       },
     });

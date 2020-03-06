@@ -827,9 +827,13 @@ Case.getCaseCaption = function(rawCase) {
   return caseCaption;
 };
 
-Case.prototype.toRawObject = function() {
+Case.prototype.toRawObject = function(processPendingItems = true) {
   const result = this.toRawObjectFromJoi();
-  result.hasPendingItems = this.doesHavePendingItems();
+
+  if (processPendingItems) {
+    result.hasPendingItems = this.doesHavePendingItems();
+  }
+
   return result;
 };
 
