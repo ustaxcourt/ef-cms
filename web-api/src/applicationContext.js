@@ -13,7 +13,6 @@ const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
 const util = require('util');
-const uuidv4 = require('uuid/v4');
 const {
   addCaseToTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/addCaseToTrialSessionInteractor');
@@ -771,6 +770,7 @@ const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { exec } = require('child_process');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 const { User } = require('../../shared/src/business/entities/User');
+const { v4: uuidv4 } = require('uuid');
 const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 
 // increase the timeout for zip uploads to S3

@@ -12,6 +12,8 @@ const generateCaseInventoryReportPage = async ({
   applicationContext,
   formattedCases,
   reportTitle,
+  showJudgeColumn,
+  showStatusColumn,
 }) => {
   const caseInventoryReportSassContent = require('./../../assets/ustcPdf.scss_');
 
@@ -32,6 +34,8 @@ const generateCaseInventoryReportPage = async ({
     formattedCases,
     logo: ustcLogoBufferBase64,
     reportTitle,
+    showJudgeColumn,
+    showStatusColumn,
     styles: css,
   });
   return html;
@@ -66,20 +70,27 @@ exports.generateCaseInventoryReportPdf = async ({
     }));
 
   let reportTitle = '';
+  let showJudgeColumn = true;
+  let showStatusColumn = true;
+
   if (filters.status) {
     reportTitle = filters.status;
+    showStatusColumn = false;
   }
   if (filters.status && filters.associatedJudge) {
     reportTitle += ' - ';
   }
   if (filters.associatedJudge) {
     reportTitle += filters.associatedJudge;
+    showJudgeColumn = false;
   }
 
   const contentHtml = await generateCaseInventoryReportPage({
     applicationContext,
     formattedCases,
     reportTitle,
+    showJudgeColumn,
+    showStatusColumn,
   });
 
   const documentId = await applicationContext
