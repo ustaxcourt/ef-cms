@@ -16,7 +16,7 @@ exports.getRecordsViaMapping = async ({ applicationContext, pk, prefix }) => {
 
   const ids = mappings.map(metadata => metadata.sk);
 
-  const results = await client.batchGet({
+  const batchGetResults = await client.batchGet({
     applicationContext,
     keys: ids.map(id => ({
       pk: id,
@@ -24,16 +24,18 @@ exports.getRecordsViaMapping = async ({ applicationContext, pk, prefix }) => {
     })),
   });
 
-  const cases = [];
+  const results = [];
   mappings.forEach(mapping => {
-    const aCase = results.find(c => mapping.sk === c.pk);
-    if (aCase) {
-      cases.push({
+    const entry = batchGetResults.find(
+      batchGetEntry => mapping.sk === batchGetEntry.pk,
+    );
+    if (entry) {
+      results.push({
         ...mapping,
-        ...aCase,
+        ...entry,
       });
     }
   });
 
-  return cases;
+  return results;
 };
