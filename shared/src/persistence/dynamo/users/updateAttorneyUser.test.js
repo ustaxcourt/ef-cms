@@ -75,7 +75,7 @@ describe('updateAttorneyUser', () => {
     });
     expect(deleteStub.mock.calls[2][0]).toMatchObject({
       Key: {
-        pk: 'practitioner|PT1234',
+        pk: 'PT1234|practitioner',
         sk: userId,
       },
     });
