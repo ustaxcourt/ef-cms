@@ -416,6 +416,72 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
 
     expect(test.getState('form.apwFile')).toBe(fakeFile);
 
+    //sequence 13
+    await test.runSequence('goBackToStartCaseInternalSequence', {
+      tab: 'caseInfo',
+    });
+    expect(test.getState('currentPage')).toEqual('StartCaseInternal');
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'noticeOfAttachments',
+      value: true,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'orderDesignatingPlaceOfTrial',
+      value: true,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'orderForAmendedPetition',
+      value: true,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'orderForAmendedPetitionAndFilingFee',
+      value: true,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'orderForFilingFee',
+      value: true,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'orderForOds',
+      value: true,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'orderForRatification',
+      value: true,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'orderForRequestedTrialLocation',
+      value: true,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'orderToShowCause',
+      value: true,
+    });
+
+    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+
+    expect(test.getState('form.noticeOfAttachments')).toBe(true);
+    expect(test.getState('form.orderDesignatingPlaceOfTrial')).toBe(true);
+    expect(test.getState('form.orderForAmendedPetition')).toBe(true);
+    expect(test.getState('form.orderForAmendedPetitionAndFilingFee')).toBe(
+      true,
+    );
+    expect(test.getState('form.orderForFilingFee')).toBe(true);
+    expect(test.getState('form.orderForOds')).toBe(true);
+    expect(test.getState('form.orderForRatification')).toBe(true);
+    expect(test.getState('form.orderForRequestedTrialLocation')).toBe(true);
+    expect(test.getState('form.orderToShowCause')).toBe(true);
+
     await test.runSequence('saveInternalCaseForLaterSequence');
 
     expect(test.getState('currentPage')).toEqual('Messages');
