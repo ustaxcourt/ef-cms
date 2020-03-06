@@ -57,7 +57,7 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   petitionsClerkManuallyAddsCaseToCalendaredTrialSession(test, 0);
   petitionsClerkManuallyAddsCaseToCalendaredTrialSession(test, 1);
 
-  loginAs(test, 'judgeCohen');
+  loginAs(test, 'judgeCohen'); //
   it("Get judge's document qc section inbox after", async () => {
     await getFormattedDocumentQCSectionInbox(test);
     const judgeDocketSectionQCInboxCountAfter = getInboxCount(test);

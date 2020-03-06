@@ -15,8 +15,6 @@ const {
  */
 exports.createCaseDeadline = async ({ applicationContext, caseDeadline }) => {
   const { caseDeadlineId } = caseDeadline;
-  console.log('caseDeadlineId', caseDeadlineId);
-  console.log('caseDeadline', caseDeadline);
   await client.put({
     Item: {
       pk: `case-deadline|${caseDeadlineId}`,
