@@ -19,18 +19,21 @@ export const noticeGenerationCompleteSequence = [
   stopWebSocketConnectionAction,
   shouldRefreshCaseAction,
   {
-    no: [],
-    yes: [getCaseAction, setCaseAction],
+    no: [() => console.log('no')],
+    yes: [() => console.log('yes'), getCaseAction, setCaseAction],
   },
   clearModalStateAction,
   clearModalAction,
   hasPaperAction,
   {
     electronic: [
+      () => console.log('electronic'),
       getNoticeGenerationSuccessMessageAction,
       setAlertSuccessAction,
     ],
     paper: [
+      () => console.log('paper'),
+
       ...setPdfPreviewUrlSequence,
       setAlternateBackLocationAction,
       navigateToPdfPreviewAction,

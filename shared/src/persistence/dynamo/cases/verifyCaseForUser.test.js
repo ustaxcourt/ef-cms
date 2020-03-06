@@ -19,8 +19,8 @@ describe('verifyCaseForUser', () => {
   it('should return true if mapping record for user to case exists', async () => {
     sinon.stub(client, 'query').resolves([
       {
-        pk: '123|case',
-        sk: '098',
+        pk: 'user|123',
+        sk: 'case|098',
       },
     ]);
     const result = await verifyCaseForUser({

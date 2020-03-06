@@ -80,7 +80,7 @@
         "documentId": "59ccf18f-5bac-48b0-a8e0-9c9e1d995b62"
       }
     ],
-    "gsi1pk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "gsi1pk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "receivedAt": "2019-12-11T15:25:09.284Z",
@@ -102,7 +102,7 @@
     "noticeOfAttachments": false,
     "caseCaption": "Guy Fieri, Petitioner",
     "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
-    "sk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "sk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -120,7 +120,7 @@
     "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
     "leadCaseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
-    "pk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "pk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
     "docketNumber": "111-19",
     "status": "Submitted"
   },
@@ -145,11 +145,11 @@
     "sk": "docket-record|decc1a72-5e38-4b66-8781-ad7bc5bd5a9e"
   },
   {
-    "sk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
-    "pk": "111-19|case"
+    "sk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "pk": "case-by-docket-number|111-19"
   },
   {
-    "sk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
   }
 ]

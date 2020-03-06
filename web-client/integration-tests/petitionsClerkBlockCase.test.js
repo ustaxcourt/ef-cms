@@ -53,7 +53,7 @@ describe('Blocking a Case', () => {
   petitionsClerkUnblocksCase(test, trialLocation);
   petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
 
-  //automatic block with a due date
+  // //automatic block with a due date
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with an automatically blocked case for due date', async () => {
     await refreshElasticsearchIndex();
@@ -78,7 +78,7 @@ describe('Blocking a Case', () => {
   petitionsClerkDeletesCaseDeadline(test);
   petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
 
-  //automatic block with a pending item
+  // //automatic block with a pending item
   loginAs(test, 'respondent');
 
   it('respondent uploads a proposed stipulated decision (pending item)', async () => {

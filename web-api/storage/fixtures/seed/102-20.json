@@ -3,7 +3,7 @@
     "docketNumberSuffix": "S",
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-77d8449a-ffe1-48e5-b056-a6112a819a4b",
+    "gsi1pk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "document": {
       "eventCode": "P",
       "createdAt": "2020-01-21T16:41:39.481Z",
@@ -29,7 +29,7 @@
     "createdAt": "2020-01-21T16:41:39.482Z",
     "assigneeName": null,
     "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "sk": "workitem-77d8449a-ffe1-48e5-b056-a6112a819a4b",
+    "sk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "messages": [
       {
         "createdAt": "2020-01-21T16:41:39.482Z",
@@ -39,32 +39,32 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "workitem-77d8449a-ffe1-48e5-b056-a6112a819a4b",
+    "pk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "docketNumber": "102-20",
     "updatedAt": "2020-01-21T16:41:39.482Z"
   },
   {
-    "sk": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "pk": "ad07b846-8933-4778-9fe2-b5d8ac8ad728|case"
+    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728"
   },
   {
-    "sk": "case-c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "pk": "catalog"
   },
   {
-    "sk": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "pk": "102-20|case"
+    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "case-by-docket-number|102-20"
   },
   {
-    "sk": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "pk": "5805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "docketNumberSuffix": "S",
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-77d8449a-ffe1-48e5-b056-a6112a819a4b",
+    "gsi1pk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "document": {
       "eventCode": "P",
       "createdAt": "2020-01-21T16:41:39.481Z",
@@ -90,7 +90,7 @@
     "createdAt": "2020-01-21T16:41:39.482Z",
     "assigneeName": null,
     "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "sk": "workitem-77d8449a-ffe1-48e5-b056-a6112a819a4b",
+    "sk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "messages": [
       {
         "createdAt": "2020-01-21T16:41:39.482Z",
@@ -100,7 +100,7 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-petitions",
+    "pk": "section|petitions",
     "docketNumber": "102-20",
     "updatedAt": "2020-01-21T16:41:39.482Z"
   },
@@ -211,7 +211,7 @@
     "noticeOfAttachments": false,
     "caseCaption": "Eve Brewer, Petitioner",
     "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "sk": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -270,7 +270,7 @@
     ],
     "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "docketNumber": "102-20",
     "status": "New"
   },
@@ -295,11 +295,11 @@
     "sk": "docket-record|f15a6532-9805-479b-ae45-e8f112153d2a"
   },
   {
-    "sk": "77d8449a-ffe1-48e5-b056-a6112a819a4b",
-    "pk": "c862926c-119f-49d5-8cc3-6e93ab703fa3|workItem"
+    "sk": "case|77d8449a-ffe1-48e5-b056-a6112a819a4b",
+    "pk": "work-item|c862926c-119f-49d5-8cc3-6e93ab703fa3"
   },
   {
-    "sk": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "work-item|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "case|7805d1ab-18d0-43ec-bafb-654e83405416"
   }
 ]

@@ -150,17 +150,17 @@
     "sk": "docket-record|89cb2500-becf-4da9-83b9-e3ca561c2622"
   },
   {
-    "sk": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-    "pk": "9805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "sk": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-    "pk": "105-19|case"
+    "sk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "pk": "case-by-docket-number|105-19"
   },
   {
-    "sk": "workitem-98c7130f-f924-423f-9f2c-89f0616f446a",
-    "gsi1pk": "workitem-98c7130f-f924-423f-9f2c-89f0616f446a",
-    "pk": "section-petitions",
+    "sk": "work-item|98c7130f-f924-423f-9f2c-89f0616f446a",
+    "gsi1pk": "work-item|98c7130f-f924-423f-9f2c-89f0616f446a",
+    "pk": "section|petitions",
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -197,9 +197,9 @@
     "updatedAt": "2019-03-27T21:53:00.297Z"
   },
   {
-    "sk": "workitem-98c7130f-f924-423f-9f2c-89f0616f446a",
-    "pk": "workitem-98c7130f-f924-423f-9f2c-89f0616f446a",
-    "gsi1pk": "workitem-98c7130f-f924-423f-9f2c-89f0616f446a",
+    "sk": "work-item|98c7130f-f924-423f-9f2c-89f0616f446a",
+    "pk": "work-item|98c7130f-f924-423f-9f2c-89f0616f446a",
+    "gsi1pk": "work-item|98c7130f-f924-423f-9f2c-89f0616f446a",
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,

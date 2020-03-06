@@ -106,7 +106,7 @@
     "trialTime": "10:00",
     "caseCaption": "Bill Burr, Petitioner",
     "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
-    "sk": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "sk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -125,17 +125,17 @@
     "practitioners": [],
     "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "docketNumber": "101-20",
     "status": "Calendared"
   },
   {
-    "sk": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
-    "pk": "101-20|case"
+    "sk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "pk": "case-by-docket-number|101-20"
   },
   {
-    "sk": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "pk": "case-by-docket-number|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",

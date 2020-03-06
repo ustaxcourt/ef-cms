@@ -50,13 +50,13 @@ describe('saveWorkItemForDocketEntryWithoutFile', () => {
 
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
-        pk: 'workitem-123',
-        sk: 'workitem-123',
+        pk: 'work-item|123',
+        sk: 'work-item|123',
       },
     });
     expect(putStub.getCall(1).args[0]).toMatchObject({
       Item: {
-        pk: 'section-docket',
+        pk: 'section|docket',
         workItemId: '123',
       },
     });

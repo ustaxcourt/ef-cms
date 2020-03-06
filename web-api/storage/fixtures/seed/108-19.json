@@ -28,7 +28,7 @@
     "createdAt": "2019-08-16T19:21:46.147Z",
     "assigneeName": "IRS Holding Queue",
     "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
-    "sk": "workitem-ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "sk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
     "messages": [
       {
         "createdAt": "2019-08-16T19:21:46.147Z",
@@ -38,7 +38,7 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "workitem-ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "pk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
     "docketNumber": "108-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk",
@@ -169,7 +169,7 @@
     "respondents": [],
     "practitioners": [],
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "pk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "docketNumber": "108-19",
     "status": "Calendared"
   },
@@ -217,7 +217,7 @@
       "filingDate": "2019-08-16T19:21:46.146Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
-    "gsi1pk": "workitem-ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "gsi1pk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
     "section": "irsSystem",
     "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
     "isInitializeCase": true,
@@ -239,7 +239,7 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-outbox-petitions",
+    "pk": "section-outbox|petitions",
     "docketNumber": "108-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk",
@@ -263,7 +263,7 @@
       "filingDate": "2019-08-16T19:21:46.146Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
-    "gsi1pk": "workitem-ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "gsi1pk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
     "section": "irsSystem",
     "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
     "isInitializeCase": true,
@@ -285,22 +285,22 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "user-outbox-3805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "user-outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "108-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk",
     "updatedAt": "2019-08-16T19:21:46.147Z"
   },
   {
-    "sk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
-    "pk": "108-19|case"
+    "sk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "pk": "case-by-docket-number|108-19"
   },
   {
-    "sk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "sk": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
-    "pk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5|workItem"
+    "sk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "pk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5"
   }
 ]

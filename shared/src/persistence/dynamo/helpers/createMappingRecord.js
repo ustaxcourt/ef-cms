@@ -9,7 +9,7 @@ exports.createMappingRecord = async ({
 }) => {
   return client.put({
     Item: {
-      pk: `${pkId}|${type}`,
+      pk: `${type}|${pkId}`,
       sk: skId,
       ...item,
     },

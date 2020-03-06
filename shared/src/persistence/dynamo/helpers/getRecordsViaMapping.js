@@ -1,14 +1,16 @@
 const client = require('../../dynamodbClientService');
 
-exports.getRecordsViaMapping = async ({ applicationContext, key, type }) => {
+exports.getRecordsViaMapping = async ({ applicationContext, pk, prefix }) => {
   const mappings = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
+      '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `${key}|${type}`,
+      ':pk': pk,
+      ':prefix': prefix,
     },
-    KeyConditionExpression: '#pk = :pk',
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
   });
 
@@ -22,10 +24,16 @@ exports.getRecordsViaMapping = async ({ applicationContext, key, type }) => {
     })),
   });
 
-  const afterMapping = mappings.map(m => ({
-    ...m,
-    ...results.find(r => m.sk === r.pk),
-  }));
+  const cases = [];
+  mappings.forEach(mapping => {
+    const aCase = results.find(c => mapping.sk === c.pk);
+    if (aCase) {
+      cases.push({
+        ...mapping,
+        ...aCase,
+      });
+    }
+  });
 
-  return afterMapping;
+  return cases;
 };

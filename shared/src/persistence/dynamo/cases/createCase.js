@@ -19,8 +19,8 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
   const [results] = await Promise.all([
     client.put({
       Item: {
-        pk: caseToCreate.caseId,
-        sk: caseToCreate.caseId,
+        pk: `case|${caseToCreate.caseId}`,
+        sk: `case|${caseToCreate.caseId}`,
         ...caseToCreate,
       },
       applicationContext,
@@ -35,21 +35,27 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
         applicationContext,
       }),
     ),
-    createMappingRecord({
+    client.put({
+      Item: {
+        pk: `user|${caseToCreate.userId}`,
+        sk: `case|${caseToCreate.caseId}`,
+      },
       applicationContext,
-      pkId: caseToCreate.userId,
-      skId: caseToCreate.caseId,
-      type: 'case',
     }),
-    createMappingRecord({
+    client.put({
+      Item: {
+        pk: `case-by-docket-number|${caseToCreate.docketNumber}`,
+        sk: `case|${caseToCreate.caseId}`,
+      },
       applicationContext,
-      pkId: caseToCreate.docketNumber,
-      skId: caseToCreate.caseId,
-      type: 'case',
     }),
-    createCaseCatalogRecord({
+    client.put({
+      Item: {
+        caseId: caseToCreate.caseId,
+        pk: 'catalog',
+        sk: `case|${caseToCreate.caseId}`,
+      },
       applicationContext,
-      caseId: caseToCreate.caseId,
     }),
   ]);
 

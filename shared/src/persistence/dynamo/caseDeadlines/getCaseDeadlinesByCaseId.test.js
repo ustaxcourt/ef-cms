@@ -20,14 +20,14 @@ describe('getCaseDeadlinesByCaseId', () => {
     sinon.stub(client, 'batchGet').resolves([
       {
         ...mockCaseDeadline,
-        pk: mockCaseDeadline.caseDeadlineId,
-        sk: mockCaseDeadline.caseDeadlineId,
+        pk: `case-deadline|${mockCaseDeadline.caseDeadlineId}`,
+        sk: `case-deadline|${mockCaseDeadline.caseDeadlineId}`,
       },
     ]);
     sinon.stub(client, 'query').resolves([
       {
-        pk: `${mockCaseDeadline.caseId}|case-deadline`,
-        sk: mockCaseDeadline.caseDeadlineId,
+        pk: `case|${mockCaseDeadline.caseId}`,
+        sk: `case-deadline|${mockCaseDeadline.caseDeadlineId}`,
       },
     ]);
   });

@@ -15,7 +15,7 @@ exports.createTrialSessionWorkingCopy = async ({
   return await put({
     Item: {
       pk: `trial-session-working-copy|${trialSessionWorkingCopy.trialSessionId}`,
-      sk: `${trialSessionWorkingCopy.userId}`,
+      sk: `user|${trialSessionWorkingCopy.userId}`,
       ...trialSessionWorkingCopy,
     },
     applicationContext,

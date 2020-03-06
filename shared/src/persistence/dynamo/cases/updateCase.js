@@ -30,8 +30,8 @@ const { differenceWith, isEqual } = require('lodash');
 exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   const oldCase = await client.get({
     Key: {
-      pk: caseToUpdate.caseId,
-      sk: caseToUpdate.caseId,
+      pk: `case|${caseToUpdate.caseId}`,
+      sk: `case|${caseToUpdate.caseId}`,
     },
     applicationContext,
   });
@@ -68,11 +68,13 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     const workItemMappings = await client.query({
       ExpressionAttributeNames: {
         '#pk': 'pk',
+        '#sk': 'sk',
       },
       ExpressionAttributeValues: {
-        ':pk': `${caseToUpdate.caseId}|workItem`,
+        ':pk': `case|${caseToUpdate.caseId}`,
+        ':prefix': 'work-item',
       },
-      KeyConditionExpression: '#pk = :pk',
+      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
       applicationContext,
     });
 
@@ -141,8 +143,8 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   const [results] = await Promise.all([
     client.put({
       Item: {
-        pk: caseToUpdate.caseId,
-        sk: caseToUpdate.caseId,
+        pk: `case|${caseToUpdate.caseId}`,
+        sk: `case|${caseToUpdate.caseId}`,
         ...setLeadCase,
         ...caseToUpdate,
       },

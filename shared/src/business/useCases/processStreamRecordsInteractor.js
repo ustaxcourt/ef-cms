@@ -3,8 +3,8 @@ const { createISODateString } = require('../utilities/DateHandler');
 const filterRecords = records => {
   return records.filter(
     record =>
-      !record.dynamodb.Keys.pk.S.includes('workitem-') &&
-      !record.dynamodb.Keys.pk.S.includes('|user') &&
+      !record.dynamodb.Keys.pk.S.includes('work-item|') &&
+      !record.dynamodb.Keys.pk.S.includes('user|') &&
       ['INSERT', 'MODIFY'].includes(record.eventName),
   );
 };

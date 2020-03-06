@@ -25,7 +25,7 @@ describe('getUsersBySearchKey', () => {
     sinon.stub(client, 'query').resolves([
       {
         pk: 'Test Practitioner|practitioner',
-        sk: '9805d1ab-18d0-43ec-bafb-654e83405416',
+        sk: 'user|9805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ]);
   });
