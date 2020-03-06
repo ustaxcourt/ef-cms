@@ -54,9 +54,38 @@ exports.getCaseByDocketNumber = async ({
     applicationContext,
   });
 
+  const practitioners = await client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `case|${theCase.caseId}`,
+      ':prefix': 'practitioner',
+    },
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+    applicationContext,
+  });
+
+  const respondents = await client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `case|${theCase.caseId}`,
+      ':prefix': 'respondent',
+    },
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+    applicationContext,
+  });
+
   return {
     ...theCase,
     docketRecord: docketRecord.length > 0 ? docketRecord : theCase.docketRecord, // this is temp until sesed data fixed
     documents: documents.length > 0 ? documents : theCase.documents, // this is temp until sesed data fixed
+    practitioners:
+      practitioners.length > 0 ? practitioners : theCase.practitioners, // this is temp until sesed data fixed
+    respondents: respondents.length > 0 ? respondents : theCase.respondents, // this is temp until sesed data fixed
   };
 };

@@ -52,16 +52,16 @@ describe('practitioners refactoring migration', () => {
             ...MOCK_CASE,
             practitioners: [
               {
-                practitionerId: 'abc-123',
+                userId: 'abc-123',
               },
               {
-                practitionerId: 'def-321',
+                userId: 'def-321',
               },
               {
-                practitionerId: 'def-321',
+                userId: 'def-321',
               },
               {
-                practitionerId: 'def-321',
+                userId: 'def-321',
               },
             ],
           },

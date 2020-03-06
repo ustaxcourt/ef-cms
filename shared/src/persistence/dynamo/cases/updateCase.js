@@ -76,6 +76,44 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     );
   });
 
+  const updatedRespondents = differenceWith(
+    caseToUpdate.respondents,
+    oldCase.respondents,
+    isEqual,
+  );
+
+  updatedRespondents.forEach(respondent => {
+    requests.push(
+      client.put({
+        Item: {
+          pk: `case|${caseToUpdate.caseId}`,
+          sk: `respondent|${respondent.userId}`,
+          ...respondent,
+        },
+        applicationContext,
+      }),
+    );
+  });
+
+  const updatedPractitioners = differenceWith(
+    caseToUpdate.practitioners,
+    oldCase.practitioners,
+    isEqual,
+  );
+
+  updatedPractitioners.forEach(practitioner => {
+    requests.push(
+      client.put({
+        Item: {
+          pk: `case|${caseToUpdate.caseId}`,
+          sk: `practitioner|${practitioner.userId}`,
+          ...practitioner,
+        },
+        applicationContext,
+      }),
+    );
+  });
+
   if (
     oldCase.status !== caseToUpdate.status ||
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
