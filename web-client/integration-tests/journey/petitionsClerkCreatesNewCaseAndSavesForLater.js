@@ -303,14 +303,19 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     }); // click Edit button
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
 
-    await test.runSequence('selectDocumentForScanSequence', {
-      documentSelectedForScan: 'Petition',
-    }); // clicked the Petition file tab ? FIXME is it actually "Petition"?
     await test.runSequence('openConfirmDeletePDFModalSequence'); // opens delete modal confirmation
     await test.runSequence('removeScannedPdfSequence'); // click confirm button
-    expect(
-      test.getState('form.documentSelectedForScan.Petition'),
-    ).toBeUndefined();
+    expect(test.getState('form.stinFile')).toBeUndefined();
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'stinFile',
+      value: fakeFile,
+    });
+
+    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+
+    expect(test.getState('form.stinFile')).toBe(fakeFile);
 
     await test.runSequence('saveInternalCaseForLaterSequence');
 
