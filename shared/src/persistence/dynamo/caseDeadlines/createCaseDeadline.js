@@ -2,9 +2,6 @@ const client = require('../../dynamodbClientService');
 const {
   createCaseDeadlineCatalogRecord,
 } = require('./createCaseDeadlineCatalogRecord');
-const {
-  createMappingRecord,
-} = require('../../dynamo/helpers/createMappingRecord');
 
 /**
  * createCaseDeadline
