@@ -187,7 +187,7 @@ exports.addCoversheetInteractor = async ({
     .updateDocumentProcessingStatus({
       applicationContext,
       caseId,
-      documentIndex,
+      documentId,
     });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
