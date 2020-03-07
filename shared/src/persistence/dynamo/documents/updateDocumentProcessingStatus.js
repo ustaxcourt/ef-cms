@@ -3,11 +3,10 @@ const client = require('../../dynamodbClientService');
 exports.updateDocumentProcessingStatus = async ({
   applicationContext,
   caseId,
-  documentIndex,
+  documentId,
 }) => {
   await client.update({
     ExpressionAttributeNames: {
-      '#documents': 'documents',
       '#processingStatus': 'processingStatus',
     },
     ExpressionAttributeValues: {
@@ -15,9 +14,9 @@ exports.updateDocumentProcessingStatus = async ({
     },
     Key: {
       pk: `case|${caseId}`,
-      sk: `case|${caseId}`,
+      sk: `document|${documentId}`,
     },
-    UpdateExpression: `SET #documents[${documentIndex}].#processingStatus = :status`,
+    UpdateExpression: 'SET #processingStatus = :status',
     applicationContext,
   });
 };

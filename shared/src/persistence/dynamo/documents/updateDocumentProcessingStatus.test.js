@@ -30,7 +30,7 @@ describe('updateDocumentProcessingStatus', () => {
     await updateDocumentProcessingStatus({
       applicationContext,
       caseId: 'abc',
-      documentIndex: 3,
+      documentId: 3,
     });
     expect(client.update.getCall(0).args[0]).toMatchObject({
       Key: { pk: 'case|abc', sk: 'case|abc' },
