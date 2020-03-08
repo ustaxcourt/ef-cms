@@ -45,25 +45,6 @@ describe('document filing date migration', () => {
     expect(putStub.mock.calls.length).toBe(0);
   });
 
-  it('should throw an error when the case is not valid', async () => {
-    scanStub = jest.fn().mockReturnValue({
-      promise: async () => ({
-        Items: [
-          {
-            ...MOCK_CASE,
-            docketRecord: [],
-          },
-        ],
-      }),
-    });
-
-    await expect(
-      up(applicationContext.getDocumentClient(), '', forAllRecords),
-    ).rejects.toThrow();
-
-    expect(putStub.mock.calls.length).toBe(0);
-  });
-
   it("should update each document with the correspondending docket entry's filing date", async () => {
     scanStub = jest.fn().mockReturnValue({
       promise: async () => ({
