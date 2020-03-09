@@ -385,6 +385,13 @@ export const setupTest = ({ useCases = {} } = {}) => {
             workQueueIsInternal: false,
           });
           break;
+        case 'document-qc/section/outbox':
+          await test.runSequence('gotoMessagesSequence', {
+            box: 'outbox',
+            queue: 'section',
+            workQueueIsInternal: false,
+          });
+          break;
         case '/document-qc':
           await test.runSequence('gotoMessagesSequence', {
             box: 'inbox',
@@ -399,6 +406,20 @@ export const setupTest = ({ useCases = {} } = {}) => {
             workQueueIsInternal: false,
           });
           break;
+        case '/document-qc/my/inProgress':
+          await test.runSequence('gotoMessagesSequence', {
+            box: 'inProgress',
+            queue: 'my',
+            workQueueIsInternal: false,
+          });
+          break;
+        case '/document-qc/my/outbox':
+          await test.runSequence('gotoMessagesSequence', {
+            box: 'outbox',
+            queue: 'my',
+            workQueueIsInternal: false,
+          });
+          break;
         case '/messages/my/inbox':
           await test.runSequence('gotoMessagesSequence', {
             box: 'inbox',
@@ -409,8 +430,6 @@ export const setupTest = ({ useCases = {} } = {}) => {
         case `/case-detail/${test.caseId}`:
         // fall through
         case `/case-detail/${test.docketNumber}`:
-          console.log('navigating to case detail');
-
           await test.runSequence('gotoCaseDetailSequence', {
             docketNumber: test.docketNumber,
           });
@@ -435,8 +454,6 @@ export const setupTest = ({ useCases = {} } = {}) => {
           await test.runSequence('gotoDashboardSequence');
           break;
         default:
-          console.trace('hit the default', url, test.docketNumber);
-
           break;
       }
     },
