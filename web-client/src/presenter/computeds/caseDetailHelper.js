@@ -17,7 +17,7 @@ export const caseDetailHelper = (get, applicationContext) => {
   const modalState = get(state.modal);
   let showEditPetitionerInformation = false;
   const permissions = get(state.permissions);
-  const showJudgesNotes = permissions.TRIAL_SESSION_WORKING_COPY;
+  const showJudgesNotes = permissions.JUDGES_NOTES;
 
   let showFileDocumentButton =
     permissions.FILE_EXTERNAL_DOCUMENT && ['CaseDetail'].includes(currentPage);
