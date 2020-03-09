@@ -33,7 +33,7 @@ describe('validateInitialWorkItemMessage', () => {
     };
   });
 
-  it('should call the path success when no errors are found', async () => {
+  it('should call the success path when no errors are found', async () => {
     validateInitialWorkItemMessageStub.returns(null);
     await runAction(validateInitialWorkItemMessageAction, {
       modules: {
@@ -47,7 +47,7 @@ describe('validateInitialWorkItemMessage', () => {
     expect(successStub.calledOnce).toEqual(true);
   });
 
-  it('should call the path error when any errors are found', async () => {
+  it('should call the error path when any errors are found', async () => {
     validateInitialWorkItemMessageStub.returns('error');
     await runAction(validateInitialWorkItemMessageAction, {
       modules: {

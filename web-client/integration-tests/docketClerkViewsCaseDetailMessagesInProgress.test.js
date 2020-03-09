@@ -8,11 +8,7 @@ import {
 import { extractedPendingMessagesFromCaseDetail as extractedPendingMessagesFromCaseDetailComputed } from '../src/presenter/computeds/extractPendingMessagesFromCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
-import docketClerkLogIn from './journey/docketClerkLogIn';
-import docketClerkSignsOut from './journey/docketClerkSignsOut';
 import petitionsClerkCreateOrder from './journey/petitionsClerkCreateOrder';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
-import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 
 const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
   extractedPendingMessagesFromCaseDetailComputed,
@@ -29,13 +25,13 @@ describe('a docket clerk views case detail messages in progress with a message o
     jest.setTimeout(30000);
   });
 
+  loginAs(test, 'petitioner');
   it('login as a petitioner and create a case', async () => {
-    await loginAs(test, 'petitioner');
     const caseDetail = await uploadPetition(test);
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkCreateOrder(test);
   it('petitions clerk sends message to docket clerk on draft order', async () => {
     await viewDocumentDetailMessage({
@@ -49,9 +45,8 @@ describe('a docket clerk views case detail messages in progress with a message o
       test,
     });
   });
-  petitionsClerkSignsOut(test);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   it('docket clerk views case detail in progress messages with a message about a draft order', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -62,5 +57,4 @@ describe('a docket clerk views case detail messages in progress with a message o
     expect(result[0].editLink).not.toContain('/edit');
     expect(result[0].editLink).toContain('/messages/');
   });
-  docketClerkSignsOut(test);
 });

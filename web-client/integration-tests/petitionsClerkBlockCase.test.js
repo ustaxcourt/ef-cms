@@ -2,26 +2,21 @@ import { Case } from '../../shared/src/business/entities/cases/Case';
 import {
   fakeFile,
   loginAs,
+  refreshElasticsearchIndex,
   setupTest,
   uploadProposedStipulatedDecision,
   viewCaseDetail,
 } from './helpers';
-import calendarClerkLogIn from './journey/calendarClerkLogIn';
-import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
-import calendarClerkSignsOut from './journey/calendarClerkSignsOut';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
-import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
-import docketClerkSignsOut from './journey/docketClerkSignsOut';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionsClerkBlocksCase from './journey/petitionsClerkBlocksCase';
 import petitionsClerkCreatesACaseDeadline from './journey/petitionsClerkCreatesACaseDeadline';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
 import petitionsClerkDeletesCaseDeadline from './journey/petitionsClerkDeletesCaseDeadline';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkRemovesPendingItemFromCase from './journey/petitionsClerkRemovesPendingItemFromCase';
-import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
+import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkUnblocksCase from './journey/petitionsClerkUnblocksCase';
 import petitionsClerkViewsATrialSessionsEligibleCases from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
 
@@ -29,7 +24,11 @@ const test = setupTest();
 
 describe('Blocking a Case', () => {
   beforeAll(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(50000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   const trialLocation = `Charleston, West Virginia, ${Date.now()}`;
@@ -37,18 +36,16 @@ describe('Blocking a Case', () => {
     trialLocation,
   };
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkCreatesNewCase(test, fakeFile, trialLocation);
-  petitionsClerkSignsOut(test);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkSetsCaseReadyForTrial(test);
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkCreatesATrialSession(test, overrides);
   docketClerkViewsTrialSessionList(test, overrides);
-  docketClerkSignsOut(test);
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   //manual block and unblock - check eligible list
   petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
   petitionsClerkBlocksCase(test, trialLocation);
@@ -59,8 +56,7 @@ describe('Blocking a Case', () => {
   //automatic block with a due date
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with an automatically blocked case for due date', async () => {
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await refreshElasticsearchIndex();
 
     await test.runSequence('gotoBlockedCasesReportSequence');
 
@@ -81,11 +77,11 @@ describe('Blocking a Case', () => {
   petitionsClerkViewsATrialSessionsEligibleCases(test, 0);
   petitionsClerkDeletesCaseDeadline(test);
   petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
-  petitionsClerkSignsOut(test);
 
   //automatic block with a pending item
+  loginAs(test, 'respondent');
+
   it('respondent uploads a proposed stipulated decision (pending item)', async () => {
-    await loginAs(test, 'respondent');
     await viewCaseDetail({
       docketNumber: setupTest.docketNumber,
       test,
@@ -93,10 +89,9 @@ describe('Blocking a Case', () => {
     await uploadProposedStipulatedDecision(test);
   });
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   it('petitions clerk views blocked report with an automatically blocked case for pending item', async () => {
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await refreshElasticsearchIndex();
 
     await test.runSequence('gotoBlockedCasesReportSequence');
 
@@ -122,8 +117,7 @@ describe('Blocking a Case', () => {
   petitionsClerkBlocksCase(test, trialLocation);
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with an automatically and manually blocked case', async () => {
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 4000));
+    await refreshElasticsearchIndex();
 
     await test.runSequence('gotoBlockedCasesReportSequence');
 
@@ -165,14 +159,14 @@ describe('Blocking a Case', () => {
     });
 
     await test.runSequence('addCaseToTrialSessionSequence');
+    await refreshElasticsearchIndex();
   });
 
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with no blocked cases', async () => {
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 4000));
-
     await test.runSequence('gotoBlockedCasesReportSequence');
+
+    await refreshElasticsearchIndex();
 
     await test.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
@@ -181,21 +175,15 @@ describe('Blocking a Case', () => {
 
     expect(test.getState('blockedCases')).toMatchObject([]);
   });
-  petitionsClerkSignsOut(test);
 
-  //add deadline for a calendared case - it shouldn't actually be set to blocked
-  calendarClerkLogIn(test);
   markAllCasesAsQCed(test, () => [test.caseId]);
-  calendarClerkSetsATrialSessionsSchedule(test);
-  calendarClerkSignsOut(test);
+  petitionsClerkSetsATrialSessionsSchedule(test);
 
-  petitionsClerkLogIn(test);
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with no blocked cases', async () => {
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 4000));
-
     await test.runSequence('gotoBlockedCasesReportSequence');
+
+    await refreshElasticsearchIndex();
 
     await test.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
@@ -204,5 +192,4 @@ describe('Blocking a Case', () => {
 
     expect(test.getState('blockedCases')).toMatchObject([]);
   });
-  petitionsClerkSignsOut(test);
 });

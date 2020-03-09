@@ -3,20 +3,10 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import associatedUserAdvancedSearchForSealedCase from './journey/associatedUserAdvancedSearchForSealedCase';
 import associatedUserViewsCaseDetailForSealedCase from './journey/associatedUserViewsCaseDetailForSealedCase';
-import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSealsCase from './journey/docketClerkSealsCase';
-import docketClerkSignsOut from './journey/docketClerkSignsOut';
-import petitionerLogIn from './journey/petitionerLogIn';
-import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionsClerkAddsPractitionersToCase from './journey/petitionsClerkAddsPractitionersToCase';
 import petitionsClerkAddsRespondentsToCase from './journey/petitionsClerkAddsRespondentsToCase';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
-import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
-import practitionerLogIn from './journey/practitionerLogIn';
-import practitionerSignsOut from './journey/practitionerSignsOut';
-import respondentLogIn from './journey/respondentLogIn';
-import respondentSignsOut from './journey/respondentSignsOut';
 import unassociatedUserAdvancedSearchForSealedCase from './journey/unassociatedUserAdvancedSearchForSealedCase';
 import unassociatedUserViewsCaseDetailForSealedCase from './journey/unassociatedUserViewsCaseDetailForSealedCase';
 
@@ -28,8 +18,8 @@ describe('Docket Clerk seals a case', () => {
     jest.setTimeout(30000);
   });
 
+  loginAs(test, 'petitioner');
   it('login as a petitioner and create a case', async () => {
-    await loginAs(test, 'petitioner');
     const caseDetail = await uploadPetition(test, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
@@ -45,44 +35,36 @@ describe('Docket Clerk seals a case', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkAddsPractitionersToCase(test);
   petitionsClerkAddsRespondentsToCase(test);
-  petitionsClerkSignsOut(test);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkSealsCase(test);
-  docketClerkSignsOut(test);
 
   //verify that an internal user can still find this case via advanced search by name
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   associatedUserAdvancedSearchForSealedCase(test);
-  petitionsClerkSignsOut(test);
 
   //associated users
-  petitionerLogIn(test);
+  loginAs(test, 'petitioner');
   associatedUserViewsCaseDetailForSealedCase(test);
-  petitionerSignsOut(test);
 
-  practitionerLogIn(test);
+  loginAs(test, 'practitioner');
   associatedUserViewsCaseDetailForSealedCase(test);
   associatedUserAdvancedSearchForSealedCase(test);
-  practitionerSignsOut(test);
 
-  respondentLogIn(test);
+  loginAs(test, 'respondent');
   associatedUserViewsCaseDetailForSealedCase(test);
   associatedUserAdvancedSearchForSealedCase(test);
-  respondentSignsOut(test);
 
   //unassociated users
-  practitionerLogIn(test, 'practitioner3');
+  loginAs(test, 'practitioner3');
   unassociatedUserViewsCaseDetailForSealedCase(test);
   unassociatedUserAdvancedSearchForSealedCase(test);
-  practitionerSignsOut(test);
 
-  respondentLogIn(test, 'respondent3');
+  loginAs(test, 'respondent3');
   unassociatedUserViewsCaseDetailForSealedCase(test);
   unassociatedUserAdvancedSearchForSealedCase(test);
-  respondentSignsOut(test);
 });

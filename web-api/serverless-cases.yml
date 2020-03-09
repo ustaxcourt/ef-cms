@@ -3,7 +3,7 @@ plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  - serverless-plugin-aws-alerts
+  # - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -23,6 +23,7 @@ custom:
     number: 3
 
   serverless-offline:
+    skipCacheInvalidation: ${opt:skipCacheInvalidation}
     host: 0.0.0.0
     port: 3002
 
@@ -107,6 +108,8 @@ provider:
     EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
     EFCMS_DOMAIN: ${opt:domain}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
+    CIRCLE_HONEYBADGER_API_KEY_DEV: ${opt:circleHoneybadgerApiKeyDev}
+    CIRCLE_HONEYBADGER_API_KEY_STG: ${opt:circleHoneybadgerApiKeyStg}
 
 package:
   exclude:
@@ -174,18 +177,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updateCaseTrialSortTags:
-    handler: web-api/${self:provider.dir}/casesHandlers.updateCaseTrialSortTagsLambda
-    events:
-      - http:
-          path: /{caseId}/update-case-trial-sort-tags
-          method: put
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   createCase:
     handler: web-api/${self:provider.dir}/casesHandlers.createCaseLambda
     events:
@@ -238,126 +229,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  sendToIRS:
-    handler: web-api/${self:provider.dir}/casesHandlers.sendPetitionToIRSHoldingQueueLambda
-    events:
-      - http:
-          path: /{caseId}/send-to-irs-holding-queue
-          method: post
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  recallFromIRS:
-    handler: web-api/${self:provider.dir}/casesHandlers.recallPetitionFromIRSHoldingQueueLambda
-    events:
-      - http:
-          path: /{caseId}/recall-from-irs-holding-queue
-          method: delete
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  blockCaseFromTrial:
-    handler: web-api/${self:provider.dir}/casesHandlers.blockCaseFromTrialLambda
-    events:
-      - http:
-          path: /{caseId}/block
-          method: post
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  unblockCaseFromTrial:
-    handler: web-api/${self:provider.dir}/casesHandlers.unblockCaseFromTrialLambda
-    events:
-      - http:
-          path: /{caseId}/block
-          method: delete
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getBlockedCases:
-    handler: web-api/${self:provider.dir}/casesHandlers.getBlockedCasesLambda
-    events:
-      - http:
-          path: /blocked/{trialLocation}
-          method: get
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  prioritizeCase:
-    handler: web-api/${self:provider.dir}/casesHandlers.prioritizeCaseLambda
-    events:
-      - http:
-          path: /{caseId}/high-priority
-          method: post
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  unprioritizeCase:
-    handler: web-api/${self:provider.dir}/casesHandlers.unprioritizeCaseLambda
-    events:
-      - http:
-          path: /{caseId}/high-priority
-          method: delete
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  updateCaseContext:
-    handler: web-api/${self:provider.dir}/casesHandlers.updateCaseContextLambda
-    events:
-      - http:
-          path: /{caseId}/case-context
-          method: put
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  addConsolidatedCase:
-    handler: web-api/${self:provider.dir}/casesHandlers.addConsolidatedCaseLambda
-    events:
-      - http:
-          path: /{caseId}/consolidate-case
-          method: put
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  removeConsolidatedCases:
-    handler: web-api/${self:provider.dir}/casesHandlers.removeConsolidatedCasesLambda
-    events:
-      - http:
-          path: /{caseId}/consolidate-case
-          method: delete
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   getConsolidatedCasesByCase:
     handler: web-api/${self:provider.dir}/casesHandlers.getConsolidatedCasesByCaseLambda
     events:
@@ -370,24 +241,16 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updateQcCompleteForTrial:
-    handler: web-api/${self:provider.dir}/casesHandlers.updateQcCompleteForTrialLambda
+  serveCaseToIrs:
+    handler: web-api/${self:provider.dir}/casesHandlers.serveCaseToIrsLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
     events:
       - http:
-          path: /{caseId}/qc-complete
-          method: put
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  sealCase:
-    handler: web-api/${self:provider.dir}/casesHandlers.sealCaseLambda
-    events:
-      - http:
-          path: /{caseId}/seal
-          method: put
+          path: /{caseId}/serve-to-irs
+          method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS

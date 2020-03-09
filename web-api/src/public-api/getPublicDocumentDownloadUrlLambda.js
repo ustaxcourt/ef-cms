@@ -10,6 +10,7 @@ const { redirect } = require('../middleware/apiGatewayHelper');
 exports.handler = event =>
   redirect(event, async () => {
     const applicationContext = createApplicationContext({});
+    const honeybadger = applicationContext.initHoneybadger();
     try {
       const results = await applicationContext
         .getUseCases()
@@ -22,6 +23,7 @@ exports.handler = event =>
       return results;
     } catch (e) {
       applicationContext.logger.error(e);
+      honeybadger && honeybadger.notify(e);
       throw e;
     }
   });

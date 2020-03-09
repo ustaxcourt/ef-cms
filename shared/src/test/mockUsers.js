@@ -1,4 +1,10 @@
 exports.MOCK_USERS = {
+  '330d4b65-620a-489d-8414-6623653ebc4f': {
+    name: 'Practitioner',
+    role: 'practitioner',
+    section: 'practitioner',
+    userId: '330d4b65-620a-489d-8414-6623653ebc4f',
+  },
   'a7d90c05-f6cd-442c-a168-202db587f16f': {
     name: 'Docketclerk',
     role: 'docketclerk',
@@ -30,6 +36,7 @@ exports.MOCK_USERS = {
     userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
   },
   'f7d90c05-f6cd-442c-a168-202db587f16f': {
+    contact: {},
     name: 'Respondent',
     role: 'respondent',
     section: 'respondent',

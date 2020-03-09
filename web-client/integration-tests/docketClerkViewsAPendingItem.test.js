@@ -3,6 +3,7 @@ import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/prese
 import {
   fakeFile,
   loginAs,
+  refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
   uploadProposedStipulatedDecision,
@@ -33,14 +34,14 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
   let caseDetail;
   let pendingItemsCount;
 
+  loginAs(test, 'petitioner');
   it('login as a petitioner and create a case', async () => {
-    await loginAs(test, 'petitioner');
     caseDetail = await uploadPetition(test);
     ({ docketNumber } = caseDetail.docketNumber);
   });
 
+  loginAs(test, 'docketclerk');
   it('login as a docket clerk and check pending items count', async () => {
-    await loginAs(test, 'docketclerk');
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber,
     });
@@ -54,8 +55,8 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
   });
 
+  loginAs(test, 'respondent');
   it('respondent uploads a proposed stipulated decision', async () => {
-    await loginAs(test, 'respondent');
     await viewCaseDetail({
       docketNumber: caseDetail.docketNumber,
       test,
@@ -63,8 +64,8 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     await uploadProposedStipulatedDecision(test);
   });
 
+  loginAs(test, 'docketclerk');
   it('login as a docket clerk and check pending items count has increased', async () => {
-    await loginAs(test, 'docketclerk');
     await viewCaseDetail({
       docketNumber: caseDetail.docketNumber,
       test,
@@ -75,8 +76,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(1);
 
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await refreshElasticsearchIndex();
 
     await test.runSequence('gotoPendingReportSequence');
     const currentPendingItemsCount = (test.getState('pendingItems') || [])

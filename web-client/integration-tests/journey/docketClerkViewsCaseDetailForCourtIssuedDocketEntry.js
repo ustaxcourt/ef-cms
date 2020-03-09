@@ -6,7 +6,7 @@ const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
   extractedPendingMessagesFromCaseDetailComputed,
 );
 
-export default test => {
+export default (test, expectedValue = 1) => {
   return it('Docketclerk views case detail', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -17,6 +17,6 @@ export default test => {
     });
 
     //a pending message should not have been created
-    expect(result.length).toEqual(1);
+    expect(result.length).toEqual(expectedValue);
   });
 };

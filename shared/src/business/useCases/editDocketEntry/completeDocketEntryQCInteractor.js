@@ -131,13 +131,21 @@ exports.completeDocketEntryQCInteractor = async ({
     },
   };
 
-  const docketRecordEntry = new DocketRecord({
-    description: updatedDocumentTitle,
-    documentId: updatedDocument.documentId,
-    editState: '{}',
-    eventCode: updatedDocument.eventCode,
-    filingDate: updatedDocument.receivedAt,
-  });
+  const existingDocketRecordEntry = caseEntity.getDocketRecordByDocumentId(
+    updatedDocument.documentId,
+  );
+
+  const docketRecordEntry = new DocketRecord(
+    {
+      ...existingDocketRecordEntry,
+      description: updatedDocumentTitle,
+      documentId: updatedDocument.documentId,
+      editState: '{}',
+      eventCode: updatedDocument.eventCode,
+      filingDate: updatedDocument.receivedAt,
+    },
+    { applicationContext },
+  );
 
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
   caseEntity.updateDocument(updatedDocument);
@@ -152,6 +160,7 @@ exports.completeDocketEntryQCInteractor = async ({
 
     Object.assign(workItemToUpdate, {
       caseId: caseId,
+      caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
       docketNumber: caseToUpdate.docketNumber,
       docketNumberSuffix: caseToUpdate.docketNumberSuffix,
@@ -228,14 +237,12 @@ exports.completeDocketEntryQCInteractor = async ({
 
       const paperServicePdfId = applicationContext.getUniqueId();
 
-      applicationContext.logger.time('Saving S3 Document');
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: paperServicePdfData,
         documentId: paperServicePdfId,
         useTempBucket: true,
       });
-      applicationContext.logger.timeEnd('Saving S3 Document');
 
       const {
         url,
@@ -272,7 +279,7 @@ exports.completeDocketEntryQCInteractor = async ({
 
     noticeUpdatedDocument.setAsServed(servedParties.all);
 
-    caseEntity.addDocument(noticeUpdatedDocument);
+    caseEntity.addDocument(noticeUpdatedDocument, { applicationContext });
 
     const { Body: pdfData } = await applicationContext
       .getStorageClient()
@@ -292,13 +299,11 @@ exports.completeDocketEntryQCInteractor = async ({
       serviceStampText: `Served ${serviceStampDate}`,
     });
 
-    applicationContext.logger.time('Saving S3 Document');
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: newPdfData,
       documentId: noticeUpdatedDocument.documentId,
     });
-    applicationContext.logger.timeEnd('Saving S3 Document');
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
@@ -324,14 +329,12 @@ exports.completeDocketEntryQCInteractor = async ({
       const paperServicePdfData = await newPdfDoc.save();
       const paperServicePdfId = applicationContext.getUniqueId();
 
-      applicationContext.logger.time('Saving S3 Document');
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: paperServicePdfData,
         documentId: paperServicePdfId,
         useTempBucket: true,
       });
-      applicationContext.logger.timeEnd('Saving S3 Document');
 
       const {
         url,

@@ -1,6 +1,5 @@
 const DateHandler = require('../utilities/DateHandler');
 const docketNumberGenerator = require('../../persistence/dynamo/cases/docketNumberGenerator');
-const uuidv4 = require('uuid/v4');
 const {
   addWorkItemToSectionInbox,
 } = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
@@ -19,12 +18,6 @@ const {
 const {
   getCaseDeadlinesByCaseId,
 } = require('../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByCaseId');
-const {
-  getDocumentQCBatchedForSection,
-} = require('../../persistence/dynamo/workitems/getDocumentQCBatchedForSection');
-const {
-  getDocumentQCBatchedForUser,
-} = require('../../persistence/dynamo/workitems/getDocumentQCBatchedForUser');
 const {
   getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
 } = require('../../persistence/dynamo/workitems/getDocumentQCInboxForSection');
@@ -55,6 +48,7 @@ const {
 const {
   saveWorkItemForNonPaper,
 } = require('../../persistence/dynamo/workitems/saveWorkItemForNonPaper');
+const { v4: uuidv4 } = require('uuid');
 
 const {
   createSectionInboxRecord,
@@ -121,8 +115,6 @@ const createTestApplicationContext = ({ user } = {}) => {
         deleteWorkItemFromInbox,
         getCaseByCaseId,
         getCaseDeadlinesByCaseId,
-        getDocumentQCBatchedForSection,
-        getDocumentQCBatchedForUser,
         getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
         getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
         getInboxMessagesForSection,

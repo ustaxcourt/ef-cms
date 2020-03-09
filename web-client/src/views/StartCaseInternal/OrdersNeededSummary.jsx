@@ -2,7 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
-export const OrdersNeededSummary = ({ data }) => {
+export const OrdersNeededSummary = ({ caseInformation }) => {
   const summaryRef = useRef(null);
   const [closed, setClosed] = useState(false);
 
@@ -29,27 +29,32 @@ export const OrdersNeededSummary = ({ data }) => {
                   <p className="heading-3 usa-alert__heading padding-top-0">
                     Orders Needed
                   </p>
-                  {data.orderForAmendedPetition && (
-                    <div>Order for Amended Petition</div>
+                  {caseInformation.noticeOfAttachments && (
+                    <div>Notice of Attachments in the Nature of Evidence</div>
                   )}
-                  {data.orderForAmendedPetitionAndFilingFee && (
-                    <div>Order for Amended Petition and Filing Fee</div>
-                  )}
-                  {data.orderForFilingFee && (
-                    <div>Order for orderForFilingFee Fee</div>
-                  )}
-                  {data.orderForOds && (
-                    <div>Order for Ownership Disclosure Statement</div>
-                  )}
-                  {data.orderForRatification && (
-                    <div>Order for Ratification of Petition</div>
-                  )}
-                  {data.orderDesignatingPlaceOfTrial && (
+                  {caseInformation.orderDesignatingPlaceOfTrial && (
                     <div>Order to Change Designated Place of Trial</div>
                   )}
-                  {data.orderToShowCause && <div>Order to Show Cause</div>}
-                  {data.noticeOfAttachments && (
-                    <div>Notice of Attachments in the Nature of Evidence</div>
+                  {caseInformation.orderForAmendedPetition && (
+                    <div>Order for Amended Petition</div>
+                  )}
+                  {caseInformation.orderForAmendedPetitionAndFilingFee && (
+                    <div>Order for Amended Petition and Filing Fee</div>
+                  )}
+                  {caseInformation.orderForFilingFee && (
+                    <div>Order for Filing Fee</div>
+                  )}
+                  {caseInformation.orderForOds && (
+                    <div>Order for Ownership Disclosure Statement</div>
+                  )}
+                  {caseInformation.orderForRatification && (
+                    <div>Order for Ratification of Petition</div>
+                  )}
+                  {caseInformation.orderForRequestedTrialLocation && (
+                    <div>Order Designating Place of Trial</div>
+                  )}
+                  {caseInformation.orderToShowCause && (
+                    <div>Order to Show Cause</div>
                   )}
                 </div>
                 <div className="tablet:grid-col-2 usa-alert__action">

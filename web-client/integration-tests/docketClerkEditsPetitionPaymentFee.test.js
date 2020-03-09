@@ -11,14 +11,15 @@ describe('docket clerk edits a petition payment fee', () => {
 
   let caseDetail;
 
+  loginAs(test, 'petitioner');
+
   it('login as a tax payer and create a case', async () => {
-    await loginAs(test, 'petitioner');
     caseDetail = await uploadPetition(test);
   });
 
-  it('login as the docketclerk and edit the case petition payment fee', async () => {
-    await loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk');
 
+  it('login as the docketclerk and edit the case petition payment fee', async () => {
     await test.runSequence('gotoEditPetitionDetailsSequence', {
       docketNumber: caseDetail.docketNumber,
     });
@@ -76,7 +77,11 @@ describe('docket clerk edits a petition payment fee', () => {
       '2001-01-01T05:00:00.000Z',
     );
 
-    expect(test.getState('caseDetail.docketRecord')).toContainEqual({
+    expect(
+      test
+        .getState('caseDetail.docketRecord')
+        .find(r => r.description === 'Filing Fee Paid'),
+    ).toMatchObject({
       description: 'Filing Fee Paid',
       eventCode: 'FEE',
       filingDate: '2001-01-01T05:00:00.000Z',

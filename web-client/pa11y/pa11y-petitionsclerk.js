@@ -294,29 +294,6 @@ module.exports = [
   },
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-session-detail/5b18af9e-4fbd-459b-8db7-7b15108c7fa5&info=non-calendared-case',
 
-  /* misc */
-  {
-    actions: [
-      'wait for #button-create-order to be visible',
-      'click element #button-create-order',
-      'wait for #eventCode to be visible',
-      'set field #eventCode to O',
-      'check field #eventCode',
-    ],
-    notes: 'checks a11y of create order modal',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/orders-needed&info=create-order',
-  },
-  {
-    actions: [
-      'wait for ul.usa-list to be visible',
-      'wait for #button-create-order to be visible',
-    ],
-    notes: 'checks a11y of orders needed summary',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/orders-needed&info=orders-needed-summary',
-  },
-
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-order/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/sign',
   {
     actions: [
@@ -344,4 +321,5 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=trial-session-planning-modal',
   },
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/edit-trial-session/6b6975cf-2b10-4e84-bcae-91e162d2f9d1',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-session-detail/5b18af9e-4fbd-459b-8db7-7b15108c7fa5&info=qc-complete-checkboxes',
 ];

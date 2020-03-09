@@ -1,13 +1,14 @@
 module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
+    'bulkImportAttorneyUsers.js',
     'switch-environment-color.js',
-    'migrations/00004-service-indicator.js',
-    'migrations/00005-service-indicator-respondents.js',
-    'migrations/00009-judge-user-notes.js',
-    'migrations/utilities.js',
-    'src/customHandle.js',
-    'src/apiGatewayHelper.js',
+    'migrations/*.js',
+    'src/**/*.js',
+    '!src/applicationContext.js',
+    '!src/**/*Handlers.js',
+    '!src/**/*Lambda.js',
+    '!src/**/*.test.js',
   ],
   coverageDirectory: './coverage',
   coverageThreshold: {

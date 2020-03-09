@@ -1,27 +1,17 @@
-import { setupTest, uploadPetition } from './helpers';
-import calendarClerkLogIn from './journey/calendarClerkLogIn';
-import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
-import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
 import docketClerkViewsNewTrialSession from './journey/docketClerkViewsNewTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
-
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
-import petitionerLogin from './journey/petitionerLogIn';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
-import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
-import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
+import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
-
 import trialClerkAddsNotesFromWorkingCopyCaseList from './journey/trialClerkAddsNotesFromWorkingCopyCaseList';
-import trialClerkLogIn from './journey/trialClerkLogIn';
 import trialClerkViewsNotesFromCaseDetail from './journey/trialClerkViewsNotesFromCaseDetail';
 import trialClerkViewsTrialSessionWorkingCopy from './journey/trialClerkViewsTrialSessionWorkingCopy';
-
-import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
 
@@ -44,11 +34,10 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   const createdCases = [];
   const createdDocketNumbers = [];
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkCreatesATrialSession(test, overrides);
   docketClerkViewsTrialSessionList(test, overrides);
   docketClerkViewsNewTrialSession(test);
-  userSignsOut(test);
 
   const caseOverrides = {
     ...overrides,
@@ -58,35 +47,26 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
     receivedAtMonth: '01',
     receivedAtYear: '2019',
   };
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   it('Create case', async () => {
     await uploadPetition(test, caseOverrides);
   });
   petitionerViewsDashboard(test);
   captureCreatedCase(test, createdCases, createdDocketNumbers);
-  userSignsOut(test);
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkUpdatesFiledBy(test, caseOverrides);
-  petitionsClerkSendsCaseToIRSHoldingQueue(test);
-  petitionsClerkRunsBatchProcess(test);
-  userSignsOut(test);
+  petitionsClerkSubmitsCaseToIrs(test);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkSetsCaseReadyForTrial(test);
-  userSignsOut(test);
 
-  calendarClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   markAllCasesAsQCed(test, () => createdCases);
-  userSignsOut(test);
+  petitionsClerkSetsATrialSessionsSchedule(test);
 
-  calendarClerkLogIn(test);
-  calendarClerkSetsATrialSessionsSchedule(test);
-  userSignsOut(test);
-
-  trialClerkLogIn(test);
+  loginAs(test, 'trialclerk');
   trialClerkViewsTrialSessionWorkingCopy(test);
   trialClerkAddsNotesFromWorkingCopyCaseList(test);
   trialClerkViewsNotesFromCaseDetail(test);
-  userSignsOut(test);
 });

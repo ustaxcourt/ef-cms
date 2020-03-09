@@ -1,12 +1,11 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { waitForRouter } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
 export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
   return it('Petitions clerk creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
-    await test.runSequence('navigateToReviewPetitionSequence');
+    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
 
     expect(test.getState('alertError.title')).toEqual(
       'Please correct the following errors on the page:',
@@ -44,7 +43,8 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'caseCaption',
-      value: 'Test Person, Deceased, Test Person, Surviving Spouse, Petitioner',
+      value:
+        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Surviving Spouse, Petitioner',
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -129,7 +129,8 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
-      value: 'Test Person',
+      value:
+        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -161,12 +162,13 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('navigateToReviewPetitionSequence');
-    await test.runSequence('gotoReviewPetitionSequence');
+    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
 
-    expect(test.getState('currentPage')).toEqual('ReviewPetition');
+    await test.runSequence('gotoReviewPetitionFromPaperSequence');
 
-    await test.runSequence('serveToIrsSequence');
+    expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+
+    await test.runSequence('createCaseFromPaperAndServeToIrsSequence');
 
     await test.runSequence('gotoCaseDetailSequence');
 

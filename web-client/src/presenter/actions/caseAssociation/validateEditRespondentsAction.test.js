@@ -19,7 +19,7 @@ describe('validateEditRespondentsAction', () => {
     };
   });
 
-  it('should call the path success when no errors are found', async () => {
+  it('should call the success path when no errors are found', async () => {
     await runAction(validateEditRespondentsAction, {
       modules: {
         presenter,
@@ -55,7 +55,7 @@ describe('validateEditRespondentsAction', () => {
     expect(successStub).toBeCalled();
   });
 
-  it('should call the path error when attempting to change from paper to electronic service', async () => {
+  it('should call the error path when attempting to change from paper to electronic service', async () => {
     await runAction(validateEditRespondentsAction, {
       modules: {
         presenter,

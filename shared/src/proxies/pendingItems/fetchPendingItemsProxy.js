@@ -9,7 +9,7 @@ const { get } = require('../requests');
  * @returns {Promise<*>} the promise of the api call
  */
 exports.fetchPendingItemsInteractor = ({ applicationContext, judge }) => {
-  var queryString = '';
+  let queryString = '';
 
   if (judge) {
     queryString = '?judge=' + encodeURIComponent(judge);
@@ -17,6 +17,6 @@ exports.fetchPendingItemsInteractor = ({ applicationContext, judge }) => {
 
   return get({
     applicationContext,
-    endpoint: `/api/pending-items${queryString}`,
+    endpoint: `/reports/pending-items${queryString}`,
   });
 };

@@ -39,14 +39,6 @@ const MY_DOCUMENT_QC_IN_PROGRESS = {
   },
 };
 
-const MY_DOCUMENT_QC_BATCHED = {
-  workQueueToDisplay: {
-    box: 'batched',
-    queue: 'my',
-    workQueueIsInternal: false,
-  },
-};
-
 const MY_DOCUMENT_QC_OUTBOX = {
   workQueueToDisplay: {
     box: 'outbox',
@@ -66,14 +58,6 @@ const SECTION_DOCUMENT_QC_INBOX = {
 const SECTION_DOCUMENT_QC_IN_PROGRESS = {
   workQueueToDisplay: {
     box: 'inProgress',
-    queue: 'section',
-    workQueueIsInternal: false,
-  },
-};
-
-const SECTION_DOCUMENT_QC_BATCHED = {
-  workQueueToDisplay: {
-    box: 'batched',
     queue: 'section',
     workQueueIsInternal: false,
   },
@@ -183,13 +167,6 @@ const generateWorkItem = (data, document) => {
 // - item.section == user role section
 // - !item.completedAt
 
-// My Document QC Batched
-// - isInternal === false
-// - item.section === 'irsBatchSection'
-// - item.sentByUserId === user.userId
-// - item.caseStatus = 'Batched for IRS'
-// - !item.completedAt
-
 // My Document QC Served
 // - isInternal === false
 // - item.section === 'irsBatchSection'
@@ -204,12 +181,6 @@ const generateWorkItem = (data, document) => {
 // Section Document QC Inbox
 // - isInternal === false
 // - item.section === user role section
-// - !item.completedAt
-
-// Section Document QC Batched
-// - isInternal === false
-// - item.section === 'irsBatchSection'
-// - item.caseStatus = 'Batched for IRS'
 // - !item.completedAt
 
 // Section Document QC Served
@@ -234,10 +205,8 @@ describe('filterWorkItems', () => {
   let workItemPetitionsSectionMessagesInbox;
   let workItemPetitionsSectionMessagesSent;
   let workItemPetitionsMyDocumentQCInbox;
-  let workItemPetitionsMyDocumentQCBatched;
   let workItemPetitionsMyDocumentQCServed;
   let workItemPetitionsSectionDocumentQCInbox;
-  let workItemPetitionsSectionDocumentQCBatched;
   let workItemPetitionsSectionDocumentQCServed;
   // Docket
   let workItemDocketMyMessagesInbox;
@@ -250,11 +219,15 @@ describe('filterWorkItems', () => {
   let workItemDocketSectionDocumentQCInProgress;
 
   let workQueueInbox;
-  let workQueueBatched;
   let workQueueInProgress;
   let workQueueOutbox;
 
   beforeEach(() => {
+    applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.docketClerk,
+      userId: '7f87f5d1-dfce-4515-a1e4-5231ceac61bb',
+    });
+
     workItemPetitionsMyMessagesInbox = generateWorkItem({
       assigneeId: petitionsClerk1.userId,
       completedAt: null,
@@ -293,14 +266,6 @@ describe('filterWorkItems', () => {
       section: CONSTANTS.PETITIONS_SECTION,
     });
 
-    workItemPetitionsMyDocumentQCBatched = generateWorkItem({
-      caseStatus: Case.STATUS_TYPES.batchedForIRS,
-      docketNumber: '100-06',
-      isQC: true,
-      section: CONSTANTS.IRS_BATCH_SYSTEM_SECTION,
-      sentByUserId: petitionsClerk1.userId,
-    });
-
     workItemPetitionsMyDocumentQCServed = generateWorkItem({
       assigneeId: petitionsClerk1.userId,
       caseStatus: Case.STATUS_TYPES.calendared,
@@ -308,7 +273,7 @@ describe('filterWorkItems', () => {
       completedByUserId: petitionsClerk1.userId,
       docketNumber: '100-07',
       isQC: true,
-      section: CONSTANTS.IRS_BATCH_SYSTEM_SECTION,
+      section: CONSTANTS.IRS_SYSTEM_SECTION,
       sentByUserId: petitionsClerk1.userId,
     });
 
@@ -319,14 +284,6 @@ describe('filterWorkItems', () => {
       section: CONSTANTS.PETITIONS_SECTION,
     });
 
-    workItemPetitionsSectionDocumentQCBatched = generateWorkItem({
-      assigneeId: petitionsClerk2.userId,
-      caseStatus: Case.STATUS_TYPES.batchedForIRS,
-      docketNumber: '100-09',
-      isQC: true,
-      section: CONSTANTS.IRS_BATCH_SYSTEM_SECTION,
-    });
-
     workItemPetitionsSectionDocumentQCServed = generateWorkItem({
       assigneeId: petitionsClerk2.userId,
       caseStatus: Case.STATUS_TYPES.calendared,
@@ -334,7 +291,7 @@ describe('filterWorkItems', () => {
       completedByUserId: petitionsClerk2.userId,
       docketNumber: '100-10',
       isQC: true,
-      section: CONSTANTS.IRS_BATCH_SYSTEM_SECTION,
+      section: CONSTANTS.IRS_SYSTEM_SECTION,
       sentByUserId: petitionsClerk2.userId,
     });
 
@@ -418,11 +375,6 @@ describe('filterWorkItems', () => {
       workItemDocketSectionMessagesInbox,
       workItemDocketMyDocumentQCInbox,
       workItemDocketSectionDocumentQCInbox,
-    ];
-
-    workQueueBatched = [
-      workItemPetitionsMyDocumentQCBatched,
-      workItemPetitionsSectionDocumentQCBatched,
     ];
 
     workQueueInProgress = [
@@ -543,21 +495,6 @@ describe('filterWorkItems', () => {
     expect(filtered.length).toEqual(1);
   });
 
-  it('Returns batched items for a Petitions Clerk in My Document QC Batched', () => {
-    const filtered = workQueueBatched.filter(
-      filterWorkItems({
-        applicationContext,
-        ...MY_DOCUMENT_QC_BATCHED,
-        user: petitionsClerk1,
-      }),
-    );
-
-    expect(filtered.length).toEqual(1);
-    expect(filtered[0].docketNumber).toEqual(
-      workItemPetitionsMyDocumentQCBatched.docketNumber,
-    );
-  });
-
   it('Returns sent messages for a Petitions Clerk in My Document QC Outbox', () => {
     const filtered = workQueueOutbox.filter(
       filterWorkItems({
@@ -600,38 +537,6 @@ describe('filterWorkItems', () => {
     // One item is assigned to another user
     expect(unassigned).toEqual(
       workItemPetitionsSectionDocumentQCInbox.docketNumber,
-    );
-  });
-
-  it('Returns batched work items for a Petitions Clerk in Section Document QC Batched', () => {
-    const user = petitionsClerk1;
-    const filtered = workQueueBatched.filter(
-      filterWorkItems({
-        applicationContext,
-        ...SECTION_DOCUMENT_QC_BATCHED,
-        user,
-      }),
-    );
-    let sentByUser = null;
-    let sentByOtherUser = null;
-
-    filtered.forEach(item => {
-      if (item.sentByUserId === user.userId) {
-        sentByUser = item.docketNumber;
-      } else {
-        sentByOtherUser = item.docketNumber;
-      }
-    });
-
-    // Two total items in the section queue
-    expect(filtered.length).toEqual(2);
-    // One item is sent from our user
-    expect(sentByUser).toEqual(
-      workItemPetitionsMyDocumentQCBatched.docketNumber,
-    );
-    // One item is sent from another user
-    expect(sentByOtherUser).toEqual(
-      workItemPetitionsSectionDocumentQCBatched.docketNumber,
     );
   });
 

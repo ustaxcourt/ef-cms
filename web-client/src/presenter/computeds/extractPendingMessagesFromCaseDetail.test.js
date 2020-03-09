@@ -132,32 +132,4 @@ describe('extractPendingMessagesFromCaseDetail', () => {
       },
     ]);
   });
-
-  it('should filter out the batched for IRS messages', () => {
-    const result = runCompute(extractedPendingMessagesFromCaseDetail, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        caseDetail: {
-          documents: [
-            {
-              workItems: [
-                {
-                  caseStatus: 'new',
-                  document: {
-                    createdAt: '2018-03-02T00:00:00.000Z',
-                  },
-                  messages: [
-                    {
-                      message: 'batched for IRS',
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      },
-    });
-    expect(result).toMatchObject([]);
-  });
 });

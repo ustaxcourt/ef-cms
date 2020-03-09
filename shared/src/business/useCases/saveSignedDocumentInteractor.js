@@ -19,7 +19,6 @@ exports.saveSignedDocumentInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  applicationContext.logger.time('Fetching the Case');
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
@@ -28,7 +27,6 @@ exports.saveSignedDocumentInteractor = async ({
     });
 
   const caseEntity = new Case(caseRecord, { applicationContext });
-  applicationContext.logger.timeEnd('Fetching the Case');
 
   const originalDocumentEntity = caseEntity.documents.find(
     document => document.documentId === originalDocumentId,
@@ -73,14 +71,10 @@ exports.saveSignedDocumentInteractor = async ({
     caseEntity.updateDocument(signedDocumentEntity);
   }
 
-  applicationContext.logger.time('Updating case with signed document');
-
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
-
-  applicationContext.logger.timeEnd('Updating case with signed document');
 
   return caseEntity;
 };

@@ -4,8 +4,6 @@ import { setNoticesForCalendaredTrialSessionAction } from './setNoticesForCalend
 
 describe('setNoticesForCalendaredTrialSessionAction', () => {
   let setNoticesForCalendaredTrialSessionInteractorStub;
-  let pathPaperStub;
-  let pathElectronicStub;
   let createObjectURLStub;
 
   beforeEach(() => {
@@ -15,8 +13,6 @@ describe('setNoticesForCalendaredTrialSessionAction', () => {
     setNoticesForCalendaredTrialSessionInteractorStub = jest
       .fn()
       .mockReturnValue(null);
-    pathPaperStub = jest.fn();
-    pathElectronicStub = jest.fn();
     createObjectURLStub = jest.fn();
 
     presenter.providers.router = {
@@ -31,14 +27,9 @@ describe('setNoticesForCalendaredTrialSessionAction', () => {
         setNoticesForCalendaredTrialSessionInteractor: setNoticesForCalendaredTrialSessionInteractorStub,
       }),
     };
-
-    presenter.providers.path = {
-      electronic: pathElectronicStub,
-      paper: pathPaperStub,
-    };
   });
 
-  it('sets notices for the calendared trial session with all electronic cases', async () => {
+  it('invokes the set notice interactor', async () => {
     await runAction(setNoticesForCalendaredTrialSessionAction, {
       modules: {
         presenter,
@@ -53,28 +44,5 @@ describe('setNoticesForCalendaredTrialSessionAction', () => {
     expect(
       setNoticesForCalendaredTrialSessionInteractorStub,
     ).toHaveBeenCalled();
-    expect(pathElectronicStub).toHaveBeenCalled();
-  });
-
-  it('sets notices for the calendared trial session with at least one paper case', async () => {
-    setNoticesForCalendaredTrialSessionInteractorStub.mockReturnValue([
-      'pdf-bytes',
-    ]);
-
-    await runAction(setNoticesForCalendaredTrialSessionAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        trialSession: {
-          trialSessionId: 'abc-123',
-        },
-      },
-    });
-
-    expect(
-      setNoticesForCalendaredTrialSessionInteractorStub,
-    ).toHaveBeenCalled();
-    expect(pathPaperStub).toHaveBeenCalled();
   });
 });

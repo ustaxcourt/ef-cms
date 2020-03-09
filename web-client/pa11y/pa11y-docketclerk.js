@@ -64,6 +64,23 @@ module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/reports/pending-report',
   {
     actions: [
+      'wait for element .case-inventory-report-modal to be visible',
+      'wait for #select-case-inventory-status to be visible',
+      'set field #select-case-inventory-status to New',
+      'check field #select-case-inventory-status',
+      'wait for #select-case-inventory-judge to be visible',
+      'set field #select-case-inventory-judge to Chief Judge',
+      'check field #select-case-inventory-judge',
+      'click element .modal-button-confirm',
+      'screen capture case-inventory-report-1.png',
+      'wait for element table.case-inventory to be visible',
+    ],
+    notes: 'checks a11y of case inventory report builder',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/reports/case-inventory-report',
+  },
+  {
+    actions: [
       'wait for element #certificate-of-service to be visible',
       'click element #certificate-of-service+label',
       'wait for element #service-date-month to be visible',
@@ -89,13 +106,17 @@ module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/110-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
   {
     actions: [
+      'wait for #judge to be visible',
+      'set field #judge to Judge Armen',
+      'check field #judge',
+      'set field #free-text to Anything',
       'wait for #serve-to-parties-btn to be visible',
       'click element #serve-to-parties-btn',
       'wait for .confirm-initiate-service-modal to be visible',
     ],
     notes: 'checks a11y of confirm-initiate-service-modal dialog',
     url:
-      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry&info=initiate-service-modal',
   },
   'http://localhost:1234/mock-login?token=docketclerk&path=/print-preview/110-19/',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-19/edit-petitioner-information',

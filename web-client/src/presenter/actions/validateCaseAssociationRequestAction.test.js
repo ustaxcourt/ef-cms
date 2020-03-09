@@ -38,7 +38,7 @@ describe('validateCaseAssociationRequest', () => {
     };
   });
 
-  it('should call the path success when no errors are found', async () => {
+  it('should call the success path when no errors are found', async () => {
     validateCaseAssociationRequestStub.returns(null);
     await runAction(validateCaseAssociationRequestAction, {
       modules: {
@@ -52,7 +52,7 @@ describe('validateCaseAssociationRequest', () => {
     expect(successStub.calledOnce).toEqual(true);
   });
 
-  it('should call the path error when any errors are found', async () => {
+  it('should call the error path when any errors are found', async () => {
     validateCaseAssociationRequestStub.returns('error');
     await runAction(validateCaseAssociationRequestAction, {
       modules: {

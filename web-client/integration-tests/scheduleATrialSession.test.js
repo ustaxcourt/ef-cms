@@ -1,31 +1,28 @@
-import { setupTest } from './helpers';
-import { uploadPetition } from './helpers';
-import calendarClerkLogIn from './journey/calendarClerkLogIn';
-import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
-import calendarClerkViewsACalendaredTrialSession from './journey/calendarClerkViewsACalendaredTrialSession';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
-import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
 import docketClerkViewsNewTrialSession from './journey/docketClerkViewsNewTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
-import petitionerLogin from './journey/petitionerLogIn';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkManuallyAddsCaseToTrial from './journey/petitionsClerkManuallyAddsCaseToTrial';
 import petitionsClerkManuallyRemovesCaseFromTrial from './journey/petitionsClerkManuallyRemovesCaseFromTrial';
-import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
-import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
+import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
+import petitionsClerkViewsACalendaredTrialSession from './journey/petitionsClerkViewsACalendaredTrialSession';
 import petitionsClerkViewsATrialSessionsEligibleCases from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
 import petitionsClerkViewsATrialSessionsEligibleCasesWithManuallyAddedCase from './journey/petitionsClerkViewsATrialSessionsEligibleCasesWithManuallyAddedCase';
-import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
 
 describe('Schedule A Trial Session', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   const caseCount = 2;
@@ -41,28 +38,24 @@ describe('Schedule A Trial Session', () => {
   const createdDocketNumbers = [];
 
   const makeCaseReadyForTrial = (test, id, caseOverrides) => {
-    petitionerLogin(test);
+    loginAs(test, 'petitioner');
     it(`Create case ${id}`, async () => {
       await uploadPetition(test, caseOverrides);
     });
     petitionerViewsDashboard(test);
     captureCreatedCase(test, createdCases, createdDocketNumbers);
 
-    userSignsOut(test);
-    petitionsClerkLogIn(test);
-    petitionsClerkSendsCaseToIRSHoldingQueue(test);
-    petitionsClerkRunsBatchProcess(test);
-    userSignsOut(test);
-    docketClerkLogIn(test);
+    loginAs(test, 'petitionsclerk');
+    petitionsClerkSubmitsCaseToIrs(test);
+
+    loginAs(test, 'docketclerk');
     docketClerkSetsCaseReadyForTrial(test);
-    userSignsOut(test);
   };
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkCreatesATrialSession(test, overrides);
   docketClerkViewsTrialSessionList(test, overrides);
   docketClerkViewsNewTrialSession(test);
-  userSignsOut(test);
 
   for (let i = 0; i < caseCount; i++) {
     const id = i + 1;
@@ -72,7 +65,7 @@ describe('Schedule A Trial Session', () => {
   // Add case with a different city
   makeCaseReadyForTrial(test, caseCount + 1, {});
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkViewsATrialSessionsEligibleCases(test, caseCount);
 
   petitionsClerkManuallyAddsCaseToTrial(test);
@@ -83,18 +76,13 @@ describe('Schedule A Trial Session', () => {
   petitionsClerkManuallyRemovesCaseFromTrial(test);
   petitionsClerkViewsATrialSessionsEligibleCases(test, caseCount);
   petitionsClerkManuallyAddsCaseToTrial(test);
-  userSignsOut(test);
 
-  calendarClerkLogIn(test);
   // only mark cases 0 and 1 as QCed
   markAllCasesAsQCed(test, () => {
     return [createdCases[0], createdCases[1]];
   });
-  userSignsOut(test);
 
-  calendarClerkLogIn(test);
-  calendarClerkSetsATrialSessionsSchedule(test);
+  petitionsClerkSetsATrialSessionsSchedule(test);
   // only 2 cases should have been calendared because only 2 were marked as QCed
-  calendarClerkViewsACalendaredTrialSession(test, caseCount);
-  userSignsOut(test);
+  petitionsClerkViewsACalendaredTrialSession(test, caseCount);
 });

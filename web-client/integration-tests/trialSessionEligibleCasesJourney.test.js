@@ -1,28 +1,25 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
-import { setupTest } from './helpers';
-import { uploadPetition } from './helpers';
-import calendarClerkLogIn from './journey/calendarClerkLogIn';
-import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
+import { loginAs, setupTest, uploadPetition, wait } from './helpers';
 import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
-import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
 import docketClerkViewsNewTrialSession from './journey/docketClerkViewsNewTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
-import petitionerLogin from './journey/petitionerLogIn';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
-import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
-import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
+import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
-import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
 
 describe('Trial Session Eligible Cases Journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   const trialLocation = `Madison, Wisconsin, ${Date.now()}`;
@@ -36,11 +33,10 @@ describe('Trial Session Eligible Cases Journey', () => {
   const createdDocketNumbers = [];
 
   describe(`Create trial session with Small session type for '${trialLocation}' with max case count = 1`, () => {
-    docketClerkLogIn(test);
+    loginAs(test, 'docketclerk');
     docketClerkCreatesATrialSession(test, overrides);
     docketClerkViewsTrialSessionList(test, overrides);
     docketClerkViewsNewTrialSession(test);
-    userSignsOut(test);
   });
 
   describe('Create cases', () => {
@@ -53,21 +49,19 @@ describe('Trial Session Eligible Cases Journey', () => {
         receivedAtMonth: '01',
         receivedAtYear: '2019',
       };
-      petitionerLogin(test);
+      loginAs(test, 'petitioner');
       it('Create case #1', async () => {
         await uploadPetition(test, caseOverrides);
       });
       petitionerViewsDashboard(test);
       captureCreatedCase(test, createdCases, createdDocketNumbers);
-      userSignsOut(test);
-      petitionsClerkLogIn(test);
+
+      loginAs(test, 'petitionsclerk');
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
-      petitionsClerkSendsCaseToIRSHoldingQueue(test);
-      petitionsClerkRunsBatchProcess(test);
-      userSignsOut(test);
-      docketClerkLogIn(test);
+      petitionsClerkSubmitsCaseToIrs(test);
+
+      loginAs(test, 'docketclerk');
       docketClerkSetsCaseReadyForTrial(test);
-      userSignsOut(test);
     });
 
     describe(`Case #2 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 1/2/2019`, () => {
@@ -79,21 +73,19 @@ describe('Trial Session Eligible Cases Journey', () => {
         receivedAtMonth: '01',
         receivedAtYear: '2019',
       };
-      petitionerLogin(test);
+      loginAs(test, 'petitioner');
       it('Create case #2', async () => {
         await uploadPetition(test, caseOverrides);
       });
       petitionerViewsDashboard(test);
       captureCreatedCase(test, createdCases, createdDocketNumbers);
-      userSignsOut(test);
-      petitionsClerkLogIn(test);
+
+      loginAs(test, 'petitionsclerk');
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
-      petitionsClerkSendsCaseToIRSHoldingQueue(test);
-      petitionsClerkRunsBatchProcess(test);
-      userSignsOut(test);
-      docketClerkLogIn(test);
+      petitionsClerkSubmitsCaseToIrs(test);
+
+      loginAs(test, 'docketclerk');
       docketClerkSetsCaseReadyForTrial(test);
-      userSignsOut(test);
     });
 
     describe(`Case #3 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Regular procedure type with filed date 1/1/2019`, () => {
@@ -105,21 +97,19 @@ describe('Trial Session Eligible Cases Journey', () => {
         receivedAtMonth: '01',
         receivedAtYear: '2019',
       };
-      petitionerLogin(test);
+      loginAs(test, 'petitioner');
       it('Create case #3', async () => {
         await uploadPetition(test, caseOverrides);
       });
       petitionerViewsDashboard(test);
       captureCreatedCase(test, createdCases, createdDocketNumbers);
-      userSignsOut(test);
-      petitionsClerkLogIn(test);
+
+      loginAs(test, 'petitionsclerk');
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
-      petitionsClerkSendsCaseToIRSHoldingQueue(test);
-      petitionsClerkRunsBatchProcess(test);
-      userSignsOut(test);
-      docketClerkLogIn(test);
+      petitionsClerkSubmitsCaseToIrs(test);
+
+      loginAs(test, 'docketclerk');
       docketClerkSetsCaseReadyForTrial(test);
-      userSignsOut(test);
     });
 
     describe(`Case #4 'L' type with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 5/1/2019`, () => {
@@ -127,25 +117,23 @@ describe('Trial Session Eligible Cases Journey', () => {
         ...overrides,
         caseType: 'CDP (Lien/Levy)',
         procedureType: 'Small',
-        receivedAtDay: '01',
+        receivedAtDay: '01', //
         receivedAtMonth: '02',
         receivedAtYear: '2019',
       };
-      petitionerLogin(test);
+      loginAs(test, 'petitioner');
       it('Create case #4', async () => {
         await uploadPetition(test, caseOverrides);
       });
       petitionerViewsDashboard(test);
       captureCreatedCase(test, createdCases, createdDocketNumbers);
-      userSignsOut(test);
-      petitionsClerkLogIn(test);
+
+      loginAs(test, 'petitionsclerk');
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
-      petitionsClerkSendsCaseToIRSHoldingQueue(test);
-      petitionsClerkRunsBatchProcess(test);
-      userSignsOut(test);
-      docketClerkLogIn(test);
+      petitionsClerkSubmitsCaseToIrs(test);
+
+      loginAs(test, 'docketclerk');
       docketClerkSetsCaseReadyForTrial(test);
-      userSignsOut(test);
     });
 
     describe(`Case #5 'P' type with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 3/1/2019`, () => {
@@ -157,26 +145,24 @@ describe('Trial Session Eligible Cases Journey', () => {
         receivedAtMonth: '03',
         receivedAtYear: '2019',
       };
-      petitionerLogin(test);
+      loginAs(test, 'petitioner');
       it('Create case #5', async () => {
         await uploadPetition(test, caseOverrides);
       });
       petitionerViewsDashboard(test);
       captureCreatedCase(test, createdCases, createdDocketNumbers);
-      userSignsOut(test);
-      petitionsClerkLogIn(test);
+
+      loginAs(test, 'petitionsclerk');
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
-      petitionsClerkSendsCaseToIRSHoldingQueue(test);
-      petitionsClerkRunsBatchProcess(test);
-      userSignsOut(test);
-      docketClerkLogIn(test);
+      petitionsClerkSubmitsCaseToIrs(test);
+
+      loginAs(test, 'docketclerk');
       docketClerkSetsCaseReadyForTrial(test);
-      userSignsOut(test);
     });
   });
 
   describe(`Result: Case #4, #5, #1, and #2 should show as eligible for '${trialLocation}' session`, () => {
-    petitionsClerkLogIn(test);
+    loginAs(test, 'petitionsclerk');
 
     it(`Case #4, #5, #1, and #2 should show as eligible for '${trialLocation}' session`, async () => {
       await test.runSequence('gotoTrialSessionDetailSequence', {
@@ -198,12 +184,10 @@ describe('Trial Session Eligible Cases Journey', () => {
       );
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
-
-    userSignsOut(test);
   });
 
   describe(`Mark case #2 as high priority for '${trialLocation}' session`, () => {
-    petitionsClerkLogIn(test);
+    loginAs(test, 'petitionsclerk');
 
     it(`Case #2 should show as first case eligible for '${trialLocation}' session`, async () => {
       await test.runSequence('gotoCaseDetailSequence', {
@@ -242,12 +226,10 @@ describe('Trial Session Eligible Cases Journey', () => {
       );
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
-
-    userSignsOut(test);
   });
 
   describe(`Remove high priority from case #2 for '${trialLocation}' session`, () => {
-    petitionsClerkLogIn(test);
+    loginAs(test, 'petitionsclerk');
 
     it(`Case #2 should show as last case eligible for '${trialLocation}' session`, async () => {
       await test.runSequence('gotoCaseDetailSequence', {
@@ -279,29 +261,25 @@ describe('Trial Session Eligible Cases Journey', () => {
       );
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
-
-    userSignsOut(test);
   });
 
   describe('Calendar clerk marks all eligible cases as QCed', () => {
-    calendarClerkLogIn(test);
+    loginAs(test, 'petitionsclerk');
     markAllCasesAsQCed(test, () => [
       createdCases[0],
       createdCases[1],
       createdCases[3],
       createdCases[4],
     ]);
-    userSignsOut(test);
   });
 
   describe(`Set calendar for '${trialLocation}' session`, () => {
-    calendarClerkLogIn(test);
-    calendarClerkSetsATrialSessionsSchedule(test);
-    userSignsOut(test);
+    loginAs(test, 'petitionsclerk');
+    petitionsClerkSetsATrialSessionsSchedule(test);
   });
 
   describe(`Result: Case #4, #5, and #1 are assigned to '${trialLocation}' session and their case statuses are updated to “Calendared for Trial”`, () => {
-    petitionsClerkLogIn(test);
+    loginAs(test, 'petitionsclerk');
 
     it(`Case #4, #5, and #1 are assigned to '${trialLocation}' session`, async () => {
       await test.runSequence('gotoTrialSessionDetailSequence', {
@@ -404,6 +382,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
 
       await test.runSequence('addCaseToTrialSessionSequence');
+      await wait(1000);
 
       expect(test.getState('validationErrors')).toEqual({
         trialSessionId: 'Select a Trial Session',
@@ -412,6 +391,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       test.setState('modal.trialSessionId', test.trialSessionId);
 
       await test.runSequence('addCaseToTrialSessionSequence');
+      await wait(1000); // we need to wait for some reason
 
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
@@ -430,7 +410,5 @@ describe('Trial Session Eligible Cases Journey', () => {
         test.getState('trialSession.calendaredCases.2.isManuallyAdded'),
       ).toBeTruthy();
     });
-
-    userSignsOut(test);
   });
 });

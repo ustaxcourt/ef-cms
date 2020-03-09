@@ -1,5 +1,4 @@
-const createApplicationContext = require('../applicationContext');
-const { handle } = require('../middleware/apiGatewayHelper');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * used for fetching cases matching the given name, country, state, and/or year filed range for the general public
@@ -8,21 +7,16 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  handle(event, async () => {
-    const user = {}; // TODO - need to figure out how this is going to work
-    const applicationContext = createApplicationContext(user);
-    try {
-      const results = await applicationContext
-        .getUseCases()
-        .casePublicSearchInteractor({
-          applicationContext,
-          ...event.queryStringParameters,
-        });
-      applicationContext.logger.info('User', 'Public User');
-      applicationContext.logger.info('Results', results);
-      return results;
-    } catch (e) {
-      applicationContext.logger.error(e);
-      throw e;
-    }
-  });
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      return await applicationContext.getUseCases().casePublicSearchInteractor({
+        applicationContext,
+        ...event.queryStringParameters,
+      });
+    },
+    {
+      isPublicUser: true,
+      user: {},
+    },
+  );

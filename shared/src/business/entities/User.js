@@ -9,12 +9,14 @@ const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
 User.ROLES = {
   adc: 'adc',
+  admin: 'admin',
   admissionsClerk: 'admissionsclerk',
-  calendarClerk: 'calendarclerk',
   chambers: 'chambers',
   clerkOfCourt: 'clerkofcourt',
   docketClerk: 'docketclerk',
   floater: 'floater',
+  inactivePractitioner: 'inactivePractitioner',
+  inactiveRespondent: 'inactiveRespondent',
   judge: 'judge',
   petitioner: 'petitioner',
   petitionsClerk: 'petitionsclerk',
@@ -44,10 +46,17 @@ const userDecorator = (obj, rawObj) => {
       state: rawObj.contact.state,
     };
   }
+  if (obj.role === User.ROLES.judge) {
+    obj.judgeFullName = rawObj.judgeFullName;
+    obj.judgeTitle = rawObj.judgeTitle;
+  }
 };
 
 const userValidation = {
-  barNumber: joi.string().optional(),
+  barNumber: joi
+    .string()
+    .optional()
+    .allow(null),
   contact: joi
     .object()
     .keys({
@@ -96,6 +105,16 @@ const userValidation = {
     })
     .optional(),
   email: joi.string().optional(),
+  judgeFullName: joi.when('role', {
+    is: User.ROLES.judge,
+    otherwise: joi.optional().allow(null),
+    then: joi.string().optional(),
+  }),
+  judgeTitle: joi.when('role', {
+    is: User.ROLES.judge,
+    otherwise: joi.optional().allow(null),
+    then: joi.string().optional(),
+  }),
   name: joi.string().optional(),
   role: joi
     .string()
@@ -126,7 +145,7 @@ const VALIDATION_ERROR_MESSAGES = {
 /**
  * constructor
  *
- * @param {object} rawUser the raw user data
+ * @param {Object} rawUser the raw user data
  * @constructor
  */
 function User(rawUser) {
@@ -155,7 +174,6 @@ User.isInternalUser = function(role) {
   const internalRoles = [
     User.ROLES.adc,
     User.ROLES.admissionsClerk,
-    User.ROLES.calendarClerk,
     User.ROLES.chambers,
     User.ROLES.clerkOfCourt,
     User.ROLES.docketClerk,

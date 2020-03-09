@@ -8,6 +8,7 @@ import { User } from '../../shared/src/business/entities/User';
 import { applicationContext } from '../src/applicationContext';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { isFunction, mapValues } from 'lodash';
+import { loginAs } from './helpers';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
 import FormData from 'form-data';
@@ -16,7 +17,6 @@ import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase
 import petitionsClerkCreatesScannedPDF from './journey/petitionsClerkCreatesScannedPDF';
 import petitionsClerkDeletesMultipleScannedBatches from './journey/petitionsClerkDeletesMultipleScannedBatches';
 import petitionsClerkDeletesScannedBatch from './journey/petitionsClerkDeletesScannedBatch';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkRescansAddedBatch from './journey/petitionsClerkRescansAddedBatch';
 import petitionsClerkSelectsScannerSource from './journey/petitionsClerkSelectsScannerSource';
 import petitionsClerkViewsCreateNewCase from './journey/petitionsClerkViewsCreateNewCase';
@@ -113,7 +113,7 @@ describe('Case from Paper Document Scan journey', () => {
     });
   });
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkViewsCreateNewCase(test);
   petitionsClerkViewsScanView(test);
   petitionsClerkSelectsScannerSource(test, {

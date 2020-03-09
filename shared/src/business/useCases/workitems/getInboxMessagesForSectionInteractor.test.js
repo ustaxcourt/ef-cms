@@ -5,33 +5,52 @@ const { User } = require('../../entities/User');
 
 describe('getInboxMessagesForSectionInteractor', () => {
   let applicationContext;
+  let getInboxMessagesForSectionStub;
+  let validateRawCollectionStub;
 
-  let mockWorkItem = {
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    createdAt: '',
-    docketNumber: '101-18',
-    docketNumberSuffix: 'S',
-    document: {
-      sentBy: 'petitioner',
-    },
-    messages: [],
-    section: 'docket',
-    sentBy: 'docketclerk',
-  };
+  beforeEach(() => {
+    getInboxMessagesForSectionStub = jest.fn();
+    validateRawCollectionStub = jest.fn();
+
+    applicationContext = {
+      getCurrentUser: () => {
+        return {
+          role: User.ROLES.petitionsClerk,
+          userId: 'petitionsClerk',
+        };
+      },
+      getEntityConstructors: () => ({
+        WorkItem: {
+          validateRawCollection: validateRawCollectionStub,
+        },
+      }),
+      getPersistenceGateway: () => ({
+        getInboxMessagesForSection: getInboxMessagesForSectionStub,
+      }),
+    };
+  });
+
+  it('gets inbox messages for a section', async () => {
+    await getInboxMessagesForSectionInteractor({
+      applicationContext,
+      section: 'docket',
+    });
+
+    expect(getInboxMessagesForSectionStub).toHaveBeenCalled();
+    expect(validateRawCollectionStub).toHaveBeenCalled();
+  });
 
   it('throws an error if the user does not have access to the work item', async () => {
     applicationContext = {
-      environment: { stage: 'local' },
+      ...applicationContext,
       getCurrentUser: () => {
         return {
           role: User.ROLES.petitioner,
           userId: 'petitioner',
         };
       },
-      getPersistenceGateway: () => ({
-        getDocumentQCServedForSection: async () => mockWorkItem,
-      }),
     };
+
     let error;
     try {
       await getInboxMessagesForSectionInteractor({

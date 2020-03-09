@@ -9,9 +9,9 @@ const {
 } = require('../../shared/src/business/entities/contacts/ContactFactory');
 import { Document } from '../../shared/src/business/entities/Document';
 import { applicationContext } from '../src/applicationContext';
+import { loginAs } from './helpers';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
-import adcLogIn from './journey/adcLogIn';
 import adcMarksStipulatedWorkItemAsCompleted from './journey/adcMarksStipulatedWorkItemAsCompleted';
 import adcViewsCaseDetail from './journey/adcViewsCaseDetail';
 import adcViewsCaseDetailAfterComplete from './journey/adcViewsCaseDetailAfterComplete';
@@ -22,7 +22,6 @@ import docketClerkAddsDocketEntries from './journey/docketClerkAddsDocketEntries
 import docketClerkAssignWorkItems from './journey/docketClerkAssignWorkItems';
 import docketClerkDocketDashboard from './journey/docketClerkDocketDashboard';
 import docketClerkForwardWorkItem from './journey/docketClerkForwardWorkItem';
-import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSelectsAssignee from './journey/docketClerkSelectsAssignee';
 import docketClerkSelectsWorkItems from './journey/docketClerkSelectsWorkItems';
 import docketClerkStartsNewMessageThreadOnAnswer from './journey/docketClerkStartsNewMessageThreadOnAnswer';
@@ -39,17 +38,13 @@ import petitionerCancelsCreateCase from './journey/petitionerCancelsCreateCase';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCaseTestAllOptions from './journey/petitionerCreatesNewCaseTestAllOptions';
-import petitionerLogin from './journey/petitionerLogIn';
 import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
-import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkAddsCaseNote from './journey/petitionsClerkAddsCaseNote';
 import petitionsClerkAssignsWorkItemToOther from './journey/petitionsClerkAssignsWorkItemToOther';
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
-import petitionsClerkIrsHoldingQueue from './journey/petitionsClerkIrsHoldingQueue';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkPrioritizesCase from './journey/petitionsClerkPrioritizesCase';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesCaseDetail from './journey/petitionsClerkUpdatesCaseDetail';
@@ -59,8 +54,6 @@ import petitionsClerkViewsMessagesAfterReassign from './journey/petitionsClerkVi
 import respondentAddsAnswer from './journey/respondentAddsAnswer';
 import respondentAddsMotion from './journey/respondentAddsMotion';
 import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
-import respondentLogIn from './journey/respondentLogIn';
-import respondentViewsCaseDetailOfBatchedCase from './journey/respondentViewsCaseDetailOfBatchedCase';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
 
 let test;
@@ -70,6 +63,7 @@ presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
   createObjectURL: () => '/test-url',
   externalRoute: () => {},
+  revokeObjectURL: () => {},
   route: async url => {
     if (url === `/case-detail/${test.docketNumber}`) {
       await test.runSequence('gotoCaseDetailSequence', {
@@ -122,41 +116,38 @@ describe('Case journey', () => {
     });
   });
 
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   petitionerCancelsCreateCase(test);
   petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCaseTestAllOptions(test, fakeFile);
   petitionerViewsDashboard(test);
-  petitionerSignsOut(test);
+  petitionerViewsCaseDetail(test);
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkCaseSearch(test);
   petitionsClerkViewsMessages(test);
   petitionsClerkAssignsWorkItemToSelf(test);
   petitionsClerkAssignsWorkItemToOther(test);
-  petitionsClerkLogIn(test, 'petitionsclerk1');
+  loginAs(test, 'petitionsclerk1');
   petitionsClerkViewsMessagesAfterReassign(test);
   petitionsClerkAddsCaseNote(test);
   petitionsClerkPrioritizesCase(test);
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkUpdatesCaseDetail(test);
   petitionsClerkSubmitsCaseToIrs(test);
-  petitionsClerkIrsHoldingQueue(test);
 
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   petitionerViewsCaseDetail(test);
-  petitionerSignsOut(test);
 
-  respondentLogIn(test);
+  loginAs(test, 'respondent');
   respondentViewsDashboard(test);
-  respondentViewsCaseDetailOfBatchedCase(test);
   respondentAddsAnswer(test, fakeFile);
   respondentAddsStipulatedDecision(test, fakeFile);
   respondentAddsMotion(test, fakeFile);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkViewsMessagesWithoutWorkItem(test);
   docketClerkViewsCaseDetail(test);
   docketClerkUpdatesCaseCaption(test);
@@ -164,12 +155,12 @@ describe('Case journey', () => {
   docketClerkStartsNewMessageThreadOnAnswer(test);
   docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC(test);
 
-  docketClerkLogIn(test, 'docketclerk1');
+  loginAs(test, 'docketclerk1');
   docketClerkDocketDashboard(test);
   docketClerkSelectsAssignee(test);
   docketClerkSelectsWorkItems(test);
   docketClerkAssignWorkItems(test);
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkViewsMessages(test);
   docketClerkViewsDocument(test);
   docketClerkForwardWorkItem(test);
@@ -177,7 +168,7 @@ describe('Case journey', () => {
   docketClerkViewsOutboxAfterForward(test);
   docketClerkAddsDocketEntries(test, fakeFile);
 
-  adcLogIn(test);
+  loginAs(test, 'adc');
   adcViewsMessages(test);
   adcViewsCaseDetail(test);
   adcViewsDocumentDetail(test);

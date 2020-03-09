@@ -87,9 +87,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     throw new NotFoundError(`Document ${documentId} was not found.`);
   }
 
-  const docketEntry = caseEntity.docketRecord.find(
-    entry => entry.documentId === documentId,
-  );
+  const docketEntry = caseEntity.getDocketRecordByDocumentId(documentId);
 
   // Serve on all parties
   const servedParties = aggregatePartiesForService(caseEntity);
@@ -124,13 +122,11 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     serviceStampText: `${serviceStampType} ${serviceStampDate}`,
   });
 
-  applicationContext.logger.time('Saving S3 Document');
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: newPdfData,
     documentId,
   });
-  applicationContext.logger.timeEnd('Saving S3 Document');
 
   const workItemToUpdate = courtIssuedDocument.getQCWorkItem();
   await completeWorkItem({
@@ -140,10 +136,13 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     workItemToUpdate,
   });
 
-  const updatedDocketRecordEntity = new DocketRecord({
-    ...docketEntry,
-    filingDate: createISODateString(),
-  });
+  const updatedDocketRecordEntity = new DocketRecord(
+    {
+      ...docketEntry,
+      filingDate: createISODateString(),
+    },
+    { applicationContext },
+  );
   updatedDocketRecordEntity.validate();
 
   caseEntity.updateDocketRecordEntry(updatedDocketRecordEntity);

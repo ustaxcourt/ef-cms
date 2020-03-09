@@ -4,15 +4,24 @@ REGION="us-east-1"
 
 CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"deployed-stack"},"sk":{"S":"deployed-stack"}}' | jq -r ".Item.current.S")
 
+echo "CURRENT_COLOR = ${CURRENT_COLOR}"
+
 restApiId=$(aws apigateway get-rest-apis --region="${REGION}" --query "items[?name=='${ENV}-ef-cms-users-${CURRENT_COLOR}'].id" --output text)
+
+echo "query = ${ENV}-ef-cms-users-${CURRENT_COLOR}"
+echo "restApiId = ${restApiId}"
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}")
 USER_POOL_ID="${USER_POOL_ID%\"}"
 USER_POOL_ID="${USER_POOL_ID#\"}"
 
+echo "USER_POOL_ID = ${USER_POOL_ID}"
+
 CLIENT_ID=$(aws cognito-idp list-user-pool-clients --user-pool-id "${USER_POOL_ID}" --query "UserPoolClients[?ClientName == 'client'].ClientId | [0]" --max-results 30 --region "${REGION}")
 CLIENT_ID="${CLIENT_ID%\"}"
 CLIENT_ID="${CLIENT_ID#\"}"
+
+echo "CLIENT_ID = ${CLIENT_ID}"
 
 generate_post_data() {
   email=$1
@@ -77,6 +86,9 @@ createAccount() {
   section=$5
   name=${6:-Test ${role}$3}
 
+  echo "url = https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"
+  echo "post data = $(generate_post_data "${email}" "${role}" "${barNumber}" "${section}" "${name}")"
+
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${adminToken}" \
     --request POST \
@@ -108,7 +120,7 @@ createManyAccounts() {
   emailPrefix=$2
   role=$2
   section=$3
-  for i in $(seq 1 ${numAccounts});
+  for i in $(seq 1 "${numAccounts}");
   do
     createAccount "${emailPrefix}${i}@example.com" "${role}" "${i}" "" "${section}"
   done
@@ -152,9 +164,11 @@ createJudgeAccount() {
 createAdmin "ustcadmin@example.com" "admin" "admin"
 
 createAccount "migrator@example.com" "admin" "" "" "admin"
+createAccount "flexionustc+practitioner@gmail.com" "practitioner" "" "GM9999" "practitioner" "Practitioner Gmail"
+createAccount "flexionustc+respondent@gmail.com" "respondent" "" "GM4444" "respondent" "Respondent Gmail"
+createAccount "flexionustc+petitioner@gmail.com" "petitioner" "" "" "petitioner" "Petitioner Gmail"
 createManyAccounts "10" "adc" "adc"
 createManyAccounts "10" "admissionsclerk" "admissions"
-createManyAccounts "10" "calendarclerk" "calendar"
 createManyAccounts "10" "clerkofcourt" "clerkofcourt"
 createManyAccounts "10" "docketclerk" "docket"
 createManyAccounts "10" "petitionsclerk" "petitions"
