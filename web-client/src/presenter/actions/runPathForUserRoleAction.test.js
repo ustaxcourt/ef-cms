@@ -31,12 +31,12 @@ describe('runPathForUserRoleAction', () => {
 
     presenter.providers.path = {
       docketclerk: docketclerkStub,
+      irsPractitioner: irsPractitionerStub,
       judge: judgeStub,
       otherInternalUser: otherInternalUserStub,
       petitioner: petitionerStub,
       petitionsclerk: petitionsclerkStub,
-      practitioner: privatePractitionerStub,
-      respondent: irsPractitionerStub,
+      privatePractitioner: privatePractitionerStub,
     };
   });
 

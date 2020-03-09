@@ -51,11 +51,11 @@ describe('Docket Clerk seals a case', () => {
   loginAs(test, 'petitioner');
   associatedUserViewsCaseDetailForSealedCase(test);
 
-  loginAs(test, 'practitioner');
+  loginAs(test, 'privatePractitioner');
   associatedUserViewsCaseDetailForSealedCase(test);
   associatedUserAdvancedSearchForSealedCase(test);
 
-  loginAs(test, 'respondent');
+  loginAs(test, 'irsPractitioner');
   associatedUserViewsCaseDetailForSealedCase(test);
   associatedUserAdvancedSearchForSealedCase(test);
 

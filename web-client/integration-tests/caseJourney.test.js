@@ -134,7 +134,7 @@ describe('Case journey', () => {
   petitionsClerkUpdatesCaseDetail(test);
   petitionsClerkSubmitsCaseToIrs(test);
 
-  loginAs(test, 'respondent');
+  loginAs(test, 'irsPractitioner');
   respondentViewsDashboard(test);
   respondentAddsAnswer(test, fakeFile);
   respondentAddsStipulatedDecision(test, fakeFile);

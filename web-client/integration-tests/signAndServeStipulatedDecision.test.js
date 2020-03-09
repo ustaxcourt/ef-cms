@@ -49,7 +49,7 @@ describe('a user signs and serves a stipulated decision', () => {
     ({ docketNumber } = caseDetail.docketNumber);
   });
 
-  loginAs(test, 'respondent');
+  loginAs(test, 'irsPractitioner');
 
   it('respondent uploads a proposed stipulated decision', async () => {
     await viewCaseDetail({
