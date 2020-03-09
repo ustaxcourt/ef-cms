@@ -1,4 +1,7 @@
-const { updateUserRecords } = require('./updateAttorneyUser');
+const {
+  updateAttorneyUser,
+  updateUserRecords,
+} = require('./updateAttorneyUser');
 const { User } = require('../../../business/entities/User');
 
 describe('updateAttorneyUser', () => {
@@ -49,47 +52,233 @@ describe('updateAttorneyUser', () => {
 
     expect(deleteStub.mock.calls[0][0]).toMatchObject({
       Key: {
-        pk: 'practitioner|user',
-        sk: userId,
+        pk: 'section|practitioner',
+        sk: `user|${userId}`,
       },
     });
     expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {
-        pk: 'inactivePractitioner|user',
-        sk: userId,
-      },
+        pk: 'section|inactivePractitioner',
+        sk: `user|${userId}`,
+      }, //
     });
     expect(putStub.mock.calls[1][0]).toMatchObject({
       Item: {
-        pk: userId,
-        sk: userId,
+        pk: `user|${userId}`,
+        sk: `user|${userId}`,
         ...updatedUser,
         userId,
       },
     });
     expect(deleteStub.mock.calls[1][0]).toMatchObject({
       Key: {
-        pk: 'Test Practitioner|practitioner',
-        sk: userId,
+        pk: 'practitioner|Test Practitioner',
+        sk: `user|${userId}`,
       },
     });
     expect(deleteStub.mock.calls[2][0]).toMatchObject({
       Key: {
-        pk: 'PT1234|practitioner',
-        sk: userId,
+        pk: 'practitioner|PT1234',
+        sk: `user|${userId}`,
       },
     });
     expect(putStub.mock.calls[2][0]).toMatchObject({
       Item: {
         pk: 'inactivePractitioner|Test Practitioner',
-        sk: userId,
+        sk: `user|${userId}`,
       },
     });
     expect(putStub.mock.calls[3][0]).toMatchObject({
       Item: {
         pk: 'inactivePractitioner|PT1234',
-        sk: userId,
+        sk: `user|${userId}`,
       },
     });
+  });
+});
+
+describe('updateAttorneyUser', () => {
+  let applicationContext;
+  let putStub;
+  let deleteStub;
+  let getStub;
+
+  beforeEach(() => {
+    putStub = jest.fn().mockReturnValue({
+      promise: async () => null,
+    });
+    deleteStub = jest.fn().mockReturnValue({
+      promise: async () => null,
+    });
+    getStub = jest.fn().mockReturnValue({
+      promise: async () => ({
+        Item: {
+          barNumber: 'PT1234',
+          name: 'Test Practitioner',
+          role: User.ROLES.inactivePractitioner,
+          section: 'inactivePractitioner',
+        },
+      }),
+    });
+
+    applicationContext = {
+      environment: {
+        stage: 'dev',
+      },
+      getCognito: () => {
+        throw new Error();
+      },
+      getDocumentClient: () => ({
+        delete: deleteStub,
+        get: getStub,
+        put: putStub,
+      }),
+      logger: {
+        error: jest.fn().mockReturnValue(null),
+      },
+    };
+  });
+
+  it('should log an error', async () => {
+    const updatedUser = {
+      barNumber: 'PT1234',
+      name: 'Test Practitioner',
+      role: User.ROLES.inactivePractitioner,
+      section: 'inactivePractitioner',
+    };
+
+    await updateAttorneyUser({
+      applicationContext,
+      user: updatedUser,
+    });
+
+    expect(applicationContext.logger.error).toHaveBeenCalled();
+  });
+});
+
+describe('updateAttorneyUser', () => {
+  let applicationContext;
+  let putStub;
+  let deleteStub;
+  let getStub;
+
+  beforeEach(() => {
+    putStub = jest.fn().mockReturnValue({
+      promise: async () => null,
+    });
+    deleteStub = jest.fn().mockReturnValue({
+      promise: async () => null,
+    });
+    getStub = jest.fn().mockReturnValue({
+      promise: async () => ({
+        Item: {
+          barNumber: 'PT1234',
+          name: 'Test Practitioner',
+          role: User.ROLES.inactivePractitioner,
+          section: 'inactivePractitioner',
+        },
+      }),
+    });
+
+    applicationContext = {
+      environment: {
+        stage: 'dev',
+      },
+      getCognito: () => ({
+        adminGetUser: () => ({
+          promise: () => null,
+        }),
+      }),
+      getDocumentClient: () => ({
+        delete: deleteStub,
+        get: getStub,
+        put: putStub,
+      }),
+      logger: {
+        error: jest.fn().mockReturnValue(null),
+      },
+    };
+  });
+
+  it('should log an error', async () => {
+    const updatedUser = {
+      barNumber: 'PT1234',
+      name: 'Test Practitioner',
+      role: User.ROLES.inactivePractitioner,
+      section: 'inactivePractitioner',
+    };
+
+    await updateAttorneyUser({
+      applicationContext,
+      user: updatedUser,
+    });
+
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
+  });
+});
+
+describe('updateAttorneyUser - with a cognito response', () => {
+  let applicationContext;
+  let putStub;
+  let deleteStub;
+  let getStub;
+
+  beforeEach(() => {
+    putStub = jest.fn().mockReturnValue({
+      promise: async () => null,
+    });
+    deleteStub = jest.fn().mockReturnValue({
+      promise: async () => null,
+    });
+    getStub = jest.fn().mockReturnValue({
+      promise: async () => ({
+        Item: {
+          barNumber: 'PT1234',
+          name: 'Test Practitioner',
+          role: User.ROLES.inactivePractitioner,
+          section: 'inactivePractitioner',
+        },
+      }),
+    });
+
+    applicationContext = {
+      environment: {
+        stage: 'dev',
+      },
+      getCognito: () => ({
+        adminGetUser: () => ({
+          promise: () => ({
+            Username: 'bob',
+          }),
+        }),
+        adminUpdateUserAttributes: () => ({
+          promise: () => null,
+        }),
+      }),
+      getDocumentClient: () => ({
+        delete: deleteStub,
+        get: getStub,
+        put: putStub,
+      }),
+      logger: {
+        error: jest.fn().mockReturnValue(null),
+      },
+    };
+  });
+
+  it('should log an error', async () => {
+    const updatedUser = {
+      barNumber: 'PT1234',
+      name: 'Test Practitioner',
+      role: User.ROLES.inactivePractitioner,
+      section: 'inactivePractitioner',
+    };
+
+    await updateAttorneyUser({
+      applicationContext,
+      user: updatedUser,
+    });
+
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
   });
 });
