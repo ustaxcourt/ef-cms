@@ -37,6 +37,7 @@ export const IndividualWorkQueueOutbox = connect(
                   {workQueueHelper.assigneeColumnTitle}
                 </th>
               )}
+              <th>Processed by</th>
               {!workQueueHelper.hideSectionColumn && (
                 <th className="small">Section</th>
               )}
@@ -96,6 +97,7 @@ export const IndividualWorkQueueOutbox = connect(
                     {item.currentMessage.to}
                   </td>
                 )}
+                <td className="message-queue-row">{item.sentBy}</td>
                 {!workQueueHelper.hideSectionColumn && (
                   <td className="message-queue-row small">
                     {workQueueSectionHelper.sectionDisplay(item.section)}
