@@ -82,7 +82,6 @@ import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequen
 import { gotoAddTrialSessionSequence } from './sequences/gotoAddTrialSessionSequence';
 import { gotoAdvancedSearchSequence } from './sequences/gotoAdvancedSearchSequence';
 import { gotoAllCaseDeadlinesSequence } from './sequences/gotoAllCaseDeadlinesSequence';
-import { gotoAttorneyListSequence } from './sequences/gotoAttorneyListSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoBeforeYouFileDocumentSequence } from './sequences/gotoBeforeYouFileDocumentSequence';
 import { gotoBlockedCasesReportSequence } from './sequences/gotoBlockedCasesReportSequence';
@@ -275,6 +274,8 @@ import { submitExternalDocumentSequence } from './sequences/submitExternalDocume
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitForwardSequence } from './sequences/submitForwardSequence';
 import { submitLoginSequence } from './sequences/submitLoginSequence';
+import { submitPractitionerBarNumberSearchSequence } from './sequences/submitPractitionerBarNumberSearchSequence';
+import { submitPractitionerNameSearchSequence } from './sequences/submitPractitionerNameSearchSequence';
 import { submitRemoveConsolidatedCasesSequence } from './sequences/submitRemoveConsolidatedCasesSequence';
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
 import { submitUpdateAttorneyUserSequence } from './sequences/submitUpdateAttorneyUserSequence';
@@ -464,7 +465,6 @@ export const presenter = {
     gotoAddTrialSessionSequence,
     gotoAdvancedSearchSequence,
     gotoAllCaseDeadlinesSequence,
-    gotoAttorneyListSequence,
     gotoBeforeStartCaseSequence,
     gotoBeforeYouFileDocumentSequence,
     gotoBlockedCasesReportSequence,
@@ -655,6 +655,8 @@ export const presenter = {
     submitFilePetitionSequence,
     submitForwardSequence,
     submitLoginSequence,
+    submitPractitionerBarNumberSearchSequence,
+    submitPractitionerNameSearchSequence,
     submitRemoveConsolidatedCasesSequence,
     submitTrialSessionSequence,
     submitUpdateAttorneyUserSequence,
