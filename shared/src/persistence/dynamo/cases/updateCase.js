@@ -1,4 +1,5 @@
 const client = require('../../dynamodbClientService');
+const diff = require('diff-arrays-of-objects');
 const {
   updateWorkItemAssociatedJudge,
 } = require('../workitems/updateWorkItemAssociatedJudge');
@@ -76,13 +77,25 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     );
   });
 
-  const updatedRespondents = differenceWith(
-    caseToUpdate.respondents,
-    oldCase.respondents,
-    isEqual,
-  );
+  const {
+    added: addedRespondents,
+    removed: deletedRespondents,
+    updated: updatedRespondents,
+  } = diff(oldCase.respondents, caseToUpdate.respondents, 'userId');
 
-  updatedRespondents.forEach(respondent => {
+  deletedRespondents.forEach(respondent => {
+    requests.push(
+      client.delete({
+        applicationContext,
+        key: {
+          pk: `case|${caseToUpdate.caseId}`,
+          sk: `respondent|${respondent.userId}`,
+        },
+      }),
+    );
+  });
+
+  [...addedRespondents, ...updatedRespondents].forEach(respondent => {
     requests.push(
       client.put({
         Item: {
@@ -95,13 +108,25 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     );
   });
 
-  const updatedPractitioners = differenceWith(
-    caseToUpdate.practitioners,
-    oldCase.practitioners,
-    isEqual,
-  );
+  const {
+    added: addedPractitioners,
+    removed: deletedPractitioners,
+    updated: updatedPractitioners,
+  } = diff(oldCase.practitioners, caseToUpdate.practitioners, 'userId');
 
-  updatedPractitioners.forEach(practitioner => {
+  deletedPractitioners.forEach(practitioner => {
+    requests.push(
+      client.delete({
+        applicationContext,
+        key: {
+          pk: `case|${caseToUpdate.caseId}`,
+          sk: `practitioner|${practitioner.userId}`,
+        },
+      }),
+    );
+  });
+
+  [...addedPractitioners, ...updatedPractitioners].forEach(practitioner => {
     requests.push(
       client.put({
         Item: {

@@ -293,9 +293,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   }
 
   if (Array.isArray(rawCase.documents)) {
-    this.documents = rawCase.documents.map(
-      document => new Document(document, { applicationContext }),
-    );
+    this.documents = rawCase.documents
+      .map(document => new Document(document, { applicationContext }))
+      .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
   } else {
     this.documents = [];
   }
