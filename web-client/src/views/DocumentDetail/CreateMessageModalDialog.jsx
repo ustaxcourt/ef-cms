@@ -68,9 +68,7 @@ export const CreateMessageModalDialog = connect(
         </FormGroup>
 
         {showChambersSelect && (
-          <FormGroup
-            errorText={validationErrors.section && 'Select a chamber'}
-          >
+          <FormGroup errorText={validationErrors.section && 'Select a chamber'}>
             <label className="usa-label" htmlFor="chambers">
               Select chambers
             </label>

@@ -145,7 +145,7 @@ const VALIDATION_ERROR_MESSAGES = {
 /**
  * constructor
  *
- * @param {Object} rawUser the raw user data
+ * @param {object} rawUser the raw user data
  * @constructor
  */
 function User(rawUser) {
