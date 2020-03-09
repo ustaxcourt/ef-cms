@@ -1,5 +1,6 @@
 import { getFormattedMyInbox, viewDocumentDetailMessage } from '../helpers';
-export default test => {
+
+export const adcViewsStipulatedDecisionForSigning = test => {
   describe('ADC views inbox and selects a Stipulated Decision for signing', () => {
     it('views inbox', async () => {
       const myInbox = await getFormattedMyInbox(test);

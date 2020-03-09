@@ -1,5 +1,5 @@
 import { Scan } from '../../../shared/src/business/entities/Scan';
-import getScanModeLabel from './getScanModeLabel';
+import { getScanModeLabel } from './getScanModeLabel';
 
 describe('getScanModeLabel', () => {
   const { SCAN_MODES } = Scan;
