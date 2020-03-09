@@ -35,7 +35,7 @@ export const CreateCaseDeadlineModalDialog = connect(
           <DateInput
             errorText={validationErrors.deadlineDate}
             id="deadline-date"
-            label="Certificate of Service"
+            label="Due date"
             values={form}
             onBlur={validateCaseDeadlineSequence}
             onChange={updateFormValueSequence}
