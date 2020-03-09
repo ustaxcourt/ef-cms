@@ -1,10 +1,21 @@
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
+import { User } from '../../../../shared/src/business/entities/User';
 import { advancedSearchHelper as advancedSearchHelperComputed } from './advancedSearchHelper';
 import { applicationContext } from '../../applicationContext';
+import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 let pageSizeOverride = 5;
+
+let globalUser;
+
+const getBaseState = user => {
+  globalUser = user;
+  return {
+    permissions: getUserPermissions(user),
+  };
+};
 
 const advancedSearchHelper = withAppContextDecorator(
   advancedSearchHelperComputed,
@@ -20,40 +31,77 @@ const advancedSearchHelper = withAppContextDecorator(
 );
 
 describe('advancedSearchHelper', () => {
-  it('returns only showStateSelect when searchResults is undefined', () => {
+  beforeEach(() => {
+    globalUser = {
+      role: User.ROLES.docketClerk,
+      userId: 'docketClerk',
+    };
+  });
+
+  it('returns only showStateSelect and showPractitionerSearch when searchResults is undefined', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: {},
       },
     });
-    expect(result).toEqual({ showStateSelect: false });
+    expect(result).toEqual({
+      showPractitionerSearch: true,
+      showStateSelect: false,
+    });
+  });
+
+  it('returns showPractitionerSearch false when user is an external user', () => {
+    globalUser = {
+      role: User.ROLES.practitioner,
+      userId: 'practitioner',
+    };
+
+    const result = runCompute(advancedSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: {},
+      },
+    });
+    expect(result).toMatchObject({
+      showPractitionerSearch: false,
+    });
   });
 
   it('returns showStateSelect true when state.advancedSearchForm.countryType is "domestic"', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: {
           countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
         },
       },
     });
-    expect(result).toEqual({ showStateSelect: true });
+    expect(result).toEqual({
+      showPractitionerSearch: true,
+      showStateSelect: true,
+    });
   });
 
   it('returns showStateSelect false when state.advancedSearchForm.countryType is "international"', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: {
           countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
         },
       },
     });
-    expect(result).toEqual({ showStateSelect: false });
+    expect(result).toEqual({
+      showPractitionerSearch: true,
+      showStateSelect: false,
+    });
   });
 
   it('returns showNoMatches true and showSearchResults false if searchResults is an empty array', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
         searchResults: [],
       },
@@ -68,6 +116,7 @@ describe('advancedSearchHelper', () => {
   it('returns showNoMatches false, showSearchResults true, and the results count if searchResults is an not empty array', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
         searchResults: [
           {
@@ -92,6 +141,7 @@ describe('advancedSearchHelper', () => {
   it('formats search results', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
         searchResults: [
           {
@@ -145,6 +195,7 @@ describe('advancedSearchHelper', () => {
     pageSizeOverride = 1;
     let result = runCompute(advancedSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
         searchResults: [
           {
@@ -186,6 +237,7 @@ describe('advancedSearchHelper', () => {
 
     result = runCompute(advancedSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 3 },
         searchResults: [
           {
