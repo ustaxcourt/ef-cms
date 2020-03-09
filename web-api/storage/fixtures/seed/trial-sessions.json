@@ -206,7 +206,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
-    "trialLocation": "Birmingham, AL",
+    "trialLocation": "Birmingham, Alabama",
     "createdAt": "2019-10-27T05:00:00.000Z",
     "sk": "trial-session-159c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "sessionType": "Hybrid",
@@ -227,7 +227,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
-    "trialLocation": "Washington, DC",
+    "trialLocation": "Washington, District of Columbia",
     "createdAt": "2019-10-27T05:00:00.000Z",
     "sk": "trial-session-359c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "sessionType": "Hybrid",
@@ -248,7 +248,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
-    "trialLocation": "New York, NY",
+    "trialLocation": "New York City, New York",
     "createdAt": "2019-10-27T05:00:00.000Z",
     "sk": "trial-session-459c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "sessionType": "Hybrid",
@@ -269,7 +269,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
-    "trialLocation": "San Francisco, CA",
+    "trialLocation": "San Francisco, California",
     "createdAt": "2019-10-27T05:00:00.000Z",
     "sk": "trial-session-539c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "sessionType": "Hybrid",
