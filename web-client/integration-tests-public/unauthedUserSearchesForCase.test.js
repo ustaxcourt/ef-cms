@@ -37,6 +37,7 @@ const testClient = setupTestClient({
 testClient.draftOrders = [];
 
 describe('Petitioner creates cases to search for', () => {
+  jest.setTimeout(10000);
   loginAs(testClient, 'petitioner');
   petitionerNavigatesToCreateCase(testClient);
   petitionerChoosesProcedureType(testClient);
