@@ -1,4 +1,4 @@
-export default test => {
+export const adcViewsMessages = test => {
   return it('ADC views messages to verify the work item that was forward by the docket clerk is now present', async () => {
     await test.runSequence('gotoMessagesSequence');
     expect(test.getState('currentPage')).toEqual('Messages');

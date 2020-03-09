@@ -427,8 +427,6 @@ export const setupTest = ({ useCases = {} } = {}) => {
             workQueueIsInternal: true,
           });
           break;
-        case `/case-detail/${test.caseId}`:
-        // fall through
         case `/case-detail/${test.docketNumber}`:
           await test.runSequence('gotoCaseDetailSequence', {
             docketNumber: test.docketNumber,
