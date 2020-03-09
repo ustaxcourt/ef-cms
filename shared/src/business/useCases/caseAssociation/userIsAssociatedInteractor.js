@@ -15,7 +15,9 @@ exports.userIsAssociated = ({ caseDetail, user }) => {
     return true;
   }
 
-  if (![User.ROLES.respondent, User.ROLES.practitioner].includes(role)) {
+  if (
+    ![User.ROLES.irsPractitioner, User.ROLES.privatePractitioner].includes(role)
+  ) {
     return false;
   }
 

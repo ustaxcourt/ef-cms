@@ -27,8 +27,8 @@ describe('createAttorneyUser', () => {
     const practitionerUser = {
       barNumber: 'PT1234',
       name: 'Test Practitioner',
-      role: User.ROLES.practitioner,
-      section: 'practitioner',
+      role: User.ROLES.privatePractitioner,
+      section: 'privatePractitioner',
     };
     await createUserRecords({
       applicationContext,
@@ -71,8 +71,8 @@ describe('createAttorneyUser', () => {
     const practitionerUser = {
       barNumber: '',
       name: 'Test Practitioner',
-      role: User.ROLES.practitioner,
-      section: 'practitioner',
+      role: User.ROLES.privatePractitioner,
+      section: 'privatePractitioner',
     };
     await createUserRecords({
       applicationContext,

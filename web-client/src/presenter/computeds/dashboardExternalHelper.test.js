@@ -38,7 +38,7 @@ describe('petitioner dashboard helper', () => {
   });
   it('shows case search if defined user has practitioner role', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
@@ -52,7 +52,7 @@ describe('petitioner dashboard helper', () => {
 
   it('shows case search if defined user has respondent role', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {

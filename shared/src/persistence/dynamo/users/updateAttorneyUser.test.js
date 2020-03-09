@@ -31,8 +31,8 @@ describe('updateAttorneyUser', () => {
     const oldUser = {
       barNumber: 'PT1234',
       name: 'Test Practitioner',
-      role: User.ROLES.practitioner,
-      section: 'practitioner',
+      role: User.ROLES.privatePractitioner,
+      section: 'privatePractitioner',
     };
     const updatedUser = {
       barNumber: 'PT1234',
