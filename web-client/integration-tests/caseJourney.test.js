@@ -50,6 +50,7 @@ import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssigns
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
 import petitionsClerkIrsHoldingQueue from './journey/petitionsClerkIrsHoldingQueue';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkPrioritizesCase from './journey/petitionsClerkPrioritizesCase';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesCaseDetail from './journey/petitionsClerkUpdatesCaseDetail';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
@@ -61,7 +62,6 @@ import respondentAddsStipulatedDecision from './journey/respondentAddsStipulated
 import respondentLogIn from './journey/respondentLogIn';
 import respondentViewsCaseDetailOfBatchedCase from './journey/respondentViewsCaseDetailOfBatchedCase';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
-import petitionsClerkPrioritizesCase from './journey/petitionsClerkPrioritizesCase';
 
 let test;
 global.FormData = FormData;
