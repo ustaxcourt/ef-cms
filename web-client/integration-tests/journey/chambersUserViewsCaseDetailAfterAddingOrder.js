@@ -16,6 +16,6 @@ export default test => {
       test
         .getState('caseDetail.documents')
         .find(d => d.documentTitle === 'Order of Dismissal and Decision'),
-    ).toBeDefeined();
+    ).toBeDefined();
   });
 };
