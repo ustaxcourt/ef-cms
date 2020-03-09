@@ -59,56 +59,55 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 };
 
 exports.createAttorneyUser = async ({ applicationContext, user }) => {
-  let userId;
+  const userId = applicationContext.getUniqueId();
 
-  try {
-    const response = await applicationContext
-      .getCognito()
-      .adminCreateUser({
-        UserAttributes: [
-          {
-            Name: 'email',
-            Value: user.email,
-          },
-          {
-            Name: 'custom:role',
-            Value: user.role,
-          },
-          {
-            Name: 'name',
-            Value: user.name,
-          },
-        ],
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: user.email,
-      })
-      .promise();
-    userId = response.User.Username;
-  } catch (err) {
-    // the user already exists
-    const response = await applicationContext
-      .getCognito()
-      .adminGetUser({
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: user.email,
-      })
-      .promise();
+  if (user.email) {
+    try {
+      await applicationContext
+        .getCognito()
+        .adminCreateUser({
+          UserAttributes: [
+            {
+              Name: 'email',
+              Value: user.email,
+            },
+            {
+              Name: 'custom:role',
+              Value: user.role,
+            },
+            {
+              Name: 'name',
+              Value: user.name,
+            },
+          ],
+          UserPoolId: process.env.USER_POOL_ID,
+          Username: user.email,
+        })
+        .promise();
+    } catch (err) {
+      // the user already exists
+      const response = await applicationContext
+        .getCognito()
+        .adminGetUser({
+          UserPoolId: process.env.USER_POOL_ID,
+          Username: user.email,
+        })
+        .promise();
 
-    await applicationContext
-      .getCognito()
-      .adminUpdateUserAttributes({
-        UserAttributes: [
-          {
-            Name: 'custom:role',
-            Value: user.role,
-          },
-        ],
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: response.Username,
-      })
-      .promise();
-
-    userId = response.Username;
+      await applicationContext
+        .getCognito()
+        .adminUpdateUserAttributes({
+          UserAttributes: [
+            {
+              Name: 'custom:role',
+              Value: user.role,
+            },
+          ],
+          UserPoolId: process.env.USER_POOL_ID,
+          Username: response.Username,
+        })
+        .promise();
+    }
   }
 
   return await exports.createUserRecords({
