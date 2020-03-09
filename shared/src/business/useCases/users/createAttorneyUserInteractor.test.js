@@ -6,60 +6,54 @@ const {
 } = require('../../../../../shared/src/errors/errors');
 const { User } = require('../../entities/User');
 
+const mockUser = {
+  admissionsDate: '2019-03-01T21:40:46.415Z',
+  birthYear: 2019,
+  employer: 'Private',
+  isAdmitted: true,
+  name: 'Test Attorney',
+  practitionerType: 'Attorney',
+  role: User.ROLES.practitioner,
+  userId: 'practitioner1@example.com',
+};
+
 describe('create attorney user', () => {
-  it('creates the attorney user', async () => {
-    const mockUser = {
-      name: 'Test Attorney',
-      role: User.ROLES.practitioner,
-      userId: 'practitioner1@example.com',
+  let applicationContext;
+  let testUser;
+
+  beforeEach(() => {
+    testUser = {
+      role: 'petitionsclerk',
+      userId: 'petitionsclerk',
     };
-    const applicationContext = {
+
+    applicationContext = {
       environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: 'petitionsclerk',
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          createAttorneyUser: () => Promise.resolve(mockUser),
-        };
-      },
+      getCurrentUser: () => testUser,
+      getPersistenceGateway: () => ({
+        createAttorneyUser: () => Promise.resolve(mockUser),
+      }),
     };
-    const userToCreate = { userId: 'practitioner1@example.com' };
+  });
+
+  it('creates the attorney user', async () => {
     const user = await createAttorneyUserInteractor({
       applicationContext,
-      user: userToCreate,
+      user: mockUser,
     });
     expect(user).not.toBeUndefined();
   });
 
   it('throws unauthorized for a non-internal user', async () => {
-    const mockUser = {
-      name: 'Test Attorney',
-      role: User.ROLES.practitioner,
-      userId: 'practitioner1@example.com',
+    testUser = {
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
     };
-    const applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitioner,
-          userId: 'admin',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          createUser: () => Promise.resolve(mockUser),
-        };
-      },
-    };
-    const userToCreate = { userId: 'practitioner1@example.com' };
+
     await expect(
       createAttorneyUserInteractor({
         applicationContext,
-        user: userToCreate,
+        user: mockUser,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
