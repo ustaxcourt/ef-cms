@@ -549,14 +549,6 @@ const router = {
     );
 
     route(
-      '/users/attorney-list',
-      ifHasAccess(() => {
-        setPageTitle('EF-CMS User Management - Attorney List');
-        app.getSequence('gotoAttorneyListSequence')();
-      }),
-    );
-
-    route(
       '/users/create-attorney',
       ifHasAccess(() => {
         setPageTitle('EF-CMS User Management - Create Attorney User');
