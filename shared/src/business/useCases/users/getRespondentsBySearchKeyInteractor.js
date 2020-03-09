@@ -30,7 +30,7 @@ exports.getRespondentsBySearchKeyInteractor = async ({
     .getUsersBySearchKey({
       applicationContext,
       searchKey,
-      type: 'respondent',
+      type: 'irsPractitioner',
     });
 
   return User.validateRawCollection(users, { applicationContext });

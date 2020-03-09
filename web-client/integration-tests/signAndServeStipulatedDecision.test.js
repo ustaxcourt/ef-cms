@@ -38,7 +38,6 @@ describe('a user signs and serves a stipulated decision', () => {
     };
   });
 
-  let docketNumber = null;
   let signedDocumentId = null;
   let caseDetail;
 
@@ -46,7 +45,6 @@ describe('a user signs and serves a stipulated decision', () => {
 
   it('login as a petitioner and create a case', async () => {
     caseDetail = await uploadPetition(test);
-    ({ docketNumber } = caseDetail.docketNumber);
   });
 
   loginAs(test, 'irsPractitioner');
