@@ -23,22 +23,22 @@ describe('createAttorneyUser', () => {
     };
   });
 
-  it('attempts to persist a practitioner user with name and barNumber mapping records', async () => {
-    const practitionerUser = {
+  it('attempts to persist a private practitioner user with name and barNumber mapping records', async () => {
+    const privatePractitionerUser = {
       barNumber: 'PT1234',
-      name: 'Test Practitioner',
+      name: 'Test Private Practitioner',
       role: User.ROLES.privatePractitioner,
       section: 'privatePractitioner',
     };
     await createUserRecords({
       applicationContext,
-      user: practitionerUser,
+      user: privatePractitionerUser,
       userId,
     });
 
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
-        pk: 'practitioner|user',
+        pk: 'privatePractitioner|user',
         sk: userId,
       },
       TableName: 'efcms-dev',
@@ -47,20 +47,20 @@ describe('createAttorneyUser', () => {
       Item: {
         pk: userId,
         sk: userId,
-        ...practitionerUser,
+        ...privatePractitionerUser,
       },
       TableName: 'efcms-dev',
     });
     expect(putStub.getCall(2).args[0]).toMatchObject({
       Item: {
-        pk: 'Test Practitioner|practitioner',
+        pk: 'Test Private Practitioner|privatePractitioner',
         sk: userId,
       },
       TableName: 'efcms-dev',
     });
     expect(putStub.getCall(3).args[0]).toMatchObject({
       Item: {
-        pk: 'PT1234|practitioner',
+        pk: 'PT1234|privatePractitioner',
         sk: userId,
       },
       TableName: 'efcms-dev',
@@ -68,21 +68,21 @@ describe('createAttorneyUser', () => {
   });
 
   it('does not persist mapping records for practitioner without barNumber', async () => {
-    const practitionerUser = {
+    const privatePractitionerUser = {
       barNumber: '',
-      name: 'Test Practitioner',
+      name: 'Test Private Practitioner',
       role: User.ROLES.privatePractitioner,
       section: 'privatePractitioner',
     };
     await createUserRecords({
       applicationContext,
-      user: practitionerUser,
+      user: privatePractitionerUser,
       userId,
     });
 
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
-        pk: 'practitioner|user',
+        pk: 'privatePractitioner|user',
         sk: userId,
       },
       TableName: 'efcms-dev',
@@ -91,7 +91,7 @@ describe('createAttorneyUser', () => {
       Item: {
         pk: userId,
         sk: userId,
-        ...practitionerUser,
+        ...privatePractitionerUser,
       },
       TableName: 'efcms-dev',
     });
