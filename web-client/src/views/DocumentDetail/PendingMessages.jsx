@@ -335,7 +335,7 @@ export const PendingMessages = connect(
                             });
                           }}
                         />
-
+                        
                         {workItemMetadata.showChambersSelect && (
                           <Select
                             error={
