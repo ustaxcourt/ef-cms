@@ -82,10 +82,9 @@ exports.getCaseByDocketNumber = async ({
 
   return {
     ...theCase,
-    docketRecord: docketRecord.length > 0 ? docketRecord : theCase.docketRecord, // this is temp until sesed data fixed
-    documents: documents.length > 0 ? documents : theCase.documents, // this is temp until sesed data fixed
-    practitioners:
-      practitioners.length > 0 ? practitioners : theCase.practitioners, // this is temp until sesed data fixed
-    respondents: respondents.length > 0 ? respondents : theCase.respondents, // this is temp until sesed data fixed
+    docketRecord,
+    documents,
+    practitioners,
+    respondents,
   };
 };

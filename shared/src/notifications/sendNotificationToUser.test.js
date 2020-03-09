@@ -89,4 +89,28 @@ describe('send websocket notification to browser', () => {
 
     expect(getNotificationClientStub).toThrow();
   });
+
+  it('throws non 410 exception', async () => {
+    let getNotificationClientStub = jest.fn().mockImplementation(() => {
+      throw new Error();
+    });
+
+    applicationContext = {
+      ...applicationContext,
+      getNotificationClient: getNotificationClientStub,
+    };
+
+    let error;
+    try {
+      await sendNotificationToUser({
+        applicationContext,
+        message: 'hello, computer',
+        userId: 'userId-000-000-0000',
+      });
+    } catch (err) {
+      error = err;
+    }
+
+    expect(error).toBeDefined();
+  });
 });
