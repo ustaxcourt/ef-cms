@@ -14,6 +14,6 @@ export default test => {
       test
         .getState('caseDetail.documents')
         .find(d => d.documentTitle === 'Notice to Need a Nap'),
-    ).toBeDefeined();
+    ).toBeDefined();
   });
 };
