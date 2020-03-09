@@ -44,7 +44,7 @@ describe('Sr. Attorney Signs Proposed Stipulated Decision', () => {
   petitionerCreatesNewCase(test, fakeFile);
   petitionerViewsDashboard(test);
 
-  loginAs(test, 'practitioner');
+  loginAs(test, 'privatePractitioner');
   practitionerViewsCaseDetail(test);
   practitionerFilesDocumentForStipulatedDecision(test, fakeFile);
 
