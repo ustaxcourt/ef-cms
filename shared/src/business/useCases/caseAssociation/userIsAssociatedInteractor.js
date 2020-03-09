@@ -21,7 +21,12 @@ exports.userIsAssociated = ({ caseDetail, user }) => {
     return false;
   }
 
-  const association = `${role}s`;
+  let association;
+  if (role === User.ROLES.irsPractitioner) {
+    association = 'respondents';
+  } else {
+    association = 'practitioners';
+  }
   const associations = caseDetail[association];
 
   return (
