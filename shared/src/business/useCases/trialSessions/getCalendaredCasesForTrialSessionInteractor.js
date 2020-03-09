@@ -29,9 +29,5 @@ exports.getCalendaredCasesForTrialSessionInteractor = async ({
       trialSessionId,
     });
 
-  return cases.map(caseWithAdditionalProperties =>
-    new Case(caseWithAdditionalProperties, { applicationContext })
-      .validate()
-      .toRawObject(),
-  );
+  return Case.validateRawCollection(cases, { applicationContext });
 };
