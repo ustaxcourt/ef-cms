@@ -1,9 +1,20 @@
 export default (test, message) => {
   return it('Petitions clerk sends message to petitionsclerk1', async () => {
-    const workItem = test.petitionerNewCases[0].documents[0].workItems[0];
+    const firstCase = test.petitionerNewCases.reduce((prev, current) =>
+      prev.createdAt < current.createdAt ? prev : current,
+    );
+
+    const firstDocument = firstCase.documents.reduce((prev, current) =>
+      prev.createdAt < current.createdAt ? prev : current,
+    );
+
+    const workItem = firstDocument.workItems.reduce((prev, current) =>
+      prev.createdAt < current.createdAt ? prev : current,
+    );
+
     await test.runSequence('gotoDocumentDetailSequence', {
-      docketNumber: test.petitionerNewCases[0].docketNumber,
-      documentId: test.petitionerNewCases[0].documents[0].documentId,
+      docketNumber: firstCase.docketNumber,
+      documentId: firstDocument.documentId,
     });
 
     // petitionsclerk1
