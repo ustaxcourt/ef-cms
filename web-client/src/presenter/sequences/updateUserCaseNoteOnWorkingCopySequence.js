@@ -1,8 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTrialSessionWorkingCopyAction';
-import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTrialSessionWorkingCopyAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -22,8 +20,6 @@ export const updateUserCaseNoteOnWorkingCopySequence = [
       clearAlertsAction,
       updateNotePropsFromModalStateAction,
       updateUserCaseNoteAction,
-      getTrialSessionWorkingCopyAction,
-      setTrialSessionWorkingCopyAction,
       updateCalendaredCaseUserNoteAction,
       clearModalAction,
       clearModalStateAction,
