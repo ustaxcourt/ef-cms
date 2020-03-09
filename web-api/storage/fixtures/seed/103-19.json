@@ -233,10 +233,10 @@
     "preferredTrialCity": "Mobile, Alabama",
     "respondents": [
       {
-        "role": "respondent",
+        "role": "irsPractitioner",
         "serviceIndicator": "Electronic",
-        "name": "Test Respondent",
-        "custom:role": "respondent",
+        "name": "Test IRS Practitioner",
+        "custom:role": "irsPractitioner",
         "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "contact": {
           "address1": "234 Main St",
@@ -250,8 +250,8 @@
         },
         "barNumber": "RT6789",
         "iat": 1551480838,
-        "respondentId": "respondent",
-        "email": "respondent",
+        "respondentId": "irsPractitioner",
+        "email": "irsPractitioner",
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InJlc3BvbmRlbnQiLCJlbWFpbCI6InJlc3BvbmRlbnQiLCJuYW1lIjoiVGVzdCBSZXNwb25kZW50Iiwicm9sZSI6InJlc3BvbmRlbnQiLCJzZWN0aW9uIjoicGV0aXRpb25zIiwidXNlcklkIjoicmVzcG9uZGVudCIsImlhdCI6MTU1MTQ4MDgzOH0.U72pP7ZEwQkQIzlhpKvaEdMbcQhCjSLQbp0FP06LKao"
       }
     ],
