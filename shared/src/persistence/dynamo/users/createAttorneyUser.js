@@ -11,15 +11,13 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
     delete user.barNumber;
   }
 
-  if (user.section) {
-    await client.put({
-      Item: {
-        pk: `${user.section}|user`,
-        sk: userId,
-      },
-      applicationContext,
-    });
-  }
+  await client.put({
+    Item: {
+      pk: `${user.section}|user`,
+      sk: userId,
+    },
+    applicationContext,
+  });
 
   await client.put({
     Item: {
@@ -31,12 +29,7 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
     applicationContext,
   });
 
-  if (
-    (user.role === User.ROLES.practitioner ||
-      user.role === User.ROLES.respondent) &&
-    user.name &&
-    user.barNumber
-  ) {
+  if (user.name && user.barNumber) {
     await createMappingRecord({
       applicationContext,
       pkId: user.name,
@@ -60,6 +53,12 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 
 exports.createAttorneyUser = async ({ applicationContext, user }) => {
   let userId = applicationContext.getUniqueId();
+
+  if (![User.ROLES.practitioner, User.ROLES.respondent].includes(user.role)) {
+    throw new Error(
+      'Attorney users must have either practitioner or respondent role',
+    );
+  }
 
   if (user.email) {
     try {
