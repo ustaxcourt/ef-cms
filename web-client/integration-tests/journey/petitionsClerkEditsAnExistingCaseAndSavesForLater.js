@@ -84,14 +84,17 @@ export default test => {
       .getState('workQueue')
       .find(x => x.docketNumber === test.docketNumber);
 
-    const results = await getFormattedDocumentQCSectionOutbox(test);
-    console.log(results);
-
     expect(sectionServedCase).toMatchObject({
       caseTitle: 'Mona Schultz',
     });
     expect(sectionServedCase.caseStatus).toEqual(
       Case.STATUS_TYPES.generalDocket,
     );
+
+    const outboxItems = await getFormattedDocumentQCSectionOutbox(test);
+    const desiredItem = outboxItems.find(
+      x => x.docketNumber === test.docketNumber,
+    );
+    expect(desiredItem.sentBy).toEqual('Test Petitionsclerk');
   });
 };
