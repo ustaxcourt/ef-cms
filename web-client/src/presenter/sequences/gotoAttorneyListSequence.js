@@ -9,7 +9,5 @@ export const gotoAttorneyListSequence = [
   setUsersByKeyAction('respondentUsers'),
   getUsersInSectionAction({ section: 'inactivePractitioner' }),
   setUsersByKeyAction('inactivePractitionerUsers'),
-  getUsersInSectionAction({ section: 'inactiveRespondent' }),
-  setUsersByKeyAction('inactiveRespondentUsers'),
   setCurrentPageAction('AttorneyList'),
 ];
