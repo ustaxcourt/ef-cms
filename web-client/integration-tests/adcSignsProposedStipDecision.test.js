@@ -20,9 +20,9 @@ import petitionerNavigatesToCreateCase from './journey/petitionerNavigatesToCrea
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 
 // adc
-import adcVerifiesStipulatedDecisionDoesNotExistInInbox from './journey/adcVerifiesStipulatedDecisionDoesNotExistInInbox';
-import adcVerifiesStipulatedDecisionExistsInOutbox from './journey/adcVerifiesStipulatedDecisionExistsInOutbox';
-import adcViewsStipulatedDecisionForSigning from './journey/adcViewsStipulatedDecisionForSigning';
+import { adcVerifiesStipulatedDecisionDoesNotExistInInbox } from './journey/adcVerifiesStipulatedDecisionDoesNotExistInInbox';
+import { adcVerifiesStipulatedDecisionExistsInOutbox } from './journey/adcVerifiesStipulatedDecisionExistsInOutbox';
+import { adcViewsStipulatedDecisionForSigning } from './journey/adcViewsStipulatedDecisionForSigning';
 const test = setupTest({
   useCases: {
     loadPDFForSigningInteractor: () => Promise.resolve(null),

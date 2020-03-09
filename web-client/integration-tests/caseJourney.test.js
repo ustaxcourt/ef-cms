@@ -8,16 +8,16 @@ const {
   ContactFactory,
 } = require('../../shared/src/business/entities/contacts/ContactFactory');
 import { Document } from '../../shared/src/business/entities/Document';
+import { adcMarksStipulatedWorkItemAsCompleted } from './journey/adcMarksStipulatedWorkItemAsCompleted';
+import { adcViewsCaseDetail } from './journey/adcViewsCaseDetail';
+import { adcViewsCaseDetailAfterComplete } from './journey/adcViewsCaseDetailAfterComplete';
+import { adcViewsDocumentDetail } from './journey/adcViewsDocumentDetail';
+import { adcViewsMessages } from './journey/adcViewsMessages';
+import { adcViewsMessagesAfterComplete } from './journey/adcViewsMessagesAfterComplete';
 import { applicationContext } from '../src/applicationContext';
 import { loginAs } from './helpers';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
-import adcMarksStipulatedWorkItemAsCompleted from './journey/adcMarksStipulatedWorkItemAsCompleted';
-import adcViewsCaseDetail from './journey/adcViewsCaseDetail';
-import adcViewsCaseDetailAfterComplete from './journey/adcViewsCaseDetailAfterComplete';
-import adcViewsDocumentDetail from './journey/adcViewsDocumentDetail';
-import adcViewsMessages from './journey/adcViewsMessages';
-import adcViewsMessagesAfterComplete from './journey/adcViewsMessagesAfterComplete';
 import docketClerkAddsDocketEntries from './journey/docketClerkAddsDocketEntries';
 import docketClerkAssignWorkItems from './journey/docketClerkAssignWorkItems';
 import docketClerkDocketDashboard from './journey/docketClerkDocketDashboard';

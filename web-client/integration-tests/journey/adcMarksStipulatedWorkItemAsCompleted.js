@@ -4,7 +4,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const extractedDocument = withAppContextDecorator(extractedDocumentComputed);
 
-export default test => {
+export const adcMarksStipulatedWorkItemAsCompleted = test => {
   return it('ADC marks the work item as completed', async () => {
     await test.runSequence('updateCompleteFormValueSequence', {
       key: 'completeMessage',
