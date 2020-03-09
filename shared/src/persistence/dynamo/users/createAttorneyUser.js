@@ -59,11 +59,11 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 };
 
 exports.createAttorneyUser = async ({ applicationContext, user }) => {
-  const userId = applicationContext.getUniqueId();
+  let userId = applicationContext.getUniqueId();
 
   if (user.email) {
     try {
-      await applicationContext
+      const response = await applicationContext
         .getCognito()
         .adminCreateUser({
           UserAttributes: [
@@ -84,6 +84,10 @@ exports.createAttorneyUser = async ({ applicationContext, user }) => {
           Username: user.email,
         })
         .promise();
+
+      if (response && response.User && response.User.Username) {
+        userId = response.User.Username;
+      }
     } catch (err) {
       // the user already exists
       const response = await applicationContext
