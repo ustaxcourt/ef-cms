@@ -21,10 +21,6 @@ exports.getCaseDocuments = ({ applicationContext }) => async theCase => {
     applicationContext,
   });
 
-  if (!documents.length) {
-    console.log('no documents found for ' + theCase.caseId);
-  }
-
   return {
     ...theCase,
     documents,

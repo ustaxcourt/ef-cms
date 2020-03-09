@@ -84,6 +84,8 @@ describe('getCasesByUser', () => {
         docketRecord: [],
         documents: [],
         pk: '123',
+        practitioners: [],
+        respondents: [],
         sk: '123',
         status: 'New',
       },
