@@ -1,8 +1,12 @@
 export default test => {
   return it('Petitions clerk bulk assigns cases', async () => {
-    const selectedWorkItems = test.petitionerNewCases.map(workItem => {
+    const selectedWorkItems = test.petitionerNewCases.map(newCase => {
+      const firstDocument = newCase.documents.reduce((prev, current) =>
+        prev.createdAt < current.createdAt ? prev : current,
+      );
+
       return {
-        workItemId: workItem.documents[0].workItems[0].workItemId,
+        workItemId: firstDocument.workItems[0].workItemId,
       };
     });
 
