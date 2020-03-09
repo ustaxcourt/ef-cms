@@ -40,6 +40,7 @@ export function TabsComponent({
   simpleSetter,
   value,
 }) {
+  // TODO - Refactor how tab selection sets documentSelectedForScan
   let activeKey, setTab;
 
   defaultActiveTab =

@@ -1,6 +1,7 @@
 module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
+    'bulkImportAttorneyUsers.js',
     'switch-environment-color.js',
     'migrations/*.js',
     'src/**/*.js',
@@ -9,7 +10,6 @@ module.exports = {
     '!src/**/*Lambda.js',
     '!src/**/*.test.js',
   ],
-
   coverageDirectory: './coverage',
   coverageThreshold: {
     global: {

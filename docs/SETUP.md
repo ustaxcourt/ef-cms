@@ -9,17 +9,17 @@
      - Create the IAM policy for Circle CI via the project Terraform scripts:
           - Make the intended domain name available on your local system, e.g. `export EFCMS_DOMAIN="ef-cms.example.gov"`
           - Create the policies on your local system: `cd iam/terraform/account-specific/main && ../bin/deploy-app.sh`
-               - Make a note of the `cloudwatch_role_arn` that is output, to use shortly for the CirleCI setup.
-          - cd `../../environment-specific/main` && ../bin/deploy-app stg`
-               - Make a note of the ARNs that are output, to use shortly for the CirleCI setup.
+               - Make a note of the `cloudwatch_role_arn` that is output, to use shortly for the CircleCI setup.
+          - `cd ../../environment-specific/main && ../bin/deploy-app.sh stg`
+               - Make a note of the ARNs that are output, to use shortly for the CircleCI setup.
      - In IAM, attach the `circle_ci_policy` to your `CircleCI` user.
      - Note the AWS-generated access key and secret access key — it will needed shortly for the CircleCI setup.
 - [Create a Route53 Hosted Zone](https://console.aws.amazon.com/route53/home) This will be used for setting up the domains for the UI and API.  Create the desired domain name (e.g. `ef-cms.example.gov.`) and make sure it is a `Public Hosted Zone`. This is the value you will set for `EFCMS_DOMAIN` in CircleCI.  Make sure the domain name ends with a period.
 - Create the Lambda roles & policies needed for the Lambdas that run the backend:
-     - `cd iam/environment-specific/terraform/main && ../bin/deploy-app dev`
-     - `cd iam/environment-specific/terraform/main && ../bin/deploy-app stg`
-     - `cd iam/environment-specific/terraform/main && ../bin/deploy-app test`
-     - `cd iam/environment-specific/terraform/main && ../bin/deploy-app prod`
+     - `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh dev`
+     - `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh stg`
+     - `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh test`
+     - `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh prod`
 - [Create a SonarCloud account](https://sonarcloud.io/). SonarCloud will be used to tests each build.
 - [Create a new SonarCloud organization](https://sonarcloud.io/create-organization).
   - There are three sub-projects to the EF-CMS — the front-end (the UI), the back-end (the API), and shared code. Each is handled separately by CircleCI and SonarCloud.
@@ -40,6 +40,7 @@
 5. Go to the settings of the project in CircleCI via clicking on the project / job, and clicking the gear icon
 6. Click "Environment Variables"
 7. Add the following:
+     - `AWS_ACCOUNT_ID` (the AWS account ID, without hyphens, e.g. `345678901234`)
      - `AWS_ACCESS_KEY_ID` (the access key for the AWS CircleCI user created in the Prerequisites)
      - `AWS_SECRET_ACCESS_KEY` (the secret access key for the AWS CircleCI user created in the Prerequisites)
      - `EFCMS_DOMAIN` (the domain indented for use by the court, e.g., `ef-cms.example.gov`)
