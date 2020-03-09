@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const express = require('express');
 const isReachable = require('is-reachable');
-const proxy = require('http-proxy-middleware');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 // https://github.com/chimurai/http-proxy-middleware#options
 
@@ -15,6 +15,7 @@ const PROXY_DESTINATIONS = {
   '/api': `http://${PROXY_HOST}:3001`,
   '/case-deadlines': `http://${PROXY_HOST}:3009`,
   '/case-documents': `http://${PROXY_HOST}:3008`,
+  '/case-meta': `http://${PROXY_HOST}:3015`,
   '/case-notes': `http://${PROXY_HOST}:3010`,
   '/case-parties': `http://${PROXY_HOST}:3014`,
   '/cases': `http://${PROXY_HOST}:3002`,
@@ -22,6 +23,7 @@ const PROXY_DESTINATIONS = {
   '/migrate': `http://${PROXY_HOST}:3030`,
   '/notifications': `http://${PROXY_HOST}:3011`,
   '/public-api': `http://${PROXY_HOST}:3013`,
+  '/reports': `http://${PROXY_HOST}:3016`,
   '/sections': `http://${PROXY_HOST}:3006`,
   '/streams': `http://${PROXY_HOST}:3012`,
   '/trial-sessions': `http://${PROXY_HOST}:3007`,
@@ -43,7 +45,7 @@ const proxyMain = async () => {
     console.log('Router:', router);
   }
 
-  const proxyObj = proxy('**', {
+  const proxyObj = createProxyMiddleware('**', {
     headers: {
       Connection: 'keep-alive',
     },

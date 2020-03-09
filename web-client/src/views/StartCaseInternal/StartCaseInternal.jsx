@@ -16,17 +16,14 @@ export const StartCaseInternal = connect(
   {
     documentSelectedForScan: state.documentSelectedForScan,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    generateInternalCaseCaptionSequence:
-      sequences.generateInternalCaseCaptionSequence,
-    navigateToReviewPetitionSequence:
-      sequences.navigateToReviewPetitionSequence,
+    navigateToReviewPetitionFromPaperSequence:
+      sequences.navigateToReviewPetitionFromPaperSequence,
     showModal: state.showModal,
   },
   ({
     documentSelectedForScan,
     formCancelToggleCancelSequence,
-    generateInternalCaseCaptionSequence,
-    navigateToReviewPetitionSequence,
+    navigateToReviewPetitionFromPaperSequence,
     showModal,
   }) => {
     return (
@@ -48,11 +45,8 @@ export const StartCaseInternal = connect(
                 <Tabs
                   bind="startCaseInternal.tab"
                   className="container-tabs no-full-border-bottom flex tab-button-h3"
-                  onSelect={tab => {
-                    generateInternalCaseCaptionSequence({ tab });
-                  }}
                 >
-                  <Tab id="tab-parties" tabName="parties" title="Parties">
+                  <Tab id="tab-parties" tabName="partyInfo" title="Parties">
                     <Parties />
                   </Tab>
                   <Tab id="tab-case-info" tabName="caseInfo" title="Case Info">
@@ -102,7 +96,7 @@ export const StartCaseInternal = connect(
                   id="submit-case"
                   type="button"
                   onClick={() => {
-                    navigateToReviewPetitionSequence();
+                    navigateToReviewPetitionFromPaperSequence();
                   }}
                 >
                   Review Petition

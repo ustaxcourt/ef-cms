@@ -16,7 +16,7 @@ describe('CourtIssuedDocumentTypeA', () => {
     it('should be valid when all fields are present', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
-        documentTitle: 'Order [Anything]',
+        documentTitle: '[Anything]',
         documentType: 'Order',
         freeText: 'Some free text',
         scenario: 'Type A',
@@ -27,7 +27,7 @@ describe('CourtIssuedDocumentTypeA', () => {
     it('should be invalid if the document type is a generic order and serviceStamp and freeText are not present', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
-        documentTitle: 'Order [Anything]',
+        documentTitle: '[Anything]',
         documentType: 'O - Order',
         scenario: 'Type A',
       });
@@ -40,7 +40,7 @@ describe('CourtIssuedDocumentTypeA', () => {
     it('should be invalid if the document type is a generic order and serviceStamp is present and not a valid option', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
-        documentTitle: 'Order [Anything]',
+        documentTitle: '[Anything]',
         documentType: 'O - Order',
         freeText: 'Some free text',
         scenario: 'Type A',
@@ -54,7 +54,7 @@ describe('CourtIssuedDocumentTypeA', () => {
     it('should be valid if the document type is a generic order and serviceStamp is present and a valid option and freeText is present', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
-        documentTitle: 'Order [Anything]',
+        documentTitle: '[Anything]',
         documentType: 'O - Order',
         freeText: 'Some free text',
         scenario: 'Type A',
@@ -68,12 +68,12 @@ describe('CourtIssuedDocumentTypeA', () => {
     it('should generate valid title', () => {
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,
-        documentTitle: 'Order [Anything]',
+        documentTitle: '[Anything]',
         documentType: 'Order',
         freeText: 'Some free text',
         scenario: 'Type A',
       });
-      expect(extDoc.getDocumentTitle()).toEqual('Order Some free text');
+      expect(extDoc.getDocumentTitle()).toEqual('Some free text');
     });
 
     it('should generate valid title without optional freeText for non-generic order type', () => {

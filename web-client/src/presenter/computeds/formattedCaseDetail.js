@@ -93,6 +93,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
             document.isInProgress));
 
       let editLink = ''; //defaults to doc detail
+
       if (
         showDocumentEditLink &&
         (permissions.DOCKET_ENTRY || permissions.CREATE_ORDER_DOCKET_ENTRY) &&
@@ -108,6 +109,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
           qcWorkItemsUntouched
         ) {
           editLink = '/edit';
+        } else if (document.isPetition && !document.servedAt) {
+          editLink = '/edit-saved';
         }
       }
 

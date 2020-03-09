@@ -15,13 +15,13 @@ exports.generatePdfFromHtmlInteractor = async ({
   docketNumber,
   footerHtml,
   headerHtml,
+  overwriteFooter,
   overwriteHeader,
 }) => {
   let browser = null;
   let result = null;
 
   try {
-    applicationContext.logger.time('Generating PDF From HTML');
     browser = await applicationContext.getChromiumBrowser();
     let page = await browser.newPage();
 
@@ -50,13 +50,15 @@ exports.generatePdfFromHtmlInteractor = async ({
       </html>
     `;
 
-    const footerTemplate = `
+    const footerTemplate = overwriteFooter
+      ? `${footerHtml ? footerHtml : ''}`
+      : `
       <!doctype html>
       <html>
         <head>
         </head>
         <body style="margin: 0px;">
-          <div style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
+          <div class="footer-default" style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
             ${footerHtml ? footerHtml : ''}
           </div>
         </body>
@@ -81,6 +83,5 @@ exports.generatePdfFromHtmlInteractor = async ({
       await browser.close();
     }
   }
-  applicationContext.logger.timeEnd('Generating PDF From HTML');
   return result;
 };

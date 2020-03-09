@@ -121,7 +121,9 @@ exports.updatePrimaryContactInteractor = async ({
       {
         assigneeId: null,
         assigneeName: null,
+        associatedJudge: caseEntity.associatedJudge,
         caseId,
+        caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseEntity.status,
         caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
         docketNumber: caseEntity.docketNumber,
@@ -151,7 +153,7 @@ exports.updatePrimaryContactInteractor = async ({
     workItem.addMessage(message);
     changeOfAddressDocument.addWorkItem(workItem);
 
-    caseEntity.addDocument(changeOfAddressDocument);
+    caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
 
     const docketRecordPdfWithCover = await addCoverToPdf({
       applicationContext,

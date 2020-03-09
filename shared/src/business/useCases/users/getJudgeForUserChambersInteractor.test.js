@@ -114,7 +114,7 @@ describe('getJudgeForUserChambersInteractor', () => {
       user: nonAssociatedUser,
     });
     expect(result).toBeUndefined();
-    expect(getUserInteractorMock).toHaveBeenCalled();
-    expect(getUsersInSectionInteractorMock).toHaveBeenCalled();
+    expect(getUserInteractorMock).not.toHaveBeenCalled();
+    expect(getUsersInSectionInteractorMock).not.toHaveBeenCalled();
   });
 });

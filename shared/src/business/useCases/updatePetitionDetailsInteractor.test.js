@@ -35,6 +35,7 @@ describe('updatePetitionDetailsInteractor', () => {
         getCaseByCaseId: getCaseByCaseIdMock,
         updateCase: updateCaseMock,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
   });
 
@@ -110,6 +111,7 @@ describe('updatePetitionDetailsInteractor', () => {
     });
     expect(result.docketRecord).toContainEqual({
       description: 'Filing Fee Waived',
+      docketRecordId: 'unique-id-1',
       documentId: undefined,
       editState: undefined,
       eventCode: 'FEEW',
@@ -134,6 +136,7 @@ describe('updatePetitionDetailsInteractor', () => {
     });
     expect(result.docketRecord).toContainEqual({
       description: 'Filing Fee Paid',
+      docketRecordId: 'unique-id-1',
       documentId: undefined,
       editState: undefined,
       eventCode: 'FEE',

@@ -22,6 +22,7 @@ describe('updateQcCompleteForTrialInteractor', () => {
           updateCase: caseToUpdate => Promise.resolve(caseToUpdate),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     await expect(
       updateQcCompleteForTrialInteractor({
@@ -38,8 +39,8 @@ describe('updateQcCompleteForTrialInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: User.ROLES.calendarClerk,
-          userId: 'calendarClerk',
+          role: User.ROLES.petitionsClerk,
+          userId: 'petitionsClerk',
         };
       },
       getPersistenceGateway: () => {
@@ -48,6 +49,7 @@ describe('updateQcCompleteForTrialInteractor', () => {
           updateCase: ({ caseToUpdate }) => Promise.resolve(caseToUpdate),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const result = await updateQcCompleteForTrialInteractor({
       applicationContext,

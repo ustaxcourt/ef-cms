@@ -6,13 +6,9 @@ import docketClerkEditsPetitionerInformation from './journey/docketClerkEditsPet
 import docketClerkEditsServiceIndicatorForPetitioner from './journey/docketClerkEditsServiceIndicatorForPetitioner';
 import docketClerkEditsServiceIndicatorForPractitioner from './journey/docketClerkEditsServiceIndicatorForPractitioner';
 import docketClerkEditsServiceIndicatorForRespondent from './journey/docketClerkEditsServiceIndicatorForRespondent';
-import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkServesOrderOnPaperParties from './journey/docketClerkServesOrderOnPaperParties';
-import docketClerkSignsOut from './journey/docketClerkSignsOut';
 import petitionsClerkAddsPractitionersToCase from './journey/petitionsClerkAddsPractitionersToCase';
 import petitionsClerkAddsRespondentsToCase from './journey/petitionsClerkAddsRespondentsToCase';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
-import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 
 const test = setupTest({
@@ -27,23 +23,22 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
     jest.setTimeout(30000);
   });
 
+  loginAs(test, 'petitioner');
+
   it('login as a petitioner and create a case', async () => {
-    await loginAs(test, 'petitioner');
     const caseDetail = await uploadPetition(test);
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkEditsPetitionerInformation(test);
-  docketClerkSignsOut(test);
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkAddsPractitionersToCase(test);
   petitionsClerkAddsRespondentsToCase(test);
-  petitionsClerkSignsOut(test);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkEditsServiceIndicatorForPetitioner(test);
   docketClerkEditsServiceIndicatorForPractitioner(test);
   docketClerkEditsServiceIndicatorForRespondent(test);
@@ -55,5 +50,4 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
   });
   docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkServesOrderOnPaperParties(test, 0);
-  docketClerkSignsOut(test);
 });

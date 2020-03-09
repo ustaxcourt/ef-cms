@@ -1,6 +1,4 @@
 module.exports = {
-  getDocumentQCBatchedForSectionLambda: require('./workitems/getDocumentQCBatchedForSectionLambda')
-    .handler,
   getDocumentQCInboxForSectionLambda: require('./workitems/getDocumentQCInboxForSectionLambda')
     .handler,
   getDocumentQCServedForSectionLambda: require('./workitems/getDocumentQCServedForSectionLambda')

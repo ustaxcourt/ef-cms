@@ -1,5 +1,4 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { IRS_BATCH_SYSTEM_SECTION } from '../../../../shared/src/business/entities/WorkQueue';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { cloneDeep } from 'lodash';
@@ -21,6 +20,13 @@ applicationContext.getCurrentUser = () => {
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
   ...applicationContext,
 });
+
+const WORK_ITEM_ID_1 = '06f09800-2f9c-4040-b133-10966fbf6179';
+const WORK_ITEM_ID_2 = '00557601-2dab-44bc-a5cf-7d1a115bd08d';
+const WORK_ITEM_ID_3 = 'a066204a-6c86-499e-9d98-b45a8f7bf86f';
+const WORK_ITEM_ID_4 = '4bd51fb7-fc46-4d4d-a506-08d48afcf46d';
+
+const JUDGE_USER_ID_1 = '89c956aa-65c6-4632-a6c8-7f0c6162d615';
 
 const petitionsClerkUser = {
   role: User.ROLES.petitionsClerk,
@@ -249,59 +255,6 @@ describe('formatted work queue computed', () => {
     expect(result2[0].showSendTo).toBeFalsy();
     expect(result2[0].showComplete).toBeFalsy();
   });
-  it('sets showBatchedStatusIcon to false when caseStatus is NOT batchedForIRS', () => {
-    // workItem.caseStatus is generalDocket
-    workItem.isInitializeCase = true;
-    const result2 = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [],
-        workQueue: [workItem],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'my',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-    expect(result2[0].showBatchedStatusIcon).toBeFalsy();
-  });
-  it('sets showBatchedStatusIcon to true when caseStatus is batchedForIRS', () => {
-    workItem.isInitializeCase = true;
-    workItem.caseStatus = Case.STATUS_TYPES.batchedForIRS;
-    const result2 = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [],
-        workQueue: [workItem],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'my',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-    expect(result2[0].showBatchedStatusIcon).toBeTruthy();
-  });
-
-  it('sets showBatchedStatusIcon to recalled', () => {
-    workItem.isInitializeCase = true;
-    workItem.caseStatus = Case.STATUS_TYPES.recalled;
-    const result2 = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [],
-        workQueue: [workItem],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'my',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-    expect(result2[0].showRecalledStatusIcon).toBeTruthy();
-    expect(result2[0].showUnreadIndicators).toEqual(true);
-  });
 
   it('filters the workitems for section QC inbox', () => {
     const result = runCompute(formattedWorkQueue, {
@@ -380,74 +333,6 @@ describe('formatted work queue computed', () => {
     expect(result[0]).toMatchObject({
       ...FORMATTED_WORK_ITEM,
       section: 'docket',
-    });
-  });
-
-  it('filters the workitems for section batched', () => {
-    const result = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [
-          {
-            ...qcWorkItem,
-            caseStatus: Case.STATUS_TYPES.batchedForIRS,
-            section: IRS_BATCH_SYSTEM_SECTION,
-          },
-        ],
-        workQueue: [
-          {
-            ...qcWorkItem,
-            caseStatus: Case.STATUS_TYPES.batchedForIRS,
-            section: IRS_BATCH_SYSTEM_SECTION,
-          },
-        ],
-        workQueueToDisplay: {
-          box: 'batched',
-          queue: 'section',
-          workQueueIsInternal: false,
-        },
-      },
-    });
-
-    expect(result[0]).toMatchObject({
-      ...FORMATTED_WORK_ITEM,
-      caseStatus: Case.STATUS_TYPES.batchedForIRS,
-      section: IRS_BATCH_SYSTEM_SECTION,
-    });
-  });
-
-  it('filters the workitems for my batched', () => {
-    const result = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [
-          {
-            ...qcWorkItem,
-            caseStatus: Case.STATUS_TYPES.batchedForIRS,
-            section: IRS_BATCH_SYSTEM_SECTION,
-            sentByUserId: petitionsClerkUser.userId,
-          },
-        ],
-        workQueue: [
-          {
-            ...qcWorkItem,
-            caseStatus: Case.STATUS_TYPES.batchedForIRS,
-            section: IRS_BATCH_SYSTEM_SECTION,
-            sentByUserId: petitionsClerkUser.userId,
-          },
-        ],
-        workQueueToDisplay: {
-          box: 'batched',
-          queue: 'my',
-          workQueueIsInternal: false,
-        },
-      },
-    });
-
-    expect(result[0]).toMatchObject({
-      ...FORMATTED_WORK_ITEM,
-      caseStatus: Case.STATUS_TYPES.batchedForIRS,
-      section: IRS_BATCH_SYSTEM_SECTION,
     });
   });
 
@@ -541,6 +426,143 @@ describe('formatted work queue computed', () => {
       ...FORMATTED_WORK_ITEM,
       section: 'docket',
     });
+  });
+
+  it('filters items based on associatedJudge for a given judge or chambers user', () => {
+    const judgeUser = {
+      name: 'Test Judge',
+      role: User.ROLES.judge,
+      userId: JUDGE_USER_ID_1,
+    };
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(judgeUser),
+        judgeUser,
+        workQueue: [
+          {
+            ...qcWorkItem,
+            workItemId: WORK_ITEM_ID_1,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: judgeUser.name,
+            workItemId: WORK_ITEM_ID_2,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: 'Test Judge 2',
+            workItemId: WORK_ITEM_ID_3,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: Case.CHIEF_JUDGE,
+            workItemId: WORK_ITEM_ID_4,
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+
+    expect(result.length).toEqual(1);
+    expect(result[0].workItemId).toEqual(WORK_ITEM_ID_2);
+  });
+
+  it('filters items based on associatedJudge for an adc user', () => {
+    const adcUser = {
+      name: 'Test ADC',
+      role: User.ROLES.adc,
+      userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
+    };
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(adcUser),
+        workQueue: [
+          {
+            ...qcWorkItem,
+            workItemId: WORK_ITEM_ID_1,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: 'Test Judge',
+            workItemId: WORK_ITEM_ID_2,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: 'Test Judge 2',
+            workItemId: WORK_ITEM_ID_3,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: Case.CHIEF_JUDGE,
+            workItemId: WORK_ITEM_ID_4,
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+
+    expect(result.length).toEqual(2);
+    expect(result[0].workItemId).toEqual(WORK_ITEM_ID_1);
+    expect(result[1].workItemId).toEqual(WORK_ITEM_ID_4);
+  });
+
+  it('filters items based on in progress cases for a petitionsclerk', () => {
+    const petitionsClerkUser = {
+      name: 'Test PetitionsClerk',
+      role: User.ROLES.petitionsClerk,
+      userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
+    };
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        workQueue: [
+          {
+            ...qcWorkItem,
+            workItemId: WORK_ITEM_ID_1,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: 'Test Judge',
+            workItemId: WORK_ITEM_ID_2,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: 'Test Judge 2',
+            workItemId: WORK_ITEM_ID_3,
+          },
+          {
+            ...qcWorkItem,
+            associatedJudge: Case.CHIEF_JUDGE,
+            caseIsInProgress: true,
+            caseStatus: Case.STATUS_TYPES.new,
+            document: {
+              ...qcWorkItem.document,
+              status: 'processing',
+            },
+            workItemId: WORK_ITEM_ID_4,
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inProgress',
+          queue: 'section',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+
+    expect(result.length).toEqual(1);
+    expect(result[0].workItemId).toEqual(WORK_ITEM_ID_4);
   });
 
   it('sorts high priority work items to the start of the list - qc, my, inbox', () => {
@@ -1023,10 +1045,39 @@ describe('formatted work queue computed', () => {
       });
       expect(result).toEqual('/edit');
     });
+
+    it('should return editLink as /review if the box is my inProgress and user is petitionsClerk', () => {
+      const { permissions } = getBaseState(petitionsClerkUser);
+
+      const result = getWorkItemDocumentLink({
+        applicationContext,
+        permissions,
+        workItem: {
+          ...baseWorkItem,
+          caseIsInProgress: true,
+          document: {
+            ...baseDocument,
+            documentType: 'Petition',
+            eventCode: 'P',
+            pending: false,
+          },
+          isInitializeCase: false,
+          isQC: true, // in QC state - should show in QC boxes
+          messages: [baseMessage],
+          section: 'petitions',
+        },
+        workQueueToDisplay: {
+          box: 'inProgress',
+          queue: 'my',
+          workQueueIsInternal: false,
+        },
+      });
+      expect(result).toEqual('/review');
+    });
   });
 
   describe('formatWorkItem', () => {
-    it('should return createdAtFormatted as MMDDYY format', () => {
+    it('should return createdAtFormatted as MM/DD/YY format', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         createdAt: '2019-02-28T21:14:39.488Z',
@@ -1094,7 +1145,7 @@ describe('formatted work queue computed', () => {
       expect(result.assigneeName).toEqual('Unassigned');
     });
 
-    it('should show the high priority when the work item is high priority', () => {
+    it('should show the high priority icon when the work item is high priority', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         highPriority: false,
@@ -1186,88 +1237,6 @@ describe('formatted work queue computed', () => {
       expect(result.showUnassignedIcon).toBeFalsy();
     });
 
-    it('should show status icons based on caseStatus for a petitions clerk', () => {
-      const applicationContextPetitionsClerk = {
-        ...applicationContext,
-        getCurrentUser: () => petitionsClerkUser,
-      };
-
-      const workItem = {
-        ...FORMATTED_WORK_ITEM,
-        caseStatus: Case.STATUS_TYPES.batchedForIRS,
-      };
-
-      let result = formatWorkItem({
-        applicationContext: applicationContextPetitionsClerk,
-        workItem,
-      });
-      expect(result.showBatchedStatusIcon).toEqual(true);
-      expect(result.showUnreadStatusIcon).toEqual(false);
-      expect(result.showUnassignedIcon).toEqual(false);
-
-      workItem.caseStatus = Case.STATUS_TYPES.recalled;
-
-      result = formatWorkItem({
-        applicationContext: applicationContextPetitionsClerk,
-        workItem,
-      });
-      expect(result.showRecalledStatusIcon).toEqual(true);
-      expect(result.showUnreadStatusIcon).toEqual(false);
-
-      workItem.caseStatus = Case.STATUS_TYPES.generalDocket;
-
-      result = formatWorkItem({
-        applicationContext: applicationContextPetitionsClerk,
-        workItem,
-      });
-      expect(result.showBatchedStatusIcon).toEqual(false);
-      expect(result.showRecalledStatusIcon).toEqual(false);
-
-      workItem.caseStatus = Case.STATUS_TYPES.new;
-
-      result = formatWorkItem({
-        applicationContext: applicationContextPetitionsClerk,
-        workItem,
-      });
-      expect(result.showBatchedStatusIcon).toEqual(false);
-      expect(result.showRecalledStatusIcon).toEqual(false);
-
-      workItem.caseStatus = 'Something Else (so use the default)';
-
-      result = formatWorkItem({
-        applicationContext: applicationContextPetitionsClerk,
-        workItem,
-      });
-      expect(result.showBatchedStatusIcon).toEqual(false);
-      expect(result.showRecalledStatusIcon).toEqual(false);
-    });
-
-    it('should NOT show recalled status or batched status icons if the user is not a petitions clerk', () => {
-      const applicationContextPetitionsClerk = {
-        ...applicationContext,
-        getCurrentUser: () => docketClerkUser,
-      };
-
-      const workItem = {
-        ...FORMATTED_WORK_ITEM,
-        caseStatus: Case.STATUS_TYPES.batchedForIRS,
-      };
-
-      let result = formatWorkItem({
-        applicationContext: applicationContextPetitionsClerk,
-        workItem,
-      });
-      expect(result.showBatchedStatusIcon).toEqual(false);
-
-      workItem.caseStatus = Case.STATUS_TYPES.recalled;
-
-      result = formatWorkItem({
-        applicationContext: applicationContextPetitionsClerk,
-        workItem,
-      });
-      expect(result.showRecalledStatusIcon).toEqual(false);
-    });
-
     it('should return docketNumberWithSuffix as a combination of the docketNumber and docketNumberSuffix', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
@@ -1283,7 +1252,7 @@ describe('formatted work queue computed', () => {
       expect(result.docketNumberWithSuffix).toEqual('123-45S');
     });
 
-    it('should return selected as true workItemId is found in selectedWorkItems', () => {
+    it('should return selected as true if workItemId is found in selectedWorkItems', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         workItemId: '123',
@@ -1417,22 +1386,6 @@ describe('formatted work queue computed', () => {
       expect(result.historyMessages[0].messageId).toEqual(
         result.messages[1].messageId,
       );
-    });
-
-    it('should set batchedAt when the messages contain a Petition batched for IRS', () => {
-      const workItem = {
-        ...FORMATTED_WORK_ITEM,
-        messages: [
-          ...FORMATTED_WORK_ITEM.messages,
-          {
-            createdAt: '2018-12-24T18:05:54.166Z',
-            message: 'Petition batched for IRS',
-          },
-        ],
-      };
-
-      const result = formatWorkItem({ applicationContext, workItem });
-      expect(result.batchedAt).toEqual('12/24/18 1:05 pm ET');
     });
 
     it('should return isCourtIssuedDocument as true when the documentType is a court issued document type', () => {

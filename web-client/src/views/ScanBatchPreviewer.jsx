@@ -267,12 +267,11 @@ export const ScanBatchPreviewer = connect(
             <Button
               secondary
               className="margin-top-3 red-warning bg-white"
-              onClick={e => {
-                e.preventDefault();
+              icon={['fas', 'times-circle']}
+              onClick={() => {
                 openConfirmDeletePDFModalSequence();
               }}
             >
-              <FontAwesomeIcon icon={['fas', 'times-circle']} />
               Delete PDF
             </Button>
           </div>

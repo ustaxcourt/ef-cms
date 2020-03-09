@@ -19,14 +19,14 @@ describe('socketRouter', () => {
     };
   });
 
-  it('should call batchDownloadReadySequence and callback if present', () => {
+  it('should call batchDownloadReadySequence and callback if present', async () => {
     socketRouter(
       mockApp,
       mockCallback,
     )({
       data: '{ "action": "batch_download_ready" }',
     });
-    socketRouter(mockApp)({
+    await socketRouter(mockApp)({
       data: '{ "action": "batch_download_ready" }',
     });
     expect(mockSequence.mock.calls.length).toBe(2);

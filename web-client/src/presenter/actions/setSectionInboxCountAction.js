@@ -1,20 +1,36 @@
+import { filterQcItemsByAssociatedJudge } from '../utilities/filterQcItemsByAssociatedJudge';
 import { state } from 'cerebral';
 
 /**
- * sets the state.workQueue based on the props.workItems passed in.
+ * sets the state.sectionInboxCount based on the current user and work queue to display
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the applicationContext used for the getUniqueId method
- * @param {object} providers.store the cerebral store used for setting state.workQueue
- * @param {object} providers.props the cerebral props object used for getting the props.workItems
- * @returns {undefined}
+ * @param {object} providers.applicationContext the applicationContext
+ * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.props the cerebral props object
+ * @param {object} providers.store the cerebral store
  */
-export const setSectionInboxCountAction = ({ get, props, store }) => {
+export const setSectionInboxCountAction = ({
+  applicationContext,
+  get,
+  props,
+  store,
+}) => {
+  const judgeUser = get(state.judgeUser);
+
+  const additionalFilters = filterQcItemsByAssociatedJudge({
+    applicationContext,
+    judgeUser,
+  });
+
   const workQueueIsInternal = get(state.workQueueToDisplay.workQueueIsInternal);
   store.set(
     state.sectionInboxCount,
-    props.workItems
-      .filter(item => item.isQC === !workQueueIsInternal)
-      .filter(item => item.document.isFileAttached !== false).length,
+    props.workItems.filter(
+      item =>
+        item.isQC === !workQueueIsInternal &&
+        item.document.isFileAttached !== false &&
+        additionalFilters(item),
+    ).length,
   );
 };

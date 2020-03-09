@@ -10,6 +10,7 @@ import { addEditUserCaseNoteModalHelper } from './computeds/addEditUserCaseNoteM
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { advancedSearchHelper } from './computeds/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
+import { attorneyListHelper } from './computeds/attorneyListHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
@@ -19,11 +20,13 @@ import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
+import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactEditHelper } from './computeds/contactEditHelper';
 import { contactsHelper } from './computeds/contactsHelper';
+import { createAttorneyUserHelper } from './computeds/createAttorneyUserHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
@@ -50,7 +53,8 @@ import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
-import { reviewPetitionHelper } from './computeds/reviewPetitionHelper';
+import { reviewPetitionFromPaperHelper } from './computeds/reviewPetitionFromPaperHelper';
+import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { selectDocumentSelectHelper } from './computeds/selectDocumentSelectHelper';
@@ -85,6 +89,7 @@ export const state = {
     documentTitle: null,
   },
   assigneeId: null,
+  attorneyListHelper,
   batchDownloadHelper,
   batchDownloads: {},
   batchIndexToRescan: null,
@@ -104,6 +109,7 @@ export const state = {
   caseDetailPage: {},
   caseDetailSubnavHelper,
   caseInformationHelper,
+  caseInventoryReportHelper,
   caseTypeDescriptionHelper,
   caseTypes: [],
   cases: [],
@@ -113,6 +119,7 @@ export const state = {
   confirmInitiateServiceModalHelper,
   contactEditHelper,
   contactsHelper,
+  createAttorneyUserHelper,
   createOrderHelper,
   currentPage: 'Interstitial',
   currentPageHeader: '',
@@ -183,7 +190,8 @@ export const state = {
   previewPdfFile: null,
   procedureTypes: [],
   requestAccessHelper,
-  reviewPetitionHelper,
+  reviewPetitionFromPaperHelper,
+  reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
   scanner: {},

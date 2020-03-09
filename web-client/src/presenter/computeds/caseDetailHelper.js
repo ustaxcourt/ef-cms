@@ -4,11 +4,7 @@ import { state } from 'cerebral';
 export const caseDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const { Case } = applicationContext.getEntityConstructors();
-  const {
-    PARTY_TYPES,
-    STATUS_TYPES,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
   const documentDetailTab =
@@ -20,16 +16,6 @@ export const caseDetailHelper = (get, applicationContext) => {
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const modalState = get(state.modal);
   let showEditPetitionerInformation = false;
-  const {
-    noticeOfAttachments,
-    orderDesignatingPlaceOfTrial,
-    orderForAmendedPetition,
-    orderForAmendedPetitionAndFilingFee,
-    orderForFilingFee,
-    orderForOds,
-    orderForRatification,
-    orderToShowCause,
-  } = caseDetail;
   const permissions = get(state.permissions);
   const showJudgesNotes = permissions.TRIAL_SESSION_WORKING_COPY;
 
@@ -81,8 +67,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showEditPetitionerInformation = true;
   }
 
-  const showRecallButton = caseDetail.status === STATUS_TYPES.batchedForIRS;
-
   const practitionerMatchesFormatted =
     modalState && modalState.practitionerMatches;
   if (practitionerMatchesFormatted) {
@@ -111,17 +95,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     });
   }
 
-  const hasOrders = [
-    noticeOfAttachments,
-    orderForAmendedPetition,
-    orderForAmendedPetitionAndFilingFee,
-    orderForFilingFee,
-    orderForOds,
-    orderForRatification,
-    orderToShowCause,
-    orderDesignatingPlaceOfTrial,
-  ].some(hasOrder => !!hasOrder);
-
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
   return {
@@ -129,7 +102,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     caseDeadlines,
     documentDetailTab,
     hasConsolidatedCases,
-    hasOrders,
     practitionerMatchesFormatted,
     practitionerSearchResultsCount:
       modalState &&
@@ -162,7 +134,6 @@ export const caseDetailHelper = (get, applicationContext) => {
       (caseDetail.practitioners && !!caseDetail.practitioners.length),
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,
-    showRecallButton,
     showRespondentSection:
       !isExternalUser ||
       (caseDetail.respondents && !!caseDetail.respondents.length),

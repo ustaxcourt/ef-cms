@@ -1,16 +1,12 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import calendarClerkLogIn from './journey/calendarClerkLogIn';
-import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
-import docketClerkLogIn from './journey/docketClerkLogIn';
-import docketClerkSignsOut from './journey/docketClerkSignsOut';
 import docketClerkUpdatesCaseStatusFromCalendaredToSubmitted from './journey/docketClerkUpdatesCaseStatusFromCalendaredToSubmitted';
 import docketClerkUpdatesCaseStatusToReadyForTrial from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import docketClerkViewsEligibleCasesForTrialSession from './journey/docketClerkViewsEligibleCasesForTrialSession';
 import docketClerkViewsInactiveCasesForTrialSession from './journey/docketClerkViewsInactiveCasesForTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
-import userSignsOut from './journey/petitionerSignsOut';
+import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
 const test = setupTest();
 
@@ -26,27 +22,30 @@ describe('docket clerk update case journey', () => {
     jest.setTimeout(30000);
   });
 
-  it('login as a petitioner and create a case', async () => {
-    await loginAs(test, 'petitioner');
+  afterAll(() => {
+    test.closeSocket();
+  });
+
+  loginAs(test, 'petitioner');
+
+  it('create a case', async () => {
     const caseDetail = await uploadPetition(test, overrides);
     test.caseId = caseDetail.caseId;
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkUpdatesCaseStatusToReadyForTrial(test);
   docketClerkCreatesATrialSession(test, overrides);
   docketClerkViewsTrialSessionList(test, overrides);
   docketClerkViewsEligibleCasesForTrialSession(test);
 
-  calendarClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   markAllCasesAsQCed(test, () => [test.caseId]);
-  calendarClerkSetsATrialSessionsSchedule(test);
-  userSignsOut(test);
+  petitionsClerkSetsATrialSessionsSchedule(test);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkUpdatesCaseStatusFromCalendaredToSubmitted(test);
   docketClerkViewsInactiveCasesForTrialSession(test);
   docketClerkUpdatesCaseStatusToReadyForTrial(test);
-  docketClerkSignsOut(test);
 });

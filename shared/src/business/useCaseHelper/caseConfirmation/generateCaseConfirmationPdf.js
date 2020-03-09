@@ -14,7 +14,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 const formattedCaseInfo = caseInfo => {
   const { servedAt } = caseInfo.documents.find(doc => doc.servedAt);
   const countryName =
-    caseInfo.contactPrimary.countryType != 'domestic'
+    caseInfo.contactPrimary.countryType !== 'domestic'
       ? caseInfo.contactPrimary.country
       : '';
   const formattedInfo = Object.assign(
@@ -125,4 +125,5 @@ exports.generateCaseConfirmationPdf = async ({
 
     s3Client.upload(params, resolve);
   });
+  return result;
 };

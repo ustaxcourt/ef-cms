@@ -35,7 +35,6 @@ const goToDashboard = [
         'admin',
         'adc',
         'admissionsclerk',
-        'calendarclerk',
         'clerkofcourt',
         'docketclerk',
         'floater',
@@ -53,6 +52,8 @@ const goToDashboard = [
       setTrialSessionsAction,
       setCurrentPageAction('DashboardChambers'),
     ],
+    inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
+    inactiveRespondent: [setCurrentPageAction('DashboardInactive')],
     judge: [
       setMessageInboxPropsAction,
       ...chooseWorkQueueSequence,

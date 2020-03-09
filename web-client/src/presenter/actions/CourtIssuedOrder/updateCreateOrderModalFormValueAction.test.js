@@ -36,7 +36,7 @@ describe('updateCreateOrderModalFormValueAction', () => {
       },
     });
     expect(result.state.form.eventCode).toEqual('O');
-    expect(result.state.form.documentTitle).toBeUndefined();
+    expect(result.state.form.documentTitle).toEqual('Order');
     expect(result.state.form.documentType).toEqual('Order');
   });
 
@@ -122,7 +122,7 @@ describe('updateCreateOrderModalFormValueAction', () => {
     expect(result.state.form.documentTitle).toBeUndefined();
   });
 
-  it('unsets documentTitle if new eventCode passed in is a generic order', async () => {
+  it('sets documentTitle to Order if new eventCode passed in is a generic order', async () => {
     const params = {
       modules: {
         presenter,
@@ -137,6 +137,7 @@ describe('updateCreateOrderModalFormValueAction', () => {
       },
     };
     let result = await runAction(updateCreateOrderModalFormValueAction, params);
-    expect(result.state.form.documentTitle).toBeUndefined();
+    expect(result.state.form.documentTitle).toEqual('Order');
+    expect(result.state.form.documentType).toEqual('Order');
   });
 });

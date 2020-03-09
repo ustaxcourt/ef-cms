@@ -37,7 +37,6 @@ export const documentDetailHelper = (get, applicationContext) => {
     COURT_ISSUED_EVENT_CODES,
     ORDER_TYPES_MAP,
     STATUS_TYPES,
-    USER_ROLES,
   } = applicationContext.getConstants();
   const orderDocumentTypes = ORDER_TYPES_MAP.map(
     orderType => orderType.documentType,
@@ -47,8 +46,6 @@ export const documentDetailHelper = (get, applicationContext) => {
   );
   const STIPULATED_DECISION_DOCUMENT_TYPE = 'Stipulated Decision';
   const MISCELLANEOUS_DOCUMENT_TYPE = 'MISC - Miscellaneous';
-
-  const newOrRecalledStatus = [STATUS_TYPES.new, STATUS_TYPES.recalled];
 
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
@@ -139,27 +136,10 @@ export const documentDetailHelper = (get, applicationContext) => {
       (isOrder && !isDocumentOnDocketRecord) ||
       (isCourtIssuedDocument && !isDocumentOnDocketRecord));
 
-  const showServeToIrsButton =
-    newOrRecalledStatus.includes(caseDetail.status) &&
-    formattedDocument.isPetition &&
-    user.role === USER_ROLES.petitionsClerk;
-  const showRecallButton =
-    caseDetail.status === STATUS_TYPES.batchedForIRS &&
-    formattedDocument.isPetition;
+  const showCaseDetailsEdit = caseDetail.status === STATUS_TYPES.new;
 
-  const showCaseDetailsEdit = newOrRecalledStatus.includes(caseDetail.status);
-  const showCaseDetailsView = [STATUS_TYPES.batchedForIRS].includes(
-    caseDetail.status,
-  );
   const showDocumentInfoTab =
-    formattedDocument.isPetition &&
-    (showCaseDetailsEdit || showCaseDetailsView);
-
-  const showViewOrdersNeededButton =
-    (document.status === 'served' ||
-      caseDetail.status === STATUS_TYPES.batchedForIRS) &&
-    user.role === USER_ROLES.petitionsClerk &&
-    formattedDocument.isPetition;
+    formattedDocument.isPetition && showCaseDetailsEdit;
 
   const showPrintCaseConfirmationButton =
     document.status === 'served' && formattedDocument.isPetition === true;
@@ -178,7 +158,6 @@ export const documentDetailHelper = (get, applicationContext) => {
     },
     showAddCourtIssuedDocketEntryButton,
     showCaseDetailsEdit,
-    showCaseDetailsView,
     showConfirmEditOrder: isSigned && isOrder,
     showCreatedFiled: (!isOrder && !isCourtIssuedDocument) || isDraftDocument,
     showDocumentInfoTab,
@@ -195,11 +174,8 @@ export const documentDetailHelper = (get, applicationContext) => {
       formattedDocument.isPetition === false &&
       !formattedDocument.isCourtIssuedDocument,
     showPrintCaseConfirmationButton,
-    showRecallButton,
     showRemoveSignature: isOrder && document.eventCode !== 'NOT' && isSigned,
-    showServeToIrsButton,
     showSignDocumentButton,
     showSignedAt: isOrder && isSigned,
-    showViewOrdersNeededButton,
   };
 };

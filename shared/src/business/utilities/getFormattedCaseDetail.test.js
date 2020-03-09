@@ -11,6 +11,10 @@ import {
 } from './getFormattedCaseDetail';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import { calculateISODate, createISODateString } from './DateHandler';
+const { MOCK_USERS } = require('../../test/mockUsers');
+
+applicationContext.getCurrentUser = () =>
+  MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'];
 
 const mockCaseDetailBase = {
   caseId: '123-456-abc-def',
@@ -698,7 +702,10 @@ describe('getFormattedCaseDetail', () => {
 
 describe('documentMeetsAgeRequirements', () => {
   it('indicates success if document is not a transcript', () => {
-    const result = documentMeetsAgeRequirements({ eventCode: 'BANANA' });
+    const nonTranscriptEventCode = 'BANANA'; // this is not a transcript event code - to think otherwise would just be bananas.
+    const result = documentMeetsAgeRequirements({
+      eventCode: nonTranscriptEventCode,
+    });
     expect(result).toBeTruthy();
   });
   it(`indicates success if document is a transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {

@@ -62,13 +62,21 @@ exports.updateDocketEntryInteractor = async ({
     { applicationContext },
   );
 
-  const docketRecordEntry = new DocketRecord({
-    description: documentMetadata.documentTitle,
-    documentId: documentEntity.documentId,
-    editState: JSON.stringify(documentMetadata),
-    eventCode: documentEntity.eventCode,
-    filingDate: documentEntity.receivedAt,
-  });
+  const existingDocketRecordEntry = caseEntity.getDocketRecordByDocumentId(
+    documentEntity.documentId,
+  );
+
+  const docketRecordEntry = new DocketRecord(
+    {
+      ...existingDocketRecordEntry,
+      description: documentMetadata.documentTitle,
+      documentId: documentEntity.documentId,
+      editState: JSON.stringify(documentMetadata),
+      eventCode: documentEntity.eventCode,
+      filingDate: documentEntity.receivedAt,
+    },
+    { applicationContext },
+  );
 
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
   caseEntity.updateDocument(documentEntity);
@@ -88,6 +96,7 @@ exports.updateDocketEntryInteractor = async ({
       assigneeId: null,
       assigneeName: null,
       caseId: caseId,
+      caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
       docketNumber: caseToUpdate.docketNumber,
       docketNumberSuffix: caseToUpdate.docketNumberSuffix,

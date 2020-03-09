@@ -1,5 +1,11 @@
 const client = require('../../dynamodbClientService');
 const {
+  updateWorkItemAssociatedJudge,
+} = require('../workitems/updateWorkItemAssociatedJudge');
+const {
+  updateWorkItemCaseIsInProgress,
+} = require('../workitems/updateWorkItemCaseIsInProgress');
+const {
   updateWorkItemCaseStatus,
 } = require('../workitems/updateWorkItemCaseStatus');
 const {
@@ -11,6 +17,7 @@ const {
 const {
   updateWorkItemTrialDate,
 } = require('../workitems/updateWorkItemTrialDate');
+const { differenceWith, isEqual } = require('lodash');
 
 /**
  * updateCase
@@ -30,11 +37,33 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   });
 
   const requests = [];
+
+  let updatedDocketRecord = differenceWith(
+    caseToUpdate.docketRecord,
+    oldCase.docketRecord,
+    isEqual,
+  );
+
+  updatedDocketRecord.forEach(docketEntry => {
+    requests.push(
+      client.put({
+        Item: {
+          pk: `case|${caseToUpdate.caseId}`,
+          sk: `docket-record|${docketEntry.docketRecordId}`,
+          ...docketEntry,
+        },
+        applicationContext,
+      }),
+    );
+  });
+
   if (
     oldCase.status !== caseToUpdate.status ||
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
     oldCase.caseCaption !== caseToUpdate.caseCaption ||
-    oldCase.trialDate !== caseToUpdate.trialDate
+    oldCase.trialDate !== caseToUpdate.trialDate ||
+    oldCase.associatedJudge !== caseToUpdate.associatedJudge ||
+    oldCase.caseIsInProgress !== caseToUpdate.caseIsInProgress
   ) {
     const workItemMappings = await client.query({
       ExpressionAttributeNames: {
@@ -80,6 +109,24 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           updateWorkItemTrialDate({
             applicationContext,
             trialDate: caseToUpdate.trialDate || null,
+            workItemId: mapping.sk,
+          }),
+        );
+      }
+      if (oldCase.associatedJudge !== caseToUpdate.associatedJudge) {
+        requests.push(
+          updateWorkItemAssociatedJudge({
+            applicationContext,
+            associatedJudge: caseToUpdate.associatedJudge,
+            workItemId: mapping.sk,
+          }),
+        );
+      }
+      if (oldCase.inProgress !== caseToUpdate.inProgress) {
+        requests.push(
+          updateWorkItemCaseIsInProgress({
+            applicationContext,
+            caseIsInProgress: caseToUpdate.inProgress,
             workItemId: mapping.sk,
           }),
         );

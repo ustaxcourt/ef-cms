@@ -1,6 +1,4 @@
-const createApplicationContext = require('../applicationContext');
-const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
-const { handle } = require('../middleware/apiGatewayHelper');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * used for signing PDF documents
@@ -9,27 +7,26 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  handle(event, async () => {
-    const user = getUserFromAuthHeader(event);
-    const applicationContext = createApplicationContext(user);
-    const {
-      body,
-      pathParameters: { caseId, documentId: originalDocumentId },
-    } = event;
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      const {
+        body,
+        pathParameters: { caseId, documentId: originalDocumentId },
+      } = event;
 
-    const { signedDocumentId } = JSON.parse(body);
+      const { signedDocumentId } = JSON.parse(body);
 
-    applicationContext.logger.info('Event', event);
-    try {
-      await applicationContext.getUseCases().saveSignedDocumentInteractor({
-        applicationContext,
-        caseId,
-        originalDocumentId,
-        signedDocumentId,
-      });
-      applicationContext.logger.info('User', user);
-    } catch (e) {
-      applicationContext.logger.error(e);
-      throw e;
-    }
-  });
+      return await applicationContext
+        .getUseCases()
+        .saveSignedDocumentInteractor({
+          applicationContext,
+          caseId,
+          originalDocumentId,
+          signedDocumentId,
+        });
+    },
+    {
+      logEvent: true,
+    },
+  );

@@ -1,7 +1,6 @@
 import { confirmInitiateServiceModalHelper } from '../../src/presenter/computeds/confirmInitiateServiceModalHelper';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
-import { waitForRouter } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export default (test, draftOrderIndex) => {
@@ -41,11 +40,9 @@ export default (test, draftOrderIndex) => {
 
     expect(helper.showPaperAlert).toEqual(true);
     expect(helper.contactsNeedingPaperService).toEqual([
-      { name: 'Test Person, Petitioner' },
+      { name: 'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Petitioner' },
     ]);
     await test.runSequence('serveCourtIssuedDocumentSequence');
-
-    await waitForRouter();
 
     expect(test.getState('currentPage')).toEqual('PrintPreview');
     expect(test.getState('pdfPreviewUrl')).toBeDefined();

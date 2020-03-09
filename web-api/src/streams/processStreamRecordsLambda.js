@@ -1,5 +1,4 @@
-const createApplicationContext = require('../applicationContext');
-const { handle } = require('../middleware/apiGatewayHelper');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * used for processing stream records from persistence
@@ -8,19 +7,20 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  handle(event, async () => {
-    const applicationContext = createApplicationContext({});
-    try {
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
       const recordsToProcess = event.Records;
-      const results = await applicationContext
+
+      return await applicationContext
         .getUseCases()
         .processStreamRecordsInteractor({
           applicationContext,
           recordsToProcess,
         });
-      applicationContext.logger.info('Results', results);
-    } catch (e) {
-      applicationContext.logger.error(e);
-      throw e;
-    }
-  });
+    },
+    {
+      logUser: false,
+      user: {},
+    },
+  );
