@@ -9,8 +9,8 @@ describe('Case journey', () => {
     jest.setTimeout(30000);
   });
 
-  // loginAs(test, 'petitionsclerk');
-  // petitionsClerkCreatesNewCaseAndSavesForLater(test, fakeFile);
+  loginAs(test, 'petitionsclerk');
+  petitionsClerkCreatesNewCaseAndSavesForLater(test, fakeFile);
 
   loginAs(test, 'petitioner');
   it('Create case', async () => {
