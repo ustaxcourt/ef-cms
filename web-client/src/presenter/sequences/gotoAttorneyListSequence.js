@@ -3,9 +3,9 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 
 export const gotoAttorneyListSequence = [
-  getUsersInSectionAction({ section: 'practitioner' }),
+  getUsersInSectionAction({ section: 'privatePractitioner' }),
   setUsersByKeyAction('practitionerUsers'),
-  getUsersInSectionAction({ section: 'respondent' }),
+  getUsersInSectionAction({ section: 'irsPractitioner' }),
   setUsersByKeyAction('respondentUsers'),
   getUsersInSectionAction({ section: 'inactivePractitioner' }),
   setUsersByKeyAction('inactivePractitionerUsers'),

@@ -43,7 +43,7 @@ describe('Get case filing types', () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {
-          role: User.ROLES.practitioner,
+          role: User.ROLES.privatePractitioner,
           userId: 'someLawyer',
         };
       },

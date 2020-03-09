@@ -55,7 +55,7 @@ describe('runPathForUserRoleAction', () => {
 
   it('should return the practitioner path for user role practitioner', async () => {
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
     });
     await runAction(runPathForUserRoleAction, {
       modules: {
@@ -68,7 +68,7 @@ describe('runPathForUserRoleAction', () => {
 
   it('should return the respondent path for user role respondent', async () => {
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
     });
     await runAction(runPathForUserRoleAction, {
       modules: {
