@@ -5,8 +5,6 @@ const {
 
 const {
   fillInCreateCaseFromPaperForm,
-  getPartiesTab,
-  getReviewCaseButton,
 } = require('../support/pages/create-paper-petition');
 
 describe('Create case and submit to IRS', function() {
@@ -19,12 +17,12 @@ describe('Create case and submit to IRS', function() {
   });
 
   it('should display parties tab when user navigates to create a case', () => {
-    const partiesTabElement = getPartiesTab();
+    const partiesTabElement = cy.get('#tab-parties');
     partiesTabElement.should('have.attr', 'aria-selected');
 
     fillInCreateCaseFromPaperForm();
 
-    getReviewCaseButton().click();
+    cy.get('#submit-case').click();
   });
 
   it('should display a create case header', () => {
@@ -36,12 +34,15 @@ describe('Create case and submit to IRS', function() {
     cy.get('#parties-card')
       .contains('Parties')
       .find('button');
+
     cy.get('#case-information-card')
       .contains('Case Information')
       .find('button');
+
     cy.get('#irs-notice-card')
       .contains('IRS Notice')
       .find('button');
+
     cy.get('#attachments-card')
       .contains('Attachments')
       .find('button');
@@ -49,5 +50,9 @@ describe('Create case and submit to IRS', function() {
 
   it('should display serve to irs button', () => {
     cy.get('#submit-case').should('exist');
+  });
+
+  it('should display save for later button', () => {
+    cy.get('#save-for-later').should('exist');
   });
 });

@@ -42,11 +42,3 @@ exports.fillInCreateCaseFromPaperForm = () => {
   cy.get('#upload-mode-upload').click();
   cy.upload_file('w3-dummy.pdf', 'input#requestForPlaceOfTrialFile-file');
 };
-
-exports.getPartiesTab = () => {
-  return cy.get('#tab-parties');
-};
-
-exports.getReviewCaseButton = () => {
-  return cy.get('#submit-case');
-};
