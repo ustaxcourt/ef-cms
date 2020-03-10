@@ -1,44 +1,45 @@
 import { cloneFile } from './cloneFile';
 
 describe('cloneFile', () => {
-  let readAsArrayBufferSpy;
-  let addEventListenerSpy;
+  const readAsArrayBufferSpy = jest.fn().mockResolvedValue();
+  const keys = {};
+
+  const addEventListenerSpy = jest.fn().mockImplementation((key, cb) => {
+    keys[key] = cb;
+  });
 
   beforeEach(() => {
-    readAsArrayBufferSpy = jest.spyOn(
-      FileReader.prototype,
-      'readAsArrayBuffer',
-    );
-    addEventListenerSpy = jest.spyOn(FileReader.prototype, 'addEventListener');
+    jest.clearAllMocks();
+
+    const FileReader = jest.spyOn(global, 'FileReader');
+    FileReader.mockImplementation(() => ({
+      addEventListener: addEventListenerSpy,
+      readAsArrayBuffer: readAsArrayBufferSpy,
+    }));
   });
 
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  it('should successfully clone a file', async () => {
-    const clonedFile = await cloneFile(new File([], 'tmp.pdf'));
-
-    expect(clonedFile).toBeDefined();
-    expect(readAsArrayBufferSpy).toHaveBeenCalledTimes(1);
-    expect(addEventListenerSpy).toHaveBeenCalledTimes(2);
-    expect(addEventListenerSpy.mock.calls[0][0]).toEqual('load');
-    expect(addEventListenerSpy.mock.calls[1][0]).toEqual('error');
+  it('should successfully clone a file', done => {
+    cloneFile(new File([], 'tmp.pdf')).then(clonedFile => {
+      expect(clonedFile).toBeDefined();
+      expect(readAsArrayBufferSpy).toHaveBeenCalledTimes(1);
+      expect(addEventListenerSpy).toHaveBeenCalledTimes(2);
+      expect(addEventListenerSpy.mock.calls[0][0]).toEqual('load');
+      expect(addEventListenerSpy.mock.calls[1][0]).toEqual('error');
+      done();
+    });
+    keys.load();
   });
 
-  it('should fail when attempting to clone something other than a file', async () => {
-    let err;
-    let clonedFile;
-
-    try {
-      clonedFile = await cloneFile(2);
-    } catch (e) {
-      err = e;
-    }
-
-    expect(err).toBeDefined();
-    expect(clonedFile).toBeUndefined();
-    expect(readAsArrayBufferSpy).toHaveBeenCalledTimes(1);
-    expect(addEventListenerSpy).toHaveBeenCalledTimes(0);
+  it('should fail when attempting to clone something other than a file', done => {
+    cloneFile(2).catch(() => {
+      expect(readAsArrayBufferSpy).toHaveBeenCalledTimes(1);
+      expect(addEventListenerSpy).toHaveBeenCalledTimes(2);
+      done();
+    });
+    keys.error();
   });
 });
