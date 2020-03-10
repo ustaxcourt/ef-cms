@@ -1,14 +1,6 @@
 export default test => {
   return it('Petitions clerk verifies assignment of work item', async () => {
-    const firstCase = test.petitionerNewCases.reduce((prev, current) =>
-      prev.createdAt < current.createdAt ? prev : current,
-    );
-
-    const {
-      workItemId,
-    } = firstCase.documents[0].workItems.reduce((prev, current) =>
-      prev.createdAt < current.createdAt ? prev : current,
-    );
+    const { workItemId } = test.petitionerNewCases[0].documents[0].workItems[0];
 
     await test.runSequence('gotoMessagesSequence');
     expect(test.getState('currentPage')).toEqual('Messages');
