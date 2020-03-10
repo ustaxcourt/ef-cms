@@ -89,15 +89,15 @@ describe('createUser', () => {
       expect(putStub.mock.calls.length).toBe(2);
       expect(putStub.mock.calls[0][0]).toMatchObject({
         Item: {
-          pk: 'petitions|user',
-          sk: userId,
+          pk: 'section|petitions',
+          sk: `user|${userId}`,
         },
         TableName: 'efcms-dev',
       });
       expect(putStub.mock.calls[1][0]).toMatchObject({
         Item: {
-          pk: userId,
-          sk: userId,
+          pk: `user|${userId}`,
+          sk: `user|${userId}`,
           ...petitionsclerkUser,
         },
         TableName: 'efcms-dev',
@@ -119,22 +119,22 @@ describe('createUser', () => {
       expect(putStub.mock.calls.length).toBe(3);
       expect(putStub.mock.calls[0][0]).toMatchObject({
         Item: {
-          pk: 'adamsChambers|user',
-          sk: userId,
+          pk: 'section|adamsChambers',
+          sk: `user|${userId}`,
         },
         TableName: 'efcms-dev',
       });
       expect(putStub.mock.calls[1][0]).toMatchObject({
         Item: {
-          pk: 'judge|user',
-          sk: userId,
+          pk: 'section|judge',
+          sk: `user|${userId}`,
         },
         TableName: 'efcms-dev',
       });
       expect(putStub.mock.calls[2][0]).toMatchObject({
         Item: {
-          pk: userId,
-          sk: userId,
+          pk: `user|${userId}`,
+          sk: `user|${userId}`,
           ...judgeUser,
         },
         TableName: 'efcms-dev',
@@ -157,30 +157,30 @@ describe('createUser', () => {
       expect(putStub.mock.calls.length).toBe(4);
       expect(putStub.mock.calls[0][0]).toMatchObject({
         Item: {
-          pk: 'practitioner|user',
-          sk: userId,
+          pk: 'section|practitioner',
+          sk: `user|${userId}`,
         },
         TableName: 'efcms-dev',
       });
       expect(putStub.mock.calls[1][0]).toMatchObject({
         Item: {
-          pk: userId,
-          sk: userId,
+          pk: `user|${userId}`,
+          sk: `user|${userId}`,
           ...practitionerUser,
         },
         TableName: 'efcms-dev',
       });
       expect(putStub.mock.calls[2][0]).toMatchObject({
         Item: {
-          pk: 'Test Practitioner|practitioner',
-          sk: userId,
+          pk: 'practitioner|Test Practitioner',
+          sk: `user|${userId}`,
         },
         TableName: 'efcms-dev',
       });
       expect(putStub.mock.calls[3][0]).toMatchObject({
         Item: {
-          pk: 'PT1234|practitioner',
-          sk: userId,
+          pk: 'practitioner|PT1234',
+          sk: `user|${userId}`,
         },
         TableName: 'efcms-dev',
       });
@@ -202,15 +202,15 @@ describe('createUser', () => {
       expect(putStub.mock.calls.length).toBe(2);
       expect(putStub.mock.calls[0][0]).toMatchObject({
         Item: {
-          pk: 'practitioner|user',
-          sk: userId,
+          pk: 'section|practitioner',
+          sk: `user|${userId}`,
         },
         TableName: 'efcms-dev',
       });
       expect(putStub.mock.calls[1][0]).toMatchObject({
         Item: {
-          pk: userId,
-          sk: userId,
+          pk: `user|${userId}`,
+          sk: `user|${userId}`,
           ...practitionerUser,
         },
         TableName: 'efcms-dev',
@@ -231,8 +231,8 @@ describe('createUser', () => {
       expect(putStub.mock.calls.length).toBe(1);
       expect(putStub.mock.calls[0][0]).toMatchObject({
         Item: {
-          pk: userId,
-          sk: userId,
+          pk: `user|${userId}`,
+          sk: `user|${userId}`,
           ...practitionerUser,
         },
         TableName: 'efcms-dev',
