@@ -30,16 +30,16 @@ describe('updateAttorneyUser', () => {
     };
   });
 
-  it('attempts to update a practitioner user to inactivePractitioner', async () => {
+  it('attempts to update a private practitioner user to inactivePractitioner', async () => {
     const oldUser = {
       barNumber: 'PT1234',
-      name: 'Test Practitioner',
-      role: User.ROLES.practitioner,
-      section: 'practitioner',
+      name: 'Test Private Practitioner',
+      role: User.ROLES.privatePractitioner,
+      section: 'privatePractitioner',
     };
     const updatedUser = {
       barNumber: 'PT1234',
-      name: 'Test Practitioner',
+      name: 'Test Private Practitioner',
       role: User.ROLES.inactivePractitioner,
       section: 'inactivePractitioner',
     };
@@ -52,7 +52,7 @@ describe('updateAttorneyUser', () => {
 
     expect(deleteStub.mock.calls[0][0]).toMatchObject({
       Key: {
-        pk: 'section|practitioner',
+        pk: 'section|privatePractitioner',
         sk: `user|${userId}`,
       },
     });
@@ -72,19 +72,19 @@ describe('updateAttorneyUser', () => {
     });
     expect(deleteStub.mock.calls[1][0]).toMatchObject({
       Key: {
-        pk: 'practitioner|Test Practitioner',
+        pk: 'privatePractitioner|Test Private Practitioner',
         sk: `user|${userId}`,
       },
     });
     expect(deleteStub.mock.calls[2][0]).toMatchObject({
       Key: {
-        pk: 'practitioner|PT1234',
+        pk: 'privatePractitioner|PT1234',
         sk: `user|${userId}`,
       },
     });
     expect(putStub.mock.calls[2][0]).toMatchObject({
       Item: {
-        pk: 'inactivePractitioner|Test Practitioner',
+        pk: 'inactivePractitioner|Test Private Practitioner',
         sk: `user|${userId}`,
       },
     });

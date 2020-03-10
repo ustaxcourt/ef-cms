@@ -23,7 +23,7 @@ export const adcViewsMessages = test => {
     expect(workItem.messages).toMatchObject([
       {
         message:
-          'Proposed Stipulated Decision filed by Respondent is ready for review.',
+          'Proposed Stipulated Decision filed by Irspractitioner is ready for review.',
       },
       {
         message: 'hello world',

@@ -6,7 +6,7 @@ export default test => {
     });
     expect(test.getState('currentPage')).toEqual('CaseDetail');
     expect(test.getState('caseDetail.respondents.0.name')).toEqual(
-      'Test Respondent',
+      'Test IRS Practitioner',
     );
   });
 };

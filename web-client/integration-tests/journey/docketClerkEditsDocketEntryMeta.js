@@ -1,4 +1,4 @@
-export default test => {
+export const docketClerkEditsDocketEntryMeta = test => {
   return it('docket clerk edits docket entry meta', async () => {
     expect(test.getState('currentPage')).toEqual('EditDocketEntryMeta');
 

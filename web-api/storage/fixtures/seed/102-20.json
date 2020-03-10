@@ -183,7 +183,7 @@
     "pk": "case|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "role": "respondent",
+    "role": "irsPractitioner",
     "serviceIndicator": "Electronic",
     "barNumber": "RT6789",
     "contact": {
@@ -196,15 +196,15 @@
       "state": "IL",
       "countryType": "domestic"
     },
-    "name": "Test Respondent",
-    "sk": "respondent|03defaec-2f77-4158-9dcd-3973ea706d4f",
-    "section": "respondent",
+    "name": "Test IRS Practitioner",
+    "sk": "irsPractitioner|03defaec-2f77-4158-9dcd-3973ea706d4f",
+    "section": "irsPractitioner",
     "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "respondent"
+    "email": "irsPractitioner"
   },
   {
-    "role": "practitioner",
+    "role": "privatePractitioner",
     "serviceIndicator": "Electronic",
     "barNumber": "PT5432",
     "contact": {
@@ -217,13 +217,13 @@
       "state": "IL",
       "countryType": "domestic"
     },
-    "name": "Test Practitioner",
-    "sk": "practitioner|60d14a39-df80-42ab-8f3f-b0e5f3a516fc",
-    "section": "practitioner",
+    "name": "Test Private Practitioner",
+    "sk": "privatePractitioner|60d14a39-df80-42ab-8f3f-b0e5f3a516fc",
+    "section": "privatePractitioner",
     "representingPrimary": true,
     "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "email": "practitioner1"
+    "email": "privatePractitioner1"
   },
   {
     "documentType": "Statement of Taxpayer Identification",

@@ -158,7 +158,7 @@
     "pk": "catalog"
   },
   {
-    "role": "practitioner",
+    "role": "privatePractitioner",
     "serviceIndicator": "Electronic",
     "barNumber": "PT1234",
     "contact": {
@@ -171,13 +171,13 @@
       "state": "IL",
       "countryType": "domestic"
     },
-    "name": "Test Practitioner",
-    "sk": "practitioner|e262e713-603a-4d52-8b70-4b6d7191e3ec",
-    "section": "practitioner",
+    "name": "Test Private Practitioner",
+    "sk": "privatePractitioner|e262e713-603a-4d52-8b70-4b6d7191e3ec",
+    "section": "privatePractitioner",
     "representingPrimary": true,
     "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "practitioner"
+    "email": "privatePractitioner"
   },
   {
     "documentType": "Petition",
