@@ -1,23 +1,10 @@
 export default (test, message) => {
   return it('Petitions clerk sends message to judgeArmen', async () => {
-    const firstCase = test.petitionerNewCases.reduce((prev, current) =>
-      prev.createdAt < current.createdAt ? prev : current,
-    );
-
-    const firstDocketEntry = firstCase.docketRecord.find(
-      entry => entry.index === 1,
-    );
-    const firstDocument = firstCase.documents.find(
-      document => document.documentId === firstDocketEntry.documentId,
-    );
-
-    const workItem = firstDocument.workItems.reduce((prev, current) =>
-      prev.createdAt < current.createdAt ? prev : current,
-    );
+    const workItem = test.petitionerNewCases[0].documents[0].workItems[0];
 
     await test.runSequence('gotoDocumentDetailSequence', {
-      docketNumber: firstCase.docketNumber,
-      documentId: firstDocument.documentId,
+      docketNumber: test.petitionerNewCases[0].docketNumber,
+      documentId: test.petitionerNewCases[0].documents[0].documentId,
     });
 
     // armensChambers
