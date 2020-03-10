@@ -70,16 +70,16 @@ export default test => {
     expect(helper.formattedCaseDetail.documents.length).toEqual(4);
     expect(helper.formattedCaseDetail.documents).toEqual(
       expect.arrayContaining([
-        expect.objectContaininng({
+        expect.objectContaining({
           documentType: 'Petition',
         }),
-        expect.objectContaininng({
+        expect.objectContaining({
           documentType: 'Statement of Taxpayer Identification',
         }),
-        expect.objectContaininng({
+        expect.objectContaining({
           documentType: 'OD - Order of Dismissal Entered,',
         }),
-        expect.objectContaininng({ documentType: 'TRAN - Transcript' }),
+        expect.objectContaining({ documentType: 'TRAN - Transcript' }),
       ]),
     );
   });
