@@ -1,8 +1,11 @@
 export default test => {
   return it('Petitions clerk bulk assigns cases', async () => {
     const selectedWorkItems = test.petitionerNewCases.map(newCase => {
-      const firstDocument = newCase.documents.reduce((prev, current) =>
-        prev.createdAt < current.createdAt ? prev : current,
+      const firstDocketEntry = newCase.docketRecord.find(
+        entry => entry.index === 1,
+      );
+      const firstDocument = newCase.documents.find(
+        document => document.documentId === firstDocketEntry.documentId,
       );
 
       return {

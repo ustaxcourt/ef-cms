@@ -4,8 +4,11 @@ export default (test, message) => {
       prev.createdAt < current.createdAt ? prev : current,
     );
 
-    const firstDocument = firstCase.documents.reduce((prev, current) =>
-      prev.createdAt < current.createdAt ? prev : current,
+    const firstDocketEntry = firstCase.docketRecord.find(
+      entry => entry.index === 1,
+    );
+    const firstDocument = firstCase.documents.find(
+      document => document.documentId === firstDocketEntry.documentId,
     );
 
     const workItem = firstDocument.workItems.reduce((prev, current) =>
