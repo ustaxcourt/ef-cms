@@ -4,11 +4,11 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 // docketClerk
-import docketClerkAddsTranscriptDocketEntryFromOrder from './journey/docketClerkAddsTranscriptDocketEntryFromOrder';
-import docketClerkCreatesAnOrder from './journey/docketClerkCreatesAnOrder';
-import docketClerkViewsDraftOrder from './journey/docketClerkViewsDraftOrder';
+import { docketClerkAddsTranscriptDocketEntryFromOrder } from './journey/docketClerkAddsTranscriptDocketEntryFromOrder';
+import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkServesOrder } from './journey/docketClerkServesOrder';
+import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 // petitioner
-import docketClerkServesOrder from './journey/docketClerkServesOrder';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';

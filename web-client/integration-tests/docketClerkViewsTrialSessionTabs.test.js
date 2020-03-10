@@ -1,10 +1,10 @@
+import { captureCreatedCase } from './journey/captureCreatedCase';
+import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
+import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
+import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
+import { docketClerkViewsTrialSessionsTab } from './journey/docketClerkViewsTrialSessionsTab';
 import { loginAs, setupTest } from './helpers';
 import { uploadPetition } from './helpers';
-import captureCreatedCase from './journey/captureCreatedCase';
-import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
-import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
-import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
-import docketClerkViewsTrialSessionsTab from './journey/docketClerkViewsTrialSessionsTab';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkManuallyAddsCaseToTrial from './journey/petitionsClerkManuallyAddsCaseToTrial';

@@ -1,10 +1,10 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
 // docketclerk
-import docketClerkConsolidatesCases from './journey/docketClerkConsolidatesCases';
-import docketClerkOpensCaseConsolidateModal from './journey/docketClerkOpensCaseConsolidateModal';
-import docketClerkSearchesForCaseToConsolidateWith from './journey/docketClerkSearchesForCaseToConsolidateWith';
-import docketClerkUnconsolidatesCase from './journey/docketClerkUnconsolidatesCase';
-import docketClerkUpdatesCaseStatusToReadyForTrial from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
+import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
+import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
+import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
+import { docketClerkUnconsolidatesCase } from './journey/docketClerkUnconsolidatesCase';
+import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 // petitioner
 import petitionerVerifiesConsolidatedCases from './journey/petitionerVerifiesConsolidatedCases';
 import petitionerVerifiesUnconsolidatedCases from './journey/petitionerVerifiesUnconsolidatedCases';

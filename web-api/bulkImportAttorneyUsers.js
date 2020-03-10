@@ -40,6 +40,12 @@ const formatRecord = record => {
     record.section = 'practitioner';
   }
 
+  Object.keys(record).map(key => {
+    if (record[key] === '') {
+      delete record[key];
+    }
+  });
+
   return record;
 };
 

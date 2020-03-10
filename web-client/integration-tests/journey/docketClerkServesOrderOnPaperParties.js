@@ -3,7 +3,7 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default (test, draftOrderIndex) => {
+export const docketClerkServesOrderOnPaperParties = (test, draftOrderIndex) => {
   return it('Docket Clerk serves the order on 3 parties with paper service', async () => {
     let caseDetailFormatted;
 
