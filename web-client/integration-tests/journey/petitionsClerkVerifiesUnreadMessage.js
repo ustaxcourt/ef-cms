@@ -1,16 +1,6 @@
 export default test => {
   return it('Petitions clerk verifies work item is unread', async () => {
-    const firstCase = test.petitionerNewCases.reduce((prev, current) =>
-      prev.createdAt < current.createdAt ? prev : current,
-    );
-
-    const firstDocument = firstCase.documents.reduce((prev, current) =>
-      prev.createdAt < current.createdAt ? prev : current,
-    );
-
-    const { workItemId } = firstDocument.workItems.reduce((prev, current) =>
-      prev.createdAt < current.createdAt ? prev : current,
-    );
+    const { workItemId } = test.petitionerNewCases[0].documents[0].workItems[0];
 
     await test.runSequence('gotoMessagesSequence');
     expect(test.getState('currentPage')).toEqual('Messages');
