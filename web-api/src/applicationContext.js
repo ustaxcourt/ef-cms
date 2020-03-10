@@ -943,7 +943,7 @@ module.exports = (appContextUser = {}) => {
         createWorkItem,
         deleteCaseDeadline,
         deleteCaseTrialSortMappingRecords,
-        deleteDocument,
+        deleteDocument: args => (process.env.CI ? null : deleteDocument(args)),
         deleteElasticsearchReindexRecord,
         deleteSectionOutboxRecord,
         deleteTrialSession,

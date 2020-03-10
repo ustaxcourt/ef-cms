@@ -18,6 +18,7 @@ ESEARCH_PID=$!
 npm run build:assets
 
 # these exported values expire when script terminates
+export CI=true
 export SKIP_VIRUS_SCAN=true
 export AWS_ACCESS_KEY_ID=S3RVER
 export AWS_SECRET_ACCESS_KEY=S3RVER
