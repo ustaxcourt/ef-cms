@@ -48,7 +48,7 @@ exports.getCalendaredCasesForTrialSession = async ({
 
   const afterMapping = caseOrder.map(myCase => ({
     ...myCase,
-    ...resultsWithDocketRecords.find(r => myCase.caseId === r.pk),
+    ...resultsWithDocketRecords.find(r => myCase.caseId === r.caseId),
   }));
 
   return afterMapping;
