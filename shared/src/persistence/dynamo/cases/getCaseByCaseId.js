@@ -1,4 +1,5 @@
 const client = require('../../dynamodbClientService');
+const { sortBy } = require('lodash');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 /**
@@ -78,10 +79,17 @@ exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
     applicationContext,
   });
 
+  const actualDocketRecord =
+    docketRecord.length > 0 ? docketRecord : theCase.docketRecord;
+  const actualDocuments = documents.length > 0 ? documents : theCase.documents;
+
+  const sortedDocketRecord = sortBy(actualDocketRecord, 'index');
+  const sortedDocuments = sortBy(actualDocuments, 'createdAt');
+
   return {
     ...theCase,
-    docketRecord: docketRecord.length > 0 ? docketRecord : theCase.docketRecord, // this is temp until sesed data fixed
-    documents: documents.length > 0 ? documents : theCase.documents, // this is temp until sesed data fixed
+    docketRecord: sortedDocketRecord,
+    documents: sortedDocuments,
     practitioners:
       practitioners.length > 0 ? practitioners : theCase.practitioners, // this is temp until sesed data fixed
     respondents: respondents.length > 0 ? respondents : theCase.respondents, // this is temp until sesed data fixed
