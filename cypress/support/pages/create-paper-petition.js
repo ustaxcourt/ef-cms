@@ -19,29 +19,27 @@ exports.fillInCreateCaseFromPaperForm = () => {
   cy.get('#preferred-trial-city')
     .scrollIntoView()
     .select('Birmingham, Alabama');
-  cy.get('input[type="radio"]')
-    .first()
-    .check();
+  cy.get('label[for="payment-status-paid"]').click();
 
   // enter irs notice info
   cy.get('#tab-irs-notice').click();
   cy.get('#case-type')
     .scrollIntoView()
     .select('Deficiency');
-  cy.get('[type="radio"]').check('No');
+  cy.get('#has-irs-verified-notice-no').click();
 
   // upload documents
-  cy.get('[type="radio"]').check('upload');
+  cy.get('#upload-mode-upload').click();
   cy.upload_file('w3-dummy.pdf', 'input#petitionFile-file');
 
   cy.get('button[aria-controls="tabContent-stinFile"]').click();
-  cy.get('[type="radio"]').check('upload');
+  cy.get('#upload-mode-upload').click();
   cy.upload_file('w3-dummy.pdf', 'input#stinFile-file');
 
   cy.get(
     'button[aria-controls="tabContent-requestForPlaceOfTrialFile"]',
   ).click();
-  cy.get('[type="radio"]').check('upload');
+  cy.get('#upload-mode-upload').click();
   cy.upload_file('w3-dummy.pdf', 'input#requestForPlaceOfTrialFile-file');
 };
 
@@ -50,5 +48,5 @@ exports.getPartiesTab = () => {
 };
 
 exports.getReviewCaseButton = () => {
-  return cy.get('#review-case');
+  return cy.get('#submit-case');
 };
