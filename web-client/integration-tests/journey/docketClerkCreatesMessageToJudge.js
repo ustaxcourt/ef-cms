@@ -1,4 +1,4 @@
-export default (test, message) => {
+export const docketClerkCreatesMessageToJudge = (test, message) => {
   return it('Docket clerk sends message to judgeArmen', async () => {
     const workItem = test.petitionerNewCases[0].documents[3].workItems[0];
     await test.runSequence('gotoDocumentDetailSequence', {

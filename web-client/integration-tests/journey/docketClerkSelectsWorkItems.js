@@ -1,4 +1,4 @@
-export default test => {
+export const docketClerkSelectsWorkItems = test => {
   return it('Docket clerk selects some work items', async () => {
     const unassignedWorkItem = test
       .getState('workQueue')

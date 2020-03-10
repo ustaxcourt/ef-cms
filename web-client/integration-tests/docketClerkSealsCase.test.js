@@ -3,7 +3,7 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { associatedUserAdvancedSearchForSealedCase } from './journey/associatedUserAdvancedSearchForSealedCase';
 import { associatedUserViewsCaseDetailForSealedCase } from './journey/associatedUserViewsCaseDetailForSealedCase';
-import docketClerkSealsCase from './journey/docketClerkSealsCase';
+import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import petitionsClerkAddsPractitionersToCase from './journey/petitionsClerkAddsPractitionersToCase';
 import petitionsClerkAddsRespondentsToCase from './journey/petitionsClerkAddsRespondentsToCase';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';

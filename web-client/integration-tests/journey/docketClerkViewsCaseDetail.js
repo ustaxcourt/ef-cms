@@ -7,7 +7,7 @@ const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
   extractedPendingMessagesFromCaseDetailComputed,
 );
 
-export default (test, docketNumber = null) => {
+export const docketClerkViewsCaseDetail = (test, docketNumber = null) => {
   return it('Docketclerk views case detail', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: docketNumber || test.docketNumber,

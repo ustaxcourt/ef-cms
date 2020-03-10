@@ -2,7 +2,7 @@ import { TrialSession } from '../../../shared/src/business/entities/trialSession
 
 const errorMessages = TrialSession.VALIDATION_ERROR_MESSAGES;
 
-export default (test, overrides = {}) => {
+export const docketClerkCreatesATrialSession = (test, overrides = {}) => {
   return it('Docket clerk starts a trial session', async () => {
     await test.runSequence('gotoAddTrialSessionSequence');
 
