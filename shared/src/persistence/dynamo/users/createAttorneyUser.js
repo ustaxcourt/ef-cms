@@ -8,15 +8,13 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
     delete user.barNumber;
   }
 
-  if (user.section) {
-    await client.put({
-      Item: {
-        pk: `section|${user.section}`,
-        sk: `user|${userId}`,
-      },
-      applicationContext,
-    });
-  }
+  await client.put({
+    Item: {
+      pk: `section|${user.section}`,
+      sk: `user|${userId}`,
+    },
+    applicationContext,
+  });
 
   await client.put({
     Item: {
@@ -28,12 +26,7 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
     applicationContext,
   });
 
-  if (
-    (user.role === User.ROLES.practitioner ||
-      user.role === User.ROLES.respondent) &&
-    user.name &&
-    user.barNumber
-  ) {
+  if (user.name && user.barNumber) {
     await client.put({
       Item: {
         pk: `${user.role}|${user.name}`,
@@ -57,56 +50,65 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 };
 
 exports.createAttorneyUser = async ({ applicationContext, user }) => {
-  let userId;
+  let userId = applicationContext.getUniqueId();
 
-  try {
-    const response = await applicationContext
-      .getCognito()
-      .adminCreateUser({
-        UserAttributes: [
-          {
-            Name: 'email',
-            Value: user.email,
-          },
-          {
-            Name: 'custom:role',
-            Value: user.role,
-          },
-          {
-            Name: 'name',
-            Value: user.name,
-          },
-        ],
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: user.email,
-      })
-      .promise();
-    userId = response.User.Username;
-  } catch (err) {
-    // the user already exists
-    const response = await applicationContext
-      .getCognito()
-      .adminGetUser({
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: user.email,
-      })
-      .promise();
+  if (![User.ROLES.practitioner, User.ROLES.respondent].includes(user.role)) {
+    throw new Error(
+      'Attorney users must have either practitioner or respondent role',
+    );
+  }
 
-    await applicationContext
-      .getCognito()
-      .adminUpdateUserAttributes({
-        UserAttributes: [
-          {
-            Name: 'custom:role',
-            Value: user.role,
-          },
-        ],
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: response.Username,
-      })
-      .promise();
+  if (user.email) {
+    try {
+      const response = await applicationContext
+        .getCognito()
+        .adminCreateUser({
+          UserAttributes: [
+            {
+              Name: 'email',
+              Value: user.email,
+            },
+            {
+              Name: 'custom:role',
+              Value: user.role,
+            },
+            {
+              Name: 'name',
+              Value: user.name,
+            },
+          ],
+          UserPoolId: process.env.USER_POOL_ID,
+          Username: user.email,
+        })
+        .promise();
 
-    userId = response.Username;
+      if (response && response.User && response.User.Username) {
+        userId = response.User.Username;
+      }
+    } catch (err) {
+      // the user already exists
+      const response = await applicationContext
+        .getCognito()
+        .adminGetUser({
+          UserPoolId: process.env.USER_POOL_ID,
+          Username: user.email,
+        })
+        .promise();
+
+      await applicationContext
+        .getCognito()
+        .adminUpdateUserAttributes({
+          UserAttributes: [
+            {
+              Name: 'custom:role',
+              Value: user.role,
+            },
+          ],
+          UserPoolId: process.env.USER_POOL_ID,
+          Username: response.Username,
+        })
+        .promise();
+    }
   }
 
   return await exports.createUserRecords({

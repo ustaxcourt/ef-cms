@@ -5,7 +5,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const SearchByDocketNumber = connect(
+export const CaseSearchByDocketNumber = connect(
   {
     clearDocketNumberSearchFormSequence:
       sequences.clearDocketNumberSearchFormSequence,

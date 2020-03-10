@@ -1,4 +1,3 @@
-const AWS = require('aws-sdk');
 const client = require('../../dynamodbClientService');
 const { User } = require('../../../business/entities/User');
 
@@ -68,13 +67,11 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 };
 
 exports.createUser = async ({ applicationContext, user }) => {
-  const cognito = new AWS.CognitoIdentityServiceProvider({
-    region: 'us-east-1',
-  });
   let userId;
 
   try {
-    const response = await cognito
+    const response = await applicationContext
+      .getCognito()
       .adminCreateUser({
         MessageAction: 'SUPPRESS',
         TemporaryPassword: user.password,
@@ -103,14 +100,16 @@ exports.createUser = async ({ applicationContext, user }) => {
     userId = response.User.Username;
   } catch (err) {
     // the user already exists
-    const response = await cognito
+    const response = await applicationContext
+      .getCognito()
       .adminGetUser({
         UserPoolId: process.env.USER_POOL_ID,
         Username: user.email,
       })
       .promise();
 
-    await cognito
+    await applicationContext
+      .getCognito()
       .adminUpdateUserAttributes({
         UserAttributes: [
           {
