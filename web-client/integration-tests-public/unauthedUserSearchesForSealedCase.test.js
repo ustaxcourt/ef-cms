@@ -9,7 +9,7 @@ import {
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 
 // Public User
-import docketClerkSealsCase from '../integration-tests/journey/docketClerkSealsCase';
+import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSealsCase';
 import unauthedUserNavigatesToPublicSite from './journey/unauthedUserNavigatesToPublicSite';
 import unauthedUserSearchesForSealedCaseByName from './journey/unauthedUserSearchesForSealedCaseByName';
 import unauthedUserViewsCaseDetailForSealedCase from './journey/unauthedUserViewsCaseDetailForSealedCase';
