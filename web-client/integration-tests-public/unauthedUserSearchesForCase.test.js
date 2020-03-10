@@ -12,12 +12,12 @@ import petitionerCreatesNewCase from '../integration-tests/journey/petitionerCre
 import petitionerNavigatesToCreateCase from '../integration-tests/journey/petitionerCancelsCreateCase';
 
 // Docket clerk
-import docketClerkAddsDocketEntryFromOrderOfDismissal from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
-import docketClerkCreatesAnOrder from '../integration-tests/journey/docketClerkCreatesAnOrder';
-import docketClerkServesOrder from '../integration-tests/journey/docketClerkServesOrder';
+import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
+import { docketClerkAddsTranscriptDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsTranscriptDocketEntryFromOrder';
+import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
+import { docketClerkServesOrder } from '../integration-tests/journey/docketClerkServesOrder';
 
 // Public User
-import docketClerkAddsTranscriptDocketEntryFromOrder from '../integration-tests/journey/docketClerkAddsTranscriptDocketEntryFromOrder';
 import unauthedUserNavigatesToPublicSite from './journey/unauthedUserNavigatesToPublicSite';
 import unauthedUserSearchesByDocketNumber from './journey/unauthedUserSearchesByDocketNumber';
 import unauthedUserSearchesByMeta from './journey/unauthedUserSearchesByMeta';

@@ -2,12 +2,12 @@ import { Case } from '../../shared/src/business/entities/cases/Case';
 import { fakeFile, loginAs, setupTest } from './helpers';
 
 // docketClerk
-import docketClerkAddsDocketEntryFromOrder from './journey/docketClerkAddsDocketEntryFromOrder';
-import docketClerkCreatesAnOrder from './journey/docketClerkCreatesAnOrder';
-import docketClerkServesOrderWithPaperService from './journey/docketClerkServesOrderWithPaperService';
-import docketClerkViewsCaseDetailAfterServingCourtIssuedDocument from './journey/docketClerkViewsCaseDetailAfterServingCourtIssuedDocument';
-import docketClerkViewsCaseDetailForCourtIssuedDocketEntry from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
-import docketClerkViewsDraftOrder from './journey/docketClerkViewsDraftOrder';
+import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkServesOrderWithPaperService } from './journey/docketClerkServesOrderWithPaperService';
+import { docketClerkViewsCaseDetailAfterServingCourtIssuedDocument } from './journey/docketClerkViewsCaseDetailAfterServingCourtIssuedDocument';
+import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
+import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 // petitionsClerk
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
 

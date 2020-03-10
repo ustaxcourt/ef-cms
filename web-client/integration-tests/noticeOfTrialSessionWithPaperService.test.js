@@ -1,13 +1,12 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 
-import { loginAs, setupTest } from './helpers';
-import { uploadPetition } from './helpers';
-import captureCreatedCase from './journey/captureCreatedCase';
+import { captureCreatedCase } from './journey/captureCreatedCase';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 
-import docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
-import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
-import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
+import { docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring } from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
+import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
+import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 

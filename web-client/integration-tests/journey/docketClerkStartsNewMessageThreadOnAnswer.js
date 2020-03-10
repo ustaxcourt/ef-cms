@@ -2,7 +2,7 @@ import { InitialWorkItemMessage } from '../../../shared/src/business/entities/In
 
 const { VALIDATION_ERROR_MESSAGES } = InitialWorkItemMessage;
 
-export default test => {
+export const docketClerkStartsNewMessageThreadOnAnswer = test => {
   return it('Docket clerk starts a new message thread on the Answer document', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,

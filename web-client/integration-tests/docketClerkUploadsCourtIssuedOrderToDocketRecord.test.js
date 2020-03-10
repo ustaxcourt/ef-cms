@@ -1,11 +1,11 @@
 import { fakeFile, loginAs, setupTest } from './helpers';
 
 // docketClerk
-import docketClerkAddsDocketEntryFromDraft from './journey/docketClerkAddsDocketEntryFromDraft';
-import docketClerkEditsAnUploadedCourtIssuedDocument from './journey/docketClerkEditsAnUploadedCourtIssuedDocument';
-import docketClerkUploadsACourtIssuedDocument from './journey/docketClerkUploadsACourtIssuedDocument';
-import docketClerkViewsCaseDetailForCourtIssuedDocketEntry from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
-import docketClerkViewsDraftOrder from './journey/docketClerkViewsDraftOrder';
+import { docketClerkAddsDocketEntryFromDraft } from './journey/docketClerkAddsDocketEntryFromDraft';
+import { docketClerkEditsAnUploadedCourtIssuedDocument } from './journey/docketClerkEditsAnUploadedCourtIssuedDocument';
+import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
+import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
+import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 // petitionsClerk
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkViewsDraftOrder from './journey/petitionsClerkViewsDraftOrder';
