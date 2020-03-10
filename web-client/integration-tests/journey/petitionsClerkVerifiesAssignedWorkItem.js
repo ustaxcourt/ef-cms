@@ -4,11 +4,9 @@ export default test => {
       prev.createdAt < current.createdAt ? prev : current,
     );
 
-    const firstDocument = firstCase.documents.reduce((prev, current) =>
-      prev.createdAt < current.createdAt ? prev : current,
-    );
-
-    const { workItemId } = firstDocument.workItems.reduce((prev, current) =>
+    const {
+      workItemId,
+    } = firstCase.documents[0].workItems.reduce((prev, current) =>
       prev.createdAt < current.createdAt ? prev : current,
     );
 
