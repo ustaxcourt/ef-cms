@@ -355,9 +355,11 @@ export const uploadPetition = async (test, overrides = {}) => {
     )
     .then(response => response.data);
 
-  return await test.runSequence('gotoCaseDetailSequence', {
+  await test.runSequence('gotoCaseDetailSequence', {
     docketNumber: caseDetail.docketNumber,
   });
+
+  return test.getState('caseDetail');
 };
 
 export const loginAs = (test, user) => {
