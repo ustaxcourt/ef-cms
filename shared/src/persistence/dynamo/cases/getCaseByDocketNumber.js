@@ -2,6 +2,7 @@ const client = require('../../dynamodbClientService');
 const {
   getRecordViaMapping,
 } = require('../../dynamo/helpers/getRecordViaMapping');
+const { sortBy } = require('lodash');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 /**
@@ -80,10 +81,13 @@ exports.getCaseByDocketNumber = async ({
     applicationContext,
   });
 
+  const sortedDocketRecord = sortBy(docketRecord, 'index');
+  const sortedDocuments = sortBy(documents, 'createdAt');
+
   return {
     ...theCase,
-    docketRecord,
-    documents,
+    docketRecord: sortedDocketRecord,
+    documents: sortedDocuments,
     practitioners,
     respondents,
   };

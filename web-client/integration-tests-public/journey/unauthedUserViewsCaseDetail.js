@@ -68,13 +68,19 @@ export default test => {
     );
 
     expect(helper.formattedCaseDetail.documents.length).toEqual(4);
-    expect(helper.formattedCaseDetail.documents).toMatchObject([
-      {
-        documentType: 'Petition',
-      },
-      { documentType: 'Statement of Taxpayer Identification' },
-      { documentType: 'OD - Order of Dismissal Entered,' },
-      { documentType: 'TRAN - Transcript' },
-    ]);
+    expect(helper.formattedCaseDetail.documents).toEqual(
+      expect.arrayContaining([
+        expect.objectContaininng({
+          documentType: 'Petition',
+        }),
+        expect.objectContaininng({
+          documentType: 'Statement of Taxpayer Identification',
+        }),
+        expect.objectContaininng({
+          documentType: 'OD - Order of Dismissal Entered,',
+        }),
+        expect.objectContaininng({ documentType: 'TRAN - Transcript' }),
+      ]),
+    );
   });
 };
