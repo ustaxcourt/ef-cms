@@ -1,8 +1,8 @@
 exports.MOCK_USERS = {
   '330d4b65-620a-489d-8414-6623653ebc4f': {
     name: 'Practitioner',
-    role: 'practitioner',
-    section: 'practitioner',
+    role: 'privatePractitioner',
+    section: 'privatePractitioner',
     userId: '330d4b65-620a-489d-8414-6623653ebc4f',
   },
   'a7d90c05-f6cd-442c-a168-202db587f16f': {
@@ -38,8 +38,8 @@ exports.MOCK_USERS = {
   'f7d90c05-f6cd-442c-a168-202db587f16f': {
     contact: {},
     name: 'Respondent',
-    role: 'respondent',
-    section: 'respondent',
+    role: 'irsPractitioner',
+    section: 'irsPractitioner',
     userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
   },
   'g7d90c05-f6cd-442c-a168-202db587f16f': {

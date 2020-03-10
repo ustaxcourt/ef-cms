@@ -461,7 +461,7 @@
     "pk": "catalog"
   },
   {
-    "role": "respondent",
+    "role": "irsPractitioner",
     "serviceIndicator": "Electronic",
     "barNumber": "RT6789",
     "contact": {
@@ -474,11 +474,11 @@
       "state": "IL",
       "countryType": "domestic"
     },
-    "name": "Test Respondent",
-    "sk": "respondent|16ac4e12-fa10-43af-8c91-ac91338df892",
+    "name": "Test IRS Practitioner",
+    "sk": "irsPractitioner|16ac4e12-fa10-43af-8c91-ac91338df892",
     "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "respondent",
+    "email": "irsPractitioner",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InJlc3BvbmRlbnQiLCJlbWFpbCI6InJlc3BvbmRlbnQiLCJuYW1lIjoiVGVzdCBSZXNwb25kZW50Iiwicm9sZSI6InJlc3BvbmRlbnQiLCJzZWN0aW9uIjoicGV0aXRpb25zIiwidXNlcklkIjoicmVzcG9uZGVudCIsImlhdCI6MTU1MTQ4MDgzOH0.U72pP7ZEwQkQIzlhpKvaEdMbcQhCjSLQbp0FP06LKao"
   },
   {

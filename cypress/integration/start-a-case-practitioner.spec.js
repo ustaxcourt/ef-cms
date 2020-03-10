@@ -12,7 +12,7 @@ describe('Start a case as a practitioner ', () => {
   });
 
   it('go to the practitioner dashboard and expect that a case list table is displayed with 2 cases', () => {
-    navigateToDashboard('practitioner');
+    navigateToDashboard('privatePractitioner');
     getCaseList().should('have.length', 2);
   });
 

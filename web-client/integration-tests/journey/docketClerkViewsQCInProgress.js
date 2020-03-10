@@ -1,6 +1,4 @@
-import { wait } from '../helpers';
-
-export default (test, shouldExist) => {
+export const docketClerkViewsQCInProgress = (test, shouldExist) => {
   return it('Docket clerk views My Document QC - In Progress', async () => {
     await test.runSequence('gotoMessagesSequence');
     expect(test.getState('currentPage')).toEqual('Messages');

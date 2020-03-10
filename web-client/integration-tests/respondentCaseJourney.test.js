@@ -29,7 +29,7 @@ describe('Respondent requests access to a case', () => {
   petitionerCreatesNewCase(test, fakeFile);
   petitionerViewsDashboard(test);
 
-  loginAs(test, 'respondent');
+  loginAs(test, 'irsPractitioner');
   respondentSearchesForNonexistentCase(test);
   respondentViewsDashboard(test);
   respondentSearchesForCase(test);
@@ -39,7 +39,7 @@ describe('Respondent requests access to a case', () => {
   respondentViewsCaseDetailOfAssociatedCase(test);
   respondentFilesDocumentForAssociatedCase(test, fakeFile);
 
-  loginAs(test, 'respondent1');
+  loginAs(test, 'irsPractitioner1');
   respondentSearchesForCase(test);
   respondentViewsCaseDetailOfUnassociatedCase(test);
   respondentRequestsAccessToCase(test, fakeFile);

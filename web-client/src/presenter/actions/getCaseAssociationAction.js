@@ -16,7 +16,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   let isAssociated = false;
   let pendingAssociation = false;
 
-  if (user.role === USER_ROLES.practitioner) {
+  if (user.role === USER_ROLES.privatePractitioner) {
     const caseDetailPractitioners = get(state.caseDetail.practitioners);
     const caseId = get(state.caseDetail.caseId);
 
@@ -31,7 +31,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
           userId: user.userId,
         });
     }
-  } else if (user.role === USER_ROLES.respondent) {
+  } else if (user.role === USER_ROLES.irsPractitioner) {
     const caseDetailRespondents = get(state.caseDetail.respondents);
     isAssociated = some(caseDetailRespondents, { userId: user.userId });
   } else if (user.role === USER_ROLES.petitioner) {

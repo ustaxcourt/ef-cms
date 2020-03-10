@@ -1,4 +1,4 @@
-export default test => {
+export const docketClerkViewsNoticeOfChangeOfAddress = test => {
   return it('Docket clerk views Notice of Change of Address on the docket record', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {

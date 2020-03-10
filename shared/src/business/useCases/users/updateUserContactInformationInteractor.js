@@ -161,14 +161,14 @@ exports.updateUserContactInformationInteractor = async ({
         userId: user.userId,
       };
 
-      if (user.role === User.ROLES.practitioner) {
+      if (user.role === User.ROLES.privatePractitioner) {
         documentData.practitioner = [
           {
             name: user.name,
             partyPractitioner: true,
           },
         ];
-      } else if (user.role === User.ROLES.respondent) {
+      } else if (user.role === User.ROLES.irsPractitioner) {
         documentData.partyRespondent = true;
       }
 

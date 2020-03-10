@@ -132,10 +132,10 @@ You can log in using the following accounts.
 
 ```
 petitioner
-practitioner
-practitioner1 - practitioner4
-respondent
-respondent1 - respondent4
+privatePractitioner
+privatePractitioner1 - privatePractitioner4
+irsPractitioner
+irsPractitioner1 - irsPractitioner4
 ```
 
 #### Internal Users
@@ -169,8 +169,8 @@ To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm
 #### External Users
 ```
 petitioner1@example.com – petitioner5@example.com
-practitioner1@example.com – practitioner10@example.com
-respondent1@example.com – respondent10@example.com
+privatePractitioner1@example.com – privatePractitioner10@example.com
+irsPractitioner1@example.com – irsPractitioner10@example.com
 ```
 
 #### Internal Users

@@ -1,4 +1,7 @@
-export default (test, docketRecordIndex = 1) => {
+export const docketClerkNavigatesToEditDocketEntryMeta = (
+  test,
+  docketRecordIndex = 1,
+) => {
   it('the docketclerk navigates to page to edit docket entry meta', async () => {
     await test.runSequence('gotoEditDocketEntryMetaSequence', {
       docketNumber: test.docketNumber,

@@ -107,7 +107,7 @@ Case.FILING_TYPES = {
     'A business',
     'Other',
   ],
-  [User.ROLES.practitioner]: [
+  [User.ROLES.privatePractitioner]: [
     'Individual petitioner',
     'Petitioner and spouse',
     'A business',
@@ -496,7 +496,7 @@ joiValidationDecorator(
       .string()
       .valid(
         ...Case.FILING_TYPES[User.ROLES.petitioner],
-        ...Case.FILING_TYPES[User.ROLES.practitioner],
+        ...Case.FILING_TYPES[User.ROLES.privatePractitioner],
       )
       .optional(),
     hasIrsNotice: joi.boolean().optional(),
