@@ -1,4 +1,5 @@
 const { query } = require('../../dynamodbClientService');
+const { sortBy } = require('lodash');
 
 /**
  * getCaseDocuments
@@ -21,8 +22,10 @@ exports.getCaseDocuments = ({ applicationContext }) => async theCase => {
     applicationContext,
   });
 
+  const sortedDocuments = sortBy(documents, 'createdAt');
+
   return {
     ...theCase,
-    documents,
+    documents: sortedDocuments,
   };
 };
