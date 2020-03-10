@@ -1,10 +1,10 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
+import { captureCreatedCase } from './journey/captureCreatedCase';
+import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
+import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
+import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
+import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition, wait } from './helpers';
-import captureCreatedCase from './journey/captureCreatedCase';
-import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
-import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
-import docketClerkViewsNewTrialSession from './journey/docketClerkViewsNewTrialSession';
-import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';

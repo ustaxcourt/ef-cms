@@ -1,9 +1,9 @@
+import { captureCreatedCase } from './journey/captureCreatedCase';
+import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
+import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
+import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
+import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import captureCreatedCase from './journey/captureCreatedCase';
-import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
-import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
-import docketClerkViewsNewTrialSession from './journey/docketClerkViewsNewTrialSession';
-import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
@@ -14,7 +14,7 @@ const test = setupTest();
 
 describe('Trial Session Eligible Cases - Both small and regular cases get scheduled to the trial session that’s a hybrid session', () => {
   beforeAll(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(50000);
   });
 
   afterAll(() => {

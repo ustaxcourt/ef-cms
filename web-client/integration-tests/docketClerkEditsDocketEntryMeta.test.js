@@ -1,11 +1,11 @@
 import { fakeFile, loginAs, setupTest } from './helpers';
 
 // docketClerk
-import docketClerkChecksDocketEntryEditLink from './journey/docketClerkChecksDocketEntryEditLink';
-import docketClerkEditsDocketEntryMeta from './journey/docketClerkEditsDocketEntryMeta';
-import docketClerkNavigatesToEditDocketEntryMeta from './journey/docketClerkNavigatesToEditDocketEntryMeta';
-import docketClerkQCsDocketEntry from './journey/docketClerkQCsDocketEntry';
-import docketClerkVerifiesDocketEntryMetaUpdates from './journey/docketClerkVerifiesDocketEntryMetaUpdates';
+import { docketClerkChecksDocketEntryEditLink } from './journey/docketClerkChecksDocketEntryEditLink';
+import { docketClerkEditsDocketEntryMeta } from './journey/docketClerkEditsDocketEntryMeta';
+import { docketClerkNavigatesToEditDocketEntryMeta } from './journey/docketClerkNavigatesToEditDocketEntryMeta';
+import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
+import { docketClerkVerifiesDocketEntryMetaUpdates } from './journey/docketClerkVerifiesDocketEntryMetaUpdates';
 
 // petitioner
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';

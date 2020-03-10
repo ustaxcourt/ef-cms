@@ -1,4 +1,4 @@
-export default test => {
+export const docketClerkUpdatesCaseCaption = test => {
   return it('Docket clerk updates case caption', async () => {
     test.setState('caseDetail', {});
 

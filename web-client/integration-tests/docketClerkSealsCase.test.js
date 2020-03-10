@@ -3,7 +3,7 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { associatedUserAdvancedSearchForSealedCase } from './journey/associatedUserAdvancedSearchForSealedCase';
 import { associatedUserViewsCaseDetailForSealedCase } from './journey/associatedUserViewsCaseDetailForSealedCase';
-import docketClerkSealsCase from './journey/docketClerkSealsCase';
+import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import petitionsClerkAddsPractitionersToCase from './journey/petitionsClerkAddsPractitionersToCase';
 import petitionsClerkAddsRespondentsToCase from './journey/petitionsClerkAddsRespondentsToCase';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
@@ -51,20 +51,20 @@ describe('Docket Clerk seals a case', () => {
   loginAs(test, 'petitioner');
   associatedUserViewsCaseDetailForSealedCase(test);
 
-  loginAs(test, 'practitioner');
+  loginAs(test, 'privatePractitioner');
   associatedUserViewsCaseDetailForSealedCase(test);
   associatedUserAdvancedSearchForSealedCase(test);
 
-  loginAs(test, 'respondent');
+  loginAs(test, 'irsPractitioner');
   associatedUserViewsCaseDetailForSealedCase(test);
   associatedUserAdvancedSearchForSealedCase(test);
 
   //unassociated users
-  loginAs(test, 'practitioner3');
+  loginAs(test, 'privatePractitioner3');
   unassociatedUserViewsCaseDetailForSealedCase(test);
   unassociatedUserAdvancedSearchForSealedCase(test);
 
-  loginAs(test, 'respondent3');
+  loginAs(test, 'irsPractitioner3');
   unassociatedUserViewsCaseDetailForSealedCase(test);
   unassociatedUserAdvancedSearchForSealedCase(test);
 });

@@ -1,6 +1,6 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
+import { docketClerkViewsNoticeOfChangeOfAddress } from './journey/docketClerkViewsNoticeOfChangeOfAddress';
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import docketClerkViewsNoticeOfChangeOfAddress from './journey/docketClerkViewsNoticeOfChangeOfAddress';
 import petitionerEditsCasePrimaryContactAddress from './journey/petitionerEditsCasePrimaryContactAddress';
 import petitionerEditsCasePrimaryContactAddressAndPhone from './journey/petitionerEditsCasePrimaryContactAddressAndPhone';
 import petitionerEditsCasePrimaryContactPhone from './journey/petitionerEditsCasePrimaryContactPhone';

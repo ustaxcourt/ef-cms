@@ -1,5 +1,9 @@
 import { getFormattedMyOutbox } from '../helpers';
-export default (test, message) => {
+
+export const docketClerkVerifiesStipulatedDecisionExistsInOutbox = (
+  test,
+  message,
+) => {
   describe('Docket Clerk navigates to My Outbox', () => {
     it('navigates to outbox', async () => {
       await test.runSequence('navigateToPathSequence', {

@@ -90,4 +90,39 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       },
     ]);
   });
+
+  it('successfully returns the work item for a petitionsclerk', async () => {
+    user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '4b423e1f-4eb2-4011-a845-873b82bee0a8',
+    };
+
+    const result = await getDocumentQCServedForSectionInteractor({
+      applicationContext,
+      section: 'docket',
+    });
+
+    expect(result).toMatchObject([
+      {
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '101-18',
+        docketNumberSuffix: 'S',
+        document: { sentBy: 'petitioner' },
+        messages: [],
+        section: 'docket',
+        sentBy: 'docketclerk',
+      },
+      {
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '101-18',
+        docketNumberSuffix: 'S',
+        document: {
+          sentBy: 'petitioner',
+        },
+        messages: [],
+        section: 'irsBatchSection',
+        sentBy: 'docketclerk',
+      },
+    ]);
+  });
 });
