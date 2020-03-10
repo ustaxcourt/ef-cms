@@ -1,5 +1,5 @@
+import { chambersUserViewsDashboard } from './journey/chambersUserViewsDashboard';
 import { fakeFile, loginAs, setupTest } from './helpers';
-import chambersUserViewsDashboard from './journey/chambersUserViewsDashboard';
 
 import petitionerAddNewCaseToTestObj from './journey/petitionerAddNewCaseToTestObj';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';

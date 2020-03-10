@@ -1,15 +1,15 @@
 import { fakeFile, loginAs, setupTest } from './helpers';
 
 // docketClerk
-import docketClerkAddsDocketEntryFromOrder from './journey/docketClerkAddsDocketEntryFromOrder';
-import docketClerkAddsDocketEntryFromOrderOfDismissal from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
-import docketClerkCancelsAddDocketEntryFromOrder from './journey/docketClerkCancelsAddDocketEntryFromOrder';
-import docketClerkCreatesAnOrder from './journey/docketClerkCreatesAnOrder';
-import docketClerkServesOrder from './journey/docketClerkServesOrder';
-import docketClerkViewsCaseDetailAfterServingCourtIssuedDocument from './journey/docketClerkViewsCaseDetailAfterServingCourtIssuedDocument';
-import docketClerkViewsCaseDetailForCourtIssuedDocketEntry from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
-import docketClerkViewsDraftOrder from './journey/docketClerkViewsDraftOrder';
-import docketClerkViewsSavedCourtIssuedDocketEntryInProgress from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
+import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
+import { docketClerkCancelsAddDocketEntryFromOrder } from './journey/docketClerkCancelsAddDocketEntryFromOrder';
+import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkServesOrder } from './journey/docketClerkServesOrder';
+import { docketClerkViewsCaseDetailAfterServingCourtIssuedDocument } from './journey/docketClerkViewsCaseDetailAfterServingCourtIssuedDocument';
+import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
+import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
+import { docketClerkViewsSavedCourtIssuedDocketEntryInProgress } from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
 // petitionsClerk
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkViewsDraftOrder from './journey/petitionsClerkViewsDraftOrder';

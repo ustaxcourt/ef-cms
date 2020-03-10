@@ -1,6 +1,6 @@
 const { Case } = require('../../../shared/src/business/entities/cases/Case');
 
-export default test => {
+export const docketClerkSetsCaseReadyForTrial = test => {
   return it('Docket clerk sets a case ready for trial', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {

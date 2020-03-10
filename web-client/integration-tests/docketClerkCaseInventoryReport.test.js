@@ -1,12 +1,12 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
+import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
+import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import {
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
 } from './helpers';
-import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
-import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
 const test = setupTest();

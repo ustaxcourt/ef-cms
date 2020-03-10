@@ -5,7 +5,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
-export default test => {
+export const docketClerkDocketDashboard = test => {
   return it('Docket clerk docket work queue messages', async () => {
     let sectionOutboxWorkQueue;
     let answerWorkItem;

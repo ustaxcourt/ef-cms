@@ -1,5 +1,5 @@
+import { captureCreatedCase } from './journey/captureCreatedCase';
 import { fakeFile, loginAs, setupTest } from './helpers';
-import captureCreatedCase from './journey/captureCreatedCase';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
