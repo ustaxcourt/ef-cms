@@ -54,9 +54,13 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 exports.createAttorneyUser = async ({ applicationContext, user }) => {
   let userId = applicationContext.getUniqueId();
 
-  if (![User.ROLES.practitioner, User.ROLES.respondent].includes(user.role)) {
+  if (
+    ![User.ROLES.privatePractitioner, User.ROLES.irsPractitioner].includes(
+      user.role,
+    )
+  ) {
     throw new Error(
-      'Attorney users must have either practitioner or respondent role',
+      'Attorney users must have either private or IRS practitioner role',
     );
   }
 

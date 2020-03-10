@@ -17,7 +17,7 @@ describe('Practitioner', () => {
       },
       firstName: 'firstName',
       lastName: 'lastName',
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: 'petitioner',
     });
     expect(user.isValid()).toBeTruthy();
@@ -25,7 +25,7 @@ describe('Practitioner', () => {
 
   it('Creates an invalid', () => {
     const user = new Practitioner({
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
     });
     expect(user.isValid()).toBeFalsy();
   });

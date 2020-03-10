@@ -42,8 +42,8 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   });
 
   if (
-    (user.role === User.ROLES.practitioner ||
-      user.role === User.ROLES.respondent) &&
+    (user.role === User.ROLES.privatePractitioner ||
+      user.role === User.ROLES.irsPractitioner) &&
     user.name &&
     user.barNumber
   ) {

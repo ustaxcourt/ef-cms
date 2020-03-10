@@ -8,7 +8,7 @@ const basePractitioner = {
   email: 'practitioner1@example.com',
   name: 'Test Practitioner',
   representingPrimary: true,
-  role: User.ROLES.practitioner,
+  role: User.ROLES.privatePractitioner,
   serviceIndicator: 'Paper',
 };
 
@@ -16,7 +16,7 @@ const baseRespondent = {
   email: 'flexionustc+respondent@gmail.com',
   name: 'Test Respondent',
   respondentId: '123-abc-123-abc',
-  role: User.ROLES.respondent,
+  role: User.ROLES.irsPractitioner,
   serviceIndicator: 'Paper',
   userId: 'abc-123-abc-123',
 };

@@ -45,49 +45,123 @@ describe('createAttorneyUser', () => {
     };
   });
 
-  it('should not call cognito adminCreateUser for a practitioner user without email address', async () => {
-    const practitionerUser = {
+  it('persists a private practitioner user with name and barNumber mapping records but does not call cognito adminCreateUser if there is no email address', async () => {
+    const privatePractitionerUser = {
       barNumber: 'PT1234',
-      name: 'Test Practitioner',
-      role: User.ROLES.practitioner,
-      section: 'practitioner',
+      name: 'Test Private Practitioner',
+      role: User.ROLES.privatePractitioner,
+      section: 'privatePractitioner',
     };
+    await createUserRecords({
+      applicationContext,
+      user: privatePractitionerUser,
+      userId,
+    });
 
-    await createAttorneyUser({ applicationContext, user: practitionerUser });
+    expect(putStub.mock.calls[0][0]).toMatchObject({
+      Item: {
+        pk: 'privatePractitioner|user',
+        sk: userId,
+      },
+      TableName: 'efcms-dev',
+    });
+    expect(putStub.mock.calls[1][0]).toMatchObject({
+      Item: {
+        pk: userId,
+        sk: userId,
+        ...privatePractitionerUser,
+      },
+      TableName: 'efcms-dev',
+    });
+    expect(putStub.mock.calls[2][0]).toMatchObject({
+      Item: {
+        pk: 'Test Private Practitioner|privatePractitioner',
+        sk: userId,
+      },
+      TableName: 'efcms-dev',
+    });
+    expect(putStub.mock.calls[3][0]).toMatchObject({
+      Item: {
+        pk: 'PT1234|privatePractitioner',
+        sk: userId,
+      },
+      TableName: 'efcms-dev',
+    });
+  });
+
+  it('does not persist mapping records for practitioner without barNumber', async () => {
+    const privatePractitionerUser = {
+      barNumber: '',
+      name: 'Test Private Practitioner',
+      role: User.ROLES.privatePractitioner,
+      section: 'privatePractitioner',
+    };
+    await createUserRecords({
+      applicationContext,
+      user: privatePractitionerUser,
+      userId,
+    });
+
+    expect(putStub.mock.calls[0][0]).toMatchObject({
+      Item: {
+        pk: 'privatePractitioner|user',
+        sk: userId,
+      },
+      TableName: 'efcms-dev',
+    });
+    expect(putStub.mock.calls[1][0]).toMatchObject({
+      Item: {
+        pk: userId,
+        sk: userId,
+        ...privatePractitionerUser,
+      },
+      TableName: 'efcms-dev',
+    });
+
+    await createAttorneyUser({
+      applicationContext,
+      user: privatePractitionerUser,
+    });
     expect(adminCreateUserStub).not.toBeCalled();
     expect(adminGetUserStub).not.toBeCalled();
     expect(adminUpdateUserAttributesStub).not.toBeCalled();
   });
 
-  it('should call cognito adminCreateUser for a practitioner user with email address', async () => {
-    const practitionerUser = {
+  it('should call cognito adminCreateUser for a private practitioner user with email address', async () => {
+    const privatePractitionerUser = {
       barNumber: 'PT1234',
       email: 'test@example.com',
-      name: 'Test Practitioner',
-      role: User.ROLES.practitioner,
-      section: 'practitioner',
+      name: 'Test Private Practitioner',
+      role: User.ROLES.privatePractitioner,
+      section: 'privatePractitioner',
     };
 
-    await createAttorneyUser({ applicationContext, user: practitionerUser });
+    await createAttorneyUser({
+      applicationContext,
+      user: privatePractitionerUser,
+    });
     expect(adminCreateUserStub).toBeCalled();
     expect(adminGetUserStub).not.toBeCalled();
     expect(adminUpdateUserAttributesStub).not.toBeCalled();
   });
 
-  it('should call cognito adminCreateUser for a practitioner user with email address and use a random uniqueId if the response does not contain a username (for local testing)', async () => {
+  it('should call cognito adminCreateUser for a private practitioner user with email address and use a random uniqueId if the response does not contain a username (for local testing)', async () => {
     adminCreateUserStub = jest.fn().mockReturnValue({
       promise: async () => ({}),
     });
 
-    const practitionerUser = {
+    const privatePractitionerUser = {
       barNumber: 'PT1234',
       email: 'test@example.com',
-      name: 'Test Practitioner',
-      role: User.ROLES.practitioner,
-      section: 'practitioner',
+      name: 'Test Private Practitioner',
+      role: User.ROLES.privatePractitioner,
+      section: 'privatePractitioner',
     };
 
-    await createAttorneyUser({ applicationContext, user: practitionerUser });
+    await createAttorneyUser({
+      applicationContext,
+      user: privatePractitionerUser,
+    });
     expect(adminCreateUserStub).toBeCalled();
     expect(adminGetUserStub).not.toBeCalled();
     expect(adminUpdateUserAttributesStub).not.toBeCalled();
@@ -98,21 +172,24 @@ describe('createAttorneyUser', () => {
       throw new Error('bad!');
     });
 
-    const practitionerUser = {
+    const privatePractitionerUser = {
       barNumber: 'PT1234',
       email: 'test@example.com',
-      name: 'Test Practitioner',
-      role: User.ROLES.practitioner,
-      section: 'practitioner',
+      name: 'Test Private Practitioner',
+      role: User.ROLES.privatePractitioner,
+      section: 'privatePractitioner',
     };
 
-    await createAttorneyUser({ applicationContext, user: practitionerUser });
+    await createAttorneyUser({
+      applicationContext,
+      user: privatePractitionerUser,
+    });
     expect(adminCreateUserStub).toBeCalled();
     expect(adminGetUserStub).toBeCalled();
     expect(adminUpdateUserAttributesStub).toBeCalled();
   });
 
-  it('should throw an error when attempting to create a user that is not role practitioner or respondent', async () => {
+  it('should throw an error when attempting to create a user that is not role private or IRS practitioner', async () => {
     const otherUser = {
       barNumber: 'PT1234',
       email: 'test@example.com',
@@ -124,28 +201,28 @@ describe('createAttorneyUser', () => {
     await expect(
       createAttorneyUser({ applicationContext, user: otherUser }),
     ).rejects.toThrow(
-      'Attorney users must have either practitioner or respondent role',
+      'Attorney users must have either private or IRS practitioner role',
     );
   });
 
   describe('createUserRecords', () => {
-    it('attempts to persist a practitioner user with name and barNumber mapping records', async () => {
-      const practitionerUser = {
+    it('attempts to persist a private practitioner user with name and barNumber mapping records', async () => {
+      const privatePractitionerUser = {
         barNumber: 'PT1234',
-        name: 'Test Practitioner',
-        role: User.ROLES.practitioner,
-        section: 'practitioner',
+        name: 'Test Private Practitioner',
+        role: User.ROLES.privatePractitioner,
+        section: 'privatePractitioner',
       };
       await createUserRecords({
         applicationContext,
-        user: practitionerUser,
+        user: privatePractitionerUser,
         userId,
       });
 
       expect(putStub.mock.calls.length).toBe(4);
       expect(putStub.mock.calls[0][0]).toMatchObject({
         Item: {
-          pk: 'practitioner|user',
+          pk: 'privatePractitioner|user',
           sk: userId,
         },
         TableName: 'efcms-dev',
@@ -154,43 +231,43 @@ describe('createAttorneyUser', () => {
         Item: {
           pk: userId,
           sk: userId,
-          ...practitionerUser,
+          ...privatePractitionerUser,
         },
         TableName: 'efcms-dev',
       });
       expect(putStub.mock.calls[2][0]).toMatchObject({
         Item: {
-          pk: 'Test Practitioner|practitioner',
+          pk: 'Test Private Practitioner|privatePractitioner',
           sk: userId,
         },
         TableName: 'efcms-dev',
       });
       expect(putStub.mock.calls[3][0]).toMatchObject({
         Item: {
-          pk: 'PT1234|practitioner',
+          pk: 'PT1234|privatePractitioner',
           sk: userId,
         },
         TableName: 'efcms-dev',
       });
     });
 
-    it('does not persist mapping records for practitioner without barNumber', async () => {
-      const practitionerUser = {
+    it('does not persist mapping records for private practitioner without barNumber', async () => {
+      const privatePractitionerUser = {
         barNumber: '',
-        name: 'Test Practitioner',
-        role: User.ROLES.practitioner,
-        section: 'practitioner',
+        name: 'Test Private Practitioner',
+        role: User.ROLES.privatePractitioner,
+        section: 'privatePractitioner',
       };
       await createUserRecords({
         applicationContext,
-        user: practitionerUser,
+        user: privatePractitionerUser,
         userId,
       });
 
       expect(putStub.mock.calls.length).toBe(2);
       expect(putStub.mock.calls[0][0]).toMatchObject({
         Item: {
-          pk: 'practitioner|user',
+          pk: 'privatePractitioner|user',
           sk: userId,
         },
         TableName: 'efcms-dev',
@@ -199,7 +276,7 @@ describe('createAttorneyUser', () => {
         Item: {
           pk: userId,
           sk: userId,
-          ...practitionerUser,
+          ...privatePractitionerUser,
         },
         TableName: 'efcms-dev',
       });

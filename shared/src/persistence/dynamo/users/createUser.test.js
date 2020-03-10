@@ -73,6 +73,50 @@ describe('createUser', () => {
     expect(adminUpdateUserAttributesStub).toBeCalled();
   });
 
+  it('attempts to persist a private practitioner user with name and barNumber mapping records', async () => {
+    const privatePractitionerUser = {
+      barNumber: 'PT1234',
+      name: 'Test Private Practitioner',
+      role: User.ROLES.privatePractitioner,
+      section: 'privatePractitioner',
+    };
+    await createUserRecords({
+      applicationContext,
+      user: privatePractitionerUser,
+      userId,
+    });
+
+    expect(putStub.mock.calls[0][0]).toMatchObject({
+      Item: {
+        pk: 'privatePractitioner|user',
+        sk: userId,
+      },
+      TableName: 'efcms-dev',
+    });
+    expect(putStub.mock.calls[1][0]).toMatchObject({
+      Item: {
+        pk: userId,
+        sk: userId,
+        ...privatePractitionerUser,
+      },
+      TableName: 'efcms-dev',
+    });
+    expect(putStub.mock.calls[2][0]).toMatchObject({
+      Item: {
+        pk: 'Test Private Practitioner|privatePractitioner',
+        sk: userId,
+      },
+      TableName: 'efcms-dev',
+    });
+    expect(putStub.mock.calls[3][0]).toMatchObject({
+      Item: {
+        pk: 'PT1234|privatePractitioner',
+        sk: userId,
+      },
+      TableName: 'efcms-dev',
+    });
+  });
+
   describe('createUserRecords', () => {
     it('attempts to persist a petitionsclerk user with a section mapping record', async () => {
       const petitionsclerkUser = {
@@ -141,23 +185,22 @@ describe('createUser', () => {
       });
     });
 
-    it('attempts to persist a practitioner user with name and barNumber mapping records', async () => {
-      const practitionerUser = {
-        barNumber: 'PT1234',
-        name: 'Test Practitioner',
-        role: User.ROLES.practitioner,
-        section: 'practitioner',
+    it('does not persist mapping records for practitioner without barNumber', async () => {
+      const privatePractitionerUser = {
+        barNumber: '',
+        name: 'Test Private Practitioner',
+        role: User.ROLES.privatePractitioner,
+        section: 'privatePractitioner',
       };
       await createUserRecords({
         applicationContext,
-        user: practitionerUser,
+        user: privatePractitionerUser,
         userId,
       });
 
-      expect(putStub.mock.calls.length).toBe(4);
       expect(putStub.mock.calls[0][0]).toMatchObject({
         Item: {
-          pk: 'practitioner|user',
+          pk: 'privatePractitioner|user',
           sk: userId,
         },
         TableName: 'efcms-dev',
@@ -166,20 +209,51 @@ describe('createUser', () => {
         Item: {
           pk: userId,
           sk: userId,
-          ...practitionerUser,
+          ...privatePractitionerUser,
+        },
+        TableName: 'efcms-dev',
+      });
+    });
+
+    it('attempts to persist a private practitioner user with name and barNumber mapping records', async () => {
+      const privatePractitionerUser = {
+        barNumber: 'PT1234',
+        name: 'Test Private Practitioner',
+        role: User.ROLES.privatePractitioner,
+        section: 'privatePractitioner',
+      };
+      await createUserRecords({
+        applicationContext,
+        user: privatePractitionerUser,
+        userId,
+      });
+
+      expect(putStub.mock.calls.length).toBe(4);
+      expect(putStub.mock.calls[0][0]).toMatchObject({
+        Item: {
+          pk: 'privatePractitioner|user',
+          sk: userId,
+        },
+        TableName: 'efcms-dev',
+      });
+      expect(putStub.mock.calls[1][0]).toMatchObject({
+        Item: {
+          pk: userId,
+          sk: userId,
+          ...privatePractitionerUser,
         },
         TableName: 'efcms-dev',
       });
       expect(putStub.mock.calls[2][0]).toMatchObject({
         Item: {
-          pk: 'Test Practitioner|practitioner',
+          pk: 'Test Private Practitioner|privatePractitioner',
           sk: userId,
         },
         TableName: 'efcms-dev',
       });
       expect(putStub.mock.calls[3][0]).toMatchObject({
         Item: {
-          pk: 'PT1234|practitioner',
+          pk: 'PT1234|privatePractitioner',
           sk: userId,
         },
         TableName: 'efcms-dev',
@@ -187,22 +261,22 @@ describe('createUser', () => {
     });
 
     it('does not persist mapping records for practitioner without barNumber', async () => {
-      const practitionerUser = {
+      const privatePractitionerUser = {
         barNumber: '',
-        name: 'Test Practitioner',
-        role: User.ROLES.practitioner,
-        section: 'practitioner',
+        name: 'Test Private Practitioner',
+        role: User.ROLES.privatePractitioner,
+        section: 'privatePractitioner',
       };
       await createUserRecords({
         applicationContext,
-        user: practitionerUser,
+        user: privatePractitionerUser,
         userId,
       });
 
       expect(putStub.mock.calls.length).toBe(2);
       expect(putStub.mock.calls[0][0]).toMatchObject({
         Item: {
-          pk: 'practitioner|user',
+          pk: 'privatePractitioner|user',
           sk: userId,
         },
         TableName: 'efcms-dev',
@@ -211,20 +285,20 @@ describe('createUser', () => {
         Item: {
           pk: userId,
           sk: userId,
-          ...practitionerUser,
+          ...privatePractitionerUser,
         },
         TableName: 'efcms-dev',
       });
     });
 
     it('does not persist section mapping record if user does not have a section', async () => {
-      const practitionerUser = {
-        name: 'Test Practitioner',
-        role: User.ROLES.practitioner,
+      const privatePractitionerUser = {
+        name: 'Test Private Practitioner',
+        role: User.ROLES.privatePractitioner,
       };
       await createUserRecords({
         applicationContext,
-        user: practitionerUser,
+        user: privatePractitionerUser,
         userId,
       });
 
@@ -233,7 +307,7 @@ describe('createUser', () => {
         Item: {
           pk: userId,
           sk: userId,
-          ...practitionerUser,
+          ...privatePractitionerUser,
         },
         TableName: 'efcms-dev',
       });

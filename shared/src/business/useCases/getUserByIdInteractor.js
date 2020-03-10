@@ -22,7 +22,11 @@ exports.getUserByIdInteractor = async ({ applicationContext, userId }) => {
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
 
-  if (![User.ROLES.practitioner, User.ROLES.respondent].includes(user.role)) {
+  if (
+    ![User.ROLES.privatePractitioner, User.ROLES.irsPractitioner].includes(
+      user.role,
+    )
+  ) {
     throw new UnauthorizedError(
       'Unauthorized to retrieve users other than attorneys',
     );
