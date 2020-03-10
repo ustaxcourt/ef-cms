@@ -23,6 +23,8 @@ describe('Petitions Clerk Document QC Journey', () => {
     jest.setTimeout(30000);
   });
 
+  test.petitionerNewCases = [];
+
   const caseCreationCount = 3;
 
   loginAs(test, 'petitionsclerk');

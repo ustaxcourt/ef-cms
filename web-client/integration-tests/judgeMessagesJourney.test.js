@@ -20,6 +20,8 @@ describe('Judge messages journey', () => {
     jest.setTimeout(30000);
   });
 
+  test.petitionerNewCases = [];
+
   loginAs(test, 'petitioner');
   petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test);
