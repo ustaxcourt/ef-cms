@@ -69,7 +69,7 @@ export const ReviewSavedPetition = connect(
           </Focus>
 
           {reviewSavedPetitionHelper.hasOrders && (
-            <OrdersNeededSummary data={caseDetail} />
+            <OrdersNeededSummary caseInformation={caseDetail} />
           )}
 
           <div className="grid-container padding-x-0 create-case-review">

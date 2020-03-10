@@ -9,7 +9,7 @@ describe('deleteUserOutboxRecord', () => {
     });
   });
 
-  it('deletes user outbox record', async () => {
+  it('invokes the persistence layer with pk of user-outbox|${userId} and sk of createdAt', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',
@@ -20,14 +20,14 @@ describe('deleteUserOutboxRecord', () => {
     };
     await deleteUserOutboxRecord({
       applicationContext,
-      createdAt: 'sometime',
-      userId: 'user-123',
+      createdAt: '2020-01-02T16:05:45.979Z',
+      userId: '91414cfb-4fc9-440d-be07-a601e676fb6c',
     });
 
     expect(deleteStub.mock.calls[0][0]).toMatchObject({
       Key: {
-        pk: 'user-outbox|user-123',
-        sk: 'sometime',
+        pk: 'user-outbox|91414cfb-4fc9-440d-be07-a601e676fb6c',
+        sk: '2020-01-02T16:05:45.979Z',
       },
     });
   });

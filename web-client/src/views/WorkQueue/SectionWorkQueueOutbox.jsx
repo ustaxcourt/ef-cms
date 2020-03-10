@@ -26,6 +26,7 @@ export const SectionWorkQueueOutbox = connect(
               {workQueueHelper.showSentColumn && <th>Sent</th>}
               <th>Case title</th>
               <th>Document</th>
+              <th>Processed by</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
               {!workQueueHelper.hideCaseStatusColumn && <th>Case status</th>}
               {workQueueHelper.showMessagesSentFromColumn && <th>From</th>}
@@ -79,6 +80,7 @@ export const SectionWorkQueueOutbox = connect(
                     </div>
                   )}
                 </td>
+                <td className="message-queue-row">{item.sentBy}</td>
                 {!workQueueHelper.hideFiledByColumn && (
                   <td className="message-queue-row">{item.document.filedBy}</td>
                 )}

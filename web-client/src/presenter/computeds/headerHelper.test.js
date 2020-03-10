@@ -193,34 +193,4 @@ describe('headerHelper', () => {
     });
     expect(result.pageIsReports).toBeTruthy();
   });
-
-  it('should show the Create Attorney menu item when the user has the MANAGE_ATTORNEY_USERS permission', () => {
-    const result = runCompute(headerHelper, {
-      state: {
-        ...getBaseState({ role: User.ROLES.petitionsClerk }), // petitionsClerk has MANAGE_ATTORNEY_USERS
-        currentPage: 'CreateAttorneyUser',
-      },
-    });
-    expect(result.showCreateAttorney).toBeTruthy();
-  });
-
-  it('should NOT show the Create Attorney menu item when the user does not have the MANAGE_ATTORNEY_USERS permission', () => {
-    const result = runCompute(headerHelper, {
-      state: {
-        ...getBaseState({ role: User.ROLES.petitioner }), // petitioner does not have MANAGE_ATTORNEY_USERS
-        currentPage: 'CreateAttorneyUser',
-      },
-    });
-    expect(result.showCreateAttorney).toBeFalsy();
-  });
-
-  it('should show border under Create Attorney tab when page is CreateAttorneyUser', () => {
-    const result = runCompute(headerHelper, {
-      state: {
-        ...getBaseState({ role: User.ROLES.petitionsClerk }),
-        currentPage: 'CreateAttorneyUser',
-      },
-    });
-    expect(result.pageIsCreateAttorney).toBeTruthy();
-  });
 });
