@@ -307,7 +307,11 @@ export const forwardWorkItem = async (test, to, workItemId, message) => {
   });
 };
 
-export const uploadPetition = async (test, overrides = {}) => {
+export const uploadPetition = async (
+  test,
+  overrides = {},
+  loginUsername = 'petitioner',
+) => {
   const petitionMetadata = {
     caseType: overrides.caseType || 'CDP (Lien/Levy)',
     contactPrimary: {
@@ -334,8 +338,8 @@ export const uploadPetition = async (test, overrides = {}) => {
 
   //create token
   const user = {
-    ...userMap['petitioner'],
-    sub: userMap['petitioner'].userId,
+    ...userMap[loginUsername],
+    sub: userMap[loginUsername].userId,
   };
   const petitionerToken = jwt.sign(user, 'secret');
 
