@@ -126,6 +126,7 @@ import { gotoSignPDFDocumentSequence } from './sequences/gotoSignPDFDocumentSequ
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDetailSequence';
+import { gotoTrialSessionPlanningReportSequence } from './sequences/gotoTrialSessionPlanningReportSequence';
 import { gotoTrialSessionWorkingCopySequence } from './sequences/gotoTrialSessionWorkingCopySequence';
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
 import { gotoUploadCourtIssuedDocumentSequence } from './sequences/gotoUploadCourtIssuedDocumentSequence';
@@ -509,6 +510,7 @@ export const presenter = {
     gotoStartCaseWizardSequence,
     gotoStyleGuideSequence,
     gotoTrialSessionDetailSequence,
+    gotoTrialSessionPlanningReportSequence,
     gotoTrialSessionWorkingCopySequence,
     gotoTrialSessionsSequence,
     gotoUploadCourtIssuedDocumentSequence,

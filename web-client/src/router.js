@@ -637,6 +637,14 @@ const router = {
     );
 
     route(
+      '/trial-session-planning-report',
+      ifHasAccess(() => {
+        setPageTitle('Trial session planning report');
+        app.getSequence('gotoTrialSessionPlanningReportSequence')();
+      }),
+    );
+
+    route(
       '/trial-sessions..',
       ifHasAccess(() => {
         const trialSessionFilter = {};

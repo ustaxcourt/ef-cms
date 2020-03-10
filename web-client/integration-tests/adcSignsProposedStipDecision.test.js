@@ -3,10 +3,10 @@ require('isomorphic-fetch');
 import { fakeFile, loginAs, setupTest } from './helpers';
 
 // docketclerk
-import docketClerkSendsStipDecisionToADC from './journey/docketClerkSendsStipDecisionToADC';
-import docketClerkVerifiesStipulatedDecisionExistsInInbox from './journey/docketClerkVerifiesStipulatedDecisionExistsInInbox';
-import docketClerkVerifiesStipulatedDecisionExistsInOutbox from './journey/docketClerkVerifiesStipulatedDecisionExistsInOutbox';
-import docketClerkViewsStipulatedDecision from './journey/docketClerkViewsStipulatedDecision';
+import { docketClerkSendsStipDecisionToADC } from './journey/docketClerkSendsStipDecisionToADC';
+import { docketClerkVerifiesStipulatedDecisionExistsInInbox } from './journey/docketClerkVerifiesStipulatedDecisionExistsInInbox';
+import { docketClerkVerifiesStipulatedDecisionExistsInOutbox } from './journey/docketClerkVerifiesStipulatedDecisionExistsInOutbox';
+import { docketClerkViewsStipulatedDecision } from './journey/docketClerkViewsStipulatedDecision';
 
 // practitioner
 import practitionerFilesDocumentForStipulatedDecision from './journey/practitionerFilesDocumentForStipulatedDecision';
