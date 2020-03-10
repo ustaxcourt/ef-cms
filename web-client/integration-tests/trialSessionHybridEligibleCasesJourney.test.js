@@ -14,7 +14,7 @@ const test = setupTest();
 
 describe('Trial Session Eligible Cases - Both small and regular cases get scheduled to the trial session that’s a hybrid session', () => {
   beforeAll(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(50000);
   });
 
   afterAll(() => {
