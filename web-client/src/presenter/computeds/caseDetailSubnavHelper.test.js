@@ -74,7 +74,7 @@ describe('caseDetailSubnavHelper', () => {
 
   it('should not show case information tab if user is external and not associated with the case', () => {
     const user = {
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
       userId: '123',
     };
     const result = runCompute(caseDetailSubnavHelper, {

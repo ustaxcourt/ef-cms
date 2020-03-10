@@ -36,7 +36,7 @@ describe('Modify Respondent Contact Information', () => {
     });
   }
 
-  loginAs(test, 'respondent');
+  loginAs(test, 'irsPractitioner');
   respondentUpdatesAddress(test);
   for (let i = 0; i < 3; i++) {
     respondentViewsCaseDetailNoticeOfChangeOfAddress(test, i);

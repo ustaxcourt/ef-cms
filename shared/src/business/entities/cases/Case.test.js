@@ -1042,7 +1042,7 @@ describe('Case entity', () => {
     });
 
     it('returns the filing types for user role practitioner', () => {
-      const filingTypes = Case.getFilingTypes(User.ROLES.practitioner);
+      const filingTypes = Case.getFilingTypes(User.ROLES.privatePractitioner);
       expect(filingTypes).not.toBeNull();
       expect(filingTypes.length).toEqual(4);
       expect(filingTypes[0]).toEqual('Individual petitioner');

@@ -36,7 +36,7 @@ describe('validateAttorneyUserAction', () => {
           },
           email: 'test@example.com',
           name: 'Test Attorney',
-          role: 'practitioner',
+          role: 'privatePractitioner',
         },
       },
     });
@@ -62,7 +62,7 @@ describe('validateAttorneyUserAction', () => {
           },
           email: 'test@example.com',
           name: 'Test Attorney',
-          role: 'practitioner',
+          role: 'privatePractitioner',
         },
       },
     });
@@ -86,7 +86,7 @@ describe('validateAttorneyUserAction', () => {
             postalCode: '12345',
           },
           email: 'test@example.com',
-          role: 'practitioner',
+          role: 'privatePractitioner',
         },
       },
     });
@@ -110,7 +110,7 @@ describe('validateAttorneyUserAction', () => {
           },
           email: 'test@example.com',
           name: 'Test Attorney',
-          role: 'practitioner',
+          role: 'privatePractitioner',
         },
       },
     });
@@ -135,7 +135,7 @@ describe('validateAttorneyUserAction', () => {
             state: 'ST',
           },
           name: 'Test Attorney',
-          role: 'practitioner',
+          role: 'privatePractitioner',
         },
       },
     });
@@ -185,7 +185,7 @@ describe('validateAttorneyUserAction', () => {
           },
           email: 'test@example.com',
           name: 'Test Attorney',
-          role: 'practitioner',
+          role: 'privatePractitioner',
         },
       },
     });
@@ -210,7 +210,7 @@ describe('validateAttorneyUserAction', () => {
           },
           email: 'test@example.com',
           name: 'Test Attorney',
-          role: 'practitioner',
+          role: 'privatePractitioner',
         },
       },
     });

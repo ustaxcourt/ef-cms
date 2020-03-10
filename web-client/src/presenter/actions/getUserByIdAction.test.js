@@ -5,7 +5,7 @@ import { runAction } from 'cerebral/test';
 presenter.providers.applicationContext = {
   getUseCases: () => ({
     getUserByIdInteractor: () => ({
-      role: 'practitioner',
+      role: 'privatePractitioner',
       userId: '123',
     }),
   }),
@@ -23,7 +23,7 @@ describe('getUserByIdAction', () => {
     });
 
     expect(results.output.user).toEqual({
-      role: 'practitioner',
+      role: 'privatePractitioner',
       userId: '123',
     });
   });

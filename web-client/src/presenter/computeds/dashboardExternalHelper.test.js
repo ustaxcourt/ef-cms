@@ -36,9 +36,9 @@ describe('petitioner dashboard helper', () => {
     expect(result.showWhatToExpect).toEqual(false);
     expect(result.showCaseSearch).toEqual(false);
   });
-  it('shows case search if defined user has practitioner role', () => {
+  it('shows case search if defined user has privatePractitioner role', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
@@ -50,9 +50,9 @@ describe('petitioner dashboard helper', () => {
     expect(result.showCaseSearch).toEqual(true);
   });
 
-  it('shows case search if defined user has respondent role', () => {
+  it('shows case search if defined user has irsPractitioner role', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
@@ -64,7 +64,7 @@ describe('petitioner dashboard helper', () => {
     expect(result.showCaseSearch).toEqual(true);
   });
 
-  it('hides case search if defined user does not have practitioner or respondent role', () => {
+  it('hides case search if defined user does not have privatePractitioner or irsPractitioner role', () => {
     applicationContext.getCurrentUser = () => ({
       role: User.ROLES.petitionsClerk,
     });

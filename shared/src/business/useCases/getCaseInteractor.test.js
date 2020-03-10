@@ -166,7 +166,7 @@ describe('Get case', () => {
     let user;
     beforeEach(() => {
       user = {
-        role: User.ROLES.practitioner,
+        role: User.ROLES.privatePractitioner,
         userId: 'practitioner2',
       };
       applicationContext = {

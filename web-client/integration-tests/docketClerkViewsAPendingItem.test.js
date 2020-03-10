@@ -55,7 +55,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
   });
 
-  loginAs(test, 'respondent');
+  loginAs(test, 'irsPractitioner');
   it('respondent uploads a proposed stipulated decision', async () => {
     await viewCaseDetail({
       docketNumber: caseDetail.docketNumber,
