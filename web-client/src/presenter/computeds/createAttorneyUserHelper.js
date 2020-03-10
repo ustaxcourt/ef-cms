@@ -2,10 +2,10 @@ export const createAttorneyUserHelper = (get, applicationContext) => {
   const { USER_ROLES } = applicationContext.getConstants();
 
   const roles = [
-    USER_ROLES.practitioner,
-    USER_ROLES.respondent,
+    USER_ROLES.privatePractitioner,
+    USER_ROLES.irsPractitioner,
     USER_ROLES.inactivePractitioner,
-    USER_ROLES.inactiveRespondent,
+    USER_ROLES.inactivePractitioner,
   ];
 
   return {

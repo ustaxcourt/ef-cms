@@ -5,7 +5,7 @@ const {
 describe('Filing an Answer', function() {
   before(() => {
     cy.task('seed');
-    cy.login('respondent', '/case-detail/102-19');
+    cy.login('irsPractitioner', '/case-detail/102-19');
   });
 
   it('should have a file first IRS document button', () => {
@@ -45,7 +45,7 @@ describe('Filing an Answer', function() {
   });
 
   it('reflects changes to 102-19 by showing it in respondent case list', () => {
-    navigateToDashboard('respondent');
+    navigateToDashboard('irsPractitioner');
     cy.get('table#case-list')
       .find('a')
       .should('contain', '102-19');

@@ -253,7 +253,7 @@
     "preferredTrialCity": "Las Vegas, Nevada",
     "respondents": [
       {
-        "role": "respondent",
+        "role": "irsPractitioner",
         "serviceIndicator": "Electronic",
         "barNumber": "RT6789",
         "contact": {
@@ -267,18 +267,18 @@
           "state": "IL"
         },
         "sk": "5805d1ab-18d0-43ec-bafb-654e83405416",
-        "name": "Test Respondent",
-        "section": "respondent",
+        "name": "Test IRS Practitioner",
+        "section": "irsPractitioner",
         "pk": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-        "email": "respondent"
+        "email": "irsPractitioner"
       }
     ],
     "practitioners": [
       {
         "serviceIndicator": "Electronic",
-        "role": "practitioner",
-        "section": "practitioner",
+        "role": "privatePractitioner",
+        "section": "privatePractitioner",
         "representingPrimary": true,
         "contact": {
           "address1": "234 Main St",
@@ -293,9 +293,9 @@
         "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "barNumber": "PT1234",
         "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "name": "Test Practitioner",
+        "name": "Test Private Practitioner",
         "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "email": "practitioner"
+        "email": "privatePractitioner"
       }
     ],
     "orderForAmendedPetitionAndFilingFee": false,

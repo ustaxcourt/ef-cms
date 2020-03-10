@@ -17,7 +17,7 @@ describe('associatePractitionerToCase', () => {
 
   const practitionerUser = {
     name: 'Olivia Jade',
-    role: User.ROLES.practitioner,
+    role: User.ROLES.privatePractitioner,
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 

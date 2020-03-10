@@ -1,5 +1,5 @@
+import { docketClerkCreatesMessageToJudge } from './journey/docketClerkCreatesMessageToJudge';
 import { fakeFile, loginAs, setupTest } from './helpers';
-import docketClerkCreatesMessageToJudge from './journey/docketClerkCreatesMessageToJudge';
 import judgeViewsCaseDetail from './journey/judgeViewsCaseDetail';
 import judgeViewsDashboardMessages from './journey/judgeViewsDashboardMessages';
 import petitionerAddNewCaseToTestObj from './journey/petitionerAddNewCaseToTestObj';

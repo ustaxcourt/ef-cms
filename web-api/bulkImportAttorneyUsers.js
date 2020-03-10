@@ -28,17 +28,23 @@ const formatRecord = record => {
 
   if (record.isIrsEmployee === 'Y') {
     record.employer = 'IRS';
-    record.role = 'respondent';
-    record.section = 'respondent';
+    record.role = 'irsPractitioner';
+    record.section = 'irsPractitioner';
   } else if (record.isDojEmployee === 'Y') {
     record.employer = 'DOJ';
-    record.role = 'respondent';
-    record.section = 'respondent';
+    record.role = 'irsPractitioner';
+    record.section = 'irsPractitioner';
   } else {
     record.employer = 'Private';
-    record.role = 'practitioner';
-    record.section = 'practitioner';
+    record.role = 'privatePractitioner';
+    record.section = 'privatePractitioner';
   }
+
+  Object.keys(record).map(key => {
+    if (record[key] === '') {
+      delete record[key];
+    }
+  });
 
   return record;
 };

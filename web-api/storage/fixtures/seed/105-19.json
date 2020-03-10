@@ -97,7 +97,7 @@
     "docketNumberSuffix": null,
     "practitioners": [
       {
-        "role": "practitioner",
+        "role": "privatePractitioner",
         "serviceIndicator": "Electronic",
         "contact": {
           "address1": "234 Main St",
@@ -111,11 +111,11 @@
         },
         "representingPrimary": true,
         "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "name": "Test Practitioner",
-        "section": "practitioner",
+        "name": "Test Private Practitioner",
+        "section": "privatePractitioner",
         "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "email": "practitioner",
+        "email": "privatePractitioner",
         "barNumber": "PT1234"
       }
     ],

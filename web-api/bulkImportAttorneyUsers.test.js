@@ -21,8 +21,8 @@ describe('formatRecord', () => {
       employer: 'IRS',
       isAdmitted: true,
       name: 'Bob the Builder yeswecan',
-      role: 'respondent',
-      section: 'respondent',
+      role: 'irsPractitioner',
+      section: 'irsPractitioner',
     });
   });
 
@@ -47,8 +47,8 @@ describe('formatRecord', () => {
       employer: 'DOJ',
       isAdmitted: false,
       name: 'Mike Wazowski',
-      role: 'respondent',
-      section: 'respondent',
+      role: 'irsPractitioner',
+      section: 'irsPractitioner',
     });
   });
 
@@ -73,8 +73,8 @@ describe('formatRecord', () => {
       employer: 'Private',
       isAdmitted: true,
       name: 'Rachael Ray',
-      role: 'practitioner',
-      section: 'practitioner',
+      role: 'privatePractitioner',
+      section: 'privatePractitioner',
     });
   });
 });

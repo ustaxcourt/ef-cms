@@ -36,7 +36,7 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
 };
 
 export const advancedSearchHelper = (get, applicationContext) => {
-  const permissions = get(state.permissions);
+  const permissions = get(state.permissions) || {};
   const countryType = get(state.advancedSearchForm.countryType);
   const {
     CASE_SEARCH_PAGE_SIZE,
