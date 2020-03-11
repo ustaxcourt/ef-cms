@@ -4,7 +4,7 @@ const {
 
 const errorMessages = AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES;
 
-describe('AddPractitioner', () => {
+describe('AddPrivatePractitionerFactory', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const entity = AddPrivatePractitionerFactory.get({});

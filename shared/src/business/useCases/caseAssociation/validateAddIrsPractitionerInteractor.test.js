@@ -6,7 +6,7 @@ const {
 } = require('./validateAddIrsPractitionerInteractor');
 
 describe('validateAddIrsPractitionerInteractor', () => {
-  it('returns the expected errors object on an empty add respondent', () => {
+  it('returns the expected errors object on an empty add irsPractitioner', () => {
     const errors = validateAddIrsPractitionerInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
