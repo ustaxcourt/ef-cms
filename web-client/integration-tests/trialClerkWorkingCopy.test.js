@@ -29,7 +29,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
     },
     trialLocation,
   };
-  const createdCases = [];
+  const createdCaseIds = [];
   const createdDocketNumbers = [];
 
   loginAs(test, 'docketclerk');
@@ -48,7 +48,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   loginAs(test, 'petitioner');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test, caseOverrides);
-    createdCases.push(caseDetail);
+    createdCaseIds.push(caseDetail.caseId);
     createdDocketNumbers.push(caseDetail.docketNumber);
   });
 
@@ -60,7 +60,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   docketClerkSetsCaseReadyForTrial(test);
 
   loginAs(test, 'petitionsclerk');
-  markAllCasesAsQCed(test, () => createdCases);
+  markAllCasesAsQCed(test, () => createdCaseIds);
   petitionsClerkSetsATrialSessionsSchedule(test);
 
   loginAs(test, 'trialclerk');
