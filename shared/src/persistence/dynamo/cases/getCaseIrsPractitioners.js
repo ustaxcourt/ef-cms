@@ -1,13 +1,15 @@
 const { query } = require('../../dynamodbClientService');
 
 /**
- * getCaseRespondents
+ * getCaseIrsPractitioners
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @returns {Function} async function to be used in an array.map
  */
-exports.getCaseRespondents = ({ applicationContext }) => async theCase => ({
+exports.getCaseIrsPractitioners = ({
+  applicationContext,
+}) => async theCase => ({
   ...theCase,
   irsPractitioners: await query({
     ExpressionAttributeNames: {

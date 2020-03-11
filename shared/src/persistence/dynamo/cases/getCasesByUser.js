@@ -1,10 +1,12 @@
 const {
+  getCasePrivatePractitioners,
+} = require('./getCasePrivatePractitioners');
+const {
   getRecordsViaMapping,
 } = require('../../dynamo/helpers/getRecordsViaMapping');
 const { getCaseDocketRecord } = require('./getCaseDocketRecord');
 const { getCaseDocuments } = require('./getCaseDocuments');
-const { getCasePractitioners } = require('./getCasePractitioners');
-const { getCaseRespondents } = require('./getCaseRespondents');
+const { getCaseIrsPractitioners } = require('./getCaseIrsPractitioners');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 exports.getCasesByUser = async ({ applicationContext, userId }) => {
@@ -21,10 +23,10 @@ exports.getCasesByUser = async ({ applicationContext, userId }) => {
     cases.map(getCaseDocuments({ applicationContext })),
   );
   cases = await Promise.all(
-    cases.map(getCaseRespondents({ applicationContext })),
+    cases.map(getCaseIrsPractitioners({ applicationContext })),
   );
   cases = await Promise.all(
-    cases.map(getCasePractitioners({ applicationContext })),
+    cases.map(getCasePrivatePractitioners({ applicationContext })),
   );
 
   return stripWorkItems(cases, applicationContext.isAuthorizedForWorkItems());
