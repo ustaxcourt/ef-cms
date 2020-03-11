@@ -1,9 +1,9 @@
 const {
-  associatePractitionerToCase,
-} = require('../../useCaseHelper/caseAssociation/associatePractitionerToCase');
+  associateIrsPractitionerToCase,
+} = require('../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase');
 const {
-  associateRespondentToCase,
-} = require('../../useCaseHelper/caseAssociation/associateRespondentToCase');
+  associatePrivatePractitionerToCase,
+} = require('../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -45,7 +45,7 @@ exports.submitCaseAssociationRequestInteractor = async ({
   const isRespondent = authorizedUser.role === User.ROLES.irsPractitioner;
 
   if (isPractitioner) {
-    return await associatePractitionerToCase({
+    return await associatePrivatePractitionerToCase({
       applicationContext,
       caseId,
       representingPrimary,
@@ -53,7 +53,7 @@ exports.submitCaseAssociationRequestInteractor = async ({
       user,
     });
   } else if (isRespondent) {
-    return await associateRespondentToCase({
+    return await associateIrsPractitionerToCase({
       applicationContext,
       caseId,
       user,

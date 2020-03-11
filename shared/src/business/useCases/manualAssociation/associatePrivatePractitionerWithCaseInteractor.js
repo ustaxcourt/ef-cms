@@ -1,6 +1,6 @@
 const {
-  associatePractitionerToCase,
-} = require('../../useCaseHelper/caseAssociation/associatePractitionerToCase');
+  associatePrivatePractitionerToCase,
+} = require('../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -40,7 +40,7 @@ exports.associatePrivatePractitionerWithCaseInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
 
-  return await associatePractitionerToCase({
+  return await associatePrivatePractitionerToCase({
     applicationContext,
     caseId,
     representingPrimary,
