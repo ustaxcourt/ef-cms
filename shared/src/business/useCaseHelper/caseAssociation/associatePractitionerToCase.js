@@ -2,7 +2,7 @@ const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/cases/CaseConstants');
 const { Case } = require('../../entities/cases/Case');
-const { Practitioner } = require('../../entities/Practitioner');
+const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 
 /**
  * associatePractitionerToCase
@@ -51,7 +51,7 @@ exports.associatePractitionerToCase = async ({
     const caseEntity = new Case(caseToUpdate, { applicationContext });
 
     caseEntity.attachPrivatePractitioner(
-      new Practitioner({
+      new PrivatePractitioner({
         ...user,
         representingPrimary,
         representingSecondary,

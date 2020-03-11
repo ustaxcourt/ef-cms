@@ -3,8 +3,8 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Practitioner } = require('../../entities/Practitioner');
-const { Respondent } = require('../../entities/Respondent');
+const { IrsPractitioner } = require('../../entities/IrsPractitioner');
+const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
@@ -48,11 +48,11 @@ exports.updateCounselOnCaseInteractor = async ({
 
   if (userToUpdate.role === User.ROLES.privatePractitioner) {
     caseEntity.updatePrivatePractitioner(
-      new Practitioner({ userId: userToUpdate.userId, ...userData }),
+      new PrivatePractitioner({ userId: userToUpdate.userId, ...userData }),
     );
   } else if (userToUpdate.role === User.ROLES.irsPractitioner) {
     caseEntity.updateIrsPractitioner(
-      new Respondent({ userId: userToUpdate.userId, ...userData }),
+      new IrsPractitioner({ userId: userToUpdate.userId, ...userData }),
     );
   } else {
     throw new Error('User is not a practitioner or respondent');

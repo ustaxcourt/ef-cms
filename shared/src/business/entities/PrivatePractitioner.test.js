@@ -1,9 +1,9 @@
-const { Respondent } = require('./Respondent');
+const { PrivatePractitioner } = require('./PrivatePractitioner');
 const { User } = require('./User');
 
-describe('Respondent', () => {
-  it('Creates a valid respondent', () => {
-    const user = new Respondent({
+describe('PrivatePractitioner', () => {
+  it('Creates a valid PrivatePractitioner', () => {
+    const user = new PrivatePractitioner({
       contact: {
         address1: '234 Main St',
         address2: 'Apartment 4',
@@ -17,15 +17,15 @@ describe('Respondent', () => {
       },
       firstName: 'firstName',
       lastName: 'lastName',
-      role: User.ROLES.irsPractitioner,
+      role: User.ROLES.privatePractitioner,
       userId: 'petitioner',
     });
     expect(user.isValid()).toBeTruthy();
   });
 
   it('Creates an invalid', () => {
-    const user = new Respondent({
-      role: User.ROLES.irsPractitioner,
+    const user = new PrivatePractitioner({
+      role: User.ROLES.privatePractitioner,
     });
     expect(user.isValid()).toBeFalsy();
   });
