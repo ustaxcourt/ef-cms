@@ -20,7 +20,7 @@ describe('Judge messages journey', () => {
     jest.setTimeout(30000);
   });
 
-  test.petitionerNewCases = [];
+  const createdCases = [];
 
   loginAs(test, 'petitioner');
   petitionerNavigatesToCreateCase(test);
@@ -32,15 +32,20 @@ describe('Judge messages journey', () => {
   petitionerFilesDocumentForCase(test, fakeFile);
   petitionerViewsCaseDetailAfterFilingDocument(test);
   petitionerViewsDashboard(test);
-  petitionerAddNewCaseToTestObj(test);
+  petitionerAddNewCaseToTestObj(test, createdCases);
 
   loginAs(test, 'petitionsclerk');
-  petitionsClerkCreatesMessageToJudge(test, "don't forget to be awesome");
+  petitionsClerkCreatesMessageToJudge(
+    test,
+    "don't forget to be awesome",
+    createdCases,
+  );
 
   loginAs(test, 'docketclerk');
   docketClerkCreatesMessageToJudge(
     test,
     'karma karma karma karma karma chameleon',
+    createdCases,
   );
 
   loginAs(test, 'judgeArmen');

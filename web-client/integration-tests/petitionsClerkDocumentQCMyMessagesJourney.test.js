@@ -23,7 +23,7 @@ describe('Petitions Clerk Document QC Journey', () => {
     jest.setTimeout(30000);
   });
 
-  test.petitionerNewCases = [];
+  const createdCases = [];
 
   const caseCreationCount = 3;
 
@@ -39,18 +39,22 @@ describe('Petitions Clerk Document QC Journey', () => {
     petitionerChoosesProcedureType(test);
     petitionerChoosesCaseType(test);
     petitionerCreatesNewCase(test, fakeFile);
-    petitionerAddNewCaseToTestObj(test);
+    petitionerAddNewCaseToTestObj(test, createdCases);
   }
 
   loginAs(test, 'petitionsclerk');
   petitionsClerkViewsSectionDocumentQC(test);
   petitionsClerkGetsSectionDocumentQCInboxCount(test, caseCreationCount);
-  petitionsClerkBulkAssignsCases(test);
+  petitionsClerkBulkAssignsCases(test, createdCases);
   petitionsClerkViewsMyDocumentQC(test);
   petitionsClerkGetsMyDocumentQCInboxCount(test, caseCreationCount);
-  petitionsClerkVerifiesAssignedWorkItem(test);
-  petitionsClerkVerifiesUnreadMessage(test);
-  petitionsClerkCreatesMessage(test, 'Here comes the hotstepper!');
+  petitionsClerkVerifiesAssignedWorkItem(test, createdCases);
+  petitionsClerkVerifiesUnreadMessage(test, createdCases);
+  petitionsClerkCreatesMessage(
+    test,
+    'Here comes the hotstepper!',
+    createdCases,
+  );
 
   loginAs(test, 'petitionsclerk1');
   petitionsClerkViewsMyMessagesInbox(test, true);

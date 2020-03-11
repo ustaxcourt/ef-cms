@@ -1,6 +1,6 @@
-export default test => {
+export default (test, createdCases) => {
   return it('Petitions clerk bulk assigns cases', async () => {
-    const selectedWorkItems = test.petitionerNewCases.map(newCase => {
+    const selectedWorkItems = createdCases.map(newCase => {
       const firstDocketEntry = newCase.docketRecord.find(
         entry => entry.index === 1,
       );
