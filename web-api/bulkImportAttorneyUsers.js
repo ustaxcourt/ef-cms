@@ -139,6 +139,9 @@ const formatRecord = record => {
         );
         if (result.status === 200) {
           console.log(`SUCCESS ${record.name} ${record.barNumber}`);
+        } else {
+          console.log(`ERROR ${record.name} ${record.barNumber}`);
+          console.log(result);
         }
       } catch (err) {
         console.log(`ERROR ${record.name} ${record.barNumber}`);
