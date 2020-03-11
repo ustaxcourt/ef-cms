@@ -78,70 +78,74 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   });
 
   const {
-    added: addedRespondents,
-    removed: deletedRespondents,
-    updated: updatedRespondents,
+    added: addedIrsPractitioners,
+    removed: deletedIrsPractitioners,
+    updated: updatedIrsPractitioners,
   } = diff(oldCase.irsPractitioners, caseToUpdate.irsPractitioners, 'userId');
 
-  deletedRespondents.forEach(respondent => {
+  deletedIrsPractitioners.forEach(practitioner => {
     requests.push(
       client.delete({
         applicationContext,
         key: {
           pk: `case|${caseToUpdate.caseId}`,
-          sk: `respondent|${respondent.userId}`,
+          sk: `irsPractitioner|${practitioner.userId}`,
         },
       }),
     );
   });
 
-  [...addedRespondents, ...updatedRespondents].forEach(respondent => {
-    requests.push(
-      client.put({
-        Item: {
-          pk: `case|${caseToUpdate.caseId}`,
-          sk: `respondent|${respondent.userId}`,
-          ...respondent,
-        },
-        applicationContext,
-      }),
-    );
-  });
+  [...addedIrsPractitioners, ...updatedIrsPractitioners].forEach(
+    practitioner => {
+      requests.push(
+        client.put({
+          Item: {
+            pk: `case|${caseToUpdate.caseId}`,
+            sk: `irsPractitioner|${practitioner.userId}`,
+            ...practitioner,
+          },
+          applicationContext,
+        }),
+      );
+    },
+  );
 
   const {
-    added: addedPractitioners,
-    removed: deletedPractitioners,
-    updated: updatedPractitioners,
+    added: addedPrivatePractitioners,
+    removed: deletedPrivatePractitioners,
+    updated: updatedPrivatePractitioners,
   } = diff(
     oldCase.privatePractitioners,
     caseToUpdate.privatePractitioners,
     'userId',
   );
 
-  deletedPractitioners.forEach(practitioner => {
+  deletedPrivatePractitioners.forEach(practitioner => {
     requests.push(
       client.delete({
         applicationContext,
         key: {
           pk: `case|${caseToUpdate.caseId}`,
-          sk: `practitioner|${practitioner.userId}`,
+          sk: `privatePractitioner|${practitioner.userId}`,
         },
       }),
     );
   });
 
-  [...addedPractitioners, ...updatedPractitioners].forEach(practitioner => {
-    requests.push(
-      client.put({
-        Item: {
-          pk: `case|${caseToUpdate.caseId}`,
-          sk: `practitioner|${practitioner.userId}`,
-          ...practitioner,
-        },
-        applicationContext,
-      }),
-    );
-  });
+  [...addedPrivatePractitioners, ...updatedPrivatePractitioners].forEach(
+    practitioner => {
+      requests.push(
+        client.put({
+          Item: {
+            pk: `case|${caseToUpdate.caseId}`,
+            sk: `privatePractitioner|${practitioner.userId}`,
+            ...practitioner,
+          },
+          applicationContext,
+        }),
+      );
+    },
+  );
 
   if (
     oldCase.status !== caseToUpdate.status ||

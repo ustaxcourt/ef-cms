@@ -172,7 +172,7 @@ describe('updateCase', () => {
       expect(putStub).toHaveBeenCalled();
       expect(putStub.mock.calls[0][0].Item).toMatchObject({
         pk: 'case|123',
-        sk: 'respondent|user-id-existing-234',
+        sk: 'irsPractitioner|user-id-existing-234',
         userId: 'user-id-existing-234',
       });
     });
@@ -209,7 +209,7 @@ describe('updateCase', () => {
       expect(putStub).toHaveBeenCalled();
       expect(putStub.mock.calls[0][0].Item).toMatchObject({
         pk: 'case|123',
-        sk: 'respondent|user-id-new-321',
+        sk: 'irsPractitioner|user-id-new-321',
         userId: 'user-id-new-321',
       });
     });
@@ -247,7 +247,7 @@ describe('updateCase', () => {
       expect(putStub.mock.calls[0][0].Item).toMatchObject({
         motto: 'Welcome to Flavortown!',
         pk: 'case|123',
-        sk: 'respondent|user-id-existing-123',
+        sk: 'irsPractitioner|user-id-existing-123',
         userId: 'user-id-existing-123',
       });
     });
@@ -308,7 +308,7 @@ describe('updateCase', () => {
       expect(putStub).toHaveBeenCalled();
       expect(putStub.mock.calls[0][0].Item).toMatchObject({
         pk: 'case|123',
-        sk: 'practitioner|user-id-existing-234',
+        sk: 'privatePractitioner|user-id-existing-234',
         userId: 'user-id-existing-234',
       });
     });
@@ -345,7 +345,7 @@ describe('updateCase', () => {
       expect(putStub).toHaveBeenCalled();
       expect(putStub.mock.calls[0][0].Item).toMatchObject({
         pk: 'case|123',
-        sk: 'practitioner|user-id-new-321',
+        sk: 'privatePractitioner|user-id-new-321',
         userId: 'user-id-new-321',
       });
     });
@@ -383,7 +383,7 @@ describe('updateCase', () => {
       expect(putStub.mock.calls[0][0].Item).toMatchObject({
         motto: 'Welcome to Flavortown!',
         pk: 'case|123',
-        sk: 'practitioner|user-id-existing-123',
+        sk: 'privatePractitioner|user-id-existing-123',
         userId: 'user-id-existing-123',
       });
     });
