@@ -21,7 +21,7 @@ export const stashWizardDataAction = ({ get, props, store }) => {
       partyIrsPractitioner,
       partyPrimary,
       partySecondary,
-      practitioner,
+      privatePractitioners,
     } = get(state.form);
 
     const documentMetadata = {
@@ -32,7 +32,7 @@ export const stashWizardDataAction = ({ get, props, store }) => {
       partyIrsPractitioner,
       partyPrimary,
       partySecondary,
-      practitioner,
+      privatePractitioners,
     };
 
     store.set(state.screenMetadata.primary, { ...documentMetadata, lodged });

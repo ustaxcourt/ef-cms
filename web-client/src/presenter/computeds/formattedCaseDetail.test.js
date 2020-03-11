@@ -264,7 +264,7 @@ describe('formattedCaseDetail', () => {
       hasIrsNotice: false,
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
-      privatePractitioners: { name: 'Test Practitioner' },
+      privatePractitioners: [{ name: 'Test Practitioner' }],
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
