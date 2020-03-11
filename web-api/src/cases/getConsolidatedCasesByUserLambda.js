@@ -1,6 +1,4 @@
-const createApplicationContext = require('../applicationContext');
-const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
-const { handle } = require('../middleware/apiGatewayHelper');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * used for fetching all cases (including consolidated) of a particular status, user role, etc
@@ -9,22 +7,17 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  handle(event, async () => {
-    const { userId } = event.pathParameters || {};
-    const user = getUserFromAuthHeader(event);
-    const applicationContext = createApplicationContext(user);
-    try {
-      const results = await applicationContext
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      const { userId } = event.pathParameters || {};
+
+      return await applicationContext
         .getUseCases()
         .getConsolidatedCasesByUserInteractor({
           applicationContext,
           userId,
         });
-      applicationContext.logger.info('User', user);
-      applicationContext.logger.info('Results', results);
-      return results;
-    } catch (e) {
-      applicationContext.logger.error(e);
-      throw e;
-    }
-  });
+    },
+    { logResults: false },
+  );

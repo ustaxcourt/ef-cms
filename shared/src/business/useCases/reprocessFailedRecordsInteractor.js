@@ -16,8 +16,6 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
   if (recordsToProcess.length) {
     const searchClient = applicationContext.getSearchClient();
 
-    const results = [];
-
     for (const record of recordsToProcess) {
       try {
         const fullRecord = await applicationContext
@@ -28,13 +26,11 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
             recordSk: record.recordSk,
           });
 
-        results.push(
-          await searchClient.index({
-            body: { ...AWS.DynamoDB.Converter.marshall(fullRecord) },
-            id: record.recordPk,
-            index: 'efcms',
-          }),
-        );
+        await searchClient.index({
+          body: { ...AWS.DynamoDB.Converter.marshall(fullRecord) },
+          id: record.recordPk,
+          index: 'efcms',
+        });
 
         await applicationContext
           .getPersistenceGateway()
@@ -49,6 +45,5 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
     }
 
     applicationContext.logger.info('Time', createISODateString());
-    return results;
   }
 };

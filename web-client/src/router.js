@@ -1,4 +1,4 @@
-import { forEach, set } from 'lodash';
+import { forEach, isEmpty, set } from 'lodash';
 import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import route from 'riot-route';
@@ -132,6 +132,46 @@ const router = {
           `${getPageTitleDocketPrefix(docketNumber)} Document details`,
         );
         app.getSequence('gotoDocumentDetailSequence')({
+          docketNumber,
+          documentId,
+        });
+      }, ROLE_PERMISSIONS.UPDATE_CASE),
+    );
+
+    route(
+      '/case-detail/*/documents/*/edit-saved..',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(
+            docketNumber,
+          )} Edit saved document details`,
+        );
+
+        if (!isEmpty(app.getState('form'))) {
+          const { tab } = route.query();
+
+          app.getSequence('gotoEditSavedDocumentDetailSequence')({
+            docketNumber,
+            documentId,
+            tab,
+          });
+        } else {
+          app.getSequence('gotoDocumentDetailSequence')({
+            docketNumber,
+            documentId,
+          });
+        }
+      }, ROLE_PERMISSIONS.UPDATE_CASE),
+    );
+
+    route(
+      '/case-detail/*/documents/*/review',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Document detail review`,
+        );
+        app.getSequence('gotoReviewSavedPetitionSequence')({
+          caseId: docketNumber,
           docketNumber,
           documentId,
         });
@@ -526,12 +566,10 @@ const router = {
           'document-qc/my/inbox',
           'document-qc/my/inProgress',
           'document-qc/my/outbox',
-          'document-qc/my/batched',
           'document-qc/section',
           'document-qc/section/inbox',
           'document-qc/section/inProgress',
           'document-qc/section/outbox',
-          'document-qc/section/batched',
         ];
 
         if (path && !validPaths.includes(path)) {
@@ -635,27 +673,29 @@ const router = {
             value: `StartCaseStep${step}`,
           });
         } else {
-          switch (step) {
-            case '1':
-              app.getSequence('gotoStartCaseWizardSequence')({
-                step,
-                wizardStep: `StartCaseStep${step}`,
-              });
-              break;
-            default:
-              app.getSequence('navigateToPathSequence')({
-                path: '/file-a-petition/step-1',
-              });
+          if (app.getState('currentPage') !== 'StartCaseInternal') {
+            switch (step) {
+              case '1':
+                app.getSequence('gotoStartCaseWizardSequence')({
+                  step,
+                  wizardStep: `StartCaseStep${step}`,
+                });
+                break;
+              default:
+                app.getSequence('navigateToPathSequence')({
+                  path: '/file-a-petition/step-1',
+                });
+            }
           }
         }
       }),
     );
 
     route(
-      '/review-petition',
+      'file-a-petition/review-petition',
       ifHasAccess(() => {
         setPageTitle('Review Petition');
-        app.getSequence('gotoReviewPetitionSequence')();
+        app.getSequence('gotoReviewPetitionFromPaperSequence')();
       }),
     );
 
@@ -700,11 +740,9 @@ const router = {
           'messages/my',
           'messages/my/inbox',
           'messages/my/outbox',
-          'messages/my/batched',
           'messages/section',
           'messages/section/inbox',
           'messages/section/outbox',
-          'messages/section/batched',
         ];
 
         if (path && !validPaths.includes(path)) {
@@ -735,6 +773,14 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('PDF Preview');
         app.getSequence('gotoPdfPreviewSequence')();
+      }),
+    );
+
+    route(
+      '/reports/case-inventory-report',
+      ifHasAccess(() => {
+        setPageTitle('Case Inventory Report');
+        app.getSequence('gotoCaseInventoryReportSequence')();
       }),
     );
 

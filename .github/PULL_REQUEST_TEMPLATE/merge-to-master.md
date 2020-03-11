@@ -1,5 +1,7 @@
 # Release Notes
 
+![Known Vulnerabilities](https://snyk.io/test/github/ustaxcourt/ef-cms/sprint-##/badge.svg) Snyk
+
 ## Summary
 
 Explain here, in a paragraph or two, what has changed since the prior merge to master.

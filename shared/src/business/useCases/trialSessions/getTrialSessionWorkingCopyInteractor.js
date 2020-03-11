@@ -33,7 +33,7 @@ exports.getTrialSessionWorkingCopyInteractor = async ({
     .getTrialSessionWorkingCopy({
       applicationContext,
       trialSessionId,
-      userId: judgeUser.userId,
+      userId: (judgeUser && judgeUser.userId) || user.userId,
     });
 
   if (trialSessionWorkingCopy) {

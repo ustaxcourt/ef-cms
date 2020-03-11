@@ -74,6 +74,126 @@ describe('workQueueHelper', () => {
     });
   });
 
+  it('returns My Messages for workQueueTitle if showing individual internal work queue', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: {
+          queue: 'my',
+          workQueueIsInternal: true,
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      workQueueTitle: 'My Messages',
+    });
+  });
+
+  it('returns Section Messages for workQueueTitle if showing section internal work queue', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: {
+          queue: 'section',
+          workQueueIsInternal: true,
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      workQueueTitle: 'Section Messages',
+    });
+  });
+
+  it('returns My Document QC for workQueueTitle if showing individual non-internal work queue', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: {
+          queue: 'my',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      workQueueTitle: 'My Document QC',
+    });
+  });
+
+  it('returns Document QC for workQueueTitle if showing section non-internal work queue and current user is not a docket or petitions clerk', () => {
+    const user = {
+      role: User.ROLES.adc,
+      userId: '123',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: {
+          queue: 'section',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      workQueueTitle: 'Document QC',
+    });
+  });
+
+  it('returns Section Document QC for workQueueTitle if showing section non-internal work queue and current user is a docket clerk', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '123',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: {
+          queue: 'section',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      workQueueTitle: 'Section Document QC',
+    });
+  });
+
   it('shows the start a case button when role is petitions clerk', () => {
     const user = {
       role: User.ROLES.petitionsClerk,
@@ -135,6 +255,25 @@ describe('workQueueHelper', () => {
     expect(result.showCaseStatusColumn).toBeTruthy();
   });
 
+  it('shows the case status column when role is chambers', () => {
+    const user = {
+      role: User.ROLES.chambers,
+      userId: '123',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: { box: 'inbox', queue: 'my' },
+      },
+    });
+    expect(result.showCaseStatusColumn).toBeTruthy();
+  });
+
   it('shows the from column when role is judge', () => {
     const user = {
       role: User.ROLES.judge,
@@ -154,9 +293,9 @@ describe('workQueueHelper', () => {
     expect(result.showFromColumn).toBeTruthy();
   });
 
-  it('shows the batched by column when role is petitions clerk and box is the doc QC outbox', () => {
+  it('shows the from column when role is chambers', () => {
     const user = {
-      role: User.ROLES.petitionsClerk,
+      role: User.ROLES.chambers,
       userId: '123',
     };
     const result = runCompute(workQueueHelper, {
@@ -167,60 +306,10 @@ describe('workQueueHelper', () => {
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
-        workQueueToDisplay: {
-          box: 'outbox',
-          queue: 'my',
-          workQueueIsInternal: false,
-        },
+        workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
     });
-    expect(result.showBatchedByColumn).toBeTruthy();
-  });
-
-  it('does not show the batched by column when role is not petitions clerk', () => {
-    const user = {
-      role: User.ROLES.docketClerk,
-      userId: '123',
-    };
-    const result = runCompute(workQueueHelper, {
-      state: {
-        ...getBaseState(user),
-        notifications: {
-          myInboxUnreadCount: 0,
-          qcUnreadCount: 0,
-        },
-        selectedWorkItems: [],
-        workQueueToDisplay: {
-          box: 'outbox',
-          queue: 'my',
-          workQueueIsInternal: false,
-        },
-      },
-    });
-    expect(result.showBatchedByColumn).toBeFalsy();
-  });
-
-  it('does not show the batched by column when role is petitions clerk and box is not the doc QC outbox', () => {
-    const user = {
-      role: User.ROLES.petitionsClerk,
-      userId: '123',
-    };
-    const result = runCompute(workQueueHelper, {
-      state: {
-        ...getBaseState(user),
-        notifications: {
-          myInboxUnreadCount: 0,
-          qcUnreadCount: 0,
-        },
-        selectedWorkItems: [],
-        workQueueToDisplay: {
-          box: 'outbox',
-          queue: 'my',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-    expect(result.showBatchedByColumn).toBeFalsy();
+    expect(result.showFromColumn).toBeTruthy();
   });
 
   it('shows "Received" as filed label on messages inbox', () => {
@@ -246,13 +335,12 @@ describe('workQueueHelper', () => {
     expect(result.inboxFiledColumnLabel).toEqual('Received');
   });
 
-  it('shows the case title column if the user role is not chambers', () => {
-    let user = {
-      role: User.ROLES.chambers,
+  it('shows in progress petitions for a petitionsclerk', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
       userId: '123',
     };
-
-    let result = runCompute(workQueueHelper, {
+    const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
         notifications: {
@@ -261,34 +349,14 @@ describe('workQueueHelper', () => {
         },
         selectedWorkItems: [],
         workQueueToDisplay: {
-          box: 'inbox',
+          box: 'inProgress',
           queue: 'section',
-          workQueueIsInternal: true,
+          workQueueIsInternal: false,
         },
       },
     });
-    expect(result.showCaseTitle).toEqual(false);
 
-    user = {
-      role: User.ROLES.judge,
-      userId: '123',
-    };
-
-    result = runCompute(workQueueHelper, {
-      state: {
-        ...getBaseState(user),
-        notifications: {
-          myInboxUnreadCount: 0,
-          qcUnreadCount: 0,
-        },
-        selectedWorkItems: [],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'section',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-    expect(result.showCaseTitle).toEqual(true);
+    expect(result.showProcessedByColumn).toEqual(true);
+    expect(result.showInProgressTab).toEqual(true);
   });
 });

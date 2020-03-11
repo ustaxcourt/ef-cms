@@ -47,7 +47,6 @@ import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkAssignsWorkItemToOther from './journey/petitionsClerkAssignsWorkItemToOther';
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
-import petitionsClerkIrsHoldingQueue from './journey/petitionsClerkIrsHoldingQueue';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesCaseDetail from './journey/petitionsClerkUpdatesCaseDetail';
@@ -58,7 +57,6 @@ import respondentAddsAnswer from './journey/respondentAddsAnswer';
 import respondentAddsMotion from './journey/respondentAddsMotion';
 import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
 import respondentLogIn from './journey/respondentLogIn';
-import respondentViewsCaseDetailOfBatchedCase from './journey/respondentViewsCaseDetailOfBatchedCase';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
 
 let test;
@@ -68,6 +66,7 @@ presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
   createObjectURL: () => '/test-url',
   externalRoute: () => {},
+  revokeObjectURL: () => {},
   route: async url => {
     if (url === `/case-detail/${test.docketNumber}`) {
       await test.runSequence('gotoCaseDetailSequence', {
@@ -140,11 +139,9 @@ describe('Case journey', () => {
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkUpdatesCaseDetail(test);
   petitionsClerkSubmitsCaseToIrs(test);
-  petitionsClerkIrsHoldingQueue(test);
 
   respondentLogIn(test);
   respondentViewsDashboard(test);
-  respondentViewsCaseDetailOfBatchedCase(test);
   respondentAddsAnswer(test, fakeFile);
   respondentAddsStipulatedDecision(test, fakeFile);
   respondentAddsMotion(test, fakeFile);

@@ -10,7 +10,6 @@ const tmp = require('tmp');
  * @returns {object} errors (null if no errors)
  */
 exports.virusScanPdfInteractor = async ({ applicationContext, documentId }) => {
-  applicationContext.logger.time('Fetching S3 File');
   let { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
@@ -18,16 +17,13 @@ exports.virusScanPdfInteractor = async ({ applicationContext, documentId }) => {
       Key: documentId,
     })
     .promise();
-  applicationContext.logger.timeEnd('Fetching S3 File');
 
   const inputPdf = tmp.fileSync();
   fs.writeSync(inputPdf.fd, Buffer.from(pdfData));
   fs.closeSync(inputPdf.fd);
 
   try {
-    applicationContext.logger.time('Running Clamscan');
     await applicationContext.runVirusScan({ filePath: inputPdf.name });
-    applicationContext.logger.timeEnd('Running Clamscan');
     applicationContext.getStorageClient().putObjectTagging({
       Bucket: applicationContext.environment.documentsBucketName,
       Key: documentId,

@@ -76,15 +76,20 @@ exports.updateDocketEntryMetaInteractor = async ({
   documentEntityForFiledBy.generateFiledBy(caseToUpdate, true);
   newFiledBy = documentEntityForFiledBy.filedBy;
 
-  const docketRecordEntity = new DocketRecord({
-    ...docketRecordEntry,
-    action: action || docketRecordEntry.action,
-    description: documentTitle || description || docketRecordEntry.description,
-    eventCode: eventCode || docketRecordEntry.eventCode,
-    filedBy: newFiledBy || docketRecordEntry.filedBy,
-    filingDate: filingDate || docketRecordEntry.filingDate,
-    servedPartiesCode: servedPartiesCode || docketRecordEntry.servedPartiesCode,
-  });
+  const docketRecordEntity = new DocketRecord(
+    {
+      ...docketRecordEntry,
+      action: action || docketRecordEntry.action,
+      description:
+        documentTitle || description || docketRecordEntry.description,
+      eventCode: eventCode || docketRecordEntry.eventCode,
+      filedBy: newFiledBy || docketRecordEntry.filedBy,
+      filingDate: filingDate || docketRecordEntry.filingDate,
+      servedPartiesCode:
+        servedPartiesCode || docketRecordEntry.servedPartiesCode,
+    },
+    { applicationContext },
+  );
 
   if (
     additionalInfo ||

@@ -1,29 +1,31 @@
-const { isCaseRecord } = require('./utilities');
+const createApplicationContext = require('../src/applicationContext');
+const { Case } = require('../../shared/src/business/entities/cases/Case');
+const { isCaseRecord, upGenerator } = require('./utilities');
+const applicationContext = createApplicationContext({});
 
-const up = async (documentClient, tableName, forAllRecords) => {
-  await forAllRecords(documentClient, tableName, async item => {
-    if (!isCaseRecord(item)) return;
+const mutateRecord = item => {
+  if (isCaseRecord(item)) {
+    item.docketRecord.forEach(docketEntry => {
+      // Case.documents[].filingDate = Case.docketRecord[].filingDate
+      if (item.documents && docketEntry.documentId) {
+        item.documents.forEach(document => {
+          if (docketEntry.documentId === document.documentId) {
+            document.filingDate = docketEntry.filingDate;
+          }
+        });
+      }
+    });
 
-    if (item.docketRecord) {
-      item.docketRecord.forEach(docketEntry => {
-        // Case.documents[].filingDate = Case.docketRecord[].filingDate
-        if (item.documents && docketEntry.documentId) {
-          item.documents.forEach(document => {
-            if (docketEntry.documentId === document.documentId) {
-              document.filingDate = docketEntry.filingDate;
-            }
-          });
-        }
-      });
+    const caseEntity = new Case(item, { applicationContext })
+      .validate()
+      .toRawObject();
 
-      await documentClient
-        .put({
-          Item: item,
-          TableName: tableName,
-        })
-        .promise();
-    }
-  });
+    const itemToPut = {
+      ...item,
+      ...caseEntity,
+    };
+    return itemToPut;
+  }
 };
 
-module.exports = { up };
+module.exports = { mutateRecord, up: upGenerator(mutateRecord) };

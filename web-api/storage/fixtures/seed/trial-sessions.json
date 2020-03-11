@@ -30,7 +30,14 @@
     "startDate": "2020-11-27T05:00:00.000Z",
     "isCalendared": true,
     "maxCases": 100,
-    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc"
+    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "trialClerk": {
+      "name": "Test Trial Clerk",
+      "section": "trialClerks",
+      "role": "trialclerk",
+      "userId": "f0a1e52a-876f-4c03-853c-f66e407e5a1e",
+      "email": "trialclerk"
+    }
   },
   {
     "pk": "trial-session-working-copy|959c4338-0fac-42eb-b0eb-d53b8d0195cc",
@@ -201,7 +208,6 @@
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "Birmingham, AL",
     "createdAt": "2019-10-27T05:00:00.000Z",
-    "swingSessionId": "108a959f-9526-4db5-b262-e58c476a4604",
     "sk": "trial-session-159c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "sessionType": "Hybrid",
     "termYear": "2020",
@@ -212,7 +218,7 @@
       "name": "Judge Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
     },
-    "swingSession": true,
+    "swingSession": false,
     "startDate": "2020-01-26T05:00:00.000Z",
     "isCalendared": true,
     "maxCases": 100,
@@ -223,7 +229,6 @@
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "Washington, DC",
     "createdAt": "2019-10-27T05:00:00.000Z",
-    "swingSessionId": "118a959f-9526-4db5-b262-e58c476a4604",
     "sk": "trial-session-359c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "sessionType": "Hybrid",
     "termYear": "2020",
@@ -234,7 +239,7 @@
       "name": "Judge Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
     },
-    "swingSession": true,
+    "swingSession": false,
     "startDate": "2020-01-16T05:00:00.000Z",
     "isCalendared": true,
     "maxCases": 100,
@@ -245,7 +250,6 @@
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "New York, NY",
     "createdAt": "2019-10-27T05:00:00.000Z",
-    "swingSessionId": "119a959f-9526-4db5-b262-e58c476a4604",
     "sk": "trial-session-459c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "sessionType": "Hybrid",
     "termYear": "2020",
@@ -256,7 +260,7 @@
       "name": "Judge Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
     },
-    "swingSession": true,
+    "swingSession": false,
     "startDate": "2020-01-06T05:00:00.000Z",
     "isCalendared": true,
     "maxCases": 100,
@@ -267,7 +271,6 @@
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "San Francisco, CA",
     "createdAt": "2019-10-27T05:00:00.000Z",
-    "swingSessionId": "218a959f-9526-4db5-b262-e58c476a4604",
     "sk": "trial-session-539c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "sessionType": "Hybrid",
     "termYear": "2020",
@@ -278,7 +281,7 @@
       "name": "Judge Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
     },
-    "swingSession": true,
+    "swingSession": false,
     "startDate": "2019-12-30T05:00:00.000Z",
     "isCalendared": true,
     "maxCases": 100,

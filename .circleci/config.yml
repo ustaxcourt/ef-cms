@@ -155,7 +155,7 @@ jobs:
           name: Pa11y - Web Client 3
           command: |
             npm run build:all
-            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-2.txt &
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-3.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 15
@@ -177,10 +177,13 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: xlarge
+    resource_class: 2xlarge
     steps:
       - attach_workspace:
           at: ~/
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
       - run:
           name: Cypress
           command: |
@@ -190,13 +193,15 @@ jobs:
               ./node_modules/.bin/cypress install
             fi
 
-            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000  AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop npx run-p start:api:ci start:client:ci > /dev/null &
+            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000 AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SLS_DEPLOYMENT_BUCKET=noop npx run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
             npm run cypress
       - store_artifacts:
           path: /root/project/cypress/videos/
+      - store_artifacts:
+          path: /tmp/cypress
 
   pre-deploy:
     machine:
@@ -204,11 +209,20 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build Docker Image
-          command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../clamav && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
-      - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+      - run:
+          name: Build Docker Image
+          command: |
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
+              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+            fi
+
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
+              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
+            fi
+
+            docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Post Confirmation Arn
           command: echo "export POST_CONFIRMATION_ROLE_ARN=$(./get-post-confirmation-role-arn.sh $CIRCLE_BRANCH)" >> $BASH_ENV
@@ -237,17 +251,26 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build Docker Image
-          command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../clamav && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
-      - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
+          name: Build Docker Image
+          command: |
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
+              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+            fi
+
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
+              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
+            fi
+
+            docker build -t efcms -f Dockerfile .
+      - run:
           name: 'Deploy - Web API - Layers - Puppeteer - us-east-1'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-east-1"
+          command: if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-east-1"; fi;
       - run:
           name: 'Deploy - Web API - Layers - ClamAV - us-east-1'
-          command: if [ "${ENV}" != "dev" ]; then docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-clamav.sh ${ENV} us-east-1"; fi;
+          command: if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-clamav.sh ${ENV} us-east-1"; fi;
       - run:
           name: 'Deploy - Web API - Serverless - Public API - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-public-api.sh ${ENV} us-east-1"
@@ -258,8 +281,11 @@ jobs:
           name: 'Deploy - Web API - Serverless - Cases - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-cases.sh ${ENV} us-east-1"
       - run:
-          name: 'Deploy - Web API - Serverless - Cases Parties - us-east-1'
+          name: 'Deploy - Web API - Serverless - Case Parties - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-parties.sh ${ENV} us-east-1"
+      - run:
+          name: 'Deploy - Web API - Serverless - Case Meta - us-east-1'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-meta.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - Case Documents - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-documents.sh ${ENV} us-east-1"
@@ -300,17 +326,26 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build Docker Image
-          command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../clamav && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
-      - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
+          name: Build Docker Image
+          command: |
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
+              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+            fi
+
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
+              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
+            fi
+
+            docker build -t efcms -f Dockerfile .
+      - run:
           name: 'Deploy - Web API - Layers - Puppeteer - us-west-1'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-west-1"
+          command: if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-west-1"; fi;
       - run:
           name: 'Deploy - Web API - Layers - ClamAV - us-west-1'
-          command: if [ "${ENV}" != "dev" ]; then docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-clamav.sh ${ENV} us-west-1"; fi;
+          command: if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-clamav.sh ${ENV} us-west-1"; fi;
       - run:
           name: 'Deploy - Web API - Serverless - Public API - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-public-api.sh ${ENV} us-west-1"
@@ -323,6 +358,9 @@ jobs:
       - run:
           name: 'Deploy - Web API - Serverless - Case Parties - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-parties.sh ${ENV} us-west-1"
+      - run:
+          name: 'Deploy - Web API - Serverless - Case Meta - us-west-1'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-meta.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Serverless - Case Documents - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-documents.sh ${ENV} us-west-1"
@@ -357,11 +395,20 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build Docker Image
-          command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../clamav && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
-      - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+      - run:
+          name: Build Docker Image
+          command: |
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
+              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+            fi
+
+            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
+              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
+            fi
+
+            docker build -t efcms -f Dockerfile .
       - run:
           name: 'Deploy - Switch environment color'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./switch-environment-color.sh ${ENV}"
@@ -403,7 +450,7 @@ jobs:
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd web-api && ./setup-court-users.sh ${ENV}"
       - run:
           name: 'Deploy - Web API - Run Migrations'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "./web-api/run-umzug.sh ${ENV}"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "DYNAMODB_ENDPOINT=dynamodb.us-east-1.amazonaws.com" --rm efcms /bin/sh -c "npm run build:assets && ./web-api/run-umzug.sh ${ENV}"
       - run:
           name: 'Deploy - Web API - Smoke Tests - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && node smoke-tests.js ${ENV} us-east-1"
@@ -413,6 +460,8 @@ jobs:
       - run:
           name: 'Deploy - Cypress Smoke Tests'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "CYPRESS_BASE_URL='https://ui-$ENV.$EFCMS_DOMAIN' ENV=${ENV} npm run cypress:smoketests"
+      - store_artifacts:
+          path: /home/app/cypress-smoketests/videos/
 
 workflows:
   version: 2

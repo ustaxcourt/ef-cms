@@ -365,6 +365,49 @@ describe('TrialSession entity', () => {
     });
   });
 
+  describe('getEmptyFields', () => {
+    it('should return all missing fields as a list', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const result = trialSession.getEmptyFields();
+
+      expect(result).toMatchObject([
+        'address1',
+        'city',
+        'state',
+        'postalCode',
+        'judge',
+      ]);
+    });
+
+    it('should return an empty list when all required fields as set', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          city: 'Flavortown',
+          judge: { name: 'Judge Armen' },
+          postalCode: '12345',
+          state: 'TN',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const result = trialSession.getEmptyFields();
+
+      expect(result).toMatchObject([]);
+    });
+  });
+
   describe('setNoticesIssued', () => {
     it('Should set the noticeIssuedDate on the trial session', async () => {
       const trialSession = new TrialSession(

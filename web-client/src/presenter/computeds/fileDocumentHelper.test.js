@@ -1,5 +1,6 @@
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
 import { applicationContext } from '../../applicationContext';
 import { fileDocumentHelper as fileDocumentHelperComputed } from './fileDocumentHelper';
 import { runCompute } from 'cerebral/test';
@@ -10,6 +11,9 @@ const state = {
   form: {},
   validationErrors: {},
 };
+
+applicationContext.getCurrentUser = () =>
+  MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'];
 
 const fileDocumentHelper = withAppContextDecorator(
   fileDocumentHelperComputed,

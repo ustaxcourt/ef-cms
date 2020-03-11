@@ -21,19 +21,16 @@ exports.processStreamRecordsInteractor = async ({
   applicationContext.logger.info('Time', createISODateString());
   const searchClient = applicationContext.getSearchClient();
 
-  const results = [];
   const filteredRecords = filterRecords(recordsToProcess);
 
   for (const record of filteredRecords) {
     if (['INSERT', 'MODIFY'].includes(record.eventName)) {
       try {
-        results.push(
-          await searchClient.index({
-            body: { ...record.dynamodb.NewImage },
-            id: record.dynamodb.Keys.pk.S,
-            index: 'efcms',
-          }),
-        );
+        await searchClient.index({
+          body: { ...record.dynamodb.NewImage },
+          id: record.dynamodb.Keys.pk.S,
+          index: 'efcms',
+        });
       } catch (e) {
         await applicationContext
           .getPersistenceGateway()
@@ -49,5 +46,4 @@ exports.processStreamRecordsInteractor = async ({
   }
 
   applicationContext.logger.info('Time', createISODateString());
-  return results;
 };

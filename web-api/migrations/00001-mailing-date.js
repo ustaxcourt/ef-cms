@@ -1,39 +1,23 @@
-const { isCaseRecord } = require('./utilities');
+const createApplicationContext = require('../src/applicationContext');
+const { Case } = require('../../shared/src/business/entities/cases/Case');
+const { isCaseRecord, upGenerator } = require('./utilities');
+const applicationContext = createApplicationContext({});
 
-const up = async (documentClient, tableName) => {
-  let hasMoreResults = true;
-  let lastKey = null;
-  while (hasMoreResults) {
-    hasMoreResults = false;
+const mutateRecord = item => {
+  if (isCaseRecord(item) && item.isPaper && item.mailingDate === undefined) {
+    console.log(`adding mailingDate to a paper case of "${item.caseId}"`);
+    item.mailingDate = '01/01/2010';
 
-    const results = await documentClient
-      .scan({
-        ExclusiveStartKey: lastKey,
-        TableName: tableName,
-      })
-      .promise();
+    const caseEntity = new Case(item, { applicationContext })
+      .validate()
+      .toRawObject();
 
-    for (let item of results.Items) {
-      if (isCaseRecord(item)) {
-        if (item.isPaper && item.mailingDate === undefined) {
-          console.log(`adding mailingDate to a paper case of "${item.caseId}"`);
-          item.mailingDate = '01/01/2010';
-
-          await documentClient
-            .put({
-              Item: item,
-              TableName: tableName,
-            })
-            .promise();
-        }
-      }
-    }
-
-    hasMoreResults = !!results.LastEvaluatedKey;
-    lastKey = results.LastEvaluatedKey;
+    const itemToPut = {
+      ...item,
+      ...caseEntity,
+    };
+    return itemToPut;
   }
 };
 
-module.exports = {
-  up,
-};
+module.exports = { mutateRecord, up: upGenerator(mutateRecord) };
