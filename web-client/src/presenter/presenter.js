@@ -9,8 +9,8 @@ import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDo
 import { archiveDraftDocumentModalSequence } from './sequences/archiveDraftDocumentModalSequence';
 import { archiveDraftDocumentSequence } from './sequences/archiveDraftDocumentSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
-import { associatePractitionerWithCaseSequence } from './sequences/caseAssociation/associatePractitionerWithCaseSequence';
-import { associateRespondentWithCaseSequence } from './sequences/caseAssociation/associateRespondentWithCaseSequence';
+import { associateIrsPractitionerWithCaseSequence } from './sequences/caseAssociation/associateIrsPractitionerWithCaseSequence';
+import { associatePrivatePractitionerWithCaseSequence } from './sequences/caseAssociation/associatePrivatePractitionerWithCaseSequence';
 import { autoSaveTrialSessionWorkingCopySequence } from './sequences/autoSaveTrialSessionWorkingCopySequence';
 import { batchDownloadErrorSequence } from './sequences/batchDownloadErrorSequence';
 import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
@@ -393,8 +393,8 @@ export const presenter = {
     archiveDraftDocumentModalSequence,
     archiveDraftDocumentSequence,
     assignSelectedWorkItemsSequence,
-    associatePractitionerWithCaseSequence,
-    associateRespondentWithCaseSequence,
+    associateIrsPractitionerWithCaseSequence,
+    associatePrivatePractitionerWithCaseSequence,
     autoSaveTrialSessionWorkingCopySequence,
     batchDownloadErrorSequence,
     batchDownloadReadySequence,

@@ -258,8 +258,8 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  practitionerCaseAssociation:
-    handler: web-api/${self:provider.dir}/usersHandlers.practitionerCaseAssociationLambda
+  privatePractitionerCaseAssociation:
+    handler: web-api/${self:provider.dir}/usersHandlers.privatePractitionerCaseAssociationLambda
     events:
       - http:
           path: /{userId}/case/{caseId}
@@ -270,8 +270,8 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  practitionerPendingCaseAssociation:
-    handler: web-api/${self:provider.dir}/usersHandlers.practitionerPendingCaseAssociationLambda
+  privatePractitionerPendingCaseAssociation:
+    handler: web-api/${self:provider.dir}/usersHandlers.privatePractitionerPendingCaseAssociationLambda
     events:
       - http:
           path: /{userId}/case/{caseId}/pending
@@ -347,8 +347,8 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getPractitionersBySearchKey:
-    handler: web-api/${self:provider.dir}/usersHandlers.getPractitionersBySearchKeyLambda
+  getPrivatePractitionersBySearchKey:
+    handler: web-api/${self:provider.dir}/usersHandlers.getPrivatePractitionersBySearchKeyLambda
     events:
       - http:
           path: /privatePractitioners/search
@@ -359,8 +359,8 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getRespondentsBySearchKey:
-    handler: web-api/${self:provider.dir}/usersHandlers.getRespondentsBySearchKeyLambda
+  getIrsPractitionersBySearchKey:
+    handler: web-api/${self:provider.dir}/usersHandlers.getIrsPractitionersBySearchKeyLambda
     events:
       - http:
           path: /irsPractitioners/search
