@@ -1,5 +1,5 @@
 const { Case } = require('../../entities/cases/Case');
-const { IrsPractitioner } = require('../../entities/Respondent');
+const { IrsPractitioner } = require('../../entities/IrsPractitioner');
 
 /**
  * associateIrsPractitionerToCase
