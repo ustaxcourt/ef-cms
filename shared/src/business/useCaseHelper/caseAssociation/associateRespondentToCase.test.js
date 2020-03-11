@@ -38,7 +38,7 @@ describe('associateRespondentToCase', () => {
 
     const user = {
       name: 'Olivia Jade',
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
@@ -71,7 +71,7 @@ describe('associateRespondentToCase', () => {
 
     const user = {
       name: 'Olivia Jade',
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 

@@ -114,11 +114,11 @@
     "email": "petitionsclerk1"
   },
   {
-    "role": "practitioner",
-    "name": "Test Practitioner",
-    "section": "practitioner",
+    "role": "privatePractitioner",
+    "name": "Test Private Practitioner",
+    "section": "privatePractitioner",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "practitioner",
+    "email": "privatePractitioner",
     "barNumber": "PT1234",
     "contact": {
       "address1": "234 Main St",
@@ -132,11 +132,11 @@
     }
   },
   {
-    "role": "practitioner",
-    "name": "Test Practitioner",
-    "section": "practitioner",
+    "role": "privatePractitioner",
+    "name": "Test Private Practitioner",
+    "section": "privatePractitioner",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "email": "practitioner1",
+    "email": "privatePractitioner1",
     "barNumber": "PT5432",
     "contact": {
       "address1": "234 Main St",
@@ -150,11 +150,11 @@
     }
   },
   {
-    "role": "practitioner",
+    "role": "privatePractitioner",
     "name": "Lilah Gilbert",
-    "section": "practitioner",
+    "section": "privatePractitioner",
     "userId": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
-    "email": "practitioner2",
+    "email": "privatePractitioner2",
     "barNumber": "GL1111",
     "contact": {
       "address1": "234 Main St",
@@ -168,11 +168,11 @@
     }
   },
   {
-    "role": "practitioner",
+    "role": "privatePractitioner",
     "name": "Clark Stark",
-    "section": "practitioner",
+    "section": "privatePractitioner",
     "userId": "9f25dc2c-764a-435c-86dd-323e53634537",
-    "email": "practitioner3",
+    "email": "privatePractitioner3",
     "barNumber": "SC2222",
     "contact": {
       "address1": "234 Main St",
@@ -186,11 +186,11 @@
     }
   },
   {
-    "role": "practitioner",
+    "role": "privatePractitioner",
     "name": "Alden Rivas",
-    "section": "practitioner",
+    "section": "privatePractitioner",
     "userId": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
-    "email": "practitioner4",
+    "email": "privatePractitioner4",
     "barNumber": "RA3333",
     "contact": {
       "address1": "234 Main St",
@@ -204,11 +204,11 @@
     }
   },
   {
-    "role": "respondent",
-    "name": "Test Respondent",
-    "section": "respondent",
+    "role": "irsPractitioner",
+    "name": "Test IRS Practitioner",
+    "section": "irsPractitioner",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "respondent",
+    "email": "irsPractitioner",
     "barNumber": "RT6789",
     "contact": {
       "address1": "234 Main St",
@@ -222,11 +222,11 @@
     }
   },
   {
-    "role": "respondent",
-    "name": "Test Respondent1",
-    "section": "respondent",
+    "role": "irsPractitioner",
+    "name": "Test IRS Practitioner1",
+    "section": "irsPractitioner",
     "userId": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
-    "email": "respondent1",
+    "email": "irsPractitioner1",
     "barNumber": "RT0987",
     "contact": {
       "address1": "234 Main St",
@@ -240,11 +240,11 @@
     }
   },
   {
-    "role": "respondent",
+    "role": "irsPractitioner",
     "name": "Nero West",
-    "section": "respondent",
+    "section": "irsPractitioner",
     "userId": "2d9a7229-7d5a-459f-84ad-754504a9f10f",
-    "email": "respondent2",
+    "email": "irsPractitioner2",
     "barNumber": "WN7777",
     "contact": {
       "address1": "234 Main St",
@@ -258,11 +258,11 @@
     }
   },
   {
-    "role": "respondent",
+    "role": "irsPractitioner",
     "name": "Stuart Morrison",
-    "section": "respondent",
+    "section": "irsPractitioner",
     "userId": "5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
-    "email": "respondent3",
+    "email": "irsPractitioner3",
     "barNumber": "MS8888",
     "contact": {
       "address1": "234 Main St",
@@ -276,11 +276,11 @@
     }
   },
   {
-    "role": "respondent",
+    "role": "irsPractitioner",
     "name": "Jaquelyn Lane",
-    "section": "respondent",
+    "section": "irsPractitioner",
     "userId": "726c38b1-1432-49b3-9383-77a998c0ba4f",
-    "email": "respondent4",
+    "email": "irsPractitioner4",
     "address1": "3202 Elk Avenue",
     "address2": "Hanover, MI 49241",
     "barNumber": "LJ9999",
@@ -387,13 +387,5 @@
     "barNumber": "IP1111",
     "userId": "c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
     "email": "inactivePractitioner"
-  },
-  {
-    "role": "inactiveRespondent",
-    "name": "Test Inactive Respondent",
-    "section": "inactiveRespondent",
-    "barNumber": "IR1111",
-    "userId": "a7c8609a-1ab5-408b-b370-1c7e55af857a",
-    "email": "inactiveRespondent"
   }
 ]

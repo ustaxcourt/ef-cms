@@ -35,8 +35,8 @@ describe('updateCaseDeadline', () => {
 
     expect(updateStub.getCall(0).args[0]).toMatchObject({
       Item: {
-        pk: 'case-deadline-6805d1ab-18d0-43ec-bafb-654e83405416',
-        sk: 'case-deadline-6805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
+        sk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
       },
       TableName: 'efcms-dev',
     });

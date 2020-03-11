@@ -54,8 +54,8 @@ export const headerHelper = (get, applicationContext) => {
       user &&
       userRole &&
       userRole !== USER_ROLES.petitioner &&
-      userRole !== USER_ROLES.practitioner &&
-      userRole !== USER_ROLES.respondent,
+      userRole !== USER_ROLES.privatePractitioner &&
+      userRole !== USER_ROLES.irsPractitioner,
     showTrialSessions: permissions && permissions.TRIAL_SESSIONS,
     userName: user && user.name,
   };

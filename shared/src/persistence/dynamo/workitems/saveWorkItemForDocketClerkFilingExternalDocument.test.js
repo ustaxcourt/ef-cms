@@ -50,26 +50,26 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
 
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
-        pk: 'workitem-123',
-        sk: 'workitem-123',
+        pk: 'work-item|123',
+        sk: 'work-item|123',
       },
     });
     expect(putStub.getCall(1).args[0]).toMatchObject({
       Item: {
-        pk: 'section-outbox-docket',
+        pk: 'section-outbox|docket',
         workItemId: '123',
       },
     });
     expect(putStub.getCall(2).args[0]).toMatchObject({
       Item: {
-        pk: 'user-outbox-1805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         workItemId: '123',
       },
     });
     expect(putStub.getCall(3).args[0]).toMatchObject({
       Item: {
-        pk: '456|workItem',
-        sk: '123',
+        pk: 'case|456',
+        sk: 'work-item|123',
       },
     });
   });

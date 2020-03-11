@@ -3,8 +3,8 @@ const { createISODateString } = require('../utilities/DateHandler');
 const filterRecords = records => {
   return records.filter(
     record =>
-      !record.dynamodb.Keys.pk.S.includes('workitem-') &&
-      !record.dynamodb.Keys.pk.S.includes('|user') &&
+      !record.dynamodb.Keys.pk.S.includes('work-item|') &&
+      !record.dynamodb.Keys.pk.S.includes('user|') &&
       ['INSERT', 'MODIFY'].includes(record.eventName),
   );
 };
@@ -26,8 +26,9 @@ exports.processStreamRecordsInteractor = async ({
     ...record.dynamodb.NewImage,
   }));
 
+  // fetch entire case persistence
   const body = filteredRecords.flatMap(doc => [
-    { index: { _id: doc.pk.S, _index: 'efcms' } },
+    { index: { _id: `${doc.pk.S}_${doc.sk.S}`, _index: 'efcms' } },
     doc,
   ]);
 
@@ -46,7 +47,7 @@ exports.processStreamRecordsInteractor = async ({
           try {
             await searchClient.index({
               body: { ...record.dynamodb.NewImage },
-              id: record.dynamodb.Keys.pk.S,
+              id: `${record.dynamodb.Keys.pk.S}_${record.dynamodb.Keys.sk.S}`,
               index: 'efcms',
             });
           } catch (e) {

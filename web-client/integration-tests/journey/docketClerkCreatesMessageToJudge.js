@@ -1,9 +1,13 @@
-export const docketClerkCreatesMessageToJudge = (test, message) => {
+export const docketClerkCreatesMessageToJudge = (
+  test,
+  message,
+  createdCases,
+) => {
   return it('Docket clerk sends message to judgeArmen', async () => {
-    const workItem = test.petitionerNewCases[0].documents[3].workItems[0];
+    const workItem = createdCases[0].documents[3].workItems[0];
     await test.runSequence('gotoDocumentDetailSequence', {
-      docketNumber: test.petitionerNewCases[0].docketNumber,
-      documentId: test.petitionerNewCases[0].documents[3].documentId,
+      docketNumber: createdCases[0].docketNumber,
+      documentId: createdCases[0].documents[3].documentId,
     });
 
     // judgeArmen

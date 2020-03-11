@@ -13,7 +13,7 @@ const mockUser = {
   isAdmitted: true,
   name: 'Test Attorney',
   practitionerType: 'Attorney',
-  role: User.ROLES.practitioner,
+  role: User.ROLES.privatePractitioner,
   userId: 'practitioner1@example.com',
 };
 

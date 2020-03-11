@@ -1,7 +1,4 @@
 const client = require('../../dynamodbClientService');
-const {
-  createMappingRecord,
-} = require('../../dynamo/helpers/createMappingRecord');
 const { User } = require('../../../business/entities/User');
 
 exports.createUserRecords = async ({ applicationContext, user, userId }) => {
@@ -13,16 +10,16 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 
   await client.put({
     Item: {
-      pk: `${user.section}|user`,
-      sk: userId,
+      pk: `section|${user.section}`,
+      sk: `user|${userId}`,
     },
     applicationContext,
   });
 
   await client.put({
     Item: {
-      pk: userId,
-      sk: userId,
+      pk: `user|${userId}`,
+      sk: `user|${userId}`,
       ...user,
       userId,
     },
@@ -30,18 +27,19 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   });
 
   if (user.name && user.barNumber) {
-    await createMappingRecord({
+    await client.put({
+      Item: {
+        pk: `${user.role}|${user.name}`,
+        sk: `user|${userId}`,
+      },
       applicationContext,
-      pkId: user.name,
-      skId: userId,
-      type: user.role,
     });
-
-    await createMappingRecord({
+    await client.put({
+      Item: {
+        pk: `${user.role}|${user.barNumber}`,
+        sk: `user|${userId}`,
+      },
       applicationContext,
-      pkId: user.barNumber,
-      skId: userId,
-      type: user.role,
     });
   }
 
@@ -54,9 +52,13 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 exports.createAttorneyUser = async ({ applicationContext, user }) => {
   let userId = applicationContext.getUniqueId();
 
-  if (![User.ROLES.practitioner, User.ROLES.respondent].includes(user.role)) {
+  if (
+    ![User.ROLES.privatePractitioner, User.ROLES.irsPractitioner].includes(
+      user.role,
+    )
+  ) {
     throw new Error(
-      'Attorney users must have either practitioner or respondent role',
+      'Attorney users must have either private or IRS practitioner role',
     );
   }
 
