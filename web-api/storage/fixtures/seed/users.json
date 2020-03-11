@@ -304,13 +304,6 @@
     "email": "admissionsclerk"
   },
   {
-    "role": "calendarclerk",
-    "name": "Test Calendar Clerk",
-    "section": "calendar",
-    "userId": "106249e9-ded0-4baa-9a35-c0073712c3d1",
-    "email": "calendarclerk"
-  },
-  {
     "role": "clerkofcourt",
     "name": "Test Clerk of Court",
     "section": "clerkofcourt",

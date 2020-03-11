@@ -62,7 +62,7 @@ describe('petitionsclerk can login', () => {
     token = results.AuthenticationResult.IdToken;
   });
 
-  it('views the section inbox', async () => {
+  it('views the section inbox', () => {
     cy.visit(`/log-in?token=${token}`);
     cy.get('.button-switch-box').should('exist');
   });

@@ -72,6 +72,32 @@ exports.updateTrialSessionInteractor = async ({
       });
   }
 
+  if (
+    ((!currentTrialSession.trialClerk ||
+      !currentTrialSession.trialClerk.userId) &&
+      newTrialSessionEntity.trialClerk &&
+      newTrialSessionEntity.trialClerk.userId) ||
+    (currentTrialSession.trialClerk &&
+      newTrialSessionEntity.trialClerk &&
+      currentTrialSession.trialClerk.userId !==
+        newTrialSessionEntity.trialClerk.userId)
+  ) {
+    //create a working copy for the new trial clerk
+    const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
+      trialSessionId: newTrialSessionEntity.trialSessionId,
+      userId: newTrialSessionEntity.trialClerk.userId,
+    });
+
+    await applicationContext
+      .getPersistenceGateway()
+      .createTrialSessionWorkingCopy({
+        applicationContext,
+        trialSessionWorkingCopy: trialSessionWorkingCopyEntity
+          .validate()
+          .toRawObject(),
+      });
+  }
+
   if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
     //update all the cases that are calendared with the new trial information
     const calendaredCases = currentTrialSession.caseOrder;

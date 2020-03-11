@@ -6,8 +6,8 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { updateJudgesCaseNoteAction } from '../actions/TrialSession/updateJudgesCaseNoteAction';
 import { updateNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateNotePropsFromModalStateAction';
+import { updateUserCaseNoteAction } from '../actions/TrialSession/updateUserCaseNoteAction';
 import { validateNoteAction } from '../actions/validateNoteAction';
 
 export const updateJudgesCaseNoteOnCaseDetailSequence = [
@@ -19,7 +19,7 @@ export const updateJudgesCaseNoteOnCaseDetailSequence = [
       stopShowValidationAction,
       clearAlertsAction,
       updateNotePropsFromModalStateAction,
-      updateJudgesCaseNoteAction,
+      updateUserCaseNoteAction,
       setJudgesCaseNoteOnCaseDetailAction,
       clearModalAction,
       clearModalStateAction,

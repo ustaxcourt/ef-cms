@@ -582,6 +582,11 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, Tennessee',
       procedureType: 'Small',
       receivedAt: '2009-10-13',
+      requestForPlaceOfTrialFile: new File(
+        [],
+        'requestForPlaceOfTrialFile.pdf',
+      ),
+      requestForPlaceOfTrialFileSize: 1,
       signature: true,
       stinFile: {},
       stinFileSize: 1,

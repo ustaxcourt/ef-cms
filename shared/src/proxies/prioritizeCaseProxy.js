@@ -13,6 +13,6 @@ exports.prioritizeCaseInteractor = ({ applicationContext, caseId, reason }) => {
   return post({
     applicationContext,
     body: { reason },
-    endpoint: `/cases/${caseId}/high-priority`,
+    endpoint: `/case-meta/${caseId}/high-priority`,
   });
 };

@@ -1,6 +1,4 @@
-const createApplicationContext = require('../applicationContext');
-const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
-const { handle } = require('../middleware/apiGatewayHelper');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * used for determining if a user has pending association with a case or not
@@ -9,23 +7,14 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  handle(event, async () => {
+  genericHandler(event, async ({ applicationContext }) => {
     const { caseId, userId } = event.pathParameters || {};
-    const user = getUserFromAuthHeader(event);
-    const applicationContext = createApplicationContext(user);
-    try {
-      const results = await applicationContext
-        .getUseCases()
-        .verifyPendingCaseForUserInteractor({
-          applicationContext,
-          caseId,
-          userId,
-        });
-      applicationContext.logger.info('User', user);
-      applicationContext.logger.info('Results', results);
-      return results;
-    } catch (e) {
-      applicationContext.logger.error(e);
-      throw e;
-    }
+
+    return await applicationContext
+      .getUseCases()
+      .verifyPendingCaseForUserInteractor({
+        applicationContext,
+        caseId,
+        userId,
+      });
   });

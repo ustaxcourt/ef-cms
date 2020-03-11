@@ -1,8 +1,8 @@
-import { AddEditJudgesCaseNoteModal } from './AddEditJudgesCaseNoteModal';
 import { AddEditSessionNoteModal } from './AddEditSessionNoteModal';
+import { AddEditUserCaseNoteModal } from './AddEditUserCaseNoteModal';
 import { Button } from '../../ustc-ui/Button/Button';
-import { DeleteJudgesCaseNoteConfirmModal } from './DeleteJudgesCaseNoteConfirmModal';
 import { DeleteSessionNoteConfirmModal } from './DeleteSessionNoteConfirmModal';
+import { DeleteUserCaseNoteConfirmModal } from './DeleteUserCaseNoteConfirmModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SessionNotes } from './SessionNotes';
@@ -34,7 +34,7 @@ export const TrialSessionWorkingCopy = connect(
           <div className="grid-row">
             <div className="grid-col-9">
               <h2 className="heading-1">
-                {formattedTrialSessionDetails.formattedJudge} - Session Copy
+                {trialSessionHeaderHelper.nameToDisplay} - Session Copy
                 {trialSessionHeaderHelper.showSwitchToSessionDetail && (
                   <a
                     className="button-switch-box margin-left-2"
@@ -66,14 +66,14 @@ export const TrialSessionWorkingCopy = connect(
           <ErrorNotification />
           <SessionNotes />
           <WorkingCopySessionList />
-          {showModal === 'DeleteJudgesCaseNoteConfirmModal' && (
-            <DeleteJudgesCaseNoteConfirmModal onConfirmSequence="deleteJudgesCaseNoteFromWorkingCopySequence" />
+          {showModal === 'DeleteUserCaseNoteConfirmModal' && (
+            <DeleteUserCaseNoteConfirmModal onConfirmSequence="deleteUserCaseNoteFromWorkingCopySequence" />
           )}
           {showModal === 'DeleteSessionNoteConfirmModal' && (
             <DeleteSessionNoteConfirmModal />
           )}
-          {showModal === 'AddEditJudgesCaseNoteModal' && (
-            <AddEditJudgesCaseNoteModal onConfirmSequence="updateJudgesCaseNoteOnWorkingCopySequence" />
+          {showModal === 'AddEditUserCaseNoteModal' && (
+            <AddEditUserCaseNoteModal onConfirmSequence="updateUserCaseNoteOnWorkingCopySequence" />
           )}
           {showModal === 'AddEditSessionNoteModal' && (
             <AddEditSessionNoteModal />

@@ -31,7 +31,7 @@ describe('validateAddRespondent', () => {
     };
   });
 
-  it('should call the path success when no errors are found', async () => {
+  it('should call the success path when no errors are found', async () => {
     validateAddRespondentInteractorStub.returns(null);
     await runAction(validateAddRespondentAction, {
       modules: {
@@ -45,7 +45,7 @@ describe('validateAddRespondent', () => {
     expect(successStub.calledOnce).toEqual(true);
   });
 
-  it('should call the path error when any errors are found', async () => {
+  it('should call the error path when any errors are found', async () => {
     validateAddRespondentInteractorStub.returns('error');
     await runAction(validateAddRespondentAction, {
       modules: {

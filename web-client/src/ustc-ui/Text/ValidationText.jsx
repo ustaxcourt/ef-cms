@@ -8,7 +8,9 @@ export const ValidationText = connect(
     setFieldOrderSequence: sequences.setFieldOrderSequence,
   },
   ({ field, setFieldOrderSequence }) => {
-    useEffect(() => setFieldOrderSequence({ field }), []);
+    useEffect(() => {
+      setFieldOrderSequence({ field });
+    }, []);
     return (
       <Text bind={`validationErrors.${field}`} className="usa-error-message" />
     );

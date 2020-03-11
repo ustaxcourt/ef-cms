@@ -7,6 +7,7 @@ const { Case, isAssociatedUser } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
+const { MOCK_USERS } = require('../../../test/mockUsers');
 const { Practitioner } = require('../Practitioner');
 const { Respondent } = require('../Respondent');
 const { TrialSession } = require('../trialSessions/TrialSession');
@@ -18,6 +19,7 @@ describe('Case entity', () => {
 
   beforeAll(() => {
     applicationContext = {
+      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
   });
@@ -311,6 +313,36 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           highPriority: true,
           highPriorityReason: 'something',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
+
+    it('Creates an invalid case with closed status and no closed date', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          status: Case.STATUS_TYPES.closed,
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        closedDate: expect.anything(),
+      });
+    });
+
+    it('Creates a valid case with closed status and a closed date', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          closedDate: '2019-03-01T21:40:46.415Z',
+          status: Case.STATUS_TYPES.closed,
         },
         {
           applicationContext,
@@ -703,16 +735,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('sendToIRSHoldingQueue', () => {
-    it('sets status for irs batch', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      caseRecord.sendToIRSHoldingQueue();
-      expect(caseRecord.status).toEqual(Case.STATUS_TYPES.batchedForIRS);
-    });
-  });
-
   describe('setRequestForTrialDocketRecord', () => {
     it('sets request for trial docket record when it does not already exist', () => {
       const caseRecord = new Case(MOCK_CASE, {
@@ -721,7 +743,9 @@ describe('Case entity', () => {
       const preferredTrialCity = 'Mobile, Alabama';
       const initialDocketLength =
         (caseRecord.docketRecord && caseRecord.docketRecord.length) || 0;
-      caseRecord.setRequestForTrialDocketRecord(preferredTrialCity);
+      caseRecord.setRequestForTrialDocketRecord(preferredTrialCity, {
+        applicationContext,
+      });
       const docketLength = caseRecord.docketRecord.length;
       expect(docketLength).toEqual(initialDocketLength + 1);
     });
@@ -731,10 +755,16 @@ describe('Case entity', () => {
         applicationContext,
       });
       const preferredTrialCity = 'Mobile, Alabama';
-      caseRecord.setRequestForTrialDocketRecord(preferredTrialCity);
+      caseRecord.setRequestForTrialDocketRecord(preferredTrialCity, {
+        applicationContext,
+      });
       const docketLength = caseRecord.docketRecord.length;
-      caseRecord.setRequestForTrialDocketRecord('Birmingham, Alabama');
-      caseRecord.setRequestForTrialDocketRecord('Some city, USA');
+      caseRecord.setRequestForTrialDocketRecord('Birmingham, Alabama', {
+        applicationContext,
+      });
+      caseRecord.setRequestForTrialDocketRecord('Some city, USA', {
+        applicationContext,
+      });
       expect(docketLength).toEqual(caseRecord.docketRecord.length);
     });
   });
@@ -745,11 +775,14 @@ describe('Case entity', () => {
         applicationContext,
       });
       caseRecord.addDocketRecord(
-        new DocketRecord({
-          description: 'test',
-          filingDate: new Date().toISOString(),
-          index: 5,
-        }),
+        new DocketRecord(
+          {
+            description: 'test',
+            filingDate: new Date().toISOString(),
+            index: 5,
+          },
+          { applicationContext },
+        ),
       );
 
       expect(caseRecord.docketRecord).toHaveLength(4);
@@ -757,10 +790,13 @@ describe('Case entity', () => {
       expect(caseRecord.docketRecord[3].index).toEqual(5);
 
       caseRecord.addDocketRecord(
-        new DocketRecord({
-          description: 'some description',
-          filingDate: new Date().toISOString(),
-        }),
+        new DocketRecord(
+          {
+            description: 'some description',
+            filingDate: new Date().toISOString(),
+          },
+          { applicationContext },
+        ),
       );
 
       expect(caseRecord.docketRecord[4].index).toEqual(6);
@@ -769,7 +805,9 @@ describe('Case entity', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
       });
-      caseRecord.addDocketRecord(new DocketRecord({ description: 'test' }));
+      caseRecord.addDocketRecord(
+        new DocketRecord({ description: 'test' }, { applicationContext }),
+      );
       let error;
       try {
         caseRecord.validate();
@@ -785,12 +823,15 @@ describe('Case entity', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
       });
-      const updatedDocketEntry = new DocketRecord({
-        description: 'second record now updated',
-        documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-        filingDate: '2018-03-02T22:22:00.000Z',
-        index: 7,
-      });
+      const updatedDocketEntry = new DocketRecord(
+        {
+          description: 'second record now updated',
+          documentId: '8675309b-28d0-43ec-bafb-654e83405412',
+          filingDate: '2018-03-02T22:22:00.000Z',
+          index: 7,
+        },
+        { applicationContext },
+      );
       caseRecord.updateDocketRecordEntry(updatedDocketEntry);
 
       expect(caseRecord.docketRecord).toHaveLength(3); // unchanged
@@ -804,7 +845,9 @@ describe('Case entity', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
       });
-      caseRecord.addDocketRecord(new DocketRecord({ description: 'test' }));
+      caseRecord.addDocketRecord(
+        new DocketRecord({ description: 'test' }, { applicationContext }),
+      );
       let error;
       try {
         caseRecord.validate();
@@ -890,11 +933,14 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      caseToVerify.addDocument({
-        documentId: '123',
-        documentType: 'Answer',
-        userId: 'respondent',
-      });
+      caseToVerify.addDocument(
+        {
+          documentId: '123',
+          documentType: 'Answer',
+          userId: 'respondent',
+        },
+        { applicationContext },
+      );
       expect(caseToVerify.documents.length).toEqual(1);
       expect(caseToVerify.documents[0]).toMatchObject({
         documentId: '123',
@@ -954,7 +1000,9 @@ describe('Case entity', () => {
       );
       expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
       caseToVerify.docketNumberSuffix = 'W';
-      caseToVerify.updateDocketNumberRecord();
+      caseToVerify.updateDocketNumberRecord({
+        applicationContext,
+      });
       expect(caseToVerify.docketRecord.length).toEqual(1);
     });
 
@@ -966,7 +1014,9 @@ describe('Case entity', () => {
         },
       );
       expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
-      caseToVerify.updateDocketNumberRecord();
+      caseToVerify.updateDocketNumberRecord({
+        applicationContext,
+      });
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
@@ -991,7 +1041,9 @@ describe('Case entity', () => {
         },
       );
       caseToVerify.docketNumberSuffix = 'W';
-      caseToVerify.updateDocketNumberRecord();
+      caseToVerify.updateDocketNumberRecord({
+        applicationContext,
+      });
       expect(caseToVerify.docketRecord.length).toEqual(3);
       expect(caseToVerify.docketRecord[2].description).toEqual(
         "Docket Number is amended from '123-19P' to '123-19W'",
@@ -1007,7 +1059,9 @@ describe('Case entity', () => {
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord();
+      ).updateCaseTitleDocketRecord({
+        applicationContext,
+      });
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
@@ -1019,7 +1073,9 @@ describe('Case entity', () => {
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord();
+      ).updateCaseTitleDocketRecord({
+        applicationContext,
+      });
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
@@ -1033,7 +1089,9 @@ describe('Case entity', () => {
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord();
+      ).updateCaseTitleDocketRecord({
+        applicationContext,
+      });
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
@@ -1047,7 +1105,9 @@ describe('Case entity', () => {
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord();
+      ).updateCaseTitleDocketRecord({
+        applicationContext,
+      });
       expect(caseToVerify.docketRecord.length).toEqual(1);
       expect(caseToVerify.docketRecord[0].eventCode).toEqual('MINC');
     });
@@ -1072,7 +1132,9 @@ describe('Case entity', () => {
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord();
+      ).updateCaseTitleDocketRecord({
+        applicationContext,
+      });
       expect(caseToVerify.docketRecord.length).toEqual(2);
     });
 
@@ -1096,7 +1158,9 @@ describe('Case entity', () => {
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord();
+      ).updateCaseTitleDocketRecord({
+        applicationContext,
+      });
       expect(caseToVerify.docketRecord.length).toEqual(3);
     });
   });
@@ -1106,11 +1170,14 @@ describe('Case entity', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
-      myCase.addDocument({
-        documentId: '123',
-        documentType: 'Answer',
-        userId: 'respondent',
-      });
+      myCase.addDocument(
+        {
+          documentId: '123',
+          documentType: 'Answer',
+          userId: 'respondent',
+        },
+        { applicationContext },
+      );
       const workItem = new WorkItem(
         {
           assigneeId: 'bob',
@@ -1447,7 +1514,7 @@ describe('Case entity', () => {
   });
 
   describe('closeCase', () => {
-    it('should update the status of the case to closed', () => {
+    it('should update the status of the case to closed and add a closedDate', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -1466,20 +1533,11 @@ describe('Case entity', () => {
         blocked: false,
         blockedDate: undefined,
         blockedReason: undefined,
+        closedDate: expect.anything(),
         highPriority: false,
         highPriorityReason: undefined,
         status: Case.STATUS_TYPES.closed,
       });
-    });
-  });
-
-  describe('recallFromIRSHoldingQueue', () => {
-    it('should update the status of the case to recalled', () => {
-      const myCase = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      myCase.recallFromIRSHoldingQueue();
-      expect(myCase.status).toEqual(Case.STATUS_TYPES.recalled);
     });
   });
 
@@ -1949,7 +2007,9 @@ describe('Case entity', () => {
       expect(updatedCase.associatedJudge).toEqual(Case.CHIEF_JUDGE);
     });
 
-    it('should update the case status and leave the associated judge unchanged if the new status is Closed', () => {
+    it('should update the case status, leave the associated judge unchanged, and call closeCase if the new status is Closed', () => {
+      const closeCaseSpy = jest.spyOn(Case.prototype, 'closeCase');
+
       const updatedCase = new Case(
         {
           ...MOCK_CASE,
@@ -1964,6 +2024,8 @@ describe('Case entity', () => {
 
       expect(updatedCase.status).toEqual(Case.STATUS_TYPES.closed);
       expect(updatedCase.associatedJudge).toEqual('Judge Buch');
+      expect(closeCaseSpy).toBeCalled();
+      closeCaseSpy.mockRestore();
     });
   });
 
@@ -2548,7 +2610,6 @@ describe('Case entity', () => {
       docketRecord: 'At least one valid Docket Record is required',
       documents: 'At least one valid document is required',
       partyType: 'Select a party type',
-      preferredTrialCity: 'Select a preferred trial location',
       procedureType: 'Select a case procedure',
     });
   });
@@ -2562,6 +2623,8 @@ describe('Case entity', () => {
       },
       {
         applicationContext: {
+          getCurrentUser: () =>
+            MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
           getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
       },
@@ -2618,6 +2681,8 @@ describe('Case entity', () => {
       },
       {
         applicationContext: {
+          getCurrentUser: () =>
+            MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
           getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
       },

@@ -20,6 +20,7 @@ export const Contacts = connect(
     showPrimaryServiceIndicator,
     showSecondaryContact,
     showSecondaryServiceIndicator,
+    useSameAsPrimary,
     validateSequence,
     wrapperClassName,
   }) => {
@@ -54,6 +55,7 @@ export const Contacts = connect(
               bind={bind}
               contactsHelper={contactsHelper}
               parentView={parentView}
+              useSameAsPrimary={useSameAsPrimary}
               wrapperClassName={wrapperClassName}
               onBlur={onBlur}
               onChange={onChange}

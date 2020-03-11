@@ -83,7 +83,7 @@ export const CourtIssuedDocketEntry = connect(
                     openConfirmInitiateServiceModalSequence();
                   }}
                 >
-                  Serve to Parties
+                  Save and Serve
                 </Button>
               </div>
             </div>

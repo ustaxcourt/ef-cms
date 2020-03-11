@@ -1,5 +1,6 @@
 import { applicationContext } from '../../src/applicationContext';
 import { userMap } from '../../../shared/src/test/mockUserTokenMap';
+import { wait } from '../helpers';
 
 export default (test, token = 'armensChambers') => {
   it('the chambers user logs in', async () => {

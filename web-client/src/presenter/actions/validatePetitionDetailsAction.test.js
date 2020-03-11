@@ -26,7 +26,7 @@ describe('validatePetitionDetailsAction', () => {
     jest.clearAllMocks();
   });
 
-  it('should call the path success when no errors are found for a paid case', async () => {
+  it('should call the success path when no errors are found for a paid case', async () => {
     await runAction(validatePetitionDetailsAction, {
       modules: {
         presenter,
@@ -50,7 +50,7 @@ describe('validatePetitionDetailsAction', () => {
     expect(successStub).toHaveBeenCalled();
   });
 
-  it('should call the path success when no errors are found for an unpaid case', async () => {
+  it('should call the success path when no errors are found for an unpaid case', async () => {
     await runAction(validatePetitionDetailsAction, {
       modules: {
         presenter,
@@ -68,7 +68,7 @@ describe('validatePetitionDetailsAction', () => {
     expect(successStub).toHaveBeenCalled();
   });
 
-  it('should call the path success when no errors are found for a waived case', async () => {
+  it('should call the success path when no errors are found for a waived case', async () => {
     await runAction(validatePetitionDetailsAction, {
       modules: {
         presenter,
@@ -90,7 +90,7 @@ describe('validatePetitionDetailsAction', () => {
     expect(successStub).toHaveBeenCalled();
   });
 
-  it('should call the path success when no errors are found for a case with an IRS notice date', async () => {
+  it('should call the success path when no errors are found for a case with an IRS notice date', async () => {
     await runAction(validatePetitionDetailsAction, {
       modules: {
         presenter,
@@ -142,7 +142,7 @@ describe('validatePetitionDetailsAction', () => {
     expect(successStub).toHaveBeenCalled();
   });
 
-  it('should call the path error when errors are found', async () => {
+  it('should call the error path when errors are found', async () => {
     validateCaseDetailStub = jest.fn().mockReturnValue('error');
     await runAction(validatePetitionDetailsAction, {
       modules: {

@@ -7,6 +7,10 @@ echo "starting dynamo"
 DYNAMO_PID=$!
 ./wait-until.sh http://localhost:8000/shell
 
+echo "killing elasticsearch if already running"
+pkill -f elasticsearch
+
+echo "starting elasticsearch"
 ./web-api/start-elasticsearch.sh &
 ESEARCH_PID=$!
 ./wait-until.sh http://localhost:9200/ 200
@@ -23,15 +27,18 @@ export S3_ENDPOINT=http://localhost:9000
 export DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1
 export TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1
 
+echo "killing s3rver if already running"
+pkill -f s3rver
+
+echo "starting s3rver"
+rm -rf ./web-api/storage/s3/*
 node ./web-api/start-s3rver &
 S3RVER_PID=$!
+./wait-until.sh http://localhost:9000/ 200
 
 if [ ! -z "$RESUME" ]; then
   echo "Resuming operation with previous s3 and dynamo data"
 else
-  echo "seeding s3"
-  npm run seed:s3
-
   echo "creating & seeding dynamo tables"
   npm run seed:db
 fi
@@ -85,6 +92,8 @@ echo "starting streams service"
 npx sls offline start "$@" --config web-api/serverless-streams.yml &
 echo "starting case parties service"
 npx sls offline start "$@" --config web-api/serverless-case-parties.yml &
+echo "starting case meta service"
+npx sls offline start "$@" --config web-api/serverless-case-meta.yml &
 echo "starting migrate service"
 npx sls offline start "$@" --config web-api/serverless-migrate.yml &
 
@@ -98,4 +107,5 @@ if [ ! -e "$CIRCLECI" ]; then
   pkill -P $DYNAMO_PID
   pkill -P $ESEARCH_PID
 fi
-kill $S3RVER_PID
+
+pkill -P $S3RVER_PID

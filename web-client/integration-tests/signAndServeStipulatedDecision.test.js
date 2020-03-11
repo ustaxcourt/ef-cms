@@ -42,14 +42,16 @@ describe('a user signs and serves a stipulated decision', () => {
   let signedDocumentId = null;
   let caseDetail;
 
+  loginAs(test, 'petitioner');
+
   it('login as a petitioner and create a case', async () => {
-    await loginAs(test, 'petitioner');
     caseDetail = await uploadPetition(test);
     ({ docketNumber } = caseDetail.docketNumber);
   });
 
+  loginAs(test, 'respondent');
+
   it('respondent uploads a proposed stipulated decision', async () => {
-    await loginAs(test, 'respondent');
     await viewCaseDetail({
       docketNumber: caseDetail.docketNumber,
       test,
@@ -57,8 +59,8 @@ describe('a user signs and serves a stipulated decision', () => {
     await uploadProposedStipulatedDecision(test);
   });
 
+  loginAs(test, 'docketclerk');
   it('docketclerk assigns the stipulated decision to the adc', async () => {
-    await loginAs(test, 'docketclerk');
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
       test,
     );
@@ -79,8 +81,8 @@ describe('a user signs and serves a stipulated decision', () => {
     });
   });
 
+  loginAs(test, 'adc');
   it('adc signs the proposed stipulated decision', async () => {
-    await loginAs(test, 'adc');
     const inbox = await getFormattedMyInbox(test);
     const stipulatedDecision = inbox.find(
       item =>
@@ -90,8 +92,9 @@ describe('a user signs and serves a stipulated decision', () => {
     await signProposedStipulatedDecision(test, stipulatedDecision);
   });
 
+  loginAs(test, 'docketclerk');
+
   it('docketclerk creates a docket entry for the signed stipulated decision', async () => {
-    await loginAs(test, 'docketclerk');
     const inbox = await getFormattedMyInbox(test);
     const signedStipulatedDecision = inbox.find(
       item =>
@@ -106,8 +109,9 @@ describe('a user signs and serves a stipulated decision', () => {
     });
   });
 
+  loginAs(test, 'docketclerk');
+
   it('docketclerk serves the signed stipulated decision', async () => {
-    await loginAs(test, 'docketclerk');
     caseDetail = test.getState('caseDetail');
     const signedDocument = caseDetail.documents.find(
       d => d.documentId === signedDocumentId,

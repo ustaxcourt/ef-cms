@@ -87,28 +87,13 @@ export const createCaseFromPaperAction = async ({
         .prepareDateFromString(props.computedDateReceived)
         .toISOString()) ||
     null;
-  const mailingDate =
-    (props.computedMailingDate &&
-      applicationContext
-        .getUtilities()
-        .prepareDateFromString(props.computedMailingDate)
-        .toISOString()) ||
-    null;
 
   const form = omit(
     {
       ...get(state.form),
-      mailingDate,
       receivedAt,
     },
-    [
-      'dateReceivedYear',
-      'dateReceivedMonth',
-      'dateReceivedDay',
-      'mailingDateYear',
-      'mailingDateMonth',
-      'mailingDateDay',
-    ],
+    ['dateReceivedYear', 'dateReceivedMonth', 'dateReceivedDay'],
   );
 
   const progressFunctions = setupPercentDone(
