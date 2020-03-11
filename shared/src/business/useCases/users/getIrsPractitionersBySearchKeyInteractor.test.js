@@ -1,9 +1,9 @@
 const {
-  getRespondentsBySearchKeyInteractor,
-} = require('./getRespondentsBySearchKeyInteractor');
+  getIrsPractitionersBySearchKeyInteractor,
+} = require('./getIrsPractitionersBySearchKeyInteractor');
 const { User } = require('../../entities/User');
 
-describe('getRespondentsBySearchKeyInteractor', () => {
+describe('getIrsPractitionersBySearchKeyInteractor', () => {
   let applicationContext;
 
   it('should throw an error when not authorized', async () => {
@@ -22,7 +22,7 @@ describe('getRespondentsBySearchKeyInteractor', () => {
           getUsersBySearchKey: async () => [],
         }),
       };
-      await getRespondentsBySearchKeyInteractor({
+      await getIrsPractitionersBySearchKeyInteractor({
         applicationContext,
         searchKey: 'something',
       });
@@ -52,7 +52,7 @@ describe('getRespondentsBySearchKeyInteractor', () => {
       }),
     };
 
-    const result = await getRespondentsBySearchKeyInteractor({
+    const result = await getIrsPractitionersBySearchKeyInteractor({
       applicationContext,
       searchKey: 'Test Respondent',
     });

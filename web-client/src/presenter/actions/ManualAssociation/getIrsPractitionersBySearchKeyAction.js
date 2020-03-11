@@ -3,10 +3,10 @@ import { state } from 'cerebral';
 /* * Gets irsPractitioners whose name or barNumber match the searchKey
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext needed for getting the getRespondentsBySearchKeyInteractor use case
- * @returns {object} contains the irsPractitioners returned from the getRespondentsBySearchKeyInteractor use case
+ * @param {object} providers.applicationContext needed for getting the getIrsPractitionersBySearchKeyInteractor use case
+ * @returns {object} contains the irsPractitioners returned from the getIrsPractitionersBySearchKeyInteractor use case
  */
-export const getRespondentsBySearchKeyAction = async ({
+export const getIrsPractitionersBySearchKeyAction = async ({
   applicationContext,
   get,
   path,
@@ -15,7 +15,10 @@ export const getRespondentsBySearchKeyAction = async ({
 
   const irsPractitioners = await applicationContext
     .getUseCases()
-    .getRespondentsBySearchKeyInteractor({ applicationContext, searchKey });
+    .getIrsPractitionersBySearchKeyInteractor({
+      applicationContext,
+      searchKey,
+    });
 
   if (irsPractitioners.length) {
     return path.success({

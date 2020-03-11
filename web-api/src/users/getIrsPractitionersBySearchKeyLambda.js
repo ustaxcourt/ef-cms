@@ -12,7 +12,7 @@ exports.handler = event =>
 
     return await applicationContext
       .getUseCases()
-      .getRespondentsBySearchKeyInteractor({
+      .getIrsPractitionersBySearchKeyInteractor({
         applicationContext,
         searchKey,
       });
