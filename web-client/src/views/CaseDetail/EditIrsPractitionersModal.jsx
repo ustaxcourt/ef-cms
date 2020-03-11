@@ -4,13 +4,14 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const EditRespondentsModal = connect(
+export const EditIrsPractitionersModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.submitEditRespondentsModalSequence,
+    confirmSequence: sequences.submitEditIrsPractitionersModalSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
-    validateEditRespondentsSequence: sequences.validateEditRespondentsSequence,
+    validateEditIrsPractitionersSequence:
+      sequences.validateEditIrsPractitionersSequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -18,7 +19,7 @@ export const EditRespondentsModal = connect(
     confirmSequence,
     modal,
     updateModalValueSequence,
-    validateEditRespondentsSequence,
+    validateEditIrsPractitionersSequence,
     validationErrors,
   }) => {
     return (
@@ -52,7 +53,7 @@ export const EditRespondentsModal = connect(
                       validationErrors.irsPractitioners[idx] &&
                       validationErrors.irsPractitioners[idx].serviceIndicator
                     }
-                    validateSequence={validateEditRespondentsSequence}
+                    validateSequence={validateEditIrsPractitionersSequence}
                   />
                 </div>
               </div>

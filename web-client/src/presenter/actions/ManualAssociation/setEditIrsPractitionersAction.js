@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @returns {Promise<*>} the promise of the completed action
  */
-export const setEditRespondentsAction = async ({ get, store }) => {
+export const setEditIrsPractitionersAction = async ({ get, store }) => {
   const irsPractitioners = get(state.caseDetail.irsPractitioners);
 
   store.set(state.modal.irsPractitioners, cloneDeep(irsPractitioners));

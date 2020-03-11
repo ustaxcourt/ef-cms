@@ -1,9 +1,9 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { submitEditRespondentsModalAction } from './submitEditRespondentsModalAction';
+import { submitEditIrsPractitionersModalAction } from './submitEditIrsPractitionersModalAction';
 import sinon from 'sinon';
 
-describe('submitEditRespondentsModalAction', () => {
+describe('submitEditIrsPractitionersModalAction', () => {
   let deleteCounselFromCaseInteractorStub;
   let updateCounselOnCaseInteractorStub;
   let successStub;
@@ -42,7 +42,7 @@ describe('submitEditRespondentsModalAction', () => {
       ],
     };
 
-    await runAction(submitEditRespondentsModalAction, {
+    await runAction(submitEditIrsPractitionersModalAction, {
       modules: {
         presenter,
       },

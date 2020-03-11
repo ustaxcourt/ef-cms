@@ -7,16 +7,16 @@ import { setCasePropFromStateAction } from '../actions/setCasePropFromStateActio
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { submitEditRespondentsModalAction } from '../actions/caseAssociation/submitEditRespondentsModalAction';
-import { validateEditRespondentsAction } from '../actions/caseAssociation/validateEditRespondentsAction';
+import { submitEditIrsPractitionersModalAction } from '../actions/caseAssociation/submitEditIrsPractitionersModalAction';
+import { validateEditIrsPractitionersAction } from '../actions/caseAssociation/validateEditIrsPractitionersAction';
 
-export const submitEditRespondentsModalSequence = [
+export const submitEditIrsPractitionersModalSequence = [
   startShowValidationAction,
-  validateEditRespondentsAction,
+  validateEditIrsPractitionersAction,
   {
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
-      submitEditRespondentsModalAction,
+      submitEditIrsPractitionersModalAction,
       {
         success: [
           setAlertSuccessAction,
