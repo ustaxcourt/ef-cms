@@ -1,8 +1,10 @@
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
-const { getCasePractitioners } = require('./getCasePractitioners');
+const {
+  getCasePrivatePractitioners,
+} = require('./getCasePrivatePractitioners');
 
-describe('getCasePractitioners', () => {
+describe('getCasePrivatePractitioners', () => {
   let applicationContext;
   let queryStub;
 
@@ -33,7 +35,7 @@ describe('getCasePractitioners', () => {
   });
 
   it('retrieves the privatePractitioners for a case', async () => {
-    const result = await getCasePractitioners({ applicationContext })({
+    const result = await getCasePrivatePractitioners({ applicationContext })({
       caseId: 'abc-123',
     });
 
