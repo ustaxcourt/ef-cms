@@ -385,6 +385,13 @@ export const setupTest = ({ useCases = {} } = {}) => {
             workQueueIsInternal: false,
           });
           break;
+        case 'document-qc/section/outbox':
+          await test.runSequence('gotoMessagesSequence', {
+            box: 'outbox',
+            queue: 'section',
+            workQueueIsInternal: false,
+          });
+          break;
         case '/document-qc':
           await test.runSequence('gotoMessagesSequence', {
             box: 'inbox',
@@ -395,6 +402,20 @@ export const setupTest = ({ useCases = {} } = {}) => {
         case '/document-qc/my/inbox':
           await test.runSequence('gotoMessagesSequence', {
             box: 'inbox',
+            queue: 'my',
+            workQueueIsInternal: false,
+          });
+          break;
+        case '/document-qc/my/inProgress':
+          await test.runSequence('gotoMessagesSequence', {
+            box: 'inProgress',
+            queue: 'my',
+            workQueueIsInternal: false,
+          });
+          break;
+        case '/document-qc/my/outbox':
+          await test.runSequence('gotoMessagesSequence', {
+            box: 'outbox',
             queue: 'my',
             workQueueIsInternal: false,
           });
@@ -431,6 +452,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
           await test.runSequence('gotoDashboardSequence');
           break;
         default:
+          console.warn('No action taken for route: ', url);
           break;
       }
     },
