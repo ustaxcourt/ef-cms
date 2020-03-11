@@ -1,9 +1,4 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
-import petitionerAddNewCaseToTestObj from './journey/petitionerAddNewCaseToTestObj';
-import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
-import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
-import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import petitionsClerkBulkAssignsCases from './journey/petitionsClerkBulkAssignsCases';
 import petitionsClerkCreatesMessage from './journey/petitionsClerkCreatesMessage';
 import petitionsClerkGetsMyDocumentQCInboxCount from './journey/petitionsClerkGetsMyDocumentQCInboxCount';
@@ -35,11 +30,10 @@ describe('Petitions Clerk Document QC Journey', () => {
 
   // Create multiple cases for testing
   for (let i = 0; i < caseCreationCount; i++) {
-    petitionerNavigatesToCreateCase(test);
-    petitionerChoosesProcedureType(test);
-    petitionerChoosesCaseType(test);
-    petitionerCreatesNewCase(test, fakeFile);
-    petitionerAddNewCaseToTestObj(test, createdCases);
+    it(`create case ${i + 1}`, async () => {
+      const caseDetail = await uploadPetition(test);
+      createdCases.push(caseDetail);
+    });
   }
 
   loginAs(test, 'petitionsclerk');
