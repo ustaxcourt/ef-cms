@@ -130,7 +130,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     },
   ];
 
-  return it('Petitions clerk creates a new case and saves for later', async () => {
+  return it('Petitions clerk creates a new case and serves case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
     await test.runSequence('navigateToReviewPetitionFromPaperSequence');
 

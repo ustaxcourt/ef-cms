@@ -2,7 +2,7 @@ import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { getFormattedDocumentQCSectionOutbox, wait } from '../helpers';
 
 export default test => {
-  return it('Petitions clerk edits an existing case and saves for later', async () => {
+  return it('Petitions clerk edits an existing case and serves it', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
       documentId: test.documentId,
@@ -39,14 +39,12 @@ export default test => {
     await test.runSequence('saveCaseAndServeToIrsSequence');
     await wait(5000);
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(test.currentRouteUrl).toEqual(`/case-detail/${test.caseId}`);
 
-    await test.runSequence('navigateToPathSequence', {
-      path: '/document-qc/my/outbox',
-    });
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'outbox',
       queue: 'my',
+      workQueueIsInternal: false,
     });
     await wait(5000);
 
@@ -65,20 +63,20 @@ export default test => {
     });
     expect(servedCase.caseStatus).toEqual(Case.STATUS_TYPES.generalDocket);
 
-    await test.runSequence('navigateToPathSequence', {
-      path: 'document-qc/section/outbox',
-    });
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'outbox',
       queue: 'section',
+      workQueueIsInternal: false,
     });
     await wait(5000);
 
     const sectionWorkQueueToDisplay = test.getState('workQueueToDisplay');
 
-    expect(sectionWorkQueueToDisplay.workQueueIsInternal).toBeFalsy();
-    expect(sectionWorkQueueToDisplay.queue).toEqual('section');
-    expect(sectionWorkQueueToDisplay.box).toEqual('outbox');
+    expect(sectionWorkQueueToDisplay).toMatchObject({
+      box: 'outbox',
+      queue: 'section',
+      workQueueIsInternal: false,
+    });
 
     const sectionServedCase = test
       .getState('workQueue')
