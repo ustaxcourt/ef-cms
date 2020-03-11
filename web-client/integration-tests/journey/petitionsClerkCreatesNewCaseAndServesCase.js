@@ -216,12 +216,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
   });
 
   it('should route to the party info tab when user selects to edit party info', async () => {
-    await test.runSequence('goBackToStartCaseInternalSequence', {
-      tab: 'partyInfo',
-    });
-
-    expect(test.getState('currentPage')).toEqual('StartCaseInternal');
-    expect(test.getState('startCaseInternal.tab')).toBe('partyInfo');
+    await navigateToStartCaseInternalPartiesTab(test);
   });
 
   it('should route to the case info tab when user selects to edit case info', async () => {
@@ -268,14 +263,8 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     );
   });
 
-  // FIXME - extract and call again
-  it('REFACTOR ME', async () => {
-    await test.runSequence('goBackToStartCaseInternalSequence', {
-      tab: 'partyInfo',
-    });
-
-    expect(test.getState('currentPage')).toEqual('StartCaseInternal');
-    expect(test.getState('startCaseInternal.tab')).toBe('partyInfo');
+  it('should default to the party info tab when editing an in progress case', async () => {
+    await navigateToStartCaseInternalPartiesTab(test);
   });
 
   it('should update stin file on the review screen when it has been changed', async () => {
@@ -376,7 +365,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('form.stinFile')).toBe(fakeFile);
   });
 
-  it('sshould allow deletion of an uploaded request for place of trial pdf', async () => {
+  it('should allow deletion of an uploaded request for place of trial pdf', async () => {
     await test.runSequence('goBackToStartCaseInternalSequence', {
       tab: 'partyInfo',
     });
@@ -536,3 +525,11 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('currentPage')).toEqual('Messages');
   });
 };
+
+async function navigateToStartCaseInternalPartiesTab(test) {
+  await test.runSequence('goBackToStartCaseInternalSequence', {
+    tab: 'partyInfo',
+  });
+  expect(test.getState('currentPage')).toEqual('StartCaseInternal');
+  expect(test.getState('startCaseInternal.tab')).toBe('partyInfo');
+}
