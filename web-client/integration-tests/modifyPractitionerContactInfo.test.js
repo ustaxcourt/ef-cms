@@ -13,7 +13,7 @@ describe('Modify Practitioner Contact Information', () => {
   test.createdDocketNumbers = [];
 
   for (let i = 0; i < 3; i++) {
-    loginAs(test, 'practitioner');
+    loginAs(test, 'privatePractitioner');
     it(`login as a practitioner and create case #${i}`, async () => {
       caseDetail = await uploadPetition(test);
       test.createdDocketNumbers.push(caseDetail.docketNumber);

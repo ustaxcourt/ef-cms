@@ -466,7 +466,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
   });
 
   test = CerebralTest(presenter);
-  test.getSequence = name => obj => test.runSequence(name, obj);
+  test.getSequence = name => async obj => await test.runSequence(name, obj);
   test.closeSocket = stop;
   test.applicationContext = applicationContext;
 

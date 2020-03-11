@@ -9,8 +9,8 @@ const applicationContext = {};
 describe('associateUserWithCasePending', () => {
   beforeEach(() => {
     sinon.stub(client, 'put').resolves({
-      pk: '123|case|pending',
-      sk: '123',
+      pk: 'user|123',
+      sk: 'pending-case|123',
     });
   });
 
@@ -25,8 +25,8 @@ describe('associateUserWithCasePending', () => {
       userId: '123',
     });
     expect(result).toEqual({
-      pk: '123|case|pending',
-      sk: '123',
+      pk: 'user|123',
+      sk: 'pending-case|123',
     });
   });
 });

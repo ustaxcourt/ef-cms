@@ -28,7 +28,7 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
 
         await searchClient.index({
           body: { ...AWS.DynamoDB.Converter.marshall(fullRecord) },
-          id: record.recordPk,
+          id: `${record.recordPk}_${record.recordSk}`,
           index: 'efcms',
         });
 

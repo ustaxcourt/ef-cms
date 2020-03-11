@@ -79,7 +79,16 @@ describe('getCasesByUser', () => {
       user,
     });
     expect(result).toEqual([
-      { caseId: '123', docketRecord: [], pk: '123', sk: '123', status: 'New' },
+      {
+        caseId: '123',
+        docketRecord: [],
+        documents: [],
+        pk: '123',
+        practitioners: [],
+        respondents: [],
+        sk: '123',
+        status: 'New',
+      },
     ]);
   });
 

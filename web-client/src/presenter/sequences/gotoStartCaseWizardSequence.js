@@ -54,6 +54,9 @@ export const gotoStartCaseWizardSequence = [
       ],
       gotoStartCaseInternal,
     ),
-    ...takePathForRoles(['petitioner', 'practitioner'], gotoStartCaseExternal),
+    ...takePathForRoles(
+      ['petitioner', 'privatePractitioner'],
+      gotoStartCaseExternal,
+    ),
   },
 ];

@@ -30,8 +30,8 @@ describe('deleteTrialSession', () => {
 
     expect(deleteStub.getCall(0).args[0]).toMatchObject({
       Key: {
-        pk: `trial-session-${trialSessionId}`,
-        sk: `trial-session-${trialSessionId}`,
+        pk: `trial-session|${trialSessionId}`,
+        sk: `trial-session|${trialSessionId}`,
       },
       TableName: 'efcms-dev',
     });

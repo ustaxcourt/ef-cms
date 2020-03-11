@@ -53,7 +53,7 @@ describe('advancedSearchHelper', () => {
 
   it('returns showPractitionerSearch false when user is an external user', () => {
     globalUser = {
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: 'practitioner',
     };
 

@@ -33,7 +33,7 @@ export const EligibleCases = connect(
         >
           <thead>
             <tr>
-              <th>Docket</th>
+              <th>Docket number</th>
               <th aria-label="manually added indicator"></th>
               <th>Case title</th>
               <th>Petitioner counsel</th>

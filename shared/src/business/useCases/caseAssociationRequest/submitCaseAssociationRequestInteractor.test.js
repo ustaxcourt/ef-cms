@@ -69,12 +69,11 @@ describe('submitCaseAssociationRequest', () => {
       getCurrentUser: () => {
         return {
           name: 'Olivia Jade',
-          role: User.ROLES.practitioner,
+          role: User.ROLES.privatePractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },
       getPersistenceGateway: () => ({
-        createMappingRecord: associateUserWithCaseSpy,
         getCaseByCaseId: async () => caseRecord,
         getUserById: () => ({
           contact: {
@@ -88,7 +87,7 @@ describe('submitCaseAssociationRequest', () => {
             state: 'IL',
           },
           name: 'Olivia Jade',
-          role: User.ROLES.practitioner,
+          role: User.ROLES.privatePractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
         updateCase: updateCaseSpy,
@@ -129,7 +128,7 @@ describe('submitCaseAssociationRequest', () => {
             state: 'IL',
           },
           name: 'Olivia Jade',
-          role: User.ROLES.practitioner,
+          role: User.ROLES.privatePractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },
@@ -148,7 +147,7 @@ describe('submitCaseAssociationRequest', () => {
             state: 'IL',
           },
           name: 'Olivia Jade',
-          role: User.ROLES.practitioner,
+          role: User.ROLES.privatePractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
         updateCase: updateCaseSpy,
@@ -179,7 +178,7 @@ describe('submitCaseAssociationRequest', () => {
       getCurrentUser: () => {
         return {
           name: 'Olivia Jade',
-          role: User.ROLES.respondent,
+          role: User.ROLES.irsPractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },
@@ -198,7 +197,7 @@ describe('submitCaseAssociationRequest', () => {
             state: 'IL',
           },
           name: 'Olivia Jade',
-          role: User.ROLES.practitioner,
+          role: User.ROLES.privatePractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
         updateCase: updateCaseSpy,

@@ -46,11 +46,11 @@ exports.updateCounselOnCaseInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  if (userToUpdate.role === User.ROLES.practitioner) {
+  if (userToUpdate.role === User.ROLES.privatePractitioner) {
     caseEntity.updatePractitioner(
       new Practitioner({ userId: userToUpdate.userId, ...userData }),
     );
-  } else if (userToUpdate.role === User.ROLES.respondent) {
+  } else if (userToUpdate.role === User.ROLES.irsPractitioner) {
     caseEntity.updateRespondent(
       new Respondent({ userId: userToUpdate.userId, ...userData }),
     );
