@@ -152,8 +152,8 @@ import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNot
 import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSessionNoteModalSequence';
 import { openAddEditUserCaseNoteModalFromDetailSequence } from './sequences/openAddEditUserCaseNoteModalFromDetailSequence';
 import { openAddEditUserCaseNoteModalFromListSequence } from './sequences/openAddEditUserCaseNoteModalFromListSequence';
+import { openAddIrsPractitionerModalSequence } from './sequences/openAddIrsPractitionerModalSequence';
 import { openAddPractitionerModalSequence } from './sequences/openAddPractitionerModalSequence';
-import { openAddRespondentModalSequence } from './sequences/openAddRespondentModalSequence';
 import { openAddToTrialModalSequence } from './sequences/openAddToTrialModalSequence';
 import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
 import { openCancelDraftDocumentModalSequence } from './sequences/openCancelDraftDocumentModalSequence';
@@ -338,8 +338,8 @@ import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequen
 import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserCaseNoteOnWorkingCopySequence';
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
 import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
+import { validateAddIrsPractitionerSequence } from './sequences/caseAssociation/validateAddIrsPractitionerSequence';
 import { validateAddPractitionerSequence } from './sequences/caseAssociation/validateAddPractitionerSequence';
-import { validateAddRespondentSequence } from './sequences/caseAssociation/validateAddRespondentSequence';
 import { validateAddToTrialSessionSequence } from './sequences/validateAddToTrialSessionSequence';
 import { validateAttorneyUserSequence } from './sequences/validateAttorneyUserSequence';
 import { validateBlockFromTrialSequence } from './sequences/validateBlockFromTrialSequence';
@@ -536,8 +536,8 @@ export const presenter = {
     openAddEditSessionNoteModalSequence,
     openAddEditUserCaseNoteModalFromDetailSequence,
     openAddEditUserCaseNoteModalFromListSequence,
+    openAddIrsPractitionerModalSequence,
     openAddPractitionerModalSequence,
-    openAddRespondentModalSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
     openCancelDraftDocumentModalSequence,
@@ -720,8 +720,8 @@ export const presenter = {
     updateUserCaseNoteOnWorkingCopySequence,
     updateWorkingCopySessionNoteSequence,
     uploadCourtIssuedDocumentSequence,
+    validateAddIrsPractitionerSequence,
     validateAddPractitionerSequence,
-    validateAddRespondentSequence,
     validateAddToTrialSessionSequence,
     validateAttorneyUserSequence,
     validateBlockFromTrialSequence,

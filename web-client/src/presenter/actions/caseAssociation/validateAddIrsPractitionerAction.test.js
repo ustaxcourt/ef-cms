@@ -1,27 +1,27 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { validateAddRespondentAction } from './validateAddRespondentAction';
+import { validateAddIrsPractitionerAction } from './validateAddIrsPractitionerAction';
 import sinon from 'sinon';
 
-describe('validateAddRespondent', () => {
-  let validateAddRespondentInteractorStub;
+describe('validateAddIrsPractitioner', () => {
+  let validateAddIrsPractitionerInteractorStub;
   let successStub;
   let errorStub;
 
-  let mockAddRespondent;
+  let mockAddIrsPractitioner;
 
   beforeEach(() => {
-    validateAddRespondentInteractorStub = sinon.stub();
+    validateAddIrsPractitionerInteractorStub = sinon.stub();
     successStub = sinon.stub();
     errorStub = sinon.stub();
 
-    mockAddRespondent = {
+    mockAddIrsPractitioner = {
       user: { userId: 'abc' },
     };
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        validateAddRespondentInteractor: validateAddRespondentInteractorStub,
+        validateAddIrsPractitionerInteractor: validateAddIrsPractitionerInteractorStub,
       }),
     };
 
@@ -32,13 +32,13 @@ describe('validateAddRespondent', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateAddRespondentInteractorStub.returns(null);
-    await runAction(validateAddRespondentAction, {
+    validateAddIrsPractitionerInteractorStub.returns(null);
+    await runAction(validateAddIrsPractitionerAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockAddRespondent,
+        form: mockAddIrsPractitioner,
       },
     });
 
@@ -46,13 +46,13 @@ describe('validateAddRespondent', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateAddRespondentInteractorStub.returns('error');
-    await runAction(validateAddRespondentAction, {
+    validateAddIrsPractitionerInteractorStub.returns('error');
+    await runAction(validateAddIrsPractitionerAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockAddRespondent,
+        form: mockAddIrsPractitioner,
       },
     });
 

@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validateAddRespondentAction = ({
+export const validateAddIrsPractitionerAction = ({
   applicationContext,
   get,
   path,
@@ -21,7 +21,7 @@ export const validateAddRespondentAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateAddRespondentInteractor({
+    .validateAddIrsPractitionerInteractor({
       applicationContext,
       counsel,
     });

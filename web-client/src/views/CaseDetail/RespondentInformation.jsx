@@ -1,4 +1,4 @@
-import { AddRespondentModal } from './AddRespondentModal';
+import { AddIrsPractitionerModal } from './AddIrsPractitionerModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { EditRespondentsModal } from './EditRespondentsModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -52,7 +52,8 @@ const RespondentInformation = connect(
     constants: state.constants,
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
-    openAddRespondentModalSequence: sequences.openAddRespondentModalSequence,
+    openAddIrsPractitionerModalSequence:
+      sequences.openAddIrsPractitionerModalSequence,
     openEditRespondentsModalSequence:
       sequences.openEditRespondentsModalSequence,
     showModal: state.showModal,
@@ -65,7 +66,7 @@ const RespondentInformation = connect(
     constants,
     form,
     formattedCaseDetail,
-    openAddRespondentModalSequence,
+    openAddIrsPractitionerModalSequence,
     openEditRespondentsModalSequence,
     showModal,
     updateFormValueSequence,
@@ -127,7 +128,7 @@ const RespondentInformation = connect(
               className="usa-search"
               onSubmit={e => {
                 e.preventDefault();
-                openAddRespondentModalSequence();
+                openAddIrsPractitionerModalSequence();
               }}
             >
               <div role="search">
@@ -198,7 +199,7 @@ const RespondentInformation = connect(
             </div>
           </div>
         )}
-        {showModal === 'AddRespondentModal' && <AddRespondentModal />}
+        {showModal === 'AddIrsPractitionerModal' && <AddIrsPractitionerModal />}
         {showModal === 'EditRespondentsModal' && <EditRespondentsModal />}
         {showModal === 'RespondentExistsModal' && <RespondentExistsModal />}
       </>
