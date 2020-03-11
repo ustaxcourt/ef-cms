@@ -348,7 +348,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('form.petitionFile')).toBe(fakeFile);
   });
 
-  it('should allow deletion of an uploaded stin pdf', async () => {
+  it('should allow deletion of an uploaded statement of identification pdf', async () => {
     await test.runSequence('goBackToStartCaseInternalSequence', {
       tab: 'partyInfo',
     });
@@ -360,7 +360,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('form.stinFile')).toBeUndefined();
   });
 
-  it('should upload a new stin file', async () => {
+  it('should upload a new statement of identification file', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'stinFile',
       value: fakeFile,
@@ -376,7 +376,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('form.stinFile')).toBe(fakeFile);
   });
 
-  it('Petitions clerk creates a new case and serves case', async () => {
+  it('sshould allow deletion of an uploaded request for place of trial pdf', async () => {
     await test.runSequence('goBackToStartCaseInternalSequence', {
       tab: 'partyInfo',
     });
@@ -389,7 +389,9 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     await test.runSequence('openConfirmDeletePDFModalSequence');
     await test.runSequence('removeScannedPdfSequence');
     expect(test.getState('form.requestForPlaceOfTrialFile')).toBeUndefined();
+  });
 
+  it('should upload a new request for place of trial file', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'requestForPlaceOfTrialFile',
       value: fakeFile,
@@ -404,12 +406,16 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
     expect(test.getState('form.requestForPlaceOfTrialFile')).toBe(fakeFile);
+  });
 
+  it('should allow the deletion an uploaded ownership disclosure statement file', async () => {
     await test.setState('documentSelectedForScan', 'odsFile');
     await test.runSequence('openConfirmDeletePDFModalSequence');
     await test.runSequence('removeScannedPdfSequence');
     expect(test.getState('form.odsFile')).toBeUndefined();
+  });
 
+  it('should upload a new ownership disclosure statement file', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'odsFile',
       value: fakeFile,
@@ -424,13 +430,16 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
     expect(test.getState('form.odsFile')).toBe(fakeFile);
+  });
 
-    // TODO - Refactor how tab selection sets documentSelectedForScan
+  it('should allow deletion of an uploaded application for waiver of filing fee file', async () => {
     await test.setState('documentSelectedForScan', 'apwFile');
     await test.runSequence('openConfirmDeletePDFModalSequence');
     await test.runSequence('removeScannedPdfSequence');
     expect(test.getState('form.apwFile')).toBeUndefined();
+  });
 
+  it('should upload a new application for waiver of filing fee file', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'apwFile',
       value: fakeFile,
@@ -445,8 +454,9 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
     expect(test.getState('form.apwFile')).toBe(fakeFile);
+  });
 
-    //sequence 13
+  it('should contain an order for notice of attachments', async () => {
     await test.runSequence('goBackToStartCaseInternalSequence', {
       tab: 'caseInfo',
     });
@@ -456,55 +466,70 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       key: 'noticeOfAttachments',
       value: true,
     });
+    expect(test.getState('form.noticeOfAttachments')).toBe(true);
+  });
 
+  it('should contain an order for amended petition', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'orderForAmendedPetition',
       value: true,
     });
+    expect(test.getState('form.orderForAmendedPetition')).toBe(true);
+  });
 
+  it('should contain an order for amended petition and filing fee', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'orderForAmendedPetitionAndFilingFee',
       value: true,
     });
+    expect(test.getState('form.orderForAmendedPetitionAndFilingFee')).toBe(
+      true,
+    );
+  });
 
+  it('should contain an order for filing fee', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'orderForFilingFee',
       value: true,
     });
+    expect(test.getState('form.orderForFilingFee')).toBe(true);
+  });
 
+  it('should contain an order for ownership disclosure statement', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'orderForOds',
       value: true,
     });
+    expect(test.getState('form.orderForOds')).toBe(true);
+  });
 
+  it('should contain an order for ratification', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'orderForRatification',
       value: true,
     });
+    expect(test.getState('form.orderForRatification')).toBe(true);
+  });
 
+  it('should contain an order for requested trial location', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'orderForRequestedTrialLocation',
       value: true,
     });
+    expect(test.getState('form.orderForRequestedTrialLocation')).toBe(true);
+  });
 
+  it('should contain an order to show cause', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'orderToShowCause',
       value: true,
     });
+    expect(test.getState('form.orderToShowCause')).toBe(true);
+  });
 
+  it('should navigate to Document QC inbox page when saving an in progress case for later', async () => {
     await test.runSequence('gotoReviewPetitionFromPaperSequence');
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
-
-    expect(test.getState('form.noticeOfAttachments')).toBe(true);
-    expect(test.getState('form.orderForAmendedPetition')).toBe(true);
-    expect(test.getState('form.orderForAmendedPetitionAndFilingFee')).toBe(
-      true,
-    );
-    expect(test.getState('form.orderForFilingFee')).toBe(true);
-    expect(test.getState('form.orderForOds')).toBe(true);
-    expect(test.getState('form.orderForRatification')).toBe(true);
-    expect(test.getState('form.orderForRequestedTrialLocation')).toBe(true);
-    expect(test.getState('form.orderToShowCause')).toBe(true);
 
     await test.runSequence('saveInternalCaseForLaterSequence');
 
