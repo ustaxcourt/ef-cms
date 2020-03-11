@@ -4,7 +4,7 @@ import petitionsClerkEditsAnExistingCaseAndServesCase from './journey/petitionsC
 
 const test = setupTest();
 
-describe('Case (paper) journey', () => {
+describe('Petitions clerk paper case flow', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });

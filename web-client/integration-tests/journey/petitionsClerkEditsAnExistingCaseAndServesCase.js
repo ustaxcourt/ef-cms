@@ -2,7 +2,7 @@ import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { getFormattedDocumentQCSectionOutbox, wait } from '../helpers';
 
 export default test => {
-  return it('Petitions clerk edits an existing case and serves it', async () => {
+  it('should allow edits to an in progress case', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
       documentId: test.documentId,
@@ -17,7 +17,9 @@ export default test => {
 
     expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
+  });
 
+  it('should save edits to an in progress case', async () => {
     await test.runSequence('navigateToReviewPetitionFromPaperSequence');
     await test.runSequence('gotoReviewPetitionFromPaperSequence');
 
@@ -27,7 +29,9 @@ export default test => {
     await wait(5000);
 
     expect(test.getState('currentPage')).toEqual('Messages');
+  });
 
+  it('should display a confirmation modal before serving to irs', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
       documentId: test.documentId,
@@ -35,12 +39,16 @@ export default test => {
     await test.runSequence('openConfirmServeToIrsModalSequence');
 
     expect(test.getState('showModal')).toBe('ConfirmServeToIrsModal');
+  });
 
+  it('should redirect to case detail after successfully serving to irs', async () => {
     await test.runSequence('saveCaseAndServeToIrsSequence');
     await wait(5000);
 
     expect(test.currentRouteUrl).toEqual(`/case-detail/${test.caseId}`);
+  });
 
+  it('should add served case to individual served queue', async () => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'outbox',
       queue: 'my',
@@ -62,7 +70,9 @@ export default test => {
       caseTitle: 'Mona Schultz',
     });
     expect(servedCase.caseStatus).toEqual(Case.STATUS_TYPES.generalDocket);
+  });
 
+  it('should add served case to section served queue', async () => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'outbox',
       queue: 'section',
@@ -88,7 +98,9 @@ export default test => {
     expect(sectionServedCase.caseStatus).toEqual(
       Case.STATUS_TYPES.generalDocket,
     );
+  });
 
+  it('should indicate who served the case', async () => {
     const outboxItems = await getFormattedDocumentQCSectionOutbox(test);
     const desiredItem = outboxItems.find(
       x => x.docketNumber === test.docketNumber,
