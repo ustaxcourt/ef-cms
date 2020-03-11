@@ -41,12 +41,10 @@ export default test => {
 
     expect(test.currentRouteUrl).toEqual(`/case-detail/${test.caseId}`);
 
-    await test.runSequence('navigateToPathSequence', {
-      path: '/document-qc/my/outbox',
-    });
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'outbox',
       queue: 'my',
+      workQueueIsInternal: false,
     });
     await wait(5000);
 
