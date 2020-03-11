@@ -27,7 +27,7 @@ describe('validateEditPractitionersAction', () => {
     };
   });
 
-  it('should call the path success when no errors are found', async () => {
+  it('should call the success path when no errors are found', async () => {
     validateEditPractitionerInteractorStub = jest.fn().mockReturnValue(null);
     await runAction(validateEditPractitionersAction, {
       modules: {
@@ -66,7 +66,7 @@ describe('validateEditPractitionersAction', () => {
     expect(successStub).toBeCalled();
   });
 
-  it('should call the path error when any errors are found', async () => {
+  it('should call the error path when any errors are found', async () => {
     validateEditPractitionerInteractorStub = jest.fn().mockReturnValue('error');
     await runAction(validateEditPractitionersAction, {
       modules: {
@@ -104,7 +104,7 @@ describe('validateEditPractitionersAction', () => {
     });
   });
 
-  it('should call the path error when attempting to change from paper to electronic service', async () => {
+  it('should call the error path when attempting to change from paper to electronic service', async () => {
     validateEditPractitionerInteractorStub = jest
       .fn()
       .mockReturnValue({ something: 'error' });

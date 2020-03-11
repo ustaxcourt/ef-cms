@@ -1,6 +1,4 @@
-const createApplicationContext = require('../applicationContext');
-const { customHandle } = require('../customHandle');
-const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * lambda for creating the printable trial calendar
@@ -8,24 +6,18 @@ const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-
 exports.handler = event =>
-  customHandle(event, async () => {
-    const user = getUserFromAuthHeader(event);
-    const applicationContext = createApplicationContext(user);
-    const { trialSessionId } = JSON.parse(event.body);
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      const { trialSessionId } = JSON.parse(event.body);
 
-    try {
-      const result = await applicationContext
+      return await applicationContext
         .getUseCases()
         .generateTrialCalendarPdfInteractor({
           applicationContext,
           trialSessionId,
         });
-      applicationContext.logger.info('User', user);
-      return result;
-    } catch (e) {
-      applicationContext.logger.error(e);
-      throw e;
-    }
-  });
+    },
+    { logResults: false },
+  );

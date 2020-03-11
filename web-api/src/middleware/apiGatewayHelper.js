@@ -12,6 +12,7 @@ const headers = {
   Pragma: 'no-cache',
   'X-Content-Type-Options': 'nosniff',
 };
+const createApplicationContext = require('../applicationContext');
 
 exports.headers = headers;
 
@@ -20,45 +21,51 @@ exports.headers = headers;
  *
  * @param {Function} event the api gateway event
  * @param {Function} fun an function which either returns a promise containing payload data, or throws an exception
- * @param {object} applicationContext the application context
  * @returns {object} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handle = async (event, fun, applicationContext) => {
+exports.handle = async (event, fun) => {
+  const applicationContext = createApplicationContext({});
   if (event.source === 'serverless-plugin-warmup') {
     return exports.sendOk('Lambda is warm!');
   }
   try {
     let response = await fun();
-    if (applicationContext) {
+
+    // Check to see if the server responded with a pdf buffer
+    const isPdfBuffer =
+      response != null &&
+      typeof response[Symbol.iterator] === 'function' &&
+      response.indexOf('%PDF-') > -1;
+
+    if (isPdfBuffer) {
+      return {
+        body: response.toString('base64'),
+        headers: {
+          ...headers,
+          'Content-Type': 'application/pdf',
+          'accept-ranges': 'bytes',
+        },
+        isBase64Encoded: true,
+        statusCode: 200,
+      };
+    } else {
       const privateKeys = applicationContext.getPersistencePrivateKeys();
-      if (Array.isArray(response)) {
-        response.forEach(item => {
-          if (
-            item &&
-            Object.keys(item).some(key => privateKeys.includes(key))
-          ) {
-            throw new UnsanitizedEntityError();
-          }
-        });
-      } else {
-        if (
-          response &&
-          Object.keys(response).some(key => privateKeys.includes(key))
-        ) {
+      (Array.isArray(response) ? response : [response]).forEach(item => {
+        if (item && Object.keys(item).some(key => privateKeys.includes(key))) {
           throw new UnsanitizedEntityError();
         }
+      });
+      if (event.queryStringParameters && event.queryStringParameters.fields) {
+        const { fields } = event.queryStringParameters;
+        const fieldsArr = fields.split(',');
+        if (Array.isArray(response)) {
+          response = response.map(object => pick(object, fieldsArr));
+        } else {
+          response = pick(response, fieldsArr);
+        }
       }
+      return exports.sendOk(response);
     }
-    if (event.queryStringParameters && event.queryStringParameters.fields) {
-      const { fields } = event.queryStringParameters;
-      const fieldsArr = fields.split(',');
-      if (Array.isArray(response)) {
-        response = response.map(object => pick(object, fieldsArr));
-      } else {
-        response = pick(response, fieldsArr);
-      }
-    }
-    return exports.sendOk(response);
   } catch (err) {
     if (!process.env.CI && !err.skipLogging) {
       console.error('err', err);

@@ -29,30 +29,29 @@ export const OrdersNeededSummary = ({ data }) => {
                   <p className="heading-3 usa-alert__heading padding-top-0">
                     Orders Needed
                   </p>
+                  {data.noticeOfAttachments && (
+                    <div>Notice of Attachments in the Nature of Evidence</div>
+                  )}
+                  {data.orderDesignatingPlaceOfTrial && (
+                    <div>Order to Change Designated Place of Trial</div>
+                  )}
                   {data.orderForAmendedPetition && (
                     <div>Order for Amended Petition</div>
                   )}
                   {data.orderForAmendedPetitionAndFilingFee && (
-                    <div>
-                      Order for Amended Petition and orderForFilingFee Fee
-                    </div>
+                    <div>Order for Amended Petition and Filing Fee</div>
                   )}
-                  {data.orderForFilingFee && (
-                    <div>Order for orderForFilingFee Fee</div>
-                  )}
+                  {data.orderForFilingFee && <div>Order for Filing Fee</div>}
                   {data.orderForOds && (
                     <div>Order for Ownership Disclosure Statement</div>
                   )}
                   {data.orderForRatification && (
                     <div>Order for Ratification of Petition</div>
                   )}
-                  {data.orderDesignatingPlaceOfTrial && (
-                    <div>Order to Change Designated Place of Trial</div>
+                  {data.orderForRequestedTrialLocation && (
+                    <div>Order for Requested Trial Location</div>
                   )}
                   {data.orderToShowCause && <div>Order to Show Cause</div>}
-                  {data.noticeOfAttachments && (
-                    <div>Notice of Attachments in the Nature of Evidence</div>
-                  )}
                 </div>
                 <div className="tablet:grid-col-2 usa-alert__action">
                   <Button

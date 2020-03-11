@@ -27,8 +27,9 @@ describe('Case Consolidation Journey', () => {
     jest.setTimeout(30000);
   });
 
+  loginAs(test, 'petitioner');
+
   it('login as a petitioner and create the lead case', async () => {
-    await loginAs(test, 'petitioner');
     const caseDetail = await uploadPetition(test, overrides);
     test.caseId = test.leadCaseId = caseDetail.caseId;
     test.docketNumber = test.leadDocketNumber = caseDetail.docketNumber;
@@ -38,8 +39,9 @@ describe('Case Consolidation Journey', () => {
   docketClerkUpdatesCaseStatusToReadyForTrial(test);
   docketClerkSignsOut(test);
 
+  loginAs(test, 'petitioner');
+
   it('login as a petitioner and create the case to consolidate with', async () => {
-    await loginAs(test, 'petitioner');
     const caseDetail = await uploadPetition(test, overrides);
     test.caseId = caseDetail.caseId;
     test.docketNumber = caseDetail.docketNumber;

@@ -157,6 +157,7 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
   getSentMessagesForSection:
     handler: web-api/${self:provider.dir}/sectionsHandlers.getSentMessagesForSectionLambda
     events:
@@ -168,6 +169,7 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
   getDocumentQCBatchedForSection:
     handler: web-api/${self:provider.dir}/sectionsHandlers.getDocumentQCBatchedForSectionLambda
     events:
@@ -191,6 +193,7 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
   getUsersInSection:
     handler: web-api/${self:provider.dir}/sectionsHandlers.getUsersInSectionLambda
     events:

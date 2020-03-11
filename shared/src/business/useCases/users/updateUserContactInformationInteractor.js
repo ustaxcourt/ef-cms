@@ -1,4 +1,11 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
+  calculateISODate,
+  createISODateString,
+} = require('../../utilities/DateHandler');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -10,6 +17,7 @@ const { Document } = require('../../entities/Document');
 const { isEqual } = require('lodash');
 const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
@@ -90,7 +98,22 @@ exports.updateUserContactInformationInteractor = async ({
       caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     };
 
-    if (caseEntity.status !== Case.STATUS_TYPES.closed) {
+    let closedMoreThan6Months;
+    if (caseEntity.status === Case.STATUS_TYPES.closed) {
+      const maxClosedDate = calculateISODate({
+        dateString: caseEntity.closedDate,
+        howMuch: 6,
+        units: 'months',
+      });
+      const rightNow = createISODateString();
+      closedMoreThan6Months = maxClosedDate <= rightNow;
+    }
+
+    const shouldGenerateNotice = caseEntity.status !== Case.STATUS_TYPES.closed;
+    const shouldUpdateCase =
+      !closedMoreThan6Months || caseEntity.status !== Case.STATUS_TYPES.closed;
+
+    if (shouldGenerateNotice) {
       const documentType = applicationContext
         .getUtilities()
         .getDocumentTypeForAddressChange({
@@ -126,25 +149,49 @@ exports.updateUserContactInformationInteractor = async ({
 
       const newDocumentId = applicationContext.getUniqueId();
 
-      const changeOfAddressDocument = new Document(
-        {
-          addToCoversheet: true,
-          additionalInfo: `for ${user.name}`,
-          caseId: caseEntity.caseId,
-          documentId: newDocumentId,
-          documentType: documentType.title,
-          eventCode: documentType.eventCode,
-          filedBy: user.name,
-          processingStatus: 'complete',
-          userId: user.userId,
-        },
-        { applicationContext },
-      );
+      const documentData = {
+        addToCoversheet: true,
+        additionalInfo: `for ${user.name}`,
+        caseId: caseEntity.caseId,
+        documentId: newDocumentId,
+        documentTitle: documentType.title,
+        documentType: documentType.title,
+        eventCode: documentType.eventCode,
+        processingStatus: 'complete',
+        userId: user.userId,
+      };
+
+      if (user.role === User.ROLES.practitioner) {
+        documentData.practitioner = [
+          {
+            name: user.name,
+            partyPractitioner: true,
+          },
+        ];
+      } else if (user.role === User.ROLES.respondent) {
+        documentData.partyRespondent = true;
+      }
+
+      const changeOfAddressDocument = new Document(documentData, {
+        applicationContext,
+      });
+
+      const servedParties = aggregatePartiesForService(caseEntity);
+
+      changeOfAddressDocument.setAsServed(servedParties.all);
+
+      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        documentEntity: changeOfAddressDocument,
+        servedParties,
+      });
 
       const workItem = new WorkItem(
         {
           assigneeId: null,
           assigneeName: null,
+          associatedJudge: caseEntity.associatedJudge,
           caseId: caseEntity.caseId,
           caseStatus: caseEntity.status,
           caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
@@ -175,7 +222,7 @@ exports.updateUserContactInformationInteractor = async ({
       workItem.addMessage(message);
       changeOfAddressDocument.addWorkItem(workItem);
 
-      caseEntity.addDocument(changeOfAddressDocument);
+      caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
 
       const docketRecordPdfWithCover = await addCoverToPdf({
         applicationContext,
@@ -196,13 +243,19 @@ exports.updateUserContactInformationInteractor = async ({
       });
     }
 
-    const updatedCase = await applicationContext
-      .getPersistenceGateway()
-      .updateCase({
-        applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
-      });
-    updatedCases.push(updatedCase);
+    if (shouldUpdateCase) {
+      const updatedCase = await applicationContext
+        .getPersistenceGateway()
+        .updateCase({
+          applicationContext,
+          caseToUpdate: caseEntity.validate().toRawObject(),
+        });
+
+      const updatedCaseRaw = new Case(updatedCase, { applicationContext })
+        .validate()
+        .toRawObject();
+      updatedCases.push(updatedCaseRaw);
+    }
   }
 
   return updatedCases;

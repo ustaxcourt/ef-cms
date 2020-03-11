@@ -13,6 +13,7 @@ const {
 } = require('../utilities/DateHandler');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { MOCK_USERS } = require('../../test/mockUsers');
 const { PDFDocument } = require('pdf-lib');
 
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
@@ -102,6 +103,8 @@ describe('addCoversheetInteractor', () => {
       applicationContext: {
         environment: { documentsBucketName: 'documents' },
         getCaseCaptionNames: Case.getCaseCaptionNames,
+        getCurrentUser: () =>
+          MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdStub,
           saveDocumentFromLambda: saveDocumentFromLambdaStub,
@@ -151,6 +154,8 @@ describe('addCoversheetInteractor', () => {
       applicationContext: {
         environment: { documentsBucketName: 'documents' },
         getCaseCaptionNames: Case.getCaseCaptionNames,
+        getCurrentUser: () =>
+          MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdStub,
           saveDocumentFromLambda: saveDocumentFromLambdaStub,
@@ -189,6 +194,8 @@ describe('addCoversheetInteractor', () => {
     beforeEach(() => {
       applicationContext = {
         getCaseCaptionNames: Case.getCaseCaptionNames,
+        getCurrentUser: () =>
+          MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
         getUtilities: () => {
           return {
             formatDateString,

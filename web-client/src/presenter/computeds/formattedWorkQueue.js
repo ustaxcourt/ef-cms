@@ -1,9 +1,9 @@
 import {
   DOCKET_SECTION,
-  IRS_BATCH_SYSTEM_SECTION,
   PETITIONS_SECTION,
 } from '../../../../shared/src/business/entities/WorkQueue';
 import { capitalize, cloneDeep, orderBy } from 'lodash';
+import { filterQcItemsByAssociatedJudge } from '../utilities/filterQcItemsByAssociatedJudge';
 import { state } from 'cerebral';
 
 const isDateToday = (date, applicationContext) => {
@@ -50,8 +50,6 @@ export const formatWorkItem = ({
   const {
     COURT_ISSUED_EVENT_CODES,
     ORDER_TYPES_MAP,
-    STATUS_TYPES,
-    USER_ROLES,
   } = applicationContext.getConstants();
 
   const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
@@ -102,28 +100,6 @@ export const formatWorkItem = ({
     result.showUnassignedIcon = true;
   }
 
-  switch (result.caseStatus.trim()) {
-    case STATUS_TYPES.batchedForIRS:
-      result.showBatchedStatusIcon = true;
-      result.showUnreadStatusIcon = false;
-      result.showUnassignedIcon = false;
-      break;
-    case STATUS_TYPES.recalled:
-      result.showRecalledStatusIcon = true;
-      result.showUnreadStatusIcon = false;
-      break;
-    case STATUS_TYPES.generalDocket:
-    case STATUS_TYPES.new:
-    default:
-      result.showBatchedStatusIcon = false;
-      result.showRecalledStatusIcon = false;
-  }
-
-  if (applicationContext.getCurrentUser().role !== USER_ROLES.petitionsClerk) {
-    result.showRecalledStatusIcon = false;
-    result.showBatchedStatusIcon = false;
-  }
-
   result.docketNumberWithSuffix = `${
     result.docketNumber
   }${result.docketNumberSuffix || ''}`;
@@ -146,16 +122,6 @@ export const formatWorkItem = ({
     applicationContext,
   );
   result.historyMessages = result.messages.slice(1);
-
-  if (
-    result.messages.find(
-      message => message.message == 'Petition batched for IRS',
-    )
-  ) {
-    result.batchedAt = result.messages.find(
-      message => message.message == 'Petition batched for IRS',
-    ).createdAtTimeFormattedTZ;
-  }
 
   result.isCourtIssuedDocument = !!courtIssuedDocumentTypes.includes(
     result.document.documentType,
@@ -249,6 +215,7 @@ export const getWorkItemDocumentLink = ({
 
 export const filterWorkItems = ({
   applicationContext,
+  judgeUser,
   user,
   workQueueToDisplay,
 }) => {
@@ -261,25 +228,27 @@ export const filterWorkItems = ({
     docQCUserSection = DOCKET_SECTION;
   }
 
+  let additionalFilters = filterQcItemsByAssociatedJudge({
+    applicationContext,
+    judgeUser,
+  });
+
   const filters = {
     documentQc: {
       my: {
-        batched: item => {
-          return (
-            !item.completedAt &&
-            item.isQC &&
-            item.sentByUserId === user.userId &&
-            item.section === IRS_BATCH_SYSTEM_SECTION &&
-            item.caseStatus === STATUS_TYPES.batchedForIRS
-          );
-        },
         inProgress: item => {
           return (
-            item.assigneeId === user.userId &&
-            !item.completedAt &&
-            item.isQC &&
-            item.section === user.section &&
-            (item.document.isFileAttached === false || item.inProgress)
+            // DocketClerks
+            (item.assigneeId === user.userId &&
+              user.role === USER_ROLES.docketClerk &&
+              !item.completedAt &&
+              item.isQC &&
+              item.section === user.section &&
+              (item.document.isFileAttached === false || item.inProgress)) ||
+            // PetitionsClerks
+            (item.assigneeId === user.userId &&
+              user.role === USER_ROLES.petitionsClerk &&
+              item.caseStatus === STATUS_TYPES.inProgress)
           );
         },
         inbox: item => {
@@ -289,15 +258,14 @@ export const filterWorkItems = ({
             item.isQC &&
             item.section === user.section &&
             item.document.isFileAttached !== false &&
-            !item.inProgress
+            !item.inProgress &&
+            item.caseStatus !== STATUS_TYPES.inProgress
           );
         },
         outbox: item => {
           return (
             item.isQC &&
-            (user.role === USER_ROLES.petitionsClerk
-              ? item.section === IRS_BATCH_SYSTEM_SECTION
-              : true) &&
+            (user.role === USER_ROLES.petitionsClerk ? !!item.section : true) &&
             item.completedByUserId &&
             item.completedByUserId === user.userId &&
             !!item.completedAt
@@ -305,20 +273,17 @@ export const filterWorkItems = ({
         },
       },
       section: {
-        batched: item => {
-          return (
-            !item.completedAt &&
-            item.isQC &&
-            item.section === IRS_BATCH_SYSTEM_SECTION &&
-            item.caseStatus === STATUS_TYPES.batchedForIRS
-          );
-        },
         inProgress: item => {
           return (
-            !item.completedAt &&
-            item.isQC &&
-            item.section === user.section &&
-            (item.document.isFileAttached === false || item.inProgress)
+            // DocketClerks
+            (!item.completedAt &&
+              user.role === USER_ROLES.docketClerk &&
+              item.isQC &&
+              item.section === user.section &&
+              (item.document.isFileAttached === false || item.inProgress)) ||
+            // PetitionsClerks
+            (user.role === USER_ROLES.petitionsClerk &&
+              item.caseStatus === STATUS_TYPES.inProgress)
           );
         },
         inbox: item => {
@@ -327,16 +292,16 @@ export const filterWorkItems = ({
             item.isQC &&
             item.section === docQCUserSection &&
             item.document.isFileAttached !== false &&
-            !item.inProgress
+            !item.inProgress &&
+            additionalFilters(item) &&
+            item.caseStatus !== STATUS_TYPES.inProgress
           );
         },
         outbox: item => {
           return (
             !!item.completedAt &&
             item.isQC &&
-            (user.role === USER_ROLES.petitionsClerk
-              ? item.section === IRS_BATCH_SYSTEM_SECTION
-              : true)
+            (user.role === USER_ROLES.petitionsClerk ? !!item.section : true)
           );
         },
       },
@@ -391,10 +356,13 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const selectedWorkItems = get(state.selectedWorkItems);
   const { USER_ROLES } = applicationContext.getConstants();
 
+  const judgeUser = get(state.judgeUser);
+
   let workQueue = workItems
     .filter(
       filterWorkItems({
         applicationContext,
+        judgeUser,
         user,
         workQueueToDisplay,
       }),
@@ -418,7 +386,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const sortFields = {
     documentQc: {
       my: {
-        batched: 'batchedAt',
         inProgress: 'receivedAt',
         inbox: 'receivedAt',
         outbox:
@@ -427,7 +394,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
             : 'receivedAt',
       },
       section: {
-        batched: 'batchedAt',
         inProgress: 'receivedAt',
         inbox: 'receivedAt',
         outbox:
@@ -451,13 +417,11 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const sortDirections = {
     documentQc: {
       my: {
-        batched: 'asc',
         inProgress: 'asc',
         inbox: 'asc',
         outbox: 'desc',
       },
       section: {
-        batched: 'asc',
         inProgress: 'asc',
         inbox: 'asc',
         outbox: 'desc',

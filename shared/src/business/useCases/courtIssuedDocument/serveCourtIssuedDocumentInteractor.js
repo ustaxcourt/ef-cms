@@ -124,13 +124,11 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     serviceStampText: `${serviceStampType} ${serviceStampDate}`,
   });
 
-  applicationContext.logger.time('Saving S3 Document');
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: newPdfData,
     documentId,
   });
-  applicationContext.logger.timeEnd('Saving S3 Document');
 
   const workItemToUpdate = courtIssuedDocument.getQCWorkItem();
   await completeWorkItem({
@@ -140,10 +138,13 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     workItemToUpdate,
   });
 
-  const updatedDocketRecordEntity = new DocketRecord({
-    ...docketEntry,
-    filingDate: createISODateString(),
-  });
+  const updatedDocketRecordEntity = new DocketRecord(
+    {
+      ...docketEntry,
+      filingDate: createISODateString(),
+    },
+    { applicationContext },
+  );
   updatedDocketRecordEntity.validate();
 
   caseEntity.updateDocketRecordEntry(updatedDocketRecordEntity);

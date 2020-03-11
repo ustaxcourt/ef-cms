@@ -2,20 +2,19 @@
 const fs = require('fs');
 const S3rver = require('s3rver');
 
-console.log('starting s3rver');
+const corsPolicy = fs.readFileSync('web-api/cors-policy.xml', 'utf-8');
 
 new S3rver({
   configureBuckets: [
     {
-      configs: [fs.readFileSync('web-api/cors-policy.xml', 'utf-8')],
+      configs: [corsPolicy],
       name: process.env.DOCUMENTS_BUCKET_NAME,
     },
     {
-      configs: [fs.readFileSync('web-api/cors-policy.xml', 'utf-8')],
+      configs: [corsPolicy],
       name: process.env.TEMP_DOCUMENTS_BUCKET_NAME,
     },
   ],
-  cors: 'wat',
   directory: 'web-api/storage/s3',
   hostname: 'localhost',
   port: 9000,
