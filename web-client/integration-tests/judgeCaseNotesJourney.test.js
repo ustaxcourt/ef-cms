@@ -1,4 +1,3 @@
-import { captureCreatedCase } from './journey/captureCreatedCase';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -8,7 +7,6 @@ import judgeAddsNotesFromWorkingCopyCaseList from './journey/judgeAddsNotesFromW
 import judgeViewsNotesFromCaseDetail from './journey/judgeViewsNotesFromCaseDetail';
 import judgeViewsTrialSessionWorkingCopy from './journey/judgeViewsTrialSessionWorkingCopy';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
@@ -48,10 +46,10 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
   };
   loginAs(test, 'petitioner');
   it('Create case', async () => {
-    await uploadPetition(test, caseOverrides);
+    const caseDetail = await uploadPetition(test, caseOverrides);
+    createdCases.push(caseDetail);
+    createdDocketNumbers.push(caseDetail.docketNumber);
   });
-  petitionerViewsDashboard(test);
-  captureCreatedCase(test, createdCases, createdDocketNumbers);
 
   loginAs(test, 'petitionsclerk');
   petitionsClerkUpdatesFiledBy(test, caseOverrides);

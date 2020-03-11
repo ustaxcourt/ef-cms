@@ -39,10 +39,11 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
   const makeCaseReadyForTrial = (test, id, caseOverrides) => {
     loginAs(test, 'petitioner');
     it(`Create case ${id}`, async () => {
-      await uploadPetition(test, caseOverrides);
+      const caseDetail = await uploadPetition(test, caseOverrides);
+      createdCases.push(caseDetail);
+      createdDocketNumbers.push(caseDetail.docketNumber);
     });
     petitionerViewsDashboard(test);
-    captureCreatedCase(test, createdCases, createdDocketNumbers);
 
     loginAs(test, 'petitionsclerk');
     petitionsClerkSubmitsCaseToIrs(test);

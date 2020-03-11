@@ -1,4 +1,3 @@
-import { captureCreatedCase } from './journey/captureCreatedCase';
 import { loginAs, setupTest } from './helpers';
 import { uploadPetition } from './helpers';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
@@ -6,8 +5,6 @@ import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import { docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring } from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
-
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 
 import petitionsClerkCompletesAndSetsTrialSession from './journey/petitionsClerkCompletesAndSetsTrialSession';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
@@ -40,10 +37,10 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
   const makeCaseReadyForTrial = (test, id, caseOverrides) => {
     loginAs(test, 'petitioner');
     it(`Create case ${id}`, async () => {
-      await uploadPetition(test, caseOverrides);
+      const caseDetail = await uploadPetition(test, caseOverrides);
+      createdCases.push(caseDetail);
+      createdDocketNumbers.push(caseDetail.docketNumber);
     });
-    petitionerViewsDashboard(test);
-    captureCreatedCase(test, createdCases, createdDocketNumbers);
 
     loginAs(test, 'petitionsclerk');
     petitionsClerkSubmitsCaseToIrs(test);
