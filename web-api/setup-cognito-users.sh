@@ -4,24 +4,15 @@ REGION="us-east-1"
 
 CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"deployed-stack"},"sk":{"S":"deployed-stack"}}' | jq -r ".Item.current.S")
 
-echo "CURRENT_COLOR = ${CURRENT_COLOR}"
-
 restApiId=$(aws apigateway get-rest-apis --region="${REGION}" --query "items[?name=='${ENV}-ef-cms-users-${CURRENT_COLOR}'].id" --output text)
-
-echo "query = ${ENV}-ef-cms-users-${CURRENT_COLOR}"
-echo "restApiId = ${restApiId}"
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}")
 USER_POOL_ID="${USER_POOL_ID%\"}"
 USER_POOL_ID="${USER_POOL_ID#\"}"
 
-echo "USER_POOL_ID = ${USER_POOL_ID}"
-
 CLIENT_ID=$(aws cognito-idp list-user-pool-clients --user-pool-id "${USER_POOL_ID}" --query "UserPoolClients[?ClientName == 'client'].ClientId | [0]" --max-results 30 --region "${REGION}")
 CLIENT_ID="${CLIENT_ID%\"}"
 CLIENT_ID="${CLIENT_ID#\"}"
-
-echo "CLIENT_ID = ${CLIENT_ID}"
 
 generate_post_data() {
   email=$1
@@ -85,9 +76,6 @@ createAccount() {
   barNumber=$4
   section=$5
   name=${6:-Test ${role}$3}
-
-  echo "url = https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"
-  echo "post data = $(generate_post_data "${email}" "${role}" "${barNumber}" "${section}" "${name}")"
 
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${adminToken}" \
