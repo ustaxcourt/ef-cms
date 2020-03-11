@@ -117,7 +117,7 @@ EOF
       barNumber="PT5432"
     fi
 
-    searchResults=$(curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/users/practitioners/search?searchKey=${barNumber}" \
+    searchResults=$(curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/users/privatePractitioners/search?searchKey=${barNumber}" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8'
