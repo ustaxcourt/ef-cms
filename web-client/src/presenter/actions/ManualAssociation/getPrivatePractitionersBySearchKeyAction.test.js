@@ -1,18 +1,18 @@
-import { getPractitionersBySearchKeyAction } from './getPractitionersBySearchKeyAction';
+import { getPrivatePractitionersBySearchKeyAction } from './getPrivatePractitionersBySearchKeyAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
 
-let getPractitionersBySearchKeyInteractorStub;
+let getPrivatePractitionersBySearchKeyInteractorStub;
 
-describe('getPractitionersBySearchKeyAction', () => {
+describe('getPrivatePractitionersBySearchKeyAction', () => {
   let successStub, errorStub;
 
   beforeEach(() => {
     successStub = sinon.stub();
     errorStub = sinon.stub();
 
-    getPractitionersBySearchKeyInteractorStub = sinon.stub().resolves([
+    getPrivatePractitionersBySearchKeyInteractorStub = sinon.stub().resolves([
       {
         name: 'Test Practitioner',
         userId: '345',
@@ -21,7 +21,7 @@ describe('getPractitionersBySearchKeyAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        getPractitionersBySearchKeyInteractor: getPractitionersBySearchKeyInteractorStub,
+        getPrivatePractitionersBySearchKeyInteractor: getPrivatePractitionersBySearchKeyInteractorStub,
       }),
     };
 
@@ -32,32 +32,40 @@ describe('getPractitionersBySearchKeyAction', () => {
   });
 
   it('calls the use case to get the matching privatePractitioners and calls the success path if privatePractitioners are returned', async () => {
-    await runAction(getPractitionersBySearchKeyAction, {
+    await runAction(getPrivatePractitionersBySearchKeyAction, {
       modules: {
         presenter,
       },
       state: { form: { practitionerSearch: 'Test Practitioner' } },
     });
-    expect(getPractitionersBySearchKeyInteractorStub.calledOnce).toEqual(true);
+    expect(getPrivatePractitionersBySearchKeyInteractorStub.calledOnce).toEqual(
+      true,
+    );
     expect(
-      getPractitionersBySearchKeyInteractorStub.getCall(0).args[0].searchKey,
+      getPrivatePractitionersBySearchKeyInteractorStub.getCall(0).args[0]
+        .searchKey,
     ).toEqual('Test Practitioner');
     expect(successStub.calledOnce).toEqual(true);
     expect(errorStub.calledOnce).toEqual(false);
   });
 
   it('calls the use case to get the matching privatePractitioners and calls the error path if no privatePractitioners are returned', async () => {
-    getPractitionersBySearchKeyInteractorStub = sinon.stub().resolves([]);
+    getPrivatePractitionersBySearchKeyInteractorStub = sinon
+      .stub()
+      .resolves([]);
 
-    await runAction(getPractitionersBySearchKeyAction, {
+    await runAction(getPrivatePractitionersBySearchKeyAction, {
       modules: {
         presenter,
       },
       state: { form: { practitionerSearch: 'Test Practitioner2' } },
     });
-    expect(getPractitionersBySearchKeyInteractorStub.calledOnce).toEqual(true);
+    expect(getPrivatePractitionersBySearchKeyInteractorStub.calledOnce).toEqual(
+      true,
+    );
     expect(
-      getPractitionersBySearchKeyInteractorStub.getCall(0).args[0].searchKey,
+      getPrivatePractitionersBySearchKeyInteractorStub.getCall(0).args[0]
+        .searchKey,
     ).toEqual('Test Practitioner2');
     expect(successStub.calledOnce).toEqual(false);
     expect(errorStub.calledOnce).toEqual(true);
