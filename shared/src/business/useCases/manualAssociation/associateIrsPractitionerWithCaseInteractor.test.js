@@ -59,7 +59,7 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
     expect(error.message).toContain('Unauthorized');
   });
 
-  it('should add mapping for a respondent', async () => {
+  it('should add mapping for an irsPractitioner', async () => {
     let updateCaseSpy = jest.fn();
 
     applicationContext = {

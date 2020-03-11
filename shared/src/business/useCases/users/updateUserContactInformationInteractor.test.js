@@ -274,7 +274,7 @@ describe('updateUserContactInformationInteractor', () => {
     });
   });
 
-  it('includes the respondent in the change of address document when the respondent changes their address', async () => {
+  it('includes the irsPractitioner in the change of address document when the irsPractitioner changes their address', async () => {
     getCasesByUserStub = jest.fn().mockResolvedValue([
       {
         ...MOCK_CASE,

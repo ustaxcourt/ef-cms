@@ -46,7 +46,7 @@ describe('fileDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
         {
           docketNumber: '45678-18',
@@ -54,7 +54,7 @@ describe('fileDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
         {
           docketNumber: '45678-18',
@@ -62,7 +62,7 @@ describe('fileDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
       ],
       filingType: 'Myself',
