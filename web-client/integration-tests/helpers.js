@@ -427,7 +427,6 @@ export const setupTest = ({ useCases = {} } = {}) => {
             workQueueIsInternal: true,
           });
           break;
-        case `/case-detail/${test.caseId}`:
         case `/case-detail/${test.docketNumber}`:
           await test.runSequence('gotoCaseDetailSequence', {
             docketNumber: test.docketNumber,
@@ -453,6 +452,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
           await test.runSequence('gotoDashboardSequence');
           break;
         default:
+          console.warn('No action taken for route: ', url);
           break;
       }
     },
