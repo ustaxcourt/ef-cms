@@ -39,7 +39,7 @@ export default test => {
     await test.runSequence('saveCaseAndServeToIrsSequence');
     await wait(5000);
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(test.currentRouteUrl).toEqual(`/case-detail/${test.caseId}`);
 
     await test.runSequence('navigateToPathSequence', {
       path: '/document-qc/my/outbox',
