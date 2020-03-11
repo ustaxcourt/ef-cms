@@ -21,7 +21,7 @@ export const OpenCases = connect(
         >
           <thead>
             <tr>
-              <th>Docket</th>
+              <th>Docket number</th>
               <th aria-label="manually added indicator"></th>
               <th>Case title</th>
               <th>Petitioner counsel</th>
@@ -47,12 +47,12 @@ export const OpenCases = connect(
                 </td>
                 <td>{item.caseCaptionNames}</td>
                 <td>
-                  {item.practitioners.map((practitioner, idx) => (
+                  {item.privatePractitioners.map((practitioner, idx) => (
                     <div key={idx}>{practitioner.name}</div>
                   ))}
                 </td>
                 <td>
-                  {item.respondents.map((respondent, idx) => (
+                  {item.irsPractitioners.map((respondent, idx) => (
                     <div key={idx}>{respondent.name}</div>
                   ))}
                 </td>

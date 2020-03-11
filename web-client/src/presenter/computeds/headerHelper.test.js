@@ -27,12 +27,12 @@ const internal = [
 ];
 const external = [
   User.ROLES.petitioner,
-  User.ROLES.practitioner,
-  User.ROLES.respondent,
+  User.ROLES.privatePractitioner,
+  User.ROLES.irsPractitioner,
 ];
 
 describe('headerHelper', () => {
-  it('should show search in header for users other than petitioner, practitioners and respondents', () => {
+  it('should show search in header for users other than petitioner, privatePractitioners and irsPractitioners', () => {
     let result = runCompute(headerHelper, {
       state: getBaseState({ role: User.ROLES.petitioner }),
     });
@@ -81,14 +81,14 @@ describe('headerHelper', () => {
       expect(result.showMyCases).toBeTruthy();
     });
   });
-  it('should NOT show search in header for practitioners or respondents', () => {
+  it('should NOT show search in header for privatePractitioners or irsPractitioners', () => {
     let result = runCompute(headerHelper, {
-      state: getBaseState({ role: User.ROLES.practitioner }),
+      state: getBaseState({ role: User.ROLES.privatePractitioner }),
     });
     expect(result.showSearchInHeader).toBeFalsy();
 
     result = runCompute(headerHelper, {
-      state: getBaseState({ role: User.ROLES.respondent }),
+      state: getBaseState({ role: User.ROLES.irsPractitioner }),
     });
     expect(result.showSearchInHeader).toBeFalsy();
   });

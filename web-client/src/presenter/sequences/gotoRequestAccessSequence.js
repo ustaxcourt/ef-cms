@@ -30,13 +30,13 @@ const gotoRequestAccess = [
       setDefaultFileDocumentFormValuesAction,
       runPathForUserRoleAction,
       {
-        practitioner: [
-          set(state.form.partyPractitioner, true),
+        irsPractitioner: [
+          set(state.form.partyIrsPractitioner, true),
           set(state.wizardStep, 'RequestAccess'),
           setCurrentPageAction('RequestAccessWizard'),
         ],
-        respondent: [
-          set(state.form.partyRespondent, true),
+        privatePractitioner: [
+          set(state.form.partyPrivatePractitioner, true),
           set(state.wizardStep, 'RequestAccess'),
           setCurrentPageAction('RequestAccessWizard'),
         ],

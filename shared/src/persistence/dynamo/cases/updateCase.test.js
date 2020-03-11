@@ -10,9 +10,10 @@ describe('updateCase', () => {
     promise: async () => null,
   });
 
-  const getStub = jest.fn().mockReturnValue({
+  let getStub = jest.fn().mockReturnValue({
     docketNumberSuffix: null,
     inProgress: false,
+    irsPractitioners: [],
     status: Case.STATUS_TYPES.generalDocket,
   });
 
@@ -22,12 +23,17 @@ describe('updateCase', () => {
     },
   ]);
 
+  const deleteStub = jest.fn().mockReturnValue({
+    promise: async () => null,
+  });
+
   const updateStub = jest.fn();
 
   client.get = getStub;
   client.put = putStub;
   client.query = queryStub;
   client.update = updateStub;
+  client.delete = deleteStub;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -52,8 +58,8 @@ describe('updateCase', () => {
       },
     });
     expect(putStub.mock.calls[0][0].Item).toMatchObject({
-      pk: '123',
-      sk: '123',
+      pk: 'case|123',
+      sk: 'case|123',
     });
   });
 
@@ -73,8 +79,8 @@ describe('updateCase', () => {
       },
     });
     expect(putStub.mock.calls[0][0].Item).toMatchObject({
-      pk: '123',
-      sk: '123',
+      pk: 'case|123',
+      sk: 'case|123',
     });
     expect(updateStub.mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
@@ -135,9 +141,281 @@ describe('updateCase', () => {
       },
     });
     expect(putStub.mock.calls[0][0].Item).toMatchObject({
-      pk: '123',
-      sk: '123',
+      pk: 'case|123',
+      sk: 'case|123',
     });
     expect(updateStub).not.toBeCalled();
+  });
+
+  describe('Respondents', () => {
+    it('adds a respondent to a case with no existing irsPractitioners', async () => {
+      getStub.mockReturnValue({
+        docketNumberSuffix: null,
+        inProgress: false,
+        irsPractitioners: [],
+        status: Case.STATUS_TYPES.generalDocket,
+      });
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          caseId: '123',
+          docketNumberSuffix: null,
+          irsPractitioners: [
+            { name: 'Guy Fieri', userId: 'user-id-existing-234' },
+          ],
+          status: Case.STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(deleteStub).not.toHaveBeenCalled();
+      expect(putStub).toHaveBeenCalled();
+      expect(putStub.mock.calls[0][0].Item).toMatchObject({
+        pk: 'case|123',
+        sk: 'irsPractitioner|user-id-existing-234',
+        userId: 'user-id-existing-234',
+      });
+    });
+
+    it('adds a respondent to a case with existing irsPractitioners', async () => {
+      getStub.mockReturnValue({
+        docketNumberSuffix: null,
+        inProgress: false,
+        irsPractitioners: [
+          { name: 'Guy Fieri', userId: 'user-id-existing-123' },
+          { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+        ],
+        status: Case.STATUS_TYPES.generalDocket,
+      });
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          caseId: '123',
+          docketNumberSuffix: null,
+          irsPractitioners: [
+            {
+              name: 'Bobby Flay',
+              userId: 'user-id-new-321',
+            },
+            { name: 'Guy Fieri', userId: 'user-id-existing-123' },
+            { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+          ],
+          status: Case.STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(deleteStub).not.toHaveBeenCalled();
+      expect(putStub).toHaveBeenCalled();
+      expect(putStub.mock.calls[0][0].Item).toMatchObject({
+        pk: 'case|123',
+        sk: 'irsPractitioner|user-id-new-321',
+        userId: 'user-id-new-321',
+      });
+    });
+
+    it('updates a respondent on a case', async () => {
+      getStub.mockReturnValue({
+        docketNumberSuffix: null,
+        inProgress: false,
+        irsPractitioners: [
+          { name: 'Guy Fieri', userId: 'user-id-existing-123' },
+          { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+        ],
+        status: Case.STATUS_TYPES.generalDocket,
+      });
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          caseId: '123',
+          docketNumberSuffix: null,
+          irsPractitioners: [
+            {
+              motto: 'Welcome to Flavortown!',
+              name: 'Guy Fieri',
+              userId: 'user-id-existing-123',
+            },
+            { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+          ],
+          status: Case.STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(deleteStub).not.toHaveBeenCalled();
+      expect(putStub).toHaveBeenCalled();
+      expect(putStub.mock.calls[0][0].Item).toMatchObject({
+        motto: 'Welcome to Flavortown!',
+        pk: 'case|123',
+        sk: 'irsPractitioner|user-id-existing-123',
+        userId: 'user-id-existing-123',
+      });
+    });
+
+    it('removes a respondent from a case with existing irsPractitioners', async () => {
+      getStub.mockReturnValue({
+        docketNumberSuffix: null,
+        inProgress: false,
+        irsPractitioners: [
+          { name: 'Guy Fieri', userId: 'user-id-existing-123' },
+          { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+        ],
+        status: Case.STATUS_TYPES.generalDocket,
+      });
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          caseId: '123',
+          docketNumberSuffix: null,
+          irsPractitioners: [
+            { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+          ],
+          status: Case.STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(deleteStub).toHaveBeenCalled();
+      expect(putStub.mock.calls.length).toEqual(1);
+      expect(putStub.mock.calls[0][0].Item.irsPractitioners).toMatchObject([
+        { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+      ]);
+    });
+  });
+
+  describe('Practitioners', () => {
+    it('adds a practitioner to a case with no existing privatePractitioners', async () => {
+      getStub.mockReturnValue({
+        docketNumberSuffix: null,
+        inProgress: false,
+        privatePractitioners: [],
+        status: Case.STATUS_TYPES.generalDocket,
+      });
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          caseId: '123',
+          docketNumberSuffix: null,
+          privatePractitioners: [
+            { name: 'Guy Fieri', userId: 'user-id-existing-234' },
+          ],
+          status: Case.STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(deleteStub).not.toHaveBeenCalled();
+      expect(putStub).toHaveBeenCalled();
+      expect(putStub.mock.calls[0][0].Item).toMatchObject({
+        pk: 'case|123',
+        sk: 'privatePractitioner|user-id-existing-234',
+        userId: 'user-id-existing-234',
+      });
+    });
+
+    it('adds a practitioner to a case with existing privatePractitioners', async () => {
+      getStub.mockReturnValue({
+        docketNumberSuffix: null,
+        inProgress: false,
+        privatePractitioners: [
+          { name: 'Guy Fieri', userId: 'user-id-existing-123' },
+          { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+        ],
+        status: Case.STATUS_TYPES.generalDocket,
+      });
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          caseId: '123',
+          docketNumberSuffix: null,
+          privatePractitioners: [
+            {
+              name: 'Bobby Flay',
+              userId: 'user-id-new-321',
+            },
+            { name: 'Guy Fieri', userId: 'user-id-existing-123' },
+            { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+          ],
+          status: Case.STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(deleteStub).not.toHaveBeenCalled();
+      expect(putStub).toHaveBeenCalled();
+      expect(putStub.mock.calls[0][0].Item).toMatchObject({
+        pk: 'case|123',
+        sk: 'privatePractitioner|user-id-new-321',
+        userId: 'user-id-new-321',
+      });
+    });
+
+    it('updates a practitioner on a case', async () => {
+      getStub.mockReturnValue({
+        docketNumberSuffix: null,
+        inProgress: false,
+        privatePractitioners: [
+          { name: 'Guy Fieri', userId: 'user-id-existing-123' },
+          { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+        ],
+        status: Case.STATUS_TYPES.generalDocket,
+      });
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          caseId: '123',
+          docketNumberSuffix: null,
+          privatePractitioners: [
+            {
+              motto: 'Welcome to Flavortown!',
+              name: 'Guy Fieri',
+              userId: 'user-id-existing-123',
+            },
+            { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+          ],
+          status: Case.STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(deleteStub).not.toHaveBeenCalled();
+      expect(putStub).toHaveBeenCalled();
+      expect(putStub.mock.calls[0][0].Item).toMatchObject({
+        motto: 'Welcome to Flavortown!',
+        pk: 'case|123',
+        sk: 'privatePractitioner|user-id-existing-123',
+        userId: 'user-id-existing-123',
+      });
+    });
+
+    it('removes a practitioner from a case with existing privatePractitioners', async () => {
+      getStub.mockReturnValue({
+        docketNumberSuffix: null,
+        inProgress: false,
+        privatePractitioners: [
+          { name: 'Guy Fieri', userId: 'user-id-existing-123' },
+          { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+        ],
+        status: Case.STATUS_TYPES.generalDocket,
+      });
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          caseId: '123',
+          docketNumberSuffix: null,
+          privatePractitioners: [
+            { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+          ],
+          status: Case.STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(deleteStub).toHaveBeenCalled();
+      expect(putStub.mock.calls.length).toEqual(1);
+      expect(putStub.mock.calls[0][0].Item.privatePractitioners).toMatchObject([
+        { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+      ]);
+    });
   });
 });

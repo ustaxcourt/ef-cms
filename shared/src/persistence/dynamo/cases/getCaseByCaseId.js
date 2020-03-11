@@ -1,4 +1,5 @@
 const client = require('../../dynamodbClientService');
+const { sortBy } = require('lodash');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 /**
@@ -13,8 +14,8 @@ exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
   const theCase = await client
     .get({
       Key: {
-        pk: caseId,
-        sk: caseId,
+        pk: `case|${caseId}`,
+        sk: `case|${caseId}`,
       },
       applicationContext,
     })
@@ -22,30 +23,74 @@ exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
       stripWorkItems(results, applicationContext.isAuthorizedForWorkItems()),
     );
 
-  let docketRecord = [];
-
-  if (theCase) {
-    docketRecord = await client.query({
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-        '#sk': 'sk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `case|${theCase.caseId}`,
-        ':prefix': 'docket-record',
-      },
-      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-      applicationContext,
-    });
-
-    docketRecord =
-      docketRecord.length > 0 ? docketRecord : theCase.docketRecord;
-
-    return {
-      ...theCase,
-      docketRecord, // this is temp until sesed data fixed
-    };
-  } else {
+  if (!theCase) {
     return null;
   }
+
+  const docketRecord = await client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `case|${theCase.caseId}`,
+      ':prefix': 'docket-record',
+    },
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+    applicationContext,
+  });
+
+  const documents = await client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `case|${theCase.caseId}`,
+      ':prefix': 'document',
+    },
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+    applicationContext,
+  });
+
+  const privatePractitioners = await client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `case|${theCase.caseId}`,
+      ':prefix': 'privatePractitioner',
+    },
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+    applicationContext,
+  });
+
+  const irsPractitioners = await client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `case|${theCase.caseId}`,
+      ':prefix': 'irsPractitioner',
+    },
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+    applicationContext,
+  });
+
+  const actualDocketRecord =
+    docketRecord.length > 0 ? docketRecord : theCase.docketRecord;
+  const actualDocuments = documents.length > 0 ? documents : theCase.documents;
+
+  const sortedDocketRecord = sortBy(actualDocketRecord, 'index');
+  const sortedDocuments = sortBy(actualDocuments, 'createdAt');
+
+  return {
+    ...theCase,
+    docketRecord: sortedDocketRecord,
+    documents: sortedDocuments,
+    irsPractitioners,
+    privatePractitioners,
+  };
 };

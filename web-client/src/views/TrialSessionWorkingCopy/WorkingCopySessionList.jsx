@@ -65,7 +65,7 @@ export const WorkingCopySessionList = connect(
                       sort === 'docket' && 'sortActive',
                     )}
                   >
-                    Docket
+                    Docket number
                   </span>
                   {(sort === 'docket' && sortOrder === 'desc' && (
                     <FontAwesomeIcon icon="caret-up" />
@@ -122,12 +122,12 @@ export const WorkingCopySessionList = connect(
                   </td>
                   <td>{item.caseCaptionNames}</td>
                   <td>
-                    {item.practitioners.map((practitioner, idx) => (
+                    {item.privatePractitioners.map((practitioner, idx) => (
                       <div key={idx}>{practitioner.name}</div>
                     ))}
                   </td>
                   <td>
-                    {item.respondents.map((respondent, idx) => (
+                    {item.irsPractitioners.map((respondent, idx) => (
                       <div key={idx}>{respondent.name}</div>
                     ))}
                   </td>

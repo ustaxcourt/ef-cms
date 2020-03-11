@@ -14,7 +14,7 @@ describe('getCaseAssociation', () => {
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: '123',
     });
 
@@ -25,7 +25,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          practitioners: [{ userId: '123' }],
+          privatePractitioners: [{ userId: '123' }],
         },
       },
     });
@@ -41,7 +41,7 @@ describe('getCaseAssociation', () => {
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: '1234',
     });
 
@@ -52,7 +52,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          practitioners: [{ userId: '123' }],
+          privatePractitioners: [{ userId: '123' }],
         },
       },
     });
@@ -68,7 +68,7 @@ describe('getCaseAssociation', () => {
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: '1234',
     });
 
@@ -79,7 +79,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          practitioners: [{ userId: '123' }],
+          privatePractitioners: [{ userId: '123' }],
         },
       },
     });
@@ -95,7 +95,7 @@ describe('getCaseAssociation', () => {
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
       userId: '789',
     });
 
@@ -106,7 +106,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          respondents: [{ userId: '789' }],
+          irsPractitioners: [{ userId: '789' }],
         },
       },
     });
@@ -122,7 +122,7 @@ describe('getCaseAssociation', () => {
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
       userId: '789',
     });
 
@@ -133,7 +133,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          respondent: { userId: '123' },
+          irsPractitioners: [{ userId: '123' }],
         },
       },
     });
@@ -214,7 +214,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          practitioners: [{ userId: '123' }],
+          privatePractitioners: [{ userId: '123' }],
         },
       },
     });

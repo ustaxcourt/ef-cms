@@ -15,11 +15,18 @@ exports.userIsAssociated = ({ caseDetail, user }) => {
     return true;
   }
 
-  if (![User.ROLES.respondent, User.ROLES.practitioner].includes(role)) {
+  if (
+    ![User.ROLES.irsPractitioner, User.ROLES.privatePractitioner].includes(role)
+  ) {
     return false;
   }
 
-  const association = `${role}s`;
+  let association;
+  if (role === User.ROLES.irsPractitioner) {
+    association = 'irsPractitioners';
+  } else {
+    association = 'privatePractitioners';
+  }
   const associations = caseDetail[association];
 
   return (

@@ -1,7 +1,4 @@
 const client = require('../../dynamodbClientService');
-const {
-  createMappingRecord,
-} = require('../../dynamo/helpers/createMappingRecord');
 const { getUserById } = require('./getUserById');
 
 exports.updateUserRecords = async ({
@@ -13,23 +10,23 @@ exports.updateUserRecords = async ({
   await client.delete({
     applicationContext,
     key: {
-      pk: `${oldUser.section}|user`,
-      sk: userId,
+      pk: `section|${oldUser.section}`,
+      sk: `user|${userId}`,
     },
   });
 
   await client.put({
     Item: {
-      pk: `${updatedUser.section}|user`,
-      sk: userId,
+      pk: `section|${updatedUser.section}`,
+      sk: `user|${userId}`,
     },
     applicationContext,
   });
 
   await client.put({
     Item: {
-      pk: userId,
-      sk: userId,
+      pk: `user|${userId}`,
+      sk: `user|${userId}`,
       ...updatedUser,
       userId,
     },
@@ -39,31 +36,33 @@ exports.updateUserRecords = async ({
   await client.delete({
     applicationContext,
     key: {
-      pk: `${oldUser.name}|${oldUser.role}`,
-      sk: userId,
+      pk: `${oldUser.role}|${oldUser.name}`,
+      sk: `user|${userId}`,
     },
   });
 
   await client.delete({
     applicationContext,
     key: {
-      pk: `${oldUser.barNumber}|${oldUser.role}`,
-      sk: userId,
+      pk: `${oldUser.role}|${oldUser.barNumber}`,
+      sk: `user|${userId}`,
     },
   });
 
-  await createMappingRecord({
+  await client.put({
+    Item: {
+      pk: `${updatedUser.role}|${updatedUser.name}`,
+      sk: `user|${userId}`,
+    },
     applicationContext,
-    pkId: updatedUser.name,
-    skId: userId,
-    type: updatedUser.role,
   });
 
-  await createMappingRecord({
+  await client.put({
+    Item: {
+      pk: `${updatedUser.role}|${updatedUser.barNumber}`,
+      sk: `user|${userId}`,
+    },
     applicationContext,
-    pkId: updatedUser.barNumber,
-    skId: userId,
-    type: updatedUser.role,
   });
 
   return {

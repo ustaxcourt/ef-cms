@@ -71,7 +71,25 @@ describe('getCaseByCaseId', () => {
           sk: '123',
         },
       ],
+      documents: [
+        {
+          pk: '123',
+          sk: '123',
+        },
+      ],
+      irsPractitioners: [
+        {
+          pk: '123',
+          sk: '123',
+        },
+      ],
       pk: '123',
+      privatePractitioners: [
+        {
+          pk: '123',
+          sk: '123',
+        },
+      ],
       sk: '123',
       status: 'New',
     });

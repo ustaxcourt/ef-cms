@@ -4,35 +4,37 @@ const { VALIDATION_ERROR_MESSAGES } = EditPractitionerFactory;
 
 export default test => {
   return it('Petitions clerk edits a practitioner on a case', async () => {
-    expect(test.getState('caseDetail.practitioners').length).toEqual(2);
+    expect(test.getState('caseDetail.privatePractitioners').length).toEqual(2);
 
     await test.runSequence('openEditPractitionersModalSequence');
 
     expect(
-      test.getState('modal.practitioners.1.representingPrimary'),
+      test.getState('modal.privatePractitioners.1.representingPrimary'),
     ).toBeFalsy();
     expect(
-      test.getState('modal.practitioners.1.representingSecondary'),
+      test.getState('modal.privatePractitioners.1.representingSecondary'),
     ).toEqual(true);
 
     await test.runSequence('updateModalValueSequence', {
-      key: 'practitioners.1.representingSecondary',
+      key: 'privatePractitioners.1.representingSecondary',
       value: false,
     });
 
     await test.runSequence('submitEditPractitionersModalSequence');
 
-    expect(test.getState('validationErrors.practitioners.0')).toBeFalsy();
-    expect(test.getState('validationErrors.practitioners.1')).toEqual({
+    expect(
+      test.getState('validationErrors.privatePractitioners.0'),
+    ).toBeFalsy();
+    expect(test.getState('validationErrors.privatePractitioners.1')).toEqual({
       representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
     });
 
     await test.runSequence('updateModalValueSequence', {
-      key: 'practitioners.1.representingPrimary',
+      key: 'privatePractitioners.1.representingPrimary',
       value: true,
     });
     await test.runSequence('updateModalValueSequence', {
-      key: 'practitioners.1.representingSecondary',
+      key: 'privatePractitioners.1.representingSecondary',
       value: true,
     });
 
@@ -40,12 +42,12 @@ export default test => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('caseDetail.practitioners.length')).toEqual(2);
+    expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(2);
     expect(
-      test.getState('caseDetail.practitioners.1.representingPrimary'),
+      test.getState('caseDetail.privatePractitioners.1.representingPrimary'),
     ).toEqual(true);
     expect(
-      test.getState('caseDetail.practitioners.1.representingSecondary'),
+      test.getState('caseDetail.privatePractitioners.1.representingSecondary'),
     ).toEqual(true);
   });
 };

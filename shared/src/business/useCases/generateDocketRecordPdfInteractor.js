@@ -37,8 +37,8 @@ exports.generateDocketRecordPdfInteractor = async ({
     const {
       contactPrimary,
       contactSecondary,
-      practitioners,
-      respondents,
+      irsPractitioners,
+      privatePractitioners,
     } = detail;
 
     const getAddress = contact => {
@@ -93,12 +93,12 @@ exports.generateDocketRecordPdfInteractor = async ({
       </div>
     `;
 
-    // practitioners
-    if (practitioners.length > 0) {
+    // privatePractitioners
+    if (privatePractitioners.length > 0) {
       const getPractitioners = () => {
         let result = '';
 
-        practitioners.map(practitioner => {
+        privatePractitioners.map(practitioner => {
           if (practitioner.formattedName) {
             const { representingPrimary, representingSecondary } = practitioner;
             result += `
@@ -139,19 +139,19 @@ exports.generateDocketRecordPdfInteractor = async ({
       `;
     }
 
-    // respondents
-    if (respondents.length > 0) {
-      const getRespondents = () => {
+    // irsPractitioners
+    if (irsPractitioners.length > 0) {
+      const getIrsPractitioners = () => {
         let result = '';
 
-        respondents.map(respondent => {
-          if (respondent.name) {
+        irsPractitioners.map(practitioner => {
+          if (practitioner.name) {
             result += `
               <div class="party-details">
-                <p>${respondent.name}</p>
+                <p>${practitioner.name}</p>
                 ${getAddress({
-                  ...respondent,
-                  ...respondent.contact,
+                  ...practitioner,
+                  ...practitioner.contact,
                 })}
               </div>
             `;
@@ -165,7 +165,7 @@ exports.generateDocketRecordPdfInteractor = async ({
         <div class="party-info">
           <div class="party-info-header">Respondent Counsel</div>
           <div class="party-info-content">
-            ${getRespondents()}
+            ${getIrsPractitioners()}
           </div>
         </div>
       `;

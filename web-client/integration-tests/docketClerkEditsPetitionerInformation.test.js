@@ -5,7 +5,7 @@ const test = setupTest();
 
 describe('docket clerk edits the petitioner information', () => {
   beforeEach(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(50000);
   });
 
   let caseDetail;
@@ -69,8 +69,9 @@ describe('docket clerk edits the petitioner information', () => {
       '123 Some Street',
     );
 
-    const noticeDocument = test.getState('caseDetail.documents.2');
-    expect(noticeDocument.documentType).toEqual('Notice of Change of Address');
+    const noticeDocument = test
+      .getState('caseDetail.documents')
+      .find(d => d.documentTitle === 'Notice of Change of Address');
     expect(noticeDocument.servedAt).toBeDefined();
   });
 });

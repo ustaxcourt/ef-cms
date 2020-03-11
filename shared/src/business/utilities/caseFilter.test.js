@@ -31,14 +31,14 @@ describe('caseFilter', () => {
         caseId: '123',
         docketNumber: '102-20',
         foo: 'bar',
-        practitioners: [{ userId: 'authPractitioner' }],
-        respondents: [{ userId: 'authRespondent' }],
+        irsPractitioners: [{ userId: 'authRespondent' }],
+        privatePractitioners: [{ userId: 'authPractitioner' }],
         sealedDate: '2020-01-02T03:04:05.007Z',
       },
     ];
     it('should remove sealed cases from a set of advanced search results', () => {
       const result = caseSearchFilter(caseSearchResults, {
-        role: 'respondent',
+        role: 'irsPractitioner',
         userId: 'some other respondent',
       });
       expect(result.length).toEqual(1);

@@ -33,7 +33,7 @@ export const EligibleCases = connect(
         >
           <thead>
             <tr>
-              <th>Docket</th>
+              <th>Docket number</th>
               <th aria-label="manually added indicator"></th>
               <th>Case title</th>
               <th>Petitioner counsel</th>
@@ -62,7 +62,7 @@ export const EligibleCases = connect(
                 </td>
                 <td>{item.caseCaption}</td>
                 <td>
-                  {item.practitioners.map((practitioner, idx) => (
+                  {item.privatePractitioners.map((practitioner, idx) => (
                     <div key={idx}>{practitioner.name}</div>
                   ))}
                 </td>

@@ -1,11 +1,11 @@
 export default test => {
   return it('Petitions clerk removes a respondent from a case', async () => {
-    expect(test.getState('caseDetail.respondents').length).toEqual(2);
+    expect(test.getState('caseDetail.irsPractitioners').length).toEqual(2);
 
     await test.runSequence('openEditRespondentsModalSequence');
 
     await test.runSequence('updateModalValueSequence', {
-      key: 'respondents.1.removeFromCase',
+      key: 'irsPractitioners.1.removeFromCase',
       value: true,
     });
 
@@ -13,6 +13,6 @@ export default test => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('caseDetail.respondents').length).toEqual(1);
+    expect(test.getState('caseDetail.irsPractitioners').length).toEqual(1);
   });
 };

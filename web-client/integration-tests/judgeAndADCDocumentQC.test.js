@@ -1,3 +1,5 @@
+import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
+import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import {
   fakeFile,
   getFormattedDocumentQCSectionInbox,
@@ -6,8 +8,6 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
-import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import petitionerFilesDocumentForCase from './journey/petitionerFilesDocumentForCase';
 import petitionsClerkManuallyAddsCaseToCalendaredTrialSession from './journey/petitionsClerkManuallyAddsCaseToCalendaredTrialSession';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';

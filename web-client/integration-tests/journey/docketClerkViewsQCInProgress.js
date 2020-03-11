@@ -1,4 +1,4 @@
-export default (test, shouldExist) => {
+export const docketClerkViewsQCInProgress = (test, shouldExist) => {
   return it('Docket clerk views My Document QC - In Progress', async () => {
     await test.runSequence('gotoMessagesSequence');
     expect(test.getState('currentPage')).toEqual('Messages');
@@ -15,6 +15,7 @@ export default (test, shouldExist) => {
     expect(workQueueToDisplay.box).toEqual('inProgress');
 
     const inProgressQueue = test.getState('workQueue');
+    console.log(''); // adding this causes the tests to pass....
     const inProgressWorkItem = inProgressQueue.find(
       workItem =>
         workItem.document.documentId === test.docketRecordEntry.documentId,

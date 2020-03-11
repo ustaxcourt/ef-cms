@@ -27,7 +27,7 @@ export const SearchResults = connect(
                   <NonMobile>
                     <th>Petitioner(s)</th>
                   </NonMobile>
-                  <th>Docket</th>
+                  <th>Docket number</th>
                   <NonMobile>
                     <th>Date filed</th>
                     <th>Case title</th>

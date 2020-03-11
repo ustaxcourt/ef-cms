@@ -35,11 +35,11 @@ const {
   assignWorkItemsInteractor,
 } = require('../../shared/src/business/useCases/workitems/assignWorkItemsInteractor');
 const {
-  associatePractitionerWithCaseInteractor,
-} = require('../../shared/src/business/useCases/manualAssociation/associatePractitionerWithCaseInteractor');
+  associateIrsPractitionerWithCaseInteractor,
+} = require('../../shared/src/business/useCases/manualAssociation/associateIrsPractitionerWithCaseInteractor');
 const {
-  associateRespondentWithCaseInteractor,
-} = require('../../shared/src/business/useCases/manualAssociation/associateRespondentWithCaseInteractor');
+  associatePrivatePractitionerWithCaseInteractor,
+} = require('../../shared/src/business/useCases/manualAssociation/associatePrivatePractitionerWithCaseInteractor');
 const {
   associateUserWithCase,
 } = require('../../shared/src/persistence/dynamo/cases/associateUserWithCase');
@@ -421,14 +421,17 @@ const {
   getInternalUsersInteractor,
 } = require('../../shared/src/business/useCases/users/getInternalUsersInteractor');
 const {
+  getIrsPractitionersBySearchKeyInteractor,
+} = require('../../shared/src/business/useCases/users/getIrsPractitionersBySearchKeyInteractor');
+const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
 const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
-  getPractitionersBySearchKeyInteractor,
-} = require('../../shared/src/business/useCases/users/getPractitionersBySearchKeyInteractor');
+  getPrivatePractitionersBySearchKeyInteractor,
+} = require('../../shared/src/business/useCases/users/getPrivatePractitionersBySearchKeyInteractor');
 const {
   getPublicCaseInteractor,
 } = require('../../shared/src/business/useCases/public/getPublicCaseInteractor');
@@ -441,9 +444,6 @@ const {
 const {
   getRecord,
 } = require('../../shared/src/persistence/dynamo/elasticsearch/getRecord');
-const {
-  getRespondentsBySearchKeyInteractor,
-} = require('../../shared/src/business/useCases/users/getRespondentsBySearchKeyInteractor');
 const {
   getSentMessagesForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getSentMessagesForSection');
@@ -1101,8 +1101,8 @@ module.exports = (appContextUser = {}) => {
         addCoversheetInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
-        associatePractitionerWithCaseInteractor,
-        associateRespondentWithCaseInteractor,
+        associateIrsPractitionerWithCaseInteractor,
+        associatePrivatePractitionerWithCaseInteractor,
         batchDownloadTrialSessionInteractor,
         blockCaseFromTrialInteractor,
         caseAdvancedSearchInteractor,
@@ -1159,12 +1159,12 @@ module.exports = (appContextUser = {}) => {
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
         getInternalUsersInteractor,
+        getIrsPractitionersBySearchKeyInteractor,
         getJudgeForUserChambersInteractor,
         getNotificationsInteractor,
-        getPractitionersBySearchKeyInteractor,
+        getPrivatePractitionersBySearchKeyInteractor,
         getPublicCaseInteractor,
         getPublicDownloadPolicyUrlInteractor,
-        getRespondentsBySearchKeyInteractor,
         getSentMessagesForSectionInteractor,
         getSentMessagesForUserInteractor,
         getTrialSessionDetailsInteractor,

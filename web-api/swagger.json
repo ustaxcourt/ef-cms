@@ -2136,7 +2136,7 @@
         }
       }
     },
-    "/respondents/{respondentId}/cases": {
+    "/irsPractitioners/{respondentId}/cases": {
       "parameters": [
         {
           "name": "respondentId",
@@ -4592,7 +4592,7 @@
         }
       }
     },
-    "/case-parties/{caseId}/associate-practitioner": {
+    "/case-parties/{caseId}/associate-private-practitioner": {
       "parameters": [
         {
           "name": "caseId",

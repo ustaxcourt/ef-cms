@@ -166,7 +166,7 @@ describe('Get case', () => {
     let user;
     beforeEach(() => {
       user = {
-        role: User.ROLES.practitioner,
+        role: User.ROLES.privatePractitioner,
         userId: 'practitioner2',
       };
       applicationContext = {
@@ -185,11 +185,11 @@ describe('Get case', () => {
               createdAt: new Date().toISOString(),
               docketNumber: '00101-18',
               documents,
+              irsPractitioners: [{ userId: 'respondent' }],
               petitioners: [{ name: 'Test Petitioner' }],
-              practitioners: [{ userId: 'practitioner' }],
               preferredTrialCity: 'Washington, District of Columbia',
+              privatePractitioners: [{ userId: 'practitioner' }],
               procedureType: 'Regular',
-              respondents: [{ userId: 'respondent' }],
               sealedDate: new Date().toISOString(),
             }),
         }),

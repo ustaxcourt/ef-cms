@@ -272,12 +272,14 @@ const formatCase = (applicationContext, caseDetail) => {
     return counsel;
   };
 
-  if (result.respondents) {
-    result.respondents = result.respondents.map(formatCounsel);
+  if (result.irsPractitioners) {
+    result.irsPractitioners = result.irsPractitioners.map(formatCounsel);
   }
 
-  if (result.practitioners) {
-    result.practitioners = result.practitioners.map(formatCounsel);
+  if (result.privatePractitioners) {
+    result.privatePractitioners = result.privatePractitioners.map(
+      formatCounsel,
+    );
   }
 
   result.createdAtFormatted = applicationContext

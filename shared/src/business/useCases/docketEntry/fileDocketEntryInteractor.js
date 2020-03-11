@@ -62,7 +62,7 @@ exports.fileDocketEntryInteractor = async ({
   const baseMetadata = pick(primaryDocumentMetadata, [
     'partyPrimary',
     'partySecondary',
-    'partyRespondent',
+    'partyIrsPractitioner',
     'practitioner',
   ]);
 
@@ -128,7 +128,7 @@ exports.fileDocketEntryInteractor = async ({
             createdAt: documentEntity.createdAt,
           },
           isQC: true,
-          isRead: user.role !== User.ROLES.practitioner,
+          isRead: user.role !== User.ROLES.privatePractitioner,
           section: DOCKET_SECTION,
           sentBy: user.userId,
         },

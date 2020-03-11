@@ -27,8 +27,12 @@ export default (test, overrides = {}) => {
     expect(caseDetail.documents.length).toEqual(documentCount);
 
     //verify that event codes were added to initial documents/docket entries
-    expect(caseDetail.documents[0].eventCode).toEqual('P');
-    expect(caseDetail.documents[1].eventCode).toEqual('STIN');
+    expect(caseDetailFormatted.documents).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ eventCode: 'P' }),
+        expect.objectContaining({ eventCode: 'STIN' }),
+      ]),
+    );
     expect(
       caseDetailFormatted.docketRecordWithDocument[1].record.eventCode,
     ).toEqual('RQT');

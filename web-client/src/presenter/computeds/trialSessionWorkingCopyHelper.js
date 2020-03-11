@@ -3,8 +3,10 @@ import { makeMap } from './makeMap';
 import { state } from 'cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
-  const aCount = (a.practitioners && a.practitioners.length && 1) || 0;
-  const bCount = (b.practitioners && b.practitioners.length && 1) || 0;
+  const aCount =
+    (a.privatePractitioners && a.privatePractitioners.length && 1) || 0;
+  const bCount =
+    (b.privatePractitioners && b.privatePractitioners.length && 1) || 0;
 
   return aCount - bCount;
 };

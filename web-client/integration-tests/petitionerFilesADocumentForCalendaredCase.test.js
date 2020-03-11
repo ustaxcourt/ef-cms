@@ -1,10 +1,10 @@
 import { fakeFile, loginAs, setupTest, uploadPetition, wait } from './helpers';
 
-import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
-import docketClerkRemovesCaseFromTrial from './journey/docketClerkRemovesCaseFromTrial';
-import docketClerkViewsSectionInboxHighPriority from './journey/docketClerkViewsSectionInboxHighPriority';
-import docketClerkViewsSectionInboxNotHighPriority from './journey/docketClerkViewsSectionInboxNotHighPriority';
-import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
+import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
+import { docketClerkRemovesCaseFromTrial } from './journey/docketClerkRemovesCaseFromTrial';
+import { docketClerkViewsSectionInboxHighPriority } from './journey/docketClerkViewsSectionInboxHighPriority';
+import { docketClerkViewsSectionInboxNotHighPriority } from './journey/docketClerkViewsSectionInboxNotHighPriority';
+import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import petitionerFilesDocumentForCase from './journey/petitionerFilesDocumentForCase';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 

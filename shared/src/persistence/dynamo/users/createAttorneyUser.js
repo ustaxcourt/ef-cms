@@ -1,7 +1,4 @@
 const client = require('../../dynamodbClientService');
-const {
-  createMappingRecord,
-} = require('../../dynamo/helpers/createMappingRecord');
 const { User } = require('../../../business/entities/User');
 
 exports.createUserRecords = async ({ applicationContext, user, userId }) => {
@@ -11,44 +8,38 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
     delete user.barNumber;
   }
 
-  if (user.section) {
-    await client.put({
-      Item: {
-        pk: `${user.section}|user`,
-        sk: userId,
-      },
-      applicationContext,
-    });
-  }
+  await client.put({
+    Item: {
+      pk: `section|${user.section}`,
+      sk: `user|${userId}`,
+    },
+    applicationContext,
+  });
 
   await client.put({
     Item: {
-      pk: userId,
-      sk: userId,
+      pk: `user|${userId}`,
+      sk: `user|${userId}`,
       ...user,
       userId,
     },
     applicationContext,
   });
 
-  if (
-    (user.role === User.ROLES.practitioner ||
-      user.role === User.ROLES.respondent) &&
-    user.name &&
-    user.barNumber
-  ) {
-    await createMappingRecord({
+  if (user.name && user.barNumber) {
+    await client.put({
+      Item: {
+        pk: `${user.role}|${user.name}`,
+        sk: `user|${userId}`,
+      },
       applicationContext,
-      pkId: user.name,
-      skId: userId,
-      type: user.role,
     });
-
-    await createMappingRecord({
+    await client.put({
+      Item: {
+        pk: `${user.role}|${user.barNumber}`,
+        sk: `user|${userId}`,
+      },
       applicationContext,
-      pkId: user.barNumber,
-      skId: userId,
-      type: user.role,
     });
   }
 
@@ -59,11 +50,21 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 };
 
 exports.createAttorneyUser = async ({ applicationContext, user }) => {
-  const userId = applicationContext.getUniqueId();
+  let userId = applicationContext.getUniqueId();
+
+  if (
+    ![User.ROLES.privatePractitioner, User.ROLES.irsPractitioner].includes(
+      user.role,
+    )
+  ) {
+    throw new Error(
+      'Attorney users must have either private or IRS practitioner role',
+    );
+  }
 
   if (user.email) {
     try {
-      await applicationContext
+      const response = await applicationContext
         .getCognito()
         .adminCreateUser({
           UserAttributes: [
@@ -84,6 +85,10 @@ exports.createAttorneyUser = async ({ applicationContext, user }) => {
           Username: user.email,
         })
         .promise();
+
+      if (response && response.User && response.User.Username) {
+        userId = response.User.Username;
+      }
     } catch (err) {
       // the user already exists
       const response = await applicationContext

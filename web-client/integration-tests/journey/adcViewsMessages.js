@@ -1,4 +1,4 @@
-export default test => {
+export const adcViewsMessages = test => {
   return it('ADC views messages to verify the work item that was forward by the docket clerk is now present', async () => {
     await test.runSequence('gotoMessagesSequence');
     expect(test.getState('currentPage')).toEqual('Messages');
@@ -23,7 +23,7 @@ export default test => {
     expect(workItem.messages).toMatchObject([
       {
         message:
-          'Proposed Stipulated Decision filed by Respondent is ready for review.',
+          'Proposed Stipulated Decision filed by Irspractitioner is ready for review.',
       },
       {
         message: 'hello world',
