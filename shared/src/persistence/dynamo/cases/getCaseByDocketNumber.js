@@ -29,57 +29,30 @@ exports.getCaseByDocketNumber = async ({
     return null;
   }
 
-  const docketRecord = await client.query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${theCase.caseId}`,
-      ':prefix': 'docket-record',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    applicationContext,
-  });
+  const caseItems =
+    (await client
+      .query({
+        ExpressionAttributeNames: {
+          '#pk': 'pk',
+        },
+        ExpressionAttributeValues: {
+          ':pk': `case|${theCase.caseId}`,
+        },
+        KeyConditionExpression: '#pk = :pk',
+        applicationContext,
+      })
+      .then(results =>
+        stripWorkItems(results, applicationContext.isAuthorizedForWorkItems()),
+      )) || [];
 
-  const documents = await client.query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${theCase.caseId}`,
-      ':prefix': 'document',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    applicationContext,
-  });
-
-  const practitioners = await client.query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${theCase.caseId}`,
-      ':prefix': 'practitioner',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    applicationContext,
-  });
-
-  const respondents = await client.query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${theCase.caseId}`,
-      ':prefix': 'respondent',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    applicationContext,
-  });
+  const docketRecord = caseItems.filter(item =>
+    item.sk.includes('docket-record|'),
+  );
+  const documents = caseItems.filter(item => item.sk.includes('document|'));
+  const practitioners = caseItems.filter(item =>
+    item.sk.includes('practitioner|'),
+  );
+  const respondents = caseItems.filter(item => item.sk.includes('respondent|'));
 
   const sortedDocketRecord = sortBy(docketRecord, 'index');
   const sortedDocuments = sortBy(documents, 'createdAt');
