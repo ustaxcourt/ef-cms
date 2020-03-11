@@ -1,7 +1,7 @@
 [
   {
-    "pk": "trial-session-c7220f03-e46e-4d5e-8e1d-a640e64df552",
-    "sk": "trial-session-c7220f03-e46e-4d5e-8e1d-a640e64df552",
+    "pk": "trial-session|c7220f03-e46e-4d5e-8e1d-a640e64df552",
+    "sk": "trial-session|c7220f03-e46e-4d5e-8e1d-a640e64df552",
     "gsi1pk": "trial-session-catalog",
     "maxCases": 100,
     "sessionType": "Regular",
@@ -29,8 +29,8 @@
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   },
   {
-    "pk": "trial-session-a3bee7c0-bd98-4504-890b-b00eb398e547",
-    "sk": "trial-session-a3bee7c0-bd98-4504-890b-b00eb398e547",
+    "pk": "trial-session|a3bee7c0-bd98-4504-890b-b00eb398e547",
+    "sk": "trial-session|a3bee7c0-bd98-4504-890b-b00eb398e547",
     "gsi1pk": "trial-session-catalog",
     "maxCases": 6,
     "sessionType": "Special",
@@ -58,8 +58,8 @@
     "userId": "dabbad03-18d0-43ec-bafb-654e83405416"
   },
   {
-    "pk": "trial-session-b4bee7c0-bd98-4504-890b-b00eb398e547",
-    "sk": "trial-session-b4bee7c0-bd98-4504-890b-b00eb398e547",
+    "pk": "trial-session|b4bee7c0-bd98-4504-890b-b00eb398e547",
+    "sk": "trial-session|b4bee7c0-bd98-4504-890b-b00eb398e547",
     "gsi1pk": "trial-session-catalog",
     "maxCases": 125,
     "sessionType": "Hybrid",
@@ -85,8 +85,8 @@
     "userId": "dabbad02-18d0-43ec-bafb-654e83405416"
   },
   {
-    "pk": "trial-session-c5bee7c0-bd98-4504-890b-b00eb398e547",
-    "sk": "trial-session-c5bee7c0-bd98-4504-890b-b00eb398e547",
+    "pk": "trial-session|c5bee7c0-bd98-4504-890b-b00eb398e547",
+    "sk": "trial-session|c5bee7c0-bd98-4504-890b-b00eb398e547",
     "gsi1pk": "trial-session-catalog",
     "maxCases": 100,
     "sessionType": "Regular",
@@ -112,8 +112,8 @@
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   },
   {
-    "pk": "trial-session-7c6975cf-2b10-4e84-bcae-91e162d2f9ee",
-    "sk": "trial-session-7c6975cf-2b10-4e84-bcae-91e162d2f9ee",
+    "pk": "trial-session|7c6975cf-2b10-4e84-bcae-91e162d2f9ee",
+    "sk": "trial-session|7c6975cf-2b10-4e84-bcae-91e162d2f9ee",
     "gsi1pk": "trial-session-catalog",
     "maxCases": 125,
     "sessionType": "Small",
@@ -139,8 +139,8 @@
     "userId": "dabbad03-18d0-43ec-bafb-654e83405416"
   },
   {
-    "pk": "trial-session-0d943468-bc2e-4631-84e3-b084cf5b1fbb",
-    "sk": "trial-session-0d943468-bc2e-4631-84e3-b084cf5b1fbb",
+    "pk": "trial-session|0d943468-bc2e-4631-84e3-b084cf5b1fbb",
+    "sk": "trial-session|0d943468-bc2e-4631-84e3-b084cf5b1fbb",
     "gsi1pk": "trial-session-catalog",
     "maxCases": 30,
     "sessionType": "Special",
@@ -166,8 +166,8 @@
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416"
   },
   {
-    "pk": "trial-session-259159ca-f4a1-4b2b-bc24-bd1fbe6defee",
-    "sk": "trial-session-259159ca-f4a1-4b2b-bc24-bd1fbe6defee",
+    "pk": "trial-session|259159ca-f4a1-4b2b-bc24-bd1fbe6defee",
+    "sk": "trial-session|259159ca-f4a1-4b2b-bc24-bd1fbe6defee",
     "gsi1pk": "trial-session-catalog",
     "maxCases": 8,
     "sessionType": "Regular",
@@ -193,8 +193,8 @@
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416"
   },
   {
-    "pk": "trial-session-259159ca-f4a1-4b2b-bc24-bd1fbe6defef",
-    "sk": "trial-session-259159ca-f4a1-4b2b-bc24-bd1fbe6defef",
+    "pk": "trial-session|259159ca-f4a1-4b2b-bc24-bd1fbe6defef",
+    "sk": "trial-session|259159ca-f4a1-4b2b-bc24-bd1fbe6defef",
     "gsi1pk": "trial-session-catalog",
     "maxCases": 8,
     "sessionType": "Small",

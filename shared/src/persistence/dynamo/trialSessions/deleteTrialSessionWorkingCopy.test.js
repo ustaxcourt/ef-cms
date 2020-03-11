@@ -35,7 +35,7 @@ describe('deleteTrialSessionWorkingCopy', () => {
     expect(deleteStub.getCall(0).args[0]).toMatchObject({
       Key: {
         pk: `trial-session-working-copy|${trialSessionId}`,
-        sk: `${userId}`,
+        sk: `user|${userId}`,
       },
       TableName: 'efcms-dev',
     });

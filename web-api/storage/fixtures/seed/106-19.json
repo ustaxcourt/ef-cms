@@ -3,7 +3,7 @@
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
+    "gsi1pk": "work-item|85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
     "document": {
       "createdAt": "2019-07-12T17:09:41.026Z",
       "processingStatus": "pending",
@@ -24,7 +24,7 @@
     "createdAt": "2019-07-12T17:09:41.027Z",
     "assigneeName": null,
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-    "sk": "workitem-85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
+    "sk": "work-item|85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
     "messages": [
       {
         "createdAt": "2019-07-12T17:09:41.027Z",
@@ -34,32 +34,32 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "workitem-85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
+    "pk": "work-item|85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
     "docketNumber": "106-19",
     "updatedAt": "2019-07-12T17:09:41.027Z"
   },
   {
-    "sk": "case-d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "sk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "pk": "catalog"
   },
   {
-    "sk": "2b8ef08e-50be-4f9b-8a96-57baa5112f02",
-    "pk": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88|workItem"
+    "sk": "work-item|2b8ef08e-50be-4f9b-8a96-57baa5112f02",
+    "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88"
   },
   {
-    "sk": "5059e127-1796-45aa-96bc-351cd5705c66",
-    "pk": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88|workItem"
+    "sk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
+    "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88"
   },
   {
-    "sk": "85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
-    "pk": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88|workItem"
+    "sk": "work-item|85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
+    "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88"
   },
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
+    "gsi1pk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
@@ -76,7 +76,7 @@
     "createdAt": "2019-07-12T17:11:47.010Z",
     "assigneeName": "Test ADC",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-    "sk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
+    "sk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
     "messages": [
       {
         "createdAt": "2019-07-12T17:11:47.010Z",
@@ -88,7 +88,7 @@
         "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "user-6805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "user|6805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-07-12T17:11:47.010Z"
@@ -97,7 +97,7 @@
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
+    "gsi1pk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
@@ -113,7 +113,7 @@
     "createdAt": "2019-07-12T17:11:47.010Z",
     "assigneeName": "Test ADC",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-    "sk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
+    "sk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
     "messages": [
       {
         "createdAt": "2019-07-12T17:11:47.010Z",
@@ -125,7 +125,7 @@
         "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-adc",
+    "pk": "section|adc",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-07-12T17:11:47.010Z"
@@ -136,7 +136,7 @@
     "caseStatus": "New",
     "caseIsInProgress": false,
     "completedMessage": "completed",
-    "gsi1pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
+    "gsi1pk": "work-item|2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
       "isPaper": true,
       "serviceDate": null,
@@ -170,7 +170,7 @@
     "createdAt": "2019-07-12T17:11:27.244Z",
     "assigneeName": "Test Docketclerk",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-    "sk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
+    "sk": "work-item|2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "messages": [
       {
         "createdAt": "2019-07-12T17:11:27.244Z",
@@ -180,7 +180,7 @@
         "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
+    "pk": "work-item|2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Docketclerk",
@@ -192,7 +192,7 @@
     "caseStatus": "New",
     "caseIsInProgress": false,
     "completedMessage": "completed",
-    "gsi1pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
+    "gsi1pk": "work-item|2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
       "isPaper": true,
       "serviceDate": null,
@@ -236,7 +236,7 @@
         "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-outbox-docket",
+    "pk": "section-outbox|docket",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Docketclerk",
@@ -246,7 +246,7 @@
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
+    "gsi1pk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
@@ -274,7 +274,7 @@
         "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-outbox-docket",
+    "pk": "section-outbox|docket",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-07-12T17:11:47.010Z"
@@ -283,7 +283,7 @@
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
+    "gsi1pk": "work-item|85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
     "document": {
       "createdAt": "2019-07-12T17:09:41.026Z",
       "processingStatus": "pending",
@@ -304,7 +304,7 @@
     "createdAt": "2019-07-12T17:09:41.027Z",
     "assigneeName": null,
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-    "sk": "workitem-85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
+    "sk": "work-item|85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
     "messages": [
       {
         "createdAt": "2019-07-12T17:09:41.027Z",
@@ -314,7 +314,7 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-petitions",
+    "pk": "section|petitions",
     "docketNumber": "106-19",
     "updatedAt": "2019-07-12T17:09:41.027Z"
   },
@@ -324,7 +324,7 @@
     "caseStatus": "New",
     "caseIsInProgress": false,
     "completedMessage": "completed",
-    "gsi1pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
+    "gsi1pk": "work-item|2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
       "isPaper": true,
       "serviceDate": null,
@@ -368,7 +368,7 @@
         "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "user-outbox-1805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Docketclerk",
@@ -378,7 +378,7 @@
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
+    "gsi1pk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
@@ -415,7 +415,7 @@
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
+    "gsi1pk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
@@ -431,7 +431,7 @@
     "createdAt": "2019-07-12T17:11:47.010Z",
     "assigneeName": "Test ADC",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-    "sk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
+    "sk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
     "messages": [
       {
         "createdAt": "2019-07-12T17:11:47.010Z",
@@ -443,7 +443,7 @@
         "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
+    "pk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-07-12T17:11:47.010Z"
@@ -452,7 +452,7 @@
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
@@ -470,7 +470,7 @@
     "createdAt": "2019-08-08T14:23:51.565Z",
     "assigneeName": "Judge Armen",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-    "sk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "messages": [
       {
         "createdAt": "2019-08-08T14:23:51.565Z",
@@ -482,7 +482,7 @@
         "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-08-08T14:23:51.565Z"
@@ -492,181 +492,6 @@
     "contactSecondary": {},
     "isPaper": false,
     "initialTitle": "Denise Gould",
-    "documents": [
-      {
-        "createdAt": "2019-07-12T17:09:41.026Z",
-        "processingStatus": "complete",
-        "documentType": "Petition",
-        "filedBy": "Denise Gould",
-        "workItems": [
-          {
-            "docketNumberSuffix": null,
-            "caseStatus": "New",
-            "caseIsInProgress": false,
-            "document": {
-              "createdAt": "2019-07-12T17:09:41.026Z",
-              "processingStatus": "pending",
-              "documentType": "Petition",
-              "documentTitle": "Petition",
-              "filedBy": "Denise Gould",
-              "workItems": [],
-              "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
-              "receivedAt": "2019-07-12T17:09:41.026Z",
-              "filingDate": "2019-07-12T17:09:41.026Z",
-              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-            },
-            "section": "petitions",
-            "workItemId": "85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
-            "isInitializeCase": true,
-            "assigneeId": null,
-            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
-            "isQC": true,
-            "createdAt": "2019-07-12T17:09:41.027Z",
-            "assigneeName": null,
-            "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-            "messages": [
-              {
-                "createdAt": "2019-07-12T17:09:41.027Z",
-                "messageId": "818bb44d-1512-4a82-b524-a179ed5f7589",
-                "from": "Test Petitioner",
-                "message": "Petition filed by Denise Gould is ready for review.",
-                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-              }
-            ],
-            "docketNumber": "106-19",
-            "updatedAt": "2019-07-12T17:09:41.027Z"
-          }
-        ],
-        "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-        "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
-        "receivedAt": "2019-07-12T17:09:41.026Z",
-        "filingDate": "2019-07-12T17:09:41.026Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      },
-      {
-        "createdAt": "2019-07-12T17:09:41.027Z",
-        "processingStatus": "complete",
-        "documentType": "Statement of Taxpayer Identification",
-        "filedBy": "Denise Gould",
-        "workItems": [],
-        "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-        "documentId": "2da6d239-555a-40e8-af81-1949c8270cd7",
-        "receivedAt": "2019-07-12T17:09:41.027Z",
-        "filingDate": "2019-07-12T17:09:41.027Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      },
-      {
-        "isPaper": true,
-        "serviceDate": null,
-        "documentType": "Proposed Stipulated Decision",
-        "practitioner": [],
-        "partyPrimary": true,
-        "workItems": [
-          {
-            "completedAt": "2019-07-12T17:11:27.244Z",
-            "docketNumberSuffix": null,
-            "caseStatus": "New",
-            "caseIsInProgress": false,
-            "completedMessage": "completed",
-            "document": {
-              "isPaper": true,
-              "serviceDate": null,
-              "documentType": "Proposed Stipulated Decision",
-              "practitioner": [],
-              "partyPrimary": true,
-              "workItems": [],
-              "receivedAt": "1990-10-10",
-              "filingDate": "1990-10-10",
-              "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-              "eventCode": "PSDE",
-              "createdAt": "2019-07-12T17:11:26.955Z",
-              "processingStatus": "pending",
-              "lodged": false,
-              "scenario": "Standard",
-              "filedBy": "Petr. Denise Gould",
-              "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-              "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
-              "category": "Decision",
-              "documentTitle": "Proposed Stipulated Decision",
-              "relationship": "primaryDocument",
-              "docketNumber": "106-19"
-            },
-            "section": "docket",
-            "workItemId": "2b8ef08e-50be-4f9b-8a96-57baa5112f02",
-            "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-            "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-            "sentBy": "Test Docketclerk",
-            "sentBySection": "docket",
-            "isQC": true,
-            "createdAt": "2019-07-12T17:11:27.244Z",
-            "assigneeName": "Test Docketclerk",
-            "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-            "messages": [
-              {
-                "createdAt": "2019-07-12T17:11:27.244Z",
-                "messageId": "a2573475-ed2e-4404-b3af-cd5ad6a862f4",
-                "from": "Test Docketclerk",
-                "message": "Proposed Stipulated Decision filed by Docketclerk is ready for review.",
-                "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-              }
-            ],
-            "docketNumber": "106-19",
-            "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-            "completedBy": "Test Docketclerk",
-            "updatedAt": "2019-07-12T17:11:27.244Z"
-          },
-          {
-            "docketNumberSuffix": null,
-            "caseStatus": "New",
-            "caseIsInProgress": false,
-            "document": {
-              "createdAt": "2019-07-12T17:11:26.955Z",
-              "documentType": "Proposed Stipulated Decision",
-              "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
-            },
-            "section": "adc",
-            "workItemId": "5059e127-1796-45aa-96bc-351cd5705c66",
-            "isInitializeCase": false,
-            "assigneeId": "6805d1ab-18d0-43ec-bafb-654e83405416",
-            "sentBy": "Test Docketclerk",
-            "sentBySection": "docket",
-            "isQC": false,
-            "createdAt": "2019-07-12T17:11:47.010Z",
-            "assigneeName": "Test ADC",
-            "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-            "messages": [
-              {
-                "createdAt": "2019-07-12T17:11:47.010Z",
-                "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-                "messageId": "e6c9a265-cb21-4eb5-86d1-df9c44ef0791",
-                "from": "Test Docketclerk",
-                "to": "Test ADC",
-                "message": "sign this please",
-                "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
-              }
-            ],
-            "docketNumber": "106-19",
-            "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-            "updatedAt": "2019-07-12T17:11:47.010Z"
-          }
-        ],
-        "receivedAt": "1990-10-10",
-        "filingDate": "1990-10-10",
-        "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-        "eventCode": "PSDE",
-        "createdAt": "2019-07-12T17:11:26.955Z",
-        "processingStatus": "complete",
-        "lodged": false,
-        "scenario": "Standard",
-        "filedBy": "Petr. Denise Gould",
-        "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-        "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
-        "category": "Decision",
-        "documentTitle": "Proposed Stipulated Decision",
-        "relationship": "primaryDocument",
-        "docketNumber": "106-19"
-      }
-    ],
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Innocent Spouse",
@@ -689,7 +514,7 @@
     "noticeOfAttachments": false,
     "caseCaption": "Denise Gould, Petitioner",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-    "sk": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "sk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -701,10 +526,8 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Lubbock, Texas",
-    "respondents": [],
-    "practitioners": [],
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "docketNumber": "106-19",
     "status": "New",
     "associatedJudge": "Chief Judge"
@@ -740,18 +563,18 @@
     "sk": "docket-record|a79bbbca-1afe-41a2-a2a6-f4befd22546c"
   },
   {
-    "sk": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-    "pk": "106-19|case"
+    "sk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "pk": "case-by-docket-number|106-19"
   },
   {
-    "sk": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
@@ -769,7 +592,7 @@
     "assigneeName": "Judge Armen",
     "caseTitle": "Denise Gould",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-    "sk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "messages": [
       {
         "createdAt": "2019-08-08T14:23:51.565Z",
@@ -781,7 +604,7 @@
         "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-armensChambers",
+    "pk": "section|armensChambers",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-08-08T14:23:51.565Z"
@@ -790,7 +613,7 @@
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
@@ -820,7 +643,7 @@
         "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "user-outbox-1805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-08-08T14:23:51.565Z"
@@ -829,7 +652,7 @@
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentTitle": "Proposed Stipulated Decision",
@@ -847,7 +670,7 @@
     "createdAt": "2019-08-08T14:23:51.565Z",
     "assigneeName": "Judge Armen",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-    "sk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "messages": [
       {
         "createdAt": "2019-08-08T14:23:51.565Z",
@@ -859,20 +682,20 @@
         "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "user-dabbad00-18d0-43ec-bafb-654e83405416",
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-08-08T14:23:51.565Z"
   },
   {
-    "sk": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
-    "pk": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88|workItem"
+    "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88"
   },
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
@@ -902,7 +725,7 @@
         "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-outbox-docket",
+    "pk": "section-outbox|docket",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-08-08T14:23:51.565Z"
@@ -913,18 +736,200 @@
     "createdAt": "2019-08-22T12:49:10.949Z",
     "deadlineDate": "2019-08-23T04:00:00.000Z",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-    "sk": "case-deadline-0f5a666d-63c5-4378-9cd6-0b2ae141280f",
+    "sk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
     "caseDeadlineId": "0f5a666d-63c5-4378-9cd6-0b2ae141280f",
     "description": "This is a test deadline",
-    "pk": "case-deadline-0f5a666d-63c5-4378-9cd6-0b2ae141280f"
+    "pk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f"
   },
   {
-    "sk": "case-deadline-0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "pk": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88|case-deadline"
+    "sk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
+    "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88"
   },
   {
-    "caseDeadlineId": "case-deadline-0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "sk": "case-deadline-0f5a666d-63c5-4378-9cd6-0b2ae141280f",
+    "caseDeadlineId": "0f5a666d-63c5-4378-9cd6-0b2ae141280f",
+    "sk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
     "pk": "case-deadline-catalog"
+  },
+  {
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2019-07-12T17:09:41.027Z",
+    "workItems": [],
+    "pending": false,
+    "receivedAt": "2019-07-12T17:09:41.027Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-07-12T17:09:41.027Z",
+    "processingStatus": "complete",
+    "filedBy": "Denise Gould",
+    "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "sk": "document|2da6d239-555a-40e8-af81-1949c8270cd7",
+    "documentId": "2da6d239-555a-40e8-af81-1949c8270cd7",
+    "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88"
+  },
+  {
+    "documentType": "Petition",
+    "filingDate": "2019-07-12T17:09:41.026Z",
+    "workItems": [
+      {
+        "associatedJudge": "Chief Judge",
+        "docketNumberSuffix": null,
+        "caseStatus": "New",
+        "caseIsInProgress": false,
+        "document": {
+          "createdAt": "2019-07-12T17:09:41.026Z",
+          "processingStatus": "pending",
+          "documentType": "Petition",
+          "filingDate": "2019-07-12T17:09:41.026Z",
+          "filedBy": "Denise Gould",
+          "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+          "documentTitle": "Petition",
+          "receivedAt": "2019-07-12T17:09:41.026Z",
+          "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        "section": "petitions",
+        "workItemId": "85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
+        "isInitializeCase": true,
+        "assigneeId": null,
+        "isQC": true,
+        "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "createdAt": "2019-07-12T17:09:41.027Z",
+        "assigneeName": null,
+        "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+        "messages": [
+          {
+            "createdAt": "2019-07-12T17:09:41.027Z",
+            "messageId": "818bb44d-1512-4a82-b524-a179ed5f7589",
+            "from": "Test Petitioner",
+            "message": "Petition filed by Denise Gould is ready for review.",
+            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+          }
+        ],
+        "docketNumber": "106-19",
+        "updatedAt": "2019-07-12T17:09:41.027Z"
+      }
+    ],
+    "pending": false,
+    "receivedAt": "2019-07-12T17:09:41.026Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-07-12T17:09:41.026Z",
+    "processingStatus": "complete",
+    "filedBy": "Denise Gould",
+    "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "sk": "document|5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+    "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+    "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88"
+  },
+  {
+    "isPaper": true,
+    "serviceDate": null,
+    "documentType": "Proposed Stipulated Decision",
+    "filingDate": "1990-10-10",
+    "practitioner": [],
+    "partyPrimary": true,
+    "workItems": [
+      {
+        "associatedJudge": "Chief Judge",
+        "completedAt": "2019-07-12T17:11:27.244Z",
+        "docketNumberSuffix": null,
+        "caseStatus": "New",
+        "completedMessage": "completed",
+        "caseIsInProgress": false,
+        "document": {
+          "isPaper": true,
+          "serviceDate": null,
+          "documentType": "Proposed Stipulated Decision",
+          "practitioner": [],
+          "filingDate": "1990-10-10",
+          "partyPrimary": true,
+          "receivedAt": "1990-10-10",
+          "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+          "eventCode": "PSDE",
+          "createdAt": "2019-07-12T17:11:26.955Z",
+          "processingStatus": "pending",
+          "lodged": false,
+          "scenario": "Standard",
+          "filedBy": "Petr. Denise Gould",
+          "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+          "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
+          "category": "Decision",
+          "documentTitle": "Proposed Stipulated Decision",
+          "relationship": "primaryDocument",
+          "docketNumber": "106-19"
+        },
+        "section": "docket",
+        "workItemId": "2b8ef08e-50be-4f9b-8a96-57baa5112f02",
+        "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "isQC": true,
+        "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "sentBy": "Test Docketclerk",
+        "sentBySection": "docket",
+        "createdAt": "2019-07-12T17:11:27.244Z",
+        "assigneeName": "Test Docketclerk",
+        "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+        "messages": [
+          {
+            "createdAt": "2019-07-12T17:11:27.244Z",
+            "messageId": "a2573475-ed2e-4404-b3af-cd5ad6a862f4",
+            "from": "Test Docketclerk",
+            "message": "Proposed Stipulated Decision filed by Docketclerk is ready for review.",
+            "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+          }
+        ],
+        "docketNumber": "106-19",
+        "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "completedBy": "Test Docketclerk",
+        "updatedAt": "2019-07-12T17:11:27.244Z"
+      },
+      {
+        "associatedJudge": "Chief Judge",
+        "docketNumberSuffix": null,
+        "caseStatus": "New",
+        "caseIsInProgress": false,
+        "document": {
+          "createdAt": "2019-07-12T17:11:26.955Z",
+          "documentType": "Proposed Stipulated Decision",
+          "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
+        },
+        "section": "adc",
+        "workItemId": "5059e127-1796-45aa-96bc-351cd5705c66",
+        "isInitializeCase": false,
+        "assigneeId": "6805d1ab-18d0-43ec-bafb-654e83405416",
+        "isQC": false,
+        "sentBy": "Test Docketclerk",
+        "sentBySection": "docket",
+        "createdAt": "2019-07-12T17:11:47.010Z",
+        "assigneeName": "Test ADC",
+        "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+        "messages": [
+          {
+            "createdAt": "2019-07-12T17:11:47.010Z",
+            "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+            "messageId": "e6c9a265-cb21-4eb5-86d1-df9c44ef0791",
+            "from": "Test Docketclerk",
+            "to": "Test ADC",
+            "message": "sign this please",
+            "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
+          }
+        ],
+        "docketNumber": "106-19",
+        "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "updatedAt": "2019-07-12T17:11:47.010Z"
+      }
+    ],
+    "pending": true,
+    "receivedAt": "1990-10-10",
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "PSDE",
+    "createdAt": "2019-07-12T17:11:26.955Z",
+    "processingStatus": "complete",
+    "lodged": false,
+    "scenario": "Standard",
+    "filedBy": "Petr. Denise Gould",
+    "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "sk": "document|7a923abd-fc41-407a-b76b-7f724fa5d47f",
+    "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
+    "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "documentTitle": "Proposed Stipulated Decision",
+    "relationship": "primaryDocument",
+    "docketNumber": "106-19"
   }
 ]

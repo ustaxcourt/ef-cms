@@ -26,7 +26,7 @@ describe('deleteSectionOutboxRecord', () => {
     });
     expect(deleteStub.getCall(0).args[0]).toMatchObject({
       Key: {
-        pk: 'section-outbox-docket',
+        pk: 'section-outbox|docket',
         sk: '2020-01-02T16:05:45.979Z',
       },
     });

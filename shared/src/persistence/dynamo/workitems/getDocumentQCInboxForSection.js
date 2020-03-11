@@ -10,8 +10,8 @@ exports.getDocumentQCInboxForSection = async ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `section-${section}`,
-      ':prefix': 'workitem',
+      ':pk': `section|${section}`,
+      ':prefix': 'work-item',
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,

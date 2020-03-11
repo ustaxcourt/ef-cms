@@ -16,12 +16,12 @@
     "trialLocation": "Houston, Texas",
     "createdAt": "2020-10-27T05:00:00.000Z",
     "swingSessionId": "208a959f-9526-4db5-b262-e58c476a4604",
-    "sk": "trial-session-959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "sk": "trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "sessionType": "Regular",
     "termYear": "2020",
     "startTime": "10:00",
     "term": "Fall",
-    "pk": "trial-session-959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "pk": "trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "judge": {
       "name": "Judge Armen",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
@@ -46,8 +46,8 @@
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   },
   {
-    "pk": "trial-session-208a959f-9526-4db5-b262-e58c476a4604",
-    "sk": "trial-session-208a959f-9526-4db5-b262-e58c476a4604",
+    "pk": "trial-session|208a959f-9526-4db5-b262-e58c476a4604",
+    "sk": "trial-session|208a959f-9526-4db5-b262-e58c476a4604",
     "gsi1pk": "trial-session-catalog",
     "maxCases": 6,
     "sessionType": "Special",
@@ -74,8 +74,8 @@
     "userId": "dabbad03-18d0-43ec-bafb-654e83405416"
   },
   {
-    "pk": "trial-session-f3b04943-8ea8-422b-8990-dec3ca644c83",
-    "sk": "trial-session-f3b04943-8ea8-422b-8990-dec3ca644c83",
+    "pk": "trial-session|f3b04943-8ea8-422b-8990-dec3ca644c83",
+    "sk": "trial-session|f3b04943-8ea8-422b-8990-dec3ca644c83",
     "gsi1pk": "trial-session-catalog",
     "maxCases": 125,
     "sessionType": "Hybrid",
@@ -100,8 +100,8 @@
     "userId": "dabbad02-18d0-43ec-bafb-654e83405416"
   },
   {
-    "pk": "trial-session-5b18af9e-4fbd-459b-8db7-7b15108c7fa5",
-    "sk": "trial-session-5b18af9e-4fbd-459b-8db7-7b15108c7fa5",
+    "pk": "trial-session|5b18af9e-4fbd-459b-8db7-7b15108c7fa5",
+    "sk": "trial-session|5b18af9e-4fbd-459b-8db7-7b15108c7fa5",
     "gsi1pk": "trial-session-catalog",
     "maxCases": 100,
     "sessionType": "Regular",
@@ -126,8 +126,8 @@
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   },
   {
-    "pk": "trial-session-6b6975cf-2b10-4e84-bcae-91e162d2f9d1",
-    "sk": "trial-session-6b6975cf-2b10-4e84-bcae-91e162d2f9d1",
+    "pk": "trial-session|6b6975cf-2b10-4e84-bcae-91e162d2f9d1",
+    "sk": "trial-session|6b6975cf-2b10-4e84-bcae-91e162d2f9d1",
     "gsi1pk": "trial-session-catalog",
     "maxCases": 125,
     "sessionType": "Small",
@@ -178,8 +178,8 @@
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416"
   },
   {
-    "pk": "trial-session-149159ca-f4a1-4b2b-bc24-bd1fbe6defdc",
-    "sk": "trial-session-149159ca-f4a1-4b2b-bc24-bd1fbe6defdc",
+    "pk": "trial-session|149159ca-f4a1-4b2b-bc24-bd1fbe6defdc",
+    "sk": "trial-session|149159ca-f4a1-4b2b-bc24-bd1fbe6defdc",
     "gsi1pk": "trial-session-catalog",
     "maxCases": 8,
     "sessionType": "Regular",
@@ -208,12 +208,12 @@
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "Birmingham, Alabama",
     "createdAt": "2019-10-27T05:00:00.000Z",
-    "sk": "trial-session-159c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "sk": "trial-session|159c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "sessionType": "Hybrid",
     "termYear": "2020",
     "startTime": "10:00",
     "term": "Winter",
-    "pk": "trial-session-159c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "pk": "trial-session|159c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "judge": {
       "name": "Judge Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
@@ -229,12 +229,12 @@
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "Washington, District of Columbia",
     "createdAt": "2019-10-27T05:00:00.000Z",
-    "sk": "trial-session-359c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "sk": "trial-session|359c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "sessionType": "Hybrid",
     "termYear": "2020",
     "startTime": "10:00",
     "term": "Winter",
-    "pk": "trial-session-359c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "pk": "trial-session|359c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "judge": {
       "name": "Judge Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
@@ -250,12 +250,12 @@
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "New York City, New York",
     "createdAt": "2019-10-27T05:00:00.000Z",
-    "sk": "trial-session-459c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "sk": "trial-session|459c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "sessionType": "Hybrid",
     "termYear": "2020",
     "startTime": "10:00",
     "term": "Winter",
-    "pk": "trial-session-459c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "pk": "trial-session|459c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "judge": {
       "name": "Judge Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
@@ -271,12 +271,12 @@
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "San Francisco, California",
     "createdAt": "2019-10-27T05:00:00.000Z",
-    "sk": "trial-session-539c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "sk": "trial-session|539c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "sessionType": "Hybrid",
     "termYear": "2020",
     "startTime": "10:00",
     "term": "Winter",
-    "pk": "trial-session-539c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "pk": "trial-session|539c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "judge": {
       "name": "Judge Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"

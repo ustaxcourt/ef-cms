@@ -104,6 +104,7 @@ describe('assignWorkItemsInteractor integration test', () => {
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
+
     expect(inbox).toMatchObject([
       {
         assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -141,6 +142,7 @@ describe('assignWorkItemsInteractor integration test', () => {
       applicationContext,
       caseId,
     });
+
     expect(
       caseAfterAssign.documents.find(d => d.documentType === 'Petition'),
     ).toMatchObject({
