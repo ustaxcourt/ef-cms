@@ -10,7 +10,7 @@ exports.handler = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .associatePractitionerWithCaseInteractor({
+      .associatePrivatePractitionerWithCaseInteractor({
         ...JSON.parse(event.body),
         applicationContext,
       });

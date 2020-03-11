@@ -1,7 +1,7 @@
 const sinon = require('sinon');
 const {
-  associatePractitionerWithCaseInteractor,
-} = require('./associatePractitionerWithCaseInteractor');
+  associatePrivatePractitionerWithCaseInteractor,
+} = require('./associatePrivatePractitionerWithCaseInteractor');
 const { User } = require('../../entities/User');
 
 describe('associateRespondentWithCaseInteractor', () => {
@@ -61,7 +61,7 @@ describe('associateRespondentWithCaseInteractor', () => {
         }),
         getUniqueId: () => 'unique-id-1',
       };
-      await associatePractitionerWithCaseInteractor({
+      await associatePrivatePractitionerWithCaseInteractor({
         applicationContext,
         caseId: caseRecord.caseId,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -98,7 +98,7 @@ describe('associateRespondentWithCaseInteractor', () => {
       getUniqueId: () => 'unique-id-1',
     };
 
-    await associatePractitionerWithCaseInteractor({
+    await associatePrivatePractitionerWithCaseInteractor({
       applicationContext,
       caseId: caseRecord.caseId,
       representingPrimary: true,
