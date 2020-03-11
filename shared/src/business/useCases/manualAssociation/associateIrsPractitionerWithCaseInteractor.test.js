@@ -1,13 +1,13 @@
 const {
-  associateRespondentWithCaseInteractor,
-} = require('./associateRespondentWithCaseInteractor');
+  associateIrsPractitionerWithCaseInteractor,
+} = require('./associateIrsPractitionerWithCaseInteractor');
 const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/cases/CaseConstants');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { User } = require('../../entities/User');
 
-describe('associateRespondentWithCaseInteractor', () => {
+describe('associateIrsPractitionerWithCaseInteractor', () => {
   let applicationContext;
 
   let caseRecord = {
@@ -47,7 +47,7 @@ describe('associateRespondentWithCaseInteractor', () => {
         }),
         getUniqueId: () => 'unique-id-1',
       };
-      await associateRespondentWithCaseInteractor({
+      await associateIrsPractitionerWithCaseInteractor({
         applicationContext,
         caseId: caseRecord.caseId,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -85,7 +85,7 @@ describe('associateRespondentWithCaseInteractor', () => {
       getUniqueId: () => 'unique-id-1',
     };
 
-    await associateRespondentWithCaseInteractor({
+    await associateIrsPractitionerWithCaseInteractor({
       applicationContext,
       caseId: caseRecord.caseId,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,

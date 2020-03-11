@@ -32,7 +32,7 @@ export default test => {
     let respondentMatch = test.getState('modal.respondentMatches.0');
     expect(test.getState('modal.user.userId')).toEqual(respondentMatch.userId);
 
-    await test.runSequence('associateRespondentWithCaseSequence');
+    await test.runSequence('associateIrsPractitionerWithCaseSequence');
 
     expect(test.getState('caseDetail.irsPractitioners.length')).toEqual(1);
     expect(test.getState('caseDetail.irsPractitioners.0.name')).toEqual(
@@ -59,7 +59,7 @@ export default test => {
     respondentMatch = test.getState('modal.respondentMatches.0');
     expect(test.getState('modal.user.userId')).toEqual(respondentMatch.userId);
 
-    await test.runSequence('associateRespondentWithCaseSequence');
+    await test.runSequence('associateIrsPractitionerWithCaseSequence');
     expect(test.getState('caseDetail.irsPractitioners.length')).toEqual(2);
     expect(test.getState('caseDetail.irsPractitioners.1.name')).toEqual(
       respondentMatch.name,
