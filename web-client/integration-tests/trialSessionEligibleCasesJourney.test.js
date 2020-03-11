@@ -1,12 +1,10 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
-import { captureCreatedCase } from './journey/captureCreatedCase';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition, wait } from './helpers';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
@@ -51,10 +49,10 @@ describe('Trial Session Eligible Cases Journey', () => {
       };
       loginAs(test, 'petitioner');
       it('Create case #1', async () => {
-        await uploadPetition(test, caseOverrides);
+        const caseDetail = await uploadPetition(test, caseOverrides);
+        createdCases.push(caseDetail);
+        createdDocketNumbers.push(caseDetail.docketNumber);
       });
-      petitionerViewsDashboard(test);
-      captureCreatedCase(test, createdCases, createdDocketNumbers);
 
       loginAs(test, 'petitionsclerk');
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
@@ -75,10 +73,10 @@ describe('Trial Session Eligible Cases Journey', () => {
       };
       loginAs(test, 'petitioner');
       it('Create case #2', async () => {
-        await uploadPetition(test, caseOverrides);
+        const caseDetail = await uploadPetition(test, caseOverrides);
+        createdCases.push(caseDetail);
+        createdDocketNumbers.push(caseDetail.docketNumber);
       });
-      petitionerViewsDashboard(test);
-      captureCreatedCase(test, createdCases, createdDocketNumbers);
 
       loginAs(test, 'petitionsclerk');
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
@@ -99,10 +97,10 @@ describe('Trial Session Eligible Cases Journey', () => {
       };
       loginAs(test, 'petitioner');
       it('Create case #3', async () => {
-        await uploadPetition(test, caseOverrides);
+        const caseDetail = await uploadPetition(test, caseOverrides);
+        createdCases.push(caseDetail);
+        createdDocketNumbers.push(caseDetail.docketNumber);
       });
-      petitionerViewsDashboard(test);
-      captureCreatedCase(test, createdCases, createdDocketNumbers);
 
       loginAs(test, 'petitionsclerk');
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
@@ -123,10 +121,10 @@ describe('Trial Session Eligible Cases Journey', () => {
       };
       loginAs(test, 'petitioner');
       it('Create case #4', async () => {
-        await uploadPetition(test, caseOverrides);
+        const caseDetail = await uploadPetition(test, caseOverrides);
+        createdCases.push(caseDetail);
+        createdDocketNumbers.push(caseDetail.docketNumber);
       });
-      petitionerViewsDashboard(test);
-      captureCreatedCase(test, createdCases, createdDocketNumbers);
 
       loginAs(test, 'petitionsclerk');
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
@@ -147,10 +145,10 @@ describe('Trial Session Eligible Cases Journey', () => {
       };
       loginAs(test, 'petitioner');
       it('Create case #5', async () => {
-        await uploadPetition(test, caseOverrides);
+        const caseDetail = await uploadPetition(test, caseOverrides);
+        createdCases.push(caseDetail);
+        createdDocketNumbers.push(caseDetail.docketNumber);
       });
-      petitionerViewsDashboard(test);
-      captureCreatedCase(test, createdCases, createdDocketNumbers);
 
       loginAs(test, 'petitionsclerk');
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
