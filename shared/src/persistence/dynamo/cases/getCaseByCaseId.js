@@ -41,12 +41,8 @@ exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
   );
   const respondents = caseItems.filter(item => item.sk.includes('respondent|'));
 
-  const actualDocketRecord =
-    docketRecord.length > 0 ? docketRecord : theCase.docketRecord;
-  const actualDocuments = documents.length > 0 ? documents : theCase.documents;
-
-  const sortedDocketRecord = sortBy(actualDocketRecord, 'index');
-  const sortedDocuments = sortBy(actualDocuments, 'createdAt');
+  const sortedDocketRecord = sortBy(docketRecord, 'index');
+  const sortedDocuments = sortBy(documents, 'createdAt');
 
   return {
     ...theCase,
