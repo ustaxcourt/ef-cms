@@ -42,9 +42,11 @@ describe('getCasesByLeadCaseId', () => {
 
     const result = await getCasesByLeadCaseId({
       applicationContext,
-      leadCaseId: 'abc',
+      leadCaseId: 'case|123',
     });
     expect(queryStub).toHaveBeenCalled();
+    expect(getCaseByCaseIdStub).toHaveBeenCalled();
+    expect(isAuthorizedForWorkItemsStub).toHaveBeenCalled();
     expect(result).toEqual([
       {
         caseId: '123',
@@ -87,6 +89,8 @@ describe('getCasesByLeadCaseId', () => {
       leadCaseId: 'abc',
     });
     expect(queryStub).toHaveBeenCalled();
+    expect(getCaseByCaseIdStub).not.toHaveBeenCalled();
+    expect(isAuthorizedForWorkItemsStub).not.toHaveBeenCalled();
     expect(result).toEqual([]);
   });
 });

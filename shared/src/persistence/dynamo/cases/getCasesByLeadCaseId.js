@@ -22,6 +22,8 @@ exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
     applicationContext,
   });
 
+  console.log('items', items);
+
   for (let i = 0; i < items.length; i++) {
     items[i] = await getCaseByCaseId({
       applicationContext,
