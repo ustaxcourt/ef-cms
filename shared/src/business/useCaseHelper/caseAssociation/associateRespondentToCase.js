@@ -1,5 +1,5 @@
 const { Case } = require('../../entities/cases/Case');
-const { Respondent } = require('../../entities/Respondent');
+const { IrsPractitioner } = require('../../entities/Respondent');
 
 /**
  * associateRespondentToCase
@@ -42,7 +42,7 @@ exports.associateRespondentToCase = async ({
     const caseEntity = new Case(caseToUpdate, { applicationContext });
 
     caseEntity.attachIrsPractitioner(
-      new Respondent({ ...user, serviceIndicator }),
+      new IrsPractitioner({ ...user, serviceIndicator }),
     );
 
     await applicationContext.getPersistenceGateway().updateCase({

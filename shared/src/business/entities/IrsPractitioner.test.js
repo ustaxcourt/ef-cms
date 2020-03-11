@@ -1,9 +1,9 @@
-const { Practitioner } = require('./Practitioner');
+const { IrsPractitioner } = require('./IrsPractitioner');
 const { User } = require('./User');
 
-describe('Practitioner', () => {
-  it('Creates a valid Practitioner', () => {
-    const user = new Practitioner({
+describe('IrsPractitioner', () => {
+  it('Creates a valid IrsPractitioner', () => {
+    const user = new IrsPractitioner({
       contact: {
         address1: '234 Main St',
         address2: 'Apartment 4',
@@ -17,15 +17,15 @@ describe('Practitioner', () => {
       },
       firstName: 'firstName',
       lastName: 'lastName',
-      role: User.ROLES.privatePractitioner,
+      role: User.ROLES.irsPractitioner,
       userId: 'petitioner',
     });
     expect(user.isValid()).toBeTruthy();
   });
 
   it('Creates an invalid', () => {
-    const user = new Practitioner({
-      role: User.ROLES.privatePractitioner,
+    const user = new IrsPractitioner({
+      role: User.ROLES.irsPractitioner,
     });
     expect(user.isValid()).toBeFalsy();
   });
