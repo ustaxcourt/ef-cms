@@ -1,16 +1,16 @@
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
-import petitionsClerkCreatesNewCaseAndSavesForLater from './journey/petitionsClerkCreatesNewCaseAndSavesForLater';
-import petitionsClerkEditsAnExistingCaseAndSavesForLater from './journey/petitionsClerkEditsAnExistingCaseAndSavesForLater';
+import petitionsClerkCreatesNewCaseAndServesCase from './journey/petitionsClerkCreatesNewCaseAndServesCase';
+import petitionsClerkEditsAnExistingCaseAndServesCase from './journey/petitionsClerkEditsAnExistingCaseAndServesCase';
 
 const test = setupTest();
 
-describe('Case journey', () => {
+describe('Case (paper) journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   loginAs(test, 'petitionsclerk');
-  petitionsClerkCreatesNewCaseAndSavesForLater(test, fakeFile);
+  petitionsClerkCreatesNewCaseAndServesCase(test, fakeFile);
 
   loginAs(test, 'petitioner');
   it('Create case', async () => {
@@ -22,5 +22,5 @@ describe('Case journey', () => {
   });
 
   loginAs(test, 'petitionsclerk');
-  petitionsClerkEditsAnExistingCaseAndSavesForLater(test);
+  petitionsClerkEditsAnExistingCaseAndServesCase(test);
 });
