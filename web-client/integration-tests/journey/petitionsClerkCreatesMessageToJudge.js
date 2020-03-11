@@ -1,6 +1,5 @@
 export default (test, message, createdCases) => {
   return it('Petitions clerk sends message to judgeArmen', async () => {
-    console.log('createdCases', createdCases);
     const workItem = createdCases[0].documents[0].workItems[0];
 
     await test.runSequence('gotoDocumentDetailSequence', {

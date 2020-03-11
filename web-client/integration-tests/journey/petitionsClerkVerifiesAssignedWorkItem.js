@@ -1,6 +1,5 @@
 export default (test, createdCases) => {
   return it('Petitions clerk verifies assignment of work item', async () => {
-    console.log('createdCases', createdCases);
     const { workItemId } = createdCases[0].documents[0].workItems[0];
 
     await test.runSequence('gotoMessagesSequence');
