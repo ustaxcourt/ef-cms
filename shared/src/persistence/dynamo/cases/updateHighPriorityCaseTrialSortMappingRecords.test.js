@@ -50,13 +50,13 @@ describe('updateHighPriorityCaseTrialSortMappingRecords', () => {
     });
     expect(client.put.getCall(0).args[0].Item).toMatchObject({
       caseId,
-      gsi1pk: 'eligible-for-trial-case-catalog-abc',
+      gsi1pk: 'eligible-for-trial-case-catalog|abc',
       pk: 'eligible-for-trial-case-catalog',
       sk: '123',
     });
     expect(client.put.getCall(1).args[0].Item).toMatchObject({
       caseId,
-      gsi1pk: 'eligible-for-trial-case-catalog-abc',
+      gsi1pk: 'eligible-for-trial-case-catalog|abc',
       pk: 'eligible-for-trial-case-catalog',
       sk: 'abc',
     });
@@ -72,13 +72,13 @@ describe('updateHighPriorityCaseTrialSortMappingRecords', () => {
     });
     expect(client.put.getCall(0).args[0].Item).toMatchObject({
       caseId,
-      gsi1pk: 'eligible-for-trial-case-catalog-abc',
+      gsi1pk: 'eligible-for-trial-case-catalog|abc',
       pk: 'eligible-for-trial-case-catalog',
       sk: '456',
     });
     expect(client.put.getCall(1).args[0].Item).toMatchObject({
       caseId,
-      gsi1pk: 'eligible-for-trial-case-catalog-abc',
+      gsi1pk: 'eligible-for-trial-case-catalog|abc',
       pk: 'eligible-for-trial-case-catalog',
       sk: 'efg',
     });

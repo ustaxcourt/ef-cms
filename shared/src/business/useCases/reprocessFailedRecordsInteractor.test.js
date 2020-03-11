@@ -51,7 +51,7 @@ describe('reprocessFailedRecordsInteractor', () => {
     expect(indexSpy).toHaveBeenCalled();
     expect(indexSpy.mock.calls[0][0]).toMatchObject({
       body: { caseId: { S: '123' }, pk: { S: 'case-123' }, sk: { S: 'abc' } },
-      id: 'case-123',
+      id: 'case-123_abc',
     });
     expect(deleteElasticsearchReindexRecordSpy).toHaveBeenCalled();
     expect(deleteElasticsearchReindexRecordSpy.mock.calls[0][0]).toMatchObject({

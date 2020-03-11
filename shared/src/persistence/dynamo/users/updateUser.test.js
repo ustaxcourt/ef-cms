@@ -37,8 +37,8 @@ describe('updateUser', () => {
 
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
-        pk: userId,
-        sk: userId,
+        pk: `user|${userId}`,
+        sk: `user|${userId}`,
         ...user,
       },
     });

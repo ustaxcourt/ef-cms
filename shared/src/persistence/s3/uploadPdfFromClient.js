@@ -27,7 +27,7 @@ exports.uploadPdfFromClient = async ({
   );
   formData.append('Policy', policy.fields.Policy);
   formData.append('X-Amz-Signature', policy.fields['X-Amz-Signature']);
-  formData.append('Content-Type', 'application/pdf');
+  formData.append('content-type', file.type || 'application/pdf');
   formData.append('file', file, file.name || 'fileName');
   await applicationContext
     .getHttpClient()

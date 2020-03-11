@@ -3,8 +3,8 @@ const client = require('../../dynamodbClientService');
 exports.getWorkItemById = ({ applicationContext, workItemId }) => {
   return client.get({
     Key: {
-      pk: `workitem-${workItemId}`,
-      sk: `workitem-${workItemId}`,
+      pk: `work-item|${workItemId}`,
+      sk: `work-item|${workItemId}`,
     },
     applicationContext,
   });

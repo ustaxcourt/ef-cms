@@ -5,8 +5,8 @@ const { getTrialSessionById } = require('./getTrialSessionById');
 describe('getTrialSessionById', () => {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
-      pk: 'trial-session-123',
-      sk: 'trial-session-123',
+      pk: 'trial-session|123',
+      sk: 'trial-session|123',
       trialSessionId: '123',
     });
   });
@@ -26,8 +26,8 @@ describe('getTrialSessionById', () => {
       trialSessionId: '123',
     });
     expect(result).toEqual({
-      pk: 'trial-session-123',
-      sk: 'trial-session-123',
+      pk: 'trial-session|123',
+      sk: 'trial-session|123',
       trialSessionId: '123',
     });
   });

@@ -29,8 +29,8 @@ describe('deleteUserFromCase', function() {
 
     expect(deleteStub.getCall(0).args[0]).toMatchObject({
       Key: {
-        pk: '123|case',
-        sk: '456',
+        pk: 'user|123',
+        sk: 'case|456',
       },
       TableName: 'efcms-dev',
     });

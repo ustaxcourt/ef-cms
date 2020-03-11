@@ -15,7 +15,7 @@ describe('getUsersBySearchKey', () => {
       {
         barNumber: 'PT1234',
         name: 'Test Practitioner',
-        pk: '9805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user|9805d1ab-18d0-43ec-bafb-654e83405416',
         role: User.ROLES.privatePractitioner,
         section: 'privatePractitioner',
         sk: '9805d1ab-18d0-43ec-bafb-654e83405416',
@@ -24,8 +24,8 @@ describe('getUsersBySearchKey', () => {
     ]);
     sinon.stub(client, 'query').resolves([
       {
-        pk: 'Test Practitioner|practitioner',
-        sk: '9805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'Test Practitioner|privatePractitioner',
+        sk: 'user|9805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ]);
   });
@@ -39,13 +39,13 @@ describe('getUsersBySearchKey', () => {
     const result = await getUsersBySearchKey({
       applicationContext,
       searchKey: 'Test Practitioner',
-      type: 'practitioner',
+      type: 'privatePractitioner',
     });
     expect(result).toEqual([
       {
         barNumber: 'PT1234',
         name: 'Test Practitioner',
-        pk: '9805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user|9805d1ab-18d0-43ec-bafb-654e83405416',
         role: User.ROLES.privatePractitioner,
         section: 'privatePractitioner',
         sk: '9805d1ab-18d0-43ec-bafb-654e83405416',
@@ -59,7 +59,7 @@ describe('getUsersBySearchKey', () => {
     const result = await getUsersBySearchKey({
       applicationContext,
       searchKey: 'Test Practitioner',
-      type: 'practitioner',
+      type: 'privatePractitioner',
     });
     expect(result).toEqual([]);
   });

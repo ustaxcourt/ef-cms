@@ -20,7 +20,7 @@ export const SectionWorkQueueOutbox = connect(
           <thead>
             <tr>
               <th aria-label="Docket Number" colSpan="2">
-                <span className="padding-left-2px">Docket</span>
+                <span className="padding-left-2px">Docket number</span>
               </th>
               {workQueueHelper.showReceivedColumn && <th>Filed</th>}
               {workQueueHelper.showSentColumn && <th>Sent</th>}
