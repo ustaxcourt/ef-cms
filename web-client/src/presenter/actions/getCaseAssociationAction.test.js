@@ -133,7 +133,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          respondent: { userId: '123' },
+          irsPractitioners: [{ userId: '123' }],
         },
       },
     });
