@@ -12,10 +12,13 @@ exports.getCasesByUser = async ({ applicationContext, userId }) => {
   });
 
   for (let i = 0; i < cases.length; i++) {
-    cases[i] = await getCaseByCaseId({
-      applicationContext,
-      caseId: cases[i].caseId,
-    });
+    cases[i] = {
+      ...cases[i],
+      ...(await getCaseByCaseId({
+        applicationContext,
+        caseId: cases[i].caseId,
+      })),
+    };
   }
 
   return stripWorkItems(cases, applicationContext.isAuthorizedForWorkItems());
