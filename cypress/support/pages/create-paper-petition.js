@@ -1,5 +1,4 @@
 exports.fillInCreateCaseFromPaperForm = () => {
-  // enter party info
   cy.get('#party-type').select('Petitioner');
   cy.get('#name').type('Wile e Coyote');
   cy.get('input[name="contactPrimary.address1"]').type('123 Roadrunner Lane');
@@ -7,7 +6,6 @@ exports.fillInCreateCaseFromPaperForm = () => {
   cy.get('select[name="contactPrimary.state"]').select('WA');
   cy.get('input[name="contactPrimary.postalCode"]').type('00000');
 
-  // enter case info
   cy.get('#tab-case-info').click();
 
   cy.get('#date-received-month').type('01');
@@ -21,14 +19,12 @@ exports.fillInCreateCaseFromPaperForm = () => {
     .select('Birmingham, Alabama');
   cy.get('label[for="payment-status-paid"]').click();
 
-  // enter irs notice info
   cy.get('#tab-irs-notice').click();
   cy.get('#case-type')
     .scrollIntoView()
     .select('Deficiency');
   cy.get('#has-irs-verified-notice-no').click();
 
-  // upload documents
   cy.get('#upload-mode-upload').click();
   cy.upload_file('w3-dummy.pdf', 'input#petitionFile-file');
 
