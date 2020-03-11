@@ -1,9 +1,9 @@
 const {
-  getPractitionersBySearchKeyInteractor,
-} = require('./getPractitionersBySearchKeyInteractor');
+  getPrivatePractitionersBySearchKeyInteractor,
+} = require('./getPrivatePractitionersBySearchKeyInteractor');
 const { User } = require('../../entities/User');
 
-describe('getPractitionersBySearchKeyInteractor', () => {
+describe('getPrivatePractitionersBySearchKeyInteractor', () => {
   let applicationContext;
 
   it('should throw an error when not authorized', async () => {
@@ -22,7 +22,7 @@ describe('getPractitionersBySearchKeyInteractor', () => {
           getUsersBySearchKey: async () => [],
         }),
       };
-      await getPractitionersBySearchKeyInteractor({
+      await getPrivatePractitionersBySearchKeyInteractor({
         applicationContext,
         searchKey: 'something',
       });
@@ -52,7 +52,7 @@ describe('getPractitionersBySearchKeyInteractor', () => {
       }),
     };
 
-    const result = await getPractitionersBySearchKeyInteractor({
+    const result = await getPrivatePractitionersBySearchKeyInteractor({
       applicationContext,
       searchKey: 'Test Practitioner',
     });

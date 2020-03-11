@@ -6,14 +6,14 @@ const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 /**
- * getPractitionersBySearchKeyInteractor
+ * getPrivatePractitionersBySearchKeyInteractor
  *
  * @param {object} params the params object
  * @param {object} params.applicationContext the application context
  * @param {string} params.searchKey the search string entered by the user
  * @returns {*} the result
  */
-exports.getPractitionersBySearchKeyInteractor = async ({
+exports.getPrivatePractitionersBySearchKeyInteractor = async ({
   applicationContext,
   searchKey,
 }) => {
