@@ -53,8 +53,8 @@ describe('createWorkItem', () => {
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
         caseId: '123',
-        pk: 'workitem-a_id',
-        sk: 'workitem-a_id',
+        pk: 'work-item|a_id',
+        sk: 'work-item|a_id',
         workItemId: 'a_id',
       },
       TableName: 'efcms-dev',
@@ -68,8 +68,8 @@ describe('createWorkItem', () => {
     });
     expect(putStub.getCall(1).args[0]).toMatchObject({
       Item: {
-        pk: '123|workItem',
-        sk: 'a_id',
+        pk: 'case|123',
+        sk: 'work-item|a_id',
       },
       TableName: 'efcms-dev',
     });
@@ -82,8 +82,8 @@ describe('createWorkItem', () => {
     });
     expect(putStub.getCall(2).args[0]).toMatchObject({
       Item: {
-        pk: 'user-123',
-        sk: 'workitem-a_id',
+        pk: 'user|123',
+        sk: 'work-item|a_id',
         workItemId: 'a_id',
       },
       TableName: 'efcms-dev',
@@ -97,7 +97,7 @@ describe('createWorkItem', () => {
     });
     expect(putStub.getCall(3).args[0]).toMatchObject({
       Item: {
-        pk: 'user-outbox-123',
+        pk: 'user-outbox|123',
         sk: '100',
       },
       TableName: 'efcms-dev',
@@ -111,8 +111,8 @@ describe('createWorkItem', () => {
     });
     expect(putStub.getCall(4).args[0]).toMatchObject({
       Item: {
-        pk: 'section-docket',
-        sk: 'workitem-a_id',
+        pk: 'section|docket',
+        sk: 'work-item|a_id',
         workItemId: 'a_id',
       },
       TableName: 'efcms-dev',
@@ -126,7 +126,7 @@ describe('createWorkItem', () => {
     });
     expect(putStub.getCall(5).args[0]).toMatchObject({
       Item: {
-        pk: 'section-outbox-docket',
+        pk: 'section-outbox|docket',
         sk: '100',
         workItemId: 'a_id',
       },

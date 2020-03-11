@@ -73,7 +73,25 @@ describe('getCaseByDocketNumber', () => {
           sk: '123',
         },
       ],
+      documents: [
+        {
+          pk: '123',
+          sk: '123',
+        },
+      ],
       pk: '123',
+      practitioners: [
+        {
+          pk: '123',
+          sk: '123',
+        },
+      ],
+      respondents: [
+        {
+          pk: '123',
+          sk: '123',
+        },
+      ],
       sk: '123',
       status: 'New',
     });

@@ -30,11 +30,11 @@ describe('updateDocumentProcessingStatus', () => {
     await updateDocumentProcessingStatus({
       applicationContext,
       caseId: 'abc',
-      documentIndex: 3,
+      documentId: 3,
     });
     expect(client.update.getCall(0).args[0]).toMatchObject({
-      Key: { pk: 'abc', sk: 'abc' },
-      UpdateExpression: 'SET #documents[3].#processingStatus = :status',
+      Key: { pk: 'case|abc', sk: 'document|3' },
+      UpdateExpression: 'SET #processingStatus = :status',
     });
   });
 });

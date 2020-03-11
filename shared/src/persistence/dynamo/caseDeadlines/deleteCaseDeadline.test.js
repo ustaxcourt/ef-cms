@@ -29,16 +29,16 @@ describe('deleteCaseDeadline', () => {
 
     expect(deleteStub.getCall(0).args[0]).toMatchObject({
       Key: {
-        pk: 'case-deadline-123',
-        sk: 'case-deadline-123',
+        pk: 'case-deadline|123',
+        sk: 'case-deadline|123',
       },
       TableName: 'efcms-dev',
     });
 
     expect(deleteStub.getCall(1).args[0]).toMatchObject({
       Key: {
-        pk: '456|case-deadline',
-        sk: 'case-deadline-123',
+        pk: 'case|456',
+        sk: 'case-deadline|123',
       },
       TableName: 'efcms-dev',
     });
@@ -46,7 +46,7 @@ describe('deleteCaseDeadline', () => {
     expect(deleteStub.getCall(2).args[0]).toMatchObject({
       Key: {
         pk: 'case-deadline-catalog',
-        sk: 'case-deadline-123',
+        sk: 'case-deadline|123',
       },
       TableName: 'efcms-dev',
     });

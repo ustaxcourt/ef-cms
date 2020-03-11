@@ -1,9 +1,4 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
-import petitionerAddNewCaseToTestObj from './journey/petitionerAddNewCaseToTestObj';
-import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
-import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
-import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import petitionsClerkBulkAssignsCases from './journey/petitionsClerkBulkAssignsCases';
 import petitionsClerkCreatesMessage from './journey/petitionsClerkCreatesMessage';
 import petitionsClerkGetsMyDocumentQCInboxCount from './journey/petitionsClerkGetsMyDocumentQCInboxCount';
@@ -23,6 +18,8 @@ describe('Petitions Clerk Document QC Journey', () => {
     jest.setTimeout(30000);
   });
 
+  const createdCases = [];
+
   const caseCreationCount = 3;
 
   loginAs(test, 'petitionsclerk');
@@ -33,22 +30,25 @@ describe('Petitions Clerk Document QC Journey', () => {
 
   // Create multiple cases for testing
   for (let i = 0; i < caseCreationCount; i++) {
-    petitionerNavigatesToCreateCase(test);
-    petitionerChoosesProcedureType(test);
-    petitionerChoosesCaseType(test);
-    petitionerCreatesNewCase(test, fakeFile);
-    petitionerAddNewCaseToTestObj(test);
+    it(`create case ${i + 1}`, async () => {
+      const caseDetail = await uploadPetition(test);
+      createdCases.push(caseDetail);
+    });
   }
 
   loginAs(test, 'petitionsclerk');
   petitionsClerkViewsSectionDocumentQC(test);
   petitionsClerkGetsSectionDocumentQCInboxCount(test, caseCreationCount);
-  petitionsClerkBulkAssignsCases(test);
+  petitionsClerkBulkAssignsCases(test, createdCases);
   petitionsClerkViewsMyDocumentQC(test);
   petitionsClerkGetsMyDocumentQCInboxCount(test, caseCreationCount);
-  petitionsClerkVerifiesAssignedWorkItem(test);
-  petitionsClerkVerifiesUnreadMessage(test);
-  petitionsClerkCreatesMessage(test, 'Here comes the hotstepper!');
+  petitionsClerkVerifiesAssignedWorkItem(test, createdCases);
+  petitionsClerkVerifiesUnreadMessage(test, createdCases);
+  petitionsClerkCreatesMessage(
+    test,
+    'Here comes the hotstepper!',
+    createdCases,
+  );
 
   loginAs(test, 'petitionsclerk1');
   petitionsClerkViewsMyMessagesInbox(test, true);
