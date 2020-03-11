@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the next object in the path
  * @returns {Promise<*>} the success path
  */
-export const associatePractitionerWithCaseAction = async ({
+export const associatePrivatePractitionerWithCaseAction = async ({
   applicationContext,
   get,
   path,
@@ -22,7 +22,7 @@ export const associatePractitionerWithCaseAction = async ({
 
   await applicationContext
     .getUseCases()
-    .associatePractitionerWithCaseInteractor({
+    .associatePrivatePractitionerWithCaseInteractor({
       applicationContext,
       caseId,
       representingPrimary,

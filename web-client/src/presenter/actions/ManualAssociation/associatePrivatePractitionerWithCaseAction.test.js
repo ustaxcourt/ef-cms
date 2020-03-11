@@ -1,15 +1,15 @@
-import { associatePractitionerWithCaseAction } from './associatePractitionerWithCaseAction';
+import { associatePrivatePractitionerWithCaseAction } from './associatePrivatePractitionerWithCaseAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
 
-describe('associatePractitionerWithCaseAction', () => {
-  it('should run associatePractitionerWithCaseInteractor and success path', async () => {
+describe('associatePrivatePractitionerWithCaseAction', () => {
+  it('should run associatePrivatePractitionerWithCaseInteractor and success path', async () => {
     const successStub = sinon.stub();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        associatePractitionerWithCaseInteractor: () =>
+        associatePrivatePractitionerWithCaseInteractor: () =>
           'hello from associate practitioner with case',
       }),
     };
@@ -18,7 +18,7 @@ describe('associatePractitionerWithCaseAction', () => {
       success: successStub,
     };
 
-    await runAction(associatePractitionerWithCaseAction, {
+    await runAction(associatePrivatePractitionerWithCaseAction, {
       modules: {
         presenter,
       },
