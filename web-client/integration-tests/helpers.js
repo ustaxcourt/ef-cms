@@ -343,27 +343,21 @@ export const uploadPetition = async (
   };
   const petitionerToken = jwt.sign(user, 'secret');
 
-  const caseDetail = await axios
-    .post(
-      'http://localhost:3002/',
-      {
-        petitionFileId,
-        petitionMetadata,
-        stinFileId,
+  const response = await axios.post(
+    'http://localhost:3002/',
+    {
+      petitionFileId,
+      petitionMetadata,
+      stinFileId,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${petitionerToken}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${petitionerToken}`,
-        },
-      },
-    )
-    .then(response => response.data);
+    },
+  );
 
-  await test.runSequence('gotoCaseDetailSequence', {
-    docketNumber: caseDetail.docketNumber,
-  });
-
-  return test.getState('caseDetail');
+  return response.data;
 };
 
 export const loginAs = (test, user) => {

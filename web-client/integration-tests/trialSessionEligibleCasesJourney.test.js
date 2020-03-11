@@ -52,6 +52,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         createdCases.push(caseDetail);
         createdDocketNumbers.push(caseDetail.docketNumber);
+        test.docketNumber = caseDetail.docketNumber;
       });
 
       loginAs(test, 'petitionsclerk');
@@ -76,6 +77,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         createdCases.push(caseDetail);
         createdDocketNumbers.push(caseDetail.docketNumber);
+        test.docketNumber = caseDetail.docketNumber;
       });
 
       loginAs(test, 'petitionsclerk');
@@ -100,6 +102,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         createdCases.push(caseDetail);
         createdDocketNumbers.push(caseDetail.docketNumber);
+        test.docketNumber = caseDetail.docketNumber;
       });
 
       loginAs(test, 'petitionsclerk');
@@ -124,6 +127,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         createdCases.push(caseDetail);
         createdDocketNumbers.push(caseDetail.docketNumber);
+        test.docketNumber = caseDetail.docketNumber;
       });
 
       loginAs(test, 'petitionsclerk');
@@ -148,6 +152,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         createdCases.push(caseDetail);
         createdDocketNumbers.push(caseDetail.docketNumber);
+        test.docketNumber = caseDetail.docketNumber;
       });
 
       loginAs(test, 'petitionsclerk');
