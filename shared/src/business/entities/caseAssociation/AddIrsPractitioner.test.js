@@ -1,16 +1,16 @@
-const { AddRespondent } = require('./AddRespondent');
+const { AddIrsPractitioner } = require('./AddIrsPractitioner');
 
-describe('AddRespondent', () => {
+describe('AddIrsPractitioner', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const entity = new AddRespondent({});
+      const entity = new AddIrsPractitioner({});
       expect(entity.getFormattedValidationErrors()).toEqual({
-        user: AddRespondent.VALIDATION_ERROR_MESSAGES.user,
+        user: AddIrsPractitioner.VALIDATION_ERROR_MESSAGES.user,
       });
     });
 
     it('should be valid when all fields are present', () => {
-      const entity = new AddRespondent({ user: { userId: 'abc' } });
+      const entity = new AddIrsPractitioner({ user: { userId: 'abc' } });
       expect(entity.getFormattedValidationErrors()).toEqual(null);
     });
   });

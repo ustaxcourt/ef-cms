@@ -29,7 +29,7 @@ describe('Filing an Answer', function() {
   });
 
   it('can select a party and go to the review page', () => {
-    cy.get('label[for="party-respondent"]').click();
+    cy.get('label[for="party-irs-practitioner"]').click();
     cy.get('button#submit-document').click();
   });
 
@@ -44,7 +44,7 @@ describe('Filing an Answer', function() {
       .should('contain', 'Answer');
   });
 
-  it('reflects changes to 102-19 by showing it in respondent case list', () => {
+  it('reflects changes to 102-19 by showing it in irsPractitioner case list', () => {
     navigateToDashboard('irsPractitioner');
     cy.get('table#case-list')
       .find('a')

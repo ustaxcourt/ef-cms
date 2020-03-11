@@ -5,8 +5,8 @@ import {
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
 
-import { AddPractitionerFactory } from '../../shared/src/business/entities/caseAssociation/AddPractitionerFactory';
-import { AddRespondent } from '../../shared/src/business/entities/caseAssociation/AddRespondent';
+import { AddIrsPractitioner } from '../../shared/src/business/entities/caseAssociation/AddIrsPractitioner';
+import { AddPrivatePractitionerFactory } from '../../shared/src/business/entities/caseAssociation/AddPrivatePractitionerFactory';
 import {
   CHAMBERS_SECTION,
   CHAMBERS_SECTIONS,
@@ -24,7 +24,7 @@ import { CourtIssuedDocumentFactory } from '../../shared/src/business/entities/c
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { DocketRecord } from '../../shared/src/business/entities/DocketRecord';
 import { Document } from '../../shared/src/business/entities/Document';
-import { EditPractitionerFactory } from '../../shared/src/business/entities/caseAssociation/EditPractitionerFactory';
+import { EditPrivatePractitionerFactory } from '../../shared/src/business/entities/caseAssociation/EditPrivatePractitionerFactory';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
@@ -501,8 +501,8 @@ const applicationContext = {
   },
   getCurrentUserToken,
   getEntityConstructors: () => ({
-    AddPractitionerFactory,
-    AddRespondent,
+    AddIrsPractitioner,
+    AddPrivatePractitionerFactory,
     Case,
     CaseAssociationRequestFactory,
     CaseDeadline,
@@ -514,7 +514,7 @@ const applicationContext = {
     DocketEntryFactory,
     DocketRecord,
     Document,
-    EditPractitionerFactory,
+    EditPrivatePractitionerFactory,
     ExternalDocumentFactory,
     ExternalDocumentInformationFactory,
     ForwardMessage,
