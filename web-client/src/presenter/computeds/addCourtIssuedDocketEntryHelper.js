@@ -40,11 +40,11 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
       ...petitioner,
       displayName: `${petitioner.name}, Petitioner`,
     })),
-    ...caseDetail.practitioners.map(practitioner => ({
+    ...caseDetail.privatePractitioners.map(practitioner => ({
       ...practitioner,
       displayName: `${practitioner.name}, Petitioner Counsel`,
     })),
-    ...caseDetail.respondents.map(practitioner => ({
+    ...caseDetail.irsPractitioners.map(practitioner => ({
       ...practitioner,
       displayName: `${practitioner.name}, Respondent Counsel`,
     })),

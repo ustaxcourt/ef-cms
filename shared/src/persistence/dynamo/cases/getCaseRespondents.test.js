@@ -32,14 +32,14 @@ describe('getCaseRespondents', () => {
     client.query.restore();
   });
 
-  it('retrieves the respondents for a case', async () => {
+  it('retrieves the irsPractitioners for a case', async () => {
     const result = await getCaseRespondents({ applicationContext })({
       caseId: 'abc-123',
     });
 
     expect(result).toMatchObject({
       caseId: 'abc-123',
-      respondents: [],
+      irsPractitioners: [],
     });
   });
 });

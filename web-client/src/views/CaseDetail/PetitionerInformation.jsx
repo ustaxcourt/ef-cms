@@ -185,46 +185,48 @@ const PetitionerInformation = connect(
     const practitionerPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
-          {formattedCaseDetail.practitioners &&
-            formattedCaseDetail.practitioners.map((practitioner, index) => (
-              <div
-                className={classNames(
-                  'tablet:grid-col-3 counsel-information',
-                  index > 3 && 'margin-top-3',
-                )}
-                key={index}
-              >
-                <address aria-labelledby="practitioner-label">
-                  {practitioner.name &&
-                    AddressDisplay(
-                      {
-                        ...practitioner,
-                        ...practitioner.contact,
-                      },
-                      constants,
-                      {
-                        nameOverride: practitioner.name,
-                      },
-                    )}
-                </address>
-                {practitioner.serviceIndicator && (
-                  <div className="margin-top-4">
-                    <span className="semi-bold">Service: </span>
-                    {practitioner.serviceIndicator}
-                  </div>
-                )}
-                <p className="label representing-label margin-top-2">
-                  Representing
-                </p>
-                {practitioner.representingPrimary &&
-                  formattedCaseDetail.contactPrimary.name}
-                {practitioner.representingPrimary &&
-                  practitioner.representingSecondary && <br />}
-                {practitioner.representingSecondary &&
-                  formattedCaseDetail.contactSecondary &&
-                  formattedCaseDetail.contactSecondary.name}
-              </div>
-            ))}
+          {formattedCaseDetail.privatePractitioners &&
+            formattedCaseDetail.privatePractitioners.map(
+              (practitioner, index) => (
+                <div
+                  className={classNames(
+                    'tablet:grid-col-3 counsel-information',
+                    index > 3 && 'margin-top-3',
+                  )}
+                  key={index}
+                >
+                  <address aria-labelledby="practitioner-label">
+                    {practitioner.name &&
+                      AddressDisplay(
+                        {
+                          ...practitioner,
+                          ...practitioner.contact,
+                        },
+                        constants,
+                        {
+                          nameOverride: practitioner.name,
+                        },
+                      )}
+                  </address>
+                  {practitioner.serviceIndicator && (
+                    <div className="margin-top-4">
+                      <span className="semi-bold">Service: </span>
+                      {practitioner.serviceIndicator}
+                    </div>
+                  )}
+                  <p className="label representing-label margin-top-2">
+                    Representing
+                  </p>
+                  {practitioner.representingPrimary &&
+                    formattedCaseDetail.contactPrimary.name}
+                  {practitioner.representingPrimary &&
+                    practitioner.representingSecondary && <br />}
+                  {practitioner.representingSecondary &&
+                    formattedCaseDetail.contactSecondary &&
+                    formattedCaseDetail.contactSecondary.name}
+                </div>
+              ),
+            )}
         </div>
       </div>
     );
@@ -310,7 +312,7 @@ const PetitionerInformation = connect(
                       <Button
                         link
                         className="margin-left-205 padding-0 height-3"
-                        id="edit-practitioners-button"
+                        id="edit-privatePractitioners-button"
                         onClick={() => openEditPractitionersModalSequence()}
                       >
                         <FontAwesomeIcon icon="edit" size="sm" />

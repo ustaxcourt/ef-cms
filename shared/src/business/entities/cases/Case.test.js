@@ -955,39 +955,43 @@ describe('Case entity', () => {
     });
   });
 
-  describe('attachRespondent', () => {
-    it('adds the user to the respondents', () => {
+  describe('attachIrsPractitioner', () => {
+    it('adds the user to the irsPractitioners', () => {
       const caseToVerify = new Case(
         {},
         {
           applicationContext,
         },
       );
-      caseToVerify.attachRespondent(
+      caseToVerify.attachIrsPractitioner(
         new Respondent({
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         }),
       );
-      expect(caseToVerify.respondents).not.toBeNull();
-      expect(caseToVerify.respondents[0].userId).toEqual('respondent');
+      expect(caseToVerify.irsPractitioners).not.toBeNull();
+      expect(caseToVerify.irsPractitioners[0].userId).toEqual(
+        'irsPractitioner',
+      );
     });
   });
 
-  describe('attachPractitioner', () => {
-    it('adds the user to the practitioners', () => {
+  describe('attachPrivatePractitioner', () => {
+    it('adds the user to the privatePractitioners', () => {
       const caseToVerify = new Case(
         {},
         {
           applicationContext,
         },
       );
-      caseToVerify.attachPractitioner(
+      caseToVerify.attachPrivatePractitioner(
         new Practitioner({
-          userId: 'practitioner',
+          userId: 'privatePractitioner',
         }),
       );
-      expect(caseToVerify.practitioners).not.toBeNull();
-      expect(caseToVerify.practitioners[0].userId).toEqual('practitioner');
+      expect(caseToVerify.privatePractitioners).not.toBeNull();
+      expect(caseToVerify.privatePractitioners[0].userId).toEqual(
+        'privatePractitioner',
+      );
     });
   });
 
@@ -1003,7 +1007,7 @@ describe('Case entity', () => {
         {
           documentId: '123',
           documentType: 'Answer',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
         { applicationContext },
       );
@@ -1011,7 +1015,7 @@ describe('Case entity', () => {
       expect(caseToVerify.documents[0]).toMatchObject({
         documentId: '123',
         documentType: 'Answer',
-        userId: 'respondent',
+        userId: 'irsPractitioner',
       });
     });
   });
@@ -1726,14 +1730,14 @@ describe('Case entity', () => {
     });
   });
 
-  describe('updatePractitioner', () => {
+  describe('updatePrivatePractitioner', () => {
     it('updates the given practitioner on the case', () => {
       const caseToVerify = new Case(
         {
-          practitioners: [
+          privatePractitioners: [
             new Practitioner({
               representingPrimary: true,
-              userId: 'practitioner',
+              userId: 'privatePractitioner',
             }),
           ],
         },
@@ -1742,25 +1746,29 @@ describe('Case entity', () => {
         },
       );
 
-      expect(caseToVerify.practitioners).not.toBeNull();
-      expect(caseToVerify.practitioners[0].representingPrimary).toBeTruthy();
+      expect(caseToVerify.privatePractitioners).not.toBeNull();
+      expect(
+        caseToVerify.privatePractitioners[0].representingPrimary,
+      ).toBeTruthy();
 
-      caseToVerify.updatePractitioner({
+      caseToVerify.updatePrivatePractitioner({
         representingPrimary: false,
-        userId: 'practitioner',
+        userId: 'privatePractitioner',
       });
-      expect(caseToVerify.practitioners[0].representingPrimary).toBeFalsy();
+      expect(
+        caseToVerify.privatePractitioners[0].representingPrimary,
+      ).toBeFalsy();
     });
   });
 
-  describe('removePractitioner', () => {
-    it('removes the user from associated case practitioners array', () => {
+  describe('removePrivatePractitioner', () => {
+    it('removes the user from associated case privatePractitioners array', () => {
       const caseToVerify = new Case(
         {
-          practitioners: [
-            new Practitioner({ userId: 'practitioner1' }),
-            new Practitioner({ userId: 'practitioner2' }),
-            new Practitioner({ userId: 'practitioner3' }),
+          privatePractitioners: [
+            new Practitioner({ userId: 'privatePractitioner1' }),
+            new Practitioner({ userId: 'privatePractitioner2' }),
+            new Practitioner({ userId: 'privatePractitioner3' }),
           ],
         },
         {
@@ -1768,27 +1776,29 @@ describe('Case entity', () => {
         },
       );
 
-      expect(caseToVerify.practitioners).not.toBeNull();
-      expect(caseToVerify.practitioners.length).toEqual(3);
+      expect(caseToVerify.privatePractitioners).not.toBeNull();
+      expect(caseToVerify.privatePractitioners.length).toEqual(3);
 
-      caseToVerify.removePractitioner({ userId: 'practitioner2' });
-      expect(caseToVerify.practitioners.length).toEqual(2);
+      caseToVerify.removePrivatePractitioner({
+        userId: 'privatePractitioner2',
+      });
+      expect(caseToVerify.privatePractitioners.length).toEqual(2);
       expect(
-        caseToVerify.practitioners.find(
-          practitioner => practitioner.userId === 'practitioner2',
+        caseToVerify.privatePractitioners.find(
+          practitioner => practitioner.userId === 'privatePractitioner2',
         ),
       ).toBeFalsy();
     });
   });
 
-  describe('updateRespondent', () => {
-    it('updates the given respondent on the case', () => {
+  describe('updateIrsPractitioner', () => {
+    it('updates the given irsPractitioner on the case', () => {
       const caseToVerify = new Case(
         {
-          respondents: [
-            new Practitioner({
-              email: 'respondent@example.com',
-              userId: 'respondent',
+          irsPractitioners: [
+            new Respondent({
+              email: 'irsPractitioner@example.com',
+              userId: 'irsPractitioner',
             }),
           ],
         },
@@ -1797,29 +1807,29 @@ describe('Case entity', () => {
         },
       );
 
-      expect(caseToVerify.respondents).not.toBeNull();
-      expect(caseToVerify.respondents[0].email).toEqual(
-        'respondent@example.com',
+      expect(caseToVerify.irsPractitioners).not.toBeNull();
+      expect(caseToVerify.irsPractitioners[0].email).toEqual(
+        'irsPractitioner@example.com',
       );
 
-      caseToVerify.updateRespondent({
-        email: 'respondent@example.com',
-        userId: 'respondent',
+      caseToVerify.updateIrsPractitioner({
+        email: 'irsPractitioner@example.com',
+        userId: 'irsPractitioner',
       });
-      expect(caseToVerify.respondents[0].email).toEqual(
-        'respondent@example.com',
+      expect(caseToVerify.irsPractitioners[0].email).toEqual(
+        'irsPractitioner@example.com',
       );
     });
   });
 
-  describe('removeRespondent', () => {
-    it('removes the user from associated case respondents array', () => {
+  describe('removeIrsPractitioner', () => {
+    it('removes the user from associated case irsPractitioners array', () => {
       const caseToVerify = new Case(
         {
-          respondents: [
-            new Respondent({ userId: 'respondent1' }),
-            new Respondent({ userId: 'respondent2' }),
-            new Respondent({ userId: 'respondent3' }),
+          irsPractitioners: [
+            new Respondent({ userId: 'irsPractitioner1' }),
+            new Respondent({ userId: 'irsPractitioner2' }),
+            new Respondent({ userId: 'irsPractitioner3' }),
           ],
         },
         {
@@ -1827,14 +1837,14 @@ describe('Case entity', () => {
         },
       );
 
-      expect(caseToVerify.respondents).not.toBeNull();
-      expect(caseToVerify.respondents.length).toEqual(3);
+      expect(caseToVerify.irsPractitioners).not.toBeNull();
+      expect(caseToVerify.irsPractitioners.length).toEqual(3);
 
-      caseToVerify.removeRespondent({ userId: 'respondent2' });
-      expect(caseToVerify.respondents.length).toEqual(2);
+      caseToVerify.removeIrsPractitioner({ userId: 'irsPractitioner2' });
+      expect(caseToVerify.irsPractitioners.length).toEqual(2);
       expect(
-        caseToVerify.respondents.find(
-          respondent => respondent.userId === 'respondent2',
+        caseToVerify.irsPractitioners.find(
+          practitioner => practitioner.userId === 'irsPractitioner2',
         ),
       ).toBeFalsy();
     });
@@ -2210,15 +2220,15 @@ describe('Case entity', () => {
       title: 'Executor',
     };
 
-    const practitioners = [
+    const privatePractitioners = [
       {
-        name: 'Petitioner One',
+        name: 'Private Practitioner One',
       },
     ];
 
-    const respondents = [
+    const irsPractitioners = [
       {
-        name: 'Respondent One',
+        name: 'IRS Practitioner One',
       },
     ];
 
@@ -2228,9 +2238,9 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           contactPrimary,
           contactSecondary,
+          irsPractitioners,
           partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
-          practitioners,
-          respondents,
+          privatePractitioners,
         },
         {
           applicationContext,
@@ -2241,8 +2251,8 @@ describe('Case entity', () => {
       expect(caseContacts).toMatchObject({
         contactPrimary,
         contactSecondary,
-        practitioners,
-        respondents,
+        irsPractitioners,
+        privatePractitioners,
       });
     });
 
@@ -2252,9 +2262,9 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           contactPrimary,
           contactSecondary,
+          irsPractitioners,
           partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
-          practitioners,
-          respondents,
+          privatePractitioners,
         },
         {
           applicationContext,
@@ -2759,8 +2769,10 @@ describe('Case entity', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
-        practitioners: [{ userId: '271e5918-6461-4e67-bc38-274bc0aa0248' }],
-        respondents: [{ userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' }],
+        irsPractitioners: [{ userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' }],
+        privatePractitioners: [
+          { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
+        ],
       },
       {
         applicationContext: {
@@ -2771,7 +2783,7 @@ describe('Case entity', () => {
       },
     );
 
-    it('returns true if the user is a respondent on the case', () => {
+    it('returns true if the user is an irsPractitioner on the case', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
         userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72',
@@ -2780,7 +2792,7 @@ describe('Case entity', () => {
       expect(isAssociated).toBeTruthy();
     });
 
-    it('returns true if the user is a practitioner on the case', () => {
+    it('returns true if the user is a privatePractitioner on the case', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
         userId: '271e5918-6461-4e67-bc38-274bc0aa0248',
@@ -2789,7 +2801,7 @@ describe('Case entity', () => {
       expect(isAssociated).toBeTruthy();
     });
 
-    it('returns false if the user is a not a practitioner or respondent on the case', () => {
+    it('returns false if the user is a not a privatePractitioner or irsPractitioner on the case', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
         userId: '4b32e14b-f583-4631-ba44-1439a093d6d0',

@@ -24,8 +24,8 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
         lastKey = results.LastEvaluatedKey;
         const recordsUpdated = [];
         for (const result of results.Items) {
-          if (result.respondents) {
-            result.respondents = result.respondents.map(r => ({
+          if (result.irsPractitioners) {
+            result.irsPractitioners = result.irsPractitioners.map(r => ({
               ...r,
               contact: {
                 address1: '234 Main St',
@@ -40,23 +40,25 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
             }));
           }
 
-          if (result.practitioners) {
-            result.practitioners = result.practitioners.map(p => ({
-              ...p,
-              contact: {
-                address1: '234 Main St',
-                address2: 'Apartment 4',
-                address3: 'Under the stairs',
-                city: 'Chicago',
-                countryType: 'domestic',
-                phone: '+1 (555) 555-5555',
-                postalCode: '61234',
-                state: 'IL',
-              },
-            }));
+          if (result.privatePractitioners) {
+            result.privatePractitioners = result.privatePractitioners.map(
+              p => ({
+                ...p,
+                contact: {
+                  address1: '234 Main St',
+                  address2: 'Apartment 4',
+                  address3: 'Under the stairs',
+                  city: 'Chicago',
+                  countryType: 'domestic',
+                  phone: '+1 (555) 555-5555',
+                  postalCode: '61234',
+                  state: 'IL',
+                },
+              }),
+            );
           }
 
-          if (result.respondents || result.practitioners) {
+          if (result.irsPractitioners || result.privatePractitioners) {
             console.log('updating a case');
             await recordsUpdated.push(
               documentClient

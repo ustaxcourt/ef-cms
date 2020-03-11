@@ -33,8 +33,8 @@ const state = {
   caseDetail: {
     contactPrimary: { name: 'Banzai' },
     contactSecondary: { name: 'Timon' },
-    practitioners: [{ name: 'Scar' }, { name: 'Zazu' }],
-    respondents: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
+    irsPractitioners: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
+    privatePractitioners: [{ name: 'Scar' }, { name: 'Zazu' }],
   },
   form: {
     generatedDocumentTitle: 'Circle of Life',

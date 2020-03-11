@@ -96,7 +96,7 @@ describe('associateRespondentToCase', () => {
     expect(associateUserWithCaseSpy).toBeCalled();
     expect(updateCaseSpy).toBeCalled();
     expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
-      respondents: [
+      irsPractitioners: [
         {
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

@@ -32,7 +32,7 @@ const external = [
 ];
 
 describe('headerHelper', () => {
-  it('should show search in header for users other than petitioner, practitioners and respondents', () => {
+  it('should show search in header for users other than petitioner, privatePractitioners and irsPractitioners', () => {
     let result = runCompute(headerHelper, {
       state: getBaseState({ role: User.ROLES.petitioner }),
     });
@@ -81,7 +81,7 @@ describe('headerHelper', () => {
       expect(result.showMyCases).toBeTruthy();
     });
   });
-  it('should NOT show search in header for practitioners or respondents', () => {
+  it('should NOT show search in header for privatePractitioners or irsPractitioners', () => {
     let result = runCompute(headerHelper, {
       state: getBaseState({ role: User.ROLES.privatePractitioner }),
     });

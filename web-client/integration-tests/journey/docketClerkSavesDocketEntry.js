@@ -16,7 +16,7 @@ export const docketClerkSavesDocketEntry = (test, isAddAnother = true) => {
       expect(test.getState('currentPage')).toEqual('AddDocketEntry');
       expect(test.getState('form')).toMatchObject({
         lodged: false,
-        practitioner: [],
+        privatePractitioners: [],
       });
       expect(test.getState('documentSelectedForScan')).toEqual(
         'primaryDocumentFile',

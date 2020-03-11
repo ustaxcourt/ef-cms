@@ -116,10 +116,10 @@ export const MultiDocumentPartiesFiling = connect(
               <div className="usa-checkbox">
                 <input
                   aria-describedby="who-legend"
-                  checked={form.partyRespondent || false}
+                  checked={form.partyIrsPractitioner || false}
                   className="usa-checkbox__input"
                   id="party-respondent"
-                  name="partyRespondent"
+                  name="partyIrsPractitioner"
                   type="checkbox"
                   onChange={e => {
                     updateFileDocumentWizardFormValueSequence({

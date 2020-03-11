@@ -2136,7 +2136,7 @@
         }
       }
     },
-    "/respondents/{respondentId}/cases": {
+    "/irsPractitioners/{respondentId}/cases": {
       "parameters": [
         {
           "name": "respondentId",

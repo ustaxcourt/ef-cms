@@ -46,8 +46,8 @@ describe('formatted case details computed', () => {
         cases: [
           {
             caseCaption: 'Brett Osborne, Petitioner',
+            irsPractitioners: [{ barNumber: '123', name: 'test' }],
             petitioners: [{ name: 'bob' }],
-            respondents: [{ barNumber: '123', name: 'test' }],
           },
         ],
         constants: {
@@ -55,6 +55,6 @@ describe('formatted case details computed', () => {
         },
       },
     });
-    expect(result[0].respondents[0].formattedName).toContain('test (123)');
+    expect(result[0].irsPractitioners[0].formattedName).toContain('test (123)');
   });
 });
