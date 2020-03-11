@@ -15,8 +15,8 @@ exports.createUserOutboxRecord = async ({
 }) => {
   await put({
     Item: {
-      gsi1pk: `workitem-${workItem.workItemId}`,
-      pk: `user-outbox-${userId}`,
+      gsi1pk: `work-item|${workItem.workItemId}`,
+      pk: `user-outbox|${userId}`,
       sk: workItem.createdAt,
       ...workItem,
     },

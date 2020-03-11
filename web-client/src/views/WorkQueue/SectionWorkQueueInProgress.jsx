@@ -64,7 +64,7 @@ export const SectionWorkQueueInProgress = connect(
           <thead>
             <tr>
               {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
-              <th aria-label="Docket Number">Docket</th>
+              <th aria-label="Docket Number">Docket number</th>
               <th>Filed</th>
               <th>Case title</th>
               <th>Document</th>

@@ -42,7 +42,7 @@ describe('uploadPdfFromClient', () => {
       ['X-Amz-Security-Token', '4'],
       ['Policy', 'gg'],
       ['X-Amz-Signature', '5'],
-      ['Content-Type', 'application/pdf'],
+      ['content-type', 'application/pdf'],
       ['file', {}],
     ]);
     expect(postStub.getCall(0).args[2]).toMatchObject({
@@ -86,7 +86,7 @@ describe('uploadPdfFromClient', () => {
       ['X-Amz-Security-Token', ''],
       ['Policy', 'gg'],
       ['X-Amz-Signature', '5'],
-      ['Content-Type', 'application/pdf'],
+      ['content-type', 'application/pdf'],
       ['file', {}],
     ]);
     expect(postStub.getCall(0).args[2]).toMatchObject({

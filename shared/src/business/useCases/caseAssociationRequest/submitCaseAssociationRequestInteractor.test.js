@@ -74,7 +74,6 @@ describe('submitCaseAssociationRequest', () => {
         };
       },
       getPersistenceGateway: () => ({
-        createMappingRecord: associateUserWithCaseSpy,
         getCaseByCaseId: async () => caseRecord,
         getUserById: () => ({
           contact: {

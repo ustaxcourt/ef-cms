@@ -23,6 +23,8 @@ module.exports = {
     },
   },
   globals: {
+    File: function() {},
+    FileReader: () => {},
     atob: x => x,
     window: { document: {} },
   },

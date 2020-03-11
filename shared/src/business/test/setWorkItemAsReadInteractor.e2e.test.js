@@ -28,7 +28,7 @@ describe('setWorkItemAsReadInteractor integration test', () => {
       user: {
         name: 'Rick Petitioner',
         role: User.ROLES.petitioner,
-        userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
   });

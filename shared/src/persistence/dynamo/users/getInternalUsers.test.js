@@ -1,6 +1,5 @@
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
 const sinon = require('sinon');
-
 const { getInternalUsers } = require('./getInternalUsers');
 
 const applicationContext = {
@@ -15,30 +14,36 @@ describe('getInternalUsers', () => {
   beforeEach(() => {
     sinon.stub(client, 'query').resolves([
       {
-        pk: 'petitions|user',
+        pk: 'section|petitions',
+        sk: 'user|petitionsclerk1',
         userId: 'petitionsclerk1',
       },
       {
-        pk: 'docket|user',
+        pk: 'section|docket',
+        sk: 'user|docketclerk1',
         userId: 'docketclerk1',
       },
       {
-        pk: 'adc|user',
+        pk: 'section|adc',
+        sk: 'user|adc1',
         userId: 'adc1',
       },
     ]);
 
     sinon.stub(client, 'batchGet').resolves([
       {
-        pk: 'petitions|user',
+        pk: 'user|petitionsclerk1',
+        sk: 'user|petitionsclerk1',
         userId: 'petitionsclerk1',
       },
       {
-        pk: 'docket|user',
+        pk: 'user|docketclerk1',
+        sk: 'user|docketclerk1',
         userId: 'docketclerk1',
       },
       {
-        pk: 'adc|user',
+        pk: 'user|adc1',
+        sk: 'user|adc1',
         userId: 'adc1',
       },
     ]);
