@@ -39,10 +39,10 @@ exports.caseAdvancedSearchInteractor = async providers => {
         'contactSecondary',
         'docketNumber',
         'docketNumberSuffix',
+        'irsPractitioners',
+        'privatePractitioners',
         'receivedAt',
         'sealedDate',
-        'practitioners',
-        'respondents',
       ],
       query: {
         bool: {

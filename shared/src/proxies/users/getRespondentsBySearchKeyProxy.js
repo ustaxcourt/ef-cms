@@ -14,6 +14,6 @@ exports.getRespondentsBySearchKeyInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/users/respondents/search?searchKey=${searchKey}`,
+    endpoint: `/users/irsPractitioners/search?searchKey=${searchKey}`,
   });
 };

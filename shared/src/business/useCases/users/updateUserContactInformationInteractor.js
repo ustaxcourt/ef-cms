@@ -73,20 +73,20 @@ exports.updateUserContactInformationInteractor = async ({
     const newData = contactInfo;
 
     let caseEntity = new Case(userCase, { applicationContext });
-    const practitioner = caseEntity.practitioners.find(
+    const privatePractitioner = caseEntity.privatePractitioners.find(
       practitioner => practitioner.userId === userId,
     );
-    if (practitioner) {
-      oldData = clone(practitioner.contact);
-      practitioner.contact = contactInfo;
+    if (privatePractitioner) {
+      oldData = clone(privatePractitioner.contact);
+      privatePractitioner.contact = contactInfo;
     }
 
-    const respondent = caseEntity.respondents.find(
-      respondent => respondent.userId === userId,
+    const irsPractitioner = caseEntity.irsPractitioners.find(
+      practitioner => practitioner.userId === userId,
     );
-    if (respondent) {
-      oldData = clone(respondent.contact);
-      respondent.contact = contactInfo;
+    if (irsPractitioner) {
+      oldData = clone(irsPractitioner.contact);
+      irsPractitioner.contact = contactInfo;
     }
 
     // we do this again so that it will convert '' to null
@@ -162,14 +162,14 @@ exports.updateUserContactInformationInteractor = async ({
       };
 
       if (user.role === User.ROLES.privatePractitioner) {
-        documentData.practitioner = [
+        documentData.privatePractitioners = [
           {
             name: user.name,
-            partyPractitioner: true,
+            partyPrivatePractitioner: true,
           },
         ];
       } else if (user.role === User.ROLES.irsPractitioner) {
-        documentData.partyRespondent = true;
+        documentData.partyIrsPractitioner = true;
       }
 
       const changeOfAddressDocument = new Document(documentData, {

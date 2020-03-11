@@ -50,8 +50,8 @@ describe('generatePrintableFilingReceiptInteractor', () => {
           servedAtFormatted: '03/27/19',
         },
       ],
-      practitioners: [],
-      respondents: [],
+      privatePractitioners: [],
+      irsPractitioners: [],
     };
 
     applicationContext = {

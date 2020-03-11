@@ -2,11 +2,11 @@ import { runAction } from 'cerebral/test';
 import { setEditRespondentsAction } from './setEditRespondentsAction';
 
 describe('setEditRespondentsAction', () => {
-  it('should set the state.caseDetail.respondents on state.modal', async () => {
+  it('should set the state.caseDetail.irsPractitioners on state.modal', async () => {
     const result = await runAction(setEditRespondentsAction, {
       state: {
         caseDetail: {
-          respondents: [
+          irsPractitioners: [
             { name: 'Test Respondent1', userId: '1' },
             { name: 'Test Respondent2', userId: '2' },
           ],
@@ -14,7 +14,7 @@ describe('setEditRespondentsAction', () => {
       },
     });
 
-    expect(result.state.modal.respondents).toEqual([
+    expect(result.state.modal.irsPractitioners).toEqual([
       { name: 'Test Respondent1', userId: '1' },
       { name: 'Test Respondent2', userId: '2' },
     ]);

@@ -34,9 +34,9 @@ describe('getCasesByLeadCaseId', () => {
       {
         docketRecord: [{ pk: '123', sk: 'abc' }],
         documents: [{ pk: '123', sk: 'abc' }],
+        irsPractitioners: [{ pk: '123', sk: 'abc' }],
         pk: '123',
-        practitioners: [{ pk: '123', sk: 'abc' }],
-        respondents: [{ pk: '123', sk: 'abc' }],
+        privatePractitioners: [{ pk: '123', sk: 'abc' }],
         sk: 'abc',
       },
     ]);

@@ -7,8 +7,8 @@ const formattedCaseDetail = withAppContextDecorator(
 );
 
 export default test => {
-  return it('Petitions clerk manually adds multiple practitioners to case', async () => {
-    expect(test.getState('caseDetail.practitioners')).toEqual([]);
+  return it('Petitions clerk manually adds multiple privatePractitioners to case', async () => {
+    expect(test.getState('caseDetail.privatePractitioners')).toEqual([]);
 
     await test.runSequence('openAddPractitionerModalSequence');
 
@@ -41,11 +41,11 @@ export default test => {
 
     await test.runSequence('associatePractitionerWithCaseSequence');
 
-    expect(test.getState('caseDetail.practitioners.length')).toEqual(1);
+    expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(1);
     expect(
-      test.getState('caseDetail.practitioners.0.representingPrimary'),
+      test.getState('caseDetail.privatePractitioners.0.representingPrimary'),
     ).toEqual(true);
-    expect(test.getState('caseDetail.practitioners.0.name')).toEqual(
+    expect(test.getState('caseDetail.privatePractitioners.0.name')).toEqual(
       practitionerMatch.name,
     );
 
@@ -53,8 +53,8 @@ export default test => {
       state: test.getState(),
     });
 
-    expect(formatted.practitioners.length).toEqual(1);
-    expect(formatted.practitioners[0].formattedName).toEqual(
+    expect(formatted.privatePractitioners.length).toEqual(1);
+    expect(formatted.privatePractitioners[0].formattedName).toEqual(
       `${practitionerMatch.name} (${practitionerMatch.barNumber})`,
     );
 
@@ -77,11 +77,11 @@ export default test => {
     });
 
     await test.runSequence('associatePractitionerWithCaseSequence');
-    expect(test.getState('caseDetail.practitioners.length')).toEqual(2);
+    expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(2);
     expect(
-      test.getState('caseDetail.practitioners.1.representingSecondary'),
+      test.getState('caseDetail.privatePractitioners.1.representingSecondary'),
     ).toEqual(true);
-    expect(test.getState('caseDetail.practitioners.1.name')).toEqual(
+    expect(test.getState('caseDetail.privatePractitioners.1.name')).toEqual(
       practitionerMatch.name,
     );
 
@@ -89,8 +89,8 @@ export default test => {
       state: test.getState(),
     });
 
-    expect(formatted.practitioners.length).toEqual(2);
-    expect(formatted.practitioners[1].formattedName).toEqual(
+    expect(formatted.privatePractitioners.length).toEqual(2);
+    expect(formatted.privatePractitioners[1].formattedName).toEqual(
       `${practitionerMatch.name} (${practitionerMatch.barNumber})`,
     );
   });

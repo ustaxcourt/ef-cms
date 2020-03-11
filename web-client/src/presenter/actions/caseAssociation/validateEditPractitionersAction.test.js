@@ -35,7 +35,7 @@ describe('validateEditPractitionersAction', () => {
       },
       state: {
         caseDetail: {
-          practitioners: [
+          privatePractitioners: [
             {
               serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
               userId: '1',
@@ -47,7 +47,7 @@ describe('validateEditPractitionersAction', () => {
           ],
         },
         modal: {
-          practitioners: [
+          privatePractitioners: [
             {
               representingPrimary: true,
               serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -74,7 +74,7 @@ describe('validateEditPractitionersAction', () => {
       },
       state: {
         caseDetail: {
-          practitioners: [
+          privatePractitioners: [
             {
               serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
               userId: '1',
@@ -86,7 +86,7 @@ describe('validateEditPractitionersAction', () => {
           ],
         },
         modal: {
-          practitioners: [
+          privatePractitioners: [
             { userId: '1' },
             {
               representingPrimary: true,
@@ -100,7 +100,7 @@ describe('validateEditPractitionersAction', () => {
 
     expect(errorStub).toBeCalled();
     expect(errorStub.mock.calls[0][0].errors).toEqual({
-      practitioners: ['error', 'error'],
+      privatePractitioners: ['error', 'error'],
     });
   });
 
@@ -114,13 +114,13 @@ describe('validateEditPractitionersAction', () => {
       },
       state: {
         caseDetail: {
-          practitioners: [
+          privatePractitioners: [
             { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER, userId: '1' },
             { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER, userId: '2' },
           ],
         },
         modal: {
-          practitioners: [
+          privatePractitioners: [
             { userId: '1' },
             {
               representingPrimary: true,
@@ -134,7 +134,7 @@ describe('validateEditPractitionersAction', () => {
 
     expect(errorStub).toBeCalled();
     expect(errorStub.mock.calls[0][0].errors).toEqual({
-      practitioners: [
+      privatePractitioners: [
         { something: 'error' },
         { serviceIndicator: expect.anything(), something: 'error' },
       ],

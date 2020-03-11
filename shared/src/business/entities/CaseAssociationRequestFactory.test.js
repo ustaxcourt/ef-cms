@@ -232,7 +232,7 @@ describe('CaseAssociationRequestFactory', () => {
           documentTitleTemplate:
             'Substitution of Counsel for [Petitioner Names]',
           documentType: 'Substitution of Counsel',
-          partyRespondent: true,
+          partyIrsPractitioner: true,
         });
         expect(caseAssoc.getDocumentTitle()).toEqual(
           'Substitution of Counsel for Respondent',

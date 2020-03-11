@@ -205,8 +205,8 @@ describe('formattedCaseDetail', () => {
           exhibits: true,
           hasSupportingDocuments: true,
           ordinalValue: 'First',
+          partyIrsPractitioner: true,
           partyPrimary: true,
-          partyRespondent: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           relationship: 'primaryDocument',
@@ -254,8 +254,8 @@ describe('formattedCaseDetail', () => {
           eventCode: 'USDL',
           freeText: 'Test',
           lodged: true,
-          partyPractitioner: true,
-          partyRespondent: true,
+          partyIrsPractitioner: true,
+          partyPrivatePractitioner: true,
           previousDocument: 'Amended Petition',
           relationship: 'primarySupportingDocument',
           scenario: 'Nonstandard C',
@@ -264,7 +264,7 @@ describe('formattedCaseDetail', () => {
       hasIrsNotice: false,
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
-      practitioner: { name: 'Test Practitioner' },
+      privatePractitioners: { name: 'Test Practitioner' },
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -789,7 +789,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
         petitioners: [{ name: 'bob' }],
-        practitioners: [{ barNumber: '9999', name: 'Jackie Chan' }],
+        privatePractitioners: [{ barNumber: '9999', name: 'Jackie Chan' }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -798,7 +798,7 @@ describe('formattedCaseDetail', () => {
           caseDetailErrors: {},
         },
       });
-      expect(result.practitioners[0].formattedName).toEqual(
+      expect(result.privatePractitioners[0].formattedName).toEqual(
         'Jackie Chan (9999)',
       );
     });
@@ -806,7 +806,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
         petitioners: [{ name: 'bob' }],
-        practitioners: [{ name: 'Jackie Chan' }],
+        privatePractitioners: [{ name: 'Jackie Chan' }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -815,7 +815,9 @@ describe('formattedCaseDetail', () => {
           caseDetailErrors: {},
         },
       });
-      expect(result.practitioners[0].formattedName).toEqual('Jackie Chan');
+      expect(result.privatePractitioners[0].formattedName).toEqual(
+        'Jackie Chan',
+      );
     });
   });
 

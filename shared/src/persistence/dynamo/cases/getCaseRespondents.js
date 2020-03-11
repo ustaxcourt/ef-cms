@@ -9,14 +9,14 @@ const { query } = require('../../dynamodbClientService');
  */
 exports.getCaseRespondents = ({ applicationContext }) => async theCase => ({
   ...theCase,
-  respondents: await query({
+  irsPractitioners: await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
       ':pk': `case|${theCase.caseId}`,
-      ':prefix': 'respondent',
+      ':prefix': 'irsPractitioner',
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
