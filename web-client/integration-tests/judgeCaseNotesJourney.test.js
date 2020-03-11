@@ -9,7 +9,6 @@ import judgeViewsTrialSessionWorkingCopy from './journey/judgeViewsTrialSessionW
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
-import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
 
 const test = setupTest();
 
@@ -49,10 +48,10 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
     const caseDetail = await uploadPetition(test, caseOverrides);
     createdCaseIds.push(caseDetail.caseId);
     createdDocketNumbers.push(caseDetail.docketNumber);
+    test.docketNumber = caseDetail.docketNumber;
   });
 
   loginAs(test, 'petitionsclerk');
-  petitionsClerkUpdatesFiledBy(test, caseOverrides);
   petitionsClerkSubmitsCaseToIrs(test);
 
   loginAs(test, 'docketclerk');

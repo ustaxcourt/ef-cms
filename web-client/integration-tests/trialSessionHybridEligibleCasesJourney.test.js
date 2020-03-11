@@ -6,7 +6,6 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
-import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
 
 const test = setupTest();
 
@@ -51,7 +50,6 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
       });
 
       loginAs(test, 'petitionsclerk');
-      petitionsClerkUpdatesFiledBy(test, caseOverrides);
       petitionsClerkSubmitsCaseToIrs(test);
 
       loginAs(test, 'docketclerk');
@@ -74,7 +72,6 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
       });
 
       loginAs(test, 'petitionsclerk');
-      petitionsClerkUpdatesFiledBy(test, caseOverrides);
       petitionsClerkSubmitsCaseToIrs(test);
 
       loginAs(test, 'docketclerk');
@@ -97,7 +94,6 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
       });
 
       loginAs(test, 'petitionsclerk');
-      petitionsClerkUpdatesFiledBy(test, caseOverrides);
       petitionsClerkSubmitsCaseToIrs(test);
 
       loginAs(test, 'docketclerk');
