@@ -6,10 +6,10 @@ const {
 const { Case, isAssociatedUser } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
+const { IrsPractitioner } = require('../IrsPractitioner');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
-const { Practitioner } = require('../Practitioner');
-const { Respondent } = require('../Respondent');
+const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 const { WorkItem } = require('../WorkItem');
@@ -964,7 +964,7 @@ describe('Case entity', () => {
         },
       );
       caseToVerify.attachIrsPractitioner(
-        new Respondent({
+        new IrsPractitioner({
           userId: 'irsPractitioner',
         }),
       );
@@ -984,7 +984,7 @@ describe('Case entity', () => {
         },
       );
       caseToVerify.attachPrivatePractitioner(
-        new Practitioner({
+        new PrivatePractitioner({
           userId: 'privatePractitioner',
         }),
       );
@@ -1735,7 +1735,7 @@ describe('Case entity', () => {
       const caseToVerify = new Case(
         {
           privatePractitioners: [
-            new Practitioner({
+            new PrivatePractitioner({
               representingPrimary: true,
               userId: 'privatePractitioner',
             }),
@@ -1766,9 +1766,9 @@ describe('Case entity', () => {
       const caseToVerify = new Case(
         {
           privatePractitioners: [
-            new Practitioner({ userId: 'privatePractitioner1' }),
-            new Practitioner({ userId: 'privatePractitioner2' }),
-            new Practitioner({ userId: 'privatePractitioner3' }),
+            new PrivatePractitioner({ userId: 'privatePractitioner1' }),
+            new PrivatePractitioner({ userId: 'privatePractitioner2' }),
+            new PrivatePractitioner({ userId: 'privatePractitioner3' }),
           ],
         },
         {
@@ -1796,7 +1796,7 @@ describe('Case entity', () => {
       const caseToVerify = new Case(
         {
           irsPractitioners: [
-            new Respondent({
+            new IrsPractitioner({
               email: 'irsPractitioner@example.com',
               userId: 'irsPractitioner',
             }),
@@ -1827,9 +1827,9 @@ describe('Case entity', () => {
       const caseToVerify = new Case(
         {
           irsPractitioners: [
-            new Respondent({ userId: 'irsPractitioner1' }),
-            new Respondent({ userId: 'irsPractitioner2' }),
-            new Respondent({ userId: 'irsPractitioner3' }),
+            new IrsPractitioner({ userId: 'irsPractitioner1' }),
+            new IrsPractitioner({ userId: 'irsPractitioner2' }),
+            new IrsPractitioner({ userId: 'irsPractitioner3' }),
           ],
         },
         {

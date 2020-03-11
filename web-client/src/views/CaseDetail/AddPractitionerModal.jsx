@@ -11,7 +11,7 @@ export const AddPractitionerModal = connect(
     cancelSequence: sequences.clearModalSequence,
     caseDetail: state.formattedCaseDetail,
     caseDetailHelper: state.caseDetailHelper,
-    confirmSequence: sequences.associatePractitionerWithCaseSequence,
+    confirmSequence: sequences.associatePrivatePractitionerWithCaseSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateSequence: sequences.validateAddPractitionerSequence,

@@ -1,7 +1,9 @@
+const {
+  getCasePrivatePractitioners,
+} = require('./getCasePrivatePractitioners');
 const { getCaseDocketRecord } = require('./getCaseDocketRecord');
 const { getCaseDocuments } = require('./getCaseDocuments');
-const { getCasePractitioners } = require('./getCasePractitioners');
-const { getCaseRespondents } = require('./getCaseRespondents');
+const { getCaseIrsPractitioners } = require('./getCaseIrsPractitioners');
 const { query } = require('../../dynamodbClientService');
 
 /**
@@ -32,10 +34,10 @@ exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
     items.map(getCaseDocuments({ applicationContext })),
   );
   items = await Promise.all(
-    items.map(getCasePractitioners({ applicationContext })),
+    items.map(getCasePrivatePractitioners({ applicationContext })),
   );
   items = await Promise.all(
-    items.map(getCaseRespondents({ applicationContext })),
+    items.map(getCaseIrsPractitioners({ applicationContext })),
   );
 
   return items;
