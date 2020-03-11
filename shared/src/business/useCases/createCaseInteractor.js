@@ -103,7 +103,7 @@ exports.createCaseInteractor = async ({
     },
   );
 
-  let practitioners = [];
+  let privatePractitioners = [];
   if (user.role === User.ROLES.privatePractitioner) {
     const practitionerUser = await applicationContext
       .getPersistenceGateway()
@@ -120,7 +120,7 @@ exports.createCaseInteractor = async ({
       practitionerUser.representingSecondary = true;
     }
 
-    practitioners = [practitionerUser];
+    privatePractitioners = [practitionerUser];
   }
 
   let partySecondary = false;
@@ -136,7 +136,7 @@ exports.createCaseInteractor = async ({
       docketNumber,
       isPaper: false,
       ...petitionEntity.toRawObject(),
-      practitioners,
+      privatePractitioners,
       userId: user.userId,
     },
     {
@@ -154,7 +154,7 @@ exports.createCaseInteractor = async ({
       filingDate: caseToAdd.createdAt,
       partyPrimary: true,
       partySecondary,
-      practitioner: practitioners,
+      privatePractitioners,
       userId: user.userId,
       ...caseToAdd.getCaseContacts({
         contactPrimary: true,
@@ -191,7 +191,7 @@ exports.createCaseInteractor = async ({
       filingDate: caseToAdd.createdAt,
       partyPrimary: true,
       partySecondary,
-      practitioner: practitioners,
+      privatePractitioners,
       userId: user.userId,
       ...caseToAdd.getCaseContacts({
         contactPrimary: true,
@@ -214,7 +214,7 @@ exports.createCaseInteractor = async ({
         filingDate: caseToAdd.createdAt,
         partyPrimary: true,
         partySecondary,
-        practitioner: practitioners,
+        privatePractitioners,
         userId: user.userId,
         ...caseToAdd.getCaseContacts({
           contactPrimary: true,

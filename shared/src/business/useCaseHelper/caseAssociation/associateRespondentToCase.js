@@ -41,7 +41,9 @@ exports.associateRespondentToCase = async ({
 
     const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-    caseEntity.attachRespondent(new Respondent({ ...user, serviceIndicator }));
+    caseEntity.attachIrsPractitioner(
+      new Respondent({ ...user, serviceIndicator }),
+    );
 
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,

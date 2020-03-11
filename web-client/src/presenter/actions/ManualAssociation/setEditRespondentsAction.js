@@ -11,7 +11,7 @@ import { state } from 'cerebral';
  * @returns {Promise<*>} the promise of the completed action
  */
 export const setEditRespondentsAction = async ({ get, store }) => {
-  const respondents = get(state.caseDetail.respondents);
+  const irsPractitioners = get(state.caseDetail.irsPractitioners);
 
-  store.set(state.modal.respondents, cloneDeep(respondents));
+  store.set(state.modal.irsPractitioners, cloneDeep(irsPractitioners));
 };

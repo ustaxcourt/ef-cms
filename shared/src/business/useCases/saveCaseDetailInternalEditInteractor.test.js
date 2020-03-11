@@ -201,8 +201,8 @@ describe('updateCase', () => {
         hasIrsNotice: false,
         isPaper: false,
         partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
-        practitioners: [],
         preferredTrialCity: 'Mobile, Alabama',
+        privatePractitioners: [],
         procedureType: 'Small',
       },
     });

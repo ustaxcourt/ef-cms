@@ -48,10 +48,10 @@ describe('updateCounselOnCaseInteractor', () => {
           documents: MOCK_CASE.documents,
           filingType: 'Myself',
           partyType: 'Petitioner',
-          practitioners: mockPractitioners,
           preferredTrialCity: 'Fresno, California',
+          privatePractitioners: mockPractitioners,
           procedureType: 'Regular',
-          respondents: mockRespondents,
+          irsPractitioners: mockRespondents,
         }),
         getUserById: ({ userId }) => {
           return mockPractitioners

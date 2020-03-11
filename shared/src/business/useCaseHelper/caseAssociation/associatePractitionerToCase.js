@@ -50,7 +50,7 @@ exports.associatePractitionerToCase = async ({
 
     const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-    caseEntity.attachPractitioner(
+    caseEntity.attachPrivatePractitioner(
       new Practitioner({
         ...user,
         representingPrimary,

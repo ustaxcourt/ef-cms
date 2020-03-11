@@ -74,8 +74,8 @@ const RespondentInformation = connect(
     const respondentPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
-          {formattedCaseDetail.respondents &&
-            formattedCaseDetail.respondents.map((respondent, index) => (
+          {formattedCaseDetail.irsPractitioners &&
+            formattedCaseDetail.irsPractitioners.map((respondent, index) => (
               <div
                 className={classNames(
                   'tablet:grid-col-3 counsel-information',
@@ -183,7 +183,7 @@ const RespondentInformation = connect(
                       <Button
                         link
                         className="margin-left-205 padding-0 height-3"
-                        id="edit-respondents-button"
+                        id="edit-irsPractitioners-button"
                         onClick={() => openEditRespondentsModalSequence()}
                       >
                         <FontAwesomeIcon icon="edit" size="sm" />

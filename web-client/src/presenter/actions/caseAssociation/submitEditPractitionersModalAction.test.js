@@ -27,7 +27,7 @@ describe('submitEditPractitionersModalAction', () => {
 
   it('should call the appropriate update and delete use cases for each practitioner on the form and call the path.success when finished', async () => {
     const form = {
-      practitioners: [
+      privatePractitioners: [
         {
           representingPrimary: true,
           representingSecondary: false,

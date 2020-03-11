@@ -344,10 +344,10 @@ export const PrimaryDocumentForm = connect(
               )}
               <div className="usa-checkbox">
                 <input
-                  checked={form.partyRespondent || false}
+                  checked={form.partyIrsPractitioner || false}
                   className="usa-checkbox__input"
                   id="party-respondent"
-                  name="partyRespondent"
+                  name="partyIrsPractitioner"
                   type="checkbox"
                   onChange={e => {
                     updateDocketEntryFormValueSequence({

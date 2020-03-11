@@ -81,7 +81,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     added: addedRespondents,
     removed: deletedRespondents,
     updated: updatedRespondents,
-  } = diff(oldCase.respondents, caseToUpdate.respondents, 'userId');
+  } = diff(oldCase.irsPractitioners, caseToUpdate.irsPractitioners, 'userId');
 
   deletedRespondents.forEach(respondent => {
     requests.push(
@@ -112,7 +112,11 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     added: addedPractitioners,
     removed: deletedPractitioners,
     updated: updatedPractitioners,
-  } = diff(oldCase.practitioners, caseToUpdate.practitioners, 'userId');
+  } = diff(
+    oldCase.privatePractitioners,
+    caseToUpdate.privatePractitioners,
+    'userId',
+  );
 
   deletedPractitioners.forEach(practitioner => {
     requests.push(

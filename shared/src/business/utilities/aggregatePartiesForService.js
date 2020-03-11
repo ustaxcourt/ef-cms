@@ -16,8 +16,8 @@ const aggregatePartiesForService = caseEntity => {
   const parties = [
     formattedCase.contactPrimary,
     formattedCase.contactSecondary,
-    ...formattedCase.practitioners,
-    ...formattedCase.respondents,
+    ...formattedCase.privatePractitioners,
+    ...formattedCase.irsPractitioners,
   ];
 
   const aggregated = { electronic: [], paper: [] };
