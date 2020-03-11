@@ -28,7 +28,7 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
     sessionType: 'Small',
     trialLocation,
   };
-  const createdCases = [];
+  const createdCaseIds = [];
   const createdDocketNumbers = [];
 
   loginAs(test, 'docketclerk');
@@ -47,7 +47,7 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
   loginAs(test, 'petitioner');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test, caseOverrides);
-    createdCases.push(caseDetail);
+    createdCaseIds.push(caseDetail.caseId);
     createdDocketNumbers.push(caseDetail.docketNumber);
   });
 
@@ -59,7 +59,7 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
   docketClerkSetsCaseReadyForTrial(test);
 
   loginAs(test, 'petitionsclerk');
-  markAllCasesAsQCed(test, () => createdCases);
+  markAllCasesAsQCed(test, () => createdCaseIds);
   petitionsClerkSetsATrialSessionsSchedule(test);
 
   loginAs(test, 'judgeCohen');
