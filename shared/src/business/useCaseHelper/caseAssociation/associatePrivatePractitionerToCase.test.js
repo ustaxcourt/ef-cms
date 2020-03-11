@@ -1,13 +1,13 @@
 const {
-  associatePractitionerToCase,
-} = require('./associatePractitionerToCase');
+  associatePrivatePractitionerToCase,
+} = require('./associatePrivatePractitionerToCase');
 const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/cases/CaseConstants');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { User } = require('../../entities/User');
 
-describe('associatePractitionerToCase', () => {
+describe('associatePrivatePractitionerToCase', () => {
   let applicationContext;
 
   let caseRecord;
@@ -90,7 +90,7 @@ describe('associatePractitionerToCase', () => {
   it('should not add mapping if already there', async () => {
     verifyCaseForUserSpy = jest.fn().mockReturnValue(true);
 
-    await associatePractitionerToCase({
+    await associatePrivatePractitionerToCase({
       applicationContext,
       caseId: caseRecord.caseId,
       representingPrimary: true,
@@ -105,7 +105,7 @@ describe('associatePractitionerToCase', () => {
   it('should add mapping for a practitioner', async () => {
     verifyCaseForUserSpy = jest.fn().mockReturnValue(false);
 
-    await associatePractitionerToCase({
+    await associatePrivatePractitionerToCase({
       applicationContext,
       caseId: caseRecord.caseId,
       representingPrimary: true,
@@ -120,7 +120,7 @@ describe('associatePractitionerToCase', () => {
   it('should set contactPrimary and contactSecondary to receive no service if the practitioner is representing both parties', async () => {
     verifyCaseForUserSpy = jest.fn().mockReturnValue(false);
 
-    await associatePractitionerToCase({
+    await associatePrivatePractitionerToCase({
       applicationContext,
       caseId: caseRecord.caseId,
       representingPrimary: true,
@@ -139,7 +139,7 @@ describe('associatePractitionerToCase', () => {
   it('should only set contactSecondary to receive no service if the practitioner is only representing contactSecondary', async () => {
     verifyCaseForUserSpy = jest.fn().mockReturnValue(false);
 
-    await associatePractitionerToCase({
+    await associatePrivatePractitionerToCase({
       applicationContext,
       caseId: caseRecord.caseId,
       representingPrimary: false,

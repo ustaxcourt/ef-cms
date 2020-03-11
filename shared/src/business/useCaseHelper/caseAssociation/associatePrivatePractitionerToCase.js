@@ -5,7 +5,7 @@ const { Case } = require('../../entities/cases/Case');
 const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 
 /**
- * associatePractitionerToCase
+ * associatePrivatePractitionerToCase
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -18,7 +18,7 @@ const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
  * @param {object} providers.serviceIndicator the service indicator
  * @returns {Promise<*>} the updated case entity
  */
-exports.associatePractitionerToCase = async ({
+exports.associatePrivatePractitionerToCase = async ({
   applicationContext,
   caseId,
   representingPrimary,
