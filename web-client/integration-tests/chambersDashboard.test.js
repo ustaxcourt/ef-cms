@@ -20,7 +20,7 @@ describe('Chambers dashboard', () => {
     jest.setTimeout(30000);
   });
 
-  test.petitionerNewCases = [];
+  const createdCases = [];
 
   loginAs(test, 'petitioner');
   petitionerNavigatesToCreateCase(test);
@@ -32,10 +32,14 @@ describe('Chambers dashboard', () => {
   petitionerFilesDocumentForCase(test, fakeFile);
   petitionerViewsCaseDetailAfterFilingDocument(test);
   petitionerViewsDashboard(test);
-  petitionerAddNewCaseToTestObj(test);
+  petitionerAddNewCaseToTestObj(test, createdCases);
 
   loginAs(test, 'petitionsclerk');
-  petitionsClerkCreatesMessageToChambers(test, 'Yeah, chambers!!');
+  petitionsClerkCreatesMessageToChambers(
+    test,
+    'Yeah, chambers!!',
+    createdCases,
+  );
 
   loginAs(test, 'armensChambers');
   chambersUserViewsDashboard(test, 'Yeah, chambers!!');
