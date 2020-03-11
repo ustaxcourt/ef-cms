@@ -1,4 +1,3 @@
-const { getCaseByCaseId } = require('./getCaseByCaseId');
 const { query } = require('../../dynamodbClientService');
 
 /**
@@ -22,13 +21,14 @@ exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
     applicationContext,
   });
 
-  console.log('items', items);
-
   for (let i = 0; i < items.length; i++) {
-    items[i] = await getCaseByCaseId({
-      applicationContext,
-      caseId: items[i].caseId,
-    });
+    items[i] = {
+      ...items[i],
+      ...(await applicationContext.getPersistenceGateway().getCaseByCaseId({
+        applicationContext,
+        caseId: items[i].caseId,
+      })),
+    };
   }
 
   return items;

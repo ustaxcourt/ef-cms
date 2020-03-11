@@ -46,7 +46,6 @@ describe('getCasesByLeadCaseId', () => {
     });
     expect(queryStub).toHaveBeenCalled();
     expect(getCaseByCaseIdStub).toHaveBeenCalled();
-    expect(isAuthorizedForWorkItemsStub).toHaveBeenCalled();
     expect(result).toEqual([
       {
         caseId: '123',
