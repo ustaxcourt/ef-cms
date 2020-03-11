@@ -94,15 +94,18 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
+      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: 2xlarge
     steps:
       - attach_workspace:
           at: ~/
       - run:
+          name: Create web-client Artifacts Directory
+          command: mkdir /tmp/web-client/
+      - run:
           name: Web Client - Test
           command: |
-            SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /dev/null &
+            SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /tmp/web-client/server-output.txt &
             ./wait-until.sh http://localhost:3000/api/swagger
             AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run test:client
       - run:
@@ -117,6 +120,8 @@ jobs:
             -Dproject.settings="web-client/sonar-project.properties" \
             -Dsonar.login="${UI_SONAR_TOKEN}" \
             -Dsonar.host.url="https://sonarcloud.io"
+      - store_artifacts:
+          path: /tmp/web-client
 
   e2e-pa11y:
     docker:

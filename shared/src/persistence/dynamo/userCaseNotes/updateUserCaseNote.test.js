@@ -30,7 +30,7 @@ describe('updateUserCaseNote', () => {
       Item: {
         notes: 'something!!!',
         pk: 'user-case-note|456',
-        sk: '123',
+        sk: 'user|123',
       },
       applicationContext: { environment: { stage: 'dev' } },
     });

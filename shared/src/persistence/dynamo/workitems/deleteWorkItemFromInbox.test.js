@@ -29,14 +29,14 @@ describe('deleteWorkItemFromInbox', () => {
     });
     expect(deleteStub.getCall(0).args[0]).toMatchObject({
       Key: {
-        pk: 'user-1805d1ab-18d0-43ec-bafb-654e83405416',
-        sk: 'workitem-123',
+        pk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
+        sk: 'work-item|123',
       },
     });
     expect(deleteStub.getCall(1).args[0]).toMatchObject({
       Key: {
-        pk: 'section-docket',
-        sk: 'workitem-123',
+        pk: 'section|docket',
+        sk: 'work-item|123',
       },
     });
   });
@@ -59,8 +59,8 @@ describe('deleteWorkItemFromInbox', () => {
     });
     expect(deleteStub.getCall(0).args[0]).toMatchObject({
       Key: {
-        pk: 'section-docket',
-        sk: 'workitem-123',
+        pk: 'section|docket',
+        sk: 'work-item|123',
       },
     });
   });

@@ -48,7 +48,9 @@ export const completeDocumentSigningAction = async ({
         },
       });
 
-    const documentFile = new File([signedPdfBytes], 'myfile.pdf');
+    const documentFile = new File([signedPdfBytes], 'myfile.pdf', {
+      type: 'application/pdf',
+    });
 
     let documentIdToOverwrite = null;
     if (document.documentType !== 'Proposed Stipulated Decision') {

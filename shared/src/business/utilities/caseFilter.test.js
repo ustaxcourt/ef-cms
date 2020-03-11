@@ -38,7 +38,7 @@ describe('caseFilter', () => {
     ];
     it('should remove sealed cases from a set of advanced search results', () => {
       const result = caseSearchFilter(caseSearchResults, {
-        role: 'respondent',
+        role: 'irsPractitioner',
         userId: 'some other respondent',
       });
       expect(result.length).toEqual(1);

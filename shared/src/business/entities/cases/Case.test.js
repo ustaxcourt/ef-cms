@@ -125,6 +125,13 @@ describe('Case entity', () => {
       expect(Case.prototype.doesHavePendingItems).toHaveBeenCalled();
       expect(result.hasPendingItems).toBeFalsy();
     });
+
+    it('does not call own function to update values if flag is set to false after decorated toRawObject', () => {
+      const myCase = new Case({}, { applicationContext });
+      const result = myCase.toRawObject(false);
+      expect(Case.prototype.doesHavePendingItems).not.toHaveBeenCalled();
+      expect(result.hasPendingItems).toBeFalsy();
+    });
   });
 
   describe('filtered', () => {
@@ -1042,7 +1049,7 @@ describe('Case entity', () => {
     });
 
     it('returns the filing types for user role practitioner', () => {
-      const filingTypes = Case.getFilingTypes(User.ROLES.practitioner);
+      const filingTypes = Case.getFilingTypes(User.ROLES.privatePractitioner);
       expect(filingTypes).not.toBeNull();
       expect(filingTypes.length).toEqual(4);
       expect(filingTypes[0]).toEqual('Individual petitioner');

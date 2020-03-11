@@ -21,7 +21,9 @@ export default (test, createdDocketNumberIndex) => {
     expect(changeOfAddressDocument.documentTitle).toBe(
       'Notice of Change of Address',
     );
-    expect(changeOfAddressDocument.additionalInfo).toBe('for Test Respondent');
+    expect(changeOfAddressDocument.additionalInfo).toBe(
+      'for Test IRS Practitioner',
+    );
     expect(changeOfAddressDocument.filedBy).toBe('Resp.');
   });
 };

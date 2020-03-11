@@ -23,7 +23,7 @@ describe('Practitioner requests access to case', () => {
   });
 
   //tests for practitioner starting a new case
-  loginAs(test, 'practitioner');
+  loginAs(test, 'privatePractitioner');
   practitionerNavigatesToCreateCase(test);
   practitionerCreatesNewCase(test, fakeFile);
   practitionerViewsCaseDetailOfOwnedCase(test);
@@ -47,7 +47,7 @@ describe('Practitioner requests access to case', () => {
   });
   petitionerViewsDashboard(test);
 
-  loginAs(test, 'practitioner');
+  loginAs(test, 'privatePractitioner');
   practitionerSearchesForNonexistentCase(test);
   practitionerViewsDashboardBeforeAddingCase(test);
   practitionerSearchesForCase(test);
@@ -77,7 +77,7 @@ describe('Practitioner requests access to case', () => {
   });
   petitionerViewsDashboard(test);
 
-  loginAs(test, 'practitioner');
+  loginAs(test, 'privatePractitioner');
   practitionerSearchesForCase(test);
   practitionerViewsCaseDetail(test);
   practitionerRequestsPendingAccessToCase(test, fakeFile);

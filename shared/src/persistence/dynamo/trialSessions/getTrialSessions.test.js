@@ -11,13 +11,13 @@ describe('getTrialSessions', () => {
         Promise.resolve({
           Items: [
             {
-              pk: 'trial-session-123',
+              pk: 'trial-session|123',
             },
             {
-              pk: 'trial-session-234',
+              pk: 'trial-session|234',
             },
             {
-              pk: 'trial-session-345',
+              pk: 'trial-session|345',
             },
           ],
         }),

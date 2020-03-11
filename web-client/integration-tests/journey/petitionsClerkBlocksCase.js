@@ -36,16 +36,18 @@ export default (test, trialLocation) => {
       value: trialLocation,
     });
 
-    expect(test.getState('blockedCases')).toMatchObject([
-      {
-        blocked: true,
-        blockedReason: 'just because',
-        caseCaption:
-          'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Surviving Spouse, Petitioner',
-        docketNumber: test.docketNumber,
-        docketNumberSuffix: 'S',
-        status: Case.STATUS_TYPES.generalDocketReadyForTrial,
-      },
-    ]);
+    expect(test.getState('blockedCases')).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          blocked: true,
+          blockedReason: 'just because',
+          caseCaption:
+            'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Surviving Spouse, Petitioner',
+          docketNumber: test.docketNumber,
+          docketNumberSuffix: 'S',
+          status: Case.STATUS_TYPES.generalDocketReadyForTrial,
+        }),
+      ]),
+    );
   });
 };
