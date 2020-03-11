@@ -58,7 +58,15 @@ describe('createCaseFromPaperInteractor integration test', () => {
         petitionFile: { name: 'something' },
         petitionFileSize: 1,
         receivedAt: RECEIVED_DATE,
+        requestForPlaceOfTrialFile: new File(
+          [],
+          'requestForPlaceOfTrialFile.pdf',
+        ),
+        requestForPlaceOfTrialFileSize: 1,
+        stinFile: { name: 'something else' },
+        stinFileSize: 1,
       },
+      stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
     const createdCase = await getCaseInteractor({
@@ -115,6 +123,13 @@ describe('createCaseFromPaperInteractor integration test', () => {
               sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             },
           ],
+        },
+        {
+          createdAt: RECEIVED_DATE,
+          documentType: 'Statement of Taxpayer Identification',
+          eventCode: 'STIN',
+          filedBy: 'Petr. Bob Jones',
+          receivedAt: RECEIVED_DATE,
         },
       ],
       initialDocketNumberSuffix: '_',

@@ -7,9 +7,7 @@ import petitionerNavigatesToCreateCase from './journey/petitionerNavigatesToCrea
 import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
-import petitionsClerkIrsHoldingQueue from './journey/petitionsClerkIrsHoldingQueue';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
-import petitionsClerkRunsIrsBatch from './journey/petitionsClerkRunsIrsBatch';
 import petitionsClerkSelectsFirstPetitionOnMyDocumentQC from './journey/petitionsClerkSelectsFirstPetitionOnMyDocumentQC';
 import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
@@ -18,7 +16,7 @@ import petitionsClerkViewsSectionDocumentQC from './journey/petitionsClerkViewsS
 
 const test = setupTest();
 
-describe('INDIVIDUAL DOC QC: Petition Gets Batched and Served', () => {
+describe('INDIVIDUAL DOC QC: Petition Gets Served', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -36,7 +34,5 @@ describe('INDIVIDUAL DOC QC: Petition Gets Batched and Served', () => {
   petitionsClerkViewsMyDocumentQC(test);
   petitionsClerkSelectsFirstPetitionOnMyDocumentQC(test);
   petitionsClerkSubmitsCaseToIrs(test);
-  petitionsClerkIrsHoldingQueue(test);
-  petitionsClerkRunsIrsBatch(test);
   petitionsClerkSignsOut(test);
 });

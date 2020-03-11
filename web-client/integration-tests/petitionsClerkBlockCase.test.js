@@ -5,10 +5,8 @@ import {
   setupTest,
   uploadProposedStipulatedDecision,
   viewCaseDetail,
+  wait,
 } from './helpers';
-import calendarClerkLogIn from './journey/calendarClerkLogIn';
-import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
-import calendarClerkSignsOut from './journey/calendarClerkSignsOut';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
@@ -21,6 +19,7 @@ import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase
 import petitionsClerkDeletesCaseDeadline from './journey/petitionsClerkDeletesCaseDeadline';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkRemovesPendingItemFromCase from './journey/petitionsClerkRemovesPendingItemFromCase';
+import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkUnblocksCase from './journey/petitionsClerkUnblocksCase';
 import petitionsClerkViewsATrialSessionsEligibleCases from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
@@ -30,6 +29,10 @@ const test = setupTest();
 describe('Blocking a Case', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   const trialLocation = `Charleston, West Virginia, ${Date.now()}`;
@@ -84,8 +87,9 @@ describe('Blocking a Case', () => {
   petitionsClerkSignsOut(test);
 
   //automatic block with a pending item
+  loginAs(test, 'respondent');
+
   it('respondent uploads a proposed stipulated decision (pending item)', async () => {
-    await loginAs(test, 'respondent');
     await viewCaseDetail({
       docketNumber: setupTest.docketNumber,
       test,
@@ -165,13 +169,11 @@ describe('Blocking a Case', () => {
     });
 
     await test.runSequence('addCaseToTrialSessionSequence');
+    await wait(1000);
   });
 
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with no blocked cases', async () => {
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 4000));
-
     await test.runSequence('gotoBlockedCasesReportSequence');
 
     await test.runSequence('getBlockedCasesByTrialLocationSequence', {
@@ -181,20 +183,12 @@ describe('Blocking a Case', () => {
 
     expect(test.getState('blockedCases')).toMatchObject([]);
   });
-  petitionsClerkSignsOut(test);
 
-  //add deadline for a calendared case - it shouldn't actually be set to blocked
-  calendarClerkLogIn(test);
   markAllCasesAsQCed(test, () => [test.caseId]);
-  calendarClerkSetsATrialSessionsSchedule(test);
-  calendarClerkSignsOut(test);
+  petitionsClerkSetsATrialSessionsSchedule(test);
 
-  petitionsClerkLogIn(test);
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with no blocked cases', async () => {
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 4000));
-
     await test.runSequence('gotoBlockedCasesReportSequence');
 
     await test.runSequence('getBlockedCasesByTrialLocationSequence', {

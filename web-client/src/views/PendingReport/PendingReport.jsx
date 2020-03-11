@@ -29,7 +29,7 @@ export const PendingReport = connect(
                 href={formattedPendingItems.printUrl}
                 icon="print"
               >
-                Print Report
+                Printable Report
               </Button>
             </div>
 

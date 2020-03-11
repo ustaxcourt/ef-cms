@@ -45,6 +45,29 @@ describe('generatePaperServiceAddressPagePdf', () => {
     jest.restoreAllMocks();
   });
 
+  it('fails to get chromium browser', async () => {
+    jest
+      .spyOn(applicationContext, 'getChromiumBrowser')
+      .mockImplementation(() => {
+        return null;
+      });
+
+    let error;
+    try {
+      await generatePaperServiceAddressPagePdf({
+        applicationContext,
+        contactData: {
+          name: 'Test Person',
+        },
+      });
+    } catch (err) {
+      error = err;
+    }
+
+    expect(error).toBeDefined();
+    expect(chromiumBrowserMock.close).not.toHaveBeenCalled();
+  });
+
   it('requires permissions', async () => {
     isAuthorized.mockReturnValue(false);
     let result, error;

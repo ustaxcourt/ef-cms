@@ -116,6 +116,7 @@ exports.fileDocketEntryInteractor = async ({
         {
           assigneeId: null,
           assigneeName: null,
+          associatedJudge: caseToUpdate.associatedJudge,
           caseId: caseId,
           caseStatus: caseToUpdate.status,
           caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
@@ -172,13 +173,16 @@ exports.fileDocketEntryInteractor = async ({
         documentEntity.isFileAttached === false ? documentMetadata : {};
 
       caseEntity.addDocketRecord(
-        new DocketRecord({
-          description: metadata.documentTitle,
-          documentId: documentEntity.documentId,
-          editState: JSON.stringify(docketRecordEditState),
-          eventCode: documentEntity.eventCode,
-          filingDate: documentEntity.receivedAt,
-        }),
+        new DocketRecord(
+          {
+            description: metadata.documentTitle,
+            documentId: documentEntity.documentId,
+            editState: JSON.stringify(docketRecordEditState),
+            eventCode: documentEntity.eventCode,
+            filingDate: documentEntity.receivedAt,
+          },
+          { applicationContext },
+        ),
       );
     }
   });

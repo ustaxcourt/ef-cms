@@ -6,6 +6,7 @@ import {
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
+import { addEditUserCaseNoteModalHelper } from './computeds/addEditUserCaseNoteModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { advancedSearchHelper } from './computeds/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
@@ -18,6 +19,7 @@ import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
+import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
@@ -49,7 +51,8 @@ import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
-import { reviewPetitionHelper } from './computeds/reviewPetitionHelper';
+import { reviewPetitionFromPaperHelper } from './computeds/reviewPetitionFromPaperHelper';
+import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { selectDocumentSelectHelper } from './computeds/selectDocumentSelectHelper';
@@ -73,6 +76,7 @@ export const state = {
   addCourtIssuedDocketEntryHelper,
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
+  addEditUserCaseNoteModalHelper,
   addToTrialSessionModalHelper,
   advancedSearchForm: {},
   advancedSearchHelper,
@@ -102,6 +106,7 @@ export const state = {
   caseDetailPage: {},
   caseDetailSubnavHelper,
   caseInformationHelper,
+  caseInventoryReportHelper,
   caseTypeDescriptionHelper,
   caseTypes: [],
   cases: [],
@@ -181,7 +186,8 @@ export const state = {
   previewPdfFile: null,
   procedureTypes: [],
   requestAccessHelper,
-  reviewPetitionHelper,
+  reviewPetitionFromPaperHelper,
+  reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
   scanner: {},

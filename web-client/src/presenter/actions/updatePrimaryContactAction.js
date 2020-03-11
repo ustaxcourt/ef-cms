@@ -29,6 +29,5 @@ export const updatePrimaryContactAction = async ({
       title: 'Your changes have been saved.',
     },
     caseId: updatedCase.docketNumber,
-    tab: 'caseInfo',
   };
 };

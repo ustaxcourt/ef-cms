@@ -152,9 +152,11 @@ createJudgeAccount() {
 createAdmin "ustcadmin@example.com" "admin" "admin"
 
 createAccount "migrator@example.com" "admin" "" "" "admin"
+createAccount "flexionustc+practitioner@gmail.com" "practitioner" "" "GM9999" "practitioner" "Practitioner Gmail"
+createAccount "flexionustc+respondent@gmail.com" "respondent" "" "GM4444" "respondent" "Respondent Gmail"
+createAccount "flexionustc+petitioner@gmail.com" "petitioner" "" "" "petitioner" "Petitioner Gmail"
 createManyAccounts "10" "adc" "adc"
 createManyAccounts "10" "admissionsclerk" "admissions"
-createManyAccounts "10" "calendarclerk" "calendar"
 createManyAccounts "10" "clerkofcourt" "clerkofcourt"
 createManyAccounts "10" "docketclerk" "docket"
 createManyAccounts "10" "petitionsclerk" "petitions"

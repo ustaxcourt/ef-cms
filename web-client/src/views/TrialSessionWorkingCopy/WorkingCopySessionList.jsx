@@ -16,10 +16,10 @@ export const WorkingCopySessionList = connect(
       sequences.autoSaveTrialSessionWorkingCopySequence,
     casesShownCount: state.trialSessionWorkingCopyHelper.casesShownCount,
     formattedCases: state.trialSessionWorkingCopyHelper.formattedCases,
-    openAddEditJudgesCaseNoteModalFromListSequence:
-      sequences.openAddEditJudgesCaseNoteModalFromListSequence,
-    openDeleteJudgesCaseNoteConfirmModalSequence:
-      sequences.openDeleteJudgesCaseNoteConfirmModalSequence,
+    openAddEditUserCaseNoteModalFromListSequence:
+      sequences.openAddEditUserCaseNoteModalFromListSequence,
+    openDeleteUserCaseNoteConfirmModalSequence:
+      sequences.openDeleteUserCaseNoteConfirmModalSequence,
     sort: state.trialSessionWorkingCopy.sort,
     sortOrder: state.trialSessionWorkingCopy.sortOrder,
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
@@ -29,8 +29,8 @@ export const WorkingCopySessionList = connect(
     autoSaveTrialSessionWorkingCopySequence,
     casesShownCount,
     formattedCases,
-    openAddEditJudgesCaseNoteModalFromListSequence,
-    openDeleteJudgesCaseNoteConfirmModalSequence,
+    openAddEditUserCaseNoteModalFromListSequence,
+    openDeleteUserCaseNoteConfirmModalSequence,
     sort,
     sortOrder,
     toggleWorkingCopySortSequence,
@@ -154,14 +154,14 @@ export const WorkingCopySessionList = connect(
                   <td className="no-wrap">
                     <If
                       not
-                      bind={`trialSessionWorkingCopy.judgesNotes.${item.caseId}.notes`}
+                      bind={`trialSessionWorkingCopy.userNotes.${item.caseId}.notes`}
                     >
                       <Button
                         link
                         className="margin-top-1"
                         icon="plus-circle"
                         onClick={() => {
-                          openAddEditJudgesCaseNoteModalFromListSequence({
+                          openAddEditUserCaseNoteModalFromListSequence({
                             caseId: item.caseId,
                           });
                         }}
@@ -172,7 +172,7 @@ export const WorkingCopySessionList = connect(
                   </td>
                 </tr>
                 <If
-                  bind={`trialSessionWorkingCopy.judgesNotes.${item.caseId}.notes`}
+                  bind={`trialSessionWorkingCopy.userNotes.${item.caseId}.notes`}
                 >
                   <tr className="notes-row">
                     <td className="text-right font-body-2xs">
@@ -180,7 +180,7 @@ export const WorkingCopySessionList = connect(
                     </td>
                     <td className="font-body-2xs" colSpan="4">
                       <Text
-                        bind={`trialSessionWorkingCopy.judgesNotes.${item.caseId}.notes`}
+                        bind={`trialSessionWorkingCopy.userNotes.${item.caseId}.notes`}
                       />
                     </td>
                     <td className="no-wrap text-align-right">
@@ -189,7 +189,7 @@ export const WorkingCopySessionList = connect(
                         className="red-warning"
                         icon="trash"
                         onClick={() => {
-                          openDeleteJudgesCaseNoteConfirmModalSequence({
+                          openDeleteUserCaseNoteConfirmModalSequence({
                             caseId: item.caseId,
                           });
                         }}
@@ -202,7 +202,7 @@ export const WorkingCopySessionList = connect(
                         link
                         icon="edit"
                         onClick={() => {
-                          openAddEditJudgesCaseNoteModalFromListSequence({
+                          openAddEditUserCaseNoteModalFromListSequence({
                             caseId: item.caseId,
                           });
                         }}

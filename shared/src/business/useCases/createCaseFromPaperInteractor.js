@@ -21,6 +21,7 @@ const addPetitionDocumentWithWorkItemToCase = ({
     {
       assigneeId: user.userId,
       assigneeName: user.name,
+      associatedJudge: caseToAdd.associatedJudge,
       caseId: caseToAdd.caseId,
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseToAdd)),
@@ -54,7 +55,7 @@ const addPetitionDocumentWithWorkItemToCase = ({
   workItemEntity.addMessage(newMessage);
 
   documentEntity.addWorkItem(workItemEntity);
-  caseToAdd.addDocument(documentEntity);
+  caseToAdd.addDocument(documentEntity, { applicationContext });
 
   return {
     message: newMessage,
@@ -113,6 +114,7 @@ exports.createCaseFromPaperInteractor = async ({
       docketNumber,
       ...petitionEntity.toRawObject(),
       isPaper: true,
+      status: petitionMetadata.status || null,
       userId: user.userId,
     },
     {
@@ -192,7 +194,9 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(applicationForWaiverOfFilingFeeDocumentEntity);
+    caseToAdd.addDocument(applicationForWaiverOfFilingFeeDocumentEntity, {
+      applicationContext,
+    });
   }
 
   if (requestForPlaceOfTrialFileId) {
@@ -230,7 +234,9 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(requestForPlaceOfTrialDocumentEntity);
+    caseToAdd.addDocument(requestForPlaceOfTrialDocumentEntity, {
+      applicationContext,
+    });
   }
 
   if (stinFileId) {
@@ -255,7 +261,9 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
+    caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity, {
+      applicationContext,
+    });
   }
 
   if (ownershipDisclosureFileId) {
@@ -282,19 +290,20 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(odsDocumentEntity);
+    caseToAdd.addDocument(odsDocumentEntity, { applicationContext });
   }
 
-  await applicationContext.getPersistenceGateway().createCase({
-    applicationContext,
-    caseToCreate: caseToAdd.validate().toRawObject(),
-  });
-
-  await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
-    applicationContext,
-    messageId: newMessage.messageId,
-    workItem: newWorkItem.validate().toRawObject(),
-  });
+  await Promise.all([
+    applicationContext.getPersistenceGateway().createCase({
+      applicationContext,
+      caseToCreate: caseToAdd.validate().toRawObject(),
+    }),
+    applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+      applicationContext,
+      messageId: newMessage.messageId,
+      workItem: newWorkItem.validate().toRawObject(),
+    }),
+  ]);
 
   return new Case(caseToAdd, { applicationContext }).toRawObject();
 };

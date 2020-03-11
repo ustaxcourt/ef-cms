@@ -1,41 +1,25 @@
-const { isCaseRecord } = require('./utilities');
+const createApplicationContext = require('../src/applicationContext');
+const { Case } = require('../../shared/src/business/entities/cases/Case');
+const { isCaseRecord, upGenerator } = require('./utilities');
+const applicationContext = createApplicationContext({});
 
-const up = async (documentClient, tableName) => {
-  let hasMoreResults = true;
-  let lastKey = null;
-  while (hasMoreResults) {
-    hasMoreResults = false;
+const mutateRecord = item => {
+  if (isCaseRecord(item) && !item.qcCompleteForTrial) {
+    console.log(
+      `adding qcCompleteForTrial default value to case with id "${item.caseId}"`,
+    );
+    item.qcCompleteForTrial = {};
 
-    const results = await documentClient
-      .scan({
-        ExclusiveStartKey: lastKey,
-        TableName: tableName,
-      })
-      .promise();
+    const caseEntity = new Case(item, { applicationContext })
+      .validate()
+      .toRawObject();
 
-    for (let item of results.Items) {
-      if (isCaseRecord(item)) {
-        if (!item.qcCompleteForTrial) {
-          console.log(
-            `adding qcCompleteForTrial default value to case with id "${item.caseId}"`,
-          );
-          item.qcCompleteForTrial = {};
-
-          await documentClient
-            .put({
-              Item: item,
-              TableName: tableName,
-            })
-            .promise();
-        }
-      }
-    }
-
-    hasMoreResults = !!results.LastEvaluatedKey;
-    lastKey = results.LastEvaluatedKey;
+    const itemToPut = {
+      ...item,
+      ...caseEntity,
+    };
+    return itemToPut;
   }
 };
 
-module.exports = {
-  up,
-};
+module.exports = { mutateRecord, up: upGenerator(mutateRecord) };

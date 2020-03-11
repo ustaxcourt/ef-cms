@@ -4,11 +4,7 @@ import { state } from 'cerebral';
 export const caseDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const { Case } = applicationContext.getEntityConstructors();
-  const {
-    PARTY_TYPES,
-    STATUS_TYPES,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
   const documentDetailTab =
@@ -80,8 +76,6 @@ export const caseDetailHelper = (get, applicationContext) => {
   } else if (user.role === USER_ROLES.docketClerk) {
     showEditPetitionerInformation = true;
   }
-
-  const showRecallButton = caseDetail.status === STATUS_TYPES.batchedForIRS;
 
   const practitionerMatchesFormatted =
     modalState && modalState.practitionerMatches;
@@ -162,7 +156,6 @@ export const caseDetailHelper = (get, applicationContext) => {
       (caseDetail.practitioners && !!caseDetail.practitioners.length),
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,
-    showRecallButton,
     showRespondentSection:
       !isExternalUser ||
       (caseDetail.respondents && !!caseDetail.respondents.length),
