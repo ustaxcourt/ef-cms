@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validateEditRespondentsAction = ({ get, path }) => {
+export const validateEditIrsPractitionersAction = ({ get, path }) => {
   const { irsPractitioners } = get(state.modal);
   const { irsPractitioners: oldRespondents } = get(state.caseDetail);
 

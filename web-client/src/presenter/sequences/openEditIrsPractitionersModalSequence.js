@@ -1,11 +1,11 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { setEditRespondentsAction } from '../actions/ManualAssociation/setEditRespondentsAction';
+import { setEditIrsPractitionersAction } from '../actions/ManualAssociation/setEditIrsPractitionersAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
-export const openEditRespondentsModalSequence = [
+export const openEditIrsPractitionersModalSequence = [
   clearModalStateAction,
   clearFormAction,
-  setEditRespondentsAction,
-  setShowModalFactoryAction('EditRespondentsModal'),
+  setEditIrsPractitionersAction,
+  setShowModalFactoryAction('EditIrsPractitionersModal'),
 ];

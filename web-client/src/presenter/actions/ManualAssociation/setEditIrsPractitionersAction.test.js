@@ -1,9 +1,9 @@
 import { runAction } from 'cerebral/test';
-import { setEditRespondentsAction } from './setEditRespondentsAction';
+import { setEditIrsPractitionersAction } from './setEditIrsPractitionersAction';
 
-describe('setEditRespondentsAction', () => {
+describe('setEditIrsPractitionersAction', () => {
   it('should set the state.caseDetail.irsPractitioners on state.modal', async () => {
-    const result = await runAction(setEditRespondentsAction, {
+    const result = await runAction(setEditIrsPractitionersAction, {
       state: {
         caseDetail: {
           irsPractitioners: [

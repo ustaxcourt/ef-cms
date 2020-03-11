@@ -1,9 +1,9 @@
 import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/cases/CaseConstants';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { validateEditRespondentsAction } from './validateEditRespondentsAction';
+import { validateEditIrsPractitionersAction } from './validateEditIrsPractitionersAction';
 
-describe('validateEditRespondentsAction', () => {
+describe('validateEditIrsPractitionersAction', () => {
   let successStub;
   let errorStub;
 
@@ -20,7 +20,7 @@ describe('validateEditRespondentsAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    await runAction(validateEditRespondentsAction, {
+    await runAction(validateEditIrsPractitionersAction, {
       modules: {
         presenter,
       },
@@ -56,7 +56,7 @@ describe('validateEditRespondentsAction', () => {
   });
 
   it('should call the error path when attempting to change from paper to electronic service', async () => {
-    await runAction(validateEditRespondentsAction, {
+    await runAction(validateEditIrsPractitionersAction, {
       modules: {
         presenter,
       },
