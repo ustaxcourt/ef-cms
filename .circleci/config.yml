@@ -460,6 +460,8 @@ jobs:
       - run:
           name: 'Deploy - Cypress Smoke Tests'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "CYPRESS_BASE_URL='https://ui-$ENV.$EFCMS_DOMAIN' ENV=${ENV} npm run cypress:smoketests"
+      - store_artifacts:
+          path: /home/app/cypress-smoketests/videos/
 
 workflows:
   version: 2
