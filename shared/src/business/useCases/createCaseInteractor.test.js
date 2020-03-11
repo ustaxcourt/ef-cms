@@ -99,7 +99,7 @@ describe('createCaseInteractor', () => {
   it('should create a case successfully as a practitioner', async () => {
     user = new User({
       name: 'Olivia Jade',
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -137,8 +137,10 @@ describe('createCaseInteractor', () => {
     });
 
     expect(result).toBeDefined();
-    expect(result.practitioners[0].representingPrimary).toEqual(true);
-    expect(result.practitioners[0].representingSecondary).toBeUndefined();
+    expect(result.privatePractitioners[0].representingPrimary).toEqual(true);
+    expect(
+      result.privatePractitioners[0].representingSecondary,
+    ).toBeUndefined();
     expect(createCaseSpy).toBeCalled();
     expect(saveWorkItemForNonPaperSpy).toBeCalled();
   });
@@ -146,7 +148,7 @@ describe('createCaseInteractor', () => {
   it('should create a case with contact primary and secondary successfully as a practitioner', async () => {
     user = new User({
       name: 'Olivia Jade',
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -195,8 +197,8 @@ describe('createCaseInteractor', () => {
     });
 
     expect(result).toBeDefined();
-    expect(result.practitioners[0].representingPrimary).toEqual(true);
-    expect(result.practitioners[0].representingSecondary).toEqual(true);
+    expect(result.privatePractitioners[0].representingPrimary).toEqual(true);
+    expect(result.privatePractitioners[0].representingSecondary).toEqual(true);
     expect(createCaseSpy).toBeCalled();
     expect(saveWorkItemForNonPaperSpy).toBeCalled();
   });

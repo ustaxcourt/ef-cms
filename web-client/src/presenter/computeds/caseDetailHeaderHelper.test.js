@@ -42,7 +42,7 @@ describe('caseDetailHeaderHelper', () => {
 
   it('should set showEditCaseButton to false if the user does not have UPDATE_CASE_CONTENT permission', () => {
     const user = {
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: '123',
     };
     const result = runCompute(caseDetailHeaderHelper, {
@@ -56,13 +56,13 @@ describe('caseDetailHeaderHelper', () => {
 
   it('should set showFileFirstDocumentButton and showRequestAccessToCaseButton to false if user role is respondent and the respondent is associated with the case', () => {
     const user = {
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
       userId: '789',
     };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { respondents: [{ userId: '789' }] },
+        caseDetail: { irsPractitioners: [{ userId: '789' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -76,15 +76,15 @@ describe('caseDetailHeaderHelper', () => {
 
   it('should set showFileFirstDocumentButton and showRequestAccessToCaseButton to false if user role is respondent and the respondent is not associated with the case but the case is sealed', () => {
     const user = {
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
       userId: '789',
     };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          irsPractitioners: [{ userId: '789' }],
           isSealed: true,
-          respondents: [{ userId: '789' }],
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -99,13 +99,13 @@ describe('caseDetailHeaderHelper', () => {
 
   it('should set showRequestAccessToCaseButton to true if user role is respondent and the respondent is not associated with the case', () => {
     const user = {
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
       userId: '789',
     };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { respondents: [{ userId: '123' }] },
+        caseDetail: { irsPractitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -119,7 +119,7 @@ describe('caseDetailHeaderHelper', () => {
 
   it('should set showFileFirstDocumentButton to true if user role is respondent and there is no respondent associated with the case', () => {
     const user = {
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
       userId: '789',
     };
     const result = runCompute(caseDetailHeaderHelper, {
@@ -139,7 +139,7 @@ describe('caseDetailHeaderHelper', () => {
 
   it('should set showPendingAccessToCaseButton to true if user role is practitioner and case is not owned by user but has pending request', () => {
     const user = {
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: '123',
     };
     const result = runCompute(caseDetailHeaderHelper, {
@@ -159,7 +159,7 @@ describe('caseDetailHeaderHelper', () => {
 
   it('should set showRequestAccessToCaseButton to true if user role is practitioner and case is not owned by user', () => {
     const user = {
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: '123',
     };
     const result = runCompute(caseDetailHeaderHelper, {
@@ -178,7 +178,7 @@ describe('caseDetailHeaderHelper', () => {
 
   it('should set showRequestAccessToCaseButton to false if user role is practitioner and case is not owned by user and the case is sealed', () => {
     const user = {
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: '123',
     };
     const result = runCompute(caseDetailHeaderHelper, {
@@ -197,13 +197,13 @@ describe('caseDetailHeaderHelper', () => {
 
   it('should set showRequestAccessToCaseButton to false if user role is practitioner and case is owned by user', () => {
     const user = {
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: '123',
     };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { practitioners: [{ userId: '123' }] },
+        caseDetail: { privatePractitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {

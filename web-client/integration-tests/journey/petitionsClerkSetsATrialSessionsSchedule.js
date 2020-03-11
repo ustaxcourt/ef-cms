@@ -1,4 +1,4 @@
-import { flushPromises, wait } from '../helpers';
+import { wait } from '../helpers';
 
 export default test => {
   return it('Petitions Clerk Sets A Trial Sessions Schedule', async () => {

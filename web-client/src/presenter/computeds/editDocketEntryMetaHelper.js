@@ -18,7 +18,7 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
     validationErrors &&
     (validationErrors.partyPrimary ||
       validationErrors.partySecondary ||
-      validationErrors.partyRespondent);
+      validationErrors.partyIrsPractitioner);
 
   const objectionDocumentTypes = [
     ...INTERNAL_CATEGORY_MAP['Motion'].map(entry => {

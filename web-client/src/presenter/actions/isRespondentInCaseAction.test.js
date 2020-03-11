@@ -21,7 +21,7 @@ describe('isRespondentInCaseAction', () => {
       },
       state: {
         caseDetail: {
-          respondents: [{ userId: 'abc' }],
+          irsPractitioners: [{ userId: 'abc' }],
         },
         modal: {
           respondentMatches: [{ userId: 'abc' }],
@@ -39,7 +39,7 @@ describe('isRespondentInCaseAction', () => {
       },
       state: {
         caseDetail: {
-          respondents: [{ userId: 'abc' }],
+          irsPractitioners: [{ userId: 'abc' }],
         },
         modal: {
           respondentMatches: [{ userId: '123' }],

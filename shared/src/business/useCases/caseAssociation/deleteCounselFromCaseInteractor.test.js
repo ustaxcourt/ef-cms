@@ -9,15 +9,15 @@ let updateCaseMock;
 let deleteUserFromCaseMock;
 
 const mockPractitioners = [
-  { role: User.ROLES.practitioner, userId: '456' },
-  { role: User.ROLES.practitioner, userId: '789' },
-  { role: User.ROLES.practitioner, userId: '012' },
+  { role: User.ROLES.privatePractitioner, userId: '456' },
+  { role: User.ROLES.privatePractitioner, userId: '789' },
+  { role: User.ROLES.privatePractitioner, userId: '012' },
 ];
 
 const mockRespondents = [
-  { role: User.ROLES.respondent, userId: '654' },
-  { role: User.ROLES.respondent, userId: '987' },
-  { role: User.ROLES.respondent, userId: '210' },
+  { role: User.ROLES.irsPractitioner, userId: '654' },
+  { role: User.ROLES.irsPractitioner, userId: '987' },
+  { role: User.ROLES.irsPractitioner, userId: '210' },
 ];
 
 const mockPetitioners = [{ role: User.ROLES.petitioner, userId: '111' }];
@@ -37,8 +37,8 @@ describe('deleteCounselFromCaseInteractor', () => {
         getCaseByCaseId: ({ caseId }) => ({
           ...MOCK_CASE,
           caseId,
-          practitioners: mockPractitioners,
-          respondents: mockRespondents,
+          irsPractitioners: mockRespondents,
+          privatePractitioners: mockPractitioners,
         }),
         getUserById: ({ userId }) => {
           return mockPractitioners

@@ -3,10 +3,10 @@ require('isomorphic-fetch');
 import { fakeFile, loginAs, setupTest } from './helpers';
 
 // docketclerk
-import docketClerkSendsStipDecisionToADC from './journey/docketClerkSendsStipDecisionToADC';
-import docketClerkVerifiesStipulatedDecisionExistsInInbox from './journey/docketClerkVerifiesStipulatedDecisionExistsInInbox';
-import docketClerkVerifiesStipulatedDecisionExistsInOutbox from './journey/docketClerkVerifiesStipulatedDecisionExistsInOutbox';
-import docketClerkViewsStipulatedDecision from './journey/docketClerkViewsStipulatedDecision';
+import { docketClerkSendsStipDecisionToADC } from './journey/docketClerkSendsStipDecisionToADC';
+import { docketClerkVerifiesStipulatedDecisionExistsInInbox } from './journey/docketClerkVerifiesStipulatedDecisionExistsInInbox';
+import { docketClerkVerifiesStipulatedDecisionExistsInOutbox } from './journey/docketClerkVerifiesStipulatedDecisionExistsInOutbox';
+import { docketClerkViewsStipulatedDecision } from './journey/docketClerkViewsStipulatedDecision';
 
 // practitioner
 import practitionerFilesDocumentForStipulatedDecision from './journey/practitionerFilesDocumentForStipulatedDecision';
@@ -20,9 +20,9 @@ import petitionerNavigatesToCreateCase from './journey/petitionerNavigatesToCrea
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 
 // adc
-import adcVerifiesStipulatedDecisionDoesNotExistInInbox from './journey/adcVerifiesStipulatedDecisionDoesNotExistInInbox';
-import adcVerifiesStipulatedDecisionExistsInOutbox from './journey/adcVerifiesStipulatedDecisionExistsInOutbox';
-import adcViewsStipulatedDecisionForSigning from './journey/adcViewsStipulatedDecisionForSigning';
+import { adcVerifiesStipulatedDecisionDoesNotExistInInbox } from './journey/adcVerifiesStipulatedDecisionDoesNotExistInInbox';
+import { adcVerifiesStipulatedDecisionExistsInOutbox } from './journey/adcVerifiesStipulatedDecisionExistsInOutbox';
+import { adcViewsStipulatedDecisionForSigning } from './journey/adcViewsStipulatedDecisionForSigning';
 const test = setupTest({
   useCases: {
     loadPDFForSigningInteractor: () => Promise.resolve(null),
@@ -44,7 +44,7 @@ describe('Sr. Attorney Signs Proposed Stipulated Decision', () => {
   petitionerCreatesNewCase(test, fakeFile);
   petitionerViewsDashboard(test);
 
-  loginAs(test, 'practitioner');
+  loginAs(test, 'privatePractitioner');
   practitionerViewsCaseDetail(test);
   practitionerFilesDocumentForStipulatedDecision(test, fakeFile);
 

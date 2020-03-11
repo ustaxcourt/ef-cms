@@ -28,17 +28,23 @@ const formatRecord = record => {
 
   if (record.isIrsEmployee === 'Y') {
     record.employer = 'IRS';
-    record.role = 'respondent';
-    record.section = 'respondent';
+    record.role = 'irsPractitioner';
+    record.section = 'irsPractitioner';
   } else if (record.isDojEmployee === 'Y') {
     record.employer = 'DOJ';
-    record.role = 'respondent';
-    record.section = 'respondent';
+    record.role = 'irsPractitioner';
+    record.section = 'irsPractitioner';
   } else {
     record.employer = 'Private';
-    record.role = 'practitioner';
-    record.section = 'practitioner';
+    record.role = 'privatePractitioner';
+    record.section = 'privatePractitioner';
   }
+
+  Object.keys(record).map(key => {
+    if (record[key] === '') {
+      delete record[key];
+    }
+  });
 
   return record;
 };
@@ -121,16 +127,26 @@ const formatRecord = record => {
     output.forEach(async row => {
       const record = formatRecord(row);
 
-      const result = await axios.post(
-        `${services['ef-cms-users-green']}/attorney`,
-        { user: record },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+      try {
+        const result = await axios.post(
+          `${services['ef-cms-users-green']}/attorney`,
+          { user: record },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        },
-      );
-      console.log('Added user', result);
+        );
+        if (result.status === 200) {
+          console.log(`SUCCESS ${record.name} ${record.barNumber}`);
+        } else {
+          console.log(`ERROR ${record.name} ${record.barNumber}`);
+          console.log(result);
+        }
+      } catch (err) {
+        console.log(`ERROR ${record.name} ${record.barNumber}`);
+        console.log(err);
+      }
     });
   });
 })();

@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * submits the edit respondents modal, removing the selected respondents from the case
+ * submits the edit irsPractitioners modal, removing the selected irsPractitioners from the case
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
@@ -17,9 +17,9 @@ export const submitEditRespondentsModalAction = async ({
   const form = get(state.modal);
   const caseId = get(state.caseDetail.caseId);
 
-  const { respondents } = form;
+  const { irsPractitioners } = form;
 
-  for (const respondent of respondents) {
+  for (const respondent of irsPractitioners) {
     if (respondent.removeFromCase) {
       await applicationContext.getUseCases().deleteCounselFromCaseInteractor({
         applicationContext,

@@ -1,4 +1,9 @@
+const {
+  getCasePrivatePractitioners,
+} = require('./getCasePrivatePractitioners');
 const { getCaseDocketRecord } = require('./getCaseDocketRecord');
+const { getCaseDocuments } = require('./getCaseDocuments');
+const { getCaseIrsPractitioners } = require('./getCaseIrsPractitioners');
 const { query } = require('../../dynamodbClientService');
 
 /**
@@ -10,7 +15,7 @@ const { query } = require('../../dynamodbClientService');
  * @returns {Promise} the promise of the call to persistence
  */
 exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
-  const items = await query({
+  let items = await query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },
@@ -22,5 +27,18 @@ exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
     applicationContext,
   });
 
-  return Promise.all(items.map(getCaseDocketRecord({ applicationContext })));
+  items = await Promise.all(
+    items.map(getCaseDocketRecord({ applicationContext })),
+  );
+  items = await Promise.all(
+    items.map(getCaseDocuments({ applicationContext })),
+  );
+  items = await Promise.all(
+    items.map(getCasePrivatePractitioners({ applicationContext })),
+  );
+  items = await Promise.all(
+    items.map(getCaseIrsPractitioners({ applicationContext })),
+  );
+
+  return items;
 };

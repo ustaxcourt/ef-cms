@@ -2,7 +2,11 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default (test, fakeFile, draftOrderIndex) => {
+export const docketClerkEditsAnUploadedCourtIssuedDocument = (
+  test,
+  fakeFile,
+  draftOrderIndex,
+) => {
   return it('Docket Clerk edits an uploaded court issued document', async () => {
     let caseDetailFormatted;
 
@@ -63,7 +67,9 @@ export default (test, fakeFile, draftOrderIndex) => {
     );
 
     const caseDraftDocuments = caseDetailFormatted.draftDocuments;
-    const newDraftOrder = caseDraftDocuments[caseDraftDocuments.length - 1];
+    const newDraftOrder = caseDraftDocuments.reduce((prev, current) =>
+      prev.createdAt > current.createdAt ? prev : current,
+    );
     expect(newDraftOrder).toBeTruthy();
     test.draftOrders.push(newDraftOrder);
   });

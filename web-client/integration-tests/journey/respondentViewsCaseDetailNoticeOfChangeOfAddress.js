@@ -4,7 +4,9 @@ export default (test, createdDocketNumberIndex) => {
       docketNumber: test.createdDocketNumbers[createdDocketNumberIndex],
     });
 
-    expect(test.getState('caseDetail.respondents.0.contact')).toMatchObject({
+    expect(
+      test.getState('caseDetail.irsPractitioners.0.contact'),
+    ).toMatchObject({
       address1: test.updatedRespondentAddress,
     });
 
@@ -21,7 +23,9 @@ export default (test, createdDocketNumberIndex) => {
     expect(changeOfAddressDocument.documentTitle).toBe(
       'Notice of Change of Address',
     );
-    expect(changeOfAddressDocument.additionalInfo).toBe('for Test Respondent');
+    expect(changeOfAddressDocument.additionalInfo).toBe(
+      'for Test IRS Practitioner',
+    );
     expect(changeOfAddressDocument.filedBy).toBe('Resp.');
   });
 };

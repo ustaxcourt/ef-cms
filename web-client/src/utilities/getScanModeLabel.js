@@ -1,13 +1,11 @@
 /**
  * returns a formatted scan mode label based on the scanMode value
  *
- * @param {object} providers the providers object
- * @param {Function} providers.scanMode the scan mode
+ * @param {object} applicationContext the application context
+ * @param {string} scanMode the scan mode
  * @returns {string} the prettified scan mode label
- *
  */
-
-export default (applicationContext, scanMode) => {
+export const getScanModeLabel = (applicationContext, scanMode) => {
   const { SCAN_MODES } = applicationContext.getConstants();
   let scanModeLabel = '';
 

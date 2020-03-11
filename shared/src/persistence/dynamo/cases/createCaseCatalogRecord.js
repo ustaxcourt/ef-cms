@@ -12,7 +12,7 @@ exports.createCaseCatalogRecord = async ({ applicationContext, caseId }) => {
     Item: {
       caseId: caseId,
       pk: 'catalog',
-      sk: `case-${caseId}`,
+      sk: `case|${caseId}`,
     },
     applicationContext,
   });

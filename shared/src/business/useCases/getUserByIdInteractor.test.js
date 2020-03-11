@@ -14,8 +14,8 @@ describe('getUserByIdInteractor', () => {
     });
     mockRetrievedUser = {
       name: 'Test Practitioner',
-      role: User.ROLES.practitioner,
-      section: 'practitioner',
+      role: User.ROLES.privatePractitioner,
+      section: 'privatePractitioner',
       userId: '4f67802c-1948-4749-b070-38f7316b15c5',
     };
 
@@ -66,8 +66,8 @@ describe('getUserByIdInteractor', () => {
 
     expect(user).toEqual({
       name: 'Test Practitioner',
-      role: User.ROLES.practitioner,
-      section: 'practitioner',
+      role: User.ROLES.privatePractitioner,
+      section: 'privatePractitioner',
       userId: '4f67802c-1948-4749-b070-38f7316b15c5',
     });
   });

@@ -21,10 +21,10 @@ export const submitCaseAssociationRequestAction = async ({
     ...documentMetadata,
     caseId,
     docketNumber,
-    practitioner: [
+    privatePractitioners: [
       {
         ...user,
-        partyPractitioner: documentMetadata.partyPractitioner,
+        partyPrivatePractitioner: documentMetadata.partyPrivatePractitioner,
       },
     ],
   };

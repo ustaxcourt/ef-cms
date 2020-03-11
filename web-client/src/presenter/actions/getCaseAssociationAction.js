@@ -3,7 +3,7 @@ import { state } from 'cerebral';
 
 /**
  * Determines if the user is associated with the case or not, and if there is a
- * pending association to the case for practitioners
+ * pending association to the case for privatePractitioners
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function to retrieve state values
@@ -16,8 +16,8 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   let isAssociated = false;
   let pendingAssociation = false;
 
-  if (user.role === USER_ROLES.practitioner) {
-    const caseDetailPractitioners = get(state.caseDetail.practitioners);
+  if (user.role === USER_ROLES.privatePractitioner) {
+    const caseDetailPractitioners = get(state.caseDetail.privatePractitioners);
     const caseId = get(state.caseDetail.caseId);
 
     isAssociated = some(caseDetailPractitioners, { userId: user.userId });
@@ -31,8 +31,8 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
           userId: user.userId,
         });
     }
-  } else if (user.role === USER_ROLES.respondent) {
-    const caseDetailRespondents = get(state.caseDetail.respondents);
+  } else if (user.role === USER_ROLES.irsPractitioner) {
+    const caseDetailRespondents = get(state.caseDetail.irsPractitioners);
     isAssociated = some(caseDetailRespondents, { userId: user.userId });
   } else if (user.role === USER_ROLES.petitioner) {
     const caseUserId = get(state.caseDetail.userId);

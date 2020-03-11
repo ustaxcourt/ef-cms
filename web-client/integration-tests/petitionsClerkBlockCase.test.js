@@ -1,4 +1,7 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
+import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
+import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
+import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import {
   fakeFile,
   loginAs,
@@ -7,9 +10,6 @@ import {
   uploadProposedStipulatedDecision,
   viewCaseDetail,
 } from './helpers';
-import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
-import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
-import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionsClerkBlocksCase from './journey/petitionsClerkBlocksCase';
 import petitionsClerkCreatesACaseDeadline from './journey/petitionsClerkCreatesACaseDeadline';
@@ -53,7 +53,7 @@ describe('Blocking a Case', () => {
   petitionsClerkUnblocksCase(test, trialLocation);
   petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
 
-  //automatic block with a due date
+  // //automatic block with a due date
   petitionsClerkCreatesACaseDeadline(test);
   it('petitions clerk views blocked report with an automatically blocked case for due date', async () => {
     await refreshElasticsearchIndex();
@@ -79,7 +79,7 @@ describe('Blocking a Case', () => {
   petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
 
   //automatic block with a pending item
-  loginAs(test, 'respondent');
+  loginAs(test, 'irsPractitioner');
 
   it('respondent uploads a proposed stipulated decision (pending item)', async () => {
     await viewCaseDetail({

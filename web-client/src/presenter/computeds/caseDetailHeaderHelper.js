@@ -15,7 +15,9 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);
   const caseHasRespondent =
-    !!caseDetail && !!caseDetail.respondents && !!caseDetail.respondents.length;
+    !!caseDetail &&
+    !!caseDetail.irsPractitioners &&
+    !!caseDetail.irsPractitioners.length;
   const currentPage = get(state.currentPage);
   const isRequestAccessForm = currentPage === 'RequestAccessWizard';
 
@@ -26,11 +28,11 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   let showFileFirstDocumentButton = false;
 
   if (isExternalUser && !userAssociatedWithCase) {
-    if (user.role === USER_ROLES.practitioner) {
+    if (user.role === USER_ROLES.privatePractitioner) {
       showRequestAccessToCaseButton =
         !pendingAssociation && !isRequestAccessForm && !isCaseSealed;
       showPendingAccessToCaseButton = pendingAssociation;
-    } else if (user.role === USER_ROLES.respondent) {
+    } else if (user.role === USER_ROLES.irsPractitioner) {
       showFileFirstDocumentButton = !caseHasRespondent && !isCaseSealed;
       showRequestAccessToCaseButton =
         caseHasRespondent && !isRequestAccessForm && !isCaseSealed;

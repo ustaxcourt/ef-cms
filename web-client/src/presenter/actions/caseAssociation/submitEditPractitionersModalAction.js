@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * submits the edit practitioners modal, removing and/or updating the practitioners on the case
+ * submits the edit privatePractitioners modal, removing and/or updating the privatePractitioners on the case
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
@@ -17,9 +17,9 @@ export const submitEditPractitionersModalAction = async ({
   const form = get(state.modal);
   const caseId = get(state.caseDetail.caseId);
 
-  const { practitioners } = form;
+  const { privatePractitioners } = form;
 
-  for (const practitioner of practitioners) {
+  for (const practitioner of privatePractitioners) {
     if (practitioner.removeFromCase) {
       await applicationContext.getUseCases().deleteCounselFromCaseInteractor({
         applicationContext,

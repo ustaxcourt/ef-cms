@@ -4,7 +4,9 @@ export default (test, createdDocketNumberIndex) => {
       docketNumber: test.createdDocketNumbers[createdDocketNumberIndex],
     });
 
-    expect(test.getState('caseDetail.practitioners.0.contact')).toMatchObject({
+    expect(
+      test.getState('caseDetail.privatePractitioners.0.contact'),
+    ).toMatchObject({
       address1: test.updatedPractitionerAddress,
     });
 
@@ -20,9 +22,11 @@ export default (test, createdDocketNumberIndex) => {
       'Notice of Change of Address',
     );
     expect(changeOfAddressDocument.additionalInfo).toBe(
-      'for Test Practitioner',
+      'for Test Private Practitioner',
     );
-    expect(changeOfAddressDocument.filedBy).toBe('Counsel Test Practitioner');
+    expect(changeOfAddressDocument.filedBy).toBe(
+      'Counsel Test Private Practitioner',
+    );
 
     expect(changeOfAddressDocument).toBeDefined();
   });

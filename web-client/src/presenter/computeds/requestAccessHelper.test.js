@@ -16,7 +16,9 @@ const requestAccessHelper = withAppContextDecorator(
   applicationContext,
 );
 
-applicationContext.getCurrentUser = () => ({ role: User.ROLES.practitioner });
+applicationContext.getCurrentUser = () => ({
+  role: User.ROLES.privatePractitioner,
+});
 
 describe('requestAccessHelper', () => {
   beforeEach(() => {
@@ -62,7 +64,7 @@ describe('requestAccessHelper', () => {
     expect(result.partyValidationError).toBeUndefined();
   });
 
-  it('does not show exhibits for document inclusion for practitioners', () => {
+  it('does not show exhibits for document inclusion for privatePractitioners', () => {
     const result = runCompute(requestAccessHelper, {
       state: {
         ...state,
@@ -87,7 +89,9 @@ describe('requestAccessHelper', () => {
   });
 
   it('returns correct number of document options for user role respondent', () => {
-    applicationContext.getCurrentUser = () => ({ role: User.ROLES.respondent });
+    applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.irsPractitioner,
+    });
     const result = runCompute(requestAccessHelper, { state });
     expect(result.documents.length).toEqual(2);
   });

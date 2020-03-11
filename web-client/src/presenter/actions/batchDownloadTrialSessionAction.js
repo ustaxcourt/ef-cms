@@ -1,5 +1,5 @@
 /**
- * submits the edit respondents modal, removing the selected respondents from the case
+ * submits the edit irsPractitioners modal, removing the selected irsPractitioners from the case
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext contains the batchDownloadTrialSessionInteractor method we will need from the getUseCases method

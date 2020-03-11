@@ -7,6 +7,25 @@ const applicationContext = {
 };
 
 describe('DocketRecord', () => {
+  it('fails if applicationContext is not passed into the entity', () => {
+    let error;
+    let docketRecord;
+
+    try {
+      docketRecord = new DocketRecord({
+        description: 'Test Docket Record',
+        eventCode: 'O',
+        filingDate: new Date('9000-01-01').toISOString(),
+        index: 0,
+      });
+    } catch (e) {
+      error = e;
+    }
+
+    expect(error).toBeDefined();
+    expect(docketRecord).toBeUndefined();
+  });
+
   describe('validation', () => {
     it('fails validation if a filingDate is in the future.', () => {
       expect(
