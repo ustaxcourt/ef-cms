@@ -1,9 +1,10 @@
-export default (test, message) => {
+export default (test, message, createdCases) => {
   return it('Petitions clerk sends message to judgeArmen', async () => {
-    const workItem = test.petitionerNewCases[0].documents[0].workItems[0];
+    const workItem = createdCases[0].documents[0].workItems[0];
+
     await test.runSequence('gotoDocumentDetailSequence', {
-      docketNumber: test.petitionerNewCases[0].docketNumber,
-      documentId: test.petitionerNewCases[0].documents[0].documentId,
+      docketNumber: createdCases[0].docketNumber,
+      documentId: createdCases[0].documents[0].documentId,
     });
 
     // judgeArmen

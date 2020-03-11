@@ -7,7 +7,7 @@ import { runAction } from 'cerebral/test';
 presenter.providers.applicationContext = {
   getCurrentUser: () => {
     return {
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: '123',
     };
   },

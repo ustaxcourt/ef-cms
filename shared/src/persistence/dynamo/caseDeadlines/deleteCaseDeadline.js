@@ -16,14 +16,12 @@ exports.deleteCaseDeadline = async ({
 }) => {
   const results = [];
 
-  const fullCaseDeadlineId = `case-deadline-${caseDeadlineId}`;
-
   results.push(
     await client.delete({
       applicationContext,
       key: {
-        pk: fullCaseDeadlineId,
-        sk: fullCaseDeadlineId,
+        pk: `case-deadline|${caseDeadlineId}`,
+        sk: `case-deadline|${caseDeadlineId}`,
       },
     }),
   );
@@ -32,8 +30,8 @@ exports.deleteCaseDeadline = async ({
     await client.delete({
       applicationContext,
       key: {
-        pk: `${caseId}|case-deadline`,
-        sk: fullCaseDeadlineId,
+        pk: `case|${caseId}`,
+        sk: `case-deadline|${caseDeadlineId}`,
       },
     }),
   );
@@ -43,7 +41,7 @@ exports.deleteCaseDeadline = async ({
       applicationContext,
       key: {
         pk: 'case-deadline-catalog',
-        sk: fullCaseDeadlineId,
+        sk: `case-deadline|${caseDeadlineId}`,
       },
     }),
   );

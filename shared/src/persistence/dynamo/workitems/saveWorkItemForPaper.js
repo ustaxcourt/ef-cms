@@ -1,6 +1,3 @@
-const {
-  createMappingRecord,
-} = require('../../dynamo/helpers/createMappingRecord');
 const { createSectionInboxRecord } = require('./createSectionInboxRecord');
 const { createUserInboxRecord } = require('./createUserInboxRecord');
 const { put } = require('../../dynamodbClientService');
@@ -17,25 +14,23 @@ exports.saveWorkItemForPaper = async ({ applicationContext, workItem }) => {
   // Warning - do not use Promise.all() as it seems to cause intermittent failures
   await put({
     Item: {
-      pk: `workitem-${workItem.workItemId}`,
-      sk: `workitem-${workItem.workItemId}`,
+      pk: `work-item|${workItem.workItemId}`,
+      sk: `work-item|${workItem.workItemId}`,
       ...workItem,
     },
     applicationContext,
   });
-
-  await createMappingRecord({
+  await put({
+    Item: {
+      pk: `case|${workItem.caseId}`,
+      sk: `work-item|${workItem.workItemId}`,
+    },
     applicationContext,
-    pkId: workItem.caseId,
-    skId: workItem.workItemId,
-    type: 'workItem',
   });
-
   await createUserInboxRecord({
     applicationContext,
     workItem,
   });
-
   await createSectionInboxRecord({
     applicationContext,
     workItem,

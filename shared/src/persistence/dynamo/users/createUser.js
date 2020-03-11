@@ -1,7 +1,4 @@
 const client = require('../../dynamodbClientService');
-const {
-  createMappingRecord,
-} = require('../../dynamo/helpers/createMappingRecord');
 const { User } = require('../../../business/entities/User');
 
 exports.createUserRecords = async ({ applicationContext, user, userId }) => {
@@ -14,8 +11,8 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   if (user.section) {
     await client.put({
       Item: {
-        pk: `${user.section}|user`,
-        sk: userId,
+        pk: `section|${user.section}`,
+        sk: `user|${userId}`,
       },
       applicationContext,
     });
@@ -23,8 +20,8 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
     if (user.role === User.ROLES.judge) {
       await client.put({
         Item: {
-          pk: 'judge|user',
-          sk: userId,
+          pk: 'section|judge',
+          sk: `user|${userId}`,
         },
         applicationContext,
       });
@@ -33,8 +30,8 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 
   await client.put({
     Item: {
-      pk: userId,
-      sk: userId,
+      pk: `user|${userId}`,
+      sk: `user|${userId}`,
       ...user,
       userId,
     },
@@ -42,23 +39,24 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   });
 
   if (
-    (user.role === User.ROLES.practitioner ||
-      user.role === User.ROLES.respondent) &&
+    (user.role === User.ROLES.privatePractitioner ||
+      user.role === User.ROLES.irsPractitioner) &&
     user.name &&
     user.barNumber
   ) {
-    await createMappingRecord({
+    await client.put({
+      Item: {
+        pk: `${user.role}|${user.name}`,
+        sk: `user|${userId}`,
+      },
       applicationContext,
-      pkId: user.name,
-      skId: userId,
-      type: user.role,
     });
-
-    await createMappingRecord({
+    await client.put({
+      Item: {
+        pk: `${user.role}|${user.barNumber}`,
+        sk: `user|${userId}`,
+      },
       applicationContext,
-      pkId: user.barNumber,
-      skId: userId,
-      type: user.role,
     });
   }
 

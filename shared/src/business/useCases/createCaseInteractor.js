@@ -104,7 +104,7 @@ exports.createCaseInteractor = async ({
   );
 
   let practitioners = [];
-  if (user.role === User.ROLES.practitioner) {
+  if (user.role === User.ROLES.privatePractitioner) {
     const practitionerUser = await applicationContext
       .getPersistenceGateway()
       .getUserById({

@@ -28,8 +28,8 @@ describe('deleteWorkItemFromSection', () => {
     });
     expect(deleteStub.getCall(0).args[0]).toMatchObject({
       Key: {
-        pk: 'section-irsHoldingQueue',
-        sk: 'workitem-123',
+        pk: 'section|irsHoldingQueue',
+        sk: 'work-item|123',
       },
     });
   });

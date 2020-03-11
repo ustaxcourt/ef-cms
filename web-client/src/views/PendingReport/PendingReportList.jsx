@@ -47,7 +47,7 @@ export const PendingReportList = connect(
         >
           <thead>
             <tr>
-              <th>Docket</th>
+              <th>Docket number</th>
               <th>Date filed</th>
               <th>Case title</th>
               <th>Filings and proceedings</th>

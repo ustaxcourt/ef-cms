@@ -1,78 +1,6 @@
 [
   {
     "procedureType": "Regular",
-    "documents": [
-      {
-        "createdAt": "2019-03-05T17:34:13.490Z",
-        "filingDate": "2019-03-05T17:34:13.490Z",
-        "documentType": "Petition",
-        "documentTitle": "Petition",
-        "filedBy": "Test Petitioner",
-        "processingStatus": "complete",
-        "workItems": [
-          {
-            "docketNumberSuffix": null,
-            "caseStatus": "New",
-            "caseIsInProgress": false,
-            "document": {
-              "createdAt": "2019-03-05T17:34:13.490Z",
-              "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
-              "documentTitle": "Petition",
-              "documentType": "Petition",
-              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-              "filedBy": "Test Petitioner",
-              "workItems": []
-            },
-            "section": "petitions",
-            "workItemId": "e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
-            "isQC": true,
-            "isInitializeCase": true,
-            "assigneeId": null,
-            "sentBy": "petitioner",
-            "createdAt": "2019-03-05T17:34:13.490Z",
-            "assigneeName": null,
-            "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-            "caseTitle": "Mufutau Wade",
-            "messages": [
-              {
-                "createdAt": "2019-03-05T17:34:13.490Z",
-                "messageId": "7092457a-33b0-4d0f-a4ba-07b2701196fc",
-                "message": "Petition filed by Mufutau Wade is ready for review.",
-                "from": "Test Petitioner",
-                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-              }
-            ],
-            "docketNumber": "104-19",
-            "updatedAt": "2019-03-05T17:34:13.490Z"
-          }
-        ],
-        "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-        "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      },
-      {
-        "processingStatus": "complete",
-        "createdAt": "2019-03-05T17:34:13.491Z",
-        "filingDate": "2019-03-05T17:34:13.491Z",
-        "documentType": "Statement of Taxpayer Identification",
-        "filedBy": "Test Petitioner",
-        "workItems": [],
-        "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
-      },
-      {
-        "processingStatus": "complete",
-        "createdAt": "2019-03-05T17:34:13.491Z",
-        "filingDate": "2019-03-05T17:34:13.491Z",
-        "documentType": "Ownership Disclosure Statement",
-        "filedBy": "Test Petitioner",
-        "workItems": [],
-        "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-        "documentId": "add36745-8e77-450b-a8dd-6f34272fe1d5",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "irsNoticeDate": null,
     "orderForFilingFee": true,
     "partyType": "Corporation",
@@ -96,7 +24,7 @@
     "receivedAt": "2019-03-05T17:34:13.490Z",
     "noticeOfAttachments": true,
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "sk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "sk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "filingType": "A business",
     "orderForOds": true,
     "orderForRatification": true,
@@ -122,7 +50,7 @@
     "orderToShowCause": true,
     "preferredTrialCity": "Birmingham, Alabama",
     "orderForAmendedPetitionAndFilingFee": true,
-    "pk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "pk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "businessType": "Corporation",
     "docketNumber": "104-19",
     "status": "New",
@@ -160,17 +88,17 @@
     "sk": "docket-record|3ca965eb-98e4-41ab-a091-da592462b709"
   },
   {
-    "sk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "sk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "pk": "104-19|case"
+    "sk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "pk": "case-by-docket-number|104-19"
   },
   {
-    "sk": "workitem-e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
-    "gsi1pk": "workitem-e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
-    "pk": "section-petitions",
+    "sk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "gsi1pk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "pk": "section|petitions",
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -208,9 +136,9 @@
     "updatedAt": "2019-03-05T17:34:13.490Z"
   },
   {
-    "sk": "workitem-e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
-    "pk": "workitem-e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
-    "gsi1pk": "workitem-e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "sk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "pk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "gsi1pk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -253,27 +181,27 @@
     "docketNumber": "104-19",
     "deadlineDate": "2019-08-25T04:00:00.000Z",
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "sk": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "sk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
     "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
     "description": "Final status report due to Judge Ashford",
-    "pk": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057"
+    "pk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057"
   },
   {
-    "sk": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "pk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05|case-deadline"
+    "sk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "pk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05"
   },
   {
-    "sk": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "pk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05|case-deadline"
+    "sk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "pk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05"
   },
   {
-    "caseDeadlineId": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "sk": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "sk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
     "pk": "case-deadline-catalog"
   },
   {
-    "caseDeadlineId": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "sk": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "sk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
     "pk": "case-deadline-catalog"
   },
   {
@@ -282,14 +210,96 @@
     "createdAt": "2019-08-22T12:46:01.052Z",
     "deadlineDate": "2019-08-22T04:00:00.000Z",
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "sk": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "sk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
     "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
     "description": "Pre-trial memorandum due",
-    "pk": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa"
+    "pk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa"
   },
   {
     "sk": "case-5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "pk": "catalog"
+  },
+  {
+    "documentType": "Ownership Disclosure Statement",
+    "filingDate": "2019-03-05T17:34:13.491Z",
+    "workItems": [],
+    "pending": false,
+    "receivedAt": "2020-03-06T20:04:07.111Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-03-05T17:34:13.491Z",
+    "processingStatus": "complete",
+    "filedBy": "Test Petitioner",
+    "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "sk": "document|add36745-8e77-450b-a8dd-6f34272fe1d5",
+    "documentId": "add36745-8e77-450b-a8dd-6f34272fe1d5",
+    "pk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05"
+  },
+  {
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2019-03-05T17:34:13.491Z",
+    "workItems": [],
+    "pending": false,
+    "receivedAt": "2020-03-06T20:04:07.111Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-03-05T17:34:13.491Z",
+    "processingStatus": "complete",
+    "filedBy": "Test Petitioner",
+    "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
+    "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
+    "pk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05"
+  },
+  {
+    "documentType": "Petition",
+    "filingDate": "2019-03-05T17:34:13.490Z",
+    "workItems": [
+      {
+        "associatedJudge": "Chief Judge",
+        "docketNumberSuffix": null,
+        "caseStatus": "New",
+        "caseIsInProgress": false,
+        "document": {
+          "createdAt": "2019-03-05T17:34:13.490Z",
+          "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
+          "documentTitle": "Petition",
+          "documentType": "Petition",
+          "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+          "filedBy": "Test Petitioner"
+        },
+        "caseTitle": "Mufutau Wade",
+        "section": "petitions",
+        "workItemId": "e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+        "isInitializeCase": true,
+        "assigneeId": null,
+        "isQC": true,
+        "sentBy": "petitioner",
+        "createdAt": "2019-03-05T17:34:13.490Z",
+        "assigneeName": null,
+        "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+        "messages": [
+          {
+            "createdAt": "2019-03-05T17:34:13.490Z",
+            "messageId": "7092457a-33b0-4d0f-a4ba-07b2701196fc",
+            "from": "Test Petitioner",
+            "message": "Petition filed by Mufutau Wade is ready for review.",
+            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+          }
+        ],
+        "docketNumber": "104-19",
+        "updatedAt": "2019-03-05T17:34:13.490Z"
+      }
+    ],
+    "pending": false,
+    "receivedAt": "2020-03-06T20:04:07.110Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-03-05T17:34:13.490Z",
+    "processingStatus": "complete",
+    "filedBy": "Test Petitioner",
+    "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "sk": "document|c63be3f2-2240-451e-b6bd-8206d52a070b",
+    "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
+    "pk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "documentTitle": "Petition"
   }
 ]

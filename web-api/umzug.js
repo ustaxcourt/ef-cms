@@ -33,6 +33,7 @@ const getMigrations = async () => {
 };
 
 const logMigration = async migrationName => {
+  console.log('Completed Migration: ' + migrationName);
   const migrations = await getMigrations();
   migrations.executed.push(migrationName);
   return documentClient
