@@ -1,31 +1,31 @@
 const {
-  AddRespondent,
-} = require('../../entities/caseAssociation/AddRespondent');
+  AddIrsPractitioner,
+} = require('../../entities/caseAssociation/AddIrsPractitioner');
 const {
-  validateAddRespondentInteractor,
-} = require('./validateAddRespondentInteractor');
+  validateAddIrsPractitionerInteractor,
+} = require('./validateAddIrsPractitionerInteractor');
 
-describe('validateAddRespondentInteractor', () => {
+describe('validateAddIrsPractitionerInteractor', () => {
   it('returns the expected errors object on an empty add respondent', () => {
-    const errors = validateAddRespondentInteractor({
+    const errors = validateAddIrsPractitionerInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
-          AddRespondent,
+          AddIrsPractitioner,
         }),
       },
       counsel: {},
     });
 
     expect(Object.keys(errors)).toEqual(
-      Object.keys(AddRespondent.VALIDATION_ERROR_MESSAGES),
+      Object.keys(AddIrsPractitioner.VALIDATION_ERROR_MESSAGES),
     );
   });
 
   it('returns null when no errors occur', () => {
-    const errors = validateAddRespondentInteractor({
+    const errors = validateAddIrsPractitionerInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
-          AddRespondent,
+          AddIrsPractitioner,
         }),
       },
       counsel: { representingPrimary: true, user: {} },

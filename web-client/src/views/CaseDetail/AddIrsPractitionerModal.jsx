@@ -6,14 +6,14 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const AddRespondentModal = connect(
+export const AddIrsPractitionerModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
     caseDetailHelper: state.caseDetailHelper,
     confirmSequence: sequences.associateIrsPractitionerWithCaseSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
-    validateSequence: sequences.validateAddRespondentSequence,
+    validateSequence: sequences.validateAddIrsPractitionerSequence,
     validationErrors: state.validationErrors,
   },
   ({

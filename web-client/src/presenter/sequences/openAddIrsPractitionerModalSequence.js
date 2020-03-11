@@ -8,20 +8,22 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const openAddRespondentModalSequence = showProgressSequenceDecorator([
-  clearAlertsAction,
-  clearModalStateAction,
-  setDefaultServiceIndicatorAction('modal'),
-  getIrsPractitionersBySearchKeyAction,
-  {
-    error: [setValidationErrorsAction],
-    success: [
-      setRespondentsAction,
-      isRespondentInCaseAction,
-      {
-        no: [setShowModalFactoryAction('AddRespondentModal')],
-        yes: [setShowModalFactoryAction('RespondentExistsModal')],
-      },
-    ],
-  },
-]);
+export const openAddIrsPractitionerModalSequence = showProgressSequenceDecorator(
+  [
+    clearAlertsAction,
+    clearModalStateAction,
+    setDefaultServiceIndicatorAction('modal'),
+    getIrsPractitionersBySearchKeyAction,
+    {
+      error: [setValidationErrorsAction],
+      success: [
+        setRespondentsAction,
+        isRespondentInCaseAction,
+        {
+          no: [setShowModalFactoryAction('AddIrsPractitionerModal')],
+          yes: [setShowModalFactoryAction('RespondentExistsModal')],
+        },
+      ],
+    },
+  ],
+);
