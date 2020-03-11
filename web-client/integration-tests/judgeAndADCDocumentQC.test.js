@@ -44,6 +44,7 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
     it(`Create case ${index}`, async () => {
       let caseDetail = await uploadPetition(test);
       test.createdCases.push(caseDetail.docketNumber);
+      test.docketNumber = caseDetail.docketNumber;
     });
     petitionerFilesDocumentForCase(test, fakeFile);
   }

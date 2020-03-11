@@ -1,4 +1,3 @@
-import { captureCreatedCase } from './journey/captureCreatedCase';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
@@ -43,7 +42,6 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
       createdCaseIds.push(caseDetail.caseId);
       createdDocketNumbers.push(caseDetail.docketNumber);
     });
-    petitionerViewsDashboard(test);
 
     loginAs(test, 'petitionsclerk');
     petitionsClerkSubmitsCaseToIrs(test);

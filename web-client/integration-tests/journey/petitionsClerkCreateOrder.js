@@ -3,6 +3,10 @@ import { first } from 'lodash';
 
 export default test => {
   return it('Petitions clerk adds Order to case', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
     await test.runSequence('updateCreateOrderModalFormValueSequence', {
       key: 'eventCode',
       value: 'O',

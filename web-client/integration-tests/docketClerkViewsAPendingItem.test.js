@@ -30,20 +30,18 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     };
   });
 
-  let docketNumber = null;
   let caseDetail;
   let pendingItemsCount;
 
   loginAs(test, 'petitioner');
   it('login as a petitioner and create a case', async () => {
     caseDetail = await uploadPetition(test);
-    ({ docketNumber } = caseDetail.docketNumber);
   });
 
   loginAs(test, 'docketclerk');
   it('login as a docket clerk and check pending items count', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber,
+      docketNumber: caseDetail.docketNumber,
     });
     const formatted = runCompute(formattedCaseDetail, {
       state: test.getState(),

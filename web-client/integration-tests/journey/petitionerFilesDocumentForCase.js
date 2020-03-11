@@ -2,10 +2,6 @@ import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities
 
 export default (test, fakeFile) => {
   return it('petitioner files document for case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
     await test.runSequence('gotoFileDocumentSequence', {
       docketNumber: test.docketNumber,
     });

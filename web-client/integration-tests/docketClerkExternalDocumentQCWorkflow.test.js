@@ -55,6 +55,10 @@ describe('Create a work item', () => {
   });
 
   it('petitioner uploads the external documents', async () => {
+    await test.runSequence('gotoFileDocumentSequence', {
+      docketNumber: caseDetail.docketNumber,
+    });
+
     await uploadExternalDecisionDocument(test);
     await uploadExternalDecisionDocument(test);
     await uploadExternalDecisionDocument(test);

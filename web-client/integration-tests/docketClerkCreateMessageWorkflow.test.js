@@ -46,6 +46,10 @@ describe('a docketclerk user creates a new message for another docketclerk user'
   });
 
   it('petitioner uploads the external documents', async () => {
+    await test.runSequence('gotoFileDocumentSequence', {
+      docketNumber: caseDetail.docketNumber,
+    });
+
     await uploadExternalDecisionDocument(test);
   });
 

@@ -6,7 +6,6 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
-import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
 import trialClerkAddsNotesFromWorkingCopyCaseList from './journey/trialClerkAddsNotesFromWorkingCopyCaseList';
 import trialClerkViewsNotesFromCaseDetail from './journey/trialClerkViewsNotesFromCaseDetail';
 import trialClerkViewsTrialSessionWorkingCopy from './journey/trialClerkViewsTrialSessionWorkingCopy';
@@ -53,7 +52,6 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   });
 
   loginAs(test, 'petitionsclerk');
-  petitionsClerkUpdatesFiledBy(test, caseOverrides);
   petitionsClerkSubmitsCaseToIrs(test);
 
   loginAs(test, 'docketclerk');

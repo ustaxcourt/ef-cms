@@ -7,7 +7,6 @@ import { loginAs, setupTest, uploadPetition, wait } from './helpers';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
-import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
 
 const test = setupTest();
 
@@ -56,7 +55,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       });
 
       loginAs(test, 'petitionsclerk');
-      petitionsClerkUpdatesFiledBy(test, caseOverrides);
       petitionsClerkSubmitsCaseToIrs(test);
 
       loginAs(test, 'docketclerk');
@@ -81,7 +79,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       });
 
       loginAs(test, 'petitionsclerk');
-      petitionsClerkUpdatesFiledBy(test, caseOverrides);
       petitionsClerkSubmitsCaseToIrs(test);
 
       loginAs(test, 'docketclerk');
@@ -106,7 +103,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       });
 
       loginAs(test, 'petitionsclerk');
-      petitionsClerkUpdatesFiledBy(test, caseOverrides);
       petitionsClerkSubmitsCaseToIrs(test);
 
       loginAs(test, 'docketclerk');
@@ -131,7 +127,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       });
 
       loginAs(test, 'petitionsclerk');
-      petitionsClerkUpdatesFiledBy(test, caseOverrides);
       petitionsClerkSubmitsCaseToIrs(test);
 
       loginAs(test, 'docketclerk');
@@ -156,7 +151,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       });
 
       loginAs(test, 'petitionsclerk');
-      petitionsClerkUpdatesFiledBy(test, caseOverrides);
       petitionsClerkSubmitsCaseToIrs(test);
 
       loginAs(test, 'docketclerk');
@@ -385,7 +379,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
 
       await test.runSequence('addCaseToTrialSessionSequence');
-      await wait(1000);
 
       expect(test.getState('validationErrors')).toEqual({
         trialSessionId: 'Select a Trial Session',
