@@ -37,8 +37,8 @@ describe('deleteCounselFromCaseInteractor', () => {
         getCaseByCaseId: ({ caseId }) => ({
           ...MOCK_CASE,
           caseId,
-          privatePractitioners: mockPractitioners,
           irsPractitioners: mockRespondents,
+          privatePractitioners: mockPractitioners,
         }),
         getUserById: ({ userId }) => {
           return mockPractitioners
