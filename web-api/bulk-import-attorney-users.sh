@@ -10,4 +10,4 @@ USER_POOL_ID="${USER_POOL_ID#\"}"
 ENV=${ENV} STAGE=${ENV} REGION=${REGION} DYNAMODB_ENDPOINT=dynamodb.${REGION}.amazonaws.com \
 S3_ENDPOINT=s3.${REGION}.amazonaws.com DOCUMENTS_BUCKET_NAME=ustc-case-mgmt.flexion.us-documents-${ENV}-${REGION} \
 USER_POOL_ID=${USER_POOL_ID} \
-node ./bulkImportAttorneyUsers.js ${FILE_NAME}
+node ./bulkImportAttorneyUsers.js ${FILE_NAME} >> bulk-import-log.txt
