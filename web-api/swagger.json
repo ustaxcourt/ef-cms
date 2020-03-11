@@ -4592,7 +4592,7 @@
         }
       }
     },
-    "/case-parties/{caseId}/associate-practitioner": {
+    "/case-parties/{caseId}/associate-private-practitioner": {
       "parameters": [
         {
           "name": "caseId",

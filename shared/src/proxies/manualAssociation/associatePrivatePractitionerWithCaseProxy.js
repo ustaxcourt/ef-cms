@@ -31,6 +31,6 @@ exports.associatePrivatePractitionerWithCaseInteractor = ({
       serviceIndicator,
       userId,
     },
-    endpoint: `/case-parties/${caseId}/associate-practitioner`,
+    endpoint: `/case-parties/${caseId}/associate-private-practitioner`,
   });
 };

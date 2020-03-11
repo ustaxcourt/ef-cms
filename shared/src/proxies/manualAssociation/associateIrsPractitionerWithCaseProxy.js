@@ -19,6 +19,6 @@ exports.associateIrsPractitionerWithCaseInteractor = ({
   return post({
     applicationContext,
     body: { caseId, serviceIndicator, userId },
-    endpoint: `/case-parties/${caseId}/associate-respondent`,
+    endpoint: `/case-parties/${caseId}/associate-irs-practitioner`,
   });
 };

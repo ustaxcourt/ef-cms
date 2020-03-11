@@ -134,7 +134,7 @@ EOF
 EOF
 )
 
-    curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/case-parties/${caseId}/associate-practitioner" \
+    curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/case-parties/${caseId}/associate-private-practitioner" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8' \
@@ -166,7 +166,7 @@ EOF
 EOF
 )
 
-    curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/case-parties/${caseId}/associate-respondent" \
+    curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/case-parties/${caseId}/associate-irs-practitioner" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8' \
