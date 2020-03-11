@@ -39,7 +39,7 @@ export default test => {
       value: true,
     });
 
-    await test.runSequence('associatePractitionerWithCaseSequence');
+    await test.runSequence('associatePrivatePractitionerWithCaseSequence');
 
     expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(1);
     expect(
@@ -76,7 +76,7 @@ export default test => {
       value: true,
     });
 
-    await test.runSequence('associatePractitionerWithCaseSequence');
+    await test.runSequence('associatePrivatePractitionerWithCaseSequence');
     expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(2);
     expect(
       test.getState('caseDetail.privatePractitioners.1.representingSecondary'),

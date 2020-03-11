@@ -1,6 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { getRespondentsBySearchKeyAction } from '../actions/ManualAssociation/getRespondentsBySearchKeyAction';
+import { getIrsPractitionersBySearchKeyAction } from '../actions/ManualAssociation/getIrsPractitionersBySearchKeyAction';
 import { isRespondentInCaseAction } from '../actions/isRespondentInCaseAction';
 import { setDefaultServiceIndicatorAction } from '../actions/setDefaultServiceIndicatorAction';
 import { setRespondentsAction } from '../actions/ManualAssociation/setRespondentsAction';
@@ -12,7 +12,7 @@ export const openAddRespondentModalSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   clearModalStateAction,
   setDefaultServiceIndicatorAction('modal'),
-  getRespondentsBySearchKeyAction,
+  getIrsPractitionersBySearchKeyAction,
   {
     error: [setValidationErrorsAction],
     success: [

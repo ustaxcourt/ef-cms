@@ -1,6 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { getPractitionersBySearchKeyAction } from '../actions/ManualAssociation/getPractitionersBySearchKeyAction';
+import { getPrivatePractitionersBySearchKeyAction } from '../actions/ManualAssociation/getPrivatePractitionersBySearchKeyAction';
 import { isPractitionerInCaseAction } from '../actions/isPractitionerInCaseAction';
 import { setDefaultServiceIndicatorAction } from '../actions/setDefaultServiceIndicatorAction';
 import { setPractitionersAction } from '../actions/ManualAssociation/setPractitionersAction';
@@ -12,7 +12,7 @@ export const openAddPractitionerModalSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   clearModalStateAction,
   setDefaultServiceIndicatorAction('modal'),
-  getPractitionersBySearchKeyAction,
+  getPrivatePractitionersBySearchKeyAction,
   {
     error: [setValidationErrorsAction],
     success: [
