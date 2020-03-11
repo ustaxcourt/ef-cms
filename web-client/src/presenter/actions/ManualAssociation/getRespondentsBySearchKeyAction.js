@@ -1,10 +1,10 @@
 import { state } from 'cerebral';
 
-/* * Gets respondents whose name or barNumber match the searchKey
+/* * Gets irsPractitioners whose name or barNumber match the searchKey
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting the getRespondentsBySearchKeyInteractor use case
- * @returns {object} contains the respondents returned from the getRespondentsBySearchKeyInteractor use case
+ * @returns {object} contains the irsPractitioners returned from the getRespondentsBySearchKeyInteractor use case
  */
 export const getRespondentsBySearchKeyAction = async ({
   applicationContext,
@@ -13,13 +13,13 @@ export const getRespondentsBySearchKeyAction = async ({
 }) => {
   const searchKey = get(state.form.respondentSearch);
 
-  const respondents = await applicationContext
+  const irsPractitioners = await applicationContext
     .getUseCases()
     .getRespondentsBySearchKeyInteractor({ applicationContext, searchKey });
 
-  if (respondents.length) {
+  if (irsPractitioners.length) {
     return path.success({
-      respondents,
+      irsPractitioners,
     });
   } else {
     return path.error({

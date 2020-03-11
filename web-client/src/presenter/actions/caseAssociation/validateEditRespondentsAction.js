@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * validates the respondents on the modal form for the edit counsel modal
+ * validates the irsPractitioners on the modal form for the edit counsel modal
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function used for getting state.modal
@@ -10,14 +10,14 @@ import { state } from 'cerebral';
  * @returns {object} the next path based on if validation was successful or error
  */
 export const validateEditRespondentsAction = ({ get, path }) => {
-  const { respondents } = get(state.modal);
-  const { respondents: oldRespondents } = get(state.caseDetail);
+  const { irsPractitioners } = get(state.modal);
+  const { irsPractitioners: oldRespondents } = get(state.caseDetail);
 
   const serviceIndicatorError =
     'You cannot change from paper to electronic service. Select a valid service preference.';
 
   const errors = [];
-  respondents.forEach(respondent => {
+  irsPractitioners.forEach(respondent => {
     const error = {};
     const oldRespondent = oldRespondents.find(
       foundRespondent => foundRespondent.userId === respondent.userId,
@@ -39,7 +39,7 @@ export const validateEditRespondentsAction = ({ get, path }) => {
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
-      errors: { respondents: errors },
+      errors: { irsPractitioners: errors },
     });
   }
 };

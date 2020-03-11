@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * validates the practitioners on the modal form for the edit counsel modal
+ * validates the privatePractitioners on the modal form for the edit counsel modal
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
@@ -15,8 +15,8 @@ export const validateEditPractitionersAction = ({
   get,
   path,
 }) => {
-  const { practitioners } = get(state.modal);
-  const { practitioners: oldPractitioners } = get(state.caseDetail);
+  const { privatePractitioners } = get(state.modal);
+  const { privatePractitioners: oldPractitioners } = get(state.caseDetail);
 
   const serviceIndicatorError = {
     serviceIndicator:
@@ -24,7 +24,7 @@ export const validateEditPractitionersAction = ({
   };
 
   const errors = [];
-  practitioners.forEach(practitioner => {
+  privatePractitioners.forEach(practitioner => {
     let error = applicationContext
       .getUseCases()
       .validateEditPractitionerInteractor({
@@ -55,7 +55,7 @@ export const validateEditPractitionersAction = ({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
-      errors: { practitioners: errors },
+      errors: { privatePractitioners: errors },
     });
   }
 };

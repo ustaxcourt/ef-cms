@@ -32,14 +32,14 @@ describe('getCasePractitioners', () => {
     client.query.restore();
   });
 
-  it('retrieves the practitioners for a case', async () => {
+  it('retrieves the privatePractitioners for a case', async () => {
     const result = await getCasePractitioners({ applicationContext })({
       caseId: 'abc-123',
     });
 
     expect(result).toMatchObject({
       caseId: 'abc-123',
-      practitioners: [],
+      privatePractitioners: [],
     });
   });
 });

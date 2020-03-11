@@ -31,7 +31,7 @@ export const EditRespondentsModal = connect(
         title="Edit Respondent Counsel"
       >
         <div>
-          {modal.respondents.map((respondent, idx) => (
+          {modal.irsPractitioners.map((respondent, idx) => (
             <div
               className="border border-base-light padding-2 margin-bottom-2 grid-row"
               key={idx}
@@ -46,11 +46,11 @@ export const EditRespondentsModal = connect(
 
                 <div className="margin-top-2">
                   <ServiceIndicatorRadios
-                    bind={`modal.respondents.${idx}`}
+                    bind={`modal.irsPractitioners.${idx}`}
                     getValidationError={() =>
-                      validationErrors.respondents &&
-                      validationErrors.respondents[idx] &&
-                      validationErrors.respondents[idx].serviceIndicator
+                      validationErrors.irsPractitioners &&
+                      validationErrors.irsPractitioners[idx] &&
+                      validationErrors.irsPractitioners[idx].serviceIndicator
                     }
                     validateSequence={validateEditRespondentsSequence}
                   />
@@ -62,7 +62,7 @@ export const EditRespondentsModal = connect(
                     checked={respondent.removeFromCase || false}
                     className="usa-checkbox__input"
                     id={`remove-respondent-${idx}`}
-                    name={`respondents.${idx}.removeFromCase`}
+                    name={`irsPractitioners.${idx}.removeFromCase`}
                     type="checkbox"
                     onChange={e => {
                       updateModalValueSequence({

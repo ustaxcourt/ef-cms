@@ -14,6 +14,6 @@ exports.getPractitionersBySearchKeyInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/users/practitioners/search?searchKey=${searchKey}`,
+    endpoint: `/users/privatePractitioners/search?searchKey=${searchKey}`,
   });
 };

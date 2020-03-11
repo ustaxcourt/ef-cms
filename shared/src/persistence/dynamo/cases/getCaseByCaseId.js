@@ -53,27 +53,27 @@ exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
     applicationContext,
   });
 
-  const practitioners = await client.query({
+  const privatePractitioners = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
       ':pk': `case|${theCase.caseId}`,
-      ':prefix': 'practitioner',
+      ':prefix': 'privatePractitioner',
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
   });
 
-  const respondents = await client.query({
+  const irsPractitioners = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
       ':pk': `case|${theCase.caseId}`,
-      ':prefix': 'respondent',
+      ':prefix': 'irsPractitioner',
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
@@ -90,8 +90,7 @@ exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
     ...theCase,
     docketRecord: sortedDocketRecord,
     documents: sortedDocuments,
-    practitioners:
-      practitioners.length > 0 ? practitioners : theCase.practitioners, // this is temp until sesed data fixed
-    respondents: respondents.length > 0 ? respondents : theCase.respondents, // this is temp until sesed data fixed
+    irsPractitioners,
+    privatePractitioners,
   };
 };

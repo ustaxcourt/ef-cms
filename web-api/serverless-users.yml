@@ -351,7 +351,7 @@ functions:
     handler: web-api/${self:provider.dir}/usersHandlers.getPractitionersBySearchKeyLambda
     events:
       - http:
-          path: /practitioners/search
+          path: /privatePractitioners/search
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -363,7 +363,7 @@ functions:
     handler: web-api/${self:provider.dir}/usersHandlers.getRespondentsBySearchKeyLambda
     events:
       - http:
-          path: /respondents/search
+          path: /irsPractitioners/search
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

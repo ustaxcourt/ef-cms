@@ -6,12 +6,12 @@ export const caseInformationHelper = get => {
 
   const showEditPractitionersButton =
     permissions.ASSOCIATE_USER_WITH_CASE &&
-    caseDetail.practitioners &&
-    !!caseDetail.practitioners.length;
+    caseDetail.privatePractitioners &&
+    !!caseDetail.privatePractitioners.length;
   const showEditRespondentsButton =
     permissions.ASSOCIATE_USER_WITH_CASE &&
-    caseDetail.respondents &&
-    !!caseDetail.respondents.length;
+    caseDetail.irsPractitioners &&
+    !!caseDetail.irsPractitioners.length;
   const showAddCounsel = permissions.ASSOCIATE_USER_WITH_CASE;
   const showSealCaseButton = permissions.SEAL_CASE && !caseDetail.isSealed;
 

@@ -55,27 +55,27 @@ exports.getCaseByDocketNumber = async ({
     applicationContext,
   });
 
-  const practitioners = await client.query({
+  const privatePractitioners = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
       ':pk': `case|${theCase.caseId}`,
-      ':prefix': 'practitioner',
+      ':prefix': 'privatePractitioner',
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
   });
 
-  const respondents = await client.query({
+  const irsPractitioners = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
       ':pk': `case|${theCase.caseId}`,
-      ':prefix': 'respondent',
+      ':prefix': 'irsPractitioner',
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
@@ -88,7 +88,7 @@ exports.getCaseByDocketNumber = async ({
     ...theCase,
     docketRecord: sortedDocketRecord,
     documents: sortedDocuments,
-    practitioners,
-    respondents,
+    irsPractitioners,
+    privatePractitioners,
   };
 };

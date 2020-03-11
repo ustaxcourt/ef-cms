@@ -35,7 +35,7 @@ export const EditPractitionersModal = connect(
         title="Edit Petitioner Counsel"
       >
         <div>
-          {modal.practitioners.map((practitioner, idx) => (
+          {modal.privatePractitioners.map((practitioner, idx) => (
             <div
               className="border border-base-light padding-2 margin-bottom-2 grid-row"
               key={idx}
@@ -51,9 +51,10 @@ export const EditPractitionersModal = connect(
                   className="margin-bottom-0"
                   errorText={
                     validationErrors &&
-                    validationErrors.practitioners &&
-                    validationErrors.practitioners[idx] &&
-                    validationErrors.practitioners[idx].representingPrimary
+                    validationErrors.privatePractitioners &&
+                    validationErrors.privatePractitioners[idx] &&
+                    validationErrors.privatePractitioners[idx]
+                      .representingPrimary
                   }
                   id={`practitioner-representing-${idx}`}
                 >
@@ -70,7 +71,7 @@ export const EditPractitionersModal = connect(
                         checked={practitioner.representingPrimary || false}
                         className="usa-checkbox__input"
                         id={`representing-primary-${idx}`}
-                        name={`practitioners.${idx}.representingPrimary`}
+                        name={`privatePractitioners.${idx}.representingPrimary`}
                         type="checkbox"
                         onChange={e => {
                           updateModalValueSequence({
@@ -98,7 +99,7 @@ export const EditPractitionersModal = connect(
                             }
                             className="usa-checkbox__input"
                             id={`representing-secondary-${idx}`}
-                            name={`practitioners.${idx}.representingSecondary`}
+                            name={`privatePractitioners.${idx}.representingSecondary`}
                             type="checkbox"
                             onChange={e => {
                               updateModalValueSequence({
@@ -119,11 +120,12 @@ export const EditPractitionersModal = connect(
                   </fieldset>
                   <div className="margin-top-2">
                     <ServiceIndicatorRadios
-                      bind={`modal.practitioners.${idx}`}
+                      bind={`modal.privatePractitioners.${idx}`}
                       getValidationError={() =>
-                        validationErrors.practitioners &&
-                        validationErrors.practitioners[idx] &&
-                        validationErrors.practitioners[idx].serviceIndicator
+                        validationErrors.privatePractitioners &&
+                        validationErrors.privatePractitioners[idx] &&
+                        validationErrors.privatePractitioners[idx]
+                          .serviceIndicator
                       }
                       validateSequence={validateEditPractitionersSequence}
                     />
@@ -136,7 +138,7 @@ export const EditPractitionersModal = connect(
                     checked={practitioner.removeFromCase || false}
                     className="usa-checkbox__input"
                     id={`remove-practitioner-${idx}`}
-                    name={`practitioners.${idx}.removeFromCase`}
+                    name={`privatePractitioners.${idx}.removeFromCase`}
                     type="checkbox"
                     onChange={e => {
                       updateModalValueSequence({

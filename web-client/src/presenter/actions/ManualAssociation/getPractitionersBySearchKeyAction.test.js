@@ -31,7 +31,7 @@ describe('getPractitionersBySearchKeyAction', () => {
     };
   });
 
-  it('calls the use case to get the matching practitioners and calls the success path if practitioners are returned', async () => {
+  it('calls the use case to get the matching privatePractitioners and calls the success path if privatePractitioners are returned', async () => {
     await runAction(getPractitionersBySearchKeyAction, {
       modules: {
         presenter,
@@ -46,7 +46,7 @@ describe('getPractitionersBySearchKeyAction', () => {
     expect(errorStub.calledOnce).toEqual(false);
   });
 
-  it('calls the use case to get the matching practitioners and calls the error path if no practitioners are returned', async () => {
+  it('calls the use case to get the matching privatePractitioners and calls the error path if no privatePractitioners are returned', async () => {
     getPractitionersBySearchKeyInteractorStub = sinon.stub().resolves([]);
 
     await runAction(getPractitionersBySearchKeyAction, {
