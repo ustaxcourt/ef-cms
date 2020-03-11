@@ -1,6 +1,6 @@
 const {
-  EditPractitionerFactory,
-} = require('../../entities/caseAssociation/EditPractitionerFactory');
+  EditPrivatePractitionerFactory,
+} = require('../../entities/caseAssociation/EditPrivatePractitionerFactory');
 const {
   validateEditPractitionerInteractor,
 } = require('./validateEditPractitionerInteractor');
@@ -10,7 +10,7 @@ describe('validateEditPractitionerInteractor', () => {
     const errors = validateEditPractitionerInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
-          EditPractitionerFactory,
+          EditPrivatePractitionerFactory,
         }),
       },
       practitioner: {},
@@ -23,7 +23,7 @@ describe('validateEditPractitionerInteractor', () => {
     const errors = validateEditPractitionerInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
-          EditPractitionerFactory,
+          EditPrivatePractitionerFactory,
         }),
       },
       practitioner: { representingPrimary: true },

@@ -1,5 +1,8 @@
 const joi = require('@hapi/joi');
 const {
+  AddPrivatePractitionerFactory,
+} = require('./AddPrivatePractitionerFactory');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
@@ -10,12 +13,10 @@ const {
  *
  * @constructor
  */
-function AddPractitionerFactory() {}
+function EditPrivatePractitionerFactory() {}
 
-AddPractitionerFactory.VALIDATION_ERROR_MESSAGES = {
-  representingPrimary: 'Select a represented party',
-  representingSecondary: 'Select a represented party',
-  user: 'Select a petitioner counsel',
+EditPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES = {
+  ...AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES,
 };
 
 /**
@@ -23,18 +24,15 @@ AddPractitionerFactory.VALIDATION_ERROR_MESSAGES = {
  * @param {object} metadata the metadata
  * @returns {object} the instance
  */
-AddPractitionerFactory.get = metadata => {
+EditPrivatePractitionerFactory.get = metadata => {
   let entityConstructor = function(rawProps) {
     Object.assign(this, {
       representingPrimary: rawProps.representingPrimary,
       representingSecondary: rawProps.representingSecondary,
-      user: rawProps.user,
     });
   };
 
-  let schema = {
-    user: joi.object().required(),
-  };
+  let schema = {};
 
   let schemaOptionalItems = {
     representingPrimary: joi.boolean().invalid(false),
@@ -62,10 +60,10 @@ AddPractitionerFactory.get = metadata => {
     entityConstructor,
     schema,
     customValidate,
-    AddPractitionerFactory.VALIDATION_ERROR_MESSAGES,
+    EditPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES,
   );
 
   return new entityConstructor(metadata);
 };
 
-module.exports = { AddPractitionerFactory };
+module.exports = { EditPrivatePractitionerFactory };

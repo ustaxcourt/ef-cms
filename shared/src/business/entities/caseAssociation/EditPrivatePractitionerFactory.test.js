@@ -1,29 +1,32 @@
-const { AddPractitionerFactory } = require('./AddPractitionerFactory');
+const {
+  EditPrivatePractitionerFactory,
+} = require('./EditPrivatePractitionerFactory');
 
-const errorMessages = AddPractitionerFactory.VALIDATION_ERROR_MESSAGES;
+const errorMessages = EditPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES;
 
-describe('AddPractitioner', () => {
+describe('EditPrivatePractitionerFactory', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const entity = AddPractitionerFactory.get({});
+      const entity = EditPrivatePractitionerFactory.get({});
       expect(entity.getFormattedValidationErrors()).toEqual({
         representingPrimary: errorMessages.representingPrimary,
-        user: errorMessages.user,
       });
     });
 
-    it('should be valid when all fields are present', () => {
-      const entity = AddPractitionerFactory.get({
+    it('should be valid if either representingPrimary or representingSecondary is present and true', () => {
+      let entity = EditPrivatePractitionerFactory.get({
         representingPrimary: true,
-        user: { userId: 'abc' },
+      });
+      expect(entity.getFormattedValidationErrors()).toEqual(null);
+      entity = EditPrivatePractitionerFactory.get({
+        representingSecondary: true,
       });
       expect(entity.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should not be valid if representingPrimary is false and representingSecondary is not present', () => {
-      const entity = AddPractitionerFactory.get({
+      const entity = EditPrivatePractitionerFactory.get({
         representingPrimary: false,
-        user: { userId: 'abc' },
       });
       expect(entity.getFormattedValidationErrors()).toEqual({
         representingPrimary: errorMessages.representingPrimary,

@@ -8,25 +8,25 @@ const {
  * @param {object} rawProps the metadata
  * @constructor
  */
-function AddRespondent(rawProps) {
+function AddIrsPractitioner(rawProps) {
   Object.assign(this, {
     user: rawProps.user,
   });
 }
 
-AddRespondent.VALIDATION_ERROR_MESSAGES = {
+AddIrsPractitioner.VALIDATION_ERROR_MESSAGES = {
   user: 'Select a respondent counsel',
 };
 
-AddRespondent.schema = joi.object().keys({
+AddIrsPractitioner.schema = joi.object().keys({
   user: joi.object().required(),
 });
 
 joiValidationDecorator(
-  AddRespondent,
-  AddRespondent.schema,
+  AddIrsPractitioner,
+  AddIrsPractitioner.schema,
   undefined,
-  AddRespondent.VALIDATION_ERROR_MESSAGES,
+  AddIrsPractitioner.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { AddRespondent };
+module.exports = { AddIrsPractitioner };
