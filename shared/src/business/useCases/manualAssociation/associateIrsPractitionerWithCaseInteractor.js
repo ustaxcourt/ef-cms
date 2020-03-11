@@ -8,7 +8,7 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * associateRespondentWithCaseInteractor
+ * associateIrsPractitionerWithCaseInteractor
  *
  * @param {object} params the params object
  * @param {object} params.applicationContext the application context
@@ -17,7 +17,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} params.userId the user id
  * @returns {*} the result
  */
-exports.associateRespondentWithCaseInteractor = async ({
+exports.associateIrsPractitionerWithCaseInteractor = async ({
   applicationContext,
   caseId,
   serviceIndicator,

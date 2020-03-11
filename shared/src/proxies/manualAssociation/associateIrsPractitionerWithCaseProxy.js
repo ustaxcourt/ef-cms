@@ -1,7 +1,7 @@
 const { post } = require('../requests');
 
 /**
- * associateRespondentWithCaseInteractorProxy
+ * associateIrsPractitionerWithCaseInteractorProxy
  *
  * @param {object} params the params object
  * @param {object} params.applicationContext the application context
@@ -10,7 +10,7 @@ const { post } = require('../requests');
  * @param {string} params.userId the user id
  * @returns {Promise<*>} the promise of the api call
  */
-exports.associateRespondentWithCaseInteractor = ({
+exports.associateIrsPractitionerWithCaseInteractor = ({
   applicationContext,
   caseId,
   serviceIndicator,

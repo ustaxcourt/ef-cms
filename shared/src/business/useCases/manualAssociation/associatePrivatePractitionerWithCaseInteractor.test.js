@@ -4,7 +4,7 @@ const {
 } = require('./associatePrivatePractitionerWithCaseInteractor');
 const { User } = require('../../entities/User');
 
-describe('associateRespondentWithCaseInteractor', () => {
+describe('associatePrivatePractitionerWithCaseInteractor', () => {
   let applicationContext;
 
   let caseRecord = {

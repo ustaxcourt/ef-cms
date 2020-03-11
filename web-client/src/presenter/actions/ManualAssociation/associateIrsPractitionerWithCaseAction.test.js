@@ -1,16 +1,16 @@
 import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/cases/CaseConstants';
-import { associateRespondentWithCaseAction } from './associateRespondentWithCaseAction';
+import { associateIrsPractitionerWithCaseAction } from './associateIrsPractitionerWithCaseAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
 
-describe('associateRespondentWithCaseAction', () => {
-  it('should run associateRespondentWithCaseInteractor and success path', async () => {
+describe('associateIrsPractitionerWithCaseAction', () => {
+  it('should run associateIrsPractitionerWithCaseInteractor and success path', async () => {
     const successStub = sinon.stub();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        associateRespondentWithCaseInteractor: () =>
+        associateIrsPractitionerWithCaseInteractor: () =>
           'hello from associate respondent with case',
       }),
     };
@@ -19,7 +19,7 @@ describe('associateRespondentWithCaseAction', () => {
       success: successStub,
     };
 
-    await runAction(associateRespondentWithCaseAction, {
+    await runAction(associateIrsPractitionerWithCaseAction, {
       modules: {
         presenter,
       },

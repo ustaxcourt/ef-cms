@@ -1,4 +1,4 @@
-import { associateRespondentWithCaseAction } from '../../actions/ManualAssociation/associateRespondentWithCaseAction';
+import { associateIrsPractitionerWithCaseAction } from '../../actions/ManualAssociation/associateIrsPractitionerWithCaseAction';
 import { clearAlertsAction } from '../../actions/clearAlertsAction';
 import { clearFormAction } from '../../actions/clearFormAction';
 import { clearModalAction } from '../../actions/clearModalAction';
@@ -13,7 +13,7 @@ import { startShowValidationAction } from '../../actions/startShowValidationActi
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 import { validateAddRespondentAction } from '../../actions/caseAssociation/validateAddRespondentAction';
 
-export const associateRespondentWithCaseSequence = showProgressSequenceDecorator(
+export const associateIrsPractitionerWithCaseSequence = showProgressSequenceDecorator(
   [
     startShowValidationAction,
     validateAddRespondentAction,
@@ -22,7 +22,7 @@ export const associateRespondentWithCaseSequence = showProgressSequenceDecorator
       success: [
         clearAlertsAction,
         stopShowValidationAction,
-        associateRespondentWithCaseAction,
+        associateIrsPractitionerWithCaseAction,
         {
           success: [
             setAlertSuccessAction,
