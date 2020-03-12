@@ -76,21 +76,14 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     );
   });
 
-  const oldRespondents = oldCase.respondents.map(respondent =>
-    omit(respondent, ['pk', 'sk']),
+  const oldIrsPractitioners = oldCase.irsPractitioners.map(irsPractitioner =>
+    omit(irsPractitioner, ['pk', 'sk']),
   );
   const {
-<<<<<<< HEAD
-    added: addedRespondents,
-    removed: deletedRespondents,
-    updated: updatedRespondents,
-  } = diff(oldRespondents, caseToUpdate.respondents, 'userId');
-=======
     added: addedIrsPractitioners,
     removed: deletedIrsPractitioners,
     updated: updatedIrsPractitioners,
-  } = diff(oldCase.irsPractitioners, caseToUpdate.irsPractitioners, 'userId');
->>>>>>> develop
+  } = diff(oldIrsPractitioners, caseToUpdate.irsPractitioners, 'userId');
 
   deletedIrsPractitioners.forEach(practitioner => {
     requests.push(
@@ -119,26 +112,19 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     },
   );
 
-  const oldPractitioners = oldCase.practitioners.map(practitioner =>
-    omit(practitioner, ['pk', 'sk']),
+  const oldPrivatePractitioners = oldCase.privatePractitioners.map(
+    privatePractitioner => omit(privatePractitioner, ['pk', 'sk']),
   );
 
   const {
-<<<<<<< HEAD
-    added: addedPractitioners,
-    removed: deletedPractitioners,
-    updated: updatedPractitioners,
-  } = diff(oldPractitioners, caseToUpdate.practitioners, 'userId');
-=======
     added: addedPrivatePractitioners,
     removed: deletedPrivatePractitioners,
     updated: updatedPrivatePractitioners,
   } = diff(
-    oldCase.privatePractitioners,
+    oldPrivatePractitioners,
     caseToUpdate.privatePractitioners,
     'userId',
   );
->>>>>>> develop
 
   deletedPrivatePractitioners.forEach(practitioner => {
     requests.push(

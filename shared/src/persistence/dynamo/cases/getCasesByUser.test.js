@@ -85,17 +85,10 @@ describe('getCasesByUser', () => {
         caseId: '123',
         docketRecord: [],
         documents: [],
-<<<<<<< HEAD
-        pk: 'case|123',
-        practitioners: [],
-        respondents: [],
-        sk: 'case|123',
-=======
         irsPractitioners: [],
-        pk: '123',
+        pk: 'case|123',
         privatePractitioners: [],
-        sk: '123',
->>>>>>> develop
+        sk: 'case|123',
         status: 'New',
       },
     ]);

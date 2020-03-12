@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-=======
-const {
-  getCasePrivatePractitioners,
-} = require('./getCasePrivatePractitioners');
-const { getCaseDocketRecord } = require('./getCaseDocketRecord');
-const { getCaseDocuments } = require('./getCaseDocuments');
-const { getCaseIrsPractitioners } = require('./getCaseIrsPractitioners');
->>>>>>> develop
 const { query } = require('../../dynamodbClientService');
 
 /**
@@ -30,7 +21,6 @@ exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
     applicationContext,
   });
 
-<<<<<<< HEAD
   for (let i = 0; i < items.length; i++) {
     items[i] = {
       ...items[i],
@@ -40,20 +30,6 @@ exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
       })),
     };
   }
-=======
-  items = await Promise.all(
-    items.map(getCaseDocketRecord({ applicationContext })),
-  );
-  items = await Promise.all(
-    items.map(getCaseDocuments({ applicationContext })),
-  );
-  items = await Promise.all(
-    items.map(getCasePrivatePractitioners({ applicationContext })),
-  );
-  items = await Promise.all(
-    items.map(getCaseIrsPractitioners({ applicationContext })),
-  );
->>>>>>> develop
 
   return items;
 };

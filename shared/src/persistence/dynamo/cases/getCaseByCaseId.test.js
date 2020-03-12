@@ -87,12 +87,12 @@ describe('getCaseByCaseId', () => {
       },
       {
         pk: 'case|123',
-        sk: 'respondent|123',
+        sk: 'irsPractitioner|123',
         userId: 'abc-123',
       },
       {
         pk: 'case|123',
-        sk: 'practitioner|123',
+        sk: 'privatePractitioner|123',
         userId: 'abc-123',
       },
       {
@@ -126,7 +126,7 @@ describe('getCaseByCaseId', () => {
           sk: 'document|123',
         },
       ],
-      irsPractitioner: [
+      irsPractitioners: [
         { pk: 'case|123', sk: 'irsPractitioner|123', userId: 'abc-123' },
       ],
       pk: 'case|123',
