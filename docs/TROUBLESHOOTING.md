@@ -33,3 +33,8 @@ This is pointing to our own fork which includes the functionality required to ho
 ### serverless-s3-local and s3rver
 
 These libraries were forked to support multipart file uploads to s3 local.
+
+
+### Jest and babel-jest version 25.x
+
+These libaries are locked to version 24.x because upgrading them causes Sonarcloud to report 0% coverage.

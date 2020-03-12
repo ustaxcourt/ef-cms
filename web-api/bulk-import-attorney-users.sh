@@ -1,7 +1,7 @@
 #!/bin/bash -e
 ENV=$1
-REGION=$2
-FILE_NAME=$3
+REGION="us-east-1"
+FILE_NAME=$2
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}")
 USER_POOL_ID="${USER_POOL_ID%\"}"
