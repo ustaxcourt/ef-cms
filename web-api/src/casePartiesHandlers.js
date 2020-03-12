@@ -1,7 +1,7 @@
 module.exports = {
-  associatePractitionerWithCaseLambda: require('./manualAssociation/associatePractitionerWithCaseLambda')
+  associateIrsPractitionerWithCaseLambda: require('./manualAssociation/associateIrsPractitionerWithCaseLambda')
     .handler,
-  associateRespondentWithCaseLambda: require('./manualAssociation/associateRespondentWithCaseLambda')
+  associatePrivatePractitionerWithCaseLambda: require('./manualAssociation/associatePrivatePractitionerWithCaseLambda')
     .handler,
   deleteCounselFromCaseLambda: require('./cases/deleteCounselFromCaseLambda')
     .handler,
