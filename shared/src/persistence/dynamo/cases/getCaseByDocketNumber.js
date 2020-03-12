@@ -13,7 +13,7 @@ exports.getCaseByDocketNumber = async ({
   applicationContext,
   docketNumber,
 }) => {
-  const [firstEntry] = await client.query({
+  const results = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
     },
@@ -23,6 +23,12 @@ exports.getCaseByDocketNumber = async ({
     KeyConditionExpression: '#pk = :pk',
     applicationContext,
   });
+
+  if (results.length === 0) {
+    return null;
+  }
+
+  const [firstEntry] = results;
 
   const [, caseId] = firstEntry.sk.split('|');
 

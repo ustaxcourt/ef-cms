@@ -19,6 +19,8 @@ const {
   updateWorkItemTrialDate,
 } = require('../workitems/updateWorkItemTrialDate');
 const { differenceWith, isEqual } = require('lodash');
+const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
+const { omit } = require('lodash');
 
 /**
  * updateCase
@@ -29,12 +31,10 @@ const { differenceWith, isEqual } = require('lodash');
  * @returns {Promise} the promise of the persistence calls
  */
 exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
-  const oldCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByCaseId({
-      applicationContext,
-      casesId: caseToUpdate.caseId,
-    });
+  const oldCase = await getCaseByCaseId({
+    applicationContext,
+    caseId: caseToUpdate.caseId,
+  });
 
   const requests = [];
 
@@ -76,11 +76,14 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     );
   });
 
+  const oldRespondents = oldCase.respondents.map(respondent =>
+    omit(respondent, ['pk', 'sk']),
+  );
   const {
     added: addedRespondents,
     removed: deletedRespondents,
     updated: updatedRespondents,
-  } = diff(oldCase.respondents, caseToUpdate.respondents, 'userId');
+  } = diff(oldRespondents, caseToUpdate.respondents, 'userId');
 
   deletedRespondents.forEach(respondent => {
     requests.push(
@@ -107,11 +110,15 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     );
   });
 
+  const oldPractitioners = oldCase.practitioners.map(practitioner =>
+    omit(practitioner, ['pk', 'sk']),
+  );
+
   const {
     added: addedPractitioners,
     removed: deletedPractitioners,
     updated: updatedPractitioners,
-  } = diff(oldCase.practitioners, caseToUpdate.practitioners, 'userId');
+  } = diff(oldPractitioners, caseToUpdate.practitioners, 'userId');
 
   deletedPractitioners.forEach(practitioner => {
     requests.push(
