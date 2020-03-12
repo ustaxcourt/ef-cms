@@ -180,7 +180,7 @@ const RespondentInformation = connect(
                 <div className="grid-row header-row">
                   <div className="grid-col-6 display-flex" id="secondary-label">
                     <h3>Respondent Counsel</h3>
-                    {caseInformationHelper.showEditRespondents && (
+                    {caseInformationHelper.showEditIrsPractitioners && (
                       <Button
                         link
                         className="margin-left-205 padding-0 height-3"

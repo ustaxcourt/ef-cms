@@ -8,7 +8,7 @@ export const caseInformationHelper = get => {
     permissions.ASSOCIATE_USER_WITH_CASE &&
     caseDetail.privatePractitioners &&
     !!caseDetail.privatePractitioners.length;
-  const showEditRespondentsButton =
+  const showEditIrsPractitionersButton =
     permissions.ASSOCIATE_USER_WITH_CASE &&
     caseDetail.irsPractitioners &&
     !!caseDetail.irsPractitioners.length;
@@ -18,7 +18,7 @@ export const caseInformationHelper = get => {
   return {
     showAddCounsel,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
-    showEditRespondents: showEditRespondentsButton,
+    showEditIrsPractitioners: showEditIrsPractitionersButton,
     showSealCaseButton,
   };
 };
