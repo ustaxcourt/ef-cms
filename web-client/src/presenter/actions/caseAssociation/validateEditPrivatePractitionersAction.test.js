@@ -1,23 +1,23 @@
 import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/cases/CaseConstants';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { validateEditPractitionersAction } from './validateEditPractitionersAction';
+import { validateEditPrivatePractitionersAction } from './validateEditPrivatePractitionersAction';
 
-describe('validateEditPractitionersAction', () => {
-  let validateEditPractitionerInteractorStub;
+describe('validateEditPrivatePractitionersAction', () => {
+  let validateEditPrivatePractitionerInteractorStub;
   let successStub;
   let errorStub;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    validateEditPractitionerInteractorStub = jest.fn();
+    validateEditPrivatePractitionerInteractorStub = jest.fn();
     successStub = jest.fn();
     errorStub = jest.fn();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        validateEditPractitionerInteractor: validateEditPractitionerInteractorStub,
+        validateEditPrivatePractitionerInteractor: validateEditPrivatePractitionerInteractorStub,
       }),
     };
 
@@ -28,8 +28,10 @@ describe('validateEditPractitionersAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateEditPractitionerInteractorStub = jest.fn().mockReturnValue(null);
-    await runAction(validateEditPractitionersAction, {
+    validateEditPrivatePractitionerInteractorStub = jest
+      .fn()
+      .mockReturnValue(null);
+    await runAction(validateEditPrivatePractitionersAction, {
       modules: {
         presenter,
       },
@@ -67,8 +69,10 @@ describe('validateEditPractitionersAction', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateEditPractitionerInteractorStub = jest.fn().mockReturnValue('error');
-    await runAction(validateEditPractitionersAction, {
+    validateEditPrivatePractitionerInteractorStub = jest
+      .fn()
+      .mockReturnValue('error');
+    await runAction(validateEditPrivatePractitionersAction, {
       modules: {
         presenter,
       },
@@ -105,10 +109,10 @@ describe('validateEditPractitionersAction', () => {
   });
 
   it('should call the error path when attempting to change from paper to electronic service', async () => {
-    validateEditPractitionerInteractorStub = jest
+    validateEditPrivatePractitionerInteractorStub = jest
       .fn()
       .mockReturnValue({ something: 'error' });
-    await runAction(validateEditPractitionersAction, {
+    await runAction(validateEditPrivatePractitionersAction, {
       modules: {
         presenter,
       },

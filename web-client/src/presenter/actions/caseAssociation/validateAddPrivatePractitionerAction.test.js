@@ -1,28 +1,28 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { validateAddPractitionerAction } from './validateAddPractitionerAction';
+import { validateAddPrivatePractitionerAction } from './validateAddPrivatePractitionerAction';
 import sinon from 'sinon';
 
-describe('validateAddPractitioner', () => {
-  let validateAddPractitionerInteractorStub;
+describe('validateAddPrivatePractitioner', () => {
+  let validateAddPrivatePractitionerInteractorStub;
   let successStub;
   let errorStub;
 
-  let mockAddPractitioner;
+  let mockAddPrivatePractitioner;
 
   beforeEach(() => {
-    validateAddPractitionerInteractorStub = sinon.stub();
+    validateAddPrivatePractitionerInteractorStub = sinon.stub();
     successStub = sinon.stub();
     errorStub = sinon.stub();
 
-    mockAddPractitioner = {
+    mockAddPrivatePractitioner = {
       representingPrimary: true,
       user: { userId: 'abc' },
     };
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        validateAddPractitionerInteractor: validateAddPractitionerInteractorStub,
+        validateAddPrivatePractitionerInteractor: validateAddPrivatePractitionerInteractorStub,
       }),
     };
 
@@ -33,13 +33,13 @@ describe('validateAddPractitioner', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateAddPractitionerInteractorStub.returns(null);
-    await runAction(validateAddPractitionerAction, {
+    validateAddPrivatePractitionerInteractorStub.returns(null);
+    await runAction(validateAddPrivatePractitionerAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockAddPractitioner,
+        form: mockAddPrivatePractitioner,
       },
     });
 
@@ -47,13 +47,13 @@ describe('validateAddPractitioner', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateAddPractitionerInteractorStub.returns('error');
-    await runAction(validateAddPractitionerAction, {
+    validateAddPrivatePractitionerInteractorStub.returns('error');
+    await runAction(validateAddPrivatePractitionerAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockAddPractitioner,
+        form: mockAddPrivatePractitioner,
       },
     });
 

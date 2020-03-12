@@ -55,7 +55,7 @@ describe('case information helper', () => {
         form: {},
       },
     });
-    expect(result.showEditPractitioners).toBeTruthy();
+    expect(result.showEditPrivatePractitioners).toBeTruthy();
     expect(result.showEditRespondents).toBeTruthy();
   });
 
@@ -71,7 +71,7 @@ describe('case information helper', () => {
         form: {},
       },
     });
-    expect(result.showEditPractitioners).toBeFalsy();
+    expect(result.showEditPrivatePractitioners).toBeFalsy();
     expect(result.showEditRespondents).toBeFalsy();
   });
 
@@ -90,7 +90,7 @@ describe('case information helper', () => {
         form: {},
       },
     });
-    expect(result.showEditPractitioners).toBeFalsy();
+    expect(result.showEditPrivatePractitioners).toBeFalsy();
     expect(result.showEditRespondents).toBeFalsy();
   });
 

@@ -9,18 +9,18 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { submitEditPractitionersModalAction } from '../actions/caseAssociation/submitEditPractitionersModalAction';
-import { validateEditPractitionersAction } from '../actions/caseAssociation/validateEditPractitionersAction';
+import { submitEditPrivatePractitionersModalAction } from '../actions/caseAssociation/submitEditPrivatePractitionersModalAction';
+import { validateEditPrivatePractitionersAction } from '../actions/caseAssociation/validateEditPrivatePractitionersAction';
 
-export const submitEditPractitionersModalSequence = [
+export const submitEditPrivatePractitionersModalSequence = [
   startShowValidationAction,
-  validateEditPractitionersAction,
+  validateEditPrivatePractitionersAction,
   {
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
       clearAlertsAction,
       stopShowValidationAction,
-      submitEditPractitionersModalAction,
+      submitEditPrivatePractitionersModalAction,
       {
         success: [
           setAlertSuccessAction,

@@ -2,12 +2,12 @@ const {
   EditPrivatePractitionerFactory,
 } = require('../../entities/caseAssociation/EditPrivatePractitionerFactory');
 const {
-  validateEditPractitionerInteractor,
-} = require('./validateEditPractitionerInteractor');
+  validateEditPrivatePractitionerInteractor,
+} = require('./validateEditPrivatePractitionerInteractor');
 
-describe('validateEditPractitionerInteractor', () => {
+describe('validateEditPrivatePractitionerInteractor', () => {
   it('returns the expected errors object on an empty add practitioner', () => {
-    const errors = validateEditPractitionerInteractor({
+    const errors = validateEditPrivatePractitionerInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           EditPrivatePractitionerFactory,
@@ -20,7 +20,7 @@ describe('validateEditPractitionerInteractor', () => {
   });
 
   it('returns null when no errors occur', () => {
-    const errors = validateEditPractitionerInteractor({
+    const errors = validateEditPrivatePractitionerInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           EditPrivatePractitionerFactory,

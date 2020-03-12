@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validateEditPractitionersAction = ({
+export const validateEditPrivatePractitionersAction = ({
   applicationContext,
   get,
   path,
@@ -27,7 +27,7 @@ export const validateEditPractitionersAction = ({
   privatePractitioners.forEach(practitioner => {
     let error = applicationContext
       .getUseCases()
-      .validateEditPractitionerInteractor({
+      .validateEditPrivatePractitionerInteractor({
         applicationContext,
         practitioner,
       });

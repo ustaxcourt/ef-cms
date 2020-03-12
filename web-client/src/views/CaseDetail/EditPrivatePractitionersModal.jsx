@@ -5,15 +5,15 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const EditPractitionersModal = connect(
+export const EditPrivatePractitionersModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     caseDetail: state.caseDetail,
-    confirmSequence: sequences.submitEditPractitionersModalSequence,
+    confirmSequence: sequences.submitEditPrivatePractitionersModalSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
-    validateEditPractitionersSequence:
-      sequences.validateEditPractitionersSequence,
+    validateEditPrivatePractitionersSequence:
+      sequences.validateEditPrivatePractitionersSequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -22,7 +22,7 @@ export const EditPractitionersModal = connect(
     confirmSequence,
     modal,
     updateModalValueSequence,
-    validateEditPractitionersSequence,
+    validateEditPrivatePractitionersSequence,
     validationErrors,
   }) => {
     return (
@@ -78,7 +78,7 @@ export const EditPractitionersModal = connect(
                             key: e.target.name,
                             value: e.target.checked,
                           });
-                          validateEditPractitionersSequence();
+                          validateEditPrivatePractitionersSequence();
                         }}
                       />
                       <label
@@ -106,7 +106,7 @@ export const EditPractitionersModal = connect(
                                 key: e.target.name,
                                 value: e.target.checked,
                               });
-                              validateEditPractitionersSequence();
+                              validateEditPrivatePractitionersSequence();
                             }}
                           />
                           <label
@@ -127,7 +127,9 @@ export const EditPractitionersModal = connect(
                         validationErrors.privatePractitioners[idx]
                           .serviceIndicator
                       }
-                      validateSequence={validateEditPractitionersSequence}
+                      validateSequence={
+                        validateEditPrivatePractitionersSequence
+                      }
                     />
                   </div>
                 </FormGroup>

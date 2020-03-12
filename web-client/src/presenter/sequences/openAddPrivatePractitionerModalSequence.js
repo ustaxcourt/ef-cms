@@ -8,20 +8,22 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const openAddPractitionerModalSequence = showProgressSequenceDecorator([
-  clearAlertsAction,
-  clearModalStateAction,
-  setDefaultServiceIndicatorAction('modal'),
-  getPrivatePractitionersBySearchKeyAction,
-  {
-    error: [setValidationErrorsAction],
-    success: [
-      setPractitionersAction,
-      isPractitionerInCaseAction,
-      {
-        no: [setShowModalFactoryAction('AddPractitionerModal')],
-        yes: [setShowModalFactoryAction('PractitionerExistsModal')],
-      },
-    ],
-  },
-]);
+export const openAddPrivatePractitionerModalSequence = showProgressSequenceDecorator(
+  [
+    clearAlertsAction,
+    clearModalStateAction,
+    setDefaultServiceIndicatorAction('modal'),
+    getPrivatePractitionersBySearchKeyAction,
+    {
+      error: [setValidationErrorsAction],
+      success: [
+        setPractitionersAction,
+        isPractitionerInCaseAction,
+        {
+          no: [setShowModalFactoryAction('AddPrivatePractitionerModal')],
+          yes: [setShowModalFactoryAction('PractitionerExistsModal')],
+        },
+      ],
+    },
+  ],
+);
