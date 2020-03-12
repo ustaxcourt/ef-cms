@@ -562,6 +562,7 @@ workflows:
           filters:
             branches:
               only:
+                - irs
                 - staging
                 - test
                 - master
