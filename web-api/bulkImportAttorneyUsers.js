@@ -50,6 +50,8 @@ const formatRecord = record => {
 
   returnData.additionalPhone = record.additionalPhone;
   returnData.alternateEmail = record.alternateEmail;
+  returnData.barNumber = record.barNumber;
+  returnData.email = record.email;
   returnData.firmName = record.firmName;
   returnData.originalBarState = record.originalBarState;
   returnData.practitionerType = record.practitionerType;
