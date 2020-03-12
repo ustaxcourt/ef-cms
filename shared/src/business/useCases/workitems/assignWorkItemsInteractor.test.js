@@ -24,11 +24,11 @@ const MOCK_WORK_ITEM = {
       message: 'Stipulated Decision filed by respondent is ready for review',
       messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
       to: null,
-      userId: 'respondent',
+      userId: 'irsPractitioner',
     },
   ],
   section: 'docket',
-  sentBy: 'respondent',
+  sentBy: 'irsPractitioner',
   updatedAt: '2018-12-27T18:06:02.968Z',
   workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
 };

@@ -147,8 +147,8 @@ describe('updateCase', () => {
     expect(updateStub).not.toBeCalled();
   });
 
-  describe('Respondents', () => {
-    it('adds a respondent to a case with no existing irsPractitioners', async () => {
+  describe('IRS Practitioners', () => {
+    it('adds an irsPractitioner to a case with no existing irsPractitioners', async () => {
       getStub.mockReturnValue({
         docketNumberSuffix: null,
         inProgress: false,
@@ -177,7 +177,7 @@ describe('updateCase', () => {
       });
     });
 
-    it('adds a respondent to a case with existing irsPractitioners', async () => {
+    it('adds an irsPractitioner to a case with existing irsPractitioners', async () => {
       getStub.mockReturnValue({
         docketNumberSuffix: null,
         inProgress: false,
@@ -214,7 +214,7 @@ describe('updateCase', () => {
       });
     });
 
-    it('updates a respondent on a case', async () => {
+    it('updates an irsPractitioner on a case', async () => {
       getStub.mockReturnValue({
         docketNumberSuffix: null,
         inProgress: false,
@@ -252,7 +252,7 @@ describe('updateCase', () => {
       });
     });
 
-    it('removes a respondent from a case with existing irsPractitioners', async () => {
+    it('removes an irsPractitioner from a case with existing irsPractitioners', async () => {
       getStub.mockReturnValue({
         docketNumberSuffix: null,
         inProgress: false,
@@ -283,8 +283,8 @@ describe('updateCase', () => {
     });
   });
 
-  describe('Practitioners', () => {
-    it('adds a practitioner to a case with no existing privatePractitioners', async () => {
+  describe('PrivatePractitioners', () => {
+    it('adds a privatePractitioner to a case with no existing privatePractitioners', async () => {
       getStub.mockReturnValue({
         docketNumberSuffix: null,
         inProgress: false,
@@ -313,7 +313,7 @@ describe('updateCase', () => {
       });
     });
 
-    it('adds a practitioner to a case with existing privatePractitioners', async () => {
+    it('adds a privatePractitioner to a case with existing privatePractitioners', async () => {
       getStub.mockReturnValue({
         docketNumberSuffix: null,
         inProgress: false,
@@ -350,7 +350,7 @@ describe('updateCase', () => {
       });
     });
 
-    it('updates a practitioner on a case', async () => {
+    it('updates a privatePractitioner on a case', async () => {
       getStub.mockReturnValue({
         docketNumberSuffix: null,
         inProgress: false,
@@ -388,7 +388,7 @@ describe('updateCase', () => {
       });
     });
 
-    it('removes a practitioner from a case with existing privatePractitioners', async () => {
+    it('removes a privatePractitioner from a case with existing privatePractitioners', async () => {
       getStub.mockReturnValue({
         docketNumberSuffix: null,
         inProgress: false,

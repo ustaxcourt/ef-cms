@@ -1,6 +1,6 @@
-import { AddPractitionerModal } from './AddPractitionerModal';
+import { AddPrivatePractitionerModal } from './AddPrivatePractitionerModal';
 import { Button } from '../../ustc-ui/Button/Button';
-import { EditPractitionersModal } from './EditPractitionersModal';
+import { EditPrivatePractitionersModal } from './EditPrivatePractitionersModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -53,10 +53,10 @@ const PetitionerInformation = connect(
     constants: state.constants,
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
-    openAddPractitionerModalSequence:
-      sequences.openAddPractitionerModalSequence,
-    openEditPractitionersModalSequence:
-      sequences.openEditPractitionersModalSequence,
+    openAddPrivatePractitionerModalSequence:
+      sequences.openAddPrivatePractitionerModalSequence,
+    openEditPrivatePractitionersModalSequence:
+      sequences.openEditPrivatePractitionersModalSequence,
     showModal: state.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
@@ -67,8 +67,8 @@ const PetitionerInformation = connect(
     constants,
     form,
     formattedCaseDetail,
-    openAddPractitionerModalSequence,
-    openEditPractitionersModalSequence,
+    openAddPrivatePractitionerModalSequence,
+    openEditPrivatePractitionersModalSequence,
     showModal,
     updateFormValueSequence,
     validationErrors,
@@ -250,7 +250,7 @@ const PetitionerInformation = connect(
               className="usa-search"
               onSubmit={e => {
                 e.preventDefault();
-                openAddPractitionerModalSequence();
+                openAddPrivatePractitionerModalSequence();
               }}
             >
               <div role="search">
@@ -308,12 +308,14 @@ const PetitionerInformation = connect(
                     id="practitioner-label"
                   >
                     <h3>Petitioner Counsel</h3>
-                    {caseInformationHelper.showEditPractitioners && (
+                    {caseInformationHelper.showEditPrivatePractitioners && (
                       <Button
                         link
                         className="margin-left-205 padding-0 height-3"
                         id="edit-privatePractitioners-button"
-                        onClick={() => openEditPractitionersModalSequence()}
+                        onClick={() =>
+                          openEditPrivatePractitionersModalSequence()
+                        }
                       >
                         <FontAwesomeIcon icon="edit" size="sm" />
                         Edit
@@ -330,8 +332,12 @@ const PetitionerInformation = connect(
         {caseDetailHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />
         )}
-        {showModal === 'AddPractitionerModal' && <AddPractitionerModal />}
-        {showModal === 'EditPractitionersModal' && <EditPractitionersModal />}
+        {showModal === 'AddPrivatePractitionerModal' && (
+          <AddPrivatePractitionerModal />
+        )}
+        {showModal === 'EditPrivatePractitionersModal' && (
+          <EditPrivatePractitionersModal />
+        )}
         {showModal === 'PractitionerExistsModal' && <PractitionerExistsModal />}
       </>
     );
