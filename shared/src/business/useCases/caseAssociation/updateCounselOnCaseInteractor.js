@@ -55,7 +55,7 @@ exports.updateCounselOnCaseInteractor = async ({
       new IrsPractitioner({ userId: userToUpdate.userId, ...userData }),
     );
   } else {
-    throw new Error('User is not a practitioner or respondent');
+    throw new Error('User is not a practitioner');
   }
 
   const updatedCase = await applicationContext

@@ -70,10 +70,10 @@ describe('Authorization client service', () => {
     ).toBeTruthy();
   });
 
-  it('should authorize a respondent for getCase', () => {
+  it('should authorize an irsPractitioner for getCase', () => {
     expect(
       isAuthorized(
-        { role: User.ROLES.irsPractitioner, userId: 'respondent' },
+        { role: User.ROLES.irsPractitioner, userId: 'irsPractitioner' },
         ROLE_PERMISSIONS.GET_CASE,
       ),
     ).toBeTruthy();

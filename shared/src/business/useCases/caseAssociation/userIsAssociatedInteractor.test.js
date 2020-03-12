@@ -61,7 +61,7 @@ describe('userIsAssociated', () => {
     expect(result).toEqual(false);
   });
 
-  it('returns false if the user role is not a practitioner or respondent', () => {
+  it('returns false if the user role is not a privatePractitioner or irsPractitioner', () => {
     const caseDetail = {
       privatePractitioners: [],
       userId: 'def-321',
