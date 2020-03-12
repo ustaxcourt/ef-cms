@@ -70,22 +70,24 @@ exports.processStreamRecordsInteractor = async ({
       //add the failing ones to the reindex list
       const recordsToReprocess = filterRecords(recordsToProcess);
       for (const record of recordsToReprocess) {
-        try {
-          await searchClient.index({
-            body: { ...record.dynamodb.NewImage },
-            id: `${record.dynamodb.Keys.pk.S}_${record.dynamodb.Keys.sk.S}`,
-            index: 'efcms',
-          });
-        } catch (e) {
-          await applicationContext
-            .getPersistenceGateway()
-            .createElasticsearchReindexRecord({
-              applicationContext,
-              recordPk: record.dynamodb.Keys.pk.S,
-              recordSk: record.dynamodb.Keys.sk.S,
+        if (['INSERT', 'MODIFY'].includes(record.eventName)) {
+          try {
+            await searchClient.index({
+              body: { ...record.dynamodb.NewImage },
+              id: `${record.dynamodb.Keys.pk.S}_${record.dynamodb.Keys.sk.S}`,
+              index: 'efcms',
             });
+          } catch (e) {
+            await applicationContext
+              .getPersistenceGateway()
+              .createElasticsearchReindexRecord({
+                applicationContext,
+                recordPk: record.dynamodb.Keys.pk.S,
+                recordSk: record.dynamodb.Keys.sk.S,
+              });
 
-          applicationContext.logger.info('Error', e);
+            applicationContext.logger.info('Error', e);
+          }
         }
       }
     }
