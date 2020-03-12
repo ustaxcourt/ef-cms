@@ -76,7 +76,7 @@
     "eventCode": "SIAB",
     "index": 4,
     "documentId": "dc2664a1-f552-418f-bcc7-8a67f4246568",
-    "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"ATOB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Simultaneous Answering Brief\",\"documentType\":\"Simultaneous Answering Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyRespondent\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"caseId\":\"491b05b4-483f-4b85-8dd7-2dd4c069eb50\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
+    "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"ATOB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Simultaneous Answering Brief\",\"documentType\":\"Simultaneous Answering Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyIrsPractitioner\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"caseId\":\"491b05b4-483f-4b85-8dd7-2dd4c069eb50\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
     "filingDate": "2001-10-10T23:54:05.993Z",
     "docketRecordId": "63b1503d-26cc-448c-a4a4-670b846518c4",
     "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
@@ -475,7 +475,7 @@
       "countryType": "domestic"
     },
     "name": "Test IRS Practitioner",
-    "sk": "respondent|16ac4e12-fa10-43af-8c91-ac91338df892",
+    "sk": "irsPractitioner|16ac4e12-fa10-43af-8c91-ac91338df892",
     "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "irsPractitioner",
@@ -596,7 +596,7 @@
           "lodged": false,
           "certificateOfServiceDate": null,
           "documentId": "dc2664a1-f552-418f-bcc7-8a67f4246568",
-          "partyRespondent": true,
+          "partyIrsPractitioner": true,
           "category": "Simultaneous Brief",
           "docketNumber": "103-19"
         },
@@ -632,7 +632,7 @@
     "lodged": false,
     "certificateOfServiceDate": null,
     "documentId": "dc2664a1-f552-418f-bcc7-8a67f4246568",
-    "partyRespondent": true,
+    "partyIrsPractitioner": true,
     "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "docketNumber": "103-19"
   },

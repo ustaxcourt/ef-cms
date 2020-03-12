@@ -76,7 +76,7 @@ describe('setServiceIndicatorsForCases', () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: true,
-      practitioners: [{ ...basePractitioner }],
+      privatePractitioners: [{ ...basePractitioner }],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
@@ -90,7 +90,7 @@ describe('setServiceIndicatorsForCases', () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: false,
-      practitioners: [{ ...basePractitioner }],
+      privatePractitioners: [{ ...basePractitioner }],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
@@ -106,7 +106,7 @@ describe('setServiceIndicatorsForCases', () => {
       contactSecondary: {
         name: 'Test Petitioner2',
       },
-      practitioners: [{ ...basePractitioner }],
+      privatePractitioners: [{ ...basePractitioner }],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
@@ -123,7 +123,7 @@ describe('setServiceIndicatorsForCases', () => {
         name: 'Test Petitioner2',
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
       },
-      practitioners: [{ ...basePractitioner }],
+      privatePractitioners: [{ ...basePractitioner }],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
@@ -139,7 +139,9 @@ describe('setServiceIndicatorsForCases', () => {
       contactSecondary: {
         name: 'Test Petitioner2',
       },
-      practitioners: [{ ...basePractitioner, representingSecondary: true }],
+      privatePractitioners: [
+        { ...basePractitioner, representingSecondary: true },
+      ],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
@@ -153,12 +155,12 @@ describe('setServiceIndicatorsForCases', () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: true,
-      practitioners: [{ ...basePractitioner }],
+      privatePractitioners: [{ ...basePractitioner }],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.practitioners[0].serviceIndicator).toEqual(
+    expect(result.privatePractitioners[0].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
@@ -166,11 +168,11 @@ describe('setServiceIndicatorsForCases', () => {
   it('should not modify the serviceIndicator on the Respondent', async () => {
     const caseDetail = {
       ...baseCaseDetail,
-      respondents: [{ ...baseRespondent }],
+      irsPractitioners: [{ ...baseRespondent }],
     };
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.respondents[0].serviceIndicator).toEqual(
+    expect(result.irsPractitioners[0].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });

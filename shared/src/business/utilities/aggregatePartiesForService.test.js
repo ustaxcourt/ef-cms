@@ -2,7 +2,7 @@ const { aggregatePartiesForService } = require('./aggregatePartiesForService');
 
 describe('aggregatePartiesForService', () => {
   let mockCase;
-  let respondents;
+  let irsPractitioners;
 
   beforeEach(() => {
     const contactPrimary = {
@@ -17,7 +17,7 @@ describe('aggregatePartiesForService', () => {
       state: 'CA',
     };
 
-    respondents = [
+    irsPractitioners = [
       {
         email: 'respondentone@example.com',
         name: 'Respondent One',
@@ -30,7 +30,7 @@ describe('aggregatePartiesForService', () => {
       },
     ];
 
-    const practitioners = [
+    const privatePractitioners = [
       {
         email: 'practitionerone@example.com',
         name: 'Practitioner One',
@@ -48,8 +48,8 @@ describe('aggregatePartiesForService', () => {
     mockCase = {
       contactPrimary,
       contactSecondary,
-      practitioners,
-      respondents,
+      irsPractitioners,
+      privatePractitioners,
     };
   });
 
@@ -125,7 +125,7 @@ describe('aggregatePartiesForService', () => {
   });
 
   it('should not serve the primary contact electronically or by paper if represented by counsel, but should serve the secondary contact by paper', async () => {
-    mockCase.practitioners[0].representingPrimary = true;
+    mockCase.privatePractitioners[0].representingPrimary = true;
     const result = aggregatePartiesForService(mockCase);
 
     expect(result).toMatchObject({
@@ -158,10 +158,10 @@ describe('aggregatePartiesForService', () => {
     });
   });
 
-  it('should serve all respondents electronically', async () => {
-    mockCase.practitioners = [];
+  it('should serve all irsPractitioners electronically', async () => {
+    mockCase.privatePractitioners = [];
     const result = aggregatePartiesForService(mockCase);
 
-    expect(result.electronic.length).toEqual(respondents.length + 1);
+    expect(result.electronic.length).toEqual(irsPractitioners.length + 1);
   });
 });

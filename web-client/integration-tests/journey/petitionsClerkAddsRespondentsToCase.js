@@ -7,10 +7,10 @@ const formattedCaseDetail = withAppContextDecorator(
 );
 
 export default test => {
-  return it('Petitions clerk manually adds multiple respondents to case', async () => {
-    expect(test.getState('caseDetail.respondents')).toEqual([]);
+  return it('Petitions clerk manually adds multiple irsPractitioners to case', async () => {
+    expect(test.getState('caseDetail.irsPractitioners')).toEqual([]);
 
-    await test.runSequence('openAddRespondentModalSequence');
+    await test.runSequence('openAddIrsPractitionerModalSequence');
 
     expect(
       test.getState('validationErrors.respondentSearchError'),
@@ -21,7 +21,7 @@ export default test => {
       value: 'RT6789',
     });
 
-    await test.runSequence('openAddRespondentModalSequence');
+    await test.runSequence('openAddIrsPractitionerModalSequence');
 
     expect(
       test.getState('validationErrors.respondentSearchError'),
@@ -32,10 +32,10 @@ export default test => {
     let respondentMatch = test.getState('modal.respondentMatches.0');
     expect(test.getState('modal.user.userId')).toEqual(respondentMatch.userId);
 
-    await test.runSequence('associateRespondentWithCaseSequence');
+    await test.runSequence('associateIrsPractitionerWithCaseSequence');
 
-    expect(test.getState('caseDetail.respondents.length')).toEqual(1);
-    expect(test.getState('caseDetail.respondents.0.name')).toEqual(
+    expect(test.getState('caseDetail.irsPractitioners.length')).toEqual(1);
+    expect(test.getState('caseDetail.irsPractitioners.0.name')).toEqual(
       respondentMatch.name,
     );
 
@@ -43,8 +43,8 @@ export default test => {
       state: test.getState(),
     });
 
-    expect(formatted.respondents.length).toEqual(1);
-    expect(formatted.respondents[0].formattedName).toEqual(
+    expect(formatted.irsPractitioners.length).toEqual(1);
+    expect(formatted.irsPractitioners[0].formattedName).toEqual(
       `${respondentMatch.name} (${respondentMatch.barNumber})`,
     );
 
@@ -53,15 +53,15 @@ export default test => {
       key: 'respondentSearch',
       value: 'RT0987',
     });
-    await test.runSequence('openAddRespondentModalSequence');
+    await test.runSequence('openAddIrsPractitionerModalSequence');
 
     expect(test.getState('modal.respondentMatches.length')).toEqual(1);
     respondentMatch = test.getState('modal.respondentMatches.0');
     expect(test.getState('modal.user.userId')).toEqual(respondentMatch.userId);
 
-    await test.runSequence('associateRespondentWithCaseSequence');
-    expect(test.getState('caseDetail.respondents.length')).toEqual(2);
-    expect(test.getState('caseDetail.respondents.1.name')).toEqual(
+    await test.runSequence('associateIrsPractitionerWithCaseSequence');
+    expect(test.getState('caseDetail.irsPractitioners.length')).toEqual(2);
+    expect(test.getState('caseDetail.irsPractitioners.1.name')).toEqual(
       respondentMatch.name,
     );
 
@@ -69,8 +69,8 @@ export default test => {
       state: test.getState(),
     });
 
-    expect(formatted.respondents.length).toEqual(2);
-    expect(formatted.respondents[1].formattedName).toEqual(
+    expect(formatted.irsPractitioners.length).toEqual(2);
+    expect(formatted.irsPractitioners[1].formattedName).toEqual(
       `${respondentMatch.name} (${respondentMatch.barNumber})`,
     );
   });

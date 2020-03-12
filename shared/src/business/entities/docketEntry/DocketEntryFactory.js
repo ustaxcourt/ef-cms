@@ -58,7 +58,7 @@ function DocketEntryFactory(rawProps) {
     this.ordinalValue = rawPropsParam.ordinalValue;
     this.partyPrimary = rawPropsParam.partyPrimary;
     this.trialLocation = rawPropsParam.trialLocation;
-    this.partyRespondent = rawPropsParam.partyRespondent;
+    this.partyIrsPractitioner = rawPropsParam.partyIrsPractitioner;
     this.partySecondary = rawPropsParam.partySecondary;
     this.previousDocument = rawPropsParam.previousDocument;
     this.primaryDocumentFile = rawPropsParam.primaryDocumentFile;
@@ -115,11 +115,11 @@ function DocketEntryFactory(rawProps) {
       .max('now')
       .required(),
     objections: joi.string().required(),
+    partyIrsPractitioner: joi.boolean().required(),
     partyPrimary: joi
       .boolean()
       .invalid(false)
       .required(),
-    partyRespondent: joi.boolean().required(),
     partySecondary: joi.boolean().required(),
     secondaryDocumentFile: joi.object().optional(),
   };
@@ -172,7 +172,7 @@ function DocketEntryFactory(rawProps) {
   if (
     rawProps.partyPrimary !== true &&
     rawProps.partySecondary !== true &&
-    rawProps.partyRespondent !== true
+    rawProps.partyIrsPractitioner !== true
   ) {
     addToSchema('partyPrimary');
   }

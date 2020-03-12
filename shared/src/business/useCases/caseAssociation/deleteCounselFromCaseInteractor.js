@@ -43,11 +43,11 @@ exports.deleteCounselFromCaseInteractor = async ({
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (userToDelete.role === User.ROLES.privatePractitioner) {
-    caseEntity.removePractitioner(userToDelete);
+    caseEntity.removePrivatePractitioner(userToDelete);
   } else if (userToDelete.role === User.ROLES.irsPractitioner) {
-    caseEntity.removeRespondent(userToDelete);
+    caseEntity.removeIrsPractitioner(userToDelete);
   } else {
-    throw new Error('User is not a practitioner or respondent');
+    throw new Error('User is not a practitioner');
   }
 
   await applicationContext.getPersistenceGateway().deleteUserFromCase({

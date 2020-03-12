@@ -97,7 +97,7 @@ describe('updateUserContactInformationInteractor', () => {
     getCasesByUserStub = jest.fn().mockResolvedValue([
       {
         ...MOCK_CASE,
-        respondents: [
+        irsPractitioners: [
           {
             contact: {},
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -115,11 +115,11 @@ describe('updateUserContactInformationInteractor', () => {
     ).rejects.toThrow('there were no changes found needing to be updated');
   });
 
-  it('updates the user and respondents in the case', async () => {
+  it('updates the user and irsPractitioners in the case', async () => {
     getCasesByUserStub = jest.fn().mockResolvedValue([
       {
         ...MOCK_CASE,
-        respondents: [
+        irsPractitioners: [
           {
             contact: {},
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -140,7 +140,7 @@ describe('updateUserContactInformationInteractor', () => {
     });
     expect(updateCaseSpy).toHaveBeenCalled();
     expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
-      respondents: [
+      irsPractitioners: [
         {
           contact: contactInfo,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -149,7 +149,7 @@ describe('updateUserContactInformationInteractor', () => {
     });
   });
 
-  it('updates the user and practitioners in the case but does not update cases that have been closed for more than 6 months', async () => {
+  it('updates the user and privatePractitioners in the case but does not update cases that have been closed for more than 6 months', async () => {
     const lastYear = calculateISODate({
       dateString: createISODateString(),
       howMuch: -1,
@@ -163,7 +163,7 @@ describe('updateUserContactInformationInteractor', () => {
     getCasesByUserStub = jest.fn().mockResolvedValue([
       {
         ...MOCK_CASE,
-        practitioners: [
+        privatePractitioners: [
           {
             contact: {},
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -173,7 +173,7 @@ describe('updateUserContactInformationInteractor', () => {
       {
         ...MOCK_CASE,
         closedDate: lastYear,
-        practitioners: [
+        privatePractitioners: [
           {
             contact: {},
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -184,7 +184,7 @@ describe('updateUserContactInformationInteractor', () => {
       {
         ...MOCK_CASE,
         closedDate: yesterday,
-        practitioners: [
+        privatePractitioners: [
           {
             contact: {},
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -207,7 +207,7 @@ describe('updateUserContactInformationInteractor', () => {
     expect(updateCaseSpy).toHaveBeenCalled();
     expect(updateCaseSpy.mock.calls.length).toEqual(2);
     expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
-      practitioners: [
+      privatePractitioners: [
         {
           contact: contactInfo,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -215,7 +215,7 @@ describe('updateUserContactInformationInteractor', () => {
       ],
     });
     expect(updateCaseSpy.mock.calls[1][0].caseToUpdate).toMatchObject({
-      practitioners: [
+      privatePractitioners: [
         {
           contact: contactInfo,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -268,13 +268,13 @@ describe('updateUserContactInformationInteractor', () => {
     expect(
       updatedCase.documents[updatedCase.documents.length - 1],
     ).toMatchObject({
-      additionalInfo: 'for Practitioner',
+      additionalInfo: 'for Private Practitioner',
       documentTitle: 'Notice of Change of Address',
-      filedBy: 'Counsel Practitioner',
+      filedBy: 'Counsel Private Practitioner',
     });
   });
 
-  it('includes the respondent in the change of address document when the respondent changes their address', async () => {
+  it('includes the irsPractitioner in the change of address document when the irsPractitioner changes their address', async () => {
     getCasesByUserStub = jest.fn().mockResolvedValue([
       {
         ...MOCK_CASE,
@@ -291,7 +291,7 @@ describe('updateUserContactInformationInteractor', () => {
     expect(
       updatedCase.documents[updatedCase.documents.length - 1],
     ).toMatchObject({
-      additionalInfo: 'for Respondent',
+      additionalInfo: 'for IRS Practitioner',
       documentTitle: 'Notice of Change of Address',
       filedBy: 'Resp.',
     });
