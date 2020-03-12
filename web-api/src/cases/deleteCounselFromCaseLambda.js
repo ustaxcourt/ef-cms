@@ -1,7 +1,7 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * used for deleting a practitioner or respondent from a case
+ * used for deleting a privatePractitioner or irsPractitioner from a case
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
