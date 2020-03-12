@@ -185,7 +185,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  associatePrivatePractitionerWithCase:
+  associatePrivatePractitioner:
     handler: web-api/${self:provider.dir}/casePartiesHandlers.associatePrivatePractitionerWithCaseLambda
     events:
       - http:
@@ -197,7 +197,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  associateIrsPractitionerWithCase:
+  associateIrsPractitioner:
     handler: web-api/${self:provider.dir}/casePartiesHandlers.associateIrsPractitionerWithCaseLambda
     events:
       - http:

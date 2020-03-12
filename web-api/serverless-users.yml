@@ -270,7 +270,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  privatePractitionerPendingCaseAssociation:
+  privatePractitionerPendingAssociation:
     handler: web-api/${self:provider.dir}/usersHandlers.privatePractitionerPendingCaseAssociationLambda
     events:
       - http:
