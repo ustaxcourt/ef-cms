@@ -14,17 +14,17 @@ describe('uploadExternalDocumentsInteractor', () => {
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'respondent',
+        userId: 'irsPractitioner',
       },
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'respondent',
+        userId: 'irsPractitioner',
       },
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'respondent',
+        userId: 'irsPractitioner',
       },
     ],
     preferredTrialCity: 'Fresno, California',
@@ -73,7 +73,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         getCurrentUser: () => {
           return {
             role: User.ROLES.irsPractitioner,
-            userId: 'respondent',
+            userId: 'irsPractitioner',
           };
         },
         getPersistenceGateway: () => ({
@@ -109,7 +109,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         getCurrentUser: () => {
           return {
             role: User.ROLES.irsPractitioner,
-            userId: 'respondent',
+            userId: 'irsPractitioner',
           };
         },
         getPersistenceGateway: () => ({

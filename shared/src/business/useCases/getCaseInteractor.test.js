@@ -185,7 +185,7 @@ describe('Get case', () => {
               createdAt: new Date().toISOString(),
               docketNumber: '00101-18',
               documents,
-              irsPractitioners: [{ userId: 'respondent' }],
+              irsPractitioners: [{ userId: 'irsPractitioner' }],
               petitioners: [{ name: 'Test Petitioner' }],
               preferredTrialCity: 'Washington, District of Columbia',
               privatePractitioners: [{ userId: 'practitioner' }],
