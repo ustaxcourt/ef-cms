@@ -19,10 +19,10 @@ const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes, isEmpty } = require('lodash');
+const { IrsPractitioner } = require('../IrsPractitioner');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
 const { Order } = require('../orders/Order');
-const { Practitioner } = require('../Practitioner');
-const { Respondent } = require('../Respondent');
+const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 
@@ -304,7 +304,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 
   if (Array.isArray(rawCase.privatePractitioners)) {
     this.privatePractitioners = rawCase.privatePractitioners.map(
-      practitioner => new Practitioner(practitioner),
+      practitioner => new PrivatePractitioner(practitioner),
     );
   } else {
     this.privatePractitioners = [];
@@ -312,7 +312,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 
   if (Array.isArray(rawCase.irsPractitioners)) {
     this.irsPractitioners = rawCase.irsPractitioners.map(
-      practitioner => new Respondent(practitioner),
+      practitioner => new IrsPractitioner(practitioner),
     );
   } else {
     this.irsPractitioners = [];
@@ -755,8 +755,8 @@ joiValidationDecorator(
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents) &&
       DocketRecord.validateCollection(this.docketRecord) &&
-      Respondent.validateCollection(this.irsPractitioners) &&
-      Practitioner.validateCollection(this.privatePractitioners)
+      IrsPractitioner.validateCollection(this.irsPractitioners) &&
+      PrivatePractitioner.validateCollection(this.privatePractitioners)
     );
   },
   Case.VALIDATION_ERROR_MESSAGES,

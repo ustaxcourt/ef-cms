@@ -10,7 +10,7 @@ export const AddRespondentModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
     caseDetailHelper: state.caseDetailHelper,
-    confirmSequence: sequences.associateRespondentWithCaseSequence,
+    confirmSequence: sequences.associateIrsPractitionerWithCaseSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateSequence: sequences.validateAddRespondentSequence,

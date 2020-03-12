@@ -31,7 +31,7 @@ describe('Modify Respondent Contact Information', () => {
         value: 'RT6789',
       });
       await test.runSequence('openAddRespondentModalSequence');
-      await test.runSequence('associateRespondentWithCaseSequence');
+      await test.runSequence('associateIrsPractitionerWithCaseSequence');
       expect(test.getState('caseDetail.irsPractitioners.length')).toEqual(1);
     });
   }
