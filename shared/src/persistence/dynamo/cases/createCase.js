@@ -39,21 +39,21 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
         applicationContext,
       }),
     ),
-    ...caseToCreate.respondents.map(respondent =>
+    ...caseToCreate.irsPractitioners.map(practitioner =>
       client.put({
         Item: {
           pk: `case|${caseToCreate.caseId}`,
-          sk: `respondent|${respondent.userId}`,
-          ...respondent,
+          sk: `irsPractitioner|${practitioner.userId}`,
+          ...practitioner,
         },
         applicationContext,
       }),
     ),
-    ...caseToCreate.practitioners.map(practitioner =>
+    ...caseToCreate.privatePractitioners.map(practitioner =>
       client.put({
         Item: {
           pk: `case|${caseToCreate.caseId}`,
-          sk: `practitioner|${practitioner.userId}`,
+          sk: `privatePractitioner|${practitioner.userId}`,
           ...practitioner,
         },
         applicationContext,

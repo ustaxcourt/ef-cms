@@ -326,7 +326,7 @@ export const FileDocumentReview = connect(
                                 Petitioner
                               </li>
                             )}
-                            {form.partyRespondent && <li>Respondent</li>}
+                            {form.partyIrsPractitioner && <li>Respondent</li>}
                           </ul>
                         </div>
                       </div>

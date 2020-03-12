@@ -68,13 +68,13 @@ module.exports = [
       'click element #tab-case-information',
       'wait for #tab-petitioner to be visible',
       'click element #tab-petitioner',
-      'wait for button#edit-practitioners-button to be visible',
-      'click element button#edit-practitioners-button',
+      'wait for button#edit-privatePractitioners-button to be visible',
+      'click element button#edit-privatePractitioners-button',
       'wait for #practitioner-representing-0 to be visible',
     ],
-    notes: 'checks a11y of edit practitioners modal',
+    notes: 'checks a11y of edit privatePractitioners modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=edit-practitioners-modal',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=edit-privatePractitioners-modal',
   },
   {
     actions: [
@@ -98,13 +98,13 @@ module.exports = [
       'click element #tab-case-information',
       'wait for #tab-respondent to be visible',
       'click element #tab-respondent',
-      'wait for button#edit-respondents-button to be visible',
-      'click element button#edit-respondents-button',
+      'wait for button#edit-irsPractitioners-button to be visible',
+      'click element button#edit-irsPractitioners-button',
       'wait for #respondent-0 to be visible',
     ],
-    notes: 'checks a11y of edit respondents modal',
+    notes: 'checks a11y of edit irsPractitioners modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-19&info=edit-respondents-modal',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-19&info=edit-irsPractitioners-modal',
   },
   {
     actions: [

@@ -79,14 +79,14 @@ describe('getCaseByDocketNumber', () => {
           sk: '123',
         },
       ],
-      pk: '123',
-      practitioners: [
+      irsPractitioners: [
         {
           pk: '123',
           sk: '123',
         },
       ],
-      respondents: [
+      pk: '123',
+      privatePractitioners: [
         {
           pk: '123',
           sk: '123',

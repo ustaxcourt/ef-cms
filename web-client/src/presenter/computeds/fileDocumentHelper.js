@@ -38,7 +38,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
   const partyValidationError =
     validationErrors.partyPrimary ||
     validationErrors.partySecondary ||
-    validationErrors.partyRespondent;
+    validationErrors.partyIrsPractitioner;
 
   let { certificateOfServiceDate } = form;
   let certificateOfServiceDateFormatted;

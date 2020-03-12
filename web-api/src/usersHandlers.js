@@ -11,17 +11,17 @@ module.exports = {
   getInboxMessagesForUserLambda: require('./workitems/getInboxMessagesForUserLambda')
     .handler,
   getInternalUsersLambda: require('./users/getInternalUsersLambda').handler,
-  getPractitionersBySearchKeyLambda: require('./users/getPractitionersBySearchKeyLambda')
+  getIrsPractitionersBySearchKeyLambda: require('./users/getIrsPractitionersBySearchKeyLambda')
     .handler,
-  getRespondentsBySearchKeyLambda: require('./users/getRespondentsBySearchKeyLambda')
+  getPrivatePractitionersBySearchKeyLambda: require('./users/getPrivatePractitionersBySearchKeyLambda')
     .handler,
   getSentMessagesForUserLambda: require('./workitems/getSentMessagesForUserLambda')
     .handler,
   getUserByIdLambda: require('./users/getUserByIdLambda').handler,
   getUserLambda: require('./users/getUserLambda').handler,
-  practitionerCaseAssociationLambda: require('./cases/practitionerCaseAssociationLambda')
+  privatePractitionerCaseAssociationLambda: require('./cases/privatePractitionerCaseAssociationLambda')
     .handler,
-  practitionerPendingCaseAssociationLambda: require('./cases/practitionerPendingCaseAssociationLambda')
+  privatePractitionerPendingCaseAssociationLambda: require('./cases/privatePractitionerPendingCaseAssociationLambda')
     .handler,
   updateAttorneyUserLambda: require('./users/updateAttorneyUserLambda').handler,
   updateUserContactInformationLambda: require('./users/updateUserContactInformationLambda')

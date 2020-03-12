@@ -102,16 +102,20 @@ describe('trial session working copy computed', () => {
             ...TRIAL_SESSION,
             calendaredCases: [
               MOCK_CASE,
-              { ...MOCK_CASE, docketNumber: '102-19', practitioners: [] },
+              {
+                ...MOCK_CASE,
+                docketNumber: '102-19',
+                privatePractitioners: [],
+              },
               {
                 ...MOCK_CASE,
                 docketNumber: '5000-17',
-                practitioners: [{}, {}],
+                privatePractitioners: [{}, {}],
               },
               {
                 ...MOCK_CASE,
                 docketNumber: '500-17',
-                practitioners: [{}, {}],
+                privatePractitioners: [{}, {}],
               },
               {
                 ...MOCK_CASE,

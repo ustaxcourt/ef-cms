@@ -60,9 +60,9 @@ describe('generateDocketRecordPdfInteractor', () => {
         servedAtFormatted: '03/27/19',
       },
     ],
+    irsPractitioners: [],
     partyType: ContactFactory.PARTY_TYPES.petitioner,
-    practitioners: [],
-    respondents: [],
+    privatePractitioners: [],
   };
 
   const applicationContext = {
@@ -196,7 +196,7 @@ describe('generateDocketRecordPdfInteractor', () => {
     expect(result.includes('Test Secondary')).toEqual(false);
   });
 
-  it('Displays practitioners associated with the case', async () => {
+  it('Displays privatePractitioners associated with the case', async () => {
     const result = await generateDocketRecordPdfInteractor({
       applicationContext: {
         ...applicationContext,
@@ -212,7 +212,7 @@ describe('generateDocketRecordPdfInteractor', () => {
               postalCode: '12345',
               state: 'ST',
             },
-            practitioners: [
+            privatePractitioners: [
               {
                 addressLine1: '123 Address 1',
                 city: 'Some City',
@@ -241,14 +241,14 @@ describe('generateDocketRecordPdfInteractor', () => {
     expect(result.includes('Test Practitioner 2')).toEqual(true);
   });
 
-  it('Displays respondents associated with the case', async () => {
+  it('Displays irsPractitioners associated with the case', async () => {
     const result = await generateDocketRecordPdfInteractor({
       applicationContext: {
         ...applicationContext,
         getPersistenceGateway: () => ({
           getCaseByCaseId: () => ({
             ...caseDetail,
-            respondents: [
+            irsPractitioners: [
               {
                 addressLine1: '123 Address 1',
                 city: 'Some City',

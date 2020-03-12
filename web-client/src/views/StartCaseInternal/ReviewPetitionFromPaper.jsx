@@ -75,7 +75,7 @@ export const ReviewPetitionFromPaper = connect(
               <div className="tablet:grid-col-7 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">
+                    <h3 className="underlined" id="parties-card">
                       Parties
                       <Button
                         link
@@ -138,7 +138,7 @@ export const ReviewPetitionFromPaper = connect(
               <div className="tablet:grid-col-5 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">
+                    <h3 className="underlined" id="case-information-card">
                       Case Information
                       <Button
                         link
@@ -231,7 +231,7 @@ export const ReviewPetitionFromPaper = connect(
               <div className="tablet:grid-col-7 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">
+                    <h3 className="underlined" id="irs-notice-card">
                       IRS Notice
                       <Button
                         link
@@ -290,7 +290,7 @@ export const ReviewPetitionFromPaper = connect(
               <div className="tablet:grid-col-5 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">
+                    <h3 className="underlined" id="attachments-card">
                       Attachments
                       <Button
                         link

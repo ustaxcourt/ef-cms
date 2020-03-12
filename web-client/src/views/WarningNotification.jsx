@@ -66,7 +66,7 @@ export const WarningNotification = connect(
                       iconRight={true}
                       onClick={() => dismissAlertSequence()}
                     >
-                      Dismiss
+                      Clear
                     </Button>
                   </div>
                 </div>

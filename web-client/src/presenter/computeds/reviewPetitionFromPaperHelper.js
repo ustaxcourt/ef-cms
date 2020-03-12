@@ -44,6 +44,7 @@ export const reviewPetitionFromPaperHelper = (get, applicationContext) => {
     'orderDesignatingPlaceOfTrial',
     'orderToShowCause',
     'noticeOfAttachments',
+    'orderForRequestedTrialLocation',
   ].some(key => Boolean(form[key]));
 
   return {
