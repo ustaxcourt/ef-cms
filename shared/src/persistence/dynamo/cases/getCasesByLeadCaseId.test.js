@@ -48,6 +48,7 @@ describe('getCasesByLeadCaseId', () => {
     expect(getCaseByCaseIdStub).toHaveBeenCalled();
     expect(result).toEqual([
       {
+<<<<<<< HEAD
         caseId: '123',
         docketRecord: [],
         documents: [],
@@ -56,6 +57,14 @@ describe('getCasesByLeadCaseId', () => {
         respondents: [],
         sk: 'case|123',
         status: 'New',
+=======
+        docketRecord: [{ pk: '123', sk: 'abc' }],
+        documents: [{ pk: '123', sk: 'abc' }],
+        irsPractitioners: [{ pk: '123', sk: 'abc' }],
+        pk: '123',
+        privatePractitioners: [{ pk: '123', sk: 'abc' }],
+        sk: 'abc',
+>>>>>>> develop
       },
     ]);
   });

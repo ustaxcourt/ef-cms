@@ -172,7 +172,7 @@
       "countryType": "domestic"
     },
     "name": "Test Private Practitioner",
-    "sk": "practitioner|e262e713-603a-4d52-8b70-4b6d7191e3ec",
+    "sk": "privatePractitioner|e262e713-603a-4d52-8b70-4b6d7191e3ec",
     "section": "privatePractitioner",
     "representingPrimary": true,
     "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",

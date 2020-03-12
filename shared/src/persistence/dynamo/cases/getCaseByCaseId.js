@@ -25,16 +25,18 @@ exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
     return null;
   }
 
-  const theCase = caseItems.filter(item => item.sk.includes('case|')).pop();
+  const theCase = caseItems.filter(item => item.sk.startsWith('case|')).pop();
 
   const docketRecord = caseItems.filter(item =>
-    item.sk.includes('docket-record|'),
+    item.sk.startsWith('docket-record|'),
   );
-  const documents = caseItems.filter(item => item.sk.includes('document|'));
-  const practitioners = caseItems.filter(item =>
-    item.sk.includes('practitioner|'),
+  const documents = caseItems.filter(item => item.sk.startsWith('document|'));
+  const privatePractitioners = caseItems.filter(item =>
+    item.sk.startsWith('privatePractitioner|'),
   );
-  const respondents = caseItems.filter(item => item.sk.includes('respondent|'));
+  const irsPractitioners = caseItems.filter(item =>
+    item.sk.startsWith('irsPractitioner|'),
+  );
 
   const sortedDocketRecord = sortBy(docketRecord, 'index');
   const sortedDocuments = sortBy(documents, 'createdAt');
@@ -43,7 +45,7 @@ exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
     ...theCase,
     docketRecord: sortedDocketRecord,
     documents: sortedDocuments,
-    practitioners,
-    respondents,
+    irsPractitioners,
+    privatePractitioners,
   };
 };

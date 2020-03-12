@@ -4,21 +4,21 @@ export const caseInformationHelper = get => {
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
 
-  const showEditPractitionersButton =
+  const showEditPrivatePractitionersButton =
     permissions.ASSOCIATE_USER_WITH_CASE &&
-    caseDetail.practitioners &&
-    !!caseDetail.practitioners.length;
-  const showEditRespondentsButton =
+    caseDetail.privatePractitioners &&
+    !!caseDetail.privatePractitioners.length;
+  const showEditIrsPractitionersButton =
     permissions.ASSOCIATE_USER_WITH_CASE &&
-    caseDetail.respondents &&
-    !!caseDetail.respondents.length;
+    caseDetail.irsPractitioners &&
+    !!caseDetail.irsPractitioners.length;
   const showAddCounsel = permissions.ASSOCIATE_USER_WITH_CASE;
   const showSealCaseButton = permissions.SEAL_CASE && !caseDetail.isSealed;
 
   return {
     showAddCounsel,
-    showEditPractitioners: showEditPractitionersButton,
-    showEditRespondents: showEditRespondentsButton,
+    showEditIrsPractitioners: showEditIrsPractitionersButton,
+    showEditPrivatePractitioners: showEditPrivatePractitionersButton,
     showSealCaseButton,
   };
 };

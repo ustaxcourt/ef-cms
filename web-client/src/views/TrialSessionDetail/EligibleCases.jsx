@@ -62,7 +62,7 @@ export const EligibleCases = connect(
                 </td>
                 <td>{item.caseCaption}</td>
                 <td>
-                  {item.practitioners.map((practitioner, idx) => (
+                  {item.privatePractitioners.map((practitioner, idx) => (
                     <div key={idx}>{practitioner.name}</div>
                   ))}
                 </td>

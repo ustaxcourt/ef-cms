@@ -39,8 +39,8 @@ function CaseAssociationRequestFactory(rawProps) {
     this.exhibits = rawPropsParam.exhibits;
     this.hasSupportingDocuments = rawPropsParam.hasSupportingDocuments;
     this.objections = rawPropsParam.objections;
-    this.partyPractitioner = rawPropsParam.partyPractitioner;
-    this.partyRespondent = rawPropsParam.partyRespondent;
+    this.partyPrivatePractitioner = rawPropsParam.partyPrivatePractitioner;
+    this.partyIrsPractitioner = rawPropsParam.partyIrsPractitioner;
     this.primaryDocumentFile = rawPropsParam.primaryDocumentFile;
     this.representingPrimary = rawPropsParam.representingPrimary;
     this.representingSecondary = rawPropsParam.representingSecondary;
@@ -90,7 +90,7 @@ function CaseAssociationRequestFactory(rawProps) {
     contactSecondaryName,
   ) {
     let petitionerNames;
-    if (rawProps.partyRespondent) {
+    if (rawProps.partyIrsPractitioner) {
       petitionerNames = 'Respondent';
     } else {
       const petitionerNamesArray = [];
@@ -121,8 +121,8 @@ function CaseAssociationRequestFactory(rawProps) {
     documentTitleTemplate: joi.string().required(),
     documentType: joi.string().required(),
     eventCode: joi.string().required(),
-    partyPractitioner: joi.boolean().optional(),
-    partyRespondent: joi.boolean().optional(),
+    partyIrsPractitioner: joi.boolean().optional(),
+    partyPrivatePractitioner: joi.boolean().optional(),
     primaryDocumentFile: joi.object().required(),
     scenario: joi.string().required(),
   };
@@ -177,7 +177,7 @@ function CaseAssociationRequestFactory(rawProps) {
   if (
     rawProps.representingPrimary !== true &&
     rawProps.representingSecondary !== true &&
-    rawProps.partyRespondent !== true
+    rawProps.partyIrsPractitioner !== true
   ) {
     makeRequired('representingPrimary');
   }

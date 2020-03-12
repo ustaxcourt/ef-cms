@@ -227,12 +227,12 @@ describe('CaseAssociationRequestFactory', () => {
         ).toEqual('Motion to Substitute Parties and Change Caption');
       });
 
-      it('should generate valid title when party is respondent', () => {
+      it('should generate valid title when party is irsPractitioner', () => {
         const caseAssoc = CaseAssociationRequestFactory({
           documentTitleTemplate:
             'Substitution of Counsel for [Petitioner Names]',
           documentType: 'Substitution of Counsel',
-          partyRespondent: true,
+          partyIrsPractitioner: true,
         });
         expect(caseAssoc.getDocumentTitle()).toEqual(
           'Substitution of Counsel for Respondent',

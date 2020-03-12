@@ -260,7 +260,7 @@ describe('Document entity', () => {
       expect(document.filedBy).toEqual('Petr. Bill');
     });
 
-    it('should generate correct filedBy string for partyPrimary and partyRespondent', () => {
+    it('should generate correct filedBy string for partyPrimary and partyIrsPractitioner', () => {
       const document = new Document(
         {
           attachments: false,
@@ -275,8 +275,8 @@ describe('Document entity', () => {
           exhibits: true,
           hasSupportingDocuments: true,
           ordinalValue: 'First',
+          partyIrsPractitioner: true,
           partyPrimary: true,
-          partyRespondent: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           relationship: 'primaryDocument',
@@ -290,7 +290,7 @@ describe('Document entity', () => {
       expect(document.filedBy).toEqual('Resp. & Petr. Bob');
     });
 
-    it('should generate correct filedBy string for partyPrimary and partyRespondent only once', () => {
+    it('should generate correct filedBy string for partyPrimary and partyIrsPractitioner only once', () => {
       const document = new Document(
         {
           attachments: false,
@@ -305,8 +305,8 @@ describe('Document entity', () => {
           exhibits: true,
           hasSupportingDocuments: true,
           ordinalValue: 'First',
+          partyIrsPractitioner: true,
           partyPrimary: false,
-          partyRespondent: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           relationship: 'primaryDocument',
@@ -326,7 +326,7 @@ describe('Document entity', () => {
       expect(document.filedBy).toEqual('Resp.');
     });
 
-    it('should generate correct filedBy string for partyPrimary and partyRespondent more than once with force = true', () => {
+    it('should generate correct filedBy string for partyPrimary and partyIrsPractitioner more than once with force = true', () => {
       const document = new Document(
         {
           attachments: false,
@@ -341,8 +341,8 @@ describe('Document entity', () => {
           exhibits: true,
           hasSupportingDocuments: true,
           ordinalValue: 'First',
+          partyIrsPractitioner: true,
           partyPrimary: false,
-          partyRespondent: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           relationship: 'primaryDocument',
@@ -397,7 +397,7 @@ describe('Document entity', () => {
       expect(document.filedBy).toEqual('Petrs. Bob & Bill');
     });
 
-    it('should generate correct filedBy string for partyRespondent and partyPractitioner (as an object, legacy data)', () => {
+    it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner (as an object, legacy data)', () => {
       const document = new Document(
         {
           category: 'Supporting Document',
@@ -410,12 +410,12 @@ describe('Document entity', () => {
           eventCode: 'USDL',
           freeText: 'Test',
           lodged: true,
-          partyPractitioner: true,
-          partyRespondent: true,
-          practitioner: {
+          partyIrsPractitioner: true,
+          partyPrivatePractitioner: true,
+          previousDocument: 'Amended Petition',
+          privatePractitioners: {
             name: 'Test Practitioner',
           },
-          previousDocument: 'Amended Petition',
           relationship: 'primarySupportingDocument',
           scenario: 'Nonstandard C',
         },
@@ -425,7 +425,7 @@ describe('Document entity', () => {
       expect(document.filedBy).toEqual('Resp.');
     });
 
-    it('should generate correct filedBy string for partyRespondent and partyPractitioner', () => {
+    it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner', () => {
       const document = new Document(
         {
           category: 'Supporting Document',
@@ -438,15 +438,15 @@ describe('Document entity', () => {
           eventCode: 'USDL',
           freeText: 'Test',
           lodged: true,
-          partyPractitioner: true,
-          partyRespondent: true,
-          practitioner: [
+          partyIrsPractitioner: true,
+          partyPrivatePractitioner: true,
+          previousDocument: 'Amended Petition',
+          privatePractitioners: [
             {
               name: 'Test Practitioner',
-              partyPractitioner: true,
+              partyPrivatePractitioner: true,
             },
           ],
-          previousDocument: 'Amended Petition',
           relationship: 'primarySupportingDocument',
           scenario: 'Nonstandard C',
         },
@@ -456,7 +456,7 @@ describe('Document entity', () => {
       expect(document.filedBy).toEqual('Resp. & Counsel Test Practitioner');
     });
 
-    it('should generate correct filedBy string for partyRespondent and partyPractitioner set to false', () => {
+    it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false', () => {
       const document = new Document(
         {
           category: 'Supporting Document',
@@ -469,15 +469,15 @@ describe('Document entity', () => {
           eventCode: 'USDL',
           freeText: 'Test',
           lodged: true,
-          partyPractitioner: true,
-          partyRespondent: true,
-          practitioner: [
+          partyIrsPractitioner: true,
+          partyPrivatePractitioner: true,
+          previousDocument: 'Amended Petition',
+          privatePractitioners: [
             {
               name: 'Test Practitioner',
-              partyPractitioner: false,
+              partyPrivatePractitioner: false,
             },
           ],
-          previousDocument: 'Amended Petition',
           relationship: 'primarySupportingDocument',
           scenario: 'Nonstandard C',
         },
@@ -487,7 +487,7 @@ describe('Document entity', () => {
       expect(document.filedBy).toEqual('Resp.');
     });
 
-    it('should generate correct filedBy string for partyRespondent and multiple partyPractitioners', () => {
+    it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners', () => {
       const document = new Document(
         {
           category: 'Supporting Document',
@@ -500,19 +500,19 @@ describe('Document entity', () => {
           eventCode: 'USDL',
           freeText: 'Test',
           lodged: true,
-          partyPractitioner: true,
-          partyRespondent: true,
-          practitioner: [
+          partyIrsPractitioner: true,
+          partyPrivatePractitioner: true,
+          previousDocument: 'Amended Petition',
+          privatePractitioners: [
             {
               name: 'Test Practitioner',
-              partyPractitioner: true,
+              partyPrivatePractitioner: true,
             },
             {
               name: 'Test Practitioner1',
-              partyPractitioner: true,
+              partyPrivatePractitioner: true,
             },
           ],
-          previousDocument: 'Amended Petition',
           relationship: 'primarySupportingDocument',
           scenario: 'Nonstandard C',
         },
@@ -524,7 +524,7 @@ describe('Document entity', () => {
       );
     });
 
-    it('should generate correct filedBy string for partyRespondent and multiple partyPractitioners with one set to false', () => {
+    it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners with one set to false', () => {
       const document = new Document(
         {
           category: 'Supporting Document',
@@ -537,19 +537,19 @@ describe('Document entity', () => {
           eventCode: 'USDL',
           freeText: 'Test',
           lodged: true,
-          partyPractitioner: true,
-          partyRespondent: true,
-          practitioner: [
+          partyIrsPractitioner: true,
+          partyPrivatePractitioner: true,
+          previousDocument: 'Amended Petition',
+          privatePractitioners: [
             {
               name: 'Test Practitioner',
-              partyPractitioner: false,
+              partyPrivatePractitioner: false,
             },
             {
               name: 'Test Practitioner1',
-              partyPractitioner: true,
+              partyPrivatePractitioner: true,
             },
           ],
-          previousDocument: 'Amended Petition',
           relationship: 'primarySupportingDocument',
           scenario: 'Nonstandard C',
         },
@@ -614,7 +614,7 @@ describe('Document entity', () => {
       expect(document.filedBy).toEqual('Petr. Bill');
     });
 
-    it('should generate correct filedBy string for partyPrimary and partyRespondent in the constructor when values are present', () => {
+    it('should generate correct filedBy string for partyPrimary and partyIrsPractitioner in the constructor when values are present', () => {
       const document = new Document(
         {
           attachments: false,
@@ -629,8 +629,8 @@ describe('Document entity', () => {
           exhibits: true,
           hasSupportingDocuments: true,
           ordinalValue: 'First',
+          partyIrsPractitioner: true,
           partyPrimary: true,
-          partyRespondent: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           relationship: 'primaryDocument',
@@ -679,7 +679,7 @@ describe('Document entity', () => {
       expect(document.filedBy).toEqual('Petrs. Bob & Bill');
     });
 
-    it('should generate correct filedBy string for partyRespondent and partyPractitioner in the constructor when values are present', () => {
+    it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner in the constructor when values are present', () => {
       const document = new Document(
         {
           category: 'Supporting Document',
@@ -692,15 +692,15 @@ describe('Document entity', () => {
           eventCode: 'USDL',
           freeText: 'Test',
           lodged: true,
-          partyPractitioner: true,
-          partyRespondent: true,
-          practitioner: [
+          partyIrsPractitioner: true,
+          partyPrivatePractitioner: true,
+          previousDocument: 'Amended Petition',
+          privatePractitioners: [
             {
               name: 'Test Practitioner',
-              partyPractitioner: true,
+              partyPrivatePractitioner: true,
             },
           ],
-          previousDocument: 'Amended Petition',
           relationship: 'primarySupportingDocument',
           scenario: 'Nonstandard C',
           ...caseDetail,
@@ -710,7 +710,7 @@ describe('Document entity', () => {
       expect(document.filedBy).toEqual('Resp. & Counsel Test Practitioner');
     });
 
-    it('should generate correct filedBy string for partyRespondent and partyPractitioner set to false in the constructor when values are present', () => {
+    it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false in the constructor when values are present', () => {
       const document = new Document(
         {
           category: 'Supporting Document',
@@ -723,15 +723,15 @@ describe('Document entity', () => {
           eventCode: 'USDL',
           freeText: 'Test',
           lodged: true,
-          partyPractitioner: true,
-          partyRespondent: true,
-          practitioner: [
+          partyIrsPractitioner: true,
+          partyPrivatePractitioner: true,
+          previousDocument: 'Amended Petition',
+          privatePractitioners: [
             {
               name: 'Test Practitioner',
-              partyPractitioner: false,
+              partyPrivatePractitioner: false,
             },
           ],
-          previousDocument: 'Amended Petition',
           relationship: 'primarySupportingDocument',
           scenario: 'Nonstandard C',
           ...caseDetail,
@@ -741,7 +741,7 @@ describe('Document entity', () => {
       expect(document.filedBy).toEqual('Resp.');
     });
 
-    it('should generate correct filedBy string for partyRespondent and multiple partyPractitioners in the constructor when values are present', () => {
+    it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners in the constructor when values are present', () => {
       const document = new Document(
         {
           category: 'Supporting Document',
@@ -754,19 +754,19 @@ describe('Document entity', () => {
           eventCode: 'USDL',
           freeText: 'Test',
           lodged: true,
-          partyPractitioner: true,
-          partyRespondent: true,
-          practitioner: [
+          partyIrsPractitioner: true,
+          partyPrivatePractitioner: true,
+          previousDocument: 'Amended Petition',
+          privatePractitioners: [
             {
               name: 'Test Practitioner',
-              partyPractitioner: true,
+              partyPrivatePractitioner: true,
             },
             {
               name: 'Test Practitioner1',
-              partyPractitioner: true,
+              partyPrivatePractitioner: true,
             },
           ],
-          previousDocument: 'Amended Petition',
           relationship: 'primarySupportingDocument',
           scenario: 'Nonstandard C',
           ...caseDetail,
@@ -778,7 +778,7 @@ describe('Document entity', () => {
       );
     });
 
-    it('should generate correct filedBy string for partyRespondent and multiple partyPractitioners with one set to false in the constructor when values are present', () => {
+    it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners with one set to false in the constructor when values are present', () => {
       const document = new Document(
         {
           category: 'Supporting Document',
@@ -791,19 +791,19 @@ describe('Document entity', () => {
           eventCode: 'USDL',
           freeText: 'Test',
           lodged: true,
-          partyPractitioner: true,
-          partyRespondent: true,
-          practitioner: [
+          partyIrsPractitioner: true,
+          partyPrivatePractitioner: true,
+          previousDocument: 'Amended Petition',
+          privatePractitioners: [
             {
               name: 'Test Practitioner',
-              partyPractitioner: false,
+              partyPrivatePractitioner: false,
             },
             {
               name: 'Test Practitioner1',
-              partyPractitioner: true,
+              partyPrivatePractitioner: true,
             },
           ],
-          previousDocument: 'Amended Petition',
           relationship: 'primarySupportingDocument',
           scenario: 'Nonstandard C',
           ...caseDetail,

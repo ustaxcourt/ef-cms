@@ -69,9 +69,9 @@ describe('getCaseByDocketNumber', () => {
       caseId: '123',
       docketRecord: [],
       documents: [],
+      irsPractitioners: [],
       pk: 'case|123',
-      practitioners: [],
-      respondents: [],
+      privatePractitioners: [],
       sk: 'case|123',
       status: 'New',
     });
@@ -126,16 +126,16 @@ describe('getCaseByDocketNumber', () => {
           sk: 'document|123',
         },
       ],
+      irsPractitioners: [
+        { pk: 'case|123', sk: 'irsPractitioner|123', userId: 'abc-123' },
+      ],
       pk: 'case|123',
-      practitioners: [
+      privatePractitioners: [
         {
           pk: 'case|123',
-          sk: 'practitioner|123',
+          sk: 'privatePractitioner|123',
           userId: 'abc-123',
         },
-      ],
-      respondents: [
-        { pk: 'case|123', sk: 'respondent|123', userId: 'abc-123' },
       ],
       sk: 'case|123',
       status: 'New',
