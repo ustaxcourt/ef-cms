@@ -11,28 +11,29 @@ const { put } = require('../../dynamodbClientService');
  * @returns {Promise} the promise for the call to persistence
  */
 exports.saveWorkItemForPaper = async ({ applicationContext, workItem }) => {
-  // Warning - do not use Promise.all() as it seems to cause intermittent failures
-  await put({
-    Item: {
-      pk: `work-item|${workItem.workItemId}`,
-      sk: `work-item|${workItem.workItemId}`,
-      ...workItem,
-    },
-    applicationContext,
-  });
-  await put({
-    Item: {
-      pk: `case|${workItem.caseId}`,
-      sk: `work-item|${workItem.workItemId}`,
-    },
-    applicationContext,
-  });
-  await createUserInboxRecord({
-    applicationContext,
-    workItem,
-  });
-  await createSectionInboxRecord({
-    applicationContext,
-    workItem,
-  });
+  await Promise.all([
+    put({
+      Item: {
+        pk: `work-item|${workItem.workItemId}`,
+        sk: `work-item|${workItem.workItemId}`,
+        ...workItem,
+      },
+      applicationContext,
+    }),
+    put({
+      Item: {
+        pk: `case|${workItem.caseId}`,
+        sk: `work-item|${workItem.workItemId}`,
+      },
+      applicationContext,
+    }),
+    createUserInboxRecord({
+      applicationContext,
+      workItem,
+    }),
+    createSectionInboxRecord({
+      applicationContext,
+      workItem,
+    }),
+  ]);
 };
