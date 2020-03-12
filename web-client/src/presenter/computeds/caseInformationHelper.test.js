@@ -56,7 +56,7 @@ describe('case information helper', () => {
       },
     });
     expect(result.showEditPrivatePractitioners).toBeTruthy();
-    expect(result.showEditRespondents).toBeTruthy();
+    expect(result.showEditIrsPractitioners).toBeTruthy();
   });
 
   it('should not show edit privatePractitioners or irsPractitioners buttons if user is an internal user and there are not privatePractitioners and irsPractitioners on the case', () => {
@@ -72,7 +72,7 @@ describe('case information helper', () => {
       },
     });
     expect(result.showEditPrivatePractitioners).toBeFalsy();
-    expect(result.showEditRespondents).toBeFalsy();
+    expect(result.showEditIrsPractitioners).toBeFalsy();
   });
 
   it('should not show edit privatePractitioners or irsPractitioners buttons if user is not an internal user', () => {
@@ -91,7 +91,7 @@ describe('case information helper', () => {
       },
     });
     expect(result.showEditPrivatePractitioners).toBeFalsy();
-    expect(result.showEditRespondents).toBeFalsy();
+    expect(result.showEditIrsPractitioners).toBeFalsy();
   });
 
   it('should not show Seal Case button if user does not have SEAL_CASE permission', () => {
