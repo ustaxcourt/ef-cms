@@ -40,7 +40,8 @@ exports.processStreamRecordsInteractor = async ({
       });
 
       if (response.body.errors) {
-        response.body.items.forEach(async (action, i) => {
+        for (let i = 0; i < response.body.items.length; i++) {
+          const action = response.body.items[i];
           const operation = Object.keys(action)[0];
           if (action[operation].error) {
             const record = body[i * 2 + 1];
@@ -63,7 +64,7 @@ exports.processStreamRecordsInteractor = async ({
               applicationContext.logger.info('Error', e);
             }
           }
-        });
+        }
       }
     } catch {
       //if the bulk index fails, try each single index individually and
