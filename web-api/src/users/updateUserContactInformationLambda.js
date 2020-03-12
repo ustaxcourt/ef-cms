@@ -1,7 +1,7 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * updates the user contact info (used for a practitioner or respondent)
+ * updates the user contact info (used for a privatePractitioner or irsPractitioner)
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
