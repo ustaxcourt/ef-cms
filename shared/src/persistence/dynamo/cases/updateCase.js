@@ -29,13 +29,12 @@ const { differenceWith, isEqual } = require('lodash');
  * @returns {Promise} the promise of the persistence calls
  */
 exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
-  const oldCase = await client.get({
-    Key: {
-      pk: `case|${caseToUpdate.caseId}`,
-      sk: `case|${caseToUpdate.caseId}`,
-    },
-    applicationContext,
-  });
+  const oldCase = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({
+      applicationContext,
+      casesId: caseToUpdate.caseId,
+    });
 
   const requests = [];
 
