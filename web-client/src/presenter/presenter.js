@@ -323,6 +323,7 @@ import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudg
 import { updateMessageValueInModalSequence } from './sequences/updateMessageValueInModalSequence';
 import { updateMessageValueSequence } from './sequences/updateMessageValueSequence';
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
+import { updateOrderForDesignatingPlaceOfTrialSequence } from './sequences/updateOrderForDesignatingPlaceOfTrialSequence';
 import { updatePetitionDetailsSequence } from './sequences/updatePetitionDetailsSequence';
 import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
 import { updatePetitionerInformationFormSequence } from './sequences/updatePetitionerInformationFormSequence';
@@ -705,6 +706,7 @@ export const presenter = {
     updateMessageValueInModalSequence,
     updateMessageValueSequence,
     updateModalValueSequence,
+    updateOrderForDesignatingPlaceOfTrialSequence,
     updatePetitionDetailsSequence,
     updatePetitionValueSequence,
     updatePetitionerInformationFormSequence,

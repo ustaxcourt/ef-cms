@@ -16,6 +16,8 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { takePathForRoles } from './takePathForRoles';
 
 const gotoStartCaseInternal = [
+  //FIXME this can change into an action
+  set(state.form.orderForRequestedTrialLocation, true),
   setStartInternalCaseDefaultTabAction,
   set(state.documentUploadMode, 'scan'),
   set(state.documentSelectedForScan, 'petitionFile'),
