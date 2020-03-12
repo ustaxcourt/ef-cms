@@ -10,7 +10,7 @@ export default test => {
   return it('Petitions clerk manually adds multiple irsPractitioners to case', async () => {
     expect(test.getState('caseDetail.irsPractitioners')).toEqual([]);
 
-    await test.runSequence('openAddRespondentModalSequence');
+    await test.runSequence('openAddIrsPractitionerModalSequence');
 
     expect(
       test.getState('validationErrors.respondentSearchError'),
@@ -21,7 +21,7 @@ export default test => {
       value: 'RT6789',
     });
 
-    await test.runSequence('openAddRespondentModalSequence');
+    await test.runSequence('openAddIrsPractitionerModalSequence');
 
     expect(
       test.getState('validationErrors.respondentSearchError'),
@@ -53,7 +53,7 @@ export default test => {
       key: 'respondentSearch',
       value: 'RT0987',
     });
-    await test.runSequence('openAddRespondentModalSequence');
+    await test.runSequence('openAddIrsPractitionerModalSequence');
 
     expect(test.getState('modal.respondentMatches.length')).toEqual(1);
     respondentMatch = test.getState('modal.respondentMatches.0');
