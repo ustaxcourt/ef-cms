@@ -1,7 +1,7 @@
 import { copyPrimaryContactSequence } from './copyPrimaryContactSequence';
-import { setFormValueAction } from '../actions/setFormValueAction';
+import { updateFormValueSequence } from './updateFormValueSequence';
 
 export const updateContactSecondaryOnChangeSequence = [
-  setFormValueAction,
+  updateFormValueSequence,
   copyPrimaryContactSequence,
 ];

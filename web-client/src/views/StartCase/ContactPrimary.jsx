@@ -186,7 +186,7 @@ export const ContactPrimary = connect(
               bind={bind}
               type="contactPrimary"
               onBlur={onBlur}
-              onChange={onChange}
+              onChange="updateContactSecondaryOnChangeSequence"
             />
           )}
           {data.contactPrimary.countryType ===
