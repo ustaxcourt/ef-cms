@@ -268,9 +268,9 @@ describe('updateUserContactInformationInteractor', () => {
     expect(
       updatedCase.documents[updatedCase.documents.length - 1],
     ).toMatchObject({
-      additionalInfo: 'for Practitioner',
+      additionalInfo: 'for Private Practitioner',
       documentTitle: 'Notice of Change of Address',
-      filedBy: 'Counsel Practitioner',
+      filedBy: 'Counsel Private Practitioner',
     });
   });
 
@@ -291,7 +291,7 @@ describe('updateUserContactInformationInteractor', () => {
     expect(
       updatedCase.documents[updatedCase.documents.length - 1],
     ).toMatchObject({
-      additionalInfo: 'for Respondent',
+      additionalInfo: 'for IRS Practitioner',
       documentTitle: 'Notice of Change of Address',
       filedBy: 'Resp.',
     });
