@@ -11,6 +11,7 @@ export const Address = connect(
   {
     data: state[props.bind],
     type: props.type,
+    updateContactSecondaryOnChangeSequence: sequences[props.onChange],
     updateFormValueSequence: sequences[props.onChange],
     usStates: state.constants.US_STATES,
     validateStartCaseSequence: sequences[props.onBlur],
@@ -19,6 +20,7 @@ export const Address = connect(
   ({
     data,
     type,
+    updateContactSecondaryOnChangeSequence,
     updateFormValueSequence,
     usStates,
     validateStartCaseSequence,
@@ -47,7 +49,7 @@ export const Address = connect(
               validateStartCaseSequence();
             }}
             onChange={e => {
-              updateFormValueSequence({
+              updateContactSecondaryOnChangeSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
