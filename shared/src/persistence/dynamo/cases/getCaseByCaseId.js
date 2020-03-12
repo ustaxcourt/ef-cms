@@ -1,6 +1,5 @@
 const client = require('../../dynamodbClientService');
 const { sortBy } = require('lodash');
-const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 /**
  * getCaseByCaseId
@@ -11,20 +10,16 @@ const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
  * @returns {object} the case details
  */
 exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
-  const caseItems = await client
-    .query({
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `case|${caseId}`,
-      },
-      KeyConditionExpression: '#pk = :pk',
-      applicationContext,
-    })
-    .then(results =>
-      stripWorkItems(results, applicationContext.isAuthorizedForWorkItems()),
-    );
+  const caseItems = await client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `case|${caseId}`,
+    },
+    KeyConditionExpression: '#pk = :pk',
+    applicationContext,
+  });
 
   if (!caseItems) {
     return null;
