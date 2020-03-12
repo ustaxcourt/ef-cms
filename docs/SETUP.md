@@ -75,13 +75,14 @@
 6. Edit `get-post-confirmation-role-arn.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the correct Amazon resource name for your `$ENVIRONMENT` (see SETUP.md)
 7. Create the `config/$ENVIRONMENT.yml` (e.g. `config/stg.yml`)
 8. Create the `web-api/config/$ENVIRONMENT.yml` (e.g. `web-api/config/stg.yml`)
-9. Add mention of your environment, if appropriate, to SETUP.md
+9. Add mention of your environment, if appropriate, to `SETUP.md`
     - to create Lambda roles & policies:
-      - e.g. `cd iam/environment-specific/terraform/main && ../bin/deploy-app $ENVIRONMENT`
+      - e.g. `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh $ENVIRONMENT`
     - mention your `DYNAMSOFT_PRODUCT_KEYS_$ENVIRONMENT`
     - mention your `POST_CONFIRMATION_ROLE_ARN_$ENVIRONMENT`
-10. Mention your `$ENVIRONMENT`, if necessary, in `web-api/deploy-sandbox.sh` within the `run_development` function
-11. For all files matching `web-api/serverless-*yml`, include your `$ENVIRONMENT` within the list of `custom.alerts.stages` if you want your `$ENVIRONMENT` to be included in those which are monitored & emails delivered upon alarm.
-12. Update circle CI to have all the new environment variables needed:
+10. Run the `deploy-app.sh` command that you just added to `SETUP.md`.
+11. Mention your `$ENVIRONMENT`, if necessary, in `web-api/deploy-sandbox.sh` within the `run_development` function
+12. For all files matching `web-api/serverless-*yml`, include your `$ENVIRONMENT` within the list of `custom.alerts.stages` if you want your `$ENVIRONMENT` to be included in those which are monitored & emails delivered upon alarm.
+13. Update CircleCI to have all the new environment variables needed:
      - DYNAMSOFT_PRODUCT_KEYS_`$ENVIRONMENT`
      - POST_CONFIRMATION_ROLE_ARN_`$ENVIRONMENT`
