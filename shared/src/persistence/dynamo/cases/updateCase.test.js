@@ -17,11 +17,7 @@ describe('updateCase', () => {
     status: Case.STATUS_TYPES.generalDocket,
   });
 
-  const queryStub = jest.fn().mockReturnValue([
-    {
-      sk: '123',
-    },
-  ]);
+  let queryStub;
 
   const deleteStub = jest.fn().mockReturnValue({
     promise: async () => null,
@@ -31,12 +27,33 @@ describe('updateCase', () => {
 
   client.get = getStub;
   client.put = putStub;
-  client.query = queryStub;
   client.update = updateStub;
   client.delete = deleteStub;
 
+  let firstQueryStub;
+
   beforeEach(() => {
     jest.clearAllMocks();
+
+    firstQueryStub = [
+      {
+        docketNumberSuffix: null,
+        inProgress: false,
+        pk: 'case|123',
+        sk: 'case|123',
+        status: Case.STATUS_TYPES.generalDocket,
+      },
+    ];
+
+    queryStub = jest
+      .fn()
+      .mockReturnValueOnce(firstQueryStub)
+      .mockReturnValue([
+        {
+          sk: '123',
+        },
+      ]);
+    client.query = queryStub;
 
     applicationContext = {
       environment: {
@@ -149,13 +166,6 @@ describe('updateCase', () => {
 
   describe('Respondents', () => {
     it('adds a respondent to a case with no existing respondents', async () => {
-      getStub.mockReturnValue({
-        docketNumberSuffix: null,
-        inProgress: false,
-        respondents: [],
-        status: Case.STATUS_TYPES.generalDocket,
-      });
-
       await updateCase({
         applicationContext,
         caseToUpdate: {
@@ -213,14 +223,17 @@ describe('updateCase', () => {
     });
 
     it('updates a respondent on a case', async () => {
-      getStub.mockReturnValue({
-        docketNumberSuffix: null,
-        inProgress: false,
-        respondents: [
-          { name: 'Guy Fieri', userId: 'user-id-existing-123' },
-          { name: 'Rachel Ray', userId: 'user-id-existing-234' },
-        ],
-        status: Case.STATUS_TYPES.generalDocket,
+      firstQueryStub.push({
+        name: 'Guy Fieri',
+        pk: 'case|123',
+        sk: 'respondent|user-id-existing-123',
+        userId: 'user-id-existing-123',
+      });
+      firstQueryStub.push({
+        name: 'Rachel Ray',
+        pk: 'case|123',
+        sk: 'respondent|user-id-existing-234',
+        userId: 'user-id-existing-234',
       });
 
       await updateCase({
@@ -250,15 +263,18 @@ describe('updateCase', () => {
       });
     });
 
-    it('removes a respondent from a case with existing respondents', async () => {
-      getStub.mockReturnValue({
-        docketNumberSuffix: null,
-        inProgress: false,
-        respondents: [
-          { name: 'Guy Fieri', userId: 'user-id-existing-123' },
-          { name: 'Rachel Ray', userId: 'user-id-existing-234' },
-        ],
-        status: Case.STATUS_TYPES.generalDocket,
+    fit('removes a respondent from a case with existing respondents', async () => {
+      firstQueryStub.push({
+        name: 'Guy Fieri',
+        pk: 'case|123',
+        sk: 'respondent|user-id-existing-123',
+        userId: 'user-id-existing-123',
+      });
+      firstQueryStub.push({
+        name: 'Rachel Ray',
+        pk: 'case|123',
+        sk: 'respondent|user-id-existing-234',
+        userId: 'user-id-existing-234',
       });
 
       await updateCase({
@@ -266,7 +282,12 @@ describe('updateCase', () => {
         caseToUpdate: {
           caseId: '123',
           docketNumberSuffix: null,
-          respondents: [{ name: 'Rachel Ray', userId: 'user-id-existing-234' }],
+          respondents: [
+            {
+              name: 'Rachel Ray',
+              userId: 'user-id-existing-234',
+            },
+          ],
           status: Case.STATUS_TYPES.generalDocket,
         },
       });
