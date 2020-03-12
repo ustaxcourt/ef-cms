@@ -10,7 +10,7 @@ export default test => {
   return it('Petitions clerk manually adds multiple privatePractitioners to case', async () => {
     expect(test.getState('caseDetail.privatePractitioners')).toEqual([]);
 
-    await test.runSequence('openAddPractitionerModalSequence');
+    await test.runSequence('openAddPrivatePractitionerModalSequence');
 
     expect(
       test.getState('validationErrors.practitionerSearchError'),
@@ -21,7 +21,7 @@ export default test => {
       value: 'PT1234',
     });
 
-    await test.runSequence('openAddPractitionerModalSequence');
+    await test.runSequence('openAddPrivatePractitionerModalSequence');
 
     expect(
       test.getState('validationErrors.practitionerSearchError'),
@@ -63,7 +63,7 @@ export default test => {
       key: 'practitionerSearch',
       value: 'PT5432',
     });
-    await test.runSequence('openAddPractitionerModalSequence');
+    await test.runSequence('openAddPrivatePractitionerModalSequence');
 
     expect(test.getState('modal.practitionerMatches.length')).toEqual(1);
     practitionerMatch = test.getState('modal.practitionerMatches.0');

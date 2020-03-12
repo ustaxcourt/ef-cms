@@ -268,13 +268,13 @@ describe('updateUserContactInformationInteractor', () => {
     expect(
       updatedCase.documents[updatedCase.documents.length - 1],
     ).toMatchObject({
-      additionalInfo: 'for Practitioner',
+      additionalInfo: 'for Private Practitioner',
       documentTitle: 'Notice of Change of Address',
-      filedBy: 'Counsel Practitioner',
+      filedBy: 'Counsel Private Practitioner',
     });
   });
 
-  it('includes the respondent in the change of address document when the respondent changes their address', async () => {
+  it('includes the irsPractitioner in the change of address document when the irsPractitioner changes their address', async () => {
     getCasesByUserStub = jest.fn().mockResolvedValue([
       {
         ...MOCK_CASE,
@@ -291,7 +291,7 @@ describe('updateUserContactInformationInteractor', () => {
     expect(
       updatedCase.documents[updatedCase.documents.length - 1],
     ).toMatchObject({
-      additionalInfo: 'for Respondent',
+      additionalInfo: 'for IRS Practitioner',
       documentTitle: 'Notice of Change of Address',
       filedBy: 'Resp.',
     });

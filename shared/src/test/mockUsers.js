@@ -1,6 +1,6 @@
 exports.MOCK_USERS = {
   '330d4b65-620a-489d-8414-6623653ebc4f': {
-    name: 'Practitioner',
+    name: 'Private Practitioner',
     role: 'privatePractitioner',
     section: 'privatePractitioner',
     userId: '330d4b65-620a-489d-8414-6623653ebc4f',
@@ -37,7 +37,7 @@ exports.MOCK_USERS = {
   },
   'f7d90c05-f6cd-442c-a168-202db587f16f': {
     contact: {},
-    name: 'Respondent',
+    name: 'IRS Practitioner',
     role: 'irsPractitioner',
     section: 'irsPractitioner',
     userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',

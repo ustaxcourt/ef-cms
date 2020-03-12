@@ -60,7 +60,7 @@ describe('filePetitionInteractor', () => {
         applicationContext: createApplicationContext({
           getCurrentUser: () => ({
             role: User.ROLES.irsPractitioner,
-            userId: 'respondent',
+            userId: 'irsPractitioner',
           }),
         }),
         petitionFile: null,

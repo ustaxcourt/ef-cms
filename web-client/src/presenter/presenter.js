@@ -152,8 +152,8 @@ import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNot
 import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSessionNoteModalSequence';
 import { openAddEditUserCaseNoteModalFromDetailSequence } from './sequences/openAddEditUserCaseNoteModalFromDetailSequence';
 import { openAddEditUserCaseNoteModalFromListSequence } from './sequences/openAddEditUserCaseNoteModalFromListSequence';
-import { openAddPractitionerModalSequence } from './sequences/openAddPractitionerModalSequence';
-import { openAddRespondentModalSequence } from './sequences/openAddRespondentModalSequence';
+import { openAddIrsPractitionerModalSequence } from './sequences/openAddIrsPractitionerModalSequence';
+import { openAddPrivatePractitionerModalSequence } from './sequences/openAddPrivatePractitionerModalSequence';
 import { openAddToTrialModalSequence } from './sequences/openAddToTrialModalSequence';
 import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
 import { openCancelDraftDocumentModalSequence } from './sequences/openCancelDraftDocumentModalSequence';
@@ -179,8 +179,8 @@ import { openDeleteCaseNoteConfirmModalSequence } from './sequences/openDeleteCa
 import { openDeleteSessionNoteConfirmModalSequence } from './sequences/openDeleteSessionNoteConfirmModalSequence';
 import { openDeleteUserCaseNoteConfirmModalSequence } from './sequences/openDeleteUserCaseNoteConfirmModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
-import { openEditPractitionersModalSequence } from './sequences/openEditPractitionersModalSequence';
-import { openEditRespondentsModalSequence } from './sequences/openEditRespondentsModalSequence';
+import { openEditIrsPractitionersModalSequence } from './sequences/openEditIrsPractitionersModalSequence';
+import { openEditPrivatePractitionersModalSequence } from './sequences/openEditPrivatePractitionersModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
@@ -267,9 +267,9 @@ import { submitCreateAttorneyUserSequence } from './sequences/submitCreateAttorn
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
-import { submitEditPractitionersModalSequence } from './sequences/submitEditPractitionersModalSequence';
+import { submitEditIrsPractitionersModalSequence } from './sequences/submitEditIrsPractitionersModalSequence';
 import { submitEditPrimaryContactSequence } from './sequences/submitEditPrimaryContactSequence';
-import { submitEditRespondentsModalSequence } from './sequences/submitEditRespondentsModalSequence';
+import { submitEditPrivatePractitionersModalSequence } from './sequences/submitEditPrivatePractitionersModalSequence';
 import { submitEditSecondaryContactSequence } from './sequences/submitEditSecondaryContactSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
@@ -339,8 +339,8 @@ import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequen
 import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserCaseNoteOnWorkingCopySequence';
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
 import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
-import { validateAddPractitionerSequence } from './sequences/caseAssociation/validateAddPractitionerSequence';
-import { validateAddRespondentSequence } from './sequences/caseAssociation/validateAddRespondentSequence';
+import { validateAddIrsPractitionerSequence } from './sequences/caseAssociation/validateAddIrsPractitionerSequence';
+import { validateAddPrivatePractitionerSequence } from './sequences/caseAssociation/validateAddPrivatePractitionerSequence';
 import { validateAddToTrialSessionSequence } from './sequences/validateAddToTrialSessionSequence';
 import { validateAttorneyUserSequence } from './sequences/validateAttorneyUserSequence';
 import { validateBlockFromTrialSequence } from './sequences/validateBlockFromTrialSequence';
@@ -351,8 +351,8 @@ import { validateCaseInventoryReportModalSequence } from './sequences/validateCa
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateDocketRecordSequence } from './sequences/validateDocketRecordSequence';
-import { validateEditPractitionersSequence } from './sequences/caseAssociation/validateEditPractitionersSequence';
-import { validateEditRespondentsSequence } from './sequences/caseAssociation/validateEditRespondentsSequence';
+import { validateEditIrsPractitionersSequence } from './sequences/caseAssociation/validateEditIrsPractitionersSequence';
+import { validateEditPrivatePractitionersSequence } from './sequences/caseAssociation/validateEditPrivatePractitionersSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateForwardMessageSequence } from './sequences/validateForwardMessageSequence';
 import { validateInitialWorkItemMessageInModalSequence } from './sequences/validateInitialWorkItemMessageInModalSequence';
@@ -537,8 +537,8 @@ export const presenter = {
     openAddEditSessionNoteModalSequence,
     openAddEditUserCaseNoteModalFromDetailSequence,
     openAddEditUserCaseNoteModalFromListSequence,
-    openAddPractitionerModalSequence,
-    openAddRespondentModalSequence,
+    openAddIrsPractitionerModalSequence,
+    openAddPrivatePractitionerModalSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
     openCancelDraftDocumentModalSequence,
@@ -564,8 +564,8 @@ export const presenter = {
     openDeleteSessionNoteConfirmModalSequence,
     openDeleteUserCaseNoteConfirmModalSequence,
     openEditCaseDeadlineModalSequence,
-    openEditPractitionersModalSequence,
-    openEditRespondentsModalSequence,
+    openEditIrsPractitionersModalSequence,
+    openEditPrivatePractitionersModalSequence,
     openPdfPreviewModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
@@ -650,9 +650,9 @@ export const presenter = {
     submitCreateOrderModalSequence,
     submitDocketEntrySequence,
     submitEditDocketEntryMetaSequence,
-    submitEditPractitionersModalSequence,
+    submitEditIrsPractitionersModalSequence,
     submitEditPrimaryContactSequence,
-    submitEditRespondentsModalSequence,
+    submitEditPrivatePractitionersModalSequence,
     submitEditSecondaryContactSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
@@ -722,8 +722,8 @@ export const presenter = {
     updateUserCaseNoteOnWorkingCopySequence,
     updateWorkingCopySessionNoteSequence,
     uploadCourtIssuedDocumentSequence,
-    validateAddPractitionerSequence,
-    validateAddRespondentSequence,
+    validateAddIrsPractitionerSequence,
+    validateAddPrivatePractitionerSequence,
     validateAddToTrialSessionSequence,
     validateAttorneyUserSequence,
     validateBlockFromTrialSequence,
@@ -734,8 +734,8 @@ export const presenter = {
     validateCourtIssuedDocketEntrySequence,
     validateDocketEntrySequence,
     validateDocketRecordSequence,
-    validateEditPractitionersSequence,
-    validateEditRespondentsSequence,
+    validateEditIrsPractitionersSequence,
+    validateEditPrivatePractitionersSequence,
     validateExternalDocumentInformationSequence,
     validateForwardMessageSequence,
     validateInitialWorkItemMessageInModalSequence,
