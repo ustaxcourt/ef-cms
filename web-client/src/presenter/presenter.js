@@ -153,7 +153,7 @@ import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSess
 import { openAddEditUserCaseNoteModalFromDetailSequence } from './sequences/openAddEditUserCaseNoteModalFromDetailSequence';
 import { openAddEditUserCaseNoteModalFromListSequence } from './sequences/openAddEditUserCaseNoteModalFromListSequence';
 import { openAddIrsPractitionerModalSequence } from './sequences/openAddIrsPractitionerModalSequence';
-import { openAddPractitionerModalSequence } from './sequences/openAddPractitionerModalSequence';
+import { openAddPrivatePractitionerModalSequence } from './sequences/openAddPrivatePractitionerModalSequence';
 import { openAddToTrialModalSequence } from './sequences/openAddToTrialModalSequence';
 import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
 import { openCancelDraftDocumentModalSequence } from './sequences/openCancelDraftDocumentModalSequence';
@@ -180,7 +180,7 @@ import { openDeleteSessionNoteConfirmModalSequence } from './sequences/openDelet
 import { openDeleteUserCaseNoteConfirmModalSequence } from './sequences/openDeleteUserCaseNoteConfirmModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
 import { openEditIrsPractitionersModalSequence } from './sequences/openEditIrsPractitionersModalSequence';
-import { openEditPractitionersModalSequence } from './sequences/openEditPractitionersModalSequence';
+import { openEditPrivatePractitionersModalSequence } from './sequences/openEditPrivatePractitionersModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
@@ -268,8 +268,8 @@ import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderMod
 import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
 import { submitEditIrsPractitionersModalSequence } from './sequences/submitEditIrsPractitionersModalSequence';
-import { submitEditPractitionersModalSequence } from './sequences/submitEditPractitionersModalSequence';
 import { submitEditPrimaryContactSequence } from './sequences/submitEditPrimaryContactSequence';
+import { submitEditPrivatePractitionersModalSequence } from './sequences/submitEditPrivatePractitionersModalSequence';
 import { submitEditSecondaryContactSequence } from './sequences/submitEditSecondaryContactSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
@@ -339,7 +339,7 @@ import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserC
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
 import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
 import { validateAddIrsPractitionerSequence } from './sequences/caseAssociation/validateAddIrsPractitionerSequence';
-import { validateAddPractitionerSequence } from './sequences/caseAssociation/validateAddPractitionerSequence';
+import { validateAddPrivatePractitionerSequence } from './sequences/caseAssociation/validateAddPrivatePractitionerSequence';
 import { validateAddToTrialSessionSequence } from './sequences/validateAddToTrialSessionSequence';
 import { validateAttorneyUserSequence } from './sequences/validateAttorneyUserSequence';
 import { validateBlockFromTrialSequence } from './sequences/validateBlockFromTrialSequence';
@@ -351,7 +351,7 @@ import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCour
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateDocketRecordSequence } from './sequences/validateDocketRecordSequence';
 import { validateEditIrsPractitionersSequence } from './sequences/caseAssociation/validateEditIrsPractitionersSequence';
-import { validateEditPractitionersSequence } from './sequences/caseAssociation/validateEditPractitionersSequence';
+import { validateEditPrivatePractitionersSequence } from './sequences/caseAssociation/validateEditPrivatePractitionersSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateForwardMessageSequence } from './sequences/validateForwardMessageSequence';
 import { validateInitialWorkItemMessageInModalSequence } from './sequences/validateInitialWorkItemMessageInModalSequence';
@@ -537,7 +537,7 @@ export const presenter = {
     openAddEditUserCaseNoteModalFromDetailSequence,
     openAddEditUserCaseNoteModalFromListSequence,
     openAddIrsPractitionerModalSequence,
-    openAddPractitionerModalSequence,
+    openAddPrivatePractitionerModalSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
     openCancelDraftDocumentModalSequence,
@@ -564,7 +564,7 @@ export const presenter = {
     openDeleteUserCaseNoteConfirmModalSequence,
     openEditCaseDeadlineModalSequence,
     openEditIrsPractitionersModalSequence,
-    openEditPractitionersModalSequence,
+    openEditPrivatePractitionersModalSequence,
     openPdfPreviewModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
@@ -650,8 +650,8 @@ export const presenter = {
     submitDocketEntrySequence,
     submitEditDocketEntryMetaSequence,
     submitEditIrsPractitionersModalSequence,
-    submitEditPractitionersModalSequence,
     submitEditPrimaryContactSequence,
+    submitEditPrivatePractitionersModalSequence,
     submitEditSecondaryContactSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
@@ -721,7 +721,7 @@ export const presenter = {
     updateWorkingCopySessionNoteSequence,
     uploadCourtIssuedDocumentSequence,
     validateAddIrsPractitionerSequence,
-    validateAddPractitionerSequence,
+    validateAddPrivatePractitionerSequence,
     validateAddToTrialSessionSequence,
     validateAttorneyUserSequence,
     validateBlockFromTrialSequence,
@@ -733,7 +733,7 @@ export const presenter = {
     validateDocketEntrySequence,
     validateDocketRecordSequence,
     validateEditIrsPractitionersSequence,
-    validateEditPractitionersSequence,
+    validateEditPrivatePractitionersSequence,
     validateExternalDocumentInformationSequence,
     validateForwardMessageSequence,
     validateInitialWorkItemMessageInModalSequence,

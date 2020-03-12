@@ -1,18 +1,18 @@
 /**
- * validateAddPractitionerInteractor
+ * validateAddPrivatePractitionerInteractor
  *
  * @param {object} params params
  * @param {object} params.applicationContext the application context
  * @param {object} params.counsel metadata
  * @returns {object} errors
  */
-exports.validateAddPractitionerInteractor = ({
+exports.validateAddPrivatePractitionerInteractor = ({
   applicationContext,
   counsel,
 }) => {
   const errors = applicationContext
     .getEntityConstructors()
-    .AddPractitionerFactory.get(counsel)
+    .AddPrivatePractitionerFactory.get(counsel)
     .getFormattedValidationErrors();
 
   if (!errors) return null;

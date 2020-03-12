@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the next object in the path
  * @returns {Promise<*>} the success path
  */
-export const submitEditPractitionersModalAction = async ({
+export const submitEditPrivatePractitionersModalAction = async ({
   applicationContext,
   get,
   path,

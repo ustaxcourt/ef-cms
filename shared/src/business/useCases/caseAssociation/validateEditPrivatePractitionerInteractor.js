@@ -1,18 +1,18 @@
 /**
- * validateEditPractitionerInteractor
+ * validateEditPrivatePractitionerInteractor
  *
  * @param {object} params params
  * @param {object} params.applicationContext the application context
  * @param {object} params.practitioner metadata
  * @returns {object} errors
  */
-exports.validateEditPractitionerInteractor = ({
+exports.validateEditPrivatePractitionerInteractor = ({
   applicationContext,
   practitioner,
 }) => {
   const errors = applicationContext
     .getEntityConstructors()
-    .EditPractitionerFactory.get(practitioner)
+    .EditPrivatePractitionerFactory.get(practitioner)
     .getFormattedValidationErrors();
 
   if (!errors) return null;

@@ -1,14 +1,14 @@
 import { clearAlertsAction } from '../../actions/clearAlertsAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../../actions/shouldValidateAction';
-import { validateAddPractitionerAction } from '../../actions/caseAssociation/validateAddPractitionerAction';
+import { validateAddPrivatePractitionerAction } from '../../actions/caseAssociation/validateAddPrivatePractitionerAction';
 
-export const validateAddPractitionerSequence = [
+export const validateAddPrivatePractitionerSequence = [
   shouldValidateAction,
   {
     ignore: [],
     validate: [
-      validateAddPractitionerAction,
+      validateAddPrivatePractitionerAction,
       {
         error: [setValidationErrorsAction],
         success: [clearAlertsAction],
