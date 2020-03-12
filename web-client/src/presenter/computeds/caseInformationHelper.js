@@ -17,8 +17,8 @@ export const caseInformationHelper = get => {
 
   return {
     showAddCounsel,
-    showEditPrivatePractitioners: showEditPrivatePractitionersButton,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
+    showEditPrivatePractitioners: showEditPrivatePractitionersButton,
     showSealCaseButton,
   };
 };
