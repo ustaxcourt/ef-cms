@@ -79,4 +79,24 @@ describe('reviewPetitionFromPaperHelper', () => {
       shouldShowIrsNoticeDate: false,
     });
   });
+
+  it('should show orders needed summary when order designating place of trial has been selected', () => {
+    const result = runCompute(reviewPetitionFromPaperHelper, {
+      state: {
+        form: {
+          orderForRequestedTrialLocation: true,
+        },
+      },
+    });
+
+    expect(result).toEqual({
+      hasIrsNoticeFormatted: 'No',
+      hasOrders: true,
+      irsNoticeDateFormatted: undefined,
+      petitionPaymentStatusFormatted: 'Not paid',
+      preferredTrialCityFormatted: 'No requested place of trial',
+      receivedAtFormatted: undefined,
+      shouldShowIrsNoticeDate: false,
+    });
+  });
 });
