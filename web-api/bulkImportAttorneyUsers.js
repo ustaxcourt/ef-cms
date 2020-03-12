@@ -9,36 +9,7 @@ const { gatherRecords, getCsvOptions } = require('../shared/src/tools/helpers');
 const { getUserToken } = require('./storage/scripts/loadTest/loadTestHelpers');
 
 const formatRecord = record => {
-  const nameArray = [
-    record.firstName,
-    record.middleName,
-    record.lastName,
-    record.suffix,
-  ].filter(item => item);
-  record.name = nameArray.join(' ');
-
-  record.admissionsDate = createISODateString(
-    record.unformattedAdmissionsDate,
-    'MM-DD-YYYY',
-  );
-
-  record.birthYear = parseInt(record.birthYear) || undefined;
-
-  record.isAdmitted = record.admissionsStatus === 'Active';
-
-  if (record.isIrsEmployee === 'Y') {
-    record.employer = 'IRS';
-    record.role = 'irsPractitioner';
-    record.section = 'irsPractitioner';
-  } else if (record.isDojEmployee === 'Y') {
-    record.employer = 'DOJ';
-    record.role = 'irsPractitioner';
-    record.section = 'irsPractitioner';
-  } else {
-    record.employer = 'Private';
-    record.role = 'privatePractitioner';
-    record.section = 'privatePractitioner';
-  }
+  const returnData = {};
 
   Object.keys(record).map(key => {
     if (record[key] === '') {
@@ -46,7 +17,54 @@ const formatRecord = record => {
     }
   });
 
-  return record;
+  const nameArray = [
+    record.firstName,
+    record.middleName,
+    record.lastName,
+    record.suffix,
+  ].filter(item => item);
+  returnData.name = nameArray.join(' ');
+
+  returnData.admissionsDate = createISODateString(
+    record.unformattedAdmissionsDate,
+    'MM-DD-YYYY',
+  );
+
+  returnData.birthYear = parseInt(record.birthYear) || undefined;
+
+  returnData.isAdmitted = record.admissionsStatus === 'Active';
+
+  if (record.isIrsEmployee === 'Y') {
+    returnData.employer = 'IRS';
+    returnData.role = 'irsPractitioner';
+    returnData.section = 'irsPractitioner';
+  } else if (record.isDojEmployee === 'Y') {
+    returnData.employer = 'DOJ';
+    returnData.role = 'irsPractitioner';
+    returnData.section = 'irsPractitioner';
+  } else {
+    returnData.employer = 'Private';
+    returnData.role = 'privatePractitioner';
+    returnData.section = 'privatePractitioner';
+  }
+
+  returnData.additionalPhone = record.additionalPhone;
+  returnData.alternateEmail = record.alternateEmail;
+  returnData.firmName = record.firmName;
+  returnData.originalBarState = record.originalBarState;
+  returnData.practitionerType = record.practitionerType;
+
+  returnData.contact = {
+    address1: record.address1,
+    address2: record.address2,
+    city: record.city,
+    countryType: 'domestic',
+    phone: record.phone,
+    postalCode: record.postalCode,
+    state: record.state,
+  };
+
+  return returnData;
 };
 
 /* istanbul ignore next */

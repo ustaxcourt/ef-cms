@@ -77,4 +77,43 @@ describe('formatRecord', () => {
       section: 'privatePractitioner',
     });
   });
+
+  it('formats a record with a nested contact', () => {
+    const initialRecord = {
+      address1: 'knows how to party',
+      admissionsStatus: 'Active',
+      birthYear: '',
+      city: 'the city of Compton',
+      firstName: 'Rachael',
+      isDojEmployee: 'N',
+      isIrsEmployee: 'N',
+      lastName: 'Ray',
+      middleName: '',
+      phone: '1234567890',
+      postalCode: '11111',
+      state: 'CA',
+      suffix: '',
+      unformattedAdmissionsDate: '11-30-2000',
+    };
+
+    const formattedRecord = formatRecord(initialRecord);
+
+    expect(formattedRecord).toMatchObject({
+      admissionsDate: '2000-11-30T05:00:00.000Z',
+      birthYear: undefined,
+      contact: {
+        address1: 'knows how to party',
+        city: 'the city of Compton',
+        countryType: 'domestic',
+        phone: '1234567890',
+        postalCode: '11111',
+        state: 'CA',
+      },
+      employer: 'Private',
+      isAdmitted: true,
+      name: 'Rachael Ray',
+      role: 'privatePractitioner',
+      section: 'privatePractitioner',
+    });
+  });
 });
