@@ -11,12 +11,12 @@ import { setValidationErrorsAction } from '../../actions/setValidationErrorsActi
 import { showProgressSequenceDecorator } from '../../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
-import { validateAddRespondentAction } from '../../actions/caseAssociation/validateAddRespondentAction';
+import { validateAddIrsPractitionerAction } from '../../actions/caseAssociation/validateAddIrsPractitionerAction';
 
 export const associateIrsPractitionerWithCaseSequence = showProgressSequenceDecorator(
   [
     startShowValidationAction,
-    validateAddRespondentAction,
+    validateAddIrsPractitionerAction,
     {
       error: [setValidationErrorsAction],
       success: [

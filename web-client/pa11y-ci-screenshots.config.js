@@ -2,19 +2,19 @@ const sanitize = require('sanitize-filename');
 
 const adc = require('./pa11y/pa11y-adc');
 const docketclerk = require('./pa11y/pa11y-docketclerk');
+const irsPractitioner = require('./pa11y/pa11y-irs-practitioner');
 const judge = require('./pa11y/pa11y-judge');
 const petitioner = require('./pa11y/pa11y-petitioner');
 const petitionsclerk = require('./pa11y/pa11y-petitionsclerk');
-const practitioner = require('./pa11y/pa11y-practitioner');
-const respondent = require('./pa11y/pa11y-respondent');
+const privatePractitioner = require('./pa11y/pa11y-private-practitioner');
 
 const userUrls = [
   ...docketclerk,
   ...judge,
   ...petitioner,
   ...petitionsclerk,
-  ...practitioner,
-  ...respondent,
+  ...privatePractitioner,
+  ...irsPractitioner,
   ...adc,
 ];
 
