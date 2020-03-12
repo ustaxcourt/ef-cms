@@ -16,6 +16,7 @@ describe('generateSignedDocument', () => {
   let testDoc;
 
   beforeEach(() => {
+    jest.setTimeout(10000);
     testDoc = testPdfDocBytes();
   });
 

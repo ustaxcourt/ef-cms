@@ -128,7 +128,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
     expect(test.getState('currentPage')).toEqual('AddDocketEntry');
     expect(test.getState('form')).toEqual({
       lodged: false,
-      practitioner: [],
+      privatePractitioners: [],
     });
   });
 };

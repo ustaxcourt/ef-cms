@@ -25,7 +25,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          practitioners: [{ userId: '123' }],
+          privatePractitioners: [{ userId: '123' }],
         },
       },
     });
@@ -52,7 +52,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          practitioners: [{ userId: '123' }],
+          privatePractitioners: [{ userId: '123' }],
         },
       },
     });
@@ -79,7 +79,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          practitioners: [{ userId: '123' }],
+          privatePractitioners: [{ userId: '123' }],
         },
       },
     });
@@ -106,7 +106,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          respondents: [{ userId: '789' }],
+          irsPractitioners: [{ userId: '789' }],
         },
       },
     });
@@ -133,7 +133,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          respondent: { userId: '123' },
+          irsPractitioners: [{ userId: '123' }],
         },
       },
     });
@@ -214,7 +214,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          practitioners: [{ userId: '123' }],
+          privatePractitioners: [{ userId: '123' }],
         },
       },
     });

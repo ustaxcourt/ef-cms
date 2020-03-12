@@ -68,7 +68,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
         {
           docketNumber: '45678-18',
@@ -76,7 +76,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
         {
           docketNumber: '45678-18',
@@ -84,7 +84,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
         {
           docketNumber: '45678-18',
@@ -92,7 +92,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Order',
           documentType: 'Order',
           eventCode: 'O',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
         {
           docketNumber: '45678-18',
@@ -100,7 +100,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Order to Show Cause',
           documentType: 'Order to Show Cause',
           eventCode: 'OSC',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
         {
           docketNumber: '45678-18',
@@ -108,7 +108,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Transcript of [anything] on [date]',
           documentType: 'TRAN - Transcript',
           eventCode: 'TRAN',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
       ],
       filingType: 'Myself',
