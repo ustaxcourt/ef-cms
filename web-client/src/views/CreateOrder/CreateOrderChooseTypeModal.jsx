@@ -27,6 +27,7 @@ export const CreateOrderChooseTypeModal = connect(
     return (
       <ModalDialog
         cancelLabel="Cancel"
+        cancelLink={true}
         cancelSequence={cancelSequence}
         className=""
         confirmLabel="Continue"
