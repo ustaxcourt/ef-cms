@@ -307,6 +307,7 @@ import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByInd
 import { updateCaseValueSequence } from './sequences/updateCaseValueSequence';
 import { updateCaseWorkingCopyUserNoteSequence } from './sequences/updateCaseWorkingCopyUserNoteSequence';
 import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
+import { updateContactSecondaryOnChangeSequence } from './sequences/updateContactSecondaryOnChangeSequence';
 import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updateCourtIssuedDocketEntryFormValueSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
@@ -595,6 +596,7 @@ export const presenter = {
     runTrialSessionPlanningReportSequence,
     saveCaseAndServeToIrsSequence,
     saveDocumentSigningSequence,
+    updateContactSecondaryOnChangeSequence,
     saveIntermediateDocketEntrySequence,
     saveInternalCaseForLaterSequence,
     saveSavedCaseForLaterSequence,
