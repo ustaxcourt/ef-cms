@@ -180,6 +180,7 @@ import { openDeleteSessionNoteConfirmModalSequence } from './sequences/openDelet
 import { openDeleteUserCaseNoteConfirmModalSequence } from './sequences/openDeleteUserCaseNoteConfirmModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
 import { openEditIrsPractitionersModalSequence } from './sequences/openEditIrsPractitionersModalSequence';
+import { openEditOrderTitleModalSequence } from './sequences/openEditOrderTitleModalSequence';
 import { openEditPrivatePractitionersModalSequence } from './sequences/openEditPrivatePractitionersModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
@@ -269,6 +270,7 @@ import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderMod
 import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
 import { submitEditIrsPractitionersModalSequence } from './sequences/submitEditIrsPractitionersModalSequence';
+import { submitEditOrderTitleModalSequence } from './sequences/submitEditOrderTitleModalSequence';
 import { submitEditPrimaryContactSequence } from './sequences/submitEditPrimaryContactSequence';
 import { submitEditPrivatePractitionersModalSequence } from './sequences/submitEditPrivatePractitionersModalSequence';
 import { submitEditSecondaryContactSequence } from './sequences/submitEditSecondaryContactSequence';
@@ -566,6 +568,7 @@ export const presenter = {
     openDeleteUserCaseNoteConfirmModalSequence,
     openEditCaseDeadlineModalSequence,
     openEditIrsPractitionersModalSequence,
+    openEditOrderTitleModalSequence,
     openEditPrivatePractitionersModalSequence,
     openPdfPreviewModalSequence,
     openPrioritizeCaseModalSequence,
@@ -653,6 +656,7 @@ export const presenter = {
     submitDocketEntrySequence,
     submitEditDocketEntryMetaSequence,
     submitEditIrsPractitionersModalSequence,
+    submitEditOrderTitleModalSequence,
     submitEditPrimaryContactSequence,
     submitEditPrivatePractitionersModalSequence,
     submitEditSecondaryContactSequence,

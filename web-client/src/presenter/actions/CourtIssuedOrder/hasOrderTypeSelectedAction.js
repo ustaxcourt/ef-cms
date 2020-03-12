@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @returns {object} the path to execute
  */
 export const hasOrderTypeSelectedAction = ({ get, path, props }) => {
-  const eventCode = get(state.screenMetadata.orderData.eventCode);
+  const eventCode = get(state.modal.eventCode);
   const caseId = props.docketNumber;
   if (eventCode) {
     return path['proceed']();

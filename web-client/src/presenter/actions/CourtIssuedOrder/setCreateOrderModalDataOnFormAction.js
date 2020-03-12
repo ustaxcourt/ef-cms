@@ -7,10 +7,8 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object
  */
-export const unstashCreateOrderModalDataAction = ({ get, store }) => {
-  const documentTitle = get(state.screenMetadata.orderData.documentTitle);
-  const documentType = get(state.screenMetadata.orderData.documentType);
-  const eventCode = get(state.screenMetadata.orderData.eventCode);
+export const setCreateOrderModalDataOnFormAction = ({ get, store }) => {
+  const { documentTitle, documentType, eventCode } = get(state.modal);
 
   if (documentTitle && documentType && eventCode) {
     store.set(state.form, {

@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { EditOrderTitleModal } from './EditOrderTitleModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
@@ -15,6 +16,7 @@ export const CreateOrder = connect(
     createOrderHelper: state.createOrderHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    openEditOrderTitleModalSequence: sequences.openEditOrderTitleModalSequence,
     refreshPdfWhenSwitchingCreateOrderTabSequence:
       sequences.refreshPdfWhenSwitchingCreateOrderTabSequence,
     showModal: state.showModal,
@@ -26,6 +28,7 @@ export const CreateOrder = connect(
     createOrderHelper,
     form,
     formCancelToggleCancelSequence,
+    openEditOrderTitleModalSequence,
     refreshPdfWhenSwitchingCreateOrderTabSequence,
     showModal,
     submitCourtIssuedOrderSequence,
@@ -40,20 +43,27 @@ export const CreateOrder = connect(
         {showModal === 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
         )}
+        {showModal === 'EditOrderTitleModal' && <EditOrderTitleModal />}
         <SuccessNotification />
         <ErrorNotification />
 
         <section className="usa-section grid-container DocumentDetail">
           <div className="grid-container padding-x-0">
-            <div className="grid-row grid-gap">
-              <div className="grid-col-8">
-                <h2 className="heading-1">{pageTitle}</h2>
-              </div>
-            </div>
+            <h1 className="heading-1">
+              {pageTitle}{' '}
+              <Button
+                link
+                className="margin-left-1"
+                icon="edit"
+                onClick={() => openEditOrderTitleModalSequence()}
+              >
+                Edit Title
+              </Button>
+            </h1>
 
             <Tabs
               bind="createOrderTab"
-              className="classic-horizontal-header3 tab-border"
+              className="tab-border tab-button-h2"
               onSelect={() => refreshPdfWhenSwitchingCreateOrderTabSequence()}
             >
               <Tab id="tab-generate" tabName="generate" title="Generate">
