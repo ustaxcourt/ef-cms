@@ -11,10 +11,8 @@ export const setCreateOrderModalDataOnFormAction = ({ get, store }) => {
   const { documentTitle, documentType, eventCode } = get(state.modal);
 
   if (documentTitle && documentType && eventCode) {
-    store.set(state.form, {
-      documentTitle,
-      documentType,
-      eventCode,
-    });
+    store.set(state.form.documentTitle, documentTitle);
+    store.set(state.form.documentType, documentType);
+    store.set(state.form.eventCode, eventCode);
   }
 };

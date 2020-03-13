@@ -9,7 +9,9 @@ describe('setCreateOrderModalDataOnFormAction', () => {
         presenter,
       },
       state: {
-        form: {},
+        form: {
+          richText: 'something',
+        },
         modal: {
           documentTitle: 'Order to Do Something',
           documentType: 'Order',
@@ -20,6 +22,7 @@ describe('setCreateOrderModalDataOnFormAction', () => {
     expect(result.state.form.eventCode).toEqual('O');
     expect(result.state.form.documentTitle).toEqual('Order to Do Something');
     expect(result.state.form.documentType).toEqual('Order');
+    expect(result.state.form.richText).toEqual('something');
   });
 
   it('does not error if modal is empty', async () => {
