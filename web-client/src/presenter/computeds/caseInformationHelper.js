@@ -4,11 +4,11 @@ export const caseInformationHelper = get => {
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
 
-  const showEditPractitionersButton =
+  const showEditPrivatePractitionersButton =
     permissions.ASSOCIATE_USER_WITH_CASE &&
     caseDetail.privatePractitioners &&
     !!caseDetail.privatePractitioners.length;
-  const showEditRespondentsButton =
+  const showEditIrsPractitionersButton =
     permissions.ASSOCIATE_USER_WITH_CASE &&
     caseDetail.irsPractitioners &&
     !!caseDetail.irsPractitioners.length;
@@ -17,8 +17,8 @@ export const caseInformationHelper = get => {
 
   return {
     showAddCounsel,
-    showEditPractitioners: showEditPractitionersButton,
-    showEditRespondents: showEditRespondentsButton,
+    showEditIrsPractitioners: showEditIrsPractitionersButton,
+    showEditPrivatePractitioners: showEditPrivatePractitionersButton,
     showSealCaseButton,
   };
 };

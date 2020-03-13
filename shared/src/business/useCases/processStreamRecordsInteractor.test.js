@@ -3,26 +3,31 @@ const {
 } = require('./processStreamRecordsInteractor');
 
 describe('processStreamRecordsInteractor', () => {
-  let bulkSpy = jest.fn().mockReturnValue({ body: {} });
-  let indexSpy = jest.fn();
+  let bulkSpy;
+  let indexSpy;
   const createElasticsearchReindexRecordSpy = jest.fn();
 
-  const applicationContext = {
-    environment: { stage: 'local' },
-    getPersistenceGateway: () => ({
-      createElasticsearchReindexRecord: createElasticsearchReindexRecordSpy,
-    }),
-    getSearchClient: () => ({
-      bulk: bulkSpy,
-      index: indexSpy,
-    }),
-    logger: {
-      info: () => {},
-    },
-  };
+  let applicationContext;
 
   beforeEach(() => {
     jest.clearAllMocks();
+
+    bulkSpy = jest.fn().mockReturnValue({ body: {} });
+    indexSpy = jest.fn();
+
+    applicationContext = {
+      environment: { stage: 'local' },
+      getPersistenceGateway: () => ({
+        createElasticsearchReindexRecord: createElasticsearchReindexRecordSpy,
+      }),
+      getSearchClient: () => ({
+        bulk: bulkSpy,
+        index: indexSpy,
+      }),
+      logger: {
+        info: () => {},
+      },
+    };
   });
 
   it('does not call bulk function if recordsToProcess is an empty array', async () => {
@@ -169,6 +174,92 @@ describe('processStreamRecordsInteractor', () => {
     expect(createElasticsearchReindexRecordSpy.mock.calls[0][0]).toMatchObject({
       recordPk: '1',
       recordSk: '2',
+    });
+  });
+
+  it('attempts to reindex if bulk indexing returns error data', async () => {
+    bulkSpy = jest.fn().mockResolvedValue({
+      body: {
+        errors: [{ badError: true }],
+        items: [
+          {
+            index: { error: false },
+          },
+          {
+            index: { error: true },
+          },
+        ],
+      },
+    });
+
+    await processStreamRecordsInteractor({
+      applicationContext,
+      recordsToProcess: [
+        {
+          dynamodb: {
+            Keys: { pk: { S: '1' }, sk: { S: '2' } },
+            NewImage: { caseId: { S: '1' }, pk: { S: '1' }, sk: { S: '1' } },
+          },
+          eventName: 'INSERT',
+        },
+        {
+          dynamodb: {
+            Keys: { pk: { S: '2' }, sk: { S: '3' } },
+            NewImage: { caseId: { S: '2' }, pk: { S: '2' }, sk: { S: '2' } },
+          },
+          eventName: 'INSERT',
+        },
+      ],
+    });
+
+    expect(indexSpy).toBeCalled();
+    expect(indexSpy.mock.calls[0][0]).toMatchObject({
+      body: { caseId: { S: '2' } },
+    });
+  });
+
+  it('creates a reindex record if bulk indexing returns error data and individual indexing fails', async () => {
+    bulkSpy = jest.fn().mockResolvedValue({
+      body: {
+        errors: [{ badError: true }],
+        items: [
+          {
+            index: { error: false },
+          },
+          {
+            index: { error: true },
+          },
+        ],
+      },
+    });
+    indexSpy = jest.fn().mockImplementation(() => {
+      throw new Error('bad!');
+    });
+
+    await processStreamRecordsInteractor({
+      applicationContext,
+      recordsToProcess: [
+        {
+          dynamodb: {
+            Keys: { pk: { S: '1' }, sk: { S: '2' } },
+            NewImage: { caseId: { S: '1' }, pk: { S: '1' }, sk: { S: '2' } },
+          },
+          eventName: 'INSERT',
+        },
+        {
+          dynamodb: {
+            Keys: { pk: { S: '2' }, sk: { S: '3' } },
+            NewImage: { caseId: { S: '2' }, pk: { S: '2' }, sk: { S: '3' } },
+          },
+          eventName: 'INSERT',
+        },
+      ],
+    });
+
+    expect(createElasticsearchReindexRecordSpy).toHaveBeenCalled();
+    expect(createElasticsearchReindexRecordSpy.mock.calls[0][0]).toMatchObject({
+      recordPk: '2',
+      recordSk: '3',
     });
   });
 });

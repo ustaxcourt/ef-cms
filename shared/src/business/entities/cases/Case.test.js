@@ -1268,7 +1268,7 @@ describe('Case entity', () => {
         {
           documentId: '123',
           documentType: 'Answer',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
         { applicationContext },
       );

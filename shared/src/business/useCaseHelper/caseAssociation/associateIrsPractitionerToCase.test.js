@@ -66,7 +66,7 @@ describe('associateIrsPractitionerToCase', () => {
     expect(updateCaseSpy).not.toBeCalled();
   });
 
-  it('should add mapping for a respondent', async () => {
+  it('should add mapping for an irsPractitioner', async () => {
     let associateUserWithCaseSpy = jest.fn();
     let verifyCaseForUserSpy = jest.fn().mockReturnValue(false);
     let updateCaseSpy = jest.fn();

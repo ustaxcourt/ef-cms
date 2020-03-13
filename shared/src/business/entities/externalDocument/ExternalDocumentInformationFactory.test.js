@@ -398,12 +398,12 @@ describe('ExternalDocumentInformationFactory', () => {
         );
       });
 
-      describe('Respondent Selected', () => {
+      describe('IRS Practitioner Selected', () => {
         beforeEach(() => {
           baseDoc.partyIrsPractitioner = true;
         });
 
-        it('should allow having only a respondent as a party to all cases', () => {
+        it('should allow having only an irsPractitioner as a party to all cases', () => {
           expect(errors().partyPrimary).toEqual(undefined);
         });
       });
