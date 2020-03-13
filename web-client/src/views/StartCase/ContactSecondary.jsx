@@ -17,8 +17,8 @@ export const ContactSecondary = connect(
     onChange: props.onChange,
     onChangeSequence: sequences[props.onChange],
     parentView: props.parentView,
-    updateContactSecondaryOnChangeSequence:
-      sequences.updateContactSecondaryOnChangeSequence,
+    updateFormValueAndSecondaryContactInfoSequence:
+      sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -31,7 +31,7 @@ export const ContactSecondary = connect(
     onChange,
     onChangeSequence,
     parentView,
-    updateContactSecondaryOnChangeSequence,
+    updateFormValueAndSecondaryContactInfoSequence,
     useSameAsPrimary,
     validationErrors,
     wrapperClassName,
@@ -86,7 +86,7 @@ export const ContactSecondary = connect(
                 type="checkbox"
                 value={true}
                 onChange={e => {
-                  updateContactSecondaryOnChangeSequence({
+                  updateFormValueAndSecondaryContactInfoSequence({
                     key: e.target.name,
                     value: e.target.checked,
                   });
