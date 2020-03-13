@@ -1,6 +1,5 @@
 const client = require('../../dynamodbClientService');
 const { sortBy } = require('lodash');
-const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 /**
  * getCaseByCaseId
@@ -11,80 +10,36 @@ const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
  * @returns {object} the case details
  */
 exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
-  const theCase = await client
-    .get({
-      Key: {
-        pk: `case|${caseId}`,
-        sk: `case|${caseId}`,
-      },
-      applicationContext,
-    })
-    .then(results =>
-      stripWorkItems(results, applicationContext.isAuthorizedForWorkItems()),
-    );
+  const caseItems = await client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `case|${caseId}`,
+    },
+    KeyConditionExpression: '#pk = :pk',
+    applicationContext,
+  });
 
-  if (!theCase) {
+  if (!caseItems) {
     return null;
   }
 
-  const docketRecord = await client.query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${theCase.caseId}`,
-      ':prefix': 'docket-record',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    applicationContext,
-  });
+  const theCase = caseItems.filter(item => item.sk.startsWith('case|')).pop();
 
-  const documents = await client.query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${theCase.caseId}`,
-      ':prefix': 'document',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    applicationContext,
-  });
+  const docketRecord = caseItems.filter(item =>
+    item.sk.startsWith('docket-record|'),
+  );
+  const documents = caseItems.filter(item => item.sk.startsWith('document|'));
+  const privatePractitioners = caseItems.filter(item =>
+    item.sk.startsWith('privatePractitioner|'),
+  );
+  const irsPractitioners = caseItems.filter(item =>
+    item.sk.startsWith('irsPractitioner|'),
+  );
 
-  const privatePractitioners = await client.query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${theCase.caseId}`,
-      ':prefix': 'privatePractitioner',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    applicationContext,
-  });
-
-  const irsPractitioners = await client.query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${theCase.caseId}`,
-      ':prefix': 'irsPractitioner',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    applicationContext,
-  });
-
-  const actualDocketRecord =
-    docketRecord.length > 0 ? docketRecord : theCase.docketRecord;
-  const actualDocuments = documents.length > 0 ? documents : theCase.documents;
-
-  const sortedDocketRecord = sortBy(actualDocketRecord, 'index');
-  const sortedDocuments = sortBy(actualDocuments, 'createdAt');
+  const sortedDocketRecord = sortBy(docketRecord, 'index');
+  const sortedDocuments = sortBy(documents, 'createdAt');
 
   return {
     ...theCase,

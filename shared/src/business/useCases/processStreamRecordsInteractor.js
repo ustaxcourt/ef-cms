@@ -34,10 +34,38 @@ exports.processStreamRecordsInteractor = async ({
 
   if (body && body.length) {
     try {
-      await searchClient.bulk({
+      const response = await searchClient.bulk({
         body,
         refresh: true,
       });
+
+      if (response.body.errors) {
+        for (let i = 0; i < response.body.items.length; i++) {
+          const action = response.body.items[i];
+          const operation = Object.keys(action)[0];
+          if (action[operation].error) {
+            const record = body[i * 2 + 1];
+
+            try {
+              await searchClient.index({
+                body: { ...record },
+                id: `${record.pk.S}_${record.sk.S}`,
+                index: 'efcms',
+              });
+            } catch (e) {
+              await applicationContext
+                .getPersistenceGateway()
+                .createElasticsearchReindexRecord({
+                  applicationContext,
+                  recordPk: record.pk.S,
+                  recordSk: record.sk.S,
+                });
+
+              applicationContext.logger.info('Error', e);
+            }
+          }
+        }
+      }
     } catch {
       //if the bulk index fails, try each single index individually and
       //add the failing ones to the reindex list
