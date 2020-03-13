@@ -307,7 +307,6 @@ import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByInd
 import { updateCaseValueSequence } from './sequences/updateCaseValueSequence';
 import { updateCaseWorkingCopyUserNoteSequence } from './sequences/updateCaseWorkingCopyUserNoteSequence';
 import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
-import { updateContactSecondaryOnChangeSequence } from './sequences/updateContactSecondaryOnChangeSequence';
 import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updateCourtIssuedDocketEntryFormValueSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
@@ -318,6 +317,7 @@ import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequ
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
 import { updateFormPartyTypeSequence } from './sequences/updateFormPartyTypeSequence';
 import { updateFormValueAndInternalCaseCaptionSequence } from './sequences/updateFormValueAndInternalCaseCaptionSequence';
+import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/updateFormValueAndSecondaryContactInfoSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateForwardFormValueSequence } from './sequences/updateForwardFormValueSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
@@ -596,7 +596,6 @@ export const presenter = {
     runTrialSessionPlanningReportSequence,
     saveCaseAndServeToIrsSequence,
     saveDocumentSigningSequence,
-    updateContactSecondaryOnChangeSequence,
     saveIntermediateDocketEntrySequence,
     saveInternalCaseForLaterSequence,
     saveSavedCaseForLaterSequence,
@@ -702,6 +701,7 @@ export const presenter = {
     updateFileDocumentWizardFormValueSequence,
     updateFormPartyTypeSequence,
     updateFormValueAndInternalCaseCaptionSequence,
+    updateFormValueAndSecondaryContactInfoSequence,
     updateFormValueSequence,
     updateForwardFormValueSequence,
     updateJudgesCaseNoteOnCaseDetailSequence,
