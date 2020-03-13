@@ -14,11 +14,11 @@ import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
 import { setStartInternalCaseDefaultTabAction } from '../actions/StartCaseInternal/setStartInternalCaseDefaultTabAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { takePathForRoles } from './takePathForRoles';
+import { updateOrderForDesignatingPlaceOfTrialAction } from '../actions/updateOrderForDesignatingPlaceOfTrialAction';
 
 const gotoStartCaseInternal = [
-  //FIXME this can change into an action
-  set(state.form.orderForRequestedTrialLocation, true),
   setStartInternalCaseDefaultTabAction,
+  updateOrderForDesignatingPlaceOfTrialAction,
   set(state.documentUploadMode, 'scan'),
   set(state.documentSelectedForScan, 'petitionFile'),
   setCurrentPageAction('StartCaseInternal'),
