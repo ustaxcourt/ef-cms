@@ -1,12 +1,12 @@
-import { EditPractitionerFactory } from '../../../shared/src/business/entities/caseAssociation/EditPractitionerFactory';
+import { EditPrivatePractitionerFactory } from '../../../shared/src/business/entities/caseAssociation/EditPrivatePractitionerFactory';
 
-const { VALIDATION_ERROR_MESSAGES } = EditPractitionerFactory;
+const { VALIDATION_ERROR_MESSAGES } = EditPrivatePractitionerFactory;
 
 export default test => {
   return it('Petitions clerk edits a practitioner on a case', async () => {
     expect(test.getState('caseDetail.privatePractitioners').length).toEqual(2);
 
-    await test.runSequence('openEditPractitionersModalSequence');
+    await test.runSequence('openEditPrivatePractitionersModalSequence');
 
     expect(
       test.getState('modal.privatePractitioners.1.representingPrimary'),
@@ -20,7 +20,7 @@ export default test => {
       value: false,
     });
 
-    await test.runSequence('submitEditPractitionersModalSequence');
+    await test.runSequence('submitEditPrivatePractitionersModalSequence');
 
     expect(
       test.getState('validationErrors.privatePractitioners.0'),
@@ -38,7 +38,7 @@ export default test => {
       value: true,
     });
 
-    await test.runSequence('submitEditPractitionersModalSequence');
+    await test.runSequence('submitEditPrivatePractitionersModalSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

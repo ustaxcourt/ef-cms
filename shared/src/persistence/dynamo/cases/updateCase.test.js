@@ -10,18 +10,7 @@ describe('updateCase', () => {
     promise: async () => null,
   });
 
-  let getStub = jest.fn().mockReturnValue({
-    docketNumberSuffix: null,
-    inProgress: false,
-    irsPractitioners: [],
-    status: Case.STATUS_TYPES.generalDocket,
-  });
-
-  const queryStub = jest.fn().mockReturnValue([
-    {
-      sk: '123',
-    },
-  ]);
+  let queryStub;
 
   const deleteStub = jest.fn().mockReturnValue({
     promise: async () => null,
@@ -29,14 +18,34 @@ describe('updateCase', () => {
 
   const updateStub = jest.fn();
 
-  client.get = getStub;
   client.put = putStub;
-  client.query = queryStub;
   client.update = updateStub;
   client.delete = deleteStub;
 
+  let firstQueryStub;
+
   beforeEach(() => {
     jest.clearAllMocks();
+
+    firstQueryStub = [
+      {
+        docketNumberSuffix: null,
+        inProgress: false,
+        pk: 'case|123',
+        sk: 'case|123',
+        status: Case.STATUS_TYPES.generalDocket,
+      },
+    ];
+
+    queryStub = jest
+      .fn()
+      .mockReturnValueOnce(firstQueryStub)
+      .mockReturnValue([
+        {
+          sk: '123',
+        },
+      ]);
+    client.query = queryStub;
 
     applicationContext = {
       environment: {
@@ -147,15 +156,8 @@ describe('updateCase', () => {
     expect(updateStub).not.toBeCalled();
   });
 
-  describe('Respondents', () => {
-    it('adds a respondent to a case with no existing irsPractitioners', async () => {
-      getStub.mockReturnValue({
-        docketNumberSuffix: null,
-        inProgress: false,
-        irsPractitioners: [],
-        status: Case.STATUS_TYPES.generalDocket,
-      });
-
+  describe('irsPractitioners', () => {
+    it('adds a irsPractitioner to a case with no existing irsPractitioners', async () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
@@ -177,17 +179,7 @@ describe('updateCase', () => {
       });
     });
 
-    it('adds a respondent to a case with existing irsPractitioners', async () => {
-      getStub.mockReturnValue({
-        docketNumberSuffix: null,
-        inProgress: false,
-        irsPractitioners: [
-          { name: 'Guy Fieri', userId: 'user-id-existing-123' },
-          { name: 'Rachel Ray', userId: 'user-id-existing-234' },
-        ],
-        status: Case.STATUS_TYPES.generalDocket,
-      });
-
+    it('adds an irsPractitioner to a case with existing irsPractitioners', async () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
@@ -214,15 +206,18 @@ describe('updateCase', () => {
       });
     });
 
-    it('updates a respondent on a case', async () => {
-      getStub.mockReturnValue({
-        docketNumberSuffix: null,
-        inProgress: false,
-        irsPractitioners: [
-          { name: 'Guy Fieri', userId: 'user-id-existing-123' },
-          { name: 'Rachel Ray', userId: 'user-id-existing-234' },
-        ],
-        status: Case.STATUS_TYPES.generalDocket,
+    it('updates a irsPractitioner on a case', async () => {
+      firstQueryStub.push({
+        name: 'Guy Fieri',
+        pk: 'case|123',
+        sk: 'irsPractitioner|user-id-existing-123',
+        userId: 'user-id-existing-123',
+      });
+      firstQueryStub.push({
+        name: 'Rachel Ray',
+        pk: 'case|123',
+        sk: 'irsPractitioner|user-id-existing-234',
+        userId: 'user-id-existing-234',
       });
 
       await updateCase({
@@ -252,15 +247,18 @@ describe('updateCase', () => {
       });
     });
 
-    it('removes a respondent from a case with existing irsPractitioners', async () => {
-      getStub.mockReturnValue({
-        docketNumberSuffix: null,
-        inProgress: false,
-        irsPractitioners: [
-          { name: 'Guy Fieri', userId: 'user-id-existing-123' },
-          { name: 'Rachel Ray', userId: 'user-id-existing-234' },
-        ],
-        status: Case.STATUS_TYPES.generalDocket,
+    it('removes a irsPractitioner from a case with existing irsPractitioners', async () => {
+      firstQueryStub.push({
+        name: 'Guy Fieri',
+        pk: 'case|123',
+        sk: 'irsPractitioner|user-id-existing-123',
+        userId: 'user-id-existing-123',
+      });
+      firstQueryStub.push({
+        name: 'Rachel Ray',
+        pk: 'case|123',
+        sk: 'irsPractitioner|user-id-existing-234',
+        userId: 'user-id-existing-234',
       });
 
       await updateCase({
@@ -269,7 +267,10 @@ describe('updateCase', () => {
           caseId: '123',
           docketNumberSuffix: null,
           irsPractitioners: [
-            { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+            {
+              name: 'Rachel Ray',
+              userId: 'user-id-existing-234',
+            },
           ],
           status: Case.STATUS_TYPES.generalDocket,
         },
@@ -283,15 +284,8 @@ describe('updateCase', () => {
     });
   });
 
-  describe('Practitioners', () => {
-    it('adds a practitioner to a case with no existing privatePractitioners', async () => {
-      getStub.mockReturnValue({
-        docketNumberSuffix: null,
-        inProgress: false,
-        privatePractitioners: [],
-        status: Case.STATUS_TYPES.generalDocket,
-      });
-
+  describe('PrivatePractitioners', () => {
+    it('adds a privatePractitioner to a case with no existing privatePractitioners', async () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
@@ -313,15 +307,18 @@ describe('updateCase', () => {
       });
     });
 
-    it('adds a practitioner to a case with existing privatePractitioners', async () => {
-      getStub.mockReturnValue({
-        docketNumberSuffix: null,
-        inProgress: false,
-        privatePractitioners: [
-          { name: 'Guy Fieri', userId: 'user-id-existing-123' },
-          { name: 'Rachel Ray', userId: 'user-id-existing-234' },
-        ],
-        status: Case.STATUS_TYPES.generalDocket,
+    it('adds a privatePractitioner to a case with existing privatePractitioners', async () => {
+      firstQueryStub.push({
+        name: 'Guy Fieri',
+        pk: 'case|123',
+        sk: 'privatePractitioner|user-id-existing-123',
+        userId: 'user-id-existing-123',
+      });
+      firstQueryStub.push({
+        name: 'Rachel Ray',
+        pk: 'case|123',
+        sk: 'privatePractitioner|user-id-existing-234',
+        userId: 'user-id-existing-234',
       });
 
       await updateCase({
@@ -350,15 +347,18 @@ describe('updateCase', () => {
       });
     });
 
-    it('updates a practitioner on a case', async () => {
-      getStub.mockReturnValue({
-        docketNumberSuffix: null,
-        inProgress: false,
-        privatePractitioners: [
-          { name: 'Guy Fieri', userId: 'user-id-existing-123' },
-          { name: 'Rachel Ray', userId: 'user-id-existing-234' },
-        ],
-        status: Case.STATUS_TYPES.generalDocket,
+    it('updates a privatePractitioner on a case', async () => {
+      firstQueryStub.push({
+        name: 'Guy Fieri',
+        pk: 'case|123',
+        sk: 'privatePractitioner|user-id-existing-123',
+        userId: 'user-id-existing-123',
+      });
+      firstQueryStub.push({
+        name: 'Rachel Ray',
+        pk: 'case|123',
+        sk: 'privatePractitioner|user-id-existing-234',
+        userId: 'user-id-existing-234',
       });
 
       await updateCase({
@@ -388,15 +388,18 @@ describe('updateCase', () => {
       });
     });
 
-    it('removes a practitioner from a case with existing privatePractitioners', async () => {
-      getStub.mockReturnValue({
-        docketNumberSuffix: null,
-        inProgress: false,
-        privatePractitioners: [
-          { name: 'Guy Fieri', userId: 'user-id-existing-123' },
-          { name: 'Rachel Ray', userId: 'user-id-existing-234' },
-        ],
-        status: Case.STATUS_TYPES.generalDocket,
+    it('removes a privatePractitioner from a case with existing privatePractitioners', async () => {
+      firstQueryStub.push({
+        name: 'Guy Fieri',
+        pk: 'case|123',
+        sk: 'privatePractitioner|user-id-existing-123',
+        userId: 'user-id-existing-123',
+      });
+      firstQueryStub.push({
+        name: 'Rachel Ray',
+        pk: 'case|123',
+        sk: 'privatePractitioner|user-id-existing-234',
+        userId: 'user-id-existing-234',
       });
 
       await updateCase({

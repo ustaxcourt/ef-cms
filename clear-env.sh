@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # usage:
-#   ./clear-env.sh $ENV 
+#   ./clear-env.sh $ENV
 #   where $ENV is dev|stg|prod|test|...
 
 if [[ -z "${USTC_ADMIN_PASS}" ]]; then
@@ -23,4 +23,3 @@ node clear-dynamodb-table.js dev
 ./setup-cognito-users.sh dev
 ./setup-court-users.sh dev
 popd
-

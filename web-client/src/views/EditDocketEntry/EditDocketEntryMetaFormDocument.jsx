@@ -274,7 +274,7 @@ export const EditDocketEntryMetaFormDocument = connect(
               <input
                 checked={form.partyIrsPractitioner || false}
                 className="usa-checkbox__input"
-                id="party-respondent"
+                id="party-irs-practitioner"
                 name="partyIrsPractitioner"
                 type="checkbox"
                 onChange={e => {
@@ -287,7 +287,7 @@ export const EditDocketEntryMetaFormDocument = connect(
               />
               <label
                 className="usa-checkbox__label inline-block"
-                htmlFor="party-respondent"
+                htmlFor="party-irs-practitioner"
               >
                 Respondent
               </label>
