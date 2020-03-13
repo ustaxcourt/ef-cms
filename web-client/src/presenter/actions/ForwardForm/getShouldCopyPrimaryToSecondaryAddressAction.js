@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 /**
- * get the role associated with the user
+ * gets the flag to indicate whether or not to use the same address as the primary contact
  *
  * @param {object} providers the providers object
  * @param {object} providers.path the cerebral path object used for invoking the next path in the sequence based on the section value
