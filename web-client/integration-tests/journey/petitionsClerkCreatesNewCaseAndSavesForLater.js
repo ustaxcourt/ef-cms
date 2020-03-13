@@ -143,7 +143,10 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       await test.runSequence('updateFormValueSequence', item);
     }
 
-    await test.runSequence('copyPrimaryContactSequence');
+    await test.runSequence('updateFormValueAndSecondaryContactInfoSequence', {
+      key: 'useSameAsPrimary',
+      value: true,
+    });
     await test.runSequence(
       'updateFormValueAndInternalCaseCaptionSequence',
       primaryContactName,
@@ -526,6 +529,9 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
   });
 };
 
+/**
+ * @param test
+ */
 async function navigateToStartCaseInternalPartiesTab(test) {
   await test.runSequence('goBackToStartCaseInternalSequence', {
     tab: 'partyInfo',
