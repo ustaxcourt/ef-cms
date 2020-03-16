@@ -63,7 +63,7 @@
     "imagemin-pngquant": "^8.0.0",
     "is-reachable": "^4.0.0",
     "isomorphic-fetch": "^2.2.1",
-    "jest": "^25.1.0",
+    "jest": "24.9.0",
     "jsdoc": "^3.6.3",
     "jsdom": "^16.2.0",
     "json2md": "^1.7.0",
