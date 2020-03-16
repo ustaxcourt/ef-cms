@@ -432,6 +432,11 @@ export const setupTest = ({ useCases = {} } = {}) => {
             docketNumber: test.docketNumber,
           });
           break;
+        case `/case-detail/${test.caseId}`:
+          await test.runSequence('gotoCaseDetailSequence', {
+            docketNumber: test.caseId,
+          });
+          break;
         case '/search/no-matches':
           await test.runSequence('gotoCaseSearchNoMatchesSequence');
           break;
