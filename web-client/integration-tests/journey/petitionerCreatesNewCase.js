@@ -125,6 +125,5 @@ export default (test, fakeFile, overrides = {}) => {
     });
 
     test.docketNumber = test.getState('cases.0.docketNumber');
-    test.caseId = test.getState('cases.0.caseId');
   });
 };
