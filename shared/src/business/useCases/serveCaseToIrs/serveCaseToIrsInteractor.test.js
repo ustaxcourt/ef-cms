@@ -68,6 +68,8 @@ describe('serveCaseToIrsInteractor', () => {
   let putWorkItemInUsersOutboxStub = sinon.stub().resolves(null);
   let generateCaseConfirmationPdfStub = jest.fn();
   let appendPaperServiceAddressPageToPdfStub = jest.fn();
+  let addCoversheetInteractorStub = jest.fn();
+  let getUseCasesStub;
 
   let applicationContext;
   let mockCase;
@@ -79,6 +81,7 @@ describe('serveCaseToIrsInteractor', () => {
     updateCaseStub = jest.fn();
     updateWorkItemStub = sinon.stub().resolves(null);
     putWorkItemInUsersOutboxStub = sinon.stub().resolves(null);
+    getUseCasesStub = jest.fn();
 
     mockCase = MOCK_CASE;
     mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
@@ -142,6 +145,9 @@ describe('serveCaseToIrsInteractor', () => {
           generateCaseConfirmationPdf: generateCaseConfirmationPdfStub,
         };
       },
+      getUseCases: () => {
+        return { addCoversheetInteractor: addCoversheetInteractorStub };
+      },
       getUtilities: () => ({
         formatDateString: () => '12/27/18',
       }),
@@ -181,6 +187,7 @@ describe('serveCaseToIrsInteractor', () => {
           deleteWorkItemFromInbox: deleteWorkItemFromInboxStub,
           getCaseByCaseId: () => Promise.resolve(mockCase),
           getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          getUseCases: getUseCasesStub,
           putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
           updateCase: updateCaseStub,
           updateWorkItem: updateWorkItemStub,
@@ -194,6 +201,9 @@ describe('serveCaseToIrsInteractor', () => {
           return MOCK_PDF_DATA;
         },
       }),
+      getUseCases: () => {
+        return { addCoversheetInteractor: addCoversheetInteractorStub };
+      },
       getUtilities: () => ({
         formatDateString: () => '12/27/18',
       }),
@@ -258,6 +268,7 @@ describe('serveCaseToIrsInteractor', () => {
           deleteWorkItemFromInbox: deleteWorkItemFromInboxStub,
           getCaseByCaseId: () => Promise.resolve(mockCase),
           getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          getUseCases: getUseCasesStub,
           putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
           updateCase: updateCaseStub,
           updateWorkItem: updateWorkItemStub,
@@ -271,6 +282,9 @@ describe('serveCaseToIrsInteractor', () => {
           return MOCK_PDF_DATA;
         },
       }),
+      getUseCases: () => {
+        return { addCoversheetInteractor: addCoversheetInteractorStub };
+      },
       getUtilities: () => ({
         formatDateString: () => '12/27/18',
       }),
