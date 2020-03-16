@@ -9,11 +9,9 @@ import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
 
 let filePetitionFromPaperInteractorStub;
-let addCoversheetInteractorStub;
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
-    addCoversheetInteractor: addCoversheetInteractorStub,
     filePetitionFromPaperInteractor: filePetitionFromPaperInteractorStub,
   }),
   getUtilities: () => ({
@@ -30,9 +28,8 @@ presenter.providers.path = {
 };
 
 describe('createCaseFromPaperAction', () => {
-  it('should call filePetitionFromPaperInteractor and addCoversheetInteractor with the petition metadata and files and call the success path when finished', async () => {
+  it('should call filePetitionFromPaperInteractor with the petition metadata and files and call the success path when finished', async () => {
     filePetitionFromPaperInteractorStub = sinon.stub().returns(MOCK_CASE);
-    addCoversheetInteractorStub = sinon.stub();
 
     await runAction(createCaseFromPaperAction, {
       modules: {
@@ -70,13 +67,11 @@ describe('createCaseFromPaperAction', () => {
       requestForPlaceOfTrialFile: {},
       stinFile: {},
     });
-    expect(addCoversheetInteractorStub.called).toEqual(true);
     expect(successStub.called).toEqual(true);
   });
 
   it('should call filePetitionFromPaperInteractor and call path.error when finished if it throws an error', async () => {
     filePetitionFromPaperInteractorStub = sinon.stub().throws();
-    addCoversheetInteractorStub = sinon.stub();
 
     await runAction(createCaseFromPaperAction, {
       modules: {
@@ -107,7 +102,6 @@ describe('createCaseFromPaperAction', () => {
       },
       stinFile: {},
     });
-    expect(addCoversheetInteractorStub.called).toEqual(false);
     expect(errorStub.called).toEqual(true);
   });
 });
