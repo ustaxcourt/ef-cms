@@ -318,6 +318,7 @@ import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequ
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
 import { updateFormPartyTypeSequence } from './sequences/updateFormPartyTypeSequence';
 import { updateFormValueAndInternalCaseCaptionSequence } from './sequences/updateFormValueAndInternalCaseCaptionSequence';
+import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/updateFormValueAndSecondaryContactInfoSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateForwardFormValueSequence } from './sequences/updateForwardFormValueSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
@@ -702,6 +703,7 @@ export const presenter = {
     updateFileDocumentWizardFormValueSequence,
     updateFormPartyTypeSequence,
     updateFormValueAndInternalCaseCaptionSequence,
+    updateFormValueAndSecondaryContactInfoSequence,
     updateFormValueSequence,
     updateForwardFormValueSequence,
     updateJudgesCaseNoteOnCaseDetailSequence,
