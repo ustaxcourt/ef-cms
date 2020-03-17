@@ -1,5 +1,5 @@
 const client = require('../../dynamodbClientService');
-const { sortBy } = require('lodash');
+const { aggregateCaseItems } = require('../helpers/aggregateCaseItems');
 
 /**
  * getCaseByCaseId
@@ -25,27 +25,5 @@ exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
     return null;
   }
 
-  const theCase = caseItems.filter(item => item.sk.startsWith('case|')).pop();
-
-  const docketRecord = caseItems.filter(item =>
-    item.sk.startsWith('docket-record|'),
-  );
-  const documents = caseItems.filter(item => item.sk.startsWith('document|'));
-  const privatePractitioners = caseItems.filter(item =>
-    item.sk.startsWith('privatePractitioner|'),
-  );
-  const irsPractitioners = caseItems.filter(item =>
-    item.sk.startsWith('irsPractitioner|'),
-  );
-
-  const sortedDocketRecord = sortBy(docketRecord, 'index');
-  const sortedDocuments = sortBy(documents, 'createdAt');
-
-  return {
-    ...theCase,
-    docketRecord: sortedDocketRecord,
-    documents: sortedDocuments,
-    irsPractitioners,
-    privatePractitioners,
-  };
+  return aggregateCaseItems(caseItems);
 };
