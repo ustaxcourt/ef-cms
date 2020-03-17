@@ -46,7 +46,8 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     'orderForFilingFee',
     'orderForOds',
     'orderForRatification',
-    'orderDesignatingPlaceOfTrial',
+    // TODO: see OrdersNeededSummary.jsx
+    // 'orderDesignatingPlaceOfTrial',
     'orderToShowCause',
     'noticeOfAttachments',
   ].some(key => Boolean(caseDetail[key]));
