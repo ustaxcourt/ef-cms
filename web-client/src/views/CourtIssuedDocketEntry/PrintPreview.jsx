@@ -8,10 +8,9 @@ import React from 'react';
 
 export const PrintPreview = connect(
   {
-    navigateBackFromPrintPreviewSequence:
-      sequences.navigateBackFromPrintPreviewSequence,
+    navigateBackSequence: sequences.navigateBackSequence,
   },
-  ({ navigateBackFromPrintPreviewSequence }) => {
+  ({ navigateBackSequence }) => {
     return (
       <>
         <CaseDetailHeader hideActionButtons />
@@ -19,7 +18,7 @@ export const PrintPreview = connect(
           <Button
             link
             onClick={() => {
-              navigateBackFromPrintPreviewSequence();
+              navigateBackSequence();
             }}
           >
             Back
