@@ -81,8 +81,6 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
       applicationContext,
       key: stinDocument.documentId,
     });
-
-    return stinDocument.documentId;
   }
 };
 
