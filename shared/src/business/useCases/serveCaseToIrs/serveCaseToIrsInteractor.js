@@ -112,19 +112,21 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  Object.keys(Document.INITIAL_DOCUMENT_TYPES).map(initialDocumentTypeKey => {
-    const initialDocumentType =
-      Document.INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
+  Object.keys(Document.INITIAL_DOCUMENT_TYPES).forEach(
+    initialDocumentTypeKey => {
+      const initialDocumentType =
+        Document.INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
-    const initialDocument = caseEntity.documents.find(
-      document => document.documentType === initialDocumentType.documentType,
-    );
+      const initialDocument = caseEntity.documents.find(
+        document => document.documentType === initialDocumentType.documentType,
+      );
 
-    if (initialDocument) {
-      initialDocument.setAsServed(servedParties.all);
-      caseEntity.updateDocument(initialDocument);
-    }
-  });
+      if (initialDocument) {
+        initialDocument.setAsServed(servedParties.all);
+        caseEntity.updateDocument(initialDocument);
+      }
+    },
+  );
 
   exports.addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
 
@@ -173,12 +175,10 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
-  const experiment = caseEntity.toRawObject();
-
-  for (const doc of experiment.documents) {
+  for (const doc of caseEntity.documents) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      caseId: experiment.caseId,
+      caseId: caseEntity.caseId,
       documentId: doc.documentId,
     });
   }
