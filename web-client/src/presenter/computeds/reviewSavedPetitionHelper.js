@@ -7,6 +7,8 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     documents,
     hasVerifiedIrsNotice,
     irsNoticeDate,
+    petitionPaymentDate,
+    petitionPaymentMethod,
     petitionPaymentStatus,
     receivedAt,
     ...caseDetail
@@ -26,7 +28,14 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   const shouldShowIrsNoticeDate = hasVerifiedIrsNotice === true;
 
   const petitionPaymentStatusFormatted =
-    petitionPaymentStatus === PAYMENT_STATUS.PAID ? 'Paid' : 'Not paid';
+    petitionPaymentStatus === PAYMENT_STATUS.PAID
+      ? `Paid ${applicationContext
+          .getUtilities()
+          .formatDateString(
+            petitionPaymentDate,
+            'MMDDYYYY',
+          )} ${petitionPaymentMethod}`
+      : 'Not paid';
 
   if (shouldShowIrsNoticeDate) {
     irsNoticeDateFormatted = applicationContext
