@@ -34,11 +34,6 @@ export default (
     //TODO - fix this when cerebral runSequence starts properly awaiting things
     await wait(1000);
 
-    //skip signing and go back to caseDetail
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
     const formattedAfterEdit = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
@@ -46,6 +41,6 @@ export default (
     const editedDraftOrder = formattedAfterEdit.draftDocuments[0];
 
     expect(editedDraftOrder.draftState.richText).toEqual(setRichText);
-    expect(test.getState('currentPage')).toEqual('SignOrder');
+    expect(test.currentRouteUrl).toContain('/sign');
   });
 };
