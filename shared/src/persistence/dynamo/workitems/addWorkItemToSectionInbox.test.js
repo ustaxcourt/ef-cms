@@ -28,8 +28,8 @@ describe('addWorkItemToSectionInbox', () => {
     });
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
-        pk: 'section-docket',
-        sk: 'workitem-123',
+        pk: 'section|docket',
+        sk: 'work-item|123',
       },
       applicationContext: { environment: { stage: 'dev' } },
     });

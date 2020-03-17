@@ -15,6 +15,8 @@ export const CaseInformation = connect(
     startCaseInternalHelper: state.startCaseInternalHelper,
     trialCitiesHelper: state.trialCitiesHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updateOrderForDesignatingPlaceOfTrialSequence:
+      sequences.updateOrderForDesignatingPlaceOfTrialSequence,
     validatePetitionFromPaperSequence:
       sequences.validatePetitionFromPaperSequence,
     validationErrors: state.validationErrors,
@@ -26,6 +28,7 @@ export const CaseInformation = connect(
     startCaseInternalHelper,
     trialCitiesHelper,
     updateFormValueSequence,
+    updateOrderForDesignatingPlaceOfTrialSequence,
     validatePetitionFromPaperSequence,
     validationErrors,
   }) => {
@@ -136,7 +139,7 @@ export const CaseInformation = connect(
           }
           value={form.preferredTrialCity}
           onChange={e => {
-            updateFormValueSequence({
+            updateOrderForDesignatingPlaceOfTrialSequence({
               key: e.target.name,
               value: e.target.value || null,
             });

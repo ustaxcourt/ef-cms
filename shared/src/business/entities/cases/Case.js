@@ -19,10 +19,10 @@ const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes, isEmpty } = require('lodash');
+const { IrsPractitioner } = require('../IrsPractitioner');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
 const { Order } = require('../orders/Order');
-const { Practitioner } = require('../Practitioner');
-const { Respondent } = require('../Respondent');
+const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 
@@ -293,29 +293,29 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   }
 
   if (Array.isArray(rawCase.documents)) {
-    this.documents = rawCase.documents.map(
-      document => new Document(document, { applicationContext }),
-    );
+    this.documents = rawCase.documents
+      .map(document => new Document(document, { applicationContext }))
+      .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
   } else {
     this.documents = [];
   }
 
   this.hasPendingItems = this.documents.some(document => document.pending);
 
-  if (Array.isArray(rawCase.practitioners)) {
-    this.practitioners = rawCase.practitioners.map(
-      practitioner => new Practitioner(practitioner),
+  if (Array.isArray(rawCase.privatePractitioners)) {
+    this.privatePractitioners = rawCase.privatePractitioners.map(
+      practitioner => new PrivatePractitioner(practitioner),
     );
   } else {
-    this.practitioners = [];
+    this.privatePractitioners = [];
   }
 
-  if (Array.isArray(rawCase.respondents)) {
-    this.respondents = rawCase.respondents.map(
-      respondent => new Respondent(respondent),
+  if (Array.isArray(rawCase.irsPractitioners)) {
+    this.irsPractitioners = rawCase.irsPractitioners.map(
+      practitioner => new IrsPractitioner(practitioner),
     );
   } else {
-    this.respondents = [];
+    this.irsPractitioners = [];
   }
 
   this.documents.forEach(document => {
@@ -532,6 +532,12 @@ joiValidationDecorator(
       .optional()
       .allow(null)
       .description('Last date that the petitioner is allowed to file before.'),
+    irsPractitioners: joi
+      .array()
+      .optional()
+      .description(
+        'List of IRS practitioners (also known as respondents) associated with the case.',
+      ),
     irsSendDate: joi
       .date()
       .iso()
@@ -652,10 +658,6 @@ joiValidationDecorator(
           .required(),
       })
       .description('When the case fee was waived.'),
-    practitioners: joi
-      .array()
-      .optional()
-      .description('List of practitioners associated with the case.'),
     preferredTrialCity: joi
       .alternatives()
       .try(
@@ -664,6 +666,10 @@ joiValidationDecorator(
       )
       .optional()
       .description('Where the petitioner would prefer to hold the case trial.'),
+    privatePractitioners: joi
+      .array()
+      .optional()
+      .description('List of private practitioners associated with the case.'),
     procedureType: joi
       .string()
       .valid(...Case.PROCEDURE_TYPES)
@@ -682,12 +688,6 @@ joiValidationDecorator(
       .required()
       .description(
         'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
-      ),
-    respondents: joi
-      .array()
-      .optional()
-      .description(
-        'List of respondents (from the IRS) associated with the case.',
       ),
     sealedDate: joi
       .date()
@@ -755,8 +755,8 @@ joiValidationDecorator(
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents) &&
       DocketRecord.validateCollection(this.docketRecord) &&
-      Respondent.validateCollection(this.respondents) &&
-      Practitioner.validateCollection(this.practitioners)
+      IrsPractitioner.validateCollection(this.irsPractitioners) &&
+      PrivatePractitioner.validateCollection(this.privatePractitioners)
     );
   },
   Case.VALIDATION_ERROR_MESSAGES,
@@ -827,9 +827,13 @@ Case.getCaseCaption = function(rawCase) {
   return caseCaption;
 };
 
-Case.prototype.toRawObject = function() {
+Case.prototype.toRawObject = function(processPendingItems = true) {
   const result = this.toRawObjectFromJoi();
-  result.hasPendingItems = this.doesHavePendingItems();
+
+  if (processPendingItems) {
+    result.hasPendingItems = this.doesHavePendingItems();
+  }
+
   return result;
 };
 
@@ -847,63 +851,73 @@ Case.getCaseCaptionNames = function(caseCaption) {
   return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
 };
 
-Case.prototype.attachRespondent = function(respondent) {
-  this.respondents.push(respondent);
+/**
+ * attaches an IRS practitioner to the case
+ *
+ * @param {string} practitioner the irsPractitioner to add to the case
+ */
+Case.prototype.attachIrsPractitioner = function(practitioner) {
+  this.irsPractitioners.push(practitioner);
 };
 
 /**
- * updates a respondent on the case
+ * updates an IRS practitioner on the case
  *
- * @param {string} respondentToUpdate the respondent user object with updated info
- * @returns {void} modifies the respondents array on the case
+ * @param {string} practitionerToUpdate the irsPractitioner user object with updated info
+ * @returns {void} modifies the irsPractitioners array on the case
  */
-Case.prototype.updateRespondent = function(respondentToUpdate) {
-  const foundRespondent = this.respondents.find(
-    respondent => respondent.userId === respondentToUpdate.userId,
-  );
-  if (foundRespondent) Object.assign(foundRespondent, respondentToUpdate);
-};
-
-/**
- * removes the given respondent from the case
- *
- * @param {string} respondentToRemove the respondent user object to remove from the case
- * @returns {Case} the modified case entity
- */
-Case.prototype.removeRespondent = function(respondentToRemove) {
-  const index = this.respondents.findIndex(
-    respondent => respondent.userId === respondentToRemove.userId,
-  );
-  if (index > -1) this.respondents.splice(index, 1);
-  return this;
-};
-
-Case.prototype.attachPractitioner = function(practitioner) {
-  this.practitioners.push(practitioner);
-};
-
-/**
- * updates a practitioner on the case
- *
- * @param {string} practitionerToUpdate the practitioner user object with updated info
- */
-Case.prototype.updatePractitioner = function(practitionerToUpdate) {
-  const foundPractitioner = this.practitioners.find(
+Case.prototype.updateIrsPractitioner = function(practitionerToUpdate) {
+  const foundPractitioner = this.irsPractitioners.find(
     practitioner => practitioner.userId === practitionerToUpdate.userId,
   );
   if (foundPractitioner) Object.assign(foundPractitioner, practitionerToUpdate);
 };
 
 /**
- * removes the given practitioner from the case
+ * removes the given IRS practitioner from the case
+ *
+ * @param {string} practitionerToRemove the irsPractitioner user object to remove from the case
+ * @returns {Case} the modified case entity
+ */
+Case.prototype.removeIrsPractitioner = function(practitionerToRemove) {
+  const index = this.irsPractitioners.findIndex(
+    practitioner => practitioner.userId === practitionerToRemove.userId,
+  );
+  if (index > -1) this.irsPractitioners.splice(index, 1);
+  return this;
+};
+
+/**
+ * attaches a private practitioner to the case
+ *
+ * @param {string} practitioner the privatePractitioner to add to the case
+ */
+Case.prototype.attachPrivatePractitioner = function(practitioner) {
+  this.privatePractitioners.push(practitioner);
+};
+
+/**
+ * updates a private practitioner on the case
+ *
+ * @param {string} practitionerToUpdate the practitioner user object with updated info
+ */
+Case.prototype.updatePrivatePractitioner = function(practitionerToUpdate) {
+  const foundPractitioner = this.privatePractitioners.find(
+    practitioner => practitioner.userId === practitionerToUpdate.userId,
+  );
+  if (foundPractitioner) Object.assign(foundPractitioner, practitionerToUpdate);
+};
+
+/**
+ * removes the given private practitioner from the case
  *
  * @param {string} practitionerToRemove the practitioner user object to remove from the case
  */
-Case.prototype.removePractitioner = function(practitionerToRemove) {
-  const index = this.practitioners.findIndex(
+Case.prototype.removePrivatePractitioner = function(practitionerToRemove) {
+  const index = this.privatePractitioners.findIndex(
     practitioner => practitioner.userId === practitionerToRemove.userId,
   );
-  if (index > -1) this.practitioners.splice(index, 1);
+  if (index > -1) this.privatePractitioners.splice(index, 1);
 };
 
 /**
@@ -1355,12 +1369,13 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
  * @returns {boolean} if the case is associated
  */
 const isAssociatedUser = function({ caseRaw, userId }) {
-  const isRespondent =
-    caseRaw.respondents && caseRaw.respondents.find(r => r.userId === userId);
-  const isPractitioner =
-    caseRaw.practitioners &&
-    caseRaw.practitioners.find(p => p.userId === userId);
-  return isRespondent || isPractitioner;
+  const isIrsPractitioner =
+    caseRaw.irsPractitioners &&
+    caseRaw.irsPractitioners.find(r => r.userId === userId);
+  const isPrivatePractitioner =
+    caseRaw.privatePractitioners &&
+    caseRaw.privatePractitioners.find(p => p.userId === userId);
+  return isIrsPractitioner || isPrivatePractitioner;
 };
 
 /**
@@ -1578,8 +1593,8 @@ Case.prototype.getCaseContacts = function(shape) {
   [
     'contactPrimary',
     'contactSecondary',
-    'practitioners',
-    'respondents',
+    'privatePractitioners',
+    'irsPractitioners',
   ].forEach(contact => {
     if (!shape || (shape && shape[contact] === true)) {
       caseContacts[contact] = this[contact];

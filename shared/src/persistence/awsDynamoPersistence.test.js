@@ -60,12 +60,10 @@ describe('awsDynamoPersistence', function() {
 
   describe('getRecordViaMapping', () => {
     it('should map respondent to active case', async () => {
-      const key = '5678';
-      const type = '234';
       await getRecordViaMapping({
         applicationContext,
-        key,
-        type,
+        pk: '234|5678',
+        prefix: 'something',
       });
 
       expect(client.get.getCall(0).args[0].Key.sk).not.toEqual('0');

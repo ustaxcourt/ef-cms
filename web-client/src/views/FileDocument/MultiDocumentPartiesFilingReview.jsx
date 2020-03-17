@@ -23,7 +23,7 @@ export const MultiDocumentPartiesFilingReview = connect(
           {!isEmpty(selectedCase.contactSecondary) && (
             <li>{selectedCase.contactSecondary.name}, Petitioner</li>
           )}
-          {form.partyRespondent && <li>Respondent</li>}
+          {form.partyIrsPractitioner && <li>Respondent</li>}
         </ul>
       </div>
     ));

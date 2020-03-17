@@ -1,5 +1,5 @@
 const client = require('../../dynamodbClientService');
-const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
+const { sortBy } = require('lodash');
 
 /**
  * getCaseByCaseId
@@ -10,42 +10,42 @@ const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
  * @returns {object} the case details
  */
 exports.getCaseByCaseId = async ({ applicationContext, caseId }) => {
-  const theCase = await client
-    .get({
-      Key: {
-        pk: caseId,
-        sk: caseId,
-      },
-      applicationContext,
-    })
-    .then(results =>
-      stripWorkItems(results, applicationContext.isAuthorizedForWorkItems()),
-    );
+  const caseItems = await client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `case|${caseId}`,
+    },
+    KeyConditionExpression: '#pk = :pk',
+    applicationContext,
+  });
 
-  let docketRecord = [];
-
-  if (theCase) {
-    docketRecord = await client.query({
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-        '#sk': 'sk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `case|${theCase.caseId}`,
-        ':prefix': 'docket-record',
-      },
-      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-      applicationContext,
-    });
-
-    docketRecord =
-      docketRecord.length > 0 ? docketRecord : theCase.docketRecord;
-
-    return {
-      ...theCase,
-      docketRecord, // this is temp until sesed data fixed
-    };
-  } else {
+  if (!caseItems) {
     return null;
   }
+
+  const theCase = caseItems.filter(item => item.sk.startsWith('case|')).pop();
+
+  const docketRecord = caseItems.filter(item =>
+    item.sk.startsWith('docket-record|'),
+  );
+  const documents = caseItems.filter(item => item.sk.startsWith('document|'));
+  const privatePractitioners = caseItems.filter(item =>
+    item.sk.startsWith('privatePractitioner|'),
+  );
+  const irsPractitioners = caseItems.filter(item =>
+    item.sk.startsWith('irsPractitioner|'),
+  );
+
+  const sortedDocketRecord = sortBy(docketRecord, 'index');
+  const sortedDocuments = sortBy(documents, 'createdAt');
+
+  return {
+    ...theCase,
+    docketRecord: sortedDocketRecord,
+    documents: sortedDocuments,
+    irsPractitioners,
+    privatePractitioners,
+  };
 };

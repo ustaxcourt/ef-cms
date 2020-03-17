@@ -1,14 +1,16 @@
 const client = require('../../dynamodbClientService');
 
-exports.getRecordViaMapping = async ({ applicationContext, key, type }) => {
+exports.getRecordViaMapping = async ({ applicationContext, pk, prefix }) => {
   const [mapping] = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
+      '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `${key}|${type}`,
+      ':pk': pk,
+      ':prefix': prefix,
     },
-    KeyConditionExpression: '#pk = :pk',
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
   });
 

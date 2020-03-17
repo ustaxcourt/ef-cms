@@ -4,7 +4,9 @@ export default (test, createdDocketNumberIndex) => {
       docketNumber: test.createdDocketNumbers[createdDocketNumberIndex],
     });
 
-    expect(test.getState('caseDetail.respondents.0.contact')).toMatchObject({
+    expect(
+      test.getState('caseDetail.irsPractitioners.0.contact'),
+    ).toMatchObject({
       address1: test.updatedRespondentAddress,
     });
 

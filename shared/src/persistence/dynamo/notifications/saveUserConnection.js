@@ -19,10 +19,11 @@ exports.saveUserConnection = async ({
   const TIME_TO_EXIST = 60 * 60 * 24;
   return await put({
     Item: {
+      connectionId,
       endpoint,
-      gsi1pk: connectionId,
-      pk: `connections-${userId}`,
-      sk: connectionId,
+      gsi1pk: `connection|${connectionId}`,
+      pk: `user|${userId}`,
+      sk: `connection|${connectionId}`,
       ttl: Math.floor(Date.now() / 1000) + TIME_TO_EXIST,
     },
     applicationContext,

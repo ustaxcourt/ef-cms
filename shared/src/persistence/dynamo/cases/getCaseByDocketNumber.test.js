@@ -14,34 +14,36 @@ describe('getCaseByDocketNumber', () => {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
       caseId: '123',
-      pk: '123',
-      sk: '123',
+      pk: 'case|123',
+      sk: 'case|123',
       status: 'New',
     });
     sinon.stub(client, 'put').resolves({
       caseId: '123',
-      pk: '123',
-      sk: '123',
+      pk: 'case|123',
+      sk: 'case|123',
       status: 'New',
     });
     sinon.stub(client, 'delete').resolves({
       caseId: '123',
-      pk: '123',
-      sk: '123',
+      pk: 'case|123',
+      sk: 'case|123',
       status: 'New',
     });
     sinon.stub(client, 'batchGet').resolves([
       {
         caseId: '123',
-        pk: '123',
-        sk: '123',
+        pk: 'case|123',
+        sk: 'case|123',
         status: 'New',
       },
     ]);
     sinon.stub(client, 'query').resolves([
       {
-        pk: '123',
-        sk: '123',
+        caseId: '123',
+        pk: 'case|123',
+        sk: 'case|123',
+        status: 'New',
       },
     ]);
     sinon.stub(client, 'batchWrite').resolves(null);
@@ -62,19 +64,80 @@ describe('getCaseByDocketNumber', () => {
     const result = await getCaseByDocketNumber({
       applicationContext,
       docketNumber: '101-18',
-      pk: '123',
-      sk: '123',
+    });
+    expect(result).toEqual({
+      caseId: '123',
+      docketRecord: [],
+      documents: [],
+      irsPractitioners: [],
+      pk: 'case|123',
+      privatePractitioners: [],
+      sk: 'case|123',
+      status: 'New',
+    });
+  });
+
+  it('should return the case and its associated data', async () => {
+    client.query.resolves([
+      {
+        caseId: '123',
+        pk: 'case|123',
+        sk: 'case|123',
+        status: 'New',
+      },
+      {
+        pk: 'case|123',
+        sk: 'irsPractitioner|123',
+        userId: 'abc-123',
+      },
+      {
+        pk: 'case|123',
+        sk: 'privatePractitioner|123',
+        userId: 'abc-123',
+      },
+      {
+        docketRecordId: 'abc-123',
+        pk: 'case|123',
+        sk: 'docket-record|123',
+      },
+      {
+        documentId: 'abc-123',
+        pk: 'case|123',
+        sk: 'document|123',
+      },
+    ]);
+    const result = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: '101-18',
     });
     expect(result).toEqual({
       caseId: '123',
       docketRecord: [
         {
-          pk: '123',
-          sk: '123',
+          docketRecordId: 'abc-123',
+          pk: 'case|123',
+          sk: 'docket-record|123',
         },
       ],
-      pk: '123',
-      sk: '123',
+      documents: [
+        {
+          documentId: 'abc-123',
+          pk: 'case|123',
+          sk: 'document|123',
+        },
+      ],
+      irsPractitioners: [
+        { pk: 'case|123', sk: 'irsPractitioner|123', userId: 'abc-123' },
+      ],
+      pk: 'case|123',
+      privatePractitioners: [
+        {
+          pk: 'case|123',
+          sk: 'privatePractitioner|123',
+          userId: 'abc-123',
+        },
+      ],
+      sk: 'case|123',
       status: 'New',
     });
   });
@@ -84,8 +147,6 @@ describe('getCaseByDocketNumber', () => {
     const result = await getCaseByDocketNumber({
       applicationContext,
       docketNumber: '101-18',
-      pk: '123',
-      sk: '123',
     });
     expect(result).toBeNull();
   });

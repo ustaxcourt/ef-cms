@@ -161,10 +161,6 @@ exports.addCoversheetInteractor = async ({
     document => document.documentId === documentId,
   );
 
-  const documentIndex = caseEntity.documents.findIndex(
-    document => document.documentId === documentId,
-  );
-
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
@@ -187,7 +183,7 @@ exports.addCoversheetInteractor = async ({
     .updateDocumentProcessingStatus({
       applicationContext,
       caseId,
-      documentIndex,
+      documentId,
     });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({

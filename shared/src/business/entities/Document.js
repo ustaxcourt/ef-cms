@@ -64,14 +64,14 @@ function Document(rawDocument, { applicationContext }) {
   this.objections = rawDocument.objections;
   this.ordinalValue = rawDocument.ordinalValue;
   this.partyPrimary = rawDocument.partyPrimary;
-  this.partyRespondent = rawDocument.partyRespondent;
+  this.partyIrsPractitioner = rawDocument.partyIrsPractitioner;
   this.partySecondary = rawDocument.partySecondary;
   this.pending =
     rawDocument.pending === undefined
       ? Document.isPendingOnCreation(rawDocument)
       : rawDocument.pending;
-  this.practitioner = rawDocument.practitioner;
   this.previousDocument = rawDocument.previousDocument;
+  this.privatePractitioners = rawDocument.privatePractitioners;
   this.processingStatus = rawDocument.processingStatus || 'pending';
   this.qcAt = rawDocument.qcAt;
   this.qcByUser = rawDocument.qcByUser;
@@ -350,12 +350,12 @@ joiValidationDecorator(
       ),
     objections: joi.string().optional(),
     ordinalValue: joi.string().optional(),
+    partyIrsPractitioner: joi.boolean().optional(),
     partyPrimary: joi.boolean().optional(),
-    partyRespondent: joi.boolean().optional(),
     partySecondary: joi.boolean().optional(),
     pending: joi.boolean().optional(),
-    practitioner: joi.array().optional(),
     previousDocument: joi.object().optional(),
+    privatePractitioners: joi.array().optional(),
     processingStatus: joi.string().optional(),
     qcAt: joi
       .date()
@@ -460,11 +460,11 @@ and contact info from the case detail
 Document.prototype.generateFiledBy = function(caseDetail, force = false) {
   if (force || !this.filedBy) {
     let filedByArray = [];
-    this.partyRespondent && filedByArray.push('Resp.');
+    this.partyIrsPractitioner && filedByArray.push('Resp.');
 
-    Array.isArray(this.practitioner) &&
-      this.practitioner.forEach(practitioner => {
-        practitioner.partyPractitioner &&
+    Array.isArray(this.privatePractitioners) &&
+      this.privatePractitioners.forEach(practitioner => {
+        practitioner.partyPrivatePractitioner &&
           filedByArray.push(`Counsel ${practitioner.name}`);
       });
 

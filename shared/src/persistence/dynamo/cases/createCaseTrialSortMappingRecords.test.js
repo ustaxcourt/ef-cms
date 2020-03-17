@@ -34,7 +34,7 @@ describe('createCaseTrialSortMappingRecords', () => {
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
         caseId: '123',
-        gsi1pk: 'eligible-for-trial-case-catalog-123',
+        gsi1pk: 'eligible-for-trial-case-catalog|123',
         pk: 'eligible-for-trial-case-catalog',
         sk: 'nonhybridSortRecord',
       },
@@ -43,7 +43,7 @@ describe('createCaseTrialSortMappingRecords', () => {
     expect(putStub.getCall(1).args[0]).toMatchObject({
       Item: {
         caseId: '123',
-        gsi1pk: 'eligible-for-trial-case-catalog-123',
+        gsi1pk: 'eligible-for-trial-case-catalog|123',
         pk: 'eligible-for-trial-case-catalog',
         sk: 'hybridSortRecord',
       },

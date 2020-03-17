@@ -47,8 +47,8 @@ const VALIDATION_ERROR_MESSAGES = {
   hasSupportingDocuments: 'Enter selection for Supporting Documents.',
   objections: 'Enter selection for Objections.',
   ordinalValue: 'Select an iteration',
+  partyIrsPractitioner: 'Select a filing party',
   partyPrimary: 'Select a filing party',
-  partyRespondent: 'Select a filing party',
   partySecondary: 'Select a filing party',
   previousDocument: 'Select a document',
   primaryDocumentFile: 'Upload a document',
@@ -115,7 +115,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     this.objections = rawProps.objections;
     this.ordinalValue = rawProps.ordinalValue;
     this.partyPrimary = rawProps.partyPrimary;
-    this.partyRespondent = rawProps.partyRespondent;
+    this.partyIrsPractitioner = rawProps.partyIrsPractitioner;
     this.partySecondary = rawProps.partySecondary;
     this.previousDocument = rawProps.previousDocument;
     this.primaryDocumentFile = rawProps.primaryDocumentFile;
@@ -183,8 +183,8 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       .max('now'),
     hasSecondarySupportingDocuments: joi.boolean(),
     objections: joi.string(),
+    partyIrsPractitioner: joi.boolean(),
     partyPrimary: joi.boolean(),
-    partyRespondent: joi.boolean(),
     partySecondary: joi.boolean(),
     secondaryDocumentFile: joi.object(),
     secondaryDocumentFileSize: joi
@@ -261,7 +261,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     documentMetadata.selectedCases &&
     documentMetadata.selectedCases.length > 1
   ) {
-    if (documentMetadata.partyRespondent !== true) {
+    if (documentMetadata.partyIrsPractitioner !== true) {
       const casesWithAPartySelected = reduce(
         documentMetadata.casesParties,
         (accArray, parties, docketNumber) => {
@@ -291,7 +291,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     if (
       documentMetadata.partyPrimary !== true &&
       documentMetadata.partySecondary !== true &&
-      documentMetadata.partyRespondent !== true
+      documentMetadata.partyIrsPractitioner !== true
     ) {
       addProperty(
         'partyPrimary',

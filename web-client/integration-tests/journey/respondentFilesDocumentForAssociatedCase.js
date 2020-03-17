@@ -73,7 +73,7 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'partyRespondent',
+      key: 'partyIrsPractitioner',
       value: true,
     });
 
