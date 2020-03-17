@@ -24,6 +24,13 @@ export default test => {
 
     await test.runSequence('submitCourtIssuedOrderSequence');
 
+    //skip signing and go back to caseDetail
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    expect(test.getState('caseDetail.documents').length).toEqual(3);
+
     const {
       draftDocuments,
     } = applicationContext.getUtilities().getFormattedCaseDetail({
