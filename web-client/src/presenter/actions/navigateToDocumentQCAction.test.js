@@ -20,6 +20,6 @@ describe('navigateToDocumentQCAction', () => {
       },
     });
 
-    expect(routeStub).toHaveBeenCalledWith('/document-qc');
+    expect(routeStub).toHaveBeenCalledWith('/document-qc/my/inbox');
   });
 });
