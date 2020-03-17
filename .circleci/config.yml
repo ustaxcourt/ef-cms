@@ -281,7 +281,7 @@ jobs:
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-public-api.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - API - us-east-1'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-api.sh ${ENV} us-east-1"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "CIRCLE_HONEYBADGER_API_KEY_DEV=${CIRCLE_HONEYBADGER_API_KEY_DEV}" -e "CIRCLE_HONEYBADGER_API_KEY_STG=${CIRCLE_HONEYBADGER_API_KEY_STG}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-api.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - Cases - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-cases.sh ${ENV} us-east-1"
@@ -359,7 +359,7 @@ jobs:
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-public-api.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Serverless - API - us-west-1'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-api.sh ${ENV} us-west-1"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "CIRCLE_HONEYBADGER_API_KEY_DEV=${CIRCLE_HONEYBADGER_API_KEY_DEV}" -e "CIRCLE_HONEYBADGER_API_KEY_STG=${CIRCLE_HONEYBADGER_API_KEY_STG}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-api.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Serverless - Cases - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-cases.sh ${ENV} us-west-1"
@@ -425,7 +425,7 @@ jobs:
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./switch-environment-color.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - S3'
-          command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" -e "HONEYBADGER_API_KEY_DEV=${CIRCLE_HONEYBADGER_API_KEY_DEV}" -e "HONEYBADGER_API_KEY_STG=${CIRCLE_HONEYBADGER_API_KEY_STG}" --rm efcms /bin/sh -c "./web-client/build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
+          command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" -e "CIRCLE_HONEYBADGER_API_KEY_DEV=${CIRCLE_HONEYBADGER_API_KEY_DEV}" -e "CIRCLE_HONEYBADGER_API_KEY_STG=${CIRCLE_HONEYBADGER_API_KEY_STG}" --rm efcms /bin/sh -c "./web-client/build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
       - run:
           name: 'Deploy - Public Web Client - S3'
           command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist-public.sh $ENV && aws s3 sync dist-public s3://ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist-public s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
