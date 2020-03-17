@@ -76,12 +76,14 @@ exports.assignWorkItemsInteractor = async ({
     })
     .addMessage(newMessage);
 
+  // This must run BEFORE saveWorkItemForPaper
+  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+    applicationContext,
+    deleteFromSection: false,
+    workItem: originalWorkItem,
+  });
+
   await Promise.all([
-    applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-      applicationContext,
-      deleteFromSection: false,
-      workItem: originalWorkItem,
-    }),
     applicationContext.getPersistenceGateway().updateWorkItemInCase({
       applicationContext,
       caseToUpdate,
