@@ -140,13 +140,14 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     caseEntity,
   });
 
-  const deletedStinDocumentId = await exports.deleteStinIfAvailable({
-    applicationContext,
-    caseEntity,
-  });
-  caseEntity.documents = caseEntity.documents.filter(
-    item => item.documentId !== deletedStinDocumentId,
-  );
+  //This functionality will probably change soon
+  // const deletedStinDocumentId = await exports.deleteStinIfAvailable({
+  //   applicationContext,
+  //   caseEntity,
+  // });
+  // caseEntity.documents = caseEntity.documents.filter(
+  //   item => item.documentId !== deletedStinDocumentId,
+  // );
 
   caseEntity.markAsSentToIRS(createISODateString());
 
