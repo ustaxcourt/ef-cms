@@ -295,17 +295,17 @@ exports.createCaseFromPaperInteractor = async ({
     caseToAdd.addDocument(odsDocumentEntity, { applicationContext });
   }
 
-  // Warning - do not use Promise.all() as it seems to cause intermittent failures
-  await applicationContext.getPersistenceGateway().createCase({
-    applicationContext,
-    caseToCreate: caseToAdd.validate().toRawObject(),
-  });
-
-  await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
-    applicationContext,
-    messageId: newMessage.messageId,
-    workItem: newWorkItem.validate().toRawObject(),
-  });
+  await Promise.all([
+    applicationContext.getPersistenceGateway().createCase({
+      applicationContext,
+      caseToCreate: caseToAdd.validate().toRawObject(),
+    }),
+    applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+      applicationContext,
+      messageId: newMessage.messageId,
+      workItem: newWorkItem.validate().toRawObject(),
+    }),
+  ]);
 
   return new Case(caseToAdd, { applicationContext }).toRawObject();
 };
