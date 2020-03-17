@@ -157,6 +157,10 @@ describe('updateCase', () => {
   });
 
   describe('irsPractitioners', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
     it('adds a irsPractitioner to a case with no existing irsPractitioners', async () => {
       await updateCase({
         applicationContext,
@@ -247,7 +251,7 @@ describe('updateCase', () => {
       });
     });
 
-    it('removes a irsPractitioner from a case with existing irsPractitioners', async () => {
+    it('removes an irsPractitioner from a case with existing irsPractitioners', async () => {
       firstQueryStub.push({
         name: 'Guy Fieri',
         pk: 'case|123',
@@ -277,14 +281,19 @@ describe('updateCase', () => {
       });
 
       expect(deleteStub).toHaveBeenCalled();
-      expect(putStub.mock.calls.length).toEqual(1);
-      expect(putStub.mock.calls[0][0].Item.irsPractitioners).toMatchObject([
-        { name: 'Rachel Ray', userId: 'user-id-existing-234' },
-      ]);
+      expect(deleteStub.mock.calls.length).toEqual(1);
+      expect(deleteStub.mock.calls[0][0].key).toMatchObject({
+        pk: 'case|123',
+        sk: 'irsPractitioner|user-id-existing-123',
+      });
     });
   });
 
   describe('PrivatePractitioners', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
     it('adds a privatePractitioner to a case with no existing privatePractitioners', async () => {
       await updateCase({
         applicationContext,
@@ -415,10 +424,11 @@ describe('updateCase', () => {
       });
 
       expect(deleteStub).toHaveBeenCalled();
-      expect(putStub.mock.calls.length).toEqual(1);
-      expect(putStub.mock.calls[0][0].Item.privatePractitioners).toMatchObject([
-        { name: 'Rachel Ray', userId: 'user-id-existing-234' },
-      ]);
+      expect(deleteStub.mock.calls.length).toEqual(1);
+      expect(deleteStub.mock.calls[0][0].key).toMatchObject({
+        pk: 'case|123',
+        sk: 'privatePractitioner|user-id-existing-123',
+      });
     });
   });
 });
