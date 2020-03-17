@@ -1,6 +1,7 @@
 import { OrderWithoutBody } from '../../../shared/src/business/entities/orders/OrderWithoutBody';
 import { applicationContext } from '../../src/applicationContext';
 import { first } from 'lodash';
+import { wait } from '../helpers';
 
 const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
@@ -21,7 +22,7 @@ export default test => {
       value: 'ODD',
     });
 
-    expect(test.getState('form.documentType')).toEqual(
+    expect(test.getState('modal.documentType')).toEqual(
       'Order of Dismissal and Decision',
     );
 
@@ -35,6 +36,9 @@ export default test => {
     });
 
     await test.runSequence('submitCourtIssuedOrderSequence');
+
+    //TODO - fix this when cerebral runSequence starts properly awaiting things
+    await wait(1000);
 
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('pdfPreviewUrl')).toBeDefined();

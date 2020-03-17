@@ -25,10 +25,8 @@ describe('hasOrderTypeSelectedAction', () => {
         docketNumber: '123-19',
       },
       state: {
-        screenMetadata: {
-          orderData: {
-            eventCode: 'ABC',
-          },
+        modal: {
+          eventCode: 'ABC',
         },
       },
     });
@@ -45,9 +43,7 @@ describe('hasOrderTypeSelectedAction', () => {
         docketNumber: '123-19',
       },
       state: {
-        screenMetadata: {
-          orderData: {},
-        },
+        modal: {},
       },
     });
 

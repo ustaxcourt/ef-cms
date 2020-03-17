@@ -81,6 +81,8 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
       applicationContext,
       key: stinDocument.documentId,
     });
+
+    return stinDocument.documentId;
   }
 };
 
@@ -108,6 +110,24 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   const { Case } = applicationContext.getEntityConstructors();
   const caseEntity = new Case(caseToBatch, { applicationContext });
 
+  const servedParties = aggregatePartiesForService(caseEntity);
+
+  Object.keys(Document.INITIAL_DOCUMENT_TYPES).forEach(
+    initialDocumentTypeKey => {
+      const initialDocumentType =
+        Document.INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
+
+      const initialDocument = caseEntity.documents.find(
+        document => document.documentType === initialDocumentType.documentType,
+      );
+
+      if (initialDocument) {
+        initialDocument.setAsServed(servedParties.all);
+        caseEntity.updateDocument(initialDocument);
+      }
+    },
+  );
+
   exports.addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
 
   caseEntity
@@ -120,28 +140,16 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     caseEntity,
   });
 
-  await exports.deleteStinIfAvailable({ applicationContext, caseEntity });
+  //This functionality will probably change soon
+  // const deletedStinDocumentId = await exports.deleteStinIfAvailable({
+  //   applicationContext,
+  //   caseEntity,
+  // });
+  // caseEntity.documents = caseEntity.documents.filter(
+  //   item => item.documentId !== deletedStinDocumentId,
+  // );
 
   caseEntity.markAsSentToIRS(createISODateString());
-
-  const servedParties = aggregatePartiesForService(caseEntity);
-
-  Object.keys(Document.INITIAL_DOCUMENT_TYPES).map(initialDocumentTypeKey => {
-    const initialDocumentType =
-      Document.INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
-
-    const initialDocument = caseEntity.documents.find(
-      document => document.documentType === initialDocumentType.documentType,
-    );
-
-    if (initialDocument) {
-      const initialDocumentEntity = new Document(initialDocument, {
-        applicationContext,
-      });
-      initialDocumentEntity.setAsServed(servedParties.all);
-      caseEntity.updateDocument(initialDocumentEntity);
-    }
-  });
 
   const petitionDocument = caseEntity.documents.find(
     document =>
@@ -179,6 +187,14 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
+
+  for (const doc of caseEntity.documents) {
+    await applicationContext.getUseCases().addCoversheetInteractor({
+      applicationContext,
+      caseId: caseEntity.caseId,
+      documentId: doc.documentId,
+    });
+  }
 
   const results = await applicationContext
     .getUseCaseHelpers()
