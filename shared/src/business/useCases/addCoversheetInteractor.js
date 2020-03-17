@@ -161,13 +161,20 @@ exports.addCoversheetInteractor = async ({
     document => document.documentId === documentId,
   );
 
-  const { Body: pdfData } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: documentId,
-    })
-    .promise();
+  let pdfData;
+  try {
+    const { Body } = await applicationContext
+      .getStorageClient()
+      .getObject({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: documentId,
+      })
+      .promise();
+    pdfData = Body;
+  } catch (err) {
+    err.message = `${err.message} document id is ${documentId}`;
+    throw err;
+  }
 
   const newPdfData = await exports.addCoverToPdf({
     applicationContext,
