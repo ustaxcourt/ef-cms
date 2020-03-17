@@ -43,11 +43,6 @@ export default test => {
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
 
-    //skip signing and go back to caseDetail
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
     const {
       draftDocuments,
     } = applicationContext.getUtilities().getFormattedCaseDetail({

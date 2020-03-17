@@ -22,7 +22,7 @@ export const chambersUserAddsOrderToCase = test => {
       value: 'ODD',
     });
 
-    expect(test.getState('form.documentType')).toEqual(
+    expect(test.getState('modal.documentType')).toEqual(
       'Order of Dismissal and Decision',
     );
 
