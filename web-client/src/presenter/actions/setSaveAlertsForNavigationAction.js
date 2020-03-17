@@ -7,6 +7,5 @@ import { state } from 'cerebral';
  * @param {Function} providers.store the cerebral store used for setting the state.saveAlertsForNavigation
  */
 export const setSaveAlertsForNavigationAction = ({ store }) => {
-  console.log('setting save alerts');
   store.set(state.saveAlertsForNavigation, true);
 };

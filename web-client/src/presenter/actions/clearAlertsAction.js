@@ -10,7 +10,6 @@ import { state } from 'cerebral';
  */
 export const clearAlertsAction = ({ get, props, store }) => {
   const saveAlerts = get(state.saveAlertsForNavigation);
-  console.log(saveAlerts);
   if (!saveAlerts) {
     store.unset(state.alertError);
     store.unset(state.alertSuccess);
