@@ -111,7 +111,7 @@ describe('genericHandler', () => {
     expect(setUser).toEqual(MOCK_USER);
   });
 
-  it('should log `user` and `results` but not `event` by default', async () => {
+  it('should log `user` and `results` and `event` by default', async () => {
     const callback = () => null;
 
     await genericHandler(MOCK_EVENT, callback, {
@@ -121,7 +121,7 @@ describe('genericHandler', () => {
 
     expect(logged.includes('User')).toBeTruthy();
     expect(logged.includes('Results')).toBeTruthy();
-    expect(logged.includes('Event')).toBeFalsy();
+    expect(logged.includes('Event')).toBeTruthy();
   });
 
   it('can optionally disable logging of `user` and `results` and enable `event`', async () => {
