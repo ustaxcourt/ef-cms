@@ -31,6 +31,7 @@
   - On AWS, setup a role & policy for accessing the Dynamsoft ZIP file that is hosted on a private S3 bucket
      - The role name must match `dynamsoft_s3_download_role`, and it must be for `EC2`
      - The policy must have `s3:GetObject` access to your bucket
+- Deploy Docker images to Amazon ECR with `./docker-to-ecr.sh`. This will build an image per the `Dockerfile-CI` config, tag it as `latest`, and push it to the repo in ECR.
 
 ## CircleCI Setup
 1. Set up a [CircleCI](https://circleci.com/) account
