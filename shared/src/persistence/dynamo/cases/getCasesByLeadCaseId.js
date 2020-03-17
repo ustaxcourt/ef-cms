@@ -1,9 +1,3 @@
-const {
-  getCasePrivatePractitioners,
-} = require('./getCasePrivatePractitioners');
-const { getCaseDocketRecord } = require('./getCaseDocketRecord');
-const { getCaseDocuments } = require('./getCaseDocuments');
-const { getCaseIrsPractitioners } = require('./getCaseIrsPractitioners');
 const { query } = require('../../dynamodbClientService');
 
 /**
@@ -27,18 +21,15 @@ exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
     applicationContext,
   });
 
-  items = await Promise.all(
-    items.map(getCaseDocketRecord({ applicationContext })),
-  );
-  items = await Promise.all(
-    items.map(getCaseDocuments({ applicationContext })),
-  );
-  items = await Promise.all(
-    items.map(getCasePrivatePractitioners({ applicationContext })),
-  );
-  items = await Promise.all(
-    items.map(getCaseIrsPractitioners({ applicationContext })),
-  );
+  for (let i = 0; i < items.length; i++) {
+    items[i] = {
+      ...items[i],
+      ...(await applicationContext.getPersistenceGateway().getCaseByCaseId({
+        applicationContext,
+        caseId: items[i].caseId,
+      })),
+    };
+  }
 
   return items;
 };
