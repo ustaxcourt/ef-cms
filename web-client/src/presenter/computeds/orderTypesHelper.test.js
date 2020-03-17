@@ -51,25 +51,25 @@ describe('orderTypesHelper', () => {
     ]);
   });
 
-  it('should return showDocumentTitleInput true and documentTitleInputLabel if state.form.eventCode is O', () => {
+  it('should return showDocumentTitleInput true and documentTitleInputLabel if state.modal.eventCode is O', () => {
     const result = runCompute(orderTypesHelper, {
-      state: { form: { eventCode: 'O' } },
+      state: { modal: { eventCode: 'O' } },
     });
     expect(result.showDocumentTitleInput).toEqual(true);
     expect(result.documentTitleInputLabel).toEqual('Order title');
   });
 
-  it('should return showDocumentTitleInput true and documentTitleInputLabel if state.form.eventCode is NOT', () => {
+  it('should return showDocumentTitleInput true and documentTitleInputLabel if state.modal.eventCode is NOT', () => {
     const result = runCompute(orderTypesHelper, {
-      state: { form: { eventCode: 'NOT' } },
+      state: { modal: { eventCode: 'NOT' } },
     });
     expect(result.showDocumentTitleInput).toEqual(true);
     expect(result.documentTitleInputLabel).toEqual('Notice title');
   });
 
-  it('should return showDocumentTitleInput false if state.form.eventCode is not O or NOT', () => {
+  it('should return showDocumentTitleInput false if state.modal.eventCode is not O or NOT', () => {
     const result = runCompute(orderTypesHelper, {
-      state: { form: { eventCode: 'OTHER' } },
+      state: { modal: { eventCode: 'OTHER' } },
     });
     expect(result.showDocumentTitleInput).toEqual(false);
   });

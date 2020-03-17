@@ -5,10 +5,10 @@ import { map } from 'lodash';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const CreateOrderChooseTypeModal = connect(
+export const EditOrderTitleModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.submitCreateOrderModalSequence,
+    confirmSequence: sequences.submitEditOrderTitleModalSequence,
     modal: state.modal,
     orderTypesHelper: state.orderTypesHelper,
     updateModalValue: sequences.updateCreateOrderModalFormValueSequence,
@@ -32,7 +32,7 @@ export const CreateOrderChooseTypeModal = connect(
         className=""
         confirmLabel="Continue"
         confirmSequence={confirmSequence}
-        title="Create Order or Notice"
+        title="Edit Order Title"
       >
         <div className="ustc-create-order-modal">
           <FormGroup errorText={validationErrors.eventCode}>
@@ -44,6 +44,7 @@ export const CreateOrderChooseTypeModal = connect(
               className="usa-select"
               id="eventCode"
               name="eventCode"
+              value={modal.eventCode}
               onChange={e => {
                 updateModalValue({
                   key: e.target.name,
