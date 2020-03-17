@@ -24,17 +24,4 @@ describe('setCreateOrderModalDataOnFormAction', () => {
     expect(result.state.form.documentType).toEqual('Order');
     expect(result.state.form.richText).toEqual('something');
   });
-
-  it('does not error if modal is empty', async () => {
-    const result = await runAction(setCreateOrderModalDataOnFormAction, {
-      modal: {},
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {},
-      },
-    });
-    expect(result.state.form).toEqual({});
-  });
 });
