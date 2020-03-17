@@ -243,7 +243,12 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
         pk: `case|${caseToUpdate.caseId}`,
         sk: `case|${caseToUpdate.caseId}`,
         ...setLeadCase,
-        ...caseToUpdate,
+        ...omit(caseToUpdate, [
+          'documents',
+          'irsPractitioners',
+          'privatePractitioners',
+          'docketRecord',
+        ]),
       },
       applicationContext,
     }),
