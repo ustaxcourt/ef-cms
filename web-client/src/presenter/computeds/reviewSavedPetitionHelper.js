@@ -8,6 +8,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     hasVerifiedIrsNotice,
     irsNoticeDate,
     petitionPaymentStatus,
+    preferredTrialCity,
     receivedAt,
     ...caseDetail
   } = get(state.caseDetail);
@@ -27,6 +28,10 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
 
   const petitionPaymentStatusFormatted =
     petitionPaymentStatus === PAYMENT_STATUS.PAID ? 'Paid' : 'Not paid';
+
+  const preferredTrialCityFormatted = preferredTrialCity
+    ? preferredTrialCity
+    : 'No requested place of trial';
 
   if (shouldShowIrsNoticeDate) {
     irsNoticeDateFormatted = applicationContext
@@ -66,6 +71,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     ownershipDisclosureFile,
     petitionFile,
     petitionPaymentStatusFormatted,
+    preferredTrialCityFormatted,
     receivedAtFormatted,
     requestForPlaceOfTrialFile,
     shouldShowIrsNoticeDate,
