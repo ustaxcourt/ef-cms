@@ -168,6 +168,18 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     user: user,
   });
 
+  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+    applicationContext,
+    section: PETITIONS_SECTION,
+    userId: user.userId,
+    workItem: initializeCaseWorkItem,
+  });
+
+  await applicationContext.getPersistenceGateway().updateWorkItem({
+    applicationContext,
+    workItemToUpdate: initializeCaseWorkItem,
+  });
+
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
@@ -181,27 +193,15 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     });
   }
 
-  const casePromises = [
-    applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-      applicationContext,
-      section: PETITIONS_SECTION,
-      userId: user.userId,
-      workItem: initializeCaseWorkItem,
-    }),
-    applicationContext.getPersistenceGateway().updateWorkItem({
-      applicationContext,
-      workItemToUpdate: initializeCaseWorkItem,
-    }),
-    applicationContext.getUseCaseHelpers().generateCaseConfirmationPdf({
+  const results = await applicationContext
+    .getUseCaseHelpers()
+    .generateCaseConfirmationPdf({
       applicationContext,
       caseEntity,
-    }),
-  ];
-
-  const results = await Promise.all(casePromises);
+    });
 
   if (caseEntity.isPaper) {
-    const pdfData = results[2];
+    const pdfData = results;
     const noticeDoc = await PDFDocument.load(pdfData);
     const newPdfDoc = await PDFDocument.create();
 

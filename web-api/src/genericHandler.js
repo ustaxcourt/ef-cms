@@ -45,7 +45,7 @@ exports.genericHandler = (event, cb, options = {}) => {
 
     const {
       isPublicUser,
-      logEvent = false,
+      logEvent = true,
       logEventLabel = 'Event',
       logResults = true,
       logResultsLabel = 'Results',
