@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.form which is used for displaying the red alerts at the top of the page.
+ * sets the state.form with a case detail from props
  *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object containing the props.caseDetail
