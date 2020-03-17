@@ -572,3 +572,17 @@ export const setBatchPages = ({ test }) => {
     })),
   );
 };
+
+export const getPetitionDocumentForCase = caseDetail => {
+  // In our tests, we had numerous instances of `case.documents[0]`, which would
+  // return the petition document most of the time, but occasionally fail,
+  // producing unintended results.
+  return caseDetail.documents.find(
+    document => document.documentType === 'Petition',
+  );
+};
+
+export const getPetitionWorkItemForCase = caseDetail => {
+  const petitionDocument = getPetitionDocumentForCase(caseDetail);
+  return petitionDocument.workItems[0];
+};
