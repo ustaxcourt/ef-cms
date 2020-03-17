@@ -1,9 +1,13 @@
+import { getPetitionWorkItemForCase } from '../helpers';
+
 export default (test, createdCases) => {
   return it('[TEST SETUP DATA] Adds the most recent case to the test object', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    const petitionerNewCase = test.getState('cases.0');
+    const petitionerNewCase = test.getState('caseDetail');
     expect(petitionerNewCase).toBeDefined();
-    expect(petitionerNewCase.documents[0].workItems[0]).toBeDefined();
+
+    const workitem = getPetitionWorkItemForCase(petitionerNewCase);
+
+    expect(workitem).toBeDefined();
     createdCases.push(petitionerNewCase);
   });
 };
