@@ -30,9 +30,9 @@ describe('Chambers dashboard', () => {
   petitionerViewsDashboard(test);
   petitionerViewsCaseDetail(test);
   petitionerFilesDocumentForCase(test, fakeFile);
+  petitionerAddNewCaseToTestObj(test, createdCases);
   petitionerViewsCaseDetailAfterFilingDocument(test);
   petitionerViewsDashboard(test);
-  petitionerAddNewCaseToTestObj(test, createdCases);
 
   loginAs(test, 'petitionsclerk');
   petitionsClerkCreatesMessageToChambers(
