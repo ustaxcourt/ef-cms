@@ -1,6 +1,3 @@
-const {
-  createMappingRecord,
-} = require('../../dynamo/helpers/createMappingRecord');
 const { createSectionInboxRecord } = require('./createSectionInboxRecord');
 const { createSectionOutboxRecord } = require('./createSectionOutboxRecord');
 const { createUserInboxRecord } = require('./createUserInboxRecord');
@@ -19,27 +16,28 @@ exports.createWorkItem = async ({ applicationContext, workItem }) => {
 
   const user = await get({
     Key: {
-      pk: authorizedUser.userId,
-      sk: authorizedUser.userId,
+      pk: `user|${authorizedUser.userId}`,
+      sk: `user|${authorizedUser.userId}`,
     },
     applicationContext,
   });
 
   await put({
     Item: {
-      gsi1pk: `workitem-${workItem.workItemId}`,
-      pk: `workitem-${workItem.workItemId}`,
-      sk: `workitem-${workItem.workItemId}`,
+      gsi1pk: `work-item|${workItem.workItemId}`,
+      pk: `work-item|${workItem.workItemId}`,
+      sk: `work-item|${workItem.workItemId}`,
       ...workItem,
     },
     applicationContext,
   });
 
-  await createMappingRecord({
+  await put({
+    Item: {
+      pk: `case|${workItem.caseId}`,
+      sk: `work-item|${workItem.workItemId}`,
+    },
     applicationContext,
-    pkId: workItem.caseId,
-    skId: workItem.workItemId,
-    type: 'workItem',
   });
 
   await createUserInboxRecord({

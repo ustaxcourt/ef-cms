@@ -1,19 +1,25 @@
 const {
   getRecordsViaMapping,
 } = require('../../dynamo/helpers/getRecordsViaMapping');
-const { getCaseDocketRecord } = require('./getCaseDocketRecord');
+const { getCaseByCaseId } = require('./getCaseByCaseId');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 exports.getCasesByUser = async ({ applicationContext, userId }) => {
   let cases = await getRecordsViaMapping({
     applicationContext,
-    key: userId,
-    type: 'case',
+    pk: `user|${userId}`,
+    prefix: 'case',
   });
 
-  cases = await Promise.all(
-    cases.map(getCaseDocketRecord({ applicationContext })),
-  );
+  for (let i = 0; i < cases.length; i++) {
+    cases[i] = {
+      ...cases[i],
+      ...(await getCaseByCaseId({
+        applicationContext,
+        caseId: cases[i].caseId,
+      })),
+    };
+  }
 
   return stripWorkItems(cases, applicationContext.isAuthorizedForWorkItems());
 };

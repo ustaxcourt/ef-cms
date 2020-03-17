@@ -69,8 +69,6 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
   });
   const { trialSessionId } = trialSessionEntity;
 
-  console.log('trial session', trialSessionId);
-
   let petitionFileId;
   let stinFileId;
 

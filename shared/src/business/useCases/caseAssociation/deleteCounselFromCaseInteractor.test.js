@@ -8,13 +8,13 @@ let applicationContext;
 let updateCaseMock;
 let deleteUserFromCaseMock;
 
-const mockPractitioners = [
+const mockPrivatePractitioners = [
   { role: User.ROLES.privatePractitioner, userId: '456' },
   { role: User.ROLES.privatePractitioner, userId: '789' },
   { role: User.ROLES.privatePractitioner, userId: '012' },
 ];
 
-const mockRespondents = [
+const mockIrsPractitioners = [
   { role: User.ROLES.irsPractitioner, userId: '654' },
   { role: User.ROLES.irsPractitioner, userId: '987' },
   { role: User.ROLES.irsPractitioner, userId: '210' },
@@ -37,12 +37,12 @@ describe('deleteCounselFromCaseInteractor', () => {
         getCaseByCaseId: ({ caseId }) => ({
           ...MOCK_CASE,
           caseId,
-          practitioners: mockPractitioners,
-          respondents: mockRespondents,
+          irsPractitioners: mockIrsPractitioners,
+          privatePractitioners: mockPrivatePractitioners,
         }),
         getUserById: ({ userId }) => {
-          return mockPractitioners
-            .concat(mockRespondents)
+          return mockPrivatePractitioners
+            .concat(mockIrsPractitioners)
             .concat(mockPetitioners)
             .find(user => user.userId === userId);
         },
@@ -83,7 +83,7 @@ describe('deleteCounselFromCaseInteractor', () => {
     expect(deleteUserFromCaseMock).toHaveBeenCalled();
   });
 
-  it('deletes a respondent with the given userId from the associated case', async () => {
+  it('deletes an irsPractitioner with the given userId from the associated case', async () => {
     await deleteCounselFromCaseInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -94,7 +94,7 @@ describe('deleteCounselFromCaseInteractor', () => {
     expect(deleteUserFromCaseMock).toHaveBeenCalled();
   });
 
-  it('throws an error if the userIdToDelete is not a practitioner or respondent role', async () => {
+  it('throws an error if the userIdToDelete is not a privatePractitioner or irsPractitioner role', async () => {
     let error;
     try {
       await deleteCounselFromCaseInteractor({
@@ -105,6 +105,6 @@ describe('deleteCounselFromCaseInteractor', () => {
     } catch (err) {
       error = err;
     }
-    expect(error.message).toEqual('User is not a practitioner or respondent');
+    expect(error.message).toEqual('User is not a practitioner');
   });
 });

@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const {
   generateSignedDocumentInteractor,
-} = require('./generateSignedDocumentInteractor.js');
+} = require('./generateSignedDocumentInteractor');
 const { PDFDocument } = require('pdf-lib');
 
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
@@ -16,6 +16,7 @@ describe('generateSignedDocument', () => {
   let testDoc;
 
   beforeEach(() => {
+    jest.setTimeout(10000);
     testDoc = testPdfDocBytes();
   });
 

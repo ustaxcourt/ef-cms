@@ -74,7 +74,7 @@ describe('DocketEntryFactory', () => {
       });
     });
 
-    it('should require one of [partyPrimary, partySecondary, partyRespondent] to be selected', () => {
+    it('should require one of [partyPrimary, partySecondary, partyIrsPractitioner] to be selected', () => {
       expect(errors().partyPrimary).toEqual(
         VALIDATION_ERROR_MESSAGES.partyPrimary,
       );

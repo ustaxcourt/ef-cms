@@ -40,7 +40,7 @@ describe('case information helper', () => {
     expect(result.showAddCounsel).toEqual(false);
   });
 
-  it('should show edit practitioners and respondents buttons if user is an internal user and there are practitioners and respondents on the case', () => {
+  it('should show edit privatePractitioners and irsPractitioners buttons if user is an internal user and there are privatePractitioners and irsPractitioners on the case', () => {
     const user = {
       role: User.ROLES.docketClerk,
       userId: '789',
@@ -49,17 +49,17 @@ describe('case information helper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          practitioners: [{ userId: '1' }],
-          respondents: [{ userId: '2' }],
+          irsPractitioners: [{ userId: '2' }],
+          privatePractitioners: [{ userId: '1' }],
         },
         form: {},
       },
     });
-    expect(result.showEditPractitioners).toBeTruthy();
-    expect(result.showEditRespondents).toBeTruthy();
+    expect(result.showEditPrivatePractitioners).toBeTruthy();
+    expect(result.showEditIrsPractitioners).toBeTruthy();
   });
 
-  it('should not show edit practitioners or respondents buttons if user is an internal user and there are not practitioners and respondents on the case', () => {
+  it('should not show edit privatePractitioners or irsPractitioners buttons if user is an internal user and there are not privatePractitioners and irsPractitioners on the case', () => {
     const user = {
       role: User.ROLES.docketClerk,
       userId: '789',
@@ -71,11 +71,11 @@ describe('case information helper', () => {
         form: {},
       },
     });
-    expect(result.showEditPractitioners).toBeFalsy();
-    expect(result.showEditRespondents).toBeFalsy();
+    expect(result.showEditPrivatePractitioners).toBeFalsy();
+    expect(result.showEditIrsPractitioners).toBeFalsy();
   });
 
-  it('should not show edit practitioners or respondents buttons if user is not an internal user', () => {
+  it('should not show edit privatePractitioners or irsPractitioners buttons if user is not an internal user', () => {
     const user = {
       role: User.ROLES.petitioner,
       userId: '789',
@@ -84,14 +84,14 @@ describe('case information helper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          practitioners: [{ userId: '1' }],
-          respondents: [{ userId: '2' }],
+          irsPractitioners: [{ userId: '2' }],
+          privatePractitioners: [{ userId: '1' }],
         },
         form: {},
       },
     });
-    expect(result.showEditPractitioners).toBeFalsy();
-    expect(result.showEditRespondents).toBeFalsy();
+    expect(result.showEditPrivatePractitioners).toBeFalsy();
+    expect(result.showEditIrsPractitioners).toBeFalsy();
   });
 
   it('should not show Seal Case button if user does not have SEAL_CASE permission', () => {

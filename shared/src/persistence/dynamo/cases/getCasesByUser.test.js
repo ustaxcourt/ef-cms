@@ -48,15 +48,17 @@ describe('getCasesByUser', () => {
     sinon.stub(client, 'batchGet').resolves([
       {
         caseId: '123',
-        pk: '123',
-        sk: '123',
+        pk: 'case|123',
+        sk: 'case|123',
         status: 'New',
       },
     ]);
     sinon.stub(client, 'query').resolves([
       {
-        pk: '123',
-        sk: '123',
+        caseId: '123',
+        pk: 'case|123',
+        sk: 'case|123',
+        status: 'New',
       },
     ]);
     sinon.stub(client, 'batchWrite').resolves(null);
@@ -79,7 +81,16 @@ describe('getCasesByUser', () => {
       user,
     });
     expect(result).toEqual([
-      { caseId: '123', docketRecord: [], pk: '123', sk: '123', status: 'New' },
+      {
+        caseId: '123',
+        docketRecord: [],
+        documents: [],
+        irsPractitioners: [],
+        pk: 'case|123',
+        privatePractitioners: [],
+        sk: 'case|123',
+        status: 'New',
+      },
     ]);
   });
 
@@ -89,7 +100,7 @@ describe('getCasesByUser', () => {
       user,
     });
     expect(client.batchGet.getCall(0).args[0].keys).toEqual([
-      { pk: '123', sk: '123' },
+      { pk: 'case|123', sk: 'case|123' },
     ]);
   });
 });

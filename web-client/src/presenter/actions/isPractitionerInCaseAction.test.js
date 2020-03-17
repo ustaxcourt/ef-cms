@@ -24,7 +24,7 @@ describe('isPractitionerInCaseAction', () => {
       },
       state: {
         caseDetail: {
-          practitioners: [{ userId: 'abc' }],
+          privatePractitioners: [{ userId: 'abc' }],
         },
         modal: {
           practitionerMatches: [{ userId: 'abc' }],
@@ -42,7 +42,7 @@ describe('isPractitionerInCaseAction', () => {
       },
       state: {
         caseDetail: {
-          practitioners: [{ userId: 'abc' }],
+          privatePractitioners: [{ userId: 'abc' }],
         },
         modal: {
           practitionerMatches: [{ userId: '123' }],

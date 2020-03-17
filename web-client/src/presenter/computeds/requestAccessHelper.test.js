@@ -64,7 +64,7 @@ describe('requestAccessHelper', () => {
     expect(result.partyValidationError).toBeUndefined();
   });
 
-  it('does not show exhibits for document inclusion for practitioners', () => {
+  it('does not show exhibits for document inclusion for privatePractitioners', () => {
     const result = runCompute(requestAccessHelper, {
       state: {
         ...state,

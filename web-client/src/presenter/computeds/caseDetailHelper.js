@@ -74,8 +74,8 @@ export const caseDetailHelper = (get, applicationContext) => {
       if (practitioner.contact) {
         practitioner.cityStateZip = `${practitioner.contact.city}, ${practitioner.contact.state} ${practitioner.contact.postalCode}`;
       }
-      if (caseDetail.practitioners) {
-        practitioner.isAlreadyInCase = caseDetail.practitioners.find(
+      if (caseDetail.privatePractitioners) {
+        practitioner.isAlreadyInCase = caseDetail.privatePractitioners.find(
           casePractitioner => casePractitioner.userId === practitioner.userId,
         );
       }
@@ -87,8 +87,8 @@ export const caseDetailHelper = (get, applicationContext) => {
       if (respondent.contact) {
         respondent.cityStateZip = `${respondent.contact.city}, ${respondent.contact.state} ${respondent.contact.postalCode}`;
       }
-      if (caseDetail.respondents) {
-        respondent.isAlreadyInCase = caseDetail.respondents.find(
+      if (caseDetail.irsPractitioners) {
+        respondent.isAlreadyInCase = caseDetail.irsPractitioners.find(
           caseRespondent => caseRespondent.userId === respondent.userId,
         );
       }
@@ -131,12 +131,13 @@ export const caseDetailHelper = (get, applicationContext) => {
     showJudgesNotes,
     showPractitionerSection:
       !isExternalUser ||
-      (caseDetail.practitioners && !!caseDetail.practitioners.length),
+      (caseDetail.privatePractitioners &&
+        !!caseDetail.privatePractitioners.length),
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,
     showRespondentSection:
       !isExternalUser ||
-      (caseDetail.respondents && !!caseDetail.respondents.length),
+      (caseDetail.irsPractitioners && !!caseDetail.irsPractitioners.length),
     userCanViewCase:
       (isExternalUser && userAssociatedWithCase) || !caseDetail.isSealed,
     userHasAccessToCase,

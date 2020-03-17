@@ -4,8 +4,8 @@ exports.deleteSectionInboxRecord = ({ applicationContext, workItem }) => {
   return client.delete({
     applicationContext,
     key: {
-      pk: `section-${workItem.section}`,
-      sk: `workitem-${workItem.workItemId}`,
+      pk: `section|${workItem.section}`,
+      sk: `work-item|${workItem.workItemId}`,
     },
   });
 };
