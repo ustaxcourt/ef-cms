@@ -53,7 +53,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "cognito-idp:CreateUserPoolClient",
         "cognito-idp:DescribeUserPoolDomain",
         "cognito-idp:SetUICustomization",
-        "cognito-idp:DeleteUserPoolDomain"
+        "cognito-idp:DeleteUserPoolDomain",
+        "cognito-idp:GetUserPoolMfaConfig"
       ],
       "Resource": "*"
     },
