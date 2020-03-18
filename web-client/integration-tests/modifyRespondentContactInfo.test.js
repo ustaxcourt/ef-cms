@@ -9,6 +9,10 @@ describe('Modify Respondent Contact Information', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.docketNumber = undefined;
+  });
+
   test.createdDocketNumbers = [];
 
   for (let i = 0; i < 3; i++) {
@@ -38,6 +42,7 @@ describe('Modify Respondent Contact Information', () => {
   loginAs(test, 'irsPractitioner');
   respondentUpdatesAddress(test);
   for (let i = 0; i < 3; i++) {
+    test.docketNumber = test.createdDocketNumbers[i];
     respondentViewsCaseDetailNoticeOfChangeOfAddress(test, i);
   }
 });
