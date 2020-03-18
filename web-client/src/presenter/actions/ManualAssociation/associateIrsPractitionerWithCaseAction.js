@@ -18,7 +18,11 @@ export const associateIrsPractitionerWithCaseAction = async ({
   const serviceIndicator = get(state.modal.serviceIndicator);
   const caseId = get(state.caseDetail.caseId);
 
-  await applicationContext
+  console.log('caseId', caseId);
+  console.log('userId', userId);
+  console.log('serviceIndicator', serviceIndicator);
+
+  const result = await applicationContext
     .getUseCases()
     .associateIrsPractitionerWithCaseInteractor({
       applicationContext,
@@ -26,6 +30,8 @@ export const associateIrsPractitionerWithCaseAction = async ({
       serviceIndicator,
       userId,
     });
+
+  console.log('associate irs practitioner with case result', result);
 
   return path.success({
     alertSuccess: {

@@ -9,8 +9,6 @@ export const ErrorFactory = {
   getError: e => {
     let responseCode = (e.response && e.response.status) || e.statusCode;
 
-    console.log('error', e);
-
     let newError = new ActionError(e);
     if (403 == responseCode) {
       newError = new UnauthorizedRequestError(e);

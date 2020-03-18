@@ -9,15 +9,14 @@ describe('Modify Respondent Contact Information', () => {
     jest.setTimeout(30000);
   });
 
-  let caseDetail;
   test.createdDocketNumbers = [];
 
   for (let i = 0; i < 3; i++) {
     loginAs(test, 'petitioner');
 
     it(`create case #${i} and associate a respondent`, async () => {
-      caseDetail = await uploadPetition(test);
-      test.createdDocketNumbers.push(caseDetail.docketNumber);
+      const { docketNumber } = await uploadPetition(test);
+      test.createdDocketNumbers.push(docketNumber);
     });
 
     loginAs(test, 'petitionsclerk');
