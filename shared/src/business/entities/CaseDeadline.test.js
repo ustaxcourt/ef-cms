@@ -1,4 +1,4 @@
-const applicationContext = require('../../applicationContextForTests');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('./cases/Case');
 const { CaseDeadline } = require('./CaseDeadline');
 
