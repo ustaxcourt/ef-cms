@@ -92,6 +92,7 @@ exports.updateUserContactInformationInteractor = async ({
       irsPractitioner.contact = contactInfo;
     }
 
+    console.log('userCase', userCase);
     console.log('LE OLD DATA', oldData);
     console.log('LE NEW DATA', newData);
 
