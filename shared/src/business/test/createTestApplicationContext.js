@@ -1,5 +1,6 @@
 const DateHandler = require('../utilities/DateHandler');
 const docketNumberGenerator = require('../../persistence/dynamo/cases/docketNumberGenerator');
+const sharedAppContext = require('../../sharedAppContext');
 const {
   addWorkItemToSectionInbox,
 } = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
@@ -7,8 +8,20 @@ const {
   CaseExternalIncomplete,
 } = require('../entities/cases/CaseExternalIncomplete');
 const {
+  createSectionInboxRecord,
+} = require('../../persistence/dynamo/workitems/createSectionInboxRecord');
+const {
+  createUserInboxRecord,
+} = require('../../persistence/dynamo/workitems/createUserInboxRecord');
+const {
   createWorkItem: createWorkItemPersistence,
 } = require('../../persistence/dynamo/workitems/createWorkItem');
+const {
+  deleteSectionOutboxRecord,
+} = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
+const {
+  deleteUserOutboxRecord,
+} = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
 const {
   deleteWorkItemFromInbox,
 } = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
@@ -48,21 +61,6 @@ const {
 const {
   saveWorkItemForNonPaper,
 } = require('../../persistence/dynamo/workitems/saveWorkItemForNonPaper');
-const { v4: uuidv4 } = require('uuid');
-
-const {
-  createSectionInboxRecord,
-} = require('../../persistence/dynamo/workitems/createSectionInboxRecord');
-const {
-  createUserInboxRecord,
-} = require('../../persistence/dynamo/workitems/createUserInboxRecord');
-const {
-  deleteSectionOutboxRecord,
-} = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
-const {
-  deleteUserOutboxRecord,
-} = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
-
 const {
   saveWorkItemForPaper,
 } = require('../../persistence/dynamo/workitems/saveWorkItemForPaper');
@@ -87,9 +85,10 @@ const { User } = require('../entities/User');
 const createTestApplicationContext = ({ user } = {}) => {
   const mockDocClient = createMockDocumentClient();
   const applicationContext = {
+    ...sharedAppContext,
     docketNumberGenerator,
     environment: { stage: 'local' },
-    getCurrentUser: () => {
+    getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {
           name: 'richard',
@@ -97,7 +96,7 @@ const createTestApplicationContext = ({ user } = {}) => {
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
       );
-    },
+    }),
     getDocumentClient: () => mockDocClient,
     getEntityConstructors: () => ({
       CaseExternal: CaseExternalIncomplete,
@@ -133,9 +132,6 @@ const createTestApplicationContext = ({ user } = {}) => {
         verifyCaseForUser,
       };
     },
-    getUniqueId: () => {
-      return uuidv4();
-    },
     getUtilities: () => {
       return { ...DateHandler };
     },
@@ -144,4 +140,6 @@ const createTestApplicationContext = ({ user } = {}) => {
   return applicationContext;
 };
 
-exports.createTestApplicationContext = createTestApplicationContext;
+const applicationContext = createTestApplicationContext();
+
+module.exports = { applicationContext, createTestApplicationContext };
