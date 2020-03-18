@@ -1,12 +1,8 @@
+import { completeWorkItemAction } from './completeWorkItemAction';
+import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
-import { presenter } from '../presenter';
-
-import { completeWorkItemAction } from './completeWorkItemAction';
-
-import sinon from 'sinon';
-
-const completeWorkItemInteractorStub = sinon.stub().returns(null);
+const completeWorkItemInteractorStub = jest.fn().mockReturnValue(null);
 
 presenter.providers.applicationContext = {
   getCurrentUser: () => ({
@@ -24,6 +20,10 @@ presenter.providers.path = {
 };
 
 describe('completeWorkItemInteractor', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should have undefined completedMessage if completeForm is empty', async () => {
     await runAction(completeWorkItemAction, {
       modules: {
@@ -54,7 +54,7 @@ describe('completeWorkItemInteractor', () => {
       },
     });
     expect(
-      completeWorkItemInteractorStub.getCall(0).args[0].completedMessage,
+      completeWorkItemInteractorStub.mock.calls[0][0].completedMessage,
     ).toBeUndefined();
   });
 
@@ -88,7 +88,7 @@ describe('completeWorkItemInteractor', () => {
       },
     });
     expect(
-      completeWorkItemInteractorStub.getCall(1).args[0].completedMessage,
+      completeWorkItemInteractorStub.mock.calls[0][0].completedMessage,
     ).toEqual('Completed');
   });
 });
