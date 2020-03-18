@@ -16,9 +16,11 @@ const gotoAllCaseDeadlines = [
   clearScreenMetadataAction,
   closeMobileMenuAction,
   clearErrorAlertsAction,
-  getSetJudgesSequence,
-  getAllCaseDeadlinesAction,
-  setCaseDeadlinesAction,
+  parallel([
+    fetchUserNotificationsSequence,
+    getSetJudgesSequence,
+    [getAllCaseDeadlinesAction, setCaseDeadlinesAction],
+  ]),
   setDefaultDateOnCalendarAction,
   setCurrentPageAction('CaseDeadlines'),
 ];
@@ -26,10 +28,7 @@ const gotoAllCaseDeadlines = [
 export const gotoAllCaseDeadlinesSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: parallel([
-      fetchUserNotificationsSequence,
-      gotoAllCaseDeadlines,
-    ]),
+    isLoggedIn: gotoAllCaseDeadlines,
     unauthorized: [redirectToCognitoAction],
   },
 ];

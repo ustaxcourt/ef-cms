@@ -1,4 +1,4 @@
-export default test => {
+export const docketClerkViewsSectionInboxNotHighPriority = test => {
   return it('Docket clerk views section inbox without a high priority item', async () => {
     await test.runSequence('gotoMessagesSequence');
     expect(test.getState('currentPage')).toEqual('Messages');

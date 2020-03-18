@@ -1,6 +1,6 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 
-export default test => {
+export const docketClerkUpdatesCaseStatusFromCalendaredToSubmitted = test => {
   return it('Docket clerk updates case status from Calendared to Submitted with an associated judge', async () => {
     test.setState('caseDetail', {});
 

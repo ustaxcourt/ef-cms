@@ -45,6 +45,7 @@ describe('associateRespondentWithCaseInteractor', () => {
           updateCase: async () => caseRecord,
           verifyCaseForUser: async () => true,
         }),
+        getUniqueId: () => 'unique-id-1',
       };
       await associateRespondentWithCaseInteractor({
         applicationContext,
@@ -75,12 +76,13 @@ describe('associateRespondentWithCaseInteractor', () => {
         getCaseByCaseId: async () => caseRecord,
         getUserById: async () => ({
           name: 'Olivia Jade',
-          role: User.ROLES.respondent,
+          role: User.ROLES.irsPractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
         updateCase: updateCaseSpy,
         verifyCaseForUser: async () => false,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
 
     await associateRespondentWithCaseInteractor({

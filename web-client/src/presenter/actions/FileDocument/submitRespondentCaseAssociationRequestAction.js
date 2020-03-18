@@ -16,7 +16,7 @@ export const submitRespondentCaseAssociationRequestAction = async ({
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
 
-  if (user.role === USER_ROLES.respondent) {
+  if (user.role === USER_ROLES.irsPractitioner) {
     return await applicationContext
       .getUseCases()
       .submitCaseAssociationRequestInteractor({

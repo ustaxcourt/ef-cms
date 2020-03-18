@@ -124,17 +124,30 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
 
   caseEntity.markAsSentToIRS(createISODateString());
 
+  const servedParties = aggregatePartiesForService(caseEntity);
+
+  Object.keys(Document.INITIAL_DOCUMENT_TYPES).map(initialDocumentTypeKey => {
+    const initialDocumentType =
+      Document.INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
+
+    const initialDocument = caseEntity.documents.find(
+      document => document.documentType === initialDocumentType.documentType,
+    );
+
+    if (initialDocument) {
+      const initialDocumentEntity = new Document(initialDocument, {
+        applicationContext,
+      });
+      initialDocumentEntity.setAsServed(servedParties.all);
+      caseEntity.updateDocument(initialDocumentEntity);
+    }
+  });
+
   const petitionDocument = caseEntity.documents.find(
     document =>
       document.documentType ===
       Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
-
-  const petitionDocumentEntity = new Document(petitionDocument, {
-    applicationContext,
-  });
-  petitionDocumentEntity.setAsServed();
-  caseEntity.updateDocument(petitionDocumentEntity);
 
   const initializeCaseWorkItem = petitionDocument.workItems.find(
     workItem => workItem.isInitializeCase,

@@ -1,26 +1,31 @@
-const faker = require('faker');
 const axios = require('axios');
-const { Case } = require('../../../shared/src/business/entities/cases/Case');
+const faker = require('faker');
+const jwt = require('jsonwebtoken');
 const {
   ContactFactory,
 } = require('../../../shared/src/business/entities/contacts/ContactFactory');
-
 const {
   TrialSession,
 } = require('../../../shared/src/business/entities/trialSessions/TrialSession');
+const { Case } = require('../../../shared/src/business/entities/cases/Case');
+const { userMap } = require('../../../shared/src/test/mockUserTokenMap');
 
 const USAGE = `
-Usage: node create-random-cases.js [authorization-token] [num-to-create]
+Used for creating cases with random data locally
 
-authorization-token should not include the string "Bearer "
-
-authorization-token should be a token for a petitioner user
+Usage: node create-random-cases.js [num-to-create]
 `;
 
-const jwtToken = process.argv[2];
-const numToCreate = process.argv[3];
+const numToCreate = process.argv[2];
 
 const main = () => {
+  const userName = 'petitioner';
+  const user = {
+    ...userMap[userName],
+    sub: userMap[userName].userId,
+  };
+  const jwtToken = jwt.sign(user, 'secret');
+
   if (!jwtToken || !numToCreate) {
     console.log(USAGE);
     return;

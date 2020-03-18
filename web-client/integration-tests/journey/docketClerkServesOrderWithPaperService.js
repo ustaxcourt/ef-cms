@@ -3,7 +3,10 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default (test, draftOrderIndex) => {
+export const docketClerkServesOrderWithPaperService = (
+  test,
+  draftOrderIndex,
+) => {
   return it('Docket Clerk serves the order after the docket entry has been created (with parties with paper service)', async () => {
     let caseDetailFormatted;
 
@@ -40,7 +43,10 @@ export default (test, draftOrderIndex) => {
 
     expect(helper.showPaperAlert).toEqual(true);
     expect(helper.contactsNeedingPaperService).toEqual([
-      { name: 'Test Person, Petitioner' },
+      {
+        name:
+          'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Petitioner',
+      },
     ]);
     await test.runSequence('serveCourtIssuedDocumentSequence');
 

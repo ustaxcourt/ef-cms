@@ -1,24 +1,18 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 
-import { setupTest } from './helpers';
-import { uploadPetition } from './helpers';
-import captureCreatedCase from './journey/captureCreatedCase';
+import { captureCreatedCase } from './journey/captureCreatedCase';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 
-import docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
-import docketClerkLogIn from './journey/docketClerkLogIn';
-import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
-import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
+import { docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring } from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
+import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
+import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 
-import petitionerLogin from './journey/petitionerLogIn';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 
 import petitionsClerkCompletesAndSetsTrialSession from './journey/petitionsClerkCompletesAndSetsTrialSession';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkViewsDocketRecordAfterSettingTrial from './journey/petitionsClerkViewsDocketRecordAfterSettingTrial';
-
-import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
 
@@ -56,34 +50,30 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
   const createdDocketNumbers = [];
 
   const makeCaseReadyForTrial = (test, id, caseOverrides) => {
-    petitionerLogin(test);
+    loginAs(test, 'petitioner');
     it(`Create case ${id}`, async () => {
       await uploadPetition(test, caseOverrides);
     });
     petitionerViewsDashboard(test);
     captureCreatedCase(test, createdCases, createdDocketNumbers);
-    userSignsOut(test);
 
-    petitionsClerkLogIn(test);
+    loginAs(test, 'petitionsclerk');
     petitionsClerkSubmitsCaseToIrs(test);
-    userSignsOut(test);
 
-    docketClerkLogIn(test);
+    loginAs(test, 'docketclerk');
     docketClerkSetsCaseReadyForTrial(test);
-    userSignsOut(test);
   };
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring(test, overrides);
   docketClerkViewsTrialSessionList(test, overrides);
-  userSignsOut(test);
 
   for (let i = 0; i < caseCount; i++) {
     const id = i + 1;
     makeCaseReadyForTrial(test, id, overrides);
   }
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   markAllCasesAsQCed(test, () => {
     return [createdCases[0], createdCases[1]];
   });
@@ -91,5 +81,4 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
   petitionsClerkViewsDocketRecordAfterSettingTrial(test, {
     documentTitle: 'Standing Pretrial Notice',
   });
-  userSignsOut(test);
 });

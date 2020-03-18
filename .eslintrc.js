@@ -153,6 +153,7 @@ module.exports = {
           'coversheet',
           'desc',
           'disallowance',
+          'dispositive',
           'docketclerk',
           'doctype',
           'douglass',

@@ -21,6 +21,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         getDownloadPolicyUrl: () => 'localhost',
         verifyCaseForUser: verifyCaseForUserMock,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
   });
 
@@ -99,6 +100,37 @@ describe('getDownloadPolicyUrlInteractor', () => {
       documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
     expect(url).toEqual('localhost');
+  });
+
+  it('returns the expected policy url for a petitioner who is associated with the case and viewing a case confirmation pdf', async () => {
+    user = {
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
+    };
+    verifyCaseForUserMock = jest.fn().mockReturnValue(true);
+
+    const url = await getDownloadPolicyUrlInteractor({
+      applicationContext,
+      caseId: MOCK_CASE.caseId,
+      documentId: 'case-101-18-confirmation.pdf',
+    });
+    expect(url).toEqual('localhost');
+  });
+
+  it('throws an Unauthorized error for a petitioner attempting to access an case confirmation pdf for a different case', async () => {
+    user = {
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
+    };
+    verifyCaseForUserMock = jest.fn().mockReturnValue(true);
+
+    await expect(
+      getDownloadPolicyUrlInteractor({
+        applicationContext,
+        caseId: MOCK_CASE.caseId, //docket number is 101-18
+        documentId: 'case-101-20-confirmation.pdf',
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('returns the url for an internal user role even if verifyCaseForUser returns false', async () => {

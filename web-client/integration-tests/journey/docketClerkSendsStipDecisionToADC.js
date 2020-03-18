@@ -1,6 +1,6 @@
 import { createMessage, viewDocumentDetailMessage } from '../helpers';
 
-export default test => {
+export const docketClerkSendsStipDecisionToADC = test => {
   describe('Docket Clerk sends Proposed Stipulated Decision to Sr. Attorney', () => {
     it('sends the stipulated decision', async () => {
       const { stipDecision } = test;

@@ -99,7 +99,7 @@ describe('createCaseInteractor', () => {
   it('should create a case successfully as a practitioner', async () => {
     user = new User({
       name: 'Olivia Jade',
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -146,7 +146,7 @@ describe('createCaseInteractor', () => {
   it('should create a case with contact primary and secondary successfully as a practitioner', async () => {
     user = new User({
       name: 'Olivia Jade',
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 

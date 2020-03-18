@@ -68,6 +68,13 @@ describe('update secondary contact on a case', () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCaseCaptionNames: Case.getCaseCaptionNames,
+      getChromiumBrowser: () => ({
+        close: () => null,
+        newPage: () => ({
+          pdf: () => fakeData,
+          setContent: () => null,
+        }),
+      }),
       getCurrentUser: () => {
         return new User({
           name: 'bob',
@@ -117,6 +124,7 @@ describe('update secondary contact on a case', () => {
         };
       },
       logger: {
+        error: e => console.log(e),
         time: () => null,
         timeEnd: () => null,
       },

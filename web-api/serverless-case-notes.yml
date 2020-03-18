@@ -2,7 +2,7 @@ service: ef-cms-case-notes-${opt:stageColor}
 plugins:
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  - serverless-plugin-aws-alerts
+  # - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -22,6 +22,7 @@ custom:
     number: 3
 
   serverless-offline:
+    skipCacheInvalidation: ${opt:skipCacheInvalidation}
     host: 0.0.0.0
     port: 3010
 
@@ -104,6 +105,8 @@ provider:
     EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
     EFCMS_DOMAIN: ${opt:domain}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
+    CIRCLE_HONEYBADGER_API_KEY_DEV: ${opt:circleHoneybadgerApiKeyDev}
+    CIRCLE_HONEYBADGER_API_KEY_STG: ${opt:circleHoneybadgerApiKeyStg}
 
 package:
   exclude:
@@ -148,6 +151,18 @@ resources:
             MetricsEnabled: true
 
 functions:
+  getUserCaseNoteForCases:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.getUserCaseNoteForCasesLambda
+    events:
+      - http:
+          path: /batch-cases/{caseIds}/user-notes
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getUserCaseNote:
     handler: web-api/${self:provider.dir}/caseNotesHandlers.getUserCaseNoteLambda
     events:

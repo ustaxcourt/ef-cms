@@ -12,6 +12,7 @@ describe('updateCase', () => {
 
   const getStub = jest.fn().mockReturnValue({
     docketNumberSuffix: null,
+    inProgress: false,
     status: Case.STATUS_TYPES.generalDocket,
   });
 
@@ -35,6 +36,7 @@ describe('updateCase', () => {
       environment: {
         stage: 'local',
       },
+      getUniqueId: () => 'unique-id-1',
     };
   });
 
@@ -64,6 +66,7 @@ describe('updateCase', () => {
         caseId: '123',
         docketNumber: '101-18',
         docketNumberSuffix: 'W',
+        inProgress: true,
         status: Case.STATUS_TYPES.calendared,
         trialDate: '2019-03-01T21:40:46.415Z',
         userId: 'petitioner',
@@ -96,6 +99,11 @@ describe('updateCase', () => {
     expect(updateStub.mock.calls[4][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':associatedJudge': 'Judge Buch',
+      },
+    });
+    expect(updateStub.mock.calls[5][0]).toMatchObject({
+      ExpressionAttributeValues: {
+        ':caseIsInProgress': true,
       },
     });
   });

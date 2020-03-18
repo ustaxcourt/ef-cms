@@ -2,23 +2,29 @@ import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PetitionPaymentForm } from '../CaseDetail/PetitionPaymentForm';
 import { ProcedureType } from '../StartCase/ProcedureType';
-import { TrialCityOptions } from '../TrialCityOptions';
+import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseInformation = connect(
   {
+    clearPreferredTrialCitySequence: sequences.clearPreferredTrialCitySequence,
+    constants: state.constants,
     form: state.form,
     startCaseInternalHelper: state.startCaseInternalHelper,
+    trialCitiesHelper: state.trialCitiesHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validatePetitionFromPaperSequence:
       sequences.validatePetitionFromPaperSequence,
     validationErrors: state.validationErrors,
   },
   ({
+    clearPreferredTrialCitySequence,
+    constants,
     form,
     startCaseInternalHelper,
+    trialCitiesHelper,
     updateFormValueSequence,
     validatePetitionFromPaperSequence,
     validationErrors,
@@ -80,6 +86,9 @@ export const CaseInformation = connect(
               });
             }}
           />
+          <span className="display-inline-block margin-top-1">
+            {constants.CASE_CAPTION_POSTFIX}
+          </span>
         </FormGroup>
         <ProcedureType
           legend="Case procedure"
@@ -89,6 +98,7 @@ export const CaseInformation = connect(
               key: 'procedureType',
               value: e.target.value,
             });
+            clearPreferredTrialCitySequence();
             validatePetitionFromPaperSequence();
           }}
         />
@@ -115,27 +125,24 @@ export const CaseInformation = connect(
             </label>
           </div>
         </FormGroup>
-        <FormGroup errorText={validationErrors.preferredTrialCity}>
-          <label className="usa-label" htmlFor="preferred-trial-city">
-            Trial location <span className="usa-hint">(Required with RQT)</span>
-          </label>
-          <select
-            className="usa-select"
-            id="preferred-trial-city"
-            name="preferredTrialCity"
-            value={form.preferredTrialCity}
-            onChange={e => {
-              updateFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-              validatePetitionFromPaperSequence();
-            }}
-          >
-            <option value="">- Select -</option>
-            <TrialCityOptions />
-          </select>
-        </FormGroup>
+        <TrialCity
+          label="Trial location"
+          showDefaultOption={true}
+          showHint={false}
+          showRegularTrialCitiesHint={false}
+          showSmallTrialCitiesHint={false}
+          trialCitiesByState={
+            trialCitiesHelper(form.procedureType).trialCitiesByState
+          }
+          value={form.preferredTrialCity}
+          onChange={e => {
+            updateFormValueSequence({
+              key: e.target.name,
+              value: e.target.value || null,
+            });
+            validatePetitionFromPaperSequence();
+          }}
+        />
         {startCaseInternalHelper.showOrderForRequestedTrialLocation && (
           <FormGroup>
             <div className="order-checkbox">
@@ -156,7 +163,7 @@ export const CaseInformation = connect(
                 className="usa-checkbox__label inline-block"
                 htmlFor="order-for-requested-trial-location"
               >
-                Order for Requested Trial Location
+                Order Designating Place of Trial
               </label>
             </div>
           </FormGroup>

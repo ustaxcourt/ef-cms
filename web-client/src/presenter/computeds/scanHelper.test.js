@@ -52,7 +52,7 @@ describe('scanHelper', () => {
 
   it('sets hasScanFeature to `false` for `practitioner` user roles', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
     });
     const result = runCompute(scanHelper, {
       state: {},
@@ -62,7 +62,7 @@ describe('scanHelper', () => {
 
   it('sets hasScanFeature to `false` for `respondent` user roles', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
     });
     const result = runCompute(scanHelper, {
       state: {},

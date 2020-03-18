@@ -1,6 +1,6 @@
 import { BigHeader } from '../BigHeader';
+import { CaseSearchForm } from '../AdvancedSearch/CaseSearchForm';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-import { SearchForm } from '../AdvancedSearch/SearchForm';
 import { SearchResults } from '../AdvancedSearch/SearchResults';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
@@ -23,7 +23,7 @@ export const PublicSearch = connect(
           <BigHeader text="Search for a Case" />
 
           <section className="usa-section grid-container advanced-search">
-            <SearchForm
+            <CaseSearchForm
               submitAdvancedSearchSequence={submitPublicAdvancedSearchSequence}
               submitDocketNumberSearchSequence={
                 submitCaseDocketNumberSearchSequence
@@ -37,7 +37,7 @@ export const PublicSearch = connect(
 
           <section className="usa-section grid-container advanced-search">
             <h2>Search for a Case</h2>
-            <SearchForm
+            <CaseSearchForm
               submitAdvancedSearchSequence={submitPublicAdvancedSearchSequence}
               submitDocketNumberSearchSequence={
                 submitCaseDocketNumberSearchSequence
