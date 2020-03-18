@@ -89,6 +89,8 @@ exports.updateUserContactInformationInteractor = async ({
       irsPractitioner.contact = contactInfo;
     }
 
+    console.log('oldData', oldData);
+
     // we do this again so that it will convert '' to null
     caseEntity = new Case(caseEntity, { applicationContext });
     const rawCase = caseEntity.validate().toRawObject();
