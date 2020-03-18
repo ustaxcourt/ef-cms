@@ -40,7 +40,7 @@ describe('validateOrderWithoutBodyAction', () => {
         presenter,
       },
       state: {
-        form: mockOrderWithoutBody,
+        modal: mockOrderWithoutBody,
       },
     });
 
@@ -54,7 +54,7 @@ describe('validateOrderWithoutBodyAction', () => {
         presenter,
       },
       state: {
-        form: mockOrderWithoutBody,
+        modal: mockOrderWithoutBody,
       },
     });
 
