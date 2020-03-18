@@ -1,3 +1,4 @@
+const applicationContext = require('../../../applicationContextForTests');
 const moment = require('moment');
 const {
   MOCK_CASE,
@@ -15,15 +16,6 @@ const { User } = require('../User');
 const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
-  let applicationContext;
-
-  beforeAll(() => {
-    applicationContext = {
-      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-  });
-
   it('should throw an error if app context is not passed in', () => {
     expect(() => new Case({}, {})).toThrow();
   });
@@ -2778,7 +2770,6 @@ describe('Case entity', () => {
         applicationContext: {
           getCurrentUser: () =>
             MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-          getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
       },
     );
@@ -2812,6 +2803,9 @@ describe('Case entity', () => {
   });
 
   describe('DocketRecord indices must be unique', () => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+    );
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -2833,11 +2827,7 @@ describe('Case entity', () => {
         ],
       },
       {
-        applicationContext: {
-          getCurrentUser: () =>
-            MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-          getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
+        applicationContext,
       },
     );
 
