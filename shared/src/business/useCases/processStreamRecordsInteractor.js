@@ -1,3 +1,4 @@
+const AWS = require('aws-sdk');
 const { createISODateString } = require('../utilities/DateHandler');
 
 const filterRecords = records => {
@@ -44,7 +45,24 @@ exports.processStreamRecordsInteractor = async ({
           const action = response.body.items[i];
           const operation = Object.keys(action)[0];
           if (action[operation].error) {
-            const record = body[i * 2 + 1];
+            let record = body[i * 2 + 1];
+            let caseId;
+
+            if (
+              record.pk.S.includes('case|') &&
+              record.sk.S.includes('case|')
+            ) {
+              caseId = record.pk.S.split('|')[1];
+
+              record = AWS.DynamoDB.Converter.marshall(
+                await applicationContext
+                  .getPersistenceGateway()
+                  .getCaseByCaseId({
+                    applicationContext,
+                    caseId,
+                  }),
+              );
+            }
 
             try {
               await searchClient.index({
@@ -73,8 +91,29 @@ exports.processStreamRecordsInteractor = async ({
       for (const record of recordsToReprocess) {
         if (['INSERT', 'MODIFY'].includes(record.eventName)) {
           try {
+            let newImage = record.dynamodb.NewImage;
+            let caseId;
+
+            if (
+              record.dynamodb.Keys.pk.S.includes('case|') &&
+              record.dynamodb.Keys.sk.S.includes('case|')
+            ) {
+              caseId = record.dynamodb.Keys.pk.S.split('|')[1];
+
+              newImage = AWS.DynamoDB.Converter.marshall(
+                await applicationContext
+                  .getPersistenceGateway()
+                  .getCaseByCaseId({
+                    applicationContext,
+                    caseId,
+                  }),
+              );
+            }
+
             await searchClient.index({
-              body: { ...record.dynamodb.NewImage },
+              body: {
+                ...newImage,
+              },
               id: `${record.dynamodb.Keys.pk.S}_${record.dynamodb.Keys.sk.S}`,
               index: 'efcms',
             });
