@@ -136,7 +136,6 @@ const pages = {
 export const AppComponent = connect(
   {
     currentPage: state.currentPage,
-    currentPageHeader: state.currentPageHeader,
     showModal: state.showModal,
     zipInProgress: state.batchDownloads.zipInProgress,
   },
