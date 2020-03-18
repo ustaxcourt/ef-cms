@@ -1358,11 +1358,13 @@ describe('Case entity', () => {
     });
 
     it("should not change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
+      const createdAt = moment();
       const caseToCheck = new Case(
         {
+          createdAt: createdAt.toISOString(),
           documents: [
             {
-              createdAt: moment()
+              createdAt: createdAt
                 .subtract(Case.ANSWER_CUTOFF_AMOUNT, Case.ANSWER_CUTOFF_UNIT)
                 .toISOString(),
               eventCode: 'A',
