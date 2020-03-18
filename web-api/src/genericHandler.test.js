@@ -1,4 +1,4 @@
-const { genericHandler } = require('./genericHandler');
+const { dataSecurityFilter, genericHandler } = require('./genericHandler');
 
 const token =
   'eyJraWQiOiJ2U2pTa3FZVkJjVkJOWk5qZ1gzWFNzcERZSjU4QmQ3OGYrSzlDSXhtck44PSIsImFsZyI6IlJTMjU2In0.eyJhdF9oYXNoIjoic2dhcEEyWk1XcGxudnFaRHhGWUVzUSIsInN1YiI6ImE0NmFmZTYwLWFkM2EtNDdhZS1iZDQ5LTQzZDZkNjJhYTQ2OSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tXC91cy1lYXN0LTFfN3VSa0YwQXhuIiwiY29nbml0bzp1c2VybmFtZSI6ImE0NmFmZTYwLWFkM2EtNDdhZS1iZDQ5LTQzZDZkNjJhYTQ2OSIsImF1ZCI6IjZ0dTZqMXN0djV1Z2N1dDdkcXNxZHVybjhxIiwiZXZlbnRfaWQiOiIzMGIwYjJiMi0zMDY0LTExZTktOTk0Yi03NTIwMGE2ZTQ3YTMiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTU1MDE1NDI0OCwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImV4cCI6MTU1MDE1Nzg0OCwiY3VzdG9tOnJvbGUiOiJwZXRpdGlvbmVyIiwiaWF0IjoxNTUwMTU0MjQ4LCJlbWFpbCI6InBldGl0aW9uZXIxQGV4YW1wbGUuY29tIn0.KBEzAj84SV6Pulu9SEjGqbIPtL_iAeC-Tcc3fvphZ_nLHuIgN7LRv8pM-ClMM3Sua5YVQ7h70N1wRV0UZADxHiEDN5pYshcsjhZdnT9sWN9Nu5QT4l9e1zFsgu1S_p9M29i0__si674VT16hlXHCywrrqrofaJYZgMVXjvfEKYDmUo4XPCGN0GVFtt9sepxjAwd5rRIF9Ned3XGBQ2xrQd5qWlIMsvnhdlIL9FqvC47_ZsPh16IyREp7FDAEI5LxIkJOFE2Ryoe74cg_9nIaqP3rQsRrRMk7E_mQ9yGV4_2j4PEfoehm3wHbrGvhNFdDBDMosS3OfbUY411swAAh3Q';
@@ -20,10 +20,25 @@ console.info = () => null;
 
 let applicationContext = {};
 let logErrorMock;
+let honeybadgerNotifyMock;
+
+/**
+ * returns a mock entity object
+ *
+ * @param {object} raw the raw entity data to return
+ * @param {object} options additional options for the returned mock entity
+ */
+function MockEntity(raw, { filtered = false }) {
+  if (!filtered) {
+    this.private = raw.private;
+  }
+  this.public = raw.public;
+}
 
 describe('genericHandler', () => {
   beforeEach(() => {
     logErrorMock = jest.fn();
+    honeybadgerNotifyMock = jest.fn();
     lastLoggedValue = null;
 
     logged = [];
@@ -34,61 +49,52 @@ describe('genericHandler', () => {
         lastLoggedValue = value;
       },
     };
+
+    applicationContext.initHoneybadger = () => ({
+      notify: honeybadgerNotifyMock,
+    });
+
+    applicationContext.getEntityByName = () => MockEntity;
   });
 
   it('returns an error if the callback throws', async () => {
-    let errors;
-
     const callback = () => {
       return Promise.reject(new Error('Test Error'));
     };
 
-    try {
-      return genericHandler(MOCK_EVENT, callback, {
-        applicationContext,
-      });
-    } catch (err) {
-      errors = err;
-    }
+    const response = await genericHandler(MOCK_EVENT, callback, {
+      applicationContext,
+    });
 
-    expect(errors).toBeTruthy();
+    expect(response.statusCode).toEqual('400');
+    expect(JSON.parse(response.body)).toEqual('Test Error');
     expect(logErrorMock).toHaveBeenCalled();
+    expect(honeybadgerNotifyMock).toHaveBeenCalled();
   });
 
   it('defaults the options param to an empty object if not provided', async () => {
-    let errors;
     const callback = () => null;
 
-    try {
-      return genericHandler({ ...MOCK_EVENT }, callback);
-    } catch (err) {
-      errors = err;
-    }
+    await genericHandler({ ...MOCK_EVENT }, callback);
 
-    expect(errors).toBeFalsy();
     expect(logErrorMock).not.toHaveBeenCalled();
   });
 
   it('does not call application.logger.error if the skipLogging flag is present on the error', async () => {
-    let errors;
-
     const callback = () => {
       const error = new Error('Test Error');
       error.skipLogging = true;
-      return Promise.reject(error);
+      throw error;
     };
 
-    try {
-      return genericHandler({ ...MOCK_EVENT }, callback, {
-        applicationContext,
-      });
-    } catch (err) {
-      errors = err;
-    }
+    const response = await genericHandler({ ...MOCK_EVENT }, callback, {
+      applicationContext,
+    });
 
-    expect(errors).toBeTruthy();
-    expect(logErrorMock).toHaveBeenCalled();
-    expect(errors.message).toEqual('Test Error');
+    expect(response.statusCode).toEqual('400');
+    expect(JSON.parse(response.body)).toEqual('Test Error');
+    expect(logErrorMock).not.toHaveBeenCalled();
+    expect(honeybadgerNotifyMock).not.toHaveBeenCalled();
   });
 
   it('can take a user override in the options param', async () => {
@@ -180,5 +186,85 @@ describe('genericHandler', () => {
     });
 
     expect(JSON.parse(result.body)).toEqual('some data');
+  });
+
+  it('returns the results of a successful execution without attempting to filter if skipFiltering is true', async () => {
+    const callback = () => {
+      return Promise.resolve({ data: 'some data', entityName: 'Case' });
+    };
+
+    const result = await genericHandler(MOCK_EVENT, callback, {
+      applicationContext,
+      skipFiltering: true,
+      user: MOCK_USER,
+    });
+
+    expect(JSON.parse(result.body)).toEqual({
+      data: 'some data',
+      entityName: 'Case',
+    });
+  });
+
+  it('returns the results of a successful execution and filters via entity constructor if the return data contains entityName', async () => {
+    const callback = () => {
+      return Promise.resolve({
+        data: 'some data',
+        entityName: 'Case',
+        public: 'public data',
+      });
+    };
+
+    const result = await genericHandler(MOCK_EVENT, callback, {
+      applicationContext,
+      user: MOCK_USER,
+    });
+
+    expect(JSON.parse(result.body)).toEqual({ public: 'public data' });
+  });
+
+  describe('dataSecurityFilter', () => {
+    beforeEach(() => {
+      applicationContext = {
+        getEntityByName: () => MockEntity,
+      };
+    });
+
+    it('returns data as it was passed in if entityName is not present', () => {
+      const data = {
+        private: 'private',
+        public: 'public',
+      };
+      const result = dataSecurityFilter(data, { applicationContext });
+      expect(result).toEqual(data);
+    });
+
+    it('returns data after passing through entity constructor if entityName is present', () => {
+      const data = {
+        entityName: 'MockEntity',
+        private: 'private',
+        public: 'public',
+      };
+      const result = dataSecurityFilter(data, { applicationContext });
+      expect(result).toEqual({
+        public: 'public',
+      });
+    });
+
+    it('returns array data after passing through entity constructor if entityName is present on array element', () => {
+      const data = [
+        {
+          entityName: 'MockEntity',
+          private: 'private',
+          public: 'public',
+        },
+        {
+          entityName: 'MockEntity',
+          private: 'private',
+          public: 'public',
+        },
+      ];
+      const result = dataSecurityFilter(data, { applicationContext });
+      expect(result).toEqual([{ public: 'public' }, { public: 'public' }]);
+    });
   });
 });

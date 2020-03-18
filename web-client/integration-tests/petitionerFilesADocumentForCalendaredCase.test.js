@@ -1,16 +1,12 @@
-import { fakeFile, setupTest, uploadPetition, wait } from './helpers';
+import { fakeFile, loginAs, setupTest, uploadPetition, wait } from './helpers';
 
-import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
-import docketClerkLogIn from './journey/docketClerkLogIn';
-import docketClerkRemovesCaseFromTrial from './journey/docketClerkRemovesCaseFromTrial';
-import docketClerkViewsSectionInboxHighPriority from './journey/docketClerkViewsSectionInboxHighPriority';
-import docketClerkViewsSectionInboxNotHighPriority from './journey/docketClerkViewsSectionInboxNotHighPriority';
-import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
+import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
+import { docketClerkRemovesCaseFromTrial } from './journey/docketClerkRemovesCaseFromTrial';
+import { docketClerkViewsSectionInboxHighPriority } from './journey/docketClerkViewsSectionInboxHighPriority';
+import { docketClerkViewsSectionInboxNotHighPriority } from './journey/docketClerkViewsSectionInboxNotHighPriority';
+import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import petitionerFilesDocumentForCase from './journey/petitionerFilesDocumentForCase';
-import petitionerLogIn from './journey/petitionerLogIn';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
-import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
 
@@ -23,19 +19,17 @@ describe('petitioner files document', () => {
     test.closeSocket();
   });
 
-  petitionerLogIn(test);
+  loginAs(test, 'petitioner');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test);
     test.docketNumber = caseDetail.docketNumber;
   });
-  userSignsOut(test);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkCreatesATrialSession(test);
   docketClerkViewsTrialSessionList(test);
-  userSignsOut(test);
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkSetsATrialSessionsSchedule(test);
   it('manually add the case to the session', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
@@ -50,14 +44,12 @@ describe('petitioner files document', () => {
     await test.runSequence('addCaseToTrialSessionSequence');
     await wait(1000);
   });
-  userSignsOut(test);
 
-  petitionerLogIn(test);
+  loginAs(test, 'petitioner');
   petitionerFilesDocumentForCase(test, fakeFile);
-  userSignsOut(test);
-  docketClerkLogIn(test);
+
+  loginAs(test, 'docketclerk');
   docketClerkViewsSectionInboxHighPriority(test);
   docketClerkRemovesCaseFromTrial(test);
   docketClerkViewsSectionInboxNotHighPriority(test);
-  userSignsOut(test);
 });

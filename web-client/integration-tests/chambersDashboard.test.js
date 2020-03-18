@@ -1,22 +1,17 @@
-import { fakeFile, setupTest } from './helpers';
-import chambersLogin from './journey/chambersLogin';
-import chambersUserViewsDashboard from './journey/chambersUserViewsDashboard';
+import { chambersUserViewsDashboard } from './journey/chambersUserViewsDashboard';
+import { fakeFile, loginAs, setupTest } from './helpers';
 
 import petitionerAddNewCaseToTestObj from './journey/petitionerAddNewCaseToTestObj';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
 import petitionerFilesDocumentForCase from './journey/petitionerFilesDocumentForCase';
-import petitionerLogin from './journey/petitionerLogIn';
 import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
-import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
 import petitionerViewsCaseDetailAfterFilingDocument from './journey/petitionerViewsCaseDetailAfterFilingDocument';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 
 import petitionsClerkCreatesMessageToChambers from './journey/petitionsClerkCreatesMessageToChambers';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
-import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 
 const test = setupTest();
 
@@ -25,7 +20,7 @@ describe('Chambers dashboard', () => {
     jest.setTimeout(30000);
   });
 
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
@@ -36,12 +31,10 @@ describe('Chambers dashboard', () => {
   petitionerViewsCaseDetailAfterFilingDocument(test);
   petitionerViewsDashboard(test);
   petitionerAddNewCaseToTestObj(test);
-  petitionerSignsOut(test);
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkCreatesMessageToChambers(test, 'Yeah, chambers!!');
-  petitionsClerkSignsOut(test);
 
-  chambersLogin(test);
+  loginAs(test, 'armensChambers');
   chambersUserViewsDashboard(test, 'Yeah, chambers!!');
 });

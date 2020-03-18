@@ -6,7 +6,7 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export default (test, count = 0) => {
+export const chambersUserViewsDraftDocuments = (test, count = 0) => {
   return it('Chambers user views draft documents', async () => {
     test.setState('caseDetail', {});
 

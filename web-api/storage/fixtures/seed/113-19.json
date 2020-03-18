@@ -13,6 +13,7 @@
           {
             "docketNumberSuffix": "L",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "eventCode": "P",
               "createdAt": "2019-12-11T16:02:31.174Z",
@@ -84,6 +85,8 @@
     "partyType": "Petitioner",
     "receivedAt": "2019-12-11T16:02:31.173Z",
     "caseType": "CDP (Lien/Levy)",
+    "sortableDocketNumber": 19000113,
+    "entityName": "Case",
     "orderDesignatingPlaceOfTrial": false,
     "contactPrimary": {
       "city": "Los Angeles",
@@ -115,27 +118,31 @@
     "respondents": [],
     "practitioners": [],
     "hasPendingItems": false,
-    "docketRecord": [
-      {
-        "description": "Petition",
-        "eventCode": "P",
-        "index": 1,
-        "documentId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d",
-        "filingDate": "2019-12-11T16:02:31.174Z",
-        "filedBy": "Petr. Letti Toretto"
-      },
-      {
-        "eventCode": "RQT",
-        "description": "Request for Place of Trial at Birmingham, Alabama",
-        "index": 2,
-        "filingDate": "2019-12-11T16:02:31.173Z"
-      }
-    ],
     "orderForAmendedPetitionAndFilingFee": false,
     "leadCaseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
     "pk": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
     "docketNumber": "113-19",
     "status": "Submitted"
+  },
+  {
+    "description": "Petition",
+    "eventCode": "P",
+    "index": 1,
+    "documentId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d",
+    "filingDate": "2019-12-11T16:02:31.174Z",
+    "filedBy": "Petr. Letti Toretto",
+    "docketRecordId": "e4932867-0312-4f82-a1d2-2ddba4679db6",
+    "pk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "sk": "docket-record|e4932867-0312-4f82-a1d2-2ddba4679db6"
+  },
+  {
+    "eventCode": "RQT",
+    "description": "Request for Place of Trial at Birmingham, Alabama",
+    "index": 2,
+    "filingDate": "2019-12-11T16:02:31.173Z",
+    "docketRecordId": "4760bafd-e75e-4924-8072-bdbef4739011",
+    "pk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "sk": "docket-record|4760bafd-e75e-4924-8072-bdbef4739011"
   },
   {
     "sk": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",

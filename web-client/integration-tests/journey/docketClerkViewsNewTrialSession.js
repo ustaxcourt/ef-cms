@@ -2,7 +2,7 @@ import { formattedTrialSessionDetails } from '../../src/presenter/computeds/form
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default test => {
+export const docketClerkViewsNewTrialSession = test => {
   return it('Docket Clerk Views a new trial session', async () => {
     await test.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: test.trialSessionId,

@@ -1,3 +1,4 @@
+const { getCaseDocketRecord } = require('./getCaseDocketRecord');
 const { query } = require('../../dynamodbClientService');
 
 /**
@@ -21,5 +22,5 @@ exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
     applicationContext,
   });
 
-  return items;
+  return Promise.all(items.map(getCaseDocketRecord({ applicationContext })));
 };

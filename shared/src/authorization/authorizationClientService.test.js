@@ -73,7 +73,7 @@ describe('Authorization client service', () => {
   it('should authorize a respondent for getCase', () => {
     expect(
       isAuthorized(
-        { role: User.ROLES.respondent, userId: 'respondent' },
+        { role: User.ROLES.irsPractitioner, userId: 'respondent' },
         ROLE_PERMISSIONS.GET_CASE,
       ),
     ).toBeTruthy();
