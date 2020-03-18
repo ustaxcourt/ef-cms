@@ -195,7 +195,9 @@ export const ReviewSavedPetition = connect(
                           >
                             Requested trial location
                           </label>
-                          {caseDetail.preferredTrialCity}
+                          {
+                            reviewSavedPetitionHelper.preferredTrialCityFormatted
+                          }
                         </div>
                       </div>
                       <div className="tablet:grid-col-6 margin-bottom-1">
