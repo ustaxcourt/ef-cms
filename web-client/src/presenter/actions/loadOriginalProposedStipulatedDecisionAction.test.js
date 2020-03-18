@@ -1,13 +1,12 @@
 import { loadOriginalProposedStipulatedDecisionAction } from './loadOriginalProposedStipulatedDecisionAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 describe('loadOriginalProposedStipulatedDecisionAction', () => {
   let loadPDFForSigningStub;
 
   beforeEach(() => {
-    loadPDFForSigningStub = sinon.stub();
+    loadPDFForSigningStub = jest.fn();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
@@ -31,7 +30,7 @@ describe('loadOriginalProposedStipulatedDecisionAction', () => {
   });
 
   it('loads original proposed stipulated decision', async () => {
-    loadPDFForSigningStub.returns({ foo: 'bar' });
+    loadPDFForSigningStub = jest.fn().mockReturnValue({ foo: 'bar' });
 
     const result = await runAction(
       loadOriginalProposedStipulatedDecisionAction,
