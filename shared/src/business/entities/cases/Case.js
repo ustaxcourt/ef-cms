@@ -1255,9 +1255,13 @@ Case.prototype.checkForReadyForTrial = function() {
         document.eventCode,
       );
 
-      const docFiledBeforeCutoff = prepareDateFromString(
+      const differencebyUnit = Case.dateDifferenceInUnits(
+        docFiledCutoffDate,
         document.createdAt,
-      ).isBefore(docFiledCutoffDate, Case.ANSWER_CUTOFF_UNIT);
+        Case.ANSWER_CUTOFF_UNIT,
+      );
+
+      const docFiledBeforeCutoff = differencebyUnit < Case.ANSWER_CUTOFF_AMOUNT;
 
       if (isAnswerDocument && docFiledBeforeCutoff) {
         this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
@@ -1266,6 +1270,12 @@ Case.prototype.checkForReadyForTrial = function() {
   }
 
   return this;
+};
+
+Case.dateDifferenceInUnits = (timestamp1, timestamp2, unit) => {
+  const moment1 = prepareDateFromString(timestamp1);
+  const moment2 = prepareDateFromString(timestamp2);
+  return moment1.diff(moment2, unit);
 };
 
 /**

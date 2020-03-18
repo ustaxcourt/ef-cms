@@ -834,6 +834,35 @@ describe('Case entity', () => {
     });
   });
 
+  describe('dateDifferenceInUnits', () => {
+    it('returns calculated interval based on provided unit', () => {
+      const firstDate = '2020-01-01T12:00:00.000Z';
+      const fiveDaysLater = '2020-01-06T12:00:00.000Z';
+      const result = Case.dateDifferenceInUnits(
+        fiveDaysLater,
+        firstDate,
+        'day',
+      );
+      expect(result).toEqual(5);
+    });
+    it('returns negative value if first date provided is earlier than second', () => {
+      const firstDate = '2020-01-01T12:00:00.000Z';
+      const fiveDaysLater = '2020-01-06T12:00:00.000Z';
+      const result = Case.dateDifferenceInUnits(
+        firstDate,
+        fiveDaysLater,
+        'day',
+      );
+      expect(result).toEqual(-5);
+    });
+    it('returns calculated interval based on provided unit when zero difference', () => {
+      const firstDate = '2020-01-01T12:00:00.000Z';
+      const sameDate = '2020-01-01T12:00:00.000Z';
+      const result = Case.dateDifferenceInUnits(sameDate, firstDate, 'day');
+      expect(result).toEqual(0);
+    });
+  });
+
   describe('addDocketRecord', () => {
     it('adds a new docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
@@ -1305,7 +1334,7 @@ describe('Case entity', () => {
     });
   });
 
-  describe('checkForReadyForTrial', () => {
+  describe.only('checkForReadyForTrial', () => {
     it('should not change the status if no answer documents have been filed', () => {
       const caseToCheck = new Case(
         {
