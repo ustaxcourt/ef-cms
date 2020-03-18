@@ -1,3 +1,4 @@
+const applicationContext = require('../../applicationContextForTests');
 const { Document } = require('./Document');
 const { Message } = require('./Message');
 const { User } = require('./User');
@@ -18,14 +19,6 @@ const caseDetail = {
 };
 
 describe('Document entity', () => {
-  let applicationContext;
-
-  beforeAll(() => {
-    applicationContext = {
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-  });
-
   describe('isPendingOnCreation', () => {
     beforeAll(() => {
       jest.spyOn(Document, 'isPendingOnCreation');
