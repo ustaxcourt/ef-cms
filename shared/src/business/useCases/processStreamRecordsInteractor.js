@@ -2,12 +2,26 @@ const AWS = require('aws-sdk');
 const { createISODateString } = require('../utilities/DateHandler');
 
 const filterRecords = records => {
-  return records.filter(
+  const filteredRecords = records.filter(
     record =>
       !record.dynamodb.Keys.pk.S.includes('work-item|') &&
       !record.dynamodb.Keys.pk.S.includes('user|') &&
       ['INSERT', 'MODIFY'].includes(record.eventName),
   );
+
+  return filteredRecords.map(record => {
+    if (
+      record.dynamodb.NewImage.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'Case'
+    ) {
+      //delete this object because its keys are dynamic and there is a limit to the amount of keys we can map in ES
+      delete record.dynamodb.NewImage.qcCompleteForTrial;
+    } else if (record.dynamodb.NewImage.workItems) {
+      //delete nested work items because they have nested documents that can cause us to hit our mapping limit
+      delete record.dynamodb.NewImage.workItems;
+    }
+    return record;
+  });
 };
 
 /**
