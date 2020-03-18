@@ -80,6 +80,7 @@ describe('reviewSavedPetitionHelper', () => {
         documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       },
       petitionPaymentStatusFormatted: 'Paid 03/14/2020 pay.gov',
+      preferredTrialCityFormatted: 'No requested place of trial',
       receivedAtFormatted: '01/04/2020',
       requestForPlaceOfTrialFile: {
         documentType:
