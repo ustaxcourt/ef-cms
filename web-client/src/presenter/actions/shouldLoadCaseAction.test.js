@@ -15,7 +15,7 @@ describe('shouldLoadCaseAction', () => {
     };
   });
 
-  it('returns the ignore path if no caseDetail.docketNumber matches props.docketNumber', async () => {
+  it('returns the ignore path if caseDetail.docketNumber matches props.docketNumber', async () => {
     runAction(shouldLoadCaseAction, {
       modules: {
         presenter,
@@ -26,7 +26,7 @@ describe('shouldLoadCaseAction', () => {
     expect(pathIgnoreStub).toHaveBeenCalled();
   });
 
-  it('returns the load path if state does not already contain detail according to props.docketNumber', async () => {
+  it('returns the load path if caseDetail.docketNumber does not match props.docketNumber', async () => {
     runAction(shouldLoadCaseAction, {
       modules: {
         presenter,
