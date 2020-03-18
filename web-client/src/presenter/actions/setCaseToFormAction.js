@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.form from props.caseDetail
+ * sets the state.form with a case detail from props
  *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object containing the props.caseDetail
