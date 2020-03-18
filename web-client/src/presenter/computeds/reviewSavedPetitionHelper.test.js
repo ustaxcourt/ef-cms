@@ -89,7 +89,7 @@ describe('reviewSavedPetitionHelper', () => {
     });
   });
 
-  it('returns a preferred trial city when it has been selected', () => {
+  it('returns a message when preferred trial city has not been selected', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         caseDetail: {},
@@ -111,7 +111,7 @@ describe('reviewSavedPetitionHelper', () => {
     });
   });
 
-  it('returns a message when preferred trial city has not been selected', () => {
+  it('returns a preferred trial city when it has been selected', () => {
     const mockCity = 'Nowhere, USA';
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
