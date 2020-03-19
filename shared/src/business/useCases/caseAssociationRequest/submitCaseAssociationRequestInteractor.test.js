@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   submitCaseAssociationRequestInteractor,
 } = require('./submitCaseAssociationRequestInteractor');
@@ -60,9 +59,9 @@ describe('submitCaseAssociationRequest', () => {
   });
 
   it('should not add mapping if already there', async () => {
-    let associateUserWithCaseSpy = sinon.spy();
-    let verifyCaseForUserSpy = sinon.stub().returns(true);
-    let updateCaseSpy = sinon.spy();
+    let associateUserWithCaseSpy = jest.fn();
+    let verifyCaseForUserSpy = jest.fn().mockReturnValue(true);
+    let updateCaseSpy = jest.fn();
 
     applicationContext = {
       environment: { stage: 'local' },
@@ -104,14 +103,14 @@ describe('submitCaseAssociationRequest', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(associateUserWithCaseSpy.called).toEqual(false);
-    expect(updateCaseSpy.called).toEqual(false);
+    expect(associateUserWithCaseSpy).not.toBeCalled();
+    expect(updateCaseSpy).not.toBeCalled();
   });
 
   it('should add mapping for a practitioner', async () => {
-    let associateUserWithCaseSpy = sinon.spy();
-    let verifyCaseForUserSpy = sinon.stub().returns(false);
-    let updateCaseSpy = sinon.spy();
+    let associateUserWithCaseSpy = jest.fn();
+    let verifyCaseForUserSpy = jest.fn().mockReturnValue(false);
+    let updateCaseSpy = jest.fn();
 
     applicationContext = {
       environment: { stage: 'local' },
@@ -164,14 +163,14 @@ describe('submitCaseAssociationRequest', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(associateUserWithCaseSpy.called).toEqual(true);
-    expect(updateCaseSpy.called).toEqual(true);
+    expect(associateUserWithCaseSpy).toBeCalled();
+    expect(updateCaseSpy).toBeCalled();
   });
 
   it('should add mapping for an irsPractitioner', async () => {
-    let associateUserWithCaseSpy = sinon.spy();
-    let verifyCaseForUserSpy = sinon.stub().returns(false);
-    let updateCaseSpy = sinon.spy();
+    let associateUserWithCaseSpy = jest.fn();
+    let verifyCaseForUserSpy = jest.fn().mockReturnValue(false);
+    let updateCaseSpy = jest.fn();
 
     applicationContext = {
       environment: { stage: 'local' },
@@ -212,7 +211,7 @@ describe('submitCaseAssociationRequest', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(associateUserWithCaseSpy.called).toEqual(true);
-    expect(updateCaseSpy.called).toEqual(true);
+    expect(associateUserWithCaseSpy).toBeCalled();
+    expect(updateCaseSpy).toBeCalled();
   });
 });

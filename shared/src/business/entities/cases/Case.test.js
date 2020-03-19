@@ -14,7 +14,6 @@ const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { TrialSession } = require('../trialSessions/TrialSession');
-const { User } = require('../User');
 const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
@@ -1021,36 +1020,6 @@ describe('Case entity', () => {
       expect(procedureTypes.length).toEqual(2);
       expect(procedureTypes[0]).toEqual('Regular');
       expect(procedureTypes[1]).toEqual('Small');
-    });
-  });
-
-  describe('getFilingTypes', () => {
-    it('returns the filing types for user role petitioner', () => {
-      const filingTypes = Case.getFilingTypes(User.ROLES.petitioner);
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Myself');
-    });
-
-    it('returns the filing types for user role petitioner as default', () => {
-      const filingTypes = Case.getFilingTypes();
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Myself');
-    });
-
-    it('returns the filing types for user role petitioner for unknown role', () => {
-      const filingTypes = Case.getFilingTypes('unknown');
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Myself');
-    });
-
-    it('returns the filing types for user role practitioner', () => {
-      const filingTypes = Case.getFilingTypes(User.ROLES.privatePractitioner);
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Individual petitioner');
     });
   });
 

@@ -1,5 +1,4 @@
 const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
 const {
   getCalendaredCasesForTrialSession,
 } = require('./getCalendaredCasesForTrialSession');
@@ -17,7 +16,7 @@ describe('getCalendaredCasesForTrialSession', () => {
   ];
 
   beforeEach(() => {
-    sinon.stub(client, 'get').resolves({
+    client.get = jest.fn().mockReturnValue({
       caseOrder: [
         {
           caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -27,12 +26,10 @@ describe('getCalendaredCasesForTrialSession', () => {
       ],
     });
 
-    sinon
-      .stub(client, 'batchGet')
-      .onCall(0)
-      .resolves([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }])
-      .onCall(1)
-      .resolves([
+    client.batchGet = jest
+      .fn()
+      .mockReturnValueOnce([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }])
+      .mockReturnValueOnce([
         {
           caseId: MOCK_CASE.caseId,
           notes: 'hey this is a note',
@@ -41,12 +38,7 @@ describe('getCalendaredCasesForTrialSession', () => {
         },
       ]);
 
-    sinon.stub(client, 'query').resolves(mockDocketRecord);
-  });
-
-  afterEach(() => {
-    client.get.restore();
-    client.batchGet.restore();
+    client.query = jest.fn().mockReturnValue(mockDocketRecord);
   });
 
   it('should get the cases calendared for a trial session', async () => {

@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
@@ -23,7 +22,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
   let applicationContext;
 
   beforeEach(() => {
-    sinon.stub(window.Date.prototype, 'toISOString').returns(CREATED_DATE);
+    window.Date.prototype.toISOString = jest.fn().mockReturnValue(CREATED_DATE);
     applicationContext = createTestApplicationContext({
       user: {
         name: 'Test Petitioner',
@@ -38,7 +37,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
   });
 
   afterEach(() => {
-    window.Date.prototype.toISOString.restore();
+    jest.restoreAllMocks();
   });
 
   it('should attach the expected documents to the case', async () => {
