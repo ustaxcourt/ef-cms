@@ -22,8 +22,8 @@ describe('handleInvalidScannerSourceAction', () => {
         presenter,
       },
       state: {
-        isScanning: true,
         scanner: {
+          isScanning: true,
           scannerSourceIndex: mockStorage.scannerSourceIndex,
           scannerSourceName: mockStorage.scannerSourceName,
         },
@@ -36,6 +36,6 @@ describe('handleInvalidScannerSourceAction', () => {
     expect(mockStorage.scannerSourceIndex).toBeNull();
     expect(mockStorage.scannerSourceName).toBeNull();
     expect(result.state.showModal).toEqual('ScanErrorModal');
-    expect(result.state.isScanning).toBeFalsy();
+    expect(result.state.scanner.isScanning).toBeFalsy();
   });
 });
