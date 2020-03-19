@@ -1,15 +1,14 @@
 import { isRespondentInCaseAction } from './isRespondentInCaseAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 let yesStub;
 let noStub;
 
 describe('isRespondentInCaseAction', () => {
   beforeEach(() => {
-    yesStub = sinon.stub();
-    noStub = sinon.stub();
+    yesStub = jest.fn();
+    noStub = jest.fn();
 
     presenter.providers.path = { no: noStub, yes: yesStub };
   });
@@ -29,7 +28,7 @@ describe('isRespondentInCaseAction', () => {
       },
     });
 
-    expect(yesStub.calledOnce).toEqual(true);
+    expect(yesStub.mock.calls.length).toEqual(1);
   });
 
   it('takes no path when respondent is not already in case', async () => {
@@ -47,6 +46,6 @@ describe('isRespondentInCaseAction', () => {
       },
     });
 
-    expect(noStub.calledOnce).toEqual(true);
+    expect(noStub.mock.calls.length).toEqual(1);
   });
 });

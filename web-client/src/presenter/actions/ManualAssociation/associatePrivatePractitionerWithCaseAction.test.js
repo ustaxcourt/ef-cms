@@ -1,11 +1,10 @@
 import { associatePrivatePractitionerWithCaseAction } from './associatePrivatePractitionerWithCaseAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 describe('associatePrivatePractitionerWithCaseAction', () => {
   it('should run associatePrivatePractitionerWithCaseInteractor and success path', async () => {
-    const successStub = sinon.stub();
+    const successStub = jest.fn();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
@@ -33,6 +32,6 @@ describe('associatePrivatePractitionerWithCaseAction', () => {
         },
       },
     });
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 });
