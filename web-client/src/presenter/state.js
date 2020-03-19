@@ -176,7 +176,6 @@ export const state = {
   pdfSignerHelper,
   percentComplete: 0,
   permissions: null,
-  petition: {}, // TODO: remove
   previewPdfFile: null,
   procedureTypes: [],
   requestAccessHelper,
