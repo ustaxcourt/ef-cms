@@ -148,9 +148,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getPersistenceGateway: jest.fn().mockImplementation(() => {
       return mockGetPersistenceGatewayReturnValue;
     }),
-    getStorageClient: () => {},
+    getStorageClient: jest.fn(),
     getTempDocumentsBucketName: jest.fn(),
-    getUniqueId: jest.fn().mockImplementation(() => ''),
+    getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
     getUtilities: () => {
       return { ...DateHandler };
     },
