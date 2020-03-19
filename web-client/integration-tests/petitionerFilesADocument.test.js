@@ -5,7 +5,6 @@ import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedure
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
 import petitionerFilesAmendedMotion from './journey/petitionerFilesAmendedMotion';
 import petitionerFilesDocumentForCase from './journey/petitionerFilesDocumentForCase';
-import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
 import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
 import petitionerViewsCaseDetailAfterFilingDocument from './journey/petitionerViewsCaseDetailAfterFilingDocument';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
@@ -19,7 +18,6 @@ describe('petitioner files document', () => {
 
   loginAs(test, 'petitioner');
   petitionerCancelsCreateCase(test);
-  petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
