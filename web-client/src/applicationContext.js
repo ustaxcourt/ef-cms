@@ -141,7 +141,6 @@ import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/wo
 import { getDocumentQCServedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
 import { getDocumentQCServedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
-import { getFilingTypesInteractor } from '../../shared/src/business/useCases/getFilingTypesInteractor';
 import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
 import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
 import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsersProxy';
@@ -322,7 +321,6 @@ const allUseCases = {
   getDocumentQCServedForSectionInteractor,
   getDocumentQCServedForUserInteractor,
   getEligibleCasesForTrialSessionInteractor,
-  getFilingTypesInteractor,
   getInboxMessagesForSectionInteractor,
   getInboxMessagesForUserInteractor,
   getInternalUsersInteractor,
@@ -460,6 +458,7 @@ const applicationContext = {
       COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
       DATE_FORMATS: FORMATS,
       ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
+      FILING_TYPES: Case.FILING_TYPES,
       INITIAL_DOCUMENT_TYPES: Document.INITIAL_DOCUMENT_TYPES,
       INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
       MAX_FILE_SIZE_BYTES,
