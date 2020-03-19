@@ -18,7 +18,7 @@ export const EmptyHopperModal = connect({}, () => {
 });
 
 export const ConfirmRescanBatchModal = connect(
-  { batchIndex: state.batchIndexToRescan },
+  { batchIndex: state.scanner.batchIndexToRescan },
   ({ batchIndex }) => (
     <ConfirmModal
       cancelLabel="No, Cancel"
@@ -33,8 +33,8 @@ export const ConfirmRescanBatchModal = connect(
 );
 export const DeleteBatchModal = connect(
   {
-    batchIndex: state.batchIndexToDelete,
-    pageCount: state.batchToDeletePageCount,
+    batchIndex: state.scanner.batchIndexToDelete,
+    pageCount: state.scanner.batchToDeletePageCount,
   },
   ({ batchIndex, pageCount }) => {
     return (

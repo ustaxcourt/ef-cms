@@ -7,13 +7,13 @@ export default test => {
     });
 
     expect(test.getState('showModal')).toEqual('ConfirmRescanBatchModal');
-    expect(test.getState('batchIndexToRescan')).toEqual(0);
+    expect(test.getState('scanner.batchIndexToRescan')).toEqual(0);
 
     await test.runSequence('rescanBatchSequence');
 
     expect(test.getState('showModal')).toEqual('');
     expect(
-      test.getState(`batches.${selectedDocumentType}`).length,
+      test.getState(`scanner.batches.${selectedDocumentType}`).length,
     ).toBeGreaterThan(0);
   });
 };

@@ -1,5 +1,3 @@
-const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
 const {
   getCasePrivatePractitioners,
 } = require('./getCasePrivatePractitioners');
@@ -9,29 +7,24 @@ describe('getCasePrivatePractitioners', () => {
   let queryStub;
 
   beforeEach(() => {
-    queryStub = jest.fn().mockResolvedValue({ Items: [] });
-
-    sinon.stub(client, 'query').resolves([
-      {
-        docketRecordId: 'abc-123',
-        eventCode: 'P',
-      },
-    ]);
+    queryStub = jest.fn().mockReturnValue({
+      promise: async () => ({
+        Items: [
+          {
+            name: 'Private Practitioner',
+          },
+        ],
+      }),
+    });
 
     applicationContext = {
       environment: {
         stage: 'local',
       },
       getDocumentClient: () => ({
-        query: () => ({
-          promise: queryStub,
-        }),
+        query: queryStub,
       }),
     };
-  });
-
-  afterEach(() => {
-    client.query.restore();
   });
 
   it('retrieves the privatePractitioners for a case', async () => {
@@ -41,7 +34,11 @@ describe('getCasePrivatePractitioners', () => {
 
     expect(result).toMatchObject({
       caseId: 'abc-123',
-      privatePractitioners: [],
+      privatePractitioners: [
+        {
+          name: 'Private Practitioner',
+        },
+      ],
     });
   });
 });

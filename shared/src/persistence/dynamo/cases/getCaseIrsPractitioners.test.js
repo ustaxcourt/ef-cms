@@ -1,5 +1,3 @@
-const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
 const { getCaseIrsPractitioners } = require('./getCaseIrsPractitioners');
 
 describe('getCaseIrsPractitioners', () => {
@@ -7,29 +5,24 @@ describe('getCaseIrsPractitioners', () => {
   let queryStub;
 
   beforeEach(() => {
-    queryStub = jest.fn().mockResolvedValue({ Items: [] });
-
-    sinon.stub(client, 'query').resolves([
-      {
-        docketRecordId: 'abc-123',
-        eventCode: 'P',
-      },
-    ]);
+    queryStub = jest.fn().mockReturnValue({
+      promise: async () => ({
+        Items: [
+          {
+            name: 'IRS Practitioner',
+          },
+        ],
+      }),
+    });
 
     applicationContext = {
       environment: {
         stage: 'local',
       },
       getDocumentClient: () => ({
-        query: () => ({
-          promise: queryStub,
-        }),
+        query: queryStub,
       }),
     };
-  });
-
-  afterEach(() => {
-    client.query.restore();
   });
 
   it('retrieves the irsPractitioners for a case', async () => {
@@ -39,7 +32,11 @@ describe('getCaseIrsPractitioners', () => {
 
     expect(result).toMatchObject({
       caseId: 'abc-123',
-      irsPractitioners: [],
+      irsPractitioners: [
+        {
+          name: 'IRS Practitioner',
+        },
+      ],
     });
   });
 });

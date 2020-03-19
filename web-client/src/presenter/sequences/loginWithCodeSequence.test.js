@@ -2,7 +2,6 @@ import { CerebralTest } from 'cerebral/test';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter';
-import sinon from 'sinon';
 
 let test;
 
@@ -18,7 +17,7 @@ presenter.providers.router = {
   route: async () => null,
 };
 
-const refreshTokenStub = sinon.stub().resolves({
+const refreshTokenStub = jest.fn().mockResolvedValue({
   token: TOKEN,
 });
 
@@ -38,22 +37,20 @@ presenter.providers.applicationContext = {
 test = CerebralTest(presenter);
 
 describe('loginWithCodeSequence', () => {
+  beforeEach(() => {
+    const globalSetInterval = jest.spyOn(global, 'setInterval');
+    globalSetInterval.mockImplementation(cb => cb());
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('should use the code to fetch the token and put it onto the store', async () => {
-    sinon.stub(global, 'setInterval').callsFake(cb => cb());
-    global.window = {
-      localStorage: {
-        setItem() {},
-      },
-    };
-    sinon.stub(window.localStorage, 'setItem');
     await test.runSequence('loginWithCodeSequence', {
       code: 'abc',
     });
-    expect(
-      presenter.providers.applicationContext
-        .getUseCases()
-        .refreshTokenInteractor.getCall(0).args[0].refreshToken,
-    ).toEqual(TOKEN);
+    expect(refreshTokenStub.mock.calls[0][0].refreshToken).toEqual(TOKEN);
     expect(test.getState('token')).toEqual(NEW_TOKEN);
     expect(test.getState('refreshToken')).toEqual(NEW_TOKEN);
     expect(test.getState('user')).toEqual(USER);
