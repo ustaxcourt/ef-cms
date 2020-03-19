@@ -144,7 +144,6 @@ export const state = {
   fieldOrder: [], // TODO: move to view metadata
   fileDocumentHelper,
   fileUploadStatusHelper,
-  filingTypes: [], // TODO: move to view metadata
   form: {}, // shared object for creating new entities, clear before using
   formattedCaseDetail,
   formattedCases,
