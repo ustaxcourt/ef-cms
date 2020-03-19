@@ -76,6 +76,7 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
+const { Case } = require('../entities/cases/Case');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
@@ -101,6 +102,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getCaseDeadlinesByCaseId),
     getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
     getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
+    getDownloadPolicyUrl: jest.fn(),
     getInboxMessagesForSection,
     getInboxMessagesForUser: getInboxMessagesForUserPersistence,
     getSentMessagesForUser: getSentMessagesForUserPersistence,
@@ -121,8 +123,12 @@ const createTestApplicationContext = ({ user } = {}) => {
   const applicationContext = {
     ...sharedAppContext,
     docketNumberGenerator,
-    environment: { stage: 'local' },
+    environment: {
+      stage: 'local',
+      tempDocumentsBucketName: 'MockDocumentBucketName',
+    },
     getBaseUrl: () => 'http://localhost',
+    getCaseCaptionNames: jest.fn().mockReturnValue(Case.getCaseCaptionNames),
     getChromiumBrowser: jest.fn(),
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
@@ -155,11 +161,15 @@ const createTestApplicationContext = ({ user } = {}) => {
     getStorageClient: jest.fn(),
     getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
+    getUseCases: jest.fn(),
     getUtilities: () => {
       return { ...DateHandler };
     },
     isAuthorizedForWorkItems: () => true,
-    logger: {},
+    logger: {
+      error: jest.fn(),
+      info: () => {},
+    },
   };
   return applicationContext;
 };
