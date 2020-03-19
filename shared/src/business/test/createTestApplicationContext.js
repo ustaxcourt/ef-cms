@@ -143,9 +143,9 @@ const createTestApplicationContext = ({ user } = {}) => {
         verifyCaseForUser,
       };
     }),
-    getStorageClient: () => {},
+    getStorageClient: jest.fn(),
     getTempDocumentsBucketName: jest.fn(),
-    getUniqueId: jest.fn().mockImplementation(() => ''),
+    getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
     getUtilities: () => {
       return { ...DateHandler };
     },
