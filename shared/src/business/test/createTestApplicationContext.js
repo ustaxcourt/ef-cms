@@ -95,7 +95,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteSectionOutboxRecord,
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox,
-    getCaseByCaseId: jest.fn(),
+    getCaseByCaseId: jest.fn().mockImplementation(getCaseByCaseId),
     getCaseDeadlinesByCaseId: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByCaseId),
@@ -111,11 +111,11 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveWorkItemForNonPaper,
     saveWorkItemForPaper,
     setWorkItemAsRead,
-    updateCase: jest.fn(),
+    updateCase: jest.fn().mockImplementation(updateCase),
     updateWorkItem,
     updateWorkItemInCase,
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
-    verifyCaseForUser: jest.fn(),
+    verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   };
   const mockDocClient = createMockDocumentClient();
   const applicationContext = {
@@ -123,6 +123,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     docketNumberGenerator,
     environment: { stage: 'local' },
     getBaseUrl: () => 'http://localhost',
+    getChromiumBrowser: jest.fn(),
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {
@@ -146,9 +147,11 @@ const createTestApplicationContext = ({ user } = {}) => {
         data: 'url',
       }),
     }),
+    getNodeSass: jest.fn(),
     getPersistenceGateway: jest.fn().mockImplementation(() => {
       return mockGetPersistenceGatewayReturnValue;
     }),
+    getPug: jest.fn(),
     getStorageClient: jest.fn(),
     getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
@@ -156,6 +159,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       return { ...DateHandler };
     },
     isAuthorizedForWorkItems: () => true,
+    logger: {},
   };
   return applicationContext;
 };
