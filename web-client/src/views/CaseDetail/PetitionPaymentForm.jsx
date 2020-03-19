@@ -1,7 +1,7 @@
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
+import { props, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -9,7 +9,6 @@ export const PetitionPaymentForm = connect(
   {
     bind: state[props.bind],
     dateBind: state[props.dateBind],
-    navigateBackSequence: sequences.navigateBackSequence,
     paymentStatus: state.constants.PAYMENT_STATUS,
     validationErrors: state[props.validationErrorsBind],
   },
