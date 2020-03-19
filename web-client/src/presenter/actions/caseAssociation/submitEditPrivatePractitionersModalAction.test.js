@@ -1,7 +1,6 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { submitEditPrivatePractitionersModalAction } from './submitEditPrivatePractitionersModalAction';
-import sinon from 'sinon';
 
 describe('submitEditPrivatePractitionersModalAction', () => {
   let deleteCounselFromCaseInteractorStub;
@@ -9,9 +8,9 @@ describe('submitEditPrivatePractitionersModalAction', () => {
   let successStub;
 
   beforeEach(() => {
-    deleteCounselFromCaseInteractorStub = sinon.stub();
-    updateCounselOnCaseInteractorStub = sinon.stub();
-    successStub = sinon.stub();
+    deleteCounselFromCaseInteractorStub = jest.fn();
+    updateCounselOnCaseInteractorStub = jest.fn();
+    successStub = jest.fn();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
@@ -58,9 +57,9 @@ describe('submitEditPrivatePractitionersModalAction', () => {
       },
     });
 
-    expect(updateCounselOnCaseInteractorStub.calledTwice).toEqual(true);
-    expect(deleteCounselFromCaseInteractorStub.calledOnce).toEqual(true);
-    expect(updateCounselOnCaseInteractorStub.getCall(0).args[0]).toMatchObject({
+    expect(updateCounselOnCaseInteractorStub.mock.calls.length).toEqual(2);
+    expect(deleteCounselFromCaseInteractorStub.mock.calls.length).toEqual(1);
+    expect(updateCounselOnCaseInteractorStub.mock.calls[0][0]).toMatchObject({
       caseId: '123',
       userData: {
         representingPrimary: true,
@@ -69,13 +68,11 @@ describe('submitEditPrivatePractitionersModalAction', () => {
       },
       userIdToUpdate: '1',
     });
-    expect(
-      deleteCounselFromCaseInteractorStub.getCall(0).args[0],
-    ).toMatchObject({
+    expect(deleteCounselFromCaseInteractorStub.mock.calls[0][0]).toMatchObject({
       caseId: '123',
       userIdToDelete: '2',
     });
-    expect(updateCounselOnCaseInteractorStub.getCall(1).args[0]).toMatchObject({
+    expect(updateCounselOnCaseInteractorStub.mock.calls[1][0]).toMatchObject({
       caseId: '123',
       userData: {
         removeFromCase: false,
@@ -84,6 +81,6 @@ describe('submitEditPrivatePractitionersModalAction', () => {
       },
       userIdToUpdate: '3',
     });
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 });

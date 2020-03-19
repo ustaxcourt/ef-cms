@@ -1,11 +1,10 @@
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { validateCaseDetailAction } from './validateCaseDetailAction';
-import sinon from 'sinon';
 
-const validateCaseDetailStub = sinon.stub().returns(null);
-const successStub = sinon.stub();
-const errorStub = sinon.stub();
+let validateCaseDetailStub = jest.fn().mockReturnValue(null);
+const successStub = jest.fn();
+const errorStub = jest.fn();
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
@@ -32,15 +31,15 @@ describe('validateCaseDetail', () => {
       },
       state: {},
     });
-    expect(validateCaseDetailStub.getCall(0).args[0].caseDetail).toMatchObject({
+    expect(validateCaseDetailStub.mock.calls[0][0].caseDetail).toMatchObject({
       caseId: '123',
       irsNoticeDate: '2009-10-13',
     });
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateCaseDetailStub.returns('error');
+    validateCaseDetailStub = jest.fn().mockReturnValue('error');
     await runAction(validateCaseDetailAction, {
       modules: {
         presenter,
@@ -56,6 +55,6 @@ describe('validateCaseDetail', () => {
         },
       },
     });
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

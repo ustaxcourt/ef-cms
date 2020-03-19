@@ -2,7 +2,6 @@ import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { validateSecondaryContactAction } from './validateSecondaryContactAction';
-import sinon from 'sinon';
 const {
   ContactFactory,
 } = require('../../../../shared/src/business/entities/contacts/ContactFactory');
@@ -12,8 +11,8 @@ describe('validateSecondaryContactAction', () => {
   let errorStub;
 
   beforeEach(() => {
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     presenter.providers.path = {
       error: errorStub,
@@ -24,7 +23,7 @@ describe('validateSecondaryContactAction', () => {
   it('runs validation on the secondary contact with a successful result', async () => {
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        validateSecondaryContactInteractor: sinon.stub().returns(null),
+        validateSecondaryContactInteractor: jest.fn().mockReturnValue(null),
       }),
     };
 
@@ -41,7 +40,7 @@ describe('validateSecondaryContactAction', () => {
     });
 
     expect(result.state.validationErrors.contactSecondary).toEqual({});
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('runs validation on the secondary contact with an invalid result', async () => {
@@ -71,6 +70,6 @@ describe('validateSecondaryContactAction', () => {
     expect(result.state.validationErrors.contactSecondary).toEqual({
       address1: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.address1,
     });
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });
