@@ -3,27 +3,13 @@ const {
 } = require('./generateCaseConfirmationPdf');
 jest.mock('../../../authorization/authorizationClientService');
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
-const PDF_MOCK_BUFFER = 'Hello World';
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-
-const pageMock = {
-  addStyleTag: () => {},
-  pdf: () => {
-    return PDF_MOCK_BUFFER;
-  },
-  setContent: () => {},
-};
-
-const chromiumBrowserMock = {
-  close: jest.fn(),
-  newPage: () => pageMock,
-};
 
 const mockCurrentUser = {
   role: User.ROLES.petitioner,
@@ -34,9 +20,6 @@ const s3Upload = jest.fn().mockImplementation((params, resolve) => resolve());
 
 applicationContext.getCurrentUser.mockReturnValue(mockCurrentUser);
 applicationContext.getDocumentsBucketName.mockReturnValue('DocumentBucketName');
-applicationContext.getNodeSass.mockReturnValue({
-  render: (data, cb) => cb(data, { css: '' }),
-});
 applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
   docketNumber: '101-19',
 });
