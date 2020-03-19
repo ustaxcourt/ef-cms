@@ -1,7 +1,7 @@
-const getDocumentEditUrl = ({ caseDetail, document }) => {
-  // TODO: get from applicationContext
-  const STIPULATED_DECISION_DOCUMENT_TYPE = 'Stipulated Decision';
+const getDocumentEditUrl = ({ applicationContext, caseDetail, document }) => {
   const MISCELLANEOUS_DOCUMENT_TYPE = 'MISC - Miscellaneous';
+  const STIPULATED_DECISION_DOCUMENT_TYPE = applicationContext.getConstants()
+    .SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType;
 
   const isStipDecision =
     document.documentType === STIPULATED_DECISION_DOCUMENT_TYPE;

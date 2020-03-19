@@ -9,7 +9,11 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @returns {void} sets the documentToEdit on state
  */
-export const setDocumentToEditAction = ({ props, store }) => {
+export const setDocumentToEditAction = ({
+  applicationContext,
+  props,
+  store,
+}) => {
   const { caseDetail, documentIdToEdit } = props;
 
   if (documentIdToEdit) {
@@ -24,7 +28,11 @@ export const setDocumentToEditAction = ({ props, store }) => {
     store.set(state.form, draftState);
 
     return {
-      path: getDocumentEditUrl({ caseDetail, document: documentToEdit }),
+      path: getDocumentEditUrl({
+        applicationContext,
+        caseDetail,
+        document: documentToEdit,
+      }),
     };
   }
 };
