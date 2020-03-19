@@ -1,4 +1,3 @@
-jest.mock('../../dynamodbClientService');
 const client = require('../../dynamodbClientService');
 const { getAllCaseDeadlines } = require('./getAllCaseDeadlines');
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -22,10 +21,6 @@ describe('getAllCaseDeadlines', () => {
         },
       ])
       .mockReturnValueOnce([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }]);
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 
   it('should get the all cases deadlines', async () => {
