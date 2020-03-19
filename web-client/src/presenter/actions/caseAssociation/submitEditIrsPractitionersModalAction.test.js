@@ -1,7 +1,6 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { submitEditIrsPractitionersModalAction } from './submitEditIrsPractitionersModalAction';
-import sinon from 'sinon';
 
 describe('submitEditIrsPractitionersModalAction', () => {
   let deleteCounselFromCaseInteractorStub;
@@ -9,9 +8,9 @@ describe('submitEditIrsPractitionersModalAction', () => {
   let successStub;
 
   beforeEach(() => {
-    deleteCounselFromCaseInteractorStub = sinon.stub();
-    updateCounselOnCaseInteractorStub = sinon.stub();
-    successStub = sinon.stub();
+    deleteCounselFromCaseInteractorStub = jest.fn();
+    updateCounselOnCaseInteractorStub = jest.fn();
+    successStub = jest.fn();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
@@ -54,13 +53,11 @@ describe('submitEditIrsPractitionersModalAction', () => {
       },
     });
 
-    expect(deleteCounselFromCaseInteractorStub.calledOnce).toEqual(true);
-    expect(
-      deleteCounselFromCaseInteractorStub.getCall(0).args[0],
-    ).toMatchObject({
+    expect(deleteCounselFromCaseInteractorStub.mock.calls.length).toEqual(1);
+    expect(deleteCounselFromCaseInteractorStub.mock.calls[0][0]).toMatchObject({
       caseId: '123',
       userIdToDelete: '2',
     });
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 });

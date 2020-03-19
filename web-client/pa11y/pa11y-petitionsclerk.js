@@ -119,6 +119,20 @@ module.exports = [
   },
   {
     actions: [
+      'wait for #case-detail-menu-button to be visible',
+      'wait for .progress-indicator to be hidden',
+      'click element #case-detail-menu-button',
+      'wait for #menu-button-create-order to be visible',
+      'wait for .progress-indicator to be hidden',
+      'click element #menu-button-create-order',
+      'wait for #eventCode to be visible',
+    ],
+    notes: 'checks a11y of create order select document type modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=create-order-modal',
+  },
+  {
+    actions: [
       'wait for #tab-deadlines to be visible',
       'click element #tab-deadlines',
     ],
