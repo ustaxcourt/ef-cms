@@ -9,10 +9,8 @@ jest.mock('../../../authorization/authorizationClientService');
 const {
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
 const { User } = require('../../entities/User');
 const PDF_MOCK_BUFFER = 'Hello World';
-import { formatDateString } from '../../utilities/DateHandler';
 const pug = require('pug');
 const sass = require('node-sass');
 
@@ -48,9 +46,6 @@ describe('generatePage', () => {
   beforeEach(() => {
     applicationContext.getChromiumBrowser.mockReturnValue(chromiumBrowserMock);
     applicationContext.getCurrentUser.mockReturnValue(mockPetitionerUser);
-    applicationContext.getDocumentsBucketName.mockReturnValue(
-      'DocumentBucketName',
-    );
     applicationContext.getNodeSass.mockReturnValue(sass);
     applicationContext
       .getPersistenceGateway()
@@ -131,6 +126,7 @@ describe('generateNoticeOfDocketChangePdf', () => {
     expect(result).not.toBeDefined();
     expect(error.message).toEqual('Unauthorized');
   });
+
   it('returns the pdf buffer produced by chromium', async () => {
     applicationContext.getUniqueId.mockReturnValue('uniqueId');
     applicationContext.getChromiumBrowser.mockReturnValue(chromiumBrowserMock);

@@ -156,7 +156,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       return '';
     },
     getDocumentClient: () => mockDocClient,
-    getDocumentsBucketName: jest.fn(),
+    getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEntityConstructors: () => ({
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
