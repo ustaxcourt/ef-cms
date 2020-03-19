@@ -201,7 +201,6 @@ export const state = {
   percentComplete: 0,
   permissions: null,
   previewPdfFile: null,
-  procedureTypes: [], // use constants instead
   scanner: {
     batchIndexToDelete: null,
     batchIndexToRescan: null, // batch index for re-scanning
