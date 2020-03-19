@@ -83,6 +83,39 @@ const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 
 const createTestApplicationContext = ({ user } = {}) => {
+  const mockGetPersistenceGatewayReturnValue = {
+    addWorkItemToSectionInbox,
+    createCase,
+    createCaseTrialSortMappingRecords: jest.fn(),
+    createSectionInboxRecord,
+    createUserInboxRecord,
+    createWorkItem: createWorkItemPersistence,
+    deleteCaseTrialSortMappingRecords: jest.fn(),
+    deleteSectionOutboxRecord,
+    deleteUserOutboxRecord,
+    deleteWorkItemFromInbox,
+    getCaseByCaseId,
+    getCaseDeadlinesByCaseId: jest
+      .fn()
+      .mockImplementation(getCaseDeadlinesByCaseId),
+    getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
+    getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
+    getInboxMessagesForSection,
+    getInboxMessagesForUser: getInboxMessagesForUserPersistence,
+    getSentMessagesForUser: getSentMessagesForUserPersistence,
+    getUserById: getUserByIdPersistence,
+    getWorkItemById: getWorkItemByIdPersistence,
+    incrementCounter,
+    putWorkItemInOutbox,
+    saveWorkItemForNonPaper,
+    saveWorkItemForPaper,
+    setWorkItemAsRead,
+    updateCase,
+    updateWorkItem,
+    updateWorkItemInCase,
+    uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
+    verifyCaseForUser,
+  };
   const mockDocClient = createMockDocumentClient();
   const applicationContext = {
     ...sharedAppContext,
@@ -113,35 +146,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       }),
     }),
     getPersistenceGateway: jest.fn().mockImplementation(() => {
-      return {
-        addWorkItemToSectionInbox,
-        createCase,
-        createSectionInboxRecord,
-        createUserInboxRecord,
-        createWorkItem: createWorkItemPersistence,
-        deleteSectionOutboxRecord,
-        deleteUserOutboxRecord,
-        deleteWorkItemFromInbox,
-        getCaseByCaseId,
-        getCaseDeadlinesByCaseId,
-        getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
-        getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
-        getInboxMessagesForSection,
-        getInboxMessagesForUser: getInboxMessagesForUserPersistence,
-        getSentMessagesForUser: getSentMessagesForUserPersistence,
-        getUserById: getUserByIdPersistence,
-        getWorkItemById: getWorkItemByIdPersistence,
-        incrementCounter,
-        putWorkItemInOutbox,
-        saveWorkItemForNonPaper,
-        saveWorkItemForPaper,
-        setWorkItemAsRead,
-        updateCase,
-        updateWorkItem,
-        updateWorkItemInCase,
-        uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
-        verifyCaseForUser,
-      };
+      return mockGetPersistenceGatewayReturnValue;
     }),
     getStorageClient: jest.fn(),
     getTempDocumentsBucketName: jest.fn(),
