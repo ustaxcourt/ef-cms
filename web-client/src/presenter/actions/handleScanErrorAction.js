@@ -16,5 +16,5 @@ export const handleScanErrorAction = async ({ props, store }) => {
   } else {
     store.set(state.showModal, 'ScanErrorModal');
   }
-  store.set(state.isScanning, false);
+  store.set(state.scanner.isScanning, false);
 };

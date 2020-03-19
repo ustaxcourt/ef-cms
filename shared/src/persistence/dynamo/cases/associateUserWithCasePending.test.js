@@ -1,21 +1,25 @@
-const client = require('../../../../../shared/src/persistence/dynamodbClientService');
-const sinon = require('sinon');
 const {
   associateUserWithCasePending,
 } = require('./associateUserWithCasePending');
 
-const applicationContext = {};
-
 describe('associateUserWithCasePending', () => {
-  beforeEach(() => {
-    sinon.stub(client, 'put').resolves({
+  let applicationContext;
+  const putStub = jest.fn().mockReturnValue({
+    promise: async () => ({
       pk: 'user|123',
       sk: 'pending-case|123',
-    });
+    }),
   });
 
-  afterEach(() => {
-    client.put.restore();
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    applicationContext = {
+      environment: { stage: 'local' },
+      getDocumentClient: () => ({
+        put: putStub,
+      }),
+    };
   });
 
   it('should create mapping request that creates pending association request', async () => {

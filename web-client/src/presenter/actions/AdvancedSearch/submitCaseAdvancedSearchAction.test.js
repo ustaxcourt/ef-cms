@@ -2,13 +2,12 @@ import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { submitCaseAdvancedSearchAction } from './submitCaseAdvancedSearchAction';
-import sinon from 'sinon';
 
 describe('submitCaseAdvancedSearchAction', () => {
   let caseAdvancedSearchInteractorStub;
 
   beforeEach(() => {
-    caseAdvancedSearchInteractorStub = sinon.stub();
+    caseAdvancedSearchInteractorStub = jest.fn();
 
     presenter.providers.applicationContext = {
       ...applicationContext,
@@ -34,9 +33,9 @@ describe('submitCaseAdvancedSearchAction', () => {
       },
     });
 
-    expect(caseAdvancedSearchInteractorStub.calledOnce).toEqual(true);
+    expect(caseAdvancedSearchInteractorStub.mock.calls.length).toEqual(1);
     expect(
-      caseAdvancedSearchInteractorStub.getCall(0).args[0].searchParams,
+      caseAdvancedSearchInteractorStub.mock.calls[0][0].searchParams,
     ).toEqual({
       countryType: 'c',
       petitionerName: 'a',

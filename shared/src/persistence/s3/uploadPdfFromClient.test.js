@@ -1,10 +1,9 @@
-const sinon = require('sinon');
 const { uploadPdfFromClient } = require('./uploadPdfFromClient');
 const { User } = require('../../business/entities/User');
 
 describe('uploadPdfFromClient', () => {
   it('makes a post request to the expected endpoint with the expected data', async () => {
-    let postStub = sinon.stub().resolves(null);
+    let postStub = jest.fn().mockResolvedValue(null);
     const applicationContext = {
       getCurrentUser: () => {
         return { role: User.ROLES.petitioner, userId: 'petitioner' };
@@ -33,8 +32,8 @@ describe('uploadPdfFromClient', () => {
         url: 'http://test.com',
       },
     });
-    expect(postStub.getCall(0).args[0]).toEqual('http://test.com');
-    expect([...postStub.getCall(0).args[1].entries()]).toMatchObject([
+    expect(postStub.mock.calls[0][0]).toEqual('http://test.com');
+    expect([...postStub.mock.calls[0][1].entries()]).toMatchObject([
       ['key', '123'],
       ['X-Amz-Algorithm', '1'],
       ['X-Amz-Credential', '2'],
@@ -45,12 +44,12 @@ describe('uploadPdfFromClient', () => {
       ['content-type', 'application/pdf'],
       ['file', {}],
     ]);
-    expect(postStub.getCall(0).args[2]).toMatchObject({
+    expect(postStub.mock.calls[0][2]).toMatchObject({
       headers: { 'content-type': 'multipart/form-data; boundary=undefined' },
     });
   });
   it('makes use of defaults when not provided', async () => {
-    let postStub = sinon.stub().resolves(null);
+    let postStub = jest.fn().mockResolvedValue(null);
     const applicationContext = {
       getCurrentUser: () => {
         return { role: User.ROLES.petitioner, userId: 'petitioner' };
@@ -78,7 +77,7 @@ describe('uploadPdfFromClient', () => {
         url: 'http://test.com',
       },
     });
-    expect([...postStub.getCall(0).args[1].entries()]).toMatchObject([
+    expect([...postStub.mock.calls[0][1].entries()]).toMatchObject([
       ['key', '123'],
       ['X-Amz-Algorithm', '1'],
       ['X-Amz-Credential', '2'],
@@ -89,7 +88,7 @@ describe('uploadPdfFromClient', () => {
       ['content-type', 'application/pdf'],
       ['file', {}],
     ]);
-    expect(postStub.getCall(0).args[2]).toMatchObject({
+    expect(postStub.mock.calls[0][2]).toMatchObject({
       headers: { 'content-type': 'multipart/form-data; boundary=undefined' },
     });
   });

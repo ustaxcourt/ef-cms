@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   submitPendingCaseAssociationRequestInteractor,
 } = require('./submitPendingCaseAssociationRequestInteractor');
@@ -42,9 +41,9 @@ describe('submitPendingCaseAssociationRequest', () => {
   });
 
   it('should not add mapping if already associated', async () => {
-    let associateUserWithCasePendingSpy = sinon.spy();
-    let verifyCaseForUserSpy = sinon.stub().returns(true);
-    let verifyPendingCaseForUserSpy = sinon.stub().returns(false);
+    let associateUserWithCasePendingSpy = jest.fn();
+    let verifyCaseForUserSpy = jest.fn().mockReturnValue(true);
+    let verifyPendingCaseForUserSpy = jest.fn().mockReturnValue(false);
 
     applicationContext = {
       environment: { stage: 'local' },
@@ -73,13 +72,13 @@ describe('submitPendingCaseAssociationRequest', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(associateUserWithCasePendingSpy.called).toEqual(false);
+    expect(associateUserWithCasePendingSpy).not.toBeCalled();
   });
 
   it('should not add mapping if these is already a pending association', async () => {
-    let associateUserWithCasePendingSpy = sinon.spy();
-    let verifyCaseForUserSpy = sinon.stub().returns(false);
-    let verifyPendingCaseForUserSpy = sinon.stub().returns(true);
+    let associateUserWithCasePendingSpy = jest.fn();
+    let verifyCaseForUserSpy = jest.fn().mockReturnValue(false);
+    let verifyPendingCaseForUserSpy = jest.fn().mockReturnValue(true);
 
     applicationContext = {
       environment: { stage: 'local' },
@@ -109,13 +108,13 @@ describe('submitPendingCaseAssociationRequest', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(associateUserWithCasePendingSpy.called).toEqual(false);
+    expect(associateUserWithCasePendingSpy).not.toBeCalled();
   });
 
   it('should add mapping', async () => {
-    let associateUserWithCasePendingSpy = sinon.spy();
-    let verifyCaseForUserSpy = sinon.stub().returns(false);
-    let verifyPendingCaseForUserSpy = sinon.stub().returns(false);
+    let associateUserWithCasePendingSpy = jest.fn();
+    let verifyCaseForUserSpy = jest.fn().mockReturnValue(false);
+    let verifyPendingCaseForUserSpy = jest.fn().mockReturnValue(false);
 
     applicationContext = {
       environment: { stage: 'local' },
@@ -144,6 +143,6 @@ describe('submitPendingCaseAssociationRequest', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(associateUserWithCasePendingSpy.called).toEqual(true);
+    expect(associateUserWithCasePendingSpy).toBeCalled();
   });
 });

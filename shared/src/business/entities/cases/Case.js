@@ -1209,16 +1209,6 @@ Case.stripLeadingZeros = docketNumber => {
 };
 
 /**
- * getFilingTypes
- *
- * @param {string} userRole - the role of the user logged in
- * @returns {string[]} array of filing types for the user role
- */
-Case.getFilingTypes = userRole => {
-  return Case.FILING_TYPES[userRole] || Case.FILING_TYPES.petitioner;
-};
-
-/**
  * getWorkItems
  *
  * @returns {WorkItem[]} the work items on the case
