@@ -8,11 +8,11 @@ describe('setCurrentPageIndexAction', () => {
         currentPageIndex: 2,
       },
       state: {
+        scanBatchPreviewerHelper: {
+          totalPages: 5,
+        },
         scanner: {
           currentPageIndex: 1,
-          scanBatchPreviewerHelper: {
-            totalPages: 5,
-          },
         },
       },
     });
@@ -25,11 +25,11 @@ describe('setCurrentPageIndexAction', () => {
         currentPageIndex: 5,
       },
       state: {
+        scanBatchPreviewerHelper: {
+          totalPages: 5,
+        },
         scanner: {
           currentPageIndex: 1,
-          scanBatchPreviewerHelper: {
-            totalPages: 5,
-          },
         },
       },
     });
@@ -42,11 +42,11 @@ describe('setCurrentPageIndexAction', () => {
         currentPageIndex: -1,
       },
       state: {
+        scanBatchPreviewerHelper: {
+          totalPages: 5,
+        },
         scanner: {
           currentPageIndex: 1,
-          scanBatchPreviewerHelper: {
-            totalPages: 5,
-          },
         },
       },
     });
