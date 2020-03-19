@@ -9,5 +9,5 @@ import { state } from 'cerebral';
  *
  */
 export const setSelectedBatchIndexAction = async ({ props, store }) => {
-  store.set(state.selectedBatchIndex, props.selectedBatchIndex);
+  store.set(state.scanner.selectedBatchIndex, props.selectedBatchIndex);
 };

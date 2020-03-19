@@ -132,7 +132,6 @@ import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/pr
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
-import { getCaseTypesInteractor } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getConsolidatedCasesByUserInteractor } from '../../shared/src/proxies/getConsolidatedCasesByUserProxy';
@@ -142,7 +141,6 @@ import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/wo
 import { getDocumentQCServedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
 import { getDocumentQCServedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
-import { getFilingTypesInteractor } from '../../shared/src/business/useCases/getFilingTypesInteractor';
 import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
 import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
 import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsersProxy';
@@ -315,7 +313,6 @@ const allUseCases = {
   getCaseDeadlinesForCaseInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
-  getCaseTypesInteractor,
   getCasesByUserInteractor,
   getConsolidatedCasesByCaseInteractor,
   getConsolidatedCasesByUserInteractor,
@@ -324,7 +321,6 @@ const allUseCases = {
   getDocumentQCServedForSectionInteractor,
   getDocumentQCServedForUserInteractor,
   getEligibleCasesForTrialSessionInteractor,
-  getFilingTypesInteractor,
   getInboxMessagesForSectionInteractor,
   getInboxMessagesForUserInteractor,
   getInternalUsersInteractor,
@@ -451,6 +447,7 @@ const applicationContext = {
       CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
       CASE_INVENTORY_PAGE_SIZE: 2,
       CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
+      CASE_TYPES: Case.CASE_TYPES,
       CATEGORIES: Document.CATEGORIES,
       CATEGORY_MAP: Document.CATEGORY_MAP,
       CHAMBERS_SECTION,
@@ -461,6 +458,7 @@ const applicationContext = {
       COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
       DATE_FORMATS: FORMATS,
       ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
+      FILING_TYPES: Case.FILING_TYPES,
       INITIAL_DOCUMENT_TYPES: Document.INITIAL_DOCUMENT_TYPES,
       INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
       MAX_FILE_SIZE_BYTES,

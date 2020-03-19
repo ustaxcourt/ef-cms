@@ -1,5 +1,4 @@
 const pdfjsLib = require('pdfjs-dist');
-const sinon = require('sinon');
 const {
   loadPDFForSigningInteractor,
 } = require('./loadPDFForSigningInteractor');
@@ -10,21 +9,17 @@ const saveMock = jest.fn();
 
 describe('loadPDFForSigningInteractor', () => {
   beforeEach(() => {
-    window.Response = sinon.stub().returns(() => {});
-    window.Response.prototype.arrayBuffer = sinon
-      .stub()
-      .returns('array buffer data');
-    pdfjsLib.getDocument = sinon.stub().returns({
+    window.Response = jest.fn().mockReturnValue(() => {});
+    window.Response.prototype.arrayBuffer = jest
+      .fn()
+      .mockReturnValue('array buffer data');
+    pdfjsLib.getDocument = jest.fn().mockReturnValue({
       promise: 'pdf data',
     });
-    PDFDocument.load = sinon.stub().returns({
+    PDFDocument.load = jest.fn().mockReturnValue({
       removePage: removePageMock,
       save: saveMock,
     });
-  });
-
-  afterEach(() => {
-    sinon.restore();
   });
 
   it('loadPDFForSigning', async () => {

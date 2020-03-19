@@ -18,7 +18,7 @@ export const startScanAction = async ({
 }) => {
   const { scanMode } = props;
 
-  store.set(state.isScanning, true);
+  store.set(state.scanner.isScanning, true);
   const scanner = await applicationContext.getScanner();
   scanner.setSourceByIndex(props.scannerSourceIndex);
   try {
@@ -28,12 +28,12 @@ export const startScanAction = async ({
     });
 
     const documentSelectedForScan = get(state.documentSelectedForScan);
-    const batches = get(state.batches[documentSelectedForScan]) || [];
+    const batches = get(state.scanner.batches[documentSelectedForScan]) || [];
     const nextIndex = batches.length
       ? Math.max(...batches.map(b => b.index)) + 1
       : 0;
 
-    store.set(state.batches[documentSelectedForScan], [
+    store.set(state.scanner.batches[documentSelectedForScan], [
       ...batches,
       ...[
         {
@@ -43,8 +43,8 @@ export const startScanAction = async ({
         },
       ],
     ]);
-    store.set(state.selectedBatchIndex, nextIndex);
-    store.set(state.currentPageIndex, 0);
+    store.set(state.scanner.selectedBatchIndex, nextIndex);
+    store.set(state.scanner.currentPageIndex, 0);
     return path.success();
   } catch (err) {
     return path.error({ error: err });

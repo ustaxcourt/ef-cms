@@ -1,4 +1,3 @@
-jest.mock('../../dynamodbClientService');
 const client = require('../../dynamodbClientService');
 const { Case } = require('../../../business/entities/cases/Case');
 const { updateCase } = require('./updateCase');

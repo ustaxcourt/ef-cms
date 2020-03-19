@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @returns {undefined} doesn't return anything
  */
 export const checkForActiveBatchesAction = ({ get, path }) => {
-  const batches = get(state.batches);
+  const batches = get(state.scanner.batches);
   const documentKeys = Object.keys(batches);
   const hasActiveBatches = documentKeys.some(documentKey => {
     return batches[documentKey].length > 0;

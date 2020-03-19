@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   validateExternalDocumentInformationInteractor,
 } = require('./validateExternalDocumentInformationInteractor');
@@ -8,7 +7,7 @@ describe('validateExternalDocumentInformationInteractor', () => {
   let spy;
 
   beforeEach(() => {
-    spy = sinon.stub().returns(null);
+    spy = jest.fn().mockReturnValue(null);
     ExternalDocumentInformationFactory = {
       get: () => ({
         getFormattedValidationErrors: spy,
