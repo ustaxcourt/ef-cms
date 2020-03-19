@@ -84,6 +84,12 @@ const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 
 const createTestApplicationContext = ({ user } = {}) => {
+  const mockCognitoReturnValue = {
+    adminCreateUser: jest.fn(),
+    adminGetUser: jest.fn(),
+    adminUpdateUserAttributes: jest.fn(),
+  };
+
   const mockGetPersistenceGatewayReturnValue = {
     addWorkItemToSectionInbox,
     associateUserWithCase: jest.fn(),
@@ -136,6 +142,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getBaseUrl: () => 'http://localhost',
     getCaseCaptionNames: jest.fn().mockReturnValue(Case.getCaseCaptionNames),
     getChromiumBrowser: jest.fn(),
+    getCognito: () => mockCognitoReturnValue,
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {
