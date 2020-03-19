@@ -10,6 +10,20 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
+const PDF_MOCK_BUFFER = 'Hello World';
+
+const pageMock = {
+  addStyleTag: () => {},
+  pdf: () => {
+    return PDF_MOCK_BUFFER;
+  },
+  setContent: () => {},
+};
+
+const chromiumBrowserMock = {
+  close: jest.fn(),
+  newPage: () => pageMock,
+};
 
 const mockCurrentUser = {
   role: User.ROLES.petitioner,
