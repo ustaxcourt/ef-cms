@@ -64,6 +64,7 @@ exports.updateUserContactInformationInteractor = async ({
     .getPersistenceGateway()
     .getCasesByUser({
       applicationContext,
+      printOut: true,
       userId,
     });
 
