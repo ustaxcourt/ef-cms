@@ -26,6 +26,9 @@ const {
   deleteWorkItemFromInbox,
 } = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 const {
+  getCaseByCaseId,
+} = require('../../persistence/dynamo/cases/getCaseByCaseId');
+const {
   getCaseDeadlinesByCaseId,
 } = require('../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByCaseId');
 const {
@@ -70,6 +73,10 @@ const {
 const {
   updateWorkItemInCase,
 } = require('../../persistence/dynamo/cases/updateWorkItemInCase');
+const {
+  verifyCaseForUser,
+} = require('../../persistence/dynamo/cases/verifyCaseForUser');
+const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');

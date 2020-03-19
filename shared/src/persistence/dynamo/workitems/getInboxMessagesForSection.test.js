@@ -21,11 +21,10 @@ describe('getInboxMessagesForSection', () => {
       sk: 'work-item-sortKey',
     },
   ];
-  const queryStub = jest.fn().mockResolvedValue({ Items: mockWorkItems });
 
   beforeAll(() => {
     applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: queryStub,
+      promise: () => Promise.resolve({ Items: mockWorkItems }),
     });
   });
 

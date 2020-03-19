@@ -1,50 +1,50 @@
 const { User } = require('../entities/User');
 
-const createMockDocumentClient = () => {
-  const data = {
-    ['user|1805d1ab-18d0-43ec-bafb-654e83405416 user|1805d1ab-18d0-43ec-bafb-654e83405416']: {
-      email: 'docketclerk',
-      name: 'Test Docketclerk',
-      pk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
-      role: User.ROLES.docketClerk,
-      section: 'docket',
-      sk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
-      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-    },
-    ['user|3805d1ab-18d0-43ec-bafb-654e83405416 user|3805d1ab-18d0-43ec-bafb-654e83405416']: {
-      email: 'petitionsclerk',
-      name: 'Test Petitionsclerk',
-      pk: 'user|3805d1ab-18d0-43ec-bafb-654e83405416',
-      role: User.ROLES.petitionsClerk,
-      section: 'petitions',
-      sk: 'user|3805d1ab-18d0-43ec-bafb-654e83405416',
-      userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-    },
-    ['user|7805d1ab-18d0-43ec-bafb-654e83405416 user|7805d1ab-18d0-43ec-bafb-654e83405416']: {
-      email: 'petitioner',
-      name: 'Test Petitioner',
-      pk: 'user|7805d1ab-18d0-43ec-bafb-654e83405416',
-      role: User.ROLES.petitioner,
-      sk: 'user|7805d1ab-18d0-43ec-bafb-654e83405416',
-      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-    },
-    ['user|a805d1ab-18d0-43ec-bafb-654e83405416 user|a805d1ab-18d0-43ec-bafb-654e83405416']: {
-      email: 'pettitionsclerk',
-      name: 'Alex Petitionsclerk',
-      pk: 'user|a805d1ab-18d0-43ec-bafb-654e83405416',
-      role: User.ROLES.petitionsClerk,
-      section: 'petitions',
-      sk: 'user|a805d1ab-18d0-43ec-bafb-654e83405416',
-      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-    },
-  };
+const mockDynamoUsers = {
+  ['user|1805d1ab-18d0-43ec-bafb-654e83405416 user|1805d1ab-18d0-43ec-bafb-654e83405416']: {
+    email: 'docketclerk',
+    name: 'Test Docketclerk',
+    pk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
+    role: User.ROLES.docketClerk,
+    section: 'docket',
+    sk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
+    userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+  },
+  ['user|3805d1ab-18d0-43ec-bafb-654e83405416 user|3805d1ab-18d0-43ec-bafb-654e83405416']: {
+    email: 'petitionsclerk',
+    name: 'Test Petitionsclerk',
+    pk: 'user|3805d1ab-18d0-43ec-bafb-654e83405416',
+    role: User.ROLES.petitionsClerk,
+    section: 'petitions',
+    sk: 'user|3805d1ab-18d0-43ec-bafb-654e83405416',
+    userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+  },
+  ['user|7805d1ab-18d0-43ec-bafb-654e83405416 user|7805d1ab-18d0-43ec-bafb-654e83405416']: {
+    email: 'petitioner',
+    name: 'Test Petitioner',
+    pk: 'user|7805d1ab-18d0-43ec-bafb-654e83405416',
+    role: User.ROLES.petitioner,
+    sk: 'user|7805d1ab-18d0-43ec-bafb-654e83405416',
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+  },
+  ['user|a805d1ab-18d0-43ec-bafb-654e83405416 user|a805d1ab-18d0-43ec-bafb-654e83405416']: {
+    email: 'pettitionsclerk',
+    name: 'Alex Petitionsclerk',
+    pk: 'user|a805d1ab-18d0-43ec-bafb-654e83405416',
+    role: User.ROLES.petitionsClerk,
+    section: 'petitions',
+    sk: 'user|a805d1ab-18d0-43ec-bafb-654e83405416',
+    userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+  },
+};
 
+const createMockDocumentClient = () => {
   return {
     batchGet: ({ RequestItems }) => {
       const { Keys } = RequestItems['efcms-local'];
       const arr = [];
       for (let { pk, sk } of Keys) {
-        arr.push(data[`${pk} ${sk}`]);
+        arr.push(mockDynamoUsers[`${pk} ${sk}`]);
       }
       return {
         promise: async () => ({
@@ -55,7 +55,7 @@ const createMockDocumentClient = () => {
       };
     },
     delete: ({ Key: { pk, sk } }) => {
-      delete data[`${pk} ${sk}`];
+      delete mockDynamoUsers[`${pk} ${sk}`];
       return {
         promise: async () => null,
       };
@@ -63,13 +63,13 @@ const createMockDocumentClient = () => {
     get: ({ Key: { pk, sk } }) => {
       return {
         promise: async () => ({
-          Item: data[`${pk} ${sk}`],
+          Item: mockDynamoUsers[`${pk} ${sk}`],
         }),
       };
     },
-    getData: () => data,
+    getData: () => mockDynamoUsers,
     put: jest.fn().mockImplementation(({ Item }) => {
-      data[`${Item.pk} ${Item.sk}`] = Item;
+      mockDynamoUsers[`${Item.pk} ${Item.sk}`] = Item;
       return {
         promise: async () => null,
       };
@@ -78,11 +78,11 @@ const createMockDocumentClient = () => {
       .fn()
       .mockImplementation(({ ExpressionAttributeValues, IndexName }) => {
         const arr = [];
-        for (let key in data) {
+        for (let key in mockDynamoUsers) {
           if (IndexName === 'gsi1') {
             const gsi1pk = ExpressionAttributeValues[':gsi1pk'];
-            if (data[key].gsi1pk === gsi1pk) {
-              arr.push(data[key]);
+            if (mockDynamoUsers[key].gsi1pk === gsi1pk) {
+              arr.push(mockDynamoUsers[key]);
             }
           } else {
             const value = ExpressionAttributeValues[':pk'];
@@ -91,10 +91,10 @@ const createMockDocumentClient = () => {
 
             if (prefix) {
               if (pk === value && sk.indexOf(prefix) === 0) {
-                arr.push(data[key]);
+                arr.push(mockDynamoUsers[key]);
               }
             } else if (pk.includes(value)) {
-              arr.push(data[key]);
+              arr.push(mockDynamoUsers[key]);
             }
           }
         }
@@ -128,7 +128,7 @@ const createMockDocumentClient = () => {
           obj[k] = v === 'true';
         } else {
           if (k.includes('workItems[')) {
-            obj = data[`${Key.pk} ${Key.sk}`];
+            obj = mockDynamoUsers[`${Key.pk} ${Key.sk}`];
             // eslint-disable-next-line security/detect-eval-with-expression
             eval(`obj.${k} = ${JSON.stringify(v)};`);
           } else {
@@ -138,23 +138,23 @@ const createMockDocumentClient = () => {
       }
 
       if (hasSet) {
-        data[`${Key.pk} ${Key.sk}`] = {
-          ...data[`${Key.pk} ${Key.sk}`],
+        mockDynamoUsers[`${Key.pk} ${Key.sk}`] = {
+          ...mockDynamoUsers[`${Key.pk} ${Key.sk}`],
           ...obj,
         };
       } else {
-        let { id } = data[`${Key.pk} ${Key.sk}`] || {};
-        data[`${Key.pk} ${Key.sk}`] = {
+        let { id } = mockDynamoUsers[`${Key.pk} ${Key.sk}`] || {};
+        mockDynamoUsers[`${Key.pk} ${Key.sk}`] = {
           id: (id || 0) + 1,
         };
       }
       return {
         promise: async () => ({
-          Attributes: data[`${Key.pk} ${Key.sk}`],
+          Attributes: mockDynamoUsers[`${Key.pk} ${Key.sk}`],
         }),
       };
     },
   };
 };
 
-exports.createMockDocumentClient = createMockDocumentClient;
+module.exports = { createMockDocumentClient };
