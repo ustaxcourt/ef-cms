@@ -15,9 +15,9 @@ describe('Miscellaneous', () => {
 
   it('Toggles USA Banner Content', async () => {
     await test.runSequence('toggleUsaBannerDetailsSequence');
-    expect(test.getState('usaBanner.showDetails')).toEqual(true);
+    expect(test.getState('commonUI.showUsaBannerDetails')).toEqual(true);
     await test.runSequence('toggleUsaBannerDetailsSequence');
-    expect(test.getState('usaBanner.showDetails')).toEqual(false);
+    expect(test.getState('commonUI.showUsaBannerDetails')).toEqual(false);
   });
 
   it('Toggles Beta Bar Visibility', async () => {

@@ -93,11 +93,7 @@ export const state = {
   batchDownloads: {}, // batch download of PDFs
   batchIndexToRescan: null, // batch index for re-scanning
   batches: [], // batches from scanning
-  betaBar: {
-    isVisible: true,
-  },
   blockedCasesReportHelper,
-  // caseCaption: '',
   caseDeadlineReportHelper,
   caseDetail: {},
   caseDetailEditContactsHelper,
@@ -113,6 +109,11 @@ export const state = {
   caseTypes: [], // TODO: refactor to use constants
   cases: [],
   cognitoLoginUrl: null,
+  commonUI: {
+    showBetaBar: true,
+    showMobileMenu: false,
+    showUsaBannerDetails: false,
+  },
   completeDocumentTypeSectionHelper,
   completeForm: {}, // TODO: replace with state.form
   confirmInitiateServiceModalHelper,
@@ -157,12 +158,8 @@ export const state = {
   getTrialCityName,
   headerHelper,
   internalTypesHelper,
-  isAccountMenuOpen: false,
   loadingHelper,
   menuHelper,
-  mobileMenu: {
-    isVisible: false,
-  },
   modal: {},
   navigation: {},
   notifications: {},
@@ -225,9 +222,6 @@ export const state = {
     group: null,
   },
   updateCaseModalHelper,
-  usaBanner: {
-    showDetails: false,
-  },
   user: null,
   users: [],
   validationErrors: {},
