@@ -142,9 +142,9 @@ export const Header = connect(
     isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
     isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
     isUsersMenuOpen: state.menuHelper.isUsersMenuOpen,
-    mobileMenu: state.mobileMenu,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
     showBetaBar: state.commonUI.showBetaBar,
+    showMobileMenu: state.commonUI.showMobileMenu,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     user: state.user,
@@ -153,9 +153,9 @@ export const Header = connect(
     headerHelper,
     isAccountMenuOpen,
     isReportsMenuOpen,
-    mobileMenu,
     resetHeaderAccordionsSequence,
     showBetaBar,
+    showMobileMenu,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
     user,
@@ -213,7 +213,7 @@ export const Header = connect(
               <nav
                 className={classNames(
                   'usa-nav ustc-nav',
-                  mobileMenu.isVisible && 'is-visible',
+                  showMobileMenu && 'is-visible',
                 )}
                 role="navigation"
               >
