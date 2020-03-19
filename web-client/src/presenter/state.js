@@ -110,7 +110,6 @@ export const state = {
   caseInformationHelper,
   caseInventoryReportHelper,
   caseTypeDescriptionHelper,
-  caseTypes: [], // TODO: refactor to use constants
   cases: [],
   cognitoLoginUrl: null,
   completeDocumentTypeSectionHelper,
