@@ -1,8 +1,7 @@
-const sinon = require('sinon');
 const { saveDocumentFromLambda } = require('./saveDocumentFromLambda');
 
 describe('saveDocumentFromLambda', () => {
-  const putObjectStub = sinon.stub().returns({
+  const putObjectStub = jest.fn().mockReturnValue({
     promise: async () => null,
   });
 
@@ -25,7 +24,7 @@ describe('saveDocumentFromLambda', () => {
       document: new Uint8Array(['a']),
       documentId: expectedDocumentId,
     });
-    expect(putObjectStub.getCall(0).args[0]).toMatchObject({
+    expect(putObjectStub.mock.calls[0][0]).toMatchObject({
       Body: Buffer.from(expectedArray),
       Bucket: 'aBucket',
       ContentType: 'application/pdf',
@@ -53,7 +52,7 @@ describe('saveDocumentFromLambda', () => {
       documentId: expectedDocumentId,
       useTempBucket: true,
     });
-    expect(putObjectStub.getCall(1).args[0]).toMatchObject({
+    expect(putObjectStub.mock.calls[1][0]).toMatchObject({
       Body: Buffer.from(expectedArray),
       Bucket: 'aTempBucket',
       ContentType: 'application/pdf',

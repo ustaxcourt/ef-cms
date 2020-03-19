@@ -18,7 +18,7 @@ export const generatePdfFromScanSessionAction = async ({
   await new Promise(resolve => setTimeout(resolve, 100));
   const documentSelectedForScan = get(state.documentSelectedForScan);
 
-  const batches = get(state.batches[documentSelectedForScan]);
+  const batches = get(state.scanner.batches[documentSelectedForScan]);
 
   const scannedBuffer = [];
   batches.forEach(batch =>

@@ -26,11 +26,13 @@ describe('generatePdfFromScanSessionAction', () => {
         presenter,
       },
       state: {
-        batches: {
-          petition: [{ pages: [] }],
-        },
         documentSelectedForScan: 'petition',
-        isScanning: true,
+        scanner: {
+          batches: {
+            petition: [{ pages: [] }],
+          },
+          isScanning: true,
+        },
       },
     });
 

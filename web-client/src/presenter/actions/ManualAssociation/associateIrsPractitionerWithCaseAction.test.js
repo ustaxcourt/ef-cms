@@ -2,11 +2,10 @@ import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/enti
 import { associateIrsPractitionerWithCaseAction } from './associateIrsPractitionerWithCaseAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 describe('associateIrsPractitionerWithCaseAction', () => {
   it('should run associateIrsPractitionerWithCaseInteractor and success path', async () => {
-    const successStub = sinon.stub();
+    const successStub = jest.fn();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
@@ -33,6 +32,6 @@ describe('associateIrsPractitionerWithCaseAction', () => {
         },
       },
     });
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 });

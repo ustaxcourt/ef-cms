@@ -91,8 +91,6 @@ export const state = {
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloadHelper,
   batchDownloads: {}, // batch download of PDFs
-  batchIndexToRescan: null, // batch index for re-scanning
-  batches: [], // batches from scanning
   betaBar: {
     isVisible: true,
   },
@@ -110,7 +108,6 @@ export const state = {
   caseInformationHelper,
   caseInventoryReportHelper,
   caseTypeDescriptionHelper,
-  caseTypes: [], // TODO: refactor to use constants
   cases: [],
   cognitoLoginUrl: null,
   completeDocumentTypeSectionHelper,
@@ -121,7 +118,6 @@ export const state = {
   createAttorneyUserHelper,
   createOrderHelper,
   currentPage: 'Interstitial',
-  currentPageIndex: 0, // wizard step
   currentTab: '', // TODO: move to view metadata
   dashboardExternalHelper,
   docketNumberSearchForm: {}, // needs its own object because it's present when other forms are on screen
@@ -145,7 +141,6 @@ export const state = {
   fieldOrder: [], // TODO: move to view metadata
   fileDocumentHelper,
   fileUploadStatusHelper,
-  filingTypes: [], // TODO: move to view metadata
   form: {}, // shared object for creating new entities, clear before using
   formattedCaseDetail,
   formattedCases,
@@ -192,7 +187,15 @@ export const state = {
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
-  scanner: {},
+  scanner: {
+    batchIndexToDelete: null,
+    batchIndexToRescan: null, // batch index for re-scanning
+    batchToDeletePageCount: null,
+    batches: [],
+    currentPageIndex: 0, // batches from scanning
+    isScanning: false,
+    selectedBatchIndex: 0,
+  },
   screenMetadata: {},
   searchMode: 'byName',
   searchTerm: '',
@@ -200,7 +203,6 @@ export const state = {
   sectionUsers: [],
   selectDocumentSelectHelper,
   selectDocumentTypeHelper,
-  selectedBatchIndex: 0,
   selectedWorkItems: [],
   sessionMetadata: {
     docketRecordSort: [],

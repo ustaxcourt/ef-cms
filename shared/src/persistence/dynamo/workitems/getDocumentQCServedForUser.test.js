@@ -1,11 +1,10 @@
-const sinon = require('sinon');
 const { getDocumentQCServedForUser } = require('./getDocumentQCServedForUser');
 
 describe('getDocumentQCServedForUser', () => {
   let queryStub;
 
   beforeEach(() => {
-    queryStub = sinon.stub().returns({
+    queryStub = jest.fn().mockReturnValue({
       promise: async () => ({
         Items: [
           {

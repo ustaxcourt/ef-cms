@@ -2,7 +2,6 @@ import { clearFormsAction } from '../actions/clearFormsAction';
 import { clearWorkItemActionMapAction } from '../actions/clearWorkItemActionMapAction';
 import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
 import { getCaseAction } from '../actions/getCaseAction';
-import { getCaseTypesAction } from '../actions/getCaseTypesAction';
 import { getInternalUsersAction } from '../actions/getInternalUsersAction';
 import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { getProcedureTypesAction } from '../actions/getProcedureTypesAction';
@@ -11,7 +10,6 @@ import { parallel } from 'cerebral/factories';
 import { set } from 'cerebral/factories';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCaseTypesAction } from '../actions/setCaseTypesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultDocumentDetailTabAction } from '../actions/setDefaultDocumentDetailTabAction';
 import { setDocumentDetailPageTitleAction } from '../actions/setDocumentDetailPageTitleAction';
@@ -43,8 +41,6 @@ export const gotoDocumentDetailSequence = [
   setInternalUsersAction,
   getProcedureTypesAction,
   setProcedureTypesAction,
-  getCaseTypesAction,
-  setCaseTypesAction,
   set(state.editDocumentEntryPoint, 'DocumentDetail'),
   setDocumentDetailPageTitleAction,
   setCurrentPageAction('DocumentDetail'),

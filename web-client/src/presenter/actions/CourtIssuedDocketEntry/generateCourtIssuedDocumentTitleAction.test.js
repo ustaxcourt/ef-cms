@@ -1,13 +1,15 @@
 import { generateCourtIssuedDocumentTitleAction } from './generateCourtIssuedDocumentTitleAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 describe('generateCourtIssuedDocumentTitleAction', () => {
   let generateCourtIssuedDocumentTitleStub;
 
   beforeEach(() => {
-    generateCourtIssuedDocumentTitleStub = sinon.stub();
+    jest.clearAllMocks();
+    generateCourtIssuedDocumentTitleStub = jest
+      .fn()
+      .mockReturnValue('Order for something');
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
@@ -17,7 +19,6 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
   });
 
   it('should call generateCourtIssuedDocumentTitle with correct data and set state.form.generatedDocumentTitle to what is returned', async () => {
-    generateCourtIssuedDocumentTitleStub.returns('Order for something');
     const results = await runAction(generateCourtIssuedDocumentTitleAction, {
       modules: {
         presenter,
@@ -35,22 +36,19 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
       },
     });
 
-    expect(generateCourtIssuedDocumentTitleStub.calledOnce).toEqual(true);
+    expect(generateCourtIssuedDocumentTitleStub.mock.calls.length).toEqual(1);
     expect(
-      generateCourtIssuedDocumentTitleStub.getCall(0).args[0].documentMetadata
-        .documentType,
-    ).toEqual('Order');
-    expect(
-      generateCourtIssuedDocumentTitleStub.getCall(0).args[0].documentMetadata
-        .date,
-    ).toEqual('12-12-2019');
+      generateCourtIssuedDocumentTitleStub.mock.calls[0][0].documentMetadata,
+    ).toMatchObject({
+      date: '12-12-2019',
+      documentType: 'Order',
+    });
     expect(results.state.form.generatedDocumentTitle).toEqual(
       'Order for something',
     );
   });
 
   it('should call generateCourtIssuedDocumentTitle with correct data and set state.form.generatedDocumentTitle to what is returned with Attachments added if it is true on the form', async () => {
-    generateCourtIssuedDocumentTitleStub.returns('Order for something');
     const results = await runAction(generateCourtIssuedDocumentTitleAction, {
       modules: {
         presenter,
@@ -69,22 +67,20 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
       },
     });
 
-    expect(generateCourtIssuedDocumentTitleStub.calledOnce).toEqual(true);
+    expect(generateCourtIssuedDocumentTitleStub.mock.calls.length).toEqual(1);
     expect(
-      generateCourtIssuedDocumentTitleStub.getCall(0).args[0].documentMetadata
-        .documentType,
-    ).toEqual('Order');
-    expect(
-      generateCourtIssuedDocumentTitleStub.getCall(0).args[0].documentMetadata
-        .date,
-    ).toEqual('12-12-2019');
+      generateCourtIssuedDocumentTitleStub.mock.calls[0][0].documentMetadata,
+    ).toMatchObject({
+      date: '12-12-2019',
+      documentType: 'Order',
+    });
     expect(results.state.form.generatedDocumentTitle).toEqual(
       'Order for something',
     );
   });
 
   it('should call generateCourtIssuedDocumentTitle with correct data and unset state.form.generatedDocumentTitle if a document title is not returned', async () => {
-    generateCourtIssuedDocumentTitleStub.returns(null);
+    generateCourtIssuedDocumentTitleStub = jest.fn().mockReturnValue(null);
     const results = await runAction(generateCourtIssuedDocumentTitleAction, {
       modules: {
         presenter,
@@ -103,15 +99,13 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
       },
     });
 
-    expect(generateCourtIssuedDocumentTitleStub.calledOnce).toEqual(true);
+    expect(generateCourtIssuedDocumentTitleStub.mock.calls.length).toEqual(1);
     expect(
-      generateCourtIssuedDocumentTitleStub.getCall(0).args[0].documentMetadata
-        .documentType,
-    ).toEqual('Order');
-    expect(
-      generateCourtIssuedDocumentTitleStub.getCall(0).args[0].documentMetadata
-        .date,
-    ).toEqual('12-12-2019');
+      generateCourtIssuedDocumentTitleStub.mock.calls[0][0].documentMetadata,
+    ).toMatchObject({
+      date: '12-12-2019',
+      documentType: 'Order',
+    });
     expect(results.state.form.generatedDocumentTitle).toBeUndefined();
   });
 });

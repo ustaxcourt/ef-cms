@@ -38,7 +38,7 @@ export const ScanBatchPreviewer = connect(
     selectDocumentForPreviewSequence:
       sequences.selectDocumentForPreviewSequence,
     selectDocumentForScanSequence: sequences.selectDocumentForScanSequence,
-    selectedBatchIndex: state.selectedBatchIndex,
+    selectedBatchIndex: state.scanner.selectedBatchIndex,
     setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
     setDocumentForUploadSequence: sequences.setDocumentForUploadSequence,
     setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,

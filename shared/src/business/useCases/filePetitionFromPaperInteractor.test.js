@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   filePetitionFromPaperInteractor,
 } = require('./filePetitionFromPaperInteractor');
@@ -11,13 +10,13 @@ let virusScanPdfStub;
 
 describe('filePetitionFromPaperInteractor', () => {
   const createApplicationContext = options => {
-    uploadDocumentStub = sinon
-      .stub()
-      .resolves('c54ba5a9-b37b-479d-9201-067ec6e335bb');
+    uploadDocumentStub = jest
+      .fn()
+      .mockResolvedValue('c54ba5a9-b37b-479d-9201-067ec6e335bb');
 
-    createCaseStub = sinon.stub().resolves(null);
-    validatePdfStub = sinon.stub().resolves(null);
-    virusScanPdfStub = sinon.stub().resolves(null);
+    createCaseStub = jest.fn().mockResolvedValue(null);
+    validatePdfStub = jest.fn().mockResolvedValue(null);
+    virusScanPdfStub = jest.fn().mockResolvedValue(null);
 
     return {
       environment: { stage: 'local' },
@@ -80,7 +79,7 @@ describe('filePetitionFromPaperInteractor', () => {
       petitionFile: 'this petition file',
       petitionMetadata: null,
     });
-    expect(uploadDocumentStub.getCall(0).args[0].document).toEqual(
+    expect(uploadDocumentStub.mock.calls[0][0].document).toEqual(
       'this petition file',
     );
   });
@@ -90,7 +89,7 @@ describe('filePetitionFromPaperInteractor', () => {
       applicationContext: createApplicationContext(),
       applicationForWaiverOfFilingFeeFile: 'this APW file',
     });
-    expect(uploadDocumentStub.getCall(0).args[0].document).toEqual(
+    expect(uploadDocumentStub.mock.calls[0][0].document).toEqual(
       'this APW file',
     );
   });
@@ -100,7 +99,7 @@ describe('filePetitionFromPaperInteractor', () => {
       applicationContext: createApplicationContext(),
       ownershipDisclosureFile: 'this ods file',
     });
-    expect(uploadDocumentStub.getCall(1).args[0].document).toEqual(
+    expect(uploadDocumentStub.mock.calls[1][0].document).toEqual(
       'this ods file',
     );
   });
@@ -110,7 +109,7 @@ describe('filePetitionFromPaperInteractor', () => {
       applicationContext: createApplicationContext(),
       stinFile: 'this stin file',
     });
-    expect(uploadDocumentStub.getCall(1).args[0].document).toEqual(
+    expect(uploadDocumentStub.mock.calls[1][0].document).toEqual(
       'this stin file',
     );
   });
@@ -120,7 +119,7 @@ describe('filePetitionFromPaperInteractor', () => {
       applicationContext: createApplicationContext(),
       requestForPlaceOfTrialFile: 'this rqt file',
     });
-    expect(uploadDocumentStub.getCall(1).args[0].document).toEqual(
+    expect(uploadDocumentStub.mock.calls[1][0].document).toEqual(
       'this rqt file',
     );
   });
@@ -132,7 +131,7 @@ describe('filePetitionFromPaperInteractor', () => {
       petitionMetadata: 'something2',
       stinFile: 'something3',
     });
-    expect(createCaseStub.getCall(0).args[0]).toMatchObject({
+    expect(createCaseStub.mock.calls[0][0]).toMatchObject({
       ownershipDisclosureFileId: undefined,
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       stinFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -147,7 +146,7 @@ describe('filePetitionFromPaperInteractor', () => {
       petitionMetadata: 'something2',
       stinFile: 'something3',
     });
-    expect(createCaseStub.getCall(0).args[0]).toMatchObject({
+    expect(createCaseStub.mock.calls[0][0]).toMatchObject({
       ownershipDisclosureFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       stinFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -162,7 +161,7 @@ describe('filePetitionFromPaperInteractor', () => {
       petitionMetadata: 'something2',
       stinFile: 'something3',
     });
-    expect(createCaseStub.getCall(0).args[0]).toMatchObject({
+    expect(createCaseStub.mock.calls[0][0]).toMatchObject({
       applicationForWaiverOfFilingFeeFileId:
         'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -178,7 +177,7 @@ describe('filePetitionFromPaperInteractor', () => {
       requestForPlaceOfTrialFile: 'something',
       stinFile: 'something3',
     });
-    expect(createCaseStub.getCall(0).args[0]).toMatchObject({
+    expect(createCaseStub.mock.calls[0][0]).toMatchObject({
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       requestForPlaceOfTrialFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       stinFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
