@@ -1,13 +1,12 @@
 import { setWorkItemAsReadAction } from './setWorkItemAsReadAction';
-import sinon from 'sinon';
 
 describe('setWorkItemAsReadAction', () => {
   let get;
   let applicationContext;
 
   it('should set message as read', async () => {
-    let setWorkItemAsReadStub = sinon.stub();
-    get = sinon.stub();
+    let setWorkItemAsReadStub = jest.fn();
+    get = jest.fn();
     applicationContext = {
       getUseCases: () => ({
         setWorkItemAsReadInteractor: setWorkItemAsReadStub,
@@ -16,7 +15,7 @@ describe('setWorkItemAsReadAction', () => {
 
     await setWorkItemAsReadAction({ applicationContext, get });
 
-    expect(setWorkItemAsReadStub.calledOnce).toEqual(true);
-    expect(get.calledOnce).toEqual(true);
+    expect(setWorkItemAsReadStub.mock.calls.length).toEqual(1);
+    expect(get.mock.calls.length).toEqual(1);
   });
 });

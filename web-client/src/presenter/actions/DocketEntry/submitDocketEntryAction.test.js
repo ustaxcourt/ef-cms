@@ -2,7 +2,6 @@ import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { submitDocketEntryAction } from './submitDocketEntryAction';
-import sinon from 'sinon';
 
 describe('submitDocketEntryAction', () => {
   let addCoversheetStub;
@@ -12,11 +11,11 @@ describe('submitDocketEntryAction', () => {
   let updateDocketEntryStub;
 
   beforeEach(() => {
-    addCoversheetStub = sinon.stub();
-    fileDocketEntryStub = sinon.stub();
-    validatePdfStub = sinon.stub();
-    updateDocketEntryStub = sinon.stub();
-    virusScanPdfStub = sinon.stub();
+    addCoversheetStub = jest.fn();
+    fileDocketEntryStub = jest.fn();
+    validatePdfStub = jest.fn();
+    updateDocketEntryStub = jest.fn();
+    virusScanPdfStub = jest.fn();
 
     presenter.providers.applicationContext = {
       ...applicationContext,
@@ -32,7 +31,7 @@ describe('submitDocketEntryAction', () => {
   });
 
   it('should call fileDocketEntry', async () => {
-    fileDocketEntryStub.returns({ documents: [] });
+    fileDocketEntryStub = jest.fn().mockReturnValue({ documents: [] });
     await runAction(submitDocketEntryAction, {
       modules: {
         presenter,
@@ -45,11 +44,11 @@ describe('submitDocketEntryAction', () => {
       },
     });
 
-    expect(fileDocketEntryStub.calledOnce).toEqual(true);
+    expect(fileDocketEntryStub.mock.calls.length).toEqual(1);
   });
 
   it('should call virusScan and validation and if a file is attached', async () => {
-    fileDocketEntryStub.returns({
+    fileDocketEntryStub = jest.fn().mockReturnValue({
       caseId: applicationContext.getUniqueId(),
     });
     await runAction(submitDocketEntryAction, {
@@ -69,12 +68,12 @@ describe('submitDocketEntryAction', () => {
       },
     });
 
-    expect(validatePdfStub.calledOnce).toEqual(true);
-    expect(virusScanPdfStub.calledOnce).toEqual(true);
+    expect(validatePdfStub.mock.calls.length).toEqual(1);
+    expect(virusScanPdfStub.mock.calls.length).toEqual(1);
   });
 
   it('should update docket entry with attached file', async () => {
-    updateDocketEntryStub.returns({
+    updateDocketEntryStub = jest.fn().mockReturnValue({
       caseId: applicationContext.getUniqueId(),
     });
     await runAction(submitDocketEntryAction, {
@@ -95,8 +94,8 @@ describe('submitDocketEntryAction', () => {
       },
     });
 
-    expect(validatePdfStub.calledOnce).toEqual(true);
-    expect(virusScanPdfStub.calledOnce).toEqual(true);
-    expect(updateDocketEntryStub.calledOnce).toEqual(true);
+    expect(validatePdfStub.mock.calls.length).toEqual(1);
+    expect(virusScanPdfStub.mock.calls.length).toEqual(1);
+    expect(updateDocketEntryStub.mock.calls.length).toEqual(1);
   });
 });
