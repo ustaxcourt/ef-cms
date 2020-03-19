@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const { getAllCatalogCases } = require('./getAllCatalogCases');
 
 describe('getAllCatalogCases', () => {
@@ -6,7 +5,7 @@ describe('getAllCatalogCases', () => {
   let queryStub;
 
   beforeEach(() => {
-    queryStub = sinon.stub().returns({
+    queryStub = jest.fn().mockReturnValue({
       promise: () =>
         Promise.resolve({
           Items: [],
@@ -31,7 +30,7 @@ describe('getAllCatalogCases', () => {
   });
 
   it('should return records from persistence', async () => {
-    queryStub = sinon.stub().returns({
+    queryStub = jest.fn().mockReturnValue({
       promise: () =>
         Promise.resolve({
           Items: [

@@ -1,16 +1,15 @@
-const sinon = require('sinon');
 const {
   createCaseTrialSortMappingRecords,
 } = require('./createCaseTrialSortMappingRecords');
 
 describe('createCaseTrialSortMappingRecords', () => {
   let applicationContext;
-  let putStub;
+  const putStub = jest.fn().mockReturnValue({
+    promise: async () => null,
+  });
 
   beforeEach(() => {
-    putStub = sinon.stub().returns({
-      promise: async () => null,
-    });
+    jest.clearAllMocks();
 
     applicationContext = {
       environment: {
@@ -31,7 +30,7 @@ describe('createCaseTrialSortMappingRecords', () => {
         nonHybrid: 'nonhybridSortRecord',
       },
     });
-    expect(putStub.getCall(0).args[0]).toMatchObject({
+    expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {
         caseId: '123',
         gsi1pk: 'eligible-for-trial-case-catalog|123',
@@ -40,7 +39,7 @@ describe('createCaseTrialSortMappingRecords', () => {
       },
       TableName: 'efcms-dev',
     });
-    expect(putStub.getCall(1).args[0]).toMatchObject({
+    expect(putStub.mock.calls[1][0]).toMatchObject({
       Item: {
         caseId: '123',
         gsi1pk: 'eligible-for-trial-case-catalog|123',

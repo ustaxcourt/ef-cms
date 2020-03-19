@@ -1,16 +1,11 @@
 const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
 const { getSortRecords } = require('./getSortRecords');
 
 describe('getSortRecords', () => {
   let getCurrentUserStub;
 
   beforeEach(() => {
-    sinon.stub(client, 'query').resolves(null);
-  });
-
-  afterEach(() => {
-    client.query.restore();
+    client.query = jest.fn().mockReturnValue(null);
   });
 
   it('invokes the persistence layer with the expected pk and sk', async () => {
@@ -26,7 +21,7 @@ describe('getSortRecords', () => {
       key: 'a',
       type: 'b',
     });
-    expect(client.query.getCall(0).args[0]).toMatchObject({
+    expect(client.query.mock.calls[0][0]).toMatchObject({
       ExpressionAttributeNames: { '#pk': 'pk', '#sk': 'sk' },
       ExpressionAttributeValues: {
         ':afterDate': 'now',

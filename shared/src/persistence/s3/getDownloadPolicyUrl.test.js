@@ -40,14 +40,10 @@ describe('getDownloadPolicyUrl', () => {
       getSignedUrl: (method, options, cb) => cb('error', 'http://localhost'),
     });
 
-    let error;
-    try {
-      await getDownloadPolicyUrl({
+    await expect(
+      getDownloadPolicyUrl({
         applicationContext,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
+      }),
+    ).rejects;
   });
 });
