@@ -1,24 +1,10 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   generateCaseInventoryReportPdf,
 } = require('./generateCaseInventoryReportPdf');
 const { User } = require('../../entities/User');
-const PDF_MOCK_BUFFER = 'Hello World';
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-
-const pageMock = {
-  addStyleTag: () => {},
-  pdf: () => {
-    return PDF_MOCK_BUFFER;
-  },
-  setContent: () => {},
-};
-
-const chromiumBrowserMock = {
-  close: () => {},
-  newPage: () => pageMock,
-};
 
 const mockCases = [
   {
@@ -44,11 +30,6 @@ describe('generateCaseInventoryReportPdf', () => {
     generatedHtml = '';
     generatePdfReportInteractorMock = jest.fn(({ contentHtml }) => {
       generatedHtml = contentHtml;
-    });
-
-    applicationContext.getChromiumBrowser.mockReturnValue(chromiumBrowserMock);
-    applicationContext.getNodeSass.mockReturnValue({
-      render: (data, cb) => cb(data, { css: '' }),
     });
 
     applicationContext.getCurrentUser.mockReturnValue(user);

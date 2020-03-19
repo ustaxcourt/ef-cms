@@ -119,7 +119,27 @@ const createTestApplicationContext = ({ user } = {}) => {
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   };
+
+  const PDF_MOCK_BUFFER = 'Hello World';
+
+  const pageMock = {
+    addStyleTag: () => {},
+    pdf: () => {
+      return PDF_MOCK_BUFFER;
+    },
+    setContent: () => {},
+  };
+
+  const nodeSassMockReturnValue = {
+    render: (data, cb) => cb(data, { css: '' }),
+  };
+
+  const chromiumBrowserMock = {
+    close: () => {},
+    newPage: () => pageMock,
+  };
   const mockDocClient = createMockDocumentClient();
+
   const applicationContext = {
     ...sharedAppContext,
     docketNumberGenerator,
@@ -129,7 +149,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     },
     getBaseUrl: () => 'http://localhost',
     getCaseCaptionNames: jest.fn().mockReturnValue(Case.getCaseCaptionNames),
-    getChromiumBrowser: jest.fn(),
+    getChromiumBrowser: jest.fn().mockReturnValue(chromiumBrowserMock),
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {
@@ -153,7 +173,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         data: 'url',
       }),
     }),
-    getNodeSass: jest.fn(),
+    getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
     getPersistenceGateway: jest.fn().mockImplementation(() => {
       return mockGetPersistenceGatewayReturnValue;
     }),
