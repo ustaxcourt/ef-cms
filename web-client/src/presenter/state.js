@@ -186,7 +186,6 @@ export const state = {
   modal: {},
   navigation: {},
   notifications: {},
-  path: '/', // can this be refactored away? Using router.query?
   paymentInfo: {
     showDetails: false,
   },

@@ -1,3 +1,4 @@
+import { getDocumentEditUrl } from '../utilities/getDocumentEditUrl';
 import { state } from 'cerebral';
 
 /**
@@ -21,5 +22,9 @@ export const setDocumentToEditAction = ({ props, store }) => {
 
     store.set(state.documentToEdit, documentToEdit);
     store.set(state.form, draftState);
+
+    return {
+      path: getDocumentEditUrl({ caseDetail, document: documentToEdit }),
+    };
   }
 };
