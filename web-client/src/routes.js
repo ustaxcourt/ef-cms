@@ -1,14 +1,13 @@
 import { forEach, isEmpty, set } from 'lodash';
 import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
-import route from 'riot-route';
 
 // Add this prefix to page titles for all pages that are related to a case
 const getPageTitleDocketPrefix = docketNumber => {
   return `Docket ${docketNumber} | `;
 };
 
-const getRoutes = ({ app, ifHasAccess, ROLE_PERMISSIONS }) => {
+const getRoutes = ({ app, ifHasAccess, ROLE_PERMISSIONS, route }) => {
   /* eslint sort-keys-fix/sort-keys-fix: 0 */
   return {
     '/': ifHasAccess(() => {

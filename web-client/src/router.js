@@ -61,6 +61,7 @@ const router = {
       ROLE_PERMISSIONS,
       app,
       ifHasAccess,
+      route,
     });
 
     Object.keys(routes).forEach(path => {

@@ -7,6 +7,7 @@ import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/tria
 import { User } from '../../shared/src/business/entities/User';
 import { applicationContext } from '../src/applicationContext';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
+import { getRoutes } from '../src/routes';
 import {
   image1,
   image2,
@@ -18,6 +19,8 @@ import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { withAppContextDecorator } from '../src/withAppContext';
 import axios from 'axios';
+
+//import { router } from '../src/router';
 
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormData from 'form-data';
@@ -356,6 +359,9 @@ export const setupTest = ({ useCases = {} } = {}) => {
   };
   global.WebSocket = require('websocket').w3cwebsocket;
   presenter.providers.applicationContext = applicationContext;
+
+  const { ROLE_PERMISSIONS } = applicationContext.getConstants();
+
   const { initialize: initializeSocketProvider, start, stop } = socketProvider({
     socketRouter,
   });
@@ -369,98 +375,54 @@ export const setupTest = ({ useCases = {} } = {}) => {
     };
   };
 
-  presenter.providers.router = {
-    createObjectURL: () => {
-      return 'fakeUrl';
-    },
-    externalRoute: () => {},
-    revokeObjectURL: () => {},
-    route: async url => {
-      test.currentRouteUrl = url;
-      switch (url) {
-        case '/document-qc/section/inbox':
-          await test.runSequence('gotoMessagesSequence', {
-            box: 'inbox',
-            queue: 'section',
-            workQueueIsInternal: false,
-          });
-          break;
-        case 'document-qc/section/outbox':
-          await test.runSequence('gotoMessagesSequence', {
-            box: 'outbox',
-            queue: 'section',
-            workQueueIsInternal: false,
-          });
-          break;
-        case '/document-qc':
-          await test.runSequence('gotoMessagesSequence', {
-            box: 'inbox',
-            queue: 'my',
-            workQueueIsInternal: false,
-          });
-          break;
-        case '/document-qc/my/inbox':
-          await test.runSequence('gotoMessagesSequence', {
-            box: 'inbox',
-            queue: 'my',
-            workQueueIsInternal: false,
-          });
-          break;
-        case '/document-qc/my/inProgress':
-          await test.runSequence('gotoMessagesSequence', {
-            box: 'inProgress',
-            queue: 'my',
-            workQueueIsInternal: false,
-          });
-          break;
-        case '/document-qc/my/outbox':
-          await test.runSequence('gotoMessagesSequence', {
-            box: 'outbox',
-            queue: 'my',
-            workQueueIsInternal: false,
-          });
-          break;
-        case '/messages/my/inbox':
-          await test.runSequence('gotoMessagesSequence', {
-            box: 'inbox',
-            queue: 'my',
-            workQueueIsInternal: true,
-          });
-          break;
-        case `/case-detail/${test.docketNumber}`:
-          await test.runSequence('gotoCaseDetailSequence', {
-            docketNumber: test.docketNumber,
-          });
-          break;
-        case '/search/no-matches':
-          await test.runSequence('gotoCaseSearchNoMatchesSequence');
-          break;
-        case `/print-preview/${test.caseId}`:
-          await test.runSequence('gotoPrintPreviewSequence', {
-            docketNumber: test.caseId,
-          });
-          break;
-        case `/case-detail/${test.docketNumber}/case-information`:
-          await test.runSequence('gotoCaseDetailSequence', {
-            docketNumber: test.docketNumber,
-          });
-          break;
-        case '/pdf-preview':
-          await test.runSequence('gotoPdfPreviewSequence');
-          break;
-        case `/case-detail/${test.docketNumber}/create-order`:
-          await test.runSequence('gotoCreateOrderSequence', {
-            docketNumber: test.docketNumber,
-          });
-          break;
-        case '/':
-          await test.runSequence('gotoDashboardSequence');
-          break;
-        default:
-          console.warn('No action taken for route: ', url);
-          break;
-      }
-    },
+  const ifHasAccessMock = cb => {
+    return cb;
+  };
+
+  const routeMock = () => {
+    return {
+      query: {}, // TODO - need to figure this out
+    };
+  };
+
+  const initializeRouter = app => {
+    const routes = getRoutes({
+      ROLE_PERMISSIONS,
+      app,
+      ifHasAccess: ifHasAccessMock,
+      route: routeMock,
+    });
+
+    presenter.providers.router = {
+      createObjectURL: () => {
+        return 'fakeUrl';
+      },
+      externalRoute: () => {},
+      revokeObjectURL: () => {},
+      route: async url => {
+        test.currentRouteUrl = url;
+        let foundRoute = false;
+        Object.keys(routes).some(path => {
+          // strip args from path
+          const regexPath = path.replace(/\*/g, '([^/?#]+?)');
+          const re = new RegExp('^' + regexPath + '$');
+          const match = url.match(re);
+
+          if (match) {
+            const args = match.slice(1);
+
+            // call function, passing in args
+            const routeFunc = routes[path];
+            routeFunc(...args);
+            return (foundRoute = true);
+          }
+        });
+
+        if (!foundRoute) {
+          console.log('NO ROUTE FOUND FOR ' + url);
+        }
+      },
+    };
   };
 
   presenter.state = mapValues(presenter.state, value => {
@@ -476,6 +438,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
   test.applicationContext = applicationContext;
 
   initializeSocketProvider(test);
+  initializeRouter(test);
 
   global.window = {
     DOMParser: () => {
@@ -505,6 +468,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     },
   };
 
+  // TODO: should we be pulling all of these from AC?
   test.setState('constants', {
     CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
     CATEGORIES: Document.CATEGORIES,
@@ -514,6 +478,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
     ORDER_TYPES_MAP: Order.ORDER_TYPES,
     PARTY_TYPES: ContactFactory.PARTY_TYPES,
+    ROLE_PERMISSIONS,
     STATUS_TYPES: Case.STATUS_TYPES,
     TRIAL_CITIES: TrialSession.TRIAL_CITIES,
     TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
