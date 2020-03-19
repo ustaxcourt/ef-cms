@@ -1,5 +1,5 @@
+jest.mock('../../../../../shared/src/persistence/dynamodbClientService');
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
-const sinon = require('sinon');
 const { getCaseDeadlinesByCaseId } = require('./getCaseDeadlinesByCaseId');
 
 const applicationContext = {
@@ -17,14 +17,14 @@ const mockCaseDeadline = {
 
 describe('getCaseDeadlinesByCaseId', () => {
   beforeEach(() => {
-    sinon.stub(client, 'batchGet').resolves([
+    client.batchGet = jest.fn().mockReturnValue([
       {
         ...mockCaseDeadline,
         pk: `case-deadline|${mockCaseDeadline.caseDeadlineId}`,
         sk: `case-deadline|${mockCaseDeadline.caseDeadlineId}`,
       },
     ]);
-    sinon.stub(client, 'query').resolves([
+    client.query = jest.fn().mockReturnValue([
       {
         pk: `case|${mockCaseDeadline.caseId}`,
         sk: `case-deadline|${mockCaseDeadline.caseDeadlineId}`,
@@ -32,9 +32,8 @@ describe('getCaseDeadlinesByCaseId', () => {
     ]);
   });
 
-  afterEach(() => {
-    client.batchGet.restore();
-    client.query.restore();
+  afterAll(() => {
+    jest.clearAllMocks();
   });
 
   it('should return data as received from persistence', async () => {
@@ -59,7 +58,7 @@ describe('getCaseDeadlinesByCaseId', () => {
       applicationContext,
       caseId: mockCaseDeadline.caseId,
     });
-    expect(client.batchGet.getCall(0).args[0].keys).toEqual([
+    expect(client.batchGet.mock.calls[0][0].keys).toEqual([
       {
         pk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
         sk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
