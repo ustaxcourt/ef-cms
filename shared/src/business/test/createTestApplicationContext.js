@@ -84,6 +84,12 @@ const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { User } = require('../entities/User');
 
 const createTestApplicationContext = ({ user } = {}) => {
+  const mockCognitoReturnValue = {
+    adminCreateUser: jest.fn(),
+    adminGetUser: jest.fn(),
+    adminUpdateUserAttributes: jest.fn(),
+  };
+
   const mockGetPersistenceGatewayReturnValue = {
     addWorkItemToSectionInbox,
     associateUserWithCase: jest.fn(),
@@ -125,6 +131,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     environment: { stage: 'local' },
     getBaseUrl: () => 'http://localhost',
     getChromiumBrowser: jest.fn(),
+    getCognito: () => mockCognitoReturnValue,
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {
