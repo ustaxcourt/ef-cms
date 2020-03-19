@@ -1,4 +1,3 @@
-jest.mock('../../../../../shared/src/persistence/dynamodbClientService');
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
 const { getCaseDeadlinesByCaseId } = require('./getCaseDeadlinesByCaseId');
 
@@ -30,10 +29,6 @@ describe('getCaseDeadlinesByCaseId', () => {
         sk: `case-deadline|${mockCaseDeadline.caseDeadlineId}`,
       },
     ]);
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
   });
 
   it('should return data as received from persistence', async () => {

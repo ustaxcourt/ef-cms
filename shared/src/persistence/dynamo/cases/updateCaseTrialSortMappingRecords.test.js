@@ -1,4 +1,3 @@
-jest.mock('../../dynamodbClientService');
 const client = require('../../dynamodbClientService');
 const {
   updateCaseTrialSortMappingRecords,
@@ -20,10 +19,6 @@ describe('updateCaseTrialSortMappingRecords', () => {
   beforeEach(() => {
     client.put = jest.fn().mockReturnValue(null);
     client.delete = jest.fn().mockReturnValue(null);
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 
   it('should not update mapping records if sort tags have not changed', async () => {

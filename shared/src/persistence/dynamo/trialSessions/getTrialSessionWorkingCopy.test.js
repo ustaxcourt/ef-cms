@@ -1,10 +1,9 @@
 const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
 const { getTrialSessionWorkingCopy } = require('./getTrialSessionWorkingCopy');
 
 describe('getTrialSessionWorkingCopy', () => {
   beforeEach(() => {
-    sinon.stub(client, 'get').resolves({
+    client.get = jest.fn().mockReturnValue({
       pk: 'trial-session-working-copy|123',
       sk: '456',
       sort: 'practitioner',
@@ -12,10 +11,6 @@ describe('getTrialSessionWorkingCopy', () => {
       trialSessionId: '123',
       userId: '456',
     });
-  });
-
-  afterEach(() => {
-    client.get.restore();
   });
 
   it('should get the trial session by id', async () => {

@@ -1,12 +1,10 @@
-const sinon = require('sinon');
-
 const { getTrialSessions } = require('./getTrialSessions');
 
 let applicationContext;
 
 describe('getTrialSessions', () => {
   beforeEach(() => {
-    const queryStub = sinon.stub().returns({
+    const queryStub = jest.fn().mockReturnValue({
       promise: () =>
         Promise.resolve({
           Items: [

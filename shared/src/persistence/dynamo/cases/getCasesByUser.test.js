@@ -1,4 +1,3 @@
-jest.mock('../../../../../shared/src/persistence/dynamodbClientService');
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
 const { getCasesByUser } = require('./getCasesByUser');
 const { User } = require('../../../business/entities/User');
