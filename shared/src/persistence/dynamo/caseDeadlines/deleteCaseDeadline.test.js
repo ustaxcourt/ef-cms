@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const { deleteCaseDeadline } = require('./deleteCaseDeadline');
 
 describe('deleteCaseDeadline', () => {
@@ -6,7 +5,7 @@ describe('deleteCaseDeadline', () => {
   let deleteStub;
 
   beforeEach(() => {
-    deleteStub = sinon.stub().returns({
+    deleteStub = jest.fn().mockReturnValue({
       promise: async () => null,
     });
 
@@ -27,7 +26,7 @@ describe('deleteCaseDeadline', () => {
       caseId: '456',
     });
 
-    expect(deleteStub.getCall(0).args[0]).toMatchObject({
+    expect(deleteStub.mock.calls[0][0]).toMatchObject({
       Key: {
         pk: 'case-deadline|123',
         sk: 'case-deadline|123',
@@ -35,7 +34,7 @@ describe('deleteCaseDeadline', () => {
       TableName: 'efcms-dev',
     });
 
-    expect(deleteStub.getCall(1).args[0]).toMatchObject({
+    expect(deleteStub.mock.calls[1][0]).toMatchObject({
       Key: {
         pk: 'case|456',
         sk: 'case-deadline|123',
@@ -43,7 +42,7 @@ describe('deleteCaseDeadline', () => {
       TableName: 'efcms-dev',
     });
 
-    expect(deleteStub.getCall(2).args[0]).toMatchObject({
+    expect(deleteStub.mock.calls[2][0]).toMatchObject({
       Key: {
         pk: 'case-deadline-catalog',
         sk: 'case-deadline|123',
