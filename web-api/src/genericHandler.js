@@ -45,11 +45,11 @@ exports.genericHandler = (event, cb, options = {}) => {
 
     const {
       isPublicUser,
-      logEvent = false,
+      logEvent = true,
       logEventLabel = 'Event',
-      logResults = false,
+      logResults = true,
       logResultsLabel = 'Results',
-      logUser = false,
+      logUser = true,
       logUserLabel = 'User',
       skipFiltering,
     } = options;
