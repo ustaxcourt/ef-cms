@@ -1,15 +1,12 @@
 import { state } from 'cerebral';
 
 /**
- * Used for changing which work queue (myself, section) and box (inbox, outbox).
+ * Used for checking the current caseDetail and reloading if necessary.
  *
  * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store object used for setting workQueueToDisplay
- * @param {object} providers.props the cerebral props object
- * @param {object} providers.props.queue the queue to display
- * @param {object} providers.props.box the inbox / output in the queue to display
- * @param {object} providers.path the next object in the path (this is defined in the sequence right after this action is invoked)
  * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.path the next object in the path (this is defined in the sequence right after this action is invoked)
+ * @param {object} providers.props the cerebral props object
  * @returns {*} returns the next action in the sequence's path
  */
 export const shouldLoadCaseAction = ({ get, path, props }) => {

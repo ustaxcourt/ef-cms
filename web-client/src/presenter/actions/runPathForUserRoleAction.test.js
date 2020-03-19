@@ -2,7 +2,6 @@ import { User } from '../../../../shared/src/business/entities/User';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { runPathForUserRoleAction } from './runPathForUserRoleAction';
-import sinon from 'sinon';
 
 let petitionerStub;
 let privatePractitionerStub;
@@ -21,13 +20,13 @@ presenter.providers.applicationContext = {
 
 describe('runPathForUserRoleAction', () => {
   beforeEach(() => {
-    petitionerStub = sinon.stub();
-    privatePractitionerStub = sinon.stub();
-    irsPractitionerStub = sinon.stub();
-    petitionsclerkStub = sinon.stub();
-    docketclerkStub = sinon.stub();
-    judgeStub = sinon.stub();
-    otherInternalUserStub = sinon.stub();
+    petitionerStub = jest.fn();
+    privatePractitionerStub = jest.fn();
+    irsPractitionerStub = jest.fn();
+    petitionsclerkStub = jest.fn();
+    docketclerkStub = jest.fn();
+    judgeStub = jest.fn();
+    otherInternalUserStub = jest.fn();
 
     presenter.providers.path = {
       docketclerk: docketclerkStub,
@@ -50,7 +49,7 @@ describe('runPathForUserRoleAction', () => {
       },
       state: {},
     });
-    expect(petitionerStub.calledOnce).toEqual(true);
+    expect(petitionerStub.mock.calls.length).toEqual(1);
   });
 
   it('should return the privatePractitioner path for user role privatePractitioner', async () => {
@@ -63,7 +62,7 @@ describe('runPathForUserRoleAction', () => {
       },
       state: {},
     });
-    expect(privatePractitionerStub.calledOnce).toEqual(true);
+    expect(privatePractitionerStub.mock.calls.length).toEqual(1);
   });
 
   it('should return the irsPractitioner path for user role irsPractitioner', async () => {
@@ -76,7 +75,7 @@ describe('runPathForUserRoleAction', () => {
       },
       state: {},
     });
-    expect(irsPractitionerStub.calledOnce).toEqual(true);
+    expect(irsPractitionerStub.mock.calls.length).toEqual(1);
   });
 
   it('should return the petitionsclerk path for user role petitionsclerk', async () => {
@@ -89,7 +88,7 @@ describe('runPathForUserRoleAction', () => {
       },
       state: {},
     });
-    expect(petitionsclerkStub.calledOnce).toEqual(true);
+    expect(petitionsclerkStub.mock.calls.length).toEqual(1);
   });
 
   it('should return the docketclerk path for user role docketclerk', async () => {
@@ -102,7 +101,7 @@ describe('runPathForUserRoleAction', () => {
       },
       state: {},
     });
-    expect(docketclerkStub.calledOnce).toEqual(true);
+    expect(docketclerkStub.mock.calls.length).toEqual(1);
   });
 
   it('should return the judge path for user role judge', async () => {
@@ -115,6 +114,6 @@ describe('runPathForUserRoleAction', () => {
       },
       state: {},
     });
-    expect(judgeStub.calledOnce).toEqual(true);
+    expect(judgeStub.mock.calls.length).toEqual(1);
   });
 });
