@@ -1,5 +1,7 @@
-const applicationContext = require('../../../applicationContextForTests');
 const moment = require('moment');
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
