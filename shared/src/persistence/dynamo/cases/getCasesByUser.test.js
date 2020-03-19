@@ -1,5 +1,5 @@
+jest.mock('../../../../../shared/src/persistence/dynamodbClientService');
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
-const sinon = require('sinon');
 const { getCasesByUser } = require('./getCasesByUser');
 const { User } = require('../../../business/entities/User');
 
@@ -27,25 +27,7 @@ const user = {
 
 describe('getCasesByUser', () => {
   beforeEach(() => {
-    sinon.stub(client, 'get').resolves({
-      caseId: '123',
-      pk: '123',
-      sk: '123',
-      status: 'New',
-    });
-    sinon.stub(client, 'put').resolves({
-      caseId: '123',
-      pk: '123',
-      sk: '123',
-      status: 'New',
-    });
-    sinon.stub(client, 'delete').resolves({
-      caseId: '123',
-      pk: '123',
-      sk: '123',
-      status: 'New',
-    });
-    sinon.stub(client, 'batchGet').resolves([
+    client.batchGet = jest.fn().mockReturnValue([
       {
         caseId: '123',
         pk: 'case|123',
@@ -53,7 +35,7 @@ describe('getCasesByUser', () => {
         status: 'New',
       },
     ]);
-    sinon.stub(client, 'query').resolves([
+    client.query = jest.fn().mockReturnValue([
       {
         caseId: '123',
         pk: 'case|123',
@@ -61,18 +43,6 @@ describe('getCasesByUser', () => {
         status: 'New',
       },
     ]);
-    sinon.stub(client, 'batchWrite').resolves(null);
-    sinon.stub(client, 'updateConsistent').resolves(null);
-  });
-
-  afterEach(() => {
-    client.get.restore();
-    client.delete.restore();
-    client.put.restore();
-    client.query.restore();
-    client.batchGet.restore();
-    client.batchWrite.restore();
-    client.updateConsistent.restore();
   });
 
   it('should return data as received from persistence', async () => {
@@ -99,7 +69,7 @@ describe('getCasesByUser', () => {
       applicationContext,
       user,
     });
-    expect(client.batchGet.getCall(0).args[0].keys).toEqual([
+    expect(client.batchGet.mock.calls[0][0].keys).toEqual([
       { pk: 'case|123', sk: 'case|123' },
     ]);
   });
