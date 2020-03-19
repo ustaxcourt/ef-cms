@@ -1,7 +1,6 @@
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { validateNoteAction } from './validateNoteAction';
-import sinon from 'sinon';
 
 describe('validateNote', () => {
   let validateNoteStub;
@@ -11,9 +10,9 @@ describe('validateNote', () => {
   let mockNote;
 
   beforeEach(() => {
-    validateNoteStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+    validateNoteStub = jest.fn();
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     mockNote = {
       notes: 'hello notes',
@@ -32,7 +31,7 @@ describe('validateNote', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateNoteStub.returns(null);
+    validateNoteStub = jest.fn().mockReturnValue(null);
     await runAction(validateNoteAction, {
       modules: {
         presenter,
@@ -42,11 +41,11 @@ describe('validateNote', () => {
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateNoteStub.returns('error');
+    validateNoteStub = jest.fn().mockReturnValue('error');
     await runAction(validateNoteAction, {
       modules: {
         presenter,
@@ -56,6 +55,6 @@ describe('validateNote', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

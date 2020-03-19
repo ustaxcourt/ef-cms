@@ -11,7 +11,6 @@ const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { TrialSession } = require('../trialSessions/TrialSession');
-const { User } = require('../User');
 const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
@@ -1030,36 +1029,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getFilingTypes', () => {
-    it('returns the filing types for user role petitioner', () => {
-      const filingTypes = Case.getFilingTypes(User.ROLES.petitioner);
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Myself');
-    });
-
-    it('returns the filing types for user role petitioner as default', () => {
-      const filingTypes = Case.getFilingTypes();
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Myself');
-    });
-
-    it('returns the filing types for user role petitioner for unknown role', () => {
-      const filingTypes = Case.getFilingTypes('unknown');
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Myself');
-    });
-
-    it('returns the filing types for user role practitioner', () => {
-      const filingTypes = Case.getFilingTypes(User.ROLES.privatePractitioner);
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Individual petitioner');
-    });
-  });
-
   describe('updateDocketNumberRecord records suffix changes', () => {
     it('should create a docket record when the suffix updates for an electronically created case', () => {
       const caseToVerify = new Case(
@@ -1358,11 +1327,13 @@ describe('Case entity', () => {
     });
 
     it("should not change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
+      const createdAt = moment();
       const caseToCheck = new Case(
         {
+          createdAt: createdAt.toISOString(),
           documents: [
             {
-              createdAt: moment()
+              createdAt: createdAt
                 .subtract(Case.ANSWER_CUTOFF_AMOUNT, Case.ANSWER_CUTOFF_UNIT)
                 .toISOString(),
               eventCode: 'A',

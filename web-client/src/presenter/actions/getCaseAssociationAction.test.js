@@ -3,13 +3,12 @@ import { applicationContext } from '../../applicationContext';
 import { getCaseAssociationAction } from './getCaseAssociationAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 presenter.providers.applicationContext = applicationContext;
 
 describe('getCaseAssociation', () => {
   it('should return that practitioner is associated', async () => {
-    let verifyPendingCaseForUserStub = sinon.stub().returns(false);
+    let verifyPendingCaseForUserStub = jest.fn().mockReturnValue(false);
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
@@ -36,7 +35,7 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return that practitioner has pending association', async () => {
-    let verifyPendingCaseForUserStub = sinon.stub().returns(true);
+    let verifyPendingCaseForUserStub = jest.fn().mockReturnValue(true);
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
@@ -63,7 +62,7 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return that practitioner not associated', async () => {
-    let verifyPendingCaseForUserStub = sinon.stub().returns(false);
+    let verifyPendingCaseForUserStub = jest.fn().mockReturnValue(false);
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
@@ -90,7 +89,7 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return that respondent is associated', async () => {
-    let verifyPendingCaseForUserStub = sinon.stub().returns(false);
+    let verifyPendingCaseForUserStub = jest.fn().mockReturnValue(false);
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
@@ -117,7 +116,7 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return that respondent is not associated', async () => {
-    let verifyPendingCaseForUserStub = sinon.stub().returns(true);
+    let verifyPendingCaseForUserStub = jest.fn().mockReturnValue(true);
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
@@ -144,7 +143,7 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return that petitioner is associated', async () => {
-    let verifyPendingCaseForUserStub = sinon.stub().returns(false);
+    let verifyPendingCaseForUserStub = jest.fn().mockReturnValue(false);
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
@@ -171,7 +170,7 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return that petitioner is not associated', async () => {
-    let verifyPendingCaseForUserStub = sinon.stub().returns(true);
+    let verifyPendingCaseForUserStub = jest.fn().mockReturnValue(true);
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
@@ -198,7 +197,7 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return false for isAssociated and pendingAssociation if the user is not an external user', async () => {
-    let verifyPendingCaseForUserStub = sinon.stub().returns(false);
+    let verifyPendingCaseForUserStub = jest.fn().mockReturnValue(false);
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });

@@ -61,6 +61,8 @@ describe('reviewSavedPetitionHelper', () => {
           hasVerifiedIrsNotice: true,
           irsNoticeDate: '2020-01-05T03:30:45.007Z',
           orderForAmendedPetitionAndFilingFee: true,
+          petitionPaymentDate: '2020-03-14T14:02:04.007Z',
+          petitionPaymentMethod: 'pay.gov',
           petitionPaymentStatus: PAYMENT_STATUS.PAID,
           receivedAt: '2020-01-05T03:30:45.007Z',
         },
@@ -77,7 +79,7 @@ describe('reviewSavedPetitionHelper', () => {
       petitionFile: {
         documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       },
-      petitionPaymentStatusFormatted: 'Paid',
+      petitionPaymentStatusFormatted: 'Paid 03/14/2020 pay.gov',
       preferredTrialCityFormatted: 'No requested place of trial',
       receivedAtFormatted: '01/04/2020',
       requestForPlaceOfTrialFile: {

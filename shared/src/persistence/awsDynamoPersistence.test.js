@@ -1,5 +1,5 @@
+jest.mock('../../../shared/src/persistence/dynamodbClientService');
 const client = require('../../../shared/src/persistence/dynamodbClientService');
-const sinon = require('sinon');
 const { getRecordViaMapping } = require('./dynamo/helpers/getRecordViaMapping');
 const { incrementCounter } = require('./dynamo/helpers/incrementCounter');
 const { stripWorkItems } = require('./dynamo/helpers/stripWorkItems');
@@ -12,50 +12,12 @@ const applicationContext = {
 
 describe('awsDynamoPersistence', function() {
   beforeEach(() => {
-    sinon.stub(client, 'get').resolves({
-      caseId: '123',
-      pk: '123',
-      sk: '123',
-      status: 'New',
-    });
-    sinon.stub(client, 'put').resolves({
-      caseId: '123',
-      pk: '123',
-      sk: '123',
-      status: 'New',
-    });
-    sinon.stub(client, 'delete').resolves({
-      caseId: '123',
-      pk: '123',
-      sk: '123',
-      status: 'New',
-    });
-    sinon.stub(client, 'batchGet').resolves([
-      {
-        caseId: '123',
-        pk: '123',
-        sk: '123',
-        status: 'New',
-      },
-    ]);
-    sinon.stub(client, 'query').resolves([
+    client.query = jest.fn().mockReturnValue([
       {
         pk: '123',
         sk: '123',
       },
     ]);
-    sinon.stub(client, 'batchWrite').resolves(null);
-    sinon.stub(client, 'updateConsistent').resolves(null);
-  });
-
-  afterEach(() => {
-    client.get.restore();
-    client.delete.restore();
-    client.put.restore();
-    client.query.restore();
-    client.batchGet.restore();
-    client.batchWrite.restore();
-    client.updateConsistent.restore();
   });
 
   describe('getRecordViaMapping', () => {
@@ -66,7 +28,7 @@ describe('awsDynamoPersistence', function() {
         prefix: 'something',
       });
 
-      expect(client.get.getCall(0).args[0].Key.sk).not.toEqual('0');
+      expect(client.get.mock.calls[0][0].Key.sk).not.toEqual('0');
     });
   });
 
@@ -78,10 +40,10 @@ describe('awsDynamoPersistence', function() {
       });
       const year = new Date().getFullYear().toString();
 
-      expect(client.updateConsistent.getCall(0).args[0].Key.pk).toEqual(
+      expect(client.updateConsistent.mock.calls[0][0].Key.pk).toEqual(
         `docketNumberCounter-${year}`,
       );
-      expect(client.updateConsistent.getCall(0).args[0].Key.sk).toEqual(
+      expect(client.updateConsistent.mock.calls[0][0].Key.sk).toEqual(
         `docketNumberCounter-${year}`,
       );
     });

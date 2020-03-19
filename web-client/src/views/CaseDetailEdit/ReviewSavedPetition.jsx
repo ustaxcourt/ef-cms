@@ -226,7 +226,7 @@ export const ReviewSavedPetition = connect(
                         <div className="margin-top-3 margin-bottom-2">
                           <label
                             className="usa-label usa-label-display"
-                            htmlFor="filing-location"
+                            htmlFor="filing-fee"
                           >
                             Filing fee
                           </label>
