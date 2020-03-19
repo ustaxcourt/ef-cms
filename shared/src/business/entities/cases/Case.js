@@ -76,7 +76,7 @@ Case.STATUS_TYPES_MANUAL_UPDATE = [
   Case.STATUS_TYPES.submitted,
 ];
 
-Case.ANSWER_CUTOFF_AMOUNT = 45;
+Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
 Case.ANSWER_CUTOFF_UNIT = 'day';
 
 Case.CASE_TYPES_MAP = {
@@ -1242,14 +1242,13 @@ Case.prototype.checkForReadyForTrial = function() {
         document.eventCode,
       );
 
-      const daysElapsedSinceDocumentWasFiled = Case.dateDifferenceInUnits(
+      const daysElapsedSinceDocumentWasFiled = Case.dateDifferenceInDays(
         currentDate,
         document.createdAt,
-        Case.ANSWER_CUTOFF_UNIT,
       );
 
       const requiredTimeElapsedSinceFiling =
-        daysElapsedSinceDocumentWasFiled > Case.ANSWER_CUTOFF_AMOUNT;
+        daysElapsedSinceDocumentWasFiled > Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS;
 
       if (isAnswerDocument && requiredTimeElapsedSinceFiling) {
         this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
@@ -1260,10 +1259,15 @@ Case.prototype.checkForReadyForTrial = function() {
   return this;
 };
 
-Case.dateDifferenceInUnits = (timestamp1, timestamp2, unit) => {
-  const moment1 = prepareDateFromString(timestamp1);
-  const moment2 = prepareDateFromString(timestamp2);
-  return Math.round(moment1.diff(moment2, unit, true));
+Case.dateDifferenceInDays = (timestamp1, timestamp2) => {
+  const moment1 = prepareDateFromString(timestamp1).set({
+    hours: 12,
+  });
+  const moment2 = prepareDateFromString(timestamp2).set({
+    hours: 12,
+  });
+  const differenceInHours = Math.round(moment1.diff(moment2, 'day', true));
+  return differenceInHours;
 };
 
 /**
