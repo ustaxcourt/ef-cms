@@ -68,12 +68,12 @@ const createMockDocumentClient = () => {
       };
     },
     getData: () => data,
-    put: ({ Item }) => {
+    put: jest.fn().mockImplementation(({ Item }) => {
       data[`${Item.pk} ${Item.sk}`] = Item;
       return {
         promise: async () => null,
       };
-    },
+    }),
     query: ({ ExpressionAttributeValues, IndexName }) => {
       const arr = [];
       for (let key in data) {
