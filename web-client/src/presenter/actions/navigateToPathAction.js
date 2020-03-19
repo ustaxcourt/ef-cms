@@ -1,5 +1,3 @@
-import { state } from 'cerebral';
-
 /**
  * changes the route to path provided in state.path
  *

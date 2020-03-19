@@ -11,7 +11,7 @@ export const state = {
     currentPage: 1,
   },
   advancedSearchHelper,
-  commonUI: {
+  header: {
     showBetaBar: true,
     showMobileMenu: false,
     showUsaBannerDetails: false,

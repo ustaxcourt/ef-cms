@@ -7,7 +7,7 @@ import usFlag from '../../../node_modules/uswds/dist/img/us_flag_small.png';
 
 export const UsaBanner = connect(
   {
-    showUsaBannerDetails: state.commonUI.showUsaBannerDetails,
+    showUsaBannerDetails: state.header.showUsaBannerDetails,
     toggleUsaBannerDetailsSequence: sequences.toggleUsaBannerDetailsSequence,
   },
   ({ showUsaBannerDetails, toggleUsaBannerDetailsSequence }) => {
