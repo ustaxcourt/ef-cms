@@ -36,9 +36,6 @@ describe('generatePaperServiceAddressPagePdf', () => {
   beforeEach(() => {
     applicationContext.getChromiumBrowser.mockReturnValue(chromiumBrowserMock);
     applicationContext.getCurrentUser.mockReturnValue(mockCurrentUser);
-    applicationContext.getDocumentsBucketName.mockReturnValue(
-      'DocumentBucketName',
-    );
     applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId.mockReturnValue(mockCase);
