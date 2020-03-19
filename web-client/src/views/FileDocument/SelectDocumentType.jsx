@@ -15,8 +15,6 @@ export const SelectDocumentType = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     gotoViewAllDocumentsSequence: sequences.gotoViewAllDocumentsSequence,
     reasons: state.viewAllDocumentsHelper.reasons,
-    screenMetadata: state.screenMetadata,
-    selectDocumentSequence: sequences.selectDocumentSequence,
     showModal: state.showModal,
   },
   ({

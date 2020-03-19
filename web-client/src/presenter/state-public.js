@@ -11,22 +11,18 @@ export const state = {
     currentPage: 1,
   },
   advancedSearchHelper,
-  betaBar: {
-    isVisible: true,
+  commonUI: {
+    showBetaBar: true,
+    showMobileMenu: false,
+    showUsaBannerDetails: false,
   },
   currentPage: 'PublicSearch',
   docketNumberSearchForm: {},
   loadingHelper,
   menuHelper,
-  mobileMenu: {
-    isVisible: false,
-  },
   publicCaseDetailHeaderHelper,
   publicCaseDetailHelper,
   searchMode: 'byName',
-  usaBanner: {
-    showDetails: false,
-  },
   user: {},
   validationErrors: {},
   waitingForResponse: false,
