@@ -1240,10 +1240,9 @@ Case.prototype.getWorkItems = function() {
  * @returns {Case} the updated case entity
  */
 Case.prototype.checkForReadyForTrial = function() {
-  let docFiledCutoffDate = prepareDateFromString().subtract(
-    Case.ANSWER_CUTOFF_AMOUNT,
-    Case.ANSWER_CUTOFF_UNIT,
-  );
+  let docFiledCutoffDate = prepareDateFromString()
+    .subtract(Case.ANSWER_CUTOFF_AMOUNT, Case.ANSWER_CUTOFF_UNIT)
+    .toISOString();
 
   const isCaseGeneralDocketNotAtIssue =
     this.status === Case.STATUS_TYPES.generalDocket;
@@ -1256,8 +1255,8 @@ Case.prototype.checkForReadyForTrial = function() {
       );
 
       const differencebyUnit = Case.dateDifferenceInUnits(
-        docFiledCutoffDate,
         document.createdAt,
+        docFiledCutoffDate,
         Case.ANSWER_CUTOFF_UNIT,
       );
 
@@ -1275,7 +1274,7 @@ Case.prototype.checkForReadyForTrial = function() {
 Case.dateDifferenceInUnits = (timestamp1, timestamp2, unit) => {
   const moment1 = prepareDateFromString(timestamp1);
   const moment2 = prepareDateFromString(timestamp2);
-  return moment1.diff(moment2, unit);
+  return Math.round(moment1.diff(moment2, unit, true));
 };
 
 /**
