@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   saveIntermediateDocketEntryInteractor,
 } = require('./saveIntermediateDocketEntryInteractor');
@@ -110,10 +109,10 @@ describe('saveIntermediateDocketEntryInteractor', () => {
 
   it('updates the docket record item', async () => {
     let error;
-    let getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
-    let deleteWorkItemFromInboxSpy = sinon.spy();
-    let saveWorkItemForDocketClerkFilingExternalDocumentSpy = sinon.spy();
-    let updateCaseSpy = sinon.spy();
+    let getCaseByCaseIdSpy = jest.fn().mockReturnValue(caseRecord);
+    let deleteWorkItemFromInboxSpy = jest.fn();
+    let saveWorkItemForDocketClerkFilingExternalDocumentSpy = jest.fn();
+    let updateCaseSpy = jest.fn();
     try {
       applicationContext = {
         environment: { stage: 'local' },
@@ -154,11 +153,11 @@ describe('saveIntermediateDocketEntryInteractor', () => {
       error = err;
     }
     expect(error).toBeUndefined();
-    expect(getCaseByCaseIdSpy.called).toEqual(true);
-    expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy.called).toEqual(
-      false,
-    );
-    expect(deleteWorkItemFromInboxSpy.called).toEqual(false);
-    expect(updateCaseSpy.called).toEqual(true);
+    expect(getCaseByCaseIdSpy).toBeCalled();
+    expect(
+      saveWorkItemForDocketClerkFilingExternalDocumentSpy,
+    ).not.toBeCalled();
+    expect(deleteWorkItemFromInboxSpy).not.toBeCalled();
+    expect(updateCaseSpy).toBeCalled();
   });
 });
