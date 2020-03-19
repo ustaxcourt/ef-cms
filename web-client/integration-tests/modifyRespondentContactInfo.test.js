@@ -13,19 +13,21 @@ describe('Modify Respondent Contact Information', () => {
     test.docketNumber = undefined;
   });
 
+  let caseDetail;
   test.createdDocketNumbers = [];
 
   for (let i = 0; i < 3; i++) {
     loginAs(test, 'petitioner');
 
     it(`create case #${i} and associate a respondent`, async () => {
-      const { docketNumber } = await uploadPetition(test);
-      test.createdDocketNumbers.push(docketNumber);
+      caseDetail = await uploadPetition(test);
+      test.createdDocketNumbers.push(caseDetail.docketNumber);
     });
 
     loginAs(test, 'petitionsclerk');
 
     it('associates a respondent', async () => {
+      test.setState('caseDetail', caseDetail);
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: test.createdDocketNumbers[i],
       });
