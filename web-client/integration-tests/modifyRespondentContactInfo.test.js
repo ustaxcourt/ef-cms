@@ -1,4 +1,5 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
+import petitionsClerkAddsRespondentsToCase from './journey/petitionsClerkAddsRespondentsToCase';
 import respondentUpdatesAddress from './journey/respondentUpdatesAddress';
 import respondentViewsCaseDetailNoticeOfChangeOfAddress from './journey/respondentViewsCaseDetailNoticeOfChangeOfAddress';
 
@@ -7,10 +8,6 @@ const test = setupTest();
 describe('Modify Respondent Contact Information', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-  });
-
-  afterAll(() => {
-    test.docketNumber = undefined;
   });
 
   let caseDetail;
@@ -25,26 +22,12 @@ describe('Modify Respondent Contact Information', () => {
     });
 
     loginAs(test, 'petitionsclerk');
-
-    it('associates a respondent', async () => {
-      await test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: test.createdDocketNumbers[i],
-      });
-      await test.runSequence('updateFormValueSequence', {
-        key: 'respondentSearch',
-        value: 'RT6789',
-      });
-      await test.runSequence('openAddIrsPractitionerModalSequence');
-      await test.runSequence('associateIrsPractitionerWithCaseSequence');
-      console.log(test.getState('caseDetail.irsPractitioners'));
-      expect(test.getState('caseDetail.irsPractitioners.length')).toEqual(1);
-    });
+    petitionsClerkAddsRespondentsToCase(test);
   }
 
   loginAs(test, 'irsPractitioner');
   respondentUpdatesAddress(test);
   for (let i = 0; i < 3; i++) {
-    test.docketNumber = test.createdDocketNumbers[i];
     respondentViewsCaseDetailNoticeOfChangeOfAddress(test, i);
   }
 });
