@@ -22,33 +22,25 @@ exports.getCalendaredCasesForTrialSession = async ({
     })),
   });
 
-  const resultsWithDocketRecords = [];
+  const resultsWithAggregatedItems = [];
 
   for (let result of results) {
-    let docketRecord = await client.query({
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-        '#sk': 'sk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `case|${result.caseId}`,
-        ':prefix': 'docket-record',
-      },
-      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-      applicationContext,
-    });
+    const caseItem = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId({
+        applicationContext,
+        caseId: result.caseId,
+      });
 
-    docketRecord = docketRecord.length > 0 ? docketRecord : result.docketRecord;
-
-    resultsWithDocketRecords.push({
+    resultsWithAggregatedItems.push({
       ...result,
-      docketRecord,
+      ...caseItem,
     });
   }
 
   const afterMapping = caseOrder.map(myCase => ({
     ...myCase,
-    ...resultsWithDocketRecords.find(r => myCase.caseId === r.caseId),
+    ...resultsWithAggregatedItems.find(r => myCase.caseId === r.caseId),
   }));
 
   return afterMapping;

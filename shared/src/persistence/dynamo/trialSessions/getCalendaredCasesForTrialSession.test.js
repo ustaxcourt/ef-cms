@@ -15,7 +15,16 @@ describe('getCalendaredCasesForTrialSession', () => {
     },
   ];
 
+  let getCaseByCaseIdSpy;
+
   beforeEach(() => {
+    getCaseByCaseIdSpy = jest.fn().mockResolvedValue({
+      ...MOCK_CASE,
+      docketRecord: mockDocketRecord,
+      irsPractitioners: [{ userId: 'abc-123' }],
+      privatePractitioners: [{ userId: 'def-123' }],
+    });
+
     client.get = jest.fn().mockReturnValue({
       caseOrder: [
         {
@@ -46,6 +55,9 @@ describe('getCalendaredCasesForTrialSession', () => {
       environment: {
         stage: 'dev',
       },
+      getPersistenceGateway: () => ({
+        getCaseByCaseId: getCaseByCaseIdSpy,
+      }),
     };
     const result = await getCalendaredCasesForTrialSession({
       applicationContext,
@@ -55,6 +67,8 @@ describe('getCalendaredCasesForTrialSession', () => {
         ...MOCK_CASE,
         disposition: 'something',
         docketRecord: mockDocketRecord,
+        irsPractitioners: [{ userId: 'abc-123' }],
+        privatePractitioners: [{ userId: 'def-123' }],
         removedFromTrial: true,
       },
     ]);
