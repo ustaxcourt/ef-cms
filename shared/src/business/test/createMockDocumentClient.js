@@ -104,56 +104,60 @@ const createMockDocumentClient = () => {
           }),
         };
       }),
-    update: ({
-      ExpressionAttributeNames,
-      ExpressionAttributeValues,
-      Key,
-      UpdateExpression,
-    }) => {
-      for (let name in ExpressionAttributeNames) {
-        UpdateExpression = UpdateExpression.replace(
-          name,
-          ExpressionAttributeNames[name],
-        );
-      }
-
-      const hasSet = UpdateExpression.includes('SET');
-      UpdateExpression = UpdateExpression.replace('SET', '').trim();
-      const expressions = UpdateExpression.split(',').map(t => t.trim());
-      const gg = expressions.map(v => v.split('=').map(x => x.trim()));
-      let obj = {};
-      for (let [k, v] of gg) {
-        v = ExpressionAttributeValues[v];
-        if (v === 'true' || v === 'false') {
-          obj[k] = v === 'true';
-        } else {
-          if (k.includes('workItems[')) {
-            obj = mockDynamoUsers[`${Key.pk} ${Key.sk}`];
-            // eslint-disable-next-line security/detect-eval-with-expression
-            eval(`obj.${k} = ${JSON.stringify(v)};`);
-          } else {
-            obj[k] = v;
+    update: jest
+      .fn()
+      .mockImplementation(
+        () => ({
+          ExpressionAttributeNames,
+          ExpressionAttributeValues,
+          Key,
+          UpdateExpression,
+        }) => {
+          for (let name in ExpressionAttributeNames) {
+            UpdateExpression = UpdateExpression.replace(
+              name,
+              ExpressionAttributeNames[name],
+            );
           }
-        }
-      }
 
-      if (hasSet) {
-        mockDynamoUsers[`${Key.pk} ${Key.sk}`] = {
-          ...mockDynamoUsers[`${Key.pk} ${Key.sk}`],
-          ...obj,
-        };
-      } else {
-        let { id } = mockDynamoUsers[`${Key.pk} ${Key.sk}`] || {};
-        mockDynamoUsers[`${Key.pk} ${Key.sk}`] = {
-          id: (id || 0) + 1,
-        };
-      }
-      return {
-        promise: async () => ({
-          Attributes: mockDynamoUsers[`${Key.pk} ${Key.sk}`],
-        }),
-      };
-    },
+          const hasSet = UpdateExpression.includes('SET');
+          UpdateExpression = UpdateExpression.replace('SET', '').trim();
+          const expressions = UpdateExpression.split(',').map(t => t.trim());
+          const gg = expressions.map(v => v.split('=').map(x => x.trim()));
+          let obj = {};
+          for (let [k, v] of gg) {
+            v = ExpressionAttributeValues[v];
+            if (v === 'true' || v === 'false') {
+              obj[k] = v === 'true';
+            } else {
+              if (k.includes('workItems[')) {
+                obj = mockDynamoUsers[`${Key.pk} ${Key.sk}`];
+                // eslint-disable-next-line security/detect-eval-with-expression
+                eval(`obj.${k} = ${JSON.stringify(v)};`);
+              } else {
+                obj[k] = v;
+              }
+            }
+          }
+
+          if (hasSet) {
+            mockDynamoUsers[`${Key.pk} ${Key.sk}`] = {
+              ...mockDynamoUsers[`${Key.pk} ${Key.sk}`],
+              ...obj,
+            };
+          } else {
+            let { id } = mockDynamoUsers[`${Key.pk} ${Key.sk}`] || {};
+            mockDynamoUsers[`${Key.pk} ${Key.sk}`] = {
+              id: (id || 0) + 1,
+            };
+          }
+          return {
+            promise: async () => ({
+              Attributes: mockDynamoUsers[`${Key.pk} ${Key.sk}`],
+            }),
+          };
+        },
+      ),
   };
 };
 
