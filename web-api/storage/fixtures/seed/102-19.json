@@ -24,6 +24,7 @@
           {
             "docketNumberSuffix": "P",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "createdAt": "2019-03-01T21:42:29.073Z",
               "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
@@ -76,6 +77,8 @@
     "partyType": "Petitioner & spouse",
     "isSpouseDeceased": "No",
     "caseType": "Passport",
+    "sortableDocketNumber": 19000102,
+    "entityName": "Case",
     "contactPrimary": {
       "address3": "Dolor ea elit dolor",
       "address2": "Duis molestias ullam",
@@ -111,26 +114,30 @@
     "initialTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "preferredTrialCity": "Boise, Idaho",
-    "docketRecord": [
-      {
-        "filingDate": "2019-03-01T21:42:29.073Z",
-        "description": "Petition",
-        "eventCode": "P",
-        "filedBy": "Test Petitioner",
-        "index": 1
-      },
-      {
-        "filingDate": "2019-03-01T21:42:29.073Z",
-        "description": "Request for Place of Trial at Boise, Idaho",
-        "eventCode": "RQT",
-        "index": 2
-      }
-    ],
     "pk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "docketNumber": "102-19",
     "status": "New",
     "hasVerifiedIrsNotice": true,
     "associatedJudge": "Chief Judge"
+  },
+  {
+    "filingDate": "2019-03-01T21:42:29.073Z",
+    "description": "Petition",
+    "eventCode": "P",
+    "filedBy": "Test Petitioner",
+    "index": 1,
+    "docketRecordId": "8ac50e8e-3a86-4340-8383-ae76eaa02f8b",
+    "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "sk": "docket-record|8ac50e8e-3a86-4340-8383-ae76eaa02f8b"
+  },
+  {
+    "filingDate": "2019-03-01T21:42:29.073Z",
+    "description": "Request for Place of Trial at Boise, Idaho",
+    "eventCode": "RQT",
+    "index": 2,
+    "docketRecordId": "654441a9-e6d3-414e-b0dd-60b2898c298e",
+    "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "sk": "docket-record|654441a9-e6d3-414e-b0dd-60b2898c298e"
   },
   {
     "sk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
@@ -143,6 +150,7 @@
   {
     "docketNumberSuffix": "P",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "createdAt": "2019-03-01T21:42:29.073Z",
       "filingDate": "2019-03-01T21:42:29.073Z",
@@ -181,6 +189,7 @@
     "pk": "section-petitions",
     "docketNumberSuffix": "P",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "filingDate": "2019-03-01T21:40:46.415Z",
@@ -220,6 +229,7 @@
     "gsi1pk": "workitem-4df3fa30-a1ad-45e1-ae1e-05256c538e72",
     "docketNumberSuffix": "P",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "createdAt": "2019-03-01T21:42:29.073Z",
       "filingDate": "2019-03-01T21:42:29.073Z",

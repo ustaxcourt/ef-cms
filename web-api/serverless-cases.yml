@@ -3,7 +3,7 @@ plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  - serverless-plugin-aws-alerts
+  # - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -23,6 +23,7 @@ custom:
     number: 3
 
   serverless-offline:
+    skipCacheInvalidation: ${opt:skipCacheInvalidation}
     host: 0.0.0.0
     port: 3002
 
@@ -107,6 +108,8 @@ provider:
     EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
     EFCMS_DOMAIN: ${opt:domain}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
+    CIRCLE_HONEYBADGER_API_KEY_DEV: ${opt:circleHoneybadgerApiKeyDev}
+    CIRCLE_HONEYBADGER_API_KEY_STG: ${opt:circleHoneybadgerApiKeyStg}
 
 package:
   exclude:
@@ -226,18 +229,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getBlockedCases:
-    handler: web-api/${self:provider.dir}/casesHandlers.getBlockedCasesLambda
-    events:
-      - http:
-          path: /blocked/{trialLocation}
-          method: get
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   getConsolidatedCasesByCase:
     handler: web-api/${self:provider.dir}/casesHandlers.getConsolidatedCasesByCaseLambda
     events:
@@ -260,18 +251,6 @@ functions:
       - http:
           path: /{caseId}/serve-to-irs
           method: post
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getCaseInventoryReport:
-    handler: web-api/${self:provider.dir}/casesHandlers.getCaseInventoryReportLambda
-    events:
-      - http:
-          path: /case-inventory-report
-          method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS

@@ -14,6 +14,7 @@
           {
             "docketNumberSuffix": "S",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "eventCode": "P",
               "createdAt": "2020-01-02T16:05:45.979Z",
@@ -86,6 +87,8 @@
     "partyType": "Petitioner",
     "receivedAt": "2020-01-02T16:05:45.978Z",
     "caseType": "Deficiency",
+    "sortableDocketNumber": 20000101,
+    "entityName": "Case",
     "trialLocation": "Houston, Texas",
     "orderDesignatingPlaceOfTrial": false,
     "contactPrimary": {
@@ -121,22 +124,6 @@
     "respondents": [],
     "practitioners": [],
     "hasPendingItems": false,
-    "docketRecord": [
-      {
-        "description": "Petition",
-        "eventCode": "P",
-        "index": 1,
-        "documentId": "cb323daf-c541-4645-bb44-232255d03d40",
-        "filingDate": "2020-01-02T16:05:45.979Z",
-        "filedBy": "Petr. Bill Burr"
-      },
-      {
-        "eventCode": "RQT",
-        "description": "Request for Place of Trial at Houston, Texas",
-        "index": 2,
-        "filingDate": "2020-01-02T16:05:45.978Z"
-      }
-    ],
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "docketNumber": "101-20",
@@ -149,5 +136,25 @@
   {
     "sk": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+  },
+  {
+    "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "sk": "docket-record|2bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "docketRecordId": "2bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "description": "Petition",
+    "eventCode": "P",
+    "index": 1,
+    "documentId": "cb323daf-c541-4645-bb44-232255d03d40",
+    "filingDate": "2020-01-02T16:05:45.979Z",
+    "filedBy": "Petr. Bill Burr"
+  },
+  {
+    "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "sk": "docket-record|3bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "docketRecordId": "3bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "eventCode": "RQT",
+    "description": "Request for Place of Trial at Houston, Texas",
+    "index": 2,
+    "filingDate": "2020-01-02T16:05:45.978Z"
   }
 ]

@@ -23,6 +23,7 @@ const addPetitionDocumentWithWorkItemToCase = ({
       assigneeName: user.name,
       associatedJudge: caseToAdd.associatedJudge,
       caseId: caseToAdd.caseId,
+      caseIsInProgress: caseToAdd.inProgress,
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseToAdd)),
       docketNumber: caseToAdd.docketNumber,
@@ -113,6 +114,7 @@ exports.createCaseFromPaperInteractor = async ({
     {
       docketNumber,
       ...petitionEntity.toRawObject(),
+      inProgress: petitionMetadata.inProgress,
       isPaper: true,
       status: petitionMetadata.status || null,
       userId: user.userId,
@@ -293,17 +295,17 @@ exports.createCaseFromPaperInteractor = async ({
     caseToAdd.addDocument(odsDocumentEntity, { applicationContext });
   }
 
-  await Promise.all([
-    applicationContext.getPersistenceGateway().createCase({
-      applicationContext,
-      caseToCreate: caseToAdd.validate().toRawObject(),
-    }),
-    applicationContext.getPersistenceGateway().saveWorkItemForPaper({
-      applicationContext,
-      messageId: newMessage.messageId,
-      workItem: newWorkItem.validate().toRawObject(),
-    }),
-  ]);
+  // Warning - do not use Promise.all() as it seems to cause intermittent failures
+  await applicationContext.getPersistenceGateway().createCase({
+    applicationContext,
+    caseToCreate: caseToAdd.validate().toRawObject(),
+  });
+
+  await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+    applicationContext,
+    messageId: newMessage.messageId,
+    workItem: newWorkItem.validate().toRawObject(),
+  });
 
   return new Case(caseToAdd, { applicationContext }).toRawObject();
 };

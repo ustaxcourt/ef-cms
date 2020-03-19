@@ -1,15 +1,11 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
 // docketclerk
-import docketClerkConsolidatesCases from './journey/docketClerkConsolidatesCases';
-import docketClerkLogIn from './journey/docketClerkLogIn';
-import docketClerkOpensCaseConsolidateModal from './journey/docketClerkOpensCaseConsolidateModal';
-import docketClerkSearchesForCaseToConsolidateWith from './journey/docketClerkSearchesForCaseToConsolidateWith';
-import docketClerkSignsOut from './journey/docketClerkSignsOut';
-import docketClerkUnconsolidatesCase from './journey/docketClerkUnconsolidatesCase';
-import docketClerkUpdatesCaseStatusToReadyForTrial from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
+import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
+import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
+import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
+import { docketClerkUnconsolidatesCase } from './journey/docketClerkUnconsolidatesCase';
+import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 // petitioner
-import petitionerLogin from './journey/petitionerLogIn';
-import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerVerifiesConsolidatedCases from './journey/petitionerVerifiesConsolidatedCases';
 import petitionerVerifiesUnconsolidatedCases from './journey/petitionerVerifiesUnconsolidatedCases';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
@@ -35,9 +31,8 @@ describe('Case Consolidation Journey', () => {
     test.docketNumber = test.leadDocketNumber = caseDetail.docketNumber;
   });
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkUpdatesCaseStatusToReadyForTrial(test);
-  docketClerkSignsOut(test);
 
   loginAs(test, 'petitioner');
 
@@ -47,24 +42,20 @@ describe('Case Consolidation Journey', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkUpdatesCaseStatusToReadyForTrial(test);
   docketClerkOpensCaseConsolidateModal(test);
   docketClerkSearchesForCaseToConsolidateWith(test);
   docketClerkConsolidatesCases(test);
-  docketClerkSignsOut(test);
 
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   petitionerViewsDashboard(test);
   petitionerVerifiesConsolidatedCases(test);
-  petitionerSignsOut(test);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkUnconsolidatesCase(test);
-  docketClerkSignsOut(test);
 
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   petitionerViewsDashboard(test);
   petitionerVerifiesUnconsolidatedCases(test);
-  petitionerSignsOut(test);
 });

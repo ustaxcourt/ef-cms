@@ -1,7 +1,6 @@
 import { completeDocumentSigningAction } from './completeDocumentSigningAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 describe('completeDocumentSigningAction', () => {
   let uploadDocumentStub;
@@ -10,22 +9,19 @@ describe('completeDocumentSigningAction', () => {
   let getInboxMessagesForUserInteractorStub;
   let completeWorkItemInteractorStub;
 
+  global.window.pdfjsObj = {
+    getData: jest.fn().mockResolvedValue(true),
+  };
+
   beforeEach(() => {
-    global.window = {
-      document: {},
-      pdfjsObj: {
-        getData: sinon.stub(),
-      },
-    };
+    global.File = jest.fn();
 
-    global.File = sinon.stub();
-
-    uploadDocumentStub = sinon
-      .stub()
-      .returns('abc81f4d-1e47-423a-8caf-6d2fdc3d3859');
-    generateSignedDocumentInteractorStub = sinon.stub();
-    signDocumentInteractorStub = sinon.stub();
-    getInboxMessagesForUserInteractorStub = sinon.stub().returns([
+    uploadDocumentStub = jest
+      .fn()
+      .mockReturnValue('abc81f4d-1e47-423a-8caf-6d2fdc3d3859');
+    generateSignedDocumentInteractorStub = jest.fn();
+    signDocumentInteractorStub = jest.fn();
+    getInboxMessagesForUserInteractorStub = jest.fn().mockReturnValue([
       {
         document: {
           documentType: 'Proposed Stipulated Decision',
@@ -33,7 +29,7 @@ describe('completeDocumentSigningAction', () => {
         workItemId: '1',
       },
     ]);
-    completeWorkItemInteractorStub = sinon.stub();
+    completeWorkItemInteractorStub = jest.fn();
 
     presenter.providers.applicationContext = {
       getCurrentUser: () => ({ userId: '1' }),
@@ -50,7 +46,7 @@ describe('completeDocumentSigningAction', () => {
   });
 
   afterEach(() => {
-    sinon.restore();
+    jest.clearAllMocks();
   });
 
   it('should sign a document via executing various use cases', async () => {
@@ -90,10 +86,57 @@ describe('completeDocumentSigningAction', () => {
       },
     });
 
-    expect(uploadDocumentStub.calledOnce).toEqual(true);
-    expect(generateSignedDocumentInteractorStub.calledOnce).toEqual(true);
-    expect(signDocumentInteractorStub.calledOnce).toEqual(true);
-    expect(completeWorkItemInteractorStub.calledOnce).toEqual(true);
+    expect(uploadDocumentStub.mock.calls.length).toBe(1);
+    expect(generateSignedDocumentInteractorStub.mock.calls.length).toBe(1);
+    expect(signDocumentInteractorStub.mock.calls.length).toBe(1);
+    expect(completeWorkItemInteractorStub.mock.calls.length).toBe(1);
+    expect(result.output).toMatchObject({
+      alertSuccess: {
+        message: 'Your signature has been added',
+        title: '',
+      },
+      caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      tab: 'docketRecord',
+    });
+  });
+
+  it('should NOT sign a document without signature data', async () => {
+    const result = await runAction(completeDocumentSigningAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          documents: [
+            {
+              documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              workItems: [
+                {
+                  messages: [
+                    {
+                      messageId: '123',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        messageId: '123',
+        pdfForSigning: {
+          documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          pageNumber: 3,
+          pdfjsLib: {},
+        },
+      },
+    });
+
+    expect(uploadDocumentStub.mock.calls.length).toBe(0);
+    expect(generateSignedDocumentInteractorStub.mock.calls.length).toBe(0);
+    expect(signDocumentInteractorStub.mock.calls.length).toBe(0);
+    expect(completeWorkItemInteractorStub.mock.calls.length).toBe(1);
     expect(result.output).toMatchObject({
       alertSuccess: {
         message: 'Your signature has been added',

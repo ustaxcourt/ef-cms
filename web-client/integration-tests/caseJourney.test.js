@@ -8,46 +8,42 @@ const {
   ContactFactory,
 } = require('../../shared/src/business/entities/contacts/ContactFactory');
 import { Document } from '../../shared/src/business/entities/Document';
+import { adcMarksStipulatedWorkItemAsCompleted } from './journey/adcMarksStipulatedWorkItemAsCompleted';
+import { adcViewsCaseDetail } from './journey/adcViewsCaseDetail';
+import { adcViewsCaseDetailAfterComplete } from './journey/adcViewsCaseDetailAfterComplete';
+import { adcViewsDocumentDetail } from './journey/adcViewsDocumentDetail';
+import { adcViewsMessages } from './journey/adcViewsMessages';
+import { adcViewsMessagesAfterComplete } from './journey/adcViewsMessagesAfterComplete';
 import { applicationContext } from '../src/applicationContext';
+import { docketClerkAddsDocketEntries } from './journey/docketClerkAddsDocketEntries';
+import { docketClerkAssignWorkItems } from './journey/docketClerkAssignWorkItems';
+import { docketClerkDocketDashboard } from './journey/docketClerkDocketDashboard';
+import { docketClerkForwardWorkItem } from './journey/docketClerkForwardWorkItem';
+import { docketClerkSelectsAssignee } from './journey/docketClerkSelectsAssignee';
+import { docketClerkSelectsWorkItems } from './journey/docketClerkSelectsWorkItems';
+import { docketClerkStartsNewMessageThreadOnAnswer } from './journey/docketClerkStartsNewMessageThreadOnAnswer';
+import { docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC } from './journey/docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC';
+import { docketClerkUpdatesCaseCaption } from './journey/docketClerkUpdatesCaseCaption';
+import { docketClerkViewsCaseDetail } from './journey/docketClerkViewsCaseDetail';
+import { docketClerkViewsDecisionDocument } from './journey/docketClerkViewsDecisionDocument';
+import { docketClerkViewsDocument } from './journey/docketClerkViewsDocument';
+import { docketClerkViewsMessages } from './journey/docketClerkViewsMessages';
+import { docketClerkViewsMessagesAfterForward } from './journey/docketClerkViewsMessagesAfterForward';
+import { docketClerkViewsMessagesWithoutWorkItem } from './journey/docketClerkViewsMessagesWithoutWorkItem';
+import { docketClerkViewsOutboxAfterForward } from './journey/docketClerkViewsOutboxAfterForward';
+import { loginAs } from './helpers';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
-import adcLogIn from './journey/adcLogIn';
-import adcMarksStipulatedWorkItemAsCompleted from './journey/adcMarksStipulatedWorkItemAsCompleted';
-import adcViewsCaseDetail from './journey/adcViewsCaseDetail';
-import adcViewsCaseDetailAfterComplete from './journey/adcViewsCaseDetailAfterComplete';
-import adcViewsDocumentDetail from './journey/adcViewsDocumentDetail';
-import adcViewsMessages from './journey/adcViewsMessages';
-import adcViewsMessagesAfterComplete from './journey/adcViewsMessagesAfterComplete';
-import docketClerkAddsDocketEntries from './journey/docketClerkAddsDocketEntries';
-import docketClerkAssignWorkItems from './journey/docketClerkAssignWorkItems';
-import docketClerkDocketDashboard from './journey/docketClerkDocketDashboard';
-import docketClerkForwardWorkItem from './journey/docketClerkForwardWorkItem';
-import docketClerkLogIn from './journey/docketClerkLogIn';
-import docketClerkSelectsAssignee from './journey/docketClerkSelectsAssignee';
-import docketClerkSelectsWorkItems from './journey/docketClerkSelectsWorkItems';
-import docketClerkStartsNewMessageThreadOnAnswer from './journey/docketClerkStartsNewMessageThreadOnAnswer';
-import docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC from './journey/docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC';
-import docketClerkUpdatesCaseCaption from './journey/docketClerkUpdatesCaseCaption';
-import docketClerkViewsCaseDetail from './journey/docketClerkViewsCaseDetail';
-import docketClerkViewsDecisionDocument from './journey/docketClerkViewsDecisionDocument';
-import docketClerkViewsDocument from './journey/docketClerkViewsDocument';
-import docketClerkViewsMessages from './journey/docketClerkViewsMessages';
-import docketClerkViewsMessagesAfterForward from './journey/docketClerkViewsMessagesAfterForward';
-import docketClerkViewsMessagesWithoutWorkItem from './journey/docketClerkViewsMessagesWithoutWorkItem';
-import docketClerkViewsOutboxAfterForward from './journey/docketClerkViewsOutboxAfterForward';
 import petitionerCancelsCreateCase from './journey/petitionerCancelsCreateCase';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCaseTestAllOptions from './journey/petitionerCreatesNewCaseTestAllOptions';
-import petitionerLogin from './journey/petitionerLogIn';
 import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
-import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkAssignsWorkItemToOther from './journey/petitionsClerkAssignsWorkItemToOther';
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesCaseDetail from './journey/petitionsClerkUpdatesCaseDetail';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
@@ -56,7 +52,6 @@ import petitionsClerkViewsMessagesAfterReassign from './journey/petitionsClerkVi
 import respondentAddsAnswer from './journey/respondentAddsAnswer';
 import respondentAddsMotion from './journey/respondentAddsMotion';
 import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
-import respondentLogIn from './journey/respondentLogIn';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
 
 let test;
@@ -119,7 +114,7 @@ describe('Case journey', () => {
     });
   });
 
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   petitionerCancelsCreateCase(test);
   petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test);
@@ -127,26 +122,25 @@ describe('Case journey', () => {
   petitionerCreatesNewCaseTestAllOptions(test, fakeFile);
   petitionerViewsDashboard(test);
   petitionerViewsCaseDetail(test);
-  petitionerSignsOut(test);
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkCaseSearch(test);
   petitionsClerkViewsMessages(test);
   petitionsClerkAssignsWorkItemToSelf(test);
   petitionsClerkAssignsWorkItemToOther(test);
-  petitionsClerkLogIn(test, 'petitionsclerk1');
+  loginAs(test, 'petitionsclerk1');
   petitionsClerkViewsMessagesAfterReassign(test);
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkUpdatesCaseDetail(test);
   petitionsClerkSubmitsCaseToIrs(test);
 
-  respondentLogIn(test);
+  loginAs(test, 'irsPractitioner');
   respondentViewsDashboard(test);
   respondentAddsAnswer(test, fakeFile);
   respondentAddsStipulatedDecision(test, fakeFile);
   respondentAddsMotion(test, fakeFile);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkViewsMessagesWithoutWorkItem(test);
   docketClerkViewsCaseDetail(test);
   docketClerkUpdatesCaseCaption(test);
@@ -154,12 +148,12 @@ describe('Case journey', () => {
   docketClerkStartsNewMessageThreadOnAnswer(test);
   docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC(test);
 
-  docketClerkLogIn(test, 'docketclerk1');
+  loginAs(test, 'docketclerk1');
   docketClerkDocketDashboard(test);
   docketClerkSelectsAssignee(test);
   docketClerkSelectsWorkItems(test);
   docketClerkAssignWorkItems(test);
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkViewsMessages(test);
   docketClerkViewsDocument(test);
   docketClerkForwardWorkItem(test);
@@ -167,7 +161,7 @@ describe('Case journey', () => {
   docketClerkViewsOutboxAfterForward(test);
   docketClerkAddsDocketEntries(test, fakeFile);
 
-  adcLogIn(test);
+  loginAs(test, 'adc');
   adcViewsMessages(test);
   adcViewsCaseDetail(test);
   adcViewsDocumentDetail(test);

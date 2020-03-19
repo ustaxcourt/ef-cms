@@ -5,18 +5,8 @@ import { presenter } from '../../presenter';
 let test;
 presenter.providers.applicationContext = applicationContext;
 
-presenter.providers.applicationContext.getFileReader = () =>
-  function() {
-    this.onload = null;
-    this.onerror = null;
-    this.readAsDataURL = function() {
-      this.result = 'abc';
-      this.onload();
-    };
-  };
-
-presenter.providers.applicationContext.getPdfJs = () => ({
-  getDocument: () => ({
+const mocks = {
+  getDocumentMock: jest.fn(() => ({
     promise: Promise.resolve({
       getPage: async () => ({
         cleanup: () => null,
@@ -28,8 +18,30 @@ presenter.providers.applicationContext.getPdfJs = () => ({
       }),
       numPages: 5,
     }),
+  })),
+  readAsArrayBufferMock: jest.fn(function() {
+    this.result = 'def';
+    this.onload();
   }),
-});
+  readAsDataURLMock: jest.fn(function() {
+    this.result = 'abc';
+    this.onload();
+  }),
+};
+
+presenter.providers.applicationContext = {
+  ...applicationContext,
+  getFileReader: () =>
+    function() {
+      this.onload = null;
+      this.onerror = null;
+      this.readAsDataURL = mocks.readAsDataURLMock;
+      this.readAsArrayBuffer = mocks.readAsArrayBufferMock;
+    },
+  getPdfJs: () => ({
+    getDocument: mocks.getDocumentMock,
+  }),
+};
 
 test = CerebralTest(presenter);
 

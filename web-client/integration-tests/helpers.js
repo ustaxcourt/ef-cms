@@ -17,6 +17,7 @@ import { runCompute } from 'cerebral/test';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { withAppContextDecorator } from '../src/withAppContext';
+import axios from 'axios';
 
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormData from 'form-data';
@@ -29,14 +30,15 @@ const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 
 const fakeData =
   'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
-const fakeFile = new Buffer.from(fakeData, 'base64', {
-  type: 'application/pdf',
-});
-fakeFile.name = 'fakeFile.pdf';
+export const fakeFile = (() => {
+  const myFile = new Buffer.from(fakeData, 'base64', {
+    type: 'application/pdf',
+  });
+  myFile.name = 'fakeFile.pdf';
+  return myFile;
+})();
 
-exports.fakeFile = fakeFile;
-
-exports.getFormattedDocumentQCMyInbox = async test => {
+export const getFormattedDocumentQCMyInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'my',
@@ -47,7 +49,7 @@ exports.getFormattedDocumentQCMyInbox = async test => {
   });
 };
 
-exports.getFormattedDocumentQCSectionInbox = async test => {
+export const getFormattedDocumentQCSectionInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'section',
@@ -58,7 +60,7 @@ exports.getFormattedDocumentQCSectionInbox = async test => {
   });
 };
 
-exports.getFormattedDocumentQCMyOutbox = async test => {
+export const getFormattedDocumentQCMyOutbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'my',
@@ -69,7 +71,7 @@ exports.getFormattedDocumentQCMyOutbox = async test => {
   });
 };
 
-exports.getFormattedDocumentQCSectionOutbox = async test => {
+export const getFormattedDocumentQCSectionOutbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'section',
@@ -80,8 +82,8 @@ exports.getFormattedDocumentQCSectionOutbox = async test => {
   });
 };
 
-exports.signProposedStipulatedDecision = async (test, stipDecision) => {
-  await exports.viewDocumentDetailMessage({
+export const signProposedStipulatedDecision = async (test, stipDecision) => {
+  await viewDocumentDetailMessage({
     docketNumber: stipDecision.docketNumber,
     documentId: stipDecision.document.documentId,
     messageId: stipDecision.currentMessage.messageId,
@@ -112,7 +114,7 @@ exports.signProposedStipulatedDecision = async (test, stipDecision) => {
   await test.runSequence('completeDocumentSigningSequence');
 };
 
-exports.serveDocument = async ({ docketNumber, documentId, test }) => {
+export const serveDocument = async ({ docketNumber, documentId, test }) => {
   await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
     docketNumber,
     documentId,
@@ -122,7 +124,7 @@ exports.serveDocument = async ({ docketNumber, documentId, test }) => {
   await test.runSequence('serveCourtIssuedDocumentSequence');
 };
 
-exports.createCourtIssuedDocketEntry = async ({
+export const createCourtIssuedDocketEntry = async ({
   docketNumber,
   documentId,
   test,
@@ -145,7 +147,7 @@ exports.createCourtIssuedDocketEntry = async ({
   await test.runSequence('submitCourtIssuedDocketEntrySequence');
 };
 
-exports.getFormattedMyInbox = async test => {
+export const getFormattedMyInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'my',
@@ -156,7 +158,7 @@ exports.getFormattedMyInbox = async test => {
   });
 };
 
-exports.getFormattedSectionInbox = async test => {
+export const getFormattedSectionInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'section',
@@ -167,7 +169,7 @@ exports.getFormattedSectionInbox = async test => {
   });
 };
 
-exports.getFormattedMyOutbox = async test => {
+export const getFormattedMyOutbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'my',
@@ -178,7 +180,7 @@ exports.getFormattedMyOutbox = async test => {
   });
 };
 
-exports.getFormattedSectionOutbox = async test => {
+export const getFormattedSectionOutbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'section',
@@ -189,21 +191,21 @@ exports.getFormattedSectionOutbox = async test => {
   });
 };
 
-exports.getInboxCount = test => {
+export const getInboxCount = test => {
   return runCompute(workQueueHelper, {
     state: test.getState(),
   }).inboxCount;
 };
 
-exports.findWorkItemByCaseId = (queue, caseId) => {
+export const findWorkItemByCaseId = (queue, caseId) => {
   return queue.find(workItem => workItem.caseId === caseId);
 };
 
-exports.getNotifications = test => {
+export const getNotifications = test => {
   return test.getState('notifications');
 };
 
-exports.assignWorkItems = async (test, to, workItems) => {
+export const assignWorkItems = async (test, to, workItems) => {
   const users = {
     adc: {
       name: 'Test ADC',
@@ -226,7 +228,7 @@ exports.assignWorkItems = async (test, to, workItems) => {
   await test.runSequence('assignSelectedWorkItemsSequence');
 };
 
-exports.uploadExternalDecisionDocument = async test => {
+export const uploadExternalDecisionDocument = async test => {
   test.setState('form', {
     attachments: false,
     category: 'Decision',
@@ -251,7 +253,7 @@ exports.uploadExternalDecisionDocument = async test => {
   await test.runSequence('submitExternalDocumentSequence');
 };
 
-exports.uploadProposedStipulatedDecision = async test => {
+export const uploadProposedStipulatedDecision = async test => {
   test.setState('form', {
     attachments: false,
     category: 'Decision',
@@ -274,7 +276,7 @@ exports.uploadProposedStipulatedDecision = async test => {
   await test.runSequence('submitExternalDocumentSequence');
 };
 
-exports.createMessage = async ({ assigneeId, message, test }) => {
+export const createMessage = async ({ assigneeId, message, test }) => {
   test.setState('form', {
     assigneeId,
     message,
@@ -284,7 +286,7 @@ exports.createMessage = async ({ assigneeId, message, test }) => {
   await test.runSequence('createWorkItemSequence');
 };
 
-exports.forwardWorkItem = async (test, to, workItemId, message) => {
+export const forwardWorkItem = async (test, to, workItemId, message) => {
   let assigneeId;
   if (to === 'docketclerk1') {
     assigneeId = '2805d1ab-18d0-43ec-bafb-654e83405416';
@@ -302,7 +304,7 @@ exports.forwardWorkItem = async (test, to, workItemId, message) => {
   });
 };
 
-exports.uploadPetition = async (test, overrides = {}) => {
+export const uploadPetition = async (test, overrides = {}) => {
   await test.runSequence('gotoStartCaseWizardSequence');
 
   test.setState('form', {
@@ -335,7 +337,7 @@ exports.uploadPetition = async (test, overrides = {}) => {
   return test.getState('caseDetail');
 };
 
-exports.loginAs = (test, user) => {
+export const loginAs = (test, user) => {
   return it(`login as ${user}`, async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'name',
@@ -345,7 +347,7 @@ exports.loginAs = (test, user) => {
   });
 };
 
-exports.setupTest = ({ useCases = {} } = {}) => {
+export const setupTest = ({ useCases = {} } = {}) => {
   let test;
   global.FormData = FormData;
   global.Blob = () => {};
@@ -380,6 +382,13 @@ exports.setupTest = ({ useCases = {} } = {}) => {
           await test.runSequence('gotoMessagesSequence', {
             box: 'inbox',
             queue: 'section',
+            workQueueIsInternal: false,
+          });
+          break;
+        case '/document-qc':
+          await test.runSequence('gotoMessagesSequence', {
+            box: 'inbox',
+            queue: 'my',
             workQueueIsInternal: false,
           });
           break;
@@ -487,13 +496,13 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   return test;
 };
 
-exports.viewCaseDetail = async ({ docketNumber, test }) => {
+export const viewCaseDetail = async ({ docketNumber, test }) => {
   await test.runSequence('gotoCaseDetailSequence', {
     docketNumber,
   });
 };
 
-exports.viewDocumentDetailMessage = async ({
+export const viewDocumentDetailMessage = async ({
   docketNumber,
   documentId,
   messageId,
@@ -508,13 +517,18 @@ exports.viewDocumentDetailMessage = async ({
   });
 };
 
-exports.wait = time => {
+export const wait = time => {
   return new Promise(resolve => {
     setTimeout(resolve, time);
   });
 };
 
-exports.base64ToUInt8Array = b64 => {
+export const refreshElasticsearchIndex = async () => {
+  await axios.post('http://localhost:9200/efcms/_refresh');
+  return await wait(1500);
+};
+
+export const base64ToUInt8Array = b64 => {
   var binaryStr = Buffer.from(b64, 'base64').toString('binary');
   var len = binaryStr.length;
   var bytes = new Uint8Array(len);
@@ -524,7 +538,7 @@ exports.base64ToUInt8Array = b64 => {
   return bytes;
 };
 
-exports.setBatchPages = ({ test }) => {
+export const setBatchPages = ({ test }) => {
   const selectedDocumentType = test.getState('documentSelectedForScan');
   let batches = test.getState(`batches.${selectedDocumentType}`);
 
@@ -532,10 +546,7 @@ exports.setBatchPages = ({ test }) => {
     `batches.${selectedDocumentType}`,
     batches.map(batch => ({
       ...batch,
-      pages: [
-        exports.base64ToUInt8Array(image1),
-        exports.base64ToUInt8Array(image2),
-      ],
+      pages: [base64ToUInt8Array(image1), base64ToUInt8Array(image2)],
     })),
   );
 };

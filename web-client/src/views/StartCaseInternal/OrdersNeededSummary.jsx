@@ -2,7 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
-export const OrdersNeededSummary = ({ data }) => {
+export const OrdersNeededSummary = ({ caseInformation }) => {
   const summaryRef = useRef(null);
   const [closed, setClosed] = useState(false);
 
@@ -29,29 +29,33 @@ export const OrdersNeededSummary = ({ data }) => {
                   <p className="heading-3 usa-alert__heading padding-top-0">
                     Orders Needed
                   </p>
-                  {data.noticeOfAttachments && (
+                  {caseInformation.noticeOfAttachments && (
                     <div>Notice of Attachments in the Nature of Evidence</div>
                   )}
-                  {data.orderDesignatingPlaceOfTrial && (
+                  {caseInformation.orderDesignatingPlaceOfTrial && (
                     <div>Order to Change Designated Place of Trial</div>
                   )}
-                  {data.orderForAmendedPetition && (
+                  {caseInformation.orderForAmendedPetition && (
                     <div>Order for Amended Petition</div>
                   )}
-                  {data.orderForAmendedPetitionAndFilingFee && (
+                  {caseInformation.orderForAmendedPetitionAndFilingFee && (
                     <div>Order for Amended Petition and Filing Fee</div>
                   )}
-                  {data.orderForFilingFee && <div>Order for Filing Fee</div>}
-                  {data.orderForOds && (
+                  {caseInformation.orderForFilingFee && (
+                    <div>Order for Filing Fee</div>
+                  )}
+                  {caseInformation.orderForOds && (
                     <div>Order for Ownership Disclosure Statement</div>
                   )}
-                  {data.orderForRatification && (
+                  {caseInformation.orderForRatification && (
                     <div>Order for Ratification of Petition</div>
                   )}
-                  {data.orderForRequestedTrialLocation && (
-                    <div>Order for Requested Trial Location</div>
+                  {caseInformation.orderForRequestedTrialLocation && (
+                    <div>Order Designating Place of Trial</div>
                   )}
-                  {data.orderToShowCause && <div>Order to Show Cause</div>}
+                  {caseInformation.orderToShowCause && (
+                    <div>Order to Show Cause</div>
+                  )}
                 </div>
                 <div className="tablet:grid-col-2 usa-alert__action">
                   <Button

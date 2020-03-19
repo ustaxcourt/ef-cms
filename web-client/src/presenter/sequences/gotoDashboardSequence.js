@@ -52,6 +52,12 @@ const goToDashboard = [
       setTrialSessionsAction,
       setCurrentPageAction('DashboardChambers'),
     ],
+    inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
+    irsPractitioner: [
+      getConsolidatedCasesByUserAction,
+      setCasesAction,
+      setCurrentPageAction('DashboardRespondent'),
+    ],
     judge: [
       setMessageInboxPropsAction,
       ...chooseWorkQueueSequence,
@@ -64,15 +70,10 @@ const goToDashboard = [
       setCasesAction,
       setCurrentPageAction('DashboardPetitioner'),
     ],
-    practitioner: [
+    privatePractitioner: [
       getConsolidatedCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardPractitioner'),
-    ],
-    respondent: [
-      getConsolidatedCasesByUserAction,
-      setCasesAction,
-      setCurrentPageAction('DashboardRespondent'),
     ],
   },
 ];

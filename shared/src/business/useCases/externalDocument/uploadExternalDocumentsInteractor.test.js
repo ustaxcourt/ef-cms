@@ -72,7 +72,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            role: User.ROLES.respondent,
+            role: User.ROLES.irsPractitioner,
             userId: 'respondent',
           };
         },
@@ -108,7 +108,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            role: User.ROLES.respondent,
+            role: User.ROLES.irsPractitioner,
             userId: 'respondent',
           };
         },
@@ -155,7 +155,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            role: User.ROLES.practitioner,
+            role: User.ROLES.privatePractitioner,
             userId: 'practitioner',
           };
         },
@@ -198,7 +198,7 @@ describe('uploadExternalDocumentsInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: User.ROLES.practitioner,
+          role: User.ROLES.privatePractitioner,
           userId: 'practitioner',
         };
       },

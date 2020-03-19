@@ -2,6 +2,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
     "document": {
       "createdAt": "2019-07-12T17:09:41.026Z",
@@ -57,6 +58,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -94,6 +96,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -131,6 +134,7 @@
     "completedAt": "2019-07-12T17:11:27.244Z",
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "completedMessage": "completed",
     "gsi1pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
@@ -186,6 +190,7 @@
     "completedAt": "2019-07-12T17:11:27.244Z",
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "completedMessage": "completed",
     "gsi1pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
@@ -240,6 +245,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -276,6 +282,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
     "document": {
       "createdAt": "2019-07-12T17:09:41.026Z",
@@ -315,6 +322,7 @@
     "completedAt": "2019-07-12T17:11:27.244Z",
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "completedMessage": "completed",
     "gsi1pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
@@ -369,6 +377,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -405,6 +414,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -441,6 +451,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -491,6 +502,7 @@
           {
             "docketNumberSuffix": null,
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "createdAt": "2019-07-12T17:09:41.026Z",
               "processingStatus": "pending",
@@ -554,6 +566,7 @@
             "completedAt": "2019-07-12T17:11:27.244Z",
             "docketNumberSuffix": null,
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "completedMessage": "completed",
             "document": {
               "isPaper": true,
@@ -605,6 +618,7 @@
           {
             "docketNumberSuffix": null,
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "createdAt": "2019-07-12T17:11:26.955Z",
               "documentType": "Proposed Stipulated Decision",
@@ -656,6 +670,8 @@
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Innocent Spouse",
+    "sortableDocketNumber": 19000106,
+    "entityName": "Case",
     "contactPrimary": {
       "address3": "Saepe proident enim",
       "address2": "Nostrud sint lorem u",
@@ -687,34 +703,41 @@
     "preferredTrialCity": "Lubbock, Texas",
     "respondents": [],
     "practitioners": [],
-    "docketRecord": [
-      {
-        "description": "Petition",
-        "eventCode": "P",
-        "index": 1,
-        "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
-        "filingDate": "2019-07-12T17:09:41.026Z",
-        "filedBy": "Denise Gould"
-      },
-      {
-        "description": "Request for Place of Trial at Lubbock, Texas",
-        "filingDate": "2019-07-12T17:09:41.026Z",
-        "eventCode": "RQT",
-        "index": 2
-      },
-      {
-        "description": "Proposed Stipulated Decision",
-        "eventCode": "PSDE",
-        "index": 3,
-        "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
-        "filingDate": "1990-10-10"
-      }
-    ],
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "docketNumber": "106-19",
     "status": "New",
     "associatedJudge": "Chief Judge"
+  },
+  {
+    "description": "Petition",
+    "eventCode": "P",
+    "index": 1,
+    "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+    "filingDate": "2019-07-12T17:09:41.026Z",
+    "filedBy": "Denise Gould",
+    "docketRecordId": "8e1e8b98-d070-4d1d-8bb6-e5c3c6146a98",
+    "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "sk": "docket-record|8e1e8b98-d070-4d1d-8bb6-e5c3c6146a98"
+  },
+  {
+    "description": "Request for Place of Trial at Lubbock, Texas",
+    "filingDate": "2019-07-12T17:09:41.026Z",
+    "eventCode": "RQT",
+    "index": 2,
+    "docketRecordId": "65d427c3-7992-4270-95d8-c5f0f2b4d18c",
+    "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "sk": "docket-record|65d427c3-7992-4270-95d8-c5f0f2b4d18c"
+  },
+  {
+    "description": "Proposed Stipulated Decision",
+    "eventCode": "PSDE",
+    "index": 3,
+    "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
+    "filingDate": "1990-10-10",
+    "docketRecordId": "a79bbbca-1afe-41a2-a2a6-f4befd22546c",
+    "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "sk": "docket-record|a79bbbca-1afe-41a2-a2a6-f4befd22546c"
   },
   {
     "sk": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
@@ -727,6 +750,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -765,6 +789,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -803,6 +828,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -845,6 +871,7 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",

@@ -4,7 +4,7 @@ import { state } from 'cerebral';
  * used for when the country type is changed on the edit user contact info sequence.
  *
  * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store object used for setting workQueueToDisplay
+ * @param {object} providers.store the cerebral store object
  */
 export const countryTypeUserContactChangeAction = ({ store }) => {
   [
