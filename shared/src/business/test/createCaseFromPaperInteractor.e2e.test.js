@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   createCaseFromPaperInteractor,
 } = require('../useCases/createCaseFromPaperInteractor');
@@ -22,7 +21,9 @@ describe('createCaseFromPaperInteractor integration test', () => {
   let applicationContext;
 
   beforeEach(() => {
-    sinon.stub(window.Date.prototype, 'toISOString').returns(RECEIVED_DATE);
+    window.Date.prototype.toISOString = jest
+      .fn()
+      .mockReturnValue(RECEIVED_DATE);
     applicationContext = createTestApplicationContext({
       user: {
         name: 'Alex Petitionsclerk',
@@ -33,7 +34,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
   });
 
   afterEach(() => {
-    window.Date.prototype.toISOString.restore();
+    jest.restoreAllMocks();
   });
 
   it('should persist the paper case into the database', async () => {
