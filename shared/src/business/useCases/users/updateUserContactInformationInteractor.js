@@ -52,9 +52,6 @@ exports.updateUserContactInformationInteractor = async ({
     throw new Error('there were no changes found needing to be updated');
   }
 
-  console.log('user.contact', user.contact);
-  console.log('contactInfo', contactInfo);
-
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
     user: {
@@ -91,10 +88,6 @@ exports.updateUserContactInformationInteractor = async ({
       oldData = clone(irsPractitioner.contact);
       irsPractitioner.contact = contactInfo;
     }
-
-    console.log('userCase', userCase);
-    console.log('LE OLD DATA', oldData);
-    console.log('LE NEW DATA', newData);
 
     // we do this again so that it will convert '' to null
     caseEntity = new Case(caseEntity, { applicationContext });

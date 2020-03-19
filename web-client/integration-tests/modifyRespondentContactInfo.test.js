@@ -27,7 +27,6 @@ describe('Modify Respondent Contact Information', () => {
     loginAs(test, 'petitionsclerk');
 
     it('associates a respondent', async () => {
-      test.setState('caseDetail', caseDetail);
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: test.createdDocketNumbers[i],
       });
