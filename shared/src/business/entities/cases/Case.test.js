@@ -1013,16 +1013,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getProcedureTypes', () => {
-    it('returns the procedure types', () => {
-      const procedureTypes = Case.PROCEDURE_TYPES;
-      expect(procedureTypes).not.toBeNull();
-      expect(procedureTypes.length).toEqual(2);
-      expect(procedureTypes[0]).toEqual('Regular');
-      expect(procedureTypes[1]).toEqual('Small');
-    });
-  });
-
   describe('updateDocketNumberRecord records suffix changes', () => {
     it('should create a docket record when the suffix updates for an electronically created case', () => {
       const caseToVerify = new Case(
