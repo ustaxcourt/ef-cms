@@ -67,6 +67,8 @@ exports.updateUserContactInformationInteractor = async ({
       userId,
     });
 
+  console.log('LE USER CASES', userCases);
+
   const updatedCases = [];
   for (let userCase of userCases) {
     let oldData;
