@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   generatePaperServiceAddressPagePdf,
 } = require('./generatePaperServiceAddressPagePdf');
 jest.mock('../../../authorization/authorizationClientService');
@@ -8,9 +11,6 @@ const {
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 const PDF_MOCK_BUFFER = 'Hello World';
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
 
 const pageMock = {
   addStyleTag: () => {},
@@ -32,16 +32,17 @@ const mockCurrentUser = {
 
 const mockCase = { docketNumber: '101-19' };
 
-applicationContext.getChromiumBrowser.mockReturnValue(chromiumBrowserMock);
-applicationContext.getCurrentUser.mockReturnValue(mockCurrentUser);
-applicationContext.getDocumentsBucketName.mockReturnValue('DocumentBucketName');
-applicationContext
-  .getPersistenceGateway()
-  .getCaseByCaseId.mockReturnValue(mockCase);
-applicationContext.getPug.mockReturnValue({ compile: () => () => '' });
-
 describe('generatePaperServiceAddressPagePdf', () => {
   beforeEach(() => {
+    applicationContext.getChromiumBrowser.mockReturnValue(chromiumBrowserMock);
+    applicationContext.getCurrentUser.mockReturnValue(mockCurrentUser);
+    applicationContext.getDocumentsBucketName.mockReturnValue(
+      'DocumentBucketName',
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(mockCase);
+    applicationContext.getPug.mockReturnValue({ compile: () => () => '' });
     isAuthorized.mockReturnValue(true);
   });
   afterEach(() => {
