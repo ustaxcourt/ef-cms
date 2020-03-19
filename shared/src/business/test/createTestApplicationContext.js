@@ -88,6 +88,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     ...sharedAppContext,
     docketNumberGenerator,
     environment: { stage: 'local' },
+    getBaseUrl: () => 'http://localhost',
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {
@@ -97,12 +98,21 @@ const createTestApplicationContext = ({ user } = {}) => {
         },
       );
     }),
+    getCurrentUserToken: () => {
+      return '';
+    },
     getDocumentClient: () => mockDocClient,
+    getDocumentsBucketName: jest.fn(),
     getEntityConstructors: () => ({
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
     }),
-    getPersistenceGateway: () => {
+    getHttpClient: () => ({
+      get: () => ({
+        data: 'url',
+      }),
+    }),
+    getPersistenceGateway: jest.fn().mockImplementation(() => {
       return {
         addWorkItemToSectionInbox,
         createCase,
@@ -129,9 +139,13 @@ const createTestApplicationContext = ({ user } = {}) => {
         updateCase,
         updateWorkItem,
         updateWorkItemInCase,
+        uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
         verifyCaseForUser,
       };
-    },
+    }),
+    getStorageClient: () => {},
+    getTempDocumentsBucketName: jest.fn(),
+    getUniqueId: jest.fn().mockImplementation(() => ''),
     getUtilities: () => {
       return { ...DateHandler };
     },
