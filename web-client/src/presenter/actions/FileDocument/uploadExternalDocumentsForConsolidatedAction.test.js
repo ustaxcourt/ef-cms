@@ -2,15 +2,14 @@ import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { uploadExternalDocumentsForConsolidatedAction } from './uploadExternalDocumentsForConsolidatedAction';
-import sinon from 'sinon';
 
 describe('uploadExternalDocumentsForConsolidatedAction', () => {
   let uploadExternalDocumentsInteractorStub;
   let addCoversheetInteractorStub;
 
   beforeEach(() => {
-    uploadExternalDocumentsInteractorStub = sinon.stub();
-    addCoversheetInteractorStub = sinon.stub();
+    uploadExternalDocumentsInteractorStub = jest.fn();
+    addCoversheetInteractorStub = jest.fn();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
@@ -26,7 +25,7 @@ describe('uploadExternalDocumentsForConsolidatedAction', () => {
   });
 
   it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractorStub for the pending document', async () => {
-    uploadExternalDocumentsInteractorStub.returns([
+    uploadExternalDocumentsInteractorStub = jest.fn().mockReturnValue([
       {
         ...MOCK_CASE,
         documents: [
@@ -58,9 +57,9 @@ describe('uploadExternalDocumentsForConsolidatedAction', () => {
       },
     });
 
-    expect(uploadExternalDocumentsInteractorStub.calledOnce).toEqual(true);
+    expect(uploadExternalDocumentsInteractorStub.mock.calls.length).toEqual(1);
     expect(
-      uploadExternalDocumentsInteractorStub.getCall(0).args[0],
+      uploadExternalDocumentsInteractorStub.mock.calls[0][0],
     ).toMatchObject({
       documentFiles: { primary: { data: 'something' } },
       documentMetadata: {
@@ -69,15 +68,17 @@ describe('uploadExternalDocumentsForConsolidatedAction', () => {
         docketNumber: MOCK_CASE.docketNumber,
       },
     });
-    expect(addCoversheetInteractorStub.calledOnce).toEqual(true);
-    expect(addCoversheetInteractorStub.getCall(0).args[0]).toMatchObject({
+    expect(addCoversheetInteractorStub.mock.calls.length).toEqual(1);
+    expect(addCoversheetInteractorStub.mock.calls[0][0]).toMatchObject({
       caseId: MOCK_CASE.caseId,
       documentId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
   });
 
   it('should call uploadExternalDocumentsInteractor for a primary and secondary document with multiple supporting documents', async () => {
-    uploadExternalDocumentsInteractorStub.returns([MOCK_CASE]);
+    uploadExternalDocumentsInteractorStub = jest
+      .fn()
+      .mockReturnValue([MOCK_CASE]);
 
     await runAction(uploadExternalDocumentsForConsolidatedAction, {
       modules: {
@@ -113,9 +114,9 @@ describe('uploadExternalDocumentsForConsolidatedAction', () => {
       },
     });
 
-    expect(uploadExternalDocumentsInteractorStub.calledOnce).toEqual(true);
+    expect(uploadExternalDocumentsInteractorStub.mock.calls.length).toEqual(1);
     expect(
-      uploadExternalDocumentsInteractorStub.getCall(0).args[0],
+      uploadExternalDocumentsInteractorStub.mock.calls[0][0],
     ).toMatchObject({
       documentFiles: {
         primary: { data: 'something' },
