@@ -33,6 +33,8 @@
 - Deploy Docker images to Amazon ECR with `./docker-to-ecr.sh`. This will build an image per the `Dockerfile-CI` config, tag it as `latest`, and push it to the repo in ECR.
 
 ## CircleCI Setup
+A prerequisite for a successful build within CircleCI is [access to CircleCI’s 2 X-large instances](https://circleci.com/pricing/#comparison-table). The memory footprint of the underlying services are too large for smaller instances — attempting a build with smaller instances will result in a cascading series of test failures, because Elasticsearch can’t operate within the memory costraints. At present, CircleCI requires contacting their sales staff to get access to 2 X-large instances.
+
 1. Set up a [CircleCI](https://circleci.com/) account
 2. Click "Add Projects"
 3. Click "Set Up Project" next to the Court's repo
