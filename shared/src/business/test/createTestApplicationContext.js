@@ -85,6 +85,7 @@ const { User } = require('../entities/User');
 const createTestApplicationContext = ({ user } = {}) => {
   const mockGetPersistenceGatewayReturnValue = {
     addWorkItemToSectionInbox,
+    associateUserWithCase: jest.fn(),
     createCase,
     createCaseTrialSortMappingRecords: jest.fn(),
     createSectionInboxRecord,
@@ -94,7 +95,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteSectionOutboxRecord,
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox,
-    getCaseByCaseId,
+    getCaseByCaseId: jest.fn(),
     getCaseDeadlinesByCaseId: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByCaseId),
@@ -110,11 +111,11 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveWorkItemForNonPaper,
     saveWorkItemForPaper,
     setWorkItemAsRead,
-    updateCase,
+    updateCase: jest.fn(),
     updateWorkItem,
     updateWorkItemInCase,
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
-    verifyCaseForUser,
+    verifyCaseForUser: jest.fn(),
   };
   const mockDocClient = createMockDocumentClient();
   const applicationContext = {
