@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const sinon = require('sinon');
 const { virusScanPdfInteractor } = require('./virusScanPdfInteractor');
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
@@ -15,7 +14,7 @@ describe('virusScanPdfInteractor', () => {
       applicationContext: {
         environment: { documentsBucketName: 'documents' },
         getStorageClient: () => ({
-          getObject: sinon.stub().returns({
+          getObject: jest.fn().mockReturnValue({
             promise: async () => ({
               Body: testAsset('sample.pdf'),
             }),
@@ -40,7 +39,7 @@ describe('virusScanPdfInteractor', () => {
       applicationContext: {
         environment: { documentsBucketName: 'documents' },
         getStorageClient: () => ({
-          getObject: sinon.stub().returns({
+          getObject: jest.fn().mockReturnValue({
             promise: async () => ({
               Body: testAsset('fake-virus.pdf'),
             }),
@@ -73,7 +72,7 @@ describe('virusScanPdfInteractor', () => {
       applicationContext: {
         environment: { documentsBucketName: 'documents' },
         getStorageClient: () => ({
-          getObject: sinon.stub().returns({
+          getObject: jest.fn().mockReturnValue({
             promise: async () => ({
               Body: testAsset('fake-virus.pdf'),
             }),

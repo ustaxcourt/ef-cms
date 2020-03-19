@@ -1,5 +1,4 @@
 const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
 const {
   getEligibleCasesForTrialSession,
 } = require('./getEligibleCasesForTrialSession');
@@ -7,7 +6,7 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('getEligibleCasesForTrialSession', () => {
   beforeEach(() => {
-    sinon.stub(client, 'query').resolves([
+    client.query = jest.fn().mockReturnValue([
       {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         pk: 'eligible-for-trial-case-catalog',
@@ -16,14 +15,9 @@ describe('getEligibleCasesForTrialSession', () => {
       },
     ]);
 
-    sinon
-      .stub(client, 'batchGet')
-      .resolves([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }]);
-  });
-
-  afterEach(() => {
-    client.query.restore();
-    client.batchGet.restore();
+    client.batchGet = jest
+      .fn()
+      .mockReturnValue([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }]);
   });
 
   it('should get the cases for a trial session', async () => {

@@ -2,7 +2,11 @@ import { showContactsHelper } from './showContactsHelper';
 import { state } from 'cerebral';
 
 export const startCaseHelper = (get, applicationContext) => {
-  const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const {
+    FILING_TYPES,
+    PARTY_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
   const form = get(state.form);
   const user = applicationContext.getCurrentUser();
 
@@ -45,6 +49,7 @@ export const startCaseHelper = (get, applicationContext) => {
       user.role === USER_ROLES.petitioner
         ? 'Is your spouse deceased?'
         : 'Is the spouse deceased?',
+    filingTypes: FILING_TYPES[user.role] || FILING_TYPES[USER_ROLES.petitioner],
     hasContactSecondary,
     minorIncompetentLegend:
       user.role === USER_ROLES.petitioner
