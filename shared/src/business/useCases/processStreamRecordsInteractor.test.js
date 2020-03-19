@@ -84,7 +84,13 @@ describe('processStreamRecordsInteractor', () => {
         {
           dynamodb: {
             Keys: { pk: { S: '4' } },
-            NewImage: { caseId: { S: '4' }, pk: { S: '4' }, sk: { S: '4' } },
+            NewImage: {
+              caseId: { S: '4' },
+              entityName: { S: 'Case' },
+              pk: { S: '4' },
+              qcCompleteForTrial: { '123': true, '234': true },
+              sk: { S: '4' },
+            },
           },
           eventName: 'MODIFY',
         },
@@ -110,18 +116,42 @@ describe('processStreamRecordsInteractor', () => {
           },
           eventName: 'MODIFY',
         },
+        {
+          dynamodb: {
+            Keys: { pk: { S: '5' } },
+            NewImage: {
+              documentId: { S: '5' },
+              pk: { S: '5' },
+              sk: { S: '5' },
+              workItems: [
+                {
+                  blah: true,
+                  documents: [{ documentId: '5' }],
+                },
+              ],
+            },
+          },
+          eventName: 'MODIFY',
+        },
       ],
     });
 
     expect(bulkSpy).toHaveBeenCalled();
-    expect(bulkSpy.mock.calls[0][0].body.length).toEqual(6);
+    expect(bulkSpy.mock.calls[0][0].body.length).toEqual(8);
     expect(bulkSpy.mock.calls[0][0].body).toEqual([
       { index: { _id: '1_1', _index: 'efcms' } },
       { caseId: { S: '1' }, pk: { S: '1' }, sk: { S: '1' } },
       { index: { _id: '3_3', _index: 'efcms' } },
       { caseId: { S: '3' }, pk: { S: '3' }, sk: { S: '3' } },
       { index: { _id: '4_4', _index: 'efcms' } },
-      { caseId: { S: '4' }, pk: { S: '4' }, sk: { S: '4' } },
+      {
+        caseId: { S: '4' },
+        entityName: { S: 'Case' },
+        pk: { S: '4' },
+        sk: { S: '4' },
+      },
+      { index: { _id: '5_5', _index: 'efcms' } },
+      { documentId: { S: '5' }, pk: { S: '5' }, sk: { S: '5' } },
     ]);
   });
 

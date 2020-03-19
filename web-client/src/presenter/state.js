@@ -79,52 +79,52 @@ export const state = {
   addDocketEntryHelper,
   addEditUserCaseNoteModalHelper,
   addToTrialSessionModalHelper,
-  advancedSearchForm: {},
+  advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
   advancedSearchHelper,
   alertHelper,
   archiveDraftDocument: {
+    // used by the delete draft document modal
     caseId: null,
     documentId: null,
     documentTitle: null,
   },
-  assigneeId: null,
+  assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloadHelper,
-  batchDownloads: {},
-  batchIndexToRescan: null,
-  batches: [],
+  batchDownloads: {}, // batch download of PDFs
+  batchIndexToRescan: null, // batch index for re-scanning
+  batches: [], // batches from scanning
   betaBar: {
     isVisible: true,
   },
   blockedCasesReportHelper,
-  caseCaption: '',
+  // caseCaption: '',
   caseDeadlineReportHelper,
   caseDetail: {},
   caseDetailEditContactsHelper,
   caseDetailEditHelper,
-  caseDetailErrors: {},
+  caseDetailErrors: {}, // field level validation errors on update case screen TODO: move to validationErrors
   caseDetailHeaderHelper,
   caseDetailHelper,
-  caseDetailPage: {},
+  caseDetailPage: {}, // current tabs for case detail page TODO: move to view metadata
   caseDetailSubnavHelper,
   caseInformationHelper,
   caseInventoryReportHelper,
   caseTypeDescriptionHelper,
-  caseTypes: [],
+  caseTypes: [], // TODO: refactor to use constants
   cases: [],
   cognitoLoginUrl: null,
   completeDocumentTypeSectionHelper,
-  completeForm: {},
+  completeForm: {}, // TODO: replace with state.form
   confirmInitiateServiceModalHelper,
   contactEditHelper,
   contactsHelper,
   createAttorneyUserHelper,
   createOrderHelper,
   currentPage: 'Interstitial',
-  currentPageHeader: '',
-  currentPageIndex: 0,
-  currentTab: '',
+  currentPageIndex: 0, // wizard step
+  currentTab: '', // TODO: move to view metadata
   dashboardExternalHelper,
-  docketNumberSearchForm: {},
+  docketNumberSearchForm: {}, // needs its own object because it's present when other forms are on screen
   docketRecordHelper,
   docketRecordIndex: 0,
   document: {},
@@ -136,17 +136,17 @@ export const state = {
   documentSelectedForPreview: null,
   documentSelectedForScan: null,
   documentSigningHelper,
-  documentUploadMode: 'scan',
+  documentUploadMode: 'scan', // TODO: move inside another object
   editDocketEntryHelper,
   editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
-  fieldOrder: [],
+  fieldOrder: [], // TODO: move to view metadata
   fileDocumentHelper,
   fileUploadStatusHelper,
-  filingTypes: [],
-  form: {},
+  filingTypes: [], // TODO: move to view metadata
+  form: {}, // shared object for creating new entities, clear before using
   formattedCaseDetail,
   formattedCases,
   formattedDashboardTrialSessions,
@@ -184,7 +184,7 @@ export const state = {
   pdfSignerHelper,
   percentComplete: 0,
   permissions: null,
-  petition: {},
+  petition: {}, // TODO: remove
   previewPdfFile: null,
   procedureTypes: [],
   requestAccessHelper,
@@ -209,6 +209,9 @@ export const state = {
   showModal: '',
   showValidation: false,
   startCaseHelper,
+  startCaseInternal: {
+    tab: '',
+  },
   startCaseInternalContactsHelper,
   startCaseInternalHelper,
   timeRemaining: Number.POSITIVE_INFINITY,
