@@ -1240,9 +1240,7 @@ Case.prototype.getWorkItems = function() {
  * @returns {Case} the updated case entity
  */
 Case.prototype.checkForReadyForTrial = function() {
-  let docFiledCutoffDate = prepareDateFromString()
-    .subtract(Case.ANSWER_CUTOFF_AMOUNT, Case.ANSWER_CUTOFF_UNIT)
-    .toISOString();
+  const currentDate = prepareDateFromString().toISOString();
 
   const isCaseGeneralDocketNotAtIssue =
     this.status === Case.STATUS_TYPES.generalDocket;
@@ -1254,15 +1252,16 @@ Case.prototype.checkForReadyForTrial = function() {
         document.eventCode,
       );
 
-      const differencebyUnit = Case.dateDifferenceInUnits(
+      const daysElapsedSinceDocumentWasFiled = Case.dateDifferenceInUnits(
+        currentDate,
         document.createdAt,
-        docFiledCutoffDate,
         Case.ANSWER_CUTOFF_UNIT,
       );
 
-      const docFiledBeforeCutoff = differencebyUnit < Case.ANSWER_CUTOFF_AMOUNT;
+      const requiredTimeElapsedSinceFiling =
+        daysElapsedSinceDocumentWasFiled > Case.ANSWER_CUTOFF_AMOUNT;
 
-      if (isAnswerDocument && docFiledBeforeCutoff) {
+      if (isAnswerDocument && requiredTimeElapsedSinceFiling) {
         this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
       }
     });

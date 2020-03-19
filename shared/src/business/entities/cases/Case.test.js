@@ -1382,8 +1382,7 @@ describe('Case entity', () => {
       expect(caseToCheck.status).toEqual(Case.STATUS_TYPES.generalDocket);
     });
 
-    // TODO: review this test: is this correctly interpreting requirements?
-    it.skip("should not change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
+    it("should NOT change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
       const caseToCheck = new Case(
         {
           documents: [
