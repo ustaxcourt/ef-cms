@@ -74,34 +74,36 @@ const createMockDocumentClient = () => {
         promise: async () => null,
       };
     }),
-    query: ({ ExpressionAttributeValues, IndexName }) => {
-      const arr = [];
-      for (let key in data) {
-        if (IndexName === 'gsi1') {
-          const gsi1pk = ExpressionAttributeValues[':gsi1pk'];
-          if (data[key].gsi1pk === gsi1pk) {
-            arr.push(data[key]);
-          }
-        } else {
-          const value = ExpressionAttributeValues[':pk'];
-          const prefix = ExpressionAttributeValues[':prefix'];
-          const [pk, sk] = key.split(' ');
-
-          if (prefix) {
-            if (pk === value && sk.indexOf(prefix) === 0) {
+    query: jest
+      .fn()
+      .mockImplementation(({ ExpressionAttributeValues, IndexName }) => {
+        const arr = [];
+        for (let key in data) {
+          if (IndexName === 'gsi1') {
+            const gsi1pk = ExpressionAttributeValues[':gsi1pk'];
+            if (data[key].gsi1pk === gsi1pk) {
               arr.push(data[key]);
             }
-          } else if (pk.includes(value)) {
-            arr.push(data[key]);
+          } else {
+            const value = ExpressionAttributeValues[':pk'];
+            const prefix = ExpressionAttributeValues[':prefix'];
+            const [pk, sk] = key.split(' ');
+
+            if (prefix) {
+              if (pk === value && sk.indexOf(prefix) === 0) {
+                arr.push(data[key]);
+              }
+            } else if (pk.includes(value)) {
+              arr.push(data[key]);
+            }
           }
         }
-      }
-      return {
-        promise: async () => ({
-          Items: arr,
-        }),
-      };
-    },
+        return {
+          promise: async () => ({
+            Items: arr,
+          }),
+        };
+      }),
     update: ({
       ExpressionAttributeNames,
       ExpressionAttributeValues,
