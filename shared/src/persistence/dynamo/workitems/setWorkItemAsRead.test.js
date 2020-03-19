@@ -1,11 +1,10 @@
-const sinon = require('sinon');
 const { setWorkItemAsRead } = require('./setWorkItemAsRead');
 
 describe('setWorkItemAsRead', () => {
   let updateStub;
 
   beforeEach(() => {
-    updateStub = sinon.stub().returns({
+    updateStub = jest.fn().mockReturnValue({
       promise: async () => true,
     });
   });
@@ -24,7 +23,7 @@ describe('setWorkItemAsRead', () => {
       userId: '123',
       workItemId: 'abc',
     });
-    expect(updateStub.getCall(0).args[0]).toMatchObject({
+    expect(updateStub.mock.calls[0][0]).toMatchObject({
       Key: {
         pk: 'user|123',
         sk: 'work-item|abc',
