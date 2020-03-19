@@ -8,7 +8,6 @@ export const IRSNotice = connect(
   {
     CASE_TYPES: state.constants.CASE_TYPES,
     form: state.form,
-    setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
     startCaseInternalHelper: state.startCaseInternalHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validatePetitionFromPaperSequence:

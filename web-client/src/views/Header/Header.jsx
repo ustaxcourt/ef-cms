@@ -141,7 +141,6 @@ export const Header = connect(
     headerHelper: state.headerHelper,
     isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
     isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
-    isUsersMenuOpen: state.menuHelper.isUsersMenuOpen,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
     showBetaBar: state.commonUI.showBetaBar,
     showMobileMenu: state.commonUI.showMobileMenu,

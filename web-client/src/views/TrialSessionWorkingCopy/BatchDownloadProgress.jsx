@@ -5,7 +5,6 @@ import React, { useEffect } from 'react';
 export const BatchDownloadProgress = connect(
   {
     batchDownloadHelper: state.batchDownloadHelper,
-    showModal: state.showModal,
   },
   ({ batchDownloadHelper }) => {
     const windowUnload = e => {
