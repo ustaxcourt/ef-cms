@@ -1,11 +1,10 @@
-const sinon = require('sinon');
 const { getSentMessagesForSection } = require('./getSentMessagesForSection');
 
 describe('getSentMessagesForSection', () => {
   let queryStub;
 
   beforeEach(() => {
-    queryStub = sinon.stub().returns({
+    queryStub = jest.fn().mockReturnValue({
       promise: async () => ({
         Items: [
           {

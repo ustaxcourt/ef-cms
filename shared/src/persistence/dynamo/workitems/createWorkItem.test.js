@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const { createWorkItem } = require('./createWorkItem');
 
 describe('createWorkItem', () => {
@@ -17,10 +16,10 @@ describe('createWorkItem', () => {
   };
 
   beforeEach(() => {
-    putStub = sinon.stub().returns({
+    putStub = jest.fn().mockReturnValue({
       promise: async () => null,
     });
-    getStub = sinon.stub().returns({
+    getStub = jest.fn().mockReturnValue({
       promise: async () => ({
         Item: {
           section: 'docket',
@@ -29,7 +28,7 @@ describe('createWorkItem', () => {
       }),
     });
 
-    getCurrentUserStub = sinon.stub().returns({
+    getCurrentUserStub = jest.fn().mockReturnValue({
       userId: '123',
     });
 
@@ -50,7 +49,7 @@ describe('createWorkItem', () => {
       applicationContext,
       workItem,
     });
-    expect(putStub.getCall(0).args[0]).toMatchObject({
+    expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {
         caseId: '123',
         pk: 'work-item|a_id',
@@ -66,7 +65,7 @@ describe('createWorkItem', () => {
       applicationContext,
       workItem,
     });
-    expect(putStub.getCall(1).args[0]).toMatchObject({
+    expect(putStub.mock.calls[1][0]).toMatchObject({
       Item: {
         pk: 'case|123',
         sk: 'work-item|a_id',
@@ -80,7 +79,7 @@ describe('createWorkItem', () => {
       applicationContext,
       workItem,
     });
-    expect(putStub.getCall(2).args[0]).toMatchObject({
+    expect(putStub.mock.calls[2][0]).toMatchObject({
       Item: {
         pk: 'user|123',
         sk: 'work-item|a_id',
@@ -95,7 +94,7 @@ describe('createWorkItem', () => {
       applicationContext,
       workItem,
     });
-    expect(putStub.getCall(3).args[0]).toMatchObject({
+    expect(putStub.mock.calls[3][0]).toMatchObject({
       Item: {
         pk: 'user-outbox|123',
         sk: '100',
@@ -109,7 +108,7 @@ describe('createWorkItem', () => {
       applicationContext,
       workItem,
     });
-    expect(putStub.getCall(4).args[0]).toMatchObject({
+    expect(putStub.mock.calls[4][0]).toMatchObject({
       Item: {
         pk: 'section|docket',
         sk: 'work-item|a_id',
@@ -124,7 +123,7 @@ describe('createWorkItem', () => {
       applicationContext,
       workItem,
     });
-    expect(putStub.getCall(5).args[0]).toMatchObject({
+    expect(putStub.mock.calls[5][0]).toMatchObject({
       Item: {
         pk: 'section-outbox|docket',
         sk: '100',

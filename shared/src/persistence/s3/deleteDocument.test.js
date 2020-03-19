@@ -1,8 +1,7 @@
-const sinon = require('sinon');
 const { deleteDocument } = require('./deleteDocument');
 
 describe('deleteDocument', () => {
-  const deleteObjectStub = sinon.stub().returns({
+  const deleteObjectStub = jest.fn().mockReturnValue({
     promise: () => {
       return Promise.resolve();
     },
@@ -21,7 +20,7 @@ describe('deleteDocument', () => {
       applicationContext,
       key: 'deleteThisDocument',
     });
-    expect(deleteObjectStub.getCall(0).args[0]).toMatchObject({
+    expect(deleteObjectStub.mock.calls[0][0]).toMatchObject({
       Bucket: 'aBucket',
       Key: 'deleteThisDocument',
     });

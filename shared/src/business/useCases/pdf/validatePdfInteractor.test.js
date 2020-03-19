@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const sinon = require('sinon');
 const { validatePdfInteractor } = require('./validatePdfInteractor');
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
@@ -15,7 +14,7 @@ describe('validatePdfInteractor', () => {
       applicationContext: {
         environment: { documentsBucketName: 'documents' },
         getStorageClient: () => ({
-          getObject: sinon.stub().returns({
+          getObject: jest.fn().mockReturnValue({
             promise: async () => ({
               Body: testAsset('sample.pdf'),
             }),
@@ -39,7 +38,7 @@ describe('validatePdfInteractor', () => {
       applicationContext: {
         environment: { documentsBucketName: 'documents' },
         getStorageClient: () => ({
-          getObject: sinon.stub().returns({
+          getObject: jest.fn().mockReturnValue({
             promise: async () => ({
               Body: testAsset('not-a-pdf.pdf'),
             }),
