@@ -1,4 +1,4 @@
-export default test => {
+export const docketClerkViewsEditDocketRecord = test => {
   return it('Docket clerk views Edit Docket Record', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

@@ -150,7 +150,7 @@
         }
       }
     },
-    "/api/pending-items": {
+    "/reports/pending-items": {
       "get": {
         "tags": [],
         "summary": "get all pending items",
@@ -194,7 +194,7 @@
         }
       }
     },
-    "/api/pending-report": {
+    "/reports/pending-report": {
       "get": {
         "summary": "create a pdf of the pending report",
         "description": "create a pdf of the pending report.\n",
@@ -319,7 +319,7 @@
         }
       }
     },
-    "/api/trial-calendar-pdf": {
+    "/reports/trial-calendar-pdf": {
       "post": {
         "summary": "create a pdf of the trial session calendar",
         "description": "create a pdf of the trial session calendar.\n",
@@ -764,7 +764,7 @@
         }
       }
     },
-    "/cases/blocked/{trialLocation}": {
+    "/reports/blocked/{trialLocation}": {
       "parameters": [
         {
           "name": "trialLocation",
@@ -777,6 +777,134 @@
         "tags": ["cases"],
         "summary": "get all blocked cases",
         "description": "get all blocked cases.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/case-inventory-report": {
+      "parameters": [
+        {
+          "name": "associatedJudge",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "from",
+          "in": "query",
+          "required": false,
+          "type": "number"
+        },
+        {
+          "name": "pageSize",
+          "in": "query",
+          "required": false,
+          "type": "number"
+        },
+        {
+          "name": "status",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["cases"],
+        "summary": "get case inventory report",
+        "description": "get case inventory report.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/printable-case-inventory-report": {
+      "parameters": [
+        {
+          "name": "associatedJudge",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["cases"],
+        "summary": "generate printable case inventory report",
+        "description": "generate printable case inventory report.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -3768,7 +3896,7 @@
         }
       }
     },
-    "/trial-sessions/planning-report": {
+    "/reports/planning-report": {
       "post": {
         "summary": "create a pdf of the trial session planning report",
         "description": "create a pdf of the trial session planning report.\n",

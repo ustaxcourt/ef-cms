@@ -62,8 +62,13 @@ exports.updateDocketEntryInteractor = async ({
     { applicationContext },
   );
 
+  const existingDocketRecordEntry = caseEntity.getDocketRecordByDocumentId(
+    documentEntity.documentId,
+  );
+
   const docketRecordEntry = new DocketRecord(
     {
+      ...existingDocketRecordEntry,
       description: documentMetadata.documentTitle,
       documentId: documentEntity.documentId,
       editState: JSON.stringify(documentMetadata),
@@ -91,6 +96,7 @@ exports.updateDocketEntryInteractor = async ({
       assigneeId: null,
       assigneeName: null,
       caseId: caseId,
+      caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
       docketNumber: caseToUpdate.docketNumber,
       docketNumberSuffix: caseToUpdate.docketNumberSuffix,

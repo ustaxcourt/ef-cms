@@ -11,7 +11,7 @@ const MOCK_WORK_ITEMS = [
     assigneeId: null,
     assigneeName: 'IRSBatchSystem',
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    caseStatus: Case.STATUS_TYPES.inProgress,
+    caseStatus: Case.STATUS_TYPES.new,
     completedAt: '2018-12-27T18:06:02.968Z',
     completedBy: 'Petitioner',
     completedByUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -76,7 +76,7 @@ describe('serveCaseToIrsInteractor', () => {
     deleteWorkItemFromInboxStub = sinon.stub().resolves(null);
     zipDocumentsStub = sinon.stub().resolves(null);
     deleteDocumentStub = sinon.stub().resolves(null);
-    updateCaseStub = sinon.stub().resolves(null);
+    updateCaseStub = jest.fn();
     updateWorkItemStub = sinon.stub().resolves(null);
     putWorkItemInUsersOutboxStub = sinon.stub().resolves(null);
 
@@ -206,5 +206,93 @@ describe('serveCaseToIrsInteractor', () => {
 
     expect(appendPaperServiceAddressPageToPdfStub).toHaveBeenCalled();
     expect(result).toBeDefined();
+  });
+
+  it('should serve all initial document types when served', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      documents: [
+        ...MOCK_CASE.documents,
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketNumber: '101-18',
+          documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          documentTitle: 'Request for Place of Trial Flavortown, AR',
+          documentType: 'Request for Place of Trial',
+          eventCode: 'RPT',
+          processingStatus: 'pending',
+          userId: 'petitioner',
+          workItems: [],
+        },
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketNumber: '101-18',
+          documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          documentTitle: 'Application for Waiver of Filing Fee',
+          documentType: 'Application for Waiver of Filing Fee',
+          eventCode: 'APW',
+          processingStatus: 'pending',
+          userId: 'petitioner',
+          workItems: [],
+        },
+      ],
+      isPaper: true,
+      mailingDate: 'some day',
+    };
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'bob',
+          role: User.ROLES.petitionsClerk,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getEntityConstructors: () => ({
+        Case,
+        DocketRecord,
+      }),
+      getPersistenceGateway: () => {
+        return {
+          deleteDocument: deleteDocumentStub,
+          deleteWorkItemFromInbox: deleteWorkItemFromInboxStub,
+          getCaseByCaseId: () => Promise.resolve(mockCase),
+          getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
+          updateCase: updateCaseStub,
+          updateWorkItem: updateWorkItemStub,
+          zipDocuments: zipDocumentsStub,
+        };
+      },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({
+        appendPaperServiceAddressPageToPdf: appendPaperServiceAddressPageToPdfStub,
+        generateCaseConfirmationPdf: () => {
+          return MOCK_PDF_DATA;
+        },
+      }),
+      getUtilities: () => ({
+        formatDateString: () => '12/27/18',
+      }),
+    };
+
+    const result = await serveCaseToIrsInteractor({
+      applicationContext,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    const documentWithServedParties = updateCaseStub.mock.calls[0][0].caseToUpdate.documents.find(
+      document =>
+        document.documentType ===
+        Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+    );
+
+    expect(result).toBeDefined();
+    expect(
+      updateCaseStub.mock.calls[0][0].caseToUpdate.documents.every(
+        document => document.status === 'served',
+      ),
+    ).toEqual(true);
+    expect(documentWithServedParties.servedParties).toBeDefined();
   });
 });

@@ -1,22 +1,18 @@
-import { fakeFile, setupTest } from './helpers';
+import { fakeFile, loginAs, setupTest } from './helpers';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 // docketClerk
-import docketClerkAddsTranscriptDocketEntryFromOrder from './journey/docketClerkAddsTranscriptDocketEntryFromOrder';
-import docketClerkCreatesAnOrder from './journey/docketClerkCreatesAnOrder';
-import docketClerkLogIn from './journey/docketClerkLogIn';
-import docketClerkSignsOut from './journey/docketClerkSignsOut';
-import docketClerkViewsDraftOrder from './journey/docketClerkViewsDraftOrder';
+import { docketClerkAddsTranscriptDocketEntryFromOrder } from './journey/docketClerkAddsTranscriptDocketEntryFromOrder';
+import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkServesOrder } from './journey/docketClerkServesOrder';
+import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 // petitioner
-import docketClerkServesOrder from './journey/docketClerkServesOrder';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerLogin from './journey/petitionerLogIn';
 import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
-import petitionerSignsOut from './journey/petitionerSignsOut';
 
 const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
@@ -34,14 +30,13 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     jest.setTimeout(30000);
   });
 
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
-  petitionerSignsOut(test);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkCreatesAnOrder(test, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
@@ -69,9 +64,8 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     year: today.getFullYear(),
   });
   docketClerkServesOrder(test, 1);
-  docketClerkSignsOut(test);
 
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   it('petitioner views transcript on docket record', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -87,5 +81,4 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     //second transcript should NOT be available to the user
     expect(transcriptDocuments[1].showLinkToDocument).toEqual(false);
   });
-  petitionerSignsOut(test);
 });

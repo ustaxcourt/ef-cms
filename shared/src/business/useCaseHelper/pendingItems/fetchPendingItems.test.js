@@ -14,6 +14,7 @@ describe('fetchPendingItems', () => {
     getSearchClient: () => ({
       search: searchSpy,
     }),
+    getUniqueId: () => 'unique-id-1',
   };
 
   const mockDataOne = {

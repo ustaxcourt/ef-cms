@@ -1,5 +1,5 @@
+import { getScanModeLabel } from '../../utilities/getScanModeLabel';
 import { state } from 'cerebral';
-import getScanModeLabel from '../../utilities/getScanModeLabel';
 
 export const scanBatchPreviewerHelper = (get, applicationContext) => {
   const selectedBatchIndex = get(state.selectedBatchIndex) || 0;

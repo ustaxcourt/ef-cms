@@ -1,5 +1,6 @@
 import { getFormattedDocumentQCSectionInbox } from '../helpers';
-export default test => {
+
+export const docketClerkViewsStipulatedDecision = test => {
   describe('a docket clerk views Section Document QC and selects a Stipulated Decision', () => {
     it('views Section Document QC box', async () => {
       const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(

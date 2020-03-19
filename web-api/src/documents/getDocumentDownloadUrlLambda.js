@@ -14,6 +14,7 @@ exports.handler = event =>
   redirect(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
+    const honeybadger = applicationContext.initHoneybadger();
     try {
       const results = await applicationContext
         .getUseCases()
@@ -27,6 +28,7 @@ exports.handler = event =>
       return results;
     } catch (e) {
       applicationContext.logger.error(e);
+      honeybadger && honeybadger.notify(e);
       throw e;
     }
   });

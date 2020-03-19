@@ -11,16 +11,9 @@ import { state } from 'cerebral';
 export const getInternalCaseCaptionForCaseInfoTabAction = ({
   applicationContext,
   get,
-  props,
 }) => {
-  const { tab } = props;
+  const { Case } = applicationContext.getEntityConstructors();
+  let caseCaption = Case.getCaseCaption(get(state.form)) || '';
 
-  if (tab === 'caseInfo') {
-    const { Case } = applicationContext.getEntityConstructors();
-    let caseCaption = Case.getCaseCaption(get(state.form)) || '';
-
-    caseCaption += ` ${Case.CASE_CAPTION_POSTFIX}`;
-
-    return { caseCaption };
-  }
+  return { caseCaption };
 };

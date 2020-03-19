@@ -31,8 +31,7 @@ export const completeDocumentSigningAction = async ({
       signatureData: { scale, x, y },
     } = get(state.pdfForSigning);
 
-    const { pdfjsObj } =
-      window.pdfjsObj !== undefined ? window : get(state.pdfForSigning);
+    const pdfjsObj = window.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
 
     // generate signed document to bytes
     const signedPdfBytes = await applicationContext
@@ -49,14 +48,7 @@ export const completeDocumentSigningAction = async ({
         },
       });
 
-    let documentFile;
-
-    if (typeof File === 'function') {
-      documentFile = new File([signedPdfBytes], 'myfile.pdf');
-    } else {
-      documentFile = Buffer.from(signedPdfBytes, 'base64');
-      documentFile.name = 'myfile.pdf';
-    }
+    const documentFile = new File([signedPdfBytes], 'myfile.pdf');
 
     let documentIdToOverwrite = null;
     if (document.documentType !== 'Proposed Stipulated Decision') {
