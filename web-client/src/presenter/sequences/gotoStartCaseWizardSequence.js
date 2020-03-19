@@ -1,12 +1,10 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
-import { getProcedureTypesAction } from '../actions/getProcedureTypesAction';
 import { prepareFormAction } from '../actions/StartCase/prepareFormAction';
 import { props, state } from 'cerebral';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
 import { setStartInternalCaseDefaultTabAction } from '../actions/StartCaseInternal/setStartInternalCaseDefaultTabAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { takePathForRoles } from './takePathForRoles';
@@ -31,8 +29,6 @@ export const gotoStartCaseWizardSequence = [
   clearScreenMetadataAction,
   prepareFormAction,
   stopShowValidationAction,
-  getProcedureTypesAction,
-  setProcedureTypesAction,
   runPathForUserRoleAction,
   {
     ...takePathForRoles(
