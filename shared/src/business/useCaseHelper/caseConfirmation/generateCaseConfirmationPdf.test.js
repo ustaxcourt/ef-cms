@@ -46,10 +46,6 @@ applicationContext.getPug.mockReturnValue({
 applicationContext.getStorageClient.mockReturnValue({
   upload: s3Upload,
 });
-applicationContext.logger = {
-  error: jest.fn(),
-  info: () => {},
-};
 
 describe('generateCaseConfirmationPdf', () => {
   beforeEach(() => {
