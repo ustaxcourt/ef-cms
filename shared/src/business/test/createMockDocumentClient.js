@@ -107,7 +107,7 @@ const createMockDocumentClient = () => {
     update: jest
       .fn()
       .mockImplementation(
-        () => ({
+        ({
           ExpressionAttributeNames,
           ExpressionAttributeValues,
           Key,
