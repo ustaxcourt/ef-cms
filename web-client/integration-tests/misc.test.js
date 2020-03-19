@@ -21,9 +21,9 @@ describe('Miscellaneous', () => {
   });
 
   it('Toggles Beta Bar Visibility', async () => {
-    expect(test.getState('betaBar.isVisible')).toEqual(true);
+    expect(test.getState('commonUI.showBetaBar')).toEqual(true);
     await test.runSequence('toggleBetaBarSequence');
-    expect(test.getState('betaBar.isVisible')).toEqual(false);
+    expect(test.getState('commonUI.showBetaBar')).toEqual(false);
   });
 
   it('Toggles payment info content', async () => {
