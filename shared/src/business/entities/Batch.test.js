@@ -1,4 +1,4 @@
-const applicationContext = require('../../applicationContextForTests');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { Batch } = require('./Batch');
 
 const { VALIDATION_ERROR_MESSAGES } = Batch;

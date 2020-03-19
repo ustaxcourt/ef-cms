@@ -1,4 +1,6 @@
-const applicationContext = require('../../../applicationContextForTests');
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { NewTrialSession } = require('./NewTrialSession');
 
 const VALID_TRIAL_SESSION = {
