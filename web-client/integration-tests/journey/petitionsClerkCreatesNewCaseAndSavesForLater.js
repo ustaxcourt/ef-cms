@@ -135,7 +135,9 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     await test.runSequence('navigateToReviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
-    expect(test.getState('startCaseInternal.tab')).toBe('partyInfo');
+    expect(test.getState('currentViewMetadata.startCaseInternal.tab')).toBe(
+      'partyInfo',
+    );
   });
 
   it('should generate case caption from primary and secondary contact information', async () => {
@@ -228,7 +230,9 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     });
 
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
-    expect(test.getState('startCaseInternal.tab')).toBe('caseInfo');
+    expect(test.getState('currentViewMetadata.startCaseInternal.tab')).toBe(
+      'caseInfo',
+    );
   });
 
   it('should update case caption on the review screen when it has been edited', async () => {
@@ -249,7 +253,9 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     });
 
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
-    expect(test.getState('startCaseInternal.tab')).toBe('irsNotice');
+    expect(test.getState('currentViewMetadata.startCaseInternal.tab')).toBe(
+      'irsNotice',
+    );
   });
 
   it('should update case type on the review screen when when it has been edited', async () => {
@@ -537,5 +543,7 @@ async function navigateToStartCaseInternalPartiesTab(test) {
     tab: 'partyInfo',
   });
   expect(test.getState('currentPage')).toEqual('StartCaseInternal');
-  expect(test.getState('startCaseInternal.tab')).toBe('partyInfo');
+  expect(test.getState('currentViewMetadata.startCaseInternal.tab')).toBe(
+    'partyInfo',
+  );
 }
