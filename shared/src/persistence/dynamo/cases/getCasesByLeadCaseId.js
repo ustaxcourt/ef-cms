@@ -9,7 +9,7 @@ const { query } = require('../../dynamodbClientService');
  * @returns {Promise} the promise of the call to persistence
  */
 exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
-  let items = await query({
+  let casesByLeadCaseId = await query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },
@@ -21,15 +21,14 @@ exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
     applicationContext,
   });
 
-  for (let i = 0; i < items.length; i++) {
-    items[i] = {
-      ...items[i],
-      ...(await applicationContext.getPersistenceGateway().getCaseByCaseId({
+  const cases = await Promise.all(
+    casesByLeadCaseId.map(({ caseId }) =>
+      applicationContext.getPersistenceGateway().getCaseByCaseId({
         applicationContext,
-        caseId: items[i].caseId,
-      })),
-    };
-  }
+        caseId,
+      }),
+    ),
+  );
 
-  return items;
+  return cases;
 };
