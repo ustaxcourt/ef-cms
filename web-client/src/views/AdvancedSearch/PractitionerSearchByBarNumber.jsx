@@ -7,14 +7,15 @@ import React from 'react';
 export const PractitionerSearchByBarNumber = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
-    clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    clearCaseSearchByNameFormSequence:
+      sequences.clearCaseSearchByNameFormSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     validationErrors: state.validationErrors,
   },
   ({
     advancedSearchForm,
-    clearAdvancedSearchFormSequence,
+    clearCaseSearchByNameFormSequence,
     submitPractitionerNameSearchSequence,
     updateAdvancedSearchFormValueSequence,
     validationErrors,
@@ -28,7 +29,7 @@ export const PractitionerSearchByBarNumber = connect(
             className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
             icon={['fas', 'times-circle']}
             onClick={() => {
-              clearAdvancedSearchFormSequence();
+              clearCaseSearchByNameFormSequence();
             }}
           >
             Clear Search
