@@ -60,13 +60,13 @@ const createMockDocumentClient = () => {
         promise: async () => null,
       };
     },
-    get: ({ Key: { pk, sk } }) => {
+    get: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
       return {
         promise: async () => ({
           Item: mockDynamoUsers[`${pk} ${sk}`],
         }),
       };
-    },
+    }),
     getData: () => mockDynamoUsers,
     put: jest.fn().mockImplementation(({ Item }) => {
       mockDynamoUsers[`${Item.pk} ${Item.sk}`] = Item;
