@@ -1,31 +1,14 @@
 const client = require('../../dynamodbClientService');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { Case } = require('../../../business/entities/cases/Case');
 const { updateCase } = require('./updateCase');
 
 describe('updateCase', () => {
-  let applicationContext;
-
-  const putStub = jest.fn().mockReturnValue({
-    promise: async () => null,
-  });
-
-  let queryStub;
-
-  const deleteStub = jest.fn().mockReturnValue({
-    promise: async () => null,
-  });
-
-  const updateStub = jest.fn();
-
-  client.put = putStub;
-  client.update = updateStub;
-  client.delete = deleteStub;
-
   let firstQueryStub;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
     firstQueryStub = [
       {
         docketNumberSuffix: null,
@@ -36,23 +19,43 @@ describe('updateCase', () => {
       },
     ];
 
-    queryStub = jest
-      .fn()
-      .mockReturnValueOnce(firstQueryStub)
+    applicationContext.getDocumentClient().put.mockReturnValue({
+      promise: async () => null,
+    });
+
+    applicationContext.getDocumentClient().delete.mockReturnValue({
+      promise: async () => null,
+    });
+
+    applicationContext
+      .getDocumentClient()
+      .query.mockReturnValueOnce(firstQueryStub)
       .mockReturnValue([
         {
           sk: '123',
         },
       ]);
-    client.query = queryStub;
 
-    applicationContext = {
-      environment: {
-        stage: 'local',
-      },
-      getUniqueId: () => 'unique-id-1',
-    };
+    client.query = applicationContext.getDocumentClient().query;
   });
+
+  /**
+   * Adds mock private practitioners to test fixture
+   */
+  function addPrivatePractitioners() {
+    firstQueryStub.push({
+      name: 'Guy Fieri',
+      pk: 'case|123',
+      sk: 'privatePractitioner|user-id-existing-123',
+      userId: 'user-id-existing-123',
+    });
+    firstQueryStub.push({
+      name: 'Rachel Ray',
+      pk: 'case|123',
+      sk: 'privatePractitioner|user-id-existing-234',
+      userId: 'user-id-existing-234',
+    });
+  }
 
   it('updates case', async () => {
     await updateCase({
@@ -65,7 +68,10 @@ describe('updateCase', () => {
         userId: 'petitioner',
       },
     });
-    expect(putStub.mock.calls[0][0].Item).toMatchObject({
+
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+    ).toMatchObject({
       pk: 'case|123',
       sk: 'case|123',
     });
@@ -86,36 +92,51 @@ describe('updateCase', () => {
         userId: 'petitioner',
       },
     });
-    expect(putStub.mock.calls[0][0].Item).toMatchObject({
+
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+    ).toMatchObject({
       pk: 'case|123',
       sk: 'case|123',
     });
-    expect(updateStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().update.mock.calls[0][0],
+    ).toMatchObject({
       ExpressionAttributeValues: {
         ':caseStatus': Case.STATUS_TYPES.calendared,
       },
     });
-    expect(updateStub.mock.calls[1][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().update.mock.calls[1][0],
+    ).toMatchObject({
       ExpressionAttributeValues: {
         ':caseTitle': 'New caption',
       },
     });
-    expect(updateStub.mock.calls[2][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().update.mock.calls[2][0],
+    ).toMatchObject({
       ExpressionAttributeValues: {
         ':docketNumberSuffix': 'W',
       },
     });
-    expect(updateStub.mock.calls[3][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().update.mock.calls[3][0],
+    ).toMatchObject({
       ExpressionAttributeValues: {
         ':trialDate': '2019-03-01T21:40:46.415Z',
       },
     });
-    expect(updateStub.mock.calls[4][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().update.mock.calls[4][0],
+    ).toMatchObject({
       ExpressionAttributeValues: {
         ':associatedJudge': 'Judge Buch',
       },
     });
-    expect(updateStub.mock.calls[5][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().update.mock.calls[5][0],
+    ).toMatchObject({
       ExpressionAttributeValues: {
         ':caseIsInProgress': true,
       },
@@ -132,7 +153,10 @@ describe('updateCase', () => {
         status: Case.STATUS_TYPES.generalDocket,
       },
     });
-    expect(updateStub.mock.calls[0][0]).toMatchObject({
+
+    expect(
+      applicationContext.getDocumentClient().update.mock.calls[0][0],
+    ).toMatchObject({
       ExpressionAttributeValues: {
         ':associatedJudge': 'Judge Buch',
       },
@@ -148,11 +172,14 @@ describe('updateCase', () => {
         status: Case.STATUS_TYPES.generalDocket,
       },
     });
-    expect(putStub.mock.calls[0][0].Item).toMatchObject({
+
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+    ).toMatchObject({
       pk: 'case|123',
       sk: 'case|123',
     });
-    expect(updateStub).not.toBeCalled();
+    expect(applicationContext.getDocumentClient().update).not.toBeCalled();
   });
 
   describe('irsPractitioners', () => {
@@ -173,9 +200,13 @@ describe('updateCase', () => {
         },
       });
 
-      expect(deleteStub).not.toHaveBeenCalled();
-      expect(putStub).toHaveBeenCalled();
-      expect(putStub.mock.calls[0][0].Item).toMatchObject({
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).not.toHaveBeenCalled();
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
         pk: 'case|123',
         sk: 'irsPractitioner|user-id-existing-234',
         userId: 'user-id-existing-234',
@@ -200,9 +231,13 @@ describe('updateCase', () => {
         },
       });
 
-      expect(deleteStub).not.toHaveBeenCalled();
-      expect(putStub).toHaveBeenCalled();
-      expect(putStub.mock.calls[0][0].Item).toMatchObject({
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).not.toHaveBeenCalled();
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
         pk: 'case|123',
         sk: 'irsPractitioner|user-id-new-321',
         userId: 'user-id-new-321',
@@ -239,10 +274,13 @@ describe('updateCase', () => {
           status: Case.STATUS_TYPES.generalDocket,
         },
       });
-
-      expect(deleteStub).not.toHaveBeenCalled();
-      expect(putStub).toHaveBeenCalled();
-      expect(putStub.mock.calls[0][0].Item).toMatchObject({
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).not.toHaveBeenCalled();
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
         motto: 'Welcome to Flavortown!',
         pk: 'case|123',
         sk: 'irsPractitioner|user-id-existing-123',
@@ -279,9 +317,13 @@ describe('updateCase', () => {
         },
       });
 
-      expect(deleteStub).toHaveBeenCalled();
-      expect(deleteStub.mock.calls.length).toEqual(1);
-      expect(deleteStub.mock.calls[0][0].key).toMatchObject({
+      expect(applicationContext.getDocumentClient().delete).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls.length,
+      ).toEqual(1);
+      expect(
+        applicationContext.getDocumentClient().delete.mock.calls[0][0].Key,
+      ).toMatchObject({
         pk: 'case|123',
         sk: 'irsPractitioner|user-id-existing-123',
       });
@@ -306,9 +348,13 @@ describe('updateCase', () => {
         },
       });
 
-      expect(deleteStub).not.toHaveBeenCalled();
-      expect(putStub).toHaveBeenCalled();
-      expect(putStub.mock.calls[0][0].Item).toMatchObject({
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).not.toHaveBeenCalled();
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
         pk: 'case|123',
         sk: 'privatePractitioner|user-id-existing-234',
         userId: 'user-id-existing-234',
@@ -316,18 +362,7 @@ describe('updateCase', () => {
     });
 
     it('adds a privatePractitioner to a case with existing privatePractitioners', async () => {
-      firstQueryStub.push({
-        name: 'Guy Fieri',
-        pk: 'case|123',
-        sk: 'privatePractitioner|user-id-existing-123',
-        userId: 'user-id-existing-123',
-      });
-      firstQueryStub.push({
-        name: 'Rachel Ray',
-        pk: 'case|123',
-        sk: 'privatePractitioner|user-id-existing-234',
-        userId: 'user-id-existing-234',
-      });
+      addPrivatePractitioners();
 
       await updateCase({
         applicationContext,
@@ -346,9 +381,13 @@ describe('updateCase', () => {
         },
       });
 
-      expect(deleteStub).not.toHaveBeenCalled();
-      expect(putStub).toHaveBeenCalled();
-      expect(putStub.mock.calls[0][0].Item).toMatchObject({
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).not.toHaveBeenCalled();
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
         pk: 'case|123',
         sk: 'privatePractitioner|user-id-new-321',
         userId: 'user-id-new-321',
@@ -356,18 +395,7 @@ describe('updateCase', () => {
     });
 
     it('updates a privatePractitioner on a case', async () => {
-      firstQueryStub.push({
-        name: 'Guy Fieri',
-        pk: 'case|123',
-        sk: 'privatePractitioner|user-id-existing-123',
-        userId: 'user-id-existing-123',
-      });
-      firstQueryStub.push({
-        name: 'Rachel Ray',
-        pk: 'case|123',
-        sk: 'privatePractitioner|user-id-existing-234',
-        userId: 'user-id-existing-234',
-      });
+      addPrivatePractitioners();
 
       await updateCase({
         applicationContext,
@@ -386,9 +414,13 @@ describe('updateCase', () => {
         },
       });
 
-      expect(deleteStub).not.toHaveBeenCalled();
-      expect(putStub).toHaveBeenCalled();
-      expect(putStub.mock.calls[0][0].Item).toMatchObject({
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).not.toHaveBeenCalled();
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
         motto: 'Welcome to Flavortown!',
         pk: 'case|123',
         sk: 'privatePractitioner|user-id-existing-123',
@@ -397,18 +429,7 @@ describe('updateCase', () => {
     });
 
     it('removes a privatePractitioner from a case with existing privatePractitioners', async () => {
-      firstQueryStub.push({
-        name: 'Guy Fieri',
-        pk: 'case|123',
-        sk: 'privatePractitioner|user-id-existing-123',
-        userId: 'user-id-existing-123',
-      });
-      firstQueryStub.push({
-        name: 'Rachel Ray',
-        pk: 'case|123',
-        sk: 'privatePractitioner|user-id-existing-234',
-        userId: 'user-id-existing-234',
-      });
+      addPrivatePractitioners();
 
       await updateCase({
         applicationContext,
@@ -422,9 +443,13 @@ describe('updateCase', () => {
         },
       });
 
-      expect(deleteStub).toHaveBeenCalled();
-      expect(deleteStub.mock.calls.length).toEqual(1);
-      expect(deleteStub.mock.calls[0][0].key).toMatchObject({
+      expect(applicationContext.getDocumentClient().delete).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().delete.mock.calls.length,
+      ).toEqual(1);
+      expect(
+        applicationContext.getDocumentClient().delete.mock.calls[0][0].Key,
+      ).toMatchObject({
         pk: 'case|123',
         sk: 'privatePractitioner|user-id-existing-123',
       });
