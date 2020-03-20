@@ -3,7 +3,9 @@ import { state } from 'cerebral';
 
 export const scanBatchPreviewerHelper = (get, applicationContext) => {
   const selectedBatchIndex = get(state.scanner.selectedBatchIndex) || 0;
-  const documentSelectedForScan = get(state.documentSelectedForScan);
+  const documentSelectedForScan = get(
+    state.currentViewMetadata.documentSelectedForScan,
+  );
   const batches =
     (documentSelectedForScan &&
       get(state.scanner.batches[documentSelectedForScan])) ||

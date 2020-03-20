@@ -12,5 +12,8 @@ export const resetAddDocketEntryAction = ({ store }) => {
   store.set(state.form.practitioner, []);
   store.set(state.wizardStep, 'PrimaryDocumentForm');
   store.set(state.currentViewMetadata.documentUploadMode, 'scan');
-  store.set(state.documentSelectedForScan, 'primaryDocumentFile');
+  store.set(
+    state.currentViewMetadata.documentSelectedForScan,
+    'primaryDocumentFile',
+  );
 };

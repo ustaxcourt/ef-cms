@@ -11,7 +11,9 @@ import { state } from 'cerebral';
 
 export const removeBatchAction = async ({ get, store }) => {
   const batchIndexToDelete = get(state.scanner.batchIndexToDelete);
-  const documentSelectedForScan = get(state.documentSelectedForScan);
+  const documentSelectedForScan = get(
+    state.currentViewMetadata.documentSelectedForScan,
+  );
   const batches = get(state.scanner.batches[documentSelectedForScan]);
   const batchIndexToRemove = batches.findIndex(
     b => b.index === batchIndexToDelete,

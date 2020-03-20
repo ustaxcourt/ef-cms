@@ -20,9 +20,9 @@ export const docketClerkSavesDocketEntry = (test, isAddAnother = true) => {
         lodged: false,
         privatePractitioners: [],
       });
-      expect(test.getState('documentSelectedForScan')).toEqual(
-        'primaryDocumentFile',
-      );
+      expect(
+        test.getState('currentViewMetadata.documentSelectedForScan'),
+      ).toEqual('primaryDocumentFile');
     } else {
       expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     }

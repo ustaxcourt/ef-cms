@@ -175,6 +175,7 @@ export const state = {
     documentDetail: {
       tab: '',
     },
+    documentSelectedForScan: null,
     documentUploadMode: 'scan',
     startCaseInternal: {
       tab: '',
@@ -187,8 +188,7 @@ export const state = {
   docketRecordIndex: 0, // needs its own object because it's present when other forms are on screen
   document: {},
   documentId: null,
-  documentSelectedForPreview: null,
-  documentSelectedForScan: null,
+
   fieldOrder: [], // TODO: related to errors
   form: {}, // shared object for creating new entities, clear before using
   modal: {},

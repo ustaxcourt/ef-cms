@@ -1,6 +1,8 @@
 export default test => {
   return it('Petitions clerk rescans a pre-existing batch', async () => {
-    const selectedDocumentType = test.getState('documentSelectedForScan');
+    const selectedDocumentType = test.getState(
+      'currentViewMetadata.documentSelectedForScan',
+    );
 
     await test.runSequence('openConfirmRescanBatchModalSequence', {
       batchIndexToRescan: 0,
