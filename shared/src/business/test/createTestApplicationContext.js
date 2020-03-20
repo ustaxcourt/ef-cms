@@ -111,9 +111,11 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDownloadPolicyUrl: jest.fn(),
     getInboxMessagesForSection,
     getInboxMessagesForUser: getInboxMessagesForUserPersistence,
-    getSentMessagesForUser: getSentMessagesForUserPersistence,
+    getSentMessagesForUser: jest
+      .fn()
+      .mockImplementation(getSentMessagesForUserPersistence),
     getUserById: getUserByIdPersistence,
-    getWorkItemById: getWorkItemByIdPersistence,
+    getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
     putWorkItemInOutbox,
     saveWorkItemForNonPaper,
