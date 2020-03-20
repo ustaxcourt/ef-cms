@@ -7,18 +7,18 @@ import React from 'react';
 
 export const CaseSearchByDocketNumber = connect(
   {
+    advancedSearchForm: state.advancedSearchForm,
     clearDocketNumberSearchFormSequence:
       sequences.clearDocketNumberSearchFormSequence,
-    docketNumberSearchForm: state.docketNumberSearchForm,
-    updateDocketNumberSearchFormSequence:
-      sequences.updateDocketNumberSearchFormSequence,
+    updateAdvancedSearchFormValueSequence:
+      sequences.updateAdvancedSearchFormValueSequence,
     validationErrors: state.validationErrors,
   },
   ({
+    advancedSearchForm,
     clearDocketNumberSearchFormSequence,
-    docketNumberSearchForm,
     submitDocketNumberSearchSequence,
-    updateDocketNumberSearchFormSequence,
+    updateAdvancedSearchFormValueSequence,
     validationErrors,
   }) => {
     return (
@@ -62,9 +62,13 @@ export const CaseSearchByDocketNumber = connect(
                     id="docket-number"
                     name="docketNumber"
                     type="text"
-                    value={docketNumberSearchForm.docketNumber || ''}
+                    value={
+                      advancedSearchForm.caseSearchByDocketNumber
+                        .docketNumber || ''
+                    }
                     onChange={e => {
-                      updateDocketNumberSearchFormSequence({
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'caseSearchByDocketNumber',
                         key: e.target.name,
                         value: e.target.value,
                       });

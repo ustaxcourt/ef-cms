@@ -166,7 +166,6 @@ export const state = {
   completeForm: {}, // TODO: replace with state.form
   currentPage: 'Interstitial',
   currentTab: '', // TODO: move to view metadata
-  docketNumberSearchForm: {}, // needs its own object because it's present when other forms are on screen
   docketRecordIndex: 0,
   document: {},
   documentDetail: {

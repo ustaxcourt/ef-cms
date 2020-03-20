@@ -14,11 +14,12 @@ export const validateCaseAdvancedSearchAction = async ({
   get,
   path,
 }) => {
+  const caseSearch = get(state.advancedSearchForm.caseSearchByName);
   const errors = applicationContext
     .getUseCases()
     .validateCaseAdvancedSearchInteractor({
       applicationContext,
-      caseSearch: get(state.advancedSearchForm),
+      caseSearch,
     });
 
   const isValid = isEmpty(errors);
