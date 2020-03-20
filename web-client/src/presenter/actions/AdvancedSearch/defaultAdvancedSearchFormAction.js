@@ -9,16 +9,24 @@ import { state } from 'cerebral';
  */
 export const defaultAdvancedSearchFormAction = ({
   applicationContext,
+  get,
   store,
 }) => {
   const { COUNTRY_TYPES } = applicationContext.getConstants();
-  store.set(state.advancedSearchForm, {
-    caseSearchByDocketNumber: {},
-    caseSearchByName: {
+  const advancedSearchForm = get(state.advancedSearchForm);
+  // do not overwrite existing state so the form is still filled in when returning to the page
+  if (!advancedSearchForm.caseSearchByDocketNumber) {
+    store.set(state.advancedSearchForm.caseSearchByDocketNumber, {});
+  }
+  if (!advancedSearchForm.caseSearchByName) {
+    store.set(state.advancedSearchForm.caseSearchByName, {
       countryType: COUNTRY_TYPES.DOMESTIC,
-    },
-    currentPage: 1,
-    practitionerSearchByBarNumber: {},
-    practitionerSearchByName: {},
-  });
+    });
+  }
+  if (!advancedSearchForm.practitionerSearchByBarNumber) {
+    store.set(state.advancedSearchForm.practitionerSearchByBarNumber, {});
+  }
+  if (!advancedSearchForm.practitionerSearchByName) {
+    store.set(state.advancedSearchForm.practitionerSearchByName, {});
+  }
 };
