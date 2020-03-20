@@ -178,6 +178,7 @@ export const state = {
   fieldOrder: [], // TODO: move to view metadata
   form: {}, // shared object for creating new entities, clear before using
   header: {
+    searchTerm: '',
     showBetaBar: true,
     showMobileMenu: false,
     showUsaBannerDetails: false,
@@ -208,7 +209,6 @@ export const state = {
   },
   screenMetadata: {},
   searchMode: 'byName', // TODO: nest inside of a advanced search?
-  searchTerm: '', // search in the header
   sectionInboxCount: 0,
   sectionUsers: [],
   selectedWorkItems: [],
