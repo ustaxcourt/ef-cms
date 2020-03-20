@@ -2,7 +2,7 @@ import { runAction } from 'cerebral/test';
 import { setDefaultCaseDetailTabAction } from './setDefaultCaseDetailTabAction';
 
 describe('setDefaultCaseDetailTabAction', () => {
-  it('should set the default values for caseDetailPage tabs', async () => {
+  it('should set the default values for caseDetail view tabs', async () => {
     const { state } = await runAction(setDefaultCaseDetailTabAction);
 
     expect(state.currentViewMetadata.caseDetail).toMatchObject({
@@ -26,17 +26,19 @@ describe('setDefaultCaseDetailTabAction', () => {
     });
   });
 
-  it('should not set anything if caseDetailPage.frozen is true', async () => {
+  it('should not set anything if currentViewMetadata.caseDetail.frozen is true', async () => {
     const { state } = await runAction(setDefaultCaseDetailTabAction, {
       props: {
         primaryTab: 'caseInformation',
       },
       state: {
-        caseDetailPage: {
-          caseInformationTab: 'petitioner',
-          frozen: true,
-          inProgressTab: 'messages',
-          primaryTab: 'caseInformation',
+        currentViewMetadata: {
+          caseDetail: {
+            caseInformationTab: 'petitioner',
+            frozen: true,
+            inProgressTab: 'messages',
+            primaryTab: 'caseInformation',
+          },
         },
       },
     });

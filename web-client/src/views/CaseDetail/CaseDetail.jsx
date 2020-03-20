@@ -79,7 +79,7 @@ export const CaseDetail = connect(
                   <>
                     <NonMobile>
                       <Tabs
-                        bind="caseDetailPage.caseInformationTab"
+                        bind="currentViewMetadata.caseDetail.caseInformationTab"
                         className="classic-horizontal-header3 tab-border"
                       >
                         <Tab
@@ -107,7 +107,7 @@ export const CaseDetail = connect(
                     </NonMobile>
                     <Mobile>
                       <Tabs
-                        bind="caseDetailPage.caseInformationTab"
+                        bind="currentViewMetadata.caseDetail.caseInformationTab"
                         className="classic-horizontal-header3 tab-border"
                       >
                         {caseInformationTab === 'overview' && (

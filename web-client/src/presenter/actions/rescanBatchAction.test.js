@@ -44,7 +44,9 @@ describe('rescanBatchAction', () => {
         scannerSourceName: 'scanner',
       },
       state: {
-        documentSelectedForScan: 'petition',
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         scanner: {
           batchIndexToRescan: 1,
           batches: {
@@ -72,7 +74,17 @@ describe('rescanBatchAction', () => {
         presenter,
       },
       state: {
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         scanner: {
+          batchIndexToRescan: 1,
+          batches: {
+            petition: [
+              { index: 0, pages: [{ a: 1 }, { b: 2 }] },
+              { index: 1, pages: [{ c: 3 }, { d: 4 }] },
+            ],
+          },
           isScanning: false,
         },
       },
