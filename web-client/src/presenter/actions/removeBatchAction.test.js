@@ -6,7 +6,9 @@ describe('removeBatchAction', () => {
     const { state } = await runAction(removeBatchAction, {
       props: {},
       state: {
-        documentSelectedForScan: 'petition',
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         scanner: {
           batchIndexToDelete: 5,
           batches: {
@@ -30,7 +32,9 @@ describe('removeBatchAction', () => {
         selectedBatchIndex: 4,
       },
       state: {
-        documentSelectedForScan: 'petition',
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         scanner: {
           batchIndexToDelete: 4,
           batches: {
@@ -60,7 +64,9 @@ describe('removeBatchAction', () => {
     const { state } = await runAction(removeBatchAction, {
       props: {},
       state: {
-        documentSelectedForScan: 'petition',
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         scanner: {
           batchIndex: 2,
           batches: {

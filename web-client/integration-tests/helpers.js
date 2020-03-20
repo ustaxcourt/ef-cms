@@ -566,7 +566,9 @@ export const base64ToUInt8Array = b64 => {
 };
 
 export const setBatchPages = ({ test }) => {
-  const selectedDocumentType = test.getState('documentSelectedForScan');
+  const selectedDocumentType = test.getState(
+    'currentViewMetadata.documentSelectedForScan',
+  );
   let batches = test.getState(`scanner.batches.${selectedDocumentType}`);
 
   test.setState(

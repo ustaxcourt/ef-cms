@@ -5,7 +5,9 @@ describe('resetScanSessionAction', () => {
   it('should reset the state for the current scanning session', async () => {
     const result = await runAction(resetScanSessionAction, {
       state: {
-        documentSelectedForScan: 'petition',
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         scanner: {
           batches: {
             petition: [{ pages: [] }],

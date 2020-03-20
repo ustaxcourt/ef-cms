@@ -42,7 +42,9 @@ describe('startScanAction', () => {
         scannerSourceName: 'scanner',
       },
       state: {
-        documentSelectedForScan: 'petition',
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         scanner: {
           batches: [],
           isScanning: false,
@@ -74,7 +76,9 @@ describe('startScanAction', () => {
         presenter,
       },
       state: {
-        documentSelectedForScan: 'petition',
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         scanner: {
           batches: {
             petition: [
@@ -106,7 +110,9 @@ describe('startScanAction', () => {
         scannerSourceName: 'scanner',
       },
       state: {
-        documentSelectedForScan: 'petition',
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         scanner: {
           batches: [],
           isScanning: false,
