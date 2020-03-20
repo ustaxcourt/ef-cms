@@ -827,39 +827,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('dateDifferenceInDays', () => {
-    it('returns calculated interval based on provided unit', () => {
-      const firstDate = '2020-01-09T12:00:00.000Z';
-      const tenDaysLater = '2020-01-19T12:00:00.000Z';
-      const result = Case.dateDifferenceInDays(tenDaysLater, firstDate);
-      expect(result).toEqual(10);
-    });
-    it('returns negative value if first date provided is earlier than second', () => {
-      const firstDate = '2020-01-01T12:00:00.000Z';
-      const fiveDaysLater = '2020-01-06T12:00:00.000Z';
-      const result = Case.dateDifferenceInDays(firstDate, fiveDaysLater);
-      expect(result).toEqual(-5);
-    });
-    it('returns a difference of 1 day if first day is "today at 4pm EST" and second day is "tomorrow at 8am EST"', () => {
-      const firstDate = '2020-01-01T21:00:00.000Z'; // 4pm EST
-      const sameDate = '2020-01-02T13:00:00.000Z'; // 8am EST
-      const result = Case.dateDifferenceInDays(sameDate, firstDate);
-      expect(result).toEqual(1);
-    });
-    it('returns difference of 1 day from the perspective of the EST time zone, even if dates provided occur on the same day in UTC and are only two minutes apart', () => {
-      const lateToday = '2020-01-02T04:59:00.000Z'; // 2010-01-01 at 11:59pm EST
-      const earlyTomorrow = '2020-01-02T05:01:00.000Z'; // 2020-01-02 at 12:01am EST
-      const result = Case.dateDifferenceInDays(earlyTomorrow, lateToday);
-      expect(result).toEqual(1);
-    });
-    it('returns difference of 1 day from the perspective of the EST time zone, even if dates provided occur on the same day in UTC', () => {
-      const earlyToday = '2020-01-02T05:01:00.000Z'; // 2010-01-02 at 12:01am EST
-      const lateTomorrow = '2020-01-04T04:59:00.000Z'; // 2020-01-03 at 11:59pm EST
-      const result = Case.dateDifferenceInDays(lateTomorrow, earlyToday);
-      expect(result).toEqual(1);
-    });
-  });
-
   describe('addDocketRecord', () => {
     it('adds a new docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
