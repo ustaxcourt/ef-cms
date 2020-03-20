@@ -160,7 +160,6 @@ export const state = {
   batchDownloads: {}, // batch download of PDFs
   caseDetail: {},
   caseDetailErrors: {}, // field level validation errors on update case screen TODO: move to validationErrors
-  caseDetailPage: {}, // current tabs for case detail page TODO: move to view metadata
   cases: [],
   cognitoLoginUrl: null,
   commonUI: {
@@ -170,9 +169,12 @@ export const state = {
   },
   completeForm: {}, // TODO: replace with state.form
   currentPage: 'Interstitial',
-  currentTab: '', // TODO: move to view metadata
-  docketNumberSearchForm: {}, // needs its own object because it's present when other forms are on screen
-  docketRecordIndex: 0,
+  currentTab: '',
+  currentViewMetadata: {
+    caseDetail: {},
+  },
+  docketNumberSearchForm: {}, // TODO: move to view metadata
+  docketRecordIndex: 0, // needs its own object because it's present when other forms are on screen
   document: {},
   documentDetail: {
     tab: '',

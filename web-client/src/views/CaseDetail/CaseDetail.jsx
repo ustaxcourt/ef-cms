@@ -16,8 +16,8 @@ export const CaseDetail = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     caseDetailSubnavHelper: state.caseDetailSubnavHelper,
-    caseInformationTab: state.caseDetailPage.caseInformationTab,
-    primaryTab: state.caseDetailPage.primaryTab,
+    caseInformationTab: state.currentViewMetadata.caseDetail.caseInformationTab,
+    primaryTab: state.currentViewMetadata.caseDetail.primaryTab,
     setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
   },
   ({

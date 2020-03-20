@@ -5,7 +5,7 @@ describe('setDefaultCaseDetailTabAction', () => {
   it('should set the default values for caseDetailPage tabs', async () => {
     const { state } = await runAction(setDefaultCaseDetailTabAction);
 
-    expect(state.caseDetailPage).toMatchObject({
+    expect(state.currentViewMetadata.caseDetail).toMatchObject({
       caseInformationTab: 'overview',
       inProgressTab: 'draftDocuments',
       primaryTab: 'docketRecord',
@@ -19,7 +19,7 @@ describe('setDefaultCaseDetailTabAction', () => {
       },
     });
 
-    expect(state.caseDetailPage).toMatchObject({
+    expect(state.currentViewMetadata.caseDetail).toMatchObject({
       caseInformationTab: 'overview',
       inProgressTab: 'draftDocuments',
       primaryTab: 'caseInformation',
@@ -41,7 +41,7 @@ describe('setDefaultCaseDetailTabAction', () => {
       },
     });
 
-    expect(state.caseDetailPage).toMatchObject({
+    expect(state.currentViewMetadata.caseDetail).toMatchObject({
       caseInformationTab: 'petitioner',
       frozen: true,
       inProgressTab: 'messages',
