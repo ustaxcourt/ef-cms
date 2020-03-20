@@ -64,11 +64,8 @@ exports.updateUserContactInformationInteractor = async ({
     .getPersistenceGateway()
     .getCasesByUser({
       applicationContext,
-      printOut: true,
       userId,
     });
-
-  console.log('LE USER CASES', userCases);
 
   const updatedCases = [];
   for (let userCase of userCases) {

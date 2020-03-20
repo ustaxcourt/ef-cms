@@ -93,7 +93,7 @@ describe('updateUserContactInformationInteractor', () => {
     };
   });
 
-  it.skip("should throw an error when the user's contact information has not changed", async () => {
+  it("should throw an error when the user's contact information has not changed", async () => {
     getCasesByUserStub = jest.fn().mockResolvedValue([
       {
         ...MOCK_CASE,
@@ -115,7 +115,7 @@ describe('updateUserContactInformationInteractor', () => {
     ).rejects.toThrow('there were no changes found needing to be updated');
   });
 
-  it.skip('updates the user and irsPractitioners in the case', async () => {
+  it('updates the user and irsPractitioners in the case', async () => {
     getCasesByUserStub = jest.fn().mockResolvedValue([
       {
         ...MOCK_CASE,
@@ -149,7 +149,7 @@ describe('updateUserContactInformationInteractor', () => {
     });
   });
 
-  it.skip('updates the user and privatePractitioners in the case but does not update cases that have been closed for more than 6 months', async () => {
+  it('updates the user and privatePractitioners in the case but does not update cases that have been closed for more than 6 months', async () => {
     const lastYear = calculateISODate({
       dateString: createISODateString(),
       howMuch: -1,
@@ -224,7 +224,7 @@ describe('updateUserContactInformationInteractor', () => {
     });
   });
 
-  it.skip('returns unauthorized error when user not authorized', async () => {
+  it('returns unauthorized error when user not authorized', async () => {
     applicationContext.getCurrentUser = () => ({
       role: User.ROLES.petitionsClerk,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -239,7 +239,7 @@ describe('updateUserContactInformationInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it.skip('returns unauthorized error when the user attempts to update a different user not owned by them', async () => {
+  it('returns unauthorized error when the user attempts to update a different user not owned by them', async () => {
     await expect(
       updateUserContactInformationInteractor({
         applicationContext,
@@ -249,7 +249,7 @@ describe('updateUserContactInformationInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it.skip('includes the practitioner name in the change of address document when the practitioner changes their address', async () => {
+  it('includes the practitioner name in the change of address document when the practitioner changes their address', async () => {
     user = MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f'];
 
     getCasesByUserStub = jest.fn().mockResolvedValue([
@@ -274,7 +274,7 @@ describe('updateUserContactInformationInteractor', () => {
     });
   });
 
-  it.skip('includes the irsPractitioner in the change of address document when the irsPractitioner changes their address', async () => {
+  it('includes the irsPractitioner in the change of address document when the irsPractitioner changes their address', async () => {
     getCasesByUserStub = jest.fn().mockResolvedValue([
       {
         ...MOCK_CASE,
@@ -295,27 +295,5 @@ describe('updateUserContactInformationInteractor', () => {
       documentTitle: 'Notice of Change of Address',
       filedBy: 'Resp.',
     });
-  });
-
-  it('does not update the case is there is no type of practitioners', async () => {
-    getCasesByUserStub = jest.fn().mockResolvedValue([
-      {
-        ...MOCK_CASE,
-        irsPractitioners: [],
-        privatePractitioners: [],
-      },
-    ]);
-    await updateUserContactInformationInteractor({
-      applicationContext,
-      contactInfo,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    });
-    expect(sendServedPartiesEmailsStub).toHaveBeenCalled();
-    expect(updateUserSpy).toHaveBeenCalled();
-
-    expect(updateUserSpy.mock.calls[0][0].user).toMatchObject({
-      contact: contactInfo,
-    });
-    expect(updateCaseSpy).toHaveBeenCalled();
   });
 });

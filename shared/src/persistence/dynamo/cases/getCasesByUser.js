@@ -4,20 +4,12 @@ const {
 const { getCaseByCaseId } = require('./getCaseByCaseId');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
-exports.getCasesByUser = async ({
-  applicationContext,
-  printOut = false,
-  userId,
-}) => {
+exports.getCasesByUser = async ({ applicationContext, userId }) => {
   let cases = await getRecordsViaMapping({
     applicationContext,
     pk: `user|${userId}`,
     prefix: 'case',
   });
-
-  if (printOut) {
-    console.log('LE USER CASES', cases);
-  }
 
   for (let i = 0; i < cases.length; i++) {
     cases[i] = {
