@@ -27,7 +27,7 @@ export const gotoDocumentDetailSequence = [
   clearWorkItemActionMapAction,
   clearFormsAction,
   stopShowValidationAction,
-  set(state.documentDetail.tab, 'partyInfo'),
+  set(state.currentViewMetadata.documentDetail.tab, 'partyInfo'),
   setDocumentIdAction,
   getCaseAction,
   setCaseAction,
