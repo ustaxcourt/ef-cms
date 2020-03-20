@@ -215,7 +215,6 @@ export const state = {
     selectedBatchIndex: 0,
   },
   screenMetadata: {},
-  searchMode: 'byName', // TODO: nest inside of a advanced search?
   sectionInboxCount: 0,
   sectionUsers: [],
   selectedWorkItems: [],
