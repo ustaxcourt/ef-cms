@@ -5,7 +5,7 @@ const { headers } = require('../middleware/apiGatewayHelper');
  *
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handler = async () => {
+exports.swaggerLambda = async () => {
   const body = `<html>
     <body>
       <head>
