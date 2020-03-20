@@ -1,3 +1,4 @@
+import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { setDocumentToEditAction } from './setDocumentToEditAction';
 
@@ -9,9 +10,23 @@ const documentToMatch = {
 
 documentToMatch.draftState = { ...documentToMatch };
 
+// TODO: convert to test applicationContext
+presenter.providers.applicationContext = {
+  getConstants: () => {
+    return {
+      SIGNED_DOCUMENT_TYPES: {
+        signedStipulatedDecision: { documentType: 'Stipulated Decision' },
+      },
+    };
+  },
+};
+
 describe('setDocumentToEditAction', () => {
   it('sets state.documentToEdit for the given case and documentIdToEdit', async () => {
     const result = await runAction(setDocumentToEditAction, {
+      modules: {
+        presenter,
+      },
       props: {
         caseDetail: {
           caseId: 'c123',
@@ -31,6 +46,9 @@ describe('setDocumentToEditAction', () => {
 
   it('sets state.form with the draft state of the documentToEdit', async () => {
     const result = await runAction(setDocumentToEditAction, {
+      modules: {
+        presenter,
+      },
       props: {
         caseDetail: {
           caseId: 'c123',
@@ -52,6 +70,9 @@ describe('setDocumentToEditAction', () => {
 
   it('does nothing if documentIdToEdit is not passed in via props', async () => {
     const result = await runAction(setDocumentToEditAction, {
+      modules: {
+        presenter,
+      },
       props: {
         caseDetail: {
           caseId: 'c123',
@@ -71,6 +92,9 @@ describe('setDocumentToEditAction', () => {
 
   it('sets state.documentToEdit and sets state.form to the documentIdToEdit if draftState does not exist for the selected document', async () => {
     const result = await runAction(setDocumentToEditAction, {
+      modules: {
+        presenter,
+      },
       props: {
         caseDetail: {
           caseId: 'c123',
