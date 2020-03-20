@@ -178,6 +178,9 @@ export const state = {
     startCaseInternal: {
       tab: '',
     },
+    trialSessions: {
+      tab: null,
+    },
   },
   docketNumberSearchForm: {}, // TODO: move to view metadata
   docketRecordIndex: 0, // needs its own object because it's present when other forms are on screen
@@ -228,9 +231,6 @@ export const state = {
   showModal: '',
   showValidation: false,
   timeRemaining: Number.POSITIVE_INFINITY,
-  trialSessionsTab: {
-    group: null,
-  },
   user: null,
   users: [],
   validationErrors: {},
