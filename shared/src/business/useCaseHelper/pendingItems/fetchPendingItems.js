@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const { Case } = require('../../entities/cases/Case');
+const { Document } = require('../../entities/Document');
 const { get, pick } = require('lodash');
 
 /**
@@ -74,8 +75,13 @@ exports.fetchPendingItems = async ({ applicationContext, caseId, judge }) => {
     documents.forEach(document => {
       if (document.pending) {
         foundDocuments.push({
+          ...new Document(
+            {
+              ...document,
+            },
+            { applicationContext },
+          ).toRawObject(),
           ...mappedProps,
-          ...document,
         });
       }
     });
