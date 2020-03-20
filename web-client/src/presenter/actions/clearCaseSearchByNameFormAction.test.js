@@ -6,20 +6,21 @@ describe.only('clearCaseSearchByNameFormAction', () => {
     const result = await runAction(clearCaseSearchByNameFormAction, {
       state: {
         advancedSearchForm: {
-          countryType: 'international',
+          caseSearchByName: {
+            countryType: 'international',
+            petitionerName: 'bob',
+            petitionerState: 'TN',
+            sure: 'yes',
+          },
           currentPage: 83,
-          petitionerName: 'bob',
-          petitionerState: 'TN',
-          sure: 'yes',
         },
         searchResults: [{ caseId: '1' }, { caseId: '2' }],
       },
     });
 
     expect(result.state.advancedSearchForm).toEqual({
-      countryType: 'domestic',
+      caseSearchByName: { countryType: 'domestic' },
       currentPage: 1,
-      sure: 'yes',
     });
     expect(result.state.searchResults).toBeUndefined();
   });

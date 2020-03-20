@@ -10,7 +10,9 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  */
 export const validateCaseDocketNumberSearchAction = async ({ get, path }) => {
-  const { docketNumber } = get(state.advancedSearchForm);
+  const { docketNumber } = get(
+    state.advancedSearchForm.caseSearchByDocketNumber,
+  );
   const errors = {};
 
   if (!docketNumber) {

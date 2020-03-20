@@ -22,7 +22,9 @@ describe('validateCaseDocketNumberSearchAction', () => {
         presenter,
       },
       state: {
-        advancedSearchForm: { docketNumber: '123' },
+        advancedSearchForm: {
+          caseSearchByDocketNumber: { docketNumber: '123' },
+        },
       },
     });
 
@@ -36,7 +38,7 @@ describe('validateCaseDocketNumberSearchAction', () => {
         presenter,
       },
       state: {
-        advancedSearchForm: {},
+        advancedSearchForm: { caseSearchByDocketNumber: {} },
       },
     });
 

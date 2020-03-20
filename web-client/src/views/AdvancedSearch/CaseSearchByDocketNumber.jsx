@@ -62,9 +62,13 @@ export const CaseSearchByDocketNumber = connect(
                     id="docket-number"
                     name="docketNumber"
                     type="text"
-                    value={advancedSearchForm.docketNumber || ''}
+                    value={
+                      advancedSearchForm.caseSearchByDocketNumber
+                        .docketNumber || ''
+                    }
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
+                        formType: 'caseSearchByDocketNumber',
                         key: e.target.name,
                         value: e.target.value,
                       });

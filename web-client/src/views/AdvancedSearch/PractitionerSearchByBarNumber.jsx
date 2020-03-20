@@ -53,9 +53,13 @@ export const PractitionerSearchByBarNumber = connect(
                     id="bar-number"
                     name="barNumber"
                     type="text"
-                    value={advancedSearchForm.barNumber || ''}
+                    value={
+                      advancedSearchForm.practitionerSearchByBarNumber
+                        .barNumber || ''
+                    }
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
+                        formType: 'practitionerSearchByBarNumber',
                         key: e.target.name,
                         value: e.target.value,
                       });

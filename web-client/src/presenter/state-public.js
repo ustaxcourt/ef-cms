@@ -6,10 +6,7 @@ import { publicCaseDetailHeaderHelper } from './computeds/public/publicCaseDetai
 import { publicCaseDetailHelper } from './computeds/public/publicCaseDetailHelper';
 
 export const state = {
-  advancedSearchForm: {
-    countryType: 'domestic',
-    currentPage: 1,
-  },
+  advancedSearchForm: {},
   advancedSearchHelper,
   commonUI: {
     showBetaBar: true,
