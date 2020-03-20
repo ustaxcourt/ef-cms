@@ -24,7 +24,6 @@ export const state = {
     showUsaBannerDetails: false,
   },
   currentPage: 'Interstitial',
-  searchMode: 'byName',
   user: {},
   validationErrors: {},
   waitingForResponse: false,
