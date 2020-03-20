@@ -76,7 +76,7 @@ Case.STATUS_TYPES_MANUAL_UPDATE = [
   Case.STATUS_TYPES.submitted,
 ];
 
-Case.ANSWER_CUTOFF_AMOUNT = 45;
+Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
 Case.ANSWER_CUTOFF_UNIT = 'day';
 
 Case.CASE_TYPES_MAP = {
@@ -1228,10 +1228,7 @@ Case.prototype.getWorkItems = function() {
  * @returns {Case} the updated case entity
  */
 Case.prototype.checkForReadyForTrial = function() {
-  let docFiledCutoffDate = prepareDateFromString().subtract(
-    Case.ANSWER_CUTOFF_AMOUNT,
-    Case.ANSWER_CUTOFF_UNIT,
-  );
+  const currentDate = prepareDateFromString().toISOString();
 
   const isCaseGeneralDocketNotAtIssue =
     this.status === Case.STATUS_TYPES.generalDocket;
@@ -1243,17 +1240,32 @@ Case.prototype.checkForReadyForTrial = function() {
         document.eventCode,
       );
 
-      const docFiledBeforeCutoff = prepareDateFromString(
+      const daysElapsedSinceDocumentWasFiled = Case.dateDifferenceInDays(
+        currentDate,
         document.createdAt,
-      ).isBefore(docFiledCutoffDate, Case.ANSWER_CUTOFF_UNIT);
+      );
 
-      if (isAnswerDocument && docFiledBeforeCutoff) {
+      const requiredTimeElapsedSinceFiling =
+        daysElapsedSinceDocumentWasFiled > Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS;
+
+      if (isAnswerDocument && requiredTimeElapsedSinceFiling) {
         this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
       }
     });
   }
 
   return this;
+};
+
+Case.dateDifferenceInDays = (timestamp1, timestamp2) => {
+  const moment1 = prepareDateFromString(timestamp1).set({
+    hours: 12,
+  });
+  const moment2 = prepareDateFromString(timestamp2).set({
+    hours: 12,
+  });
+  const differenceInHours = Math.round(moment1.diff(moment2, 'day', true));
+  return differenceInHours;
 };
 
 /**
