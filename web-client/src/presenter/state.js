@@ -192,9 +192,6 @@ export const state = {
   modal: {},
   navigation: {},
   notifications: {},
-  paymentInfo: {
-    showDetails: false,
-  },
   pdfForSigning: {
     documentId: null,
     nameForSigning: '',
