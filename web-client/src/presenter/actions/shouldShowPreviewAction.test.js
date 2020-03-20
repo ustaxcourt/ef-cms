@@ -29,7 +29,9 @@ describe('shouldShowPreviewAction', () => {
         presenter,
       },
       state: {
-        documentSelectedForScan: 'primaryDocumentFile',
+        currentViewMetadata: {
+          documentSelectedForScan: 'primaryDocumentFile',
+        },
         form: {
           primaryDocumentFile: mockFile,
         },
@@ -44,7 +46,9 @@ describe('shouldShowPreviewAction', () => {
         presenter,
       },
       state: {
-        documentSelectedForScan: 'primaryDocumentFile',
+        currentViewMetadata: {
+          documentSelectedForScan: 'primaryDocumentFile',
+        },
         form: {},
       },
     });

@@ -13,7 +13,7 @@ export const CaseDetailSubnavTabs = connect(
       <div className="case-detail-primary-tabs__container">
         <div className="case-detail-primary-tabs__tabs">
           <Tabs
-            bind="caseDetailPage.primaryTab"
+            bind="currentViewMetadata.caseDetail.primaryTab"
             className="container-tabs-dark"
             onSelect={() => clearAlertSequence()}
           >

@@ -31,7 +31,9 @@ export const rescanBatchAction = async ({
       applicationContext,
       scanMode,
     });
-    const documentSelectedForScan = get(state.documentSelectedForScan);
+    const documentSelectedForScan = get(
+      state.currentViewMetadata.documentSelectedForScan,
+    );
     const batches = get(state.scanner.batches[documentSelectedForScan]);
     batches.find(b => b.index === batchIndex).pages = pages;
     store.set(state.scanner.batches[documentSelectedForScan], batches);
