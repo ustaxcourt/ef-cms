@@ -90,6 +90,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     adminUpdateUserAttributes: jest.fn(),
   };
 
+  const mockStorageClientReturnValue = {
+    deleteObject: jest.fn(),
+  };
+
   const mockGetPersistenceGatewayReturnValue = {
     addWorkItemToSectionInbox,
     associateUserWithCase: jest.fn(),
@@ -175,7 +179,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       return mockGetPersistenceGatewayReturnValue;
     }),
     getPug: jest.fn(),
-    getStorageClient: jest.fn(),
+    getStorageClient: jest.fn().mockImplementation(() => {
+      return mockStorageClientReturnValue;
+    }),
     getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
     getUseCases: jest.fn(),
