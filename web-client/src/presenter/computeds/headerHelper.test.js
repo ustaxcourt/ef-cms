@@ -27,8 +27,8 @@ const internal = [
 ];
 const external = [
   User.ROLES.petitioner,
-  User.ROLES.practitioner,
-  User.ROLES.respondent,
+  User.ROLES.privatePractitioner,
+  User.ROLES.irsPractitioner,
 ];
 
 describe('headerHelper', () => {
@@ -83,12 +83,12 @@ describe('headerHelper', () => {
   });
   it('should NOT show search in header for practitioners or respondents', () => {
     let result = runCompute(headerHelper, {
-      state: getBaseState({ role: User.ROLES.practitioner }),
+      state: getBaseState({ role: User.ROLES.privatePractitioner }),
     });
     expect(result.showSearchInHeader).toBeFalsy();
 
     result = runCompute(headerHelper, {
-      state: getBaseState({ role: User.ROLES.respondent }),
+      state: getBaseState({ role: User.ROLES.irsPractitioner }),
     });
     expect(result.showSearchInHeader).toBeFalsy();
   });

@@ -1,7 +1,8 @@
-export default test => {
+import { refreshElasticsearchIndex } from '../helpers';
+
+export const associatedUserAdvancedSearchForSealedCase = test => {
   return it('associated user performs an advanced search by name for a sealed case', async () => {
-    // we need to wait for elasticsearch to get updated by the processing stream lambda after creating the case
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await refreshElasticsearchIndex();
 
     await test.runSequence('gotoAdvancedSearchSequence');
 

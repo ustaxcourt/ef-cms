@@ -32,6 +32,7 @@
     "completedAt": "2019-08-16T17:30:10.526Z",
     "docketNumberSuffix": "L",
     "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "caseIsInProgress": false,
     "completedMessage": "Served on IRS",
     "document": {
       "eventCode": "P",
@@ -77,6 +78,7 @@
     "completedAt": "2019-08-16T17:30:10.526Z",
     "docketNumberSuffix": "L",
     "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "caseIsInProgress": false,
     "completedMessage": "Served on IRS",
     "document": {
       "eventCode": "P",
@@ -134,7 +136,8 @@
           {
             "completedAt": "2019-08-16T17:30:10.526Z",
             "docketNumberSuffix": "L",
-            "caseStatus": "In Progress",
+            "caseStatus": "New",
+            "caseIsInProgress": false,
             "completedMessage": "Served on IRS",
             "document": {
               "eventCode": "P",
@@ -216,6 +219,8 @@
     "partyType": "Partnership (as a partnership representative under the BBA regime)",
     "irsSendDate": "2019-08-16T17:30:10.522Z",
     "caseType": "CDP (Lien/Levy)",
+    "sortableDocketNumber": 19000107,
+    "entityName": "Case",
     "contactPrimary": {
       "address3": "Veritatis vel tenetu",
       "secondaryName": "Wayne Obrien",
@@ -248,7 +253,7 @@
     "preferredTrialCity": "Las Vegas, Nevada",
     "respondents": [
       {
-        "role": "respondent",
+        "role": "irsPractitioner",
         "serviceIndicator": "Electronic",
         "barNumber": "RT6789",
         "contact": {
@@ -262,18 +267,18 @@
           "state": "IL"
         },
         "sk": "5805d1ab-18d0-43ec-bafb-654e83405416",
-        "name": "Test Respondent",
-        "section": "respondent",
+        "name": "Test IRS Practitioner",
+        "section": "irsPractitioner",
         "pk": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-        "email": "respondent"
+        "email": "irsPractitioner"
       }
     ],
     "practitioners": [
       {
         "serviceIndicator": "Electronic",
-        "role": "practitioner",
-        "section": "practitioner",
+        "role": "privatePractitioner",
+        "section": "privatePractitioner",
         "representingPrimary": true,
         "contact": {
           "address1": "234 Main St",
@@ -288,35 +293,9 @@
         "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "barNumber": "PT1234",
         "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "name": "Test Practitioner",
+        "name": "Test Private Practitioner",
         "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "email": "practitioner"
-      }
-    ],
-    "docketRecord": [
-      {
-        "description": "Petition",
-        "eventCode": "P",
-        "index": 1,
-        "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
-        "filingDate": "2019-08-16T17:29:10.132Z",
-        "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
-        "status": "R served on 08/16/2019 12:30 PM"
-      },
-      {
-        "eventCode": "RQT",
-        "description": "Request for Place of Trial at Las Vegas, Nevada",
-        "index": 2,
-        "filingDate": "2019-08-16T17:29:10.132Z"
-      },
-      {
-        "description": "Ownership Disclosure Statement",
-        "eventCode": "DISC",
-        "index": 3,
-        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
-        "filingDate": "2019-08-16T17:29:10.133Z",
-        "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
-        "status": "R served on 08/16/2019 12:30 PM"
+        "email": "privatePractitioner"
       }
     ],
     "orderForAmendedPetitionAndFilingFee": false,
@@ -326,9 +305,43 @@
     "associatedJudge": "Chief Judge"
   },
   {
+    "description": "Petition",
+    "eventCode": "P",
+    "index": 1,
+    "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+    "filingDate": "2019-08-16T17:29:10.132Z",
+    "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
+    "status": "R served on 08/16/2019 12:30 PM",
+    "docketRecordId": "e43fd71d-ed47-4ffd-b07a-0394fc02965c",
+    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "docket-record|e43fd71d-ed47-4ffd-b07a-0394fc02965c"
+  },
+  {
+    "eventCode": "RQT",
+    "description": "Request for Place of Trial at Las Vegas, Nevada",
+    "index": 2,
+    "filingDate": "2019-08-16T17:29:10.132Z",
+    "docketRecordId": "b3352d0e-8686-4206-955c-d1659570f26b",
+    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "docket-record|b3352d0e-8686-4206-955c-d1659570f26b"
+  },
+  {
+    "description": "Ownership Disclosure Statement",
+    "eventCode": "DISC",
+    "index": 3,
+    "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+    "filingDate": "2019-08-16T17:29:10.133Z",
+    "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
+    "status": "R served on 08/16/2019 12:30 PM",
+    "docketRecordId": "eb5f5c4c-2873-4a25-98ff-e34cbcfeecd8",
+    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "docket-record|eb5f5c4c-2873-4a25-98ff-e34cbcfeecd8"
+  },
+  {
     "completedAt": "2019-08-16T17:30:10.526Z",
     "docketNumberSuffix": "L",
-    "caseStatus": "In Progress",
+    "caseStatus": "New",
+    "caseIsInProgress": false,
     "completedMessage": "Served on IRS",
     "document": {
       "eventCode": "P",

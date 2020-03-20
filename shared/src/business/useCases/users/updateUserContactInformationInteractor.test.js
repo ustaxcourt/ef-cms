@@ -46,6 +46,13 @@ describe('updateUserContactInformationInteractor', () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCaseCaptionNames: Case.getCaseCaptionNames,
+      getChromiumBrowser: () => ({
+        close: () => null,
+        newPage: () => ({
+          pdf: () => fakeData,
+          setContent: () => null,
+        }),
+      }),
       getCurrentUser: () => user,
       getPersistenceGateway: () => {
         return {
@@ -79,6 +86,7 @@ describe('updateUserContactInformationInteractor', () => {
         }),
       }),
       logger: {
+        error: e => console.log(e),
         time: () => null,
         timeEnd: () => null,
       },

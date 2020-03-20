@@ -95,9 +95,11 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 - Node v12.13.1
 - npm v6.12.1
 - ClamAV v0.101.2 (see Setup below)
+-  Java 11
 
 ### Setup
 
+- Install the JDK from https://www.oracle.com/java/technologies/javase-jdk13-downloads.html
 For ClamAV, macOS users can do the following:
 - `brew install clamav`
 - `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`
@@ -113,7 +115,7 @@ Both the front-end (`/web-client`) and API (`/web-api`) share code that exists i
 
 ##### Other Start Commands
 
-- Run `cd web-client && npm start:client:no-scanner` to start the UI without Dynamsoft (or if you don't have a scanner)
+- Run `cd web-client && npm run start:client:no-scanner` to start the UI without Dynamsoft (or if you don't have a scanner)
 - Run `npm run start:public` to start the UI for the public access portion of the site
 
 #### Terminal B
@@ -132,10 +134,10 @@ You can log in using the following accounts.
 
 ```
 petitioner
-practitioner
-practitioner1 - practitioner4
-respondent
-respondent1 - respondent4
+privatePractitioner
+privatePractitioner1 - privatePractitioner4
+irsPractitioner
+irsPractitioner1 - irsPractitioner4
 ```
 
 #### Internal Users
@@ -169,8 +171,8 @@ To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm
 #### External Users
 ```
 petitioner1@example.com – petitioner5@example.com
-practitioner1@example.com – practitioner10@example.com
-respondent1@example.com – respondent10@example.com
+privatePractitioner1@example.com – privatePractitioner10@example.com
+irsPractitioner1@example.com – irsPractitioner10@example.com
 ```
 
 #### Internal Users

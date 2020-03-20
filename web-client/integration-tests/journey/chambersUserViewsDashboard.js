@@ -2,7 +2,7 @@ import { runCompute } from 'cerebral/test';
 import { trialSessionsSummaryHelper } from '../../src/presenter/computeds/trialSessionsSummaryHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default (
+export const chambersUserViewsDashboard = (
   test,
   message = 'Test message',
   judgeUserId = 'dabbad00-18d0-43ec-bafb-654e83405416',

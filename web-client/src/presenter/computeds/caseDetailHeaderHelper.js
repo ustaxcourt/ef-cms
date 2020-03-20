@@ -26,11 +26,11 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   let showFileFirstDocumentButton = false;
 
   if (isExternalUser && !userAssociatedWithCase) {
-    if (user.role === USER_ROLES.practitioner) {
+    if (user.role === USER_ROLES.privatePractitioner) {
       showRequestAccessToCaseButton =
         !pendingAssociation && !isRequestAccessForm && !isCaseSealed;
       showPendingAccessToCaseButton = pendingAssociation;
-    } else if (user.role === USER_ROLES.respondent) {
+    } else if (user.role === USER_ROLES.irsPractitioner) {
       showFileFirstDocumentButton = !caseHasRespondent && !isCaseSealed;
       showRequestAccessToCaseButton =
         caseHasRespondent && !isRequestAccessForm && !isCaseSealed;

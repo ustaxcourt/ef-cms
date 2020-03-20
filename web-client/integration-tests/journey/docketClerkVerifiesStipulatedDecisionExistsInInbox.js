@@ -1,5 +1,9 @@
 import { getFormattedMyInbox } from '../helpers';
-export default (test, message) => {
+
+export const docketClerkVerifiesStipulatedDecisionExistsInInbox = (
+  test,
+  message,
+) => {
   describe('Docket Clerk navigates to My Inbox', () => {
     it('navigates to inbox', async () => {
       await test.runSequence('navigateToPathSequence', {

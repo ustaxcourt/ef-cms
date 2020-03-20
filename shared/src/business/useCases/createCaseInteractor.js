@@ -26,6 +26,7 @@ const addPetitionDocumentToCase = ({
       assigneeName: null,
       associatedJudge: caseToAdd.associatedJudge,
       caseId: caseToAdd.caseId,
+      caseIsInProgress: caseToAdd.inProgress,
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseToAdd)),
       docketNumber: caseToAdd.docketNumber,
@@ -103,7 +104,7 @@ exports.createCaseInteractor = async ({
   );
 
   let practitioners = [];
-  if (user.role === User.ROLES.practitioner) {
+  if (user.role === User.ROLES.privatePractitioner) {
     const practitionerUser = await applicationContext
       .getPersistenceGateway()
       .getUserById({

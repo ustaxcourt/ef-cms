@@ -20,6 +20,7 @@ describe('sealCaseInteractor', () => {
           updateCase: caseToUpdate => Promise.resolve(caseToUpdate),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     await expect(
       sealCaseInteractor({
@@ -46,6 +47,7 @@ describe('sealCaseInteractor', () => {
           updateCase: ({ caseToUpdate }) => Promise.resolve(caseToUpdate),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const result = await sealCaseInteractor({
       applicationContext,
