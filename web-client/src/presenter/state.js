@@ -172,13 +172,13 @@ export const state = {
   currentTab: '',
   currentViewMetadata: {
     caseDetail: {},
+    documentDetail: {
+      tab: '',
+    },
   },
   docketNumberSearchForm: {}, // TODO: move to view metadata
   docketRecordIndex: 0, // needs its own object because it's present when other forms are on screen
   document: {},
-  documentDetail: {
-    tab: '',
-  },
   documentId: null,
   documentSelectedForPreview: null,
   documentSelectedForScan: null,
