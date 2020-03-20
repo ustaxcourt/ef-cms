@@ -6,20 +6,24 @@ import { publicAlertHelper } from './computeds/public/publicAlertHelper';
 import { publicCaseDetailHeaderHelper } from './computeds/public/publicCaseDetailHeaderHelper';
 import { publicCaseDetailHelper } from './computeds/public/publicCaseDetailHelper';
 
-export const state = {
-  advancedSearchForm: {},
+const helpers = {
   advancedSearchHelper,
   alertHelper: publicAlertHelper,
+  loadingHelper,
+  menuHelper,
+  publicCaseDetailHeaderHelper,
+  publicCaseDetailHelper,
+};
+
+export const state = {
+  ...helpers,
+  advancedSearchForm: {},
   commonUI: {
     showBetaBar: true,
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
   currentPage: 'Interstitial',
-  loadingHelper,
-  menuHelper,
-  publicCaseDetailHeaderHelper,
-  publicCaseDetailHelper,
   searchMode: 'byName',
   user: {},
   validationErrors: {},

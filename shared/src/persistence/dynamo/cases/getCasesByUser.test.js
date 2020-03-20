@@ -26,22 +26,24 @@ const user = {
 
 describe('getCasesByUser', () => {
   beforeEach(() => {
-    client.batchGet = jest.fn().mockReturnValue([
-      {
-        caseId: '123',
-        pk: 'case|123',
-        sk: 'case|123',
-        status: 'New',
-      },
-    ]);
-    client.query = jest.fn().mockReturnValue([
-      {
-        caseId: '123',
-        pk: 'case|123',
-        sk: 'case|123',
-        status: 'New',
-      },
-    ]);
+    client.query = jest
+      .fn()
+      .mockReturnValueOnce([
+        {
+          caseId: '123',
+          pk: 'case|123',
+          sk: 'case|123',
+          status: 'New',
+        },
+      ])
+      .mockReturnValueOnce([
+        {
+          caseId: '123',
+          pk: 'case|123',
+          sk: 'case|123',
+          status: 'New',
+        },
+      ]);
   });
 
   it('should return data as received from persistence', async () => {
@@ -63,13 +65,13 @@ describe('getCasesByUser', () => {
     ]);
   });
 
-  it('should attempt to do a batch get in the same ids that were returned in the mapping records', async () => {
+  it('should attempt to do a query using the found caseIds', async () => {
     await getCasesByUser({
       applicationContext,
       user,
     });
-    expect(client.batchGet.mock.calls[0][0].keys).toEqual([
-      { pk: 'case|123', sk: 'case|123' },
-    ]);
+    expect(client.query.mock.calls[1][0].ExpressionAttributeValues).toEqual({
+      ':pk': 'case|123',
+    });
   });
 });
