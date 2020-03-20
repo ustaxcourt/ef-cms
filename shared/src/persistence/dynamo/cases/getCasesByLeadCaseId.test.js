@@ -28,22 +28,6 @@ describe('getCasesByLeadCaseId', () => {
         status: 'New',
       });
 
-    // getCaseByCaseIdStub = jest.fn();
-    // isAuthorizedForWorkItemsStub = jest.fn().mockReturnValue(true);
-
-    // applicationContext = {
-    //   environment: {
-    //     stage: 'dev',
-    //   },
-    //   getDocumentClient: () => ({
-    //     query: queryStub,
-    //   }),
-    //   getPersistenceGateway: () => ({
-    //     getCaseByCaseId: getCaseByCaseIdStub,
-    //   }),
-    //   isAuthorizedForWorkItems: isAuthorizedForWorkItemsStub,
-    // };
-
     const result = await getCasesByLeadCaseId({
       applicationContext,
       leadCaseId: 'case|123',
