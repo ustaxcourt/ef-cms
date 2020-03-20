@@ -11,20 +11,22 @@ describe('getCasesByLeadCaseId', () => {
       promise: async () => ({
         Items: [
           {
-            caseId: '123',
-            docketRecord: [],
-            documents: [],
-            irsPractitioners: [],
-            pk: 'case|123',
-            privatePractitioners: [],
-            sk: 'case|123',
-            status: 'New',
+            caseId: 'abc',
           },
         ],
       }),
     }));
 
-    getCaseByCaseIdStub = jest.fn().mockResolvedValue([]);
+    getCaseByCaseIdStub = jest.fn().mockResolvedValue({
+      caseId: '123',
+      docketRecord: [],
+      documents: [],
+      irsPractitioners: [],
+      pk: 'case|123',
+      privatePractitioners: [],
+      sk: 'case|123',
+      status: 'New',
+    });
     isAuthorizedForWorkItemsStub = jest.fn().mockReturnValue(true);
 
     applicationContext = {
