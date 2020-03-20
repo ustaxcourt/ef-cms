@@ -15,14 +15,17 @@ export default test => {
     });
 
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
       key: 'petitionerName',
       value: 'Stormborn',
     });
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
       key: 'yearFiledMin',
       value: '1800',
     });
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
       key: 'yearFiledMax',
       value: '2030',
     });
@@ -35,14 +38,17 @@ export default test => {
     });
 
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
       key: 'yearFiledMin',
       value: '2001',
     });
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
       key: 'yearFiledMax',
       value: '2001',
     });
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
       key: 'countryType',
       value: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
     });

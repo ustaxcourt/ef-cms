@@ -162,11 +162,6 @@ export const state = {
   caseDetailErrors: {}, // field level validation errors on update case screen TODO: move to validationErrors
   cases: [],
   cognitoLoginUrl: null,
-  commonUI: {
-    showBetaBar: true,
-    showMobileMenu: false,
-    showUsaBannerDetails: false,
-  },
   completeForm: {}, // TODO: replace with state.form
   currentPage: 'Interstitial',
   currentTab: '',
@@ -184,16 +179,19 @@ export const state = {
       tab: null,
     },
   },
-  docketNumberSearchForm: {}, // TODO: move to view metadata
   docketRecordIndex: 0, // needs its own object because it's present when other forms are on screen
   document: {},
   documentId: null,
   fieldOrder: [], // TODO: related to errors
   form: {}, // shared object for creating new entities, clear before using
+  header: {
+    showBetaBar: true,
+    showMobileMenu: false,
+    showUsaBannerDetails: false,
+  },
   modal: {},
   navigation: {},
   notifications: {},
-  path: '/', // can this be refactored away? Using router.query?
   paymentInfo: {
     showDetails: false,
   },
@@ -219,8 +217,8 @@ export const state = {
     selectedBatchIndex: 0,
   },
   screenMetadata: {},
-  searchMode: 'byName',
-  searchTerm: '',
+  searchMode: 'byName', // TODO: nest inside of a advanced search?
+  searchTerm: '', // search in the header
   sectionInboxCount: 0,
   sectionUsers: [],
   selectedWorkItems: [],
