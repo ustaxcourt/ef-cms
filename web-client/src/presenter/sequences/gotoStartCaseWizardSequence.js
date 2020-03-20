@@ -14,7 +14,7 @@ const gotoStartCaseInternal = [
   setStartInternalCaseDefaultTabAction,
   updateOrderForDesignatingPlaceOfTrialAction,
   set(state.currentViewMetadata.documentUploadMode, 'scan'),
-  set(state.documentSelectedForScan, 'petitionFile'),
+  set(state.currentViewMetadata.documentSelectedForScan, 'petitionFile'),
   setCurrentPageAction('StartCaseInternal'),
 ];
 

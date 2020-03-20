@@ -14,7 +14,7 @@ import React from 'react';
 
 export const StartCaseInternal = connect(
   {
-    documentSelectedForScan: state.documentSelectedForScan,
+    documentSelectedForScan: state.currentViewMetadata.documentSelectedForScan,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateToReviewPetitionFromPaperSequence:
       sequences.navigateToReviewPetitionFromPaperSequence,

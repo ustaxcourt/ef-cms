@@ -352,7 +352,10 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     });
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
 
-    await test.setState('documentSelectedForScan', 'stinFile');
+    await test.setState(
+      'currentViewMetadata.documentSelectedForScan',
+      'stinFile',
+    );
     await test.runSequence('openConfirmDeletePDFModalSequence');
     await test.runSequence('removeScannedPdfSequence');
     expect(test.getState('form.stinFile')).toBeUndefined();
@@ -381,7 +384,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
 
     await test.setState(
-      'documentSelectedForScan',
+      'currentViewMetadata.documentSelectedForScan',
       'requestForPlaceOfTrialFile',
     );
     await test.runSequence('openConfirmDeletePDFModalSequence');
@@ -407,7 +410,10 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
   });
 
   it('should allow the deletion an uploaded ownership disclosure statement file', async () => {
-    await test.setState('documentSelectedForScan', 'odsFile');
+    await test.setState(
+      'currentViewMetadata.documentSelectedForScan',
+      'odsFile',
+    );
     await test.runSequence('openConfirmDeletePDFModalSequence');
     await test.runSequence('removeScannedPdfSequence');
     expect(test.getState('form.odsFile')).toBeUndefined();
@@ -431,7 +437,10 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
   });
 
   it('should allow deletion of an uploaded application for waiver of filing fee file', async () => {
-    await test.setState('documentSelectedForScan', 'apwFile');
+    await test.setState(
+      'currentViewMetadata.documentSelectedForScan',
+      'apwFile',
+    );
     await test.runSequence('openConfirmDeletePDFModalSequence');
     await test.runSequence('removeScannedPdfSequence');
     expect(test.getState('form.apwFile')).toBeUndefined();
