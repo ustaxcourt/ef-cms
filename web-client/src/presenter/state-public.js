@@ -11,13 +11,13 @@ export const state = {
     currentPage: 1,
   },
   advancedSearchHelper,
-  commonUI: {
+  currentPage: 'PublicSearch',
+  docketNumberSearchForm: {},
+  header: {
     showBetaBar: true,
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
-  currentPage: 'PublicSearch',
-  docketNumberSearchForm: {},
   loadingHelper,
   menuHelper,
   publicCaseDetailHeaderHelper,

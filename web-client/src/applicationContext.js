@@ -480,6 +480,7 @@ const applicationContext = {
         (process.env.SESSION_TIMEOUT &&
           parseInt(process.env.SESSION_TIMEOUT)) ||
         55 * MINUTES,
+      SIGNED_DOCUMENT_TYPES: Document.SIGNED_DOCUMENT_TYPES,
       STATUS_TYPES: Case.STATUS_TYPES,
       STATUS_TYPES_MANUAL_UPDATE: Case.STATUS_TYPES_MANUAL_UPDATE,
       STATUS_TYPES_WITH_ASSOCIATED_JUDGE:
