@@ -183,6 +183,10 @@ describe('updateCase', () => {
   });
 
   describe('irsPractitioners', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
     it('adds a irsPractitioner to a case with no existing irsPractitioners', async () => {
       await updateCase({
         applicationContext,
@@ -284,7 +288,7 @@ describe('updateCase', () => {
       });
     });
 
-    it('removes a irsPractitioner from a case with existing irsPractitioners', async () => {
+    it('removes an irsPractitioner from a case with existing irsPractitioners', async () => {
       firstQueryStub.push({
         name: 'Guy Fieri',
         pk: 'case|123',
@@ -318,13 +322,19 @@ describe('updateCase', () => {
         applicationContext.getDocumentClient().put.mock.calls.length,
       ).toEqual(1);
       expect(
-        applicationContext.getDocumentClient().put.mock.calls[0][0].Item
-          .irsPractitioners,
-      ).toMatchObject([{ name: 'Rachel Ray', userId: 'user-id-existing-234' }]);
+        applicationContext.getDocumentClient().delete.mock.calls[0][0].Key,
+      ).toMatchObject({
+        pk: 'case|123',
+        sk: 'irsPractitioner|user-id-existing-123',
+      });
     });
   });
 
   describe('PrivatePractitioners', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
     it('adds a privatePractitioner to a case with no existing privatePractitioners', async () => {
       await updateCase({
         applicationContext,
@@ -435,37 +445,14 @@ describe('updateCase', () => {
 
       expect(applicationContext.getDocumentClient().delete).toHaveBeenCalled();
       expect(
-        applicationContext.getDocumentClient().put.mock.calls.length,
+        applicationContext.getDocumentClient().delete.mock.calls.length,
       ).toEqual(1);
       expect(
-        applicationContext.getDocumentClient().put.mock.calls[0][0].Item
-          .privatePractitioners,
-      ).toMatchObject([{ name: 'Rachel Ray', userId: 'user-id-existing-234' }]);
-    });
-
-    it('removes a privatePractitioner from a case with existing privatePractitioners', async () => {
-      addPrivatePractitioners();
-
-      await updateCase({
-        applicationContext,
-        caseToUpdate: {
-          caseId: '123',
-          docketNumberSuffix: null,
-          privatePractitioners: [
-            { name: 'Rachel Ray', userId: 'user-id-existing-234' },
-          ],
-          status: Case.STATUS_TYPES.generalDocket,
-        },
+        applicationContext.getDocumentClient().delete.mock.calls[0][0].Key,
+      ).toMatchObject({
+        pk: 'case|123',
+        sk: 'privatePractitioner|user-id-existing-123',
       });
-
-      expect(applicationContext.getDocumentClient().delete).toHaveBeenCalled();
-      expect(
-        applicationContext.getDocumentClient().put.mock.calls.length,
-      ).toEqual(1);
-      expect(
-        applicationContext.getDocumentClient().put.mock.calls[0][0].Item
-          .privatePractitioners,
-      ).toMatchObject([{ name: 'Rachel Ray', userId: 'user-id-existing-234' }]);
     });
   });
 });

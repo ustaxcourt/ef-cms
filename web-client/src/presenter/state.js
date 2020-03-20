@@ -73,78 +73,42 @@ import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
-export const state = {
+const helpers = {
   addCourtIssuedDocketEntryHelper,
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
   addEditUserCaseNoteModalHelper,
   addToTrialSessionModalHelper,
-  advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
   advancedSearchHelper,
   alertHelper,
-  archiveDraftDocument: {
-    // used by the delete draft document modal
-    caseId: null,
-    documentId: null,
-    documentTitle: null,
-  },
-  assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloadHelper,
-  batchDownloads: {}, // batch download of PDFs
-  batchIndexToRescan: null, // batch index for re-scanning
-  batches: [], // batches from scanning
-  betaBar: {
-    isVisible: true,
-  },
   blockedCasesReportHelper,
-  // caseCaption: '',
   caseDeadlineReportHelper,
-  caseDetail: {},
   caseDetailEditContactsHelper,
   caseDetailEditHelper,
-  caseDetailErrors: {}, // field level validation errors on update case screen TODO: move to validationErrors
   caseDetailHeaderHelper,
   caseDetailHelper,
-  caseDetailPage: {}, // current tabs for case detail page TODO: move to view metadata
   caseDetailSubnavHelper,
   caseInformationHelper,
   caseInventoryReportHelper,
   caseTypeDescriptionHelper,
-  cases: [],
-  cognitoLoginUrl: null,
   completeDocumentTypeSectionHelper,
-  completeForm: {}, // TODO: replace with state.form
   confirmInitiateServiceModalHelper,
   contactEditHelper,
   contactsHelper,
   createAttorneyUserHelper,
   createOrderHelper,
-  currentPage: 'Interstitial',
-  currentPageIndex: 0, // wizard step
-  currentTab: '', // TODO: move to view metadata
   dashboardExternalHelper,
-  docketNumberSearchForm: {}, // needs its own object because it's present when other forms are on screen
   docketRecordHelper,
-  docketRecordIndex: 0,
-  document: {},
-  documentDetail: {
-    tab: '',
-  },
   documentDetailHelper,
-  documentId: null,
-  documentSelectedForPreview: null,
-  documentSelectedForScan: null,
   documentSigningHelper,
-  documentUploadMode: 'scan', // TODO: move inside another object
   editDocketEntryHelper,
   editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
-  fieldOrder: [], // TODO: move to view metadata
   fileDocumentHelper,
   fileUploadStatusHelper,
-  form: {}, // shared object for creating new entities, clear before using
   formattedCaseDetail,
   formattedCases,
   formattedDashboardTrialSessions,
@@ -155,17 +119,74 @@ export const state = {
   getTrialCityName,
   headerHelper,
   internalTypesHelper,
-  isAccountMenuOpen: false,
   loadingHelper,
   menuHelper,
-  mobileMenu: {
-    isVisible: false,
+  orderTypesHelper,
+  pdfPreviewModalHelper,
+  pdfSignerHelper,
+  requestAccessHelper,
+  reviewPetitionFromPaperHelper,
+  reviewSavedPetitionHelper,
+  scanBatchPreviewerHelper,
+  scanHelper,
+  selectDocumentSelectHelper,
+  selectDocumentTypeHelper,
+  showAppTimeoutModalHelper,
+  startCaseHelper,
+  startCaseInternalContactsHelper,
+  startCaseInternalHelper,
+  trialCitiesHelper,
+  trialSessionDetailsHelper,
+  trialSessionHeaderHelper,
+  trialSessionWorkingCopyHelper,
+  trialSessionsHelper,
+  trialSessionsSummaryHelper,
+  updateCaseModalHelper,
+  viewAllDocumentsHelper,
+  workQueueHelper,
+  workQueueSectionHelper,
+};
+
+export const state = {
+  ...helpers,
+  advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
+  archiveDraftDocument: {
+    // used by the delete draft document modal
+    caseId: null,
+    documentId: null,
+    documentTitle: null,
   },
+  assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
+  batchDownloads: {}, // batch download of PDFs
+  caseDetail: {},
+  caseDetailErrors: {}, // field level validation errors on update case screen TODO: move to validationErrors
+  caseDetailPage: {}, // current tabs for case detail page TODO: move to view metadata
+  cases: [],
+  cognitoLoginUrl: null,
+  commonUI: {
+    showBetaBar: true,
+    showMobileMenu: false,
+    showUsaBannerDetails: false,
+  },
+  completeForm: {}, // TODO: replace with state.form
+  currentPage: 'Interstitial',
+  currentTab: '', // TODO: move to view metadata
+  docketNumberSearchForm: {}, // needs its own object because it's present when other forms are on screen
+  docketRecordIndex: 0,
+  document: {},
+  documentDetail: {
+    tab: '',
+  },
+  documentId: null,
+  documentSelectedForPreview: null,
+  documentSelectedForScan: null,
+  documentUploadMode: 'scan', // TODO: move inside another object
+  fieldOrder: [], // TODO: move to view metadata
+  form: {}, // shared object for creating new entities, clear before using
   modal: {},
   navigation: {},
   notifications: {},
-  orderTypesHelper,
-  path: '/',
+  path: '/', // can this be refactored away? Using router.query?
   paymentInfo: {
     showDetails: false,
   },
@@ -177,66 +198,45 @@ export const state = {
     signatureApplied: false,
     signatureData: null,
   },
-  pdfPreviewModal: {},
-  pdfPreviewModalHelper,
-  pdfSignerHelper,
+  pdfPreviewModal: {}, // how is this different than the modal?
   percentComplete: 0,
   permissions: null,
-  petition: {}, // TODO: remove
   previewPdfFile: null,
-  procedureTypes: [],
-  requestAccessHelper,
-  reviewPetitionFromPaperHelper,
-  reviewSavedPetitionHelper,
-  scanBatchPreviewerHelper,
-  scanHelper,
-  scanner: {},
+  scanner: {
+    batchIndexToDelete: null,
+    batchIndexToRescan: null, // batch index for re-scanning
+    batchToDeletePageCount: null,
+    batches: [],
+    currentPageIndex: 0, // batches from scanning
+    isScanning: false,
+    selectedBatchIndex: 0,
+  },
   screenMetadata: {},
   searchMode: 'byName',
   searchTerm: '',
   sectionInboxCount: 0,
   sectionUsers: [],
-  selectDocumentSelectHelper,
-  selectDocumentTypeHelper,
-  selectedBatchIndex: 0,
   selectedWorkItems: [],
   sessionMetadata: {
     docketRecordSort: [],
   },
-  showAppTimeoutModalHelper,
   showModal: '',
   showValidation: false,
-  startCaseHelper,
   startCaseInternal: {
     tab: '',
   },
-  startCaseInternalContactsHelper,
-  startCaseInternalHelper,
   timeRemaining: Number.POSITIVE_INFINITY,
-  trialCitiesHelper,
-  trialSessionDetailsHelper,
-  trialSessionHeaderHelper,
-  trialSessionWorkingCopyHelper,
-  trialSessionsHelper,
-  trialSessionsSummaryHelper,
   trialSessionsTab: {
     group: null,
-  },
-  updateCaseModalHelper,
-  usaBanner: {
-    showDetails: false,
   },
   user: null,
   users: [],
   validationErrors: {},
-  viewAllDocumentsHelper,
   waitingForResponse: false,
   waitingForResponseRequests: 0,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
   workQueue: [],
-  workQueueHelper,
-  workQueueSectionHelper,
   workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
 };

@@ -9,18 +9,40 @@ describe('getCasesByLeadCaseId', () => {
       promise: async () => ({
         Items: [
           {
-            caseId: '123',
-            docketRecord: [],
-            documents: [],
-            irsPractitioners: [],
-            pk: 'case|123',
-            privatePractitioners: [],
-            sk: 'case|123',
-            status: 'New',
+            caseId: 'abc',
           },
         ],
       }),
     });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockResolvedValue({
+        caseId: '123',
+        docketRecord: [],
+        documents: [],
+        irsPractitioners: [],
+        pk: 'case|123',
+        privatePractitioners: [],
+        sk: 'case|123',
+        status: 'New',
+      });
+
+    // getCaseByCaseIdStub = jest.fn();
+    // isAuthorizedForWorkItemsStub = jest.fn().mockReturnValue(true);
+
+    // applicationContext = {
+    //   environment: {
+    //     stage: 'dev',
+    //   },
+    //   getDocumentClient: () => ({
+    //     query: queryStub,
+    //   }),
+    //   getPersistenceGateway: () => ({
+    //     getCaseByCaseId: getCaseByCaseIdStub,
+    //   }),
+    //   isAuthorizedForWorkItems: isAuthorizedForWorkItemsStub,
+    // };
 
     const result = await getCasesByLeadCaseId({
       applicationContext,
