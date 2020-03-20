@@ -25,11 +25,4 @@ describe('Miscellaneous', () => {
     await test.runSequence('toggleBetaBarSequence');
     expect(test.getState('header.showBetaBar')).toEqual(false);
   });
-
-  it('Toggles payment info content', async () => {
-    await test.runSequence('togglePaymentDetailsSequence');
-    expect(test.getState('paymentInfo.showDetails')).toEqual(true);
-    await test.runSequence('togglePaymentDetailsSequence');
-    expect(test.getState('paymentInfo.showDetails')).toEqual(false);
-  });
 });
