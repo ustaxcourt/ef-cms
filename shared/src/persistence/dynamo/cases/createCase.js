@@ -1,4 +1,5 @@
 const client = require('../../dynamodbClientService');
+const { omit } = require('lodash');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 /**
@@ -15,7 +16,12 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
       Item: {
         pk: `case|${caseToCreate.caseId}`,
         sk: `case|${caseToCreate.caseId}`,
-        ...caseToCreate,
+        ...omit(caseToCreate, [
+          'documents',
+          'irsPractitioners',
+          'privatePractitioners',
+          'docketRecord',
+        ]),
       },
       applicationContext,
     }),
