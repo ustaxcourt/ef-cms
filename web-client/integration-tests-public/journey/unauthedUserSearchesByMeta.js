@@ -8,7 +8,7 @@ export default (test, overrides = {}) => {
       ...overrides,
     };
 
-    test.setState('advancedSearchForm', queryParams);
+    test.setState('advancedSearchForm.caseSearchByName', queryParams);
 
     await test.runSequence('submitPublicAdvancedSearchSequence', {});
 
@@ -18,7 +18,7 @@ export default (test, overrides = {}) => {
     await test.runSequence('clearCaseSearchByNameFormSequence');
     expect(test.getState('searchResults')).toBeUndefined();
     expect(test.getState('advancedSearchForm')).toEqual({
-      countryType: 'domestic',
+      caseSearchByName: { countryType: 'domestic' },
       currentPage: 1,
     });
   });

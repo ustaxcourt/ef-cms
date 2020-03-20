@@ -63,9 +63,12 @@ export const CaseSearchByName = connect(
                     id="petitioner-name"
                     name="petitionerName"
                     type="text"
-                    value={advancedSearchForm.petitionerName || ''}
+                    value={
+                      advancedSearchForm.caseSearchByName.petitionerName || ''
+                    }
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
+                        formType: 'caseSearchByName',
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -93,9 +96,12 @@ export const CaseSearchByName = connect(
                         id="year-filed-min"
                         name="yearFiledMin"
                         type="text"
-                        value={advancedSearchForm.yearFiledMin || ''}
+                        value={
+                          advancedSearchForm.caseSearchByName.yearFiledMin || ''
+                        }
                         onChange={e => {
                           updateAdvancedSearchFormValueSequence({
+                            formType: 'caseSearchByName',
                             key: e.target.name,
                             value: e.target.value,
                           });
@@ -111,9 +117,12 @@ export const CaseSearchByName = connect(
                         id="year-filed-max"
                         name="yearFiledMax"
                         type="text"
-                        value={advancedSearchForm.yearFiledMax || ''}
+                        value={
+                          advancedSearchForm.caseSearchByName.yearFiledMax || ''
+                        }
                         onChange={e => {
                           updateAdvancedSearchFormValueSequence({
+                            formType: 'caseSearchByName',
                             key: e.target.name,
                             value: e.target.value,
                           });
@@ -133,7 +142,7 @@ export const CaseSearchByName = connect(
                       Country
                     </label>
                     <BindedSelect
-                      bind="advancedSearchForm.countryType"
+                      bind="advancedSearchForm.caseSearchByName.countryType"
                       id="country-type"
                       name="countryType"
                     >
@@ -152,7 +161,7 @@ export const CaseSearchByName = connect(
                         State
                       </label>
                       <BindedSelect
-                        bind="advancedSearchForm.petitionerState"
+                        bind="advancedSearchForm.caseSearchByName.petitionerState"
                         id="petitioner-state"
                         name="petitionerState"
                       >

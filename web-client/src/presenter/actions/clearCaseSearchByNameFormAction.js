@@ -8,11 +8,9 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  */
 export const clearCaseSearchByNameFormAction = ({ store }) => {
-  store.unset(state.advancedSearchForm.petitionerName);
-  store.unset(state.advancedSearchForm.yearFiledMin);
-  store.unset(state.advancedSearchForm.yearFiledMax);
-  store.unset(state.advancedSearchForm.petitionerState);
-  store.set(state.advancedSearchForm.countryType, 'domestic');
+  store.set(state.advancedSearchForm.caseSearchByName, {
+    countryType: 'domestic',
+  });
   store.unset(state.searchResults);
   store.set(state.advancedSearchForm.currentPage, 1);
 };

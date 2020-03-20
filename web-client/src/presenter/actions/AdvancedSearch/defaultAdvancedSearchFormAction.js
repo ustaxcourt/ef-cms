@@ -7,10 +7,16 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.store the cerebral store function
  */
-export const setDefaultCountryTypeOnAdvancedSearchFormAction = ({
+export const defaultAdvancedSearchFormAction = ({
   applicationContext,
   store,
 }) => {
   const { COUNTRY_TYPES } = applicationContext.getConstants();
-  store.set(state.advancedSearchForm.countryType, COUNTRY_TYPES.DOMESTIC);
+  store.set(state.advancedSearchForm, {
+    caseSearchByDocketNumber: {},
+    caseSearchByName: {
+      countryType: COUNTRY_TYPES.DOMESTIC,
+    },
+    currentPage: 1,
+  });
 };

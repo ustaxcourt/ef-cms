@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const clearDocketNumberSearchFormAction = ({ store }) => {
-  store.unset(state.advancedSearchForm.docketNumber);
+  store.set(state.advancedSearchForm.caseSearchByDocketNumber, {});
   store.unset(state.searchResults);
   store.set(state.advancedSearchForm.currentPage, 1);
 };
