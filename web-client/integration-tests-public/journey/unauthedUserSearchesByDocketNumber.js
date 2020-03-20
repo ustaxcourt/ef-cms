@@ -18,7 +18,9 @@ export default (test, params) => {
 
     await test.runSequence('clearDocketNumberSearchFormSequence');
     expect(test.getState('searchResults')).toBeUndefined();
-    expect(test.getState('advancedSearchForm.docketNumber')).toBeUndefined();
+    expect(
+      test.getState('advancedSearchForm.caseSearchByDocketNumber'),
+    ).toEqual({});
 
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByDocketNumber',

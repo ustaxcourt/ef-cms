@@ -18,6 +18,7 @@ export default (test, overrides = {}) => {
     await test.runSequence('clearCaseSearchByNameFormSequence');
     expect(test.getState('searchResults')).toBeUndefined();
     expect(test.getState('advancedSearchForm')).toEqual({
+      caseSearchByDocketNumber: {},
       caseSearchByName: { countryType: 'domestic' },
       currentPage: 1,
     });

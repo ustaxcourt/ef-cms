@@ -21,6 +21,8 @@ describe('defaultAdvancedSearchFormAction', () => {
         countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
       },
       currentPage: 1,
+      practitionerSearchByBarNumber: {},
+      practitionerSearchByName: {},
     });
   });
 });

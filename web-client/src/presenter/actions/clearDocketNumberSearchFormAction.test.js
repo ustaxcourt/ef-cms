@@ -2,7 +2,7 @@ import { clearDocketNumberSearchFormAction } from './clearDocketNumberSearchForm
 import { runAction } from 'cerebral/test';
 
 describe.only('clearDocketNumberSearchFormAction', () => {
-  it('should clear the docket number field in the advanced search form', async () => {
+  it('should clear the docket number search form and clear the state.searchResults', async () => {
     const result = await runAction(clearDocketNumberSearchFormAction, {
       state: {
         advancedSearchForm: {
