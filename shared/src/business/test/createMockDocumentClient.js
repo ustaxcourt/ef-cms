@@ -54,12 +54,12 @@ const createMockDocumentClient = () => {
         }),
       };
     },
-    delete: ({ Key: { pk, sk } }) => {
+    delete: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
       delete mockDynamoUsers[`${pk} ${sk}`];
       return {
         promise: async () => null,
       };
-    },
+    }),
     get: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
       return {
         promise: async () => ({
