@@ -9,6 +9,7 @@ export const UpdateCaseModalDialog = connect(
   {
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.submitUpdateCaseModalSequence,
+    constants: state.constants,
     modal: state.modal,
     newStatus: state.constants.STATUS_TYPES.new,
     updateCaseModalHelper: state.updateCaseModalHelper,
@@ -19,6 +20,7 @@ export const UpdateCaseModalDialog = connect(
   ({
     cancelSequence,
     confirmSequence,
+    constants,
     modal,
     newStatus,
     updateCaseModalHelper,
@@ -54,6 +56,9 @@ export const UpdateCaseModalDialog = connect(
                 validateUpdateCaseModalSequence();
               }}
             />
+            <span className="display-inline-block margin-top-1">
+              {constants.CASE_CAPTION_POSTFIX}
+            </span>
           </FormGroup>
         </div>
         {updateCaseModalHelper.showCalendaredAlert && (

@@ -25,6 +25,16 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
       },
       applicationContext,
     }),
+    ...caseToCreate.docketRecord.map(docketEntry =>
+      client.put({
+        Item: {
+          pk: `case|${caseToCreate.caseId}`,
+          sk: `docket-record|${docketEntry.docketRecordId}`,
+          ...docketEntry,
+        },
+        applicationContext,
+      }),
+    ),
     createMappingRecord({
       applicationContext,
       pkId: caseToCreate.userId,

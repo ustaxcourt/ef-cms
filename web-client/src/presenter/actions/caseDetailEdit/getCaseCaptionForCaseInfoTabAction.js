@@ -6,22 +6,16 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {Function} providers.applicationContext application context to get Case entity
  * @param {Function} providers.get the cerebral get function
- * @param {Function} providers.props the cerebral props object
  * @returns {object} contains the caseCaption
  */
 export const getCaseCaptionForCaseInfoTabAction = ({
   applicationContext,
   get,
-  props,
 }) => {
-  const { tab } = props;
+  const { Case } = applicationContext.getEntityConstructors();
+  let caseCaption = Case.getCaseCaption(get(state.caseDetail)) || '';
 
-  if (tab === 'partyInfo') {
-    const { Case } = applicationContext.getEntityConstructors();
-    let caseCaption = Case.getCaseCaption(get(state.caseDetail)) || '';
+  // NOTE: case caption should never have the postfix value. Perhaps you're looking for case title?
 
-    caseCaption += ` ${Case.CASE_CAPTION_POSTFIX}`;
-
-    return { caseCaption };
-  }
+  return { caseCaption };
 };

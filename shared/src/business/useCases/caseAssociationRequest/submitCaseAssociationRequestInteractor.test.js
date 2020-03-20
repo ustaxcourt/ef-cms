@@ -41,12 +41,12 @@ describe('submitCaseAssociationRequest', () => {
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           };
         },
-
         getPersistenceGateway: () => ({
           getCaseByCaseId: async () => caseRecord,
           updateCase: async () => caseRecord,
           verifyCaseForUser: async () => true,
         }),
+        getUniqueId: () => 'unique-id-1',
       };
       await submitCaseAssociationRequestInteractor({
         applicationContext,
@@ -69,7 +69,7 @@ describe('submitCaseAssociationRequest', () => {
       getCurrentUser: () => {
         return {
           name: 'Olivia Jade',
-          role: User.ROLES.practitioner,
+          role: User.ROLES.privatePractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },
@@ -88,12 +88,13 @@ describe('submitCaseAssociationRequest', () => {
             state: 'IL',
           },
           name: 'Olivia Jade',
-          role: User.ROLES.practitioner,
+          role: User.ROLES.privatePractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
         updateCase: updateCaseSpy,
         verifyCaseForUser: verifyCaseForUserSpy,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
 
     await submitCaseAssociationRequestInteractor({
@@ -128,7 +129,7 @@ describe('submitCaseAssociationRequest', () => {
             state: 'IL',
           },
           name: 'Olivia Jade',
-          role: User.ROLES.practitioner,
+          role: User.ROLES.privatePractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },
@@ -147,12 +148,13 @@ describe('submitCaseAssociationRequest', () => {
             state: 'IL',
           },
           name: 'Olivia Jade',
-          role: User.ROLES.practitioner,
+          role: User.ROLES.privatePractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
         updateCase: updateCaseSpy,
         verifyCaseForUser: verifyCaseForUserSpy,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
 
     await submitCaseAssociationRequestInteractor({
@@ -177,7 +179,7 @@ describe('submitCaseAssociationRequest', () => {
       getCurrentUser: () => {
         return {
           name: 'Olivia Jade',
-          role: User.ROLES.respondent,
+          role: User.ROLES.irsPractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },
@@ -196,12 +198,13 @@ describe('submitCaseAssociationRequest', () => {
             state: 'IL',
           },
           name: 'Olivia Jade',
-          role: User.ROLES.practitioner,
+          role: User.ROLES.privatePractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
         updateCase: updateCaseSpy,
         verifyCaseForUser: verifyCaseForUserSpy,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
 
     await submitCaseAssociationRequestInteractor({

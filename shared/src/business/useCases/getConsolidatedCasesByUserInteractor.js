@@ -55,7 +55,7 @@ exports.getConsolidatedCasesByUserInteractor = async ({
 
       const consolidatedCasesValidated = Case.validateRawCollection(
         consolidatedCases,
-        { applicationContext },
+        { applicationContext, filtered: true },
       );
 
       if (!caseMapping[leadCaseId]) {

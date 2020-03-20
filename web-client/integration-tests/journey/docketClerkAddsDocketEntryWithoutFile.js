@@ -2,7 +2,7 @@ import { DocketEntryFactory } from '../../../shared/src/business/entities/docket
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
-export default test => {
+export const docketClerkAddsDocketEntryWithoutFile = test => {
   return it('Docketclerk adds docket entry data without a file', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

@@ -13,6 +13,7 @@
           {
             "docketNumberSuffix": null,
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "createdAt": "2019-03-27T21:53:00.297Z",
               "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
@@ -64,6 +65,8 @@
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Interest Abatement",
+    "sortableDocketNumber": 19000105,
+    "entityName": "Case",
     "contactPrimary": {
       "address3": "Aliquam molestias fu",
       "address2": "Est asperiores ullam",
@@ -94,7 +97,7 @@
     "docketNumberSuffix": null,
     "practitioners": [
       {
-        "role": "practitioner",
+        "role": "privatePractitioner",
         "serviceIndicator": "Electronic",
         "contact": {
           "address1": "234 Main St",
@@ -108,11 +111,11 @@
         },
         "representingPrimary": true,
         "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "name": "Test Practitioner",
-        "section": "practitioner",
+        "name": "Test Private Practitioner",
+        "section": "privatePractitioner",
         "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "email": "practitioner",
+        "email": "privatePractitioner",
         "barNumber": "PT1234"
       }
     ],
@@ -120,27 +123,31 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Jackson, Mississippi",
-    "docketRecord": [
-      {
-        "description": "Petition",
-        "eventCode": "P",
-        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
-        "filingDate": "2019-03-27T21:53:00.297Z",
-        "filedBy": "Test Practitioner",
-        "index": 1
-      },
-      {
-        "description": "Request for Place of Trial at Jackson, Mississippi",
-        "filingDate": "2019-03-27T21:53:00.297Z",
-        "eventCode": "RQT",
-        "index": 2
-      }
-    ],
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "docketNumber": "105-19",
     "status": "New",
     "associatedJudge": "Chief Judge"
+  },
+  {
+    "description": "Petition",
+    "eventCode": "P",
+    "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+    "filingDate": "2019-03-27T21:53:00.297Z",
+    "filedBy": "Test Practitioner",
+    "index": 1,
+    "docketRecordId": "8b86bf30-0118-4b85-bb4f-5bfbf7cb2baf",
+    "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "sk": "docket-record|8b86bf30-0118-4b85-bb4f-5bfbf7cb2baf"
+  },
+  {
+    "description": "Request for Place of Trial at Jackson, Mississippi",
+    "filingDate": "2019-03-27T21:53:00.297Z",
+    "eventCode": "RQT",
+    "index": 2,
+    "docketRecordId": "89cb2500-becf-4da9-83b9-e3ca561c2622",
+    "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "sk": "docket-record|89cb2500-becf-4da9-83b9-e3ca561c2622"
   },
   {
     "sk": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
@@ -156,6 +163,7 @@
     "pk": "section-petitions",
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "createdAt": "2019-03-27T21:53:00.297Z",
       "receivedAt": "2019-03-01T21:40:46.415Z",
@@ -194,6 +202,7 @@
     "gsi1pk": "workitem-98c7130f-f924-423f-9f2c-89f0616f446a",
     "docketNumberSuffix": null,
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "createdAt": "2019-03-27T21:53:00.297Z",
       "receivedAt": "2019-03-01T21:40:46.415Z",
