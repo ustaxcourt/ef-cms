@@ -1,6 +1,6 @@
 module.exports = {
   processStreamRecordsLambda: require('./streams/processStreamRecordsLambda')
-    .handler,
+    .processStreamRecordsLambda,
   reprocessFailedRecordsLambda: require('./streams/reprocessFailedRecordsLambda')
     .handler,
 };

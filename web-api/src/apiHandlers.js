@@ -1,13 +1,14 @@
 module.exports = {
   checkForReadyForTrialCases: require('./cases/checkForReadyForTrialCasesLambda')
-    .handler,
+    .checkForReadyForTrialCasesLambda,
   createCourtIssuedOrderPdfFromHtmlLambda: require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda')
-    .handler,
+    .createCourtIssuedOrderPdfFromHtmlLambda,
   generateDocketRecordPdfLambda: require('./cases/generateDocketRecordPdfLambda')
-    .handler,
+    .generateDocketRecordPdfLambda,
   generatePdfFromHtmlLambda: require('./cases/generatePdfFromHtmlLambda')
-    .handler,
-  getNotificationsLambda: require('./users/getNotificationsLambda').handler,
-  swaggerJsonLambda: require('./swagger/swaggerJsonLambda').handler,
-  swaggerLambda: require('./swagger/swaggerLambda').handler,
+    .generatePdfFromHtmlLambda,
+  getNotificationsLambda: require('./users/getNotificationsLambda')
+    .getNotificationsLambda,
+  swaggerJsonLambda: require('./swagger/swaggerJsonLambda').swaggerJsonLambda,
+  swaggerLambda: require('./swagger/swaggerLambda').swaggerLambda,
 };
