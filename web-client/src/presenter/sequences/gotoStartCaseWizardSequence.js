@@ -13,7 +13,7 @@ import { updateOrderForDesignatingPlaceOfTrialAction } from '../actions/updateOr
 const gotoStartCaseInternal = [
   setStartInternalCaseDefaultTabAction,
   updateOrderForDesignatingPlaceOfTrialAction,
-  set(state.documentUploadMode, 'scan'),
+  set(state.currentViewMetadata.documentUploadMode, 'scan'),
   set(state.documentSelectedForScan, 'petitionFile'),
   setCurrentPageAction('StartCaseInternal'),
 ];

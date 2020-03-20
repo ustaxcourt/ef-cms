@@ -175,6 +175,7 @@ export const state = {
     documentDetail: {
       tab: '',
     },
+    documentUploadMode: 'scan',
     startCaseInternal: {
       tab: '',
     },
@@ -188,8 +189,7 @@ export const state = {
   documentId: null,
   documentSelectedForPreview: null,
   documentSelectedForScan: null,
-  documentUploadMode: 'scan', // TODO: move inside another object
-  fieldOrder: [], // TODO: move to view metadata
+  fieldOrder: [], // TODO: related to errors
   form: {}, // shared object for creating new entities, clear before using
   modal: {},
   navigation: {},

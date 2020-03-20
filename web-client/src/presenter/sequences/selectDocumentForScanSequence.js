@@ -6,14 +6,14 @@ import { state } from 'cerebral';
 
 export const selectDocumentForScanSequence = [
   unset(state.documentSelectedForPreview),
-  set(state.documentUploadMode, 'scan'),
+  set(state.currentViewMetadata.documentUploadMode, 'scan'),
   shouldShowPreviewAction,
   {
     no: [],
     yes: [
       selectDocumentForPreviewAction,
       ...setPdfPreviewUrlSequence,
-      set(state.documentUploadMode, 'preview'),
+      set(state.currentViewMetadata.documentUploadMode, 'preview'),
     ],
   },
 ];

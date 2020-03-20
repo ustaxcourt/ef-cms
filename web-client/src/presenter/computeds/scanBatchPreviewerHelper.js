@@ -12,7 +12,7 @@ export const scanBatchPreviewerHelper = (get, applicationContext) => {
     ? batches.find(b => b.index === selectedBatchIndex)
     : { pages: [] };
   const currentPageIndex = get(state.scanner.currentPageIndex);
-  const documentUploadMode = get(state.documentUploadMode);
+  const documentUploadMode = get(state.currentViewMetadata.documentUploadMode);
   let selectPageImage = null;
 
   const bufferToBase64 = buf => {
