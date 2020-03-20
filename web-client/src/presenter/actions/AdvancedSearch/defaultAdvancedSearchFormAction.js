@@ -29,4 +29,7 @@ export const defaultAdvancedSearchFormAction = ({
   if (!advancedSearchForm.practitionerSearchByName) {
     store.set(state.advancedSearchForm.practitionerSearchByName, {});
   }
+  if (!advancedSearchForm.searchMode) {
+    store.set(state.advancedSearchForm.searchMode, 'byName');
+  }
 };
