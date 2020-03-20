@@ -163,15 +163,9 @@ export const state = {
   caseDetailPage: {}, // current tabs for case detail page TODO: move to view metadata
   cases: [],
   cognitoLoginUrl: null,
-  commonUI: {
-    showBetaBar: true,
-    showMobileMenu: false,
-    showUsaBannerDetails: false,
-  },
   completeForm: {}, // TODO: replace with state.form
   currentPage: 'Interstitial',
   currentTab: '', // TODO: move to view metadata
-  docketNumberSearchForm: {}, // needs its own object because it's present when other forms are on screen
   docketRecordIndex: 0,
   document: {},
   documentDetail: {
@@ -183,10 +177,14 @@ export const state = {
   documentUploadMode: 'scan', // TODO: move inside another object
   fieldOrder: [], // TODO: move to view metadata
   form: {}, // shared object for creating new entities, clear before using
+  header: {
+    showBetaBar: true,
+    showMobileMenu: false,
+    showUsaBannerDetails: false,
+  },
   modal: {},
   navigation: {},
   notifications: {},
-  path: '/', // can this be refactored away? Using router.query?
   paymentInfo: {
     showDetails: false,
   },
@@ -212,8 +210,8 @@ export const state = {
     selectedBatchIndex: 0,
   },
   screenMetadata: {},
-  searchMode: 'byName',
-  searchTerm: '',
+  searchMode: 'byName', // TODO: nest inside of a advanced search?
+  searchTerm: '', // search in the header
   sectionInboxCount: 0,
   sectionUsers: [],
   selectedWorkItems: [],

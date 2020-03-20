@@ -7,6 +7,7 @@ export default test => {
     await test.runSequence('gotoAdvancedSearchSequence');
 
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
       key: 'petitionerName',
       value: 'NOTAREALNAMEFORTESTING',
     });
