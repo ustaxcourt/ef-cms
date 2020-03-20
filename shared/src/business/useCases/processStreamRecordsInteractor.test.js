@@ -6,6 +6,7 @@ describe('processStreamRecordsInteractor', () => {
   let bulkSpy;
   let indexSpy;
   const createElasticsearchReindexRecordSpy = jest.fn();
+  const getCaseByCaseIdSpy = jest.fn();
 
   let applicationContext;
 
@@ -19,6 +20,7 @@ describe('processStreamRecordsInteractor', () => {
       environment: { stage: 'local' },
       getPersistenceGateway: () => ({
         createElasticsearchReindexRecord: createElasticsearchReindexRecordSpy,
+        getCaseByCaseId: getCaseByCaseIdSpy,
       }),
       getSearchClient: () => ({
         bulk: bulkSpy,
@@ -291,5 +293,64 @@ describe('processStreamRecordsInteractor', () => {
       recordPk: '2',
       recordSk: '3',
     });
+  });
+
+  it('calls getCaseByCaseId to index an entire case item', async () => {
+    bulkSpy = jest.fn().mockResolvedValue({
+      body: {
+        errors: [{ badError: true }],
+        items: [
+          {
+            index: { error: false },
+          },
+          {
+            index: { error: true },
+          },
+        ],
+      },
+    });
+
+    await processStreamRecordsInteractor({
+      applicationContext,
+      recordsToProcess: [
+        {
+          dynamodb: {
+            Keys: { pk: { S: 'case|1' }, sk: { S: 'case|1' } },
+            NewImage: {
+              caseId: { S: '1' },
+              pk: { S: 'case|1' },
+              sk: { S: 'case|1' },
+            },
+          },
+          eventName: 'INSERT',
+        },
+        {
+          dynamodb: {
+            Keys: { pk: { S: 'case|4' }, sk: { S: 'case|1' } },
+            NewImage: {
+              caseId: { S: '4' },
+              pk: { S: 'case|4' },
+              sk: { S: 'case|4' },
+            },
+          },
+          eventName: 'MODIFY',
+        },
+      ],
+    });
+
+    expect(bulkSpy).toHaveBeenCalled();
+    expect(getCaseByCaseIdSpy).toHaveBeenCalled();
+    expect(getCaseByCaseIdSpy.mock.calls).toMatchObject([
+      [{ caseId: '4' }],
+      [{ caseId: '1' }],
+      [{ caseId: '4' }],
+    ]);
+    expect(bulkSpy.mock.calls[0][0].body.length).toEqual(4);
+    expect(bulkSpy.mock.calls[0][0].body).toEqual([
+      { index: { _id: 'case|1_case|1', _index: 'efcms' } },
+      { caseId: { S: '1' }, pk: { S: 'case|1' }, sk: { S: 'case|1' } },
+      { index: { _id: 'case|4_case|4', _index: 'efcms' } },
+      { caseId: { S: '4' }, pk: { S: 'case|4' }, sk: { S: 'case|4' } },
+    ]);
   });
 });
