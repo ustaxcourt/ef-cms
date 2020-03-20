@@ -1,12 +1,12 @@
 module.exports = {
   createCaseDeadlineLambda: require('./caseDeadline/createCaseDeadlineLambda')
-    .handler,
+    .createCaseDeadlineLambda,
   deleteCaseDeadlineLambda: require('./caseDeadline/deleteCaseDeadlineLambda')
-    .handler,
+    .deleteCaseDeadlineLambda,
   getAllCaseDeadlinesLambda: require('./caseDeadline/getAllCaseDeadlinesLambda')
-    .handler,
+    .getAllCaseDeadlinesLambda,
   getCaseDeadlinesForCaseLambda: require('./caseDeadline/getCaseDeadlinesForCaseLambda')
-    .handler,
+    .getCaseDeadlinesForCaseLambda,
   updateCaseDeadlineLambda: require('./caseDeadline/updateCaseDeadlineLambda')
-    .handler,
+    .updateCaseDeadlineLambda,
 };

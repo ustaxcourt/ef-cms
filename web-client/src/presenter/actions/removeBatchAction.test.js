@@ -6,19 +6,21 @@ describe('removeBatchAction', () => {
     const { state } = await runAction(removeBatchAction, {
       props: {},
       state: {
-        batchIndexToDelete: 5,
-        batches: {
-          petition: [
-            {
-              index: 5,
-            },
-          ],
-        },
         documentSelectedForScan: 'petition',
+        scanner: {
+          batchIndexToDelete: 5,
+          batches: {
+            petition: [
+              {
+                index: 5,
+              },
+            ],
+          },
+        },
       },
     });
-    expect(state.selectedBatchIndex).toEqual(0);
-    expect(state.batches).toEqual({ petition: [] });
+    expect(state.scanner.selectedBatchIndex).toEqual(0);
+    expect(state.scanner.batches).toEqual({ petition: [] });
   });
 
   it('should set the batchIndex to the previous batch in the list', async () => {
@@ -28,22 +30,24 @@ describe('removeBatchAction', () => {
         selectedBatchIndex: 4,
       },
       state: {
-        batchIndexToDelete: 4,
-        batches: {
-          petition: [
-            {
-              index: 4,
-            },
-            {
-              index: 2,
-            },
-          ],
-        },
         documentSelectedForScan: 'petition',
+        scanner: {
+          batchIndexToDelete: 4,
+          batches: {
+            petition: [
+              {
+                index: 4,
+              },
+              {
+                index: 2,
+              },
+            ],
+          },
+        },
       },
     });
-    expect(state.selectedBatchIndex).toEqual(2);
-    expect(state.batches).toEqual({
+    expect(state.scanner.selectedBatchIndex).toEqual(2);
+    expect(state.scanner.batches).toEqual({
       petition: [
         {
           index: 2,
@@ -56,23 +60,25 @@ describe('removeBatchAction', () => {
     const { state } = await runAction(removeBatchAction, {
       props: {},
       state: {
-        batchIndex: 2,
-        batches: {
-          petition: [
-            {
-              index: 4,
-            },
-            {
-              index: 2,
-            },
-          ],
-        },
         documentSelectedForScan: 'petition',
-        selectedBatchIndex: 4,
+        scanner: {
+          batchIndex: 2,
+          batches: {
+            petition: [
+              {
+                index: 4,
+              },
+              {
+                index: 2,
+              },
+            ],
+          },
+          selectedBatchIndex: 4,
+        },
       },
     });
-    expect(state.selectedBatchIndex).toEqual(4);
-    expect(state.batches).toEqual({
+    expect(state.scanner.selectedBatchIndex).toEqual(4);
+    expect(state.scanner.batches).toEqual({
       petition: [
         {
           index: 4,
