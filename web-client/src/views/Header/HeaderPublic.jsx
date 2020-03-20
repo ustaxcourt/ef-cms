@@ -36,7 +36,7 @@ const BetaBar = toggleBetaBarSequence => {
 export const HeaderPublic = connect(
   {
     navigateToCognitoSequence: sequences.navigateToCognitoSequence,
-    showBetaBar: state.commonUI.showBetaBar,
+    showBetaBar: state.header.showBetaBar,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
   },
   ({ navigateToCognitoSequence, showBetaBar, toggleBetaBarSequence }) => {

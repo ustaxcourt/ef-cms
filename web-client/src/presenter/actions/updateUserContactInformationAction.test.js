@@ -11,11 +11,9 @@ presenter.providers.path = {
 };
 const updateUserMock = jest
   .fn()
-  // TODO: skipped until cerebral bug is fixed: https://github.com/cerebral/cerebral/pull/1431
-
-  // .mockImplementationOnce(() => {
-  //   return Promise.reject(new Error('other kind of failure'));
-  // })
+  .mockImplementationOnce(() => {
+    return Promise.reject(new Error('other kind of failure'));
+  })
   .mockImplementationOnce(() => {
     const err = new Error('update failed');
     err.originalError = {
@@ -35,8 +33,7 @@ presenter.providers.applicationContext = {
 };
 
 describe('updateUserContactInformationAction', () => {
-  // TODO: skipped until cerebral bug is fixed: https://github.com/cerebral/cerebral/pull/1431
-  it.skip('should gracefully handle other failures', async () => {
+  it('should gracefully handle other failures', async () => {
     presenter.providers.applicationContext.getCurrentUser = () => ({
       contact: {},
       userId: '123',
