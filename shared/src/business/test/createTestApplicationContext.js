@@ -178,7 +178,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUtilities: () => {
       return { ...DateHandler };
     },
-    isAuthorizedForWorkItems: () => true,
+    isAuthorizedForWorkItems: jest.fn().mockReturnValue(() => true),
     logger: {
       error: jest.fn(),
       info: () => {},
