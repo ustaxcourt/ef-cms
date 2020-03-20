@@ -188,7 +188,6 @@ export const state = {
   docketRecordIndex: 0, // needs its own object because it's present when other forms are on screen
   document: {},
   documentId: null,
-
   fieldOrder: [], // TODO: related to errors
   form: {}, // shared object for creating new entities, clear before using
   modal: {},
