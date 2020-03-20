@@ -28,6 +28,8 @@ describe('removeScannedPdfAction', () => {
         },
       },
     });
-    expect(result.output).toMatchObject({ documentUploadMode: 'scan' });
+    expect(result.output).toMatchObject({
+      currentViewMetadata: { documentUploadMode: 'scan' },
+    });
   });
 });
