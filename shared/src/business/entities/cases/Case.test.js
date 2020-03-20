@@ -1311,6 +1311,17 @@ describe('Case entity', () => {
     });
 
     it("should NOT change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
+      // eslint-disable-next-line spellcheck/spell-checker
+      /*
+      Note: As of this writing on 2020-03-20, there may be a bug in the `moment` library as it pertains to 
+      leap-years and/or leap-days and maybe daylight saving time, too. Meaning that if *this* test runs
+      at a time when it is calculating date/time differences across the existence of a leap year and DST, it may fail.
+      I expect that this would work correctly in a production environment. 
+      I suspect that possibly:
+       const differenceInDays = moment().diff(moment().subtract(45, 'day'), 'day', true);
+       console.log('differenceInDays', differenceInDays); // yields '46' instead of '45'
+      But I haven't nailed down the bug. :(
+      */
       const caseToCheck = new Case(
         {
           documents: [
