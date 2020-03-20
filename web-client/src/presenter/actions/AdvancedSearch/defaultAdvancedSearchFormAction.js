@@ -18,5 +18,7 @@ export const defaultAdvancedSearchFormAction = ({
       countryType: COUNTRY_TYPES.DOMESTIC,
     },
     currentPage: 1,
+    practitionerSearchByBarNumber: {},
+    practitionerSearchByName: {},
   });
 };
