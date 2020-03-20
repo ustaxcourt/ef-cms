@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { NewTrialSession } = require('./NewTrialSession');
 
 const VALID_TRIAL_SESSION = {
@@ -10,14 +13,6 @@ const VALID_TRIAL_SESSION = {
 };
 
 describe('NewTrialSession entity', () => {
-  let applicationContext;
-
-  beforeAll(() => {
-    applicationContext = {
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-  });
-
   describe('isValid', () => {
     it('should throw an error if app context is not passed in', () => {
       expect(() => new NewTrialSession({}, {})).toThrow();

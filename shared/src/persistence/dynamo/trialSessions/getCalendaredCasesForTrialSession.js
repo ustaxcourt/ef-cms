@@ -1,4 +1,5 @@
 const client = require('../../dynamodbClientService');
+const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
 
 exports.getCalendaredCasesForTrialSession = async ({
   applicationContext,
@@ -14,34 +15,15 @@ exports.getCalendaredCasesForTrialSession = async ({
 
   const { caseOrder } = trialSession;
 
-  const results = await client.batchGet({
-    applicationContext,
-    keys: caseOrder.map(({ caseId }) => ({
-      pk: `case|${caseId}`,
-      sk: `case|${caseId}`,
-    })),
-  });
-
-  const resultsWithAggregatedItems = [];
-
-  for (let result of results) {
-    const caseItem = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByCaseId({
+  for (let i = 0; i < caseOrder.length; i++) {
+    caseOrder[i] = {
+      ...caseOrder[i],
+      ...(await getCaseByCaseId({
         applicationContext,
-        caseId: result.caseId,
-      });
-
-    resultsWithAggregatedItems.push({
-      ...result,
-      ...caseItem,
-    });
+        caseId: caseOrder[i].caseId,
+      })),
+    };
   }
 
-  const afterMapping = caseOrder.map(myCase => ({
-    ...myCase,
-    ...resultsWithAggregatedItems.find(r => myCase.caseId === r.caseId),
-  }));
-
-  return afterMapping;
+  return caseOrder;
 };

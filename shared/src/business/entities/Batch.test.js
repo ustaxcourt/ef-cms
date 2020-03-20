@@ -1,16 +1,9 @@
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { Batch } = require('./Batch');
 
 const { VALIDATION_ERROR_MESSAGES } = Batch;
 
 describe('Batch entity', () => {
-  let applicationContext;
-
-  beforeEach(() => {
-    applicationContext = {
-      getUniqueId: () => 'unique-id-1',
-    };
-  });
-
   it('adds a page', () => {
     const batch = new Batch({
       applicationContext,

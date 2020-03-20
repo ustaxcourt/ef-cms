@@ -149,7 +149,6 @@ import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getPrivatePractitionersBySearchKeyProxy';
-import { getProcedureTypesInteractor } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
 import { getSentMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
 import { getSentMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
@@ -329,7 +328,6 @@ const allUseCases = {
   getJudgeForUserChambersInteractor,
   getNotificationsInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
-  getProcedureTypesInteractor,
   getSentMessagesForSectionInteractor,
   getSentMessagesForUserInteractor,
   getTrialSessionDetailsInteractor,
@@ -468,6 +466,7 @@ const applicationContext = {
       OTHER_TYPES: ContactFactory.OTHER_TYPES,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
       PAYMENT_STATUS: Case.PAYMENT_STATUS,
+      PROCEDURE_TYPES: Case.PROCEDURE_TYPES,
       REFRESH_INTERVAL: 20 * MINUTES,
       ROLE_PERMISSIONS,
       SCAN_MODES: Scan.SCAN_MODES,
