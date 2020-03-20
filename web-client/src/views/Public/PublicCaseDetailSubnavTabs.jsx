@@ -6,7 +6,10 @@ export const PublicCaseDetailSubnavTabs = connect({}, () => {
   return (
     <div className="case-detail-primary-tabs__container">
       <div className="case-detail-primary-tabs__tabs">
-        <Tabs bind="caseDetailPage.primaryTab" className="container-tabs-dark">
+        <Tabs
+          bind="currentViewMetadata.caseDetail.primaryTab"
+          className="container-tabs-dark"
+        >
           <Tab
             className="padding-left-2"
             id="tab-docket-record"

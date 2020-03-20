@@ -25,8 +25,8 @@ export const CaseDetailInternal = connect(
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     formattedCaseDetail: state.formattedCaseDetail,
-    primaryTab: state.caseDetailPage.primaryTab,
-    showEditPetition: state.caseDetailPage.showEditPetition,
+    primaryTab: state.currentViewMetadata.caseDetail.primaryTab,
+    showEditPetition: state.currentViewMetadata.caseDetail.showEditPetition,
     showModal: state.showModal,
     token: state.token,
   },
@@ -68,7 +68,7 @@ export const CaseDetailInternal = connect(
           )}
           {primaryTab === 'inProgress' && (
             <Tabs
-              bind="caseDetailPage.inProgressTab"
+              bind="currentViewMetadata.caseDetail.inProgressTab"
               className="classic-horizontal-header3 tab-border"
             >
               <Tab
@@ -95,7 +95,7 @@ export const CaseDetailInternal = connect(
           )}
           {primaryTab === 'caseInformation' && !showEditPetition && (
             <Tabs
-              bind="caseDetailPage.caseInformationTab"
+              bind="currentViewMetadata.caseDetail.caseInformationTab"
               className="classic-horizontal-header3 tab-border"
             >
               <Tab id="tab-overview" tabName="overview" title="Overview">
