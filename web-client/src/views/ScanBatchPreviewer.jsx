@@ -403,7 +403,7 @@ export const ScanBatchPreviewer = connect(
       if (documentTabs && documentTabs.length > 1) {
         return (
           <Tabs
-            bind="documentSelectedForScan"
+            bind="currentViewMetadata.documentSelectedForScan"
             className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
             onSelect={() => {
               selectDocumentForScanSequence();

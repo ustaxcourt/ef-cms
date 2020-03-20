@@ -10,7 +10,9 @@ import { state } from 'cerebral';
  *
  */
 export const removeScannedPdfAction = async ({ get, store }) => {
-  const documentSelectedForScan = get(state.documentSelectedForScan);
+  const documentSelectedForScan = get(
+    state.currentViewMetadata.documentSelectedForScan,
+  );
 
   store.unset(state.form[documentSelectedForScan]);
   store.unset(state.form[`${documentSelectedForScan}Size`]);
