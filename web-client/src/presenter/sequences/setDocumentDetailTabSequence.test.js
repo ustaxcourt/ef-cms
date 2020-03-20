@@ -15,7 +15,7 @@ describe('setDocumentDetailTabSequence', () => {
     await test.runSequence('setDocumentDetailTabSequence', {
       tab: 'caseInfo',
     });
-    expect(test.getState('documentDetail')).toMatchObject({
+    expect(test.getState('currentViewMetadata.documentDetail')).toMatchObject({
       tab: 'caseInfo',
     });
   });
