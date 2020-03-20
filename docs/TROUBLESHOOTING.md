@@ -20,6 +20,14 @@ If you see this error in the AWS Cloudformation Stacks for your `$ENVIRONMENT`, 
 > ```Error response from daemon: repository xxxxx.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1 not found```
 This issue is due to a deletion of our ECR repository. We aren't sure the cause of the deletion yet, but the fix is to recreate the ECR repository (name it `ef-cms-us-east-1`) and run `./docker-to-ecr.sh` to rebuild the Docker container and send it to the repository.
 
+#### IAM permissions errors
+
+When a deploy fails due to a permissions error with AWS, it’s likely that the IAM permissions within that environment have not been updated. Do so like such, substituting the environment in question for `stg`:
+
+```
+cd iam/terraform/account-specific/main && ../bin/deploy-app.sh && cd ../../environment-specific/main && ../bin/deploy-app.sh stg
+```
+
 ### Serverless 1.61.1
 
 We needed to lock the serverless file down to 1.61.1 because it throws this error when trying to do deploys:
