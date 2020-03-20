@@ -6,7 +6,9 @@ export default (test, params) => {
     };
     test.docketNumber = params.docketNumber;
 
-    test.setState('docketNumberSearchForm', { docketNumber: '123-xx' });
+    test.setState('advancedSearchForm', {
+      docketNumber: '123-xx',
+    });
     await test.runSequence('submitCaseDocketNumberSearchSequence', {});
     searchResults = test.getState('searchResults');
     expect(searchResults).toEqual([]);
@@ -14,9 +16,9 @@ export default (test, params) => {
 
     await test.runSequence('clearDocketNumberSearchFormSequence');
     expect(test.getState('searchResults')).toBeUndefined();
-    expect(test.getState('docketNumberSearchForm')).toEqual({});
+    expect(test.getState('advancedSearchForm.docketNumber')).toBeUndefined();
 
-    test.setState('docketNumberSearchForm', queryParams);
+    test.setState('advancedSearchForm.docketNumber', queryParams.docketNumber);
     await test.runSequence('submitCaseDocketNumberSearchSequence', {});
     searchResults = test.getState('searchResults');
     expect(test.getState('caseId')).toEqual(params.docketNumber);

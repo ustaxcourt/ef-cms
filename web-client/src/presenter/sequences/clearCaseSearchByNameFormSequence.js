@@ -1,7 +1,7 @@
-import { clearAdvancedSearchFormAction } from '../actions/clearAdvancedSearchFormAction';
+import { clearCaseSearchByNameFormAction } from '../actions/clearCaseSearchByNameFormAction';
 import { setDefaultCountryTypeOnAdvancedSearchFormAction } from '../actions/AdvancedSearch/setDefaultCountryTypeOnAdvancedSearchFormAction';
 
-export const clearAdvancedSearchFormSequence = [
-  clearAdvancedSearchFormAction,
+export const clearCaseSearchByNameFormSequence = [
+  clearCaseSearchByNameFormAction,
   setDefaultCountryTypeOnAdvancedSearchFormAction,
 ];

@@ -10,7 +10,8 @@ export const CaseSearchByName = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     advancedSearchHelper: state.advancedSearchHelper,
-    clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    clearCaseSearchByNameFormSequence:
+      sequences.clearCaseSearchByNameFormSequence,
     constants: state.constants,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
@@ -20,7 +21,7 @@ export const CaseSearchByName = connect(
   ({
     advancedSearchForm,
     advancedSearchHelper,
-    clearAdvancedSearchFormSequence,
+    clearCaseSearchByNameFormSequence,
     constants,
     submitAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence,
@@ -37,7 +38,7 @@ export const CaseSearchByName = connect(
               className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
               icon={['fas', 'times-circle']}
               onClick={() => {
-                clearAdvancedSearchFormSequence();
+                clearCaseSearchByNameFormSequence();
               }}
             >
               Clear Search
@@ -205,7 +206,7 @@ export const CaseSearchByName = connect(
                     className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
                     icon={['fas', 'times-circle']}
                     onClick={() => {
-                      clearAdvancedSearchFormSequence();
+                      clearCaseSearchByNameFormSequence();
                     }}
                   >
                     Clear Search

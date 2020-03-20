@@ -2,15 +2,15 @@ import { clearDocketNumberSearchFormAction } from './clearDocketNumberSearchForm
 import { runAction } from 'cerebral/test';
 
 describe.only('clearDocketNumberSearchFormAction', () => {
-  it('should clear the docket number search form and clear the state.searchResults', async () => {
+  it('should clear the docket number field in the advanced search form', async () => {
     const result = await runAction(clearDocketNumberSearchFormAction, {
       state: {
-        docketNumberSearchForm: { docketNumber: 123 - 45 },
+        advancedSearchForm: { currentPage: 82, docketNumber: '123-45' },
         searchResults: [{ caseId: '1' }, { caseId: '2' }],
       },
     });
 
-    expect(result.state.docketNumberSearchForm).toEqual({});
+    expect(result.state.advancedSearchForm).toEqual({ currentPage: 1 });
     expect(result.state.searchResults).toBeUndefined();
   });
 });

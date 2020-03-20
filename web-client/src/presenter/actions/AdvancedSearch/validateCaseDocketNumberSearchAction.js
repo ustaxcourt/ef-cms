@@ -10,10 +10,10 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  */
 export const validateCaseDocketNumberSearchAction = async ({ get, path }) => {
-  const searchForm = get(state.docketNumberSearchForm);
+  const { docketNumber } = get(state.advancedSearchForm);
   const errors = {};
 
-  if (!searchForm.docketNumber) {
+  if (!docketNumber) {
     errors.docketNumber = 'Enter a docket number';
   }
 
