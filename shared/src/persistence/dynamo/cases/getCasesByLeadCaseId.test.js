@@ -1,13 +1,11 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { getCasesByLeadCaseId } = require('./getCasesByLeadCaseId');
 
 describe('getCasesByLeadCaseId', () => {
-  let applicationContext;
-  let getCaseByCaseIdStub;
-  let isAuthorizedForWorkItemsStub;
-  let queryStub;
-
   it('attempts to retrieve the cases by leadCaseId', async () => {
-    queryStub = jest.fn(() => ({
+    applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => ({
         Items: [
           {
@@ -15,39 +13,30 @@ describe('getCasesByLeadCaseId', () => {
           },
         ],
       }),
-    }));
-
-    getCaseByCaseIdStub = jest.fn().mockResolvedValue({
-      caseId: '123',
-      docketRecord: [],
-      documents: [],
-      irsPractitioners: [],
-      pk: 'case|123',
-      privatePractitioners: [],
-      sk: 'case|123',
-      status: 'New',
     });
-    isAuthorizedForWorkItemsStub = jest.fn().mockReturnValue(true);
 
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        query: queryStub,
-      }),
-      getPersistenceGateway: () => ({
-        getCaseByCaseId: getCaseByCaseIdStub,
-      }),
-      isAuthorizedForWorkItems: isAuthorizedForWorkItemsStub,
-    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockResolvedValue({
+        caseId: '123',
+        docketRecord: [],
+        documents: [],
+        irsPractitioners: [],
+        pk: 'case|123',
+        privatePractitioners: [],
+        sk: 'case|123',
+        status: 'New',
+      });
 
     const result = await getCasesByLeadCaseId({
       applicationContext,
       leadCaseId: 'case|123',
     });
-    expect(queryStub).toHaveBeenCalled();
-    expect(getCaseByCaseIdStub).toHaveBeenCalled();
+
+    expect(applicationContext.getDocumentClient().query).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toHaveBeenCalled();
     expect(result).toEqual([
       {
         caseId: '123',
@@ -63,35 +52,22 @@ describe('getCasesByLeadCaseId', () => {
   });
 
   it('returns an empty array when no items are returned', async () => {
-    queryStub = jest.fn(() => ({
+    applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => ({
         Items: [],
       }),
-    }));
-
-    getCaseByCaseIdStub = jest.fn().mockResolvedValue([]);
-    isAuthorizedForWorkItemsStub = jest.fn().mockReturnValue(true);
-
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        query: queryStub,
-      }),
-      getPersistenceGateway: () => ({
-        getCaseByCaseId: getCaseByCaseIdStub,
-      }),
-      isAuthorizedForWorkItems: isAuthorizedForWorkItemsStub,
-    };
+    });
 
     const result = await getCasesByLeadCaseId({
       applicationContext,
       leadCaseId: 'abc',
     });
-    expect(queryStub).toHaveBeenCalled();
-    expect(getCaseByCaseIdStub).not.toHaveBeenCalled();
-    expect(isAuthorizedForWorkItemsStub).not.toHaveBeenCalled();
+
+    expect(applicationContext.getDocumentClient().query).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).not.toHaveBeenCalled();
+    expect(applicationContext.isAuthorizedForWorkItems).not.toHaveBeenCalled();
     expect(result).toEqual([]);
   });
 });
