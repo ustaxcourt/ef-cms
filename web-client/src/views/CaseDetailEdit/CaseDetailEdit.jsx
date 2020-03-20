@@ -24,7 +24,7 @@ export const CaseDetailEdit = connect(
       <div noValidate id="case-edit-form" role="form">
         <Tabs
           boxed
-          bind="documentDetail.tab"
+          bind="currentViewMetadata.documentDetail.tab"
           className="container-tabs tab-button-h3"
           id="case-detail-tabs"
         >
