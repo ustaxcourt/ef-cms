@@ -1240,9 +1240,6 @@ Case.prototype.checkForReadyForTrial = function() {
         document.eventCode,
       );
 
-      console.log('currentDate', currentDate);
-      console.log('document.createdAt', document.createdAt);
-
       const daysElapsedSinceDocumentWasFiled = Case.dateDifferenceInDays(
         currentDate,
         document.createdAt,
