@@ -160,22 +160,29 @@ export const state = {
   batchDownloads: {}, // batch download of PDFs
   caseDetail: {},
   caseDetailErrors: {}, // field level validation errors on update case screen TODO: move to validationErrors
-  caseDetailPage: {}, // current tabs for case detail page TODO: move to view metadata
   cases: [],
   cognitoLoginUrl: null,
   completeForm: {}, // TODO: replace with state.form
   currentPage: 'Interstitial',
-  currentTab: '', // TODO: move to view metadata
-  docketRecordIndex: 0,
-  document: {},
-  documentDetail: {
-    tab: '',
+  currentTab: '',
+  currentViewMetadata: {
+    caseDetail: {},
+    documentDetail: {
+      tab: '',
+    },
+    documentSelectedForScan: null,
+    documentUploadMode: 'scan',
+    startCaseInternal: {
+      tab: '',
+    },
+    trialSessions: {
+      tab: null,
+    },
   },
+  docketRecordIndex: 0, // needs its own object because it's present when other forms are on screen
+  document: {},
   documentId: null,
-  documentSelectedForPreview: null,
-  documentSelectedForScan: null,
-  documentUploadMode: 'scan', // TODO: move inside another object
-  fieldOrder: [], // TODO: move to view metadata
+  fieldOrder: [], // TODO: related to errors
   form: {}, // shared object for creating new entities, clear before using
   header: {
     showBetaBar: true,
@@ -220,13 +227,7 @@ export const state = {
   },
   showModal: '',
   showValidation: false,
-  startCaseInternal: {
-    tab: '',
-  },
   timeRemaining: Number.POSITIVE_INFINITY,
-  trialSessionsTab: {
-    group: null,
-  },
   user: null,
   users: [],
   validationErrors: {},

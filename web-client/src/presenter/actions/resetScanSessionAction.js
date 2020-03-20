@@ -10,7 +10,9 @@ import { state } from 'cerebral';
  */
 
 export const resetScanSessionAction = async ({ get, store }) => {
-  const documentSelectedForScan = get(state.documentSelectedForScan);
+  const documentSelectedForScan = get(
+    state.currentViewMetadata.documentSelectedForScan,
+  );
   const scans = get(state.scanner.batches);
   delete scans[documentSelectedForScan];
   store.set(state.scanner.batches, scans);

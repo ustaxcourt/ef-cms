@@ -5,7 +5,9 @@ export default (test, { scannerSourceIndex, scannerSourceName }) => {
       scannerSourceName,
     });
 
-    const selectedDocumentType = test.getState('documentSelectedForScan');
+    const selectedDocumentType = test.getState(
+      'currentViewMetadata.documentSelectedForScan',
+    );
 
     expect(
       test.getState(`scanner.batches.${selectedDocumentType}`).length,
