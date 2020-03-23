@@ -19,7 +19,7 @@ function CourtIssuedDocumentTypeH(rawProps) {
   this.freeText = rawProps.freeText;
 }
 
-CourtIssuedDocumentTypeH.prototype.getDocumentTitle = function() {
+CourtIssuedDocumentTypeH.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
     this.freeText,
@@ -29,11 +29,7 @@ CourtIssuedDocumentTypeH.prototype.getDocumentTitle = function() {
 
 CourtIssuedDocumentTypeH.schema = {
   attachments: joi.boolean().required(),
-  date: joi
-    .date()
-    .iso()
-    .max('now')
-    .required(),
+  date: joi.date().iso().max('now').required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
   freeText: joi.string().required(),

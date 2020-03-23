@@ -42,7 +42,7 @@ exports.generatePdfReportInteractor = async ({
       Key: documentId,
     };
 
-    s3Client.upload(params, function() {
+    s3Client.upload(params, function () {
       resolve();
     });
   });

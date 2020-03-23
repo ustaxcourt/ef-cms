@@ -3,9 +3,23 @@ const {
 } = require('../../../business/test/createTestApplicationContext');
 const { deleteUserFromCase } = require('./deleteUserFromCase');
 
-describe('deleteUserFromCase', () => {
-  beforeAll(() => {
-    applicationContext.environment.stage = 'dev';
+describe('deleteUserFromCase', function() {
+  let applicationContext;
+  let deleteStub;
+
+  beforeEach(() => {
+    deleteStub = jest.fn().mockReturnValue({
+      promise: async () => null,
+    });
+
+    applicationContext = {
+      environment: {
+        stage: 'dev',
+      },
+      getDocumentClient: () => ({
+        delete: deleteStub,
+      }),
+    };
   });
 
   it('attempts to delete the user from the case', async () => {

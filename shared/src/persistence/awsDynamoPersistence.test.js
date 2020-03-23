@@ -10,7 +10,7 @@ const applicationContext = {
   },
 };
 
-describe('awsDynamoPersistence', function() {
+describe('awsDynamoPersistence', function () {
   beforeEach(() => {
     client.query = jest.fn().mockReturnValue([
       {
