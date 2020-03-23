@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const { createCaseDeadline } = require('./createCaseDeadline');
 
 describe('createCaseDeadline', () => {
@@ -13,7 +12,7 @@ describe('createCaseDeadline', () => {
   };
 
   beforeEach(() => {
-    putStub = sinon.stub().returns({
+    putStub = jest.fn().mockReturnValue({
       promise: async () => null,
     });
 
@@ -32,7 +31,7 @@ describe('createCaseDeadline', () => {
       applicationContext,
       caseDeadline: mockCaseDeadline,
     });
-    expect(putStub.getCall(0).args[0]).toMatchObject({
+    expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {
         caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         pk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',

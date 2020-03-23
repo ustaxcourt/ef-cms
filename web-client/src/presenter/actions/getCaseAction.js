@@ -14,6 +14,5 @@ export const getCaseAction = async ({ applicationContext, get, props }) => {
     applicationContext,
     docketNumber,
   });
-
   return { caseDetail };
 };

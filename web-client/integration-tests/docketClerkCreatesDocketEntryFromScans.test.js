@@ -26,7 +26,6 @@ import FormData from 'form-data';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
 
 let test;
 global.FormData = FormData;
@@ -120,7 +119,6 @@ describe('Create Docket Entry From Scans', () => {
   });
 
   loginAs(test, 'petitioner');
-  petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile, { caseType: 'CDP (Lien/Levy)' });

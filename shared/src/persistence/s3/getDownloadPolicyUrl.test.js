@@ -1,29 +1,33 @@
+const {
+  applicationContext,
+} = require('../../business/test/createTestApplicationContext');
 const { getDownloadPolicyUrl } = require('./getDownloadPolicyUrl');
 
-let applicationContext;
-let getTempDocumentsBucketNameMock;
-let getDocumentsBucketNameMock;
-
 describe('getDownloadPolicyUrl', () => {
-  beforeEach(() => {
-    getTempDocumentsBucketNameMock = jest.fn(() => 'my-test-temp-bucket');
-    getDocumentsBucketNameMock = jest.fn(() => 'my-test-bucket');
+  const getSignedUrlErrorMock = jest.fn((method, options, cb) =>
+    cb('error', 'http://localhost'),
+  );
+  const getSignedUrlMock = jest.fn((method, options, cb) =>
+    cb(null, 'http://localhost'),
+  );
 
-    applicationContext = {
-      getDocumentsBucketName: getDocumentsBucketNameMock,
-      getStorageClient: () => ({
-        getSignedUrl: (method, options, cb) => cb(null, 'http://localhost'),
-      }),
-      getTempDocumentsBucketName: getTempDocumentsBucketNameMock,
-    };
+  beforeAll(() => {
+    applicationContext.getStorageClient.mockReturnValue({
+      getSignedUrl: getSignedUrlMock,
+    });
+    applicationContext.getDocumentsBucketName.mockReturnValue('my-test-bucket');
+    applicationContext.getTempDocumentsBucketName.mockReturnValue(
+      'my-test-temp-bucket',
+    );
   });
 
   it('returns a signed URL from the storage client (s3)', async () => {
     const result = await getDownloadPolicyUrl({
       applicationContext,
     });
+
     expect(result).toEqual({ url: 'http://localhost' });
-    expect(getDocumentsBucketNameMock).toHaveBeenCalled();
+    expect(applicationContext.getDocumentsBucketName).toHaveBeenCalled();
   });
 
   it('returns a signed URL from the storage client using the temp bucket when the useTempBucket param is true', async () => {
@@ -31,23 +35,20 @@ describe('getDownloadPolicyUrl', () => {
       applicationContext,
       useTempBucket: true,
     });
+
     expect(result).toEqual({ url: 'http://localhost' });
-    expect(getTempDocumentsBucketNameMock).toHaveBeenCalled();
+    expect(applicationContext.getTempDocumentsBucketName).toHaveBeenCalled();
   });
 
   it('rejects if an error is thrown', async () => {
-    applicationContext.getStorageClient = () => ({
-      getSignedUrl: (method, options, cb) => cb('error', 'http://localhost'),
+    applicationContext.getStorageClient.mockReturnValue({
+      getSignedUrl: getSignedUrlErrorMock,
     });
 
-    let error;
-    try {
-      await getDownloadPolicyUrl({
+    await expect(
+      getDownloadPolicyUrl({
         applicationContext,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
+      }),
+    ).rejects.toThrow('error');
   });
 });

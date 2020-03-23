@@ -1,7 +1,6 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateAddIrsPractitionerAction } from './validateAddIrsPractitionerAction';
-import sinon from 'sinon';
 
 describe('validateAddIrsPractitioner', () => {
   let validateAddIrsPractitionerInteractorStub;
@@ -11,9 +10,9 @@ describe('validateAddIrsPractitioner', () => {
   let mockAddIrsPractitioner;
 
   beforeEach(() => {
-    validateAddIrsPractitionerInteractorStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+    validateAddIrsPractitionerInteractorStub = jest.fn();
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     mockAddIrsPractitioner = {
       user: { userId: 'abc' },
@@ -32,7 +31,7 @@ describe('validateAddIrsPractitioner', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateAddIrsPractitionerInteractorStub.returns(null);
+    validateAddIrsPractitionerInteractorStub = jest.fn().mockReturnValue(null);
     await runAction(validateAddIrsPractitionerAction, {
       modules: {
         presenter,
@@ -42,11 +41,13 @@ describe('validateAddIrsPractitioner', () => {
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateAddIrsPractitionerInteractorStub.returns('error');
+    validateAddIrsPractitionerInteractorStub = jest
+      .fn()
+      .mockReturnValue('error');
     await runAction(validateAddIrsPractitionerAction, {
       modules: {
         presenter,
@@ -56,6 +57,6 @@ describe('validateAddIrsPractitioner', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

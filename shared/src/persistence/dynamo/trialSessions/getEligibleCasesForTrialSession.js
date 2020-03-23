@@ -29,8 +29,21 @@ exports.getEligibleCasesForTrialSession = async ({
     })),
   });
 
+  const aggregatedResults = [];
+
+  for (let result of results) {
+    const caseItems = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId({ applicationContext, caseId: result.caseId });
+
+    aggregatedResults.push({
+      ...result,
+      ...caseItems,
+    });
+  }
+
   const afterMapping = caseIds.map(caseId => ({
-    ...results.find(r => caseId === r.caseId),
+    ...aggregatedResults.find(r => caseId === r.caseId),
   }));
 
   return afterMapping;
