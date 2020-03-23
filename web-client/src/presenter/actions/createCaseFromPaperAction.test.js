@@ -130,19 +130,19 @@ describe('setupPercentDone', () => {
       trial: {},
       waiverOfFilingFee: {},
     });
-    expect(storeObject.fileUploadProgress.percentComplete).toEqual(0);
-    expect(storeObject.fileUploadProgress.timeRemaining).toEqual(
+    expect(storeObject['fileUploadProgress.percentComplete']).toEqual(0);
+    expect(storeObject['fileUploadProgress.timeRemaining']).toEqual(
       Number.POSITIVE_INFINITY,
     );
-    expect(storeObject.fileUploadProgress.isUploading).toEqual(true);
+    expect(storeObject['fileUploadProgress.isUploading']).toEqual(true);
 
     result.ownership({ isDone: true });
     result.petition({ isDone: true });
     result.stin({ isDone: true });
     result.trial({ isDone: true });
     result.waiverOfFilingFee({ loaded: 0, total: 1 });
-    expect(storeObject.fileUploadProgress.percentComplete).toEqual(90);
+    expect(storeObject['fileUploadProgress.percentComplete']).toEqual(90);
     result.waiverOfFilingFee({ isDone: true });
-    expect(storeObject.fileUploadProgress.percentComplete).toEqual(100);
+    expect(storeObject['fileUploadProgress.percentComplete']).toEqual(100);
   });
 });
