@@ -105,6 +105,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createWorkItem: createWorkItemPersistence,
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteSectionOutboxRecord,
+    deleteUserCaseNote: jest.fn(),
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
     getCaseByCaseId: jest.fn().mockImplementation(getCaseByCaseId),
@@ -126,6 +127,8 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getSentMessagesForUserPersistence),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
+    getUserCaseNote: jest.fn(),
+    getUserCaseNoteForCases: jest.fn(),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
     putWorkItemInOutbox: jest.fn(putWorkItemInOutbox),

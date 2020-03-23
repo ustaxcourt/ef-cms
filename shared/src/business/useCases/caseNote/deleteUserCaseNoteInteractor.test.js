@@ -1,18 +1,16 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   deleteUserCaseNoteInteractor,
 } = require('./deleteUserCaseNoteInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 describe('deleteUserCaseNoteInteractor', () => {
-  let applicationContext;
-
   it('throws an error if the user is not valid or authorized', async () => {
-    applicationContext = {
-      getCurrentUser: () => {
-        return {};
-      },
-    };
+    applicationContext.getCurrentUser.mockReturnValue({});
+
     let error;
     try {
       await deleteUserCaseNoteInteractor({
@@ -28,24 +26,21 @@ describe('deleteUserCaseNoteInteractor', () => {
   });
 
   it('deletes a case note', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () =>
-        new User({
-          name: 'Judge Armen',
-          role: User.ROLES.judge,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
-      getPersistenceGateway: () => ({
-        deleteUserCaseNote: v => v,
+    const mockUser = new User({
+      name: 'Judge Armen',
+      role: User.ROLES.judge,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    applicationContext.getPersistenceGateway().deleteUserCaseNote = v => v;
+
+    applicationContext.getUseCases.mockReturnValue({
+      getJudgeForUserChambersInteractor: () => ({
+        role: User.ROLES.judge,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
-      getUseCases: () => ({
-        getJudgeForUserChambersInteractor: () => ({
-          role: User.ROLES.judge,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
-      }),
-    };
+    });
 
     let error;
     let caseNote;
