@@ -16,7 +16,7 @@ export const saveCaseDetailInternalEditAction = async ({
 }) => {
   const { STATUS_TYPES } = applicationContext.getConstants();
   const { combinedCaseDetailWithForm } = props;
-  const caseToUpdate = combinedCaseDetailWithForm || get(state.caseDetail);
+  const caseToUpdate = combinedCaseDetailWithForm || get(state.form);
 
   const caseDetail = await applicationContext
     .getUseCases()

@@ -150,7 +150,7 @@ const router = {
         if (!isEmpty(app.getState('form'))) {
           const { tab } = route.query();
 
-          app.getSequence('gotoEditSavedDocumentDetailSequence')({
+          app.getSequence('gotoEditSavedPetitionSequence')({
             docketNumber,
             documentId,
             tab,
