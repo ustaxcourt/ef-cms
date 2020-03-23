@@ -3,6 +3,9 @@ const {
 } = require('./generateCaseConfirmationPdf');
 jest.mock('../../../authorization/authorizationClientService');
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -22,25 +25,24 @@ const chromiumBrowserMock = {
   newPage: () => pageMock,
 };
 
+const mockCurrentUser = {
+  role: User.ROLES.petitioner,
+  userId: 'petitioner',
+};
+
 const s3Upload = jest.fn().mockImplementation((params, resolve) => resolve());
 
-let applicationContext = {
-  getChromiumBrowser: () => chromiumBrowserMock,
-  getCurrentUser: () => ({
-    role: User.ROLES.petitioner,
-    userId: 'petitioner',
-  }),
-  getDocumentsBucketName: () => 'DocumentBucketName',
-  getNodeSass: () => ({ render: (data, cb) => cb(data, { css: '' }) }),
-  getPersistenceGateway: () => ({
-    getCaseByCaseId: () => ({ docketNumber: '101-19' }),
-  }),
-  getPug: () => ({ compile: () => () => '' }),
-  getStorageClient: () => ({
-    upload: s3Upload,
-  }),
-  logger: { error: jest.fn(), info: () => {} },
-};
+applicationContext.getCurrentUser.mockReturnValue(mockCurrentUser);
+applicationContext.getDocumentsBucketName.mockReturnValue('DocumentBucketName');
+applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
+  docketNumber: '101-19',
+});
+applicationContext.getPug.mockReturnValue({
+  compile: () => () => '',
+});
+applicationContext.getStorageClient.mockReturnValue({
+  upload: s3Upload,
+});
 
 describe('generateCaseConfirmationPdf', () => {
   beforeEach(() => {
@@ -96,6 +98,7 @@ describe('generateCaseConfirmationPdf', () => {
     jest.spyOn(chromiumBrowserMock, 'newPage').mockImplementation(() => {
       throw new Error('page problem');
     });
+    applicationContext.getChromiumBrowser.mockReturnValue(chromiumBrowserMock);
     let error;
     try {
       await generateCaseConfirmationPdf({
@@ -132,6 +135,6 @@ describe('generateCaseConfirmationPdf', () => {
       },
     });
 
-    expect(s3Upload).toHaveBeenCalled();
+    expect(applicationContext.getStorageClient).toHaveBeenCalled();
   });
 });

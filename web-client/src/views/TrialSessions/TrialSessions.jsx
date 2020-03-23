@@ -23,7 +23,7 @@ export const TrialSessions = connect(
           <ErrorNotification />
 
           <Tabs
-            bind="trialSessionsTab.group"
+            bind="currentViewMetadata.trialSessions.tab"
             defaultActiveTab={defaultTab || 'open'}
             id="trial-sessions-tabs"
           >

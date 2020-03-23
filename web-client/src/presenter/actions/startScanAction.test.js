@@ -42,13 +42,17 @@ describe('startScanAction', () => {
         scannerSourceName: 'scanner',
       },
       state: {
-        batches: [],
-        documentSelectedForScan: 'petition',
-        isScanning: false,
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
+        scanner: {
+          batches: [],
+          isScanning: false,
+        },
       },
     });
 
-    expect(result.state.isScanning).toBeTruthy();
+    expect(result.state.scanner.isScanning).toBeTruthy();
   });
 
   it('expect the success path to be called', async () => {
@@ -57,7 +61,9 @@ describe('startScanAction', () => {
         presenter,
       },
       state: {
-        isScanning: false,
+        scanner: {
+          isScanning: false,
+        },
       },
     });
 
@@ -70,19 +76,23 @@ describe('startScanAction', () => {
         presenter,
       },
       state: {
-        batches: {
-          petition: [
-            {
-              index: 5,
-            },
-          ],
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
         },
-        documentSelectedForScan: 'petition',
-        isScanning: false,
+        scanner: {
+          batches: {
+            petition: [
+              {
+                index: 5,
+              },
+            ],
+          },
+          isScanning: false,
+        },
       },
     });
 
-    expect(result.state.selectedBatchIndex).toEqual(6);
+    expect(result.state.scanner.selectedBatchIndex).toEqual(6);
   });
 
   it('calls the error path on errors', async () => {
@@ -100,9 +110,13 @@ describe('startScanAction', () => {
         scannerSourceName: 'scanner',
       },
       state: {
-        batches: [],
-        documentSelectedForScan: 'petition',
-        isScanning: false,
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
+        scanner: {
+          batches: [],
+          isScanning: false,
+        },
       },
     });
 

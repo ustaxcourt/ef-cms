@@ -32,12 +32,13 @@ exports.handler = (event, context, callback) => {
   const cognitoUrl = 'https://*.auth.us-east-1.amazoncognito.com';
   const dynamsoftUrl = 'https://dynamsoft-lib-stg.ef-cms.ustaxcourt.gov';
   const websocketUrl = `wss://${allowedDomainString}`;
+  const honeybadgerApiUrl = 'https://api.honeybadger.io';
   const localUrl = 'https://127.0.0.1:*';
   const localWebsocketUrl = 'ws://127.0.0.1:*';
   const s3Url = 'https://s3.us-east-1.amazonaws.com';
   const contentSecurityPolicy = [
     'base-uri resource://pdf.js',
-    `connect-src ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrl} ${localUrl} ${websocketUrl} ${localWebsocketUrl}`,
+    `connect-src ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrl} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${honeybadgerApiUrl}`,
     `default-src ${applicationUrl} ${s3Url} data: blob:`,
     `form-action ${applicationUrl}`,
     "object-src 'none'",

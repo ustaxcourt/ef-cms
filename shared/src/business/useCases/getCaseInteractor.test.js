@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { getCaseInteractor } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
@@ -63,7 +62,7 @@ describe('Get case', () => {
   });
 
   it('success case by docket number', async () => {
-    const getCaseByDocketNumberStub = sinon.stub().resolves(MOCK_CASE);
+    const getCaseByDocketNumberStub = jest.fn().mockResolvedValue(MOCK_CASE);
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
@@ -83,7 +82,7 @@ describe('Get case', () => {
       caseId: '00101-00',
     });
     expect(caseRecord.caseId).toEqual('c54ba5a9-b37b-479d-9201-067ec6e335bb');
-    expect(getCaseByDocketNumberStub.getCall(0).args[0].docketNumber).toEqual(
+    expect(getCaseByDocketNumberStub.mock.calls[0][0].docketNumber).toEqual(
       '101-00',
     );
   });

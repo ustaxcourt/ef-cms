@@ -17,7 +17,7 @@ export const generatePdfFromScanSessionSequence = showProgressSequenceDecorator(
     generatePdfFromScanSessionAction,
     validateFileSizeAction,
     {
-      invalid: [set(state.isScanning, false)],
+      invalid: [set(state.scanner.isScanning, false)],
       valid: [
         getFormValueDocumentAction,
         ...updateFormValueSequence,

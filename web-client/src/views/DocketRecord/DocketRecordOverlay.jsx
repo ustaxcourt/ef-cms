@@ -12,7 +12,6 @@ export const DocketRecordOverlay = connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
-    clearDocumentSequence: sequences.clearDocumentSequence,
     dismissModalSequence: sequences.dismissModalSequence,
     docketRecordIndex: state.docketRecordIndex,
     formattedCaseDetail: state.formattedCaseDetail,

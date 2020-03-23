@@ -7,11 +7,11 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { openCreateOrderChooseTypeModalSequence } from './openCreateOrderChooseTypeModalSequence';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
+import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder/setCreateOrderModalDataOnFormAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unset } from 'cerebral/factories';
-import { unstashCreateOrderModalDataAction } from '../actions/CourtIssuedOrder/unstashCreateOrderModalDataAction';
 
 const gotoCreateOrder = [
   unset(state.documentToEdit),
@@ -20,7 +20,7 @@ const gotoCreateOrder = [
   stopShowValidationAction,
   clearFormAction,
   setCasePropFromStateAction,
-  unstashCreateOrderModalDataAction,
+  setCreateOrderModalDataOnFormAction,
   ...convertHtml2PdfSequence,
   setCurrentPageAction('CreateOrder'),
 ];
