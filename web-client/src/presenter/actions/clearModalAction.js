@@ -8,5 +8,5 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object used for setting showModal
  */
 export const clearModalAction = ({ store }) => {
-  store.set(state.modal.showModal, '');
+  store.unset(state.modal.showModal);
 };
