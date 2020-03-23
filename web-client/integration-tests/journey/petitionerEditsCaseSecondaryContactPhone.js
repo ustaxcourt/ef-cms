@@ -4,7 +4,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export default test => {
   return it('petitioner updates secondary contact phone', async () => {
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'contactSecondary.phone',
       value: '9999999999',
     });
