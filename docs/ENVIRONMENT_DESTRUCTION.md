@@ -26,8 +26,10 @@ To destroy an environment that was previously created and deployed:
 ```
 This Lambda function's replicas may take several hours to remove. It can be deleted from the AWS console after waiting a few hours for replication deletion.
 
-9. Destroy web-api: `cd web-api/terraform/main && ../bin/environment-destroy.sh [ENV]`.  You may get this error, or something similar. 
+9. Destroy web-api: `cd web-api/terraform/main && ../bin/environment-destroy.sh [ENV]`.  
+
+If you get an error like this, you may have to contact AWS and have them remove the associations with the certificate.
+
 ```
 * aws_acm_certificate.ws-us-west-1: Error deleting certificate: ResourceInUseException: Certificate arn:aws:acm:us-west-1:515554424717:certificate/9d6bbec6-c7fc-4277-87a5-fb63f2589f21 in account 515554424717 is in use.
 ```
-This seems to be caused by a delay between deleting the API Gateway custom domain name and the associated certificate.  It may take a couple of hours for the certificate to be disassociated with the none existing resource.  
