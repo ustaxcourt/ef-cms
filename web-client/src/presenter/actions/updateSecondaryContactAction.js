@@ -12,15 +12,14 @@ export const updateSecondaryContactAction = async ({
   applicationContext,
   get,
 }) => {
-  const caseToUpdate = get(state.caseDetail);
-  const contactInfo = get(state.caseDetail.contactSecondary);
+  const { caseId, contactSecondary } = get(state.form);
 
   const updatedCase = await applicationContext
     .getUseCases()
     .updateSecondaryContactInteractor({
       applicationContext,
-      caseId: caseToUpdate.caseId,
-      contactInfo,
+      caseId,
+      contactInfo: contactSecondary,
     });
 
   return {

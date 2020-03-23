@@ -32,7 +32,7 @@ describe('validateSecondaryContactAction', () => {
         presenter,
       },
       state: {
-        caseDetail: {
+        form: {
           contactSecondary: {},
           partyType: 'Petitioner & spouse',
         },
@@ -51,7 +51,7 @@ describe('validateSecondaryContactAction', () => {
         presenter,
       },
       state: {
-        caseDetail: {
+        form: {
           contactSecondary: {
             address1: '',
             address2: 'asdf',
