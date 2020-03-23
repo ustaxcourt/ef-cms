@@ -7,5 +7,5 @@ import { state } from 'cerebral';
  * @param {object} providers.store the store where we register our modal request
  */
 export const openFileUploadErrorModal = ({ store }) => {
-  store.set(state.showModal, 'FileUploadErrorModal');
+  store.set(state.modal.showModal, 'FileUploadErrorModal');
 };

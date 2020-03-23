@@ -57,7 +57,7 @@ const PetitionerInformation = connect(
       sequences.openAddPrivatePractitionerModalSequence,
     openEditPrivatePractitionersModalSequence:
       sequences.openEditPrivatePractitionersModalSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },

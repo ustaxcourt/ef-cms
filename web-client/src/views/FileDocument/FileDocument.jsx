@@ -19,7 +19,7 @@ export const FileDocument = connect(
     navigateBackSequence: sequences.navigateBackSequence,
     reviewExternalDocumentInformationSequence:
       sequences.reviewExternalDocumentInformationSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
   ({
     fileDocumentHelper,

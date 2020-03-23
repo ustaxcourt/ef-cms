@@ -15,7 +15,7 @@ export const PrimaryContactEdit = connect(
     caseDetail: state.caseDetail,
     contactEditHelper: state.contactEditHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     submitEditPrimaryContactSequence:
       sequences.submitEditPrimaryContactSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,

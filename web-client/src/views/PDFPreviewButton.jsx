@@ -10,7 +10,7 @@ export const PDFPreviewButton = connect(
   {
     openPdfPreviewModalSequence: sequences.openPdfPreviewModalSequence,
     pdfPreviewModalHelper: state.pdfPreviewModalHelper,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
   ({
     file,

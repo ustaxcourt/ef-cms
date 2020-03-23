@@ -12,6 +12,6 @@ export const closeFileUploadStatusModalAction = async ({ store }) => {
     store.set(state.isUploading, false);
     setTimeout(resolve, process.env.FILE_UPLOAD_MODAL_TIMEOUT || 3000);
   }).then(() => {
-    store.set(state.showModal, '');
+    store.set(state.modal.showModal, '');
   });
 };

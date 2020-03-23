@@ -191,7 +191,10 @@ export const state = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
-  modal: {},
+  modal: {
+    form: {},
+    showModal: '',
+  },
   navigation: {},
   notifications: {},
   pdfForSigning: {
@@ -222,7 +225,6 @@ export const state = {
   sessionMetadata: {
     docketRecordSort: [],
   },
-  showModal: '',
   showValidation: false,
   timeRemaining: Number.POSITIVE_INFINITY,
   user: null,
