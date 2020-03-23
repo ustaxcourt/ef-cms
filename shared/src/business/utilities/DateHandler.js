@@ -44,7 +44,7 @@ const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
 const createISODateString = (dateString, inputFormat) => {
   let result;
   if (!dateString) {
-    result = moment();
+    result = moment.tz(USTC_TZ);
   } else {
     result = prepareDateFromString(dateString, inputFormat);
   }
@@ -75,8 +75,11 @@ const formatDateString = (dateString, formatStr) => {
 };
 
 const formatNow = formatStr => {
+  /*
+  Using `module.exports` to allow mocking in tests
+  */
   const now = module.exports.createISODateString();
-  return module.exports.formatDateString(now, formatStr);
+  return formatDateString(now, formatStr);
 };
 
 /**
