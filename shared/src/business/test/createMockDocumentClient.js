@@ -54,6 +54,11 @@ const createMockDocumentClient = () => {
         }),
       };
     },
+    batchWrite: jest.fn().mockImplementation(() => {
+      return {
+        promise: async () => null,
+      };
+    }),
     delete: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
       delete mockDynamoUsers[`${pk} ${sk}`];
       return {
