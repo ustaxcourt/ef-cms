@@ -46,7 +46,7 @@ export default test => {
     await wait(5000);
 
     expect(test.currentRouteUrl).toEqual(`/case-detail/${test.caseId}`);
-    expect(test.getState('showModal')).toEqual('PaperServiceConfirmModal');
+    expect(test.getState('modal.showModal')).toEqual('PaperServiceConfirmModal');
   });
 
   it('should add served case to individual served queue', async () => {

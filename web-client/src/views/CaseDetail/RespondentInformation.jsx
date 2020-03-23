@@ -56,7 +56,7 @@ const RespondentInformation = connect(
       sequences.openAddIrsPractitionerModalSequence,
     openEditIrsPractitionersModalSequence:
       sequences.openEditIrsPractitionersModalSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },

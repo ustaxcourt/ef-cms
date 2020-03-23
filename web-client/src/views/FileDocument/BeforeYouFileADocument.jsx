@@ -11,7 +11,7 @@ export const BeforeYouFileADocument = connect(
   {
     caseDetail: state.caseDetail,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
   ({ caseDetail, formCancelToggleCancelSequence, showModal }) => {
     return (

@@ -23,8 +23,10 @@ describe('closeFileUploadStatusModalAction', () => {
     expect(global.setTimeout.mock.calls[3][1]).toBe('77');
     expect(result.state).toMatchObject({
       isUploading: false,
+      modal: {
+        showModal: '',
+      },
       percentComplete: 100,
-      showModal: '',
       timeRemaining: 0,
     });
   });

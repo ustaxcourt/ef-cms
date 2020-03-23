@@ -16,7 +16,7 @@ export const StartCaseStep5 = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     user: state.user,
