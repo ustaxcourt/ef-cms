@@ -33,3 +33,10 @@ This is pointing to our own fork which includes the functionality required to ho
 ### Jest and babel-jest version 25.x
 
 These libaries are locked to version 24.x because upgrading them causes Sonarcloud to report 0% coverage.
+
+
+### aws-sdk version 2.642.0
+
+This library is locked to version 2.642.x because upgrading to 2.643.x causes this error in cypress smoke tests in post-deploy:
+
+`Error: Cannot find module './dist-tools/transform.js' from '/home/app/node_modules/aws-sdk'`
