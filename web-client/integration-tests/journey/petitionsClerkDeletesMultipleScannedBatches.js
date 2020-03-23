@@ -1,7 +1,9 @@
 export default (test, { numBatches }) => {
   return it('Petitions clerk deletes multiple batches', async () => {
-    const selectedDocumentType = test.getState('documentSelectedForScan');
-    const batches = test.getState(`batches.${selectedDocumentType}`);
+    const selectedDocumentType = test.getState(
+      'currentViewMetadata.documentSelectedForScan',
+    );
+    const batches = test.getState(`scanner.batches.${selectedDocumentType}`);
 
     expect(batches).toHaveLength(numBatches);
 

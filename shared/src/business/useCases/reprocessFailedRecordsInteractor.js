@@ -18,13 +18,27 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
 
     for (const record of recordsToProcess) {
       try {
-        const fullRecord = await applicationContext
-          .getPersistenceGateway()
-          .getRecord({
-            applicationContext,
-            recordPk: record.recordPk,
-            recordSk: record.recordSk,
-          });
+        let fullRecord;
+
+        if (
+          record.recordPk.includes('case|') &&
+          record.recordSk.includes('case|')
+        ) {
+          fullRecord = await applicationContext
+            .getPersistenceGateway()
+            .getCaseByCaseId({
+              applicationContext,
+              caseId: record.recordPk.split('|')[1],
+            });
+        } else {
+          fullRecord = await applicationContext
+            .getPersistenceGateway()
+            .getRecord({
+              applicationContext,
+              recordPk: record.recordPk,
+              recordSk: record.recordSk,
+            });
+        }
 
         await searchClient.index({
           body: { ...AWS.DynamoDB.Converter.marshall(fullRecord) },

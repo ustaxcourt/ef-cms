@@ -1,5 +1,5 @@
+jest.mock('aws-sdk');
 const AWS = require('aws-sdk');
-const sinon = require('sinon');
 
 const {
   batchGet,
@@ -17,21 +17,57 @@ const MOCK_ITEM = {
 
 let documentClientStub;
 
-const applicationContext = {
-  environment: { stage: 'dev' },
-  getDocumentClient: () => {
-    return documentClientStub;
-  },
-};
+describe('dynamodbClientService', function () {
+  let applicationContext;
+  let getStub = jest.fn().mockReturnValue({
+    promise: () =>
+      Promise.resolve({
+        Item: {
+          'aws:rep:deleting': 'a',
+          'aws:rep:updateregion': 'b',
+          'aws:rep:updatetime': 'c',
+          ...MOCK_ITEM,
+        },
+      }),
+  });
+  const deleteStub = jest
+    .fn()
+    .mockReturnValue({ promise: () => Promise.resolve(null) });
+  const batchWriteStub = jest
+    .fn()
+    .mockReturnValue({ promise: () => Promise.resolve(null) });
 
-describe('dynamodbClientService', function() {
   beforeEach(() => {
-    documentClientStub = {
-      batchGet: sinon.stub().returns({
-        promise: () =>
-          Promise.resolve({
-            Responses: {
-              'efcms-dev': [
+    jest.clearAllMocks();
+
+    applicationContext = {
+      environment: { stage: 'dev' },
+      getDocumentClient: () => ({
+        batchGet: jest.fn().mockReturnValue({
+          promise: () =>
+            Promise.resolve({
+              Responses: {
+                'efcms-dev': [
+                  {
+                    'aws:rep:deleting': 'a',
+                    'aws:rep:updateregion': 'b',
+                    'aws:rep:updatetime': 'c',
+                    ...MOCK_ITEM,
+                  },
+                ],
+              },
+            }),
+        }),
+        batchWrite: batchWriteStub,
+        delete: deleteStub,
+        get: getStub,
+        put: jest
+          .fn()
+          .mockReturnValue({ promise: () => Promise.resolve(null) }),
+        query: jest.fn().mockReturnValue({
+          promise: () =>
+            Promise.resolve({
+              Items: [
                 {
                   'aws:rep:deleting': 'a',
                   'aws:rep:updateregion': 'b',
@@ -39,52 +75,24 @@ describe('dynamodbClientService', function() {
                   ...MOCK_ITEM,
                 },
               ],
-            },
-          }),
-      }),
-      batchWrite: sinon
-        .stub()
-        .returns({ promise: () => Promise.resolve(null) }),
-      delete: sinon.stub().returns({ promise: () => Promise.resolve(null) }),
-      get: sinon.stub().returns({
-        promise: () =>
-          Promise.resolve({
-            Item: {
-              'aws:rep:deleting': 'a',
-              'aws:rep:updateregion': 'b',
-              'aws:rep:updatetime': 'c',
-              ...MOCK_ITEM,
-            },
-          }),
-      }),
-      put: sinon.stub().returns({ promise: () => Promise.resolve(null) }),
-      query: sinon.stub().returns({
-        promise: () =>
-          Promise.resolve({
-            Items: [
-              {
-                'aws:rep:deleting': 'a',
-                'aws:rep:updateregion': 'b',
-                'aws:rep:updatetime': 'c',
-                ...MOCK_ITEM,
+            }),
+        }),
+        update: jest.fn().mockReturnValue({
+          promise: () =>
+            Promise.resolve({
+              Attributes: {
+                id: '123',
               },
-            ],
-          }),
-      }),
-      update: sinon.stub().returns({
-        promise: () =>
-          Promise.resolve({
-            Attributes: {
-              id: '123',
-            },
-          }),
+            }),
+        }),
       }),
     };
-    sinon.stub(AWS.DynamoDB, 'DocumentClient').returns(documentClientStub);
+
+    AWS.DynamoDB = { DocumentClient: () => documentClientStub };
   });
 
-  afterEach(() => {
-    AWS.DynamoDB.DocumentClient.restore();
+  afterAll(() => {
+    jest.restoreAllMocks();
   });
 
   describe('put', () => {
@@ -110,12 +118,16 @@ describe('dynamodbClientService', function() {
       expect(result).toEqual(MOCK_ITEM);
     });
     it('should throw an error if the item is not returned', async () => {
-      documentClientStub.get.returns({ promise: () => Promise.resolve({}) });
+      getStub = jest
+        .fn()
+        .mockReturnValue({ promise: () => Promise.resolve({}) });
       const result = await get({ applicationContext });
       expect(result).toBeUndefined();
     });
     it('should return nothing if the promise is rejected', async () => {
-      documentClientStub.get.returns({ promise: () => Promise.reject({}) });
+      getStub = jest
+        .fn()
+        .mockReturnValue({ promise: () => Promise.reject({}) });
       const result = await get({ applicationContext });
       expect(result).toBeUndefined();
     });
@@ -163,7 +175,7 @@ describe('dynamodbClientService', function() {
         items: [item],
         tableName: 'a',
       });
-      expect(documentClientStub.batchWrite.getCall(0).args[0]).toEqual({
+      expect(batchWriteStub.mock.calls[0][0]).toEqual({
         RequestItems: {
           'efcms-dev': [
             {
@@ -191,7 +203,7 @@ describe('dynamodbClientService', function() {
           pk: '123',
         },
       });
-      expect(documentClientStub.delete.getCall(0).args[0]).toEqual({
+      expect(deleteStub.mock.calls[0][0]).toEqual({
         Key: { pk: '123' },
         TableName: 'efcms-dev',
       });

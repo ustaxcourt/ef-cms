@@ -237,18 +237,23 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     ? { gsi1pk: caseToUpdate.leadCaseId }
     : {};
 
-  const [results] = await Promise.all([
+  await Promise.all([
     client.put({
       Item: {
         pk: `case|${caseToUpdate.caseId}`,
         sk: `case|${caseToUpdate.caseId}`,
         ...setLeadCase,
-        ...caseToUpdate,
+        ...omit(caseToUpdate, [
+          'documents',
+          'irsPractitioners',
+          'privatePractitioners',
+          'docketRecord',
+        ]),
       },
       applicationContext,
     }),
     ...requests,
   ]);
 
-  return results;
+  return caseToUpdate;
 };

@@ -1,5 +1,4 @@
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
-const sinon = require('sinon');
 const { getInternalUsers } = require('./getInternalUsers');
 
 const applicationContext = {
@@ -12,7 +11,7 @@ const applicationContext = {
 
 describe('getInternalUsers', () => {
   beforeEach(() => {
-    sinon.stub(client, 'query').resolves([
+    client.query = jest.fn().mockReturnValue([
       {
         pk: 'section|petitions',
         sk: 'user|petitionsclerk1',
@@ -30,7 +29,7 @@ describe('getInternalUsers', () => {
       },
     ]);
 
-    sinon.stub(client, 'batchGet').resolves([
+    client.batchGet = jest.fn().mockReturnValue([
       {
         pk: 'user|petitionsclerk1',
         sk: 'user|petitionsclerk1',
@@ -47,10 +46,6 @@ describe('getInternalUsers', () => {
         userId: 'adc1',
       },
     ]);
-  });
-
-  afterEach(() => {
-    client.query.restore();
   });
 
   it('should get the internal users', async () => {

@@ -21,7 +21,7 @@ SecondaryDocumentInformationFactory.get = (
   documentMetadata,
   VALIDATION_ERROR_MESSAGES,
 ) => {
-  let entityConstructor = function(rawProps) {
+  let entityConstructor = function (rawProps) {
     this.attachments = rawProps.attachments;
     this.category = rawProps.category;
     this.certificateOfService = rawProps.certificateOfService;
@@ -36,10 +36,7 @@ SecondaryDocumentInformationFactory.get = (
   let schemaOptionalItems = {
     attachments: joi.boolean(),
     certificateOfService: joi.boolean(),
-    certificateOfServiceDate: joi
-      .date()
-      .iso()
-      .max('now'),
+    certificateOfServiceDate: joi.date().iso().max('now'),
     objections: joi.string(),
   };
 

@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const { deleteUserConnection } = require('./deleteUserConnection');
 
 describe('deleteUserConnection', () => {
@@ -8,7 +7,7 @@ describe('deleteUserConnection', () => {
 
   beforeEach(() => {
     deleteStub = jest.fn(() => ({ promise: async () => null }));
-    queryStub = sinon.stub().returns({
+    queryStub = jest.fn().mockReturnValue({
       promise: async () => ({
         Items: [{ pk: 'connections-123', sk: 'abc' }],
       }),

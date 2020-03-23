@@ -19,10 +19,12 @@ describe('setAdvancedSearchPropsOnFormAction', () => {
 
     expect(result.state.advancedSearchForm).toEqual({
       anotherThing: 'h',
-      countryType: 'c',
-      petitionerName: 'a',
-      petitionerState: 'b',
-      yearFiledMax: 'e',
+      caseSearchByName: {
+        countryType: 'c',
+        petitionerName: 'a',
+        petitionerState: 'b',
+        yearFiledMax: 'e',
+      },
     });
   });
 });

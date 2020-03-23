@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
@@ -22,7 +21,7 @@ describe('forwardWorkItemInteractor integration test', () => {
   let applicationContext;
 
   beforeEach(() => {
-    sinon.stub(window.Date.prototype, 'toISOString').returns(CREATED_DATE);
+    window.Date.prototype.toISOString = jest.fn().mockReturnValue(CREATED_DATE);
     applicationContext = createTestApplicationContext({
       user: {
         name: 'Rick Petitioner',
@@ -33,7 +32,7 @@ describe('forwardWorkItemInteractor integration test', () => {
   });
 
   afterEach(() => {
-    window.Date.prototype.toISOString.restore();
+    jest.restoreAllMocks();
   });
 
   it('should create the expected case into the database', async () => {

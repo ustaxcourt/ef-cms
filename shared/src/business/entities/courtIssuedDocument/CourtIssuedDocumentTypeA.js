@@ -21,7 +21,7 @@ function CourtIssuedDocumentTypeA(rawProps) {
   this.serviceStamp = rawProps.serviceStamp;
 }
 
-CourtIssuedDocumentTypeA.prototype.getDocumentTitle = function() {
+CourtIssuedDocumentTypeA.prototype.getDocumentTitle = function () {
   return replaceBracketed(this.documentTitle, this.freeText);
 };
 

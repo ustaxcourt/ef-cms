@@ -19,7 +19,7 @@ function ExternalDocumentNonStandardE(rawProps) {
   this.trialLocation = rawProps.trialLocation;
 }
 
-ExternalDocumentNonStandardE.prototype.getDocumentTitle = function() {
+ExternalDocumentNonStandardE.prototype.getDocumentTitle = function () {
   return replaceBracketed(this.documentTitle, this.trialLocation);
 };
 

@@ -30,7 +30,7 @@ const router = {
     const { ROLE_PERMISSIONS } = app.getState('constants');
 
     const ifHasAccess = (cb, permissionToCheck) => {
-      return function() {
+      return function () {
         const gotoLoginPage = () => {
           const path = app.getState('cognitoLoginUrl');
           externalRoute(path);

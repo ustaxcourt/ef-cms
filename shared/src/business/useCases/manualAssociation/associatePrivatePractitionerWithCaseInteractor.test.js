@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   associatePrivatePractitionerWithCaseInteractor,
 } = require('./associatePrivatePractitionerWithCaseInteractor');
@@ -73,7 +72,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
   });
 
   it('should add mapping for a practitioner', async () => {
-    let updateCaseSpy = sinon.spy();
+    let updateCaseSpy = jest.fn();
 
     applicationContext = {
       environment: { stage: 'local' },
@@ -106,6 +105,6 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(updateCaseSpy.called).toEqual(true);
+    expect(updateCaseSpy).toBeCalled();
   });
 });
