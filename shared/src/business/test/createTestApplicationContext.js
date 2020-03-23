@@ -82,6 +82,7 @@ const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
+const { WorkItem } = require('../entities/WorkItem');
 
 const createTestApplicationContext = ({ user } = {}) => {
   const mockCognitoReturnValue = {
@@ -105,6 +106,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createWorkItem: createWorkItemPersistence,
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteSectionOutboxRecord,
+    deleteUserCaseNote: jest.fn(),
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
     getCaseByCaseId: jest.fn().mockImplementation(getCaseByCaseId),
@@ -113,15 +115,21 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getCaseDeadlinesByCaseId),
     getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
     getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
-    getDocumentQCServedForSection: jest.fn(),
+    getDocumentQCServedForSection: jest
+      .fn()
+      .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDownloadPolicyUrl: jest.fn(),
-    getInboxMessagesForSection,
+    getInboxMessagesForSection: jest
+      .fn()
+      .mockImplementation(getInboxMessagesForSection),
     getInboxMessagesForUser: getInboxMessagesForUserPersistence,
     getSentMessagesForSection: jest.fn(),
     getSentMessagesForUser: jest
       .fn()
       .mockImplementation(getSentMessagesForUserPersistence),
-    getUserById: getUserByIdPersistence,
+    getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
+    getUserCaseNote: jest.fn(),
+    getUserCaseNoteForCases: jest.fn(),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
@@ -129,6 +137,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveWorkItemForPaper,
     setWorkItemAsRead,
     updateCase: jest.fn().mockImplementation(updateCase),
+    updateUserCaseNote: jest.fn(),
     updateWorkItem,
     updateWorkItemInCase,
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
@@ -169,6 +178,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getEntityConstructors: () => ({
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
+      WorkItem: WorkItem,
     }),
     getHttpClient: jest.fn(() => ({
       get: () => ({

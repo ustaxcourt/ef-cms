@@ -1,11 +1,12 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   getDocumentQCInboxForSectionInteractor,
 } = require('./getDocumentQCInboxForSectionInteractor');
 const { User } = require('../../entities/User');
 
 describe('getDocumentQCInboxForSectionInteractor', () => {
-  let applicationContext;
-
   let mockWorkItem = {
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     createdAt: '',
@@ -20,18 +21,14 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
   };
 
   it('throws an error if the user does not have access to the work item', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
-      getPersistenceGateway: () => ({
-        getDocumentQCServedForSection: async () => mockWorkItem,
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCServedForSection.mockResolvedValue(mockWorkItem);
+
     let error;
     try {
       await getDocumentQCInboxForSectionInteractor({
