@@ -26,6 +26,6 @@ describe('setScannerSourceSequence', () => {
 
     expect(mockSetSourceByName).toHaveBeenCalled();
     expect(mockSetItem).toHaveBeenCalled();
-    expect(test.getState('modal.showModal')).toEqual('');
+    expect(test.getState('modal')).toBeUndefined();
   });
 });

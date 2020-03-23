@@ -25,10 +25,12 @@ export const docketClerkCancelsAddDocketEntryFromOrder = (
     expect(draftOrderDocument).toBeTruthy();
 
     await test.runSequence('openCancelDraftDocumentModalSequence');
-    expect(test.getState('modal.showModal')).toEqual('CancelDraftDocumentModal');
+    expect(test.getState('modal.showModal')).toEqual(
+      'CancelDraftDocumentModal',
+    );
 
     await test.runSequence('cancelAddDraftDocumentSequence');
-    expect(test.getState('modal.showModal')).toEqual('');
+    expect(test.getState('modal')).toBeUndefined();
 
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),

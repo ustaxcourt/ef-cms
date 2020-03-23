@@ -294,9 +294,9 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       file: test.getState('form.petitionFile'),
       modalId: 'PDFPreviewModal-petitionFile',
     });
-    expect(test.getState('showModal')).toBe('PDFPreviewModal-petitionFile');
+    expect(test.getState('modal.showModal')).toBe('PDFPreviewModal-petitionFile');
     await test.runSequence('dismissModalSequence');
-    expect(test.getState('showModal')).toBe('');
+    expect(test.getState('modal.showModal')).toBe('');
   });
 
   it('should display a preview of the uploaded stin file', async () => {
@@ -304,9 +304,9 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       file: test.getState('form.stinFile'),
       modalId: 'PDFPreviewModal-stinFile',
     });
-    expect(test.getState('showModal')).toBe('PDFPreviewModal-stinFile');
+    expect(test.getState('modal.showModal')).toBe('PDFPreviewModal-stinFile');
     await test.runSequence('dismissModalSequence');
-    expect(test.getState('showModal')).toBe('');
+    expect(test.getState('modal.showModal')).toBe('');
   });
 
   it('should display a preview of the uploaded ods file', async () => {
@@ -314,9 +314,9 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       file: test.getState('form.odsFile'),
       modalId: 'PDFPreviewModal-odsFile',
     });
-    expect(test.getState('showModal')).toBe('PDFPreviewModal-odsFile');
+    expect(test.getState('modal.showModal')).toBe('PDFPreviewModal-odsFile');
     await test.runSequence('dismissModalSequence');
-    expect(test.getState('showModal')).toBe('');
+    expect(test.getState('modal.showModal')).toBe('');
   });
 
   it('should allow deletion of an uploaded petition pdf', async () => {
