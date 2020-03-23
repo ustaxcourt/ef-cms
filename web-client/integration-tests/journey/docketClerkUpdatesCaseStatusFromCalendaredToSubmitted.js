@@ -56,6 +56,6 @@ export const docketClerkUpdatesCaseStatusFromCalendaredToSubmitted = test => {
       Case.STATUS_TYPES.submitted,
     );
     expect(test.getState('caseDetail.associatedJudge')).toEqual('Judge Buch');
-    expect(test.getState('modal')).toBeUndefined();
+    expect(test.getState('modal')).toEqual({});
   });
 };
