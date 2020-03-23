@@ -40,3 +40,23 @@ These libaries are locked to version 24.x because upgrading them causes Sonarclo
 This library is locked to version 2.642.x because upgrading to 2.643.x causes this error in cypress smoke tests in post-deploy:
 
 `Error: Cannot find module './dist-tools/transform.js' from '/home/app/node_modules/aws-sdk'`
+
+
+### Issues with terraform deploy - first time
+
+```
+Error: Error applying plan:
+
+2 error(s) occurred:
+
+* module.environment.aws_cloudfront_distribution.public_distribution: 1 error(s) occurred:
+
+* aws_cloudfront_distribution.public_distribution: error creating CloudFront Distribution: InvalidViewerCertificate: The specified SSL certificate doesn't exist, isn't in us-east-1 region, isn't valid, or doesn't include a valid certificate chain.
+	status code: 400, request id: 88163d5d-bb9b-43db-abd7-57ba923cb103
+* module.environment.aws_cloudfront_distribution.distribution: 1 error(s) occurred:
+
+* aws_cloudfront_distribution.distribution: error creating CloudFront Distribution: InvalidViewerCertificate: The specified SSL certificate doesn't exist, isn't in us-east-1 region, isn't valid, or doesn't include a valid certificate chain.
+	status code: 400, request id: 8fb7c31a-8e7a-4608-ac7b-10d118deae59
+```
+
+If this occurs, rerun the build.
