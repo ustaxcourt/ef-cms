@@ -3,7 +3,7 @@ import { runAction } from 'cerebral/test';
 import { setMessageIdAndCurrentTabFromUrlAction } from './setMessageIdAndCurrentTabFromUrlAction';
 
 describe('setMessageIdAndCurrentTabFromUrlAction', () => {
-  it('Sets state.messageId based on props.messageId', async () => {
+  it('Sets state.currentViewMetadata.messageId based on props.messageId', async () => {
     const result = await runAction(setMessageIdAndCurrentTabFromUrlAction, {
       props: {
         messageId: '123',
@@ -17,15 +17,15 @@ describe('setMessageIdAndCurrentTabFromUrlAction', () => {
     expect(result.state.currentViewMetadata.messageId).toEqual('123');
   });
 
-  it('Sets state.currentTab to Messages if props.messageId is set', async () => {
+  it('Sets state.currentViewMetadata.tab to Messages if props.messageId is set', async () => {
     const result = await runAction(setMessageIdAndCurrentTabFromUrlAction, {
       props: {
         messageId: '123',
       },
       state: {
         currentViewMetadata: {
-          currentTab: '',
           messageId: '',
+          tab: '',
         },
       },
     });
@@ -39,8 +39,8 @@ describe('setMessageIdAndCurrentTabFromUrlAction', () => {
       },
       state: {
         currentViewMetadata: {
-          currentTab: '',
           messageId: 'abc',
+          tab: '',
         },
       },
     });
