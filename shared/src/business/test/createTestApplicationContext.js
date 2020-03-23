@@ -93,6 +93,7 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockStorageClientReturnValue = {
     deleteObject: jest.fn(),
+    getObject: jest.fn(),
   };
 
   const mockGetPersistenceGatewayReturnValue = {
@@ -131,9 +132,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUserCaseNoteForCases: jest.fn(),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
-    putWorkItemInOutbox: jest.fn(putWorkItemInOutbox),
+    putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     saveWorkItemForNonPaper,
-    saveWorkItemForPaper: jest.fn().mockImplementation(saveWorkItemForPaper),
+    saveWorkItemForPaper,
     setWorkItemAsRead,
     updateCase: jest.fn().mockImplementation(updateCase),
     updateUserCaseNote: jest.fn(),
@@ -179,11 +180,11 @@ const createTestApplicationContext = ({ user } = {}) => {
       CaseInternal: CaseInternal,
       WorkItem: WorkItem,
     }),
-    getHttpClient: () => ({
+    getHttpClient: jest.fn(() => ({
       get: () => ({
         data: 'url',
       }),
-    }),
+    })),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
     getPersistenceGateway: jest.fn().mockImplementation(() => {
       return mockGetPersistenceGatewayReturnValue;
