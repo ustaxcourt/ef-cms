@@ -136,6 +136,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveWorkItemForPaper: jest.fn().mockImplementation(saveWorkItemForPaper),
     setWorkItemAsRead,
     updateCase: jest.fn().mockImplementation(updateCase),
+    updateUserCaseNote: jest.fn(),
     updateWorkItem,
     updateWorkItemInCase,
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
