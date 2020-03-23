@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const { updateUser } = require('./updateUser');
 const { User } = require('../../../business/entities/User');
 
@@ -9,7 +8,7 @@ describe('updateUser', () => {
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
 
   beforeEach(() => {
-    putStub = sinon.stub().returns({
+    putStub = jest.fn().mockReturnValue({
       promise: async () => null,
     });
 
@@ -35,7 +34,7 @@ describe('updateUser', () => {
       user,
     });
 
-    expect(putStub.getCall(0).args[0]).toMatchObject({
+    expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {
         pk: `user|${userId}`,
         sk: `user|${userId}`,

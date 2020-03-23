@@ -6,6 +6,7 @@ describe('processStreamRecordsInteractor', () => {
   let bulkSpy;
   let indexSpy;
   const createElasticsearchReindexRecordSpy = jest.fn();
+  const getCaseByCaseIdSpy = jest.fn();
 
   let applicationContext;
 
@@ -19,6 +20,7 @@ describe('processStreamRecordsInteractor', () => {
       environment: { stage: 'local' },
       getPersistenceGateway: () => ({
         createElasticsearchReindexRecord: createElasticsearchReindexRecordSpy,
+        getCaseByCaseId: getCaseByCaseIdSpy,
       }),
       getSearchClient: () => ({
         bulk: bulkSpy,
@@ -84,7 +86,13 @@ describe('processStreamRecordsInteractor', () => {
         {
           dynamodb: {
             Keys: { pk: { S: '4' } },
-            NewImage: { caseId: { S: '4' }, pk: { S: '4' }, sk: { S: '4' } },
+            NewImage: {
+              caseId: { S: '4' },
+              entityName: { S: 'Case' },
+              pk: { S: '4' },
+              qcCompleteForTrial: { '123': true, '234': true },
+              sk: { S: '4' },
+            },
           },
           eventName: 'MODIFY',
         },
@@ -110,18 +118,42 @@ describe('processStreamRecordsInteractor', () => {
           },
           eventName: 'MODIFY',
         },
+        {
+          dynamodb: {
+            Keys: { pk: { S: '5' } },
+            NewImage: {
+              documentId: { S: '5' },
+              pk: { S: '5' },
+              sk: { S: '5' },
+              workItems: [
+                {
+                  blah: true,
+                  documents: [{ documentId: '5' }],
+                },
+              ],
+            },
+          },
+          eventName: 'MODIFY',
+        },
       ],
     });
 
     expect(bulkSpy).toHaveBeenCalled();
-    expect(bulkSpy.mock.calls[0][0].body.length).toEqual(6);
+    expect(bulkSpy.mock.calls[0][0].body.length).toEqual(8);
     expect(bulkSpy.mock.calls[0][0].body).toEqual([
       { index: { _id: '1_1', _index: 'efcms' } },
       { caseId: { S: '1' }, pk: { S: '1' }, sk: { S: '1' } },
       { index: { _id: '3_3', _index: 'efcms' } },
       { caseId: { S: '3' }, pk: { S: '3' }, sk: { S: '3' } },
       { index: { _id: '4_4', _index: 'efcms' } },
-      { caseId: { S: '4' }, pk: { S: '4' }, sk: { S: '4' } },
+      {
+        caseId: { S: '4' },
+        entityName: { S: 'Case' },
+        pk: { S: '4' },
+        sk: { S: '4' },
+      },
+      { index: { _id: '5_5', _index: 'efcms' } },
+      { documentId: { S: '5' }, pk: { S: '5' }, sk: { S: '5' } },
     ]);
   });
 
@@ -261,5 +293,64 @@ describe('processStreamRecordsInteractor', () => {
       recordPk: '2',
       recordSk: '3',
     });
+  });
+
+  it('calls getCaseByCaseId to index an entire case item', async () => {
+    bulkSpy = jest.fn().mockResolvedValue({
+      body: {
+        errors: [{ badError: true }],
+        items: [
+          {
+            index: { error: false },
+          },
+          {
+            index: { error: true },
+          },
+        ],
+      },
+    });
+
+    await processStreamRecordsInteractor({
+      applicationContext,
+      recordsToProcess: [
+        {
+          dynamodb: {
+            Keys: { pk: { S: 'case|1' }, sk: { S: 'case|1' } },
+            NewImage: {
+              caseId: { S: '1' },
+              pk: { S: 'case|1' },
+              sk: { S: 'case|1' },
+            },
+          },
+          eventName: 'INSERT',
+        },
+        {
+          dynamodb: {
+            Keys: { pk: { S: 'case|4' }, sk: { S: 'case|1' } },
+            NewImage: {
+              caseId: { S: '4' },
+              pk: { S: 'case|4' },
+              sk: { S: 'case|4' },
+            },
+          },
+          eventName: 'MODIFY',
+        },
+      ],
+    });
+
+    expect(bulkSpy).toHaveBeenCalled();
+    expect(getCaseByCaseIdSpy).toHaveBeenCalled();
+    expect(getCaseByCaseIdSpy.mock.calls).toMatchObject([
+      [{ caseId: '4' }],
+      [{ caseId: '1' }],
+      [{ caseId: '4' }],
+    ]);
+    expect(bulkSpy.mock.calls[0][0].body.length).toEqual(4);
+    expect(bulkSpy.mock.calls[0][0].body).toEqual([
+      { index: { _id: 'case|1_case|1', _index: 'efcms' } },
+      { caseId: { S: '1' }, pk: { S: 'case|1' }, sk: { S: 'case|1' } },
+      { index: { _id: 'case|4_case|4', _index: 'efcms' } },
+      { caseId: { S: '4' }, pk: { S: 'case|4' }, sk: { S: 'case|4' } },
+    ]);
   });
 });

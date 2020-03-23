@@ -1,11 +1,10 @@
-const sinon = require('sinon');
 const { addWorkItemToSectionInbox } = require('./addWorkItemToSectionInbox');
 
 describe('addWorkItemToSectionInbox', () => {
   let putStub;
 
   beforeEach(() => {
-    putStub = sinon.stub().returns({
+    putStub = jest.fn().mockReturnValue({
       promise: async () => true,
     });
   });
@@ -26,7 +25,7 @@ describe('addWorkItemToSectionInbox', () => {
         workItemId: '123',
       },
     });
-    expect(putStub.getCall(0).args[0]).toMatchObject({
+    expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {
         pk: 'section|docket',
         sk: 'work-item|123',

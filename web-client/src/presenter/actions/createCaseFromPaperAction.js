@@ -131,15 +131,6 @@ export const createCaseFromPaperAction = async ({
     return path.error();
   }
 
-  const addCoversheet = document => {
-    return applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      caseId: caseDetail.caseId,
-      documentId: document.documentId,
-    });
-  };
-  await Promise.all(caseDetail.documents.map(addCoversheet));
-
   return path.success({
     caseDetail,
   });

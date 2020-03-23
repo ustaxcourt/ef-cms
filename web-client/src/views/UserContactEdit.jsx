@@ -12,7 +12,6 @@ export const UserContactEdit = connect(
     navigateBackSequence: sequences.navigateBackSequence,
     submitUpdateUserContactInformationSequence:
       sequences.submitUpdateUserContactInformationSequence,
-    validationErrors: state.validationErrors,
   },
   ({
     form,

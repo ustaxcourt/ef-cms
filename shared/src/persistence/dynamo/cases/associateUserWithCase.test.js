@@ -1,19 +1,23 @@
-const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
 const { associateUserWithCase } = require('./associateUserWithCase');
 
-const applicationContext = {};
-
 describe('associateUserWithCase', () => {
-  beforeEach(() => {
-    sinon.stub(client, 'put').resolves({
+  let applicationContext;
+  const putStub = jest.fn().mockReturnValue({
+    promise: async () => ({
       pk: '123|case',
       sk: '234',
-    });
+    }),
   });
 
-  afterEach(() => {
-    client.put.restore();
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    applicationContext = {
+      environment: { stage: 'local' },
+      getDocumentClient: () => ({
+        put: putStub,
+      }),
+    };
   });
 
   it('should persist the mapping record to associate user with case', async () => {
@@ -23,8 +27,8 @@ describe('associateUserWithCase', () => {
       userId: '123',
     });
     expect(result).toEqual({
-      pk: '123|case',
-      sk: '234',
+      pk: 'user|123',
+      sk: 'case|234',
     });
   });
 });

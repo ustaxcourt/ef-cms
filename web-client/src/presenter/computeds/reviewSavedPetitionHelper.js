@@ -7,7 +7,10 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     documents,
     hasVerifiedIrsNotice,
     irsNoticeDate,
+    petitionPaymentDate,
+    petitionPaymentMethod,
     petitionPaymentStatus,
+    preferredTrialCity,
     receivedAt,
     ...caseDetail
   } = get(state.caseDetail);
@@ -26,7 +29,18 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   const shouldShowIrsNoticeDate = hasVerifiedIrsNotice === true;
 
   const petitionPaymentStatusFormatted =
-    petitionPaymentStatus === PAYMENT_STATUS.PAID ? 'Paid' : 'Not paid';
+    petitionPaymentStatus === PAYMENT_STATUS.PAID
+      ? `Paid ${applicationContext
+          .getUtilities()
+          .formatDateString(
+            petitionPaymentDate,
+            'MMDDYYYY',
+          )} ${petitionPaymentMethod}`
+      : 'Not paid';
+
+  const preferredTrialCityFormatted = preferredTrialCity
+    ? preferredTrialCity
+    : 'No requested place of trial';
 
   if (shouldShowIrsNoticeDate) {
     irsNoticeDateFormatted = applicationContext
@@ -46,7 +60,8 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     'orderForFilingFee',
     'orderForOds',
     'orderForRatification',
-    'orderDesignatingPlaceOfTrial',
+    // TODO: see OrdersNeededSummary.jsx
+    // 'orderDesignatingPlaceOfTrial',
     'orderToShowCause',
     'noticeOfAttachments',
   ].some(key => Boolean(caseDetail[key]));
@@ -66,6 +81,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     ownershipDisclosureFile,
     petitionFile,
     petitionPaymentStatusFormatted,
+    preferredTrialCityFormatted,
     receivedAtFormatted,
     requestForPlaceOfTrialFile,
     shouldShowIrsNoticeDate,

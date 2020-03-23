@@ -6,14 +6,11 @@ import {
 import { prepareDateFromString } from '../../../../shared/src/business/utilities/DateHandler';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 let filePetitionFromPaperInteractorStub;
-let addCoversheetInteractorStub;
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
-    addCoversheetInteractor: addCoversheetInteractorStub,
     filePetitionFromPaperInteractor: filePetitionFromPaperInteractorStub,
   }),
   getUtilities: () => ({
@@ -21,8 +18,8 @@ presenter.providers.applicationContext = {
   }),
 };
 
-const errorStub = sinon.stub();
-const successStub = sinon.stub();
+const errorStub = jest.fn();
+const successStub = jest.fn();
 
 presenter.providers.path = {
   error: errorStub,
@@ -30,9 +27,8 @@ presenter.providers.path = {
 };
 
 describe('createCaseFromPaperAction', () => {
-  it('should call filePetitionFromPaperInteractor and addCoversheetInteractor with the petition metadata and files and call the success path when finished', async () => {
-    filePetitionFromPaperInteractorStub = sinon.stub().returns(MOCK_CASE);
-    addCoversheetInteractorStub = sinon.stub();
+  it('should call filePetitionFromPaperInteractor with the petition metadata and files and call the success path when finished', async () => {
+    filePetitionFromPaperInteractorStub = jest.fn().mockReturnValue(MOCK_CASE);
 
     await runAction(createCaseFromPaperAction, {
       modules: {
@@ -57,10 +53,8 @@ describe('createCaseFromPaperAction', () => {
       },
     });
 
-    expect(filePetitionFromPaperInteractorStub.called).toEqual(true);
-    expect(
-      filePetitionFromPaperInteractorStub.getCall(0).args[0],
-    ).toMatchObject({
+    expect(filePetitionFromPaperInteractorStub).toBeCalled();
+    expect(filePetitionFromPaperInteractorStub.mock.calls[0][0]).toMatchObject({
       applicationForWaiverOfFilingFeeFile: {},
       ownershipDisclosureFile: {},
       petitionFile: {},
@@ -70,13 +64,13 @@ describe('createCaseFromPaperAction', () => {
       requestForPlaceOfTrialFile: {},
       stinFile: {},
     });
-    expect(addCoversheetInteractorStub.called).toEqual(true);
-    expect(successStub.called).toEqual(true);
+    expect(successStub).toBeCalled();
   });
 
   it('should call filePetitionFromPaperInteractor and call path.error when finished if it throws an error', async () => {
-    filePetitionFromPaperInteractorStub = sinon.stub().throws();
-    addCoversheetInteractorStub = sinon.stub();
+    filePetitionFromPaperInteractorStub = jest.fn().mockImplementation(() => {
+      throw new Error('error');
+    });
 
     await runAction(createCaseFromPaperAction, {
       modules: {
@@ -96,10 +90,8 @@ describe('createCaseFromPaperAction', () => {
       },
     });
 
-    expect(filePetitionFromPaperInteractorStub.called).toEqual(true);
-    expect(
-      filePetitionFromPaperInteractorStub.getCall(0).args[0],
-    ).toMatchObject({
+    expect(filePetitionFromPaperInteractorStub).toBeCalled();
+    expect(filePetitionFromPaperInteractorStub.mock.calls[0][0]).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
@@ -107,8 +99,7 @@ describe('createCaseFromPaperAction', () => {
       },
       stinFile: {},
     });
-    expect(addCoversheetInteractorStub.called).toEqual(false);
-    expect(errorStub.called).toEqual(true);
+    expect(errorStub).toBeCalled();
   });
 });
 

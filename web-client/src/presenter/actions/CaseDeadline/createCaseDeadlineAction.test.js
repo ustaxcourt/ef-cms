@@ -1,15 +1,14 @@
 import { createCaseDeadlineAction } from './createCaseDeadlineAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 describe('createCaseDeadlineAction', () => {
   let successStub;
   let errorStub;
 
   beforeEach(() => {
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
@@ -43,6 +42,6 @@ describe('createCaseDeadlineAction', () => {
         },
       },
     });
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 });
