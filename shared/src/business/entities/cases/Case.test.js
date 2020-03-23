@@ -1,4 +1,3 @@
-const moment = require('moment');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
@@ -12,6 +11,7 @@ const { DocketRecord } = require('../DocketRecord');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
+const { prepareDateFromString } = require('../../utilities/DateHandler');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { TrialSession } = require('../trialSessions/TrialSession');
 const { WorkItem } = require('../WorkItem');
@@ -1277,7 +1277,7 @@ describe('Case entity', () => {
         {
           documents: [
             {
-              createdAt: moment().toISOString(),
+              createdAt: prepareDateFromString().toISOString(),
               eventCode: 'A',
             },
           ],
@@ -1295,7 +1295,9 @@ describe('Case entity', () => {
         {
           documents: [
             {
-              createdAt: moment().subtract(1, 'year').toISOString(),
+              createdAt: prepareDateFromString()
+                .subtract(1, 'year')
+                .toISOString(),
               eventCode: 'ZZZs',
             },
           ],
@@ -1314,17 +1316,12 @@ describe('Case entity', () => {
       Note: As of this writing on 2020-03-20, there may be a bug in the `moment` library as it pertains to 
       leap-years and/or leap-days and maybe daylight saving time, too. Meaning that if *this* test runs
       at a time when it is calculating date/time differences across the existence of a leap year and DST, it may fail.
-      I expect that this would work correctly in a production environment. 
-      I suspect that possibly:
-       const differenceInDays = moment().diff(moment().subtract(45, 'day'), 'day', true);
-       console.log('differenceInDays', differenceInDays); // yields '46' instead of '45'
-      But I haven't nailed down the bug. :(
       */
       const caseToCheck = new Case(
         {
           documents: [
             {
-              createdAt: moment()
+              createdAt: prepareDateFromString()
                 .subtract(
                   Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS,
                   Case.ANSWER_CUTOFF_UNIT,
@@ -1346,7 +1343,7 @@ describe('Case entity', () => {
     });
 
     it("should not change the status to 'Ready for Trial' when an answer document has been filed before the cutoff but case is not 'Not at issue'", () => {
-      const createdAt = moment()
+      const createdAt = prepareDateFromString()
         .subtract(
           Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10,
           Case.ANSWER_CUTOFF_UNIT,
@@ -1372,7 +1369,7 @@ describe('Case entity', () => {
     });
 
     it("should change the status to 'Ready for Trial' when an answer document has been filed before the cutoff", () => {
-      const createdAt = moment()
+      const createdAt = prepareDateFromString()
         .subtract(
           Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10,
           Case.ANSWER_CUTOFF_UNIT,
