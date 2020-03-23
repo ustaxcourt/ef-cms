@@ -38,10 +38,7 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
-    createdAt: joi
-      .date()
-      .iso()
-      .optional(),
+    createdAt: joi.date().iso().optional(),
     documentId: joi
       .string()
       .uuid({
@@ -54,14 +51,8 @@ joiValidationDecorator(
     filedBy: joi.string().optional(),
     isPaper: joi.boolean().optional(),
     processingStatus: joi.string().optional(),
-    receivedAt: joi
-      .date()
-      .iso()
-      .optional(),
-    servedAt: joi
-      .date()
-      .iso()
-      .optional(),
+    receivedAt: joi.date().iso().optional(),
+    servedAt: joi.date().iso().optional(),
     servedParties: joi.array().optional(),
     status: joi.string().optional(),
   }),
