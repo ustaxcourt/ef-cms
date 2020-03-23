@@ -184,6 +184,12 @@ export const state = {
   document: {},
   documentId: null,
   fieldOrder: [], // TODO: related to errors
+  fileUploadProgress: {
+    // used for the progress bar shown in modal when uploading files
+    isUploading: false,
+    percentComplete: 0,
+    timeRemaining: Number.POSITIVE_INFINITY,
+  },
   form: {}, // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
@@ -203,7 +209,6 @@ export const state = {
     signatureData: null,
   },
   pdfPreviewModal: {}, // how is this different than the modal?
-  percentComplete: 0,
   permissions: null,
   previewPdfFile: null,
   progressIndicator: {
@@ -228,7 +233,6 @@ export const state = {
     docketRecordSort: [],
   },
   showValidation: false,
-  timeRemaining: Number.POSITIVE_INFINITY,
   user: null,
   users: [],
   validationErrors: {},

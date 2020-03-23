@@ -22,12 +22,14 @@ describe('closeFileUploadStatusModalAction', () => {
     // inspecting arguments of 4th call because it seems `store.set` also invokes setTimeout
     expect(global.setTimeout.mock.calls[3][1]).toBe('77');
     expect(result.state).toMatchObject({
-      isUploading: false,
+      fileUploadProgress: {
+        isUploading: false,
+        percentComplete: 100,
+        timeRemaining: 0,
+      },
       modal: {
         showModal: '',
       },
-      percentComplete: 100,
-      timeRemaining: 0,
     });
   });
 });
