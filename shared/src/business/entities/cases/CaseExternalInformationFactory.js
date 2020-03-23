@@ -82,7 +82,7 @@ const schema = {
 joiValidationDecorator(
   CaseExternalInformationFactory,
   joi.object().keys(schema),
-  function() {
+  function () {
     return !this.getFormattedValidationErrors();
   },
   CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES,
