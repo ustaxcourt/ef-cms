@@ -19,7 +19,12 @@ describe('updatePrimaryContactAction', () => {
         presenter,
       },
       state: {
-        caseDetail: {},
+        form: {
+          contactPrimary: {
+            caseId: '0880564b-b978-4450-a34a-08430808f931',
+            name: 'Rachael Ray',
+          },
+        },
       },
     });
 
