@@ -19,7 +19,7 @@ export const CaseNotes = connect(
       sequences.openDeleteCaseNoteConfirmModalSequence,
     openDeleteUserCaseNoteConfirmModalSequence:
       sequences.openDeleteUserCaseNoteConfirmModalSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
   ({
     caseDetail,

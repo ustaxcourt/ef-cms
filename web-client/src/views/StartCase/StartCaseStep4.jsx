@@ -20,7 +20,7 @@ export const StartCaseStep4 = connect(
     navigateBackSequence: sequences.navigateBackSequence,
     openCaseDifferenceModalSequence: sequences.openCaseDifferenceModalSequence,
     screenMetadata: state.screenMetadata,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
     toggleCaseDifferenceSequence: sequences.toggleCaseDifferenceSequence,
     trialCitiesHelper: state.trialCitiesHelper,

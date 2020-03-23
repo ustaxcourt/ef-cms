@@ -24,7 +24,7 @@ export const DocumentDetail = connect(
       sequences.navigateToPrintableCaseConfirmationSequence,
     removeSignatureFromOrderSequence:
       sequences.removeSignatureFromOrderSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
   ({
     caseDetail,

@@ -457,7 +457,9 @@ export const setupTest = ({ useCases = {} } = {}) => {
           await test.runSequence('gotoDashboardSequence');
           break;
         default:
-          console.warn('No action taken for route: ', url);
+          if (process.env.USTC_DEBUG) {
+            console.warn('No action taken for route: ', url);
+          }
           break;
       }
     },
