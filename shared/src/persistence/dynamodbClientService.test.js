@@ -17,7 +17,7 @@ const MOCK_ITEM = {
 
 let documentClientStub;
 
-describe('dynamodbClientService', function() {
+describe('dynamodbClientService', function () {
   let applicationContext;
   let getStub = jest.fn().mockReturnValue({
     promise: () =>
