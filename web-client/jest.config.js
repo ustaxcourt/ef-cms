@@ -26,7 +26,8 @@ module.exports = {
     File: function() {},
     FileReader: () => {},
     atob: x => x,
-    window: { document: {} },
+    history: {},
+    window: { document: {}, history: {} },
   },
   testEnvironment: 'node',
   // this is to ignore imported html files
