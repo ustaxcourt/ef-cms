@@ -13,7 +13,7 @@ export default test => {
 
     await test.runSequence('rescanBatchSequence');
 
-    expect(test.getState('modal')).toBeUndefined();
+    expect(test.getState('modal')).toEqual({});
     expect(
       test.getState(`scanner.batches.${selectedDocumentType}`).length,
     ).toBeGreaterThan(0);

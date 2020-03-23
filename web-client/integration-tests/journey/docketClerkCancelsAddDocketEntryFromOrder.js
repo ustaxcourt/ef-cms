@@ -30,7 +30,7 @@ export const docketClerkCancelsAddDocketEntryFromOrder = (
     );
 
     await test.runSequence('cancelAddDraftDocumentSequence');
-    expect(test.getState('modal')).toBeUndefined();
+    expect(test.getState('modal')).toEqual({});
 
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
