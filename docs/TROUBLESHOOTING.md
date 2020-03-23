@@ -57,4 +57,4 @@ Error: Error applying plan:
 	status code: 400, request id: 8fb7c31a-8e7a-4608-ac7b-10d118deae59
 ```
 
-If the occurs, rerun the build.
+If this occurs, rerun the build.
