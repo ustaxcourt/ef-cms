@@ -1295,9 +1295,7 @@ describe('Case entity', () => {
         {
           documents: [
             {
-              createdAt: moment()
-                .subtract(1, 'year')
-                .toISOString(),
+              createdAt: moment().subtract(1, 'year').toISOString(),
               eventCode: 'ZZZs',
             },
           ],
