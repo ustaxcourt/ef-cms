@@ -280,13 +280,15 @@ describe('formattedTrialSessions', () => {
     let result = runCompute(formattedTrialSessions, {
       state: {
         ...baseState,
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'open',
+          },
+        },
         screenMetadata: {
           trialSessionFilters: { judge: { userId: 'unassigned' } },
         },
         trialSessions: TRIAL_SESSIONS_LIST,
-        trialSessionsTab: {
-          group: 'open',
-        },
         user: testJudgeUser,
       },
     });

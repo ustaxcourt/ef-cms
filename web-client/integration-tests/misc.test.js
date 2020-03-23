@@ -15,21 +15,14 @@ describe('Miscellaneous', () => {
 
   it('Toggles USA Banner Content', async () => {
     await test.runSequence('toggleUsaBannerDetailsSequence');
-    expect(test.getState('commonUI.showUsaBannerDetails')).toEqual(true);
+    expect(test.getState('header.showUsaBannerDetails')).toEqual(true);
     await test.runSequence('toggleUsaBannerDetailsSequence');
-    expect(test.getState('commonUI.showUsaBannerDetails')).toEqual(false);
+    expect(test.getState('header.showUsaBannerDetails')).toEqual(false);
   });
 
   it('Toggles Beta Bar Visibility', async () => {
-    expect(test.getState('commonUI.showBetaBar')).toEqual(true);
+    expect(test.getState('header.showBetaBar')).toEqual(true);
     await test.runSequence('toggleBetaBarSequence');
-    expect(test.getState('commonUI.showBetaBar')).toEqual(false);
-  });
-
-  it('Toggles payment info content', async () => {
-    await test.runSequence('togglePaymentDetailsSequence');
-    expect(test.getState('paymentInfo.showDetails')).toEqual(true);
-    await test.runSequence('togglePaymentDetailsSequence');
-    expect(test.getState('paymentInfo.showDetails')).toEqual(false);
+    expect(test.getState('header.showBetaBar')).toEqual(false);
   });
 });

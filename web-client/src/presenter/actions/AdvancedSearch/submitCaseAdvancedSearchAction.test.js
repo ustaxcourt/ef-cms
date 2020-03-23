@@ -24,11 +24,13 @@ describe('submitCaseAdvancedSearchAction', () => {
       },
       state: {
         advancedSearchForm: {
-          countryType: 'c',
-          petitionerName: 'a',
-          petitionerState: 'b',
-          yearFiledMax: '2',
-          yearFiledMin: '1',
+          caseSearchByName: {
+            countryType: 'c',
+            petitionerName: 'a',
+            petitionerState: 'b',
+            yearFiledMax: '2',
+            yearFiledMin: '1',
+          },
         },
       },
     });

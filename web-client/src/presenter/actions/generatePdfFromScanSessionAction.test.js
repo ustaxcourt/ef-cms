@@ -26,7 +26,9 @@ describe('generatePdfFromScanSessionAction', () => {
         presenter,
       },
       state: {
-        documentSelectedForScan: 'petition',
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         scanner: {
           batches: {
             petition: [{ pages: [] }],

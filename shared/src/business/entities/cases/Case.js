@@ -1,14 +1,15 @@
 const joi = require('@hapi/joi');
 const {
-  CHIEF_JUDGE,
-  DOCKET_NUMBER_MATCHER,
-  TRIAL_LOCATION_MATCHER,
-} = require('./CaseConstants');
-const {
+  calculateDifferenceInDays,
   createISODateString,
   formatDateString,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
+const {
+  CHIEF_JUDGE,
+  DOCKET_NUMBER_MATCHER,
+  TRIAL_LOCATION_MATCHER,
+} = require('./CaseConstants');
 const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
@@ -1240,7 +1241,7 @@ Case.prototype.checkForReadyForTrial = function() {
         document.eventCode,
       );
 
-      const daysElapsedSinceDocumentWasFiled = Case.dateDifferenceInDays(
+      const daysElapsedSinceDocumentWasFiled = calculateDifferenceInDays(
         currentDate,
         document.createdAt,
       );
@@ -1255,17 +1256,6 @@ Case.prototype.checkForReadyForTrial = function() {
   }
 
   return this;
-};
-
-Case.dateDifferenceInDays = (timestamp1, timestamp2) => {
-  const moment1 = prepareDateFromString(timestamp1).set({
-    hours: 12,
-  });
-  const moment2 = prepareDateFromString(timestamp2).set({
-    hours: 12,
-  });
-  const differenceInHours = Math.round(moment1.diff(moment2, 'day', true));
-  return differenceInHours;
 };
 
 /**
