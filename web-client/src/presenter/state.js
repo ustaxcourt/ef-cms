@@ -205,6 +205,11 @@ export const state = {
   percentComplete: 0,
   permissions: null,
   previewPdfFile: null,
+  progressIndicator: {
+    // used for the spinner that shows when waiting for network responses
+    waitingForResponse: false,
+    waitingForResponseRequests: 0,
+  },
   scanner: {
     batchIndexToDelete: null,
     batchIndexToRescan: null, // batch index for re-scanning
@@ -227,8 +232,6 @@ export const state = {
   user: null,
   users: [],
   validationErrors: {},
-  waitingForResponse: false,
-  waitingForResponseRequests: 0,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
