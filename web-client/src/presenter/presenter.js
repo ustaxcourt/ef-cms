@@ -45,10 +45,11 @@ import { completeDocumentSelectSequence } from './sequences/completeDocumentSele
 import { completeDocumentSigningSequence } from './sequences/completeDocumentSigningSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
+import { contactPrimaryCountryTypeChangeSequence } from './sequences/contactPrimaryCountryTypeChangeSequence';
+import { contactSecondaryCountryTypeChangeSequence } from './sequences/contactSecondaryCountryTypeChangeSequence';
 import { convertHtml2PdfAndOpenInNewTabSequence } from './sequences/convertHtml2PdfAndOpenInNewTabSequence';
 import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
 import { copyPrimaryContactSequence } from './sequences/copyPrimaryContactSequence';
-import { countryTypeChangeSequence } from './sequences/countryTypeChangeSequence';
 import { countryTypeFormContactChangeSequence } from './sequences/countryTypeFormContactChangeSequence';
 import { countryTypeUserContactChangeSequence } from './sequences/countryTypeUserContactChangeSequence';
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
@@ -431,10 +432,11 @@ export const presenter = {
     completeDocumentSigningSequence,
     completeStartCaseWizardStepSequence,
     confirmStayLoggedInSequence,
+    contactPrimaryCountryTypeChangeSequence,
+    contactSecondaryCountryTypeChangeSequence,
     convertHtml2PdfAndOpenInNewTabSequence,
     convertHtml2PdfSequence,
     copyPrimaryContactSequence,
-    countryTypeChangeSequence,
     countryTypeFormContactChangeSequence,
     countryTypeUserContactChangeSequence,
     createCaseDeadlineSequence,
