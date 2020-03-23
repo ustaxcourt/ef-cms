@@ -73,10 +73,10 @@ describe('DateHandler', () => {
     });
     it('returns difference of 45 day from the perspective of the EST time zone when both are 1 minute before midnight EST', () => {
       const firstDate = '2020-02-04T04:59:00.000Z'; // 2010-02-03 at 11:59pm EST of a leap year
-      const fourtyFiveDaysLater = '2020-03-20T03:59:00.000Z'; // 2020-03-19 at 11:59pm EST across daylight saving line, too
+      const fortyFiveDaysLater = '2020-03-20T03:59:00.000Z'; // 2020-03-19 at 11:59pm EST across daylight saving line, too
 
       const result = DateHandler.calculateDifferenceInDays(
-        fourtyFiveDaysLater,
+        fortyFiveDaysLater,
         firstDate,
       );
       expect(result).toEqual(45);
