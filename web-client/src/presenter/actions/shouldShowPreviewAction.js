@@ -10,7 +10,9 @@ import { state } from 'cerebral';
  * @returns {undefined}
  */
 export const shouldShowPreviewAction = ({ get, path }) => {
-  const documentSelectedForScan = get(state.documentSelectedForScan);
+  const documentSelectedForScan = get(
+    state.currentViewMetadata.documentSelectedForScan,
+  );
   const file = get(state.form[documentSelectedForScan]);
   return file ? path.yes({ file }) : path.no();
 };

@@ -25,8 +25,8 @@ import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStep
 import { chooseStartCaseWizardStepSequence } from './sequences/chooseStartCaseWizardStepSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
-import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearAlertSequence } from './sequences/clearAlertSequence';
+import { clearCaseSearchByNameFormSequence } from './sequences/clearCaseSearchByNameFormSequence';
 import { clearDocketNumberSearchFormSequence } from './sequences/clearDocketNumberSearchFormSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
@@ -290,7 +290,6 @@ import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSe
 import { toggleMenuSequence } from './sequences/toggleMenuSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
-import { togglePaymentDetailsSequence } from './sequences/togglePaymentDetailsSequence';
 import { toggleReportsMenuSequence } from './sequences/toggleReportsMenuSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
 import { toggleWorkingCopySortSequence } from './sequences/toggleWorkingCopySortSequence';
@@ -413,8 +412,8 @@ export const presenter = {
     chooseStartCaseWizardStepSequence,
     chooseWizardStepSequence,
     chooseWorkQueueSequence,
-    clearAdvancedSearchFormSequence,
     clearAlertSequence,
+    clearCaseSearchByNameFormSequence,
     clearDocketNumberSearchFormSequence,
     clearDocumentSequence,
     clearExistingDocumentSequence,
@@ -676,7 +675,6 @@ export const presenter = {
     toggleMenuSequence,
     toggleMobileDocketSortSequence,
     toggleMobileMenuSequence,
-    togglePaymentDetailsSequence,
     toggleReportsMenuSequence,
     toggleUsaBannerDetailsSequence,
     toggleWorkingCopySortSequence,

@@ -3,7 +3,9 @@ import { state } from 'cerebral';
 
 export const scanBatchPreviewerHelper = (get, applicationContext) => {
   const selectedBatchIndex = get(state.scanner.selectedBatchIndex) || 0;
-  const documentSelectedForScan = get(state.documentSelectedForScan);
+  const documentSelectedForScan = get(
+    state.currentViewMetadata.documentSelectedForScan,
+  );
   const batches =
     (documentSelectedForScan &&
       get(state.scanner.batches[documentSelectedForScan])) ||
@@ -12,7 +14,7 @@ export const scanBatchPreviewerHelper = (get, applicationContext) => {
     ? batches.find(b => b.index === selectedBatchIndex)
     : { pages: [] };
   const currentPageIndex = get(state.scanner.currentPageIndex);
-  const documentUploadMode = get(state.documentUploadMode);
+  const documentUploadMode = get(state.currentViewMetadata.documentUploadMode);
   let selectPageImage = null;
 
   const bufferToBase64 = buf => {
