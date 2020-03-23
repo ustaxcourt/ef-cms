@@ -257,7 +257,7 @@ describe('getScannerInterface', () => {
     global.document = {
       addEventListener: () => null,
       createElement: () => ({
-        cloneNode: function() {
+        cloneNode: function () {
           return {
             ...this,
           };

@@ -19,14 +19,16 @@ const formatDateIfToday = (date, applicationContext) => {
   const then = applicationContext
     .getUtilities()
     .formatDateString(date, 'MMDDYY');
-  const yesterday = applicationContext.getUtilities().formatDateString(
-    applicationContext
-      .getUtilities()
-      .prepareDateFromString()
-      .add(-1, 'days')
-      .toDate(),
-    'MMDDYY',
-  );
+  const yesterday = applicationContext
+    .getUtilities()
+    .formatDateString(
+      applicationContext
+        .getUtilities()
+        .prepareDateFromString()
+        .add(-1, 'days')
+        .toDate(),
+      'MMDDYY',
+    );
 
   let formattedDate;
   if (now == then) {
@@ -100,9 +102,9 @@ export const formatWorkItem = ({
     result.showUnassignedIcon = true;
   }
 
-  result.docketNumberWithSuffix = `${
-    result.docketNumber
-  }${result.docketNumberSuffix || ''}`;
+  result.docketNumberWithSuffix = `${result.docketNumber}${
+    result.docketNumberSuffix || ''
+  }`;
 
   result.selected = !!selectedWorkItems.find(
     selectedWorkItem => selectedWorkItem.workItemId == result.workItemId,

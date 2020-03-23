@@ -28,7 +28,7 @@ CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
  * @constructor
  */
 function CaseAssociationRequestFactory(rawProps) {
-  let entityConstructor = function(rawPropsParam) {
+  let entityConstructor = function (rawPropsParam) {
     this.attachments = rawPropsParam.attachments;
     this.certificateOfService = rawPropsParam.certificateOfService;
     this.certificateOfServiceDate = rawPropsParam.certificateOfServiceDate;
@@ -85,7 +85,7 @@ function CaseAssociationRequestFactory(rawProps) {
     'Substitution of Counsel',
   ].includes(rawProps.documentType);
 
-  entityConstructor.prototype.getDocumentTitle = function(
+  entityConstructor.prototype.getDocumentTitle = function (
     contactPrimaryName,
     contactSecondaryName,
   ) {
@@ -129,22 +129,12 @@ function CaseAssociationRequestFactory(rawProps) {
 
   let schemaOptionalItems = {
     attachments: joi.boolean().required(),
-    certificateOfServiceDate: joi
-      .date()
-      .iso()
-      .max('now')
-      .required(),
+    certificateOfServiceDate: joi.date().iso().max('now').required(),
     exhibits: joi.boolean().required(),
     hasSupportingDocuments: joi.boolean().required(),
     objections: joi.string().required(),
-    representingPrimary: joi
-      .boolean()
-      .invalid(false)
-      .required(),
-    representingSecondary: joi
-      .boolean()
-      .invalid(false)
-      .required(),
+    representingPrimary: joi.boolean().invalid(false).required(),
+    representingSecondary: joi.boolean().invalid(false).required(),
     supportingDocuments: joi.array().optional(),
   };
 
