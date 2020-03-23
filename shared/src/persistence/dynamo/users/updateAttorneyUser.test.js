@@ -121,7 +121,7 @@ describe('updateAttorneyUser', () => {
 });
 
 describe('updateAttorneyUser', () => {
-  it('should log an error', async () => {
+  it('should not log an error', async () => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
       promise: () => null,
     });
@@ -152,7 +152,7 @@ describe('updateAttorneyUser', () => {
 });
 
 describe('updateAttorneyUser - with a cognito response', () => {
-  it('should log an error', async () => {
+  it('should not log an error', async () => {
     const updatedUser = {
       barNumber: 'PT1234',
       name: 'Test Practitioner',
