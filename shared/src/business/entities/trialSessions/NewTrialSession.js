@@ -24,13 +24,9 @@ joiValidationDecorator(
   NewTrialSession,
   joi.object().keys({
     ...TrialSession.validationRules.COMMON,
-    startDate: joi
-      .date()
-      .iso()
-      .min('now')
-      .required(),
+    startDate: joi.date().iso().min('now').required(),
   }),
-  function() {
+  function () {
     return !this.getFormattedValidationErrors();
   },
   NewTrialSession.VALIDATION_ERROR_MESSAGES,
