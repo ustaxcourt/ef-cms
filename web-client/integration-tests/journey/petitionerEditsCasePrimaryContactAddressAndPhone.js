@@ -3,17 +3,17 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 export default test => {
   return it('petitioner updates primary contact address and phone', async () => {
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
       value: '101 Main St.',
     });
 
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address3',
       value: 'Apt. 101',
     });
 
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.phone',
       value: '1111111111',
     });
