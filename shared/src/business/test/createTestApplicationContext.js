@@ -82,6 +82,7 @@ const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
+const { WorkItem } = require('../entities/WorkItem');
 
 const createTestApplicationContext = ({ user } = {}) => {
   const mockCognitoReturnValue = {
@@ -112,9 +113,13 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getCaseDeadlinesByCaseId),
     getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
     getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
-    getDocumentQCServedForSection: jest.fn(),
+    getDocumentQCServedForSection: jest
+      .fn()
+      .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDownloadPolicyUrl: jest.fn(),
-    getInboxMessagesForSection,
+    getInboxMessagesForSection: jest
+      .fn()
+      .mockImplementation(getInboxMessagesForSection),
     getInboxMessagesForUser: getInboxMessagesForUserPersistence,
     getSentMessagesForSection: jest.fn(),
     getSentMessagesForUser: jest
@@ -168,6 +173,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getEntityConstructors: () => ({
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
+      WorkItem: WorkItem,
     }),
     getHttpClient: () => ({
       get: () => ({
