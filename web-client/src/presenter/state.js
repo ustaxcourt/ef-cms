@@ -197,7 +197,7 @@ export const state = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
-  modal: undefined,
+  modal: {},
   navigation: {},
   notifications: {},
   pdfForSigning: {
