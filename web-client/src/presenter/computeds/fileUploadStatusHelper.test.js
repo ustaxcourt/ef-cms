@@ -72,9 +72,11 @@ describe('fileUploadStatusHelper', () => {
   it('returns `4 Hours 21 Minutes Left` for time remaining for 15,660 seconds remaining', () => {
     const result = runCompute(fileUploadStatusHelper, {
       state: {
-        isUploading: true,
-        // prettier-ignore
-        timeRemaining: (3600 * 4) + (60 * 21)
+        fileUploadProgress: {
+          isUploading: true,
+          // prettier-ignore
+          timeRemaining: (3600 * 4) + (60 * 21)
+        },
       },
     });
 
@@ -84,8 +86,10 @@ describe('fileUploadStatusHelper', () => {
   it('returns status message of `Just Finishing Up` if percentComplete is 100', () => {
     const result = runCompute(fileUploadStatusHelper, {
       state: {
-        isUploading: true,
-        percentComplete: 100,
+        fileUploadProgress: {
+          isUploading: true,
+          percentComplete: 100,
+        },
       },
     });
 
@@ -95,8 +99,10 @@ describe('fileUploadStatusHelper', () => {
   it('returns status message of `All Done!` if isUploading is false', () => {
     const result = runCompute(fileUploadStatusHelper, {
       state: {
-        isUploading: false,
-        percentComplete: 100,
+        fileUploadProgress: {
+          isUploading: false,
+          percentComplete: 100,
+        },
       },
     });
 

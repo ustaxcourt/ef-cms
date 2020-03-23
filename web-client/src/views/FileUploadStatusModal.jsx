@@ -8,7 +8,7 @@ export const FileUploadStatusModal = connect(
   {
     cancelUploadSequence: sequences.cancelFileUploadSequence, // TODO: replace with a real cancel sequence
     helper: state.fileUploadStatusHelper,
-    percentComplete: state.percentComplete,
+    percentComplete: state.fileUploadProgress.percentComplete,
   },
   ({ cancelUploadSequence, helper, percentComplete }) => {
     return (
