@@ -75,7 +75,10 @@ const formatDateString = (dateString, formatStr) => {
 };
 
 const formatNow = formatStr => {
-  const now = createISODateString();
+  /*
+  Using `module.exports` to allow mocking in tests
+  */
+  const now = module.exports.createISODateString();
   return formatDateString(now, formatStr);
 };
 
