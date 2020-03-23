@@ -185,6 +185,7 @@ export const state = {
   fieldOrder: [], // TODO: related to errors
   form: {}, // shared object for creating new entities, clear before using
   header: {
+    searchTerm: '',
     showBetaBar: true,
     showMobileMenu: false,
     showUsaBannerDetails: false,
@@ -214,8 +215,6 @@ export const state = {
     selectedBatchIndex: 0,
   },
   screenMetadata: {},
-  searchMode: 'byName', // TODO: nest inside of a advanced search?
-  searchTerm: '', // search in the header
   sectionInboxCount: 0,
   sectionUsers: [],
   selectedWorkItems: [],
