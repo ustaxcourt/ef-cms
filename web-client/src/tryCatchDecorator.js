@@ -14,7 +14,7 @@ export const tryCatchDecorator = useCases => {
    * @returns {*} the result of method
    */
   function decorate(method) {
-    return function() {
+    return function () {
       const response = method.apply(
         null,
         Array.prototype.slice.call(arguments),

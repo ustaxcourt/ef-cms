@@ -63,11 +63,7 @@ CaseDeadline.schema = joi.object().keys({
     })
     .required()
     .description('Unique Case ID only used by the system.'),
-  caseTitle: joi
-    .string()
-    .min(1)
-    .required()
-    .description('Title of the Case.'),
+  caseTitle: joi.string().min(1).required().description('Title of the Case.'),
   createdAt: joi
     .date()
     .iso()
@@ -89,10 +85,7 @@ CaseDeadline.schema = joi.object().keys({
     .regex(DOCKET_NUMBER_MATCHER)
     .required()
     .description('Unique Case ID in XXXXX-YY format.'),
-  docketNumberSuffix: joi
-    .string()
-    .optional()
-    .allow(null),
+  docketNumberSuffix: joi.string().optional().allow(null),
 });
 
 joiValidationDecorator(

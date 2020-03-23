@@ -61,8 +61,9 @@ export const setValidationAlertErrorsAction = ({ get, props, store }) => {
                 k => k !== 'index',
               );
               return subErrorKeys.map(subErrorKey => {
-                return `${key} #${subError.index +
-                  1} - ${subErrorKey} field - ${subError[subErrorKey]}`;
+                return `${key} #${
+                  subError.index + 1
+                } - ${subErrorKey} field - ${subError[subErrorKey]}`;
               });
             });
           } else if (typeof error === 'object') {
