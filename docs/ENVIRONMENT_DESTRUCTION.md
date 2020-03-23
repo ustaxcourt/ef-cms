@@ -33,3 +33,18 @@ If you get an error like this, you may have to contact AWS and have them remove 
 ```
 * aws_acm_certificate.ws-us-west-1: Error deleting certificate: ResourceInUseException: Certificate arn:aws:acm:us-west-1:515554424717:certificate/9d6bbec6-c7fc-4277-87a5-fb63f2589f21 in account 515554424717 is in use.
 ```
+
+If you run into this issue:
+
+```
+Error: Error applying plan:
+
+1 error(s) occurred:
+
+* module.ef-cms_apis.aws_cognito_user_pool_domain.main (destroy): 1 error(s) occurred:
+
+* aws_cognito_user_pool_domain.main: InvalidParameter: 1 validation error(s) found.
+- minimum field size of 1, DeleteUserPoolDomainInput.UserPoolId.
+```
+
+You'll need to run `terraform state rm aws_cognito_user_pool_domain.main`
