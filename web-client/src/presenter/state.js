@@ -160,24 +160,33 @@ export const state = {
   batchDownloads: {}, // batch download of PDFs
   caseDetail: {},
   caseDetailErrors: {}, // field level validation errors on update case screen TODO: move to validationErrors
-  caseDetailPage: {}, // current tabs for case detail page TODO: move to view metadata
   cases: [],
   cognitoLoginUrl: null,
   completeForm: {}, // TODO: replace with state.form
   currentPage: 'Interstitial',
-  currentTab: '', // TODO: move to view metadata
-  docketRecordIndex: 0,
-  document: {},
-  documentDetail: {
+  currentViewMetadata: {
+    caseDetail: {},
+    documentDetail: {
+      tab: '',
+    },
+    documentSelectedForScan: null,
+    documentUploadMode: 'scan',
+    messageId: '',
+    startCaseInternal: {
+      tab: '',
+    },
     tab: '',
+    trialSessions: {
+      tab: null,
+    },
   },
+  docketRecordIndex: 0, // needs its own object because it's present when other forms are on screen
+  document: {},
   documentId: null,
-  documentSelectedForPreview: null,
-  documentSelectedForScan: null,
-  documentUploadMode: 'scan', // TODO: move inside another object
-  fieldOrder: [], // TODO: move to view metadata
+  fieldOrder: [], // TODO: related to errors
   form: {}, // shared object for creating new entities, clear before using
   header: {
+    searchTerm: '',
     showBetaBar: true,
     showMobileMenu: false,
     showUsaBannerDetails: false,
@@ -185,9 +194,6 @@ export const state = {
   modal: {},
   navigation: {},
   notifications: {},
-  paymentInfo: {
-    showDetails: false,
-  },
   pdfForSigning: {
     documentId: null,
     nameForSigning: '',
@@ -200,6 +206,11 @@ export const state = {
   percentComplete: 0,
   permissions: null,
   previewPdfFile: null,
+  progressIndicator: {
+    // used for the spinner that shows when waiting for network responses
+    waitingForResponse: false,
+    waitingForResponseRequests: 0,
+  },
   scanner: {
     batchIndexToDelete: null,
     batchIndexToRescan: null, // batch index for re-scanning
@@ -210,8 +221,6 @@ export const state = {
     selectedBatchIndex: 0,
   },
   screenMetadata: {},
-  searchMode: 'byName', // TODO: nest inside of a advanced search?
-  searchTerm: '', // search in the header
   sectionInboxCount: 0,
   sectionUsers: [],
   selectedWorkItems: [],
@@ -220,18 +229,10 @@ export const state = {
   },
   showModal: '',
   showValidation: false,
-  startCaseInternal: {
-    tab: '',
-  },
   timeRemaining: Number.POSITIVE_INFINITY,
-  trialSessionsTab: {
-    group: null,
-  },
   user: null,
   users: [],
   validationErrors: {},
-  waitingForResponse: false,
-  waitingForResponseRequests: 0,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},

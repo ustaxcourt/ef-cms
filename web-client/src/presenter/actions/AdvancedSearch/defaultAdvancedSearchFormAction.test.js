@@ -22,6 +22,7 @@ describe('defaultAdvancedSearchFormAction', () => {
       },
       practitionerSearchByBarNumber: {},
       practitionerSearchByName: {},
+      searchMode: 'byName',
     });
   });
 
@@ -37,6 +38,7 @@ describe('defaultAdvancedSearchFormAction', () => {
           },
           practitionerSearchByBarNumber: { red: 'blue' },
           practitionerSearchByName: { one: 'two' },
+          searchMode: 'byDocketNumber',
         },
       },
     });
@@ -49,6 +51,7 @@ describe('defaultAdvancedSearchFormAction', () => {
       },
       practitionerSearchByBarNumber: { red: 'blue' },
       practitionerSearchByName: { one: 'two' },
+      searchMode: 'byDocketNumber',
     });
   });
 });

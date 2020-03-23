@@ -90,6 +90,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     adminUpdateUserAttributes: jest.fn(),
   };
 
+  const mockStorageClientReturnValue = {
+    deleteObject: jest.fn(),
+  };
+
   const mockGetPersistenceGatewayReturnValue = {
     addWorkItemToSectionInbox,
     associateUserWithCase: jest.fn(),
@@ -108,12 +112,16 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getCaseDeadlinesByCaseId),
     getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
     getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
+    getDocumentQCServedForSection: jest.fn(),
     getDownloadPolicyUrl: jest.fn(),
     getInboxMessagesForSection,
     getInboxMessagesForUser: getInboxMessagesForUserPersistence,
-    getSentMessagesForUser: getSentMessagesForUserPersistence,
+    getSentMessagesForSection: jest.fn(),
+    getSentMessagesForUser: jest
+      .fn()
+      .mockImplementation(getSentMessagesForUserPersistence),
     getUserById: getUserByIdPersistence,
-    getWorkItemById: getWorkItemByIdPersistence,
+    getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
     putWorkItemInOutbox,
     saveWorkItemForNonPaper,
@@ -171,14 +179,16 @@ const createTestApplicationContext = ({ user } = {}) => {
       return mockGetPersistenceGatewayReturnValue;
     }),
     getPug: jest.fn(),
-    getStorageClient: jest.fn(),
+    getStorageClient: jest.fn().mockImplementation(() => {
+      return mockStorageClientReturnValue;
+    }),
     getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
     getUseCases: jest.fn(),
     getUtilities: () => {
       return { ...DateHandler };
     },
-    isAuthorizedForWorkItems: () => true,
+    isAuthorizedForWorkItems: jest.fn().mockReturnValue(() => true),
     logger: {
       error: jest.fn(),
       info: () => {},

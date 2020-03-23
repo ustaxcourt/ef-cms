@@ -135,7 +135,9 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     await test.runSequence('navigateToReviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
-    expect(test.getState('startCaseInternal.tab')).toBe('partyInfo');
+    expect(test.getState('currentViewMetadata.startCaseInternal.tab')).toBe(
+      'partyInfo',
+    );
   });
 
   it('should generate case caption from primary and secondary contact information', async () => {
@@ -228,7 +230,9 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     });
 
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
-    expect(test.getState('startCaseInternal.tab')).toBe('caseInfo');
+    expect(test.getState('currentViewMetadata.startCaseInternal.tab')).toBe(
+      'caseInfo',
+    );
   });
 
   it('should update case caption on the review screen when it has been edited', async () => {
@@ -249,7 +253,9 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     });
 
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
-    expect(test.getState('startCaseInternal.tab')).toBe('irsNotice');
+    expect(test.getState('currentViewMetadata.startCaseInternal.tab')).toBe(
+      'irsNotice',
+    );
   });
 
   it('should update case type on the review screen when when it has been edited', async () => {
@@ -346,7 +352,10 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     });
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
 
-    await test.setState('documentSelectedForScan', 'stinFile');
+    await test.setState(
+      'currentViewMetadata.documentSelectedForScan',
+      'stinFile',
+    );
     await test.runSequence('openConfirmDeletePDFModalSequence');
     await test.runSequence('removeScannedPdfSequence');
     expect(test.getState('form.stinFile')).toBeUndefined();
@@ -375,7 +384,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
 
     await test.setState(
-      'documentSelectedForScan',
+      'currentViewMetadata.documentSelectedForScan',
       'requestForPlaceOfTrialFile',
     );
     await test.runSequence('openConfirmDeletePDFModalSequence');
@@ -401,7 +410,10 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
   });
 
   it('should allow the deletion an uploaded ownership disclosure statement file', async () => {
-    await test.setState('documentSelectedForScan', 'odsFile');
+    await test.setState(
+      'currentViewMetadata.documentSelectedForScan',
+      'odsFile',
+    );
     await test.runSequence('openConfirmDeletePDFModalSequence');
     await test.runSequence('removeScannedPdfSequence');
     expect(test.getState('form.odsFile')).toBeUndefined();
@@ -425,7 +437,10 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
   });
 
   it('should allow deletion of an uploaded application for waiver of filing fee file', async () => {
-    await test.setState('documentSelectedForScan', 'apwFile');
+    await test.setState(
+      'currentViewMetadata.documentSelectedForScan',
+      'apwFile',
+    );
     await test.runSequence('openConfirmDeletePDFModalSequence');
     await test.runSequence('removeScannedPdfSequence');
     expect(test.getState('form.apwFile')).toBeUndefined();
@@ -537,5 +552,7 @@ async function navigateToStartCaseInternalPartiesTab(test) {
     tab: 'partyInfo',
   });
   expect(test.getState('currentPage')).toEqual('StartCaseInternal');
-  expect(test.getState('startCaseInternal.tab')).toBe('partyInfo');
+  expect(test.getState('currentViewMetadata.startCaseInternal.tab')).toBe(
+    'partyInfo',
+  );
 }

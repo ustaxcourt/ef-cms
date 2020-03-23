@@ -10,7 +10,9 @@ exports.addBatchesForScanning = (
       scannerSourceName,
     });
 
-    const selectedDocumentType = test.getState('documentSelectedForScan');
+    const selectedDocumentType = test.getState(
+      'currentViewMetadata.documentSelectedForScan',
+    );
 
     expect(
       test.getState(`scanner.batches.${selectedDocumentType}`).length,
@@ -23,7 +25,9 @@ exports.addBatchesForScanning = (
 
 exports.createPDFFromScannedBatches = test => {
   return it('Creates a PDF from added batches', async () => {
-    const selectedDocumentType = test.getState('documentSelectedForScan');
+    const selectedDocumentType = test.getState(
+      'currentViewMetadata.documentSelectedForScan',
+    );
 
     setBatchPages({ test });
 
