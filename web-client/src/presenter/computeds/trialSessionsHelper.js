@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 export const trialSessionsHelper = get => {
-  const tab = get(state.trialSessionsTab.group);
+  const tab = get(state.currentViewMetadata.trialSessions.tab);
 
   const isNewTab = tab === 'new';
   const isOpenTab = tab === 'open';

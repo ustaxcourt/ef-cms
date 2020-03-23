@@ -33,7 +33,7 @@ presenter.providers.path = {
 global.alert = () => null;
 
 describe('rescanBatchAction', () => {
-  it('rescans the batch based on the state.scanner.batchIndexToRescan and state.documentSelectedForScan and replaces that batch with the return from startScanSession', async () => {
+  it('rescans the batch based on the state.scanner.batchIndexToRescan and state.currentViewMetadata.documentSelectedForScan and replaces that batch with the return from startScanSession', async () => {
     const result = await runAction(rescanBatchAction, {
       modules: {
         presenter,
@@ -44,7 +44,9 @@ describe('rescanBatchAction', () => {
         scannerSourceName: 'scanner',
       },
       state: {
-        documentSelectedForScan: 'petition',
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         scanner: {
           batchIndexToRescan: 1,
           batches: {
@@ -72,7 +74,17 @@ describe('rescanBatchAction', () => {
         presenter,
       },
       state: {
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         scanner: {
+          batchIndexToRescan: 1,
+          batches: {
+            petition: [
+              { index: 0, pages: [{ a: 1 }, { b: 2 }] },
+              { index: 1, pages: [{ c: 3 }, { d: 4 }] },
+            ],
+          },
           isScanning: false,
         },
       },
@@ -92,7 +104,9 @@ describe('rescanBatchAction', () => {
         scannerSourceName: 'scanner',
       },
       state: {
-        documentSelectedForScan: 'petition',
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         scanner: {
           batchIndexToRescan: 2,
           batches: {
@@ -125,7 +139,9 @@ describe('rescanBatchAction', () => {
         scannerSourceName: 'scanner',
       },
       state: {
-        documentSelectedForScan: 'petition',
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         scanner: {
           batches: [],
           isScanning: false,

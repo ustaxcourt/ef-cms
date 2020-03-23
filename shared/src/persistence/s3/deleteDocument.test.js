@@ -1,26 +1,27 @@
+const {
+  applicationContext,
+} = require('../../business/test/createTestApplicationContext');
 const { deleteDocument } = require('./deleteDocument');
 
 describe('deleteDocument', () => {
-  const deleteObjectStub = jest.fn().mockReturnValue({
-    promise: () => {
-      return Promise.resolve();
-    },
+  beforeAll(() => {
+    applicationContext.environment.documentsBucketName = 'aBucket';
+    applicationContext.getStorageClient().deleteObject.mockReturnValue({
+      promise: () => {
+        return Promise.resolve();
+      },
+    });
   });
 
   it('deletes the document', async () => {
-    let applicationContext = {
-      environment: {
-        documentsBucketName: 'aBucket',
-      },
-      getStorageClient: () => ({
-        deleteObject: deleteObjectStub,
-      }),
-    };
     await deleteDocument({
       applicationContext,
       key: 'deleteThisDocument',
     });
-    expect(deleteObjectStub.mock.calls[0][0]).toMatchObject({
+
+    expect(
+      applicationContext.getStorageClient().deleteObject.mock.calls[0][0],
+    ).toMatchObject({
       Bucket: 'aBucket',
       Key: 'deleteThisDocument',
     });

@@ -1,5 +1,8 @@
 import { state } from 'cerebral';
 
 export const setDocumentUploadModeAction = ({ props, store }) => {
-  store.set(state.documentUploadMode, props.documentUploadMode);
+  store.set(
+    state.currentViewMetadata.documentUploadMode,
+    props.documentUploadMode,
+  );
 };
