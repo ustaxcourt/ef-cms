@@ -346,7 +346,9 @@ export const loginAs = (test, user) => {
       key: 'name',
       value: user,
     });
-    await test.runSequence('submitLoginSequence');
+    await test.runSequence('submitLoginSequence', {
+      path: '/',
+    });
   });
 };
 
@@ -385,21 +387,24 @@ export const setupTest = ({ useCases = {} } = {}) => {
     };
   };
 
-  const initializeRouter = app => {
+  /**
+   * @param app
+   */
+  function initializeRouter(app) {
     const routes = getRoutes({
       ROLE_PERMISSIONS,
-      app,
+      app: { ...app },
       ifHasAccess: ifHasAccessMock,
       route: routeMock,
     });
 
-    presenter.providers.router = {
+    this.router = {
       createObjectURL: () => {
         return 'fakeUrl';
       },
       externalRoute: () => {},
       revokeObjectURL: () => {},
-      route: async url => {
+      route: url => {
         test.currentRouteUrl = url;
         let foundRoute = false;
         Object.keys(routes).some(path => {
@@ -423,7 +428,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
         }
       },
     };
-  };
+  }
 
   presenter.state = mapValues(presenter.state, value => {
     if (isFunction(value)) {
@@ -432,13 +437,16 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
+  presenter.providers.initializeRouter = initializeRouter;
+
   test = CerebralTest(presenter);
   test.getSequence = name => async obj => await test.runSequence(name, obj);
   test.closeSocket = stop;
   test.applicationContext = applicationContext;
 
+  test.controller.module.providers.initializeRouter(test);
+
   initializeSocketProvider(test);
-  initializeRouter(test);
 
   global.window = {
     DOMParser: () => {
