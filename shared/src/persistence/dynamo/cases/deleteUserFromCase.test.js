@@ -1,12 +1,11 @@
-const sinon = require('sinon');
 const { deleteUserFromCase } = require('./deleteUserFromCase');
 
-describe('deleteUserFromCase', function() {
+describe('deleteUserFromCase', function () {
   let applicationContext;
   let deleteStub;
 
   beforeEach(() => {
-    deleteStub = sinon.stub().returns({
+    deleteStub = jest.fn().mockReturnValue({
       promise: async () => null,
     });
 
@@ -27,7 +26,7 @@ describe('deleteUserFromCase', function() {
       userId: '123',
     });
 
-    expect(deleteStub.getCall(0).args[0]).toMatchObject({
+    expect(deleteStub.mock.calls[0][0]).toMatchObject({
       Key: {
         pk: 'user|123',
         sk: 'case|456',

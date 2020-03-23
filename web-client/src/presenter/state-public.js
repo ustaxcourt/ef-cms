@@ -2,33 +2,33 @@ import { menuHelper } from './computeds/menuHelper';
 
 import { advancedSearchHelper } from './computeds/advancedSearchHelper';
 import { loadingHelper } from './computeds/loadingHelper';
+import { publicAlertHelper } from './computeds/public/publicAlertHelper';
 import { publicCaseDetailHeaderHelper } from './computeds/public/publicCaseDetailHeaderHelper';
 import { publicCaseDetailHelper } from './computeds/public/publicCaseDetailHelper';
 
-export const state = {
-  advancedSearchForm: {
-    countryType: 'domestic',
-    currentPage: 1,
-  },
+const helpers = {
   advancedSearchHelper,
-  betaBar: {
-    isVisible: true,
-  },
-  currentPage: 'PublicSearch',
-  docketNumberSearchForm: {},
+  alertHelper: publicAlertHelper,
   loadingHelper,
   menuHelper,
-  mobileMenu: {
-    isVisible: false,
-  },
   publicCaseDetailHeaderHelper,
   publicCaseDetailHelper,
-  searchMode: 'byName',
-  usaBanner: {
-    showDetails: false,
+};
+
+export const state = {
+  ...helpers,
+  advancedSearchForm: {},
+  commonUI: {
+    showBetaBar: true,
+    showMobileMenu: false,
+    showUsaBannerDetails: false,
+  },
+  currentPage: 'Interstitial',
+  progressIndicator: {
+    // used for the spinner that shows when waiting for network responses
+    waitingForResponse: false,
+    waitingForResponseRequests: 0,
   },
   user: {},
   validationErrors: {},
-  waitingForResponse: false,
-  waitingForResponseRequests: 0,
 };

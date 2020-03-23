@@ -1,7 +1,6 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateExternalDocumentInformationAction } from './validateExternalDocumentInformationAction';
-import sinon from 'sinon';
 
 describe('validateExternalDocumentInformationAction', () => {
   let validateExternalDocumentInformationStub;
@@ -11,9 +10,9 @@ describe('validateExternalDocumentInformationAction', () => {
   let mockDocInfo;
 
   beforeEach(() => {
-    validateExternalDocumentInformationStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+    validateExternalDocumentInformationStub = jest.fn();
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     mockDocInfo = {
       data: 'hello world',
@@ -32,7 +31,7 @@ describe('validateExternalDocumentInformationAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateExternalDocumentInformationStub.returns(null);
+    validateExternalDocumentInformationStub = jest.fn().mockReturnValue(null);
     await runAction(validateExternalDocumentInformationAction, {
       modules: {
         presenter,
@@ -42,11 +41,13 @@ describe('validateExternalDocumentInformationAction', () => {
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateExternalDocumentInformationStub.returns('error');
+    validateExternalDocumentInformationStub = jest
+      .fn()
+      .mockReturnValue('error');
     await runAction(validateExternalDocumentInformationAction, {
       modules: {
         presenter,
@@ -56,6 +57,6 @@ describe('validateExternalDocumentInformationAction', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

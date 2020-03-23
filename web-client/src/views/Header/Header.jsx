@@ -138,24 +138,23 @@ const NavigationItems = (
 
 export const Header = connect(
   {
-    betaBar: state.betaBar,
-    helper: state.headerHelper,
+    headerHelper: state.headerHelper,
     isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
     isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
-    isUsersMenuOpen: state.menuHelper.isUsersMenuOpen,
-    mobileMenu: state.mobileMenu,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
+    showBetaBar: state.header.showBetaBar,
+    showMobileMenu: state.header.showMobileMenu,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     user: state.user,
   },
   ({
-    betaBar,
-    helper,
+    headerHelper,
     isAccountMenuOpen,
     isReportsMenuOpen,
-    mobileMenu,
     resetHeaderAccordionsSequence,
+    showBetaBar,
+    showMobileMenu,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
     user,
@@ -190,7 +189,7 @@ export const Header = connect(
 
     return (
       <div ref={headerRef}>
-        {betaBar.isVisible && BetaBar(toggleBetaBarSequence)}
+        {showBetaBar && BetaBar(toggleBetaBarSequence)}
         <div className="grid-container no-mobile-padding">
           <header
             className="usa-header usa-header--basic ustc-header"
@@ -213,7 +212,7 @@ export const Header = connect(
               <nav
                 className={classNames(
                   'usa-nav ustc-nav',
-                  mobileMenu.isVisible && 'is-visible',
+                  showMobileMenu && 'is-visible',
                 )}
                 role="navigation"
               >
@@ -228,12 +227,12 @@ export const Header = connect(
                   />
                 </button>
                 {user &&
-                  NavigationItems(helper, {
+                  NavigationItems(headerHelper, {
                     isReportsMenuOpen,
                     toggleMobileMenuSequence,
                   })}
-                {helper.showSearchInHeader && <SearchBox />}
-                {helper.showAccountMenu && (
+                {headerHelper.showSearchInHeader && <SearchBox />}
+                {headerHelper.showAccountMenu && (
                   <AccountMenu isExpanded={isAccountMenuOpen} />
                 )}
               </nav>

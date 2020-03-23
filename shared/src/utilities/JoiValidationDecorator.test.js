@@ -28,7 +28,7 @@ joiValidationDecorator(
   MockEntity1.errorToMessageMap,
 );
 
-const MockEntity2 = function(raw) {
+const MockEntity2 = function (raw) {
   Object.assign(this, raw);
 };
 
@@ -37,17 +37,11 @@ const MockEntity2Schema = joi.object().keys({
     .array()
     .items(joi.object().keys({ foo: joi.string().required() }))
     .required(),
-  arry2: joi
-    .array()
-    .items(joi.string())
-    .optional(),
+  arry2: joi.array().items(joi.string()).optional(),
   favoriteNumber: joi.number().required(),
   hasNickname: joi.boolean().required(),
   name: joi.string().required(),
-  obj1: joi
-    .object()
-    .keys({ foo: joi.string().required() })
-    .required(),
+  obj1: joi.object().keys({ foo: joi.string().required() }).required(),
 });
 
 joiValidationDecorator(MockEntity2, MockEntity2Schema, undefined, {

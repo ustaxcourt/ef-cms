@@ -25,7 +25,6 @@ const pages = {
 export const AppComponentPublic = connect(
   {
     currentPage: state.currentPage,
-    currentPageHeader: state.currentPageHeader,
   },
   ({ currentPage }) => {
     const focusMain = e => {

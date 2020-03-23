@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   deleteTrialSessionWorkingCopy,
 } = require('./deleteTrialSessionWorkingCopy');
@@ -11,7 +10,7 @@ describe('deleteTrialSessionWorkingCopy', () => {
   const userId = '338';
 
   beforeEach(() => {
-    deleteStub = sinon.stub().returns({
+    deleteStub = jest.fn().mockReturnValue({
       promise: async () => null,
     });
 
@@ -32,7 +31,7 @@ describe('deleteTrialSessionWorkingCopy', () => {
       userId,
     });
 
-    expect(deleteStub.getCall(0).args[0]).toMatchObject({
+    expect(deleteStub.mock.calls[0][0]).toMatchObject({
       Key: {
         pk: `trial-session-working-copy|${trialSessionId}`,
         sk: `user|${userId}`,

@@ -1,15 +1,13 @@
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('./cases/Case');
 const { CaseDeadline } = require('./CaseDeadline');
 
 const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
 
+const UUID = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
 describe('CaseDeadline', () => {
-  let applicationContext;
-
   beforeAll(() => {
-    applicationContext = {
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
+    applicationContext.getUniqueId = jest.fn().mockReturnValue(UUID);
   });
 
   describe('validation', () => {
@@ -31,7 +29,7 @@ describe('CaseDeadline', () => {
     it('should be valid when all fields are present', () => {
       const caseDeadline = new CaseDeadline(
         {
-          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          caseId: UUID,
           caseTitle: 'My Case Title',
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: 'One small step',
@@ -46,7 +44,7 @@ describe('CaseDeadline', () => {
     it('should have error messages for invalid fields', () => {
       const caseDeadline = new CaseDeadline(
         {
-          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          caseId: UUID,
           caseTitle: 'My Case Title',
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: `I got the horses in the back
@@ -71,7 +69,7 @@ You ain't been up off that porch, now`,
       const caseDeadlineWithJudge = new CaseDeadline(
         {
           associatedJudge: mockJudgeName,
-          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          caseId: UUID,
           caseTitle: 'My Case Title',
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: 'One small step',
@@ -85,7 +83,7 @@ You ain't been up off that porch, now`,
     it('should use default judge if one is not provided', () => {
       const caseDeadlineWithoutJudge = new CaseDeadline(
         {
-          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          caseId: UUID,
           caseTitle: 'My Case Title',
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: 'One small step',

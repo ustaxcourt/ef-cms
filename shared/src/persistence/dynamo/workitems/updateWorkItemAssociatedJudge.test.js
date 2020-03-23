@@ -1,28 +1,24 @@
 import { updateWorkItemAssociatedJudge } from './updateWorkItemAssociatedJudge';
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 
 describe('updateWorkItemAssociatedJudge', () => {
-  let applicationContext;
-  let queryStub;
-  let updateStub;
-
-  beforeEach(() => {
-    queryStub = jest.fn().mockResolvedValue({
-      Items: [
-        {
-          pk: 'work-item-123',
-          sk: 'work-item-sortKey',
-        },
-      ],
+  beforeAll(() => {
+    applicationContext.getDocumentClient().query.mockReturnValue({
+      promise: () =>
+        Promise.resolve({
+          Items: [
+            {
+              pk: 'work-item-123',
+              sk: 'work-item-sortKey',
+            },
+          ],
+        }),
     });
-    updateStub = jest.fn().mockResolvedValue(null);
-
-    applicationContext = {
-      environment: { stage: 'local' },
-      getDocumentClient: () => ({
-        query: () => ({ promise: queryStub }),
-        update: () => ({ promise: updateStub }),
-      }),
-    };
+    applicationContext.getDocumentClient().update.mockReturnValue({
+      promise: () => Promise.resolve(null),
+    });
   });
 
   it('updates workItem with an associated judge', async () => {
@@ -32,7 +28,7 @@ describe('updateWorkItemAssociatedJudge', () => {
       workItemId: 'work-item-123',
     });
 
-    expect(queryStub).toHaveBeenCalled();
-    expect(updateStub).toHaveBeenCalled();
+    expect(applicationContext.getDocumentClient().query).toHaveBeenCalled();
+    expect(applicationContext.getDocumentClient().update).toHaveBeenCalled();
   });
 });

@@ -25,8 +25,8 @@ import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStep
 import { chooseStartCaseWizardStepSequence } from './sequences/chooseStartCaseWizardStepSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
-import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearAlertSequence } from './sequences/clearAlertSequence';
+import { clearCaseSearchByNameFormSequence } from './sequences/clearCaseSearchByNameFormSequence';
 import { clearDocketNumberSearchFormSequence } from './sequences/clearDocketNumberSearchFormSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
@@ -290,7 +290,6 @@ import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSe
 import { toggleMenuSequence } from './sequences/toggleMenuSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
-import { togglePaymentDetailsSequence } from './sequences/togglePaymentDetailsSequence';
 import { toggleReportsMenuSequence } from './sequences/toggleReportsMenuSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
 import { toggleWorkingCopySortSequence } from './sequences/toggleWorkingCopySortSequence';
@@ -312,7 +311,6 @@ import { updateCaseWorkingCopyUserNoteSequence } from './sequences/updateCaseWor
 import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
 import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updateCourtIssuedDocketEntryFormValueSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
-import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocketEntryMetaDocumentFormValueSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
@@ -329,7 +327,6 @@ import { updateMessageValueSequence } from './sequences/updateMessageValueSequen
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
 import { updateOrderForDesignatingPlaceOfTrialSequence } from './sequences/updateOrderForDesignatingPlaceOfTrialSequence';
 import { updatePetitionDetailsSequence } from './sequences/updatePetitionDetailsSequence';
-import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
 import { updatePetitionerInformationFormSequence } from './sequences/updatePetitionerInformationFormSequence';
 import { updateQcCompleteForTrialSequence } from './sequences/updateQcCompleteForTrialSequence';
 import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSequence';
@@ -414,8 +411,8 @@ export const presenter = {
     chooseStartCaseWizardStepSequence,
     chooseWizardStepSequence,
     chooseWorkQueueSequence,
-    clearAdvancedSearchFormSequence,
     clearAlertSequence,
+    clearCaseSearchByNameFormSequence,
     clearDocketNumberSearchFormSequence,
     clearDocumentSequence,
     clearExistingDocumentSequence,
@@ -677,7 +674,6 @@ export const presenter = {
     toggleMenuSequence,
     toggleMobileDocketSortSequence,
     toggleMobileMenuSequence,
-    togglePaymentDetailsSequence,
     toggleReportsMenuSequence,
     toggleUsaBannerDetailsSequence,
     toggleWorkingCopySortSequence,
@@ -699,7 +695,6 @@ export const presenter = {
     updateCompleteFormValueSequence,
     updateCourtIssuedDocketEntryFormValueSequence,
     updateCreateOrderModalFormValueSequence,
-    updateCurrentTabSequence,
     updateDocketEntryFormValueSequence,
     updateDocketEntryMetaDocumentFormValueSequence,
     updateDocketNumberSearchFormSequence,
@@ -716,7 +711,6 @@ export const presenter = {
     updateModalValueSequence,
     updateOrderForDesignatingPlaceOfTrialSequence,
     updatePetitionDetailsSequence,
-    updatePetitionValueSequence,
     updatePetitionerInformationFormSequence,
     updateQcCompleteForTrialSequence,
     updateScreenMetadataSequence,

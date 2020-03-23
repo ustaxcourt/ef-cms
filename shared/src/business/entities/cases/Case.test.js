@@ -1,4 +1,6 @@
-const moment = require('moment');
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
@@ -9,21 +11,12 @@ const { DocketRecord } = require('../DocketRecord');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
+const { prepareDateFromString } = require('../../utilities/DateHandler');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { TrialSession } = require('../trialSessions/TrialSession');
-const { User } = require('../User');
 const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
-  let applicationContext;
-
-  beforeAll(() => {
-    applicationContext = {
-      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-  });
-
   it('should throw an error if app context is not passed in', () => {
     expect(() => new Case({}, {})).toThrow();
   });
@@ -1020,46 +1013,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getProcedureTypes', () => {
-    it('returns the procedure types', () => {
-      const procedureTypes = Case.PROCEDURE_TYPES;
-      expect(procedureTypes).not.toBeNull();
-      expect(procedureTypes.length).toEqual(2);
-      expect(procedureTypes[0]).toEqual('Regular');
-      expect(procedureTypes[1]).toEqual('Small');
-    });
-  });
-
-  describe('getFilingTypes', () => {
-    it('returns the filing types for user role petitioner', () => {
-      const filingTypes = Case.getFilingTypes(User.ROLES.petitioner);
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Myself');
-    });
-
-    it('returns the filing types for user role petitioner as default', () => {
-      const filingTypes = Case.getFilingTypes();
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Myself');
-    });
-
-    it('returns the filing types for user role petitioner for unknown role', () => {
-      const filingTypes = Case.getFilingTypes('unknown');
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Myself');
-    });
-
-    it('returns the filing types for user role practitioner', () => {
-      const filingTypes = Case.getFilingTypes(User.ROLES.privatePractitioner);
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Individual petitioner');
-    });
-  });
-
   describe('updateDocketNumberRecord records suffix changes', () => {
     it('should create a docket record when the suffix updates for an electronically created case', () => {
       const caseToVerify = new Case(
@@ -1324,7 +1277,7 @@ describe('Case entity', () => {
         {
           documents: [
             {
-              createdAt: moment().toISOString(),
+              createdAt: prepareDateFromString().toISOString(),
               eventCode: 'A',
             },
           ],
@@ -1342,7 +1295,7 @@ describe('Case entity', () => {
         {
           documents: [
             {
-              createdAt: moment()
+              createdAt: prepareDateFromString()
                 .subtract(1, 'year')
                 .toISOString(),
               eventCode: 'ZZZs',
@@ -1357,13 +1310,22 @@ describe('Case entity', () => {
       expect(caseToCheck.status).toEqual(Case.STATUS_TYPES.generalDocket);
     });
 
-    it("should not change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
+    it("should NOT change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
+      // eslint-disable-next-line spellcheck/spell-checker
+      /*
+      Note: As of this writing on 2020-03-20, there may be a bug in the `moment` library as it pertains to 
+      leap-years and/or leap-days and maybe daylight saving time, too. Meaning that if *this* test runs
+      at a time when it is calculating date/time differences across the existence of a leap year and DST, it may fail.
+      */
       const caseToCheck = new Case(
         {
           documents: [
             {
-              createdAt: moment()
-                .subtract(Case.ANSWER_CUTOFF_AMOUNT, Case.ANSWER_CUTOFF_UNIT)
+              createdAt: prepareDateFromString()
+                .subtract(
+                  Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS,
+                  Case.ANSWER_CUTOFF_UNIT,
+                )
                 .toISOString(),
               eventCode: 'A',
             },
@@ -1381,8 +1343,11 @@ describe('Case entity', () => {
     });
 
     it("should not change the status to 'Ready for Trial' when an answer document has been filed before the cutoff but case is not 'Not at issue'", () => {
-      const createdAt = moment()
-        .subtract(Case.ANSWER_CUTOFF_AMOUNT + 10, Case.ANSWER_CUTOFF_UNIT)
+      const createdAt = prepareDateFromString()
+        .subtract(
+          Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10,
+          Case.ANSWER_CUTOFF_UNIT,
+        )
         .toISOString();
 
       const caseToCheck = new Case(
@@ -1404,8 +1369,11 @@ describe('Case entity', () => {
     });
 
     it("should change the status to 'Ready for Trial' when an answer document has been filed before the cutoff", () => {
-      const createdAt = moment()
-        .subtract(Case.ANSWER_CUTOFF_AMOUNT + 10, Case.ANSWER_CUTOFF_UNIT)
+      const createdAt = prepareDateFromString()
+        .subtract(
+          Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10,
+          Case.ANSWER_CUTOFF_UNIT,
+        )
         .toISOString();
 
       const caseToCheck = new Case(
@@ -2757,8 +2725,6 @@ describe('Case entity', () => {
       caseCaption: 'Enter a case caption',
       caseType: 'Select a case type',
       docketNumber: 'Docket number is required',
-      docketRecord: 'At least one valid Docket Record is required',
-      documents: 'At least one valid document is required',
       partyType: 'Select a party type',
       procedureType: 'Select a case procedure',
       sortableDocketNumber: 'Sortable docket number is required',
@@ -2778,7 +2744,6 @@ describe('Case entity', () => {
         applicationContext: {
           getCurrentUser: () =>
             MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-          getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
       },
     );
@@ -2812,6 +2777,9 @@ describe('Case entity', () => {
   });
 
   describe('DocketRecord indices must be unique', () => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+    );
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -2833,11 +2801,7 @@ describe('Case entity', () => {
         ],
       },
       {
-        applicationContext: {
-          getCurrentUser: () =>
-            MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-          getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
+        applicationContext,
       },
     );
 

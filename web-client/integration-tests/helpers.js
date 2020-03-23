@@ -531,11 +531,13 @@ export const base64ToUInt8Array = b64 => {
 };
 
 export const setBatchPages = ({ test }) => {
-  const selectedDocumentType = test.getState('documentSelectedForScan');
-  let batches = test.getState(`batches.${selectedDocumentType}`);
+  const selectedDocumentType = test.getState(
+    'currentViewMetadata.documentSelectedForScan',
+  );
+  let batches = test.getState(`scanner.batches.${selectedDocumentType}`);
 
   test.setState(
-    `batches.${selectedDocumentType}`,
+    `scanner.batches.${selectedDocumentType}`,
     batches.map(batch => ({
       ...batch,
       pages: [base64ToUInt8Array(image1), base64ToUInt8Array(image2)],

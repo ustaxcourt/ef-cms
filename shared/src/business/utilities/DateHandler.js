@@ -44,7 +44,7 @@ const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
 const createISODateString = (dateString, inputFormat) => {
   let result;
   if (!dateString) {
-    result = moment();
+    result = moment.tz(USTC_TZ);
   } else {
     result = prepareDateFromString(dateString, inputFormat);
   }
@@ -75,8 +75,11 @@ const formatDateString = (dateString, formatStr) => {
 };
 
 const formatNow = formatStr => {
+  /*
+  Using `module.exports` to allow mocking in tests
+  */
   const now = module.exports.createISODateString();
-  return module.exports.formatDateString(now, formatStr);
+  return formatDateString(now, formatStr);
 };
 
 /**
@@ -135,8 +138,30 @@ const isValidDateString = (dateString, formats = ['M-D-YYYY', 'M/D/YYYY']) => {
   return moment(dateString, formats, true).isValid();
 };
 
+/**
+ * Calculates the difference in calendar days between timeStamp1 and timeStamp2
+ * When timeStamp1 is greater (more recent) than timeStamp2, the difference
+ * will be positive. Time-stamps occurring on the same day will yield zero.
+ * If timeStamp2 is greater than timeStamp1, the result will be negative.
+ *
+ * @param {string} timeStamp1 an ISO-8601 date string
+ * @param {string} timeStamp2 an ISO-8601 date string
+ * @returns {number} the difference between two days, rounded to the nearest integer
+ */
+const calculateDifferenceInDays = (timeStamp1, timeStamp2) => {
+  const moment1 = prepareDateFromString(timeStamp1).set({
+    hours: 12,
+  });
+  const moment2 = prepareDateFromString(timeStamp2).set({
+    hours: 12,
+  });
+  const differenceInDays = Math.round(moment1.diff(moment2, 'day', true));
+  return differenceInDays;
+};
+
 module.exports = {
   FORMATS,
+  calculateDifferenceInDays,
   calculateISODate,
   createISODateString,
   createISODateStringFromObject,

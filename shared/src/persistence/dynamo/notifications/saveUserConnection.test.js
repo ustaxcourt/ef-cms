@@ -1,22 +1,15 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { saveUserConnection } = require('./saveUserConnection');
 
 describe('saveUserConnection', () => {
-  let applicationContext;
-  let putStub;
+  beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
 
-  beforeEach(() => {
-    putStub = jest.fn(() => ({
-      promise: async () => null,
-    }));
-
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        put: putStub,
-      }),
-    };
+    applicationContext.getDocumentClient().put.mockReturnValue({
+      promise: async () => Promise.resolve(null),
+    });
   });
 
   it('attempts to persist the websocket connection details', async () => {
@@ -26,7 +19,8 @@ describe('saveUserConnection', () => {
       endpoint: {},
       userId: '123',
     });
-    expect(putStub).toHaveBeenCalledWith({
+
+    expect(applicationContext.getDocumentClient().put).toHaveBeenCalledWith({
       Item: {
         connectionId: 'abc',
         endpoint: {},

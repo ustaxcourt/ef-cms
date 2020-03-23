@@ -5,15 +5,16 @@ import { state } from 'cerebral';
  * on whether there is an IRS notice or not
  *
  * @param {*} get cerebral get function
+ * @param {object} applicationContext the application context
  * @returns {object} array of case types with descriptions
  */
-export const caseTypeDescriptionHelper = get => {
+export const caseTypeDescriptionHelper = (get, applicationContext) => {
   const form = get(state.form);
-  const caseTypes = get(state.caseTypes);
+  const { CASE_TYPES } = applicationContext.getConstants();
 
   let caseTypesWithDescriptions = [];
   if (form.hasIrsNotice) {
-    caseTypes.forEach(caseType => {
+    CASE_TYPES.forEach(caseType => {
       let caseDescription = '';
       switch (caseType) {
         case 'Deficiency':
@@ -66,7 +67,7 @@ export const caseTypeDescriptionHelper = get => {
       }
     });
   } else {
-    caseTypes.forEach(caseType => {
+    CASE_TYPES.forEach(caseType => {
       let caseDescription = '';
       switch (caseType) {
         case 'CDP (Lien/Levy)':

@@ -20,7 +20,6 @@ import classNames from 'classnames';
 
 export const ScanBatchPreviewer = connect(
   {
-    clearModalSequence: sequences.clearModalSequence,
     constants: state.constants,
     generatePdfFromScanSessionSequence:
       sequences.generatePdfFromScanSessionSequence,
@@ -35,20 +34,14 @@ export const ScanBatchPreviewer = connect(
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
     scanHelper: state.scanHelper,
     scannerStartupSequence: sequences.scannerStartupSequence,
-    selectDocumentForPreviewSequence:
-      sequences.selectDocumentForPreviewSequence,
     selectDocumentForScanSequence: sequences.selectDocumentForScanSequence,
-    selectedBatchIndex: state.selectedBatchIndex,
+    selectedBatchIndex: state.scanner.selectedBatchIndex,
     setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
     setDocumentForUploadSequence: sequences.setDocumentForUploadSequence,
     setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
-    setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
     showModal: state.showModal,
     startScanSequence: sequences.startScanSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
-    validatePetitionFromPaperSequence:
-      sequences.validatePetitionFromPaperSequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -410,7 +403,7 @@ export const ScanBatchPreviewer = connect(
       if (documentTabs && documentTabs.length > 1) {
         return (
           <Tabs
-            bind="documentSelectedForScan"
+            bind="currentViewMetadata.documentSelectedForScan"
             className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
             onSelect={() => {
               selectDocumentForScanSequence();
