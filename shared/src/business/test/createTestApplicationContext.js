@@ -91,6 +91,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     adminUpdateUserAttributes: jest.fn(),
   };
 
+  const mockGetUseCasesReturnValue = {
+    generatePrintableCaseInventoryReportInteractor: jest.fn(),
+    getJudgeForUserChambersInteractor: jest.fn(),
+    setWorkItemAsReadInteractor: jest.fn(),
+  };
+
   const mockStorageClientReturnValue = {
     deleteObject: jest.fn(),
     getObject: jest.fn(),
@@ -159,6 +165,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     },
     getBaseUrl: () => 'http://localhost',
     getCaseCaptionNames: jest.fn().mockReturnValue(Case.getCaseCaptionNames),
+    getChiefJudgeNameForSigning: jest
+      .fn()
+      .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
     getChromiumBrowser: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
     getCurrentUser: jest.fn().mockImplementation(() => {
@@ -195,7 +204,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
     getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
-    getUseCases: jest.fn(),
+    getUseCases: jest.fn().mockImplementation(() => {
+      console.log('in get use cases');
+      return mockGetUseCasesReturnValue;
+    }),
     getUtilities: () => {
       return { ...DateHandler };
     },
