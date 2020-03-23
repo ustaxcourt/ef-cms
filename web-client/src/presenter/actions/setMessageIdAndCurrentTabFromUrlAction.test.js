@@ -9,10 +9,12 @@ describe('setMessageIdAndCurrentTabFromUrlAction', () => {
         messageId: '123',
       },
       state: {
-        messageId: '',
+        currentViewMetadata: {
+          messageId: '',
+        },
       },
     });
-    expect(result.state.messageId).toEqual('123');
+    expect(result.state.currentViewMetadata.messageId).toEqual('123');
   });
 
   it('Sets state.currentTab to Messages if props.messageId is set', async () => {
@@ -21,11 +23,13 @@ describe('setMessageIdAndCurrentTabFromUrlAction', () => {
         messageId: '123',
       },
       state: {
-        currentTab: '',
-        messageId: '',
+        currentViewMetadata: {
+          currentTab: '',
+          messageId: '',
+        },
       },
     });
-    expect(result.state.currentTab).toEqual('Messages');
+    expect(result.state.currentViewMetadata.tab).toEqual('Messages');
   });
 
   it('resets the messageId to null if not already set', async () => {
@@ -34,11 +38,13 @@ describe('setMessageIdAndCurrentTabFromUrlAction', () => {
         messageId: null,
       },
       state: {
-        currentTab: '',
-        messageId: 'abc',
+        currentViewMetadata: {
+          currentTab: '',
+          messageId: 'abc',
+        },
       },
     });
-    expect(result.state.currentTab).toEqual('');
-    expect(result.state.messageId).toEqual(null);
+    expect(result.state.currentViewMetadata.tab).toEqual('');
+    expect(result.state.currentViewMetadata.messageId).toEqual(null);
   });
 });
