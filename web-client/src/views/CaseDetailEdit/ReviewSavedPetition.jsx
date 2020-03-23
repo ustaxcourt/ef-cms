@@ -26,12 +26,12 @@ const ConfirmServeToIrsModal = () => (
 
 export const ReviewSavedPetition = connect(
   {
-    caseDetail: state.caseDetail,
     constants: state.constants,
     documentId: state.documentId,
+    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    navigateToEditSavedDocumentDetailSequence:
-      sequences.navigateToEditSavedDocumentDetailSequence,
+    navigateToEditSavedPetitionSequence:
+      sequences.navigateToEditSavedPetitionSequence,
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper: state.reviewSavedPetitionHelper,
@@ -41,11 +41,11 @@ export const ReviewSavedPetition = connect(
     startCaseHelper: state.startCaseHelper,
   },
   ({
-    caseDetail,
     constants,
     documentId,
+    form,
     formCancelToggleCancelSequence,
-    navigateToEditSavedDocumentDetailSequence,
+    navigateToEditSavedPetitionSequence,
     openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper,
     saveCaseAndServeToIrsSequence,
@@ -53,7 +53,7 @@ export const ReviewSavedPetition = connect(
     showModal,
     startCaseHelper,
   }) => {
-    const { caseId } = caseDetail;
+    const { caseId } = form;
 
     return (
       <>
@@ -69,7 +69,7 @@ export const ReviewSavedPetition = connect(
           </Focus>
 
           {reviewSavedPetitionHelper.hasOrders && (
-            <OrdersNeededSummary caseInformation={caseDetail} />
+            <OrdersNeededSummary caseInformation={form} />
           )}
 
           <div className="grid-container padding-x-0 create-case-review">
@@ -85,7 +85,7 @@ export const ReviewSavedPetition = connect(
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         icon="edit"
                         onClick={() => {
-                          navigateToEditSavedDocumentDetailSequence({
+                          navigateToEditSavedPetitionSequence({
                             caseId,
                             documentId,
                             tab: 'partyInfo',
@@ -103,7 +103,7 @@ export const ReviewSavedPetition = connect(
                         >
                           Party type
                         </label>
-                        {caseDetail.partyType}
+                        {form.partyType}
                       </div>
                       <div className="tablet:grid-col-4 margin-bottom-1">
                         <label
@@ -112,17 +112,13 @@ export const ReviewSavedPetition = connect(
                         >
                           Petitioner’s contact information
                         </label>
-                        {caseDetail.contactPrimary && (
+                        {form.contactPrimary && (
                           <address aria-labelledby="primary-label">
-                            {AddressDisplay(
-                              caseDetail.contactPrimary,
-                              constants,
-                              {
-                                nameOverride:
-                                  startCaseHelper.showCaseNameForPrimary &&
-                                  startCaseHelper.caseName,
-                              },
-                            )}
+                            {AddressDisplay(form.contactPrimary, constants, {
+                              nameOverride:
+                                startCaseHelper.showCaseNameForPrimary &&
+                                startCaseHelper.caseName,
+                            })}
                           </address>
                         )}
                       </div>
@@ -135,10 +131,7 @@ export const ReviewSavedPetition = connect(
                             >
                               Spouse’s contact information
                             </label>
-                            {AddressDisplay(
-                              caseDetail.contactSecondary,
-                              constants,
-                            )}
+                            {AddressDisplay(form.contactSecondary, constants)}
                           </>
                         )}
                       </div>
@@ -157,7 +150,7 @@ export const ReviewSavedPetition = connect(
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         icon="edit"
                         onClick={() => {
-                          navigateToEditSavedDocumentDetailSequence({
+                          navigateToEditSavedPetitionSequence({
                             caseId,
                             documentId,
                             tab: 'caseInfo',
@@ -185,8 +178,7 @@ export const ReviewSavedPetition = connect(
                           >
                             Case caption
                           </label>
-                          {caseDetail.caseCaption}{' '}
-                          {constants.CASE_CAPTION_POSTFIX}
+                          {form.caseCaption} {constants.CASE_CAPTION_POSTFIX}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
                           <label
@@ -201,7 +193,7 @@ export const ReviewSavedPetition = connect(
                         </div>
                       </div>
                       <div className="tablet:grid-col-6 margin-bottom-1">
-                        {caseDetail.mailingDate && (
+                        {form.mailingDate && (
                           <div className="margin-top-3 margin-bottom-2">
                             <label
                               className="usa-label usa-label-display"
@@ -209,7 +201,7 @@ export const ReviewSavedPetition = connect(
                             >
                               Mailing date
                             </label>
-                            {caseDetail.mailingDate}
+                            {form.mailingDate}
                           </div>
                         )}
 
@@ -220,7 +212,7 @@ export const ReviewSavedPetition = connect(
                           >
                             Case procedure
                           </label>
-                          {caseDetail.procedureType}
+                          {form.procedureType}
                         </div>
 
                         <div className="margin-top-3 margin-bottom-2">
@@ -255,7 +247,7 @@ export const ReviewSavedPetition = connect(
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         icon="edit"
                         onClick={() => {
-                          navigateToEditSavedDocumentDetailSequence({
+                          navigateToEditSavedPetitionSequence({
                             caseId,
                             documentId,
                             tab: 'irsNotice',
@@ -283,7 +275,7 @@ export const ReviewSavedPetition = connect(
                           >
                             Type of notice/case
                           </label>
-                          {caseDetail.caseType}
+                          {form.caseType}
                         </div>
                       </div>
                       <div className="tablet:grid-col-4 margin-bottom-1">

@@ -1,9 +1,19 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { getPetitionDocumentForCase } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
 export default test => {
   return it('Petitions clerk updates case detail', async () => {
+    const petitionDocument = getPetitionDocumentForCase(
+      test.getState('caseDetail'),
+    );
+
+    await test.runSequence('gotoDocumentDetailSequence', {
+      docketNumber: test.docketNumber,
+      documentId: petitionDocument.documentId,
+    });
+
     expect(test.getState('caseDetailErrors')).toEqual({});
 
     // irsNoticeDate - invalid
@@ -114,7 +124,7 @@ export default test => {
     expect(test.getState('caseDetailErrors')).toEqual({});
 
     // petitionPaymentDate
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentStatus',
       value: Case.PAYMENT_STATUS.PAID,
     });
@@ -125,7 +135,7 @@ export default test => {
       petitionPaymentMethod: VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
     });
 
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentMethod',
       value: 'check',
     });
@@ -146,11 +156,11 @@ export default test => {
     expect(test.getState('caseDetailErrors')).toEqual({});
 
     //error on save
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: '',
     });
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'procedureType',
       value: '',
     });
@@ -169,11 +179,11 @@ export default test => {
     });
 
     //user changes value and hits save
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: 'Whistleblower',
     });
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'procedureType',
       value: 'Regular',
     });
