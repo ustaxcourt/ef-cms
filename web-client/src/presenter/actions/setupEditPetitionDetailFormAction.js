@@ -56,7 +56,11 @@ export const setupEditPetitionDetailFormAction = ({
   }
 
   if (caseDetail.irsNoticeDate) {
-    const [irsYear, irsMonth, irsDay] = applicationContext
+    const [
+      irsYear,
+      irsMonth,
+      irsDay,
+    ] = applicationContext
       .getUtilities()
       .formatDateString(caseDetail.irsNoticeDate, 'YYYY-MM-DD')
       .split('-');

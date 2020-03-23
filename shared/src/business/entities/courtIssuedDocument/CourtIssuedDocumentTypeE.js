@@ -29,7 +29,7 @@ function CourtIssuedDocumentTypeE(rawProps) {
   this.documentType = rawProps.documentType;
 }
 
-CourtIssuedDocumentTypeE.prototype.getDocumentTitle = function() {
+CourtIssuedDocumentTypeE.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
     formatDateString(this.date, 'MM-DD-YYYY'),
@@ -38,11 +38,7 @@ CourtIssuedDocumentTypeE.prototype.getDocumentTitle = function() {
 
 CourtIssuedDocumentTypeE.schema = {
   attachments: joi.boolean().required(),
-  date: joi
-    .date()
-    .iso()
-    .min(yesterdayFormatted)
-    .required(),
+  date: joi.date().iso().min(yesterdayFormatted).required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
 };

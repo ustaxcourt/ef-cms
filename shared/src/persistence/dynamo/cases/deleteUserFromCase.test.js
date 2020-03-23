@@ -1,6 +1,6 @@
 const { deleteUserFromCase } = require('./deleteUserFromCase');
 
-describe('deleteUserFromCase', function() {
+describe('deleteUserFromCase', function () {
   let applicationContext;
   let deleteStub;
 

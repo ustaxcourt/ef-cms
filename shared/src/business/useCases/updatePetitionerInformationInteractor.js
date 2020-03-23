@@ -91,9 +91,9 @@ exports.updatePetitionerInformationInteractor = async ({
         content: {
           caption: caseDetail.caseCaption,
           captionPostfix: caseDetail.caseCaptionPostfix,
-          docketNumberWithSuffix: `${
-            caseDetail.docketNumber
-          }${caseDetail.docketNumberSuffix || ''}`,
+          docketNumberWithSuffix: `${caseDetail.docketNumber}${
+            caseDetail.docketNumberSuffix || ''
+          }`,
           documentTitle: documentType.title,
           name: contactName,
           newData,
