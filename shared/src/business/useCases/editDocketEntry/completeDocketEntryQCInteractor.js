@@ -118,9 +118,9 @@ exports.completeDocketEntryQCInteractor = async ({
   const docketChangeInfo = {
     caseTitle: caseToUpdate.caseTitle,
     docketEntryIndex: docketRecordIndexUpdated,
-    docketNumber: `${
-      caseToUpdate.docketNumber
-    }${caseToUpdate.docketNumberSuffix || ''}`,
+    docketNumber: `${caseToUpdate.docketNumber}${
+      caseToUpdate.docketNumberSuffix || ''
+    }`,
     filingParties: {
       after: updatedDocument.filedBy,
       before: currentDocument.filedBy,

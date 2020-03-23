@@ -19,11 +19,11 @@ const mocks = {
       numPages: 5,
     }),
   })),
-  readAsArrayBufferMock: jest.fn(function() {
+  readAsArrayBufferMock: jest.fn(function () {
     this.result = 'def';
     this.onload();
   }),
-  readAsDataURLMock: jest.fn(function() {
+  readAsDataURLMock: jest.fn(function () {
     this.result = 'abc';
     this.onload();
   }),
@@ -32,7 +32,7 @@ const mocks = {
 presenter.providers.applicationContext = {
   ...applicationContext,
   getFileReader: () =>
-    function() {
+    function () {
       this.onload = null;
       this.onerror = null;
       this.readAsDataURL = mocks.readAsDataURLMock;
