@@ -73,7 +73,9 @@ describe('scanHelper', () => {
   it('shows the scanner source selection modal', () => {
     const result = runCompute(scanHelper, {
       state: {
-        showModal: 'SelectScannerSourceModal',
+        modal: {
+          showModal: 'SelectScannerSourceModal',
+        },
       },
     });
     expect(result.showScannerSourceModal).toBeTruthy();

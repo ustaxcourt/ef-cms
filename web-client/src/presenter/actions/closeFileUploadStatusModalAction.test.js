@@ -27,7 +27,9 @@ describe('closeFileUploadStatusModalAction', () => {
         percentComplete: 100,
         timeRemaining: 0,
       },
-      showModal: '',
+      modal: {
+        showModal: '',
+      },
     });
   });
 });

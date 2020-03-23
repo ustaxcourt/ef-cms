@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 /**
- * Sets state.showModal to PDFPreviewModal
+ * Sets state.modal.showModal to PDFPreviewModal
  *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object
@@ -8,5 +8,5 @@ import { state } from 'cerebral';
  */
 export const openPdfPreviewModalAction = ({ props, store }) => {
   store.set(state.previewPdfFile, props.file);
-  store.set(state.showModal, props.modalId);
+  store.set(state.modal.showModal, props.modalId);
 };

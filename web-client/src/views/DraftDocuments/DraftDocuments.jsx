@@ -12,7 +12,7 @@ export const DraftDocuments = connect(
       sequences.archiveDraftDocumentModalSequence,
     formattedCaseDetail: state.formattedCaseDetail,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
   ({
     archiveDraftDocumentModalSequence,

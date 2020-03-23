@@ -23,7 +23,7 @@ export const EditUploadCourtIssuedDocument = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     screenMetadata: state.screenMetadata,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateUploadCourtIssuedDocumentSequence:
       sequences.validateUploadCourtIssuedDocumentSequence,

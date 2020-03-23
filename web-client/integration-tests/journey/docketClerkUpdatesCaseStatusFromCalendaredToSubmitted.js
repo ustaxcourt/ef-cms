@@ -14,7 +14,7 @@ export const docketClerkUpdatesCaseStatusFromCalendaredToSubmitted = test => {
 
     await test.runSequence('openUpdateCaseModalSequence');
 
-    expect(test.getState('showModal')).toEqual('UpdateCaseModalDialog');
+    expect(test.getState('modal.showModal')).toEqual('UpdateCaseModalDialog');
 
     expect(test.getState('modal.caseStatus')).toEqual(
       Case.STATUS_TYPES.calendared,
@@ -56,7 +56,6 @@ export const docketClerkUpdatesCaseStatusFromCalendaredToSubmitted = test => {
       Case.STATUS_TYPES.submitted,
     );
     expect(test.getState('caseDetail.associatedJudge')).toEqual('Judge Buch');
-    expect(test.getState('showModal')).toEqual('');
-    expect(test.getState('modal.caseStatus')).toBeUndefined();
+    expect(test.getState('modal')).toEqual({});
   });
 };

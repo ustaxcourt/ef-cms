@@ -55,7 +55,8 @@ export const scanBatchPreviewerHelper = (get, applicationContext) => {
       ? batches.find(b => b.index === selectedBatchIndex)
       : {},
     selectedPageImage: selectPageImage,
-    showScannerSourceModal: get(state.showModal) === 'SelectScannerSourceModal',
+    showScannerSourceModal:
+      get(state.modal.showModal) === 'SelectScannerSourceModal',
     totalPages: selectedBatch.pages.length,
     uploadMode: documentUploadMode,
   };
