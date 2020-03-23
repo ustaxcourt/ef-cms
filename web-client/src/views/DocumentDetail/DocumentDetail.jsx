@@ -18,7 +18,7 @@ export const DocumentDetail = connect(
     caseDetail: state.caseDetail,
     documentDetailHelper: state.documentDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
-    messageId: state.messageId,
+    messageId: state.currentViewMetadata.messageId,
     navigateToPathSequence: sequences.navigateToPathSequence,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
@@ -38,7 +38,10 @@ export const DocumentDetail = connect(
   }) => {
     const renderParentTabs = () => {
       return (
-        <Tabs bind="currentTab" className="no-full-border-bottom tab-button-h2">
+        <Tabs
+          bind="currentViewMetadata.tab"
+          className="no-full-border-bottom tab-button-h2"
+        >
           {documentDetailHelper.showDocumentInfoTab && (
             <Tab
               id="tab-document-info"
@@ -53,7 +56,10 @@ export const DocumentDetail = connect(
     };
     const renderNestedTabs = () => {
       return (
-        <Tabs bind="currentTab" className="no-full-border-bottom tab-button-h2">
+        <Tabs
+          bind="currentViewMetadata.tab"
+          className="no-full-border-bottom tab-button-h2"
+        >
           {documentDetailHelper.showDocumentInfoTab && (
             <Tab id="tab-document-info" tabName="Document Info">
               <div

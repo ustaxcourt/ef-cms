@@ -51,7 +51,7 @@ export const EditDocketEntry = connect(
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
                 <Tabs
-                  bind="currentTab"
+                  bind="currentViewMetadata.tab"
                   className="no-full-border-bottom tab-button-h2"
                 >
                   <Tab
@@ -73,7 +73,7 @@ export const EditDocketEntry = connect(
               <div className="grid-col-5">
                 <Tabs
                   asSwitch
-                  bind="currentTab"
+                  bind="currentViewMetadata.tab"
                   className="no-full-border-bottom tab-button-h2"
                 >
                   <Tab id="tab-document-info" tabName="Document Info">

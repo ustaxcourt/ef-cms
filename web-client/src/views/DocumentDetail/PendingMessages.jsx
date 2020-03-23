@@ -13,7 +13,7 @@ export const PendingMessages = connect(
     constants: state.constants,
     documentDetailHelper: state.documentDetailHelper,
     form: state.form,
-    messageId: state.messageId,
+    messageId: state.currentViewMetadata.messageId,
     openCreateMessageModalSequence: sequences.openCreateMessageModalSequence,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
     showModal: state.showModal,
