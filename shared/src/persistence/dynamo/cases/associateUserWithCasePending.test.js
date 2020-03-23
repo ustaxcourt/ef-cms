@@ -1,27 +1,11 @@
 const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+const {
   associateUserWithCasePending,
 } = require('./associateUserWithCasePending');
 
 describe('associateUserWithCasePending', () => {
-  let applicationContext;
-  const putStub = jest.fn().mockReturnValue({
-    promise: async () => ({
-      pk: 'user|123',
-      sk: 'pending-case|123',
-    }),
-  });
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-
-    applicationContext = {
-      environment: { stage: 'local' },
-      getDocumentClient: () => ({
-        put: putStub,
-      }),
-    };
-  });
-
   it('should create mapping request that creates pending association request', async () => {
     const result = await associateUserWithCasePending({
       applicationContext,
