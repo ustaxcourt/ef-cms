@@ -1,10 +1,17 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   getInboxMessagesForSectionInteractor,
 } = require('./getInboxMessagesForSectionInteractor');
 const { User } = require('../../entities/User');
 
 describe('getInboxMessagesForSectionInteractor', () => {
-  let applicationContext;
+  const mockPetitionsClerk = {
+    role: User.ROLES.petitionsClerk,
+    userId: 'petitionsClerk',
+  };
+
   let getInboxMessagesForSectionStub;
   let validateRawCollectionStub;
 
@@ -12,22 +19,19 @@ describe('getInboxMessagesForSectionInteractor', () => {
     getInboxMessagesForSectionStub = jest.fn();
     validateRawCollectionStub = jest.fn();
 
-    applicationContext = {
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsClerk',
-        };
+    applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerk);
+
+    applicationContext.getEntityConstructors = () => ({
+      WorkItem: {
+        validateRawCollection: validateRawCollectionStub,
       },
-      getEntityConstructors: () => ({
-        WorkItem: {
-          validateRawCollection: validateRawCollectionStub,
-        },
-      }),
-      getPersistenceGateway: () => ({
-        getInboxMessagesForSection: getInboxMessagesForSectionStub,
-      }),
-    };
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getInboxMessagesForSection.mockReturnValue(
+        getInboxMessagesForSectionStub,
+      );
   });
 
   it('gets inbox messages for a section', async () => {
@@ -36,20 +40,17 @@ describe('getInboxMessagesForSectionInteractor', () => {
       section: 'docket',
     });
 
-    expect(getInboxMessagesForSectionStub).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getInboxMessagesForSection,
+    ).toHaveBeenCalled();
     expect(validateRawCollectionStub).toHaveBeenCalled();
   });
 
   it('throws an error if the user does not have access to the work item', async () => {
-    applicationContext = {
-      ...applicationContext,
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
+    });
 
     let error;
     try {
