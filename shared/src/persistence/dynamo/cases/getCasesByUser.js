@@ -1,25 +1,32 @@
-const {
-  getRecordsViaMapping,
-} = require('../../dynamo/helpers/getRecordsViaMapping');
+const client = require('../../dynamodbClientService');
+
 const { getCaseByCaseId } = require('./getCaseByCaseId');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 exports.getCasesByUser = async ({ applicationContext, userId }) => {
-  let cases = await getRecordsViaMapping({
-    applicationContext,
-    pk: `user|${userId}`,
-    prefix: 'case',
-  });
+  const caseIds = (
+    await client.query({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+        '#sk': 'sk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `user|${userId}`,
+        ':prefix': 'case',
+      },
+      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+      applicationContext,
+    })
+  ).map(mapping => mapping.sk.split('|')[1]);
 
-  for (let i = 0; i < cases.length; i++) {
-    cases[i] = {
-      ...cases[i],
-      ...(await getCaseByCaseId({
+  const cases = await Promise.all(
+    caseIds.map(caseId =>
+      getCaseByCaseId({
         applicationContext,
-        caseId: cases[i].caseId,
-      })),
-    };
-  }
+        caseId,
+      }),
+    ),
+  );
 
   return stripWorkItems(cases, applicationContext.isAuthorizedForWorkItems());
 };

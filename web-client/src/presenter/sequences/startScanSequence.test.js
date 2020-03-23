@@ -36,11 +36,11 @@ describe('startScanSequence', () => {
       scannerSourceIndex: '1',
       scannerSourceName: 'Mock Scanner',
     };
-    test.setState('batches', []);
+    test.setState('scanner.batches', []);
     await test.runSequence('startScanSequence', {});
 
     expect(mockStartScanSession).toHaveBeenCalled();
-    expect(test.getState('isScanning')).toBeTruthy;
+    expect(test.getState('scanner.isScanning')).toBeTruthy;
   });
 
   it('provides a flow for setting a scan source if one is not cached', async () => {
@@ -48,7 +48,7 @@ describe('startScanSequence', () => {
       scannerSourceIndex: null,
       scannerSourceName: '',
     };
-    test.setState('batches', []);
+    test.setState('scanner.batches', []);
     await test.runSequence('startScanSequence', {});
     const scannerState = test.getState('scanner');
 

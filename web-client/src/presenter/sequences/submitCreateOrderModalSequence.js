@@ -6,7 +6,6 @@ import { setCasePropFromStateAction } from '../actions/setCasePropFromStateActio
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { stashCreateOrderModalDataAction } from '../actions/CourtIssuedOrder/stashCreateOrderModalDataAction';
 import { validateOrderWithoutBodyAction } from '../actions/CourtIssuedOrder/validateOrderWithoutBodyAction';
 
 export const submitCreateOrderModalSequence = [
@@ -18,7 +17,6 @@ export const submitCreateOrderModalSequence = [
     success: [
       clearModalAction,
       setCurrentPageAction('Interstitial'),
-      stashCreateOrderModalDataAction,
       setCasePropFromStateAction,
       navigateToCreateOrderAction,
     ],

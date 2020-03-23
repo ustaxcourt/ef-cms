@@ -9,7 +9,6 @@ export const TrialSessionPlanningModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.runTrialSessionPlanningReportSequence,
-    modal: state.modal,
     trialYears: state.modal.trialYears,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateTrialSessionPlanningSequence:

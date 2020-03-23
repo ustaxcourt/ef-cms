@@ -6,9 +6,9 @@ import React from 'react';
 
 export const IRSNotice = connect(
   {
+    CASE_TYPES: state.constants.CASE_TYPES,
     caseDetail: state.caseDetail,
     caseDetailErrors: state.caseDetailErrors,
-    caseTypes: state.caseTypes,
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
     setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
@@ -17,9 +17,9 @@ export const IRSNotice = connect(
     validateCaseDetailSequence: sequences.validateCaseDetailSequence,
   },
   ({
+    CASE_TYPES,
     caseDetail,
     caseDetailErrors,
-    caseTypes,
     form,
     formattedCaseDetail,
     setIrsNoticeFalseSequence,
@@ -111,7 +111,7 @@ export const IRSNotice = connect(
 
         <CaseTypeSelect
           allowDefaultOption={true}
-          caseTypes={caseTypes}
+          caseTypes={CASE_TYPES}
           legend="Type of case"
           validation="validateCaseDetailSequence"
           value={caseDetail.caseType}

@@ -5,9 +5,11 @@ describe('resetCurrentPageIndexAction', () => {
   it('resets the currentPageIndex back to 0', async () => {
     const { state } = await runAction(resetCurrentPageIndexAction, {
       state: {
-        currentPageIndex: 1,
+        scanner: {
+          currentPageIndex: 1,
+        },
       },
     });
-    expect(state.currentPageIndex).toEqual(0);
+    expect(state.scanner.currentPageIndex).toEqual(0);
   });
 });

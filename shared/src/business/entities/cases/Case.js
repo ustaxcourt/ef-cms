@@ -1,14 +1,15 @@
 const joi = require('@hapi/joi');
 const {
-  CHIEF_JUDGE,
-  DOCKET_NUMBER_MATCHER,
-  TRIAL_LOCATION_MATCHER,
-} = require('./CaseConstants');
-const {
+  calculateDifferenceInDays,
   createISODateString,
   formatDateString,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
+const {
+  CHIEF_JUDGE,
+  DOCKET_NUMBER_MATCHER,
+  TRIAL_LOCATION_MATCHER,
+} = require('./CaseConstants');
 const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
@@ -76,7 +77,7 @@ Case.STATUS_TYPES_MANUAL_UPDATE = [
   Case.STATUS_TYPES.submitted,
 ];
 
-Case.ANSWER_CUTOFF_AMOUNT = 45;
+Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
 Case.ANSWER_CUTOFF_UNIT = 'day';
 
 Case.CASE_TYPES_MAP = {
@@ -478,14 +479,12 @@ joiValidationDecorator(
     docketRecord: joi
       .array()
       .items(joi.object().meta({ entityName: 'DocketRecord' }))
-      .min(1)
       .required()
       .unique((a, b) => a.index === b.index)
       .description('List of DocketRecord Entities for the case.'),
     documents: joi
       .array()
       .items(joi.object().meta({ entityName: 'Document' }))
-      .min(1)
       .required()
       .description('List of Document Entities for the case.'),
     entityName: joi
@@ -1211,16 +1210,6 @@ Case.stripLeadingZeros = docketNumber => {
 };
 
 /**
- * getFilingTypes
- *
- * @param {string} userRole - the role of the user logged in
- * @returns {string[]} array of filing types for the user role
- */
-Case.getFilingTypes = userRole => {
-  return Case.FILING_TYPES[userRole] || Case.FILING_TYPES.petitioner;
-};
-
-/**
  * getWorkItems
  *
  * @returns {WorkItem[]} the work items on the case
@@ -1240,10 +1229,7 @@ Case.prototype.getWorkItems = function() {
  * @returns {Case} the updated case entity
  */
 Case.prototype.checkForReadyForTrial = function() {
-  let docFiledCutoffDate = prepareDateFromString().subtract(
-    Case.ANSWER_CUTOFF_AMOUNT,
-    Case.ANSWER_CUTOFF_UNIT,
-  );
+  const currentDate = prepareDateFromString().toISOString();
 
   const isCaseGeneralDocketNotAtIssue =
     this.status === Case.STATUS_TYPES.generalDocket;
@@ -1255,11 +1241,15 @@ Case.prototype.checkForReadyForTrial = function() {
         document.eventCode,
       );
 
-      const docFiledBeforeCutoff = prepareDateFromString(
+      const daysElapsedSinceDocumentWasFiled = calculateDifferenceInDays(
+        currentDate,
         document.createdAt,
-      ).isBefore(docFiledCutoffDate, Case.ANSWER_CUTOFF_UNIT);
+      );
 
-      if (isAnswerDocument && docFiledBeforeCutoff) {
+      const requiredTimeElapsedSinceFiling =
+        daysElapsedSinceDocumentWasFiled > Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS;
+
+      if (isAnswerDocument && requiredTimeElapsedSinceFiling) {
         this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
       }
     });

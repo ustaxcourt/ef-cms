@@ -7,7 +7,10 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  * @param {object} providers.props the cerebral props object
  */
-export const clearAdvancedSearchFormAction = ({ store }) => {
-  store.set(state.advancedSearchForm, { currentPage: 1 });
+export const clearCaseSearchByNameFormAction = ({ store }) => {
+  store.set(state.advancedSearchForm.caseSearchByName, {
+    countryType: 'domestic',
+  });
   store.unset(state.searchResults);
+  store.set(state.advancedSearchForm.currentPage, 1);
 };
