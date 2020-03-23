@@ -27,6 +27,7 @@ export default test => {
       caseCaptionNames: 'Mona Schultz',
       caseId,
       notes: undefined,
+      showModal: 'AddEditUserCaseNoteModal',
     });
 
     await test.runSequence('cerebralBindSimpleSetStateSequence', {

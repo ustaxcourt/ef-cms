@@ -38,7 +38,7 @@ export default test => {
     });
     await test.runSequence('openConfirmServeToIrsModalSequence');
 
-    expect(test.getState('showModal')).toBe('ConfirmServeToIrsModal');
+    expect(test.getState('modal.showModal')).toBe('ConfirmServeToIrsModal');
   });
 
   it('should redirect to case detail after successfully serving to irs', async () => {

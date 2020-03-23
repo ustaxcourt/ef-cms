@@ -24,8 +24,7 @@ export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
     await test.runSequence('clearModalSequence');
 
     expect(test.getState('caseDetail.status')).toEqual(currentStatus);
-    expect(test.getState('modal.showModal')).toEqual('');
-    expect(test.getState('modal.caseStatus')).toBeUndefined();
+    expect(test.getState('modal')).toBeUndefined();
 
     await test.runSequence('openUpdateCaseModalSequence');
 
@@ -45,7 +44,6 @@ export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
     expect(test.getState('caseDetail.associatedJudge')).toEqual(
       Case.CHIEF_JUDGE,
     );
-    expect(test.getState('modal.showModal')).toEqual('');
-    expect(test.getState('modal.caseStatus')).toBeUndefined();
+    expect(test.getState('modal')).toBeUndefined();
   });
 };
