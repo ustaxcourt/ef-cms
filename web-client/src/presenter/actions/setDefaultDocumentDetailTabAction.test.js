@@ -20,7 +20,7 @@ describe('setDefaultDocumentDetailTab', () => {
         documentId: 'abc',
       },
     });
-    expect(state.currentTab).toEqual('Document Info');
+    expect(state.currentViewMetadata.tab).toEqual('Document Info');
   });
 
   it('returns "Document Info" when the case status is in progress and the document type is Petition', async () => {
@@ -36,7 +36,7 @@ describe('setDefaultDocumentDetailTab', () => {
         documentId: 'abc',
       },
     });
-    expect(state.currentTab).toEqual('Document Info');
+    expect(state.currentViewMetadata.tab).toEqual('Document Info');
   });
 
   it('returns "Messages" when the case status is new and the document type is Answer', async () => {
@@ -52,7 +52,7 @@ describe('setDefaultDocumentDetailTab', () => {
         documentId: 'abc',
       },
     });
-    expect(state.currentTab).toEqual('Messages');
+    expect(state.currentViewMetadata.tab).toEqual('Messages');
   });
 
   it('returns "Messages" when the case status is general docket', async () => {
@@ -68,6 +68,6 @@ describe('setDefaultDocumentDetailTab', () => {
         documentId: 'abc',
       },
     });
-    expect(state.currentTab).toEqual('Messages');
+    expect(state.currentViewMetadata.tab).toEqual('Messages');
   });
 });

@@ -164,7 +164,6 @@ export const state = {
   cognitoLoginUrl: null,
   completeForm: {}, // TODO: replace with state.form
   currentPage: 'Interstitial',
-  currentTab: '',
   currentViewMetadata: {
     caseDetail: {},
     documentDetail: {
@@ -172,9 +171,11 @@ export const state = {
     },
     documentSelectedForScan: null,
     documentUploadMode: 'scan',
+    messageId: '',
     startCaseInternal: {
       tab: '',
     },
+    tab: '',
     trialSessions: {
       tab: null,
     },
