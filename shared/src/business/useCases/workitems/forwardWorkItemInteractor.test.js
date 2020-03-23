@@ -7,13 +7,12 @@ const { MOCK_CASE } = require('../../../../src/test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { User } = require('../../entities/User');
 
-const mockPetitionsClerkUser = {
+const mockPetitionsClerk = {
   name: 'Petitionsclerk',
   role: User.ROLES.petitionsClerk,
   section: 'petitions',
   userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
 };
-
 const mockCase = {
   ...MOCK_CASE,
   documents: [
@@ -102,13 +101,6 @@ const mockCase = {
       ],
     },
   ],
-};
-
-const mockPetitionsClerk = {
-  name: 'Petitionsclerk',
-  role: User.ROLES.petitionsClerk,
-  section: 'petitions',
-  userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
 };
 
 describe('forwardWorkItemInteractor', () => {
