@@ -28,7 +28,7 @@ Batch.validationName = 'Batch';
  * @returns {Batch} the batch entity after the page is added
 
  */
-Batch.prototype.addPage = function(page) {
+Batch.prototype.addPage = function (page) {
   this.pages.push(page);
   return this;
 };
@@ -38,7 +38,7 @@ Batch.prototype.addPage = function(page) {
  *
  * @returns {Batch} the batch entity after the pages are cleared
  */
-Batch.prototype.clear = function() {
+Batch.prototype.clear = function () {
   this.pages = [];
   return this;
 };
@@ -55,19 +55,9 @@ Batch.schema = joi.object().keys({
       version: ['uuidv4'],
     })
     .required(),
-  batchIndex: joi
-    .number()
-    .integer()
-    .min(0)
-    .required(),
-  createdAt: joi
-    .date()
-    .iso()
-    .required(),
-  pages: joi
-    .array()
-    .min(1)
-    .required(),
+  batchIndex: joi.number().integer().min(0).required(),
+  createdAt: joi.date().iso().required(),
+  pages: joi.array().min(1).required(),
 });
 
 joiValidationDecorator(

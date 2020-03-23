@@ -65,42 +65,24 @@ const paperRequirements = joi.object().keys({
     {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),
-      then: joi
-        .number()
-        .required()
-        .min(1)
-        .max(MAX_FILE_SIZE_BYTES)
-        .integer(),
+      then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     },
   ),
   caseCaption: joi.string().required(),
   caseType: joi.string().required(),
-  mailingDate: joi
-    .string()
-    .max(25)
-    .required(),
+  mailingDate: joi.string().max(25).required(),
   ownershipDisclosureFile: joi.object().optional(),
   ownershipDisclosureFileSize: joi.when('ownershipDisclosureFile', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
-    then: joi
-      .number()
-      .required()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+    then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
   }),
   partyType: joi.string().required(),
   petitionFile: joi.object().required(),
   petitionFileSize: joi.when('petitionFile', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
-    then: joi
-      .number()
-      .required()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+    then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
   }),
   preferredTrialCity: joi
     .alternatives()
@@ -110,11 +92,7 @@ const paperRequirements = joi.object().keys({
       then: joi.string().required(),
     }),
   procedureType: joi.string().required(),
-  receivedAt: joi
-    .date()
-    .iso()
-    .max('now')
-    .required(),
+  receivedAt: joi.date().iso().max('now').required(),
   requestForPlaceOfTrialFile: joi
     .alternatives()
     .conditional('preferredTrialCity', {
@@ -125,30 +103,20 @@ const paperRequirements = joi.object().keys({
   requestForPlaceOfTrialFileSize: joi.when('requestForPlaceOfTrialFile', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
-    then: joi
-      .number()
-      .required()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+    then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
   }),
   stinFile: joi.object().required(),
   stinFileSize: joi.when('stinFile', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
-    then: joi
-      .number()
-      .required()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+    then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
   }),
 });
 
 joiValidationDecorator(
   CaseInternal,
   paperRequirements,
-  function() {
+  function () {
     return !this.getFormattedValidationErrors();
   },
   CaseInternal.VALIDATION_ERROR_MESSAGES,

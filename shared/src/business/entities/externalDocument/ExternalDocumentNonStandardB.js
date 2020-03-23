@@ -19,7 +19,7 @@ function ExternalDocumentNonStandardB(rawProps) {
   this.freeText = rawProps.freeText;
 }
 
-ExternalDocumentNonStandardB.prototype.getDocumentTitle = function() {
+ExternalDocumentNonStandardB.prototype.getDocumentTitle = function () {
   return replaceBracketed(this.documentTitle, this.freeText);
 };
 

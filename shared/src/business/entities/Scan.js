@@ -32,7 +32,7 @@ Scan.SCAN_MODES = {
  * @param {Batch} batch Batch entity
  * @returns {Scan} Scan entity
  */
-Scan.prototype.addBatch = function(batch) {
+Scan.prototype.addBatch = function (batch) {
   this.batches.push(batch);
   return this;
 };
@@ -43,7 +43,7 @@ Scan.prototype.addBatch = function(batch) {
  * @param {Batch} batchEntity Batch entity to remove
  * @returns {Scan} Scan entity
  */
-Scan.prototype.removeBatch = function(batchEntity) {
+Scan.prototype.removeBatch = function (batchEntity) {
   const { batchId } = batchEntity;
 
   remove(this.batches, batch => {
@@ -60,7 +60,7 @@ Scan.prototype.removeBatch = function(batchEntity) {
  *
  * @returns {Array} array of PNGs
  */
-Scan.prototype.getPages = function() {
+Scan.prototype.getPages = function () {
   // flattens the array of pages for each batch
   const aggregatedPngs = this.batches.reduce((acc, val, idx) => {
     const aggregatedBatch = [...acc, ...val.pages];
@@ -79,14 +79,8 @@ Scan.VALIDATION_ERROR_MESSAGES = {
 };
 
 Scan.schema = joi.object().keys({
-  batches: joi
-    .array()
-    .min(1)
-    .required(),
-  createdAt: joi
-    .date()
-    .iso()
-    .required(),
+  batches: joi.array().min(1).required(),
+  createdAt: joi.date().iso().required(),
   scanId: joi
     .string()
     .uuid({
