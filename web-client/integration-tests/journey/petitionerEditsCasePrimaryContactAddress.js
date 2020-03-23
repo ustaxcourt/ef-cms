@@ -4,17 +4,17 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export default test => {
   return it('petitioner updates primary contact address', async () => {
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
       value: '100 Main St.',
     });
 
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address2',
       value: 'Grand View Apartments',
     });
 
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address3',
       value: 'Apt. 104',
     });

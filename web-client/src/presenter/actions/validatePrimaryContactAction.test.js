@@ -32,7 +32,7 @@ describe('validatePrimaryContactAction', () => {
         presenter,
       },
       state: {
-        caseDetail: {
+        form: {
           contactPrimary: {},
           partyType: 'Petitioner',
         },
@@ -51,7 +51,7 @@ describe('validatePrimaryContactAction', () => {
         presenter,
       },
       state: {
-        caseDetail: {
+        form: {
           contactPrimary: {
             address1: '',
             address2: 'asdf',

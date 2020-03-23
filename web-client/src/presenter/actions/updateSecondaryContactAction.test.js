@@ -19,7 +19,10 @@ describe('updateSecondaryContactAction', () => {
         presenter,
       },
       state: {
-        caseDetail: {},
+        form: {
+          caseId: '851a973a-7569-43f5-93ec-613833929b82',
+          contactSecondary: { name: 'Rachael Ray' },
+        },
       },
     });
 
