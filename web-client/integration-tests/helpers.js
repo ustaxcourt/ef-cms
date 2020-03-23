@@ -19,6 +19,7 @@ import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { withAppContextDecorator } from '../src/withAppContext';
 import axios from 'axios';
+import route from 'riot-route';
 
 //import { router } from '../src/router';
 
@@ -379,29 +380,34 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return cb;
   };
 
-  const routeMock = () => {
-    return {
-      query: {}, // TODO - need to figure this out
-    };
-  };
+  // const routeMock = {
+  //   _: () => ({ getPathFromBase: () => {} }),
+  //   base: () => {},
+  //   query: () => {
+  //     console.log('calling query');
+  //   },
+  //   start: () => {},
+  // };
 
   const initializeRouter = app => {
     const routes = getRoutes({
       ROLE_PERMISSIONS,
       app,
       ifHasAccess: ifHasAccessMock,
-      route: routeMock,
+      route,
     });
 
     presenter.providers.router = {
       createObjectURL: () => {
+        console.log('wut da shit');
         return 'fakeUrl';
       },
       externalRoute: () => {},
       revokeObjectURL: () => {},
-      route: async url => {
+      route: url => {
         test.currentRouteUrl = url;
         let foundRoute = false;
+        console.log('routing', url);
         Object.keys(routes).some(path => {
           // strip args from path
           const regexPath = path.replace(/\*/g, '([^/?#]+?)');
@@ -411,6 +417,8 @@ export const setupTest = ({ useCases = {} } = {}) => {
           if (match) {
             const args = match.slice(1);
 
+            console.log('found a route for path,' + path);
+
             // call function, passing in args
             const routeFunc = routes[path];
             routeFunc(...args);
@@ -419,7 +427,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
         });
 
         if (!foundRoute) {
-          console.log('NO ROUTE FOUND FOR ' + url);
+          console.log(`NO ROUTE FOUND FOR URL: ${url}.`);
         }
       },
     };
