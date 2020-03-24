@@ -7,19 +7,19 @@ import React from 'react';
 export const PartyInformation = connect(
   {
     baseUrl: state.baseUrl,
-    caseDetail: state.caseDetail,
     caseDetailEditHelper: state.caseDetailEditHelper,
+    form: state.form,
     token: state.token,
     updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
-    updateCaseValueSequence: sequences.updateCaseValueSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
   },
   ({
     baseUrl,
-    caseDetail,
     caseDetailEditHelper,
+    form,
     token,
     updateCasePartyTypeSequence,
-    updateCaseValueSequence,
+    updateFormValueSequence,
   }) => {
     return (
       <div className="blue-container document-detail-one-third">
@@ -32,7 +32,7 @@ export const PartyInformation = connect(
               className="usa-select"
               id="party-type"
               name="partyType"
-              value={caseDetail.partyType}
+              value={form.partyType}
               onChange={e => {
                 updateCasePartyTypeSequence({
                   key: e.target.name,
@@ -61,7 +61,7 @@ export const PartyInformation = connect(
               {caseDetailEditHelper.ownershipDisclosureStatementDocumentId && (
                 <a
                   aria-label="View PDF: Ownership Disclosure Statement"
-                  href={`${baseUrl}/case-documents/${caseDetail.caseId}/${caseDetailEditHelper.ownershipDisclosureStatementDocumentId}/document-download-url?token=${token}`}
+                  href={`${baseUrl}/case-documents/${form.caseId}/${caseDetailEditHelper.ownershipDisclosureStatementDocumentId}/document-download-url?token=${token}`}
                   rel="noopener noreferrer"
                   target="_blank"
                 >
@@ -73,13 +73,13 @@ export const PartyInformation = connect(
                 'No file uploaded'}
               <div className="order-checkbox">
                 <input
-                  checked={caseDetail.orderForOds}
+                  checked={form.orderForOds}
                   className="usa-checkbox__input"
                   id="order-for-ods"
                   name="orderForOds"
                   type="checkbox"
                   onChange={e => {
-                    updateCaseValueSequence({
+                    updateFormValueSequence({
                       key: e.target.name,
                       value: e.target.checked,
                     });
