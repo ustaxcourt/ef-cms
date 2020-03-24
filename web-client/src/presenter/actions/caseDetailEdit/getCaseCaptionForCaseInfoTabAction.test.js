@@ -14,7 +14,7 @@ describe('getCaseCaptionForCaseInfoTabAction', () => {
         presenter,
       },
       state: {
-        caseDetail: {
+        form: {
           partyType: '',
         },
       },
@@ -30,7 +30,7 @@ describe('getCaseCaptionForCaseInfoTabAction', () => {
         presenter,
       },
       state: {
-        caseDetail: {
+        form: {
           contactPrimary: {
             name: 'Guy Fieri',
           },

@@ -75,7 +75,6 @@ export const getFormCombinedWithCaseDetailAction = ({
   get,
   props,
 }) => {
-  const caseDetail = { ...get(state.form) };
   let { caseCaption } = props;
   const {
     irsDay,
@@ -131,16 +130,10 @@ export const getFormCombinedWithCaseDetailAction = ({
   form.receivedAt = checkDate(applicationContext, form.receivedAt);
 
   if (caseCaption && (caseCaption = caseCaption.trim())) {
-    caseDetail.caseCaption = caseCaption;
+    form.caseCaption = caseCaption;
   }
 
   return {
-    combinedCaseDetailWithForm: {
-      ...omit(caseDetail, [
-        'contactPrimary.serviceIndicator',
-        'contactSecondary.serviceIndicator',
-      ]),
-      ...form,
-    },
+    combinedCaseDetailWithForm: form,
   };
 };
