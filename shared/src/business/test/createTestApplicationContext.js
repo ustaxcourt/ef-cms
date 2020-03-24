@@ -83,6 +83,7 @@ const { Case } = require('../entities/cases/Case');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
+const { Scan } = require('../entities/Scan');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
@@ -100,7 +101,16 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseInventoryReportInteractor: jest.fn(),
     getJudgeForUserChambersInteractor: jest.fn(),
     removeCasePendingItemInteractor: jest.fn(),
+    removeItemInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
+  };
+
+  const mockGetScannerReturnValue = {
+    getSourceNameByIndex: jest.fn().mockReturnValue('scanner'),
+    setSourceByIndex: jest.fn().mockReturnValue(null),
+    startScanSession: jest.fn().mockReturnValue({
+      scannedBuffer: [],
+    }),
   };
 
   const mockStorageClientReturnValue = {
@@ -190,7 +200,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
     getChromiumBrowser: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
-    getConstants: jest.fn(),
+    getConstants: jest.fn().mockReturnValue({ SCAN_MODES: Scan.SCAN_MODES }),
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {
@@ -220,6 +230,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       return mockGetPersistenceGatewayReturnValue;
     }),
     getPug: jest.fn(),
+    getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getStorageClient: jest.fn().mockImplementation(() => {
       return mockStorageClientReturnValue;
     }),
