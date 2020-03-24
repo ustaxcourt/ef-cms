@@ -1,26 +1,15 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { saveCaseNoteInteractor } = require('./saveCaseNoteInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
-const updateCaseMock = jest
-  .fn()
-  .mockImplementation(async ({ caseToUpdate }) => caseToUpdate);
-const getCaseByCaseIdMock = jest.fn().mockResolvedValue(MOCK_CASE);
-
 describe('saveCaseNoteInteractor', () => {
-  let applicationContext;
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('throws an error if the user is not valid or authorized', async () => {
-    applicationContext = {
-      getCurrentUser: () => {
-        return {};
-      },
-      getUniqueId: () => 'unique-id-1',
-    };
+    applicationContext.getCurrentUser.mockReturnValue({});
+
     let error;
     try {
       await saveCaseNoteInteractor({
@@ -35,20 +24,20 @@ describe('saveCaseNoteInteractor', () => {
   });
 
   it('saves a case note', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () =>
-        new User({
-          name: 'Judge Armen',
-          role: User.ROLES.judge,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
-      getPersistenceGateway: () => ({
-        getCaseByCaseId: getCaseByCaseIdMock,
-        updateCase: updateCaseMock,
-      }),
-      getUniqueId: () => 'unique-id-1',
-    };
+    const mockJudge = new User({
+      name: 'Judge Armen',
+      role: User.ROLES.judge,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    applicationContext.getCurrentUser.mockReturnValue(mockJudge);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockResolvedValue(MOCK_CASE);
+    applicationContext
+      .getPersistenceGateway()
+      .updateCase.mockImplementation(async ({ caseToUpdate }) => caseToUpdate);
 
     let error;
     let result;
@@ -65,8 +54,12 @@ describe('saveCaseNoteInteractor', () => {
 
     expect(error).toBeUndefined();
     expect(result).toBeDefined();
-    expect(getCaseByCaseIdMock).toHaveBeenCalled();
-    expect(updateCaseMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(result.caseNote).toEqual('This is my case note');
   });
 });

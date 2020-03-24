@@ -1,31 +1,22 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { getCaseByDocketNumber } = require('./getCaseByDocketNumber');
 
 describe('getCaseByDocketNumber', () => {
-  let applicationContext;
-  let queryStub = jest.fn().mockReturnValue({
-    promise: async () => ({
-      Items: [
-        {
-          caseId: '123',
-          pk: 'case|123',
-          sk: 'case|123',
-          status: 'New',
-        },
-      ],
-    }),
-  });
-
-  beforeEach(() => {
-    applicationContext = {
-      environment: {
-        stage: 'local',
-      },
-      filterCaseMetadata: ({ cases }) => cases,
-      getDocumentClient: () => ({
-        query: queryStub,
+  beforeAll(() => {
+    applicationContext.getDocumentClient().query.mockReturnValue({
+      promise: async () => ({
+        Items: [
+          {
+            caseId: '123',
+            pk: 'case|123',
+            sk: 'case|123',
+            status: 'New',
+          },
+        ],
       }),
-      isAuthorizedForWorkItems: () => true,
-    };
+    });
   });
 
   it('should return data as received from persistence', async () => {
@@ -33,6 +24,7 @@ describe('getCaseByDocketNumber', () => {
       applicationContext,
       docketNumber: '101-18',
     });
+
     expect(result).toEqual({
       caseId: '123',
       docketRecord: [],
@@ -46,7 +38,7 @@ describe('getCaseByDocketNumber', () => {
   });
 
   it('should return the case and its associated data', async () => {
-    queryStub = jest.fn().mockReturnValue({
+    applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => ({
         Items: [
           {
@@ -78,10 +70,12 @@ describe('getCaseByDocketNumber', () => {
         ],
       }),
     });
+
     const result = await getCaseByDocketNumber({
       applicationContext,
       docketNumber: '101-18',
     });
+
     expect(result).toEqual({
       caseId: '123',
       docketRecord: [
@@ -115,13 +109,15 @@ describe('getCaseByDocketNumber', () => {
   });
 
   it('should return null if nothing is returned from the client query request', async () => {
-    queryStub = jest.fn().mockReturnValue({
+    applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => ({ Items: [] }),
     });
+
     const result = await getCaseByDocketNumber({
       applicationContext,
       docketNumber: '101-18',
     });
+
     expect(result).toEqual(null);
   });
 });
