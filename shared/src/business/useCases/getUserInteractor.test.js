@@ -1,27 +1,22 @@
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { getUserInteractor } = require('./getUserInteractor');
 const { User } = require('../entities/User');
 
 describe('getUserInteractor', () => {
-  let applicationContext;
-
   it('calls the persistence method to get the user', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () =>
-        new User({
-          name: 'Test Petitionsclerk',
-          role: User.ROLES.petitionsClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
-      getPersistenceGateway: () => ({
-        getUserById: () => ({
-          name: 'Test Petitionsclerk',
-          role: User.ROLES.petitionsClerk,
-          section: 'petitions',
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'Test Petitionsclerk',
+        role: User.ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
-    };
+    );
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      name: 'Test Petitionsclerk',
+      role: User.ROLES.petitionsClerk,
+      section: 'petitions',
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
 
     let error;
     let user;
@@ -45,23 +40,19 @@ describe('getUserInteractor', () => {
   });
 
   it('calls the persistence method to get the user (that is a judge)', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () =>
-        new User({
-          name: 'Test Judge',
-          role: User.ROLES.judge,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
-      getPersistenceGateway: () => ({
-        getUserById: () => ({
-          name: 'Test Judge',
-          role: User.ROLES.judge,
-          section: 'judge',
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'Test Judge',
+        role: User.ROLES.judge,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
-    };
+    );
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      name: 'Test Judge',
+      role: User.ROLES.judge,
+      section: 'judge',
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
 
     let error;
     let user;
