@@ -197,8 +197,8 @@ export const state = {
     showUsaBannerDetails: false,
   },
   modal: {
-    pdfPreviewModal: null,
-    showModal: null, // the name of the modal to display
+    pdfPreviewModal: undefined,
+    showModal: undefined, // the name of the modal to display
   },
   navigation: {},
   notifications: {},
