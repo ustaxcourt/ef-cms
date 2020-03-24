@@ -24,7 +24,7 @@ describe('validateCaseDetail', () => {
         presenter,
       },
       props: {
-        combinedCaseDetailWithForm: {
+        formWithComputedDates: {
           caseId: '123',
           irsNoticeDate: '2009-10-13',
         },
