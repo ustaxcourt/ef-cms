@@ -158,7 +158,6 @@ export const state = {
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloads: {}, // batch download of PDFs
   caseDetail: {},
-  caseDetailErrors: {}, // field level validation errors on update case screen TODO: move to validationErrors
   cases: [],
   cognitoLoginUrl: null,
   completeForm: {}, // TODO: replace with state.form

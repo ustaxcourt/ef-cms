@@ -40,7 +40,7 @@ export default test => {
     });
 
     await test.runSequence('navigateToReviewSavedPetitionSequence');
-    expect(test.getState('caseDetailErrors')).toEqual({
+    expect(test.getState('validationErrors')).toEqual({
       irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[0].message,
     });
 
@@ -50,7 +50,7 @@ export default test => {
     });
 
     await test.runSequence('navigateToReviewSavedPetitionSequence');
-    expect(test.getState('caseDetailErrors')).toEqual({});
+    expect(test.getState('validationErrors')).toEqual({});
     await test.runSequence('saveCaseAndServeToIrsSequence');
 
     test.setState('caseDetail', {});
