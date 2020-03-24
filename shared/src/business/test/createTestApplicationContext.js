@@ -68,6 +68,9 @@ const {
   setWorkItemAsRead,
 } = require('../../persistence/dynamo/workitems/setWorkItemAsRead');
 const {
+  updateCaseAutomaticBlock,
+} = require('../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
+const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
 const {
@@ -100,6 +103,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
   };
 
+  const mockGetUseCaseHelpers = {
+    updateCaseAutomaticBlock: jest
+      .fn()
+      .mockImplementation(updateCaseAutomaticBlock),
+  };
+
   const mockGetPersistenceGatewayReturnValue = {
     addWorkItemToSectionInbox,
     associateUserWithCase: jest.fn(),
@@ -108,11 +117,13 @@ const createTestApplicationContext = ({ user } = {}) => {
     createSectionInboxRecord,
     createUserInboxRecord,
     createWorkItem: createWorkItemPersistence,
+    deleteCaseDeadline: jest.fn(),
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteSectionOutboxRecord,
     deleteUserCaseNote: jest.fn(),
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
+    getAllCaseDeadlines: jest.fn(),
     getCaseByCaseId: jest.fn().mockImplementation(getCaseByCaseId),
     getCaseDeadlinesByCaseId: jest
       .fn()
@@ -205,9 +216,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
     getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
-    getUseCases: jest.fn().mockImplementation(() => {
-      return mockGetUseCasesReturnValue;
-    }),
+    getUseCaseHelpers: jest.fn().mockReturnValue(mockGetUseCaseHelpers),
+    getUseCases: jest.fn().mockReturnValue(mockGetUseCasesReturnValue),
     getUtilities: () => {
       return { ...DateHandler };
     },
