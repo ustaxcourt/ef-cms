@@ -8,12 +8,12 @@ export default test => {
       batchIndexToRescan: 0,
     });
 
-    expect(test.getState('showModal')).toEqual('ConfirmRescanBatchModal');
+    expect(test.getState('modal.showModal')).toEqual('ConfirmRescanBatchModal');
     expect(test.getState('scanner.batchIndexToRescan')).toEqual(0);
 
     await test.runSequence('rescanBatchSequence');
 
-    expect(test.getState('showModal')).toEqual('');
+    expect(test.getState('modal')).toEqual({});
     expect(
       test.getState(`scanner.batches.${selectedDocumentType}`).length,
     ).toBeGreaterThan(0);

@@ -8,25 +8,34 @@ describe('setPaperServicePartiesAction', () => {
         paperServiceParties: [],
         pdfUrl: 'www.example.com',
       },
+      state: {
+        modal: {},
+      },
     });
 
-    expect(result.state.showModal).toBeUndefined();
+    expect(result.state.modal.showModal).toBeUndefined();
   });
 
   it('should not set showModal if paperServiceParties is not defined', async () => {
     const result = await runAction(setPaperServicePartiesAction, {
       props: { pdfUrl: 'www.example.com' },
+      state: {
+        modal: {},
+      },
     });
 
-    expect(result.state.showModal).toBeUndefined();
+    expect(result.state.modal.showModal).toBeUndefined();
   });
 
   it('should not set showModal if pdfUrl is not defined', async () => {
     const result = await runAction(setPaperServicePartiesAction, {
       props: { paperServiceParties: [{ yes: 'no' }] },
+      state: {
+        modal: {},
+      },
     });
 
-    expect(result.state.showModal).toBeUndefined();
+    expect(result.state.modal.showModal).toBeUndefined();
   });
 
   it('should set showModal if paperServiceParties is a non-empty array', async () => {
@@ -35,8 +44,11 @@ describe('setPaperServicePartiesAction', () => {
         paperServiceParties: [{ yes: 'no' }],
         pdfUrl: 'www.example.com',
       },
+      state: {
+        modal: {},
+      },
     });
 
-    expect(result.state.showModal).toEqual('PaperServiceConfirmModal');
+    expect(result.state.modal.showModal).toEqual('PaperServiceConfirmModal');
   });
 });

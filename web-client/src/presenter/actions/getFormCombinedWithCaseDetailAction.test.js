@@ -47,7 +47,6 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       modules,
       state: {
-        caseDetail: {},
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
@@ -81,7 +80,6 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       modules,
       state: {
-        caseDetail: {},
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
@@ -116,18 +114,13 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       modules,
 
       state: {
-        caseDetail: {
-          irsNoticeDate: '2018-12-24T05:00:00.000Z',
-          petitionPaymentDate: '2018-12-24T05:00:00.000Z',
-          petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
-          receivedAt: '2018-12-24T05:00:00.000Z',
-        },
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
         form: {
           irsDay: '24',
           irsMonth: '12',
+          irsNoticeDate: '2018-12-24T05:00:00.000Z',
           irsYear: '',
           paymentDateDay: '24',
           paymentDateMonth: '12',
@@ -135,6 +128,9 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           paymentDateWaivedMonth: '12',
           paymentDateWaivedYear: '',
           paymentDateYear: '',
+          petitionPaymentDate: '2018-12-24T05:00:00.000Z',
+          petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
+          receivedAt: '2018-12-24T05:00:00.000Z',
           receivedAtDay: '24',
           receivedAtMonth: '12',
           receivedAtYear: '',
@@ -156,18 +152,13 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       modules,
 
       state: {
-        caseDetail: {
-          irsNoticeDate: null,
-          petitionPaymentDate: '2018-12-24T05:00:00.000Z',
-          petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
-          receivedAt: '2018-12-24T05:00:00.000Z',
-        },
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
         form: {
           irsDay: '24',
           irsMonth: '',
+          irsNoticeDate: null,
           irsYear: '',
           paymentDateDay: '24',
           paymentDateMonth: '',
@@ -175,6 +166,9 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           paymentDateWaivedMonth: '',
           paymentDateWaivedYear: '',
           paymentDateYear: '',
+          petitionPaymentDate: '2018-12-24T05:00:00.000Z',
+          petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
+          receivedAt: '2018-12-24T05:00:00.000Z',
           receivedAtDay: '24',
           receivedAtMonth: '',
           receivedAtYear: '',
@@ -196,18 +190,13 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       modules,
 
       state: {
-        caseDetail: {
-          irsNoticeDate: '2018-12-24T05:00:00.000Z',
-          petitionPaymentDate: '2018-12-24T05:00:00.000Z',
-          petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
-          receivedAt: '2018-12-24T05:00:00.000Z',
-        },
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
         form: {
           irsDay: '',
           irsMonth: '',
+          irsNoticeDate: '2018-12-24T05:00:00.000Z',
           irsYear: '',
           paymentDateDay: '',
           paymentDateMonth: '',
@@ -215,6 +204,9 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           paymentDateWaivedMonth: '',
           paymentDateWaivedYear: '',
           paymentDateYear: '',
+          petitionPaymentDate: '2018-12-24T05:00:00.000Z',
+          petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
+          receivedAt: '2018-12-24T05:00:00.000Z',
           receivedAtDay: '',
           receivedAtMonth: '',
           receivedAtYear: '',
@@ -238,20 +230,18 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       modules,
 
       state: {
-        caseDetail: {
-          // irsNoticeDate: '2018-12-24T05:00:00.000Z',
-          petitionPaymentDate: '2018-12-24T05:00:00.000Z',
-        },
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
         form: {
+          // irsNoticeDate: '2018-12-24T05:00:00.000Z',
           irsDay: '12',
           irsMonth: '12',
           irsYear: 'notayear',
           paymentDateDay: '',
           paymentDateMonth: '',
           paymentDateYear: '',
+          petitionPaymentDate: '2018-12-24T05:00:00.000Z',
         },
       },
     });
@@ -268,7 +258,6 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       modules,
       props: { caseCaption: 'Test Petitioner, Petitioner' },
       state: {
-        caseDetail: {},
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },

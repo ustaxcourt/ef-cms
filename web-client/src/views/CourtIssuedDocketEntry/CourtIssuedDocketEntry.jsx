@@ -28,7 +28,7 @@ export const CourtIssuedDocketEntry = connect(
       sequences.openCancelDraftDocumentModalSequence,
     openConfirmInitiateServiceModalSequence:
       sequences.openConfirmInitiateServiceModalSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     submitCourtIssuedDocketEntrySequence:
       sequences.submitCourtIssuedDocketEntrySequence,
     updateCourtIssuedDocketEntryFormValueSequence:

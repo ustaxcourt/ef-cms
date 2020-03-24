@@ -11,7 +11,7 @@ describe('resetContactsAction', () => {
     const { state } = await runAction(resetContactsAction, {
       modules: { presenter },
       state: {
-        caseDetail: {
+        form: {
           contactPrimary: {
             address1: '123 Abc Ln',
             city: 'Bobville',
@@ -26,7 +26,7 @@ describe('resetContactsAction', () => {
         },
       },
     });
-    expect(state.caseDetail).toEqual({
+    expect(state.form).toEqual({
       contactPrimary: {
         countryType: 'domestic',
         email: 'test@example.com',
@@ -39,7 +39,7 @@ describe('resetContactsAction', () => {
     const { state } = await runAction(resetContactsAction, {
       modules: { presenter },
       state: {
-        caseDetail: {
+        form: {
           contactPrimary: {
             address1: '123 Abc Ln',
             city: 'Bobville',
@@ -54,7 +54,7 @@ describe('resetContactsAction', () => {
         },
       },
     });
-    expect(state.caseDetail).toEqual({
+    expect(state.form).toEqual({
       contactPrimary: {
         countryType: 'domestic',
         email: 'test@example.com',
@@ -67,7 +67,7 @@ describe('resetContactsAction', () => {
     const { state } = await runAction(resetContactsAction, {
       modules: { presenter },
       state: {
-        caseDetail: {
+        form: {
           contactPrimary: {
             address1: '123 Abc Ln',
             city: 'Bobville',
@@ -90,7 +90,7 @@ describe('resetContactsAction', () => {
         },
       },
     });
-    expect(state.caseDetail).toEqual({
+    expect(state.form).toEqual({
       contactPrimary: {
         countryType: 'domestic',
         email: 'test@example.com',
