@@ -50,8 +50,7 @@ set -- \
   --dynamo_stream_arn="${DYNAMO_STREAM_ARN}" \
   --elasticsearch_endpoint="${ELASTICSEARCH_ENDPOINT}" \
   --verbose \
-  --circleHoneybadgerApiKeyDev="${CIRCLE_HONEYBADGER_API_KEY_DEV}" \
-  --circleHoneybadgerApiKeyStg="${CIRCLE_HONEYBADGER_API_KEY_STG}"
+  --circleHoneybadgerApiKey="${CIRCLE_HONEYBADGER_API_KEY}"
 
 ./node_modules/.bin/sls create_domain "$@"
 echo "done running create_domain"
