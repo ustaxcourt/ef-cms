@@ -9,7 +9,7 @@ import React from 'react';
 export const PDFPreviewButton = connect(
   {
     openPdfPreviewModalSequence: sequences.openPdfPreviewModalSequence,
-    pdfPreviewModalHelper: state.modal.pdfPreviewModalHelper,
+    pdfPreviewModalHelper: state.pdfPreviewModalHelper,
     showModal: state.modal.showModal,
   },
   function PDFPreviewButton({
