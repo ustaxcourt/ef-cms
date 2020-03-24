@@ -9,5 +9,5 @@ export const setIrsNoticeFalseSequence = [
   set(state.form.irsMonth, ''),
   set(state.form.irsDay, ''),
   set(state.form.irsYear, ''),
-  set(state.caseDetail.hasVerifiedIrsNotice, false),
+  set(state.form.hasVerifiedIrsNotice, false),
 ];
