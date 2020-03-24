@@ -9,13 +9,13 @@ import { state } from 'cerebral';
  * @param {object} providers.router the riot.router object that is used for changing the route
  * @returns {Promise} async action
  */
-export const navigateToEditSavedDocumentDetailAction = async ({
+export const navigateToEditSavedPetitionAction = async ({
   get,
   props,
   router,
 }) => {
   const documentId = get(state.documentId);
-  const docketNumber = get(state.caseDetail.docketNumber);
+  const docketNumber = get(state.form.docketNumber);
   const { tab } = props;
 
   if (documentId && docketNumber) {
