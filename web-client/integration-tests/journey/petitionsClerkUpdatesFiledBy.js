@@ -15,7 +15,7 @@ export default (test, overrides = {}) => {
       documentId: petitionDocument.documentId,
     });
 
-    expect(test.getState('caseDetailErrors')).toEqual({});
+    expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('updateFormValueSequence', {
       key: 'receivedAtMonth',
