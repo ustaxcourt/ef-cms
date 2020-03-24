@@ -1,11 +1,13 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   updateCaseDeadlineInteractor,
 } = require('./updateCaseDeadlineInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 describe('updateCaseDeadlineInteractor', () => {
-  let applicationContext;
   const mockCaseDeadline = {
     caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -16,11 +18,8 @@ describe('updateCaseDeadlineInteractor', () => {
   };
 
   it('throws an error if the user is not valid or authorized', async () => {
-    applicationContext = {
-      getCurrentUser: () => {
-        return {};
-      },
-    };
+    applicationContext.getCurrentUser.mockReturnValue({});
+
     let error;
     try {
       await updateCaseDeadlineInteractor({
@@ -35,18 +34,14 @@ describe('updateCaseDeadlineInteractor', () => {
   });
 
   it('updates a case deadline', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () =>
-        new User({
-          name: 'Test Petitionsclerk',
-          role: User.ROLES.petitionsClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
-      getPersistenceGateway: () => ({
-        updateCaseDeadline: v => v,
-      }),
-    };
+    const mockPetitionsClerk = new User({
+      name: 'Test Petitionsclerk',
+      role: User.ROLES.petitionsClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+    applicationContext.environment.stage = 'local';
+    applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerk);
+    applicationContext.getPersistenceGateway().updateCaseDeadline = v => v;
 
     let error;
     let caseDeadline;

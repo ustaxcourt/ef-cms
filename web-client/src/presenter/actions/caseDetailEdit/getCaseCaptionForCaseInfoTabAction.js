@@ -13,7 +13,7 @@ export const getCaseCaptionForCaseInfoTabAction = ({
   get,
 }) => {
   const { Case } = applicationContext.getEntityConstructors();
-  let caseCaption = Case.getCaseCaption(get(state.caseDetail)) || '';
+  const caseCaption = Case.getCaseCaption(get(state.form)) || '';
 
   // NOTE: case caption should never have the postfix value. Perhaps you're looking for case title?
 

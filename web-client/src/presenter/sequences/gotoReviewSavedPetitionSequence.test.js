@@ -25,6 +25,7 @@ describe('gotoReviewSavedPetitionSequence', () => {
 
   it('Should set state.caseDetail and state.form to the mock case', async () => {
     test.setState('currentPage', 'SomeOtherPage');
+    test.setState('form', { partyType: 'petitioner' });
     test.setState('caseDetail', {
       docketNumber: '199-99',
       partyType: 'Petitioner',

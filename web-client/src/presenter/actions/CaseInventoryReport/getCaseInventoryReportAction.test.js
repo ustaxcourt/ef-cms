@@ -6,7 +6,7 @@ import { runAction } from 'cerebral/test';
 describe('getCaseInventoryReportAction', () => {
   const applicationContext = applicationContextForClient;
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getUseCases()
       .getCaseInventoryReportInteractor.mockReturnValue({

@@ -11,17 +11,17 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const resetContactsAction = ({ applicationContext, get, store }) => {
-  const partyType = get(state.caseDetail.partyType);
+  const partyType = get(state.form.partyType);
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
 
-  store.set(state.caseDetail.contactPrimary, {
+  store.set(state.form.contactPrimary, {
     countryType: COUNTRY_TYPES.DOMESTIC,
-    email: get(state.caseDetail.contactPrimary.email),
+    email: get(state.form.contactPrimary.email),
   });
 
   if (showContacts.contactSecondary) {
-    store.set(state.caseDetail.contactSecondary, {
+    store.set(state.form.contactSecondary, {
       countryType: COUNTRY_TYPES.DOMESTIC,
     });
   }
