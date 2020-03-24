@@ -1,7 +1,7 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { applicationContext } from '../../applicationContext';
-import { castToISO } from './getFormCombinedWithCaseDetailAction';
-import { getFormCombinedWithCaseDetailAction } from './getFormCombinedWithCaseDetailAction';
+import { castToISO } from './getCaseDetailFormWithComputedDatesAction';
+import { getCaseDetailFormWithComputedDatesAction } from './getCaseDetailFormWithComputedDatesAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
@@ -42,9 +42,9 @@ describe('castToISO', () => {
   });
 });
 
-describe('getFormCombinedWithCaseDetailAction', () => {
+describe('getCaseDetailFormWithComputedDatesAction', () => {
   it('should return the expected combined caseDetail after run', async () => {
-    const results = await runAction(getFormCombinedWithCaseDetailAction, {
+    const results = await runAction(getCaseDetailFormWithComputedDatesAction, {
       modules,
       state: {
         constants: {
@@ -67,7 +67,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       },
     });
     expect(results.output).toEqual({
-      combinedCaseDetailWithForm: {
+      formWithComputedDates: {
         irsNoticeDate: '2009-01-01T05:00:00.000Z',
         petitionPaymentDate: '2009-01-01T05:00:00.000Z',
         petitionPaymentWaivedDate: '2009-01-01T05:00:00.000Z',
@@ -77,7 +77,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
   });
 
   it('should leave the dates as -1 if they are invalid', async () => {
-    const results = await runAction(getFormCombinedWithCaseDetailAction, {
+    const results = await runAction(getCaseDetailFormWithComputedDatesAction, {
       modules,
       state: {
         constants: {
@@ -100,7 +100,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       },
     });
     expect(results.output).toEqual({
-      combinedCaseDetailWithForm: {
+      formWithComputedDates: {
         irsNoticeDate: '-1',
         petitionPaymentDate: '-1',
         petitionPaymentWaivedDate: '-1',
@@ -110,7 +110,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
   });
 
   it('should delete the date if year is missing', async () => {
-    const results = await runAction(getFormCombinedWithCaseDetailAction, {
+    const results = await runAction(getCaseDetailFormWithComputedDatesAction, {
       modules,
 
       state: {
@@ -138,7 +138,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       },
     });
     expect(results.output).toEqual({
-      combinedCaseDetailWithForm: {
+      formWithComputedDates: {
         irsNoticeDate: null,
         petitionPaymentDate: null,
         petitionPaymentWaivedDate: null,
@@ -148,7 +148,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
   });
 
   it('should delete the date if year and month are missing', async () => {
-    const results = await runAction(getFormCombinedWithCaseDetailAction, {
+    const results = await runAction(getCaseDetailFormWithComputedDatesAction, {
       modules,
 
       state: {
@@ -176,7 +176,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       },
     });
     expect(results.output).toEqual({
-      combinedCaseDetailWithForm: {
+      formWithComputedDates: {
         irsNoticeDate: null,
         petitionPaymentDate: null,
         petitionPaymentWaivedDate: null,
@@ -186,7 +186,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
   });
 
   it('clears the irsNoticeDate and petitionPaymentDate and receivedAt to null if it was once defined and the user clears the fields', async () => {
-    const results = await runAction(getFormCombinedWithCaseDetailAction, {
+    const results = await runAction(getCaseDetailFormWithComputedDatesAction, {
       modules,
 
       state: {
@@ -213,20 +213,18 @@ describe('getFormCombinedWithCaseDetailAction', () => {
         },
       },
     });
-    expect(results.output.combinedCaseDetailWithForm.irsNoticeDate).toEqual(
+    expect(results.output.formWithComputedDates.irsNoticeDate).toEqual(null);
+    expect(results.output.formWithComputedDates.petitionPaymentDate).toEqual(
       null,
     );
     expect(
-      results.output.combinedCaseDetailWithForm.petitionPaymentDate,
+      results.output.formWithComputedDates.petitionPaymentWaivedDate,
     ).toEqual(null);
-    expect(
-      results.output.combinedCaseDetailWithForm.petitionPaymentWaivedDate,
-    ).toEqual(null);
-    expect(results.output.combinedCaseDetailWithForm.receivedAt).toEqual(null);
+    expect(results.output.formWithComputedDates.receivedAt).toEqual(null);
   });
 
   it('deletes the petitionPaymentDate if the user cleared the form', async () => {
-    const results = await runAction(getFormCombinedWithCaseDetailAction, {
+    const results = await runAction(getCaseDetailFormWithComputedDatesAction, {
       modules,
 
       state: {
@@ -245,27 +243,9 @@ describe('getFormCombinedWithCaseDetailAction', () => {
         },
       },
     });
-    expect(results.output.combinedCaseDetailWithForm.irsNoticeDate).toEqual(
-      '-1',
-    );
-    expect(
-      results.output.combinedCaseDetailWithForm.petitionPaymentDate,
-    ).toEqual(null);
-  });
-
-  it('adds the props.caseCaption to the combinedCaseDetailWithForm', async () => {
-    const results = await runAction(getFormCombinedWithCaseDetailAction, {
-      modules,
-      props: { caseCaption: 'Test Petitioner, Petitioner' },
-      state: {
-        constants: {
-          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-        },
-        form: {},
-      },
-    });
-    expect(results.output.combinedCaseDetailWithForm.caseCaption).toEqual(
-      'Test Petitioner, Petitioner',
+    expect(results.output.formWithComputedDates.irsNoticeDate).toEqual('-1');
+    expect(results.output.formWithComputedDates.petitionPaymentDate).toEqual(
+      null,
     );
   });
 });
