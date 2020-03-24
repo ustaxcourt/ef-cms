@@ -19,7 +19,7 @@ export const PDFPreviewModal = connect(
     setPageSequence: sequences.setPageSequence,
     totalPages: state.modal.pdfPreviewModal.totalPages,
   },
-  ({
+  function PDFPreviewModal({
     cancelSequence,
     confirmSequence,
     currentPage,
@@ -30,7 +30,7 @@ export const PDFPreviewModal = connect(
     setPageSequence,
     title,
     totalPages,
-  }) => {
+  }) {
     const canvasRef = useRef(null);
 
     useEffect(() => {

@@ -11,14 +11,14 @@ export const ServiceIndicatorRadios = connect(
     updateStateSequence: sequences.updateStateSequence,
     validationErrors: state[props.validationErrors],
   },
-  ({
+  function ServiceIndicatorRadios({
     bindKey,
     bindObject,
     getValidationError,
     updateStateSequence,
     validateSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <FormGroup
         className="margin-bottom-0"

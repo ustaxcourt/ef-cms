@@ -12,13 +12,13 @@ export const Inclusions = connect(
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function Inclusions({
     form,
     marginClass,
     updateSequence,
     validateDocketEntrySequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <div className={classNames('usa-form-group', marginClass)}>
         <fieldset className={classNames('usa-fieldset', marginClass)}>

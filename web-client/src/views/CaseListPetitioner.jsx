@@ -9,7 +9,7 @@ export const CaseListPetitioner = connect(
   {
     formattedCases: state.formattedCases,
   },
-  ({ formattedCases }) => {
+  function CaseListPetitioner({ formattedCases }) {
     return (
       <>
         <WarningNotification

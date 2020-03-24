@@ -139,7 +139,7 @@ export const AppComponent = connect(
     showModal: state.modal.showModal,
     zipInProgress: state.batchDownloads.zipInProgress,
   },
-  ({ currentPage, showModal, zipInProgress }) => {
+  function AppComponent({ currentPage, showModal, zipInProgress }) {
     const focusMain = e => {
       e && e.preventDefault();
       const header = document.querySelector('#main-content h1');

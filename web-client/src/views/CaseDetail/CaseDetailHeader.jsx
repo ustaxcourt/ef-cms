@@ -15,12 +15,12 @@ export const CaseDetailHeader = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     hideActionButtons: props.hideActionButtons,
   },
-  ({
+  function CaseDetailHeader({
     caseDetailHeaderHelper,
     className,
     formattedCaseDetail,
     hideActionButtons,
-  }) => {
+  }) {
     return (
       <>
         {caseDetailHeaderHelper.showSealedCaseBanner && (

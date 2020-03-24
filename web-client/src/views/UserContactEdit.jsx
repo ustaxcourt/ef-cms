@@ -13,11 +13,11 @@ export const UserContactEdit = connect(
     submitUpdateUserContactInformationSequence:
       sequences.submitUpdateUserContactInformationSequence,
   },
-  ({
+  function UserContactEdit({
     form,
     navigateBackSequence,
     submitUpdateUserContactInformationSequence,
-  }) => {
+  }) {
     return (
       <>
         <div className="big-blue-header">

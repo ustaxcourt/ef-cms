@@ -340,7 +340,7 @@ export const CaseInformationInternal = connect(
     openUnprioritizeCaseModalSequence:
       sequences.openUnprioritizeCaseModalSequence,
   },
-  ({
+  function CaseInformationInternal({
     caseDetailHelper,
     caseInformationHelper,
     formattedCaseDetail,
@@ -352,7 +352,7 @@ export const CaseInformationInternal = connect(
     openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence,
-  }) => {
+  }) {
     return (
       <div className="internal-information">
         <div className="grid-container padding-x-0">
