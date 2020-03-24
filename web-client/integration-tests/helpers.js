@@ -354,7 +354,9 @@ export const loginAs = (test, user) => {
       key: 'name',
       value: user,
     });
-    await test.runSequence('submitLoginSequence');
+    await test.runSequence('submitLoginSequence', {
+      path: '/',
+    });
   });
 };
 
