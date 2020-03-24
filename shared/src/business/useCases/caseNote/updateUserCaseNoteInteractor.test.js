@@ -1,11 +1,13 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   updateUserCaseNoteInteractor,
 } = require('./updateUserCaseNoteInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 describe('updateUserCaseNoteInteractor', () => {
-  let applicationContext;
   const mockCaseNote = {
     caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     notes: 'hello world',
@@ -13,11 +15,8 @@ describe('updateUserCaseNoteInteractor', () => {
   };
 
   it('throws an error if the user is not valid or authorized', async () => {
-    applicationContext = {
-      getCurrentUser: () => {
-        return {};
-      },
-    };
+    applicationContext.getCurrentUser.mockReturnValue({});
+
     let error;
     try {
       await updateUserCaseNoteInteractor({
@@ -33,24 +32,20 @@ describe('updateUserCaseNoteInteractor', () => {
   });
 
   it('updates a case note', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () =>
-        new User({
-          name: 'Judge Armen',
-          role: User.ROLES.judge,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
-      getPersistenceGateway: () => ({
-        updateUserCaseNote: v => v.caseNoteToUpdate,
+    const mockUser = new User({
+      name: 'Judge Armen',
+      role: User.ROLES.judge,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    applicationContext.getPersistenceGateway().updateUserCaseNote = v =>
+      v.caseNoteToUpdate;
+    applicationContext.getUseCases.mockReturnValue({
+      getJudgeForUserChambersInteractor: () => ({
+        role: User.ROLES.judge,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
-      getUseCases: () => ({
-        getJudgeForUserChambersInteractor: () => ({
-          role: User.ROLES.judge,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
-      }),
-    };
+    });
 
     let error;
     let caseNote;
