@@ -12,7 +12,7 @@ export const CaseDetailPendingReportList = connect(
       sequences.openConfirmRemoveCaseDetailPendingItemModalSequence,
     pendingItemsDocketEntries:
       state.formattedCaseDetail.pendingItemsDocketEntries,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
   ({
     formattedCaseDetail,

@@ -123,7 +123,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showEditPetitionDetailsButton: permissions.EDIT_PETITION_DETAILS,
     showEditPetitionerInformation,
     showEditSecondaryContactModal:
-      get(state.showModal) === 'EditSecondaryContact',
+      get(state.modal.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
     showFilingFeeExternal:
       isExternalUser && user.role !== USER_ROLES.irsPractitioner,

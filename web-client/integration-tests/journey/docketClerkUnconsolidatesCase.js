@@ -7,7 +7,7 @@ export const docketClerkUnconsolidatesCase = test => {
     await test.runSequence('openCleanModalSequence', {
       showModal: 'UnconsolidateCasesModal',
     });
-    expect(test.getState('showModal')).toEqual('UnconsolidateCasesModal');
+    expect(test.getState('modal.showModal')).toEqual('UnconsolidateCasesModal');
     const currentCaseId = test.getState('caseDetail.caseId');
 
     await test.runSequence('updateModalValueSequence', {

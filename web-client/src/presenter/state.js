@@ -232,7 +232,6 @@ export const state = {
   sessionMetadata: {
     docketRecordSort: [],
   },
-  showModal: '',
   showValidation: false,
   user: null,
   users: [],

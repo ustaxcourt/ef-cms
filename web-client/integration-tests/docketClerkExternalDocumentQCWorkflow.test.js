@@ -155,6 +155,6 @@ describe('Create a work item', () => {
     const noticeDocument = test.getState('caseDetail.documents.5');
     expect(noticeDocument.documentType).toEqual('Notice of Docket Change');
     expect(noticeDocument.servedAt).toBeDefined();
-    expect(test.getState('showModal')).toEqual('PaperServiceConfirmModal');
+    expect(test.getState('modal.showModal')).toEqual('PaperServiceConfirmModal');
   });
 });

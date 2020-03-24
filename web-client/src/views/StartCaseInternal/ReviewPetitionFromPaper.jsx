@@ -38,7 +38,7 @@ export const ReviewPetitionFromPaper = connect(
     reviewPetitionFromPaperHelper: state.reviewPetitionFromPaperHelper,
     saveInternalCaseForLaterSequence:
       sequences.saveInternalCaseForLaterSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
   },
   ({

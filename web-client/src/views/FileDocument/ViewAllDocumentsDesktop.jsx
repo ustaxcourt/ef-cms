@@ -12,7 +12,7 @@ export const ViewAllDocumentsDesktop = connect(
     navigateBackSequence: sequences.navigateBackSequence,
     openCompleteSelectDocumentTypeModalSequence:
       sequences.openCompleteSelectDocumentTypeModalSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
     viewAllDocumentsHelper: state.viewAllDocumentsHelper,
