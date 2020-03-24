@@ -18,7 +18,7 @@ export const TrialSessionWorkingCopy = connect(
     batchDownloadTrialSessionSequence:
       sequences.batchDownloadTrialSessionSequence,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
   },
   ({

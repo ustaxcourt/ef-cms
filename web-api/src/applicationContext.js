@@ -1243,15 +1243,8 @@ module.exports = (appContextUser = {}) => {
       };
     },
     initHoneybadger: () => {
-      if (process.env.NODE_ENV === 'production' && process.env.ENV) {
-        const stagingApiKey = process.env.CIRCLE_HONEYBADGER_API_KEY_STG;
-        const devApiKey = process.env.CIRCLE_HONEYBADGER_API_KEY_DEV;
-        const apiKey =
-          process.env.ENV === 'stg'
-            ? stagingApiKey
-            : process.env.ENV === 'dev'
-            ? devApiKey
-            : null;
+      if (process.env.NODE_ENV === 'production') {
+        const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
 
         if (apiKey) {
           const config = {
