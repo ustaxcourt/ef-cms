@@ -63,7 +63,7 @@ describe('setPageSequence', () => {
     await test.runSequence('setPageSequence', {
       currentPage: 100,
     });
-    expect(test.getState('pdfPreviewModal')).toMatchObject({
+    expect(test.getState('modal.pdfPreviewModal')).toMatchObject({
       currentPage: 5,
     });
   });
@@ -72,7 +72,7 @@ describe('setPageSequence', () => {
     await test.runSequence('setPageSequence', {
       currentPage: -200,
     });
-    expect(test.getState('pdfPreviewModal')).toMatchObject({
+    expect(test.getState('modal.pdfPreviewModal')).toMatchObject({
       currentPage: 1,
     });
   });
@@ -81,7 +81,7 @@ describe('setPageSequence', () => {
     await test.runSequence('setPageSequence', {
       currentPage: 3,
     });
-    expect(test.getState('pdfPreviewModal')).toMatchObject({
+    expect(test.getState('modal.pdfPreviewModal')).toMatchObject({
       currentPage: 3,
     });
   });
