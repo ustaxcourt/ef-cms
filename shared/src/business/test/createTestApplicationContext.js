@@ -204,17 +204,14 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
     getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
-    getUseCases: jest.fn().mockImplementation(() => {
-      console.log('in get use cases');
-      return mockGetUseCasesReturnValue;
-    }),
+    getUseCases: jest.fn().mockReturnValue(mockGetUseCasesReturnValue),
     getUtilities: () => {
       return { ...DateHandler };
     },
     isAuthorizedForWorkItems: jest.fn().mockReturnValue(() => true),
     logger: {
       error: jest.fn(),
-      info: () => {},
+      info: jest.fn(),
     },
   };
   return applicationContext;
@@ -222,4 +219,23 @@ const createTestApplicationContext = ({ user } = {}) => {
 
 const applicationContext = createTestApplicationContext();
 
-module.exports = { applicationContext, createTestApplicationContext };
+/*
+  If you receive an error when testing cerebral that says:
+  `The property someProperty passed to Provider is not a method`
+  it is because the cerebral testing framework expects all objects on the 
+  applicationContext to be functions.  The code below walks the original 
+  applicationContext and adds ONLY the functions to the 
+  applicationContextForClient.
+*/
+const applicationContextForClient = {};
+Object.entries(applicationContext).map(([key, value]) => {
+  if (typeof value === 'function') {
+    applicationContextForClient[key] = value;
+  }
+});
+
+module.exports = {
+  applicationContext,
+  applicationContextForClient,
+  createTestApplicationContext,
+};

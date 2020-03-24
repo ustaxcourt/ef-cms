@@ -1,19 +1,14 @@
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintableCaseInventoryReportAction } from './generatePrintableCaseInventoryReportAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('generatePrintableCaseInventoryReportAction', () => {
-  // let applicationContext;
-  // const generatePrintableCaseInventoryReportInteractorMock = jest
-  //   .fn()
-  //   .mockReturnValue('www.example.com');
-
+  const applicationContext = applicationContextForClient;
   beforeEach(() => {
     applicationContext
       .getUseCases()
       .generatePrintableCaseInventoryReportInteractor.mockImplementation(() => {
-        console.log('hello?');
         return 'www.example.com';
       });
     presenter.providers.applicationContext = applicationContext;
