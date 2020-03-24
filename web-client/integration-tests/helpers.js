@@ -1,13 +1,23 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { Document } from '../../shared/src/business/entities/Document';
+import { JSDOM } from 'jsdom';
 import { Order } from '../../shared/src/business/entities/orders/Order';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
 import { applicationContext } from '../src/applicationContext';
+import {
+  back,
+  createObjectURL,
+  exec,
+  externalRoute,
+  openInNewTab,
+  revokeObjectURL,
+  route,
+  router,
+} from '../src/router';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
-import { getRoutes } from '../src/routes';
 import {
   image1,
   image2,
@@ -19,9 +29,6 @@ import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { withAppContextDecorator } from '../src/withAppContext';
 import axios from 'axios';
-import route from 'riot-route';
-
-//import { router } from '../src/router';
 
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormData from 'form-data';
@@ -359,96 +366,20 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return fakeFile;
   };
   global.WebSocket = require('websocket').w3cwebsocket;
-  presenter.providers.applicationContext = applicationContext;
+  const dom = new JSDOM(
+    `<!DOCTYPE html>
+<body>
+  <input type="file" />
+</body>`,
+    {
+      url: 'http://localhost',
+    },
+  );
 
-  const { ROLE_PERMISSIONS } = applicationContext.getConstants();
-
-  const { initialize: initializeSocketProvider, start, stop } = socketProvider({
-    socketRouter,
-  });
-  presenter.providers.socket = { start, stop };
-
-  const originalUseCases = applicationContext.getUseCases();
-  presenter.providers.applicationContext.getUseCases = () => {
-    return {
-      ...originalUseCases,
-      ...useCases,
-    };
-  };
-
-  const ifHasAccessMock = cb => {
-    return cb;
-  };
-
-  // const routeMock = {
-  //   _: () => ({ getPathFromBase: () => {} }),
-  //   base: () => {},
-  //   query: () => {
-  //     console.log('calling query');
-  //   },
-  //   start: () => {},
-  // };
-
-  const initializeRouter = app => {
-    const routes = getRoutes({
-      ROLE_PERMISSIONS,
-      app,
-      ifHasAccess: ifHasAccessMock,
-      route,
-    });
-
-    presenter.providers.router = {
-      createObjectURL: () => {
-        console.log('wut da shit');
-        return 'fakeUrl';
-      },
-      externalRoute: () => {},
-      revokeObjectURL: () => {},
-      route: url => {
-        test.currentRouteUrl = url;
-        let foundRoute = false;
-        console.log('routing', url);
-        Object.keys(routes).some(path => {
-          // strip args from path
-          const regexPath = path.replace(/\*/g, '([^/?#]+?)');
-          const re = new RegExp('^' + regexPath + '$');
-          const match = url.match(re);
-
-          if (match) {
-            const args = match.slice(1);
-
-            console.log('found a route for path,' + path);
-
-            // call function, passing in args
-            const routeFunc = routes[path];
-            routeFunc(...args);
-            return (foundRoute = true);
-          }
-        });
-
-        if (!foundRoute) {
-          console.log(`NO ROUTE FOUND FOR URL: ${url}.`);
-        }
-      },
-    };
-  };
-
-  presenter.state = mapValues(presenter.state, value => {
-    if (isFunction(value)) {
-      return withAppContextDecorator(value, applicationContext);
-    }
-    return value;
-  });
-
-  test = CerebralTest(presenter);
-  test.getSequence = name => async obj => await test.runSequence(name, obj);
-  test.closeSocket = stop;
-  test.applicationContext = applicationContext;
-
-  initializeSocketProvider(test);
-  initializeRouter(test);
+  const { window } = dom;
 
   global.window = {
+    ...window,
     DOMParser: () => {
       return {
         parseFromString: () => {
@@ -474,24 +405,51 @@ export const setupTest = ({ useCases = {} } = {}) => {
       removeItem: () => null,
       setItem: () => null,
     },
+    location: {},
   };
 
-  // TODO: should we be pulling all of these from AC?
-  test.setState('constants', {
-    CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-    CATEGORIES: Document.CATEGORIES,
-    CATEGORY_MAP: Document.CATEGORY_MAP,
-    COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-    COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
-    INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
-    ORDER_TYPES_MAP: Order.ORDER_TYPES,
-    PARTY_TYPES: ContactFactory.PARTY_TYPES,
-    ROLE_PERMISSIONS,
-    STATUS_TYPES: Case.STATUS_TYPES,
-    TRIAL_CITIES: TrialSession.TRIAL_CITIES,
-    TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-    USER_ROLES: User.ROLES,
+  presenter.providers.applicationContext = applicationContext;
+  const { initialize: initializeSocketProvider, start, stop } = socketProvider({
+    socketRouter,
   });
+  presenter.providers.socket = { start, stop };
+
+  const originalUseCases = applicationContext.getUseCases();
+  presenter.providers.applicationContext.getUseCases = () => {
+    return {
+      ...originalUseCases,
+      ...useCases,
+    };
+  };
+
+  presenter.state = mapValues(presenter.state, value => {
+    if (isFunction(value)) {
+      return withAppContextDecorator(value, applicationContext);
+    }
+    return value;
+  });
+
+  presenter.providers.router = {
+    back,
+    createObjectURL,
+    exec,
+    externalRoute,
+    openInNewTab,
+    revokeObjectURL,
+    route,
+  };
+
+  test = CerebralTest(presenter);
+  test.getSequence = name => async obj => {
+    const result = await test.runSequence(name, obj);
+    return result;
+  };
+  test.closeSocket = stop;
+
+  test.setState('constants', applicationContext.getConstants());
+
+  console.log('router initialization', router.initialize(test));
+  initializeSocketProvider(test);
 
   return test;
 };

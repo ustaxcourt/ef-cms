@@ -53,7 +53,7 @@ describe('Case journey', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
-      document: {},
+      ...global.window,
       localStorage: {
         removeItem: () => null,
         setItem: () => null,
@@ -69,8 +69,8 @@ describe('Case journey', () => {
   petitionerViewsDashboard(test);
   petitionerViewsCaseDetail(test);
 
-  // loginAs(test, 'petitionsclerk');
-  // petitionsClerkCaseSearch(test);
+  loginAs(test, 'petitionsclerk');
+  petitionsClerkCaseSearch(test);
   // petitionsClerkViewsMessages(test);
   // petitionsClerkAssignsWorkItemToSelf(test);
   // petitionsClerkAssignsWorkItemToOther(test);
