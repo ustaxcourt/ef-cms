@@ -8,7 +8,7 @@ export const FormCancelModalDialog = connect(
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences[props.onCancelSequence],
   },
-  ({ cancelSequence, confirmSequence }) => {
+  function FormCancelModalDialog({ cancelSequence, confirmSequence }) {
     return (
       <ModalDialog
         cancelLabel="No, Take Me Back"

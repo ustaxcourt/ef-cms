@@ -10,7 +10,7 @@ export const LogIn = connect(
     submitLoginSequence: sequences.submitLoginSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  ({ form, submitLoginSequence, updateFormValueSequence }) => {
+  function LogIn({ form, submitLoginSequence, updateFormValueSequence }) {
     return (
       <section className="usa-section grid-container">
         <h1 tabIndex="-1">Log in</h1>

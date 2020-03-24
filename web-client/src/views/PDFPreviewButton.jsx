@@ -12,13 +12,13 @@ export const PDFPreviewButton = connect(
     pdfPreviewModalHelper: state.modal.pdfPreviewModalHelper,
     showModal: state.modal.showModal,
   },
-  ({
+  function PDFPreviewButton({
     file,
     openPdfPreviewModalSequence,
     pdfPreviewModalHelper,
     showModal,
     title,
-  }) => {
+  }) {
     const modalId = `PDFPreviewModal-${title}`;
     const fullTitle = file.name || file.documentType || title;
     const abbrevTitle = getStringAbbreviation(fullTitle, 50);

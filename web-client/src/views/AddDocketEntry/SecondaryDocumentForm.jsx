@@ -13,7 +13,7 @@ export const SecondaryDocumentForm = connect(
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
-  ({ addDocketEntryHelper }) => {
+  function SecondaryDocumentForm({ addDocketEntryHelper }) {
     return (
       <React.Fragment>
         {addDocketEntryHelper.secondary.showNonstandardForm && (

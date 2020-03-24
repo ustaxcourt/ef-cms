@@ -60,7 +60,7 @@ const RespondentInformation = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function RespondentInformation({
     caseDetailHelper,
     caseInformationHelper,
     constants,
@@ -71,7 +71,7 @@ const RespondentInformation = connect(
     showModal,
     updateFormValueSequence,
     validationErrors,
-  }) => {
+  }) {
     const respondentPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">

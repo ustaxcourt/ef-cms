@@ -20,13 +20,13 @@ export const CaseDetail = connect(
     primaryTab: state.currentViewMetadata.caseDetail.primaryTab,
     setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
   },
-  ({
+  function CaseDetail({
     caseDetailHelper,
     caseDetailSubnavHelper,
     caseInformationTab,
     primaryTab,
     setCaseDetailPageTabSequence,
-  }) => {
+  }) {
     return (
       <>
         <CaseDetailHeader className="margin-bottom-0" />

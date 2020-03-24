@@ -14,14 +14,14 @@ export const EditIrsPractitionersModal = connect(
       sequences.validateEditIrsPractitionersSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function EditIrsPractitionersModal({
     cancelSequence,
     confirmSequence,
     modal,
     updateModalValueSequence,
     validateEditIrsPractitionersSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"

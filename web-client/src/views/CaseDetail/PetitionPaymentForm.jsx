@@ -12,7 +12,7 @@ export const PetitionPaymentForm = connect(
     paymentStatus: state.constants.PAYMENT_STATUS,
     validationErrors: state[props.validationErrorsBind],
   },
-  ({
+  function PetitionPaymentForm({
     bind,
     dateBind,
     paymentStatus,
@@ -20,7 +20,7 @@ export const PetitionPaymentForm = connect(
     updateSequence,
     validateSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <h4 className="margin-bottom-2">Petition Fee</h4>

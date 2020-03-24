@@ -17,7 +17,7 @@ export const Accordion = connect(
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
     value: state[props.bind],
   },
-  ({
+  function Accordion({
     bind,
     bordered,
     children,
@@ -27,7 +27,7 @@ export const Accordion = connect(
     onSelect,
     simpleSetter,
     value,
-  }) => {
+  }) {
     let activeKey, setTab;
 
     if (bind) {

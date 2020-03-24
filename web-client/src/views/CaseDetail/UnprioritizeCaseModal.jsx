@@ -8,7 +8,7 @@ export const UnprioritizeCaseModal = connect(
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.unprioritizeCaseSequence,
   },
-  ({ cancelSequence, confirmSequence }) => {
+  function UnprioritizeCaseModal({ cancelSequence, confirmSequence }) {
     return (
       <ModalDialog
         cancelLabel="No, Cancel"
