@@ -13,6 +13,6 @@ describe('openPdfPreviewModalAction', () => {
     expect(result.state.previewPdfFile).toEqual({
       name: 'something',
     });
-    expect(result.state.showModal).toEqual('PDFPreview-something-unique');
+    expect(result.state.modal.showModal).toEqual('PDFPreview-something-unique');
   });
 });

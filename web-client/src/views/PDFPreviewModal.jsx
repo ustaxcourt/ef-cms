@@ -11,13 +11,13 @@ export const PDFPreviewModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.dismissModalSequence,
-    currentPage: state.pdfPreviewModal.currentPage,
+    currentPage: state.modal.pdfPreviewModal.currentPage,
     loadPdfSequence: sequences.loadPdfSequence,
-    pdfPreviewModal: state.pdfPreviewModal,
-    pdfPreviewModalHelper: state.pdfPreviewModalHelper,
+    pdfPreviewModal: state.modal.pdfPreviewModal,
+    pdfPreviewModalHelper: state.modal.pdfPreviewModalHelper,
     previewPdfFile: state.previewPdfFile,
     setPageSequence: sequences.setPageSequence,
-    totalPages: state.pdfPreviewModal.totalPages,
+    totalPages: state.modal.pdfPreviewModal.totalPages,
   },
   ({
     cancelSequence,

@@ -7,23 +7,19 @@ import React from 'react';
 export const IRSNotice = connect(
   {
     CASE_TYPES: state.constants.CASE_TYPES,
-    caseDetail: state.caseDetail,
+    caseDetailEditHelper: state.caseDetailEditHelper,
     caseDetailErrors: state.caseDetailErrors,
     form: state.form,
-    formattedCaseDetail: state.formattedCaseDetail,
     setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
-    updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateCaseDetailSequence: sequences.validateCaseDetailSequence,
   },
   ({
     CASE_TYPES,
-    caseDetail,
+    caseDetailEditHelper,
     caseDetailErrors,
     form,
-    formattedCaseDetail,
     setIrsNoticeFalseSequence,
-    updateCaseValueSequence,
     updateFormValueSequence,
     validateCaseDetailSequence,
   }) => {
@@ -36,14 +32,14 @@ export const IRSNotice = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby="irs-verified-notice-radios"
-              checked={caseDetail.hasVerifiedIrsNotice === true}
+              checked={form.hasVerifiedIrsNotice === true}
               className="usa-radio__input"
               id="hasVerifiedIrsNotice-yes"
               name="hasVerifiedIrsNotice"
               type="radio"
               value="Yes"
               onChange={e => {
-                updateCaseValueSequence({
+                updateFormValueSequence({
                   key: e.target.name,
                   value: true,
                 });
@@ -60,7 +56,7 @@ export const IRSNotice = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby="irs-verified-notice-radios"
-              checked={caseDetail.hasVerifiedIrsNotice === false}
+              checked={form.hasVerifiedIrsNotice === false}
               className="usa-radio__input"
               id="hasVerifiedIrsNotice-no"
               name="hasVerifiedIrsNotice"
@@ -114,11 +110,11 @@ export const IRSNotice = connect(
           caseTypes={CASE_TYPES}
           legend="Type of case"
           validation="validateCaseDetailSequence"
-          value={caseDetail.caseType}
-          onChange="updateCaseValueSequence"
+          value={form.caseType}
+          onChange="updateFormValueSequence"
         />
 
-        {formattedCaseDetail.shouldShowIrsNoticeDate && renderIrsNoticeDate()}
+        {caseDetailEditHelper.shouldShowIrsNoticeDate && renderIrsNoticeDate()}
       </div>
     );
   },

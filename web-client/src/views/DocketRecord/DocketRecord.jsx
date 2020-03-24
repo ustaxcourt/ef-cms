@@ -13,7 +13,7 @@ export const DocketRecord = connect(
     docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     refreshCaseSequence: sequences.refreshCaseSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
   ({
     docketRecordHelper,

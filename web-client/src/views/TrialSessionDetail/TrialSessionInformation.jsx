@@ -11,7 +11,7 @@ export const TrialSessionInformation = connect(
     openConfirmDeleteTrialSessionModalSequence:
       sequences.openConfirmDeleteTrialSessionModalSequence,
     printTrialCalendarSequence: sequences.printTrialCalendarSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
   },
   ({

@@ -129,7 +129,7 @@ describe('loadPdfAction', () => {
       },
     });
 
-    expect(result.state.pdfPreviewModal).toMatchObject({
+    expect(result.state.modal.pdfPreviewModal).toMatchObject({
       ctx: 'abc',
       error: 'An error called via reader.onerror.',
     });

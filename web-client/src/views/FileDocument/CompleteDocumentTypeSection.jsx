@@ -20,7 +20,7 @@ export const CompleteDocumentTypeSection = connect(
     form: state.form,
     openSelectDocumentWizardOverlaySequence:
       sequences.openSelectDocumentWizardOverlaySequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,

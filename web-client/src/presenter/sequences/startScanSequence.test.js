@@ -53,6 +53,8 @@ describe('startScanSequence', () => {
     const scannerState = test.getState('scanner');
 
     expect(scannerState.sources.length).toEqual(mockSources.length);
-    expect(test.getState('showModal')).toEqual('SelectScannerSourceModal');
+    expect(test.getState('modal.showModal')).toEqual(
+      'SelectScannerSourceModal',
+    );
   });
 });

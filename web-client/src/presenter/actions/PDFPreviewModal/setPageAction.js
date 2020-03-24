@@ -15,11 +15,11 @@ export const setPageAction = async ({ get, props, store }) => {
 
   const actualPage = Math.min(
     Math.max(1, desiredPage),
-    get(state.pdfPreviewModal.totalPages),
+    get(state.modal.pdfPreviewModal.totalPages),
   );
-  store.set(state.pdfPreviewModal.currentPage, actualPage);
+  store.set(state.modal.pdfPreviewModal.currentPage, actualPage);
 
-  const { ctx, pdfDoc } = get(state.pdfPreviewModal);
+  const { ctx, pdfDoc } = get(state.modal.pdfPreviewModal);
 
   const page = await pdfDoc.getPage(actualPage);
 
@@ -27,8 +27,8 @@ export const setPageAction = async ({ get, props, store }) => {
     scale: 2,
   });
 
-  store.set(state.pdfPreviewModal.width, viewport.width);
-  store.set(state.pdfPreviewModal.height, viewport.height);
+  store.set(state.modal.pdfPreviewModal.width, viewport.width);
+  store.set(state.modal.pdfPreviewModal.height, viewport.height);
 
   const renderContext = {
     canvasContext: ctx,
