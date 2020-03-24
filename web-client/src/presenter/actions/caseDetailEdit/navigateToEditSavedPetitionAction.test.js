@@ -1,8 +1,8 @@
-import { navigateToEditSavedDocumentDetailAction } from './navigateToEditSavedDocumentDetailAction';
+import { navigateToEditSavedPetitionAction } from './navigateToEditSavedPetitionAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
-describe('navigateToEditSavedDocumentDetailAction', () => {
+describe('navigateToEditSavedPetitionAction', () => {
   let routeStub;
 
   beforeEach(() => {
@@ -14,13 +14,13 @@ describe('navigateToEditSavedDocumentDetailAction', () => {
   });
 
   it('navigates to the edit saved document detail view', async () => {
-    await runAction(navigateToEditSavedDocumentDetailAction, {
+    await runAction(navigateToEditSavedPetitionAction, {
       modules: { presenter },
       state: {
-        caseDetail: {
+        documentId: 'document-id-123',
+        form: {
           docketNumber: '101-12',
         },
-        documentId: 'document-id-123',
       },
     });
 
@@ -30,16 +30,16 @@ describe('navigateToEditSavedDocumentDetailAction', () => {
   });
 
   it('navigates to the edit saved document detail view with the appropriate tab', async () => {
-    await runAction(navigateToEditSavedDocumentDetailAction, {
+    await runAction(navigateToEditSavedPetitionAction, {
       modules: { presenter },
       props: {
         tab: 'caseInfo',
       },
       state: {
-        caseDetail: {
+        documentId: 'document-id-123',
+        form: {
           docketNumber: '101-12',
         },
-        documentId: 'document-id-123',
       },
     });
 
@@ -49,10 +49,10 @@ describe('navigateToEditSavedDocumentDetailAction', () => {
   });
 
   it('does not navigate to the edit saved document detail view if document id is not provided', async () => {
-    await runAction(navigateToEditSavedDocumentDetailAction, {
+    await runAction(navigateToEditSavedPetitionAction, {
       modules: { presenter },
       state: {
-        caseDetail: {
+        form: {
           docketNumber: '101-12',
         },
       },
@@ -62,11 +62,11 @@ describe('navigateToEditSavedDocumentDetailAction', () => {
   });
 
   it('does not navigate to the edit saved document detail view if docketNumber is not provided', async () => {
-    await runAction(navigateToEditSavedDocumentDetailAction, {
+    await runAction(navigateToEditSavedPetitionAction, {
       modules: { presenter },
       state: {
-        caseDetail: {},
         documentId: 'document-id-123',
+        form: {},
       },
     });
 

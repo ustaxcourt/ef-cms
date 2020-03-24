@@ -1,21 +1,24 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   getAllCaseDeadlinesInteractor,
 } = require('./getAllCaseDeadlinesInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 describe('getAllCaseDeadlinesInteractor', () => {
-  let applicationContext;
   const mockDeadlines = [];
 
+  beforeEach(() => {
+    applicationContext.environment.stage = 'local';
+    applicationContext
+      .getPersistenceGateway()
+      .getAllCaseDeadlines.mockReturnValue(mockDeadlines);
+  });
+
   it('throws an error if the user is not valid or authorized', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => new User({}),
-      getPersistenceGateway: () => ({
-        getAllCaseDeadlines: () => mockDeadlines,
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue(new User({}));
 
     let error;
     let caseDeadlines;
@@ -34,18 +37,12 @@ describe('getAllCaseDeadlinesInteractor', () => {
   });
 
   it('gets all the case deadlines', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () =>
-        new User({
-          name: 'Test Petitionsclerk',
-          role: User.ROLES.petitionsClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
-      getPersistenceGateway: () => ({
-        getAllCaseDeadlines: () => mockDeadlines,
-      }),
-    };
+    const mockPetitionsClerk = new User({
+      name: 'Test Petitionsclerk',
+      role: User.ROLES.petitionsClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+    applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerk);
 
     let error;
     let caseDeadlines;

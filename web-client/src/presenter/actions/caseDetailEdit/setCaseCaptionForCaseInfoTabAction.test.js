@@ -9,6 +9,6 @@ describe('setCaseCaptionForCaseInfoTabAction', () => {
       },
     });
 
-    expect(result.state.caseDetail.caseCaption).toEqual('something something');
+    expect(result.state.form.caseCaption).toEqual('something something');
   });
 });
