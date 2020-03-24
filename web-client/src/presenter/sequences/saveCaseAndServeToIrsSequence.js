@@ -1,7 +1,7 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
-import { getFormCombinedWithCaseDetailAction } from '../actions/getFormCombinedWithCaseDetailAction';
+import { getCaseDetailFormWithComputedDatesAction } from '../actions/getCaseDetailFormWithComputedDatesAction';
 import { getServeToIrsAlertSuccessAction } from '../actions/StartCaseInternal/getServeToIrsAlertSuccessAction';
 import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrintPreviewPreparedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -22,7 +22,7 @@ export const saveCaseAndServeToIrsSequence = [
   clearPdfPreviewUrlAction,
   showProgressSequenceDecorator([
     setCaseNotInProgressAction,
-    getFormCombinedWithCaseDetailAction,
+    getCaseDetailFormWithComputedDatesAction,
     saveCaseDetailInternalEditAction,
     setCaseAction,
     setPetitionIdAction,

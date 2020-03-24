@@ -67,15 +67,12 @@ export const checkDate = (applicationContext, updatedDateString) => {
  *
  * @param {object} providers the cerebral providers
  * @param {Function} providers.get the cerebral get function for getting the state.form
- * @param {object} providers.props the cerebral props object
- * @returns {object} the combinedCaseDetailWithForm
+ * @returns {object} the formWithComputedDates
  */
-export const getFormCombinedWithCaseDetailAction = ({
+export const getCaseDetailFormWithComputedDatesAction = ({
   applicationContext,
   get,
-  props,
 }) => {
-  let { caseCaption } = props;
   const {
     irsDay,
     irsMonth,
@@ -96,10 +93,6 @@ export const getFormCombinedWithCaseDetailAction = ({
   const form = omit(
     {
       ...get(state.form),
-      irsNoticeDate: `${irsYear}-${irsMonth}-${irsDay}`,
-      petitionPaymentDate: `${paymentDateYear}-${paymentDateMonth}-${paymentDateDay}`,
-      petitionPaymentWaivedDate: `${paymentDateWaivedYear}-${paymentDateWaivedMonth}-${paymentDateWaivedDay}`,
-      receivedAt: `${receivedAtYear}-${receivedAtMonth}-${receivedAtDay}`,
     },
     [
       'irsYear',
@@ -118,22 +111,24 @@ export const getFormCombinedWithCaseDetailAction = ({
     ],
   );
 
-  form.irsNoticeDate = checkDate(applicationContext, form.irsNoticeDate);
+  form.irsNoticeDate = checkDate(
+    applicationContext,
+    `${irsYear}-${irsMonth}-${irsDay}`,
+  );
   form.petitionPaymentDate = checkDate(
     applicationContext,
-    form.petitionPaymentDate,
+    `${paymentDateYear}-${paymentDateMonth}-${paymentDateDay}`,
   );
   form.petitionPaymentWaivedDate = checkDate(
     applicationContext,
-    form.petitionPaymentWaivedDate,
+    `${paymentDateWaivedYear}-${paymentDateWaivedMonth}-${paymentDateWaivedDay}`,
   );
-  form.receivedAt = checkDate(applicationContext, form.receivedAt);
-
-  if (caseCaption && (caseCaption = caseCaption.trim())) {
-    form.caseCaption = caseCaption;
-  }
+  form.receivedAt = checkDate(
+    applicationContext,
+    `${receivedAtYear}-${receivedAtMonth}-${receivedAtDay}`,
+  );
 
   return {
-    combinedCaseDetailWithForm: form,
+    formWithComputedDates: form,
   };
 };
