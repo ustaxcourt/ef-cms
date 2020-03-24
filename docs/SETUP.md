@@ -10,8 +10,6 @@
           - Make the intended domain name available on your local system, e.g. `export EFCMS_DOMAIN="ef-cms.example.gov"`
           - Create the policies on your local system: `cd iam/terraform/account-specific/main && ../bin/deploy-app.sh`
                - Make a note of the `cloudwatch_role_arn` that is output, to use shortly for the CircleCI setup.
-          - `cd ../../environment-specific/main && ../bin/deploy-app.sh stg`
-               - Make a note of the ARNs that are output, to use shortly for the CircleCI setup.
      - In IAM, attach the `circle_ci_policy` to your `CircleCI` user.
      - Note the AWS-generated access key and secret access key — it will needed shortly for the CircleCI setup.
 - [Create a Route53 Hosted Zone](https://console.aws.amazon.com/route53/home) This will be used for setting up the domains for the UI and API.  Create the desired domain name (e.g. `ef-cms.example.gov.`) and make sure it is a `Public Hosted Zone`. This is the value you will set for `EFCMS_DOMAIN` in CircleCI.  Make sure the domain name ends with a period.
@@ -20,6 +18,7 @@
      - `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh stg`
      - `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh test`
      - `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh prod`
+          - Make a note of the ARNs that are output, to use shortly for the CircleCI setup.
 - [Create a SonarCloud account](https://sonarcloud.io/). SonarCloud will be used to tests each build.
 - [Create a new SonarCloud organization](https://sonarcloud.io/create-organization).
   - There are three sub-projects to the EF-CMS — the front-end (the UI), the back-end (the API), and shared code. Each is handled separately by CircleCI and SonarCloud.
@@ -31,8 +30,11 @@
   - On AWS, setup a role & policy for accessing the Dynamsoft ZIP file that is hosted on a private S3 bucket
      - The role name must match `dynamsoft_s3_download_role`, and it must be for `EC2`
      - The policy must have `s3:GetObject` access to your bucket
+- Deploy Docker images to Amazon ECR with `./docker-to-ecr.sh`. This will build an image per the `Dockerfile-CI` config, tag it as `latest`, and push it to the repo in ECR.
 
 ## CircleCI Setup
+A prerequisite for a successful build within CircleCI is [access to CircleCI’s 2 X-large instances](https://circleci.com/pricing/#comparison-table). The memory footprint of the underlying services are too large for smaller instances — attempting a build with smaller instances will result in a cascading series of test failures, because Elasticsearch can’t operate within the memory costraints. At present, CircleCI requires contacting their sales staff to get access to 2 X-large instances.
+
 1. Set up a [CircleCI](https://circleci.com/) account
 2. Click "Add Projects"
 3. Click "Set Up Project" next to the Court's repo
