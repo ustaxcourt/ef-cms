@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * clears the modal state
+ * unsets the modal state
  * state.modal used for temp modal state
  *
  * @param {object} providers the providers object

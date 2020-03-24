@@ -23,7 +23,7 @@ export const EditDocketEntry = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     openCreateMessageAlongsideDocketRecordQCModalSequence:
       sequences.openCreateMessageAlongsideDocketRecordQCModalSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
   ({
     completeDocketEntryQCSequence,

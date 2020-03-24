@@ -30,7 +30,7 @@ export const CaseDetailHeaderMenu = connect(
       sequences.openCreateOrderChooseTypeModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     toggleMenuSequence: sequences.toggleMenuSequence,
   },
   ({
