@@ -16,7 +16,7 @@ export const PendingMessages = connect(
     messageId: state.currentViewMetadata.messageId,
     openCreateMessageModalSequence: sequences.openCreateMessageModalSequence,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,
     updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,

@@ -50,7 +50,7 @@ exports.selectScannerSource = (
   return it('Selects a scanner', async () => {
     await test.runSequence('openChangeScannerSourceModalSequence');
 
-    expect(test.getState('showModal')).toEqual('SelectScannerSourceModal');
+    expect(test.getState('modal.showModal')).toEqual('SelectScannerSourceModal');
 
     await test.runSequence('updateModalValueSequence', {
       key: 'scanner',

@@ -17,7 +17,7 @@ export const RequestAccessReview = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     navigateBackSequence: sequences.navigateBackSequence,
     requestAccessHelper: state.requestAccessHelper,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     submitCaseAssociationRequestSequence:
       sequences.submitCaseAssociationRequestSequence,
   },

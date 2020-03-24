@@ -19,7 +19,7 @@ export const CreateOrder = connect(
     openEditOrderTitleModalSequence: sequences.openEditOrderTitleModalSequence,
     refreshPdfWhenSwitchingCreateOrderTabSequence:
       sequences.refreshPdfWhenSwitchingCreateOrderTabSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     submitCourtIssuedOrderSequence: sequences.submitCourtIssuedOrderSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
