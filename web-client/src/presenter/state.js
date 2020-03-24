@@ -191,12 +191,15 @@ export const state = {
   },
   form: {}, // shared object for creating new entities, clear before using
   header: {
-    searchTerm: '',
+    searchTerm: null,
     showBetaBar: true,
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
-  modal: {},
+  modal: {
+    pdfPreviewModal: null,
+    showModal: null, // the name of the modal to display
+  },
   navigation: {},
   notifications: {},
   pdfForSigning: {
