@@ -18,7 +18,7 @@ export const FileDocumentReview = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     formattedCaseDetail: state.formattedCaseDetail,
     navigateBackSequence: sequences.navigateBackSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
   },
   ({

@@ -18,7 +18,7 @@ export const RequestAccessDocumentForm = connect(
     form: state.form,
     openCleanModalSequence: sequences.openCleanModalSequence,
     requestAccessHelper: state.requestAccessHelper,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     updateCaseAssociationFormValueSequence:
       sequences.updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence:

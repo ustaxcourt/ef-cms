@@ -37,7 +37,7 @@ export const ReviewSavedPetition = connect(
     reviewSavedPetitionHelper: state.reviewSavedPetitionHelper,
     saveCaseAndServeToIrsSequence: sequences.saveCaseAndServeToIrsSequence,
     saveSavedCaseForLaterSequence: sequences.saveSavedCaseForLaterSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
   },
   ({
