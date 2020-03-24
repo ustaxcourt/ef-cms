@@ -93,7 +93,9 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetUseCasesReturnValue = {
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
+    getCaseInventoryReportInteractor: jest.fn(),
     getJudgeForUserChambersInteractor: jest.fn(),
+    removeCasePendingItemInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
   };
 
@@ -170,6 +172,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
     getChromiumBrowser: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
+    getConstants: jest.fn(),
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {

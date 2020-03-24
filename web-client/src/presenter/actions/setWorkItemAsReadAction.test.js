@@ -1,17 +1,19 @@
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter';
+import { runAction } from 'cerebral/test';
 import { setWorkItemAsReadAction } from './setWorkItemAsReadAction';
 
 describe('setWorkItemAsReadAction', () => {
-  let get;
+  const applicationContext = applicationContextForClient;
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
 
   it('should set message as read', async () => {
-    get = jest.fn();
-
-    await setWorkItemAsReadAction({ applicationContext, get });
+    await runAction(setWorkItemAsReadAction, { modules: { presenter } });
 
     expect(
       applicationContext.getUseCases().setWorkItemAsReadInteractor,
     ).toHaveBeenCalled();
-    expect(get).toHaveBeenCalled();
   });
 });
