@@ -10,22 +10,22 @@ export const CaseInfo = connect(
   {
     baseUrl: state.baseUrl,
     caseDetailEditHelper: state.caseDetailEditHelper,
-    caseDetailErrors: state.caseDetailErrors,
     constants: state.constants,
     form: state.form,
     token: state.token,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateCaseDetailSequence: sequences.validateCaseDetailSequence,
+    validationErrors: state.validationErrors,
   },
   ({
     baseUrl,
     caseDetailEditHelper,
-    caseDetailErrors,
     constants,
     form,
     token,
     updateFormValueSequence,
     validateCaseDetailSequence,
+    validationErrors,
   }) => {
     return (
       <div className="blue-container">
@@ -54,7 +54,7 @@ export const CaseInfo = connect(
         {form.isPaper && (
           <>
             <DateInput
-              errorText={caseDetailErrors.receivedAt}
+              errorText={validationErrors.receivedAt}
               id="received-at"
               label="Date received"
               names={{
@@ -192,7 +192,7 @@ export const CaseInfo = connect(
           updateDateSequence={updateFormValueSequence}
           updateSequence={updateFormValueSequence}
           validateSequence={validateCaseDetailSequence}
-          validationErrorsBind="caseDetailErrors"
+          validationErrorsBind="validationErrors"
         />
 
         {caseDetailEditHelper.showOrderForFilingFee && (
