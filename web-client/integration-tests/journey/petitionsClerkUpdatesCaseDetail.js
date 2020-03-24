@@ -18,7 +18,7 @@ export default test => {
 
     // irsNoticeDate - invalid
     await test.runSequence('updateFormValueSequence', {
-      key: 'hasIrsNotice',
+      key: 'hasVerifiedIrsNotice',
       value: true,
     });
     await test.runSequence('updateFormValueSequence', {
@@ -41,7 +41,7 @@ export default test => {
 
     // irsNoticeDate - valid
     await test.runSequence('updateFormValueSequence', {
-      key: 'hasIrsNotice',
+      key: 'hasVerifiedIrsNotice',
       value: true,
     });
     await test.runSequence('updateFormValueSequence', {
@@ -61,7 +61,7 @@ export default test => {
 
     // irsNoticeDate - valid
     await test.runSequence('updateFormValueSequence', {
-      key: 'hasIrsNotice',
+      key: 'hasVerifiedIrsNotice',
       value: true,
     });
     await test.runSequence('updateFormValueSequence', {
@@ -103,9 +103,14 @@ export default test => {
 
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(null);
 
+    await test.runSequence('gotoDocumentDetailSequence', {
+      docketNumber: test.docketNumber,
+      documentId: petitionDocument.documentId,
+    });
+
     // irsNoticeDate - valid
     await test.runSequence('updateFormValueSequence', {
-      key: 'hasIrsNotice',
+      key: 'hasVerifiedIrsNotice',
       value: true,
     });
     await test.runSequence('updateFormValueSequence', {
