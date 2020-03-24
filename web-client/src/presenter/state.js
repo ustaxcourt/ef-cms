@@ -191,7 +191,7 @@ export const state = {
   },
   form: {}, // shared object for creating new entities, clear before using
   header: {
-    searchTerm: null,
+    searchTerm: '',
     showBetaBar: true,
     showMobileMenu: false,
     showUsaBannerDetails: false,
