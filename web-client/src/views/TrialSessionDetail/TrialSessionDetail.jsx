@@ -18,7 +18,7 @@ export const TrialSessionDetail = connect(
   {
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
   },
   ({

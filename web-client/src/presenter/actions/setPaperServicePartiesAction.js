@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.showModal to display the PaperServiceConfirmModal if there are paperServiceParties on the props
+ * sets the state.modal.showModal to display the PaperServiceConfirmModal if there are paperServiceParties on the props
  *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object
@@ -13,7 +13,7 @@ export const setPaperServicePartiesAction = ({ props, store }) => {
     props.paperServiceParties &&
     props.paperServiceParties.length > 0
   ) {
-    store.set(state.showModal, 'PaperServiceConfirmModal');
+    store.set(state.modal.showModal, 'PaperServiceConfirmModal');
     store.set(state.form.documentTitle, props.paperServiceDocumentTitle);
   }
 };

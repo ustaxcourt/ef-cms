@@ -57,7 +57,7 @@ describe('loadPdfSequence', () => {
       ctx: 'abc',
       file: fakeFile,
     });
-    expect(test.getState('pdfPreviewModal')).toMatchObject({
+    expect(test.getState('modal.pdfPreviewModal')).toMatchObject({
       ctx: 'abc',
       currentPage: 1,
       height: 100,

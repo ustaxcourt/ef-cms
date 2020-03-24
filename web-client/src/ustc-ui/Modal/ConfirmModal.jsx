@@ -10,7 +10,7 @@ export const ConfirmModal = connect(
   {
     onCancel: sequences[props.onCancelSequence],
     onConfirm: sequences[props.onConfirmSequence],
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
   ({
     cancelLabel,

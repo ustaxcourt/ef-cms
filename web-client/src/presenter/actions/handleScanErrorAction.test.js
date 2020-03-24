@@ -21,7 +21,7 @@ describe('handleScanErrorAction', () => {
       },
     });
 
-    expect(result.state.showModal).toEqual('EmptyHopperModal');
+    expect(result.state.modal.showModal).toEqual('EmptyHopperModal');
     expect(result.state.scanner.isScanning).toBeFalsy();
   });
 
@@ -43,7 +43,7 @@ describe('handleScanErrorAction', () => {
       },
     });
 
-    expect(result.state.showModal).toEqual('ScanErrorModal');
+    expect(result.state.modal.showModal).toEqual('ScanErrorModal');
     expect(result.state.scanner.isScanning).toBeFalsy();
   });
 });

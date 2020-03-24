@@ -13,7 +13,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     preferredTrialCity,
     receivedAt,
     ...caseDetail
-  } = get(state.caseDetail);
+  } = get(state.form);
 
   const {
     INITIAL_DOCUMENT_TYPES,
