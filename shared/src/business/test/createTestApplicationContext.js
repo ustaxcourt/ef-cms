@@ -117,6 +117,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseDeadlinesByCaseId: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByCaseId),
+    getCasesByUser: jest.fn(),
     getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
     getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
     getDocumentQCServedForSection: jest
@@ -128,6 +129,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getInboxMessagesForSection),
     getInboxMessagesForUser: getInboxMessagesForUserPersistence,
+    getItem: jest.fn(),
     getSentMessagesForSection: jest.fn(),
     getSentMessagesForUser: jest
       .fn()
@@ -142,6 +144,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     saveWorkItemForNonPaper,
     saveWorkItemForPaper,
+    setItem: jest.fn(),
     setWorkItemAsRead,
     updateCase: jest.fn().mockImplementation(updateCase),
     updateUserCaseNote: jest.fn(),
