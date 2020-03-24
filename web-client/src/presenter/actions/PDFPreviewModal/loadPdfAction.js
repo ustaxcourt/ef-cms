@@ -12,6 +12,7 @@ export const loadPdfAction = ({ applicationContext, path, props, store }) => {
   const { ctx, file } = props;
   const isBase64Encoded = typeof file === 'string' && file.startsWith('data');
 
+  store.set(state.modal.pdfPreviewModal, {});
   store.set(state.modal.pdfPreviewModal.ctx, ctx);
 
   return new Promise((resolve, reject) => {
