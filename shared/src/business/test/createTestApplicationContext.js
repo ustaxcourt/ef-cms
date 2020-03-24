@@ -96,6 +96,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     getObject: jest.fn(),
   };
 
+  const mockGetUseCasesReturnValue = {
+    getCalendaredCasesForTrialSessionInteractor: jest.fn(),
+  };
+
   const mockGetPersistenceGatewayReturnValue = {
     addWorkItemToSectionInbox,
     associateUserWithCase: jest.fn(),
@@ -119,6 +123,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDownloadPolicyUrl: jest.fn(),
+    getEligibleCasesForTrialSession: jest.fn(),
     getInboxMessagesForSection: jest
       .fn()
       .mockImplementation(getInboxMessagesForSection),
@@ -127,6 +132,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     getSentMessagesForUser: jest
       .fn()
       .mockImplementation(getSentMessagesForUserPersistence),
+    getTrialSessionById: jest.fn(),
+    getTrialSessions: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseNote: jest.fn(),
     getUserCaseNoteForCases: jest.fn(),
@@ -195,7 +202,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
     getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
-    getUseCases: jest.fn(),
+    getUseCases: jest.fn().mockImplementation(() => {
+      return mockGetUseCasesReturnValue;
+    }),
     getUtilities: () => {
       return { ...DateHandler };
     },
