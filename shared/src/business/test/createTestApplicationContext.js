@@ -110,6 +110,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     associateIrsPractitionerWithCaseInteractor: jest.fn(),
     associatePrivatePractitionerWithCaseInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
+    casePublicSearchInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
     createCourtIssuedOrderPdfFromHtmlInteractor: jest.fn(),
     deleteCaseNoteInteractor: jest.fn(),
