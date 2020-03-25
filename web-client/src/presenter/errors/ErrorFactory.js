@@ -7,6 +7,7 @@ import { UnidentifiedUserError } from './UnidentifiedUserError';
 
 export const ErrorFactory = {
   getError: e => {
+    console.log('e', e);
     let responseCode = (e.response && e.response.status) || e.statusCode;
 
     let newError = new ActionError(e);

@@ -71,13 +71,13 @@ describe('Case journey', () => {
 
   loginAs(test, 'petitionsclerk');
   petitionsClerkCaseSearch(test);
-  // petitionsClerkViewsMessages(test);
-  // petitionsClerkAssignsWorkItemToSelf(test);
-  // petitionsClerkAssignsWorkItemToOther(test);
-  // loginAs(test, 'petitionsclerk1');
-  // petitionsClerkViewsMessagesAfterReassign(test);
-  // petitionsClerkViewsCaseDetail(test);
-  // petitionsClerkUpdatesCaseDetail(test);
+  petitionsClerkViewsMessages(test);
+  petitionsClerkAssignsWorkItemToSelf(test);
+  petitionsClerkAssignsWorkItemToOther(test);
+  loginAs(test, 'petitionsclerk1');
+  petitionsClerkViewsMessagesAfterReassign(test);
+  petitionsClerkViewsCaseDetail(test);
+  petitionsClerkUpdatesCaseDetail(test);
   // petitionsClerkSubmitsCaseToIrs(test);
 
   // loginAs(test, 'irsPractitioner');
