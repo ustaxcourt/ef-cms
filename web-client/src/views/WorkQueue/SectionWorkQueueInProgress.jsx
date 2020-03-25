@@ -15,7 +15,7 @@ export const SectionWorkQueueInProgress = connect(
     users: state.users,
     workQueueHelper: state.workQueueHelper,
   },
-  ({
+  function SectionWorkQueueInProgress({
     assignSelectedWorkItemsSequence,
     formattedWorkQueue,
     selectAssigneeSequence,
@@ -24,7 +24,7 @@ export const SectionWorkQueueInProgress = connect(
     setFocusedWorkItemSequence,
     users,
     workQueueHelper,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         {workQueueHelper.showSendToBar && (

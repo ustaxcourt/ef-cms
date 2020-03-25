@@ -25,7 +25,7 @@ export const StartCaseStep3 = connect(
     validateStartCaseWizardSequence: sequences.validateStartCaseWizardSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function StartCaseStep3({
     completeStartCaseWizardStepSequence,
     constants,
     form,
@@ -36,7 +36,7 @@ export const StartCaseStep3 = connect(
     updateStartCaseFormValueSequence,
     validateStartCaseWizardSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <Focus>

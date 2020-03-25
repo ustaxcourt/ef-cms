@@ -21,12 +21,12 @@ export const TrialSessionDetail = connect(
     showModal: state.modal.showModal,
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
   },
-  ({
+  function TrialSessionDetail({
     formattedTrialSessionDetails,
     openSetCalendarModalSequence,
     showModal,
     trialSessionDetailsHelper,
-  }) => (
+  })  (
     <>
       <TrialSessionDetailHeader />
 
