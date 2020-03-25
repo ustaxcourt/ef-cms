@@ -1,9 +1,8 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateDocketEntryAction } from './validateDocketEntryAction';
 
-const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
 
 describe('validateDocketEntryAction', () => {

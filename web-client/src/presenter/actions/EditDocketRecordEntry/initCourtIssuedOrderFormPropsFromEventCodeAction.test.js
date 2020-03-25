@@ -1,9 +1,8 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { initCourtIssuedOrderFormPropsFromEventCodeAction } from './initCourtIssuedOrderFormPropsFromEventCodeAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
-const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
 applicationContext.getConstants.mockReturnValue({
   COURT_ISSUED_EVENT_CODES: [

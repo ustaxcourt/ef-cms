@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { loadPdfAction } from './loadPdfAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
@@ -25,18 +26,20 @@ const mocks = {
   }),
 };
 
-presenter.providers.applicationContext = {
-  getFileReader: () =>
+presenter.providers.applicationContext = applicationContext;
+
+applicationContext.getFileReader.mockImplementation(
+  () =>
     function () {
       this.onload = null;
       this.onerror = null;
       this.readAsDataURL = mocks.readAsDataURLMock;
       this.readAsArrayBuffer = mocks.readAsArrayBufferMock;
     },
-  getPdfJs: () => ({
-    getDocument: mocks.getDocumentMock,
-  }),
-};
+);
+applicationContext.getPdfJs.mockImplementation(() => ({
+  getDocument: mocks.getDocumentMock,
+}));
 
 let pathError = jest.fn();
 let pathSuccess = jest.fn();
