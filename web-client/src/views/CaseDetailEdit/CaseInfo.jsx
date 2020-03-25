@@ -17,7 +17,7 @@ export const CaseInfo = connect(
     validateCaseDetailSequence: sequences.validateCaseDetailSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function CaseInfo({
     baseUrl,
     caseDetailEditHelper,
     constants,
@@ -26,7 +26,7 @@ export const CaseInfo = connect(
     updateFormValueSequence,
     validateCaseDetailSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <div className="blue-container">
         <div className="subsection">

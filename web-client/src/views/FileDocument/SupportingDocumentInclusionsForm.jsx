@@ -17,14 +17,14 @@ export const SupportingDocumentInclusionsForm = connect(
       sequences.validateExternalDocumentInformationSequence,
     validationData: state[props.validationBind],
   },
-  ({
+  function SupportingDocumentInclusionsForm({
     data,
     openCleanModalSequence,
     type,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
     validationData,
-  }) => {
+  }) {
     return (
       <>
         <div

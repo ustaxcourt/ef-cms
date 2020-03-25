@@ -17,7 +17,7 @@ export const FilingsAndProceedings = connect(
       sequences.showDocketRecordDetailModalSequence,
     token: state.token,
   },
-  ({
+  function FilingsAndProceedings({
     arrayIndex,
     baseUrl,
     caseDetail,
@@ -26,7 +26,7 @@ export const FilingsAndProceedings = connect(
     formattedCaseDetail,
     showDocketRecordDetailModalSequence,
     token,
-  }) => {
+  }) {
     const renderDocumentLink = () => {
       return (
         <>

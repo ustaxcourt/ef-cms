@@ -7,7 +7,7 @@ export const CaseDetailReadOnly = connect(
   {
     formattedCaseDetail: state.formattedCaseDetail,
   },
-  ({ formattedCaseDetail }) => {
+  function CaseDetailReadOnly({ formattedCaseDetail }) {
     return (
       <React.Fragment>
         <CaseDetailReadOnlyPartyInformation />

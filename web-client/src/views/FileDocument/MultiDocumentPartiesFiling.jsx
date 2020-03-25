@@ -12,12 +12,12 @@ export const MultiDocumentPartiesFiling = connect(
     validateExternalDocumentInformationSequence:
       sequences.validateExternalDocumentInformationSequence,
   },
-  ({
+  function MultiDocumentPartiesFiling({
     fileDocumentHelper,
     form,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         <h2 className="margin-top-4">

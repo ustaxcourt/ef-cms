@@ -12,7 +12,11 @@ export const SecondarySupportingDocuments = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
   },
-  ({ addSupportingDocumentToFormSequence, fileDocumentHelper, form }) => {
+  function SecondarySupportingDocuments({
+    addSupportingDocumentToFormSequence,
+    fileDocumentHelper,
+    form,
+  }) {
     return (
       <>
         {form.hasSecondarySupportingDocuments &&

@@ -14,7 +14,7 @@ export const IRSNotice = connect(
     validateCaseDetailSequence: sequences.validateCaseDetailSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function IRSNotice({
     CASE_TYPES,
     caseDetailEditHelper,
     form,
@@ -22,7 +22,7 @@ export const IRSNotice = connect(
     updateFormValueSequence,
     validateCaseDetailSequence,
     validationErrors,
-  }) => {
+  }) {
     const renderIrsNoticeRadios = () => {
       return (
         <fieldset className="usa-fieldset" id="irs-verified-notice-radios">

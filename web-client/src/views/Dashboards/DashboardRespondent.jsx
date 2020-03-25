@@ -10,7 +10,7 @@ export const DashboardRespondent = connect(
   {
     user: state.user,
   },
-  ({ user }) => {
+  function DashboardRespondent({ user }) {
     return (
       <React.Fragment>
         <BigHeader text={`Welcome, ${user.name}`} />

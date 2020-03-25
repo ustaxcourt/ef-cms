@@ -7,7 +7,7 @@ export const CompletedMessages = connect(
   {
     documentDetailHelper: state.documentDetailHelper,
   },
-  ({ documentDetailHelper }) => {
+  function CompletedMessages({ documentDetailHelper }) {
     return (
       <div className="blue-container">
         {(!documentDetailHelper.formattedDocument ||
