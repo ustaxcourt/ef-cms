@@ -1,3 +1,4 @@
+const createWebApiApplicationContext = require('../../../../web-api/src/applicationContext');
 const DateHandler = require('../utilities/DateHandler');
 const docketNumberGenerator = require('../../persistence/dynamo/cases/docketNumberGenerator');
 const sharedAppContext = require('../../sharedAppContext');
@@ -86,10 +87,11 @@ const { Case } = require('../entities/cases/Case');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
-const { Scan } = require('../entities/Scan');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
+
+const webApiApplicationContext = createWebApiApplicationContext({});
 
 const createTestApplicationContext = ({ user } = {}) => {
   const mockCognitoReturnValue = {
@@ -99,6 +101,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCasesReturnValue = {
+    caseAdvancedSearchInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
@@ -204,9 +207,10 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
     getChromiumBrowser: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
-    getConstants: jest
-      .fn()
-      .mockReturnValue(webClientApplicationContext.getConstants()),
+    getConstants: jest.fn().mockReturnValue({
+      ...webClientApplicationContext.getConstants(),
+      ...webApiApplicationContext.getConstants(),
+    }),
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {
