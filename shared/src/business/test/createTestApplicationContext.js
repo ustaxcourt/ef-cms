@@ -101,14 +101,20 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCasesReturnValue = {
+    addCaseToTrialSessionInteractor: jest.fn(),
     addConsolidatedCaseInteractor: jest.fn(),
     archiveDraftDocumentInteractor: jest.fn(),
     assignWorkItemsInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
+    deleteCaseNoteInteractor: jest.fn(),
+    deleteCounselFromCaseInteractor: jest.fn(),
+    fileExternalDocumentForConsolidatedInteractor: jest.fn(),
+    fileExternalDocumentInteractor: jest.fn(),
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
+    getBlockedCasesInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
     getCaseDeadlinesForCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
@@ -116,9 +122,17 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeCasePendingItemInteractor: jest.fn(),
     removeConsolidatedCasesInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
+    saveCaseNoteInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
+    updateCaseContextInteractor: jest.fn(),
+    updateCounselOnCaseInteractor: jest.fn(),
+    validateAddIrsPractitionerInteractor: jest.fn(),
+    validateAddPrivatePractitionerInteractor: jest.fn(),
     validateCaseAdvancedSearchInteractor: jest.fn(),
     validateCaseDeadlineInteractor: jest.fn(),
+    validateEditPrivatePractitionerInteractor: jest.fn(),
+    validatePdfInteractor: jest.fn(),
+    virusScanPdfInteractor: jest.fn(),
   };
 
   const mockGetScannerReturnValue = {
@@ -135,11 +149,15 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUtilitiesReturnValue = {
+    createISODateString: jest
+      .fn()
+      .mockImplementation(DateHandler.createISODateString),
     formatDateString: jest.fn().mockReturnValue(DateHandler.formatDateString),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
-    generatePdfFromHtmlInteractor: jest.fn(),
-    getCalendaredCasesForTrialSessionInteractor: jest.fn(),
     getDocumentTypeForAddressChange: jest.fn(),
+    prepareDateFromString: jest
+      .fn()
+      .mockImplementation(DateHandler.prepareDateFromString),
   };
 
   const mockGetUseCaseHelpers = {
@@ -237,7 +255,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       tempDocumentsBucketName: 'MockDocumentBucketName',
     },
     getBaseUrl: () => 'http://localhost',
-    getCaseCaptionNames: jest.fn().mockReturnValue(Case.getCaseCaptionNames),
+    getCaseCaptionNames: jest.fn().mockImplementation(Case.getCaseCaptionNames),
     getChiefJudgeNameForSigning: jest
       .fn()
       .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
@@ -264,7 +282,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getEntityConstructors: () => ({
       Case,
       CaseExternal: CaseExternalIncomplete,
-      CaseInternal: CaseInternal,
+      CaseInternal,
       WorkItem: WorkItem,
     }),
     getHttpClient: jest.fn(() => ({
