@@ -102,7 +102,9 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetUseCasesReturnValue = {
     caseAdvancedSearchInteractor: jest.fn(),
+    createCaseDeadlineInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
+    getAllCaseDeadlinesInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
     getJudgeForUserChambersInteractor: jest.fn(),
