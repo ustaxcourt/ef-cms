@@ -101,8 +101,11 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCasesReturnValue = {
+    archiveDraftDocumentInteractor: jest.fn(),
+    assignWorkItemsInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
+    generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
@@ -129,15 +132,33 @@ const createTestApplicationContext = ({ user } = {}) => {
     getObject: jest.fn(),
   };
 
+  const mockGetUtilitiesReturnValue = {
+    formatDateString: jest.fn().mockReturnValue(DateHandler.formatDateString),
+    formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
+    generatePdfFromHtmlInteractor: jest.fn(),
+    getCalendaredCasesForTrialSessionInteractor: jest.fn(),
+    getDocumentTypeForAddressChange: jest.fn(),
+  };
+
   const mockGetUseCaseHelpers = {
+    sendServedPartiesEmails: jest.fn(),
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
   };
 
+  const getTemplateGeneratorsReturnMock = {
+    generateChangeOfAddressTemplate: jest.fn().mockResolvedValue('<div></div>'),
+    generateHTMLTemplateForPDF: jest.fn().mockReturnValue('<div></div>'),
+    generatePrintableDocketRecordTemplate: jest
+      .fn()
+      .mockResolvedValue('<div></div>'),
+  };
+
   const mockGetPersistenceGatewayReturnValue = {
     addWorkItemToSectionInbox,
     associateUserWithCase: jest.fn(),
+    createAttorneyUser: jest.fn(),
     createCase,
     createCaseTrialSortMappingRecords: jest.fn(),
     createSectionInboxRecord,
@@ -152,6 +173,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getAllCaseDeadlines: jest.fn(),
     getCaseByCaseId: jest.fn().mockImplementation(getCaseByCaseId),
     getCaseByDocketNumber: jest.fn(),
+    getCaseByUser: jest.fn(),
     getCaseDeadlinesByCaseId: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByCaseId),
@@ -163,6 +185,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDownloadPolicyUrl: jest.fn(),
     getEligibleCasesForTrialSession: jest.fn(),
+    updateAttorneyUser: jest.fn(),
     getInboxMessagesForSection: jest
       .fn()
       .mockImplementation(getInboxMessagesForSection),
@@ -177,14 +200,19 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseNote: jest.fn(),
     getUserCaseNoteForCases: jest.fn(),
+    getUsersBySearchKey: jest.fn(),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
-    saveWorkItemForNonPaper,
+    saveDocumentFromLambda: jest.fn(),
+    saveWorkItemForNonPaper: jest
+      .fn()
+      .mockImplementation(saveWorkItemForNonPaper),
     saveWorkItemForPaper,
     setItem: jest.fn(),
     setWorkItemAsRead,
     updateCase: jest.fn().mockImplementation(updateCase),
+    updateUser: jest.fn(),
     updateUserCaseNote: jest.fn(),
     updateWorkItem,
     updateWorkItemInCase,
@@ -251,16 +279,19 @@ const createTestApplicationContext = ({ user } = {}) => {
       return mockStorageClientReturnValue;
     }),
     getTempDocumentsBucketName: jest.fn(),
+    getTemplateGenerators: jest
+      .fn()
+      .mockReturnValue(getTemplateGeneratorsReturnMock),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
     getUseCaseHelpers: jest.fn().mockReturnValue(mockGetUseCaseHelpers),
     getUseCases: jest.fn().mockReturnValue(mockGetUseCasesReturnValue),
-    getUtilities: () => {
-      return { ...DateHandler };
-    },
+    getUtilities: jest.fn().mockReturnValue(mockGetUtilitiesReturnValue),
     isAuthorizedForWorkItems: jest.fn().mockReturnValue(() => true),
     logger: {
       error: jest.fn(),
       info: jest.fn(),
+      time: () => jest.fn().mockReturnValue(null),
+      timeEnd: () => jest.fn().mockReturnValue(null),
     },
   };
   return applicationContext;
