@@ -6,8 +6,9 @@ import { applicationContextForClient } from '../../../../../shared/src/business/
 const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
 
-const validateExternalDocumentInformationInteractor = applicationContext.getUseCases()
-  .validateExternalDocumentInformationInteractor;
+const {
+  validateExternalDocumentInformationInteractor,
+} = applicationContext.getUseCases();
 
 describe('validateExternalDocumentInformationAction', () => {
   let successStub;

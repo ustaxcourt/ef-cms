@@ -6,8 +6,7 @@ import { applicationContextForClient } from '../../../../../shared/src/business/
 
 const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
-const generateDocumentTitleInteractor = applicationContext.getUseCases()
-  .generateDocumentTitleInteractor;
+const { generateDocumentTitleInteractor } = applicationContext.getUseCases();
 
 describe('generateTitleForSupportingDocumentsAction', () => {
   it('should call generateDocumentTitle with correct data for supporting documents', async () => {
