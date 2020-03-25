@@ -96,6 +96,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCasesReturnValue = {
+    deleteCounselFromCaseInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
@@ -103,6 +104,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeCasePendingItemInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
+    updateCounselOnCaseInteractor: jest.fn(),
   };
 
   const mockGetScannerReturnValue = {
