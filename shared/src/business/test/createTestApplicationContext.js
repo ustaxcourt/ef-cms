@@ -106,6 +106,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     caseAdvancedSearchInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
     deleteCounselFromCaseInteractor: jest.fn(),
+    fileExternalDocumentForConsolidatedInteractor: jest.fn(),
+    fileExternalDocumentInteractor: jest.fn(),
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
@@ -122,6 +124,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     validateCaseAdvancedSearchInteractor: jest.fn(),
     validateCaseDeadlineInteractor: jest.fn(),
     validateEditPrivatePractitionerInteractor: jest.fn(),
+    validatePdfInteractor: jest.fn(),
+    virusScanPdfInteractor: jest.fn(),
   };
 
   const mockGetScannerReturnValue = {
