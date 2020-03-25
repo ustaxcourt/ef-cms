@@ -99,7 +99,20 @@ const createTestApplicationContext = ({ user } = {}) => {
     adminGetUser: jest.fn(),
     adminUpdateUserAttributes: jest.fn(),
   };
-
+  const mockGetPdfJsReturnValue = {
+    getDocument: jest.fn().mockReturnValue({
+      promise: Promise.resolve({
+        getPage: async () => ({
+          getViewport: () => ({
+            height: 100,
+            width: 100,
+          }),
+          render: () => null,
+        }),
+        numPages: 5,
+      }),
+    }),
+  };
   const mockGetUseCasesReturnValue = {
     archiveDraftDocumentInteractor: jest.fn(),
     assignWorkItemsInteractor: jest.fn(),
@@ -185,7 +198,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDownloadPolicyUrl: jest.fn(),
     getEligibleCasesForTrialSession: jest.fn(),
-    updateAttorneyUser: jest.fn(),
     getInboxMessagesForSection: jest
       .fn()
       .mockImplementation(getInboxMessagesForSection),
@@ -211,6 +223,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveWorkItemForPaper,
     setItem: jest.fn(),
     setWorkItemAsRead,
+    updateAttorneyUser: jest.fn(),
     updateCase: jest.fn().mockImplementation(updateCase),
     updateUser: jest.fn(),
     updateUserCaseNote: jest.fn(),
@@ -263,12 +276,14 @@ const createTestApplicationContext = ({ user } = {}) => {
       CaseInternal: CaseInternal,
       WorkItem: WorkItem,
     }),
+    getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn(() => ({
       get: () => ({
         data: 'url',
       }),
     })),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
+    getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPersistenceGateway: jest.fn().mockImplementation(() => {
       return mockGetPersistenceGatewayReturnValue;
     }),
