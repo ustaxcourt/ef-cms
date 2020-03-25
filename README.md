@@ -14,7 +14,7 @@ API | Front-End | Shared Code
 
 [![Known Vulnerabilities](https://snyk.io//test/github/flexion/ef-cms/badge.svg?targetFile=package.json)](https://snyk.io//test/github/flexion/ef-cms?targetFile=package.json)
 
-## Screenshots
+## Screenshots of new system
 
 <a href="docs/images/screenshot_docket.png"><img src="docs/images/screenshot_docket.png" width="47%" style="float: left; margin: 0 4px;" /></a>
 <a href="docs/images/screenshot_qc.png"><img src="docs/images/screenshot_qc.png" width="47%" style="float: left; margin: 0 4px;" /></a>
@@ -26,6 +26,7 @@ API | Front-End | Shared Code
 
 The fork of this project in which the bulk of development is occurring is [Flexion’s fork](https://github.com/flexion/ef-cms).
 
+### UX design and research
 Artifacts for ongoing development such as designs, research data, user workflows etc. are located in the [wiki](https://github.com/flexion/ef-cms/wiki).
 
 ## Technical overview
