@@ -84,6 +84,7 @@ const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { Case } = require('../entities/cases/Case');
+const { Document } = require('../entities/Document');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
@@ -106,7 +107,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     addConsolidatedCaseInteractor: jest.fn(),
     addCoversheetInteractor: jest.fn(),
     archiveDraftDocumentInteractor: jest.fn(),
+    generatePrintableFilingReceiptInteractor: jest.fn(),
     assignWorkItemsInteractor: jest.fn(),
+    validateExternalDocumentInformationInteractor: jest.fn(),
     associateIrsPractitionerWithCaseInteractor: jest.fn(),
     associatePrivatePractitionerWithCaseInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
@@ -123,7 +126,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
+    uploadExternalDocumentsInteractor: jest.fn(),
     getBlockedCasesInteractor: jest.fn(),
+    submitCaseAssociationRequestInteractor: jest.fn(),
+    submitPendingCaseAssociationRequestInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
     getCaseDeadlinesForCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
@@ -307,6 +313,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEntityConstructors: () => ({
       Case,
+      Document,
       CaseExternal: CaseExternalIncomplete,
       CaseInternal,
       WorkItem: WorkItem,
