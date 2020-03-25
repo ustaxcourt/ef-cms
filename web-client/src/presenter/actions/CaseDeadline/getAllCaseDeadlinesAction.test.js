@@ -3,11 +3,12 @@ import { getAllCaseDeadlinesAction } from './getAllCaseDeadlinesAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
+const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContextForClient;
 
 describe('getAllCaseDeadlinesAction', () => {
   it('gets all case deadlines', async () => {
-    presenter.providers.applicationContext.getUseCases().getAllCaseDeadlinesInteractor = jest
+    applicationContext.getUseCases().getAllCaseDeadlinesInteractor = jest
       .fn()
       .mockReturnValue('hello world');
 
