@@ -10,7 +10,6 @@ import { applicationContext } from '../src/applicationContext';
 import {
   back,
   createObjectURL,
-  exec,
   externalRoute,
   openInNewTab,
   revokeObjectURL,
@@ -431,14 +430,15 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
+  const routes = [];
+
   presenter.providers.router = {
     back,
     createObjectURL,
-    exec,
     externalRoute,
     openInNewTab,
     revokeObjectURL,
-    route,
+    route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
   };
 
   test = CerebralTest(presenter);
@@ -450,10 +450,33 @@ export const setupTest = ({ useCases = {} } = {}) => {
 
   test.setState('constants', applicationContext.getConstants());
 
-  console.log('router initialization', router.initialize(test));
+  router.initialize(test, (route, cb) => {
+    routes.push({
+      route,
+      cb,
+    });
+  });
   initializeSocketProvider(test);
 
   return test;
+};
+
+export const gotoRoute = (routes, routeToGoTo) => {
+  for (let route of routes) {
+    const regex = new RegExp(
+      route.route.replace(/\*/g, '([a-z\\-A-Z0-9]+)').replace(/\.\./g, '(.*)') +
+        '$',
+    );
+    if (routeToGoTo.match(regex)) {
+      let match = regex.exec(routeToGoTo);
+      while (match != null) {
+        const args = match.splice(1);
+        return route.cb.call(this, ...args);
+      }
+      return null;
+    }
+  }
+  throw new Error(`route ${routeToGoTo} not found`);
 };
 
 export const viewCaseDetail = async ({ docketNumber, test }) => {

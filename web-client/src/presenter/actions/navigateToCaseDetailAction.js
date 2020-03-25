@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get method
  * @returns {Promise} async action
  */
-export const navigateToCaseDetailAction = ({ get, props, router }) => {
+export const navigateToCaseDetailAction = async ({ get, props, router }) => {
   const caseId =
     props.caseId ||
     (props.caseDetail
@@ -17,8 +17,6 @@ export const navigateToCaseDetailAction = ({ get, props, router }) => {
       : get(state.caseDetail.docketNumber));
 
   if (caseId) {
-    // router.route(`/case-detail/${caseId}`);
-    window.location = `/case-detail/${caseId}`;
-    router.exec();
+    await router.route(`/case-detail/${caseId}`);
   }
 };
