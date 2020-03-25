@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   setTrialSessionCalendarInteractor,
 } = require('./setTrialSessionCalendarInteractor');
 const { User } = require('../../entities/User');
@@ -14,27 +17,30 @@ const MOCK_TRIAL = {
   trialLocation: 'Birmingham, Alabama',
 };
 
+let user;
+
 describe('setTrialSessionCalendarInteractor', () => {
-  let applicationContext;
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(MOCK_TRIAL);
+    applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
+  });
 
   it('throws an exception when there is a permissions issue', async () => {
-    applicationContext = {
-      getCurrentUser: () => {
-        return new User({
-          name: 'Petitioner',
-          role: User.ROLES.petitioner,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => ({
-        deleteCaseTrialSortMappingRecords: () => {},
-        getEligibleCasesForTrialSession: () => [MOCK_CASE],
-        getTrialSessionById: () => MOCK_TRIAL,
-        updateCase: () => {},
-        updateTrialSession: () => {},
-      }),
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
+    user = new User({
+      name: 'Petitioner',
+      role: User.ROLES.petitioner,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getEligibleCasesForTrialSession.mockReturnValue([MOCK_CASE]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .updateTrialSession.mockReturnValue({});
 
     let error;
 
@@ -51,153 +57,153 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('should set a trial session to "calendared" and calendar all cases that have been QCed', async () => {
-    let updateTrialSession = jest
-      .fn()
-      .mockImplementation(v => v.trialSessionToUpdate);
-    let updateCaseSpy = jest.fn();
+    applicationContext
+      .getPersistenceGateway()
+      .updateTrialSession.mockImplementation(v => v.trialSessionToUpdate);
 
-    applicationContext = {
-      getCurrentUser: () => {
-        return new User({
-          name: 'petitionsClerk',
-          role: User.ROLES.petitionsClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => ({
-        deleteCaseTrialSortMappingRecords: () => {},
-        getCalendaredCasesForTrialSession: () => [
-          {
-            ...MOCK_CASE,
-            caseId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-            docketNumber: '102-19',
-            qcCompleteForTrial: {
-              '6805d1ab-18d0-43ec-bafb-654e83405416': true,
-            },
+    user = new User({
+      name: 'petitionsClerk',
+      role: User.ROLES.petitionsClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([
+        {
+          ...MOCK_CASE,
+          caseId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+          docketNumber: '102-19',
+          qcCompleteForTrial: {
+            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
           },
-        ],
-        getEligibleCasesForTrialSession: () => [
-          {
-            ...MOCK_CASE,
-            qcCompleteForTrial: {
-              '6805d1ab-18d0-43ec-bafb-654e83405416': true,
-            },
+        },
+      ]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getEligibleCasesForTrialSession.mockReturnValue([
+        {
+          ...MOCK_CASE,
+          qcCompleteForTrial: {
+            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
           },
-        ],
-        getTrialSessionById: () => MOCK_TRIAL,
-        setPriorityOnAllWorkItems: () => {},
-        updateCase: updateCaseSpy,
-        updateTrialSession,
-      }),
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
+        },
+      ]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .setPriorityOnAllWorkItems.mockReturnValue({});
 
     await setTrialSessionCalendarInteractor({
       applicationContext,
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    expect(updateCaseSpy).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 
   it('should set a trial session to "calendared" but not calendar cases that have not been QCed', async () => {
-    let updateTrialSession = jest
-      .fn()
-      .mockImplementation(v => v.trialSessionToUpdate);
-    let updateCaseSpy = jest.fn();
-    applicationContext = {
-      getCurrentUser: () => {
-        return new User({
-          name: 'petitionsClerk',
-          role: User.ROLES.petitionsClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => ({
-        deleteCaseTrialSortMappingRecords: () => {},
-        getCalendaredCasesForTrialSession: () => [
-          {
-            ...MOCK_CASE,
-            caseId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-            docketNumber: '102-19',
-            qcCompleteForTrial: {
-              '6805d1ab-18d0-43ec-bafb-654e83405416': false,
-            },
+    applicationContext
+      .getPersistenceGateway()
+      .updateTrialSession.mockImplementation(v => v.trialSessionToUpdate);
+
+    user = new User({
+      name: 'petitionsClerk',
+      role: User.ROLES.petitionsClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([
+        {
+          ...MOCK_CASE,
+          caseId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+          docketNumber: '102-19',
+          qcCompleteForTrial: {
+            '6805d1ab-18d0-43ec-bafb-654e83405416': false,
           },
-        ],
-        getEligibleCasesForTrialSession: () => [
-          {
-            ...MOCK_CASE,
-            qcCompleteForTrial: {
-              '6805d1ab-18d0-43ec-bafb-654e83405416': false,
-            },
+        },
+      ]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getEligibleCasesForTrialSession.mockReturnValue([
+        {
+          ...MOCK_CASE,
+          qcCompleteForTrial: {
+            '6805d1ab-18d0-43ec-bafb-654e83405416': false,
           },
-        ],
-        getTrialSessionById: () => MOCK_TRIAL,
-        updateCase: updateCaseSpy,
-        updateTrialSession,
-      }),
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
+        },
+      ]);
 
     await setTrialSessionCalendarInteractor({
       applicationContext,
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    expect(updateCaseSpy).not.toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toBeCalled();
   });
 
   it('should set work items as high priority for each case that is calendared', async () => {
-    const setPriorityOnAllWorkItemsSpy = jest.fn();
+    user = new User({
+      name: 'petitionsClerk',
+      role: User.ROLES.petitionsClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([
+        {
+          ...MOCK_CASE,
+          caseId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+          docketNumber: '102-19',
+          qcCompleteForTrial: {
+            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
+          },
+        },
+      ]);
 
-    applicationContext = {
-      getCurrentUser: () => {
-        return new User({
-          name: 'petitionsClerk',
-          role: User.ROLES.petitionsClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => ({
-        deleteCaseTrialSortMappingRecords: () => {},
-        getCalendaredCasesForTrialSession: () => [
-          {
-            ...MOCK_CASE,
-            caseId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-            docketNumber: '102-19',
-            qcCompleteForTrial: {
-              '6805d1ab-18d0-43ec-bafb-654e83405416': true,
-            },
+    applicationContext
+      .getPersistenceGateway()
+      .getEligibleCasesForTrialSession.mockReturnValue([
+        {
+          ...MOCK_CASE,
+          qcCompleteForTrial: {
+            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
           },
-        ],
-        getEligibleCasesForTrialSession: () => [
-          {
-            ...MOCK_CASE,
-            qcCompleteForTrial: {
-              '6805d1ab-18d0-43ec-bafb-654e83405416': true,
-            },
-          },
-        ],
-        getTrialSessionById: () => MOCK_TRIAL,
-        setPriorityOnAllWorkItems: setPriorityOnAllWorkItemsSpy,
-        updateCase: () => {},
-        updateTrialSession: v => v.trialSessionToUpdate,
-      }),
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
+        },
+      ]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .updateTrialSession.mockImplementation(v => v.trialSessionToUpdate);
 
     await setTrialSessionCalendarInteractor({
       applicationContext,
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(setPriorityOnAllWorkItemsSpy).toBeCalled();
-    expect(setPriorityOnAllWorkItemsSpy.mock.calls.length).toEqual(2);
-    expect(setPriorityOnAllWorkItemsSpy.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems.mock
+        .calls.length,
+    ).toEqual(2);
+    expect(
+      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems.mock
+        .calls[0][0],
+    ).toMatchObject({
       caseId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
       highPriority: true,
       trialDate: '2025-12-01T00:00:00.000Z',
     });
-    expect(setPriorityOnAllWorkItemsSpy.mock.calls[1][0]).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems.mock
+        .calls[1][0],
+    ).toMatchObject({
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       highPriority: true,
       trialDate: '2025-12-01T00:00:00.000Z',
