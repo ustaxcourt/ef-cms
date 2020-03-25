@@ -12,10 +12,10 @@ export const SessionNotes = connect(
     openDeleteSessionNoteConfirmModalSequence:
       sequences.openDeleteSessionNoteConfirmModalSequence,
   },
-  ({
+  function SessionNotes({
     openAddEditSessionNoteModalSequence,
     openDeleteSessionNoteConfirmModalSequence,
-  }) => {
+  }) {
     return (
       <>
         <div className="case-notes">

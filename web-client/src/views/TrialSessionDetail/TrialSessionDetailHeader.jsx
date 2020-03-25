@@ -6,7 +6,7 @@ export const TrialSessionDetailHeader = connect(
   {
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
   },
-  ({ formattedTrialSessionDetails }) => (
+  function TrialSessionDetailHeader ({ formattedTrialSessionDetails })  (
     <>
       <div className="big-blue-header">
         <div className="grid-container">

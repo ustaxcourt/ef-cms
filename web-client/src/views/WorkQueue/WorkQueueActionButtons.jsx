@@ -7,7 +7,7 @@ export const WorkQueueActionButtons = connect(
   {
     workQueueHelper: state.workQueueHelper,
   },
-  ({ workQueueHelper }) => {
+  function WorkQueueActionButtons({ workQueueHelper }) {
     return (
       <React.Fragment>
         {workQueueHelper.showStartCaseButton && (

@@ -7,7 +7,7 @@ export const DeleteTrialSessionModal = connect(
   {
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
   },
-  ({ formattedTrialSessionDetails }) => {
+  function DeleteTrialSessionModal({ formattedTrialSessionDetails }) {
     return (
       <ConfirmModal
         cancelLabel="No, Cancel"
