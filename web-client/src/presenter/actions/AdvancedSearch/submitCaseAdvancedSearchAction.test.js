@@ -3,6 +3,7 @@ import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { submitCaseAdvancedSearchAction } from './submitCaseAdvancedSearchAction';
 
+const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContextForClient;
 
 describe('submitCaseAdvancedSearchAction', () => {
@@ -25,12 +26,12 @@ describe('submitCaseAdvancedSearchAction', () => {
     });
 
     expect(
-      applicationContextForClient.getUseCases().caseAdvancedSearchInteractor
-        .mock.calls.length,
+      applicationContext.getUseCases().caseAdvancedSearchInteractor.mock.calls
+        .length,
     ).toEqual(1);
     expect(
-      applicationContextForClient.getUseCases().caseAdvancedSearchInteractor
-        .mock.calls[0][0].searchParams,
+      applicationContext.getUseCases().caseAdvancedSearchInteractor.mock
+        .calls[0][0].searchParams,
     ).toEqual({
       countryType: 'c',
       petitionerName: 'a',
