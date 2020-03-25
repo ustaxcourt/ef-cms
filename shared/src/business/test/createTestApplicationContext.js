@@ -88,6 +88,7 @@ const { Document } = require('../entities/Document');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
+const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
@@ -109,10 +110,14 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePrintableFilingReceiptInteractor: jest.fn(),
     assignWorkItemsInteractor: jest.fn(),
     validateExternalDocumentInformationInteractor: jest.fn(),
+    associateIrsPractitionerWithCaseInteractor: jest.fn(),
+    associatePrivatePractitionerWithCaseInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
+    createCourtIssuedOrderPdfFromHtmlInteractor: jest.fn(),
     deleteCaseNoteInteractor: jest.fn(),
     deleteCounselFromCaseInteractor: jest.fn(),
+    fileCourtIssuedOrderInteractor: jest.fn(),
     fileDocketEntryInteractor: jest.fn(),
     fileExternalDocumentForConsolidatedInteractor: jest.fn(),
     fileExternalDocumentInteractor: jest.fn(),
@@ -127,7 +132,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
     getCaseDeadlinesForCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
+    getIrsPractitionersBySearchKeyInteractor: jest.fn(),
     getJudgeForUserChambersInteractor: jest.fn(),
+    getPrivatePractitionersBySearchKeyInteractor: jest.fn(),
     removeCasePendingItemInteractor: jest.fn(),
     removeConsolidatedCasesInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
@@ -136,11 +143,15 @@ const createTestApplicationContext = ({ user } = {}) => {
     updateCaseContextInteractor: jest.fn(),
     updateCounselOnCaseInteractor: jest.fn(),
     updateDocketEntryInteractor: jest.fn(),
+    updateDocketEntryMetaInteractor: jest.fn(),
+    uploadOrderDocumentInteractor: jest.fn(),
     validateAddIrsPractitionerInteractor: jest.fn(),
     validateAddPrivatePractitionerInteractor: jest.fn(),
     validateCaseAdvancedSearchInteractor: jest.fn(),
     validateCaseDeadlineInteractor: jest.fn(),
+    validateCourtIssuedDocketEntryInteractor: jest.fn(),
     validateDocketEntryInteractor: jest.fn(),
+    validateDocketRecordInteractor: jest.fn(),
     validateEditPrivatePractitionerInteractor: jest.fn(),
     validatePdfInteractor: jest.fn(),
     virusScanPdfInteractor: jest.fn(),
@@ -163,6 +174,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
+    deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
+    filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
     formatDateString: jest.fn().mockReturnValue(DateHandler.formatDateString),
     formatDocument: jest.fn().mockImplementation(v => v),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
@@ -273,6 +286,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
     getChromiumBrowser: jest.fn(),
+    getClerkOfCourtNameForSigning: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
     getConstants: jest.fn().mockReturnValue({
       ...webClientApplicationContext.getConstants(),
@@ -299,12 +313,15 @@ const createTestApplicationContext = ({ user } = {}) => {
       CaseInternal,
       WorkItem: WorkItem,
     }),
+    getFileReader: jest.fn(),
     getHttpClient: jest.fn(() => ({
       get: () => ({
         data: 'url',
       }),
     })),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
+    getPdfJs: jest.fn(),
+    getPdfStyles: jest.fn(),
     getPersistenceGateway: jest.fn().mockImplementation(() => {
       return mockGetPersistenceGatewayReturnValue;
     }),
