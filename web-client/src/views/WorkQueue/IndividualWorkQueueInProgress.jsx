@@ -8,7 +8,10 @@ export const IndividualWorkQueueInProgress = connect(
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ formattedWorkQueue, workQueueHelper }) => {
+  function IndividualWorkQueueInProgress({
+    formattedWorkQueue,
+    workQueueHelper,
+  }) {
     return (
       <React.Fragment>
         <table

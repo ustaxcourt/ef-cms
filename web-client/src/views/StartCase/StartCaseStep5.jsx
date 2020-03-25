@@ -21,7 +21,7 @@ export const StartCaseStep5 = connect(
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     user: state.user,
   },
-  ({
+  function StartCaseStep5({
     constants,
     form,
     formCancelToggleCancelSequence,
@@ -30,7 +30,7 @@ export const StartCaseStep5 = connect(
     startCaseHelper,
     submitFilePetitionSequence,
     user,
-  }) => {
+  }) {
     return (
       <>
         <Focus>

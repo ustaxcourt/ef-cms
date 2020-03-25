@@ -17,14 +17,14 @@ export const ViewAllDocumentsDesktop = connect(
       sequences.updateFileDocumentWizardFormValueSequence,
     viewAllDocumentsHelper: state.viewAllDocumentsHelper,
   },
-  ({
+  function ViewAllDocumentsDesktop({
     formCancelToggleCancelSequence,
     navigateBackSequence,
     openCompleteSelectDocumentTypeModalSequence,
     showModal,
     updateFileDocumentWizardFormValueSequence,
     viewAllDocumentsHelper,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         <div className="grid-container">

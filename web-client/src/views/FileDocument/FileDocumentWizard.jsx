@@ -15,7 +15,7 @@ export const FileDocumentWizard = connect(
   {
     showModal: state.modal.showModal,
   },
-  ({ showModal }) => {
+  function FileDocumentWizard({ showModal }) {
     return (
       <>
         <CaseDetailHeader hideActionButtons />

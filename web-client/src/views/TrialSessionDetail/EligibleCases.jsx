@@ -13,12 +13,12 @@ export const EligibleCases = connect(
     updateQcCompleteForTrialSequence:
       sequences.updateQcCompleteForTrialSequence,
   },
-  ({
+  function EligibleCases({
     formattedEligibleCases,
     trialSessionDetailsHelper,
     trialSessionId,
     updateQcCompleteForTrialSequence,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         {trialSessionDetailsHelper.showQcComplete && (

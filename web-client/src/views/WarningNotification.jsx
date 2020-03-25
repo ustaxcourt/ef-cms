@@ -9,7 +9,7 @@ export const WarningNotification = connect(
     alertWarning: state.alertWarning,
     dismissAlertSequence: sequences.dismissAlertSequence,
   },
-  ({ alertWarning, dismissAlertSequence }) => {
+  function WarningNotification({ alertWarning, dismissAlertSequence }) {
     const notificationRef = useRef(null);
     const isMessageOnly =
       alertWarning && alertWarning.message && !alertWarning.title;

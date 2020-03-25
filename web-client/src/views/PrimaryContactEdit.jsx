@@ -22,7 +22,7 @@ export const PrimaryContactEdit = connect(
     validatePrimaryContactSequence: sequences.validatePrimaryContactSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function PrimaryContactEdit({
     contactEditHelper,
     form,
     formCancelToggleCancelSequence,
@@ -31,7 +31,7 @@ export const PrimaryContactEdit = connect(
     updateFormValueSequence,
     validatePrimaryContactSequence,
     validationErrors,
-  }) => {
+  }) {
     const type = 'contactPrimary';
     const bind = 'form';
     const onBlur = 'validatePrimaryContactSequence';

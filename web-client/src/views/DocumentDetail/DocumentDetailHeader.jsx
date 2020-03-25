@@ -12,13 +12,13 @@ export const DocumentDetailHeader = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
   },
-  ({
+  function DocumentDetailHeader({
     archiveDraftDocumentModalSequence,
     caseDetail,
     documentDetailHelper,
     formattedCaseDetail,
     openConfirmEditModalSequence,
-  }) => {
+  }) {
     return (
       <>
         <h2 className="heading-1">

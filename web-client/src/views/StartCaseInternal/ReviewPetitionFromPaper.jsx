@@ -41,7 +41,7 @@ export const ReviewPetitionFromPaper = connect(
     showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
   },
-  ({
+  function ReviewPetitionFromPaper({
     constants,
     createCaseFromPaperAndServeToIrsSequence,
     form,
@@ -52,7 +52,7 @@ export const ReviewPetitionFromPaper = connect(
     saveInternalCaseForLaterSequence,
     showModal,
     startCaseHelper,
-  }) => {
+  }) {
     return (
       <>
         <BigHeader text="Create Case" />

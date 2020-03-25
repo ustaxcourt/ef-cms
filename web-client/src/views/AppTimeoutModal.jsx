@@ -9,7 +9,11 @@ export const AppTimeoutModal = connect(
     idleLogoutSequence: sequences.gotoIdleLogoutSequence,
     shouldIdleLogout: state.shouldIdleLogout,
   },
-  ({ confirmSequence, idleLogoutSequence, shouldIdleLogout }) => {
+  function AppTimeoutModal({
+    confirmSequence,
+    idleLogoutSequence,
+    shouldIdleLogout,
+  }) {
     useEffect(() => {
       if (shouldIdleLogout === true) {
         idleLogoutSequence();

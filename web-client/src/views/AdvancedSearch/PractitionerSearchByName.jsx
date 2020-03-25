@@ -13,13 +13,13 @@ export const PractitionerSearchByName = connect(
       sequences.updateAdvancedSearchFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function PractitionerSearchByName({
     advancedSearchForm,
     clearCaseSearchByNameFormSequence,
     submitPractitionerBarNumberSearchSequence,
     updateAdvancedSearchFormValueSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <div className="header-with-blue-background display-flex flex-justify">

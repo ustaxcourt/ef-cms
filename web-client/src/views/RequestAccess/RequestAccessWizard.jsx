@@ -13,7 +13,7 @@ export const RequestAccessWizard = connect(
   {
     showModal: state.modal.showModal,
   },
-  ({ showModal }) => {
+  function RequestAccessWizard({ showModal }) {
     return (
       <>
         <CaseDetailHeader hideActionButtons />

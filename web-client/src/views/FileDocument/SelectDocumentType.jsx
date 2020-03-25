@@ -17,14 +17,14 @@ export const SelectDocumentType = connect(
     reasons: state.viewAllDocumentsHelper.reasons,
     showModal: state.modal.showModal,
   },
-  ({
+  function SelectDocumentType({
     completeDocumentSelectSequence,
     fileDocumentHelper,
     formCancelToggleCancelSequence,
     gotoViewAllDocumentsSequence,
     reasons,
     showModal,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         <div className="grid-container">

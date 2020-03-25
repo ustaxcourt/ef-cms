@@ -3,7 +3,7 @@ import { connect } from '@cerebral/react';
 import React from 'react';
 import classNames from 'classnames';
 
-export const TextArea = connect(props => {
+export const TextArea = connect(function TextArea(props) {
   const { error, id, label, name, onChange } = props;
   const ariaLabelledby = props['aria-labelledby'];
 

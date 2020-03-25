@@ -21,12 +21,12 @@ export const TrialSessionWorkingCopy = connect(
     showModal: state.modal.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
   },
-  ({
+  function TrialSessionWorkingCopy({
     batchDownloadTrialSessionSequence,
     formattedTrialSessionDetails,
     showModal,
     trialSessionHeaderHelper,
-  }) => {
+  }) {
     return (
       <>
         <TrialSessionDetailHeader />

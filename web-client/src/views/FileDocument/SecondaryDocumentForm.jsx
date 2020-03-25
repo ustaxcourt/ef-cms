@@ -15,7 +15,12 @@ export const SecondaryDocumentForm = connect(
     form: state.form,
     validationErrors: state.validationErrors,
   },
-  ({ constants, fileDocumentHelper, form, validationErrors }) => {
+  function SecondaryDocumentForm({
+    constants,
+    fileDocumentHelper,
+    form,
+    validationErrors,
+  }) {
     return (
       <React.Fragment>
         <h2 className="margin-top-4">{form.secondaryDocument.documentTitle}</h2>
