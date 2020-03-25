@@ -106,8 +106,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     caseAdvancedSearchInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
     deleteCounselFromCaseInteractor: jest.fn(),
+    fileCourtIssuedDocketEntryInteractor: jest.fn(),
     fileExternalDocumentForConsolidatedInteractor: jest.fn(),
     fileExternalDocumentInteractor: jest.fn(),
+    generateCourtIssuedDocumentTitleInteractor: jest.fn(),
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
@@ -119,10 +121,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeItemInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
     updateCounselOnCaseInteractor: jest.fn(),
+    updateCourtIssuedDocketEntryInteractor: jest.fn(),
     validateAddIrsPractitionerInteractor: jest.fn(),
     validateAddPrivatePractitionerInteractor: jest.fn(),
     validateCaseAdvancedSearchInteractor: jest.fn(),
     validateCaseDeadlineInteractor: jest.fn(),
+    validateCourtIssuedDocketEntryInteractor: jest.fn(),
     validateEditPrivatePractitionerInteractor: jest.fn(),
     validatePdfInteractor: jest.fn(),
     virusScanPdfInteractor: jest.fn(),
@@ -315,9 +319,9 @@ const applicationContext = createTestApplicationContext();
 /*
   If you receive an error when testing cerebral that says:
   `The property someProperty passed to Provider is not a method`
-  it is because the cerebral testing framework expects all objects on the 
-  applicationContext to be functions.  The code below walks the original 
-  applicationContext and adds ONLY the functions to the 
+  it is because the cerebral testing framework expects all objects on the
+  applicationContext to be functions.  The code below walks the original
+  applicationContext and adds ONLY the functions to the
   applicationContextForClient.
 */
 const applicationContextForClient = {};
