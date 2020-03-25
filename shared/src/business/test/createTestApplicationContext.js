@@ -230,6 +230,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteSectionOutboxRecord,
     deleteUserCaseNote: jest.fn(),
+    deleteUserConnection: jest.fn(),
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
     getAllCaseDeadlines: jest.fn(),
@@ -268,6 +269,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     incrementCounter,
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     saveDocumentFromLambda: jest.fn(),
+    saveUserConnection: jest.fn(),
     saveWorkItemForNonPaper: jest
       .fn()
       .mockImplementation(saveWorkItemForNonPaper),
