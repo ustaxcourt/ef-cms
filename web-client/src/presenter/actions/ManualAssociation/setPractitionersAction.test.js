@@ -1,9 +1,5 @@
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setPractitionersAction } from './setPractitionersAction';
-
-presenter.providers.applicationContext = applicationContext;
 
 describe('setPractitionersAction', () => {
   it('sets state.modal.practitionerMatches to the passed in props.privatePractitioners and defaults state.modal.user to that user if there is only one match', async () => {

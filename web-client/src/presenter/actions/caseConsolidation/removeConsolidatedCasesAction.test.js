@@ -1,17 +1,14 @@
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { removeConsolidatedCasesAction } from './removeConsolidatedCasesAction';
 import { runAction } from 'cerebral/test';
 
-const removeInteractorStub = jest.fn();
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    removeConsolidatedCasesInteractor: removeInteractorStub,
-  }),
-};
+let applicationContext;
 
 describe('removeConsolidatedCasesAction', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('should call remove consolidated cases interactor with the caseId and case IDs to remove', async () => {
@@ -25,7 +22,9 @@ describe('removeConsolidatedCasesAction', () => {
       },
     });
 
-    expect(removeInteractorStub).toHaveBeenCalledWith({
+    expect(
+      applicationContext.getUseCases().removeConsolidatedCasesInteractor,
+    ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
       caseId: 'abc123-abc123abc123-abc123abc123-abc123abc123',
       caseIdsToRemove: ['abc'],
