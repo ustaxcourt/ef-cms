@@ -24,7 +24,7 @@ export const CreateOrder = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
-  ({
+  function CreateOrder({
     createOrderHelper,
     form,
     formCancelToggleCancelSequence,
@@ -34,7 +34,7 @@ export const CreateOrder = connect(
     submitCourtIssuedOrderSequence,
     updateFormValueSequence,
     updateScreenMetadataSequence,
-  }) => {
+  }) {
     const { pageTitle } = createOrderHelper;
 
     return (

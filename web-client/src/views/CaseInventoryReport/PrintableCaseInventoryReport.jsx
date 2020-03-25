@@ -9,7 +9,7 @@ export const PrintableCaseInventoryReport = connect(
   {
     gotoCaseInventoryReportSequence: sequences.gotoCaseInventoryReportSequence,
   },
-  ({ gotoCaseInventoryReportSequence }) => {
+  function PrintableCaseInventoryReport({ gotoCaseInventoryReportSequence }) {
     return (
       <>
         <BigHeader text="Case Inventory Report" />

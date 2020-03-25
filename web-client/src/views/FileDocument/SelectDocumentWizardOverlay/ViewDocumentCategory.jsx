@@ -14,14 +14,14 @@ export const ViewDocumentCategory = connect(
       sequences.updateFileDocumentWizardFormValueSequence,
     viewAllDocumentsHelper: state.viewAllDocumentsHelper,
   },
-  ({
+  function ViewDocumentCategory({
     chooseModalWizardStepSequence,
     clearModalSequence,
     modal,
     overlayRef,
     updateFileDocumentWizardFormValueSequence,
     viewAllDocumentsHelper,
-  }) => {
+  }) {
     if (overlayRef && overlayRef.current) {
       overlayRef.current.scrollTo(0, 0);
     }

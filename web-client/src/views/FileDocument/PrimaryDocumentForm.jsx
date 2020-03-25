@@ -15,7 +15,12 @@ export const PrimaryDocumentForm = connect(
     form: state.form,
     validationErrors: state.validationErrors,
   },
-  ({ constants, fileDocumentHelper, form, validationErrors }) => {
+  function PrimaryDocumentForm({
+    constants,
+    fileDocumentHelper,
+    form,
+    validationErrors,
+  }) {
     return (
       <React.Fragment>
         <h2 className="margin-top-4">{form.documentTitle}</h2>
