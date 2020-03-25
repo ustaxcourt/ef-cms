@@ -118,6 +118,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createTrialSessionInteractor: jest.fn(),
     deleteCaseNoteInteractor: jest.fn(),
     deleteCounselFromCaseInteractor: jest.fn(),
+    deleteTrialSessionInteractor: jest.fn(),
     fetchPendingItemsInteractor: jest.fn(),
     fileCourtIssuedDocketEntryInteractor: jest.fn(),
     fileCourtIssuedOrderInteractor: jest.fn(),
