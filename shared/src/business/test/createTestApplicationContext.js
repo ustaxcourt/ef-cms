@@ -30,6 +30,9 @@ const {
   deleteWorkItemFromInbox,
 } = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 const {
+  ExternalDocumentFactory,
+} = require('../entities/externalDocument/ExternalDocumentFactory');
+const {
   getCaseByCaseId,
 } = require('../../persistence/dynamo/cases/getCaseByCaseId');
 const {
@@ -190,6 +193,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseDeadlinesByCaseId: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByCaseId),
+    getCasesByLeadCaseId: jest.fn(),
     getCasesByUser: jest.fn(),
     getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
     getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
@@ -275,6 +279,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getEntityConstructors: () => ({
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
+      ExternalDocumentFactory: ExternalDocumentFactory,
       WorkItem: WorkItem,
     }),
     getHttpClient: jest.fn(() => ({
