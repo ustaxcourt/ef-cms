@@ -17,10 +17,10 @@ API | Front-End | Shared Code
 ## Screenshots
 
 <a href="docs/images/screenshot_docket.png"><img src="docs/images/screenshot_docket.png" width="47%" style="float: left; margin: 0 4px;" /></a>
-<a href="docs/images/screenshot-case.png"><img src="docs/images/screenshot-case.png" width="47%" style="float: left; margin: 0 4px;" /></a>
+<a href="docs/images/screenshot_qc.png"><img src="docs/images/screenshot_qc.png" width="47%" style="float: left; margin: 0 4px;" /></a>
 
-<a href="docs/images/screenshot-judge.png"><img src="docs/images/screenshot-judge.png" width="47%" style="float: left; margin: 4px 4px 0 0;" /></a>
-<a href="docs/images/screenshot-sessions.png"><img src="docs/images/screenshot-sessions.png" width="47%" style="float: left; margin: 4px 0 0 4px;" /></a>
+<a href="docs/images/screenshot_petition.png"><img src="docs/images/screenshot_petition.png" width="47%" style="float: left; margin: 4px 4px 0 0;" /></a>
+<a href="docs/images/screenshot_trialsession.png"><img src="docs/images/screenshot_trialsession.png" width="47%" style="float: left; margin: 4px 0 0 4px;" /></a>
 
 <br clear="both">
 
