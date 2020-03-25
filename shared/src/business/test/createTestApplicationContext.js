@@ -105,6 +105,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocument: jest.fn().mockReturnValue({
       promise: Promise.resolve({
         getPage: async () => ({
+          cleanup: () => {},
           getViewport: () => ({
             height: 100,
             width: 100,
