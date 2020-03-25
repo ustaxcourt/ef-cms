@@ -1,10 +1,13 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   updateCourtIssuedOrderInteractor,
 } = require('./updateCourtIssuedOrderInteractor');
 const { User } = require('../../entities/User');
 
 describe('updateCourtIssuedOrderInteractor', () => {
-  let applicationContext;
+  let mockUser;
 
   let caseRecord = {
     caseCaption: 'Caption',
@@ -49,63 +52,54 @@ describe('updateCourtIssuedOrderInteractor', () => {
     userId: 'petitioner',
   };
 
+  beforeEach(() => {
+    applicationContext.environment.stage = 'local';
+    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockResolvedValue(caseRecord);
+  });
+
   it('should throw an error if not authorized', async () => {
-    let error;
-    try {
-      applicationContext = {
-        environment: { stage: 'local' },
-        getCurrentUser: () => {
-          return {
-            name: 'Olivia Jade',
-            role: User.ROLES.privatePractitioner,
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          };
-        },
-        getPersistenceGateway: () => ({
-          getCaseByCaseId: async () => caseRecord,
-          getUserById: async () => ({ name: 'bob' }),
-          updateCase: async () => caseRecord,
-        }),
-        getUniqueId: () => 'unique-id-1',
-      };
-      await updateCourtIssuedOrderInteractor({
+    mockUser = new User({
+      name: 'Olivia Jade',
+      role: User.ROLES.privatePractitioner,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .updateCase.mockResolvedValue(caseRecord);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockResolvedValue({ name: 'bob' });
+
+    await expect(
+      updateCourtIssuedOrderInteractor({
         applicationContext,
         documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           caseId: caseRecord.caseId,
           documentType: 'Order to Show Cause',
         },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain('Unauthorized');
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('update existing document within case', async () => {
+    mockUser = new User({
+      name: 'Olivia Jade',
+      role: User.ROLES.petitionsClerk,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
     let error;
-    let getCaseByCaseIdSpy = jest.fn().mockReturnValue(caseRecord);
-    let updateCaseSpy = jest.fn();
     try {
-      applicationContext = {
-        environment: { stage: 'local' },
-        getCurrentUser: () => {
-          return new User({
-            name: 'Olivia Jade',
-            role: User.ROLES.petitionsClerk,
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          });
-        },
-        getPersistenceGateway: () => ({
-          getCaseByCaseId: getCaseByCaseIdSpy,
-          getUserById: async () => ({
-            name: 'bob',
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          }),
-          updateCase: updateCaseSpy,
-        }),
-        getUniqueId: () => 'unique-id-1',
-      };
+      applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+        name: 'bob',
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+
       await updateCourtIssuedOrderInteractor({
         applicationContext,
         documentMetadata: {
@@ -118,9 +112,12 @@ describe('updateCourtIssuedOrderInteractor', () => {
       error = err;
     }
     expect(error).toBeUndefined();
-    expect(getCaseByCaseIdSpy).toBeCalled();
     expect(
-      updateCaseSpy.mock.calls[0][0].caseToUpdate.documents.length,
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents.length,
     ).toEqual(3);
   });
 });

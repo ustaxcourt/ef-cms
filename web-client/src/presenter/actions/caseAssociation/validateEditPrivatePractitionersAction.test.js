@@ -1,26 +1,24 @@
-import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/cases/CaseConstants';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateEditPrivatePractitionersAction } from './validateEditPrivatePractitionersAction';
 
 describe('validateEditPrivatePractitionersAction', () => {
-  let validateEditPrivatePractitionerInteractorStub;
+  let applicationContext;
   let successStub;
   let errorStub;
+  let serviceIndicatorTypes;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    validateEditPrivatePractitionerInteractorStub = jest.fn();
+    applicationContext = applicationContextForClient;
+    serviceIndicatorTypes = applicationContext.getConstants()
+      .SERVICE_INDICATOR_TYPES;
     successStub = jest.fn();
     errorStub = jest.fn();
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateEditPrivatePractitionerInteractor: validateEditPrivatePractitionerInteractorStub,
-      }),
-    };
-
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -28,9 +26,9 @@ describe('validateEditPrivatePractitionersAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateEditPrivatePractitionerInteractorStub = jest
-      .fn()
-      .mockReturnValue(null);
+    applicationContext
+      .getUseCases()
+      .validateEditPrivatePractitionerInteractor.mockReturnValue(null);
     await runAction(validateEditPrivatePractitionersAction, {
       modules: {
         presenter,
@@ -39,11 +37,11 @@ describe('validateEditPrivatePractitionersAction', () => {
         caseDetail: {
           privatePractitioners: [
             {
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
               userId: '1',
             },
             {
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
               userId: '2',
             },
           ],
@@ -52,12 +50,12 @@ describe('validateEditPrivatePractitionersAction', () => {
           privatePractitioners: [
             {
               representingPrimary: true,
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
               userId: '1',
             },
             {
               representingPrimary: true,
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
               userId: '2',
             },
           ],
@@ -69,9 +67,10 @@ describe('validateEditPrivatePractitionersAction', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateEditPrivatePractitionerInteractorStub = jest
-      .fn()
-      .mockReturnValue('error');
+    applicationContext
+      .getUseCases()
+      .validateEditPrivatePractitionerInteractor.mockReturnValue('error');
+
     await runAction(validateEditPrivatePractitionersAction, {
       modules: {
         presenter,
@@ -80,11 +79,11 @@ describe('validateEditPrivatePractitionersAction', () => {
         caseDetail: {
           privatePractitioners: [
             {
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
               userId: '1',
             },
             {
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
               userId: '2',
             },
           ],
@@ -94,7 +93,7 @@ describe('validateEditPrivatePractitionersAction', () => {
             { userId: '1' },
             {
               representingPrimary: true,
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
               userId: '2',
             },
           ],
@@ -102,6 +101,10 @@ describe('validateEditPrivatePractitionersAction', () => {
       },
     });
 
+    expect(
+      applicationContext.getUseCases()
+        .validateEditPrivatePractitionerInteractor,
+    ).toBeCalled();
     expect(errorStub).toBeCalled();
     expect(errorStub.mock.calls[0][0].errors).toEqual({
       privatePractitioners: ['error', 'error'],
@@ -109,9 +112,11 @@ describe('validateEditPrivatePractitionersAction', () => {
   });
 
   it('should call the error path when attempting to change from paper to electronic service', async () => {
-    validateEditPrivatePractitionerInteractorStub = jest
-      .fn()
-      .mockReturnValue({ something: 'error' });
+    applicationContext
+      .getUseCases()
+      .validateEditPrivatePractitionerInteractor.mockReturnValue({
+        something: 'error',
+      });
     await runAction(validateEditPrivatePractitionersAction, {
       modules: {
         presenter,
@@ -119,8 +124,14 @@ describe('validateEditPrivatePractitionersAction', () => {
       state: {
         caseDetail: {
           privatePractitioners: [
-            { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER, userId: '1' },
-            { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER, userId: '2' },
+            {
+              serviceIndicator: serviceIndicatorTypes.SI_PAPER,
+              userId: '1',
+            },
+            {
+              serviceIndicator: serviceIndicatorTypes.SI_PAPER,
+              userId: '2',
+            },
           ],
         },
         modal: {
@@ -128,7 +139,7 @@ describe('validateEditPrivatePractitionersAction', () => {
             { userId: '1' },
             {
               representingPrimary: true,
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
               userId: '2',
             },
           ],
@@ -136,6 +147,10 @@ describe('validateEditPrivatePractitionersAction', () => {
       },
     });
 
+    expect(
+      applicationContext.getUseCases()
+        .validateEditPrivatePractitionerInteractor,
+    ).toBeCalled();
     expect(errorStub).toBeCalled();
     expect(errorStub.mock.calls[0][0].errors).toEqual({
       privatePractitioners: [

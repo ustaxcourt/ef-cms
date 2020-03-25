@@ -1,12 +1,10 @@
+import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { assignSelectedWorkItemsAction } from './assignSelectedWorkItemsAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    assignWorkItemsInteractor: () => null,
-  }),
-};
+const applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
 describe('assignSelectedWorkItemsAction', () => {
   it('updates only the section queue items to have the new assignee information', async () => {
