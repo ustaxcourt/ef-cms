@@ -1,12 +1,16 @@
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseCaptionForCaseInfoTabAction } from './getCaseCaptionForCaseInfoTabAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
+const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
 
 describe('getCaseCaptionForCaseInfoTabAction', () => {
-  const { Case, ContactFactory } = applicationContext.getEntityConstructors();
+  const {
+    CASE_CAPTION_POSTFIX,
+    PARTY_TYPES,
+  } = applicationContext.getConstants();
 
   it('should return an empty string when the party type has not been selected', async () => {
     const result = await runAction(getCaseCaptionForCaseInfoTabAction, {
@@ -34,14 +38,14 @@ describe('getCaseCaptionForCaseInfoTabAction', () => {
           contactPrimary: {
             name: 'Guy Fieri',
           },
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
 
     expect(result.output.caseCaption).toBe('Guy Fieri, Petitioner');
     expect(
-      result.output.caseCaption.includes(Case.CASE_CAPTION_POSTFIX),
+      result.output.caseCaption.includes(CASE_CAPTION_POSTFIX),
     ).toBeFalsy();
   });
 });
