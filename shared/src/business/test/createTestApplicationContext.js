@@ -84,6 +84,7 @@ const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { Case } = require('../entities/cases/Case');
+const { Document } = require('../entities/Document');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
@@ -106,10 +107,13 @@ const createTestApplicationContext = ({ user } = {}) => {
     addConsolidatedCaseInteractor: jest.fn(),
     addCoversheetInteractor: jest.fn(),
     archiveDraftDocumentInteractor: jest.fn(),
+    generatePrintableFilingReceiptInteractor: jest.fn(),
     assignWorkItemsInteractor: jest.fn(),
+    validateExternalDocumentInformationInteractor: jest.fn(),
     associateIrsPractitionerWithCaseInteractor: jest.fn(),
     associatePrivatePractitionerWithCaseInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
+    completeDocketEntryQCInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
     createCourtIssuedOrderPdfFromHtmlInteractor: jest.fn(),
     deleteCaseNoteInteractor: jest.fn(),
@@ -124,7 +128,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
+    uploadExternalDocumentsInteractor: jest.fn(),
     getBlockedCasesInteractor: jest.fn(),
+    submitCaseAssociationRequestInteractor: jest.fn(),
+    submitPendingCaseAssociationRequestInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
     getCaseDeadlinesForCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
@@ -135,6 +142,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeConsolidatedCasesInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
     saveCaseNoteInteractor: jest.fn(),
+    saveIntermediateDocketEntryInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
     updateCaseContextInteractor: jest.fn(),
     updateCounselOnCaseInteractor: jest.fn(),
@@ -172,7 +180,10 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(DateHandler.createISODateString),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
+<<<<<<< HEAD
+=======
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
+>>>>>>> origin/shared-app-context
     formatDateString: jest.fn().mockReturnValue(DateHandler.formatDateString),
     formatDocument: jest.fn().mockImplementation(v => v),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
@@ -305,6 +316,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEntityConstructors: () => ({
       Case,
+      Document,
       CaseExternal: CaseExternalIncomplete,
       CaseInternal,
       WorkItem: WorkItem,
