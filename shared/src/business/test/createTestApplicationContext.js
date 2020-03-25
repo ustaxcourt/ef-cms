@@ -113,6 +113,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     fileDocketEntryInteractor: jest.fn(),
     fileExternalDocumentForConsolidatedInteractor: jest.fn(),
     fileExternalDocumentInteractor: jest.fn(),
+    generateDocumentTitleInteractor: jest.fn(),
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
@@ -157,8 +158,10 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(DateHandler.createISODateString),
     formatDateString: jest.fn().mockReturnValue(DateHandler.formatDateString),
+    formatDocument: jest.fn().mockImplementation(v => v),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     getDocumentTypeForAddressChange: jest.fn(),
+    getFilingsAndProceedings: jest.fn().mockReturnValue(''),
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
