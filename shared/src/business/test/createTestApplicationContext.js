@@ -106,6 +106,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     archiveDraftDocumentInteractor: jest.fn(),
     assignWorkItemsInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
+    completeDocketEntryQCInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
     deleteCaseNoteInteractor: jest.fn(),
     deleteCounselFromCaseInteractor: jest.fn(),
@@ -123,6 +124,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeConsolidatedCasesInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
     saveCaseNoteInteractor: jest.fn(),
+    saveIntermediateDocketEntryInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
     updateCaseContextInteractor: jest.fn(),
     updateCounselOnCaseInteractor: jest.fn(),
@@ -152,6 +154,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
+    deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     formatDateString: jest.fn().mockReturnValue(DateHandler.formatDateString),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     getDocumentTypeForAddressChange: jest.fn(),
