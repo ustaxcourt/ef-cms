@@ -1,10 +1,9 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateCaseAdvancedSearchAction } from './validateCaseAdvancedSearchAction';
 
-const applicationContext = applicationContextForClient;
-presenter.providers.applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
 describe('validateCaseAdvancedSearchAction', () => {
   let successStub;
