@@ -87,6 +87,7 @@ const { Case } = require('../entities/cases/Case');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
+const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
@@ -101,32 +102,50 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCasesReturnValue = {
+    addCaseToTrialSessionInteractor: jest.fn(),
+    addConsolidatedCaseInteractor: jest.fn(),
+    addCoversheetInteractor: jest.fn(),
     archiveDraftDocumentInteractor: jest.fn(),
     assignWorkItemsInteractor: jest.fn(),
+    associateIrsPractitionerWithCaseInteractor: jest.fn(),
+    associatePrivatePractitionerWithCaseInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
+    createCourtIssuedOrderPdfFromHtmlInteractor: jest.fn(),
+    deleteCaseNoteInteractor: jest.fn(),
     deleteCounselFromCaseInteractor: jest.fn(),
-    fileCourtIssuedDocketEntryInteractor: jest.fn(),
+    fileCourtIssuedOrderInteractor: jest.fn(),
+    fileDocketEntryInteractor: jest.fn(),
     fileExternalDocumentForConsolidatedInteractor: jest.fn(),
     fileExternalDocumentInteractor: jest.fn(),
-    generateCourtIssuedDocumentTitleInteractor: jest.fn(),
+    generateDocumentTitleInteractor: jest.fn(),
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
+    getBlockedCasesInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
     getCaseDeadlinesForCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
+    getIrsPractitionersBySearchKeyInteractor: jest.fn(),
     getJudgeForUserChambersInteractor: jest.fn(),
+    getPrivatePractitionersBySearchKeyInteractor: jest.fn(),
     removeCasePendingItemInteractor: jest.fn(),
+    removeConsolidatedCasesInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
+    saveCaseNoteInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
+    updateCaseContextInteractor: jest.fn(),
     updateCounselOnCaseInteractor: jest.fn(),
-    updateCourtIssuedDocketEntryInteractor: jest.fn(),
+    updateDocketEntryInteractor: jest.fn(),
+    updateDocketEntryMetaInteractor: jest.fn(),
+    uploadOrderDocumentInteractor: jest.fn(),
     validateAddIrsPractitionerInteractor: jest.fn(),
     validateAddPrivatePractitionerInteractor: jest.fn(),
     validateCaseAdvancedSearchInteractor: jest.fn(),
     validateCaseDeadlineInteractor: jest.fn(),
     validateCourtIssuedDocketEntryInteractor: jest.fn(),
+    validateDocketEntryInteractor: jest.fn(),
+    validateDocketRecordInteractor: jest.fn(),
     validateEditPrivatePractitionerInteractor: jest.fn(),
     validatePdfInteractor: jest.fn(),
     virusScanPdfInteractor: jest.fn(),
@@ -149,9 +168,13 @@ const createTestApplicationContext = ({ user } = {}) => {
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
+    deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
+    filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
     formatDateString: jest.fn().mockReturnValue(DateHandler.formatDateString),
+    formatDocument: jest.fn().mockImplementation(v => v),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     getDocumentTypeForAddressChange: jest.fn(),
+    getFilingsAndProceedings: jest.fn().mockReturnValue(''),
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
@@ -252,11 +275,12 @@ const createTestApplicationContext = ({ user } = {}) => {
       tempDocumentsBucketName: 'MockDocumentBucketName',
     },
     getBaseUrl: () => 'http://localhost',
-    getCaseCaptionNames: jest.fn().mockReturnValue(Case.getCaseCaptionNames),
+    getCaseCaptionNames: jest.fn().mockImplementation(Case.getCaseCaptionNames),
     getChiefJudgeNameForSigning: jest
       .fn()
       .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
     getChromiumBrowser: jest.fn(),
+    getClerkOfCourtNameForSigning: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
     getConstants: jest.fn().mockReturnValue({
       ...webClientApplicationContext.getConstants(),
@@ -277,16 +301,20 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentClient: () => mockDocClient,
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEntityConstructors: () => ({
+      Case,
       CaseExternal: CaseExternalIncomplete,
-      CaseInternal: CaseInternal,
+      CaseInternal,
       WorkItem: WorkItem,
     }),
+    getFileReader: jest.fn(),
     getHttpClient: jest.fn(() => ({
       get: () => ({
         data: 'url',
       }),
     })),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
+    getPdfJs: jest.fn(),
+    getPdfStyles: jest.fn(),
     getPersistenceGateway: jest.fn().mockImplementation(() => {
       return mockGetPersistenceGatewayReturnValue;
     }),
