@@ -13,13 +13,13 @@ export const PartiesFiling = connect(
     validateExternalDocumentInformationSequence:
       sequences.validateExternalDocumentInformationSequence,
   },
-  ({
+  function PartiesFiling({
     fileDocumentHelper,
     form,
     formattedCaseDetail,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         <h2 className="margin-top-4">

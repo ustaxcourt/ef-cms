@@ -29,7 +29,7 @@ export const EditUploadCourtIssuedDocument = connect(
       sequences.validateUploadCourtIssuedDocumentSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function EditUploadCourtIssuedDocument({
     clearExistingDocumentSequence,
     constants,
     editUploadCourtIssuedDocumentSequence,
@@ -41,7 +41,7 @@ export const EditUploadCourtIssuedDocument = connect(
     updateFormValueSequence,
     validateUploadCourtIssuedDocumentSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <CaseDetailHeader />

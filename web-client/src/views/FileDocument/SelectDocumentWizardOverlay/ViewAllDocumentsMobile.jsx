@@ -11,12 +11,12 @@ export const ViewAllDocumentsMobile = connect(
     updateModalValueSequence: sequences.updateModalValueSequence,
     viewAllDocumentsHelper: state.viewAllDocumentsHelper,
   },
-  ({
+  function ViewAllDocumentsMobile({
     chooseModalWizardStepSequence,
     overlayRef,
     updateModalValueSequence,
     viewAllDocumentsHelper,
-  }) => {
+  }) {
     if (overlayRef && overlayRef.current) {
       overlayRef.current.scrollTo(0, 0);
     }

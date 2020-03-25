@@ -17,7 +17,7 @@ export const CreateMessageModalDialog = connect(
     validationErrors: state.modal.validationErrors,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({
+  function CreateMessageModalDialog({
     constants,
     form,
     onConfirmSequence = 'createWorkItemSequence',
@@ -27,7 +27,7 @@ export const CreateMessageModalDialog = connect(
     validateInitialWorkItemMessageInModalSequence,
     validationErrors,
     workQueueSectionHelper,
-  }) => {
+  }) {
     validationErrors = validationErrors || {};
     form = form || {};
 

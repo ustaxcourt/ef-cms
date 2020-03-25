@@ -13,13 +13,13 @@ export const DocketRecordHeader = connect(
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
-  ({
+  function DocketRecordHeader({
     formattedCaseDetail,
     navigateToPrintableDocketRecordSequence,
     printDocketRecordSequence,
     toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
-  }) => {
+  }) {
     const openDocketRecordPrintPreview = (options = {}) => {
       updateSessionMetadataSequence({
         key: `docketRecordSort.${formattedCaseDetail.caseId}`,

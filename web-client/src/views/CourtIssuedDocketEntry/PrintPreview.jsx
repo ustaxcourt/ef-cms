@@ -10,7 +10,7 @@ export const PrintPreview = connect(
   {
     navigateBackSequence: sequences.navigateBackSequence,
   },
-  ({ navigateBackSequence }) => {
+  function PrintPreview({ navigateBackSequence }) {
     return (
       <>
         <CaseDetailHeader hideActionButtons />

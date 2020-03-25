@@ -7,7 +7,7 @@ export const MultiDocumentPartiesFilingReview = connect(
   {
     form: state.form,
   },
-  ({ form, selectedCases }) => {
+  function MultiDocumentPartiesFilingReview({ form, selectedCases }) {
     return selectedCases.map(selectedCase => (
       <div
         className="tablet:grid-col-3 margin-bottom-5"

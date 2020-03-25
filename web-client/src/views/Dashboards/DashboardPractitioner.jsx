@@ -8,7 +8,7 @@ import React from 'react';
 
 export const DashboardPractitioner = connect(
   { user: state.user },
-  ({ user }) => {
+  function DashboardPractitioner({ user }) {
     return (
       <React.Fragment>
         <BigHeader text={`Welcome, ${user.name}`} />

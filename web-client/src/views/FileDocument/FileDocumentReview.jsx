@@ -21,7 +21,7 @@ export const FileDocumentReview = connect(
     showModal: state.modal.showModal,
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
   },
-  ({
+  function FileDocumentReview({
     fileDocumentHelper,
     form,
     formattedCaseDetail,
@@ -29,7 +29,7 @@ export const FileDocumentReview = connect(
     navigateBackSequence,
     showModal,
     submitExternalDocumentSequence,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         <Focus>
