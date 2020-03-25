@@ -1,8 +1,10 @@
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPrivatePractitionersBySearchKeyAction } from './getPrivatePractitionersBySearchKeyAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
-let getPrivatePractitionersBySearchKeyInteractorStub;
+const applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
 describe('getPrivatePractitionersBySearchKeyAction', () => {
   let successStub, errorStub;
@@ -11,20 +13,14 @@ describe('getPrivatePractitionersBySearchKeyAction', () => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
-    getPrivatePractitionersBySearchKeyInteractorStub = jest
-      .fn()
-      .mockResolvedValue([
+    applicationContext
+      .getUseCases()
+      .getPrivatePractitionersBySearchKeyInteractor.mockResolvedValue([
         {
           name: 'Test Practitioner',
           userId: '345',
         },
       ]);
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        getPrivatePractitionersBySearchKeyInteractor: getPrivatePractitionersBySearchKeyInteractorStub,
-      }),
-    };
 
     presenter.providers.path = {
       error: errorStub,
@@ -40,10 +36,12 @@ describe('getPrivatePractitionersBySearchKeyAction', () => {
       state: { form: { practitionerSearch: 'Test Practitioner' } },
     });
     expect(
-      getPrivatePractitionersBySearchKeyInteractorStub.mock.calls.length,
+      applicationContext.getUseCases()
+        .getPrivatePractitionersBySearchKeyInteractor.mock.calls.length,
     ).toEqual(1);
     expect(
-      getPrivatePractitionersBySearchKeyInteractorStub.mock.calls[0][0]
+      applicationContext.getUseCases()
+        .getPrivatePractitionersBySearchKeyInteractor.mock.calls[0][0]
         .searchKey,
     ).toEqual('Test Practitioner');
     expect(successStub.mock.calls.length).toEqual(1);
@@ -51,9 +49,9 @@ describe('getPrivatePractitionersBySearchKeyAction', () => {
   });
 
   it('calls the use case to get the matching privatePractitioners and calls the error path if no privatePractitioners are returned', async () => {
-    getPrivatePractitionersBySearchKeyInteractorStub = jest
-      .fn()
-      .mockResolvedValue([]);
+    applicationContext
+      .getUseCases()
+      .getPrivatePractitionersBySearchKeyInteractor.mockResolvedValue([]);
 
     await runAction(getPrivatePractitionersBySearchKeyAction, {
       modules: {
@@ -62,10 +60,12 @@ describe('getPrivatePractitionersBySearchKeyAction', () => {
       state: { form: { practitionerSearch: 'Test Practitioner2' } },
     });
     expect(
-      getPrivatePractitionersBySearchKeyInteractorStub.mock.calls.length,
+      applicationContext.getUseCases()
+        .getPrivatePractitionersBySearchKeyInteractor.mock.calls.length,
     ).toEqual(1);
     expect(
-      getPrivatePractitionersBySearchKeyInteractorStub.mock.calls[0][0]
+      applicationContext.getUseCases()
+        .getPrivatePractitionersBySearchKeyInteractor.mock.calls[0][0]
         .searchKey,
     ).toEqual('Test Practitioner2');
     expect(successStub).not.toBeCalled();
