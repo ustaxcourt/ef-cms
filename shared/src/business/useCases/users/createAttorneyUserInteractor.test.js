@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   createAttorneyUserInteractor,
 } = require('./createAttorneyUserInteractor');
 const {
@@ -18,7 +21,6 @@ const mockUser = {
 };
 
 describe('create attorney user', () => {
-  let applicationContext;
   let testUser;
 
   beforeEach(() => {
@@ -27,13 +29,11 @@ describe('create attorney user', () => {
       userId: 'petitionsclerk',
     };
 
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => testUser,
-      getPersistenceGateway: () => ({
-        createAttorneyUser: () => Promise.resolve(mockUser),
-      }),
-    };
+    applicationContext.environment.stage = 'local';
+    applicationContext.getCurrentUser.mockImplementation(() => testUser);
+    applicationContext
+      .getPersistenceGateway()
+      .createAttorneyUser.mockResolvedValue(mockUser);
   });
 
   it('creates the attorney user', async () => {
