@@ -1,27 +1,23 @@
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateDocketEntryAction } from './validateDocketEntryAction';
 
+const applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
+
 describe('validateDocketEntryAction', () => {
-  let validateDocketEntryStub;
   let successStub;
   let errorStub;
 
   let mockDocketEntry;
 
   beforeEach(() => {
-    validateDocketEntryStub = jest.fn();
     successStub = jest.fn();
     errorStub = jest.fn();
 
     mockDocketEntry = {
       data: 'hello world',
-    };
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateDocketEntryInteractor: validateDocketEntryStub,
-      }),
     };
 
     presenter.providers.path = {
@@ -31,7 +27,10 @@ describe('validateDocketEntryAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateDocketEntryStub = jest.fn().mockReturnValue(null);
+    applicationContext
+      .getUseCases()
+      .validateDocketEntryInteractor.mockReturnValue(null);
+
     await runAction(validateDocketEntryAction, {
       modules: {
         presenter,
@@ -45,7 +44,10 @@ describe('validateDocketEntryAction', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateDocketEntryStub = jest.fn().mockReturnValue('error');
+    applicationContext
+      .getUseCases()
+      .validateDocketEntryInteractor.mockReturnValue('error');
+
     await runAction(validateDocketEntryAction, {
       modules: {
         presenter,

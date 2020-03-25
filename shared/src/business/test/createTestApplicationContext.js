@@ -87,6 +87,7 @@ const { Case } = require('../entities/cases/Case');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
+const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
@@ -101,28 +102,43 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCasesReturnValue = {
+    addCaseToTrialSessionInteractor: jest.fn(),
+    addConsolidatedCaseInteractor: jest.fn(),
+    addCoversheetInteractor: jest.fn(),
     archiveDraftDocumentInteractor: jest.fn(),
     assignWorkItemsInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
+    deleteCaseNoteInteractor: jest.fn(),
     deleteCounselFromCaseInteractor: jest.fn(),
+    fileDocketEntryInteractor: jest.fn(),
     fileExternalDocumentForConsolidatedInteractor: jest.fn(),
     fileExternalDocumentInteractor: jest.fn(),
+    generateDocumentTitleInteractor: jest.fn(),
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
+    getBlockedCasesInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
     getCaseDeadlinesForCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
     getJudgeForUserChambersInteractor: jest.fn(),
     removeCasePendingItemInteractor: jest.fn(),
+    removeConsolidatedCasesInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
+    saveCaseNoteInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
+    updateCaseContextInteractor: jest.fn(),
     updateCounselOnCaseInteractor: jest.fn(),
+    updateDocketEntryInteractor: jest.fn(),
+    updateDocketEntryMetaInteractor: jest.fn(),
     validateAddIrsPractitionerInteractor: jest.fn(),
     validateAddPrivatePractitionerInteractor: jest.fn(),
     validateCaseAdvancedSearchInteractor: jest.fn(),
     validateCaseDeadlineInteractor: jest.fn(),
+    validateCourtIssuedDocketEntryInteractor: jest.fn(),
+    validateDocketEntryInteractor: jest.fn(),
+    validateDocketRecordInteractor: jest.fn(),
     validateEditPrivatePractitionerInteractor: jest.fn(),
     validatePdfInteractor: jest.fn(),
     virusScanPdfInteractor: jest.fn(),
@@ -145,9 +161,13 @@ const createTestApplicationContext = ({ user } = {}) => {
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
+    deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
+    filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
     formatDateString: jest.fn().mockReturnValue(DateHandler.formatDateString),
+    formatDocument: jest.fn().mockImplementation(v => v),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     getDocumentTypeForAddressChange: jest.fn(),
+    getFilingsAndProceedings: jest.fn().mockReturnValue(''),
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
@@ -248,7 +268,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       tempDocumentsBucketName: 'MockDocumentBucketName',
     },
     getBaseUrl: () => 'http://localhost',
-    getCaseCaptionNames: jest.fn().mockReturnValue(Case.getCaseCaptionNames),
+    getCaseCaptionNames: jest.fn().mockImplementation(Case.getCaseCaptionNames),
     getChiefJudgeNameForSigning: jest
       .fn()
       .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
@@ -316,9 +336,9 @@ const applicationContext = createTestApplicationContext();
 /*
   If you receive an error when testing cerebral that says:
   `The property someProperty passed to Provider is not a method`
-  it is because the cerebral testing framework expects all objects on the 
-  applicationContext to be functions.  The code below walks the original 
-  applicationContext and adds ONLY the functions to the 
+  it is because the cerebral testing framework expects all objects on the
+  applicationContext to be functions.  The code below walks the original
+  applicationContext and adds ONLY the functions to the
   applicationContextForClient.
 */
 const applicationContextForClient = {};

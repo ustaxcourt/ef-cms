@@ -1,12 +1,12 @@
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { submitDocketEntryWithFileAction } from './submitDocketEntryWithFileAction';
 
+const applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
+
 describe('submitDocketEntryWithFileAction', () => {
-  let virusScanPdfInteractorMock;
-  let validatePdfInteractorMock;
-  let fileDocketEntryInteractorMock;
-  let addCoversheetInteractorMock;
   let caseDetail;
 
   beforeEach(() => {
@@ -14,28 +14,13 @@ describe('submitDocketEntryWithFileAction', () => {
       caseId: '123',
       docketNumber: '123-45',
     };
-
-    validatePdfInteractorMock = jest.fn();
-    virusScanPdfInteractorMock = jest.fn();
-    fileDocketEntryInteractorMock = jest.fn(() => caseDetail);
-    addCoversheetInteractorMock = jest.fn();
-
-    //updateDocketEntryInteractorMock = jest.fn(() => caseDetail);
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        addCoversheetInteractor: addCoversheetInteractorMock,
-        fileDocketEntryInteractor: fileDocketEntryInteractorMock,
-        validatePdfInteractor: validatePdfInteractorMock,
-        virusScanPdfInteractor: virusScanPdfInteractorMock,
-      }),
-      getUtilities: () => ({
-        createISODateString: () => new Date().toISOString(),
-      }),
-    };
   });
 
   it('should call submitDocketEntryWithFileAction and return caseDetail', async () => {
+    applicationContext
+      .getUseCases()
+      .fileDocketEntryInteractor.mockReturnValue(caseDetail);
+
     const result = await runAction(submitDocketEntryWithFileAction, {
       modules: {
         presenter,
@@ -49,10 +34,18 @@ describe('submitDocketEntryWithFileAction', () => {
       },
     });
 
-    expect(addCoversheetInteractorMock).toHaveBeenCalled();
-    expect(fileDocketEntryInteractorMock).toHaveBeenCalled();
-    expect(validatePdfInteractorMock).toHaveBeenCalled();
-    expect(virusScanPdfInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().fileDocketEntryInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().validatePdfInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().virusScanPdfInteractor,
+    ).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
       caseId: caseDetail.docketNumber,
