@@ -14,7 +14,7 @@ API | Front-End | Shared Code
 
 [![Known Vulnerabilities](https://snyk.io//test/github/flexion/ef-cms/badge.svg?targetFile=package.json)](https://snyk.io//test/github/flexion/ef-cms?targetFile=package.json)
 
-### Screenshots
+## Screenshots
 
 <a href="docs/images/screenshot_docket.png"><img src="docs/images/screenshot_docket.png" width="47%" style="float: left; margin: 0 4px;" /></a>
 <a href="docs/images/screenshot-case.png"><img src="docs/images/screenshot-case.png" width="47%" style="float: left; margin: 0 4px;" /></a>
