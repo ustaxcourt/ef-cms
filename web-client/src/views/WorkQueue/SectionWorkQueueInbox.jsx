@@ -15,7 +15,7 @@ export const SectionWorkQueueInbox = connect(
     users: state.users,
     workQueueHelper: state.workQueueHelper,
   },
-  ({
+  function SectionWorkQueueInbox({
     assignSelectedWorkItemsSequence,
     formattedWorkQueue,
     selectAssigneeSequence,
@@ -24,7 +24,7 @@ export const SectionWorkQueueInbox = connect(
     setFocusedWorkItemSequence,
     users,
     workQueueHelper,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         {workQueueHelper.showSendToBar && (

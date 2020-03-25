@@ -21,7 +21,7 @@ export const RequestAccessReview = connect(
     submitCaseAssociationRequestSequence:
       sequences.submitCaseAssociationRequestSequence,
   },
-  ({
+  function RequestAccessReview({
     fileDocumentHelper,
     form,
     formattedCaseDetail,
@@ -30,7 +30,7 @@ export const RequestAccessReview = connect(
     requestAccessHelper,
     showModal,
     submitCaseAssociationRequestSequence,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         <Focus>

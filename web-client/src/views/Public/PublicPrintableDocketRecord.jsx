@@ -9,7 +9,7 @@ export const PublicPrintableDocketRecord = connect(
   {
     navigateBackSequence: sequences.navigateBackSequence,
   },
-  ({ navigateBackSequence }) => {
+  function PublicPrintableDocketRecord({ navigateBackSequence }) {
     return (
       <>
         <PublicCaseDetailHeader />
