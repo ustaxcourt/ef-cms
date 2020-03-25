@@ -7,11 +7,9 @@ import { applicationContextForClient } from '../../../../../shared/src/business/
 const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
 
-const uploadExternalDocumentsInteractor = applicationContext.getUseCases()
-  .uploadExternalDocumentsInteractor;
+const { uploadExternalDocumentsInteractor } = applicationContext.getUseCases();
 
-const addCoversheetInteractor = applicationContext.getUseCases()
-  .addCoversheetInteractor;
+const { addCoversheetInteractor } = applicationContext.getUseCases();
 
 describe('uploadExternalDocumentsAction', () => {
   beforeEach(() => {
