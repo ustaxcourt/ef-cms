@@ -3,14 +3,13 @@ import { getCaseCaptionForCaseInfoTabAction } from './getCaseCaptionForCaseInfoT
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
-const applicationContext = applicationContextForClient;
-presenter.providers.applicationContext = applicationContext;
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('getCaseCaptionForCaseInfoTabAction', () => {
   const {
     CASE_CAPTION_POSTFIX,
     PARTY_TYPES,
-  } = applicationContext.getConstants();
+  } = applicationContextForClient.getConstants();
 
   it('should return an empty string when the party type has not been selected', async () => {
     const result = await runAction(getCaseCaptionForCaseInfoTabAction, {
