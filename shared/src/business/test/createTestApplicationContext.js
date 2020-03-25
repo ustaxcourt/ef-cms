@@ -101,6 +101,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCasesReturnValue = {
+    addConsolidatedCaseInteractor: jest.fn(),
     archiveDraftDocumentInteractor: jest.fn(),
     assignWorkItemsInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
@@ -113,6 +114,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseInventoryReportInteractor: jest.fn(),
     getJudgeForUserChambersInteractor: jest.fn(),
     removeCasePendingItemInteractor: jest.fn(),
+    removeConsolidatedCasesInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
     validateCaseAdvancedSearchInteractor: jest.fn(),
@@ -260,6 +262,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentClient: () => mockDocClient,
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEntityConstructors: () => ({
+      Case,
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
       WorkItem: WorkItem,
@@ -302,9 +305,9 @@ const applicationContext = createTestApplicationContext();
 /*
   If you receive an error when testing cerebral that says:
   `The property someProperty passed to Provider is not a method`
-  it is because the cerebral testing framework expects all objects on the 
-  applicationContext to be functions.  The code below walks the original 
-  applicationContext and adds ONLY the functions to the 
+  it is because the cerebral testing framework expects all objects on the
+  applicationContext to be functions.  The code below walks the original
+  applicationContext and adds ONLY the functions to the
   applicationContextForClient.
 */
 const applicationContextForClient = {};
