@@ -9,7 +9,11 @@ export const SectionWorkQueueOutbox = connect(
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({ formattedWorkQueue, workQueueHelper, workQueueSectionHelper }) => {
+  function SectionWorkQueueOutbox({
+    formattedWorkQueue,
+    workQueueHelper,
+    workQueueSectionHelper,
+  }) {
     return (
       <React.Fragment>
         <table

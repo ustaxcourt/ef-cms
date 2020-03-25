@@ -13,7 +13,11 @@ export const IndividualWorkQueue = connect(
     queue: state.workQueueToDisplay.queue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ navigateToPathSequence, queue, workQueueHelper }) => {
+  function IndividualWorkQueue({
+    navigateToPathSequence,
+    queue,
+    workQueueHelper,
+  }) {
     return (
       <Tabs
         bind="workQueueToDisplay.box"

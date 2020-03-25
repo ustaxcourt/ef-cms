@@ -12,13 +12,13 @@ export const InternationalAddress = connect(
     validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
-  ({
+  function InternationalAddress({
     data,
     type,
     updateFormValueSequence,
     validateStartCaseSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <FormGroup

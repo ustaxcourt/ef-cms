@@ -18,13 +18,13 @@ export const EditTrialSession = connect(
       sequences.updateTrialSessionFormDataSequence,
     updateTrialSessionSequence: sequences.updateTrialSessionSequence,
   },
-  ({
+  function EditTrialSession({
     form,
     formCancelToggleCancelSequence,
     showModal,
     updateTrialSessionFormDataSequence,
     updateTrialSessionSequence,
-  }) => {
+  }) {
     return (
       <>
         <TrialSessionDetailHeader />

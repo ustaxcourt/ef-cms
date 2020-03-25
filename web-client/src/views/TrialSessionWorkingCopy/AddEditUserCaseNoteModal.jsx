@@ -12,13 +12,13 @@ export const AddEditUserCaseNoteModal = connect(
     validateNoteSequence: sequences.validateNoteSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function AddEditUserCaseNoteModal({
     addEditUserCaseNoteModalHelper,
     modal,
     onConfirmSequence,
     validateNoteSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <ConfirmModal
         cancelLabel="Cancel"

@@ -8,7 +8,7 @@ export const PendingReportList = connect(
   {
     formattedPendingItems: state.formattedPendingItems,
   },
-  ({ formattedPendingItems }) => {
+  function PendingReportList({ formattedPendingItems }) {
     return (
       <React.Fragment>
         <div className="grid-row margin-bottom-2">
