@@ -102,12 +102,14 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetUseCasesReturnValue = {
     addCaseToTrialSessionInteractor: jest.fn(),
+    addCoversheetInteractor: jest.fn(),
     archiveDraftDocumentInteractor: jest.fn(),
     assignWorkItemsInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
     deleteCaseNoteInteractor: jest.fn(),
     deleteCounselFromCaseInteractor: jest.fn(),
+    fileDocketEntryInteractor: jest.fn(),
     fileExternalDocumentForConsolidatedInteractor: jest.fn(),
     fileExternalDocumentInteractor: jest.fn(),
     generatePdfFromHtmlInteractor: jest.fn(),
@@ -124,6 +126,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     setWorkItemAsReadInteractor: jest.fn(),
     updateCaseContextInteractor: jest.fn(),
     updateCounselOnCaseInteractor: jest.fn(),
+    updateDocketEntryInteractor: jest.fn(),
     validateAddIrsPractitionerInteractor: jest.fn(),
     validateAddPrivatePractitionerInteractor: jest.fn(),
     validateCaseAdvancedSearchInteractor: jest.fn(),
