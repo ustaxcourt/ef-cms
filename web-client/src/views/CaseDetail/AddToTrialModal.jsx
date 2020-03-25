@@ -16,7 +16,7 @@ export const AddToTrialModal = connect(
     validateAddToTrialSequence: sequences.validateAddToTrialSessionSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function AddToTrialModal({
     addToTrialSessionModalHelper,
     cancelSequence,
     confirmSequence,
@@ -24,7 +24,7 @@ export const AddToTrialModal = connect(
     updateModalValueSequence,
     validateAddToTrialSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"

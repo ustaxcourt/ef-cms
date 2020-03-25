@@ -11,7 +11,11 @@ export const SearchResults = connect(
     pageSize: state.constants.CASE_SEARCH_PAGE_SIZE,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
   },
-  ({ advancedSearchHelper, pageSize, showMoreResultsSequence }) => {
+  function SearchResults({
+    advancedSearchHelper,
+    pageSize,
+    showMoreResultsSequence,
+  }) {
     return (
       <>
         {advancedSearchHelper.showSearchResults && (

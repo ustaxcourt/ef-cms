@@ -20,13 +20,13 @@ export const AddDocketEntry = connect(
     showModal: state.modal.showModal,
     submitDocketEntrySequence: sequences.submitDocketEntrySequence,
   },
-  ({
+  function AddDocketEntry({
     caseDetail,
     formCancelToggleCancelSequence,
     isEditingDocketEntry,
     showModal,
     submitDocketEntrySequence,
-  }) => {
+  }) {
     return (
       <>
         <CaseDetailHeader />

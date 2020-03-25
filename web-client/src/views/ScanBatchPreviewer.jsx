@@ -44,7 +44,7 @@ export const ScanBatchPreviewer = connect(
     startScanSequence: sequences.startScanSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function ScanBatchPreviewer({
     constants,
     documentTabs,
     documentType,
@@ -66,7 +66,7 @@ export const ScanBatchPreviewer = connect(
     startScanSequence,
     title,
     validationErrors,
-  }) => {
+  }) {
     useEffect(() => {
       scannerStartupSequence();
     }, []);
