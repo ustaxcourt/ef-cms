@@ -1,8 +1,7 @@
-import { Document } from '../../../../../shared/src/business/entities/Document';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintableFilingReceiptAction } from './generatePrintableFilingReceiptAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 
 const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
