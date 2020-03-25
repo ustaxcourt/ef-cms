@@ -1,24 +1,26 @@
 import { addConsolidatedCaseAction } from './addConsolidatedCaseAction';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
+let applicationContext;
+
 describe('addConsolidatedCaseAction', () => {
-  let addConsolidatedCaseInteractorMock;
   let caseDetail;
 
   beforeEach(() => {
+    applicationContext = applicationContextForClient;
+
     caseDetail = {
       caseId: '123',
       docketNumber: '123-45',
     };
 
-    addConsolidatedCaseInteractorMock = jest.fn(() => caseDetail);
+    applicationContext.getUseCases().addConsolidatedCaseInteractor = jest
+      .fn()
+      .mockResolvedValue(caseDetail);
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        addConsolidatedCaseInteractor: addConsolidatedCaseInteractorMock,
-      }),
-    };
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('should call addConsolidatedCaseInteractor and return caseId and caseToConsolidateId', async () => {
@@ -32,7 +34,10 @@ describe('addConsolidatedCaseAction', () => {
       },
     });
 
-    expect(addConsolidatedCaseInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addConsolidatedCaseInteractor.mock.calls
+        .length,
+    ).toEqual(1);
     expect(result.output).toEqual({
       caseId: '123',
       caseToConsolidateId: '456',

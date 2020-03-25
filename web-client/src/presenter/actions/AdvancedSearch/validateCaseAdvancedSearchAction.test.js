@@ -1,10 +1,9 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateCaseAdvancedSearchAction } from './validateCaseAdvancedSearchAction';
 
-const applicationContext = applicationContextForClient;
-presenter.providers.applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
 describe('validateCaseAdvancedSearchAction', () => {
   let successStub;
@@ -21,9 +20,9 @@ describe('validateCaseAdvancedSearchAction', () => {
   });
 
   it('validates advanced case search successfully', async () => {
-    applicationContext.getUseCases().validateCaseAdvancedSearchInteractor = jest
-      .fn()
-      .mockReturnValue({});
+    applicationContext
+      .getUseCases()
+      .validateCaseAdvancedSearchInteractor.mockReturnValue({});
 
     await runAction(validateCaseAdvancedSearchAction, {
       modules: {
@@ -40,9 +39,9 @@ describe('validateCaseAdvancedSearchAction', () => {
   });
 
   it('fails validation for advanced case search', async () => {
-    applicationContext.getUseCases().validateCaseAdvancedSearchInteractor = jest
-      .fn()
-      .mockReturnValue({ foo: 'bar' });
+    applicationContext
+      .getUseCases()
+      .validateCaseAdvancedSearchInteractor.mockReturnValue({ foo: 'bar' });
 
     await runAction(validateCaseAdvancedSearchAction, {
       modules: {

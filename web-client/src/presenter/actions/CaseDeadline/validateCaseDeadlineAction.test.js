@@ -1,9 +1,8 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateCaseDeadlineAction } from './validateCaseDeadlineAction';
 
-const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
 
 describe('validateCaseDeadlineAction', () => {
@@ -29,9 +28,9 @@ describe('validateCaseDeadlineAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    applicationContext.getUseCases().validateCaseDeadlineInteractor = jest
-      .fn()
-      .mockReturnValue(null);
+    applicationContext
+      .getUseCases()
+      .validateCaseDeadlineInteractor.mockReturnValue(null);
 
     await runAction(validateCaseDeadlineAction, {
       modules: {
@@ -46,9 +45,9 @@ describe('validateCaseDeadlineAction', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    applicationContext.getUseCases().validateCaseDeadlineInteractor = jest
-      .fn()
-      .mockReturnValue('error');
+    applicationContext
+      .getUseCases()
+      .validateCaseDeadlineInteractor.mockReturnValue('error');
 
     await runAction(validateCaseDeadlineAction, {
       modules: {
