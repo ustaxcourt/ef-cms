@@ -146,6 +146,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeItemInteractor: jest.fn(),
     saveCaseNoteInteractor: jest.fn(),
     saveIntermediateDocketEntryInteractor: jest.fn(),
+    serveCaseToIrsInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
     submitCaseAssociationRequestInteractor: jest.fn(),
     submitPendingCaseAssociationRequestInteractor: jest.fn(),
