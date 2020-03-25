@@ -1,3 +1,4 @@
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { canConsolidateAction } from './canConsolidateAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
@@ -6,26 +7,24 @@ describe('canConsolidateAction', () => {
   let yesStub;
   let noStub;
   let consolidationStub;
-  let getTrialSessionDetailsInteractorStub;
 
   beforeEach(() => {
     yesStub = jest.fn();
     noStub = jest.fn();
     consolidationStub = jest.fn();
-    getTrialSessionDetailsInteractorStub = jest.fn();
 
     presenter.providers.path = { error: noStub, success: yesStub };
+    const currentEntityConstructors = applicationContextForClient.getEntityConstructors();
 
     presenter.providers.applicationContext = {
+      ...applicationContextForClient,
       getEntityConstructors: () => ({
+        ...currentEntityConstructors,
         Case: () => {
           return {
             getConsolidationStatus: consolidationStub,
           };
         },
-      }),
-      getUseCases: () => ({
-        getTrialSessionDetailsInteractor: getTrialSessionDetailsInteractorStub,
       }),
     };
   });
