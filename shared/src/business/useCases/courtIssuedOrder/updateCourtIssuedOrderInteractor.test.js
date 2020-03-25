@@ -67,27 +67,23 @@ describe('updateCourtIssuedOrderInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    let error;
-    try {
-      applicationContext
-        .getPersistenceGateway()
-        .updateCase.mockResolvedValue(caseRecord);
-      applicationContext
-        .getPersistenceGateway()
-        .getUserById.mockResolvedValue({ name: 'bob' });
+    applicationContext
+      .getPersistenceGateway()
+      .updateCase.mockResolvedValue(caseRecord);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockResolvedValue({ name: 'bob' });
 
-      await updateCourtIssuedOrderInteractor({
+    await expect(
+      updateCourtIssuedOrderInteractor({
         applicationContext,
         documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           caseId: caseRecord.caseId,
           documentType: 'Order to Show Cause',
         },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain('Unauthorized');
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('update existing document within case', async () => {
