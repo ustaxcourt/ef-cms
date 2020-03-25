@@ -4,10 +4,6 @@ const {
 import { getJudgeForUserChambersInteractor } from './getJudgeForUserChambersInteractor';
 const { User } = require('../../entities/User');
 
-// let applicationContext;
-// let getUserInteractorMock;
-// let getUsersInSectionInteractorMock;
-
 let currentUser;
 
 const chambersUser = {

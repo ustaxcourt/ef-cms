@@ -4,21 +4,9 @@ The [U.S. Tax Court](https://ustaxcourt.gov/) currently uses a non-web-based leg
 
 Work is not yet in production, so `master` does not deploy. For additional background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
 
-#### develop
-
-[![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop)
-
-#### master
-
-[![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/master.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/master)
-
-#### staging
-
-[![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging)
-
-#### test
-
-[![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test)
+| develop | master | staging | test |
+| ------- | ------ | ------- | ---- |
+| [![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/master.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/master) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test) |
 
 API | Front-End | Shared Code
 --- | --------- | -----------
@@ -26,7 +14,7 @@ API | Front-End | Shared Code
 
 [![Known Vulnerabilities](https://snyk.io//test/github/flexion/ef-cms/badge.svg?targetFile=package.json)](https://snyk.io//test/github/flexion/ef-cms?targetFile=package.json)
 
-### Screenshots
+## Screenshots
 
 <a href="docs/images/screenshot_docket.png"><img src="docs/images/screenshot_docket.png" width="47%" style="float: left; margin: 0 4px;" /></a>
 <a href="docs/images/screenshot-case.png"><img src="docs/images/screenshot-case.png" width="47%" style="float: left; margin: 0 4px;" /></a>
