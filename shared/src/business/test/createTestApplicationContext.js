@@ -101,6 +101,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCasesReturnValue = {
+    addCaseToTrialSessionInteractor: jest.fn(),
     archiveDraftDocumentInteractor: jest.fn(),
     assignWorkItemsInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
@@ -111,6 +112,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
+    getBlockedCasesInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
     getCaseDeadlinesForCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
@@ -118,6 +120,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeCasePendingItemInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
+    updateCaseContextInteractor: jest.fn(),
     updateCounselOnCaseInteractor: jest.fn(),
     validateAddIrsPractitionerInteractor: jest.fn(),
     validateAddPrivatePractitionerInteractor: jest.fn(),
@@ -248,7 +251,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       tempDocumentsBucketName: 'MockDocumentBucketName',
     },
     getBaseUrl: () => 'http://localhost',
-    getCaseCaptionNames: jest.fn().mockReturnValue(Case.getCaseCaptionNames),
+    getCaseCaptionNames: jest.fn().mockImplementation(Case.getCaseCaptionNames),
     getChiefJudgeNameForSigning: jest
       .fn()
       .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
