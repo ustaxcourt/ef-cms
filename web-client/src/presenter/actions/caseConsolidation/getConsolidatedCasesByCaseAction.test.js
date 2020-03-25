@@ -3,9 +3,9 @@ import { getConsolidatedCasesByCaseAction } from './getConsolidatedCasesByCaseAc
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
-let applicationContext;
-
 describe('getConsolidatedCasesByCaseAction', () => {
+  let applicationContext;
+
   beforeEach(() => {
     applicationContext = applicationContextForClient;
 
