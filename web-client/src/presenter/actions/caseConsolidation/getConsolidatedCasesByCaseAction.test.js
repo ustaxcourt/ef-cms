@@ -1,36 +1,35 @@
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getConsolidatedCasesByCaseAction } from './getConsolidatedCasesByCaseAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
+let applicationContext;
+
 describe('getConsolidatedCasesByCaseAction', () => {
-  let getConsolidatedCasesByCaseInteractorStub;
-
   beforeEach(() => {
-    getConsolidatedCasesByCaseInteractorStub = jest.fn().mockResolvedValue([
-      {
-        caseId: 'case-id-123',
-        docketNumber: '100-19',
-        leadCaseId: 'case-id-123',
-      },
-      {
-        caseId: 'case-id-234',
-        docketNumber: '102-19',
-        leadCaseId: 'case-id-123',
-      },
-      {
-        caseId: 'case-id-345',
-        docketNumber: '111-19',
-        leadCaseId: 'case-id-123',
-      },
-    ]);
+    applicationContext = applicationContextForClient;
 
-    presenter.providers.applicationContext = {
-      getEntityConstructors: applicationContext.getEntityConstructors,
-      getUseCases: () => ({
-        getConsolidatedCasesByCaseInteractor: getConsolidatedCasesByCaseInteractorStub,
-      }),
-    };
+    applicationContext.getUseCases().getConsolidatedCasesByCaseInteractor = jest
+      .fn()
+      .mockResolvedValue([
+        {
+          caseId: 'case-id-123',
+          docketNumber: '100-19',
+          leadCaseId: 'case-id-123',
+        },
+        {
+          caseId: 'case-id-234',
+          docketNumber: '102-19',
+          leadCaseId: 'case-id-123',
+        },
+        {
+          caseId: 'case-id-345',
+          docketNumber: '111-19',
+          leadCaseId: 'case-id-123',
+        },
+      ]);
+
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it("gets the consolidated cases by the case's lead case", async () => {
@@ -43,7 +42,10 @@ describe('getConsolidatedCasesByCaseAction', () => {
       },
     });
 
-    expect(getConsolidatedCasesByCaseInteractorStub).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().getConsolidatedCasesByCaseInteractor.mock
+        .calls.length,
+    ).toEqual(1);
     expect(output.consolidatedCases).toEqual([
       {
         caseId: 'case-id-123',
@@ -71,6 +73,9 @@ describe('getConsolidatedCasesByCaseAction', () => {
       },
     });
 
-    expect(getConsolidatedCasesByCaseInteractorStub).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().getConsolidatedCasesByCaseInteractor.mock
+        .calls.length,
+    ).toEqual(0);
   });
 });
