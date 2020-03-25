@@ -52,7 +52,6 @@ describe('getIrsPractitionersBySearchKeyInteractor', () => {
           userId: '7d9eca44-4d10-44f2-9210-e7eed047f3c5',
         },
       ]);
-    // };
 
     const result = await getIrsPractitionersBySearchKeyInteractor({
       applicationContext,
