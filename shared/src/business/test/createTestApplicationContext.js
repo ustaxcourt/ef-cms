@@ -87,6 +87,8 @@ const { Case } = require('../entities/cases/Case');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
+const { Document } = require('../entities/Document');
+const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
@@ -114,29 +116,68 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
   };
   const mockGetUseCasesReturnValue = {
+    addCaseToTrialSessionInteractor: jest.fn(),
+    addConsolidatedCaseInteractor: jest.fn(),
+    addCoversheetInteractor: jest.fn(),
     archiveDraftDocumentInteractor: jest.fn(),
     assignWorkItemsInteractor: jest.fn(),
+    associateIrsPractitionerWithCaseInteractor: jest.fn(),
+    associatePrivatePractitionerWithCaseInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
+    casePublicSearchInteractor: jest.fn(),
+    completeDocketEntryQCInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
+    createCourtIssuedOrderPdfFromHtmlInteractor: jest.fn(),
+    deleteCaseNoteInteractor: jest.fn(),
     deleteCounselFromCaseInteractor: jest.fn(),
+    fetchPendingItemsInteractor: jest.fn(),
+    fileCourtIssuedDocketEntryInteractor: jest.fn(),
+    fileCourtIssuedOrderInteractor: jest.fn(),
+    fileDocketEntryInteractor: jest.fn(),
     fileExternalDocumentForConsolidatedInteractor: jest.fn(),
     fileExternalDocumentInteractor: jest.fn(),
+    generateCourtIssuedDocumentTitleInteractor: jest.fn(),
+    generateDocumentTitleInteractor: jest.fn(),
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
+    generatePrintableFilingReceiptInteractor: jest.fn(),
+    generatePrintablePendingReportInteractor: jest.fn(),
+    generatePublicDocketRecordPdfInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
+    getBlockedCasesInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
     getCaseDeadlinesForCaseInteractor: jest.fn(),
+    getCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
+    getIrsPractitionersBySearchKeyInteractor: jest.fn(),
     getJudgeForUserChambersInteractor: jest.fn(),
+    getPrivatePractitionersBySearchKeyInteractor: jest.fn(),
+    getUserInteractor: jest.fn(),
+    getUsersInSectionInteractor: jest.fn(),
     removeCasePendingItemInteractor: jest.fn(),
+    removeConsolidatedCasesInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
+    saveCaseNoteInteractor: jest.fn(),
+    saveIntermediateDocketEntryInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
+    submitCaseAssociationRequestInteractor: jest.fn(),
+    submitPendingCaseAssociationRequestInteractor: jest.fn(),
+    updateCaseContextInteractor: jest.fn(),
     updateCounselOnCaseInteractor: jest.fn(),
+    updateCourtIssuedDocketEntryInteractor: jest.fn(),
+    updateDocketEntryInteractor: jest.fn(),
+    updateDocketEntryMetaInteractor: jest.fn(),
+    uploadExternalDocumentsInteractor: jest.fn(),
+    uploadOrderDocumentInteractor: jest.fn(),
     validateAddIrsPractitionerInteractor: jest.fn(),
     validateAddPrivatePractitionerInteractor: jest.fn(),
     validateCaseAdvancedSearchInteractor: jest.fn(),
     validateCaseDeadlineInteractor: jest.fn(),
+    validateCourtIssuedDocketEntryInteractor: jest.fn(),
+    validateDocketEntryInteractor: jest.fn(),
+    validateDocketRecordInteractor: jest.fn(),
     validateEditPrivatePractitionerInteractor: jest.fn(),
+    validateExternalDocumentInformationInteractor: jest.fn(),
     validatePdfInteractor: jest.fn(),
     virusScanPdfInteractor: jest.fn(),
   };
@@ -158,9 +199,13 @@ const createTestApplicationContext = ({ user } = {}) => {
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
+    deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
+    filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
     formatDateString: jest.fn().mockReturnValue(DateHandler.formatDateString),
+    formatDocument: jest.fn().mockImplementation(v => v),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     getDocumentTypeForAddressChange: jest.fn(),
+    getFilingsAndProceedings: jest.fn().mockReturnValue(''),
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
@@ -188,6 +233,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCase,
     createCaseTrialSortMappingRecords: jest.fn(),
     createSectionInboxRecord,
+    createTrialSessionWorkingCopy: jest.fn(),
     createUserInboxRecord,
     createWorkItem: createWorkItemPersistence,
     deleteCaseDeadline: jest.fn(),
@@ -197,6 +243,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
     getAllCaseDeadlines: jest.fn(),
+    getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByCaseId: jest.fn().mockImplementation(getCaseByCaseId),
     getCaseByDocketNumber: jest.fn(),
     getCaseByUser: jest.fn(),
@@ -235,9 +282,12 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(saveWorkItemForNonPaper),
     saveWorkItemForPaper,
     setItem: jest.fn(),
+    setPriorityOnAllWorkItems: jest.fn(),
     setWorkItemAsRead,
     updateAttorneyUser: jest.fn(),
     updateCase: jest.fn().mockImplementation(updateCase),
+    updateTrialSession: jest.fn(),
+    updateTrialSessionWorkingCopy: jest.fn(),
     updateUser: jest.fn(),
     updateUserCaseNote: jest.fn(),
     updateWorkItem,
@@ -261,11 +311,12 @@ const createTestApplicationContext = ({ user } = {}) => {
       tempDocumentsBucketName: 'MockDocumentBucketName',
     },
     getBaseUrl: () => 'http://localhost',
-    getCaseCaptionNames: jest.fn().mockReturnValue(Case.getCaseCaptionNames),
+    getCaseCaptionNames: jest.fn().mockImplementation(Case.getCaseCaptionNames),
     getChiefJudgeNameForSigning: jest
       .fn()
       .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
     getChromiumBrowser: jest.fn(),
+    getClerkOfCourtNameForSigning: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
     getConstants: jest.fn().mockReturnValue({
       ...webClientApplicationContext.getConstants(),
@@ -286,8 +337,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentClient: () => mockDocClient,
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEntityConstructors: () => ({
+      Case,
       CaseExternal: CaseExternalIncomplete,
-      CaseInternal: CaseInternal,
+      CaseInternal,
+      Document,
       WorkItem: WorkItem,
     }),
     getFileReaderInstance: jest.fn(),
@@ -298,6 +351,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     })),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
+    getPdfStyles: jest.fn(),
     getPersistenceGateway: jest.fn().mockImplementation(() => {
       return mockGetPersistenceGatewayReturnValue;
     }),
@@ -330,9 +384,9 @@ const applicationContext = createTestApplicationContext();
 /*
   If you receive an error when testing cerebral that says:
   `The property someProperty passed to Provider is not a method`
-  it is because the cerebral testing framework expects all objects on the 
-  applicationContext to be functions.  The code below walks the original 
-  applicationContext and adds ONLY the functions to the 
+  it is because the cerebral testing framework expects all objects on the
+  applicationContext to be functions.  The code below walks the original
+  applicationContext and adds ONLY the functions to the
   applicationContextForClient.
 */
 const applicationContextForClient = {};
