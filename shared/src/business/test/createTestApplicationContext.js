@@ -188,6 +188,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     updateUserCaseNote: jest.fn(),
     updateWorkItem,
     updateWorkItemInCase,
+    uploadDocumentFromClient: jest.fn(),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   };
