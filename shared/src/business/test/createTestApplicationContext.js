@@ -113,6 +113,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeItemInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
     validateCaseAdvancedSearchInteractor: jest.fn(),
+    validateCaseDeadlineInteractor: jest.fn(),
   };
 
   const mockGetScannerReturnValue = {
