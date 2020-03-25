@@ -149,9 +149,11 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeItemInteractor: jest.fn(),
     saveCaseNoteInteractor: jest.fn(),
     saveIntermediateDocketEntryInteractor: jest.fn(),
+    serveCaseToIrsInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
     submitCaseAssociationRequestInteractor: jest.fn(),
     submitPendingCaseAssociationRequestInteractor: jest.fn(),
+    updateCase: jest.fn(),
     updateCaseContextInteractor: jest.fn(),
     updateCounselOnCaseInteractor: jest.fn(),
     updateCourtIssuedDocketEntryInteractor: jest.fn(),
@@ -169,6 +171,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     validateEditPrivatePractitionerInteractor: jest.fn(),
     validateExternalDocumentInformationInteractor: jest.fn(),
     validatePdfInteractor: jest.fn(),
+    validateStartCaseWizardInteractor: jest.fn(),
     virusScanPdfInteractor: jest.fn(),
   };
 
