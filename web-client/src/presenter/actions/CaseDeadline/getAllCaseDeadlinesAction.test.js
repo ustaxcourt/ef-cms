@@ -8,9 +8,9 @@ presenter.providers.applicationContext = applicationContextForClient;
 
 describe('getAllCaseDeadlinesAction', () => {
   it('gets all case deadlines', async () => {
-    applicationContext.getUseCases().getAllCaseDeadlinesInteractor = jest
-      .fn()
-      .mockReturnValue('hello world');
+    applicationContext
+      .getUseCases()
+      .getAllCaseDeadlinesInteractor.mockReturnValue('hello world');
 
     const result = await runAction(getAllCaseDeadlinesAction, {
       modules: {
