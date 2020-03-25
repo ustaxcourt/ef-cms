@@ -1,26 +1,26 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
+import { User } from '../../../../../shared/src/business/entities/User';
 import { submitCaseAssociationRequestAction } from './submitCaseAssociationRequestAction';
 
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+const applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
+const submitCaseAssociationRequestInteractor = applicationContext.getUseCases()
+  .submitCaseAssociationRequestInteractor;
+const submitPendingCaseAssociationRequestInteractor = applicationContext.getUseCases()
+  .submitPendingCaseAssociationRequestInteractor;
+
+applicationContext.getCurrentUser.mockReturnValue(
+  new User({
+    name: 'richard',
+    role: User.ROLES.privatePractitioner,
+    email: 'practitioner1@example.com',
+    userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+  }),
+);
+
 describe('submitCaseAssociationRequestAction', () => {
-  let submitCaseAssociationRequestStub;
-  let submitPendingCaseAssociationRequestStub;
-
-  beforeEach(() => {
-    submitCaseAssociationRequestStub = jest.fn();
-    submitPendingCaseAssociationRequestStub = jest.fn();
-
-    presenter.providers.applicationContext = {
-      getCurrentUser: () => ({
-        email: 'practitioner1@example.com',
-      }),
-      getUseCases: () => ({
-        submitCaseAssociationRequestInteractor: submitCaseAssociationRequestStub,
-        submitPendingCaseAssociationRequestInteractor: submitPendingCaseAssociationRequestStub,
-      }),
-    };
-  });
-
   it('should call submitCaseAssociationRequest', async () => {
     await runAction(submitCaseAssociationRequestAction, {
       modules: {
@@ -35,7 +35,7 @@ describe('submitCaseAssociationRequestAction', () => {
       },
     });
 
-    expect(submitCaseAssociationRequestStub.mock.calls.length).toEqual(1);
+    expect(submitCaseAssociationRequestInteractor.mock.calls.length).toEqual(1);
   });
 
   it('should call submitPendingCaseAssociationRequest', async () => {
@@ -52,8 +52,8 @@ describe('submitCaseAssociationRequestAction', () => {
       },
     });
 
-    expect(submitPendingCaseAssociationRequestStub.mock.calls.length).toEqual(
-      1,
-    );
+    expect(
+      submitPendingCaseAssociationRequestInteractor.mock.calls.length,
+    ).toEqual(1);
   });
 });
