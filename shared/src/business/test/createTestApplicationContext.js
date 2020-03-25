@@ -105,6 +105,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     assignWorkItemsInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
+    createCourtIssuedOrderPdfFromHtmlInteractor: jest.fn(),
     deleteCounselFromCaseInteractor: jest.fn(),
     fileExternalDocumentForConsolidatedInteractor: jest.fn(),
     fileExternalDocumentInteractor: jest.fn(),
@@ -253,6 +254,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
     getChromiumBrowser: jest.fn(),
+    getClerkOfCourtNameForSigning: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
     getConstants: jest.fn().mockReturnValue({
       ...webClientApplicationContext.getConstants(),
@@ -284,6 +286,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       }),
     })),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
+    getPdfStyles: jest.fn(),
     getPersistenceGateway: jest.fn().mockImplementation(() => {
       return mockGetPersistenceGatewayReturnValue;
     }),
