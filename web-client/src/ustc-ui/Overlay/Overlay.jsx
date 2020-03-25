@@ -11,14 +11,14 @@ const OverlayUnRef = connect(
   {
     onEscSequence: sequences[props.onEscSequence],
   },
-  ({
+  function OverlayUnRef({
     children,
     className,
     forwardedRef,
     onEscSequence,
     preventEsc,
     preventScrolling,
-  }) => {
+  }) {
     if (!onEscSequence) onEscSequence = () => {};
 
     const elRef = React.useRef(null);

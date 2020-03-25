@@ -21,14 +21,14 @@ export const FileDocument = connect(
       sequences.reviewExternalDocumentInformationSequence,
     showModal: state.modal.showModal,
   },
-  ({
+  function FileDocument({
     fileDocumentHelper,
     form,
     formCancelToggleCancelSequence,
     navigateBackSequence,
     reviewExternalDocumentInformationSequence,
     showModal,
-  }) => {
+  }) {
     return (
       <div className="grid-container">
         <Focus>

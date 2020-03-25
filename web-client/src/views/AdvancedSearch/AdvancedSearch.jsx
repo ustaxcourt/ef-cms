@@ -20,13 +20,13 @@ export const AdvancedSearch = connect(
     submitPractitionerNameSearchSequence:
       sequences.submitPractitionerNameSearchSequence,
   },
-  ({
+  function AdvancedSearch({
     advancedSearchHelper,
     submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence,
     submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence,
-  }) => {
+  }) {
     return (
       <>
         <BigHeader text="Advanced Search" />

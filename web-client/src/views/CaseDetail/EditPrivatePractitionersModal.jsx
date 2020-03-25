@@ -16,7 +16,7 @@ export const EditPrivatePractitionersModal = connect(
       sequences.validateEditPrivatePractitionersSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function EditPrivatePractitionersModal({
     cancelSequence,
     caseDetail,
     confirmSequence,
@@ -24,7 +24,7 @@ export const EditPrivatePractitionersModal = connect(
     updateModalValueSequence,
     validateEditPrivatePractitionersSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"

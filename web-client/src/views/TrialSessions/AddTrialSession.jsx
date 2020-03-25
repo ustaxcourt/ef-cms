@@ -18,13 +18,13 @@ export const AddTrialSession = connect(
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
   },
-  ({
+  function AddTrialSession({
     form,
     formCancelToggleCancelSequence,
     showModal,
     submitTrialSessionSequence,
     updateTrialSessionFormDataSequence,
-  }) => {
+  }) {
     return (
       <>
         <BigHeader text="Create Trial Session" />

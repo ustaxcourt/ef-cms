@@ -5,7 +5,7 @@ import React from 'react';
 
 export const PublicDocketRecordHeader = connect(
   { docketNumber: state.caseDetail.docketNumber },
-  ({ docketNumber }) => {
+  function PublicDocketRecordHeader({ docketNumber }) {
     return (
       <React.Fragment>
         <div className="title">

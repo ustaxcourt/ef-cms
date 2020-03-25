@@ -25,13 +25,13 @@ export const EditDocketEntry = connect(
       sequences.openCreateMessageAlongsideDocketRecordQCModalSequence,
     showModal: state.modal.showModal,
   },
-  ({
+  function EditDocketEntry({
     completeDocketEntryQCSequence,
     editDocketEntryHelper,
     formCancelToggleCancelSequence,
     openCreateMessageAlongsideDocketRecordQCModalSequence,
     showModal,
-  }) => {
+  }) {
     return (
       <>
         <CaseDetailHeader />

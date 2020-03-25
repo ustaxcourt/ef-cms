@@ -12,7 +12,7 @@ export const SimplePdfPreviewPage = connect(
     headerTitle: state.screenMetadata.headerTitle,
     navigateBackSequence: sequences.navigateBackSequence,
   },
-  ({ headerTitle, navigateBackSequence }) => {
+  function SimplePdfPreviewPage({ headerTitle, navigateBackSequence }) {
     return (
       <>
         <BigHeader text={headerTitle} />

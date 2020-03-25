@@ -14,13 +14,13 @@ export const TrialSessionInformation = connect(
     showModal: state.modal.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
   },
-  ({
+  function TrialSessionInformation({
     formattedTrialSessionDetails,
     openConfirmDeleteTrialSessionModalSequence,
     printTrialCalendarSequence,
     showModal,
     trialSessionHeaderHelper,
-  }) => {
+  }) {
     return (
       <>
         <div className="grid-container padding-x-0">

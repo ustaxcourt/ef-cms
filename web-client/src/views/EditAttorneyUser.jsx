@@ -19,7 +19,7 @@ export const EditAttorneyUser = connect(
     validateAttorneyUserSequence: sequences.validateAttorneyUserSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function EditAttorneyUser({
     createAttorneyUserHelper,
     form,
     navigateBackSequence,
@@ -27,7 +27,7 @@ export const EditAttorneyUser = connect(
     updateFormValueSequence,
     validateAttorneyUserSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <div className="big-blue-header">

@@ -10,7 +10,12 @@ export const EditDocketEntryMetaTabAction = connect(
     validationErrors: state.modal.validationErrors,
     validationSequence: sequences.validateDocketRecordSequence,
   },
-  ({ form, updateFormValueSequence, validationErrors, validationSequence }) => {
+  function EditDocketEntryMetaTabAction({
+    form,
+    updateFormValueSequence,
+    validationErrors,
+    validationSequence,
+  }) {
     return (
       <div className="blue-container">
         <FormGroup errorText={validationErrors && validationErrors.action}>

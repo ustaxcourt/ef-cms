@@ -26,7 +26,7 @@ export const DocumentDetail = connect(
       sequences.removeSignatureFromOrderSequence,
     showModal: state.modal.showModal,
   },
-  ({
+  function DocumentDetail({
     caseDetail,
     documentDetailHelper,
     formattedCaseDetail,
@@ -35,7 +35,7 @@ export const DocumentDetail = connect(
     navigateToPrintableCaseConfirmationSequence,
     removeSignatureFromOrderSequence,
     showModal,
-  }) => {
+  }) {
     const renderParentTabs = () => {
       return (
         <Tabs

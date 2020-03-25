@@ -25,7 +25,7 @@ export const RequestAccessDocumentForm = connect(
       sequences.validateCaseAssociationRequestSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function RequestAccessDocumentForm({
     constants,
     form,
     openCleanModalSequence,
@@ -34,7 +34,7 @@ export const RequestAccessDocumentForm = connect(
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <h2 className="margin-top-4">Tell Us About This Document</h2>

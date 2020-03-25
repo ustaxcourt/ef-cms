@@ -8,7 +8,7 @@ export const OpenCases = connect(
   {
     openCases: state.formattedTrialSessionDetails.openCases,
   },
-  ({ openCases }) => {
+  function OpenCases({ openCases }) {
     return (
       <React.Fragment>
         <div className="text-semibold push-right margin-bottom-2">

@@ -27,7 +27,7 @@ export const PendingMessages = connect(
     workItemMetadata: state.workItemMetadata,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({
+  function PendingMessages({
     constants,
     documentDetailHelper,
     form,
@@ -44,7 +44,7 @@ export const PendingMessages = connect(
     validationErrors,
     workItemMetadata,
     workQueueSectionHelper,
-  }) => {
+  }) {
     return (
       <>
         <div className="blue-container">

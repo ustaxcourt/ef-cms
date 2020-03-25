@@ -13,11 +13,11 @@ export const PrintableTrialCalendar = connect(
     gotoTrialSessionDetailSequence: sequences.gotoTrialSessionDetailSequence,
     trialSessionId: state.trialSessionId,
   },
-  ({
+  function PrintableTrialCalendar({
     formattedTrialSessionDetails,
     gotoTrialSessionDetailSequence,
     trialSessionId,
-  }) => {
+  }) {
     return (
       <>
         <div className="big-blue-header">

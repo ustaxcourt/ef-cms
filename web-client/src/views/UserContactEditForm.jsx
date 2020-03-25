@@ -18,7 +18,7 @@ export const UserContactEditForm = connect(
     type: props.type,
     validationErrors: state.validationErrors,
   },
-  ({
+  function UserContactEditForm({
     bind,
     changeCountryTypeSequence,
     form,
@@ -28,7 +28,7 @@ export const UserContactEditForm = connect(
     onChangeUpdateSequence,
     type,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <Country

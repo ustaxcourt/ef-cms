@@ -10,7 +10,7 @@ export const CaseListRespondent = connect(
     dashboardExternalHelper: state.dashboardExternalHelper,
     formattedCases: state.formattedCases,
   },
-  ({ dashboardExternalHelper, formattedCases }) => {
+  function CaseListRespondent({ dashboardExternalHelper, formattedCases }) {
     const renderTable = () => (
       <div className="margin-top-2">
         <table className="usa-table responsive-table dashboard" id="case-list">

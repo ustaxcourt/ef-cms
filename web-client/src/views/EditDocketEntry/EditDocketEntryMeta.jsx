@@ -20,7 +20,12 @@ export const EditDocketEntryMeta = connect(
     showModal: state.modal.showModal,
     submitSequence: sequences.submitEditDocketEntryMetaSequence,
   },
-  ({ cancelSequence, editType, showModal, submitSequence }) => {
+  function EditDocketEntryMeta({
+    cancelSequence,
+    editType,
+    showModal,
+    submitSequence,
+  }) {
     return (
       <>
         <CaseDetailHeader />

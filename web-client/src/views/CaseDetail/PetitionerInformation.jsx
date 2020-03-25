@@ -61,7 +61,7 @@ const PetitionerInformation = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function PetitionerInformation({
     caseDetailHelper,
     caseInformationHelper,
     constants,
@@ -72,7 +72,7 @@ const PetitionerInformation = connect(
     showModal,
     updateFormValueSequence,
     validationErrors,
-  }) => {
+  }) {
     const mainPartyInformation = () => (
       <div className="grid-row grid-gap-6">
         <div className="tablet:grid-col-6">

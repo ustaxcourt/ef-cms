@@ -28,7 +28,6 @@ import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearAlertSequence } from './sequences/clearAlertSequence';
 import { clearCaseSearchByNameFormSequence } from './sequences/clearCaseSearchByNameFormSequence';
 import { clearDocketNumberSearchFormSequence } from './sequences/clearDocketNumberSearchFormSequence';
-import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
@@ -313,7 +312,6 @@ import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreat
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocketEntryMetaDocumentFormValueSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
-import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
 import { updateFormPartyTypeSequence } from './sequences/updateFormPartyTypeSequence';
 import { updateFormValueAndInternalCaseCaptionSequence } from './sequences/updateFormValueAndInternalCaseCaptionSequence';
@@ -413,7 +411,6 @@ export const presenter = {
     clearAlertSequence,
     clearCaseSearchByNameFormSequence,
     clearDocketNumberSearchFormSequence,
-    clearDocumentSequence,
     clearExistingDocumentSequence,
     clearModalFormSequence,
     clearModalSequence,
@@ -696,7 +693,6 @@ export const presenter = {
     updateDocketEntryFormValueSequence,
     updateDocketEntryMetaDocumentFormValueSequence,
     updateDocketNumberSearchFormSequence,
-    updateDocumentValueSequence,
     updateFileDocumentWizardFormValueSequence,
     updateFormPartyTypeSequence,
     updateFormValueAndInternalCaseCaptionSequence,
