@@ -23,7 +23,7 @@ export const SecondaryContactEdit = connect(
       sequences.validateSecondaryContactSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function SecondaryContactEdit({
     contactEditHelper,
     form,
     formCancelToggleCancelSequence,
@@ -32,7 +32,7 @@ export const SecondaryContactEdit = connect(
     updateFormValueSequence,
     validateSecondaryContactSequence,
     validationErrors,
-  }) => {
+  }) {
     const type = 'contactSecondary';
     const bind = 'form';
     const onBlur = 'validateSecondaryContactSequence';

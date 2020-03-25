@@ -3,7 +3,7 @@ import { connect } from '@cerebral/react';
 import React from 'react';
 import classNames from 'classnames';
 
-export const Hint = connect(props => {
+export const Hint = connect(function Hint(props) {
   const { children, className, exclamation, fullWidth, wider } = props;
 
   return (

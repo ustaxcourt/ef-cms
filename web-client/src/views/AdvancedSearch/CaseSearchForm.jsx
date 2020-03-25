@@ -8,11 +8,11 @@ import React from 'react';
 
 export const CaseSearchForm = connect(
   { advancedSearchForm: state.advancedSearchForm },
-  ({
+  function CaseSearchForm({
     advancedSearchForm,
     submitAdvancedSearchSequence,
     submitDocketNumberSearchSequence,
-  }) => {
+  }) {
     return (
       <>
         <Mobile>

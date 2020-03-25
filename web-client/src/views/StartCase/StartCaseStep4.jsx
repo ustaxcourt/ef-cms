@@ -27,7 +27,7 @@ export const StartCaseStep4 = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateStartCaseWizardSequence: sequences.validateStartCaseWizardSequence,
   },
-  ({
+  function StartCaseStep4({
     clearPreferredTrialCitySequence,
     completeStartCaseWizardStepSequence,
     form,
@@ -41,7 +41,7 @@ export const StartCaseStep4 = connect(
     trialCitiesHelper,
     updateFormValueSequence,
     validateStartCaseWizardSequence,
-  }) => {
+  }) {
     return (
       <>
         <Focus>

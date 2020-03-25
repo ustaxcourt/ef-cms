@@ -2,7 +2,7 @@ import { connect } from '@cerebral/react';
 import React from 'react';
 import classNames from 'classnames';
 
-export const FormGroup = connect(props => {
+export const FormGroup = connect(function FormGroup(props) {
   const { children, className, errorText, id } = props;
 
   let hasError = false;

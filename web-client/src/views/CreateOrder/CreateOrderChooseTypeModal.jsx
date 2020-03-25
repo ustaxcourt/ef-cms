@@ -15,7 +15,7 @@ export const CreateOrderChooseTypeModal = connect(
     validateSequence: sequences.validateOrderWithoutBodySequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function CreateOrderChooseTypeModal({
     cancelSequence,
     confirmSequence,
     modal,
@@ -23,7 +23,7 @@ export const CreateOrderChooseTypeModal = connect(
     updateModalValue,
     validateSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"

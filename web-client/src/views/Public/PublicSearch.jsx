@@ -13,10 +13,10 @@ export const PublicSearch = connect(
     submitPublicAdvancedSearchSequence:
       sequences.submitPublicAdvancedSearchSequence,
   },
-  ({
+  function PublicSearch({
     submitCaseDocketNumberSearchSequence,
     submitPublicAdvancedSearchSequence,
-  }) => {
+  }) {
     return (
       <>
         <NonMobile>

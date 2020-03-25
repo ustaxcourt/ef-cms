@@ -21,7 +21,7 @@ export const EditPetitionDetails = connect(
     validatePetitionDetailsSequence: sequences.validatePetitionDetailsSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function EditPetitionDetails({
     CASE_TYPES,
     docketNumber,
     form,
@@ -29,7 +29,7 @@ export const EditPetitionDetails = connect(
     updatePetitionDetailsSequence,
     validatePetitionDetailsSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <CaseDetailHeader />

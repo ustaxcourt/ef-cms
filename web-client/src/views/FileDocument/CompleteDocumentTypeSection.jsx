@@ -28,7 +28,7 @@ export const CompleteDocumentTypeSection = connect(
       sequences.validateSelectDocumentTypeSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function CompleteDocumentTypeSection({
     completeDocumentTypeSectionHelper,
     form,
     openSelectDocumentWizardOverlaySequence,
@@ -37,7 +37,7 @@ export const CompleteDocumentTypeSection = connect(
     updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         <FormGroup errorText={validationErrors.documentType}>

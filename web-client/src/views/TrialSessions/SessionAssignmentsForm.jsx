@@ -10,7 +10,12 @@ export const SessionAssignmentsForm = connect(
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
   },
-  ({ form, judges, trialClerks, updateTrialSessionFormDataSequence }) => {
+  function SessionAssignmentsForm({
+    form,
+    judges,
+    trialClerks,
+    updateTrialSessionFormDataSequence,
+  }) {
     return (
       <>
         <h2 className="margin-top-4">Session Assignments</h2>

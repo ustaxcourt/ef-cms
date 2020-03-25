@@ -4,7 +4,7 @@ import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import React from 'react';
 
-export const DocumentMessages = connect({}, () => {
+export const DocumentMessages = connect({}, function DocumentMessages() {
   return (
     <Tabs
       boxed

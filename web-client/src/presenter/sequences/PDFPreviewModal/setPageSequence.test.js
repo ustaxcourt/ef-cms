@@ -52,7 +52,7 @@ fakeFile.name = 'fakeFile.pdf';
 
 describe('setPageSequence', () => {
   beforeEach(async () => {
-    test.setState('pdfPreviewModal', {});
+    test.setState('modal.pdfPreviewModal', {});
     await test.runSequence('loadPdfSequence', {
       ctx: 'abc',
       file: fakeFile,

@@ -40,7 +40,7 @@ export const ReviewSavedPetition = connect(
     showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
   },
-  ({
+  function ReviewSavedPetition({
     constants,
     documentId,
     form,
@@ -52,7 +52,7 @@ export const ReviewSavedPetition = connect(
     saveSavedCaseForLaterSequence,
     showModal,
     startCaseHelper,
-  }) => {
+  }) {
     const { caseId } = form;
 
     return (

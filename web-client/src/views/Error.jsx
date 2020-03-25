@@ -8,7 +8,7 @@ export const Error = connect(
   {
     alertHelper: state.alertHelper,
   },
-  ({ alertHelper }) => {
+  function Error({ alertHelper }) {
     return (
       <>
         <BigHeader text="Error 404" />

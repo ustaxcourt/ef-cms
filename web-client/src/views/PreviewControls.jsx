@@ -16,7 +16,7 @@ export const PreviewControls = connect(
     onPreviousPage: props.onPreviousPage,
     totalPages: props.totalPages,
   },
-  ({
+  function PreviewControls({
     currentPage,
     disableLeftButtons,
     disableRightButtons,
@@ -25,7 +25,7 @@ export const PreviewControls = connect(
     onNextPage,
     onPreviousPage,
     totalPages,
-  }) => {
+  }) {
     return (
       <div className="pdf-preview-controls">
         <Button
