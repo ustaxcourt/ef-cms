@@ -110,6 +110,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseDeadlinesForCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
     getJudgeForUserChambersInteractor: jest.fn(),
+    getUserInteractor: jest.fn(),
+    getUsersInSectionInteractor: jest.fn(),
     removeCasePendingItemInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
@@ -183,7 +185,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDownloadPolicyUrl: jest.fn(),
     getEligibleCasesForTrialSession: jest.fn(),
-    updateAttorneyUser: jest.fn(),
     getInboxMessagesForSection: jest
       .fn()
       .mockImplementation(getInboxMessagesForSection),
@@ -209,6 +210,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveWorkItemForPaper,
     setItem: jest.fn(),
     setWorkItemAsRead,
+    updateAttorneyUser: jest.fn(),
     updateCase: jest.fn().mockImplementation(updateCase),
     updateUser: jest.fn(),
     updateUserCaseNote: jest.fn(),
