@@ -133,6 +133,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     validateAddPrivatePractitionerInteractor: jest.fn(),
     validateCaseAdvancedSearchInteractor: jest.fn(),
     validateCaseDeadlineInteractor: jest.fn(),
+    validateDocketEntryInteractor: jest.fn(),
     validateEditPrivatePractitionerInteractor: jest.fn(),
     validatePdfInteractor: jest.fn(),
     virusScanPdfInteractor: jest.fn(),
