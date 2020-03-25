@@ -1,9 +1,14 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   updateTrialSessionWorkingCopyInteractor,
 } = require('./updateTrialSessionWorkingCopyInteractor');
 const { omit } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
+
+let user;
 
 const MOCK_WORKING_COPY = {
   caseMetadata: {
@@ -16,23 +21,21 @@ const MOCK_WORKING_COPY = {
 };
 
 describe('Update trial session working copy', () => {
-  let applicationContext;
+  beforeEach(() => {
+    applicationContext.environment.stage = 'local';
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+  });
 
   it('throws error if user is unauthorized', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: 'unauthorizedRole',
-          userId: 'unauthorizedUser',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          updateTrialSessionWorkingCopy: () => {},
-        };
-      },
+    user = {
+      role: 'unauthorizedRole',
+      userId: 'unauthorizedUser',
     };
+
+    applicationContext
+      .getPersistenceGateway()
+      .updateTrialSessionWorkingCopy.mockReturnValue({});
+
     await expect(
       updateTrialSessionWorkingCopyInteractor({
         applicationContext,
@@ -42,51 +45,37 @@ describe('Update trial session working copy', () => {
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.judge,
-          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          updateTrialSessionWorkingCopy: () =>
-            Promise.resolve(omit(MOCK_WORKING_COPY, 'userId')),
-        };
-      },
+    user = {
+      role: User.ROLES.judge,
+      userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     };
-    let error;
-    try {
-      await updateTrialSessionWorkingCopyInteractor({
+
+    applicationContext
+      .getPersistenceGateway()
+      .updateTrialSessionWorkingCopy.mockResolvedValue(
+        omit(MOCK_WORKING_COPY, 'userId'),
+      );
+
+    await expect(
+      updateTrialSessionWorkingCopyInteractor({
         applicationContext,
         trialSessionWorkingCopyToUpdate: MOCK_WORKING_COPY,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain(
+      }),
+    ).rejects.toThrow(
       'The TrialSessionWorkingCopy entity was invalid ValidationError: "userId" is required',
     );
   });
 
   it('correctly returns data from persistence', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.judge,
-          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          updateTrialSessionWorkingCopy: () =>
-            Promise.resolve(MOCK_WORKING_COPY),
-        };
-      },
+    user = {
+      role: User.ROLES.judge,
+      userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     };
+
+    applicationContext
+      .getPersistenceGateway()
+      .updateTrialSessionWorkingCopy.mockResolvedValue(MOCK_WORKING_COPY);
+
     const result = await updateTrialSessionWorkingCopyInteractor({
       applicationContext,
       trialSessionWorkingCopyToUpdate: MOCK_WORKING_COPY,
