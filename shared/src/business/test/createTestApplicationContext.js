@@ -5,6 +5,9 @@ const {
   addWorkItemToSectionInbox,
 } = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
+  applicationContext: webClientApplicationContext,
+} = require('../../../../web-client/src/applicationContext');
+const {
   CaseExternalIncomplete,
 } = require('../entities/cases/CaseExternalIncomplete');
 const {
@@ -201,7 +204,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
     getChromiumBrowser: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
-    getConstants: jest.fn().mockReturnValue({ SCAN_MODES: Scan.SCAN_MODES }),
+    getConstants: jest
+      .fn()
+      .mockReturnValue(webClientApplicationContext.getConstants()),
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {
