@@ -3,22 +3,11 @@ import { applicationContextForClient } from '../../../../../shared/src/business/
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
-let applicationContext;
-
 describe('addConsolidatedCaseAction', () => {
-  let caseDetail;
+  let applicationContext;
 
   beforeEach(() => {
     applicationContext = applicationContextForClient;
-
-    caseDetail = {
-      caseId: '123',
-      docketNumber: '123-45',
-    };
-
-    applicationContext.getUseCases().addConsolidatedCaseInteractor = jest
-      .fn()
-      .mockResolvedValue(caseDetail);
 
     presenter.providers.applicationContext = applicationContext;
   });
