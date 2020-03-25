@@ -13,14 +13,14 @@ export const PartyInformation = connect(
     updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  ({
+  function PartyInformation({
     baseUrl,
     caseDetailEditHelper,
     form,
     token,
     updateCasePartyTypeSequence,
     updateFormValueSequence,
-  }) => {
+  }) {
     return (
       <div className="blue-container document-detail-one-third">
         <div className="subsection party-type">

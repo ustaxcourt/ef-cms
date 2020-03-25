@@ -15,12 +15,12 @@ export const DocketRecord = connect(
     refreshCaseSequence: sequences.refreshCaseSequence,
     showModal: state.modal.showModal,
   },
-  ({
+  function DocketRecord({
     docketRecordHelper,
     formattedCaseDetail,
     refreshCaseSequence,
     showModal,
-  }) => {
+  }) {
     useEffect(() => {
       const interval = setInterval(() => {
         refreshCaseSequence();

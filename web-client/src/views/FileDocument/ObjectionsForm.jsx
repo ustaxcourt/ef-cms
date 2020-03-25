@@ -13,13 +13,13 @@ export const ObjectionsForm = connect(
       sequences.validateExternalDocumentInformationSequence,
     validationData: state[props.validationBind],
   },
-  ({
+  function ObjectionsForm({
     data,
     type,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
     validationData,
-  }) => {
+  }) {
     return (
       <>
         <FormGroup errorText={validationData && validationData.objections}>

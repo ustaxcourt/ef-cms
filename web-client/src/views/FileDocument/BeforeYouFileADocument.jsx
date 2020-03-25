@@ -13,7 +13,11 @@ export const BeforeYouFileADocument = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
   },
-  ({ caseDetail, formCancelToggleCancelSequence, showModal }) => {
+  function BeforeYouFileADocument({
+    caseDetail,
+    formCancelToggleCancelSequence,
+    showModal,
+  }) {
     return (
       <>
         <CaseDetailHeader hideActionButtons />

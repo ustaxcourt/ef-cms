@@ -10,12 +10,12 @@ export const SearchBox = connect(
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     updateSearchTermSequence: sequences.updateSearchTermSequence,
   },
-  ({
+  function SearchBox({
     searchTerm,
     submitCaseSearchSequence,
     toggleMobileMenuSequence,
     updateSearchTermSequence,
-  }) => {
+  }) {
     return (
       <form
         noValidate
