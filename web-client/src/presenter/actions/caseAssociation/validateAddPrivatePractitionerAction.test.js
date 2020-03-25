@@ -4,14 +4,12 @@ import { runAction } from 'cerebral/test';
 import { validateAddPrivatePractitionerAction } from './validateAddPrivatePractitionerAction';
 
 describe('validateAddPrivatePractitioner', () => {
-  let applicationContext;
   let successStub;
   let errorStub;
 
   let mockAddPrivatePractitioner;
 
   beforeEach(() => {
-    applicationContext = applicationContextForClient;
     successStub = jest.fn();
     errorStub = jest.fn();
 
@@ -20,7 +18,7 @@ describe('validateAddPrivatePractitioner', () => {
       user: { userId: 'abc' },
     };
 
-    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.applicationContext = applicationContextForClient;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -28,7 +26,7 @@ describe('validateAddPrivatePractitioner', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    applicationContext
+    applicationContextForClient
       .getUseCases()
       .validateAddPrivatePractitionerInteractor.mockReturnValue(null);
 
@@ -45,7 +43,7 @@ describe('validateAddPrivatePractitioner', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    applicationContext
+    applicationContextForClient
       .getUseCases()
       .validateAddPrivatePractitionerInteractor.mockReturnValue('error');
 
