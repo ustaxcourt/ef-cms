@@ -1,9 +1,10 @@
 import { User } from '../../../../../shared/src/business/entities/User';
-import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setDefaultFileDocumentFormValuesAction } from './setDefaultFileDocumentFormValuesAction';
 
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
 
 describe('setDefaultFileDocumentFormValuesAction', () => {
