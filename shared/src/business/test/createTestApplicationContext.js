@@ -302,12 +302,14 @@ const createTestApplicationContext = ({ user } = {}) => {
       CaseInternal,
       WorkItem: WorkItem,
     }),
+    getFileReader: jest.fn(),
     getHttpClient: jest.fn(() => ({
       get: () => ({
         data: 'url',
       }),
     })),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
+    getPdfJs: jest.fn(),
     getPersistenceGateway: jest.fn().mockImplementation(() => {
       return mockGetPersistenceGatewayReturnValue;
     }),
