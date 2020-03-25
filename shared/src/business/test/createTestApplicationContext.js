@@ -138,8 +138,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.createISODateString),
     formatDateString: jest.fn().mockReturnValue(DateHandler.formatDateString),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
-    generatePdfFromHtmlInteractor: jest.fn(),
-    getCalendaredCasesForTrialSessionInteractor: jest.fn(),
     getDocumentTypeForAddressChange: jest.fn(),
     prepareDateFromString: jest
       .fn()
