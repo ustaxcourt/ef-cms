@@ -84,6 +84,7 @@ const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { Scan } = require('../entities/Scan');
+const { SERVICE_INDICATOR_TYPES } = require('../entities/cases/CaseConstants');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
@@ -107,6 +108,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     updateCounselOnCaseInteractor: jest.fn(),
     validateAddIrsPractitionerInteractor: jest.fn(),
     validateAddPrivatePractitionerInteractor: jest.fn(),
+    validateEditPrivatePractitionerInteractor: jest.fn(),
   };
 
   const mockGetScannerReturnValue = {
@@ -204,7 +206,10 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
     getChromiumBrowser: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
-    getConstants: jest.fn().mockReturnValue({ SCAN_MODES: Scan.SCAN_MODES }),
+    getConstants: jest.fn().mockReturnValue({
+      SCAN_MODES: Scan.SCAN_MODES,
+      SERVICE_INDICATOR_TYPES,
+    }),
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {
