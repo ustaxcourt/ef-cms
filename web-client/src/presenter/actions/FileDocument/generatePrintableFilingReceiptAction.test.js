@@ -2,23 +2,12 @@ import { Document } from '../../../../../shared/src/business/entities/Document';
 import { generatePrintableFilingReceiptAction } from './generatePrintableFilingReceiptAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 
-let generatePrintableFilingReceiptInteractorMock;
+const applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
 describe('generatePrintableFilingReceiptAction', () => {
-  beforeEach(() => {
-    generatePrintableFilingReceiptInteractorMock = jest.fn();
-
-    presenter.providers.applicationContext = {
-      getEntityConstructors: () => ({
-        Document,
-      }),
-      getUseCases: () => ({
-        generatePrintableFilingReceiptInteractor: generatePrintableFilingReceiptInteractorMock,
-      }),
-    };
-  });
-
   it('should call generatePrintableFilingReceiptInteractor', async () => {
     await runAction(generatePrintableFilingReceiptAction, {
       modules: {
@@ -39,7 +28,9 @@ describe('generatePrintableFilingReceiptAction', () => {
       },
     });
 
-    expect(generatePrintableFilingReceiptInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generatePrintableFilingReceiptInteractor,
+    ).toHaveBeenCalled();
   });
 
   it('should generate a receipt with supporting documents', async () => {
@@ -65,7 +56,8 @@ describe('generatePrintableFilingReceiptAction', () => {
     });
 
     expect(
-      generatePrintableFilingReceiptInteractorMock.mock.calls[0][0].documents,
+      applicationContext.getUseCases().generatePrintableFilingReceiptInteractor
+        .mock.calls[0][0].documents,
     ).toHaveProperty('supportingDocuments');
   });
 
@@ -92,7 +84,8 @@ describe('generatePrintableFilingReceiptAction', () => {
     });
 
     expect(
-      generatePrintableFilingReceiptInteractorMock.mock.calls[0][0].documents,
+      applicationContext.getUseCases().generatePrintableFilingReceiptInteractor
+        .mock.calls[0][0].documents,
     ).toHaveProperty('secondaryDocument');
   });
 
@@ -121,7 +114,8 @@ describe('generatePrintableFilingReceiptAction', () => {
     });
 
     expect(
-      generatePrintableFilingReceiptInteractorMock.mock.calls[0][0].documents,
+      applicationContext.getUseCases().generatePrintableFilingReceiptInteractor
+        .mock.calls[0][0].documents,
     ).toHaveProperty('secondarySupportingDocuments');
   });
 });
