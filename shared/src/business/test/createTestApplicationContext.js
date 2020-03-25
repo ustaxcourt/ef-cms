@@ -183,6 +183,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDownloadPolicyUrl: jest.fn(),
     getEligibleCasesForTrialSession: jest.fn(),
+    updateAttorneyUser: jest.fn(),
     getInboxMessagesForSection: jest
       .fn()
       .mockImplementation(getInboxMessagesForSection),
