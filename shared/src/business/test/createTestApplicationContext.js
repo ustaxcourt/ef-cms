@@ -106,6 +106,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
+    getCaseDeadlinesForCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
     getJudgeForUserChambersInteractor: jest.fn(),
     removeCasePendingItemInteractor: jest.fn(),
