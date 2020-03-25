@@ -29,9 +29,9 @@ describe('validateCaseDeadlineAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    applicationContext.getUseCases().validateCaseDeadlineInteractor = jest
-      .fn()
-      .mockReturnValue(null);
+    applicationContext
+      .getUseCases()
+      .validateCaseDeadlineInteractor.mockReturnValue(null);
 
     await runAction(validateCaseDeadlineAction, {
       modules: {
@@ -46,9 +46,9 @@ describe('validateCaseDeadlineAction', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    applicationContext.getUseCases().validateCaseDeadlineInteractor = jest
-      .fn()
-      .mockReturnValue('error');
+    applicationContext
+      .getUseCases()
+      .validateCaseDeadlineInteractor.mockReturnValue('error');
 
     await runAction(validateCaseDeadlineAction, {
       modules: {
