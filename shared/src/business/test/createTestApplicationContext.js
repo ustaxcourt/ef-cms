@@ -197,6 +197,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseNote: jest.fn(),
     getUserCaseNoteForCases: jest.fn(),
+    getUsersBySearchKey: jest.fn(),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
