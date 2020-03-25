@@ -12,7 +12,6 @@ export const generatePrintableCaseInventoryReportAction = async ({
   get,
 }) => {
   const { associatedJudge, status } = get(state.screenMetadata);
-
   const pdfUrl = await applicationContext
     .getUseCases()
     .generatePrintableCaseInventoryReportInteractor({

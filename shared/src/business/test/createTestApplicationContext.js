@@ -83,6 +83,7 @@ const { Case } = require('../entities/cases/Case');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
+const { Scan } = require('../entities/Scan');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
@@ -94,13 +95,27 @@ const createTestApplicationContext = ({ user } = {}) => {
     adminUpdateUserAttributes: jest.fn(),
   };
 
+  const mockGetUseCasesReturnValue = {
+    generatePrintableCaseInventoryReportInteractor: jest.fn(),
+    getCalendaredCasesForTrialSessionInteractor: jest.fn(),
+    getCaseInventoryReportInteractor: jest.fn(),
+    getJudgeForUserChambersInteractor: jest.fn(),
+    removeCasePendingItemInteractor: jest.fn(),
+    removeItemInteractor: jest.fn(),
+    setWorkItemAsReadInteractor: jest.fn(),
+  };
+
+  const mockGetScannerReturnValue = {
+    getSourceNameByIndex: jest.fn().mockReturnValue('scanner'),
+    setSourceByIndex: jest.fn().mockReturnValue(null),
+    startScanSession: jest.fn().mockReturnValue({
+      scannedBuffer: [],
+    }),
+  };
+
   const mockStorageClientReturnValue = {
     deleteObject: jest.fn(),
     getObject: jest.fn(),
-  };
-
-  const mockGetUseCasesReturnValue = {
-    getCalendaredCasesForTrialSessionInteractor: jest.fn(),
   };
 
   const mockGetUseCaseHelpers = {
@@ -180,8 +195,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     },
     getBaseUrl: () => 'http://localhost',
     getCaseCaptionNames: jest.fn().mockReturnValue(Case.getCaseCaptionNames),
+    getChiefJudgeNameForSigning: jest
+      .fn()
+      .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
     getChromiumBrowser: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
+    getConstants: jest.fn().mockReturnValue({ SCAN_MODES: Scan.SCAN_MODES }),
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {
@@ -211,6 +230,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       return mockGetPersistenceGatewayReturnValue;
     }),
     getPug: jest.fn(),
+    getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getStorageClient: jest.fn().mockImplementation(() => {
       return mockStorageClientReturnValue;
     }),
@@ -224,7 +244,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     isAuthorizedForWorkItems: jest.fn().mockReturnValue(() => true),
     logger: {
       error: jest.fn(),
-      info: () => {},
+      info: jest.fn(),
     },
   };
   return applicationContext;
@@ -232,4 +252,23 @@ const createTestApplicationContext = ({ user } = {}) => {
 
 const applicationContext = createTestApplicationContext();
 
-module.exports = { applicationContext, createTestApplicationContext };
+/*
+  If you receive an error when testing cerebral that says:
+  `The property someProperty passed to Provider is not a method`
+  it is because the cerebral testing framework expects all objects on the 
+  applicationContext to be functions.  The code below walks the original 
+  applicationContext and adds ONLY the functions to the 
+  applicationContextForClient.
+*/
+const applicationContextForClient = {};
+Object.entries(applicationContext).map(([key, value]) => {
+  if (typeof value === 'function') {
+    applicationContextForClient[key] = value;
+  }
+});
+
+module.exports = {
+  applicationContext,
+  applicationContextForClient,
+  createTestApplicationContext,
+};
