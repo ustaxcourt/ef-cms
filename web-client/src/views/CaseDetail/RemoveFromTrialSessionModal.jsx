@@ -14,14 +14,14 @@ export const RemoveFromTrialSessionModal = connect(
       sequences.validateRemoveFromTrialSessionSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function RemoveFromTrialSessionModal({
     cancelSequence,
     confirmSequence,
     modal,
     updateModalValueSequence,
     validateRemoveFromTrialSessionSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"

@@ -13,14 +13,14 @@ export const BlockFromTrialModal = connect(
     validateBlockFromTrialSequence: sequences.validateBlockFromTrialSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function BlockFromTrialModal({
     cancelSequence,
     confirmSequence,
     modal,
     updateModalValueSequence,
     validateBlockFromTrialSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"

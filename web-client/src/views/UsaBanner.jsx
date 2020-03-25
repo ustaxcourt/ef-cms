@@ -10,7 +10,7 @@ export const UsaBanner = connect(
     showUsaBannerDetails: state.header.showUsaBannerDetails,
     toggleUsaBannerDetailsSequence: sequences.toggleUsaBannerDetailsSequence,
   },
-  ({ showUsaBannerDetails, toggleUsaBannerDetailsSequence }) => {
+  function UsaBanner({ showUsaBannerDetails, toggleUsaBannerDetailsSequence }) {
     return (
       <section className="site-banner usa-banner">
         <div className="usa-accordion">

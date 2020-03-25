@@ -10,7 +10,11 @@ export const UnconsolidateCasesModal = connect(
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
-  ({ formattedCaseDetail, modal, updateModalValueSequence }) => {
+  function UnconsolidateCasesModal({
+    formattedCaseDetail,
+    modal,
+    updateModalValueSequence,
+  }) {
     return (
       <ConfirmModal
         cancelLabel="Cancel"

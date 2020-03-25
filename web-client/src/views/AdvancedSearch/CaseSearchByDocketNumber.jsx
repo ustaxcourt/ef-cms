@@ -14,13 +14,13 @@ export const CaseSearchByDocketNumber = connect(
       sequences.updateAdvancedSearchFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function CaseSearchByDocketNumber({
     advancedSearchForm,
     clearDocketNumberSearchFormSequence,
     submitDocketNumberSearchSequence,
     updateAdvancedSearchFormValueSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <div className="header-with-blue-background display-flex flex-justify">

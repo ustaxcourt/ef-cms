@@ -11,7 +11,13 @@ export const BaseModal = connect(
   {
     onBlur: sequences[props.onBlurSequence],
   },
-  ({ children, className, extraClassNames, onBlur, preventCancelOnBlur }) => {
+  function BaseModal({
+    children,
+    className,
+    extraClassNames,
+    onBlur,
+    preventCancelOnBlur,
+  }) {
     extraClassNames = extraClassNames || null;
 
     const elRef = React.useRef(null);
