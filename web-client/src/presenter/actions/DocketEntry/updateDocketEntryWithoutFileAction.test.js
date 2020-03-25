@@ -1,9 +1,8 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { updateDocketEntryWithoutFileAction } from './updateDocketEntryWithoutFileAction';
 
-const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
 
 describe('updateDocketEntryWithoutFileAction', () => {
