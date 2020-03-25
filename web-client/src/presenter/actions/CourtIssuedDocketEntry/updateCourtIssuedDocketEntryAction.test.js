@@ -4,18 +4,6 @@ import { runAction } from 'cerebral/test';
 import { updateCourtIssuedDocketEntryAction } from './updateCourtIssuedDocketEntryAction';
 
 describe('updateCourtIssuedDocketEntryAction', () => {
-  // let updateCourtIssuedDocketEntryInteractorMock;
-  //
-  // beforeEach(() => {
-  //   updateCourtIssuedDocketEntryInteractorMock = jest.fn();
-  //
-  //   presenter.providers.applicationContext = {
-  //     getUseCases: () => ({
-  //       updateCourtIssuedDocketEntryInteractor: updateCourtIssuedDocketEntryInteractorMock,
-  //     }),
-  //   };
-  // });
-
   presenter.providers.applicationContext = applicationContext;
 
   it('Calls the interactor for filing a court-issued docket entry', async () => {
