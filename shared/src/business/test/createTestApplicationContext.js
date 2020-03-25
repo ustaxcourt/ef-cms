@@ -87,6 +87,7 @@ const { Case } = require('../entities/cases/Case');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
+const { Document } = require('../entities/Document');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
@@ -110,10 +111,13 @@ const createTestApplicationContext = ({ user } = {}) => {
     associateIrsPractitionerWithCaseInteractor: jest.fn(),
     associatePrivatePractitionerWithCaseInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
+    casePublicSearchInteractor: jest.fn(),
+    completeDocketEntryQCInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
     createCourtIssuedOrderPdfFromHtmlInteractor: jest.fn(),
     deleteCaseNoteInteractor: jest.fn(),
     deleteCounselFromCaseInteractor: jest.fn(),
+    fetchPendingItemsInteractor: jest.fn(),
     fileCourtIssuedOrderInteractor: jest.fn(),
     fileDocketEntryInteractor: jest.fn(),
     fileExternalDocumentForConsolidatedInteractor: jest.fn(),
@@ -121,10 +125,14 @@ const createTestApplicationContext = ({ user } = {}) => {
     generateDocumentTitleInteractor: jest.fn(),
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
+    generatePrintableFilingReceiptInteractor: jest.fn(),
+    generatePrintablePendingReportInteractor: jest.fn(),
+    generatePublicDocketRecordPdfInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
     getBlockedCasesInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
     getCaseDeadlinesForCaseInteractor: jest.fn(),
+    getCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
     getIrsPractitionersBySearchKeyInteractor: jest.fn(),
     getJudgeForUserChambersInteractor: jest.fn(),
@@ -135,11 +143,15 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeConsolidatedCasesInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
     saveCaseNoteInteractor: jest.fn(),
+    saveIntermediateDocketEntryInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
+    submitCaseAssociationRequestInteractor: jest.fn(),
+    submitPendingCaseAssociationRequestInteractor: jest.fn(),
     updateCaseContextInteractor: jest.fn(),
     updateCounselOnCaseInteractor: jest.fn(),
     updateDocketEntryInteractor: jest.fn(),
     updateDocketEntryMetaInteractor: jest.fn(),
+    uploadExternalDocumentsInteractor: jest.fn(),
     uploadOrderDocumentInteractor: jest.fn(),
     validateAddIrsPractitionerInteractor: jest.fn(),
     validateAddPrivatePractitionerInteractor: jest.fn(),
@@ -149,6 +161,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     validateDocketEntryInteractor: jest.fn(),
     validateDocketRecordInteractor: jest.fn(),
     validateEditPrivatePractitionerInteractor: jest.fn(),
+    validateExternalDocumentInformationInteractor: jest.fn(),
     validatePdfInteractor: jest.fn(),
     virusScanPdfInteractor: jest.fn(),
   };
@@ -311,6 +324,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       Case,
       CaseExternal: CaseExternalIncomplete,
       CaseInternal,
+      Document,
       WorkItem: WorkItem,
     }),
     getFileReader: jest.fn(),
