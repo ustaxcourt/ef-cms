@@ -13,7 +13,11 @@ export const SectionWorkQueue = connect(
     queue: state.workQueueToDisplay.queue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ navigateToPathSequence, queue, workQueueHelper }) => {
+  function SectionWorkQueue({
+    navigateToPathSequence,
+    queue,
+    workQueueHelper,
+  }) {
     return (
       <Tabs
         bind="workQueueToDisplay.box"

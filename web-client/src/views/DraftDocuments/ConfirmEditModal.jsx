@@ -8,7 +8,7 @@ export const ConfirmEditModal = connect(
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.navigateToEditOrderSequence,
   },
-  ({ cancelSequence, confirmSequence }) => {
+  function ConfirmEditModal({ cancelSequence, confirmSequence }) {
     return (
       <ModalDialog
         cancelLabel="No, Take Me Back"

@@ -8,7 +8,7 @@ export const ErrorNotification = connect(
     alertError: state.alertError,
     alertHelper: state.alertHelper,
   },
-  ({ alertError, alertHelper }) => {
+  function ErrorNotification({ alertError, alertHelper }) {
     const notificationRef = useRef(null);
 
     useEffect(() => {

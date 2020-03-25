@@ -11,7 +11,7 @@ import howToPrepareYourDocuments from '../../pdfs/how-to-prepare-your-documents.
 
 export const DashboardPetitioner = connect(
   { dashboardExternalHelper: state.dashboardExternalHelper, user: state.user },
-  ({ dashboardExternalHelper, user }) => {
+  function DashboardPetitioner({ dashboardExternalHelper, user }) {
     return (
       <React.Fragment>
         <BigHeader text={`Welcome, ${user.name}`} />

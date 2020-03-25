@@ -17,7 +17,7 @@ export const UpdateCaseModalDialog = connect(
     validateUpdateCaseModalSequence: sequences.validateUpdateCaseModalSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function UpdateCaseModalDialog({
     cancelSequence,
     confirmSequence,
     constants,
@@ -27,7 +27,7 @@ export const UpdateCaseModalDialog = connect(
     updateModalValueSequence,
     validateUpdateCaseModalSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"

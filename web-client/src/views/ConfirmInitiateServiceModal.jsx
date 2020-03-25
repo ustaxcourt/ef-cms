@@ -10,12 +10,12 @@ export const ConfirmInitiateServiceModal = connect(
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
     confirmSequence: sequences.serveCourtIssuedDocumentSequence,
   },
-  ({
+  function ConfirmInitiateServiceModal({
     cancelSequence,
     confirmInitiateServiceModalHelper,
     confirmSequence,
     documentTitle,
-  }) => {
+  }) {
     return (
       <ModalDialog
         cancelLabel="No, Take Me Back"

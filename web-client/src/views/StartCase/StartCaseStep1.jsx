@@ -19,14 +19,14 @@ export const StartCaseStep1 = connect(
     startCaseHelper: state.startCaseHelper,
     validationErrors: state.validationErrors,
   },
-  ({
+  function StartCaseStep1({
     completeStartCaseWizardStepSequence,
     constants,
     formCancelToggleCancelSequence,
     navigateBackSequence,
     startCaseHelper,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <Focus>

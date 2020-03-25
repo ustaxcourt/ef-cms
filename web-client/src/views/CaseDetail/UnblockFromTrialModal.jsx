@@ -10,7 +10,11 @@ export const UnblockFromTrialModal = connect(
     caseDetail: state.caseDetail,
     confirmSequence: sequences.unblockCaseFromTrialSequence,
   },
-  ({ cancelSequence, caseDetail, confirmSequence }) => {
+  function UnblockFromTrialModal({
+    cancelSequence,
+    caseDetail,
+    confirmSequence,
+  }) {
     return (
       <ModalDialog
         cancelLabel="No, Cancel"

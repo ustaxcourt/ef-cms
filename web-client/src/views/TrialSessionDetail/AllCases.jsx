@@ -8,7 +8,7 @@ export const AllCases = connect(
   {
     allCases: state.formattedTrialSessionDetails.allCases,
   },
-  ({ allCases }) => {
+  function AllCases({ allCases }) {
     return (
       <React.Fragment>
         <div className="text-semibold push-right margin-bottom-2">

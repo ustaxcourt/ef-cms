@@ -1,7 +1,10 @@
 // a global config if running tests singly on CLI
+// this file also contains a set of configuration defaults which can
+// be imported / overridden as a base configuration elsewhere.
 module.exports = {
   clearMocks: true,
   collectCoverage: false,
+  coverageDirectory: './coverage',
   coverageThreshold: {
     global: {
       branches: 95,
@@ -9,12 +12,6 @@ module.exports = {
       lines: 95,
       statements: 95,
     },
-  },
-  globals: {
-    File: function() {},
-    FileReader: () => {},
-    atob: x => x,
-    window: { document: {} },
   },
   verbose: true,
 };

@@ -13,7 +13,7 @@ export const Country = connect(
     validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
-  ({
+  function Country({
     constants,
     data,
     onChangeCountryType,
@@ -21,7 +21,7 @@ export const Country = connect(
     updateFormValueSequence,
     validateStartCaseSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         <FormGroup

@@ -9,7 +9,11 @@ export const SealCaseModal = connect(
     confirmSequence: sequences.sealCaseSequence,
     formattedCaseDetail: state.formattedCaseDetail,
   },
-  ({ cancelSequence, confirmSequence, formattedCaseDetail }) => {
+  function SealCaseModal({
+    cancelSequence,
+    confirmSequence,
+    formattedCaseDetail,
+  }) {
     return (
       <ModalDialog
         cancelLabel="No, Cancel"

@@ -8,7 +8,6 @@ import { setForwardMessageValidationErrorsAction } from '../actions/setForwardMe
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startForwardValidationAction } from '../actions/ForwardForm/startForwardValidationAction';
-import { unsetShowForwardInputs } from '../actions/unsetShowForwardInputs';
 import { validateForwardMessageAction } from '../actions/validateForwardMessageAction';
 
 export const submitForwardSequence = showProgressSequenceDecorator([
@@ -24,7 +23,6 @@ export const submitForwardSequence = showProgressSequenceDecorator([
     success: [
       forwardWorkItemAction,
       clearForwardFormAction,
-      unsetShowForwardInputs,
       setAlertSuccessAction,
       navigateToDashboardAction,
     ],

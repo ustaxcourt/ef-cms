@@ -16,7 +16,7 @@ export const TrialCity = connect(
     validationErrors: state.validationErrors,
     value: props.value,
   },
-  ({
+  function TrialCity({
     label,
     onChange,
     showDefaultOption,
@@ -26,7 +26,7 @@ export const TrialCity = connect(
     trialCitiesByState,
     validationErrors,
     value,
-  }) => {
+  }) {
     return (
       <FormGroup errorText={validationErrors.preferredTrialCity}>
         <label

@@ -8,7 +8,7 @@ export const CancelDraftDocumentModal = connect(
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.cancelAddDraftDocumentSequence,
   },
-  ({ cancelSequence, confirmSequence }) => {
+  function CancelDraftDocumentModal({ cancelSequence, confirmSequence }) {
     return (
       <ModalDialog
         cancelLabel="No, Take Me Back"

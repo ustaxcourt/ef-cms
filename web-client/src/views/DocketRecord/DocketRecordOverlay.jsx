@@ -17,7 +17,7 @@ export const DocketRecordOverlay = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     token: state.token,
   },
-  ({
+  function DocketRecordOverlay({
     baseUrl,
     caseDetail,
     dismissModalSequence,
@@ -25,7 +25,7 @@ export const DocketRecordOverlay = connect(
     formattedCaseDetail,
     runCancelSequence,
     token,
-  }) => {
+  }) {
     const elRef = React.useRef(null);
 
     const getEl = () => {

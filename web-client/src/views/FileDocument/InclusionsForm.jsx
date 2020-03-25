@@ -18,7 +18,7 @@ export const InclusionsForm = connect(
       sequences.validateExternalDocumentInformationSequence,
     validationData: state[props.validationBind],
   },
-  ({
+  function InclusionsForm({
     data,
     fileDocumentHelper,
     openCleanModalSequence,
@@ -26,7 +26,7 @@ export const InclusionsForm = connect(
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
     validationData,
-  }) => {
+  }) {
     return (
       <>
         <div

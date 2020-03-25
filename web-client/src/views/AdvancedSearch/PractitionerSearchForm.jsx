@@ -5,10 +5,10 @@ import React from 'react';
 
 export const PractitionerSearchForm = connect(
   {},
-  ({
+  function PractitionerSearchForm({
     submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence,
-  }) => {
+  }) {
     return (
       <>
         <div className="grid-row grid-gap-6">

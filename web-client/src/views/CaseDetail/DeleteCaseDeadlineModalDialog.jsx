@@ -9,7 +9,11 @@ export const DeleteCaseDeadlineModalDialog = connect(
     confirmSequence: sequences.deleteCaseDeadlineSequence,
     form: state.form,
   },
-  ({ cancelSequence, confirmSequence, form }) => {
+  function DeleteCaseDeadlineModalDialog({
+    cancelSequence,
+    confirmSequence,
+    form,
+  }) {
     return (
       <ModalDialog
         cancelLabel="No, Cancel"

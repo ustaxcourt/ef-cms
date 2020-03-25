@@ -9,12 +9,12 @@ export const CaseDetailReadOnlyPartyInformation = connect(
     constants: state.constants,
     formattedCaseDetail: state.formattedCaseDetail,
   },
-  ({
+  function CaseDetailReadOnlyPartyInformation({
     caseDetailEditContactsHelper,
     caseDetailEditHelper,
     constants,
     formattedCaseDetail,
-  }) => {
+  }) {
     const addressDisplay = contact => {
       return (
         <React.Fragment>

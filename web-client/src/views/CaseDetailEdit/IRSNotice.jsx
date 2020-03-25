@@ -8,21 +8,21 @@ export const IRSNotice = connect(
   {
     CASE_TYPES: state.constants.CASE_TYPES,
     caseDetailEditHelper: state.caseDetailEditHelper,
-    caseDetailErrors: state.caseDetailErrors,
     form: state.form,
     setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateCaseDetailSequence: sequences.validateCaseDetailSequence,
+    validationErrors: state.validationErrors,
   },
-  ({
+  function IRSNotice({
     CASE_TYPES,
     caseDetailEditHelper,
-    caseDetailErrors,
     form,
     setIrsNoticeFalseSequence,
     updateFormValueSequence,
     validateCaseDetailSequence,
-  }) => {
+    validationErrors,
+  }) {
     const renderIrsNoticeRadios = () => {
       return (
         <fieldset className="usa-fieldset" id="irs-verified-notice-radios">
@@ -81,7 +81,7 @@ export const IRSNotice = connect(
     const renderIrsNoticeDate = () => {
       return (
         <DateInput
-          errorText={caseDetailErrors.irsNoticeDate}
+          errorText={validationErrors.irsNoticeDate}
           id="date-of-notice"
           label="Date of notice"
           names={{

@@ -7,7 +7,7 @@ export const PublicCaseDetailHeader = connect(
   {
     publicCaseDetailHeaderHelper: state.publicCaseDetailHeaderHelper,
   },
-  ({ publicCaseDetailHeaderHelper }) => {
+  function PublicCaseDetailHeader({ publicCaseDetailHeaderHelper }) {
     return (
       <>
         {publicCaseDetailHeaderHelper.isCaseSealed && (

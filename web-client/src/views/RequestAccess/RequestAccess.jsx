@@ -23,7 +23,7 @@ export const RequestAccess = connect(
       sequences.validateCaseAssociationRequestSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function RequestAccess({
     form,
     formCancelToggleCancelSequence,
     requestAccessHelper,
@@ -31,7 +31,7 @@ export const RequestAccess = connect(
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <Focus>

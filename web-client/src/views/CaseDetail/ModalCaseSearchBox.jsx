@@ -10,11 +10,11 @@ export const ModalCaseSearchBox = connect(
       sequences.submitCaseSearchForConsolidationSequence,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
-  ({
+  function ModalCaseSearchBox({
     searchTerm,
     submitCaseSearchForConsolidationSequence,
     updateModalValueSequence,
-  }) => {
+  }) {
     return (
       <form
         noValidate
