@@ -118,6 +118,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     assignWorkItemsInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
+    deleteCounselFromCaseInteractor: jest.fn(),
+    fileExternalDocumentForConsolidatedInteractor: jest.fn(),
+    fileExternalDocumentInteractor: jest.fn(),
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
@@ -128,8 +131,14 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeCasePendingItemInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
+    updateCounselOnCaseInteractor: jest.fn(),
+    validateAddIrsPractitionerInteractor: jest.fn(),
+    validateAddPrivatePractitionerInteractor: jest.fn(),
     validateCaseAdvancedSearchInteractor: jest.fn(),
     validateCaseDeadlineInteractor: jest.fn(),
+    validateEditPrivatePractitionerInteractor: jest.fn(),
+    validatePdfInteractor: jest.fn(),
+    virusScanPdfInteractor: jest.fn(),
   };
 
   const mockGetScannerReturnValue = {
@@ -146,11 +155,15 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUtilitiesReturnValue = {
+    createISODateString: jest
+      .fn()
+      .mockImplementation(DateHandler.createISODateString),
     formatDateString: jest.fn().mockReturnValue(DateHandler.formatDateString),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
-    generatePdfFromHtmlInteractor: jest.fn(),
-    getCalendaredCasesForTrialSessionInteractor: jest.fn(),
     getDocumentTypeForAddressChange: jest.fn(),
+    prepareDateFromString: jest
+      .fn()
+      .mockImplementation(DateHandler.prepareDateFromString),
   };
 
   const mockGetUseCaseHelpers = {
@@ -229,6 +242,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     updateUserCaseNote: jest.fn(),
     updateWorkItem,
     updateWorkItemInCase,
+    uploadDocumentFromClient: jest.fn(),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   };

@@ -21,9 +21,9 @@ describe('validateCaseAdvancedSearchAction', () => {
   });
 
   it('validates advanced case search successfully', async () => {
-    applicationContext.getUseCases().validateCaseAdvancedSearchInteractor = jest
-      .fn()
-      .mockReturnValue({});
+    applicationContext
+      .getUseCases()
+      .validateCaseAdvancedSearchInteractor.mockReturnValue({});
 
     await runAction(validateCaseAdvancedSearchAction, {
       modules: {
@@ -40,9 +40,9 @@ describe('validateCaseAdvancedSearchAction', () => {
   });
 
   it('fails validation for advanced case search', async () => {
-    applicationContext.getUseCases().validateCaseAdvancedSearchInteractor = jest
-      .fn()
-      .mockReturnValue({ foo: 'bar' });
+    applicationContext
+      .getUseCases()
+      .validateCaseAdvancedSearchInteractor.mockReturnValue({ foo: 'bar' });
 
     await runAction(validateCaseAdvancedSearchAction, {
       modules: {
