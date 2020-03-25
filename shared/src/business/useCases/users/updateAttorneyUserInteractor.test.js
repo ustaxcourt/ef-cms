@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   UnauthorizedError,
 } = require('../../../../../shared/src/errors/errors');
 const {
@@ -18,7 +21,6 @@ const mockUser = {
 };
 
 describe('update attorney user', () => {
-  let applicationContext;
   let testUser;
 
   beforeEach(() => {
@@ -27,13 +29,11 @@ describe('update attorney user', () => {
       userId: 'petitionsclerk',
     };
 
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => testUser,
-      getPersistenceGateway: () => ({
-        updateAttorneyUser: () => Promise.resolve(mockUser),
-      }),
-    };
+    applicationContext.environment.stage = 'local';
+    applicationContext.getCurrentUser.mockImplementation(() => testUser);
+    applicationContext
+      .getPersistenceGateway()
+      .updateAttorneyUser.mockResolvedValue(mockUser);
   });
 
   it('updates the attorney user', async () => {
