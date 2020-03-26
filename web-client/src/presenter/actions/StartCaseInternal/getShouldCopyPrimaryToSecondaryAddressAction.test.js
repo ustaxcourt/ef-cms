@@ -1,4 +1,4 @@
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext.js';
 import { getShouldCopyPrimaryToSecondaryAddressAction } from './getShouldCopyPrimaryToSecondaryAddressAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
