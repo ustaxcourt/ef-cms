@@ -1,21 +1,13 @@
 import { CerebralTest } from 'cerebral/test';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter';
 
-const mockSetItem = jest.fn();
-const mockSetSourceByName = jest.fn();
-
-presenter.providers.applicationContext = {
-  getScanner: () => ({
-    setSourceByName: mockSetSourceByName,
-  }),
-  getUseCases: () => ({
-    setItemInteractor: mockSetItem,
-  }),
-};
-
-const test = CerebralTest(presenter);
-
 describe('setScannerSourceSequence', () => {
+  let test;
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+    test = CerebralTest(presenter);
+  });
   it('should set the scanner source based on props and close the selector modal', async () => {
     test.setState('showModal', 'SelectScannerSourceModal');
     test.setState('scanner', {});
@@ -24,8 +16,10 @@ describe('setScannerSourceSequence', () => {
       scannerSourceName: 'Test Scanner 1',
     });
 
-    expect(mockSetSourceByName).toHaveBeenCalled();
-    expect(mockSetItem).toHaveBeenCalled();
+    expect(applicationContext.getScanner().setSourceByName).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().setItemInteractor,
+    ).toHaveBeenCalled();
     expect(test.getState('modal')).toEqual({});
   });
 });

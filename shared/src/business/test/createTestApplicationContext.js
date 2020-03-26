@@ -216,7 +216,9 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetScannerReturnValue = {
     getSourceNameByIndex: jest.fn().mockReturnValue('scanner'),
-    setSourceByIndex: jest.fn().mockReturnValue(null),
+    getSources: jest.fn(),
+    setSourceByIndex: jest.fn(),
+    setSourceByName: jest.fn().mockReturnValue(null),
     startScanSession: jest.fn().mockReturnValue({
       scannedBuffer: [],
     }),
