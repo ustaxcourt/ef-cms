@@ -1,25 +1,23 @@
 import { generatePdfFromScanSessionAction } from './generatePdfFromScanSessionAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-
-const mockGeneratePDFFromJPGData = jest.fn();
-
-// Mocking File
-global.File = class {
-  constructor() {
-    this.foo = 'bar';
-  }
-};
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    generatePDFFromJPGDataInteractor: () => {
-      return mockGeneratePDFFromJPGData();
-    },
-  }),
-};
+import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('generatePdfFromScanSessionAction', () => {
+  let generatePDFFromJPGDataInteractor;
+  beforeEach(() => {
+    const applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
+    generatePDFFromJPGDataInteractor = applicationContext.getUseCases()
+      .generatePDFFromJPGDataInteractor;
+
+    global.File = class {
+      constructor() {
+        this.foo = 'bar';
+      }
+    };
+  });
+
   it('generates a PDF from provided scan batches', async () => {
     await runAction(generatePdfFromScanSessionAction, {
       modules: {
@@ -38,6 +36,6 @@ describe('generatePdfFromScanSessionAction', () => {
       },
     });
 
-    expect(mockGeneratePDFFromJPGData).toHaveBeenCalled();
+    expect(generatePDFFromJPGDataInteractor).toHaveBeenCalled();
   });
 });
