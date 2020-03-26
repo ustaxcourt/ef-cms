@@ -228,7 +228,7 @@ const app = {
 
     const cerebralApp = App(presenter, debugTools);
 
-    router.initialize(cerebralApp);
+    router.initialize(cerebralApp, route);
     initializeSocketProvider(cerebralApp);
 
     ReactDOM.render(
