@@ -177,6 +177,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     serveCaseToIrsInteractor: jest.fn(),
     setNoticesForCalendaredTrialSessionInteractor: jest.fn(),
     setTrialSessionAsSwingSessionInteractor: jest.fn(),
+    setTrialSessionCalendarInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
     submitCaseAssociationRequestInteractor: jest.fn(),
     submitPendingCaseAssociationRequestInteractor: jest.fn(),
