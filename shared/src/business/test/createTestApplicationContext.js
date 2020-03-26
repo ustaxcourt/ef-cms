@@ -166,12 +166,15 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseDeadlinesForCaseInteractor: jest.fn(),
     getCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
+    getCasesByUserInteractor: jest.fn(),
     getInboxMessagesForUserInteractor: jest.fn(),
     getIrsPractitionersBySearchKeyInteractor: jest.fn(),
     getJudgeForUserChambersInteractor: jest.fn(),
     getPrivatePractitionersBySearchKeyInteractor: jest.fn(),
+    getUserByIdInteractor: jest.fn(),
     getUserInteractor: jest.fn(),
     getUsersInSectionInteractor: jest.fn(),
+    loadPDFForPreviewInteractor: jest.fn(),
     removeCasePendingItemInteractor: jest.fn(),
     removeConsolidatedCasesInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
@@ -229,6 +232,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     getDocumentTypeForAddressChange: jest.fn(),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
+    isStringISOFormatted: jest
+      .fn()
+      .mockImplementation(DateHandler.isStringISOFormatted),
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),

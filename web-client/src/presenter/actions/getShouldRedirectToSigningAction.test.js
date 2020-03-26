@@ -1,7 +1,7 @@
-import { applicationContext } from '../../applicationContext';
 import { getShouldRedirectToSigningAction } from './getShouldRedirectToSigningAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
+import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 let yesMock;
 let noMock;
@@ -16,7 +16,7 @@ describe('getShouldRedirectToSigningAction', () => {
       yes: yesMock,
     };
 
-    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.applicationContext = applicationContextForClient;
   });
 
   it('should call the yes path for court issued documents that DO NOT have a Notice event code', async () => {

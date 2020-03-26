@@ -1,18 +1,16 @@
 import { getPDFForPreviewAction } from './getPDFForPreviewAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-
-const mockLoadPDF = jest.fn().mockResolvedValue('fake file data');
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    loadPDFForPreviewInteractor: mockLoadPDF,
-  }),
-};
+import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('getPDFForPreviewAction', () => {
-  afterEach(() => {
-    jest.resetAllMocks();
+  let loadPDFForPreviewInteractor;
+  beforeEach(() => {
+    const applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
+    loadPDFForPreviewInteractor = applicationContext.getUseCases()
+      .loadPDFForPreviewInteractor;
+    loadPDFForPreviewInteractor.mockResolvedValue('fake file data');
   });
 
   it('returns original props if we already have what appears to be an actual file', async () => {
@@ -25,7 +23,7 @@ describe('getPDFForPreviewAction', () => {
       state: {},
     });
     expect(result.props).toEqual(props);
-    expect(mockLoadPDF).not.toHaveBeenCalled();
+    expect(loadPDFForPreviewInteractor).not.toHaveBeenCalled();
   });
 
   it('returns results from loadPDFForPreviewInteractor if provided a caseId and documentId', async () => {
@@ -37,7 +35,7 @@ describe('getPDFForPreviewAction', () => {
       props,
       state: {},
     });
-    expect(mockLoadPDF).toHaveBeenCalledWith({
+    expect(loadPDFForPreviewInteractor).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
       caseId: '123',
       documentId: '456',
