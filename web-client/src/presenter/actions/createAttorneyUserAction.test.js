@@ -2,21 +2,19 @@ import { createAttorneyUserAction } from './createAttorneyUserAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
+import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
+const applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
+
+const { createAttorneyUserInteractor } = applicationContext.getUseCases();
+
 describe('createAttorneyUserAction', () => {
-  let createAttorneyUserInteractorMock;
   let successMock;
   let errorMock;
 
   beforeEach(() => {
-    createAttorneyUserInteractorMock = jest.fn();
     successMock = jest.fn();
     errorMock = jest.fn();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        createAttorneyUserInteractor: createAttorneyUserInteractorMock,
-      }),
-    };
 
     presenter.providers.path = {
       error: errorMock,
@@ -35,11 +33,11 @@ describe('createAttorneyUserAction', () => {
       },
     });
 
-    expect(createAttorneyUserInteractorMock).toHaveBeenCalled();
+    expect(createAttorneyUserInteractor).toHaveBeenCalled();
   });
 
   it('returns path.error if the use case throws an error', async () => {
-    createAttorneyUserInteractorMock = jest.fn().mockImplementation(() => {
+    createAttorneyUserInteractor.mockImplementation(() => {
       throw new Error('bad!');
     });
 
@@ -54,7 +52,7 @@ describe('createAttorneyUserAction', () => {
       },
     });
 
-    expect(createAttorneyUserInteractorMock).toHaveBeenCalled();
+    expect(createAttorneyUserInteractor).toHaveBeenCalled();
     expect(errorMock).toHaveBeenCalled();
   });
 });

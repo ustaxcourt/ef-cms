@@ -2,19 +2,18 @@ import { batchDownloadTrialSessionAction } from './batchDownloadTrialSessionActi
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
-const batchDownloadTrialSessionInteractorStub = jest.fn();
+import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
+const applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
+
+const batchDownloadTrialSessionInteractor = applicationContext.getUseCases()
+  .batchDownloadTrialSessionInteractor;
 const pathSuccessStub = jest.fn();
 const pathErrorStub = jest.fn();
 
 presenter.providers.path = {
   error: pathErrorStub,
   success: pathSuccessStub,
-};
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    batchDownloadTrialSessionInteractor: batchDownloadTrialSessionInteractorStub,
-  }),
 };
 
 describe('batchDownloadTrialSessionAction', () => {
@@ -29,27 +28,21 @@ describe('batchDownloadTrialSessionAction', () => {
       },
     });
 
-    expect(batchDownloadTrialSessionInteractorStub).toHaveBeenCalled();
+    expect(batchDownloadTrialSessionInteractor).toHaveBeenCalled();
     expect(pathSuccessStub).toHaveBeenCalled();
   });
 
   it('calls the error path if an exception is thrown', async () => {
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        batchDownloadTrialSessionInteractor: batchDownloadTrialSessionInteractorStub.mockImplementation(
-          () => {
-            throw new Error('Guy Fieri has connected to the server.');
-          },
-        ),
-      }),
-    };
-    await runAction(batchDownloadTrialSessionAction, {
-      modules: {
-        presenter,
-      },
-    });
+    batchDownloadTrialSessionInteractor.mockImplementation(() => {
+      throw new Error('Guy Fieri has connected to the server.');
+    }),
+      await runAction(batchDownloadTrialSessionAction, {
+        modules: {
+          presenter,
+        },
+      });
 
-    expect(batchDownloadTrialSessionInteractorStub).toThrow();
+    expect(batchDownloadTrialSessionInteractor).toThrow();
     expect(pathErrorStub).toHaveBeenCalled();
   });
 });
