@@ -90,6 +90,7 @@ const { Case } = require('../entities/cases/Case');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
+const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
@@ -336,6 +337,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       Case,
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
+      DocketRecord,
       Document,
       ExternalDocumentFactory: ExternalDocumentFactory,
       WorkItem: WorkItem,
