@@ -1,28 +1,21 @@
 import { CerebralTest } from 'cerebral/test';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter';
 
-let test;
-
-presenter.providers.router = {
-  revokeObjectURL: () => {},
-};
-
-presenter.providers.applicationContext = {
-  ...applicationContext,
-  getCurrentUser: () => ({
-    section: 'chambers',
-  }),
-  getUseCases: () => ({
-    generatePrintablePendingReportInteractor: () => {
-      return 'http://example.com/mock-pdf-url';
-    },
-  }),
-};
-
-test = CerebralTest(presenter);
-
 describe('gotoPrintablePendingReportSequence', () => {
+  let test;
+  beforeAll(() => {
+    applicationContext
+      .getUseCases()
+      .generatePrintablePendingReportInteractor.mockReturnValue(
+        'http://example.com/mock-pdf-url',
+      );
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.router = {
+      revokeObjectURL: () => {},
+    };
+    test = CerebralTest(presenter);
+  });
   it('Should show the Printable Pending Report page', async () => {
     test.setState('currentPage', 'SomeOtherPage');
     await test.runSequence('gotoPrintablePendingReportSequence', {});

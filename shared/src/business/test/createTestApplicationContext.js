@@ -131,6 +131,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     assignWorkItemsInteractor: jest.fn(),
     associateIrsPractitionerWithCaseInteractor: jest.fn(),
     associatePrivatePractitionerWithCaseInteractor: jest.fn(),
+    authorizeCodeInteractor: jest.fn(),
     batchDownloadTrialSessionInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
     casePublicSearchInteractor: jest.fn(),
@@ -174,12 +175,15 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUserInteractor: jest.fn(),
     getUsersInSectionInteractor: jest.fn(),
     loadPDFForPreviewInteractor: jest.fn(),
+    loadPDFForSigningInteractor: jest.fn(),
+    refreshTokenInteractor: jest.fn(),
     removeCasePendingItemInteractor: jest.fn(),
     removeConsolidatedCasesInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
     saveCaseNoteInteractor: jest.fn(),
     saveIntermediateDocketEntryInteractor: jest.fn(),
     serveCaseToIrsInteractor: jest.fn(),
+    setItemInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
     submitCaseAssociationRequestInteractor: jest.fn(),
     submitPendingCaseAssociationRequestInteractor: jest.fn(),
@@ -373,6 +377,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         },
       );
     }),
+    getCurrentUserPermissions: jest.fn(),
     getCurrentUserToken: () => {
       return '';
     },
@@ -423,6 +428,8 @@ const createTestApplicationContext = ({ user } = {}) => {
       time: () => jest.fn().mockReturnValue(null),
       timeEnd: () => jest.fn().mockReturnValue(null),
     },
+    setCurrentUser: jest.fn(),
+    setCurrentUserToken: jest.fn(),
   };
   return applicationContext;
 };
