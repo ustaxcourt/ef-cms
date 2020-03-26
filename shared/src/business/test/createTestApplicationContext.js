@@ -187,6 +187,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     updateCourtIssuedDocketEntryInteractor: jest.fn(),
     updateDocketEntryInteractor: jest.fn(),
     updateDocketEntryMetaInteractor: jest.fn(),
+    updateQcCompleteForTrialInteractor: jest.fn(),
+    updateTrialSessionInteractor: jest.fn(),
+    updateTrialSessionWorkingCopyInteractor: jest.fn(),
+    updateUserCaseNoteInteractor: jest.fn(),
     uploadExternalDocumentsInteractor: jest.fn(),
     uploadOrderDocumentInteractor: jest.fn(),
     validateAddIrsPractitionerInteractor: jest.fn(),
@@ -200,6 +204,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     validateExternalDocumentInformationInteractor: jest.fn(),
     validatePdfInteractor: jest.fn(),
     validateStartCaseWizardInteractor: jest.fn(),
+    validateTrialSessionInteractor: jest.fn(),
     virusScanPdfInteractor: jest.fn(),
   };
 
