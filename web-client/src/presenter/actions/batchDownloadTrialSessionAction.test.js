@@ -6,8 +6,9 @@ import { applicationContextForClient } from '../../../../shared/src/business/tes
 const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
 
-const batchDownloadTrialSessionInteractor = applicationContext.getUseCases()
-  .batchDownloadTrialSessionInteractor;
+const {
+  batchDownloadTrialSessionInteractor,
+} = applicationContext.getUseCases();
 const pathSuccessStub = jest.fn();
 const pathErrorStub = jest.fn();
 
