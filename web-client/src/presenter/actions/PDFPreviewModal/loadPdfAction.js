@@ -16,7 +16,7 @@ export const loadPdfAction = ({ applicationContext, path, props, store }) => {
   store.set(state.modal.pdfPreviewModal.ctx, ctx);
 
   return new Promise((resolve, reject) => {
-    const reader = new (applicationContext.getFileReader())();
+    const reader = applicationContext.getFileReaderInstance();
 
     reader.onload = async () => {
       let binaryFile;
