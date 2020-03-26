@@ -7,10 +7,10 @@ const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
 
 const {
-  generateSignedDocumentInteractor,
-  signDocumentInteractor,
-  getInboxMessagesForUserInteractor,
   completeWorkItemInteractor,
+  generateSignedDocumentInteractor,
+  getInboxMessagesForUserInteractor,
+  signDocumentInteractor,
 } = applicationContext.getUseCases();
 const { uploadDocumentFromClient } = applicationContext.getPersistenceGateway();
 
