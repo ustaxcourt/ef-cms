@@ -104,7 +104,21 @@ const createTestApplicationContext = ({ user } = {}) => {
     adminGetUser: jest.fn(),
     adminUpdateUserAttributes: jest.fn(),
   };
-
+  const mockGetPdfJsReturnValue = {
+    getDocument: jest.fn().mockReturnValue({
+      promise: Promise.resolve({
+        getPage: async () => ({
+          cleanup: () => {},
+          getViewport: () => ({
+            height: 100,
+            width: 100,
+          }),
+          render: () => null,
+        }),
+        numPages: 5,
+      }),
+    }),
+  };
   const mockGetUseCasesReturnValue = {
     addCaseToTrialSessionInteractor: jest.fn(),
     addConsolidatedCaseInteractor: jest.fn(),
@@ -344,14 +358,14 @@ const createTestApplicationContext = ({ user } = {}) => {
       ExternalDocumentFactory: ExternalDocumentFactory,
       WorkItem: WorkItem,
     }),
-    getFileReader: jest.fn(),
+    getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn(() => ({
       get: () => ({
         data: 'url',
       }),
     })),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
-    getPdfJs: jest.fn(),
+    getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfStyles: jest.fn(),
     getPersistenceGateway: jest.fn().mockImplementation(() => {
       return mockGetPersistenceGatewayReturnValue;
