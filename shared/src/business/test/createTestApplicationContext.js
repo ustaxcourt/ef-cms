@@ -206,6 +206,8 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCaseHelpers = {
+    appendPaperServiceAddressPageToPdf: jest.fn(),
+    generateCaseConfirmationPdf: jest.fn(),
     sendServedPartiesEmails: jest.fn(),
     updateCaseAutomaticBlock: jest
       .fn()
@@ -232,6 +234,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createWorkItem: createWorkItemPersistence,
     deleteCaseDeadline: jest.fn(),
     deleteCaseTrialSortMappingRecords: jest.fn(),
+    deleteDocument: jest.fn(),
     deleteSectionOutboxRecord,
     deleteUserCaseNote: jest.fn(),
     deleteUserConnection: jest.fn(),
@@ -272,6 +275,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
+    putWorkItemInUsersOutbox: jest.fn(),
     saveDocumentFromLambda: jest.fn(),
     saveUserConnection: jest.fn(),
     saveWorkItemForNonPaper: jest
@@ -292,6 +296,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     uploadDocumentFromClient: jest.fn(),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
+    zipDocuments: jest.fn(),
   };
 
   const nodeSassMockReturnValue = {
