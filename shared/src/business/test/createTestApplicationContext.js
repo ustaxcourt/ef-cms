@@ -96,6 +96,7 @@ const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
+const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
@@ -368,6 +369,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       DocketRecord,
       Document,
       ExternalDocumentFactory: ExternalDocumentFactory,
+      TrialSession: TrialSession,
       WorkItem: WorkItem,
     }),
     getFileReaderInstance: jest.fn(),
