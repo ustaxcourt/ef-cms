@@ -150,6 +150,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePrintableFilingReceiptInteractor: jest.fn(),
     generatePrintablePendingReportInteractor: jest.fn(),
     generatePublicDocketRecordPdfInteractor: jest.fn(),
+    generateTrialCalendarPdfInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
     getBlockedCasesInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
