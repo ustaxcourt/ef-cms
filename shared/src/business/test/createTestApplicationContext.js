@@ -145,6 +145,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     fileExternalDocumentForConsolidatedInteractor: jest.fn(),
     fileExternalDocumentInteractor: jest.fn(),
     generateCourtIssuedDocumentTitleInteractor: jest.fn(),
+    generateDocketRecordPdfInteractor: jest.fn(),
     generateDocumentTitleInteractor: jest.fn(),
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
@@ -220,6 +221,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
+  };
+
+  const mockGetNotificationGatewayReturnValue = {
+    sendNotificationToUser: jest.fn(),
   };
 
   const mockGetUseCaseHelpers = {
@@ -373,6 +378,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       }),
     })),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
+    getNotificationGateway: jest.fn().mockImplementation(() => {
+      return mockGetNotificationGatewayReturnValue;
+    }),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfStyles: jest.fn(),
     getPersistenceGateway: jest.fn().mockImplementation(() => {
