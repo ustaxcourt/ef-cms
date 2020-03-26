@@ -1,48 +1,40 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   generatePrintableCaseInventoryReportInteractor,
 } = require('./generatePrintableCaseInventoryReportInteractor');
 const { User } = require('../../entities/User');
 
 describe('generatePrintableCaseInventoryReportInteractor', () => {
-  let generateCaseInventoryReportPdfSpy;
-  let getCaseInventoryReportSpy;
-  let applicationContext;
-  let user;
-
-  beforeEach(() => {
-    user = {
+  it('calls generateCaseInventoryReportPdf function and returns result', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitionsClerk,
       userId: 'petitionsclerk',
-    };
-
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => user,
-      getUseCaseHelpers: () => ({
-        generateCaseInventoryReportPdf: generateCaseInventoryReportPdfSpy,
-        getCaseInventoryReport: getCaseInventoryReportSpy,
-      }),
-    };
-  });
-
-  it('calls generateCaseInventoryReportPdf function and returns result', async () => {
-    generateCaseInventoryReportPdfSpy = jest.fn(() => 'https://example.com');
-    getCaseInventoryReportSpy = jest.fn(() => []);
+    });
+    applicationContext
+      .getUseCaseHelpers()
+      .generateCaseInventoryReportPdf.mockReturnValue('https://example.com');
+    applicationContext
+      .getUseCaseHelpers()
+      .getCaseInventoryReport.mockReturnValue([]);
 
     const results = await generatePrintableCaseInventoryReportInteractor({
       applicationContext,
       associatedJudge: 'Judge Armen',
     });
 
-    expect(generateCaseInventoryReportPdfSpy).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().generateCaseInventoryReportPdf,
+    ).toHaveBeenCalled();
     expect(results).toEqual('https://example.com');
   });
 
   it('should throw an unauthorized error if the user does not have access', async () => {
-    user = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitioner,
       userId: 'petitioner',
-    };
+    });
 
     await expect(
       generatePrintableCaseInventoryReportInteractor({
@@ -53,6 +45,11 @@ describe('generatePrintableCaseInventoryReportInteractor', () => {
   });
 
   it('should throw an error if associatedJudge and status are not passed in', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
+    });
+
     await expect(
       generatePrintableCaseInventoryReportInteractor({
         applicationContext,
