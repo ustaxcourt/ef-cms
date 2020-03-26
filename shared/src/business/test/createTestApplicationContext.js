@@ -131,11 +131,14 @@ const createTestApplicationContext = ({ user } = {}) => {
     assignWorkItemsInteractor: jest.fn(),
     associateIrsPractitionerWithCaseInteractor: jest.fn(),
     associatePrivatePractitionerWithCaseInteractor: jest.fn(),
+    batchDownloadTrialSessionInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
     casePublicSearchInteractor: jest.fn(),
     completeDocketEntryQCInteractor: jest.fn(),
+    createAttorneyUserInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
     createCourtIssuedOrderPdfFromHtmlInteractor: jest.fn(),
+    createWorkItemInteractor: jest.fn(),
     deleteCaseNoteInteractor: jest.fn(),
     deleteCounselFromCaseInteractor: jest.fn(),
     fetchPendingItemsInteractor: jest.fn(),
@@ -144,9 +147,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     fileDocketEntryInteractor: jest.fn(),
     fileExternalDocumentForConsolidatedInteractor: jest.fn(),
     fileExternalDocumentInteractor: jest.fn(),
+    filePetitionFromPaperInteractor: jest.fn(),
+    filePetitionInteractor: jest.fn(),
     generateCourtIssuedDocumentTitleInteractor: jest.fn(),
     generateDocketRecordPdfInteractor: jest.fn(),
     generateDocumentTitleInteractor: jest.fn(),
+    generatePDFFromJPGDataInteractor: jest.fn(),
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
     generatePrintableFilingReceiptInteractor: jest.fn(),
@@ -158,13 +164,16 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseDeadlinesForCaseInteractor: jest.fn(),
     getCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
+    getCasesByUserInteractor: jest.fn(),
     getInboxMessagesForSectionInteractor: jest.fn(),
     getIrsPractitionersBySearchKeyInteractor: jest.fn(),
     getJudgeForUserChambersInteractor: jest.fn(),
     getNotificationsInteractor: jest.fn(),
     getPrivatePractitionersBySearchKeyInteractor: jest.fn(),
+    getUserByIdInteractor: jest.fn(),
     getUserInteractor: jest.fn(),
     getUsersInSectionInteractor: jest.fn(),
+    loadPDFForPreviewInteractor: jest.fn(),
     removeCasePendingItemInteractor: jest.fn(),
     removeConsolidatedCasesInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
@@ -193,6 +202,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     validateExternalDocumentInformationInteractor: jest.fn(),
     validatePdfInteractor: jest.fn(),
     validateStartCaseWizardInteractor: jest.fn(),
+    verifyPendingCaseForUserInteractor: jest.fn(),
     virusScanPdfInteractor: jest.fn(),
   };
 
@@ -220,6 +230,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     getDocumentTypeForAddressChange: jest.fn(),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
+    isStringISOFormatted: jest
+      .fn()
+      .mockImplementation(DateHandler.isStringISOFormatted),
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
@@ -249,6 +262,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   const mockGetPersistenceGatewayReturnValue = {
     addWorkItemToSectionInbox,
     associateUserWithCase: jest.fn(),
+    associateUserWithCasePending: jest.fn(),
     createAttorneyUser: jest.fn(),
     createCase,
     createCaseTrialSortMappingRecords: jest.fn(),
@@ -321,6 +335,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     uploadDocumentFromClient: jest.fn(),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
+    verifyPendingCaseForUser: jest.fn(),
     zipDocuments: jest.fn(),
   };
 

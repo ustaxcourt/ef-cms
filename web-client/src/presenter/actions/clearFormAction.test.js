@@ -1,7 +1,7 @@
 import { clearFormAction } from './clearFormAction';
 import { runAction } from 'cerebral/test';
 
-describe.only('clearFormAction', () => {
+describe('clearFormAction', () => {
   it('should clear the form', async () => {
     const result = await runAction(clearFormAction, {
       state: { form: { formItem: 'form item' } },
