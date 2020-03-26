@@ -11,8 +11,7 @@ applicationContext.getCurrentUser.mockReturnValue({
   name: 'Some One',
   userId: 'abc',
 });
-const assignWorkItemsInteractor = applicationContext.getUseCases()
-  .assignWorkItemsInteractor;
+const { assignWorkItemsInteractor } = applicationContext.getUseCases();
 
 describe('assignPetitionToAuthenticatedUserAction', () => {
   afterEach(() => {
