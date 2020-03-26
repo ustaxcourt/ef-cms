@@ -247,6 +247,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   const mockGetPersistenceGatewayReturnValue = {
     addWorkItemToSectionInbox,
     associateUserWithCase: jest.fn(),
+    associateUserWithCasePending: jest.fn(),
     createAttorneyUser: jest.fn(),
     createCase,
     createCaseTrialSortMappingRecords: jest.fn(),
@@ -319,6 +320,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     uploadDocumentFromClient: jest.fn(),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
+    verifyPendingCaseForUser: jest.fn(),
     zipDocuments: jest.fn(),
   };
 
