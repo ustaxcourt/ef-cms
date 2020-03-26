@@ -1,35 +1,40 @@
 import { getCachedScannerSourceAction } from './getCachedScannerSourceAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-
-const mockSelectSource = jest.fn();
-const mockSuccess = jest.fn();
-
-// Mocking File
-global.File = class {
-  constructor() {
-    this.foo = 'bar';
-  }
-};
-
-let mockItems;
-
-presenter.providers.applicationContext = {
-  getPersistenceGateway: () => ({
-    getItem: ({ key }) => mockItems[key],
-  }),
-};
-
-presenter.providers.path = {
-  sourceInCache: mockSuccess,
-  sourceNotInCache: mockSelectSource,
-};
+import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('getCachedScannerSourceAction', () => {
-  it('gets the cached scanner source from local storage and returns it via path.success', async () => {
-    mockItems = {
-      scannerSourceName: 'Mock Scanner',
+  let mockSelectSource;
+  let mockSuccess;
+  let getItem;
+
+  beforeEach(() => {
+    const applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
+    getItem = applicationContext.getPersistenceGateway().getItem;
+
+    global.File = class {
+      constructor() {
+        this.foo = 'bar';
+      }
     };
+
+    mockSelectSource = jest.fn();
+    mockSuccess = jest.fn();
+
+    presenter.providers.path = {
+      sourceInCache: mockSuccess,
+      sourceNotInCache: mockSelectSource,
+    };
+  });
+
+  it('gets the cached scanner source from local storage and returns it via path.success', async () => {
+    getItem.mockImplementation(({ key }) => {
+      const mockItems = {
+        scannerSourceName: 'Mock Scanner',
+      };
+      return mockItems[key];
+    });
     await runAction(getCachedScannerSourceAction, {
       modules: {
         presenter,
@@ -41,9 +46,13 @@ describe('getCachedScannerSourceAction', () => {
   });
 
   it('fails to find a cached scanner source and calls path.selectSource', async () => {
-    mockItems = {
-      scannerSourceName: '',
-    };
+    getItem.mockImplementation(({ key }) => {
+      const mockItems = {
+        scannerSourceName: '',
+      };
+      return mockItems[key];
+    });
+
     await runAction(getCachedScannerSourceAction, {
       modules: {
         presenter,

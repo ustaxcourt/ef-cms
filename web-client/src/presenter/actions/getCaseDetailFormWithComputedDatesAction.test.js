@@ -1,14 +1,19 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { applicationContext } from '../../applicationContext';
 import { castToISO } from './getCaseDetailFormWithComputedDatesAction';
 import { getCaseDetailFormWithComputedDatesAction } from './getCaseDetailFormWithComputedDatesAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
+import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 const modules = { presenter };
-presenter.providers.applicationContext = applicationContext;
 
 describe('castToISO', () => {
+  let applicationContext;
+
+  beforeEach(() => {
+    applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContextForClient;
+  });
   it('returns an iso string when the date string passed in is valid', () => {
     expect(castToISO(applicationContext, '2010-10-10')).toEqual(
       '2010-10-10T04:00:00.000Z',

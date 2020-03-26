@@ -12,11 +12,9 @@ describe('loadPDFForSigningInteractor', () => {
     applicationContext.getPdfJs().getDocument.mockReturnValue({
       promise: 'pdf data',
     });
-
-    window.Response = jest.fn().mockReturnValue(() => {});
-    window.Response.prototype.arrayBuffer = jest
-      .fn()
-      .mockReturnValue('array buffer data');
+    window.Response = jest.fn().mockReturnValue({
+      arrayBuffer: () => Promise.resolve('array buffer data'),
+    });
     PDFDocument.load = jest.fn().mockReturnValue({
       removePage: removePageMock,
       save: saveMock,
