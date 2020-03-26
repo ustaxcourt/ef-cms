@@ -363,6 +363,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       CaseInternal: CaseInternal,
       Document,
       ExternalDocumentFactory: ExternalDocumentFactory,
+      User,
       WorkItem: WorkItem,
     }),
     getFileReaderInstance: jest.fn(),
