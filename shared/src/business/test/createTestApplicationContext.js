@@ -230,6 +230,8 @@ const createTestApplicationContext = ({ user } = {}) => {
   const mockGetUseCaseHelpers = {
     appendPaperServiceAddressPageToPdf: jest.fn(),
     generateCaseConfirmationPdf: jest.fn(),
+    generateCaseInventoryReportPdf: jest.fn(),
+    getCaseInventoryReport: jest.fn(),
     sendServedPartiesEmails: jest.fn(),
     updateCaseAutomaticBlock: jest
       .fn()
