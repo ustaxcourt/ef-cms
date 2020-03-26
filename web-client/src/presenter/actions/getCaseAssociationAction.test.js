@@ -1,21 +1,19 @@
 import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseAssociationAction } from './getCaseAssociationAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('getCaseAssociation', () => {
-  let verifyPendingCaseForUserInteractor;
   let applicationContext;
 
   beforeEach(() => {
     applicationContext = applicationContextForClient;
     presenter.providers.applicationContext = applicationContext;
 
-    verifyPendingCaseForUserInteractor = applicationContext.getUseCases()
-      .verifyPendingCaseForUserInteractor;
-
-    verifyPendingCaseForUserInteractor.mockReturnValue(false);
+    applicationContext
+      .getUseCases()
+      .verifyPendingCaseForUserInteractor.mockReturnValue(false);
 
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.privatePractitioner,
@@ -42,7 +40,9 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return that practitioner has pending association', async () => {
-    verifyPendingCaseForUserInteractor.mockReturnValue(true);
+    applicationContext
+      .getUseCases()
+      .verifyPendingCaseForUserInteractor.mockReturnValue(true);
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.privatePractitioner,
       userId: '1234',
@@ -66,7 +66,9 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return that practitioner not associated', async () => {
-    verifyPendingCaseForUserInteractor.mockReturnValue(false);
+    applicationContext
+      .getUseCases()
+      .verifyPendingCaseForUserInteractor.mockReturnValue(false);
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.privatePractitioner,
       userId: '1234',
@@ -90,7 +92,9 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return that respondent is associated', async () => {
-    verifyPendingCaseForUserInteractor.mockReturnValue(false);
+    applicationContext
+      .getUseCases()
+      .verifyPendingCaseForUserInteractor.mockReturnValue(false);
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.irsPractitioner,
       userId: '789',
@@ -114,7 +118,9 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return that respondent is not associated', async () => {
-    verifyPendingCaseForUserInteractor.mockReturnValue(true);
+    applicationContext
+      .getUseCases()
+      .verifyPendingCaseForUserInteractor.mockReturnValue(true);
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.irsPractitioner,
       userId: '789',
@@ -138,7 +144,9 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return that petitioner is associated', async () => {
-    verifyPendingCaseForUserInteractor.mockReturnValue(false);
+    applicationContext
+      .getUseCases()
+      .verifyPendingCaseForUserInteractor.mockReturnValue(false);
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitioner,
       userId: '123',
@@ -161,7 +169,9 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return that petitioner is not associated', async () => {
-    verifyPendingCaseForUserInteractor.mockReturnValue(true);
+    applicationContext
+      .getUseCases()
+      .verifyPendingCaseForUserInteractor.mockReturnValue(true);
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitioner,
       userId: '789',
@@ -185,7 +195,9 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return false for isAssociated and pendingAssociation if the user is not an external user', async () => {
-    verifyPendingCaseForUserInteractor.mockReturnValue(false);
+    applicationContext
+      .getUseCases()
+      .verifyPendingCaseForUserInteractor.mockReturnValue(false);
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitionsClerk,
       userId: '123',
