@@ -16,11 +16,19 @@ API | Front-End | Shared Code
 
 ## Screenshots of new system
 
-<a href="docs/images/screenshot_docket.png"><img src="docs/images/screenshot_docket.png" width="47%" style="float: left; margin: 0 4px;" /></a>
-<a href="docs/images/screenshot_qc.png"><img src="docs/images/screenshot_qc.png" width="47%" style="float: left; margin: 0 4px;" /></a>
+### Case detail page / Docket record
+<a href="docs/images/screenshot_docket.png"><img src="docs/images/screenshot_docket.png" width="80%" style="float: left; margin: 0 4px;" /></a>
 
-<a href="docs/images/screenshot_petition.png"><img src="docs/images/screenshot_petition.png" width="47%" style="float: left; margin: 4px 4px 0 0;" /></a>
-<a href="docs/images/screenshot_trialsession.png"><img src="docs/images/screenshot_trialsession.png" width="47%" style="float: left; margin: 4px 0 0 4px;" /></a>
+### Quality control for documents
+<a href="docs/images/screenshot_qc.png"><img src="docs/images/screenshot_qc.png" width="80%" style="float: left; margin: 0 4px;" /></a>
+
+### Validating a Petition
+
+<a href="docs/images/screenshot_petition.png"><img src="docs/images/screenshot_petition.png" width="80%" style="float: left; margin: 4px 4px 0 0;" /></a>
+
+### Trial session details 
+
+<a href="docs/images/screenshot_trialsession.png"><img src="docs/images/screenshot_trialsession.png" width="80%" style="float: left; margin: 4px 0 0 4px;" /></a>
 
 <br clear="both">
 
