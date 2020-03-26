@@ -240,6 +240,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   const getTemplateGeneratorsReturnMock = {
     generateChangeOfAddressTemplate: jest.fn().mockResolvedValue('<div></div>'),
     generateHTMLTemplateForPDF: jest.fn().mockReturnValue('<div></div>'),
+    generateNoticeOfTrialIssuedTemplate: jest.fn(),
     generatePrintableDocketRecordTemplate: jest
       .fn()
       .mockResolvedValue('<div></div>'),
