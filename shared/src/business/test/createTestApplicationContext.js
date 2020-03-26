@@ -252,6 +252,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCase,
     createCaseTrialSortMappingRecords: jest.fn(),
     createSectionInboxRecord,
+    createTrialSession: jest.fn(),
     createTrialSessionWorkingCopy: jest.fn(),
     createUserInboxRecord,
     createWorkItem: createWorkItemPersistence,

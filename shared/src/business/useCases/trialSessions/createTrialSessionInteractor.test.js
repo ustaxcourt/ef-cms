@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   createTrialSessionInteractor,
 } = require('./createTrialSessionInteractor');
 const { User } = require('../../entities/User');
@@ -13,38 +16,32 @@ const MOCK_TRIAL = {
 };
 
 describe('createTrialSessionInteractor', () => {
-  let applicationContext;
-  let createTrialSessionWorkingCopyMock;
-  let createTrialSessionMock;
+  let user;
 
   beforeEach(() => {
-    createTrialSessionMock = jest.fn(trial => trial.trialSession);
-    createTrialSessionWorkingCopyMock = jest.fn(() => null);
+    user = new User({
+      name: 'Docket Clerk',
+      role: User.ROLES.docketClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
 
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return new User({
-          name: 'Docket Clerk',
-          role: User.ROLES.docketClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => ({
-        createTrialSession: createTrialSessionMock,
-        createTrialSessionWorkingCopy: createTrialSessionWorkingCopyMock,
-      }),
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
+    applicationContext.environment.stage = 'local';
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+
+    applicationContext
+      .getPersistenceGateway()
+      .createTrialSession.mockImplementation(trial => trial.trialSession);
+
+    applicationContext
+      .getPersistenceGateway()
+      .createTrialSessionWorkingCopy.mockReturnValue(null);
   });
 
   it('throws error if user is unauthorized', async () => {
-    applicationContext.getCurrentUser = () => {
-      return new User({
-        role: User.ROLES.petitioner,
-        userId: 'petitioner',
-      });
-    };
+    user = new User({
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
+    });
 
     await expect(
       createTrialSessionInteractor({
@@ -55,9 +52,11 @@ describe('createTrialSessionInteractor', () => {
   });
 
   it('throws an exception when it fails to create a trial session', async () => {
-    createTrialSessionMock = () => {
-      throw new Error('Error!');
-    };
+    applicationContext
+      .getPersistenceGateway()
+      .createTrialSession.mockImplementation(() => {
+        throw new Error('Error!');
+      });
 
     let error;
 
@@ -79,7 +78,9 @@ describe('createTrialSessionInteractor', () => {
       trialSession: MOCK_TRIAL,
     });
 
-    expect(createTrialSessionMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSession,
+    ).toHaveBeenCalled();
   });
 
   it('creates a trial session and working copy successfully if a judge is set on the trial session', async () => {
@@ -91,8 +92,12 @@ describe('createTrialSessionInteractor', () => {
       },
     });
 
-    expect(createTrialSessionMock).toHaveBeenCalled();
-    expect(createTrialSessionWorkingCopyMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSession,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
+    ).toHaveBeenCalled();
   });
 
   it('creates a trial session and working copy successfully if a trial clerk is set on the trial session', async () => {
@@ -104,8 +109,12 @@ describe('createTrialSessionInteractor', () => {
       },
     });
 
-    expect(createTrialSessionMock).toHaveBeenCalled();
-    expect(createTrialSessionWorkingCopyMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSession,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
+    ).toHaveBeenCalled();
   });
 
   it('creates a working copy for both a trial clerk and judge if both are set on the trial session', async () => {
@@ -118,8 +127,12 @@ describe('createTrialSessionInteractor', () => {
       },
     });
 
-    expect(createTrialSessionMock).toHaveBeenCalled();
-    expect(createTrialSessionWorkingCopyMock).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSession,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
+    ).toHaveBeenCalledTimes(2);
   });
 
   it('sets the trial session as calendared if it is a Motion/Hearing session type', async () => {
