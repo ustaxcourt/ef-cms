@@ -9,6 +9,9 @@ const {
   applicationContext: webClientApplicationContext,
 } = require('../../../../web-client/src/applicationContext');
 const {
+  CaseAssociationRequestFactory,
+} = require('../entities/CaseAssociationRequestFactory');
+const {
   CaseExternalIncomplete,
 } = require('../entities/cases/CaseExternalIncomplete');
 const {
@@ -354,6 +357,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEntityConstructors: () => ({
       Case,
+      CaseAssociationRequestFactory,
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
       DocketRecord,
