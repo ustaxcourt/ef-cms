@@ -30,6 +30,9 @@ const {
   deleteWorkItemFromInbox,
 } = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 const {
+  ExternalDocumentFactory,
+} = require('../entities/externalDocument/ExternalDocumentFactory');
+const {
   getCaseByCaseId,
 } = require('../../persistence/dynamo/cases/getCaseByCaseId');
 const {
@@ -118,10 +121,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteCaseNoteInteractor: jest.fn(),
     deleteCounselFromCaseInteractor: jest.fn(),
     fetchPendingItemsInteractor: jest.fn(),
+    fileCourtIssuedDocketEntryInteractor: jest.fn(),
     fileCourtIssuedOrderInteractor: jest.fn(),
     fileDocketEntryInteractor: jest.fn(),
     fileExternalDocumentForConsolidatedInteractor: jest.fn(),
     fileExternalDocumentInteractor: jest.fn(),
+    generateCourtIssuedDocumentTitleInteractor: jest.fn(),
     generateDocumentTitleInteractor: jest.fn(),
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
@@ -144,11 +149,14 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeItemInteractor: jest.fn(),
     saveCaseNoteInteractor: jest.fn(),
     saveIntermediateDocketEntryInteractor: jest.fn(),
+    serveCaseToIrsInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
     submitCaseAssociationRequestInteractor: jest.fn(),
     submitPendingCaseAssociationRequestInteractor: jest.fn(),
+    updateCase: jest.fn(),
     updateCaseContextInteractor: jest.fn(),
     updateCounselOnCaseInteractor: jest.fn(),
+    updateCourtIssuedDocketEntryInteractor: jest.fn(),
     updateDocketEntryInteractor: jest.fn(),
     updateDocketEntryMetaInteractor: jest.fn(),
     uploadExternalDocumentsInteractor: jest.fn(),
@@ -163,6 +171,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     validateEditPrivatePractitionerInteractor: jest.fn(),
     validateExternalDocumentInformationInteractor: jest.fn(),
     validatePdfInteractor: jest.fn(),
+    validateStartCaseWizardInteractor: jest.fn(),
     virusScanPdfInteractor: jest.fn(),
   };
 
@@ -224,6 +233,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteSectionOutboxRecord,
     deleteUserCaseNote: jest.fn(),
+    deleteUserConnection: jest.fn(),
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
     getAllCaseDeadlines: jest.fn(),
@@ -234,6 +244,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseDeadlinesByCaseId: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByCaseId),
+    getCasesByLeadCaseId: jest.fn(),
     getCasesByUser: jest.fn(),
     getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
     getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
@@ -261,6 +272,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     incrementCounter,
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     saveDocumentFromLambda: jest.fn(),
+    saveUserConnection: jest.fn(),
     saveWorkItemForNonPaper: jest
       .fn()
       .mockImplementation(saveWorkItemForNonPaper),
@@ -323,8 +335,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getEntityConstructors: () => ({
       Case,
       CaseExternal: CaseExternalIncomplete,
-      CaseInternal,
+      CaseInternal: CaseInternal,
       Document,
+      ExternalDocumentFactory: ExternalDocumentFactory,
       WorkItem: WorkItem,
     }),
     getFileReader: jest.fn(),
