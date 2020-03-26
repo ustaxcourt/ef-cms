@@ -125,9 +125,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
   };
   const mockGetUseCasesReturnValue = {
+    getUserByIdInteractor: jest.fn(),
+    getCasesByUserInteractor: jest.fn(),
     addCaseToTrialSessionInteractor: jest.fn(),
     addConsolidatedCaseInteractor: jest.fn(),
     addCoversheetInteractor: jest.fn(),
+    loadPDFForPreviewInteractor: jest.fn(),
     filePetitionInteractor: jest.fn(),
     createAttorneyUserInteractor: jest.fn(),
     filePetitionFromPaperInteractor: jest.fn(),
@@ -224,6 +227,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
+    isStringISOFormatted: jest
+      .fn()
+      .mockImplementation(DateHandler.isStringISOFormatted),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
     formatDateString: jest.fn().mockReturnValue(DateHandler.formatDateString),
