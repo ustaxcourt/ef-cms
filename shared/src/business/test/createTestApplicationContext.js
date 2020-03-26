@@ -136,6 +136,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     caseAdvancedSearchInteractor: jest.fn(),
     casePublicSearchInteractor: jest.fn(),
     completeDocketEntryQCInteractor: jest.fn(),
+    completeWorkItemInteractor: jest.fn(),
     createAttorneyUserInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
     createCourtIssuedOrderPdfFromHtmlInteractor: jest.fn(),
@@ -159,6 +160,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePrintableFilingReceiptInteractor: jest.fn(),
     generatePrintablePendingReportInteractor: jest.fn(),
     generatePublicDocketRecordPdfInteractor: jest.fn(),
+    generateSignedDocumentInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
     getBlockedCasesInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
@@ -167,6 +169,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseInventoryReportInteractor: jest.fn(),
     getCasesByUserInteractor: jest.fn(),
     getInboxMessagesForSectionInteractor: jest.fn(),
+    getInboxMessagesForUserInteractor: jest.fn(),
     getIrsPractitionersBySearchKeyInteractor: jest.fn(),
     getJudgeForUserChambersInteractor: jest.fn(),
     getNotificationsInteractor: jest.fn(),
@@ -185,6 +188,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     serveCaseToIrsInteractor: jest.fn(),
     setItemInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
+    signDocumentInteractor: jest.fn(),
     submitCaseAssociationRequestInteractor: jest.fn(),
     submitPendingCaseAssociationRequestInteractor: jest.fn(),
     updateCase: jest.fn(),
@@ -234,6 +238,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     getDocumentTypeForAddressChange: jest.fn(),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
+    isExternalUser: User.isExternalUser,
+    isInternalUser: User.isInternalUser,
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
@@ -249,6 +255,8 @@ const createTestApplicationContext = ({ user } = {}) => {
   const mockGetUseCaseHelpers = {
     appendPaperServiceAddressPageToPdf: jest.fn(),
     generateCaseConfirmationPdf: jest.fn(),
+    generateCaseInventoryReportPdf: jest.fn(),
+    getCaseInventoryReport: jest.fn(),
     sendServedPartiesEmails: jest.fn(),
     updateCaseAutomaticBlock: jest
       .fn()

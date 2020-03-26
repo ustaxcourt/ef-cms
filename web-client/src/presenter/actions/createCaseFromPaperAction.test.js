@@ -1,21 +1,17 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   createCaseFromPaperAction,
   setupPercentDone,
 } from './createCaseFromPaperAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('createCaseFromPaperAction', () => {
-  let errorStub, successStub, filePetitionFromPaperInteractor;
+  let errorStub, successStub;
 
   beforeEach(() => {
-    const applicationContext = applicationContextForClient;
     presenter.providers.applicationContext = applicationContext;
-
-    filePetitionFromPaperInteractor = applicationContext.getUseCases()
-      .filePetitionFromPaperInteractor;
 
     errorStub = jest.fn();
     successStub = jest.fn();
@@ -27,7 +23,9 @@ describe('createCaseFromPaperAction', () => {
   });
 
   it('should call filePetitionFromPaperInteractor with the petition metadata and files and call the success path when finished', async () => {
-    filePetitionFromPaperInteractor.mockReturnValue(MOCK_CASE);
+    applicationContext
+      .getUseCases()
+      .filePetitionFromPaperInteractor.mockReturnValue(MOCK_CASE);
 
     await runAction(createCaseFromPaperAction, {
       modules: {
@@ -52,8 +50,13 @@ describe('createCaseFromPaperAction', () => {
       },
     });
 
-    expect(filePetitionFromPaperInteractor).toBeCalled();
-    expect(filePetitionFromPaperInteractor.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().filePetitionFromPaperInteractor,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCases().filePetitionFromPaperInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       applicationForWaiverOfFilingFeeFile: {},
       ownershipDisclosureFile: {},
       petitionFile: {},
@@ -67,9 +70,11 @@ describe('createCaseFromPaperAction', () => {
   });
 
   it('should call filePetitionFromPaperInteractor and call path.error when finished if it throws an error', async () => {
-    filePetitionFromPaperInteractor.mockImplementation(() => {
-      throw new Error('error');
-    });
+    applicationContext
+      .getUseCases()
+      .filePetitionFromPaperInteractor.mockImplementation(() => {
+        throw new Error('error');
+      });
 
     await runAction(createCaseFromPaperAction, {
       modules: {
@@ -89,8 +94,13 @@ describe('createCaseFromPaperAction', () => {
       },
     });
 
-    expect(filePetitionFromPaperInteractor).toBeCalled();
-    expect(filePetitionFromPaperInteractor.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().filePetitionFromPaperInteractor,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCases().filePetitionFromPaperInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
