@@ -267,6 +267,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getCaseDeadlinesByCaseId),
     getCasesByLeadCaseId: jest.fn(),
     getCasesByUser: jest.fn(),
+    getDocument: jest.fn(),
     getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
     getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
     getDocumentQCServedForSection: jest
