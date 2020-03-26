@@ -1,5 +1,5 @@
-import { applicationContext } from '../../applicationContext';
 import { gotoPrintDocketRecordPreviewAction } from './gotoPrintDocketRecordPreviewAction';
+import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
@@ -9,7 +9,7 @@ const openInNewTabMock = jest.fn();
 
 describe('gotoPrintDocketRecordPreviewAction', () => {
   beforeEach(() => {
-    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.applicationContext = applicationContextForClient;
     presenter.providers.router = {
       openInNewTab: openInNewTabMock,
       route: routeMock,
