@@ -162,6 +162,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getJudgeForUserChambersInteractor: jest.fn(),
     getPrivatePractitionersBySearchKeyInteractor: jest.fn(),
     getTrialSessionDetailsInteractor: jest.fn(),
+    getTrialSessionsInteractor: jest.fn(),
     getUserCaseNoteInteractor: jest.fn(),
     getUserInteractor: jest.fn(),
     getUsersInSectionInteractor: jest.fn(),
