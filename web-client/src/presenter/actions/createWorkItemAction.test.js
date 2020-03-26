@@ -1,19 +1,20 @@
 import { createWorkItemAction } from './createWorkItemAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-
-let createWorkItemInteractorStub;
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    createWorkItemInteractor: createWorkItemInteractorStub,
-  }),
-};
+import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('createWorkItemAction', () => {
-  it('should call createWorkItemInteractor with the expected parameters for a message on props and return the alertSuccess', async () => {
-    createWorkItemInteractorStub = jest.fn();
+  let createWorkItemInteractor;
 
+  beforeEach(() => {
+    const applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
+
+    createWorkItemInteractor = applicationContext.getUseCases()
+      .createWorkItemInteractor;
+  });
+
+  it('should call createWorkItemInteractor with the expected parameters for a message on props and return the alertSuccess', async () => {
     const result = await runAction(createWorkItemAction, {
       modules: {
         presenter,
@@ -29,8 +30,8 @@ describe('createWorkItemAction', () => {
       },
     });
 
-    expect(createWorkItemInteractorStub).toBeCalled();
-    expect(createWorkItemInteractorStub.mock.calls[0][0]).toMatchObject({
+    expect(createWorkItemInteractor).toBeCalled();
+    expect(createWorkItemInteractor.mock.calls[0][0]).toMatchObject({
       assigneeId: '111',
       caseId: '222',
       documentId: '333',
@@ -40,8 +41,6 @@ describe('createWorkItemAction', () => {
   });
 
   it('should call createWorkItemInteractor with the expected parameters for a message on state.form and return the alertSuccess', async () => {
-    createWorkItemInteractorStub = jest.fn();
-
     const result = await runAction(createWorkItemAction, {
       modules: {
         presenter,
@@ -58,8 +57,8 @@ describe('createWorkItemAction', () => {
       },
     });
 
-    expect(createWorkItemInteractorStub).toBeCalled();
-    expect(createWorkItemInteractorStub.mock.calls[0][0]).toMatchObject({
+    expect(createWorkItemInteractor).toBeCalled();
+    expect(createWorkItemInteractor.mock.calls[0][0]).toMatchObject({
       assigneeId: '123',
       caseId: '456',
       documentId: '789',
