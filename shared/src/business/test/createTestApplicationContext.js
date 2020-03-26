@@ -260,6 +260,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteDocument: jest.fn(),
     deleteSectionOutboxRecord,
+    deleteTrialSession: jest.fn(),
+    deleteTrialSessionWorkingCopy: jest.fn(),
     deleteUserCaseNote: jest.fn(),
     deleteUserConnection: jest.fn(),
     deleteUserOutboxRecord,
