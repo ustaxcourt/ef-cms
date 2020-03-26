@@ -5,6 +5,7 @@ export const docketClerkAssignWorkItems = test => {
     let selectedWorkItem = sectionWorkQueue.find(
       workItem => workItem.workItemId === test.selectedWorkItem.workItemId,
     );
+    console.log('selectedWorkItem', selectedWorkItem);
     expect(selectedWorkItem).toMatchObject({
       assigneeId: null,
     });
