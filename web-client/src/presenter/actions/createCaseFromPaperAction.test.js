@@ -3,32 +3,31 @@ import {
   createCaseFromPaperAction,
   setupPercentDone,
 } from './createCaseFromPaperAction';
-import { prepareDateFromString } from '../../../../shared/src/business/utilities/DateHandler';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-
-let filePetitionFromPaperInteractorStub;
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    filePetitionFromPaperInteractor: filePetitionFromPaperInteractorStub,
-  }),
-  getUtilities: () => ({
-    prepareDateFromString,
-  }),
-};
-
-const errorStub = jest.fn();
-const successStub = jest.fn();
-
-presenter.providers.path = {
-  error: errorStub,
-  success: successStub,
-};
+import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('createCaseFromPaperAction', () => {
+  let errorStub, successStub, filePetitionFromPaperInteractor;
+
+  beforeEach(() => {
+    const applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
+
+    filePetitionFromPaperInteractor = applicationContext.getUseCases()
+      .filePetitionFromPaperInteractor;
+
+    errorStub = jest.fn();
+    successStub = jest.fn();
+
+    presenter.providers.path = {
+      error: errorStub,
+      success: successStub,
+    };
+  });
+
   it('should call filePetitionFromPaperInteractor with the petition metadata and files and call the success path when finished', async () => {
-    filePetitionFromPaperInteractorStub = jest.fn().mockReturnValue(MOCK_CASE);
+    filePetitionFromPaperInteractor.mockReturnValue(MOCK_CASE);
 
     await runAction(createCaseFromPaperAction, {
       modules: {
@@ -53,8 +52,8 @@ describe('createCaseFromPaperAction', () => {
       },
     });
 
-    expect(filePetitionFromPaperInteractorStub).toBeCalled();
-    expect(filePetitionFromPaperInteractorStub.mock.calls[0][0]).toMatchObject({
+    expect(filePetitionFromPaperInteractor).toBeCalled();
+    expect(filePetitionFromPaperInteractor.mock.calls[0][0]).toMatchObject({
       applicationForWaiverOfFilingFeeFile: {},
       ownershipDisclosureFile: {},
       petitionFile: {},
@@ -68,7 +67,7 @@ describe('createCaseFromPaperAction', () => {
   });
 
   it('should call filePetitionFromPaperInteractor and call path.error when finished if it throws an error', async () => {
-    filePetitionFromPaperInteractorStub = jest.fn().mockImplementation(() => {
+    filePetitionFromPaperInteractor.mockImplementation(() => {
       throw new Error('error');
     });
 
@@ -90,8 +89,8 @@ describe('createCaseFromPaperAction', () => {
       },
     });
 
-    expect(filePetitionFromPaperInteractorStub).toBeCalled();
-    expect(filePetitionFromPaperInteractorStub.mock.calls[0][0]).toMatchObject({
+    expect(filePetitionFromPaperInteractor).toBeCalled();
+    expect(filePetitionFromPaperInteractor.mock.calls[0][0]).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
