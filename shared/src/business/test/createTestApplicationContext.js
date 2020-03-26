@@ -131,6 +131,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     assignWorkItemsInteractor: jest.fn(),
     associateIrsPractitionerWithCaseInteractor: jest.fn(),
     associatePrivatePractitionerWithCaseInteractor: jest.fn(),
+    authorizeCodeInteractor: jest.fn(),
     batchDownloadTrialSessionInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
     casePublicSearchInteractor: jest.fn(),
@@ -232,6 +233,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     getDocumentTypeForAddressChange: jest.fn(),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
+    isExternalUser: User.isExternalUser,
+    isInternalUser: User.isInternalUser,
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
