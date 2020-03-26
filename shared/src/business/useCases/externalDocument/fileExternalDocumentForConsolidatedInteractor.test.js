@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   fileExternalDocumentForConsolidatedInteractor,
 } = require('./fileExternalDocumentForConsolidatedInteractor');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
@@ -6,8 +9,8 @@ const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { User } = require('../../entities/User');
 
 describe('fileExternalDocumentForConsolidatedInteractor', () => {
-  let applicationContext;
   let caseRecords;
+
   const caseId0 = '00000000-b37b-479d-9201-067ec6e335bb';
   const caseId1 = '11111111-b37b-479d-9201-067ec6e335bb';
   const caseId2 = '22222222-b37b-479d-9201-067ec6e335bb';
@@ -80,41 +83,28 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       },
     ];
 
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          name: 'Guy Fieri',
-          role: 'admin', // Avoiding adding admin user to User entity
-          userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
-        };
-      },
-      getPersistenceGateway: () => ({
-        getCasesByLeadCaseId: async () => caseRecords,
-        getUserById: () => ({
-          name: 'Guy Fieri',
-          role: 'admin', // Avoiding adding admin user to User entity
-          userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
-        }),
-        saveWorkItemForNonPaper: async () => {},
-        updateCase: async ({ caseToUpdate }) => await caseToUpdate,
-      }),
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      getUseCaseHelpers: () => ({
-        sendServedPartiesEmails: jest.fn(),
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Guy Fieri',
+      role: 'admin',
+      userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
+    });
+
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      name: 'Guy Fieri',
+      role: 'admin',
+      userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByLeadCaseId.mockReturnValue(caseRecords);
   });
 
-  it('Should throw an error if not authorized', async () => {
-    let error;
+  it('should throw an error when not authorized', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({});
 
-    applicationContext.getCurrentUser = () => {
-      return {};
-    };
-
-    try {
-      await fileExternalDocumentForConsolidatedInteractor({
+    await expect(
+      fileExternalDocumentForConsolidatedInteractor({
         applicationContext,
         documentIds: ['dddddddd-1111-dddd-1111-dddddddddddd'],
         documentMetadata: {
@@ -122,14 +112,11 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
         },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain('Unauthorized');
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
-  it('Should associate the document with all selected cases from the consolidated set', async () => {
+  it('should associate the document with all selected cases from the consolidated set', async () => {
     expect(caseRecords[0].documents.length).toEqual(4);
     expect(caseRecords[1].documents.length).toEqual(4);
     expect(caseRecords[2].documents.length).toEqual(4);
@@ -151,7 +138,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     expect(result[2].documents.length).toEqual(4);
   });
 
-  it('Should generate a docket record entry on each case in the consolidated set', async () => {
+  it('should generate a docket record entry on each case in the consolidated set', async () => {
     expect(caseRecords[0].docketRecord.length).toEqual(3);
     expect(caseRecords[1].docketRecord.length).toEqual(3);
 
@@ -172,7 +159,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     expect(result[2].docketRecord[3].documentId).toEqual(documentId0);
   });
 
-  it.skip('Should aggregate the filing parties for the docket record entry', async () => {
+  it.skip('should aggregate the filing parties for the docket record entry', async () => {
     // skipping until we finalize how this will be handled
     await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
@@ -187,7 +174,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     });
   });
 
-  it('Should generate only ONE QC work item for the filing, to be found on the document of the lowest docket number case to be filed in', async () => {
+  it('should generate only ONE QC work item for the filing, to be found on the document of the lowest docket number case to be filed in', async () => {
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
       docketNumbersForFiling: ['123-19', '234-19'],
@@ -212,7 +199,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     expect(nonLowestDocketNumberCase.documents[4].workItems.length).toEqual(0);
   });
 
-  it('Should file multiple documents for each case if a secondary document is provided', async () => {
+  it('should file multiple documents for each case if a secondary document is provided', async () => {
     expect(caseRecords[0].documents.length).toEqual(4);
     expect(caseRecords[1].documents.length).toEqual(4);
 
@@ -237,7 +224,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     expect(result[1].documents.length).toEqual(6);
   });
 
-  it('Should file multiple documents for each case if supporting documents are provided', async () => {
+  it('should file multiple documents for each case if supporting documents are provided', async () => {
     expect(caseRecords[0].documents.length).toEqual(4);
     expect(caseRecords[1].documents.length).toEqual(4);
 
