@@ -1,23 +1,18 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { completeDocketEntryQCAction } from './completeDocketEntryQCAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('completeDocketEntryQCAction', () => {
-  let applicationContext;
-  let caseDetail;
+  const caseDetail = {
+    caseId: '123',
+    docketNumber: '123-45',
+    documents: [
+      { documentId: '123-456-789-abc', documentTitle: "bob's burgers" },
+    ],
+  };
 
-  beforeEach(() => {
-    applicationContext = applicationContextForClient;
-
-    caseDetail = {
-      caseId: '123',
-      docketNumber: '123-45',
-      documents: [
-        { documentId: '123-456-789-abc', documentTitle: "bob's burgers" },
-      ],
-    };
-
+  beforeAll(() => {
     applicationContext
       .getUseCases()
       .completeDocketEntryQCInteractor.mockReturnValue({ caseDetail });

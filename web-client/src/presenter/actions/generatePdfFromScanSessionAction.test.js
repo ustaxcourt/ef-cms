@@ -1,15 +1,11 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePdfFromScanSessionAction } from './generatePdfFromScanSessionAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('generatePdfFromScanSessionAction', () => {
-  let generatePDFFromJPGDataInteractor;
   beforeEach(() => {
-    const applicationContext = applicationContextForClient;
     presenter.providers.applicationContext = applicationContext;
-    generatePDFFromJPGDataInteractor = applicationContext.getUseCases()
-      .generatePDFFromJPGDataInteractor;
 
     global.File = class {
       constructor() {
@@ -36,6 +32,8 @@ describe('generatePdfFromScanSessionAction', () => {
       },
     });
 
-    expect(generatePDFFromJPGDataInteractor).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generatePDFFromJPGDataInteractor,
+    ).toHaveBeenCalled();
   });
 });

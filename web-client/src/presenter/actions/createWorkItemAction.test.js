@@ -1,17 +1,11 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { createWorkItemAction } from './createWorkItemAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('createWorkItemAction', () => {
-  let createWorkItemInteractor;
-
   beforeEach(() => {
-    const applicationContext = applicationContextForClient;
     presenter.providers.applicationContext = applicationContext;
-
-    createWorkItemInteractor = applicationContext.getUseCases()
-      .createWorkItemInteractor;
   });
 
   it('should call createWorkItemInteractor with the expected parameters for a message on props and return the alertSuccess', async () => {
@@ -30,8 +24,13 @@ describe('createWorkItemAction', () => {
       },
     });
 
-    expect(createWorkItemInteractor).toBeCalled();
-    expect(createWorkItemInteractor.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().createWorkItemInteractor,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCases().createWorkItemInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       assigneeId: '111',
       caseId: '222',
       documentId: '333',
@@ -57,8 +56,13 @@ describe('createWorkItemAction', () => {
       },
     });
 
-    expect(createWorkItemInteractor).toBeCalled();
-    expect(createWorkItemInteractor.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().createWorkItemInteractor,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCases().createWorkItemInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       assigneeId: '123',
       caseId: '456',
       documentId: '789',
