@@ -68,6 +68,7 @@ const router = {
       '/',
       ifHasAccess(() => {
         setPageTitle('Dashboard');
+        console.log('go to dashboard');
         return app.getSequence('gotoDashboardSequence')();
       }),
     );
