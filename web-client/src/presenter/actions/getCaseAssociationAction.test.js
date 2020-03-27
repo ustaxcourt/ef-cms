@@ -216,4 +216,52 @@ describe('getCaseAssociation', () => {
       pendingAssociation: false,
     });
   });
+
+  it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser and the petition document is not served', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.irsSuperuser,
+      userId: '123',
+    });
+
+    const results = await runAction(getCaseAssociationAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        caseDetail: {
+          documents: [{ documentType: 'Petition' }],
+        },
+      },
+    });
+    expect(results.output).toEqual({
+      isAssociated: false,
+      pendingAssociation: false,
+    });
+  });
+
+  it('should return true for isAssociated and false for pendingAssociation if the user is an irsSuperuser and the petition document is served', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.irsSuperuser,
+      userId: '123',
+    });
+
+    const results = await runAction(getCaseAssociationAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        caseDetail: {
+          documents: [
+            { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
+          ],
+        },
+      },
+    });
+    expect(results.output).toEqual({
+      isAssociated: true,
+      pendingAssociation: false,
+    });
+  });
 });

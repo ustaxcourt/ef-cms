@@ -27,8 +27,10 @@ exports.getDownloadPolicyUrlInteractor = async ({
   }
 
   const isInternalUser = User.isInternalUser(user && user.role);
+  const isIrsSuperuser =
+    user && user.role && user.role === User.ROLES.irsSuperuser;
 
-  if (!isInternalUser) {
+  if (!isInternalUser && !isIrsSuperuser) {
     //verify that the user has access to this document
     const userAssociatedWithCase = await applicationContext
       .getPersistenceGateway()
@@ -65,6 +67,25 @@ exports.getDownloadPolicyUrlInteractor = async ({
           'Unauthorized to view document at this time',
         );
       }
+    }
+  } else if (isIrsSuperuser) {
+    const caseData = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId({
+        applicationContext,
+        caseId,
+      });
+
+    const caseEntity = new Case(caseData, { applicationContext });
+
+    const isPetitionServed = caseEntity.documents.find(
+      doc => doc.documentType === 'Petition',
+    ).servedAt;
+
+    if (!isPetitionServed) {
+      throw new UnauthorizedError(
+        'Unauthorized to view case documents at this time',
+      );
     }
   }
 
