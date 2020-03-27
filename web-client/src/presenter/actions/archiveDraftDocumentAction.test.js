@@ -1,9 +1,8 @@
-import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { archiveDraftDocumentAction } from './archiveDraftDocumentAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
-const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
 
 describe('archiveDraftDocumentAction', () => {

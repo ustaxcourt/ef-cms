@@ -1,16 +1,15 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { completeDocumentSigningAction } from './completeDocumentSigningAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
-import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
-const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
 
 const {
-  generateSignedDocumentInteractor,
-  signDocumentInteractor,
-  getInboxMessagesForUserInteractor,
   completeWorkItemInteractor,
+  generateSignedDocumentInteractor,
+  getInboxMessagesForUserInteractor,
+  signDocumentInteractor,
 } = applicationContext.getUseCases();
 const { uploadDocumentFromClient } = applicationContext.getPersistenceGateway();
 

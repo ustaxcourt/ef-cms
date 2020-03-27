@@ -1,18 +1,14 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateEditPrivatePractitionersAction } from './validateEditPrivatePractitionersAction';
 
 describe('validateEditPrivatePractitionersAction', () => {
-  let applicationContext;
   let successStub;
   let errorStub;
   let serviceIndicatorTypes;
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-
-    applicationContext = applicationContextForClient;
+  beforeAll(() => {
     serviceIndicatorTypes = applicationContext.getConstants()
       .SERVICE_INDICATOR_TYPES;
     successStub = jest.fn();

@@ -1,4 +1,5 @@
 import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { runPathForUserRoleAction } from './runPathForUserRoleAction';
@@ -10,13 +11,6 @@ let petitionsclerkStub;
 let docketclerkStub;
 let judgeStub;
 let otherInternalUserStub;
-
-presenter.providers.applicationContext = {
-  getUtilities: () => ({
-    isExternalUser: User.isExternalUser,
-    isInternalUser: User.isInternalUser,
-  }),
-};
 
 describe('runPathForUserRoleAction', () => {
   beforeEach(() => {
@@ -37,6 +31,8 @@ describe('runPathForUserRoleAction', () => {
       petitionsclerk: petitionsclerkStub,
       privatePractitioner: privatePractitionerStub,
     };
+
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('should return the petitioner path for user role petitioner', async () => {

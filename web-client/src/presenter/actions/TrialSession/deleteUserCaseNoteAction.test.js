@@ -1,18 +1,12 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext.js';
 import { deleteUserCaseNoteAction } from './deleteUserCaseNoteAction';
 import { presenter } from '../../presenter';
+
 import { runAction } from 'cerebral/test';
 
 describe('deleteUserCaseNoteAction', () => {
-  let deleteUserCaseNoteInteractorStub;
-
   beforeEach(() => {
-    deleteUserCaseNoteInteractorStub = jest.fn();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        deleteUserCaseNoteInteractor: deleteUserCaseNoteInteractorStub,
-      }),
-    };
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('deletes a case note', async () => {
@@ -32,6 +26,8 @@ describe('deleteUserCaseNoteAction', () => {
         trialSessionId: 'trial-session-id-123',
       },
     });
-    expect(deleteUserCaseNoteInteractorStub).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().deleteUserCaseNoteInteractor,
+    ).toHaveBeenCalled();
   });
 });

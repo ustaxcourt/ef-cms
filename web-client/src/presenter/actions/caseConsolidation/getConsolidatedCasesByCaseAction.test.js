@@ -1,17 +1,13 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getConsolidatedCasesByCaseAction } from './getConsolidatedCasesByCaseAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('getConsolidatedCasesByCaseAction', () => {
-  let applicationContext;
-
   beforeEach(() => {
-    applicationContext = applicationContextForClient;
-
-    applicationContext.getUseCases().getConsolidatedCasesByCaseInteractor = jest
-      .fn()
-      .mockResolvedValue([
+    applicationContext
+      .getUseCases()
+      .getConsolidatedCasesByCaseInteractor.mockResolvedValue([
         {
           caseId: 'case-id-123',
           docketNumber: '100-19',

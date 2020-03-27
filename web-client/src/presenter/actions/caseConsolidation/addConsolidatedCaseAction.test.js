@@ -1,14 +1,10 @@
 import { addConsolidatedCaseAction } from './addConsolidatedCaseAction';
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('addConsolidatedCaseAction', () => {
-  let applicationContext;
-
-  beforeEach(() => {
-    applicationContext = applicationContextForClient;
-
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

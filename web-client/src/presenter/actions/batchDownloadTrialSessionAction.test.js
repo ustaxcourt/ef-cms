@@ -1,13 +1,13 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { batchDownloadTrialSessionAction } from './batchDownloadTrialSessionAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
-import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
-const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
 
-const batchDownloadTrialSessionInteractor = applicationContext.getUseCases()
-  .batchDownloadTrialSessionInteractor;
+const {
+  batchDownloadTrialSessionInteractor,
+} = applicationContext.getUseCases();
 const pathSuccessStub = jest.fn();
 const pathErrorStub = jest.fn();
 
