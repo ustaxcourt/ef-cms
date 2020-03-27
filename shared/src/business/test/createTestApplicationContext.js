@@ -1,6 +1,7 @@
 const createWebApiApplicationContext = require('../../../../web-api/src/applicationContext');
 const DateHandler = require('../utilities/DateHandler');
 const docketNumberGenerator = require('../../persistence/dynamo/cases/docketNumberGenerator');
+const path = require('path');
 const sharedAppContext = require('../../sharedAppContext');
 const {
   addWorkItemToSectionInbox,
@@ -101,7 +102,6 @@ const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
 
-import path from 'path';
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
 const webApiApplicationContext = createWebApiApplicationContext({});
