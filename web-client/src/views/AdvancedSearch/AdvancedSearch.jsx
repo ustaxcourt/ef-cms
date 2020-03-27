@@ -41,7 +41,7 @@ export const AdvancedSearch = connect(
               <p>
                 Anyone can search for a case in our system for cases filed{' '}
                 <span className="text-semibold">on or after May 1, 1986</span>.
-                If If you aren’t affiliated with that case, you will only see
+                If you aren’t affiliated with that case, you will only see
                 limited information about that case.
               </p>
 
