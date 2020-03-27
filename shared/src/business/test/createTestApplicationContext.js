@@ -96,6 +96,7 @@ const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
+const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
@@ -131,6 +132,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     assignWorkItemsInteractor: jest.fn(),
     associateIrsPractitionerWithCaseInteractor: jest.fn(),
     associatePrivatePractitionerWithCaseInteractor: jest.fn(),
+    authorizeCodeInteractor: jest.fn(),
     batchDownloadTrialSessionInteractor: jest.fn(),
     caseAdvancedSearchInteractor: jest.fn(),
     casePublicSearchInteractor: jest.fn(),
@@ -139,9 +141,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     createAttorneyUserInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
     createCourtIssuedOrderPdfFromHtmlInteractor: jest.fn(),
+    createTrialSessionInteractor: jest.fn(),
     createWorkItemInteractor: jest.fn(),
     deleteCaseNoteInteractor: jest.fn(),
     deleteCounselFromCaseInteractor: jest.fn(),
+    deleteTrialSessionInteractor: jest.fn(),
+    deleteUserCaseNoteInteractor: jest.fn(),
     fetchPendingItemsInteractor: jest.fn(),
     fileCourtIssuedDocketEntryInteractor: jest.fn(),
     fileCourtIssuedOrderInteractor: jest.fn(),
@@ -160,6 +165,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePrintablePendingReportInteractor: jest.fn(),
     generatePublicDocketRecordPdfInteractor: jest.fn(),
     generateSignedDocumentInteractor: jest.fn(),
+    generateTrialCalendarPdfInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
     getBlockedCasesInteractor: jest.fn(),
     getCalendaredCasesForTrialSessionInteractor: jest.fn(),
@@ -167,20 +173,35 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
     getCasesByUserInteractor: jest.fn(),
+    getEligibleCasesForTrialSessionInteractor: jest.fn(),
+    getInboxMessagesForSectionInteractor: jest.fn(),
     getInboxMessagesForUserInteractor: jest.fn(),
     getIrsPractitionersBySearchKeyInteractor: jest.fn(),
     getJudgeForUserChambersInteractor: jest.fn(),
+    getNotificationsInteractor: jest.fn(),
     getPrivatePractitionersBySearchKeyInteractor: jest.fn(),
+    getTrialSessionDetailsInteractor: jest.fn(),
+    getTrialSessionWorkingCopyInteractor: jest.fn(),
+    getTrialSessionsInteractor: jest.fn(),
     getUserByIdInteractor: jest.fn(),
+    getUserCaseNoteForCasesInteractor: jest.fn(),
+    getUserCaseNoteInteractor: jest.fn(),
     getUserInteractor: jest.fn(),
     getUsersInSectionInteractor: jest.fn(),
     loadPDFForPreviewInteractor: jest.fn(),
+    loadPDFForSigningInteractor: jest.fn(),
+    refreshTokenInteractor: jest.fn(),
     removeCasePendingItemInteractor: jest.fn(),
     removeConsolidatedCasesInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
+    runTrialSessionPlanningReportInteractor: jest.fn(),
     saveCaseNoteInteractor: jest.fn(),
     saveIntermediateDocketEntryInteractor: jest.fn(),
     serveCaseToIrsInteractor: jest.fn(),
+    setItemInteractor: jest.fn(),
+    setNoticesForCalendaredTrialSessionInteractor: jest.fn(),
+    setTrialSessionAsSwingSessionInteractor: jest.fn(),
+    setTrialSessionCalendarInteractor: jest.fn(),
     setWorkItemAsReadInteractor: jest.fn(),
     signDocumentInteractor: jest.fn(),
     submitCaseAssociationRequestInteractor: jest.fn(),
@@ -191,6 +212,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     updateCourtIssuedDocketEntryInteractor: jest.fn(),
     updateDocketEntryInteractor: jest.fn(),
     updateDocketEntryMetaInteractor: jest.fn(),
+    updateQcCompleteForTrialInteractor: jest.fn(),
+    updateTrialSessionInteractor: jest.fn(),
+    updateTrialSessionWorkingCopyInteractor: jest.fn(),
+    updateUserCaseNoteInteractor: jest.fn(),
     uploadExternalDocumentsInteractor: jest.fn(),
     uploadOrderDocumentInteractor: jest.fn(),
     validateAddIrsPractitionerInteractor: jest.fn(),
@@ -204,13 +229,16 @@ const createTestApplicationContext = ({ user } = {}) => {
     validateExternalDocumentInformationInteractor: jest.fn(),
     validatePdfInteractor: jest.fn(),
     validateStartCaseWizardInteractor: jest.fn(),
+    validateTrialSessionInteractor: jest.fn(),
     verifyPendingCaseForUserInteractor: jest.fn(),
     virusScanPdfInteractor: jest.fn(),
   };
 
   const mockGetScannerReturnValue = {
     getSourceNameByIndex: jest.fn().mockReturnValue('scanner'),
-    setSourceByIndex: jest.fn().mockReturnValue(null),
+    getSources: jest.fn(),
+    setSourceByIndex: jest.fn(),
+    setSourceByName: jest.fn().mockReturnValue(null),
     startScanSession: jest.fn().mockReturnValue({
       scannedBuffer: [],
     }),
@@ -232,6 +260,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     getDocumentTypeForAddressChange: jest.fn(),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
+    isExternalUser: User.isExternalUser,
+    isInternalUser: User.isInternalUser,
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
@@ -249,6 +279,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     generateCaseConfirmationPdf: jest.fn(),
     generateCaseInventoryReportPdf: jest.fn(),
     getCaseInventoryReport: jest.fn(),
+    getConsolidatedCasesByCaseInteractor: jest.fn(),
     sendServedPartiesEmails: jest.fn(),
     updateCaseAutomaticBlock: jest
       .fn()
@@ -258,9 +289,11 @@ const createTestApplicationContext = ({ user } = {}) => {
   const getTemplateGeneratorsReturnMock = {
     generateChangeOfAddressTemplate: jest.fn().mockResolvedValue('<div></div>'),
     generateHTMLTemplateForPDF: jest.fn().mockReturnValue('<div></div>'),
+    generateNoticeOfTrialIssuedTemplate: jest.fn(),
     generatePrintableDocketRecordTemplate: jest
       .fn()
       .mockResolvedValue('<div></div>'),
+    generateStandingPretrialNoticeTemplate: jest.fn(),
   };
 
   const mockGetPersistenceGatewayReturnValue = {
@@ -271,6 +304,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCase,
     createCaseTrialSortMappingRecords: jest.fn(),
     createSectionInboxRecord,
+    createTrialSession: jest.fn(),
     createTrialSessionWorkingCopy: jest.fn(),
     createUserInboxRecord,
     createWorkItem: createWorkItemPersistence,
@@ -278,6 +312,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteDocument: jest.fn(),
     deleteSectionOutboxRecord,
+    deleteTrialSession: jest.fn(),
+    deleteTrialSessionWorkingCopy: jest.fn(),
     deleteUserCaseNote: jest.fn(),
     deleteUserConnection: jest.fn(),
     deleteUserFromCase: jest.fn(),
@@ -378,6 +414,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         },
       );
     }),
+    getCurrentUserPermissions: jest.fn(),
     getCurrentUserToken: () => {
       return '';
     },
@@ -391,6 +428,8 @@ const createTestApplicationContext = ({ user } = {}) => {
       DocketRecord,
       Document,
       ExternalDocumentFactory: ExternalDocumentFactory,
+      TrialSession: TrialSession,
+      User,
       WorkItem: WorkItem,
     }),
     getFileReaderInstance: jest.fn(),
@@ -428,6 +467,8 @@ const createTestApplicationContext = ({ user } = {}) => {
       time: () => jest.fn().mockReturnValue(null),
       timeEnd: () => jest.fn().mockReturnValue(null),
     },
+    setCurrentUser: jest.fn(),
+    setCurrentUserToken: jest.fn(),
   };
   return applicationContext;
 };
