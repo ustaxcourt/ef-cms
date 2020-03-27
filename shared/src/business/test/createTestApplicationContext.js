@@ -15,6 +15,9 @@ const {
   CaseExternalIncomplete,
 } = require('../entities/cases/CaseExternalIncomplete');
 const {
+  CourtIssuedDocumentFactory,
+} = require('../entities/courtIssuedDocument/CourtIssuedDocumentFactory');
+const {
   createSectionInboxRecord,
 } = require('../../persistence/dynamo/workitems/createSectionInboxRecord');
 const {
@@ -437,6 +440,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       CaseAssociationRequestFactory,
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
+      CourtIssuedDocumentFactory,
       DocketRecord,
       Document,
       ExternalDocumentFactory: ExternalDocumentFactory,
