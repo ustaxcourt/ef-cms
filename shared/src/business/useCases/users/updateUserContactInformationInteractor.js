@@ -258,6 +258,7 @@ exports.updateUserContactInformationInteractor = async ({
       updatedCases.push(updatedCaseRaw);
     }
   }
+  console.log('we are done');
 
   return updatedCases;
 };
