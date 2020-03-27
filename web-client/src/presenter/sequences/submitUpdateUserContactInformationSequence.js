@@ -12,19 +12,15 @@ import { validateUserContactAction } from '../actions/validateUserContactAction'
 
 export const submitUpdateUserContactInformationSequence = [
   clearAlertsAction,
-  () => console.log('t'),
   startShowValidationAction,
-  () => console.log('u'),
   validateUserContactAction,
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: showProgressSequenceDecorator([
-      () => console.log('v'),
       updateUserContactInformationAction,
       {
         noChange: [navigateToDashboardAction],
         success: [
-          () => console.log('w'),
           setAlertSuccessAction,
           setSaveAlertsForNavigationAction,
           setCurrentPageAction('Interstitial'),

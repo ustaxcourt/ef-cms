@@ -6,6 +6,5 @@
  * @returns {Promise} async action
  */
 export const navigateToDashboardAction = async ({ router }) => {
-  console.log('1');
   await router.route('/');
 };

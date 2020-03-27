@@ -18,7 +18,6 @@ export const updateUserContactInformationAction = async ({
   const currentUser = applicationContext.getCurrentUser();
 
   try {
-    console.log('-1');
     await applicationContext
       .getUseCases()
       .updateUserContactInformationInteractor({
@@ -26,10 +25,7 @@ export const updateUserContactInformationAction = async ({
         contactInfo: formUser.contact,
         userId: currentUser.userId,
       });
-    console.log('-2');
   } catch (err) {
-    console.log('-3');
-
     if (
       err.originalError &&
       err.originalError.response.data.indexOf(
