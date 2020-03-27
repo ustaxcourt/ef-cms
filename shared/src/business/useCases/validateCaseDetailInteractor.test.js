@@ -5,7 +5,6 @@ const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_USERS } = require('../../test/mockUsers');
 const { User } = require('../entities/User');
-
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
 const contactPrimary = {
