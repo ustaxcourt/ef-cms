@@ -6,6 +6,9 @@ const {
   addWorkItemToSectionInbox,
 } = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
+  appendPaperServiceAddressPageToPdf,
+} = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
+const {
   applicationContext: webClientApplicationContext,
 } = require('../../../../web-client/src/applicationContext');
 const {
@@ -158,6 +161,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     generateCourtIssuedDocumentTitleInteractor: jest.fn(),
     generateDocketRecordPdfInteractor: jest.fn(),
     generateDocumentTitleInteractor: jest.fn(),
+    generateNoticeOfTrialIssuedInteractor: jest.fn(),
     generatePDFFromJPGDataInteractor: jest.fn(),
     generatePdfFromHtmlInteractor: jest.fn(),
     generatePrintableCaseInventoryReportInteractor: jest.fn(),
@@ -165,6 +169,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePrintablePendingReportInteractor: jest.fn(),
     generatePublicDocketRecordPdfInteractor: jest.fn(),
     generateSignedDocumentInteractor: jest.fn(),
+    generateStandingPretrialNoticeInteractor: jest.fn(),
+    generateStandingPretrialOrderInteractor: jest.fn(),
     generateTrialCalendarPdfInteractor: jest.fn(),
     getAllCaseDeadlinesInteractor: jest.fn(),
     getBlockedCasesInteractor: jest.fn(),
@@ -251,6 +257,10 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUtilitiesReturnValue = {
+    compareISODateStrings: jest
+      .fn()
+      .mockReturnValue(DateHandler.compareISODateStrings),
+    compareStrings: jest.fn().mockImplementation(DateHandler.compareStrings),
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
@@ -276,9 +286,12 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCaseHelpers = {
-    appendPaperServiceAddressPageToPdf: jest.fn(),
+    appendPaperServiceAddressPageToPdf: jest
+      .fn()
+      .mockImplementation(appendPaperServiceAddressPageToPdf),
     generateCaseConfirmationPdf: jest.fn(),
     generateCaseInventoryReportPdf: jest.fn(),
+    generatePaperServiceAddressPagePdf: jest.fn(),
     getCaseInventoryReport: jest.fn(),
     sendServedPartiesEmails: jest.fn(),
     updateCaseAutomaticBlock: jest
@@ -295,6 +308,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockResolvedValue('<div></div>'),
     generateStandingPretrialNoticeTemplate: jest.fn(),
     generateStandingPretrialOrderTemplate: jest.fn(),
+    generateTrialSessionPlanningReportTemplate: jest.fn(),
   };
 
   const mockGetPersistenceGatewayReturnValue = {
@@ -337,6 +351,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDownloadPolicyUrl: jest.fn(),
+    getEligibleCasesForTrialCity: jest.fn(),
     getEligibleCasesForTrialSession: jest.fn(),
     getInboxMessagesForSection: jest
       .fn()
