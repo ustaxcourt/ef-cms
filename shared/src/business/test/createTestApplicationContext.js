@@ -348,6 +348,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getSentMessagesForUserPersistence),
     getTrialSessionById: jest.fn(),
+    getTrialSessionWorkingCopy: jest.fn(),
     getTrialSessions: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseNote: jest.fn(),
