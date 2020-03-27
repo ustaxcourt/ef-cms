@@ -317,6 +317,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteTrialSessionWorkingCopy: jest.fn(),
     deleteUserCaseNote: jest.fn(),
     deleteUserConnection: jest.fn(),
+    deleteUserFromCase: jest.fn(),
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
     getAllCaseDeadlines: jest.fn(),
@@ -347,6 +348,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getSentMessagesForUserPersistence),
     getTrialSessionById: jest.fn(),
+    getTrialSessionWorkingCopy: jest.fn(),
     getTrialSessions: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseNote: jest.fn(),
