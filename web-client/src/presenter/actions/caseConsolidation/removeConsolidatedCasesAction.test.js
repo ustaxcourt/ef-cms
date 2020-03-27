@@ -1,13 +1,10 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { removeConsolidatedCasesAction } from './removeConsolidatedCasesAction';
 import { runAction } from 'cerebral/test';
 
-let applicationContext;
-
 describe('removeConsolidatedCasesAction', () => {
   beforeEach(() => {
-    applicationContext = applicationContextForClient;
     presenter.providers.applicationContext = applicationContext;
   });
 
