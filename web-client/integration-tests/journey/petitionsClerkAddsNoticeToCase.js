@@ -43,11 +43,6 @@ export default test => {
     expect(test.getState('currentPage')).toEqual('DocumentDetail');
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
-    expect(test.getState('form')).toEqual({
-      receivedAtDay: '27',
-      receivedAtMonth: '3',
-      receivedAtYear: '2020',
-    });
 
     //skip signing and go back to caseDetail
     await test.runSequence('gotoCaseDetailSequence', {

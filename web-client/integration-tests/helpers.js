@@ -353,6 +353,7 @@ export const loginAs = (test, user) => {
       key: 'name',
       value: user,
     });
+
     await test.runSequence('submitLoginSequence', {
       path: '/',
     });
@@ -464,8 +465,8 @@ export const setupTest = ({ useCases = {} } = {}) => {
 
   router.initialize(test, (route, cb) => {
     routes.push({
-      route,
       cb,
+      route,
     });
   });
   initializeSocketProvider(test);
