@@ -96,6 +96,7 @@ const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
+const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
@@ -175,6 +176,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
     getCasesByUserInteractor: jest.fn(),
+    getConsolidatedCasesByCaseInteractor: jest.fn(),
     getEligibleCasesForTrialSessionInteractor: jest.fn(),
     getInboxMessagesForSectionInteractor: jest.fn(),
     getInboxMessagesForUserInteractor: jest.fn(),
@@ -296,9 +298,12 @@ const createTestApplicationContext = ({ user } = {}) => {
   const getTemplateGeneratorsReturnMock = {
     generateChangeOfAddressTemplate: jest.fn().mockResolvedValue('<div></div>'),
     generateHTMLTemplateForPDF: jest.fn().mockReturnValue('<div></div>'),
+    generateNoticeOfTrialIssuedTemplate: jest.fn(),
     generatePrintableDocketRecordTemplate: jest
       .fn()
       .mockResolvedValue('<div></div>'),
+    generateStandingPretrialNoticeTemplate: jest.fn(),
+    generateStandingPretrialOrderTemplate: jest.fn(),
   };
 
   const mockGetPersistenceGatewayReturnValue = {
@@ -309,6 +314,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCase,
     createCaseTrialSortMappingRecords: jest.fn(),
     createSectionInboxRecord,
+    createTrialSession: jest.fn(),
     createTrialSessionWorkingCopy: jest.fn(),
     createUserInboxRecord,
     createWorkItem: createWorkItemPersistence,
@@ -316,8 +322,11 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteDocument: jest.fn(),
     deleteSectionOutboxRecord,
+    deleteTrialSession: jest.fn(),
+    deleteTrialSessionWorkingCopy: jest.fn(),
     deleteUserCaseNote: jest.fn(),
     deleteUserConnection: jest.fn(),
+    deleteUserFromCase: jest.fn(),
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
     getAllCaseDeadlines: jest.fn(),
@@ -431,6 +440,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       DocketRecord,
       Document,
       ExternalDocumentFactory: ExternalDocumentFactory,
+      TrialSession: TrialSession,
       User,
       WorkItem: WorkItem,
     }),
