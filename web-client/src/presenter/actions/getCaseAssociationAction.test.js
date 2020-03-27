@@ -1,14 +1,11 @@
 import { User } from '../../../../shared/src/business/entities/User';
-import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseAssociationAction } from './getCaseAssociationAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('getCaseAssociation', () => {
-  let applicationContext;
-
-  beforeEach(() => {
-    applicationContext = applicationContextForClient;
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
     applicationContext

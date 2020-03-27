@@ -1,17 +1,15 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserByIdAction } from './getUserByIdAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('getUserByIdAction', () => {
   beforeEach(() => {
-    presenter.providers.applicationContext = applicationContextForClient;
-    applicationContextForClient
-      .getUseCases()
-      .getUserByIdInteractor.mockReturnValue({
-        role: 'privatePractitioner',
-        userId: '123',
-      });
+    presenter.providers.applicationContext = applicationContext;
+    applicationContext.getUseCases().getUserByIdInteractor.mockReturnValue({
+      role: 'privatePractitioner',
+      userId: '123',
+    });
   });
 
   it('should call the user and return the user from the use case', async () => {

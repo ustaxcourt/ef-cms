@@ -1,18 +1,15 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { castToISO } from './getCaseDetailFormWithComputedDatesAction';
 import { getCaseDetailFormWithComputedDatesAction } from './getCaseDetailFormWithComputedDatesAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 const modules = { presenter };
 
 describe('castToISO', () => {
-  let applicationContext;
-
-  beforeEach(() => {
-    applicationContext = applicationContextForClient;
-    presenter.providers.applicationContext = applicationContextForClient;
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
   });
   it('returns an iso string when the date string passed in is valid', () => {
     expect(castToISO(applicationContext, '2010-10-10')).toEqual(
@@ -48,6 +45,9 @@ describe('castToISO', () => {
 });
 
 describe('getCaseDetailFormWithComputedDatesAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
   it('should return the expected combined caseDetail after run', async () => {
     const results = await runAction(getCaseDetailFormWithComputedDatesAction, {
       modules,

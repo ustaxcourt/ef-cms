@@ -1,20 +1,15 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { saveIntermediateDocketEntryAction } from './saveIntermediateDocketEntryAction';
 
 describe('saveIntermediateDocketEntryAction', () => {
-  let applicationContext;
-  let caseDetail;
+  const caseDetail = {
+    caseId: '123',
+    docketNumber: '123-45',
+  };
 
   beforeEach(() => {
-    applicationContext = applicationContextForClient;
-
-    caseDetail = {
-      caseId: '123',
-      docketNumber: '123-45',
-    };
-
     applicationContext
       .getUseCases()
       .saveIntermediateDocketEntryInteractor.mockReturnValue(caseDetail);
