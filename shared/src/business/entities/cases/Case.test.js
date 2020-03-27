@@ -2803,6 +2803,20 @@ describe('Case entity', () => {
       expect(isAssociated).toBeTruthy();
     });
 
+    it('returns false if the user is an irs superuser and the case does not have documents', () => {
+      caseEntity.documents = undefined;
+
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity,
+        user: {
+          role: User.ROLES.irsSuperuser,
+          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+        },
+      });
+
+      expect(isAssociated).toBeFalsy();
+    });
+
     it('returns false if the user is a not a privatePractitioner or irsPractitioner on the case and is not an irs superuser', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),

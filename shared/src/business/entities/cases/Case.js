@@ -1326,9 +1326,11 @@ const isAssociatedUser = function ({ caseRaw, user }) {
 
   const isIrsSuperuser = user.role === User.ROLES.irsSuperuser;
 
-  const isPetitionServed = !!caseRaw.documents.find(
+  const petitionDocument = (caseRaw.documents || []).find(
     doc => doc.documentType === 'Petition',
-  ).servedAt;
+  );
+
+  const isPetitionServed = petitionDocument && !!petitionDocument.servedAt;
 
   return (
     isIrsPractitioner ||
