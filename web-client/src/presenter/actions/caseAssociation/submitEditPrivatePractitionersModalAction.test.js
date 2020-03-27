@@ -4,14 +4,12 @@ import { runAction } from 'cerebral/test';
 import { submitEditPrivatePractitionersModalAction } from './submitEditPrivatePractitionersModalAction';
 
 describe('submitEditPrivatePractitionersModalAction', () => {
-  let applicationContext;
   let successStub;
 
   beforeEach(() => {
-    applicationContext = applicationContextForClient;
     successStub = jest.fn();
 
-    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.applicationContext = applicationContextForClient;
     presenter.providers.path = {
       success: successStub,
     };
@@ -51,16 +49,16 @@ describe('submitEditPrivatePractitionersModalAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().updateCounselOnCaseInteractor.mock.calls
-        .length,
+      applicationContextForClient.getUseCases().updateCounselOnCaseInteractor
+        .mock.calls.length,
     ).toEqual(2);
     expect(
-      applicationContext.getUseCases().deleteCounselFromCaseInteractor.mock
-        .calls.length,
+      applicationContextForClient.getUseCases().deleteCounselFromCaseInteractor
+        .mock.calls.length,
     ).toEqual(1);
     expect(
-      applicationContext.getUseCases().updateCounselOnCaseInteractor.mock
-        .calls[0][0],
+      applicationContextForClient.getUseCases().updateCounselOnCaseInteractor
+        .mock.calls[0][0],
     ).toMatchObject({
       caseId: '123',
       userData: {
@@ -71,15 +69,15 @@ describe('submitEditPrivatePractitionersModalAction', () => {
       userIdToUpdate: '1',
     });
     expect(
-      applicationContext.getUseCases().deleteCounselFromCaseInteractor.mock
-        .calls[0][0],
+      applicationContextForClient.getUseCases().deleteCounselFromCaseInteractor
+        .mock.calls[0][0],
     ).toMatchObject({
       caseId: '123',
       userIdToDelete: '2',
     });
     expect(
-      applicationContext.getUseCases().updateCounselOnCaseInteractor.mock
-        .calls[1][0],
+      applicationContextForClient.getUseCases().updateCounselOnCaseInteractor
+        .mock.calls[1][0],
     ).toMatchObject({
       caseId: '123',
       userData: {

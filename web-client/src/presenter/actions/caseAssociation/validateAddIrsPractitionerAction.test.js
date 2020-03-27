@@ -4,13 +4,11 @@ import { runAction } from 'cerebral/test';
 import { validateAddIrsPractitionerAction } from './validateAddIrsPractitionerAction';
 
 describe('validateAddIrsPractitioner', () => {
-  let applicationContext;
   let successStub;
   let errorStub;
   let mockAddIrsPractitioner;
 
   beforeEach(() => {
-    applicationContext = applicationContextForClient;
     successStub = jest.fn();
     errorStub = jest.fn();
 
@@ -18,7 +16,7 @@ describe('validateAddIrsPractitioner', () => {
       user: { userId: 'abc' },
     };
 
-    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.applicationContext = applicationContextForClient;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -26,7 +24,7 @@ describe('validateAddIrsPractitioner', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    applicationContext
+    applicationContextForClient
       .getUseCases()
       .validateAddIrsPractitionerInteractor.mockReturnValue(null);
 
@@ -40,13 +38,14 @@ describe('validateAddIrsPractitioner', () => {
     });
 
     expect(
-      applicationContext.getUseCases().validateAddIrsPractitionerInteractor,
+      applicationContextForClient.getUseCases()
+        .validateAddIrsPractitionerInteractor,
     ).toHaveBeenCalled();
     expect(successStub).toHaveBeenCalledTimes(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    applicationContext
+    applicationContextForClient
       .getUseCases()
       .validateAddIrsPractitionerInteractor.mockReturnValue('error');
 
@@ -60,7 +59,8 @@ describe('validateAddIrsPractitioner', () => {
     });
 
     expect(
-      applicationContext.getUseCases().validateAddIrsPractitionerInteractor,
+      applicationContextForClient.getUseCases()
+        .validateAddIrsPractitionerInteractor,
     ).toHaveBeenCalled();
     expect(errorStub).toHaveBeenCalledTimes(1);
   });

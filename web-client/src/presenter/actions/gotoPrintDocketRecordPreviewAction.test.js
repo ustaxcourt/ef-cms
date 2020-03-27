@@ -1,4 +1,4 @@
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { gotoPrintDocketRecordPreviewAction } from './gotoPrintDocketRecordPreviewAction';
 
 import { presenter } from '../presenter';

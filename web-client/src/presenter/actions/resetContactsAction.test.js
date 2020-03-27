@@ -1,12 +1,14 @@
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter';
 import { resetContactsAction } from './resetContactsAction';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('resetContactsAction', () => {
+  beforeEach(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('clears the contactPrimary except for countryType and email for a domestic address', async () => {
     const { state } = await runAction(resetContactsAction, {
       modules: { presenter },

@@ -1,10 +1,9 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { submitCaseAdvancedSearchAction } from './submitCaseAdvancedSearchAction';
 
-const applicationContext = applicationContextForClient;
-presenter.providers.applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
 describe('submitCaseAdvancedSearchAction', () => {
   it('should call caseAdvancedSearchInteractor with the state.advancedSearchForm as searchParams', async () => {

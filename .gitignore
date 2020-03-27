@@ -38,3 +38,4 @@ web-client/pa11y/pa11y-screenshots
 web-client/reports
 web-client/tests_output/
 web-client/terraform/common/cloudfront-edge/index.js.zip
+reports/test-reporter.xml
