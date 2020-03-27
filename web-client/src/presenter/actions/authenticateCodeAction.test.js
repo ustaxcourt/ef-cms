@@ -7,7 +7,7 @@ describe('authenticateCodeAction', () => {
   beforeEach(() => {
     applicationContext
       .getUseCases()
-      .authorizeCodeInteractor.mockImplementation(code => {
+      .authorizeCodeInteractor.mockImplementation(({ code }) => {
         return {
           refreshToken: `refresh-token-${code}`,
           token: `token-${code}`,
@@ -32,7 +32,7 @@ describe('authenticateCodeAction', () => {
         .length,
     ).toEqual(1);
 
-    expect(result).toEqual({
+    expect(result.output).toEqual({
       refreshToken: 'refresh-token-123',
       token: 'token-123',
     });
