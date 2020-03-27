@@ -173,6 +173,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseInteractor: jest.fn(),
     getCaseInventoryReportInteractor: jest.fn(),
     getCasesByUserInteractor: jest.fn(),
+    getConsolidatedCasesByCaseInteractor: jest.fn(),
     getEligibleCasesForTrialSessionInteractor: jest.fn(),
     getInboxMessagesForSectionInteractor: jest.fn(),
     getInboxMessagesForUserInteractor: jest.fn(),
@@ -279,7 +280,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     generateCaseConfirmationPdf: jest.fn(),
     generateCaseInventoryReportPdf: jest.fn(),
     getCaseInventoryReport: jest.fn(),
-    getConsolidatedCasesByCaseInteractor: jest.fn(),
     sendServedPartiesEmails: jest.fn(),
     updateCaseAutomaticBlock: jest
       .fn()
@@ -294,6 +294,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockResolvedValue('<div></div>'),
     generateStandingPretrialNoticeTemplate: jest.fn(),
+    generateStandingPretrialOrderTemplate: jest.fn(),
   };
 
   const mockGetPersistenceGatewayReturnValue = {
