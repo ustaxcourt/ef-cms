@@ -68,7 +68,6 @@ const router = {
       '/',
       ifHasAccess(() => {
         setPageTitle('Dashboard');
-        console.log('go to dashboard');
         return app.getSequence('gotoDashboardSequence')();
       }),
     );
@@ -837,7 +836,6 @@ const router = {
     registerRoute(
       '/messages',
       ifHasAccess(() => {
-        console.log('calling gotoMessagesSequence');
         setPageTitle('Messages');
         return app.getSequence('gotoMessagesSequence')({
           workQueueIsInternal: true,
@@ -850,7 +848,6 @@ const router = {
     registerRoute(
       '/messages/my',
       ifHasAccess(() => {
-        console.log('calling gotoMessagesSequence');
         setPageTitle('Messages');
         return app.getSequence('gotoMessagesSequence')({
           workQueueIsInternal: true,
@@ -863,7 +860,6 @@ const router = {
     registerRoute(
       '/messages/section',
       ifHasAccess(() => {
-        console.log('calling gotoMessagesSequence');
         setPageTitle('Messages');
         return app.getSequence('gotoMessagesSequence')({
           workQueueIsInternal: true,

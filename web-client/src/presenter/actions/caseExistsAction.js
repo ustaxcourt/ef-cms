@@ -8,7 +8,6 @@
  * @returns {object} contains the caseDetail returned from the use case
  */
 export const caseExistsAction = async ({ applicationContext, path, props }) => {
-  console.log('case exists action, before proxy call');
   try {
     const caseDetail = await applicationContext
       .getUseCases()
@@ -16,8 +15,6 @@ export const caseExistsAction = async ({ applicationContext, path, props }) => {
         applicationContext,
         docketNumber: props.caseId,
       });
-
-    console.log('case exists action, after proxy call');
 
     return path.success({ caseDetail });
   } catch (e) {
