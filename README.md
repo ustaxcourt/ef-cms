@@ -1,6 +1,6 @@
 # Electronic Filing / Case Management System
 
-An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS, which began in October 2018. Work is not yet in production, so `master` does not deploy. For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
+An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS, which began in October 2018. It is not yet in production use. For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
 
 #### develop
 
@@ -32,9 +32,9 @@ API | Front-End | Shared Code
 
 <br clear="both">
 
-The fork of this project in which the bulk of development is occurring is [Flexion’s fork](https://github.com/flexion/ef-cms).
+The fork of this project in which the bulk of development is occurring is [Flexion’s fork](https://github.com/flexion/ef-cms), but all changes are pulled into the U.S. Tax Court’s repository every two weeks.
 
-Artifacts for ongoing development such as designs, research data, user workflows etc. are located in the [wiki](https://github.com/flexion/ef-cms/wiki).
+Artifacts for ongoing development such as designs, research data, user workflows etc. are located in the [wiki](https://github.com/flexion/ef-cms/wiki). See also [documentation about how we work](https://github.com/ustaxcourt/ef-cms/blob/staging/docs/how-we-work.md): our principles, product team, technical strategy, meetings cadence, tools, etc.
 
 ## Technical overview
 
