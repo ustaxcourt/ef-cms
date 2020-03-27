@@ -22,14 +22,14 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
     validateDocketRecordSequence: sequences.validateDocketRecordSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function EditDocketEntryMetaFormCourtIssued({
     addCourtIssuedDocketEntryHelper,
     form,
     updateCourtIssuedDocketEntryFormValueSequence,
     validateCourtIssuedDocketEntrySequence,
     validateDocketRecordSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <div className="blue-container">
         <DateInput

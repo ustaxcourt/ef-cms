@@ -1,6 +1,9 @@
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createCaseDeadlineAction } from './createCaseDeadlineAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
+
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('createCaseDeadlineAction', () => {
   let successStub;
@@ -10,14 +13,6 @@ describe('createCaseDeadlineAction', () => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        createCaseDeadlineInteractor: () => 'something',
-      }),
-      getUtilities: () => ({
-        createISODateString: () => '2019-03-01T21:42:29.073Z',
-      }),
-    };
     presenter.providers.path = {
       error: errorStub,
       success: successStub,

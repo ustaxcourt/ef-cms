@@ -18,88 +18,94 @@ export const TrialSessionDetail = connect(
   {
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
   },
-  ({
+  function TrialSessionDetail({
     formattedTrialSessionDetails,
     openSetCalendarModalSequence,
     showModal,
     trialSessionDetailsHelper,
-  }) => (
-    <>
-      <TrialSessionDetailHeader />
+  }) {
+    return (
+      <>
+        <TrialSessionDetailHeader />
 
-      <section className="usa-section grid-container">
-        <SuccessNotification />
-        <ErrorNotification />
-        <WarningNotification />
-        <TrialSessionInformation />
-        {!formattedTrialSessionDetails.isCalendared && (
-          <Tabs
-            bind="trialSessionDetailsTab.caseList"
-            defaultActiveTab="EligibleCases"
-          >
-            {trialSessionDetailsHelper.showSetCalendarButton && (
-              <Button
-                className="tab-right-button ustc-ui-tabs ustc-ui-tabs--right-button-container"
-                icon="calendar-check"
-                onClick={() => openSetCalendarModalSequence()}
+        <section className="usa-section grid-container">
+          <SuccessNotification />
+          <ErrorNotification />
+          <WarningNotification />
+          <TrialSessionInformation />
+          {!formattedTrialSessionDetails.isCalendared && (
+            <Tabs
+              bind="trialSessionDetailsTab.caseList"
+              defaultActiveTab="EligibleCases"
+            >
+              {trialSessionDetailsHelper.showSetCalendarButton && (
+                <Button
+                  className="tab-right-button ustc-ui-tabs ustc-ui-tabs--right-button-container"
+                  icon="calendar-check"
+                  onClick={() => openSetCalendarModalSequence()}
+                >
+                  Set Calendar
+                </Button>
+              )}
+              <Tab
+                id="eligible-cases-tab"
+                tabName="EligibleCases"
+                title="Eligible Cases"
               >
-                Set Calendar
-              </Button>
-            )}
-            <Tab
-              id="eligible-cases-tab"
-              tabName="EligibleCases"
-              title="Eligible Cases"
+                <div id="eligible-cases-tab-content">
+                  <EligibleCases />
+                </div>
+              </Tab>
+            </Tabs>
+          )}
+          {showModal == 'SetCalendarModalDialog' && <SetCalendarModalDialog />}
+          {formattedTrialSessionDetails.showOpenCases && (
+            <Tabs
+              bind="trialSessionDetailsTab.calendaredCaseList"
+              defaultActiveTab="OpenCases"
             >
-              <div id="eligible-cases-tab-content">
-                <EligibleCases />
-              </div>
-            </Tab>
-          </Tabs>
-        )}
-        {showModal == 'SetCalendarModalDialog' && <SetCalendarModalDialog />}
-        {formattedTrialSessionDetails.showOpenCases && (
-          <Tabs
-            bind="trialSessionDetailsTab.calendaredCaseList"
-            defaultActiveTab="OpenCases"
-          >
-            <Tab id="open-cases-tab" tabName="OpenCases" title="Open Cases">
-              <div id="open-cases-tab-content">
-                <OpenCases />
-              </div>
-            </Tab>
-            <Tab
-              id="inactive-cases-tab"
-              tabName="InactiveCases"
-              title="Inactive Cases"
+              <Tab id="open-cases-tab" tabName="OpenCases" title="Open Cases">
+                <div id="open-cases-tab-content">
+                  <OpenCases />
+                </div>
+              </Tab>
+              <Tab
+                id="inactive-cases-tab"
+                tabName="InactiveCases"
+                title="Inactive Cases"
+              >
+                <div id="inactive-cases-tab-content">
+                  <InactiveCases />
+                </div>
+              </Tab>
+              <Tab id="all-cases-tab" tabName="AllCases" title="All Cases">
+                <div id="all-cases-tab-content">
+                  <AllCases />
+                </div>
+              </Tab>
+            </Tabs>
+          )}
+          {formattedTrialSessionDetails.showOnlyClosedCases && (
+            <Tabs
+              bind="trialSessionDetailsTab.calendaredCaseList"
+              defaultActiveTab="InactiveCases"
             >
-              <div id="inactive-cases-tab-content">
-                <InactiveCases />
-              </div>
-            </Tab>
-            <Tab id="all-cases-tab" tabName="AllCases" title="All Cases">
-              <div id="all-cases-tab-content">
-                <AllCases />
-              </div>
-            </Tab>
-          </Tabs>
-        )}
-        {formattedTrialSessionDetails.showOnlyClosedCases && (
-          <Tabs
-            bind="trialSessionDetailsTab.calendaredCaseList"
-            defaultActiveTab="InactiveCases"
-          >
-            <Tab id="inactive-cases-tab" tabName="InactiveCases" title="Cases">
-              <div id="inactive-cases-tab-content">
-                <InactiveCases />
-              </div>
-            </Tab>
-          </Tabs>
-        )}
-      </section>
-    </>
-  ),
+              <Tab
+                id="inactive-cases-tab"
+                tabName="InactiveCases"
+                title="Cases"
+              >
+                <div id="inactive-cases-tab-content">
+                  <InactiveCases />
+                </div>
+              </Tab>
+            </Tabs>
+          )}
+        </section>
+      </>
+    );
+  },
 );

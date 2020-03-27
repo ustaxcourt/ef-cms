@@ -377,6 +377,18 @@ export const setupTest = ({ useCases = {} } = {}) => {
     },
   );
 
+  presenter.state = mapValues(presenter.state, value => {
+    if (isFunction(value)) {
+      return withAppContextDecorator(value, applicationContext);
+    }
+    return value;
+  });
+
+  test = CerebralTest(presenter);
+  test.getSequence = name => async obj => await test.runSequence(name, obj);
+  test.closeSocket = stop;
+  test.applicationContext = applicationContext;
+
   const { window } = dom;
 
   global.window = {

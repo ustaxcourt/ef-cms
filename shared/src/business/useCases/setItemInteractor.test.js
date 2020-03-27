@@ -1,15 +1,19 @@
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { setItemInteractor } = require('./setItemInteractor');
 
 describe('setItemInteractor', () => {
-  let applicationContext;
-
   it('should be able to set an item', async () => {
-    applicationContext = {
-      getPersistenceGateway: () => ({
-        getItem: require('../../persistence/localStorage/getItem').getItem,
-        setItem: require('../../persistence/localStorage/setItem').setItem,
-      }),
-    };
+    applicationContext
+      .getPersistenceGateway()
+      .getItem.mockImplementation(
+        require('../../persistence/localStorage/getItem').getItem,
+      );
+    applicationContext
+      .getPersistenceGateway()
+      .setItem.mockImplementation(
+        require('../../persistence/localStorage/setItem').setItem,
+      );
+
     await setItemInteractor({
       applicationContext,
       key: 'abc',
@@ -19,6 +23,7 @@ describe('setItemInteractor', () => {
       applicationContext,
       key: 'abc',
     });
+
     expect(result).toEqual('123');
   });
 });

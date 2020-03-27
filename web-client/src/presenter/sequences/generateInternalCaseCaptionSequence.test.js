@@ -1,13 +1,15 @@
 import { CerebralTest } from 'cerebral/test';
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter';
 
-presenter.providers.applicationContext = applicationContext;
-
-let test = CerebralTest(presenter);
-
 describe('generateInternalCaseCaptionSequence', () => {
+  let test;
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
+    test = CerebralTest(presenter);
+  });
   it('should create and set a case caption for the case', async () => {
     test.setState('form', {
       contactPrimary: {

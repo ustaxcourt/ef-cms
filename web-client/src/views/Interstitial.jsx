@@ -8,7 +8,7 @@ export const Interstitial = connect(
   {
     alertHelper: state.alertHelper,
   },
-  ({ alertHelper }) => {
+  function Interstitial({ alertHelper }) {
     return (
       <>
         {alertHelper.showErrorAlert && (

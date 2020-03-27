@@ -2,6 +2,16 @@
 
 ENVIRONMENT=$1
 
+if [ -z "$ENVIRONMENT" ]; then
+  echo "Please specify the environment"
+  exit 1
+fi
+
+if [ -z "$EFCMS_DOMAIN" ]; then
+  echo "Please export the EFCMS_DOMAIN variable in your shell"
+  exit 1
+fi
+
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
 KEY="permissions-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock

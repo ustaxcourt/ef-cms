@@ -9,7 +9,11 @@ export const CaseSearchBox = connect(
     submitCaseSearchSequence: sequences.submitCaseSearchSequence,
     updateSearchTermSequence: sequences.updateSearchTermSequence,
   },
-  ({ searchTerm, submitCaseSearchSequence, updateSearchTermSequence }) => {
+  function CaseSearchBox({
+    searchTerm,
+    submitCaseSearchSequence,
+    updateSearchTermSequence,
+  }) {
     return (
       <>
         <form

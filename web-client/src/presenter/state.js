@@ -1,8 +1,3 @@
-import {
-  formattedCaseDetail,
-  formattedCases,
-} from './computeds/formattedCaseDetail';
-
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
@@ -38,6 +33,10 @@ import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
+import {
+  formattedCaseDetail,
+  formattedCases,
+} from './computeds/formattedCaseDetail';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
 import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
@@ -159,7 +158,6 @@ export const state = {
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloads: {}, // batch download of PDFs
   caseDetail: {},
-  caseDetailErrors: {}, // field level validation errors on update case screen TODO: move to validationErrors
   cases: [],
   cognitoLoginUrl: null,
   completeForm: {}, // TODO: replace with state.form
@@ -181,7 +179,6 @@ export const state = {
     },
   },
   docketRecordIndex: 0, // needs its own object because it's present when other forms are on screen
-  document: {},
   documentId: null,
   fieldOrder: [], // TODO: related to errors
   fileUploadProgress: {
@@ -197,7 +194,10 @@ export const state = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
-  modal: {},
+  modal: {
+    pdfPreviewModal: undefined,
+    showModal: undefined, // the name of the modal to display
+  },
   navigation: {},
   notifications: {},
   pdfForSigning: {
@@ -208,7 +208,6 @@ export const state = {
     signatureApplied: false,
     signatureData: null,
   },
-  pdfPreviewModal: {}, // how is this different than the modal?
   permissions: null,
   previewPdfFile: null,
   progressIndicator: {
@@ -232,7 +231,6 @@ export const state = {
   sessionMetadata: {
     docketRecordSort: [],
   },
-  showModal: '',
   showValidation: false,
   user: null,
   users: [],

@@ -1,10 +1,10 @@
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateUpdateCaseModalAction } from './validateUpdateCaseModalAction';
 
-presenter.providers.applicationContext = applicationContext;
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('validateUpdateCaseModalAction', () => {
   let successStub;

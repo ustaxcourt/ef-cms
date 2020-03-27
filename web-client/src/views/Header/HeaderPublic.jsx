@@ -39,7 +39,11 @@ export const HeaderPublic = connect(
     showBetaBar: state.header.showBetaBar,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
   },
-  ({ navigateToCognitoSequence, showBetaBar, toggleBetaBarSequence }) => {
+  function HeaderPublic({
+    navigateToCognitoSequence,
+    showBetaBar,
+    toggleBetaBarSequence,
+  }) {
     return (
       <div className="header-public">
         {showBetaBar && BetaBar(toggleBetaBarSequence)}

@@ -13,12 +13,12 @@ export const TrialSessionsTable = connect(
     trialSessionsHelper: state.trialSessionsHelper,
     users: state.users,
   },
-  ({
+  function TrialSessionsTable({
     formattedTrialSessions,
     trialSessionsHelper,
     trialSessionTypes,
     users,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         <div className="grid-row margin-bottom-3">

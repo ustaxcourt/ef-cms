@@ -10,7 +10,11 @@ export const FileUploadStatusModal = connect(
     helper: state.fileUploadStatusHelper,
     percentComplete: state.fileUploadProgress.percentComplete,
   },
-  ({ cancelUploadSequence, helper, percentComplete }) => {
+  function FileUploadStatusModal({
+    cancelUploadSequence,
+    helper,
+    percentComplete,
+  }) {
     return (
       <ModalDialog ariaLiveMode="polite" className="file-upload-status-modal">
         <div>
