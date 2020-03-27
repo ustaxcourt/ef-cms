@@ -21,7 +21,7 @@ export const CaseInformation = connect(
       sequences.validatePetitionFromPaperSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function CaseInformation({
     clearPreferredTrialCitySequence,
     constants,
     form,
@@ -31,7 +31,7 @@ export const CaseInformation = connect(
     updateOrderForDesignatingPlaceOfTrialSequence,
     validatePetitionFromPaperSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <div className="blue-container">
         <DateInput

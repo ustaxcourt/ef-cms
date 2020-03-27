@@ -1,4 +1,4 @@
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getShouldRedirectToSigningAction } from './getShouldRedirectToSigningAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';

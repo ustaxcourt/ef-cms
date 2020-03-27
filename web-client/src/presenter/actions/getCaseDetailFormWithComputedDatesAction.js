@@ -66,17 +66,13 @@ export const checkDate = (applicationContext, updatedDateString) => {
  * combines the dates in the form with the caseDetails
  *
  * @param {object} providers the cerebral providers
- * @param {Function} providers.get the cerebral get function for getting the state.caseDetail
- * @param {object} providers.props the cerebral props object
- * @returns {object} the combinedCaseDetailWithForm
+ * @param {Function} providers.get the cerebral get function for getting the state.form
+ * @returns {object} the formWithComputedDates
  */
-export const getFormCombinedWithCaseDetailAction = ({
+export const getCaseDetailFormWithComputedDatesAction = ({
   applicationContext,
   get,
-  props,
 }) => {
-  const caseDetail = { ...get(state.caseDetail) };
-  let { caseCaption } = props;
   const {
     irsDay,
     irsMonth,
@@ -97,10 +93,6 @@ export const getFormCombinedWithCaseDetailAction = ({
   const form = omit(
     {
       ...get(state.form),
-      irsNoticeDate: `${irsYear}-${irsMonth}-${irsDay}`,
-      petitionPaymentDate: `${paymentDateYear}-${paymentDateMonth}-${paymentDateDay}`,
-      petitionPaymentWaivedDate: `${paymentDateWaivedYear}-${paymentDateWaivedMonth}-${paymentDateWaivedDay}`,
-      receivedAt: `${receivedAtYear}-${receivedAtMonth}-${receivedAtDay}`,
     },
     [
       'irsYear',
@@ -119,28 +111,24 @@ export const getFormCombinedWithCaseDetailAction = ({
     ],
   );
 
-  form.irsNoticeDate = checkDate(applicationContext, form.irsNoticeDate);
+  form.irsNoticeDate = checkDate(
+    applicationContext,
+    `${irsYear}-${irsMonth}-${irsDay}`,
+  );
   form.petitionPaymentDate = checkDate(
     applicationContext,
-    form.petitionPaymentDate,
+    `${paymentDateYear}-${paymentDateMonth}-${paymentDateDay}`,
   );
   form.petitionPaymentWaivedDate = checkDate(
     applicationContext,
-    form.petitionPaymentWaivedDate,
+    `${paymentDateWaivedYear}-${paymentDateWaivedMonth}-${paymentDateWaivedDay}`,
   );
-  form.receivedAt = checkDate(applicationContext, form.receivedAt);
-
-  if (caseCaption && (caseCaption = caseCaption.trim())) {
-    caseDetail.caseCaption = caseCaption;
-  }
+  form.receivedAt = checkDate(
+    applicationContext,
+    `${receivedAtYear}-${receivedAtMonth}-${receivedAtDay}`,
+  );
 
   return {
-    combinedCaseDetailWithForm: {
-      ...omit(caseDetail, [
-        'contactPrimary.serviceIndicator',
-        'contactSecondary.serviceIndicator',
-      ]),
-      ...form,
-    },
+    formWithComputedDates: form,
   };
 };

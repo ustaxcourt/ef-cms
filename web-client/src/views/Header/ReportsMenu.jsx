@@ -15,7 +15,7 @@ export const ReportsMenu = connect(
     toggleMenuSequence: sequences.toggleMenuSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
   },
-  ({
+  function ReportsMenu({
     isExpanded,
     openCaseInventoryReportModalSequence,
     openTrialSessionPlanningModalSequence,
@@ -23,7 +23,7 @@ export const ReportsMenu = connect(
     resetHeaderAccordionsSequence,
     toggleMenuSequence,
     toggleMobileMenuSequence,
-  }) => {
+  }) {
     return (
       <>
         <button

@@ -6,7 +6,7 @@ export const BigHeader = connect(
   {
     text: props.text,
   },
-  ({ text }) => {
+  function BigHeader({ text }) {
     return (
       <div className="big-blue-header">
         <div className="grid-container">

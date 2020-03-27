@@ -23,7 +23,7 @@ export const SignStipDecision = connect(
     signatureApplied: state.pdfForSigning.signatureApplied,
     signatureData: state.pdfForSigning.signatureData,
   },
-  ({
+  function SignStipDecision({
     completeDocumentSigningSequence,
     currentPageNumber,
     docketNumber,
@@ -37,7 +37,7 @@ export const SignStipDecision = connect(
     setSignatureData,
     signatureApplied,
     signatureData,
-  }) => {
+  }) {
     const canvasRef = useRef(null);
     const signatureRef = useRef(null);
 

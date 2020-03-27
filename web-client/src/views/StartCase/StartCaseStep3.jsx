@@ -18,14 +18,14 @@ export const StartCaseStep3 = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
     validateStartCaseWizardSequence: sequences.validateStartCaseWizardSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function StartCaseStep3({
     completeStartCaseWizardStepSequence,
     constants,
     form,
@@ -36,7 +36,7 @@ export const StartCaseStep3 = connect(
     updateStartCaseFormValueSequence,
     validateStartCaseWizardSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <Focus>

@@ -17,7 +17,7 @@ export const Address = connect(
     validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
-  ({
+  function Address({
     data,
     type,
     updateFormValueAndSecondaryContactInfoSequence,
@@ -25,7 +25,7 @@ export const Address = connect(
     usStates,
     validateStartCaseSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         <FormGroup

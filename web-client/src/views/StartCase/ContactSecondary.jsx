@@ -21,7 +21,7 @@ export const ContactSecondary = connect(
       sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function ContactSecondary({
     bind,
     constants,
     contactsHelper,
@@ -35,7 +35,7 @@ export const ContactSecondary = connect(
     useSameAsPrimary,
     validationErrors,
     wrapperClassName,
-  }) => {
+  }) {
     return (
       <>
         {parentView === 'StartCase' ? (

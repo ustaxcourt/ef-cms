@@ -9,7 +9,10 @@ export const CompleteSelectDocumentModalDialog = connect(
     cancelSequence: sequences.dismissCreateMessageModalSequence,
     confirmSequence: sequences.completeDocumentSelectSequence,
   },
-  ({ cancelSequence, confirmSequence }) => {
+  function CompleteSelectDocumentModalDialog({
+    cancelSequence,
+    confirmSequence,
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"

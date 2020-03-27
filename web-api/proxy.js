@@ -8,7 +8,7 @@ const fs = require('fs');
 
 const PROXY_REACHABLE_TIMEOUT = 30 * 1000; // 30 seconds
 const PROXY_HOST = 'localhost';
-const PROXY_PORT = 5000;
+const PROXY_PORT = 3000;
 const LOG_LEVEL = 'info'; // ['debug', 'info', 'warn', 'error', 'silent']. Default: 'info'
 
 // do not include trailing slashes

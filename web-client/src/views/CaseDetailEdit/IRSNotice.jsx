@@ -7,26 +7,22 @@ import React from 'react';
 export const IRSNotice = connect(
   {
     CASE_TYPES: state.constants.CASE_TYPES,
-    caseDetail: state.caseDetail,
-    caseDetailErrors: state.caseDetailErrors,
+    caseDetailEditHelper: state.caseDetailEditHelper,
     form: state.form,
-    formattedCaseDetail: state.formattedCaseDetail,
     setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
-    updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateCaseDetailSequence: sequences.validateCaseDetailSequence,
+    validationErrors: state.validationErrors,
   },
-  ({
+  function IRSNotice({
     CASE_TYPES,
-    caseDetail,
-    caseDetailErrors,
+    caseDetailEditHelper,
     form,
-    formattedCaseDetail,
     setIrsNoticeFalseSequence,
-    updateCaseValueSequence,
     updateFormValueSequence,
     validateCaseDetailSequence,
-  }) => {
+    validationErrors,
+  }) {
     const renderIrsNoticeRadios = () => {
       return (
         <fieldset className="usa-fieldset" id="irs-verified-notice-radios">
@@ -36,14 +32,14 @@ export const IRSNotice = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby="irs-verified-notice-radios"
-              checked={caseDetail.hasVerifiedIrsNotice === true}
+              checked={form.hasVerifiedIrsNotice === true}
               className="usa-radio__input"
               id="hasVerifiedIrsNotice-yes"
               name="hasVerifiedIrsNotice"
               type="radio"
               value="Yes"
               onChange={e => {
-                updateCaseValueSequence({
+                updateFormValueSequence({
                   key: e.target.name,
                   value: true,
                 });
@@ -60,7 +56,7 @@ export const IRSNotice = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby="irs-verified-notice-radios"
-              checked={caseDetail.hasVerifiedIrsNotice === false}
+              checked={form.hasVerifiedIrsNotice === false}
               className="usa-radio__input"
               id="hasVerifiedIrsNotice-no"
               name="hasVerifiedIrsNotice"
@@ -85,7 +81,7 @@ export const IRSNotice = connect(
     const renderIrsNoticeDate = () => {
       return (
         <DateInput
-          errorText={caseDetailErrors.irsNoticeDate}
+          errorText={validationErrors.irsNoticeDate}
           id="date-of-notice"
           label="Date of notice"
           names={{
@@ -114,11 +110,11 @@ export const IRSNotice = connect(
           caseTypes={CASE_TYPES}
           legend="Type of case"
           validation="validateCaseDetailSequence"
-          value={caseDetail.caseType}
-          onChange="updateCaseValueSequence"
+          value={form.caseType}
+          onChange="updateFormValueSequence"
         />
 
-        {formattedCaseDetail.shouldShowIrsNoticeDate && renderIrsNoticeDate()}
+        {caseDetailEditHelper.shouldShowIrsNoticeDate && renderIrsNoticeDate()}
       </div>
     );
   },

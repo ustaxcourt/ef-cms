@@ -1,4 +1,7 @@
+const baseConfig = require('../jest.config');
+
 module.exports = {
+  ...baseConfig,
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.js', '!e2e/**/*.js', '!src/**/*.test.js'],
   coverageDirectory: './coverage-unit',

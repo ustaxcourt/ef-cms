@@ -40,3 +40,4 @@ web-client/reports
 web-client/tests_output/
 web-client/terraform/common/cloudfront-edge/index.js.zip
 proxy-request-times.json
+reports/test-reporter.xml

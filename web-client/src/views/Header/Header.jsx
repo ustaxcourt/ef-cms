@@ -148,7 +148,7 @@ export const Header = connect(
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     user: state.user,
   },
-  ({
+  function Header({
     headerHelper,
     isAccountMenuOpen,
     isReportsMenuOpen,
@@ -158,7 +158,7 @@ export const Header = connect(
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
     user,
-  }) => {
+  }) {
     const headerRef = useRef(null);
 
     useEffect(() => {

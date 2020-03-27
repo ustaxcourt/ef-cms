@@ -1,13 +1,13 @@
 import { CerebralTest } from 'cerebral/test';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter';
 
-let test;
-presenter.providers.applicationContext = applicationContext;
-
-test = CerebralTest(presenter);
-
 describe('updateForwardFormValueSequence', () => {
+  let test;
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+    test = CerebralTest(presenter);
+  });
   it('should set the non section items', async () => {
     await test.runSequence('updateForwardFormValueSequence', {
       form: 'form.abc',

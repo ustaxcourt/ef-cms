@@ -1,12 +1,12 @@
 import { state } from 'cerebral';
 
 /**
- * Used for changing which work queue (myself, section) and box (inbox, outbox).
+ * used to clear contact fields when the countryType changes
  *
  * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store object used for setting workQueueToDisplay
+ * @param {object} providers.store the cerebral store
  */
-export const countryTypeChangeAction = ({ store }) => {
+export const contactPrimaryCountryTypeChangeAction = ({ store }) => {
   [
     'address1',
     'address2',
@@ -17,7 +17,7 @@ export const countryTypeChangeAction = ({ store }) => {
     'state',
     'city',
   ].forEach(field => {
-    store.unset(state.caseDetail.contactPrimary[field]);
+    store.unset(state.form.contactPrimary[field]);
   });
 
   store.set(state.validationErrors.contactPrimary, {});

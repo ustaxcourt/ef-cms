@@ -11,7 +11,13 @@ export const ProcedureType = connect(
     validationErrors: state.validationErrors,
     value: props.value,
   },
-  ({ legend, onChange, PROCEDURE_TYPES, validationErrors, value }) => {
+  function ProcedureType({
+    legend,
+    onChange,
+    PROCEDURE_TYPES,
+    validationErrors,
+    value,
+  }) {
     return (
       <FormGroup errorText={validationErrors.procedureType}>
         <fieldset

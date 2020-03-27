@@ -10,9 +10,10 @@ import { state } from 'cerebral';
 export const setFormForCaseAction = async ({
   applicationContext,
   get,
+  props,
   store,
 }) => {
-  const caseDetail = get(state.caseDetail);
+  const caseDetail = props.caseDetail || get(state.caseDetail);
   const irsNoticeDate = applicationContext
     .getUtilities()
     .prepareDateFromString(caseDetail.irsNoticeDate, 'YYYY/MM/DD');

@@ -18,7 +18,7 @@ export const CaseSearchByName = connect(
     usStates: state.constants.US_STATES,
     validationErrors: state.validationErrors,
   },
-  ({
+  function CaseSearchByName({
     advancedSearchForm,
     advancedSearchHelper,
     clearCaseSearchByNameFormSequence,
@@ -27,7 +27,7 @@ export const CaseSearchByName = connect(
     updateAdvancedSearchFormValueSequence,
     usStates,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <div className="header-with-blue-background display-flex flex-justify">

@@ -34,14 +34,14 @@ export const CourtIssuedNonstandardForm = connect(
       sequences.validateCourtIssuedDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function CourtIssuedNonstandardForm({
     addCourtIssuedDocketEntryNonstandardHelper,
     form,
     judgeUsers,
     updateCourtIssuedDocketEntryFormValueSequence,
     validateCourtIssuedDocketEntrySequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         {addCourtIssuedDocketEntryNonstandardHelper.showDateFirst && (

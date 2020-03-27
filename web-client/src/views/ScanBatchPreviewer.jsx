@@ -40,11 +40,11 @@ export const ScanBatchPreviewer = connect(
     setDocumentForUploadSequence: sequences.setDocumentForUploadSequence,
     setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
     setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     startScanSequence: sequences.startScanSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function ScanBatchPreviewer({
     constants,
     documentTabs,
     documentType,
@@ -66,7 +66,7 @@ export const ScanBatchPreviewer = connect(
     startScanSequence,
     title,
     validationErrors,
-  }) => {
+  }) {
     useEffect(() => {
       scannerStartupSequence();
     }, []);

@@ -26,7 +26,7 @@ export const PrimaryDocumentForm = connect(
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function PrimaryDocumentForm({
     addDocketEntryHelper,
     caseDetail,
     form,
@@ -35,7 +35,7 @@ export const PrimaryDocumentForm = connect(
     updateScreenMetadataSequence,
     validateDocketEntrySequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <div className="blue-container docket-entry-form">
