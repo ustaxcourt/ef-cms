@@ -294,6 +294,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockResolvedValue('<div></div>'),
     generateStandingPretrialNoticeTemplate: jest.fn(),
+    generateStandingPretrialOrderTemplate: jest.fn(),
   };
 
   const mockGetPersistenceGatewayReturnValue = {
