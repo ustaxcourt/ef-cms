@@ -1316,14 +1316,27 @@ Case.prototype.setAsCalendared = function (trialSessionEntity) {
  * @param {string} arguments.userId id of the user account
  * @returns {boolean} if the case is associated
  */
-const isAssociatedUser = function ({ caseRaw, userId }) {
+const isAssociatedUser = function ({ caseRaw, user }) {
   const isIrsPractitioner =
     caseRaw.irsPractitioners &&
-    caseRaw.irsPractitioners.find(r => r.userId === userId);
+    caseRaw.irsPractitioners.find(r => r.userId === user.userId);
   const isPrivatePractitioner =
     caseRaw.privatePractitioners &&
-    caseRaw.privatePractitioners.find(p => p.userId === userId);
-  return isIrsPractitioner || isPrivatePractitioner;
+    caseRaw.privatePractitioners.find(p => p.userId === user.userId);
+
+  const isIrsSuperuser = user.role === User.ROLES.irsSuperuser;
+
+  const petitionDocument = (caseRaw.documents || []).find(
+    doc => doc.documentType === 'Petition',
+  );
+
+  const isPetitionServed = petitionDocument && !!petitionDocument.servedAt;
+
+  return (
+    isIrsPractitioner ||
+    isPrivatePractitioner ||
+    (isIrsSuperuser && isPetitionServed)
+  );
 };
 
 /**

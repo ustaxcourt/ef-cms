@@ -14,6 +14,7 @@ const { MOCK_USERS } = require('../../../test/mockUsers');
 const { prepareDateFromString } = require('../../utilities/DateHandler');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { TrialSession } = require('../trialSessions/TrialSession');
+const { User } = require('../User');
 const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
@@ -2732,26 +2733,31 @@ describe('Case entity', () => {
   });
 
   describe('isAssociatedUser', () => {
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        irsPractitioners: [{ userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' }],
-        privatePractitioners: [
-          { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
-        ],
-      },
-      {
-        applicationContext: {
-          getCurrentUser: () =>
-            MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+    let caseEntity;
+    beforeEach(() => {
+      caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          irsPractitioners: [
+            { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
+          ],
+          privatePractitioners: [
+            { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
+          ],
         },
-      },
-    );
+        {
+          applicationContext: {
+            getCurrentUser: () =>
+              MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+          },
+        },
+      );
+    });
 
     it('returns true if the user is an irsPractitioner on the case', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
-        userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72',
+        user: { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
       });
 
       expect(isAssociated).toBeTruthy();
@@ -2760,16 +2766,61 @@ describe('Case entity', () => {
     it('returns true if the user is a privatePractitioner on the case', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
-        userId: '271e5918-6461-4e67-bc38-274bc0aa0248',
+        user: { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
       });
 
       expect(isAssociated).toBeTruthy();
     });
 
-    it('returns false if the user is a not a privatePractitioner or irsPractitioner on the case', () => {
+    it('returns false if the user is an irs superuser but the petition document is not served', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
-        userId: '4b32e14b-f583-4631-ba44-1439a093d6d0',
+        user: {
+          role: User.ROLES.irsSuperuser,
+          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+        },
+      });
+
+      expect(isAssociated).toBeFalsy();
+    });
+
+    it('returns true if the user is an irs superuser and the petition document is served', () => {
+      caseEntity.documents = [
+        {
+          documentType: 'Petition',
+          servedAt: '2019-03-01T21:40:46.415Z',
+        },
+      ];
+
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        user: {
+          role: User.ROLES.irsSuperuser,
+          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+        },
+      });
+
+      expect(isAssociated).toBeTruthy();
+    });
+
+    it('returns false if the user is an irs superuser and the case does not have documents', () => {
+      caseEntity.documents = undefined;
+
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity,
+        user: {
+          role: User.ROLES.irsSuperuser,
+          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+        },
+      });
+
+      expect(isAssociated).toBeFalsy();
+    });
+
+    it('returns false if the user is a not a privatePractitioner or irsPractitioner on the case and is not an irs superuser', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        user: { userId: '4b32e14b-f583-4631-ba44-1439a093d6d0' },
       });
 
       expect(isAssociated).toBeFalsy();
