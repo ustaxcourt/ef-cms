@@ -280,6 +280,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteSectionOutboxRecord,
     deleteUserCaseNote: jest.fn(),
     deleteUserConnection: jest.fn(),
+    deleteUserFromCase: jest.fn(),
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
     getAllCaseDeadlines: jest.fn(),
