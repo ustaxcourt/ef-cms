@@ -279,6 +279,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     generateCaseConfirmationPdf: jest.fn(),
     generateCaseInventoryReportPdf: jest.fn(),
     getCaseInventoryReport: jest.fn(),
+    getConsolidatedCasesByCaseInteractor: jest.fn(),
     sendServedPartiesEmails: jest.fn(),
     updateCaseAutomaticBlock: jest
       .fn()
