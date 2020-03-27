@@ -1,9 +1,9 @@
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setDocketEntryFormForEditAction } from './setDocketEntryFormForEditAction';
 
-presenter.providers.applicationContext = applicationContext;
+presenter.providers.applicationContext = applicationContextForClient;
 
 const editState = {
   testKey: 'testValue',

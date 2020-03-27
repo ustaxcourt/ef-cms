@@ -1,8 +1,9 @@
-import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setSupportingDocumentScenarioAction } from './setSupportingDocumentScenarioAction';
 
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+const applicationContext = applicationContextForClient;
 presenter.providers.applicationContext = applicationContext;
 
 describe('setSupportingDocumentScenarioAction', () => {

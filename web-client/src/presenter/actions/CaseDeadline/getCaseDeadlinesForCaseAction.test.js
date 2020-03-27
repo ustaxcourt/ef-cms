@@ -1,4 +1,4 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseDeadlinesForCaseAction } from './getCaseDeadlinesForCaseAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
@@ -20,8 +20,7 @@ const mockCaseDeadlines = [
   },
 ];
 
-const applicationContext = applicationContextForClient;
-presenter.providers.applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
 applicationContext
   .getUseCases()

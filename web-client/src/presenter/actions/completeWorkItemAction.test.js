@@ -1,18 +1,16 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { completeWorkItemAction } from './completeWorkItemAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
-const completeWorkItemInteractorStub = jest.fn().mockReturnValue(null);
+presenter.providers.applicationContext = applicationContext;
 
-presenter.providers.applicationContext = {
-  getCurrentUser: () => ({
-    name: 'Docket Clerk',
-    userId: 'docketclerk',
-  }),
-  getUseCases: () => ({
-    completeWorkItemInteractor: completeWorkItemInteractorStub,
-  }),
-};
+const { completeWorkItemInteractor } = applicationContext.getUseCases();
+
+applicationContext.getCurrentUser.mockReturnValue({
+  name: 'Docket Clerk',
+  userId: 'docketclerk',
+});
 
 presenter.providers.path = {
   error() {},
@@ -54,7 +52,7 @@ describe('completeWorkItemInteractor', () => {
       },
     });
     expect(
-      completeWorkItemInteractorStub.mock.calls[0][0].completedMessage,
+      completeWorkItemInteractor.mock.calls[0][0].completedMessage,
     ).toBeUndefined();
   });
 
@@ -88,7 +86,7 @@ describe('completeWorkItemInteractor', () => {
       },
     });
     expect(
-      completeWorkItemInteractorStub.mock.calls[0][0].completedMessage,
+      completeWorkItemInteractor.mock.calls[0][0].completedMessage,
     ).toEqual('Completed');
   });
 });

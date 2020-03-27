@@ -526,7 +526,7 @@ const applicationContext = {
   getError: e => {
     return ErrorFactory.getError(e);
   },
-  getFileReader: () => FileReader,
+  getFileReaderInstance: () => new FileReader(),
   getHttpClient: () => axios,
   getPdfJs: async () => {
     const pdfjsLib = await import('pdfjs-dist');

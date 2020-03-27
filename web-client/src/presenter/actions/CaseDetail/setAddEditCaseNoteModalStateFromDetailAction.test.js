@@ -1,9 +1,9 @@
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setAddEditCaseNoteModalStateFromDetailAction } from './setAddEditCaseNoteModalStateFromDetailAction';
 
-presenter.providers.applicationContext = applicationContext;
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('setAddEditCaseNoteModalStateFromDetailAction', () => {
   it('should set the modal state from caseDetail', async () => {

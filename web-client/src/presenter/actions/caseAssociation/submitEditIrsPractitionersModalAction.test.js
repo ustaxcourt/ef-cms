@@ -4,14 +4,12 @@ import { runAction } from 'cerebral/test';
 import { submitEditIrsPractitionersModalAction } from './submitEditIrsPractitionersModalAction';
 
 describe('submitEditIrsPractitionersModalAction', () => {
-  let applicationContext;
   let successStub;
 
   beforeEach(() => {
     successStub = jest.fn();
-    applicationContext = applicationContextForClient;
 
-    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.applicationContext = applicationContextForClient;
     presenter.providers.path = {
       success: successStub,
     };
@@ -47,12 +45,12 @@ describe('submitEditIrsPractitionersModalAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().updateCounselOnCaseInteractor.mock.calls
-        .length,
+      applicationContextForClient.getUseCases().updateCounselOnCaseInteractor
+        .mock.calls.length,
     ).toEqual(2);
     expect(
-      applicationContext.getUseCases().updateCounselOnCaseInteractor.mock
-        .calls[0],
+      applicationContextForClient.getUseCases().updateCounselOnCaseInteractor
+        .mock.calls[0],
     ).toMatchObject(
       [
         {
@@ -70,12 +68,12 @@ describe('submitEditIrsPractitionersModalAction', () => {
       ],
     );
     expect(
-      applicationContext.getUseCases().deleteCounselFromCaseInteractor.mock
-        .calls.length,
+      applicationContextForClient.getUseCases().deleteCounselFromCaseInteractor
+        .mock.calls.length,
     ).toEqual(1);
     expect(
-      applicationContext.getUseCases().deleteCounselFromCaseInteractor.mock
-        .calls[0][0],
+      applicationContextForClient.getUseCases().deleteCounselFromCaseInteractor
+        .mock.calls[0][0],
     ).toMatchObject({
       caseId: '123',
       userIdToDelete: '2',
