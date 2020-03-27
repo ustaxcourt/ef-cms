@@ -248,6 +248,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   const mockStorageClientReturnValue = {
     deleteObject: jest.fn(),
     getObject: jest.fn(),
+    upload: jest.fn(),
   };
 
   const mockGetUtilitiesReturnValue = {
@@ -279,6 +280,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     appendPaperServiceAddressPageToPdf: jest.fn(),
     generateCaseConfirmationPdf: jest.fn(),
     generateCaseInventoryReportPdf: jest.fn(),
+    generatePaperServiceAddressPagePdf: jest.fn(),
     getCaseInventoryReport: jest.fn(),
     sendServedPartiesEmails: jest.fn(),
     updateCaseAutomaticBlock: jest
@@ -295,6 +297,11 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockResolvedValue('<div></div>'),
     generateStandingPretrialNoticeTemplate: jest.fn(),
     generateStandingPretrialOrderTemplate: jest.fn(),
+  };
+
+  const mockGetChromiumBrowserReturnValue = {
+    close: jest.fn(),
+    newPage: jest.fn(),
   };
 
   const mockGetPersistenceGatewayReturnValue = {
@@ -360,6 +367,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     putWorkItemInUsersOutbox: jest.fn(),
     saveDocumentFromLambda: jest.fn(),
     saveUserConnection: jest.fn(),
+    saveWorkItemForDocketClerkFilingExternalDocument: jest.fn(),
     saveWorkItemForNonPaper: jest
       .fn()
       .mockImplementation(saveWorkItemForNonPaper),
@@ -400,7 +408,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getChiefJudgeNameForSigning: jest
       .fn()
       .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
-    getChromiumBrowser: jest.fn(),
+    getChromiumBrowser: jest.fn().mockImplementation(() => {
+      return mockGetChromiumBrowserReturnValue;
+    }),
     getClerkOfCourtNameForSigning: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
     getConstants: jest.fn().mockReturnValue({
