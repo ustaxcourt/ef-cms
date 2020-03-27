@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   getTrialSessionDetailsInteractor,
 } = require('./getTrialSessionDetailsInteractor');
 const { omit } = require('lodash');
@@ -15,24 +18,23 @@ const MOCK_TRIAL_SESSION = {
   trialSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
 };
 
+let user;
+
 describe('Get trial session details', () => {
-  let applicationContext;
+  beforeEach(() => {
+    applicationContext.environment.stage = 'local';
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+  });
 
   it('throws error if user is unauthorized', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: 'unauthorizedRole',
-          userId: 'unauthorizedUser',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getTrialSessionById: () => {},
-        };
-      },
+    user = {
+      role: 'unauthorizedRole',
+      userId: 'unauthorizedUser',
     };
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue({});
+
     await expect(
       getTrialSessionDetailsInteractor({
         applicationContext,
@@ -42,79 +44,54 @@ describe('Get trial session details', () => {
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getTrialSessionById: () =>
-            Promise.resolve(omit(MOCK_TRIAL_SESSION, 'maxCases')),
-        };
-      },
+    user = {
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
     };
-    let error;
-    try {
-      await getTrialSessionDetailsInteractor({
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValue(
+        omit(MOCK_TRIAL_SESSION, 'maxCases'),
+      );
+
+    await expect(
+      getTrialSessionDetailsInteractor({
         applicationContext,
         trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain(
+      }),
+    ).rejects.toThrow(
       'The TrialSession entity was invalid ValidationError: "maxCases" is required',
     );
   });
 
   it('throws a not found error if persistence does not return any results', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getTrialSessionById: () => Promise.resolve(null),
-        };
-      },
+    user = {
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
     };
-    let error;
-    try {
-      await getTrialSessionDetailsInteractor({
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValue(null);
+
+    await expect(
+      getTrialSessionDetailsInteractor({
         applicationContext,
         trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain(
+      }),
+    ).rejects.toThrow(
       'Trial session 208a959f-9526-4db5-b262-e58c476a4604 was not found.',
     );
   });
 
   it('correctly returns data from persistence', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getTrialSessionById: () => Promise.resolve(MOCK_TRIAL_SESSION),
-        };
-      },
+    user = {
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
     };
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValue(MOCK_TRIAL_SESSION);
+
     const result = await getTrialSessionDetailsInteractor({
       applicationContext,
       trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
