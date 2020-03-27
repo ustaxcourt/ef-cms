@@ -12,6 +12,10 @@ const test = setupTest({
 test.draftOrders = [];
 
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   loginAs(test, 'petitioner');
   petitionerCreatesNewCase(test, fakeFile);
 

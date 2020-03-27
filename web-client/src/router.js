@@ -577,9 +577,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Document QC');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: false,
-          queue: null,
           box: null,
+          queue: null,
+          workQueueIsInternal: false,
         });
       }),
     );
@@ -589,9 +589,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Document QC');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: false,
-          queue: 'my',
           box: null,
+          queue: 'my',
+          workQueueIsInternal: false,
         });
       }),
     );
@@ -601,9 +601,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Document QC');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: false,
-          queue: 'my',
           box: 'inbox',
+          queue: 'my',
+          workQueueIsInternal: false,
         });
       }),
     );
@@ -613,9 +613,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Document QC');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: false,
-          queue: 'my',
           box: 'outbox',
+          queue: 'my',
+          workQueueIsInternal: false,
         });
       }),
     );
@@ -625,9 +625,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Document QC');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: false,
-          queue: 'my',
           box: 'inProgress',
+          queue: 'my',
+          workQueueIsInternal: false,
         });
       }),
     );
@@ -637,9 +637,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Document QC');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: false,
-          queue: 'section',
           box: null,
+          queue: 'section',
+          workQueueIsInternal: false,
         });
       }),
     );
@@ -649,9 +649,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Document QC');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: false,
-          queue: 'section',
           box: 'inbox',
+          queue: 'section',
+          workQueueIsInternal: false,
         });
       }),
     );
@@ -661,9 +661,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Document QC');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: false,
-          queue: 'section',
           box: 'inProgress',
+          queue: 'section',
+          workQueueIsInternal: false,
         });
       }),
     );
@@ -673,9 +673,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Document QC');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: false,
-          queue: 'section',
           box: 'outbox',
+          queue: 'section',
+          workQueueIsInternal: false,
         });
       }),
     );
@@ -838,9 +838,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Messages');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: true,
-          queue: null,
           box: null,
+          queue: null,
+          workQueueIsInternal: true,
         });
       }),
     );
@@ -850,9 +850,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Messages');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: true,
-          queue: 'my',
           box: null,
+          queue: 'my',
+          workQueueIsInternal: true,
         });
       }),
     );
@@ -862,9 +862,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Messages');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: true,
-          queue: 'section',
           box: null,
+          queue: 'section',
+          workQueueIsInternal: true,
         });
       }),
     );
@@ -874,9 +874,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Messages');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: true,
-          queue: 'my',
           box: 'inbox',
+          queue: 'my',
+          workQueueIsInternal: true,
         });
       }),
     );
@@ -886,9 +886,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Messages');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: true,
-          queue: 'my',
           box: 'outbox',
+          queue: 'my',
+          workQueueIsInternal: true,
         });
       }),
     );
@@ -898,9 +898,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Messages');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: true,
-          queue: 'section',
           box: 'inbox',
+          queue: 'section',
+          workQueueIsInternal: true,
         });
       }),
     );
@@ -910,9 +910,9 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Messages');
         return app.getSequence('gotoMessagesSequence')({
-          workQueueIsInternal: true,
-          queue: 'section',
           box: 'outbox',
+          queue: 'section',
+          workQueueIsInternal: true,
         });
       }),
     );
