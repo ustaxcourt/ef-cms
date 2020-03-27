@@ -1,56 +1,51 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import { validateNoteAction } from './validateNoteAction';
+import { validatePetitionFromPaperAction } from './validatePetitionFromPaperAction';
 
-describe('validateNote', () => {
+describe('validatePetitionFromPaperAction', () => {
   let successStub;
   let errorStub;
-
-  let mockNote;
 
   beforeEach(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
-    mockNote = {
-      notes: 'hello notes',
-    };
-
-    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
     };
+    presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should call the success path when no errors are found', async () => {
+  it('runs validation on the petition from paper with a successful result', async () => {
     applicationContext
       .getUseCases()
-      .validateNoteInteractor.mockReturnValue(null);
+      .validatePetitionFromPaperInteractor.mockReturnValue(null);
 
-    await runAction(validateNoteAction, {
+    await runAction(validatePetitionFromPaperAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockNote,
+        form: {},
       },
     });
 
     expect(successStub.mock.calls.length).toEqual(1);
   });
 
-  it('should call the error path when any errors are found', async () => {
+  it('runs validation on the petition from paper with an invalid result', async () => {
     applicationContext
       .getUseCases()
-      .validateNoteInteractor.mockReturnValue('error');
-    await runAction(validateNoteAction, {
+      .validatePetitionFromPaperInteractor.mockReturnValue('validation errors');
+
+    await runAction(validatePetitionFromPaperAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockNote,
+        form: {},
       },
     });
 
