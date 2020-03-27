@@ -100,6 +100,9 @@ const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
 
+import path from 'path';
+const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
+
 const webApiApplicationContext = createWebApiApplicationContext({});
 
 const createTestApplicationContext = ({ user } = {}) => {
@@ -194,9 +197,11 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeConsolidatedCasesInteractor: jest.fn(),
     removeItemInteractor: jest.fn(),
     runTrialSessionPlanningReportInteractor: jest.fn(),
+    saveCaseDetailInternalEditInteractor: jest.fn(),
     saveCaseNoteInteractor: jest.fn(),
     saveIntermediateDocketEntryInteractor: jest.fn(),
     serveCaseToIrsInteractor: jest.fn(),
+    serveCourtIssuedDocumentInteractor: jest.fn(),
     setItemInteractor: jest.fn(),
     setNoticesForCalendaredTrialSessionInteractor: jest.fn(),
     setTrialSessionAsSwingSessionInteractor: jest.fn(),
@@ -207,6 +212,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     submitPendingCaseAssociationRequestInteractor: jest.fn(),
     updateCase: jest.fn(),
     updateCaseContextInteractor: jest.fn(),
+    updateCaseTrialSortTagsInteractor: jest.fn(),
     updateCounselOnCaseInteractor: jest.fn(),
     updateCourtIssuedDocketEntryInteractor: jest.fn(),
     updateDocketEntryInteractor: jest.fn(),
@@ -236,6 +242,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   const mockGetScannerReturnValue = {
     getSourceNameByIndex: jest.fn().mockReturnValue('scanner'),
     getSources: jest.fn(),
+    loadDynamsoft: jest.fn().mockReturnValue('dynam-scanner-injection'),
     setSourceByIndex: jest.fn(),
     setSourceByName: jest.fn().mockReturnValue(null),
     startScanSession: jest.fn().mockReturnValue({
@@ -254,7 +261,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.createISODateString),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
-    formatDateString: jest.fn().mockReturnValue(DateHandler.formatDateString),
+    formatDateString: jest
+      .fn()
+      .mockImplementation(DateHandler.formatDateString),
     formatDocument: jest.fn().mockImplementation(v => v),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     getDocumentTypeForAddressChange: jest.fn(),
@@ -389,7 +398,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseCaptionNames: jest.fn().mockImplementation(Case.getCaseCaptionNames),
     getChiefJudgeNameForSigning: jest
       .fn()
-      .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
+      .mockImplementation(
+        webClientApplicationContext.getChiefJudgeNameForSigning,
+      ),
     getChromiumBrowser: jest.fn(),
     getClerkOfCourtNameForSigning: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
@@ -440,6 +451,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
     getPug: jest.fn(),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
+    getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getStorageClient: jest.fn().mockImplementation(() => {
       return mockStorageClientReturnValue;
     }),
