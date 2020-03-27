@@ -1,12 +1,12 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import { validateUserContactAction } from './validateUserContactAction';
+import { validateSelectDocumentTypeAction } from './validateSelectDocumentTypeAction';
 
 const errorMock = jest.fn();
 const successMock = jest.fn();
 
-describe('validateUserContactAction', () => {
+describe('validateSelectDocumentTypeAction', () => {
   beforeEach(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
@@ -15,11 +15,13 @@ describe('validateUserContactAction', () => {
     };
   });
 
-  it('should return the error path if user is invalid', async () => {
+  it('should return the error path if document is invalid', async () => {
     applicationContext
       .getUseCases()
-      .validateUserContactInteractor.mockReturnValue('something went wrong');
-    runAction(validateUserContactAction, {
+      .validateExternalDocumentInteractor.mockReturnValue(
+        'something went wrong',
+      );
+    runAction(validateSelectDocumentTypeAction, {
       modules: {
         presenter,
       },
@@ -28,11 +30,11 @@ describe('validateUserContactAction', () => {
     expect(errorMock).toHaveBeenCalled();
   });
 
-  it('should return the success path if user is valid', async () => {
+  it('should return the success path if document is valid', async () => {
     applicationContext
       .getUseCases()
-      .validateUserContactInteractor.mockReturnValue(undefined);
-    runAction(validateUserContactAction, {
+      .validateExternalDocumentInteractor.mockReturnValue(undefined);
+    runAction(validateSelectDocumentTypeAction, {
       modules: {
         presenter,
       },

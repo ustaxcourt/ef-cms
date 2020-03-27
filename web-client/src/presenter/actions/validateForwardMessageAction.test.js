@@ -1,23 +1,15 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import { validateInitialWorkItemMessageAction } from './validateInitialWorkItemMessageAction';
+import { validateForwardMessageAction } from './validateForwardMessageAction';
 
 describe('validateInitialWorkItemMessage', () => {
   let successStub;
   let errorStub;
 
-  let mockMessage;
-
   beforeEach(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
-
-    mockMessage = {
-      message: 'hello world',
-      recipientId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      section: 'docket',
-    };
 
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
@@ -29,13 +21,13 @@ describe('validateInitialWorkItemMessage', () => {
   it('should call the success path when no errors are found', async () => {
     applicationContext
       .getUseCases()
-      .validateInitialWorkItemMessageInteractor.mockReturnValue(null);
-    await runAction(validateInitialWorkItemMessageAction, {
+      .validateForwardMessageInteractor.mockReturnValue(null);
+    await runAction(validateForwardMessageAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockMessage,
+        form: {},
       },
     });
 
@@ -45,13 +37,13 @@ describe('validateInitialWorkItemMessage', () => {
   it('should call the error path when any errors are found', async () => {
     applicationContext
       .getUseCases()
-      .validateInitialWorkItemMessageInteractor.mockReturnValue('error');
-    await runAction(validateInitialWorkItemMessageAction, {
+      .validateForwardMessageInteractor.mockReturnValue('error');
+    await runAction(validateForwardMessageAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockMessage,
+        form: {},
       },
     });
 

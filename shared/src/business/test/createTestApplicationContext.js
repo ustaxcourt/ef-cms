@@ -221,15 +221,27 @@ const createTestApplicationContext = ({ user } = {}) => {
     validateAddIrsPractitionerInteractor: jest.fn(),
     validateAddPrivatePractitionerInteractor: jest.fn(),
     validateCaseAdvancedSearchInteractor: jest.fn(),
+    validateCaseAssociationRequestInteractor: jest.fn(),
     validateCaseDeadlineInteractor: jest.fn(),
+    validateCaseDetailInteractor: jest.fn(),
     validateCourtIssuedDocketEntryInteractor: jest.fn(),
     validateDocketEntryInteractor: jest.fn(),
     validateDocketRecordInteractor: jest.fn(),
     validateEditPrivatePractitionerInteractor: jest.fn(),
     validateExternalDocumentInformationInteractor: jest.fn(),
+    validateExternalDocumentInteractor: jest.fn(),
+    validateForwardMessageInteractor: jest.fn(),
+    validateInitialWorkItemMessageInteractor: jest.fn(),
+    validateNoteInteractor: jest.fn(),
     validatePdfInteractor: jest.fn(),
+    validatePetitionFromPaperInteractor: jest.fn(),
+    validatePetitionInteractor: jest.fn(),
+    validatePetitionerInformationFormInteractor: jest.fn(),
+    validatePrimaryContactInteractor: jest.fn(),
+    validateSecondaryContactInteractor: jest.fn(),
     validateStartCaseWizardInteractor: jest.fn(),
     validateTrialSessionInteractor: jest.fn(),
+    validateUserContactInteractor: jest.fn(),
     verifyPendingCaseForUserInteractor: jest.fn(),
     virusScanPdfInteractor: jest.fn(),
   };
@@ -253,6 +265,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
+    createISODateStringFromObject: jest
+      .fn()
+      .mockImplementation(DateHandler.createISODateStringFromObject),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
     formatDateString: jest.fn().mockReturnValue(DateHandler.formatDateString),
@@ -265,6 +280,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
+    isValidDateString: jest
+      .fn()
+      .mockImplementation(DateHandler.isValidDateString),
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
