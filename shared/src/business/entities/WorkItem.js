@@ -55,8 +55,14 @@ WorkItem.validationName = 'WorkItem';
 joiValidationDecorator(
   WorkItem,
   joi.object().keys({
-    assigneeId: joi.string().allow(null).optional(),
-    assigneeName: joi.string().allow(null).optional(), // should be a Message entity at some point
+    assigneeId: joi
+      .string()
+      .allow(null)
+      .optional(),
+    assigneeName: joi
+      .string()
+      .allow(null)
+      .optional(), // should be a Message entity at some point
     associatedJudge: joi.string().required(),
     caseId: joi
       .string()
@@ -67,8 +73,14 @@ joiValidationDecorator(
     caseIsInProgress: joi.boolean().optional(),
     caseStatus: joi.string().optional(),
     caseTitle: joi.string().optional(),
-    completedAt: joi.date().iso().optional(),
-    completedBy: joi.string().optional().allow(null),
+    completedAt: joi
+      .date()
+      .iso()
+      .optional(),
+    completedBy: joi
+      .string()
+      .optional()
+      .allow(null),
     completedByUserId: joi
       .string()
       .uuid({
@@ -76,10 +88,19 @@ joiValidationDecorator(
       })
       .optional()
       .allow(null),
-    completedMessage: joi.string().optional().allow(null),
-    createdAt: joi.date().iso().optional(),
+    completedMessage: joi
+      .string()
+      .optional()
+      .allow(null),
+    createdAt: joi
+      .date()
+      .iso()
+      .optional(),
     docketNumber: joi.string().required(),
-    docketNumberSuffix: joi.string().allow(null).optional(),
+    docketNumberSuffix: joi
+      .string()
+      .allow(null)
+      .optional(),
     document: joi.object().required(),
     hideFromPendingMessages: joi.boolean().optional(),
     highPriority: joi.boolean().optional(),
@@ -87,7 +108,10 @@ joiValidationDecorator(
     isInitializeCase: joi.boolean().optional(),
     isQC: joi.boolean().required(),
     isRead: joi.boolean().optional(),
-    messages: joi.array().items(joi.object()).required(),
+    messages: joi
+      .array()
+      .items(joi.object())
+      .required(),
     section: joi.string().required(),
     sentBy: joi.string().required(),
     sentBySection: joi.string().optional(),
@@ -97,8 +121,15 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
-    trialDate: joi.date().iso().optional().allow(null),
-    updatedAt: joi.date().iso().required(),
+    trialDate: joi
+      .date()
+      .iso()
+      .optional()
+      .allow(null),
+    updatedAt: joi
+      .date()
+      .iso()
+      .required(),
     workItemId: joi
       .string()
       .uuid({
@@ -106,7 +137,7 @@ joiValidationDecorator(
       })
       .required(),
   }),
-  function () {
+  function() {
     return Message.validateCollection(this.messages);
   },
 );
@@ -116,12 +147,12 @@ joiValidationDecorator(
  * @param {Message} message the message to add to the work item
  * @returns {WorkItem} the updated work item
  */
-WorkItem.prototype.addMessage = function (message) {
+WorkItem.prototype.addMessage = function(message) {
   this.messages = [...this.messages, message];
   return this;
 };
 
-WorkItem.prototype.setAsInternal = function () {
+WorkItem.prototype.setAsInternal = function() {
   this.isQC = false;
   return this;
 };
@@ -131,7 +162,7 @@ WorkItem.prototype.setAsInternal = function () {
  *
  * @returns {Message} the latest message entity by date
  */
-WorkItem.prototype.getLatestMessageEntity = function () {
+WorkItem.prototype.getLatestMessageEntity = function() {
   return orderBy(this.messages, 'createdAt', 'desc')[0];
 };
 
@@ -147,7 +178,7 @@ WorkItem.prototype.getLatestMessageEntity = function () {
  * @param {string} props.sentByUserRole the role of the user who sent the work item
  * @returns {WorkItem} the updated work item
  */
-WorkItem.prototype.assignToUser = function ({
+WorkItem.prototype.assignToUser = function({
   assigneeId,
   assigneeName,
   section,
@@ -166,7 +197,7 @@ WorkItem.prototype.assignToUser = function ({
   return this;
 };
 
-WorkItem.prototype.setStatus = function (status) {
+WorkItem.prototype.setStatus = function(status) {
   this.caseStatus = status;
 };
 
@@ -177,7 +208,7 @@ WorkItem.prototype.setStatus = function (status) {
  * @param {object} props.user the user who triggered the complete action
  * @returns {WorkItem} the updated work item
  */
-WorkItem.prototype.setAsCompleted = function ({ message, user }) {
+WorkItem.prototype.setAsCompleted = function({ message, user }) {
   this.completedAt = createISODateString();
   this.completedBy = user.name;
   this.completedByUserId = user.userId;

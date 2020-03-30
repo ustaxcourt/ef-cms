@@ -30,17 +30,33 @@ joiValidationDecorator(
   Attorney,
   joi.object().keys({
     ...userValidation,
-    additionalPhone: joi.string().optional().allow(null),
-    admissionsDate: joi.date().iso().max('now').required(),
-    alternateEmail: joi.string().optional().allow(null),
+    additionalPhone: joi
+      .string()
+      .optional()
+      .allow(null),
+    admissionsDate: joi
+      .date()
+      .iso()
+      .max('now')
+      .required(),
+    alternateEmail: joi
+      .string()
+      .optional()
+      .allow(null),
     birthYear: joi.number().required(),
     employer: joi
       .string()
       .valid(...EMPLOYER_OPTIONS)
       .required(),
-    firmName: joi.string().optional().allow(null),
+    firmName: joi
+      .string()
+      .optional()
+      .allow(null),
     isAdmitted: joi.boolean().required(),
-    originalBarState: joi.string().optional().allow(null),
+    originalBarState: joi
+      .string()
+      .optional()
+      .allow(null),
     practitionerType: joi
       .string()
       .valid(...PRACTITIONER_TYPE_OPTIONS)

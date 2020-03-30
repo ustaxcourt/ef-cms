@@ -53,17 +53,29 @@ const userDecorator = (obj, rawObj) => {
 };
 
 const userValidation = {
-  barNumber: joi.string().optional().allow(null),
+  barNumber: joi
+    .string()
+    .optional()
+    .allow(null),
   contact: joi
     .object()
     .keys({
       address1: joi.string().required(),
-      address2: joi.string().optional().allow(null),
-      address3: joi.string().optional().allow(null),
+      address2: joi
+        .string()
+        .optional()
+        .allow(null),
+      address3: joi
+        .string()
+        .optional()
+        .allow(null),
       city: joi.string().required(),
       country: joi.when('countryType', {
         is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
-        otherwise: joi.string().optional().allow(null),
+        otherwise: joi
+          .string()
+          .optional()
+          .allow(null),
         then: joi.string().required(),
       }),
       countryType: joi
@@ -85,7 +97,10 @@ const userValidation = {
       state: joi.when('countryType', {
         is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
         otherwise: joi.string().required(),
-        then: joi.string().optional().allow(null),
+        then: joi
+          .string()
+          .optional()
+          .allow(null),
       }),
     })
     .optional(),
@@ -146,7 +161,7 @@ joiValidationDecorator(
   VALIDATION_ERROR_MESSAGES,
 );
 
-User.isExternalUser = function (role) {
+User.isExternalUser = function(role) {
   const externalRoles = [
     User.ROLES.petitioner,
     User.ROLES.privatePractitioner,
@@ -156,7 +171,7 @@ User.isExternalUser = function (role) {
   return externalRoles.includes(role);
 };
 
-User.isInternalUser = function (role) {
+User.isInternalUser = function(role) {
   const internalRoles = [
     User.ROLES.adc,
     User.ROLES.admissionsClerk,

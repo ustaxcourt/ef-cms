@@ -100,7 +100,7 @@ function ExternalDocumentInformationFactory() {}
  * @returns {Function} the created entity
  */
 ExternalDocumentInformationFactory.get = documentMetadata => {
-  let entityConstructor = function (rawProps) {
+  let entityConstructor = function(rawProps) {
     this.attachments = rawProps.attachments;
     this.casesParties = rawProps.casesParties;
     this.certificateOfService = rawProps.certificateOfService;
@@ -177,7 +177,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   };
 
   let schemaOptionalItems = {
-    certificateOfServiceDate: joi.date().iso().max('now'),
+    certificateOfServiceDate: joi
+      .date()
+      .iso()
+      .max('now'),
     hasSecondarySupportingDocuments: joi.boolean(),
     objections: joi.string(),
     partyIrsPractitioner: joi.boolean(),
@@ -191,7 +194,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       .max(MAX_FILE_SIZE_BYTES)
       .integer(),
     secondarySupportingDocuments: joi.array().optional(),
-    selectedCases: joi.array().items(joi.string()).optional(),
+    selectedCases: joi
+      .array()
+      .items(joi.string())
+      .optional(),
     supportingDocuments: joi.array().optional(),
   };
 
@@ -272,7 +278,13 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
           sortBy(casesWithAPartySelected),
         )
       ) {
-        addProperty('partyPrimary', joi.boolean().invalid(false).required());
+        addProperty(
+          'partyPrimary',
+          joi
+            .boolean()
+            .invalid(false)
+            .required(),
+        );
       }
     }
   } else {
@@ -281,7 +293,13 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       documentMetadata.partySecondary !== true &&
       documentMetadata.partyIrsPractitioner !== true
     ) {
-      addProperty('partyPrimary', joi.boolean().invalid(false).required());
+      addProperty(
+        'partyPrimary',
+        joi
+          .boolean()
+          .invalid(false)
+          .required(),
+      );
     }
   }
 
