@@ -37,6 +37,13 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   } else if (user.role === USER_ROLES.petitioner) {
     const caseUserId = get(state.caseDetail.userId);
     isAssociated = caseUserId === user.userId;
+  } else if (user.role === USER_ROLES.irsSuperuser) {
+    const documents = get(state.caseDetail.documents);
+
+    const isPetitionServed = !!documents.find(
+      doc => doc.documentType === 'Petition',
+    ).servedAt;
+    isAssociated = isPetitionServed;
   }
 
   return { isAssociated, pendingAssociation };
