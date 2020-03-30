@@ -327,7 +327,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     associateUserWithCase: jest.fn(),
     associateUserWithCasePending: jest.fn(),
     createAttorneyUser: jest.fn(),
-    createCase: jest.fn(),
+    createCase: jest.fn().mockImplementation(createCase),
     createCaseDeadline: jest.fn(),
     createCaseTrialSortMappingRecords: jest.fn(),
     createSectionInboxRecord,
