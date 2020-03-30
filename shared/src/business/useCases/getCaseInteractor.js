@@ -60,7 +60,7 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
       ) ||
       isAssociatedUser({
         caseRaw: caseRecord,
-        userId: applicationContext.getCurrentUser().userId,
+        user: applicationContext.getCurrentUser(),
       });
     if (isAuthorizedUser) {
       caseDetail = new Case(caseRecord, {
