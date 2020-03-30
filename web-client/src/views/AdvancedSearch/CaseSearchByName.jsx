@@ -1,7 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -32,18 +31,6 @@ export const CaseSearchByName = connect(
       <>
         <div className="header-with-blue-background display-flex flex-justify">
           <h3>Search by Name</h3>
-          <NonMobile>
-            <Button
-              link
-              className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-              icon={['fas', 'times-circle']}
-              onClick={() => {
-                clearCaseSearchByNameFormSequence();
-              }}
-            >
-              Clear Search
-            </Button>
-          </NonMobile>
         </div>
         <div className="blue-container advanced-search__form-container">
           <form
@@ -196,7 +183,7 @@ export const CaseSearchByName = connect(
             </div>
 
             <div className="grid-row">
-              <div className="tablet:grid-col-5">
+              <div className="tablet:grid-col-6">
                 <Button
                   className="advanced-search__button"
                   id="advanced-search-button"
@@ -204,25 +191,17 @@ export const CaseSearchByName = connect(
                 >
                   Search
                 </Button>
+                <Button
+                  link
+                  className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                  onClick={() => {
+                    clearCaseSearchByNameFormSequence();
+                  }}
+                >
+                  Clear Search
+                </Button>
               </div>
             </div>
-
-            <Mobile>
-              <div className="grid-row">
-                <div className="tablet:grid-col-5 text-center">
-                  <Button
-                    link
-                    className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-                    icon={['fas', 'times-circle']}
-                    onClick={() => {
-                      clearCaseSearchByNameFormSequence();
-                    }}
-                  >
-                    Clear Search
-                  </Button>
-                </div>
-              </div>
-            </Mobile>
           </form>
         </div>
       </>

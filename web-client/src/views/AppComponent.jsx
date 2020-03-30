@@ -17,6 +17,7 @@ import { CreateAttorneyUser } from './CreateAttorneyUser';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
+import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
 import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
@@ -86,6 +87,7 @@ const pages = {
   CreateOrder,
   DashboardChambers,
   DashboardInactive,
+  DashboardIrsSuperuser,
   DashboardJudge,
   DashboardPetitioner,
   DashboardPractitioner,
