@@ -20,7 +20,7 @@ function CaseExternal(rawCase) {
   CaseExternal.prototype.initContacts.call(this, rawCase);
 }
 
-CaseExternal.prototype.initContacts = function(rawCase) {
+CaseExternal.prototype.initContacts = function (rawCase) {
   const contacts = ContactFactory.createContacts({
     contactInfo: {
       primary: rawCase.contactPrimary,
@@ -32,7 +32,7 @@ CaseExternal.prototype.initContacts = function(rawCase) {
   this.contactSecondary = contacts.secondary;
 };
 
-CaseExternal.prototype.init = function(rawCase) {
+CaseExternal.prototype.init = function (rawCase) {
   this.businessType = rawCase.businessType;
   this.caseType = rawCase.caseType;
   this.contactPrimary = rawCase.contactPrimary;
@@ -54,10 +54,7 @@ CaseExternal.prototype.init = function(rawCase) {
 CaseExternal.VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
 
 CaseExternal.commonRequirements = {
-  businessType: joi
-    .string()
-    .optional()
-    .allow(null),
+  businessType: joi.string().optional().allow(null),
   caseType: joi.when('hasIrsNotice', {
     is: joi.exist(),
     otherwise: joi.optional().allow(null),
@@ -76,24 +73,14 @@ CaseExternal.commonRequirements = {
   ownershipDisclosureFileSize: joi.when('ownershipDisclosureFile', {
     is: joi.exist(),
     otherwise: joi.optional().allow(null),
-    then: joi
-      .number()
-      .required()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+    then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
   }),
   partyType: joi.string().required(),
   petitionFile: joi.object().required(),
   petitionFileSize: joi.when('petitionFile', {
     is: joi.exist(),
     otherwise: joi.optional().allow(null),
-    then: joi
-      .number()
-      .required()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+    then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
   }),
   preferredTrialCity: joi.string().required(),
   procedureType: joi.string().required(),
@@ -101,19 +88,14 @@ CaseExternal.commonRequirements = {
   stinFileSize: joi.when('stinFile', {
     is: joi.exist(),
     otherwise: joi.optional().allow(null),
-    then: joi
-      .number()
-      .required()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+    then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
   }),
 };
 
 joiValidationDecorator(
   CaseExternal,
   joi.object().keys(CaseExternal.commonRequirements),
-  function() {
+  function () {
     return !this.getFormattedValidationErrors();
   },
   CaseExternal.VALIDATION_ERROR_MESSAGES,
