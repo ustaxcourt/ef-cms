@@ -1,27 +1,21 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   getCaseInventoryReportInteractor,
 } = require('./getCaseInventoryReportInteractor');
 const { User } = require('../../entities/User');
 
 describe('getCaseInventoryReportInteractor', () => {
-  let applicationContext;
   let user;
-  let getCaseInventoryReportMock = jest.fn();
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
     user = {
       role: User.ROLES.docketClerk,
       userId: '9754a349-1013-44fa-9e61-d39aba2637e0',
     };
 
-    applicationContext = {
-      getCurrentUser: () => user,
-      getUseCaseHelpers: () => ({
-        getCaseInventoryReport: getCaseInventoryReportMock,
-      }),
-    };
+    applicationContext.getCurrentUser.mockImplementation(() => user);
   });
 
   it('throws an error if user is not authorized for case inventory report', async () => {
@@ -54,7 +48,10 @@ describe('getCaseInventoryReportInteractor', () => {
       docketNumberSuffix: 'L',
       status: 'New',
     };
-    getCaseInventoryReportMock = jest.fn().mockReturnValue([mockCaseResult]);
+
+    applicationContext
+      .getUseCaseHelpers()
+      .getCaseInventoryReport.mockReturnValue([mockCaseResult]);
 
     const result = await getCaseInventoryReportInteractor({
       applicationContext,
@@ -62,7 +59,9 @@ describe('getCaseInventoryReportInteractor', () => {
       status: 'New',
     });
 
-    expect(getCaseInventoryReportMock).toBeCalledWith({
+    expect(
+      applicationContext.getUseCaseHelpers().getCaseInventoryReport,
+    ).toBeCalledWith({
       applicationContext: expect.anything(),
       associatedJudge: 'Chief Judge',
       status: 'New',
