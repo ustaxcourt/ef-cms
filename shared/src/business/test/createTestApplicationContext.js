@@ -222,6 +222,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     updateDocketEntryMetaInteractor: jest.fn(),
     updatePetitionDetailsInteractor: jest.fn(),
     updatePetitionerInformationInteractor: jest.fn(),
+    updatePrimaryContactInteractor: jest.fn(),
     updateQcCompleteForTrialInteractor: jest.fn(),
     updateSecondaryContactInteractor: jest.fn(),
     updateTrialSessionInteractor: jest.fn(),
