@@ -327,7 +327,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     associateUserWithCase: jest.fn(),
     associateUserWithCasePending: jest.fn(),
     createAttorneyUser: jest.fn(),
-    createCase,
+    createCase: jest.fn(),
     createCaseDeadline: jest.fn(),
     createCaseTrialSortMappingRecords: jest.fn(),
     createSectionInboxRecord,
