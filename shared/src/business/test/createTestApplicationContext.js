@@ -148,6 +148,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     completeWorkItemInteractor: jest.fn(),
     createAttorneyUserInteractor: jest.fn(),
     createCaseDeadlineInteractor: jest.fn(),
+    createCaseFromPaperInteractor: jest.fn(),
+    createCaseInteractor: jest.fn(),
     createCourtIssuedOrderPdfFromHtmlInteractor: jest.fn(),
     createTrialSessionInteractor: jest.fn(),
     createWorkItemInteractor: jest.fn(),
