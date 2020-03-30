@@ -3,6 +3,6 @@ import { applicationContextPublic as applicationContext } from '../../src/applic
 export default test => {
   return it('Should navigate to the public site without logging in', async () => {
     await test.runSequence('navigateToPublicSiteSequence', {});
-    expect(window.location).toEqual(applicationContext.getPublicSiteUrl());
+    expect(test.currentRouteUrl).toEqual(applicationContext.getPublicSiteUrl());
   });
 };
