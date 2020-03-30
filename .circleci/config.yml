@@ -466,6 +466,9 @@ jobs:
           name: 'Deploy - Web API - Cognito Create Court Users'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd web-api && ./setup-court-users.sh ${ENV}"
       - run:
+          name: 'Deploy - Web API - Cognito Create IRS User'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd web-api && ./setup-irs-user.sh ${ENV}"
+      - run:
           name: 'Deploy - Web API - Run Migrations'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "DYNAMODB_ENDPOINT=dynamodb.us-east-1.amazonaws.com" --rm efcms /bin/sh -c "npm run build:assets && ./web-api/run-umzug.sh ${ENV}"
       - run:
