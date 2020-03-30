@@ -18,6 +18,10 @@ const {
   CaseExternalIncomplete,
 } = require('../entities/cases/CaseExternalIncomplete');
 const {
+  compareISODateStrings,
+  compareStrings,
+} = require('../utilities/sortFunctions');
+const {
   CourtIssuedDocumentFactory,
 } = require('../entities/courtIssuedDocument/CourtIssuedDocumentFactory');
 const {
@@ -261,10 +265,8 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUtilitiesReturnValue = {
-    compareISODateStrings: jest
-      .fn()
-      .mockReturnValue(DateHandler.compareISODateStrings),
-    compareStrings: jest.fn().mockImplementation(DateHandler.compareStrings),
+    compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
+    compareStrings: jest.fn().mockImplementation(compareStrings),
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
