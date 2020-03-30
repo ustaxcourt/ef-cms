@@ -24,7 +24,7 @@ AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES = {
  * @returns {object} the instance
  */
 AddPrivatePractitionerFactory.get = metadata => {
-  let entityConstructor = function (rawProps) {
+  let entityConstructor = function(rawProps) {
     Object.assign(this, {
       representingPrimary: rawProps.representingPrimary,
       representingSecondary: rawProps.representingSecondary,

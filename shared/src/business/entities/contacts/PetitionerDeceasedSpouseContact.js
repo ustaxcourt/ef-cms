@@ -11,7 +11,10 @@ exports.getPetitionerDeceasedSpouseContact = ContactFactory.createContactFactory
     },
     additionalValidation: {
       inCareOf: joi.string().required(),
-      phone: joi.string().optional().allow(null),
+      phone: joi
+        .string()
+        .optional()
+        .allow(null),
     },
   },
 );

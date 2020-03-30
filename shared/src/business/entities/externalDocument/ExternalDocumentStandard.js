@@ -18,7 +18,7 @@ function ExternalDocumentStandard(rawProps) {
   this.selectedCases = rawProps.selectedCases;
 }
 
-ExternalDocumentStandard.prototype.getDocumentTitle = function () {
+ExternalDocumentStandard.prototype.getDocumentTitle = function() {
   return this.documentTitle;
 };
 
@@ -33,10 +33,19 @@ ExternalDocumentStandard.schema = joi.object({
     .string()
     .required()
     .when('selectedCases', {
-      is: joi.array().min(1).required(),
-      then: joi.string().required().invalid('Proposed Stipulated Decision'),
+      is: joi
+        .array()
+        .min(1)
+        .required(),
+      then: joi
+        .string()
+        .required()
+        .invalid('Proposed Stipulated Decision'),
     }),
-  selectedCases: joi.array().items(joi.string()).optional(),
+  selectedCases: joi
+    .array()
+    .items(joi.string())
+    .optional(),
 });
 
 joiValidationDecorator(

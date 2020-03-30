@@ -21,9 +21,8 @@ const formattedCaseInfo = caseInfo => {
     {
       caseTitle: caseInfo.caseTitle,
       countryName,
-      docketNumber: `${caseInfo.docketNumber}${
-        caseInfo.docketNumberSuffix || ''
-      }`,
+      docketNumber: `${caseInfo.docketNumber}${caseInfo.docketNumberSuffix ||
+        ''}`,
       preferredTrialCity: caseInfo.preferredTrialCity,
       receivedAtFormatted: DateHandler.formatDateString(
         caseInfo.receivedAt,

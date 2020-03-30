@@ -21,7 +21,7 @@ function ExternalDocumentNonStandardD(rawProps) {
   this.serviceDate = rawProps.serviceDate;
 }
 
-ExternalDocumentNonStandardD.prototype.getDocumentTitle = function () {
+ExternalDocumentNonStandardD.prototype.getDocumentTitle = function() {
   return replaceBracketed(
     this.documentTitle,
     this.previousDocument.documentTitle || this.previousDocument.documentType,
@@ -44,7 +44,11 @@ ExternalDocumentNonStandardD.schema = {
       documentType: joi.string().required(),
     })
     .required(),
-  serviceDate: joi.date().iso().max('now').required(),
+  serviceDate: joi
+    .date()
+    .iso()
+    .max('now')
+    .required(),
 };
 
 joiValidationDecorator(

@@ -28,7 +28,10 @@ Message.validationName = 'Message';
 joiValidationDecorator(
   Message,
   joi.object().keys({
-    createdAt: joi.date().iso().optional(),
+    createdAt: joi
+      .date()
+      .iso()
+      .optional(),
     from: joi.string().required(),
     fromUserId: joi
       .string()
@@ -43,7 +46,10 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .required(),
-    to: joi.string().optional().allow(null),
+    to: joi
+      .string()
+      .optional()
+      .allow(null),
     toUserId: joi
       .string()
       .uuid({

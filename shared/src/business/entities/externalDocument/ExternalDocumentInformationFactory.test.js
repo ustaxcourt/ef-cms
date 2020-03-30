@@ -52,7 +52,9 @@ describe('ExternalDocumentInformationFactory', () => {
       });
 
       it('should not allow certificate of service date to be in the future', () => {
-        baseDoc.certificateOfServiceDate = moment().add(1, 'days').format();
+        baseDoc.certificateOfServiceDate = moment()
+          .add(1, 'days')
+          .format();
         expect(errors().certificateOfServiceDate).toEqual(
           VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
         );

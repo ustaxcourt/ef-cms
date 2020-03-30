@@ -4,11 +4,11 @@ import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 const mocks = {
-  readAsArrayBufferMock: jest.fn(function () {
+  readAsArrayBufferMock: jest.fn(function() {
     this.result = 'def';
     this.onload();
   }),
-  readAsDataURLMock: jest.fn(function () {
+  readAsDataURLMock: jest.fn(function() {
     this.result = 'abc';
     this.onload();
   }),
@@ -95,7 +95,7 @@ describe('loadPdfAction', () => {
   });
 
   it('should error out when the FileReader fails', async () => {
-    mocks.readAsDataURLMock.mockImplementationOnce(function () {
+    mocks.readAsDataURLMock.mockImplementationOnce(function() {
       this.result = 'abc';
       this.onerror('An error called via reader.onerror.');
     });
