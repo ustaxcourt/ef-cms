@@ -327,10 +327,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     createAttorneyUser: jest.fn(),
     createCase,
     createCaseTrialSortMappingRecords: jest.fn(),
-    createSectionInboxRecord,
+    createSectionInboxRecord: jest.fn(),
     createTrialSession: jest.fn(),
     createTrialSessionWorkingCopy: jest.fn(),
-    createUserInboxRecord,
+    createUserInboxRecord: jest.fn(),
     createWorkItem: createWorkItemPersistence,
     deleteCaseDeadline: jest.fn(),
     deleteCaseTrialSortMappingRecords: jest.fn(),
@@ -359,6 +359,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
+    saveWorkItemForDocketEntryWithoutFile: jest.fn(),
     getDownloadPolicyUrl: jest.fn(),
     getEligibleCasesForTrialCity: jest.fn(),
     getEligibleCasesForTrialSession: jest.fn(),
