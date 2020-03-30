@@ -24,16 +24,6 @@ export const PractitionerSearchByBarNumber = connect(
       <>
         <div className="header-with-blue-background display-flex flex-justify">
           <h3>Search by Bar Number</h3>
-          <Button
-            link
-            className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-            icon={['fas', 'times-circle']}
-            onClick={() => {
-              clearCaseSearchByNameFormSequence();
-            }}
-          >
-            Clear Search
-          </Button>
         </div>
         <div className="blue-container">
           <form
@@ -70,12 +60,21 @@ export const PractitionerSearchByBarNumber = connect(
             </div>
 
             <div className="grid-row">
-              <div className="tablet:grid-col-5">
+              <div className="tablet:grid-col-6">
                 <Button
                   className="advanced-search__button margin-top-2"
                   type="submit"
                 >
                   Search
+                </Button>
+                <Button
+                  link
+                  className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                  onClick={() => {
+                    clearCaseSearchByNameFormSequence();
+                  }}
+                >
+                  Clear Search
                 </Button>
               </div>
             </div>
