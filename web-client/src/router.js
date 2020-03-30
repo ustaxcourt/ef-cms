@@ -775,7 +775,6 @@ const router = {
                   step,
                   wizardStep: `StartCaseStep${step}`,
                 });
-                break;
               default:
                 return app.getSequence('navigateToPathSequence')({
                   path: '/file-a-petition/step-1',
