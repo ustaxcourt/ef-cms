@@ -3,7 +3,7 @@ import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { validateForwardMessageAction } from './validateForwardMessageAction';
 
-describe('validateInitialWorkItemMessage', () => {
+describe('validateForwardMessageAction', () => {
   let successStub;
   let errorStub;
 

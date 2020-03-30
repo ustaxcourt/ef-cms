@@ -22,7 +22,7 @@ describe('setSignatureNameForPdfSigningAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it.only('sets the Chief Judge for non chamber users', async () => {
+  it('sets the Chief Judge for non chamber users', async () => {
     user.section = 'docketclerk';
 
     const result = await runAction(setSignatureNameForPdfSigningAction, {
