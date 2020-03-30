@@ -2,14 +2,17 @@ import { Button } from '../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const CaseSearchBox = connect(
   {
+    caseSearchBoxHelper: state.caseSearchBoxHelper,
     searchTerm: state.header.searchTerm,
     submitCaseSearchSequence: sequences.submitCaseSearchSequence,
     updateSearchTermSequence: sequences.updateSearchTermSequence,
   },
   function CaseSearchBox({
+    caseSearchBoxHelper,
     searchTerm,
     submitCaseSearchSequence,
     updateSearchTermSequence,
@@ -35,10 +38,19 @@ export const CaseSearchBox = connect(
                     </a>
                   </div>
                 </div>
-                <p>
-                  To file an Entry of Appearance, Substitution of Counsel, etc.
-                </p>
-                <div className="usa-form-group margin-bottom-4">
+                {caseSearchBoxHelper.showSearchDescription && (
+                  <p>
+                    To file an Entry of Appearance, Substitution of Counsel,
+                    etc.
+                  </p>
+                )}
+                <div
+                  className={classNames(
+                    'usa-form-group margin-bottom-4',
+                    !caseSearchBoxHelper.showSearchDescription &&
+                      'margin-top-3',
+                  )}
+                >
                   <div>
                     <label className="usa-label" htmlFor="docket-search-field">
                       Docket number
