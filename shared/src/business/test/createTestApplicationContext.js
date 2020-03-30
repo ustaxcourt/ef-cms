@@ -426,6 +426,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     setWorkItemAsRead,
     updateAttorneyUser: jest.fn(),
     updateCase: jest.fn().mockImplementation(updateCase),
+    updateDocumentProcessingStatus: jest.fn(),
     updateTrialSession: jest.fn(),
     updateTrialSessionWorkingCopy: jest.fn(),
     updateUser: jest.fn(),
