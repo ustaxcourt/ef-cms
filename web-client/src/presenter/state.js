@@ -15,6 +15,7 @@ import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
+import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
@@ -90,6 +91,7 @@ const helpers = {
   caseDetailSubnavHelper,
   caseInformationHelper,
   caseInventoryReportHelper,
+  caseSearchBoxHelper,
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
   confirmInitiateServiceModalHelper,
