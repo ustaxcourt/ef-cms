@@ -25,12 +25,6 @@ const {
   CourtIssuedDocumentFactory,
 } = require('../entities/courtIssuedDocument/CourtIssuedDocumentFactory');
 const {
-  createSectionInboxRecord,
-} = require('../../persistence/dynamo/workitems/createSectionInboxRecord');
-const {
-  createUserInboxRecord,
-} = require('../../persistence/dynamo/workitems/createUserInboxRecord');
-const {
   createWorkItem: createWorkItemPersistence,
 } = require('../../persistence/dynamo/workitems/createWorkItem');
 const {
@@ -331,10 +325,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCase: jest.fn().mockImplementation(createCase),
     createCaseDeadline: jest.fn(),
     createCaseTrialSortMappingRecords: jest.fn(),
-    createSectionInboxRecord,
+    createSectionInboxRecord: jest.fn(),
     createTrialSession: jest.fn(),
     createTrialSessionWorkingCopy: jest.fn(),
-    createUserInboxRecord,
+    createUserInboxRecord: jest.fn(),
     createWorkItem: createWorkItemPersistence,
     deleteCaseDeadline: jest.fn(),
     deleteCaseTrialSortMappingRecords: jest.fn(),
@@ -389,6 +383,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveDocumentFromLambda: jest.fn(),
     saveUserConnection: jest.fn(),
     saveWorkItemForDocketClerkFilingExternalDocument: jest.fn(),
+    saveWorkItemForDocketEntryWithoutFile: jest.fn(),
     saveWorkItemForNonPaper: jest
       .fn()
       .mockImplementation(saveWorkItemForNonPaper),

@@ -7,22 +7,18 @@ const {
 const { User } = require('../../entities/User');
 
 describe('getCaseInventoryReportInteractor', () => {
-  let user;
-
   beforeEach(() => {
-    user = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.docketClerk,
       userId: '9754a349-1013-44fa-9e61-d39aba2637e0',
-    };
-
-    applicationContext.getCurrentUser.mockImplementation(() => user);
+    });
   });
 
   it('throws an error if user is not authorized for case inventory report', async () => {
-    user = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitioner, //petitioner does not have CASE_INVENTORY_REPORT permission
       userId: '8e20dd1b-d142-40f4-8362-6297f1be68bf',
-    };
+    });
 
     await expect(
       getCaseInventoryReportInteractor({
@@ -41,17 +37,17 @@ describe('getCaseInventoryReportInteractor', () => {
   });
 
   it('calls getCaseInventoryReport useCaseHelper with appropriate params and returns its result', async () => {
-    const mockCaseResult = {
-      associatedJudge: 'Chief Judge',
-      caseCaption: 'A Test Caption',
-      docketNumber: '123-20',
-      docketNumberSuffix: 'L',
-      status: 'New',
-    };
-
     applicationContext
       .getUseCaseHelpers()
-      .getCaseInventoryReport.mockReturnValue([mockCaseResult]);
+      .getCaseInventoryReport.mockReturnValue([
+        {
+          associatedJudge: 'Chief Judge',
+          caseCaption: 'A Test Caption',
+          docketNumber: '123-20',
+          docketNumberSuffix: 'L',
+          status: 'New',
+        },
+      ]);
 
     const result = await getCaseInventoryReportInteractor({
       applicationContext,
@@ -66,6 +62,14 @@ describe('getCaseInventoryReportInteractor', () => {
       associatedJudge: 'Chief Judge',
       status: 'New',
     });
-    expect(result).toEqual([mockCaseResult]);
+    expect(result).toEqual([
+      {
+        associatedJudge: 'Chief Judge',
+        caseCaption: 'A Test Caption',
+        docketNumber: '123-20',
+        docketNumberSuffix: 'L',
+        status: 'New',
+      },
+    ]);
   });
 });
