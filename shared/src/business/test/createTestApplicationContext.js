@@ -100,6 +100,7 @@ const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
+const { getItem } = require('../../persistence/localStorage/getItem');
 const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
@@ -363,7 +364,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getInboxMessagesForSection),
     getInboxMessagesForUser: getInboxMessagesForUserPersistence,
-    getItem: jest.fn(),
+    getItem: jest.fn().mockImplementation(getItem),
     getSentMessagesForSection: jest.fn(),
     getSentMessagesForUser: jest
       .fn()
