@@ -147,4 +147,48 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
     expect(url).toEqual('localhost');
   });
+
+  it('throws an error if the user role is irsSuperuser and the petition document on the case is not served', async () => {
+    user = {
+      role: User.ROLES.irsSuperuser,
+      userId: 'irsSuperuser',
+    };
+
+    MOCK_CASE.documents = [
+      {
+        documentType: 'Petition',
+      },
+    ];
+    getCaseByCaseIdMock = jest.fn().mockReturnValue(MOCK_CASE);
+
+    await expect(
+      getDownloadPolicyUrlInteractor({
+        applicationContext,
+        caseId: MOCK_CASE.caseId,
+        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      }),
+    ).rejects.toThrow('Unauthorized to view case documents at this time');
+  });
+
+  it('returns the url if the user role is irsSuperuser and the petition document on the case is served', async () => {
+    user = {
+      role: User.ROLES.irsSuperuser,
+      userId: 'irsSuperuser',
+    };
+
+    MOCK_CASE.documents = [
+      {
+        documentType: 'Petition',
+        servedAt: '2019-03-01T21:40:46.415Z',
+      },
+    ];
+    getCaseByCaseIdMock = jest.fn().mockReturnValue(MOCK_CASE);
+
+    const url = await getDownloadPolicyUrlInteractor({
+      applicationContext,
+      caseId: MOCK_CASE.caseId,
+      documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    });
+    expect(url).toEqual('localhost');
+  });
 });
