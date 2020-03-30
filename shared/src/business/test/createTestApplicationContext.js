@@ -18,6 +18,9 @@ const {
   CaseExternalIncomplete,
 } = require('../entities/cases/CaseExternalIncomplete');
 const {
+  CourtIssuedDocumentFactory,
+} = require('../entities/courtIssuedDocument/CourtIssuedDocumentFactory');
+const {
   createSectionInboxRecord,
 } = require('../../persistence/dynamo/workitems/createSectionInboxRecord');
 const {
@@ -254,6 +257,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   const mockStorageClientReturnValue = {
     deleteObject: jest.fn(),
     getObject: jest.fn(),
+    upload: jest.fn(),
   };
 
   const mockGetUtilitiesReturnValue = {
@@ -309,6 +313,11 @@ const createTestApplicationContext = ({ user } = {}) => {
     generateStandingPretrialNoticeTemplate: jest.fn(),
     generateStandingPretrialOrderTemplate: jest.fn(),
     generateTrialSessionPlanningReportTemplate: jest.fn(),
+  };
+
+  const mockGetChromiumBrowserReturnValue = {
+    close: jest.fn(),
+    newPage: jest.fn(),
   };
 
   const mockGetPersistenceGatewayReturnValue = {
@@ -375,6 +384,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     putWorkItemInUsersOutbox: jest.fn(),
     saveDocumentFromLambda: jest.fn(),
     saveUserConnection: jest.fn(),
+    saveWorkItemForDocketClerkFilingExternalDocument: jest.fn(),
     saveWorkItemForNonPaper: jest
       .fn()
       .mockImplementation(saveWorkItemForNonPaper),
@@ -415,7 +425,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getChiefJudgeNameForSigning: jest
       .fn()
       .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
-    getChromiumBrowser: jest.fn(),
+    getChromiumBrowser: jest.fn().mockImplementation(() => {
+      return mockGetChromiumBrowserReturnValue;
+    }),
     getClerkOfCourtNameForSigning: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
     getConstants: jest.fn().mockReturnValue({
@@ -442,6 +454,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       CaseAssociationRequestFactory,
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
+      CourtIssuedDocumentFactory,
       DocketRecord,
       Document,
       ExternalDocumentFactory: ExternalDocumentFactory,
@@ -466,6 +479,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
     getPug: jest.fn(),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
+    getSearchClient: jest.fn(),
     getStorageClient: jest.fn().mockImplementation(() => {
       return mockStorageClientReturnValue;
     }),
