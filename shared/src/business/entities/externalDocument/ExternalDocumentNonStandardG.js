@@ -19,7 +19,7 @@ function ExternalDocumentNonStandardG(rawProps) {
   this.ordinalValue = rawProps.ordinalValue;
 }
 
-ExternalDocumentNonStandardG.prototype.getDocumentTitle = function() {
+ExternalDocumentNonStandardG.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
     this.ordinalValue,

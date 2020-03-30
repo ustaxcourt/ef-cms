@@ -42,7 +42,7 @@ export const loadPdfAction = ({ applicationContext, path, props, store }) => {
       }
     };
 
-    reader.onerror = function(err) {
+    reader.onerror = function (err) {
       store.set(state.modal.pdfPreviewModal.error, err);
       reject(path.error());
     };

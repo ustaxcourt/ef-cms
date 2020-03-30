@@ -24,7 +24,7 @@ SupportingDocumentInformationFactory.get = (
   documentMetadata,
   VALIDATION_ERROR_MESSAGES,
 ) => {
-  let entityConstructor = function(rawProps) {
+  let entityConstructor = function (rawProps) {
     this.attachments = rawProps.attachments;
     this.certificateOfService = rawProps.certificateOfService;
     this.certificateOfServiceDate = rawProps.certificateOfServiceDate;
@@ -41,10 +41,7 @@ SupportingDocumentInformationFactory.get = (
   };
 
   let schemaOptionalItems = {
-    certificateOfServiceDate: joi
-      .date()
-      .iso()
-      .max('now'),
+    certificateOfServiceDate: joi.date().iso().max('now'),
     supportingDocumentFile: joi.object(),
     supportingDocumentFileSize: joi
       .number()
