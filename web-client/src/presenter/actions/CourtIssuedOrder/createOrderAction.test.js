@@ -5,16 +5,20 @@ import { runAction } from 'cerebral/test';
 
 describe('createOrderAction', () => {
   beforeEach(() => {
-    window.DOMParser = class {
-      constructor() {}
+    global.window = {
+      DOMParser: class {
+        constructor() {}
+      },
     };
 
-    window.DOMParser.prototype.parseFromString = jest.fn().mockReturnValue({
-      children: [{ innerHTML: '' }],
-      querySelector: jest.fn().mockReturnValue({
+    global.window.DOMParser.prototype.parseFromString = jest
+      .fn()
+      .mockReturnValue({
         children: [{ innerHTML: '' }],
-      }),
-    });
+        querySelector: jest.fn().mockReturnValue({
+          children: [{ innerHTML: '' }],
+        }),
+      });
 
     presenter.providers.applicationContext = applicationContextForClient;
   });
