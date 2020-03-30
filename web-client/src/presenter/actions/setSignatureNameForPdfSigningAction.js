@@ -25,8 +25,7 @@ export const setSignatureNameForPdfSigningAction = async ({
     nameForPdfSigning = judgeUser.judgeFullName;
     nameForSigningLine2 = judgeUser.judgeTitle;
   } else {
-    const name = applicationContext.getChiefJudgeNameForSigning();
-    nameForPdfSigning = name;
+    nameForPdfSigning = applicationContext.getChiefJudgeNameForSigning();
     nameForSigningLine2 = 'Chief Judge';
   }
   store.set(state.pdfForSigning.nameForSigning, nameForPdfSigning);
