@@ -7,7 +7,7 @@ const {
 const { User } = require('../../entities/User');
 
 describe('fileCourtIssuedOrderInteractor', () => {
-  let caseRecord = {
+  const caseRecord = {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     caseType: 'Deficiency',
@@ -50,26 +50,26 @@ describe('fileCourtIssuedOrderInteractor', () => {
     userId: 'petitioner',
   };
 
-  // let currentUser;
-  // let getCaseByCaseIdSpy = jest.fn().mockResolvedValue(caseRecord);
-  // let updateCaseSpy = jest.fn();
-
   beforeEach(() => {
-    // currentUser = new User({
-    //   name: 'Olivia Jade',
-    //   role: User.ROLES.petitionsClerk,
-    //   userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    // });
-    // applicationContext = {
-    //   environment: { stage: 'local' },
-    //   getCurrentUser: () => currentUser,
-    //   getPersistenceGateway: () => ({
-    //     getCaseByCaseId: getCaseByCaseIdSpy,
-    //     getUserById: async () => currentUser,
-    //     updateCase: updateCaseSpy,
-    //   }),
-    //   getUniqueId: () => 'unique-id-1',
-    // };
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'Olivia Jade',
+        role: User.ROLES.petitionsClerk,
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    );
+
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue(
+      new User({
+        name: 'Olivia Jade',
+        role: User.ROLES.petitionsClerk,
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
