@@ -137,6 +137,7 @@ privatePractitioner
 privatePractitioner1 - privatePractitioner4
 irsPractitioner
 irsPractitioner1 - irsPractitioner4
+irsSuperuser
 ```
 
 #### Internal Users
@@ -172,6 +173,7 @@ To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm
 petitioner1@example.com – petitioner5@example.com
 privatePractitioner1@example.com – privatePractitioner10@example.com
 irsPractitioner1@example.com – irsPractitioner10@example.com
+service.agent@example.com (IRS Superuser)
 ```
 
 #### Internal Users
