@@ -1,51 +1,52 @@
 const AWS = require('aws-sdk');
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { fetchPendingItems } = require('./fetchPendingItems');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('fetchPendingItems', () => {
   let searchSpy;
-
-  const applicationContext = {
-    getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-    getPersistenceGateway: () => ({
-      getCaseByCaseId: searchSpy,
-    }),
-    getSearchClient: () => ({
+  beforeAll(() => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+    );
+    applicationContext.getSearchClient.mockImplementation(() => ({
       search: searchSpy,
-    }),
-    getUniqueId: () => 'unique-id-1',
-  };
+    }));
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockImplementation(() => searchSpy());
+  });
 
-  const mockDataOne = {
-    caseId: '1',
-    documents: [
-      {
-        documentId: 'def',
-        pending: true,
-      },
-      {
-        documentId: 'lmnop',
-        pending: false,
-      },
-    ],
-  };
-
-  const mockDataTwo = {
-    caseId: '2',
-    documents: [
-      {
-        documentId: 'abc',
-        pending: true,
-      },
-      {
-        documentId: 'xyz',
-        pending: false,
-      },
-    ],
-  };
-
-  it('calls search function with correct params when provided a judge and returns records', async () => {
+  beforeEach(() => {
+    const mockDataOne = {
+      caseId: '1',
+      documents: [
+        {
+          documentId: 'def',
+          pending: true,
+        },
+        {
+          documentId: 'lmnop',
+          pending: false,
+        },
+      ],
+    };
+    const mockDataTwo = {
+      caseId: '2',
+      documents: [
+        {
+          documentId: 'abc',
+          pending: true,
+        },
+        {
+          documentId: 'xyz',
+          pending: false,
+        },
+      ],
+    };
     searchSpy = jest.fn(async () => {
       return {
         hits: {
@@ -60,7 +61,9 @@ describe('fetchPendingItems', () => {
         },
       };
     });
+  });
 
+  it('calls search function with correct params when provided a judge and returns records', async () => {
     const results = await fetchPendingItems({
       applicationContext,
       judge: 'Judge Armen',
@@ -82,22 +85,38 @@ describe('fetchPendingItems', () => {
     ]);
   });
 
-  it('calls search function with correct params when not provided a judge and returns records', async () => {
-    searchSpy = jest.fn(async () => {
-      return {
-        hits: {
-          hits: [
-            {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
-            },
-            {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
-            },
-          ],
-        },
-      };
+  it('calls search function and returns no records if cases lack documents', async () => {
+    searchSpy = jest.fn(async () => ({
+      hits: {
+        hits: [
+          {
+            _source: AWS.DynamoDB.Converter.marshall({
+              caseId: '1',
+              documents: undefined,
+            }),
+          },
+        ],
+      },
+    }));
+    const results = await fetchPendingItems({
+      applicationContext,
+      judge: 'Judge Armen',
     });
 
+    expect(searchSpy).toHaveBeenCalled();
+    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+      {
+        match: { 'hasPendingItems.BOOL': true },
+      },
+      {
+        match_phrase: { 'associatedJudge.S': 'Judge Armen' },
+      },
+    ]);
+
+    expect(results.length).toEqual(0);
+  });
+
+  it('calls search function with correct params when not provided a judge and returns records', async () => {
     const results = await fetchPendingItems({
       applicationContext,
     });

@@ -465,6 +465,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
     getPug: jest.fn(),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
+    getSearchClient: jest.fn(),
     getStorageClient: jest.fn().mockImplementation(() => {
       return mockStorageClientReturnValue;
     }),
