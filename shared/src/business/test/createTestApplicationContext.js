@@ -25,12 +25,6 @@ const {
   CourtIssuedDocumentFactory,
 } = require('../entities/courtIssuedDocument/CourtIssuedDocumentFactory');
 const {
-  createSectionInboxRecord,
-} = require('../../persistence/dynamo/workitems/createSectionInboxRecord');
-const {
-  createUserInboxRecord,
-} = require('../../persistence/dynamo/workitems/createUserInboxRecord');
-const {
   createWorkItem: createWorkItemPersistence,
 } = require('../../persistence/dynamo/workitems/createWorkItem');
 const {
@@ -327,7 +321,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     associateUserWithCase: jest.fn(),
     associateUserWithCasePending: jest.fn(),
     createAttorneyUser: jest.fn(),
-    createCase,
+    createCase: jest.fn().mockImplementation(createCase),
+    createCaseDeadline: jest.fn(),
     createCaseTrialSortMappingRecords: jest.fn(),
     createSectionInboxRecord: jest.fn(),
     createTrialSession: jest.fn(),
@@ -361,7 +356,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
-    saveWorkItemForDocketEntryWithoutFile: jest.fn(),
     getDownloadPolicyUrl: jest.fn(),
     getEligibleCasesForTrialCity: jest.fn(),
     getEligibleCasesForTrialSession: jest.fn(),
@@ -388,6 +382,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveDocumentFromLambda: jest.fn(),
     saveUserConnection: jest.fn(),
     saveWorkItemForDocketClerkFilingExternalDocument: jest.fn(),
+    saveWorkItemForDocketEntryWithoutFile: jest.fn(),
     saveWorkItemForNonPaper: jest
       .fn()
       .mockImplementation(saveWorkItemForNonPaper),
