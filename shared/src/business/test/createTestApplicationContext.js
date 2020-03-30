@@ -412,9 +412,13 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockDocClient = createMockDocumentClient();
 
+  const mockCreateDocketNumberGenerator = {
+    createDocketNumber: jest.fn(),
+  };
+
   const applicationContext = {
     ...sharedAppContext,
-    docketNumberGenerator,
+    docketNumberGenerator: mockCreateDocketNumberGenerator,
     environment: {
       stage: 'local',
       tempDocumentsBucketName: 'MockDocumentBucketName',
