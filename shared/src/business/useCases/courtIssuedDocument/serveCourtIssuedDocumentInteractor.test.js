@@ -219,6 +219,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .updateCase.mockImplementation(caseToUpdate => caseToUpdate);
+    applicationContext
+      .getUseCaseHelpers()
+      .generatePaperServiceAddressPagePdf.mockResolvedValue(testPdfDoc);
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: async () => ({
         Body: testPdfDoc,
