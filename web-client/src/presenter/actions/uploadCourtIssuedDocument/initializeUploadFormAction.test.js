@@ -1,12 +1,11 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { initializeUploadFormAction } from './initializeUploadFormAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-const applicationContext = applicationContextForClient;
-presenter.providers.applicationContext = applicationContext;
-
 describe('initializeUploadFormAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   it('should initialize the form values', async () => {
     const results = await runAction(initializeUploadFormAction, {
       modules: {

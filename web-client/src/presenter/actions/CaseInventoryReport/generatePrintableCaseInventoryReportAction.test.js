@@ -1,11 +1,10 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintableCaseInventoryReportAction } from './generatePrintableCaseInventoryReportAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('generatePrintableCaseInventoryReportAction', () => {
-  const applicationContext = applicationContextForClient;
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getUseCases()
       .generatePrintableCaseInventoryReportInteractor.mockImplementation(() => {

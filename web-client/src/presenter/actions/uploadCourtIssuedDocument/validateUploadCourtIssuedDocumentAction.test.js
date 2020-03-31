@@ -1,12 +1,11 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateUploadCourtIssuedDocumentAction } from './validateUploadCourtIssuedDocumentAction';
 
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-const applicationContext = applicationContextForClient;
-presenter.providers.applicationContext = applicationContext;
-
 describe('validateUploadCourtIssuedDocumentAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   let successStub;
   let errorStub;
 
