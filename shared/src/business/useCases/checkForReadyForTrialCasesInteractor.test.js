@@ -4,7 +4,6 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('checkForReadyForTrialCasesInteractor', () => {
   it('should successfully run without error', async () => {
