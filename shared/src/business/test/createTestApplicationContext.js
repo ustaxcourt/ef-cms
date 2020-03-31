@@ -297,7 +297,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     render: (data, cb) => cb(data, { css: '' }),
   };
 
-  const mockDocClient = createMockDocumentClient();
+  const mockDocumentClient = createMockDocumentClient();
 
   const mockCreateDocketNumberGenerator = {
     createDocketNumber: jest.fn().mockImplementation(createDocketNumber),
@@ -342,7 +342,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCurrentUserToken: () => {
       return '';
     },
-    getDocumentClient: () => mockDocClient,
+    getDocumentClient: () => mockDocumentClient,
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEntityConstructors: () => ({
       Case,
@@ -360,6 +360,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
+    getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfStyles: jest.fn(),
