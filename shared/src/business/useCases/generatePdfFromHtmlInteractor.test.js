@@ -2,6 +2,8 @@ const {
   generatePdfFromHtmlInteractor,
 } = require('./generatePdfFromHtmlInteractor.js');
 
+const { applicationContext } = require('../test/createTestApplicationContext');
+
 let pageContent = '';
 
 const launchMock = jest.fn();
@@ -22,45 +24,29 @@ let closeMock;
 let errorMock;
 
 describe('generatePdfFromHtmlInteractor', () => {
-  let applicationContext;
-
   beforeEach(() => {
     closeMock = jest.fn();
     errorMock = jest.fn();
 
-    applicationContext = {
-      getChromiumBrowser: () => {
-        launchMock();
-        return {
-          close: closeMock,
-          newPage: () => {
-            newPageMock();
-            return {
-              pdf: pdfMock,
-              setContent: setContentMock,
-            };
-          },
-        };
-      },
-      logger: {
-        error: () => null,
-        time: () => null,
-        timeEnd: () => null,
-      },
-    };
+    applicationContext.getChromiumBrowser.mockImplementation(() => {
+      launchMock();
+      return {
+        close: closeMock,
+        newPage: () => {
+          newPageMock();
+          return {
+            pdf: pdfMock,
+            setContent: setContentMock,
+          };
+        },
+      };
+    });
   });
 
   it('should call the error logger if an error is thrown', async () => {
-    applicationContext = {
-      getChromiumBrowser: () => {
-        return launchErrorMock();
-      },
-      logger: {
-        error: errorMock,
-        time: () => null,
-        timeEnd: () => null,
-      },
-    };
+    applicationContext.getChromiumBrowser.mockImplementation(() => {
+      return launchErrorMock();
+    });
 
     const args = {
       applicationContext,
@@ -76,7 +62,7 @@ describe('generatePdfFromHtmlInteractor', () => {
     } catch (err) {
       error = err;
     }
-    expect(errorMock).toHaveBeenCalled();
+    expect(applicationContext.logger.error).toHaveBeenCalled();
     expect(error).toBeDefined();
   });
 
