@@ -238,6 +238,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteSectionOutboxRecord,
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
+    getAllCaseDeadlines: jest.fn(),
+    getAllCatalogCases: jest.fn(),
+    getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByCaseId: jest.fn().mockImplementation(getCaseByCaseId),
     getCaseDeadlinesByCaseId: jest
       .fn()
@@ -262,7 +265,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveWorkItemForNonPaper: jest
       .fn()
       .mockImplementation(saveWorkItemForNonPaper),
-    saveWorkItemForPaper,
+    saveWorkItemForPaper: jest.fn().mockImplementation(saveWorkItemForPaper),
+    setItem: jest.fn(),
+    setPriorityOnAllWorkItems: jest.fn(),
     setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
     updateCase: jest.fn().mockImplementation(updateCase),
     updateWorkItem,
