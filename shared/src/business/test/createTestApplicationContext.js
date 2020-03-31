@@ -1,6 +1,5 @@
 const createWebApiApplicationContext = require('../../../../web-api/src/applicationContext');
 const DateHandler = require('../utilities/DateHandler');
-const docketNumberGenerator = require('../../persistence/dynamo/cases/docketNumberGenerator');
 const path = require('path');
 const sharedAppContext = require('../../sharedAppContext');
 const {
@@ -25,6 +24,9 @@ const {
 const {
   CourtIssuedDocumentFactory,
 } = require('../entities/courtIssuedDocument/CourtIssuedDocumentFactory');
+const {
+  createDocketNumber,
+} = require('../../persistence/dynamo/cases/docketNumberGenerator');
 const {
   createWorkItem: createWorkItemPersistence,
 } = require('../../persistence/dynamo/workitems/createWorkItem');
@@ -432,7 +434,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveWorkItemForPaper,
     setItem: jest.fn(),
     setPriorityOnAllWorkItems: jest.fn(),
-    setWorkItemAsRead,
+    setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
     updateAttorneyUser: jest.fn(),
     updateCase: jest.fn().mockImplementation(updateCase),
     updateDocumentProcessingStatus: jest.fn(),
@@ -455,9 +457,13 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockDocClient = createMockDocumentClient();
 
+  const mockCreateDocketNumberGenerator = {
+    createDocketNumber: jest.fn().mockImplementation(createDocketNumber),
+  };
+
   const applicationContext = {
     ...sharedAppContext,
-    docketNumberGenerator,
+    docketNumberGenerator: mockCreateDocketNumberGenerator,
     environment: {
       stage: 'local',
       tempDocumentsBucketName: 'MockDocumentBucketName',
@@ -466,7 +472,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseCaptionNames: jest.fn().mockImplementation(Case.getCaseCaptionNames),
     getChiefJudgeNameForSigning: jest
       .fn()
-      .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
+      .mockImplementation(
+        webClientApplicationContext.getChiefJudgeNameForSigning,
+      ),
     getChromiumBrowser: jest.fn().mockImplementation(() => {
       return mockGetChromiumBrowserReturnValue;
     }),
