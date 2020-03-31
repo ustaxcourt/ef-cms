@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../shared/src/business/test/createTestApplicationContext');
 const { dataSecurityFilter, genericHandler } = require('./genericHandler');
 
 const token =
@@ -18,10 +21,6 @@ let lastLoggedValue;
 console.error = () => null;
 console.info = () => null;
 
-let applicationContext = {};
-let logErrorMock;
-let honeybadgerNotifyMock;
-
 /**
  * returns a mock entity object
  *
@@ -37,24 +36,14 @@ function MockEntity(raw, { filtered = false }) {
 
 describe('genericHandler', () => {
   beforeEach(() => {
-    logErrorMock = jest.fn();
-    honeybadgerNotifyMock = jest.fn();
     lastLoggedValue = null;
-
     logged = [];
-    applicationContext.logger = {
-      error: logErrorMock,
-      info: (label, value) => {
-        logged.push(label);
-        lastLoggedValue = value;
-      },
-    };
 
-    applicationContext.initHoneybadger = () => ({
-      notify: honeybadgerNotifyMock,
+    applicationContext.logger.info.mockImplementation((label, value) => {
+      logged.push(label);
+      lastLoggedValue = value;
     });
-
-    applicationContext.getEntityByName = () => MockEntity;
+    applicationContext.getEntityByName.mockImplementation(() => MockEntity);
   });
 
   it('returns an error if the callback throws', async () => {
@@ -68,8 +57,8 @@ describe('genericHandler', () => {
 
     expect(response.statusCode).toEqual('400');
     expect(JSON.parse(response.body)).toEqual('Test Error');
-    expect(logErrorMock).toHaveBeenCalled();
-    expect(honeybadgerNotifyMock).toHaveBeenCalled();
+    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(applicationContext.initHoneybadger().notify).toHaveBeenCalled();
   });
 
   it('defaults the options param to an empty object if not provided', async () => {
@@ -77,7 +66,7 @@ describe('genericHandler', () => {
 
     await genericHandler({ ...MOCK_EVENT }, callback);
 
-    expect(logErrorMock).not.toHaveBeenCalled();
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
   });
 
   it('does not call application.logger.error if the skipLogging flag is present on the error', async () => {
@@ -93,8 +82,8 @@ describe('genericHandler', () => {
 
     expect(response.statusCode).toEqual('400');
     expect(JSON.parse(response.body)).toEqual('Test Error');
-    expect(logErrorMock).not.toHaveBeenCalled();
-    expect(honeybadgerNotifyMock).not.toHaveBeenCalled();
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
+    expect(applicationContext.initHoneybadger().notify).not.toHaveBeenCalled();
   });
 
   it('can take a user override in the options param', async () => {
@@ -223,12 +212,6 @@ describe('genericHandler', () => {
   });
 
   describe('dataSecurityFilter', () => {
-    beforeEach(() => {
-      applicationContext = {
-        getEntityByName: () => MockEntity,
-      };
-    });
-
     it('returns data as it was passed in if entityName is not present', () => {
       const data = {
         private: 'private',
