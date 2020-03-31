@@ -189,13 +189,10 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.formatDateString),
     formatDocument: jest.fn().mockImplementation(v => v),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
-<<<<<<< HEAD
     formattedTrialSessionDetails: jest
       .fn()
       .mockImplementation(formattedTrialSessionDetails),
-=======
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
->>>>>>> f177a0d7488299c83b5a50fa9ad637c8dd920949
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
     getFormattedCaseDetail: jest
       .fn()
