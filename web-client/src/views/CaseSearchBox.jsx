@@ -33,7 +33,11 @@ export const CaseSearchBox = connect(
                     <h3>Search for a Case</h3>
                   </div>
                   <div className="tablet:grid-col-4 padding-top-05">
-                    <a className="usa-link float-right" href="/search">
+                    <a
+                      className="usa-link float-right"
+                      href="/search"
+                      id="advanced-search-button"
+                    >
                       Advanced Search
                     </a>
                   </div>
