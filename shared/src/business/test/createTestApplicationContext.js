@@ -61,6 +61,9 @@ const {
   getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
 } = require('../../persistence/dynamo/workitems/getDocumentQCInboxForUser');
 const {
+  getFormattedCaseDetail,
+} = require('../utilities/getFormattedCaseDetail');
+const {
   getInboxMessagesForSection,
 } = require('../../persistence/dynamo/workitems/getInboxMessagesForSection');
 const {
@@ -88,6 +91,9 @@ const {
   saveWorkItemForPaper,
 } = require('../../persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
+  setServiceIndicatorsForCase,
+} = require('../utilities/setServiceIndicatorsForCase');
+const {
   setWorkItemAsRead,
 } = require('../../persistence/dynamo/workitems/setWorkItemAsRead');
 const {
@@ -110,11 +116,12 @@ const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { getItem } = require('../../persistence/localStorage/getItem');
+const { removeItem } = require('../../persistence/localStorage/removeItem');
+const { setItem } = require('../../persistence/localStorage/setItem');
 const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
-import { getFormattedCaseDetail } from '../../business/utilities/getFormattedCaseDetail';
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
@@ -192,6 +199,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
+    setServiceIndicatorsForCase: jest
+      .fn()
+      .mockImplementation(setServiceIndicatorsForCase),
   });
 
   const mockGetHttpClientReturnValue = {
@@ -217,6 +227,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePrintableDocketRecordTemplate: jest
       .fn()
       .mockResolvedValue('<div></div>'),
+    generatePrintableFilingReceiptTemplate: jest
+      .fn()
+      .mockReturnValue('<div></div>'),
     generateStandingPretrialNoticeTemplate: jest.fn(),
     generateStandingPretrialOrderTemplate: jest.fn(),
     generateTrialSessionPlanningReportTemplate: jest.fn(),
@@ -265,11 +278,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
+    removeItem: jest.fn().mockImplementation(removeItem),
     saveWorkItemForNonPaper: jest
       .fn()
       .mockImplementation(saveWorkItemForNonPaper),
     saveWorkItemForPaper: jest.fn().mockImplementation(saveWorkItemForPaper),
-    setItem: jest.fn(),
+    setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
     setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
     updateCase: jest.fn().mockImplementation(updateCase),
