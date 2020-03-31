@@ -1,18 +1,13 @@
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { getUploadPolicyInteractor } = require('./getUploadPolicyInteractor');
 const { User } = require('../entities/User');
 
 describe('getUploadPolicyInteractor', () => {
-  beforeEach(() => {});
-
   it('throw unauthorized error on invalid role', async () => {
-    const applicationContext = {
-      getCurrentUser: () => {
-        return {
-          role: 'admin',
-          userId: 'petitioner',
-        };
-      },
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: 'admin',
+      userId: 'petitioner',
+    });
     let error;
     try {
       await getUploadPolicyInteractor({
@@ -25,19 +20,18 @@ describe('getUploadPolicyInteractor', () => {
   });
 
   it('returns the expected policy when the file does not already exist', async () => {
-    const applicationContext = {
-      getCurrentUser: () => {
-        return {
-          isExternalUser: () => true,
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
-      getPersistenceGateway: () => ({
-        getUploadPolicy: () => 'policy',
-        isFileExists: () => false,
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      isExternalUser: () => true,
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getUploadPolicy.mockReturnValue('policy');
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockReturnValue(false);
+
     const url = await getUploadPolicyInteractor({
       applicationContext,
     });
@@ -45,19 +39,17 @@ describe('getUploadPolicyInteractor', () => {
   });
 
   it('throws an unauthorized exception when file already exists', async () => {
-    const applicationContext = {
-      getCurrentUser: () => {
-        return {
-          isExternalUser: () => true,
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
-      getPersistenceGateway: () => ({
-        getUploadPolicy: () => 'policy',
-        isFileExists: () => true,
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      isExternalUser: () => true,
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getUploadPolicy.mockReturnValue('policy');
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockReturnValue(true);
 
     let error;
     try {
