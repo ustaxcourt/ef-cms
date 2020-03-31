@@ -217,10 +217,12 @@ const formatCase = (applicationContext, caseDetail) => {
 
   result.docketRecordWithDocument = [];
 
-  if (result.documents)
+  if (result.documents) {
     result.documents = result.documents.map(d =>
       formatDocument(applicationContext, d),
     );
+  }
+
   if (result.docketRecord) {
     result.docketRecord = result.docketRecord.map(d =>
       formatDocketRecord(applicationContext, d),
