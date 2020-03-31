@@ -110,7 +110,7 @@ const appContextProxy = (initial = {}, makeMock = true) => {
   const applicationContextHandler = {
     get(target, name, receiver) {
       if (!Reflect.has(target, name)) {
-        Reflect.set(target, name, jest.fn().mockReturnValue(true), receiver);
+        Reflect.set(target, name, jest.fn(), receiver);
       }
       return Reflect.get(target, name, receiver);
     },
