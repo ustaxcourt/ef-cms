@@ -463,7 +463,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseCaptionNames: jest.fn().mockImplementation(Case.getCaseCaptionNames),
     getChiefJudgeNameForSigning: jest
       .fn()
-      .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
+      .mockImplementation(
+        webClientApplicationContext.getChiefJudgeNameForSigning,
+      ),
     getChromiumBrowser: jest.fn().mockImplementation(() => {
       return mockGetChromiumBrowserReturnValue;
     }),
