@@ -230,6 +230,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   const mockGetPersistenceGateway = appContextProxy({
     addWorkItemToSectionInbox,
     createCase: jest.fn().mockImplementation(createCase),
+    createElasticsearchReindexRecord: jest.fn(),
     createSectionInboxRecord: jest
       .fn()
       .mockImplementation(createSectionInboxRecord),
@@ -270,6 +271,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     setPriorityOnAllWorkItems: jest.fn(),
     setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
     updateCase: jest.fn().mockImplementation(updateCase),
+    updateHighPriorityCaseTrialSortMappingRecords: jest.fn(),
     updateWorkItem,
     updateWorkItemInCase,
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
@@ -350,7 +352,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getPug: jest.fn(),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
-    getSearchClient: jest.fn(),
+    getSearchClient: appContextProxy(),
     getStorageClient: appContextProxy(),
     getTempDocumentsBucketName: jest.fn(),
     getTemplateGenerators: jest
