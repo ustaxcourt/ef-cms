@@ -8,8 +8,6 @@ describe('validateEditIrsPractitionersAction', () => {
   let errorStub;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
     successStub = jest.fn();
     errorStub = jest.fn();
 

@@ -4,7 +4,7 @@ import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('authenticateCodeAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getUseCases()
       .authorizeCodeInteractor.mockImplementation(({ code }) => {
