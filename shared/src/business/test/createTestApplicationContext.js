@@ -425,7 +425,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveWorkItemForPaper,
     setItem: jest.fn(),
     setPriorityOnAllWorkItems: jest.fn(),
-    setWorkItemAsRead,
+    setWorkItemAsRead: jest.fn(),
     updateAttorneyUser: jest.fn(),
     updateCase: jest.fn().mockImplementation(updateCase),
     updateDocumentProcessingStatus: jest.fn(),
