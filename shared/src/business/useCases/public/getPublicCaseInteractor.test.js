@@ -1,8 +1,7 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { getPublicCaseInteractor } = require('./getPublicCaseInteractor');
-
-let applicationContext;
-let getCaseByCaseIdMock;
-let getCaseByDocketNumberMock;
 
 const mockCase = {
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -21,36 +20,27 @@ const mockCases = {
   'c54ba5a9-b37b-479d-9201-067ec6e335bb': mockCase,
 };
 
-const getMockCaseByIndex = ({ caseId, docketNumber }) => {
-  return mockCases[caseId || docketNumber];
-};
-
 describe('getPublicCaseInteractor', () => {
   beforeEach(() => {
-    getCaseByCaseIdMock = jest.fn(getMockCaseByIndex);
-    getCaseByDocketNumberMock = jest.fn(getMockCaseByIndex);
-
-    applicationContext = {
-      getPersistenceGateway: () => ({
-        getCaseByCaseId: getCaseByCaseIdMock,
-        getCaseByDocketNumber: getCaseByDocketNumberMock,
-      }),
-    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockImplementation(({ caseId, docketNumber }) => {
+        return mockCases[caseId || docketNumber];
+      });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockImplementation(({ caseId, docketNumber }) => {
+        return mockCases[caseId || docketNumber];
+      });
   });
 
   it('Should return a Not Found error if the case does not exist', async () => {
-    let error;
-
-    try {
-      await getPublicCaseInteractor({
+    await expect(
+      getPublicCaseInteractor({
         applicationContext,
         caseId: '999',
-      });
-    } catch (err) {
-      error = err;
-    }
-
-    expect(error.message).toContain('Case 999 was not found.');
+      }),
+    ).rejects.toThrow('Case 999 was not found.');
   });
 
   it('Should search by caseId when caseId parameter is a valid uuid', async () => {
@@ -61,7 +51,9 @@ describe('getPublicCaseInteractor', () => {
       caseId,
     });
 
-    expect(getCaseByCaseIdMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toHaveBeenCalled();
     expect(result).toMatchObject(mockCases[caseId]);
   });
 
@@ -73,7 +65,9 @@ describe('getPublicCaseInteractor', () => {
       caseId,
     });
 
-    expect(getCaseByDocketNumberMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toHaveBeenCalled();
     expect(result).toMatchObject(mockCases[caseId]);
   });
 
