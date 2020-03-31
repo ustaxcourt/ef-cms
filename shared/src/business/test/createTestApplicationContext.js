@@ -266,6 +266,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createUserInboxRecord: jest.fn().mockImplementation(createUserInboxRecord),
     createWorkItem: createWorkItemPersistence,
     deleteCaseTrialSortMappingRecords: jest.fn(),
+    deleteElasticsearchReindexRecord: jest.fn(),
     deleteSectionOutboxRecord,
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
@@ -283,6 +284,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
+    getElasticsearchReindexRecords: jest.fn(),
     getInboxMessagesForSection: jest
       .fn()
       .mockImplementation(getInboxMessagesForSection),
@@ -290,6 +292,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getInboxMessagesForUserPersistence),
     getItem: jest.fn().mockImplementation(getItem),
+    getRecord: jest.fn(),
     getSentMessagesForUser: jest
       .fn()
       .mockImplementation(getSentMessagesForUserPersistence),

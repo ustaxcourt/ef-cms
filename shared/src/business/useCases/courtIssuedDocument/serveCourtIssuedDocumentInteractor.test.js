@@ -204,7 +204,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   beforeEach(() => {
     testPdfDoc = testPdfDocBytes();
     extendCase = {};
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+
+    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
     applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId.mockImplementation(({ caseId }) => {
