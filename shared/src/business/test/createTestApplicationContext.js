@@ -373,6 +373,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentClient: () => mockDocumentClient,
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
+    getEntityByName: jest.fn(),
     getEntityConstructors: () => ({
       Case,
       CaseAssociationRequestFactory,
@@ -407,6 +408,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: appContextProxy(),
     getUtilities: mockGetUtilities,
+    initHoneybadger: appContextProxy(),
     isAuthorizedForWorkItems: jest.fn().mockReturnValue(() => true),
     logger: {
       error: jest.fn(),
