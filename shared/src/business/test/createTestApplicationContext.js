@@ -248,6 +248,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   const mockGetPersistenceGateway = appContextProxy({
     addWorkItemToSectionInbox,
     createCase: jest.fn().mockImplementation(createCase),
+    createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
     createSectionInboxRecord: jest
       .fn()
@@ -266,14 +267,18 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getCaseDeadlinesByCaseId),
     getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
-    getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
+    getDocumentQCInboxForUser: jest
+      .fn()
+      .mockImplementation(getDocumentQCInboxForUserPersistence),
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getInboxMessagesForSection: jest
       .fn()
       .mockImplementation(getInboxMessagesForSection),
-    getInboxMessagesForUser: getInboxMessagesForUserPersistence,
+    getInboxMessagesForUser: jest
+      .fn()
+      .mockImplementation(getInboxMessagesForUserPersistence),
     getItem: jest.fn().mockImplementation(getItem),
     getSentMessagesForUser: jest
       .fn()
@@ -291,6 +296,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     setPriorityOnAllWorkItems: jest.fn(),
     setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
     updateCase: jest.fn().mockImplementation(updateCase),
+    updateCaseTrialSortMappingRecords: jest.fn(),
     updateHighPriorityCaseTrialSortMappingRecords: jest.fn(),
     updateWorkItem,
     updateWorkItemInCase,
@@ -306,7 +312,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     sendBulkTemplatedEmail: jest.fn(),
   };
 
-  const mockDocClient = createMockDocumentClient();
+  const mockDocumentClient = createMockDocumentClient();
 
   const mockCreateDocketNumberGenerator = {
     createDocketNumber: jest.fn().mockImplementation(createDocketNumber),
@@ -354,7 +360,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
     }),
-    getDocumentClient: () => mockDocClient,
+    getDocumentClient: () => mockDocumentClient,
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityConstructors: () => ({
@@ -373,6 +379,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
+    getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfStyles: jest.fn(),
