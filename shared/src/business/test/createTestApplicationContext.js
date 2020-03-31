@@ -55,6 +55,9 @@ const {
   getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
 } = require('../../persistence/dynamo/workitems/getDocumentQCInboxForUser');
 const {
+  getFormattedCaseDetail,
+} = require('../utilities/getFormattedCaseDetail');
+const {
   getInboxMessagesForSection,
 } = require('../../persistence/dynamo/workitems/getInboxMessagesForSection');
 const {
@@ -81,6 +84,9 @@ const {
 const {
   saveWorkItemForPaper,
 } = require('../../persistence/dynamo/workitems/saveWorkItemForPaper');
+const {
+  setServiceIndicatorsForCase,
+} = require('../utilities/setServiceIndicatorsForCase');
 const {
   setWorkItemAsRead,
 } = require('../../persistence/dynamo/workitems/setWorkItemAsRead');
@@ -306,6 +312,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     getDocumentTypeForAddressChange: jest.fn(),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
+    getFormattedCaseDetail: jest
+      .fn()
+      .mockImplementation(getFormattedCaseDetail),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
     isStringISOFormatted: jest
@@ -317,6 +326,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
+    setServiceIndicatorsForCase: jest
+      .fn()
+      .mockImplementation(setServiceIndicatorsForCase),
   };
 
   const mockGetNotificationGatewayReturnValue = {
@@ -344,6 +356,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePrintableDocketRecordTemplate: jest
       .fn()
       .mockResolvedValue('<div></div>'),
+    generatePrintableFilingReceiptTemplate: jest
+      .fn()
+      .mockReturnValue('<div></div>'),
     generateStandingPretrialNoticeTemplate: jest.fn(),
     generateStandingPretrialOrderTemplate: jest.fn(),
     generateTrialSessionPlanningReportTemplate: jest.fn(),

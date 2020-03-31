@@ -1,7 +1,6 @@
-import { Case } from '../entities/cases/Case';
+const { applicationContext } = require('../test/createTestApplicationContext');
 import { ContactFactory } from '../entities/contacts/ContactFactory';
 import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
-import { getFormattedCaseDetail } from '../utilities/getFormattedCaseDetail';
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('generateDocketRecordPdfInteractor', () => {
@@ -65,47 +64,28 @@ describe('generateDocketRecordPdfInteractor', () => {
     privatePractitioners: [],
   };
 
-  const applicationContext = {
-    getCaseCaptionNames: Case.getCaseCaptionNames,
-    getConstants: () => ({
-      ORDER_TYPES_MAP: [
-        {
-          documentType: 'Decision',
-        },
-      ],
-    }),
-    getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-    getEntityConstructors: () => ({
-      Case,
-    }),
-    getPersistenceGateway: () => ({
-      getCaseByCaseId: () => ({
-        ...caseDetail,
-      }),
-    }),
-    getTemplateGenerators: () => {
-      return {
-        generatePrintableDocketRecordTemplate: async ({ content }) => {
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(caseDetail);
+    applicationContext
+      .getTemplateGenerators()
+      .generatePrintableDocketRecordTemplate.mockImplementation(
+        ({ content }) => {
           generatePrintableDocketRecordTemplateMock();
           return `<!DOCTYPE html>${content.docketRecord} ${content.partyInfo}</html>`;
         },
-      };
-    },
-    getUniqueId: () => 'unique-id-1',
-    getUseCases: () => {
-      return {
-        generatePdfFromHtmlInteractor: ({ contentHtml }) => {
-          generatePdfFromHtmlInteractorMock();
-          return contentHtml;
-        },
-      };
-    },
-    getUtilities: () => ({
-      formatDateString: date => date,
-      getFormattedCaseDetail,
-      setServiceIndicatorsForCase: () => null,
-    }),
-  };
+      );
+    applicationContext
+      .getUseCases()
+      .generatePdfFromHtmlInteractor.mockImplementation(({ contentHtml }) => {
+        generatePdfFromHtmlInteractorMock();
+        return contentHtml;
+      });
+  });
 
   it('Calls generatePdfFromHtmlInteractor and generatePrintableDocketRecordTemplate to build a PDF', async () => {
     const result = await generateDocketRecordPdfInteractor({
