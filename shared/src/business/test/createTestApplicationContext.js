@@ -230,12 +230,14 @@ const createTestApplicationContext = ({ user } = {}) => {
   const mockGetPersistenceGateway = appContextProxy({
     addWorkItemToSectionInbox,
     createCase: jest.fn().mockImplementation(createCase),
+    createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
     createSectionInboxRecord: jest
       .fn()
       .mockImplementation(createSectionInboxRecord),
     createUserInboxRecord: jest.fn().mockImplementation(createUserInboxRecord),
     createWorkItem: createWorkItemPersistence,
+    deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteSectionOutboxRecord,
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
@@ -271,6 +273,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     setPriorityOnAllWorkItems: jest.fn(),
     setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
     updateCase: jest.fn().mockImplementation(updateCase),
+    updateCaseTrialSortMappingRecords: jest.fn(),
     updateHighPriorityCaseTrialSortMappingRecords: jest.fn(),
     updateWorkItem,
     updateWorkItemInCase,
