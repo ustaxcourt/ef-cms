@@ -261,14 +261,18 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getCaseDeadlinesByCaseId),
     getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
-    getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
+    getDocumentQCInboxForUser: jest
+      .fn()
+      .mockImplementation(getDocumentQCInboxForUserPersistence),
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getInboxMessagesForSection: jest
       .fn()
       .mockImplementation(getInboxMessagesForSection),
-    getInboxMessagesForUser: getInboxMessagesForUserPersistence,
+    getInboxMessagesForUser: jest
+      .fn()
+      .mockImplementation(getInboxMessagesForUserPersistence),
     getItem: jest.fn().mockImplementation(getItem),
     getSentMessagesForUser: jest
       .fn()
@@ -295,6 +299,10 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const nodeSassMockReturnValue = {
     render: (data, cb) => cb(data, { css: '' }),
+  };
+
+  const mockGetEmailClient = {
+    sendBulkTemplatedEmail: jest.fn(),
   };
 
   const mockDocumentClient = createMockDocumentClient();
@@ -344,6 +352,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     },
     getDocumentClient: () => mockDocumentClient,
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
+    getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityConstructors: () => ({
       Case,
       CaseAssociationRequestFactory,

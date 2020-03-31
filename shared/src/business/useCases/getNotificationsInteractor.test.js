@@ -1,29 +1,29 @@
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { getNotificationsInteractor } = require('./getNotificationsInteractor');
 
 describe('getNotificationsInteractor', () => {
-  let applicationContext;
-
   it('returns an unread count for my messages', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => ({
-        userId: 'abc',
-      }),
-      getPersistenceGateway: () => ({
-        getDocumentQCInboxForUser: () => [
-          {
-            isQC: false,
-            isRead: true,
-          },
-        ],
-        getInboxMessagesForUser: () => [
-          {
-            isQC: false,
-            isRead: false,
-          },
-        ],
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      userId: 'abc',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCInboxForUser.mockReturnValue([
+        {
+          isQC: false,
+          isRead: true,
+        },
+      ]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getInboxMessagesForUser.mockReturnValue([
+        {
+          isQC: false,
+          isRead: false,
+        },
+      ]);
+
     const result = await getNotificationsInteractor({
       applicationContext,
       userId: 'docketclerk',
@@ -32,26 +32,24 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns an unread count for qc messages', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => ({
-        userId: 'abc',
-      }),
-      getPersistenceGateway: () => ({
-        getDocumentQCInboxForUser: () => [
-          {
-            isQC: false,
-            isRead: false,
-          },
-        ],
-        getInboxMessagesForUser: () => [
-          {
-            isQC: true,
-            isRead: true,
-          },
-        ],
-      }),
-    };
+    applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCInboxForUser.mockReturnValue([
+        {
+          isQC: false,
+          isRead: false,
+        },
+      ]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getInboxMessagesForUser.mockReturnValue([
+        {
+          isQC: true,
+          isRead: true,
+        },
+      ]);
+
     const result = await getNotificationsInteractor({
       applicationContext,
       userId: 'docketclerk',
@@ -60,26 +58,23 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns an accurate unread count for legacy items marked complete', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => ({
-        userId: 'abc',
-      }),
-      getPersistenceGateway: () => ({
-        getDocumentQCInboxForUser: () => [
-          {
-            isQC: false,
-            isRead: true,
-          },
-        ],
-        getInboxMessagesForUser: () => [
-          {
-            isQC: false,
-            isRead: true,
-          },
-        ],
-      }),
-    };
+    applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCInboxForUser.mockReturnValue([
+        {
+          isQC: false,
+          isRead: true,
+        },
+      ]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getInboxMessagesForUser.mockReturnValue([
+        {
+          isQC: false,
+          isRead: true,
+        },
+      ]);
     const result = await getNotificationsInteractor({
       applicationContext,
       userId: 'docketclerk',
