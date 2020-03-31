@@ -1,30 +1,17 @@
+const {
+  applicationContext,
+} = require('../../business/test/createTestApplicationContext');
 const { sendBulkTemplatedEmail } = require('./sendBulkTemplatedEmail');
 
 describe('sendBulkTemplatedEmail', () => {
-  const sendBulkTemplatedEmailStub = jest.fn().mockReturnValue({
-    promise: () => {
-      return Promise.resolve();
-    },
-  });
-
-  const sendBulkTemplatedEmailThrowsErrorStub = jest.fn().mockReturnValue({
-    promise: () => {
-      return Promise.reject('Something bad happened!');
-    },
-  });
-
-  const loggerErrorStub = jest.fn().mockReturnValue(() => {});
-
   it('sends the bulk email given a template', async () => {
-    let applicationContext = {
-      getEmailClient: () => ({
-        sendBulkTemplatedEmail: sendBulkTemplatedEmailStub,
-      }),
-      logger: {
-        error: () => null,
-        info: () => null,
-      },
-    };
+    applicationContext
+      .getEmailClient()
+      .sendBulkTemplatedEmail.mockImplementation({
+        promise: () => {
+          return Promise.resolve();
+        },
+      });
 
     await sendBulkTemplatedEmail({
       applicationContext,
@@ -41,7 +28,10 @@ describe('sendBulkTemplatedEmail', () => {
       templateName: 'case_served',
     });
 
-    expect(sendBulkTemplatedEmailStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getEmailClient().sendBulkTemplatedEmail.mock
+        .calls[0][0],
+    ).toMatchObject({
       Destinations: [
         {
           Destination: {
@@ -59,15 +49,13 @@ describe('sendBulkTemplatedEmail', () => {
   });
 
   it('should log when an error occurs sending the bulk email', async () => {
-    let applicationContext = {
-      getEmailClient: () => ({
-        sendBulkTemplatedEmail: sendBulkTemplatedEmailThrowsErrorStub,
-      }),
-      logger: {
-        error: loggerErrorStub,
-        info: () => null,
-      },
-    };
+    applicationContext
+      .getEmailClient()
+      .sendBulkTemplatedEmail.mockImplementation({
+        promise: () => {
+          return Promise.reject('Something bad happened!');
+        },
+      });
 
     await sendBulkTemplatedEmail({
       applicationContext,
@@ -84,6 +72,6 @@ describe('sendBulkTemplatedEmail', () => {
       templateName: 'case_served',
     });
 
-    expect(loggerErrorStub.mock.calls.length).toEqual(1);
+    expect(applicationContext.logger.error.mock.calls.length).toEqual(1);
   });
 });
