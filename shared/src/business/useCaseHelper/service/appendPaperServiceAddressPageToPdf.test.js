@@ -3,8 +3,10 @@ const path = require('path');
 const {
   appendPaperServiceAddressPageToPdf,
 } = require('./appendPaperServiceAddressPageToPdf');
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { PDFDocument } = require('pdf-lib');
-
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 const testPdfDocBytes = () => {
   // sample.pdf is a 1 page document
@@ -17,11 +19,11 @@ describe('appendPaperServiceAddressPageToPdf', () => {
     .fn()
     .mockResolvedValue(testPdfDoc);
 
-  const applicationContext = {
-    getUseCaseHelpers: () => ({
-      generatePaperServiceAddressPagePdf: generatePaperServiceAddressPagePdfMock,
-    }),
-  };
+  applicationContext
+    .getUseCaseHelpers()
+    .generatePaperServiceAddressPagePdf.mockImplementation(
+      generatePaperServiceAddressPagePdfMock,
+    );
 
   beforeEach(() => {
     jest.clearAllMocks();
