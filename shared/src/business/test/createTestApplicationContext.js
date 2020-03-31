@@ -261,14 +261,18 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getCaseDeadlinesByCaseId),
     getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
-    getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
+    getDocumentQCInboxForUser: jest
+      .fn()
+      .mockImplementation(getDocumentQCInboxForUserPersistence),
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getInboxMessagesForSection: jest
       .fn()
       .mockImplementation(getInboxMessagesForSection),
-    getInboxMessagesForUser: getInboxMessagesForUserPersistence,
+    getInboxMessagesForUser: jest
+      .fn()
+      .mockImplementation(getInboxMessagesForUserPersistence),
     getItem: jest.fn().mockImplementation(getItem),
     getSentMessagesForUser: jest
       .fn()
