@@ -26,6 +26,10 @@ const {
   CourtIssuedDocumentFactory,
 } = require('../entities/courtIssuedDocument/CourtIssuedDocumentFactory');
 const {
+  formattedTrialSessionDetails,
+} = require('../utilities/getFormattedTrialSessionDetails');
+
+const {
   createDocketNumber,
 } = require('../../persistence/dynamo/cases/docketNumberGenerator');
 const {
@@ -185,6 +189,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.formatDateString),
     formatDocument: jest.fn().mockImplementation(v => v),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
+    formattedTrialSessionDetails: jest
+      .fn()
+      .mockImplementation(formattedTrialSessionDetails),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
     getFormattedCaseDetail: jest
@@ -217,6 +224,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     appendPaperServiceAddressPageToPdf: jest
       .fn()
       .mockImplementation(appendPaperServiceAddressPageToPdf),
+    fetchPendingItems: jest.fn(),
+    generatePendingReportPdf: jest.fn(),
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
@@ -234,6 +243,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockReturnValue('<div></div>'),
     generateStandingPretrialNoticeTemplate: jest.fn(),
     generateStandingPretrialOrderTemplate: jest.fn(),
+    generateTrialCalendarTemplate: jest.fn(),
     generateTrialSessionPlanningReportTemplate: jest.fn(),
   };
 

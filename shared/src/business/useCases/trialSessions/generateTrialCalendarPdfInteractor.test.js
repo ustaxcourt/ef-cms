@@ -1,33 +1,55 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+
+const { MOCK_CASE } = require('../../../test/mockCase');
+
+const {
   generateTrialCalendarPdfInteractor,
 } = require('./generateTrialCalendarPdfInteractor');
 
-const getCalendaredCasesForTrialSessionStub = jest
-    .fn()
-    .mockReturnValue(['case1', 'case2', 'case3']),
-  getTrialSessionByIdStub = jest.fn(),
-  generatePdfFromHtmlInteractorStub = jest.fn(),
-  generateTrialCalendarTemplateStub = jest.fn().mockResolvedValue(true),
-  formattedTrialSessionDetailsStub = jest.fn(),
-  getFormattedCaseDetailStub = jest.fn();
+let getCalendaredCasesForTrialSessionStub;
+let getTrialSessionByIdStub;
+let generatePdfFromHtmlInteractorStub;
+let generateTrialCalendarTemplateStub;
+let formattedTrialSessionDetailsStub;
+let getFormattedCaseDetailStub;
 
 describe('generateTrialCalendarPdfInteractor', () => {
-  const applicationContext = {
-    getPersistenceGateway: () => ({
-      getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionStub,
-      getTrialSessionById: getTrialSessionByIdStub,
-    }),
-    getTemplateGenerators: () => ({
-      generateTrialCalendarTemplate: generateTrialCalendarTemplateStub,
-    }),
-    getUseCases: () => ({
-      generatePdfFromHtmlInteractor: generatePdfFromHtmlInteractorStub,
-    }),
-    getUtilities: () => ({
-      formattedTrialSessionDetails: formattedTrialSessionDetailsStub,
-      getFormattedCaseDetail: getFormattedCaseDetailStub,
-    }),
-  };
+  beforeEach(() => {
+    getCalendaredCasesForTrialSessionStub = jest
+      .fn()
+      .mockReturnValue([MOCK_CASE, MOCK_CASE, MOCK_CASE]);
+    getTrialSessionByIdStub = jest.fn();
+    generatePdfFromHtmlInteractorStub = jest.fn();
+    generateTrialCalendarTemplateStub = jest.fn().mockResolvedValue(true);
+    formattedTrialSessionDetailsStub = applicationContext.getUtilities()
+      .formattedTrialSessionDetails;
+    getFormattedCaseDetailStub = applicationContext.getUtilities()
+      .getFormattedCaseDetail;
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockImplementation(
+        getCalendaredCasesForTrialSessionStub,
+      );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockImplementation(getTrialSessionByIdStub);
+
+    applicationContext
+      .getTemplateGenerators()
+      .generateTrialCalendarTemplate.mockImplementation(
+        generateTrialCalendarTemplateStub,
+      );
+
+    applicationContext
+      .getUseCases()
+      .generatePdfFromHtmlInteractor.mockImplementation(
+        generatePdfFromHtmlInteractorStub,
+      );
+  });
 
   it('should find the cases for a trial session successfully', async () => {
     await expect(

@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   getUsersInSectionInteractor,
 } = require('./getUsersInSectionInteractor');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
@@ -18,20 +21,13 @@ const MOCK_SECTION = [
 ];
 describe('Get users in section', () => {
   it('retrieves the users in the petitions section', async () => {
-    const applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getUsersInSection: () => Promise.resolve(MOCK_SECTION),
-        };
-      },
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getUsersInSection.mockReturnValue(MOCK_SECTION);
     const sectionToGet = { section: 'petitions' };
     const section = await getUsersInSectionInteractor({
       applicationContext,
@@ -42,20 +38,13 @@ describe('Get users in section', () => {
   });
 
   it('returns notfounderror when section not found', async () => {
-    const applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getUsersInSection: () => Promise.resolve(MOCK_SECTION),
-        };
-      },
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getUsersInSection.mockReturnValue(MOCK_SECTION);
     let result = 'error';
     try {
       const sectionToGet = { section: 'unknown' };
@@ -72,20 +61,14 @@ describe('Get users in section', () => {
   });
 
   it('returns unauthorizederror when user not authorized', async () => {
-    const applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getUsersInSection: () => Promise.resolve(MOCK_SECTION),
-        };
-      },
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getUsersInSection.mockReturnValue(MOCK_SECTION);
+
     let result = 'error';
     try {
       const sectionToGet = { section: 'unknown' };
