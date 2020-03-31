@@ -17,6 +17,8 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getAllCatalogCases.mockImplementation(() => mockCatalogCases);
+
+    applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
   });
 
   it('should successfully run without error', async () => {
@@ -24,19 +26,13 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId.mockReturnValue(MOCK_CASE);
-    applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
 
-    let error;
-
-    try {
-      await checkForReadyForTrialCasesInteractor({
+    await expect(
+      checkForReadyForTrialCasesInteractor({
         applicationContext,
-      });
-    } catch (e) {
-      error = e;
-    }
+      }),
+    ).resolves.not.toThrow();
 
-    expect(error).toBeUndefined();
     expect(
       applicationContext.getPersistenceGateway().getAllCatalogCases,
     ).toBeCalled();
@@ -53,15 +49,12 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     let error;
 
-    try {
-      await checkForReadyForTrialCasesInteractor({
+    await expect(
+      checkForReadyForTrialCasesInteractor({
         applicationContext,
-      });
-    } catch (e) {
-      error = e;
-    }
+      }),
+    ).resolves.not.toThrow();
 
-    expect(error).toBeUndefined();
     expect(
       applicationContext.getPersistenceGateway().getAllCatalogCases,
     ).toBeCalled();
@@ -76,17 +69,12 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     mockCatalogCases = [{ caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' }];
 
-    let error;
-
-    try {
-      await checkForReadyForTrialCasesInteractor({
+    await expect(
+      checkForReadyForTrialCasesInteractor({
         applicationContext,
-      });
-    } catch (e) {
-      error = e;
-    }
+      }),
+    ).resolves.not.toThrow();
 
-    expect(error).toBeUndefined();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).not.toBeCalled();
@@ -112,17 +100,12 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     mockCatalogCases = [{ caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' }];
 
-    let error;
-
-    try {
-      await checkForReadyForTrialCasesInteractor({
+    await expect(
+      checkForReadyForTrialCasesInteractor({
         applicationContext,
-      });
-    } catch (e) {
-      error = e;
-    }
+      }),
+    ).resolves.not.toThrow();
 
-    expect(error).toBeUndefined();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).not.toBeCalled();
@@ -143,18 +126,18 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
 
     mockCatalogCases = [{ caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' }];
+    applicationContext
+      .getPersistenceGateway()
+      .getAllCatalogCases.mockReturnValue([
+        { caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' },
+      ]);
 
-    let error;
-
-    try {
-      await checkForReadyForTrialCasesInteractor({
+    await expect(
+      checkForReadyForTrialCasesInteractor({
         applicationContext,
-      });
-    } catch (e) {
-      error = e;
-    }
+      }),
+    ).resolves.not.toThrow();
 
-    expect(error).toBeUndefined();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 });
