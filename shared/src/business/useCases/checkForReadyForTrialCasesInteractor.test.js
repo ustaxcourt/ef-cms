@@ -47,8 +47,6 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     mockCatalogCases = [{ caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' }];
 
-    let error;
-
     await expect(
       checkForReadyForTrialCasesInteractor({
         applicationContext,
