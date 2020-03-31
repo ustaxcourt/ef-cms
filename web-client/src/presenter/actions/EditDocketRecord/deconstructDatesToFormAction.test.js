@@ -1,10 +1,9 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { deconstructDatesToFormAction } from './deconstructDatesToFormAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('deconstructDatesToFormAction', () => {
-  const applicationContext = applicationContextForClient;
   presenter.providers.applicationContext = applicationContext;
 
   it('deconstructs the date', async () => {

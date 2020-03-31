@@ -1,14 +1,10 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { removeCaseDetailPendingItemAction } from './removeCaseDetailPendingItemAction';
 import { runAction } from 'cerebral/test';
 
 describe('removeCaseDetailPendingItemAction', () => {
-  const applicationContext = applicationContextForClient;
-
-  beforeEach(() => {
-    presenter.providers.applicationContext = applicationContext;
-  });
+  presenter.providers.applicationContext = applicationContext;
 
   it('should call the removeCasePendingItemInteractor with the data from props', async () => {
     await runAction(removeCaseDetailPendingItemAction, {
