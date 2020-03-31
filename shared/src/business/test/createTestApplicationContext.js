@@ -301,6 +301,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     render: (data, cb) => cb(data, { css: '' }),
   };
 
+  const mockGetEmailClient = {
+    sendBulkTemplatedEmail: jest.fn(),
+  };
+
   const mockDocClient = createMockDocumentClient();
 
   const mockCreateDocketNumberGenerator = {
@@ -348,6 +352,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     },
     getDocumentClient: () => mockDocClient,
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
+    getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityConstructors: () => ({
       Case,
       CaseAssociationRequestFactory,

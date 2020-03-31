@@ -25,6 +25,7 @@ describe('blockCaseFromTrialInteractor', () => {
       caseId: MOCK_CASE.caseId,
       reason: 'just because',
     });
+
     expect(result).toMatchObject({
       blocked: true,
       blockedReason: 'just because',
@@ -45,16 +46,11 @@ describe('blockCaseFromTrialInteractor', () => {
       userId: 'nope',
     });
 
-    let error;
-    try {
-      await blockCaseFromTrialInteractor({
+    await expect(
+      blockCaseFromTrialInteractor({
         applicationContext,
         caseId: '123',
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).not.toBeNull();
-    expect(error.message).toContain('Unauthorized');
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 });
