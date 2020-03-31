@@ -46,9 +46,8 @@ describe('blockCaseFromTrialInteractor', () => {
       userId: 'nope',
     });
 
-    let error;
-    try {
-      await blockCaseFromTrialInteractor({
+    await expect(
+      blockCaseFromTrialInteractor({
         applicationContext,
         caseId: '123',
       }),
