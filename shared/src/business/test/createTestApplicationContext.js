@@ -262,14 +262,18 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getCaseDeadlinesByCaseId),
     getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
-    getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
+    getDocumentQCInboxForUser: jest
+      .fn()
+      .mockImplementation(getDocumentQCInboxForUserPersistence),
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getInboxMessagesForSection: jest
       .fn()
       .mockImplementation(getInboxMessagesForSection),
-    getInboxMessagesForUser: getInboxMessagesForUserPersistence,
+    getInboxMessagesForUser: jest
+      .fn()
+      .mockImplementation(getInboxMessagesForUserPersistence),
     getItem: jest.fn().mockImplementation(getItem),
     getSentMessagesForUser: jest
       .fn()
@@ -299,7 +303,11 @@ const createTestApplicationContext = ({ user } = {}) => {
     render: (data, cb) => cb(data, { css: '' }),
   };
 
-  const mockDocClient = createMockDocumentClient();
+  const mockGetEmailClient = {
+    sendBulkTemplatedEmail: jest.fn(),
+  };
+
+  const mockDocumentClient = createMockDocumentClient();
 
   const mockCreateDocketNumberGenerator = {
     createDocketNumber: jest.fn().mockImplementation(createDocketNumber),
@@ -344,8 +352,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCurrentUserToken: () => {
       return '';
     },
-    getDocumentClient: () => mockDocClient,
+    getDocumentClient: () => mockDocumentClient,
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
+    getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityConstructors: () => ({
       Case,
       CaseAssociationRequestFactory,
@@ -362,6 +371,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
+    getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfStyles: jest.fn(),

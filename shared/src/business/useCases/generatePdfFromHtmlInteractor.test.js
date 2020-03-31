@@ -21,12 +21,10 @@ const pdfMock = jest.fn(
 );
 
 let closeMock;
-let errorMock;
 
 describe('generatePdfFromHtmlInteractor', () => {
   beforeEach(() => {
     closeMock = jest.fn();
-    errorMock = jest.fn();
 
     applicationContext.getChromiumBrowser.mockImplementation(() => {
       launchMock();

@@ -1,7 +1,6 @@
 const {
   applicationContext,
 } = require('../business/test/createTestApplicationContext');
-
 const {
   batchGet,
   batchWrite,
