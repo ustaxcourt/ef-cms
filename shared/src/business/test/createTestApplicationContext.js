@@ -474,6 +474,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
     getClerkOfCourtNameForSigning: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
+    getCognitoClientId: jest.fn(),
+    getCognitoTokenUrl: jest.fn(),
     getConstants: jest.fn().mockReturnValue({
       ...webClientApplicationContext.getConstants(),
       ...webApiApplicationContext.getConstants(),
