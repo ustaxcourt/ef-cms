@@ -110,6 +110,8 @@ const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { getItem } = require('../../persistence/localStorage/getItem');
+const { removeItem } = require('../../persistence/localStorage/removeItem');
+const { setItem } = require('../../persistence/localStorage/setItem');
 const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
@@ -236,6 +238,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(createSectionInboxRecord),
     createUserInboxRecord: jest.fn().mockImplementation(createUserInboxRecord),
     createWorkItem: createWorkItemPersistence,
+    deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteSectionOutboxRecord,
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
@@ -263,11 +266,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
+    removeItem: jest.fn().mockImplementation(removeItem),
     saveWorkItemForNonPaper: jest
       .fn()
       .mockImplementation(saveWorkItemForNonPaper),
     saveWorkItemForPaper: jest.fn().mockImplementation(saveWorkItemForPaper),
-    setItem: jest.fn(),
+    setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
     setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
     updateCase: jest.fn().mockImplementation(updateCase),
