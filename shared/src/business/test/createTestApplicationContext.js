@@ -321,6 +321,13 @@ const createTestApplicationContext = ({ user } = {}) => {
     sendNotificationToUser: jest.fn(),
   };
 
+  const mockGetHttpClientReturnValue = {
+    get: () => ({
+      data: 'url',
+    }),
+    post: jest.fn(),
+  };
+
   const mockGetUseCaseHelpers = {
     appendPaperServiceAddressPageToPdf: jest
       .fn()
@@ -465,6 +472,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
     getClerkOfCourtNameForSigning: jest.fn(),
     getCognito: () => mockCognitoReturnValue,
+    getCognitoClientId: jest.fn(),
+    getCognitoRedirectUrl: jest.fn(),
+    getCognitoTokenUrl: jest.fn(),
     getConstants: jest.fn().mockReturnValue({
       ...webClientApplicationContext.getConstants(),
       ...webApiApplicationContext.getConstants(),
@@ -498,11 +508,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       WorkItem: WorkItem,
     }),
     getFileReaderInstance: jest.fn(),
-    getHttpClient: jest.fn(() => ({
-      get: () => ({
-        data: 'url',
-      }),
-    })),
+    getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
     getNotificationGateway: jest.fn().mockImplementation(() => {
       return mockGetNotificationGatewayReturnValue;
