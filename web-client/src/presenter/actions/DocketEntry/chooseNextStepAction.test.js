@@ -6,7 +6,7 @@ describe('chooseNextStepAction', () => {
   let addAnotherEntryStub;
   let caseDetailStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     addAnotherEntryStub = jest.fn();
     caseDetailStub = jest.fn();
 

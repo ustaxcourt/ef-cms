@@ -8,7 +8,7 @@ describe('canConsolidateAction', () => {
   let noStub;
   let consolidationStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     yesStub = jest.fn();
     noStub = jest.fn();
     consolidationStub = jest.fn();

@@ -8,7 +8,7 @@ describe('serveCourtIssuedDocumentAction', () => {
   global.Blob = () => {};
   let mockCreateObjectUrl;
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
     mockCreateObjectUrl = jest.fn();

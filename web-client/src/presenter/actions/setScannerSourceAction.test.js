@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 import { setScannerSourceAction } from './setScannerSourceAction';
 
 describe('setScannerSourceAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

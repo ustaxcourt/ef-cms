@@ -7,7 +7,7 @@ describe('updateUserContactInformationAction', () => {
   let noChangeMock;
   let successMock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     noChangeMock = jest.fn();
     successMock = jest.fn();
 

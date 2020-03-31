@@ -1,7 +1,7 @@
 import { setPageTitle } from './setPageTitle';
 
 describe('setPageTitle', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     global.window = {};
     global.window.document = {};
   });

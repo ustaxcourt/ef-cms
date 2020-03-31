@@ -8,7 +8,7 @@ describe('validatePetitionerInformationFormAction', () => {
   let errorStub;
   let SERVICE_INDICATOR_TYPES;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

@@ -16,7 +16,7 @@ const successStub = jest.fn();
 const errorStub = jest.fn();
 
 describe('createTrialSessionAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.restoreAllMocks();
 
     presenter.providers.applicationContext = applicationContext;

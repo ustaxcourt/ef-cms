@@ -9,7 +9,7 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
 
   const { USER_ROLES } = applicationContext.getConstants();
 
-  beforeEach(() => {
+  beforeAll(() => {
     pathYesStub = jest.fn();
     pathNoStub = jest.fn();
 

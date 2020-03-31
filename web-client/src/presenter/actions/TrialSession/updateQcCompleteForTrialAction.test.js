@@ -8,7 +8,7 @@ const successMock = jest.fn();
 const errorMock = jest.fn();
 
 describe('updateQcCompleteForTrialAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorMock,
