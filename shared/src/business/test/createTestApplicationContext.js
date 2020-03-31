@@ -1,5 +1,6 @@
 const createWebApiApplicationContext = require('../../../../web-api/src/applicationContext');
 const DateHandler = require('../utilities/DateHandler');
+const getAddressPhoneDiff = require('../utilities/generateChangeOfAddressTemplate');
 const path = require('path');
 const sharedAppContext = require('../../sharedAppContext');
 const {
@@ -188,9 +189,13 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.formatDateString),
     formatDocument: jest.fn().mockImplementation(v => v),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
+<<<<<<< HEAD
     formattedTrialSessionDetails: jest
       .fn()
       .mockImplementation(formattedTrialSessionDetails),
+=======
+    getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
+>>>>>>> f177a0d7488299c83b5a50fa9ad637c8dd920949
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
     getFormattedCaseDetail: jest
       .fn()
@@ -247,7 +252,10 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetChromiumBrowserReturnValue = {
     close: jest.fn(),
-    newPage: jest.fn(),
+    newPage: jest.fn().mockReturnValue({
+      pdf: jest.fn(),
+      setContent: jest.fn(),
+    }),
   };
 
   const mockGetPersistenceGateway = appContextProxy({
@@ -362,6 +370,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCurrentUserToken: () => {
       return '';
     },
+    getDispatchers: jest.fn().mockReturnValue({
+      sendBulkTemplatedEmail: jest.fn(),
+    }),
     getDocumentClient: () => mockDocumentClient,
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
