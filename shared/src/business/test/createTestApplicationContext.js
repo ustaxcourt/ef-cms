@@ -425,7 +425,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveWorkItemForNonPaper: jest
       .fn()
       .mockImplementation(saveWorkItemForNonPaper),
-    saveWorkItemForPaper,
+    saveWorkItemForPaper: jest.fn().mockImplementation(saveWorkItemForPaper),
     setItem: jest.fn(),
     setPriorityOnAllWorkItems: jest.fn(),
     setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
