@@ -1,24 +1,21 @@
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { getBlockedCasesInteractor } = require('./getBlockedCasesInteractor');
 const { User } = require('../entities/User');
 
 describe('getBlockedCasesInteractor', () => {
-  let searchSpy;
-
-  const applicationContext = {
-    environment: { stage: 'local' },
-    getCurrentUser: () => {
-      return {
-        role: User.ROLES.petitionsClerk,
-        userId: 'petitionsclerk',
-      };
-    },
-    getSearchClient: () => ({
-      search: searchSpy,
-    }),
-  };
+  let searchSpy = jest.fn();
 
   it('calls search function with correct params and returns records', async () => {
-    searchSpy = jest.fn(async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
+    });
+
+    applicationContext.getSearchClient.mockReturnValue({
+      search: searchSpy,
+    });
+
+    searchSpy.mockImplementation(() => {
       return {
         hits: {
           hits: [
@@ -42,8 +39,11 @@ describe('getBlockedCasesInteractor', () => {
       trialLocation: 'Boise, Idaho',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must,
+    ).toEqual([
       { match: { 'preferredTrialCity.S': 'Boise, Idaho' } },
       {
         bool: {
@@ -58,12 +58,10 @@ describe('getBlockedCasesInteractor', () => {
   });
 
   it('should throw an unauthorized error if the user does not have access to blocked cases', async () => {
-    applicationContext.getCurrentUser = () => {
-      return {
-        role: User.ROLES.petitioner,
-        userId: 'petitioner',
-      };
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
+    });
 
     let error;
     try {

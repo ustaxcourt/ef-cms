@@ -6,25 +6,20 @@ const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
 describe('blockCaseFromTrialInteractor', () => {
-  let user;
-
   beforeEach(() => {
-    applicationContext.environment.stage = 'local';
-    applicationContext.getCurrentUser.mockImplementation(() => user);
-  });
-
-  it('should update the case with the blocked flag set as true and attach a reason', async () => {
-    user = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitionsClerk,
       userId: 'petitionsclerk',
-    };
+    });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockResolvedValue(MOCK_CASE);
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
       .updateCase.mockImplementation(({ caseToUpdate }) => caseToUpdate);
+  });
 
+  it('should update the case with the blocked flag set as true and attach a reason', async () => {
     const result = await blockCaseFromTrialInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
@@ -46,13 +41,14 @@ describe('blockCaseFromTrialInteractor', () => {
   });
 
   it('should throw an unauthorized error if the user has no access to block cases', async () => {
-    user = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: 'nope',
       userId: 'nope',
-    };
+    });
 
-    await expect(
-      blockCaseFromTrialInteractor({
+    let error;
+    try {
+      await blockCaseFromTrialInteractor({
         applicationContext,
         caseId: '123',
       }),
