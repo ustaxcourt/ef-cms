@@ -8,8 +8,6 @@ describe('overwriteOrderFileAction', () => {
   let successStub;
 
   beforeAll(() => {
-    jest.restoreAllMocks();
-
     errorStub = jest.fn();
     successStub = jest.fn();
 
