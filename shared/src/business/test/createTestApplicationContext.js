@@ -116,6 +116,7 @@ const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
+import { getFormattedCaseDetail } from '../../business/utilities/getFormattedCaseDetail';
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
@@ -179,6 +180,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatDocument: jest.fn().mockImplementation(v => v),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
+    getFormattedCaseDetail: jest
+      .fn()
+      .mockImplementation(getFormattedCaseDetail),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
     isStringISOFormatted: jest
