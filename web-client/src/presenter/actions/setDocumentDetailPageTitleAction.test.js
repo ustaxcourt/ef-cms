@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 import { setDocumentDetailPageTitleAction } from './setDocumentDetailPageTitleAction';
 
 describe('setDocumentDetailPageTitleAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

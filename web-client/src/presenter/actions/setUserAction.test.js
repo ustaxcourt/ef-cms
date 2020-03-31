@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 import { setUserAction } from './setUserAction';
 
 describe('setUserAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     process.env.USTC_ENV = 'dev';
 
     presenter.providers.applicationContext = applicationContext;

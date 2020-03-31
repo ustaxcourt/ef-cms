@@ -6,7 +6,7 @@ let yesStub;
 let noStub;
 
 describe('isPractitionerInCaseAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     yesStub = jest.fn();
     noStub = jest.fn();
 

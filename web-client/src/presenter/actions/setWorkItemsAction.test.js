@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 import { setWorkItemsAction } from './setWorkItemsAction';
 
 describe('setWorkItemsAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

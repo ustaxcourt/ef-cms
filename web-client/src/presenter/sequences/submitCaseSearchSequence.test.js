@@ -16,7 +16,7 @@ describe('submitCaseSearchSequence', () => {
     test = CerebralTest(presenter);
     test.setState('searchTerm', '111-19');
   });
-  beforeEach(() => {
+  beforeAll(() => {
     routeStub = jest.fn().mockReturnValue({});
   });
 

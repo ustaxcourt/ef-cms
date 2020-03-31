@@ -5,7 +5,7 @@ import { resetContactsAction } from './resetContactsAction';
 import { runAction } from 'cerebral/test';
 
 describe('resetContactsAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

@@ -6,7 +6,7 @@ describe('shouldGetTrialSessionWorkingCopyAction', () => {
   let yesStub;
   let noStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     yesStub = jest.fn();
     noStub = jest.fn();
 

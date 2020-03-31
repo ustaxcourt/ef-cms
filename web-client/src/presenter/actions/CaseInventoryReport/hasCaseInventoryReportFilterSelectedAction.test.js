@@ -6,7 +6,7 @@ describe('hasCaseInventoryReportFilterSelectedAction', () => {
   const proceedMock = jest.fn();
   const noMock = jest.fn();
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.path = {
       no: noMock,
       proceed: proceedMock,
