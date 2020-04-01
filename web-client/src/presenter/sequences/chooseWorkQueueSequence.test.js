@@ -1,6 +1,7 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { chooseWorkQueueSequence } from '../sequences/chooseWorkQueueSequence';
+import { presenter } from '../presenter-mock';
 
 describe('chooseWorkQueueSequence', () => {
   let test;
@@ -15,6 +16,9 @@ describe('chooseWorkQueueSequence', () => {
       .getUseCases()
       .getNotificationsInteractor.mockReturnValue({});
     presenter.providers.applicationContext = applicationContext;
+    presenter.sequences = {
+      chooseWorkQueueSequence,
+    };
     test = CerebralTest(presenter);
   });
   it('should set the workQueueToDisplay to match the props passed in', async () => {

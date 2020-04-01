@@ -1,6 +1,6 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { overwriteOrderFileAction } from './overwriteOrderFileAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('overwriteOrderFileAction', () => {

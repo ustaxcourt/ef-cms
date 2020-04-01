@@ -1,6 +1,7 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { gotoReviewSavedPetitionSequence } from '../sequences/gotoReviewSavedPetitionSequence';
+import { presenter } from '../presenter-mock';
 
 describe('gotoReviewSavedPetitionSequence', () => {
   let test;
@@ -14,6 +15,9 @@ describe('gotoReviewSavedPetitionSequence', () => {
       .getUseCases()
       .getCaseInteractor.mockReturnValue(MOCK_CASE);
     presenter.providers.applicationContext = applicationContext;
+    presenter.sequences = {
+      gotoReviewSavedPetitionSequence,
+    };
     test = CerebralTest(presenter);
   });
 
