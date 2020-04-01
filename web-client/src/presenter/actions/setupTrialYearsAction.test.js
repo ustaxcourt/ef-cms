@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 import { setupTrialYearsAction } from './setupTrialYearsAction';
 
 describe('setupTrialYearsAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext.getUtilities().formatNow.mockReturnValue('2000');
     presenter.providers.applicationContext = applicationContext;
   });

@@ -3,11 +3,11 @@ import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('closeFileUploadStatusModalAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.spyOn(global, 'setTimeout');
   });
 
-  afterEach(() => {
+  afterAll(() => {
     jest.restoreAllMocks();
   });
 

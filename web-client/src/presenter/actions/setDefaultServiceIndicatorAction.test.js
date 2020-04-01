@@ -6,7 +6,7 @@ import { setDefaultServiceIndicatorAction } from './setDefaultServiceIndicatorAc
 describe('setDefaultServiceIndicatorAction', () => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

@@ -17,7 +17,7 @@ describe('canSetTrialSessionToCalendarAction', () => {
   let pathNoStub;
   let pathYesStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     canSetTrialSessionAsCalendaredInteractorStub = jest.fn();
     pathNoStub = jest.fn();
     pathYesStub = jest.fn();

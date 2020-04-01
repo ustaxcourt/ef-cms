@@ -9,7 +9,7 @@ describe('validateInitialWorkItemMessage', () => {
 
   let mockMessage;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

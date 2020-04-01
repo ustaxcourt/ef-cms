@@ -5,7 +5,7 @@ import { runAction } from 'cerebral/test';
 
 describe('generatePrintableCaseInventoryReportAction', () => {
   const applicationContext = applicationContextForClient;
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getUseCases()
       .generatePrintableCaseInventoryReportInteractor.mockImplementation(() => {

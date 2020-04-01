@@ -222,7 +222,7 @@ describe('filterWorkItems', () => {
   let workQueueInProgress;
   let workQueueOutbox;
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext.getCurrentUser = () => ({
       role: User.ROLES.docketClerk,
       userId: '7f87f5d1-dfce-4515-a1e4-5231ceac61bb',
