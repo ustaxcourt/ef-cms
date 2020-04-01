@@ -23,7 +23,7 @@ const caseSearchFilter = (cases, currentUser) => {
   for (const caseRaw of cases) {
     if (
       !caseRaw.sealedDate ||
-      isAssociatedUser({ caseRaw, userId: currentUser.userId }) ||
+      isAssociatedUser({ caseRaw, user: currentUser }) ||
       isAuthorized(
         currentUser,
         ROLE_PERMISSIONS.VIEW_SEALED_CASE,

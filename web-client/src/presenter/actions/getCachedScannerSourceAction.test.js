@@ -7,7 +7,7 @@ describe('getCachedScannerSourceAction', () => {
   let mockSelectSource;
   let mockSuccess;
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
     global.File = class {

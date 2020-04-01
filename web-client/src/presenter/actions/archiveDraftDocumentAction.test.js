@@ -3,9 +3,11 @@ import { archiveDraftDocumentAction } from './archiveDraftDocumentAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('archiveDraftDocumentAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('archives a drafted document successfully', async () => {
     const result = await runAction(archiveDraftDocumentAction, {
       modules: {

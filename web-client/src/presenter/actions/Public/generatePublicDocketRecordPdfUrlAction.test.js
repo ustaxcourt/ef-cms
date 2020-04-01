@@ -5,7 +5,7 @@ import { runAction } from 'cerebral/test';
 
 describe('generatePublicDocketRecordPdfUrlAction', () => {
   let createObjectURLStub;
-  beforeEach(() => {
+  beforeAll(() => {
     global.Blob = jest.fn();
     createObjectURLStub = jest.fn().mockReturnValue('pdf url');
 

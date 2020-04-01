@@ -10,7 +10,7 @@ import { runAction } from 'cerebral/test';
 describe('createCaseFromPaperAction', () => {
   let errorStub, successStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
     errorStub = jest.fn();

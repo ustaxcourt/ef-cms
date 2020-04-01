@@ -4,7 +4,7 @@ import { presenter } from '../../presenter-public';
 import { runAction } from 'cerebral/test';
 
 describe('getPublicCaseAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContextForClient;
   });
 

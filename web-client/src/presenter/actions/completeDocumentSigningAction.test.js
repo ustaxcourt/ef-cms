@@ -3,26 +3,32 @@ import { completeDocumentSigningAction } from './completeDocumentSigningAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
-const {
-  completeWorkItemInteractor,
-  generateSignedDocumentInteractor,
-  getInboxMessagesForUserInteractor,
-  signDocumentInteractor,
-} = applicationContext.getUseCases();
-const { uploadDocumentFromClient } = applicationContext.getPersistenceGateway();
-
-applicationContext.getCurrentUser.mockReturnValue({
-  userId: '1',
-});
-
 describe('completeDocumentSigningAction', () => {
-  beforeEach(() => {
+  const {
+    completeWorkItemInteractor,
+    generateSignedDocumentInteractor,
+    getInboxMessagesForUserInteractor,
+    signDocumentInteractor,
+  } = applicationContext.getUseCases();
+  const {
+    uploadDocumentFromClient,
+  } = applicationContext.getPersistenceGateway();
+
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      userId: '1',
+    });
+
     global.window = {
       pdfjsObj: {
         getData: jest.fn().mockResolvedValue(true),
       },
+    };
+
+    global.window.pdfjsObj = {
+      getData: jest.fn().mockResolvedValue(true),
     };
 
     global.File = jest.fn();
@@ -38,10 +44,6 @@ describe('completeDocumentSigningAction', () => {
         workItemId: '1',
       },
     ]);
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 
   it('should sign a document via executing various use cases', async () => {

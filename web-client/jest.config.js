@@ -17,11 +17,12 @@ module.exports = {
     '!src/index-public.prod.js',
   ],
   globals: {
-    File: function() {},
+    File: function () {},
     FileReader: () => {},
     atob: x => x,
   },
   testEnvironment: 'node',
+  testTimeout: 30000,
   // this is to ignore imported html files
   transform: {
     '^.+\\.html?$': './htmlLoader.js',
