@@ -6,7 +6,7 @@ describe('getHasAlternateBackLocationAction', () => {
   let trueStub;
   let falseStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     trueStub = jest.fn();
     falseStub = jest.fn();
 

@@ -5,7 +5,7 @@ import { runAction } from 'cerebral/test';
 describe('navigateToTrialSessionPlanningReportAction', () => {
   let routeStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     routeStub = jest.fn();
 
     presenter.providers.router = {

@@ -4,13 +4,17 @@ import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('assignPetitionToAuthenticatedUserAction', () => {
-  presenter.providers.applicationContext = applicationContext;
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
-  applicationContext.getCurrentUser.mockReturnValue({
-    name: 'Some One',
-    userId: 'abc',
-  });
   const { assignWorkItemsInteractor } = applicationContext.getUseCases();
+
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Some One',
+      userId: 'abc',
+    });
+  });
 
   it('should not assign the workitem if the qc work item is not present', async () => {
     await runAction(assignPetitionToAuthenticatedUserAction, {

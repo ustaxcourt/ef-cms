@@ -8,7 +8,7 @@ presenter.providers.applicationContext = applicationContextForClient;
 describe('setDocketEntryMetaFormForEditAction', () => {
   let caseDetail;
 
-  beforeEach(() => {
+  beforeAll(() => {
     caseDetail = {
       docketNumber: '123-45',
       docketRecord: [

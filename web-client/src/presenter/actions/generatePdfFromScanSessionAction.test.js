@@ -4,7 +4,7 @@ import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('generatePdfFromScanSessionAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
     global.File = class {

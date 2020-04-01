@@ -16,15 +16,15 @@ const successStub = jest.fn();
 const errorStub = jest.fn();
 
 describe('createTrialSessionAction', () => {
-  beforeEach(() => {
-    jest.restoreAllMocks();
-
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
     };
+  });
 
+  beforeEach(() => {
     applicationContext
       .getUseCases()
       .createTrialSessionInteractor.mockResolvedValue(MOCK_TRIAL);

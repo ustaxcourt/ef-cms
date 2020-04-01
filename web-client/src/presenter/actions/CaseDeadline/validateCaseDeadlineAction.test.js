@@ -11,7 +11,7 @@ describe('validateCaseDeadlineAction', () => {
 
   let mockCaseDeadline;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

@@ -8,7 +8,7 @@ describe('validateFileSizeAction', () => {
   let mockInvalid;
   let fakeFile;
 
-  beforeEach(() => {
+  beforeAll(() => {
     mockValid = jest.fn();
     mockInvalid = jest.fn();
 

@@ -7,7 +7,7 @@ let yesMock;
 let noMock;
 
 describe('getShouldRedirectToSigningAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     yesMock = jest.fn();
     noMock = jest.fn();
 

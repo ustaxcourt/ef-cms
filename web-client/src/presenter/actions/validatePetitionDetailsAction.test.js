@@ -9,7 +9,7 @@ describe('validatePetitionDetailsAction', () => {
   let errorStub;
   let PAYMENT_STATUS;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

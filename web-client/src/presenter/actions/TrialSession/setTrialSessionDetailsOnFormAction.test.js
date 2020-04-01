@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 import { setTrialSessionDetailsOnFormAction } from './setTrialSessionDetailsOnFormAction';
 
 describe('setTrialSessionDetailsOnFormAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

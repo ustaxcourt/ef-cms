@@ -6,7 +6,7 @@ import { runAction } from 'cerebral/test';
 describe('redirectToCognitoAction', () => {
   const externalRoute = jest.fn();
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = { externalRoute };
   });

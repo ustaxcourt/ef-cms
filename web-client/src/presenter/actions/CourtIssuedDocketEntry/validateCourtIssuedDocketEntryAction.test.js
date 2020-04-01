@@ -8,7 +8,7 @@ describe('validateCourtIssuedDocketEntryAction', () => {
   let errorStub;
   let mockDocketEntry;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

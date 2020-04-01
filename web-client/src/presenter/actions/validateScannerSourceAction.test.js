@@ -7,7 +7,7 @@ const invalidMock = jest.fn();
 const validMock = jest.fn();
 
 describe('validateScannerSourceAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       invalid: invalidMock,

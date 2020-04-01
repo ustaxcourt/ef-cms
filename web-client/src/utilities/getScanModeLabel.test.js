@@ -5,8 +5,6 @@ import { getScanModeLabel } from './getScanModeLabel';
 describe('getScanModeLabel', () => {
   const { SCAN_MODES } = Scan;
 
-  applicationContext.getConstants.mockReturnValue({ SCAN_MODES });
-
   it('Returns Single Sided when the scan mode is feeder', () => {
     expect(getScanModeLabel(applicationContext, SCAN_MODES.FEEDER)).toEqual(
       'Single sided',

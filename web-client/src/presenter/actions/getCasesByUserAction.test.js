@@ -6,7 +6,7 @@ import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('getCasesByUserAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.privatePractitioner,

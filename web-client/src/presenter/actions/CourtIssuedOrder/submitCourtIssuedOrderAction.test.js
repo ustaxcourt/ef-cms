@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 import { submitCourtIssuedOrderAction } from './submitCourtIssuedOrderAction';
 
 describe('submitCourtIssuedOrderAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContextForClient;
   });
 

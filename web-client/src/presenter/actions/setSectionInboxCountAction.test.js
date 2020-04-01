@@ -7,7 +7,7 @@ import { setSectionInboxCountAction } from './setSectionInboxCountAction';
 describe('setSectionInboxCountAction', () => {
   let workItems;
 
-  beforeEach(() => {
+  beforeAll(() => {
     workItems = [
       {
         associatedJudge: 'Judge Barker',
