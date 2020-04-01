@@ -1,6 +1,7 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { gotoPrintablePendingReportForCaseSequence } from '../sequences/gotoPrintablePendingReportForCaseSequence';
+import { presenter } from '../presenter-mock';
 
 describe('gotoPrintablePendingReportForCaseSequence', () => {
   let test;
@@ -22,6 +23,9 @@ describe('gotoPrintablePendingReportForCaseSequence', () => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
       revokeObjectURL: () => {},
+    };
+    presenter.sequences = {
+      gotoPrintablePendingReportForCaseSequence,
     };
     test = CerebralTest(presenter);
   });
