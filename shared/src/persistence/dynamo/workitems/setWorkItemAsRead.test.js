@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { setWorkItemAsRead } = require('./setWorkItemAsRead');
 
 describe('setWorkItemAsRead', () => {
@@ -10,14 +13,9 @@ describe('setWorkItemAsRead', () => {
   });
 
   it('invokes the persistence layer with pk of {userId}|workItem and other expected params', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        update: updateStub,
-      }),
-    };
+    applicationContext.getDocumentClient.mockReturnValue({
+      update: updateStub,
+    });
     await setWorkItemAsRead({
       applicationContext,
       userId: '123',
