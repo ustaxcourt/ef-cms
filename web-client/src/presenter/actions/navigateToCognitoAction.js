@@ -1,6 +1,14 @@
 import { state } from 'cerebral';
 
-export const navigateToCognitoAction = ({ get, router }) => {
+/**
+ * changes the route to view the cognito url from state
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.router the riot.router object that is used for changing the route
+ * @param {object} providers.get the cerebral get method
+ * @returns {Promise} async action
+ */
+export const navigateToCognitoAction = async ({ get, router }) => {
   const path = get(state.cognitoLoginUrl);
-  router.externalRoute(path);
+  await router.externalRoute(path);
 };
