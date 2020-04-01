@@ -1,28 +1,15 @@
 import { batchDownloadTrialSessionInteractor } from './batchDownloadTrialSessionInteractor';
-
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
 describe('batchDownloadTrialSessionInteractor', () => {
-  let applicationContext, getCalendaredCasesForTrialSessionMock;
-  const getTrialSessionByIdMock = jest.fn(() => {
-    return {
-      startDate: new Date('2019-09-26T12:00:00.000Z'),
-      trialLocation: 'Birmingham',
-    };
-  });
-
-  let loggerMock;
-  let sendNotificationToUserMock;
-
-  const zipDocumentsMock = jest.fn();
-  const getDownloadPolicyUrlMock = jest.fn(() => ({ url: 'something' }));
+  let user;
 
   beforeEach(() => {
-    loggerMock = jest.fn();
-    sendNotificationToUserMock = jest.fn();
-
     const mockCase = {
       ...MOCK_CASE,
     };
@@ -37,45 +24,54 @@ describe('batchDownloadTrialSessionInteractor', () => {
         index: 4,
       },
     ];
-    getCalendaredCasesForTrialSessionMock = jest.fn(() => [
-      {
-        ...mockCase,
-      },
-    ]);
-    applicationContext = {
-      getCurrentUser: () => ({
-        role: User.ROLES.judge,
-        userId: 'abc-123',
-      }),
-      getNotificationGateway: () => ({
-        sendNotificationToUser: sendNotificationToUserMock,
-      }),
-      getPersistenceGateway: () => ({
-        getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionMock,
-        getDownloadPolicyUrl: getDownloadPolicyUrlMock,
-        getTrialSessionById: getTrialSessionByIdMock,
-        zipDocuments: zipDocumentsMock,
-      }),
-      getUseCases: () => ({
-        generateDocketRecordPdfInteractor: async () => {},
-      }),
-      logger: { info: loggerMock },
+
+    user = {
+      role: User.ROLES.judge,
+      userId: 'abc-123',
     };
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([
+        {
+          ...mockCase,
+        },
+      ]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockReturnValue({ url: 'something' });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue({
+        startDate: new Date('2019-09-26T12:00:00.000Z'),
+        trialLocation: 'Birmingham',
+      });
+
+    applicationContext
+      .getUseCases()
+      .generateDocketRecordPdfInteractor.mockResolvedValue({});
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
-    applicationContext.getCurrentUser = () => ({
+    user = {
       role: User.ROLES.petitioner,
       userId: 'abc-123',
-    });
+    };
 
     await batchDownloadTrialSessionInteractor({
       applicationContext,
       trialSessionId: '123',
     });
 
-    expect(loggerMock).toHaveBeenCalledWith('Error', expect.anything());
-    expect(sendNotificationToUserMock).toHaveBeenCalledWith({
+    expect(applicationContext.logger.info).toHaveBeenCalledWith(
+      'Error',
+      expect.anything(),
+    );
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
       message: {
         action: 'batch_download_error',
@@ -91,27 +87,43 @@ describe('batchDownloadTrialSessionInteractor', () => {
       trialSessionId: '123',
     });
 
-    expect(getTrialSessionByIdMock).toHaveBeenCalled();
-    expect(getCalendaredCasesForTrialSessionMock).toHaveBeenCalled();
-    expect(zipDocumentsMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getTrialSessionById,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .getCalendaredCasesForTrialSession,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().zipDocuments,
+    ).toHaveBeenCalled();
   });
 
   it('should filter closed cases from batch', async () => {
-    getCalendaredCasesForTrialSessionMock = jest.fn(() => [
-      {
-        ...MOCK_CASE,
-        status: Case.STATUS_TYPES.closed,
-      },
-    ]);
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([
+        {
+          ...MOCK_CASE,
+          status: Case.STATUS_TYPES.closed,
+        },
+      ]);
 
     await batchDownloadTrialSessionInteractor({
       applicationContext,
       trialSessionId: '123',
     });
 
-    expect(getTrialSessionByIdMock).toHaveBeenCalled();
-    expect(getCalendaredCasesForTrialSessionMock).toHaveBeenCalled();
-    expect(zipDocumentsMock).toHaveBeenCalledWith({
+    expect(
+      applicationContext.getPersistenceGateway().getTrialSessionById,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .getCalendaredCasesForTrialSession,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().zipDocuments,
+    ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
       extraFileNames: [],
       extraFiles: [],

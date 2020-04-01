@@ -1,13 +1,13 @@
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+
 import { computeFilingFormDateAction } from './computeFilingFormDateAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
-describe('computeFilingFormDateAction', () => {
-  beforeEach(() => {
-    presenter.providers.applicationContext = applicationContext;
-  });
+const applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
+describe('computeFilingFormDateAction', () => {
   it("computes the document's filingDate from date parts", async () => {
     const result = await runAction(computeFilingFormDateAction, {
       modules: {

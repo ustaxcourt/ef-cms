@@ -1,12 +1,12 @@
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { deconstructDatesToFormAction } from './deconstructDatesToFormAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('deconstructDatesToFormAction', () => {
-  it('returns undefined if no valid date is provided', () => {});
+  const applicationContext = applicationContextForClient;
+  presenter.providers.applicationContext = applicationContext;
+
   it('deconstructs the date', async () => {
     const result = await runAction(deconstructDatesToFormAction, {
       modules: {

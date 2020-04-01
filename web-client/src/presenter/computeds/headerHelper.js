@@ -34,6 +34,8 @@ export const headerHelper = (get, applicationContext) => {
     defaultQCBoxPath: isOtherUser(userRole)
       ? '/document-qc/section/inbox'
       : '/document-qc/my/inbox',
+    pageIsDashboard:
+      isDashboard && applicationContext.getUtilities().isExternalUser(userRole),
     pageIsDocumentQC: isMessages && !workQueueIsInternal,
     pageIsHome,
     pageIsMessages: isMessages && workQueueIsInternal,
@@ -48,14 +50,20 @@ export const headerHelper = (get, applicationContext) => {
     showHomeIcon: [USER_ROLES.judge, USER_ROLES.chambers].includes(userRole),
     showMessages: applicationContext.getUtilities().isInternalUser(userRole),
     showMessagesIcon: notifications.myInboxUnreadCount > 0,
-    showMyCases: applicationContext.getUtilities().isExternalUser(userRole),
+    showMyCases:
+      applicationContext.getUtilities().isExternalUser(userRole) &&
+      user &&
+      userRole &&
+      userRole !== USER_ROLES.irsSuperuser,
     showReports: applicationContext.getUtilities().isInternalUser(userRole),
     showSearchInHeader:
       user &&
       userRole &&
       userRole !== USER_ROLES.petitioner &&
       userRole !== USER_ROLES.privatePractitioner &&
-      userRole !== USER_ROLES.irsPractitioner,
+      userRole !== USER_ROLES.irsPractitioner &&
+      userRole !== USER_ROLES.irsSuperuser,
+    showSearchNavItem: user && userRole && userRole === USER_ROLES.irsSuperuser,
     showTrialSessions: permissions && permissions.TRIAL_SESSIONS,
     userName: user && user.name,
   };
