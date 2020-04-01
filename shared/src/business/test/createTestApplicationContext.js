@@ -250,7 +250,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getChromiumBrowser: jest.fn(),
     getClerkOfCourtNameForSigning: jest.fn(),
     getCognito: appContextProxy(),
-    getConstants: getConstants(),
+    getConstants: jest.fn().mockReturnValue(getConstants()),
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {
