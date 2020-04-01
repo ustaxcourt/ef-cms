@@ -18,10 +18,6 @@ presenter.providers.path = {
 };
 
 describe('completeWorkItemInteractor', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('should have undefined completedMessage if completeForm is empty', async () => {
     await runAction(completeWorkItemAction, {
       modules: {

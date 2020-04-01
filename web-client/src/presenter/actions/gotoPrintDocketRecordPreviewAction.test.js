@@ -8,7 +8,7 @@ const routeMock = jest.fn();
 const openInNewTabMock = jest.fn();
 
 describe('gotoPrintDocketRecordPreviewAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
       openInNewTab: openInNewTabMock,

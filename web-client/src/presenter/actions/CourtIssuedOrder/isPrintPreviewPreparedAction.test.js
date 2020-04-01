@@ -8,7 +8,7 @@ presenter.providers.path = {
 };
 
 describe('isPrintPreviewPreparedAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.resetAllMocks();
   });
 

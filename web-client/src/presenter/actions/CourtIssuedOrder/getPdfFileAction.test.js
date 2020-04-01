@@ -6,7 +6,7 @@ import { runAction } from 'cerebral/test';
 describe('getPdfFileAction', () => {
   let createObjectURLStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     global.File = jest.fn();
     createObjectURLStub = jest.fn();
 

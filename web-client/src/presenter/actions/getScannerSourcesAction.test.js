@@ -6,7 +6,7 @@ import { runAction } from 'cerebral/test';
 const mockSources = ['Test Source 1', 'Test Source 2'];
 
 describe('getScannerSourcesAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext.getScanner.mockReturnValue({
       getSources: () => mockSources,

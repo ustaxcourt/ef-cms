@@ -6,9 +6,7 @@ describe('shouldLoadCaseAction', () => {
   let pathLoadStub = jest.fn();
   let pathIgnoreStub = jest.fn();
 
-  beforeEach(() => {
-    jest.resetAllMocks();
-
+  beforeAll(() => {
     presenter.providers.path = {
       ignore: pathIgnoreStub,
       load: pathLoadStub,

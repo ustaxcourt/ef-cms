@@ -11,7 +11,7 @@ global.document = jsdom.window.document;
 global.window = jsdom.window;
 
 describe('scannerStartupAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

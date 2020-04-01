@@ -9,7 +9,7 @@ describe('saveIntermediateDocketEntryAction', () => {
     docketNumber: '123-45',
   };
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getUseCases()
       .saveIntermediateDocketEntryInteractor.mockReturnValue(caseDetail);
