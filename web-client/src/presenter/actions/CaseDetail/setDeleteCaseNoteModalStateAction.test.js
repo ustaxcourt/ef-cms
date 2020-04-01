@@ -1,9 +1,9 @@
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setDeleteCaseNoteModalStateAction } from './setDeleteCaseNoteModalStateAction';
 
-presenter.providers.applicationContext = applicationContext;
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('setDeleteCaseNoteModalStateAction', () => {
   it('should set the modal state caseId from caseDetail', async () => {

@@ -2,21 +2,15 @@ import { generateTitleForSupportingDocumentsAction } from './generateTitleForSup
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+
+const applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
+const { generateDocumentTitleInteractor } = applicationContext.getUseCases();
+
 describe('generateTitleForSupportingDocumentsAction', () => {
-  let generateDocumentTitleStub;
-
-  beforeEach(() => {
-    generateDocumentTitleStub = jest.fn();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        generateDocumentTitleInteractor: generateDocumentTitleStub,
-      }),
-    };
-  });
-
   it('should call generateDocumentTitle with correct data for supporting documents', async () => {
-    generateDocumentTitleStub = jest.fn().mockReturnValue(null);
+    generateDocumentTitleInteractor.mockReturnValue(null);
     await runAction(generateTitleForSupportingDocumentsAction, {
       modules: {
         presenter,
@@ -40,10 +34,12 @@ describe('generateTitleForSupportingDocumentsAction', () => {
     });
 
     expect(
-      generateDocumentTitleStub.mock.calls[0][0].documentMetadata.documentType,
+      generateDocumentTitleInteractor.mock.calls[0][0].documentMetadata
+        .documentType,
     ).toEqual('Motion for a New Trial');
     expect(
-      generateDocumentTitleStub.mock.calls[1][0].documentMetadata.documentType,
+      generateDocumentTitleInteractor.mock.calls[1][0].documentMetadata
+        .documentType,
     ).toEqual('Application for Waiver of Filing Fee');
   });
 });

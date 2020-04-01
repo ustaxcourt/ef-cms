@@ -17,6 +17,7 @@ User.ROLES = {
   floater: 'floater',
   inactivePractitioner: 'inactivePractitioner',
   irsPractitioner: 'irsPractitioner',
+  irsSuperuser: 'irsSuperuser',
   judge: 'judge',
   petitioner: 'petitioner',
   petitionsClerk: 'petitionsclerk',
@@ -150,6 +151,7 @@ User.isExternalUser = function (role) {
     User.ROLES.petitioner,
     User.ROLES.privatePractitioner,
     User.ROLES.irsPractitioner,
+    User.ROLES.irsSuperuser,
   ];
   return externalRoles.includes(role);
 };

@@ -1,36 +1,30 @@
 import { CerebralTest } from 'cerebral/test';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter';
 
-let test;
-
-presenter.providers.router = {
-  revokeObjectURL: () => {},
-};
-
-presenter.providers.applicationContext = {
-  ...applicationContext,
-  getCurrentUser: () => ({
-    section: 'chambers',
-  }),
-  getUseCases: () => ({
-    generatePrintablePendingReportInteractor: () => {
-      return 'http://example.com/mock-pdf-url';
-    },
-    getCaseInteractor: () => ({
+describe('gotoPrintablePendingReportForCaseSequence', () => {
+  let test;
+  beforeAll(() => {
+    applicationContext.getCurrentUser.mockReturnValue({ section: 'chambers' });
+    applicationContext
+      .getUseCases()
+      .generatePrintablePendingReportInteractor.mockReturnValue(
+        'http://example.com/mock-pdf-url',
+      );
+    applicationContext.getUseCases().getCaseInteractor.mockReturnValue({
       documents: [
         {
           documentId: '123',
           documentType: 'Proposed Stipulated Decision',
         },
       ],
-    }),
-  }),
-};
-
-test = CerebralTest(presenter);
-
-describe('gotoPrintablePendingReportForCaseSequence', () => {
+    });
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.router = {
+      revokeObjectURL: () => {},
+    };
+    test = CerebralTest(presenter);
+  });
   it('Should show the Printable Pending Report page', async () => {
     test.setState('currentPage', 'SomeOtherPage');
     await test.runSequence('gotoPrintablePendingReportForCaseSequence', {

@@ -1,25 +1,11 @@
 import { Case } from '../../entities/cases/Case';
-import { DocketRecord } from '../../entities/DocketRecord';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { addDocketEntryForPaymentStatus } from './serveCaseToIrsInteractor';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('addDocketEntryForPaymentStatus', () => {
-  let applicationContext;
-  let caseEntity;
-
-  beforeEach(() => {
-    applicationContext = {
-      getCurrentUser: () => ({
-        role: 'petitioner',
-      }),
-      getEntityConstructors: () => ({
-        Case,
-        DocketRecord,
-      }),
-      getUniqueId: () => 'unique-id-1',
-    };
-
-    caseEntity = new Case(
+  it('adds a docketRecord for a paid petition payment', async () => {
+    const caseEntity = new Case(
       {
         ...MOCK_CASE,
         petitionPaymentDate: 'Today',
@@ -27,9 +13,6 @@ describe('addDocketEntryForPaymentStatus', () => {
       },
       { applicationContext },
     );
-  });
-
-  it('adds a docketRecord for a paid petition payment', async () => {
     await addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
 
     const addedDocketRecord = caseEntity.docketRecord.find(
@@ -41,7 +24,7 @@ describe('addDocketEntryForPaymentStatus', () => {
   });
 
   it('adds a docketRecord for a waived petition payment', async () => {
-    caseEntity = new Case(
+    const caseEntity = new Case(
       {
         ...MOCK_CASE,
         contactPrimary: undefined,
@@ -51,7 +34,6 @@ describe('addDocketEntryForPaymentStatus', () => {
       },
       { applicationContext },
     );
-
     await addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
 
     const addedDocketRecord = caseEntity.docketRecord.find(

@@ -1,14 +1,12 @@
 import { Document } from '../../../../../shared/src/business/entities/Document';
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setDocketEntryMetaTypeAction } from './setDocketEntryMetaTypeAction';
 
-describe('setDocketEntryMetaTypeAction', () => {
-  beforeEach(() => {
-    presenter.providers.applicationContext = applicationContext;
-  });
+presenter.providers.applicationContext = applicationContextForClient;
 
+describe('setDocketEntryMetaTypeAction', () => {
   it('Should return CourtIssued in the case of a court issued document', async () => {
     const result = await runAction(setDocketEntryMetaTypeAction, {
       modules: { presenter },
