@@ -1,7 +1,7 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
-
+import { presenter } from '../presenter-mock';
+import { startScanSequence } from '../sequences/startScanSequence';
 describe('startScanSequence', () => {
   let test;
   let mockItems;
@@ -17,6 +17,9 @@ describe('startScanSequence', () => {
     applicationContext.getScanner().getSources.mockReturnValue(mockSources);
 
     presenter.providers.applicationContext = applicationContext;
+    presenter.sequences = {
+      startScanSequence,
+    };
     test = CerebralTest(presenter);
   });
   it('gets the cached scan source name and starts the scan action', async () => {

@@ -1,7 +1,7 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 
 import { computeFilingFormDateAction } from './computeFilingFormDateAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 const applicationContext = applicationContextForClient;
