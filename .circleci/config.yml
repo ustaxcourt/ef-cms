@@ -87,7 +87,35 @@ jobs:
             -Dsonar.login="${SHARED_SONAR_TOKEN}" \
             -Dsonar.host.url="https://sonarcloud.io"
 
-  build-client:
+  build-client-unit:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    environment:
+      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
+    resource_class: 2xlarge
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Web Client - Unit Test
+          command: npm run test:client:unit
+      - run:
+          name: Web Client - SonarQube
+          command: |
+            export SONAR_SCANNER_OPTS="-Xmx2048m"
+            /home/app/sonar_home/bin/sonar-scanner \
+            -Dsonar.projectKey="${UI_SONAR_KEY}" \
+            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
+            -Dsonar.organization="${SONAR_ORG}" \
+            -Dsonar.projectBaseDir="web-client" \
+            -Dproject.settings="web-client/sonar-project.properties" \
+            -Dsonar.login="${UI_SONAR_TOKEN}" \
+            -Dsonar.host.url="https://sonarcloud.io"
+
+  build-client-integration:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
         aws_auth:
@@ -104,26 +132,12 @@ jobs:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
       - run:
-          name: Web Client - Test
+          name: Web Client - Unit Test
           command: |
             SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /tmp/web-client/server-output.txt &
             ./wait-until.sh http://localhost:3000/api/swagger
-            TESTFILES=$(circleci tests glob "web-client/**/*.test.js" | circleci tests split --split-by=timings)
-            CI=false SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop FILE_UPLOAD_MODAL_TIMEOUT=1 npx jest --runInBand --config web-client/jest.config.js ${TESTFILES}
-            TESTFILES_GLOB=$(echo $TESTFILES | sed 's/ /\"\ --collectCoverageFrom \"/g')
-            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest --collectCoverageFrom ["${TESTFILES_GLOB}"] --runInBand --config web-client/jest.config.js ${TESTFILES}
-      - run:
-          name: Web Client - SonarQube
-          command: |
-            export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /home/app/sonar_home/bin/sonar-scanner \
-            -Dsonar.projectKey="${UI_SONAR_KEY}" \
-            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-            -Dsonar.organization="${SONAR_ORG}" \
-            -Dsonar.projectBaseDir="web-client" \
-            -Dproject.settings="web-client/sonar-project.properties" \
-            -Dsonar.login="${UI_SONAR_TOKEN}" \
-            -Dsonar.host.url="https://sonarcloud.io"
+            TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" | circleci tests split --split-by=timings)
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest --runInBand --config web-client/jest.config.js ${TESTFILES}
       - store_artifacts:
           path: /tmp/web-client
 
