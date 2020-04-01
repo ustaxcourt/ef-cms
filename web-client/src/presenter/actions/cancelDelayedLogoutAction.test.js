@@ -1,5 +1,5 @@
 import { cancelDelayedLogoutAction } from './cancelDelayedLogoutAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('cancelDelayedLogoutAction', () => {

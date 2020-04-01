@@ -1,4 +1,3 @@
-const createWebApiApplicationContext = require('../../../../web-api/src/applicationContext');
 const DateHandler = require('../utilities/DateHandler');
 const docketNumberGenerator = require('../../persistence/dynamo/cases/docketNumberGenerator');
 const path = require('path');
@@ -6,9 +5,6 @@ const sharedAppContext = require('../../sharedAppContext');
 const {
   addWorkItemToSectionInbox,
 } = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
-const {
-  applicationContext: webClientApplicationContext,
-} = require('../../../../web-client/src/applicationContext');
 const {
   CaseAssociationRequestFactory,
 } = require('../entities/CaseAssociationRequestFactory');
@@ -36,6 +32,9 @@ const {
 const {
   ExternalDocumentFactory,
 } = require('../entities/externalDocument/ExternalDocumentFactory');
+const {
+  formatDocument,
+} = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
   getCaseByCaseId,
 } = require('../../persistence/dynamo/cases/getCaseByCaseId');
@@ -97,14 +96,13 @@ const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
+const { getConstants } = require('../../../../web-client/src/getConstants');
 const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
-
-const webApiApplicationContext = createWebApiApplicationContext({});
 
 const appContextProxy = (initial = {}, makeMock = true) => {
   const applicationContextHandler = {
@@ -159,7 +157,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatDateString: jest
       .fn()
       .mockImplementation(DateHandler.formatDateString),
-    formatDocument: jest.fn().mockImplementation(v => v),
+    formatDocument: jest.fn().mockImplementation(formatDocument),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
     isExternalUser: User.isExternalUser,
@@ -248,17 +246,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     },
     getBaseUrl: () => 'http://localhost',
     getCaseCaptionNames: jest.fn().mockImplementation(Case.getCaseCaptionNames),
-    getChiefJudgeNameForSigning: jest
-      .fn()
-      .mockImplementation(
-        webClientApplicationContext.getChiefJudgeNameForSigning,
-      ),
+    getChiefJudgeNameForSigning: jest.fn(),
     getChromiumBrowser: jest.fn(),
     getClerkOfCourtNameForSigning: jest.fn(),
     getCognito: appContextProxy(),
     getConstants: jest.fn().mockReturnValue({
-      ...webClientApplicationContext.getConstants(),
-      ...webApiApplicationContext.getConstants(),
+      ...getConstants(),
     }),
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(

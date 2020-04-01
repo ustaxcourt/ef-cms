@@ -1,11 +1,15 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
+import { selectWorkItemSequence } from '../sequences/selectWorkItemSequence';
 
 describe('setFocusedWorkItemSequence', () => {
   let test;
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
+    presenter.sequences = {
+      selectWorkItemSequence,
+    };
     test = CerebralTest(presenter);
   });
   it('should add a work item to the selectedWorkItems state if it does not already exist', async () => {

@@ -1,7 +1,8 @@
 import { CerebralTest } from 'cerebral/test';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { loginWithCodeSequence } from '../sequences/loginWithCodeSequence';
+import { presenter } from '../presenter-mock';
 
 describe('loginWithCodeSequence', () => {
   let test;
@@ -28,6 +29,9 @@ describe('loginWithCodeSequence', () => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
       route: async () => null,
+    };
+    presenter.sequences = {
+      loginWithCodeSequence,
     };
     test = CerebralTest(presenter);
   });
