@@ -7,6 +7,7 @@ describe('initializeUploadFormAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
+
   it('should initialize the form values', async () => {
     const results = await runAction(initializeUploadFormAction, {
       modules: {
