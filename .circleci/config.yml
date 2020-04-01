@@ -101,7 +101,7 @@ jobs:
           at: ~/
       - run:
           name: Web Client - Unit Test
-          command: npm run test:client:unit
+          command: npm run build:assets && npm run test:client:unit
       - run:
           name: Web Client - SonarQube
           command: |
