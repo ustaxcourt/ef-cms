@@ -14,18 +14,18 @@ import React from 'react';
 
 export const StartCaseInternal = connect(
   {
-    documentSelectedForScan: state.documentSelectedForScan,
+    documentSelectedForScan: state.currentViewMetadata.documentSelectedForScan,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateToReviewPetitionFromPaperSequence:
       sequences.navigateToReviewPetitionFromPaperSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
-  ({
+  function StartCaseInternal({
     documentSelectedForScan,
     formCancelToggleCancelSequence,
     navigateToReviewPetitionFromPaperSequence,
     showModal,
-  }) => {
+  }) {
     return (
       <>
         <BigHeader text="Create Case" />
@@ -43,7 +43,7 @@ export const StartCaseInternal = connect(
               </div>
               <div className="grid-col-5">
                 <Tabs
-                  bind="startCaseInternal.tab"
+                  bind="currentViewMetadata.startCaseInternal.tab"
                   className="container-tabs no-full-border-bottom flex tab-button-h3"
                 >
                   <Tab id="tab-parties" tabName="partyInfo" title="Parties">

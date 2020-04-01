@@ -74,11 +74,11 @@ export const CaseInformationExternal = connect(
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
   },
-  ({
+  function CaseInformationExternal({
     caseDetailHelper,
     formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence,
-  }) => {
+  }) {
     return (
       <div className="petitions-details">
         <NonMobile>

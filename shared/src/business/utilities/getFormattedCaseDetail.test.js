@@ -89,7 +89,6 @@ describe('formatCase', () => {
       ],
     });
     expect(result.documents[0].isPetition).toBeTruthy();
-    expect(result.documents[0].canEdit).toBeFalsy();
     expect(result.documents[0].qcWorkItemsCompleted).toBeTruthy();
     expect(result.documents[0].qcWorkItemsUntouched).toEqual(false);
 

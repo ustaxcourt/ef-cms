@@ -1,9 +1,10 @@
 module.exports = {
   casePublicSearchLambda: require('./public-api/casePublicSearchLambda')
-    .handler,
+    .casePublicSearchLambda,
   generatePublicDocketRecordPdfLambda: require('./public-api/generatePublicDocketRecordPdfLambda')
-    .handler,
-  getPublicCaseLambda: require('./public-api/getPublicCaseLambda').handler,
+    .generatePublicDocketRecordPdfLambda,
+  getPublicCaseLambda: require('./public-api/getPublicCaseLambda')
+    .getPublicCaseLambda,
   getPublicDocumentDownloadUrlLambda: require('./public-api/getPublicDocumentDownloadUrlLambda')
-    .handler,
+    .getPublicDocumentDownloadUrlLambda,
 };

@@ -38,7 +38,6 @@ import petitionerCancelsCreateCase from './journey/petitionerCancelsCreateCase';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCaseTestAllOptions from './journey/petitionerCreatesNewCaseTestAllOptions';
-import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
 import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkAssignsWorkItemToOther from './journey/petitionsClerkAssignsWorkItemToOther';
@@ -116,7 +115,6 @@ describe('Case journey', () => {
 
   loginAs(test, 'petitioner');
   petitionerCancelsCreateCase(test);
-  petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCaseTestAllOptions(test, fakeFile);

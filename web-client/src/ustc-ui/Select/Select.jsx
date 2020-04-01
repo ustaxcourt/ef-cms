@@ -3,7 +3,7 @@ import { connect } from '@cerebral/react';
 import React from 'react';
 import classNames from 'classnames';
 
-export const Select = connect(props => {
+export const Select = connect(function Select(props) {
   const {
     disabled,
     error,

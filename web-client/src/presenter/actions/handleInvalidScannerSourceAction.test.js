@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { handleInvalidScannerSourceAction } from './handleInvalidScannerSourceAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
@@ -7,23 +8,25 @@ const mockStorage = {
   scannerSourceName: 'TC3000 Tricorder',
 };
 
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    removeItemInteractor: ({ key }) => {
-      mockStorage[key] = null;
-    },
-  }),
-};
-
 describe('handleInvalidScannerSourceAction', () => {
+  beforeAll(() => {
+    applicationContext.getUseCases().removeItemInteractor = jest.fn(
+      ({ key }) => {
+        mockStorage[key] = null;
+      },
+    );
+
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('should clear the scanner source and show the ScanErrorModal modal when a scan source is invalid', async () => {
     const result = await runAction(handleInvalidScannerSourceAction, {
       modules: {
         presenter,
       },
       state: {
-        isScanning: true,
         scanner: {
+          isScanning: true,
           scannerSourceIndex: mockStorage.scannerSourceIndex,
           scannerSourceName: mockStorage.scannerSourceName,
         },
@@ -35,7 +38,7 @@ describe('handleInvalidScannerSourceAction', () => {
     expect(result.state.scanner.scannerSourceName).toBeUndefined();
     expect(mockStorage.scannerSourceIndex).toBeNull();
     expect(mockStorage.scannerSourceName).toBeNull();
-    expect(result.state.showModal).toEqual('ScanErrorModal');
-    expect(result.state.isScanning).toBeFalsy();
+    expect(result.state.modal.showModal).toEqual('ScanErrorModal');
+    expect(result.state.scanner.isScanning).toBeFalsy();
   });
 });

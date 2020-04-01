@@ -1,8 +1,10 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   updateTrialSessionInteractor,
 } = require('./updateTrialSessionInteractor');
 const { Case } = require('../../entities/cases/Case');
-const { createISODateString } = require('../../utilities/DateHandler');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
@@ -16,6 +18,7 @@ const MOCK_TRIAL = {
 };
 
 let mockTrialsById;
+let user;
 
 describe('updateTrialSessionInteractor', () => {
   const MOCK_TRIAL_ID_1 = '8a3ed061-bdc6-44f0-baec-7e2c007c51bb';
@@ -24,14 +27,7 @@ describe('updateTrialSessionInteractor', () => {
   const MOCK_TRIAL_ID_4 = '195bd58c-e81e-44b5-90e2-b9f0a39575d6';
   const MOCK_TRIAL_ID_5 = '5674b900-517d-4ffc-81c0-140302c10010';
 
-  let applicationContext;
-  let updateTrialSessionMock;
-  let createTrialSessionWorkingCopyMock;
-
   beforeEach(() => {
-    updateTrialSessionMock = jest.fn(trial => trial.trialSession);
-    createTrialSessionWorkingCopyMock = jest.fn(() => null);
-
     mockTrialsById = {
       [MOCK_TRIAL_ID_1]: {
         ...MOCK_TRIAL,
@@ -59,35 +55,32 @@ describe('updateTrialSessionInteractor', () => {
       },
     };
 
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return new User({
-          name: 'Docket Clerk',
-          role: User.ROLES.docketClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => ({
-        createTrialSessionWorkingCopy: createTrialSessionWorkingCopyMock,
-        getTrialSessionById: ({ trialSessionId }) =>
-          mockTrialsById[trialSessionId],
-        updateTrialSession: updateTrialSessionMock,
-      }),
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      getUtilities: () => ({
-        createISODateString,
-      }),
-    };
+    applicationContext.environment.stage = 'local';
+
+    user = new User({
+      name: 'Docket Clerk',
+      role: User.ROLES.docketClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockImplementation(
+        ({ trialSessionId }) => mockTrialsById[trialSessionId],
+      );
+
+    applicationContext
+      .getPersistenceGateway()
+      .updateTrialSession.mockImplementation(trial => trial.trialSession);
   });
 
   it('throws error if user is unauthorized', async () => {
-    applicationContext.getCurrentUser = () => {
-      return new User({
-        role: User.ROLES.petitioner,
-        userId: 'petitioner',
-      });
-    };
+    user = new User({
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
+    });
 
     await expect(
       updateTrialSessionInteractor({
@@ -113,9 +106,11 @@ describe('updateTrialSessionInteractor', () => {
   });
 
   it('throws an exception when it fails to update a trial session', async () => {
-    updateTrialSessionMock = jest.fn(() => {
-      throw new Error('Error!');
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .updateTrialSession.mockImplementation(() => {
+        throw new Error('Error!');
+      });
 
     let error;
 
@@ -137,7 +132,9 @@ describe('updateTrialSessionInteractor', () => {
       trialSession: mockTrialsById[MOCK_TRIAL_ID_2],
     });
 
-    expect(updateTrialSessionMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession,
+    ).toHaveBeenCalled();
   });
 
   it('creates a trial session working copy successfully if a judge is set on the updated trial session and a judge was not set on the old session', async () => {
@@ -151,8 +148,12 @@ describe('updateTrialSessionInteractor', () => {
       trialSession: trialSessionWithJudge,
     });
 
-    expect(updateTrialSessionMock).toHaveBeenCalled();
-    expect(createTrialSessionWorkingCopyMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
+    ).toHaveBeenCalled();
   });
 
   it('creates a trial session working copy successfully if a judge is set on the updated trial session and it is a different judge than was on the old session', async () => {
@@ -166,8 +167,12 @@ describe('updateTrialSessionInteractor', () => {
       trialSession: trialSessionWithJudge,
     });
 
-    expect(updateTrialSessionMock).toHaveBeenCalled();
-    expect(createTrialSessionWorkingCopyMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
+    ).toHaveBeenCalled();
   });
 
   it('creates a trial session working copy successfully if a trial clerk is set on the updated trial session and a trial clerk was not set on the old session', async () => {
@@ -181,11 +186,15 @@ describe('updateTrialSessionInteractor', () => {
       trialSession: trialSessionWithTrialClerk,
     });
 
-    expect(updateTrialSessionMock).toHaveBeenCalled();
-    expect(createTrialSessionWorkingCopyMock).toHaveBeenCalled();
     expect(
-      createTrialSessionWorkingCopyMock.mock.calls[0][0].trialSessionWorkingCopy
-        .userId,
+      applicationContext.getPersistenceGateway().updateTrialSession,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy
+        .mock.calls[0][0].trialSessionWorkingCopy.userId,
     ).toEqual('c7d90c05-f6cd-442c-a168-202db587f16f');
   });
 
@@ -200,11 +209,15 @@ describe('updateTrialSessionInteractor', () => {
       trialSession: trialSessionWithTrialClerk,
     });
 
-    expect(updateTrialSessionMock).toHaveBeenCalled();
-    expect(createTrialSessionWorkingCopyMock).toHaveBeenCalled();
     expect(
-      createTrialSessionWorkingCopyMock.mock.calls[0][0].trialSessionWorkingCopy
-        .userId,
+      applicationContext.getPersistenceGateway().updateTrialSession,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy
+        .mock.calls[0][0].trialSessionWorkingCopy.userId,
     ).toEqual('c7d90c05-f6cd-442c-a168-202db587f16f');
   });
 

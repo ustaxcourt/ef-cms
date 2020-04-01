@@ -1,19 +1,14 @@
 import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/cases/CaseConstants';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { associateIrsPractitionerWithCaseAction } from './associateIrsPractitionerWithCaseAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
+
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('associateIrsPractitionerWithCaseAction', () => {
   it('should run associateIrsPractitionerWithCaseInteractor and success path', async () => {
-    const successStub = sinon.stub();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        associateIrsPractitionerWithCaseInteractor: () =>
-          'hello from associate respondent with case',
-      }),
-    };
+    const successStub = jest.fn();
 
     presenter.providers.path = {
       success: successStub,
@@ -33,6 +28,6 @@ describe('associateIrsPractitionerWithCaseAction', () => {
         },
       },
     });
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 });

@@ -1,56 +1,42 @@
 const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+const {
   getWebSocketConnectionByConnectionId,
 } = require('./getWebSocketConnectionByConnectionId');
 
+const mockConnection = { pk: 'connections-123', sk: 'abc' };
+
 describe('getWebSocketConnectionByConnectionId', () => {
-  let applicationContext;
-  let queryStub;
-
   it('attempts to retrieve the web socket details', async () => {
-    queryStub = jest.fn(() => ({
+    applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => ({
-        Items: [{ pk: 'connections-123', sk: 'abc' }],
+        Items: [mockConnection],
       }),
-    }));
-
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        query: queryStub,
-      }),
-    };
+    });
 
     const result = await getWebSocketConnectionByConnectionId({
       applicationContext,
       connectionId: 'abc',
     });
-    expect(queryStub).toHaveBeenCalled();
-    expect(result).toEqual({ pk: 'connections-123', sk: 'abc' });
+
+    expect(applicationContext.getDocumentClient().query).toHaveBeenCalled();
+    expect(result).toEqual(mockConnection);
   });
 
   it('returns undefined when no items are returned', async () => {
-    queryStub = jest.fn(() => ({
+    applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => ({
         Items: [],
       }),
-    }));
-
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        query: queryStub,
-      }),
-    };
+    });
 
     const result = await getWebSocketConnectionByConnectionId({
       applicationContext,
       connectionId: 'abc',
     });
-    expect(queryStub).toHaveBeenCalled();
+
+    expect(applicationContext.getDocumentClient().query).toHaveBeenCalled();
     expect(result).toBeUndefined();
   });
 });

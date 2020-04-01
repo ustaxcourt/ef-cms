@@ -1,20 +1,19 @@
-const sinon = require('sinon');
 const { sendBulkTemplatedEmail } = require('./sendBulkTemplatedEmail');
 
 describe('sendBulkTemplatedEmail', () => {
-  const sendBulkTemplatedEmailStub = sinon.stub().returns({
+  const sendBulkTemplatedEmailStub = jest.fn().mockReturnValue({
     promise: () => {
       return Promise.resolve();
     },
   });
 
-  const sendBulkTemplatedEmailThrowsErrorStub = sinon.stub().returns({
+  const sendBulkTemplatedEmailThrowsErrorStub = jest.fn().mockReturnValue({
     promise: () => {
       return Promise.reject('Something bad happened!');
     },
   });
 
-  const loggerErrorStub = sinon.stub().returns(() => {});
+  const loggerErrorStub = jest.fn().mockReturnValue(() => {});
 
   it('sends the bulk email given a template', async () => {
     let applicationContext = {
@@ -42,7 +41,7 @@ describe('sendBulkTemplatedEmail', () => {
       templateName: 'case_served',
     });
 
-    expect(sendBulkTemplatedEmailStub.getCall(0).args[0]).toMatchObject({
+    expect(sendBulkTemplatedEmailStub.mock.calls[0][0]).toMatchObject({
       Destinations: [
         {
           Destination: {
@@ -85,6 +84,6 @@ describe('sendBulkTemplatedEmail', () => {
       templateName: 'case_served',
     });
 
-    expect(loggerErrorStub.calledOnce).toBe(true);
+    expect(loggerErrorStub.mock.calls.length).toEqual(1);
   });
 });

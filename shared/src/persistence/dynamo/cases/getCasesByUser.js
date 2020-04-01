@@ -1,32 +1,31 @@
-const {
-  getCasePrivatePractitioners,
-} = require('./getCasePrivatePractitioners');
-const {
-  getRecordsViaMapping,
-} = require('../../dynamo/helpers/getRecordsViaMapping');
-const { getCaseDocketRecord } = require('./getCaseDocketRecord');
-const { getCaseDocuments } = require('./getCaseDocuments');
-const { getCaseIrsPractitioners } = require('./getCaseIrsPractitioners');
+const client = require('../../dynamodbClientService');
+
+const { getCaseByCaseId } = require('./getCaseByCaseId');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 exports.getCasesByUser = async ({ applicationContext, userId }) => {
-  let cases = await getRecordsViaMapping({
-    applicationContext,
-    pk: `user|${userId}`,
-    prefix: 'case',
-  });
+  const caseIds = (
+    await client.query({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+        '#sk': 'sk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `user|${userId}`,
+        ':prefix': 'case',
+      },
+      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+      applicationContext,
+    })
+  ).map(mapping => mapping.sk.split('|')[1]);
 
-  cases = await Promise.all(
-    cases.map(getCaseDocketRecord({ applicationContext })),
-  );
-  cases = await Promise.all(
-    cases.map(getCaseDocuments({ applicationContext })),
-  );
-  cases = await Promise.all(
-    cases.map(getCaseIrsPractitioners({ applicationContext })),
-  );
-  cases = await Promise.all(
-    cases.map(getCasePrivatePractitioners({ applicationContext })),
+  const cases = await Promise.all(
+    caseIds.map(caseId =>
+      getCaseByCaseId({
+        applicationContext,
+        caseId,
+      }),
+    ),
   );
 
   return stripWorkItems(cases, applicationContext.isAuthorizedForWorkItems());

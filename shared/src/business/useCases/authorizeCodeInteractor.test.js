@@ -1,11 +1,10 @@
-const sinon = require('sinon');
 const { authorizeCodeInteractor } = require('./authorizeCodeInteractor');
 
 describe('authorizeCodeInteractor', () => {
   let applicationContext;
 
   it('returns the expected token and refresh token', async () => {
-    const postStub = sinon.stub().resolves({
+    const postStub = jest.fn().mockResolvedValue({
       data: {
         id_token: '123',
         refresh_token: 'abc',
@@ -27,10 +26,10 @@ describe('authorizeCodeInteractor', () => {
       refreshToken: 'abc',
       token: '123',
     });
-    expect(postStub.getCall(0).args[0]).toEqual(
+    expect(postStub.mock.calls[0][0]).toEqual(
       'http://example.com/oauth2/token',
     );
-    expect(postStub.getCall(0).args[1]).toEqual(
+    expect(postStub.mock.calls[0][1]).toEqual(
       'client_id=abc&grant_type=authorization_code&redirect_uri=http%3A%2F%2Fexample.com',
     );
   });

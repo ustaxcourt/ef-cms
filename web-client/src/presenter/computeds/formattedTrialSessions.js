@@ -116,7 +116,7 @@ export const formattedTrialSessions = (get, applicationContext) => {
     state.screenMetadata.trialSessionFilters.judge.userId,
   );
 
-  const tab = get(state.trialSessionsTab.group);
+  const tab = get(state.currentViewMetadata.trialSessions.tab);
 
   if (!judgeFilter || (tab !== 'new' && judgeFilter === 'unassigned')) {
     delete trialSessionFilters.judge;

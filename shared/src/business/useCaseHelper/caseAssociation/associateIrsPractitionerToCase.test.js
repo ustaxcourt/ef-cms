@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   associateIrsPractitionerToCase,
 } = require('./associateIrsPractitionerToCase');
 const {
@@ -9,8 +12,6 @@ const { MOCK_USERS } = require('../../../test/mockUsers');
 const { User } = require('../../entities/User');
 
 describe('associateIrsPractitionerToCase', () => {
-  let applicationContext;
-
   let caseRecord = {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -33,27 +34,25 @@ describe('associateIrsPractitionerToCase', () => {
     status: 'New',
   };
 
-  it('should not add mapping if already there', async () => {
-    let associateUserWithCaseSpy = jest.fn();
-    let verifyCaseForUserSpy = jest.fn().mockReturnValue(true);
-    let updateCaseSpy = jest.fn();
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockResolvedValue(caseRecord);
+  });
 
+  it('should not add mapping if already there', async () => {
     const user = {
       name: 'Olivia Jade',
       role: User.ROLES.irsPractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
-    applicationContext = {
-      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      getPersistenceGateway: () => ({
-        associateUserWithCase: associateUserWithCaseSpy,
-        getCaseByCaseId: async () => caseRecord,
-        updateCase: updateCaseSpy,
-        verifyCaseForUser: verifyCaseForUserSpy,
-      }),
-      getUniqueId: () => 'unique-id-1',
-    };
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
 
     await associateIrsPractitionerToCase({
       applicationContext,
@@ -62,30 +61,23 @@ describe('associateIrsPractitionerToCase', () => {
       user,
     });
 
-    expect(associateUserWithCaseSpy).not.toBeCalled();
-    expect(updateCaseSpy).not.toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toHaveBeenCalled();
   });
 
   it('should add mapping for an irsPractitioner', async () => {
-    let associateUserWithCaseSpy = jest.fn();
-    let verifyCaseForUserSpy = jest.fn().mockReturnValue(false);
-    let updateCaseSpy = jest.fn();
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
 
     const user = {
       name: 'Olivia Jade',
       role: User.ROLES.irsPractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-
-    applicationContext = {
-      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      getPersistenceGateway: () => ({
-        associateUserWithCase: associateUserWithCaseSpy,
-        getCaseByCaseId: async () => caseRecord,
-        updateCase: updateCaseSpy,
-        verifyCaseForUser: verifyCaseForUserSpy,
-      }),
-      getUniqueId: () => 'unique-id-1',
     };
 
     await associateIrsPractitionerToCase({
@@ -95,9 +87,16 @@ describe('associateIrsPractitionerToCase', () => {
       user,
     });
 
-    expect(associateUserWithCaseSpy).toBeCalled();
-    expect(updateCaseSpy).toBeCalled();
-    expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({
       irsPractitioners: [
         {
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,

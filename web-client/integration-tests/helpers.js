@@ -471,11 +471,18 @@ export const setupTest = ({ useCases = {} } = {}) => {
         case '/pdf-preview':
           await test.runSequence('gotoPdfPreviewSequence');
           break;
+        case `/case-detail/${test.docketNumber}/create-order`:
+          await test.runSequence('gotoCreateOrderSequence', {
+            docketNumber: test.docketNumber,
+          });
+          break;
         case '/':
           await test.runSequence('gotoDashboardSequence');
           break;
         default:
-          console.warn('No action taken for route: ', url);
+          if (process.env.USTC_DEBUG) {
+            console.warn('No action taken for route: ', url);
+          }
           break;
       }
     },
@@ -584,14 +591,30 @@ export const base64ToUInt8Array = b64 => {
 };
 
 export const setBatchPages = ({ test }) => {
-  const selectedDocumentType = test.getState('documentSelectedForScan');
-  let batches = test.getState(`batches.${selectedDocumentType}`);
+  const selectedDocumentType = test.getState(
+    'currentViewMetadata.documentSelectedForScan',
+  );
+  let batches = test.getState(`scanner.batches.${selectedDocumentType}`);
 
   test.setState(
-    `batches.${selectedDocumentType}`,
+    `scanner.batches.${selectedDocumentType}`,
     batches.map(batch => ({
       ...batch,
       pages: [base64ToUInt8Array(image1), base64ToUInt8Array(image2)],
     })),
   );
+};
+
+export const getPetitionDocumentForCase = caseDetail => {
+  // In our tests, we had numerous instances of `case.documents[0]`, which would
+  // return the petition document most of the time, but occasionally fail,
+  // producing unintended results.
+  return caseDetail.documents.find(
+    document => document.documentType === 'Petition',
+  );
+};
+
+export const getPetitionWorkItemForCase = caseDetail => {
+  const petitionDocument = getPetitionDocumentForCase(caseDetail);
+  return petitionDocument.workItems[0];
 };

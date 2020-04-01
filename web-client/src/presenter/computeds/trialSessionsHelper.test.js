@@ -19,8 +19,10 @@ describe('trialSessionsHelper', () => {
   it('should show the Notice Issued column for `open` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'open',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'open',
+          },
         },
       },
     });
@@ -31,8 +33,10 @@ describe('trialSessionsHelper', () => {
   it('should NOT show the Notice Issued column for `new` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'new',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'new',
+          },
         },
       },
     });
@@ -43,8 +47,10 @@ describe('trialSessionsHelper', () => {
   it('should NOT show the Notice Issued column for `closed` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'closed',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'closed',
+          },
         },
       },
     });
@@ -55,8 +61,10 @@ describe('trialSessionsHelper', () => {
   it('should NOT show the Notice Issued column for `all` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'all',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'all',
+          },
         },
       },
     });
@@ -67,8 +75,10 @@ describe('trialSessionsHelper', () => {
   it('should show the Number of Cases column for `open` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'open',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'open',
+          },
         },
       },
     });
@@ -79,8 +89,10 @@ describe('trialSessionsHelper', () => {
   it('should NOT show the Number of Cases column for `new` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'new',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'new',
+          },
         },
       },
     });
@@ -91,8 +103,10 @@ describe('trialSessionsHelper', () => {
   it('should NOT show the Number of Cases column for `closed` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'closed',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'closed',
+          },
         },
       },
     });
@@ -103,8 +117,10 @@ describe('trialSessionsHelper', () => {
   it('should NOT show the Number of Cases column for `all` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'all',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'all',
+          },
         },
       },
     });
@@ -115,8 +131,10 @@ describe('trialSessionsHelper', () => {
   it('should show the Session Status column for `all` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'all',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'all',
+          },
         },
       },
     });
@@ -127,8 +145,10 @@ describe('trialSessionsHelper', () => {
   it('should NOT show the Session Status column for `new` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'new',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'new',
+          },
         },
       },
     });
@@ -139,8 +159,10 @@ describe('trialSessionsHelper', () => {
   it('should NOT show the Session Status column for `open` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'open',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'open',
+          },
         },
       },
     });
@@ -151,8 +173,10 @@ describe('trialSessionsHelper', () => {
   it('should NOT show the Session Status column for `closed` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'closed',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'closed',
+          },
         },
       },
     });
@@ -163,8 +187,10 @@ describe('trialSessionsHelper', () => {
   it('should show 0 additional table columns for `new` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'new',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'new',
+          },
         },
       },
     });
@@ -175,8 +201,10 @@ describe('trialSessionsHelper', () => {
   it('should show 0 additional table columns for `closed` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'closed',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'closed',
+          },
         },
       },
     });
@@ -187,8 +215,10 @@ describe('trialSessionsHelper', () => {
   it('should show 2 additional table columns for `open` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'open',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'open',
+          },
         },
       },
     });
@@ -199,8 +229,10 @@ describe('trialSessionsHelper', () => {
   it('should show 1 additional table column for `all` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'all',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'all',
+          },
         },
       },
     });
@@ -211,8 +243,10 @@ describe('trialSessionsHelper', () => {
   it('should show the `unassigned` judge filter for `new` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'new',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'new',
+          },
         },
       },
     });
@@ -223,8 +257,10 @@ describe('trialSessionsHelper', () => {
   it('should NOT show the `unassigned` judge filter for `open` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'open',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'open',
+          },
         },
       },
     });
@@ -235,8 +271,10 @@ describe('trialSessionsHelper', () => {
   it('should NOT show the `unassigned` judge filter for `closed` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'close',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'close',
+          },
         },
       },
     });
@@ -247,8 +285,10 @@ describe('trialSessionsHelper', () => {
   it('should NOT show the `unassigned` judge filter for `all` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
-        trialSessionsTab: {
-          group: 'all',
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'all',
+          },
         },
       },
     });

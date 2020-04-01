@@ -9,6 +9,7 @@ import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseT
 import trialClerkAddsNotesFromWorkingCopyCaseList from './journey/trialClerkAddsNotesFromWorkingCopyCaseList';
 import trialClerkViewsNotesFromCaseDetail from './journey/trialClerkViewsNotesFromCaseDetail';
 import trialClerkViewsTrialSessionWorkingCopy from './journey/trialClerkViewsTrialSessionWorkingCopy';
+import trialClerkViewsTrialSessionWorkingCopyWithNotes from './journey/trialClerkViewsTrialSessionWorkingCopyWithNotes';
 
 const test = setupTest();
 
@@ -65,4 +66,5 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   trialClerkViewsTrialSessionWorkingCopy(test);
   trialClerkAddsNotesFromWorkingCopyCaseList(test);
   trialClerkViewsNotesFromCaseDetail(test);
+  trialClerkViewsTrialSessionWorkingCopyWithNotes(test);
 });

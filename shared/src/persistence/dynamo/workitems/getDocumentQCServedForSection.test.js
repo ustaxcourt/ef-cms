@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   getDocumentQCServedForSection,
 } = require('./getDocumentQCServedForSection');
@@ -7,7 +6,7 @@ describe('getDocumentQCServedForSection', () => {
   let queryStub;
 
   beforeEach(() => {
-    queryStub = sinon.stub().returns({
+    queryStub = jest.fn().mockReturnValue({
       promise: async () => ({
         Items: [
           {

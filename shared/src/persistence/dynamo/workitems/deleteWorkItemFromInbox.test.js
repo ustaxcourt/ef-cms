@@ -1,11 +1,10 @@
-const sinon = require('sinon');
 const { deleteWorkItemFromInbox } = require('./deleteWorkItemFromInbox');
 
 describe('deleteWorkItemFromInbox', () => {
   let deleteStub;
 
   beforeEach(() => {
-    deleteStub = sinon.stub().returns({
+    deleteStub = jest.fn().mockReturnValue({
       promise: async () => true,
     });
   });
@@ -27,13 +26,13 @@ describe('deleteWorkItemFromInbox', () => {
         workItemId: '123',
       },
     });
-    expect(deleteStub.getCall(0).args[0]).toMatchObject({
+    expect(deleteStub.mock.calls[0][0]).toMatchObject({
       Key: {
         pk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
         sk: 'work-item|123',
       },
     });
-    expect(deleteStub.getCall(1).args[0]).toMatchObject({
+    expect(deleteStub.mock.calls[1][0]).toMatchObject({
       Key: {
         pk: 'section|docket',
         sk: 'work-item|123',
@@ -57,7 +56,7 @@ describe('deleteWorkItemFromInbox', () => {
         workItemId: '123',
       },
     });
-    expect(deleteStub.getCall(0).args[0]).toMatchObject({
+    expect(deleteStub.mock.calls[0][0]).toMatchObject({
       Key: {
         pk: 'section|docket',
         sk: 'work-item|123',

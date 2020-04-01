@@ -27,7 +27,7 @@ function TrialSessionWorkingCopy(rawSession) {
   this.init(rawSession);
 }
 
-TrialSessionWorkingCopy.prototype.init = function(rawSession) {
+TrialSessionWorkingCopy.prototype.init = function (rawSession) {
   this.caseMetadata = rawSession.caseMetadata || {};
   this.filters = rawSession.filters || {
     aBasisReached: true,
@@ -95,7 +95,7 @@ TrialSessionWorkingCopy.validationRules = {
 joiValidationDecorator(
   TrialSessionWorkingCopy,
   joi.object().keys(TrialSessionWorkingCopy.validationRules),
-  function() {
+  function () {
     return !this.getFormattedValidationErrors();
   },
   TrialSessionWorkingCopy.VALIDATION_ERROR_MESSAGES,

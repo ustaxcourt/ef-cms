@@ -11,7 +11,12 @@ export const AccountMenu = connect(
     signOutSequence: sequences.signOutSequence,
     toggleMenuSequence: sequences.toggleMenuSequence,
   },
-  ({ headerHelper, isExpanded, signOutSequence, toggleMenuSequence }) => {
+  function AccountMenu({
+    headerHelper,
+    isExpanded,
+    signOutSequence,
+    toggleMenuSequence,
+  }) {
     const LogOutButton = () => (
       <button
         className="account-menu-item usa-button usa-button--unstyled"

@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const { refreshTokenInteractor } = require('./refreshTokenInteractor');
 
 describe('refreshToken', () => {
@@ -9,7 +8,7 @@ describe('refreshToken', () => {
       getCognitoClientId: () => 'asdf',
       getCognitoTokenUrl: () => 'http://example.com/oauth2/token',
       getHttpClient: () => ({
-        post: sinon.stub().resolves({
+        post: jest.fn().mockResolvedValue({
           data: {
             id_token: '123',
             refresh_token: 'abc',

@@ -3,11 +3,11 @@ import { getEditDocumentEntryPointAction } from '../actions/getEditDocumentEntry
 import { getEditedDocumentDetailParamsAction } from '../actions/getEditedDocumentDetailParamsAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
 import { getShouldRedirectToSigningAction } from '../actions/getShouldRedirectToSigningAction';
-import { gotoSignOrderSequence } from './gotoSignOrderSequence';
 import { isEditingOrderAction } from '../actions/CourtIssuedOrder/isEditingOrderAction';
 import { isFormPristineAction } from '../actions/CourtIssuedOrder/isFormPristineAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { navigateToDocumentDetailAction } from '../actions/navigateToDocumentDetailAction';
+import { navigateToSignOrderAction } from '../actions/navigateToSignOrderAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { overwriteOrderFileAction } from '../actions/CourtIssuedOrder/overwriteOrderFileAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -33,7 +33,7 @@ const onFileUploadedSuccess = [
         DocumentDetail: navigateToDocumentDetailAction,
       },
     ],
-    yes: gotoSignOrderSequence,
+    yes: navigateToSignOrderAction,
   },
 ];
 

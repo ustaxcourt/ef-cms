@@ -17,9 +17,7 @@ describe('CourtIssuedDocumentTypeH', () => {
     });
 
     it('should have error message for future date', () => {
-      const date = moment()
-        .add(5, 'days')
-        .format();
+      const date = moment().add(5, 'days').format();
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,
         date,

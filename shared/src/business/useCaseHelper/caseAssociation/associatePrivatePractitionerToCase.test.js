@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   associatePrivatePractitionerToCase,
 } = require('./associatePrivatePractitionerToCase');
 const {
@@ -8,12 +11,7 @@ const { MOCK_USERS } = require('../../../test/mockUsers');
 const { User } = require('../../entities/User');
 
 describe('associatePrivatePractitionerToCase', () => {
-  let applicationContext;
-
   let caseRecord;
-  const associateUserWithCaseSpy = jest.fn();
-  const updateCaseSpy = jest.fn();
-  let verifyCaseForUserSpy;
 
   const practitionerUser = {
     name: 'Olivia Jade',
@@ -22,8 +20,6 @@ describe('associatePrivatePractitionerToCase', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
     caseRecord = {
       caseCaption: 'Case Caption',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -75,20 +71,18 @@ describe('associatePrivatePractitionerToCase', () => {
       procedureType: 'Regular',
     };
 
-    applicationContext = {
-      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      getPersistenceGateway: () => ({
-        associateUserWithCase: associateUserWithCaseSpy,
-        getCaseByCaseId: async () => caseRecord,
-        updateCase: updateCaseSpy,
-        verifyCaseForUser: verifyCaseForUserSpy,
-      }),
-      getUniqueId: () => 'unique-id-1',
-    };
+    applicationContext.getCurrentUser.mockReturnValue(
+      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockResolvedValue(caseRecord);
   });
 
   it('should not add mapping if already there', async () => {
-    verifyCaseForUserSpy = jest.fn().mockReturnValue(true);
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
 
     await associatePrivatePractitionerToCase({
       applicationContext,
@@ -98,12 +92,18 @@ describe('associatePrivatePractitionerToCase', () => {
       user: practitionerUser,
     });
 
-    expect(associateUserWithCaseSpy).not.toBeCalled();
-    expect(updateCaseSpy).not.toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toHaveBeenCalled();
   });
 
   it('should add mapping for a practitioner', async () => {
-    verifyCaseForUserSpy = jest.fn().mockReturnValue(false);
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
 
     await associatePrivatePractitionerToCase({
       applicationContext,
@@ -113,12 +113,18 @@ describe('associatePrivatePractitionerToCase', () => {
       user: practitionerUser,
     });
 
-    expect(associateUserWithCaseSpy).toBeCalled();
-    expect(updateCaseSpy).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
   });
 
   it('should set contactPrimary and contactSecondary to receive no service if the practitioner is representing both parties', async () => {
-    verifyCaseForUserSpy = jest.fn().mockReturnValue(false);
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
 
     await associatePrivatePractitionerToCase({
       applicationContext,
@@ -128,16 +134,25 @@ describe('associatePrivatePractitionerToCase', () => {
       user: practitionerUser,
     });
 
-    expect(associateUserWithCaseSpy).toBeCalled();
-    expect(updateCaseSpy).toBeCalled();
-    expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({
       contactPrimary: { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE },
       contactSecondary: { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE },
     });
   });
 
   it('should only set contactSecondary to receive no service if the practitioner is only representing contactSecondary', async () => {
-    verifyCaseForUserSpy = jest.fn().mockReturnValue(false);
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
 
     await associatePrivatePractitionerToCase({
       applicationContext,
@@ -146,10 +161,16 @@ describe('associatePrivatePractitionerToCase', () => {
       representingSecondary: true,
       user: practitionerUser,
     });
-
-    expect(associateUserWithCaseSpy).toBeCalled();
-    expect(updateCaseSpy).toBeCalled();
-    expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({
       contactPrimary: {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },

@@ -7,32 +7,23 @@ import React from 'react';
 export const PractitionerSearchByBarNumber = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
-    clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    clearCaseSearchByNameFormSequence:
+      sequences.clearCaseSearchByNameFormSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function PractitionerSearchByBarNumber({
     advancedSearchForm,
-    clearAdvancedSearchFormSequence,
+    clearCaseSearchByNameFormSequence,
     submitPractitionerNameSearchSequence,
     updateAdvancedSearchFormValueSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <div className="header-with-blue-background display-flex flex-justify">
           <h3>Search by Bar Number</h3>
-          <Button
-            link
-            className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-            icon={['fas', 'times-circle']}
-            onClick={() => {
-              clearAdvancedSearchFormSequence();
-            }}
-          >
-            Clear Search
-          </Button>
         </div>
         <div className="blue-container">
           <form
@@ -52,9 +43,13 @@ export const PractitionerSearchByBarNumber = connect(
                     id="bar-number"
                     name="barNumber"
                     type="text"
-                    value={advancedSearchForm.barNumber || ''}
+                    value={
+                      advancedSearchForm.practitionerSearchByBarNumber
+                        .barNumber || ''
+                    }
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
+                        formType: 'practitionerSearchByBarNumber',
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -65,12 +60,21 @@ export const PractitionerSearchByBarNumber = connect(
             </div>
 
             <div className="grid-row">
-              <div className="tablet:grid-col-5">
+              <div className="tablet:grid-col-6">
                 <Button
                   className="advanced-search__button margin-top-2"
                   type="submit"
                 >
                   Search
+                </Button>
+                <Button
+                  link
+                  className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                  onClick={() => {
+                    clearCaseSearchByNameFormSequence();
+                  }}
+                >
+                  Clear Search
                 </Button>
               </div>
             </div>

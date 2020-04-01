@@ -5,9 +5,11 @@ describe('pdfPreviewModalHelper', () => {
   it('should disable left and right buttons', () => {
     const result = runCompute(pdfPreviewModalHelper, {
       state: {
-        pdfPreviewModal: {
-          currentPage: 1,
-          totalPages: 1,
+        modal: {
+          pdfPreviewModal: {
+            currentPage: 1,
+            totalPages: 1,
+          },
         },
       },
     });
@@ -20,9 +22,11 @@ describe('pdfPreviewModalHelper', () => {
   it('should disable left buttons only (first page)', () => {
     const result = runCompute(pdfPreviewModalHelper, {
       state: {
-        pdfPreviewModal: {
-          currentPage: 1,
-          totalPages: 2,
+        modal: {
+          pdfPreviewModal: {
+            currentPage: 1,
+            totalPages: 2,
+          },
         },
       },
     });
@@ -35,9 +39,11 @@ describe('pdfPreviewModalHelper', () => {
   it('should disable right buttons only (last page)', () => {
     const result = runCompute(pdfPreviewModalHelper, {
       state: {
-        pdfPreviewModal: {
-          currentPage: 2,
-          totalPages: 2,
+        modal: {
+          pdfPreviewModal: {
+            currentPage: 2,
+            totalPages: 2,
+          },
         },
       },
     });
@@ -50,9 +56,11 @@ describe('pdfPreviewModalHelper', () => {
   it('should enable both buttons (middle page)', () => {
     const result = runCompute(pdfPreviewModalHelper, {
       state: {
-        pdfPreviewModal: {
-          currentPage: 2,
-          totalPages: 3,
+        modal: {
+          pdfPreviewModal: {
+            currentPage: 2,
+            totalPages: 3,
+          },
         },
       },
     });
@@ -65,8 +73,10 @@ describe('pdfPreviewModalHelper', () => {
   it('should display error text if there is an error', () => {
     const result = runCompute(pdfPreviewModalHelper, {
       state: {
-        pdfPreviewModal: {
-          error: true,
+        modal: {
+          pdfPreviewModal: {
+            error: true,
+          },
         },
       },
     });

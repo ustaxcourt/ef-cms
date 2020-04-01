@@ -7,11 +7,11 @@ import { state } from 'cerebral';
  */
 export const closeFileUploadStatusModalAction = async ({ store }) => {
   await new Promise(resolve => {
-    store.set(state.percentComplete, 100);
-    store.set(state.timeRemaining, 0);
-    store.set(state.isUploading, false);
+    store.set(state.fileUploadProgress.percentComplete, 100);
+    store.set(state.fileUploadProgress.timeRemaining, 0);
+    store.set(state.fileUploadProgress.isUploading, false);
     setTimeout(resolve, process.env.FILE_UPLOAD_MODAL_TIMEOUT || 3000);
   }).then(() => {
-    store.set(state.showModal, '');
+    store.set(state.modal.showModal, '');
   });
 };

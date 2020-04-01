@@ -6,7 +6,7 @@ const s3Files = require('s3-files');
 const s3Zip = {};
 module.exports = s3Zip;
 
-s3Zip.archive = function(opts, folder, filesS3, filesZip, extra, extraZip) {
+s3Zip.archive = function (opts, folder, filesS3, filesZip, extra, extraZip) {
   const self = this;
   let connectionConfig;
 
@@ -50,7 +50,7 @@ s3Zip.archive = function(opts, folder, filesS3, filesZip, extra, extraZip) {
   return archive;
 };
 
-s3Zip.archiveStream = function(stream, filesS3, filesZip, extras, extrasZip) {
+s3Zip.archiveStream = function (stream, filesS3, filesZip, extras, extrasZip) {
   const self = this;
   const folder = this.folder || '';
   if (this.registerFormat) {
@@ -69,7 +69,7 @@ s3Zip.archiveStream = function(stream, filesS3, filesZip, extras, extrasZip) {
     self.debug && console.log('promise.all complete');
   });
 
-  archive.on('error', function(err) {
+  archive.on('error', function (err) {
     self.debug && console.log('archive error', err);
   });
 
@@ -77,7 +77,7 @@ s3Zip.archiveStream = function(stream, filesS3, filesZip, extras, extrasZip) {
   archive.on('entry', self.onEntry);
 
   stream
-    .on('data', function(file) {
+    .on('data', function (file) {
       if (file.path[file.path.length - 1] === '/') {
         self.debug && console.log("don't append to zip", file.path);
         return;
@@ -103,7 +103,7 @@ s3Zip.archiveStream = function(stream, filesS3, filesZip, extras, extrasZip) {
         archive.append(file.data, entryData);
       }
     })
-    .on('end', function() {
+    .on('end', function () {
       self.debug && console.log('end -> finalize');
       extraFilesPromisesAll
         .then(() => {})
@@ -113,24 +113,24 @@ s3Zip.archiveStream = function(stream, filesS3, filesZip, extras, extrasZip) {
           archive.finalize();
         });
     })
-    .on('error', function(err) {
+    .on('error', function (err) {
       archive.emit('error', err);
     });
 
   return archive;
 };
 
-s3Zip.setFormat = function(format) {
+s3Zip.setFormat = function (format) {
   this.format = format;
   return this;
 };
 
-s3Zip.setArchiverOptions = function(archiverOpts) {
+s3Zip.setArchiverOptions = function (archiverOpts) {
   this.archiverOpts = archiverOpts;
   return this;
 };
 
-s3Zip.setRegisterFormatOptions = function(registerFormat, formatModule) {
+s3Zip.setRegisterFormatOptions = function (registerFormat, formatModule) {
   this.registerFormat = registerFormat;
   this.formatModule = formatModule;
   return this;

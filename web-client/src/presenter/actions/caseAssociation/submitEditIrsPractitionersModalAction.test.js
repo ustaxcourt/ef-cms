@@ -1,25 +1,15 @@
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { submitEditIrsPractitionersModalAction } from './submitEditIrsPractitionersModalAction';
-import sinon from 'sinon';
 
 describe('submitEditIrsPractitionersModalAction', () => {
-  let deleteCounselFromCaseInteractorStub;
-  let updateCounselOnCaseInteractorStub;
   let successStub;
 
-  beforeEach(() => {
-    deleteCounselFromCaseInteractorStub = sinon.stub();
-    updateCounselOnCaseInteractorStub = sinon.stub();
-    successStub = sinon.stub();
+  beforeAll(() => {
+    successStub = jest.fn();
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        deleteCounselFromCaseInteractor: deleteCounselFromCaseInteractorStub,
-        updateCounselOnCaseInteractor: updateCounselOnCaseInteractorStub,
-      }),
-    };
-
+    presenter.providers.applicationContext = applicationContextForClient;
     presenter.providers.path = {
       success: successStub,
     };
@@ -54,13 +44,40 @@ describe('submitEditIrsPractitionersModalAction', () => {
       },
     });
 
-    expect(deleteCounselFromCaseInteractorStub.calledOnce).toEqual(true);
     expect(
-      deleteCounselFromCaseInteractorStub.getCall(0).args[0],
+      applicationContextForClient.getUseCases().updateCounselOnCaseInteractor
+        .mock.calls.length,
+    ).toEqual(2);
+    expect(
+      applicationContextForClient.getUseCases().updateCounselOnCaseInteractor
+        .mock.calls[0],
+    ).toMatchObject(
+      [
+        {
+          caseId: '123',
+          userData: { userId: '1' },
+          userIdToUpdate: '1',
+        },
+      ],
+      [
+        {
+          caseId: '123',
+          userData: { userId: '3' },
+          userIdToUpdate: '3',
+        },
+      ],
+    );
+    expect(
+      applicationContextForClient.getUseCases().deleteCounselFromCaseInteractor
+        .mock.calls.length,
+    ).toEqual(1);
+    expect(
+      applicationContextForClient.getUseCases().deleteCounselFromCaseInteractor
+        .mock.calls[0][0],
     ).toMatchObject({
       caseId: '123',
       userIdToDelete: '2',
     });
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub).toHaveBeenCalled();
   });
 });

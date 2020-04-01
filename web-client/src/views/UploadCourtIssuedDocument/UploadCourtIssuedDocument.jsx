@@ -17,7 +17,7 @@ export const UploadCourtIssuedDocument = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     uploadCourtIssuedDocumentSequence:
       sequences.uploadCourtIssuedDocumentSequence,
@@ -25,7 +25,7 @@ export const UploadCourtIssuedDocument = connect(
       sequences.validateUploadCourtIssuedDocumentSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function UploadCourtIssuedDocument({
     constants,
     fileDocumentHelper,
     form,
@@ -35,7 +35,7 @@ export const UploadCourtIssuedDocument = connect(
     uploadCourtIssuedDocumentSequence,
     validateUploadCourtIssuedDocumentSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <CaseDetailHeader />

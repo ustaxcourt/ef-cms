@@ -25,7 +25,7 @@ export const WorkingCopySessionList = connect(
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
     trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
   },
-  ({
+  function WorkingCopySessionList({
     autoSaveTrialSessionWorkingCopySequence,
     casesShownCount,
     formattedCases,
@@ -35,7 +35,7 @@ export const WorkingCopySessionList = connect(
     sortOrder,
     toggleWorkingCopySortSequence,
     trialStatusOptions,
-  }) => {
+  }) {
     return (
       <div className="margin-top-4">
         <WorkingCopyFilterHeader />

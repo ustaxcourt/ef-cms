@@ -44,8 +44,7 @@ exports.getConsolidatedCasesByUserInteractor = async ({
       }
     });
 
-    for (let i = 0; i < leadCaseIdsToGet.length; i++) {
-      const leadCaseId = leadCaseIdsToGet[i];
+    for (const leadCaseId of leadCaseIdsToGet) {
       const consolidatedCases = await applicationContext
         .getPersistenceGateway()
         .getCasesByLeadCaseId({

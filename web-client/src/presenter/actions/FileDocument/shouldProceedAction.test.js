@@ -6,7 +6,7 @@ describe('shouldProceedAction', () => {
   let proceedStub;
   let ignoreStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     proceedStub = jest.fn();
     ignoreStub = jest.fn();
 

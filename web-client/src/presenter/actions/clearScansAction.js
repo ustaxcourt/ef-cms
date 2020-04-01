@@ -7,5 +7,5 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object used for clearing the form
  */
 export const clearScansAction = ({ store }) => {
-  store.set(state.batches, {});
+  store.set(state.scanner.batches, {});
 };

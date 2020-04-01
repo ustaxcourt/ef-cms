@@ -54,20 +54,11 @@ const publicCaseSchema = {
     })
     .optional(),
   caseTitle: joi.string().optional(),
-  createdAt: joi
-    .date()
-    .iso()
-    .optional(),
+  createdAt: joi.date().iso().optional(),
   docketNumber: joi.string().optional(),
-  docketNumberSuffix: joi
-    .string()
-    .allow(null)
-    .optional(),
+  docketNumberSuffix: joi.string().allow(null).optional(),
   isSealed: joi.boolean(),
-  receivedAt: joi
-    .date()
-    .iso()
-    .optional(),
+  receivedAt: joi.date().iso().optional(),
 };
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
@@ -93,7 +84,7 @@ joiValidationDecorator(
   {},
 );
 
-const isDraftDocument = function(document, docketRecord) {
+const isDraftDocument = function (document, docketRecord) {
   const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');
   const courtIssuedDocumentTypes = map(
     Document.COURT_ISSUED_EVENT_CODES,
@@ -115,7 +106,7 @@ const isDraftDocument = function(document, docketRecord) {
   return isPublicDocumentType && !isDocumentOnDocketRecord;
 };
 
-const isPrivateDocument = function(document, docketRecord) {
+const isPrivateDocument = function (document, docketRecord) {
   const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');
   const courtIssuedDocumentTypes = map(
     Document.COURT_ISSUED_EVENT_CODES,

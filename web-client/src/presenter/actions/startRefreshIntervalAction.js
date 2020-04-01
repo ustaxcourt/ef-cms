@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.showValidation to true
+ * starts the token refresh interval
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store used for setting state.workItem

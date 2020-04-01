@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   updateDocketEntryInteractor,
 } = require('./updateDocketEntryInteractor');
@@ -108,10 +107,10 @@ describe('updateDocketEntryInteractor', () => {
 
   it('updates the workitem without updating the document if no file is attached', async () => {
     let error;
-    let getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
-    let deleteWorkItemFromInboxSpy = sinon.spy();
-    let saveWorkItemForDocketClerkFilingExternalDocumentSpy = sinon.spy();
-    let updateCaseSpy = sinon.spy();
+    let getCaseByCaseIdSpy = jest.fn().mockReturnValue(caseRecord);
+    let deleteWorkItemFromInboxSpy = jest.fn();
+    let saveWorkItemForDocketClerkFilingExternalDocumentSpy = jest.fn();
+    let updateCaseSpy = jest.fn();
     try {
       applicationContext = {
         environment: { stage: 'local' },
@@ -150,20 +149,20 @@ describe('updateDocketEntryInteractor', () => {
       error = err;
     }
     expect(error).toBeUndefined();
-    expect(getCaseByCaseIdSpy.called).toEqual(true);
-    expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy.called).toEqual(
-      false,
-    );
-    expect(deleteWorkItemFromInboxSpy.called).toEqual(false);
-    expect(updateCaseSpy.called).toEqual(true);
+    expect(getCaseByCaseIdSpy).toBeCalled();
+    expect(
+      saveWorkItemForDocketClerkFilingExternalDocumentSpy,
+    ).not.toBeCalled();
+    expect(deleteWorkItemFromInboxSpy).not.toBeCalled();
+    expect(updateCaseSpy).toBeCalled();
   });
 
   it('adds documents and workitems', async () => {
     let error;
-    let getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
-    let deleteWorkItemFromInboxSpy = sinon.spy();
-    let saveWorkItemForDocketClerkFilingExternalDocumentSpy = sinon.spy();
-    let updateCaseSpy = sinon.spy();
+    let getCaseByCaseIdSpy = jest.fn().mockReturnValue(caseRecord);
+    let deleteWorkItemFromInboxSpy = jest.fn();
+    let saveWorkItemForDocketClerkFilingExternalDocumentSpy = jest.fn();
+    let updateCaseSpy = jest.fn();
     try {
       applicationContext = {
         environment: { stage: 'local' },
@@ -202,21 +201,19 @@ describe('updateDocketEntryInteractor', () => {
       error = err;
     }
     expect(error).toBeUndefined();
-    expect(getCaseByCaseIdSpy.called).toEqual(true);
-    expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy.called).toEqual(
-      true,
-    );
-    expect(deleteWorkItemFromInboxSpy.called).toEqual(true);
-    expect(updateCaseSpy.called).toEqual(true);
+    expect(getCaseByCaseIdSpy).toBeCalled();
+    expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
+    expect(deleteWorkItemFromInboxSpy).toBeCalled();
+    expect(updateCaseSpy).toBeCalled();
   });
 
   it('add documents but not workitems for paper filed documents', async () => {
     let error;
-    let getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
-    let saveWorkItemForNonPaperSpy = sinon.spy();
-    let saveWorkItemForDocketClerkFilingExternalDocumentSpy = sinon.spy();
-    let saveWorkItemForDocketEntryWithoutFileSpy = sinon.spy();
-    let updateCaseSpy = sinon.spy();
+    let getCaseByCaseIdSpy = jest.fn().mockReturnValue(caseRecord);
+    let saveWorkItemForNonPaperSpy = jest.fn();
+    let saveWorkItemForDocketClerkFilingExternalDocumentSpy = jest.fn();
+    let saveWorkItemForDocketEntryWithoutFileSpy = jest.fn();
+    let updateCaseSpy = jest.fn();
     try {
       applicationContext = {
         environment: { stage: 'local' },
@@ -257,8 +254,8 @@ describe('updateDocketEntryInteractor', () => {
       error = err;
     }
     expect(error).toBeUndefined();
-    expect(getCaseByCaseIdSpy.called).toEqual(true);
-    expect(saveWorkItemForNonPaperSpy.called).toEqual(false);
-    expect(updateCaseSpy.called).toEqual(true);
+    expect(getCaseByCaseIdSpy).toBeCalled();
+    expect(saveWorkItemForNonPaperSpy).not.toBeCalled();
+    expect(updateCaseSpy).toBeCalled();
   });
 });

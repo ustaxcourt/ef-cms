@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.currentTab based on the state.documentDetailHelper
+ * sets the state.currentViewMetadata.tab based on the state.documentDetailHelper
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -25,7 +25,7 @@ export const setDefaultDocumentDetailTabAction = ({
     [STATUS_TYPES.new, STATUS_TYPES.inProgress].includes(caseDetail.status);
 
   store.set(
-    state.currentTab,
+    state.currentViewMetadata.tab,
     showDocumentInfoTab ? 'Document Info' : 'Messages',
   );
   store.unset(state.documentDetail.messagesTab);
