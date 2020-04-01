@@ -7,7 +7,7 @@ describe('setPDFForSigningAction', () => {
   let mockPDFObj;
   let removeCoverMock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     mockPDFObj = {
       numPages: 1,
     };

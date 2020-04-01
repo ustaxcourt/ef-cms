@@ -5,7 +5,7 @@ import { runAction } from 'cerebral/test';
 import { setupEditPetitionDetailFormAction } from './setupEditPetitionDetailFormAction';
 
 describe('setupEditPetitionDetailFormAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

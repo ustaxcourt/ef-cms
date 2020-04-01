@@ -6,7 +6,7 @@ const mockCaseDetail = jest.fn();
 const mockDocumentDetail = jest.fn();
 
 describe('getGotoAfterSigningAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.path = {
       CaseDetail: mockCaseDetail,
       DocumentDetail: mockDocumentDetail,

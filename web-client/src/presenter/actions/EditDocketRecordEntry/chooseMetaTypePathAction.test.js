@@ -7,7 +7,7 @@ describe('chooseMetaTypePathAction', () => {
   let documentStub;
   let noDocumentStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     courtIssuedStub = jest.fn();
     documentStub = jest.fn();
     noDocumentStub = jest.fn();

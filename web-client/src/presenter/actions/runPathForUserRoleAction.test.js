@@ -13,7 +13,7 @@ let judgeStub;
 let otherInternalUserStub;
 
 describe('runPathForUserRoleAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     petitionerStub = jest.fn();
     privatePractitionerStub = jest.fn();
     irsPractitionerStub = jest.fn();

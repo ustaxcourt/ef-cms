@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 import { setTrialSessionCalendarAction } from './setTrialSessionCalendarAction';
 
 describe('setTrialSessionCalendarAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext
       .getUseCases()

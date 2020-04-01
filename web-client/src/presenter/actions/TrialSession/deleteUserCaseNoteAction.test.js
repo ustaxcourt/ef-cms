@@ -5,7 +5,7 @@ import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('deleteUserCaseNoteAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

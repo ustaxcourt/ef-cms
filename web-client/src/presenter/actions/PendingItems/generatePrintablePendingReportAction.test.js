@@ -6,7 +6,7 @@ import { runAction } from 'cerebral/test';
 describe('generatePrintablePendingReportAction', () => {
   let resultUrl;
 
-  beforeEach(() => {
+  beforeAll(() => {
     resultUrl = 'https://example.com';
     presenter.providers.applicationContext = applicationContextForClient;
 

@@ -9,7 +9,7 @@ describe('updateDocketEntryMetaAction', () => {
   let errorMock;
   let successMock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     errorMock = jest.fn();
     successMock = jest.fn();
 
