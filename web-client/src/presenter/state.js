@@ -150,6 +150,10 @@ const helpers = {
 
 export const state = {
   ...helpers,
+  ...baseState,
+};
+
+export const baseState = {
   advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
   archiveDraftDocument: {
     // used by the delete draft document modal
