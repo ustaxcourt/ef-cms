@@ -1,22 +1,21 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateExternalDocumentInformationAction } from './validateExternalDocumentInformationAction';
 
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-const applicationContext = applicationContextForClient;
-presenter.providers.applicationContext = applicationContext;
-
-const {
-  validateExternalDocumentInformationInteractor,
-} = applicationContext.getUseCases();
-
 describe('validateExternalDocumentInformationAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
+  const {
+    validateExternalDocumentInformationInteractor,
+  } = applicationContext.getUseCases();
+
   let successStub;
   let errorStub;
 
   let mockDocInfo;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

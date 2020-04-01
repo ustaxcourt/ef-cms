@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { deleteWorkItemFromInbox } = require('./deleteWorkItemFromInbox');
 
 describe('deleteWorkItemFromInbox', () => {
@@ -10,14 +13,9 @@ describe('deleteWorkItemFromInbox', () => {
   });
 
   it('invokes the persistence layer with pk of {assigneeId}|workItem, docket|workItem and other expected params', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        delete: deleteStub,
-      }),
-    };
+    applicationContext.getDocumentClient.mockReturnValue({
+      delete: deleteStub,
+    });
     await deleteWorkItemFromInbox({
       applicationContext,
       workItem: {
@@ -41,14 +39,9 @@ describe('deleteWorkItemFromInbox', () => {
   });
 
   it('invokes the persistence layer with pk of docket|workItem and other expected params when assigneeId is not set', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        delete: deleteStub,
-      }),
-    };
+    applicationContext.getDocumentClient.mockReturnValue({
+      delete: deleteStub,
+    });
     await deleteWorkItemFromInbox({
       applicationContext,
       workItem: {

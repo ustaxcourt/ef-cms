@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { deleteUserOutboxRecord } = require('./deleteUserOutboxRecord');
 
 describe('deleteUserOutboxRecord', () => {
@@ -10,14 +13,9 @@ describe('deleteUserOutboxRecord', () => {
   });
 
   it('invokes the persistence layer with pk of user-outbox|${userId} and sk of createdAt', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        delete: deleteStub,
-      }),
-    };
+    applicationContext.getDocumentClient.mockReturnValue({
+      delete: deleteStub,
+    });
     await deleteUserOutboxRecord({
       applicationContext,
       createdAt: '2020-01-02T16:05:45.979Z',

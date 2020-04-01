@@ -6,7 +6,7 @@ import { runAction } from 'cerebral/test';
 const mockCreateObjectUrl = jest.fn();
 
 describe('generateDocketRecordPdfUrlAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
     global.window = global;

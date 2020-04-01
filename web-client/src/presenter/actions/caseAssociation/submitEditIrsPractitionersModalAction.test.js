@@ -6,7 +6,7 @@ import { submitEditIrsPractitionersModalAction } from './submitEditIrsPractition
 describe('submitEditIrsPractitionersModalAction', () => {
   let successStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
 
     presenter.providers.applicationContext = applicationContextForClient;

@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { updateWorkItem } = require('./updateWorkItem');
 
 describe('updateWorkItem', () => {
@@ -9,14 +12,9 @@ describe('updateWorkItem', () => {
   });
 
   it('invokes the persistence layer with pk of {workItemId}, sk of {workItemId} and other expected params', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        put: putStub,
-      }),
-    };
+    applicationContext.getDocumentClient.mockReturnValue({
+      put: putStub,
+    });
     await updateWorkItem({
       applicationContext,
       workItemToUpdate: {
@@ -31,7 +29,7 @@ describe('updateWorkItem', () => {
         sk: 'work-item|123',
         workItemId: '123',
       },
-      applicationContext: { environment: { stage: 'dev' } },
+      applicationContext: { environment: { stage: 'local' } },
     });
   });
 });

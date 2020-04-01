@@ -7,7 +7,7 @@ describe('validatePetitionFromPaperAction', () => {
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

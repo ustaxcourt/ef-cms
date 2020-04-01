@@ -9,7 +9,7 @@ const mockStorage = {
 };
 
 describe('handleInvalidScannerSourceAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext.getUseCases().removeItemInteractor = jest.fn(
       ({ key }) => {
         mockStorage[key] = null;

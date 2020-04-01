@@ -32,7 +32,7 @@ describe('loginWithCodeSequence', () => {
     test = CerebralTest(presenter);
   });
 
-  afterEach(() => {
+  afterAll(() => {
     jest.restoreAllMocks();
   });
 

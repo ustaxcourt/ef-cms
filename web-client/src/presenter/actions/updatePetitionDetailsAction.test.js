@@ -6,7 +6,7 @@ import { updatePetitionDetailsAction } from './updatePetitionDetailsAction';
 describe('updatePetitionDetailsAction', () => {
   let PAYMENT_STATUS;
 
-  beforeEach(() => {
+  beforeAll(() => {
     ({ PAYMENT_STATUS } = applicationContext.getConstants());
     presenter.providers.applicationContext = applicationContext;
 

@@ -333,11 +333,15 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const applicationContext = {
     ...sharedAppContext,
+    convertBlobToUInt8Array: jest
+      .fn()
+      .mockImplementation(() => new Uint8Array([])),
     docketNumberGenerator: mockCreateDocketNumberGenerator,
     environment: {
       stage: 'local',
       tempDocumentsBucketName: 'MockDocumentBucketName',
     },
+    filterCaseMetadata: jest.fn(),
     getBaseUrl: () => 'http://localhost',
     getCaseCaptionNames: jest.fn().mockImplementation(Case.getCaseCaptionNames),
     getChiefJudgeNameForSigning: jest
@@ -373,7 +377,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
     }),
-    getDocumentClient: () => mockDocumentClient,
+    getDocumentClient: jest.fn().mockImplementation(() => mockDocumentClient),
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityByName: jest.fn(),

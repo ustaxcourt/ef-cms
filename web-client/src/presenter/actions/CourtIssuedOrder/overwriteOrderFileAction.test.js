@@ -7,9 +7,7 @@ describe('overwriteOrderFileAction', () => {
   let errorStub;
   let successStub;
 
-  beforeEach(() => {
-    jest.restoreAllMocks();
-
+  beforeAll(() => {
     errorStub = jest.fn();
     successStub = jest.fn();
 

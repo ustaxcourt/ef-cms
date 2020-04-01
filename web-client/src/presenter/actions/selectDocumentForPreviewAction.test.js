@@ -5,7 +5,7 @@ import { selectDocumentForPreviewAction } from './selectDocumentForPreviewAction
 describe('selectDocumentForPreviewAction', () => {
   let createObjectURLMock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     createObjectURLMock = jest.fn();
 
     presenter.providers.router = {

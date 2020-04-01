@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+const {
   saveWorkItemForDocketClerkFilingExternalDocument,
 } = require('./saveWorkItemForDocketClerkFilingExternalDocument');
 
@@ -24,19 +27,14 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
   });
 
   it('invokes the persistence layer 4 times to store the work item, user and section outbox records, and work item mapping record', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getCurrentUser: () => ({
-        section: 'docket',
-        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-      getDocumentClient: () => ({
-        get: getStub,
-        put: putStub,
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      section: 'docket',
+      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+    applicationContext.getDocumentClient.mockReturnValue({
+      get: getStub,
+      put: putStub,
+    });
     await saveWorkItemForDocketClerkFilingExternalDocument({
       applicationContext,
       workItem: {

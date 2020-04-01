@@ -8,7 +8,7 @@ presenter.providers.applicationContext = applicationContext;
 describe('updateDocketEntryWithoutFileAction', () => {
   let caseDetail;
 
-  beforeEach(() => {
+  beforeAll(() => {
     caseDetail = {
       caseId: '123',
       docketNumber: '123-45',

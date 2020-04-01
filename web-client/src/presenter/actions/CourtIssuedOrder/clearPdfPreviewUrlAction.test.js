@@ -5,7 +5,7 @@ import { runAction } from 'cerebral/test';
 describe('clearPdfPreviewUrlAction', () => {
   let revokeObjectURLStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     revokeObjectURLStub = jest.fn();
 
     presenter.providers.router = {

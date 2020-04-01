@@ -1,12 +1,11 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setAddEditSessionNoteModalStateAction } from './setAddEditSessionNoteModalStateAction';
 
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-const applicationContext = applicationContextForClient;
-presenter.providers.applicationContext = applicationContext;
-
 describe('setAddEditSessionNoteModalStateAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   it('should set the modal caseId state', async () => {
     const result = await runAction(setAddEditSessionNoteModalStateAction, {
       modules: {

@@ -6,9 +6,7 @@ describe('shouldRefreshOrderPdfAction', () => {
   const noStub = jest.fn();
   const yesStub = jest.fn();
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-
+  beforeAll(() => {
     presenter.providers.path = {
       no: noStub,
       yes: yesStub,

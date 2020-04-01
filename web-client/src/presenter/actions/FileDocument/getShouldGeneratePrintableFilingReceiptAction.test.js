@@ -6,7 +6,7 @@ let trueMock;
 let falseMock;
 
 describe('getShouldGeneratePrintableFilingReceiptAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     trueMock = jest.fn();
     falseMock = jest.fn();
 

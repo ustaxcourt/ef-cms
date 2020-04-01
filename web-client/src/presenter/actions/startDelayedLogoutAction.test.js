@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 import { startDelayedLogoutAction } from './startDelayedLogoutAction';
 
 describe('startDelayedLogoutAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { setPriorityOnAllWorkItems } = require('./setPriorityOnAllWorkItems');
 
 describe('setPriorityOnAllWorkItems', () => {
@@ -25,15 +28,10 @@ describe('setPriorityOnAllWorkItems', () => {
   });
 
   it('invokes the persistence layer to update each work item', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        query: queryStub,
-        update: updateStub,
-      }),
-    };
+    applicationContext.getDocumentClient.mockReturnValue({
+      query: queryStub,
+      update: updateStub,
+    });
     await setPriorityOnAllWorkItems({
       applicationContext,
       caseId: '80f89505-f137-45f0-8e82-9f9870322efc',
@@ -63,15 +61,11 @@ describe('setPriorityOnAllWorkItems', () => {
   });
 
   it('invokes the persistence layer to update each work item with an undefined trialDate', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        query: queryStub,
-        update: updateStub,
-      }),
-    };
+    applicationContext.getDocumentClient.mockReturnValue({
+      query: queryStub,
+      update: updateStub,
+    });
+
     await setPriorityOnAllWorkItems({
       applicationContext,
       caseId: '80f89505-f137-45f0-8e82-9f9870322efc',

@@ -9,7 +9,7 @@ describe('validateAddPrivatePractitioner', () => {
 
   let mockAddPrivatePractitioner;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
