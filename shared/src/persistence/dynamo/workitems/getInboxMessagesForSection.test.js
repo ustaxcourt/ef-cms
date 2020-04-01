@@ -1,39 +1,31 @@
 import { getInboxMessagesForSection } from './getInboxMessagesForSection';
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 
 describe('getInboxMessagesForSection', () => {
-  let applicationContext;
-  let queryStub;
-  let workItems;
+  const mockWorkItems = [
+    {
+      pk: 'work-item-123',
+      section: 'inProgress',
+      sk: 'work-item-sortKey',
+    },
+    {
+      pk: 'work-item-321',
+      section: 'inProgress',
+      sk: 'work-item-sortKey',
+    },
+    {
+      pk: 'work-item-456',
+      section: 'inProgress',
+      sk: 'work-item-sortKey',
+    },
+  ];
 
-  beforeEach(() => {
-    workItems = [
-      {
-        pk: 'work-item-123',
-        section: 'inProgress',
-        sk: 'work-item-sortKey',
-      },
-      {
-        pk: 'work-item-321',
-        section: 'inProgress',
-        sk: 'work-item-sortKey',
-      },
-      {
-        pk: 'work-item-456',
-        section: 'inProgress',
-        sk: 'work-item-sortKey',
-      },
-    ];
-
-    queryStub = jest.fn().mockResolvedValue({
-      Items: workItems,
+  beforeAll(() => {
+    applicationContext.getDocumentClient().query.mockReturnValue({
+      promise: () => Promise.resolve({ Items: mockWorkItems }),
     });
-
-    applicationContext = {
-      environment: { stage: 'local' },
-      getDocumentClient: () => ({
-        query: () => ({ promise: queryStub }),
-      }),
-    };
   });
 
   it('returns the work items for a given section', async () => {
@@ -42,6 +34,6 @@ describe('getInboxMessagesForSection', () => {
       section: 'inProgress',
     });
 
-    expect(result).toEqual(workItems);
+    expect(result).toEqual(mockWorkItems);
   });
 });

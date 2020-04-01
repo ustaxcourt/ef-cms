@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { validateScannerSourceAction } from './validateScannerSourceAction';
@@ -5,18 +6,18 @@ import { validateScannerSourceAction } from './validateScannerSourceAction';
 const invalidMock = jest.fn();
 const validMock = jest.fn();
 
-presenter.providers.path = {
-  invalid: invalidMock,
-  valid: validMock,
-};
-
-presenter.providers.applicationContext = {
-  getScanner: async () => ({
-    getSourceNameByIndex: index => `Scanner-${index}`,
-  }),
-};
-
 describe('validateScannerSourceAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.path = {
+      invalid: invalidMock,
+      valid: validMock,
+    };
+    applicationContext.getScanner.mockResolvedValue({
+      getSourceNameByIndex: index => `Scanner-${index}`,
+    });
+  });
+
   afterEach(() => {
     invalidMock.mockReset();
     validMock.mockReset();

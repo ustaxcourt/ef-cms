@@ -1,46 +1,56 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { createUser, createUserRecords } = require('./createUser');
 const { User } = require('../../../business/entities/User');
 
+const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
+
+const petitionsClerkUser = {
+  name: 'Test Petitionsclerk',
+  role: User.ROLES.petitionsClerk,
+  section: 'petitions',
+};
+
+const privatePractitionerUser = {
+  barNumber: 'PT1234',
+  name: 'Test Private Practitioner',
+  role: User.ROLES.privatePractitioner,
+  section: 'privatePractitioner',
+};
+
+const privatePractitionerUserWithoutBarNumber = {
+  barNumber: '',
+  name: 'Test Private Practitioner',
+  role: User.ROLES.privatePractitioner,
+  section: 'privatePractitioner',
+};
+
 describe('createUser', () => {
-  let applicationContext;
-  let putStub;
-  let adminCreateUserStub;
-  const adminGetUserStub = jest.fn().mockReturnValue({
-    promise: async () => ({
-      Username: '562d6260-aa9b-4010-af99-536d3872c752',
-    }),
-  });
-  const adminUpdateUserAttributesStub = jest.fn().mockReturnValue({
-    promise: async () => null,
-  });
+  beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
 
-  const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-
-    putStub = jest.fn().mockReturnValue({
-      promise: async () => null,
-    });
-    adminCreateUserStub = jest.fn().mockReturnValue({
-      promise: async () => ({
-        User: { Username: '562d6260-aa9b-4010-af99-536d3872c752' },
-      }),
+    applicationContext.getCognito().adminGetUser.mockReturnValue({
+      promise: async () =>
+        Promise.resolve({
+          Username: '562d6260-aa9b-4010-af99-536d3872c752',
+        }),
     });
 
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getCognito: () => ({
-        adminCreateUser: adminCreateUserStub,
-        adminGetUser: adminGetUserStub,
-        adminUpdateUserAttributes: adminUpdateUserAttributesStub,
-      }),
-      getDocumentClient: () => ({
-        put: putStub,
-      }),
-    };
+    applicationContext.getCognito().adminCreateUser.mockReturnValue({
+      promise: async () =>
+        Promise.resolve({
+          User: { Username: '562d6260-aa9b-4010-af99-536d3872c752' },
+        }),
+    });
+
+    applicationContext.getCognito().adminUpdateUserAttributes.mockReturnValue({
+      promise: async () => Promise.resolve(),
+    });
+
+    applicationContext.getDocumentClient().put.mockReturnValue({
+      promise: () => Promise.resolve(null),
+    });
   });
 
   it('should call adminCreateUser', async () => {
@@ -49,51 +59,51 @@ describe('createUser', () => {
       role: User.ROLES.petitionsClerk,
       section: 'petitions',
     };
+
     await createUser({ applicationContext, user: petitionsclerkUser });
 
-    expect(adminCreateUserStub).toBeCalled();
-    expect(adminGetUserStub).not.toBeCalled();
-    expect(adminUpdateUserAttributesStub).not.toBeCalled();
+    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).not.toBeCalled();
   });
 
   it('should call adminGetUser and adminUpdateUserAttributes if adminCreateUser throws an error', async () => {
-    adminCreateUserStub = jest.fn().mockImplementation(() => {
-      throw new Error('bad!');
+    applicationContext.getCognito().adminCreateUser.mockReturnValue({
+      promise: async () => {
+        throw new Error('bad!');
+      },
     });
 
-    const petitionsclerkUser = {
-      name: 'Test Petitionsclerk',
-      role: User.ROLES.petitionsClerk,
-      section: 'petitions',
-    };
-    await createUser({ applicationContext, user: petitionsclerkUser });
+    await createUser({ applicationContext, user: petitionsClerkUser });
 
-    expect(adminCreateUserStub).toBeCalled();
-    expect(adminGetUserStub).toBeCalled();
-    expect(adminUpdateUserAttributesStub).toBeCalled();
+    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(applicationContext.getCognito().adminGetUser).toBeCalled();
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).toBeCalled();
   });
 
   it('attempts to persist a private practitioner user with name and barNumber mapping records', async () => {
-    const privatePractitionerUser = {
-      barNumber: 'PT1234',
-      name: 'Test Private Practitioner',
-      role: User.ROLES.privatePractitioner,
-      section: 'privatePractitioner',
-    };
     await createUserRecords({
       applicationContext,
       user: privatePractitionerUser,
       userId,
     });
 
-    expect(putStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0],
+    ).toMatchObject({
       Item: {
         pk: 'section|privatePractitioner',
         sk: `user|${userId}`,
       },
       TableName: 'efcms-dev',
     });
-    expect(putStub.mock.calls[1][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[1][0],
+    ).toMatchObject({
       Item: {
         pk: `user|${userId}`,
         sk: `user|${userId}`,
@@ -101,14 +111,18 @@ describe('createUser', () => {
       },
       TableName: 'efcms-dev',
     });
-    expect(putStub.mock.calls[2][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[2][0],
+    ).toMatchObject({
       Item: {
         pk: 'privatePractitioner|Test Private Practitioner',
         sk: `user|${userId}`,
       },
       TableName: 'efcms-dev',
     });
-    expect(putStub.mock.calls[3][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[3][0],
+    ).toMatchObject({
       Item: {
         pk: 'privatePractitioner|PT1234',
         sk: `user|${userId}`,
@@ -119,30 +133,31 @@ describe('createUser', () => {
 
   describe('createUserRecords', () => {
     it('attempts to persist a petitionsclerk user with a section mapping record', async () => {
-      const petitionsclerkUser = {
-        name: 'Test Petitionsclerk',
-        role: User.ROLES.petitionsClerk,
-        section: 'petitions',
-      };
       await createUserRecords({
         applicationContext,
-        user: petitionsclerkUser,
+        user: petitionsClerkUser,
         userId,
       });
 
-      expect(putStub.mock.calls.length).toBe(2);
-      expect(putStub.mock.calls[0][0]).toMatchObject({
+      expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
+        2,
+      );
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
         Item: {
           pk: 'section|petitions',
           sk: `user|${userId}`,
         },
         TableName: 'efcms-dev',
       });
-      expect(putStub.mock.calls[1][0]).toMatchObject({
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[1][0],
+      ).toMatchObject({
         Item: {
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...petitionsclerkUser,
+          ...petitionsClerkUser,
         },
         TableName: 'efcms-dev',
       });
@@ -154,28 +169,36 @@ describe('createUser', () => {
         role: User.ROLES.judge,
         section: 'adamsChambers',
       };
+
       await createUserRecords({
         applicationContext,
         user: judgeUser,
         userId,
       });
-
-      expect(putStub.mock.calls.length).toBe(3);
-      expect(putStub.mock.calls[0][0]).toMatchObject({
+      expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
+        3,
+      );
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
         Item: {
           pk: 'section|adamsChambers',
           sk: `user|${userId}`,
         },
         TableName: 'efcms-dev',
       });
-      expect(putStub.mock.calls[1][0]).toMatchObject({
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[1][0],
+      ).toMatchObject({
         Item: {
           pk: 'section|judge',
           sk: `user|${userId}`,
         },
         TableName: 'efcms-dev',
       });
-      expect(putStub.mock.calls[2][0]).toMatchObject({
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[2][0],
+      ).toMatchObject({
         Item: {
           pk: `user|${userId}`,
           sk: `user|${userId}`,
@@ -186,26 +209,24 @@ describe('createUser', () => {
     });
 
     it('does not persist mapping records for practitioner without barNumber', async () => {
-      const privatePractitionerUser = {
-        barNumber: '',
-        name: 'Test Private Practitioner',
-        role: User.ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-      };
       await createUserRecords({
         applicationContext,
         user: privatePractitionerUser,
         userId,
       });
 
-      expect(putStub.mock.calls[0][0]).toMatchObject({
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
         Item: {
           pk: 'section|privatePractitioner',
           sk: `user|${userId}`,
         },
         TableName: 'efcms-dev',
       });
-      expect(putStub.mock.calls[1][0]).toMatchObject({
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[1][0],
+      ).toMatchObject({
         Item: {
           pk: `user|${userId}`,
           sk: `user|${userId}`,
@@ -216,27 +237,27 @@ describe('createUser', () => {
     });
 
     it('attempts to persist a private practitioner user with name and barNumber mapping records', async () => {
-      const privatePractitionerUser = {
-        barNumber: 'PT1234',
-        name: 'Test Private Practitioner',
-        role: User.ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-      };
       await createUserRecords({
         applicationContext,
         user: privatePractitionerUser,
         userId,
       });
 
-      expect(putStub.mock.calls.length).toBe(4);
-      expect(putStub.mock.calls[0][0]).toMatchObject({
+      expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
+        4,
+      );
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
         Item: {
           pk: 'section|privatePractitioner',
           sk: `user|${userId}`,
         },
         TableName: 'efcms-dev',
       });
-      expect(putStub.mock.calls[1][0]).toMatchObject({
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[1][0],
+      ).toMatchObject({
         Item: {
           pk: `user|${userId}`,
           sk: `user|${userId}`,
@@ -244,14 +265,18 @@ describe('createUser', () => {
         },
         TableName: 'efcms-dev',
       });
-      expect(putStub.mock.calls[2][0]).toMatchObject({
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[2][0],
+      ).toMatchObject({
         Item: {
           pk: 'privatePractitioner|Test Private Practitioner',
           sk: `user|${userId}`,
         },
         TableName: 'efcms-dev',
       });
-      expect(putStub.mock.calls[3][0]).toMatchObject({
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[3][0],
+      ).toMatchObject({
         Item: {
           pk: 'privatePractitioner|PT1234',
           sk: `user|${userId}`,
@@ -261,53 +286,58 @@ describe('createUser', () => {
     });
 
     it('does not persist mapping records for practitioner without barNumber', async () => {
-      const privatePractitionerUser = {
-        barNumber: '',
-        name: 'Test Private Practitioner',
-        role: User.ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-      };
       await createUserRecords({
         applicationContext,
-        user: privatePractitionerUser,
+        user: privatePractitionerUserWithoutBarNumber,
         userId,
       });
 
-      expect(putStub.mock.calls.length).toBe(2);
-      expect(putStub.mock.calls[0][0]).toMatchObject({
+      expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
+        2,
+      );
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
         Item: {
           pk: 'section|privatePractitioner',
           sk: `user|${userId}`,
         },
         TableName: 'efcms-dev',
       });
-      expect(putStub.mock.calls[1][0]).toMatchObject({
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[1][0],
+      ).toMatchObject({
         Item: {
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...privatePractitionerUser,
+          ...privatePractitionerUserWithoutBarNumber,
         },
         TableName: 'efcms-dev',
       });
     });
 
     it('does not persist section mapping record if user does not have a section', async () => {
-      const privatePractitionerUser = {
+      const privatePractitionerUserWithoutSection = {
         name: 'Test Private Practitioner',
         role: User.ROLES.privatePractitioner,
       };
+
       await createUserRecords({
         applicationContext,
-        user: privatePractitionerUser,
+        user: privatePractitionerUserWithoutSection,
         userId,
       });
 
-      expect(putStub.mock.calls.length).toBe(1);
-      expect(putStub.mock.calls[0][0]).toMatchObject({
+      expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
+        1,
+      );
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
         Item: {
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...privatePractitionerUser,
+          ...privatePractitionerUserWithoutSection,
         },
         TableName: 'efcms-dev',
       });

@@ -19,7 +19,7 @@ export const EditPetitionerInformation = connect(
       sequences.validatePetitionerInformationFormSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function EditPetitionerInformation({
     docketNumber,
     editPetitionerInformationHelper,
     form,
@@ -27,7 +27,7 @@ export const EditPetitionerInformation = connect(
     updatePetitionerInformationFormSequence,
     validatePetitionerInformationFormSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <CaseDetailHeader />

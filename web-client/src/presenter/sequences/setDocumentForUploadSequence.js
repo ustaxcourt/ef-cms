@@ -13,7 +13,7 @@ import { validatePetitionFromPaperSequence } from './validatePetitionFromPaperSe
 export const setDocumentForUploadSequence = [
   validateFileSizeAction,
   {
-    invalid: [set(state.isScanning, false)],
+    invalid: [set(state.scanner.isScanning, false)],
     valid: [
       getFormValueDocumentAction,
       updateFormValueSequence,

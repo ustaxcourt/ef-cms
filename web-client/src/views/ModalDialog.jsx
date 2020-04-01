@@ -10,6 +10,7 @@ const modalRoot = document.getElementById('modal-root');
 export const ModalDialog = ({
   ariaLiveMode,
   cancelLabel,
+  cancelLink = false,
   cancelSequence,
   children,
   className,
@@ -136,6 +137,7 @@ export const ModalDialog = ({
                 <Button
                   secondary
                   className="modal-button-cancel"
+                  link={cancelLink}
                   onClick={runCancelSequence}
                 >
                   {cancelLabel}

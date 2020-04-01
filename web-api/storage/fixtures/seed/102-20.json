@@ -197,7 +197,7 @@
       "countryType": "domestic"
     },
     "name": "Test IRS Practitioner",
-    "sk": "irsPractitioner|03defaec-2f77-4158-9dcd-3973ea706d4f",
+    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
     "section": "irsPractitioner",
     "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
@@ -218,7 +218,7 @@
       "countryType": "domestic"
     },
     "name": "Test Private Practitioner",
-    "sk": "privatePractitioner|60d14a39-df80-42ab-8f3f-b0e5f3a516fc",
+    "sk": "privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "section": "privatePractitioner",
     "representingPrimary": true,
     "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",

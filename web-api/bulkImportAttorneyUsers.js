@@ -143,8 +143,8 @@ const formatRecord = record => {
   const stream = parse(data, csvOptions);
 
   stream.on('readable', gatherRecords(csvColumns, output));
-  stream.on('end', () => {
-    output.forEach(async row => {
+  stream.on('end', async () => {
+    for (let row of output) {
       const record = formatRecord(row);
 
       try {
@@ -167,7 +167,7 @@ const formatRecord = record => {
         console.log(`ERROR ${record.name} ${record.barNumber}`);
         console.log(err);
       }
-    });
+    }
   });
 })();
 

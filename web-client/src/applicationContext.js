@@ -132,7 +132,6 @@ import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/pr
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
-import { getCaseTypesInteractor } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getConsolidatedCasesByUserInteractor } from '../../shared/src/proxies/getConsolidatedCasesByUserProxy';
@@ -142,7 +141,6 @@ import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/wo
 import { getDocumentQCServedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
 import { getDocumentQCServedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
-import { getFilingTypesInteractor } from '../../shared/src/business/useCases/getFilingTypesInteractor';
 import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
 import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
 import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsersProxy';
@@ -151,7 +149,6 @@ import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getPrivatePractitionersBySearchKeyProxy';
-import { getProcedureTypesInteractor } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
 import { getSentMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
 import { getSentMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
@@ -315,7 +312,6 @@ const allUseCases = {
   getCaseDeadlinesForCaseInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
-  getCaseTypesInteractor,
   getCasesByUserInteractor,
   getConsolidatedCasesByCaseInteractor,
   getConsolidatedCasesByUserInteractor,
@@ -324,7 +320,6 @@ const allUseCases = {
   getDocumentQCServedForSectionInteractor,
   getDocumentQCServedForUserInteractor,
   getEligibleCasesForTrialSessionInteractor,
-  getFilingTypesInteractor,
   getInboxMessagesForSectionInteractor,
   getInboxMessagesForUserInteractor,
   getInternalUsersInteractor,
@@ -333,7 +328,6 @@ const allUseCases = {
   getJudgeForUserChambersInteractor,
   getNotificationsInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
-  getProcedureTypesInteractor,
   getSentMessagesForSectionInteractor,
   getSentMessagesForUserInteractor,
   getTrialSessionDetailsInteractor,
@@ -451,6 +445,7 @@ const applicationContext = {
       CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
       CASE_INVENTORY_PAGE_SIZE: 2,
       CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
+      CASE_TYPES: Case.CASE_TYPES,
       CATEGORIES: Document.CATEGORIES,
       CATEGORY_MAP: Document.CATEGORY_MAP,
       CHAMBERS_SECTION,
@@ -461,6 +456,7 @@ const applicationContext = {
       COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
       DATE_FORMATS: FORMATS,
       ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
+      FILING_TYPES: Case.FILING_TYPES,
       INITIAL_DOCUMENT_TYPES: Document.INITIAL_DOCUMENT_TYPES,
       INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
       MAX_FILE_SIZE_BYTES,
@@ -470,6 +466,7 @@ const applicationContext = {
       OTHER_TYPES: ContactFactory.OTHER_TYPES,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
       PAYMENT_STATUS: Case.PAYMENT_STATUS,
+      PROCEDURE_TYPES: Case.PROCEDURE_TYPES,
       REFRESH_INTERVAL: 20 * MINUTES,
       ROLE_PERMISSIONS,
       SCAN_MODES: Scan.SCAN_MODES,
@@ -483,6 +480,7 @@ const applicationContext = {
         (process.env.SESSION_TIMEOUT &&
           parseInt(process.env.SESSION_TIMEOUT)) ||
         55 * MINUTES,
+      SIGNED_DOCUMENT_TYPES: Document.SIGNED_DOCUMENT_TYPES,
       STATUS_TYPES: Case.STATUS_TYPES,
       STATUS_TYPES_MANUAL_UPDATE: Case.STATUS_TYPES_MANUAL_UPDATE,
       STATUS_TYPES_WITH_ASSOCIATED_JUDGE:
@@ -528,7 +526,7 @@ const applicationContext = {
   getError: e => {
     return ErrorFactory.getError(e);
   },
-  getFileReader: () => FileReader,
+  getFileReaderInstance: () => new FileReader(),
   getHttpClient: () => axios,
   getPdfJs: async () => {
     const pdfjsLib = await import('pdfjs-dist');
@@ -600,15 +598,8 @@ const applicationContext = {
     };
   },
   initHoneybadger: async () => {
-    if (process.env.USTC_ENV === 'prod' && process.env.ENV) {
-      const stagingApiKey = process.env.CIRCLE_HONEYBADGER_API_KEY_STG;
-      const devApiKey = process.env.CIRCLE_HONEYBADGER_API_KEY_DEV;
-      const apiKey =
-        process.env.ENV === 'stg'
-          ? stagingApiKey
-          : process.env.ENV === 'dev'
-          ? devApiKey
-          : null;
+    if (process.env.USTC_ENV === 'prod') {
+      const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
 
       if (apiKey) {
         const Honeybadger = await import('honeybadger-js'); // browser version

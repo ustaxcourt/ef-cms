@@ -22,7 +22,7 @@ exports.getDownloadPolicyUrl = ({
       },
       (err, data) => {
         if (err) {
-          return reject(err);
+          return reject(new Error(err));
         }
         resolve({
           url: data,

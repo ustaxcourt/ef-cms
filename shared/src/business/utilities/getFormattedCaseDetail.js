@@ -164,10 +164,6 @@ const formatDocketRecordWithDocument = (
       if (formattedDocument.additionalInfo) {
         record.description += ` ${formattedDocument.additionalInfo}`;
       }
-
-      formattedDocument.canEdit =
-        !formattedDocument.isPetition &&
-        !formattedDocument.qcWorkItemsCompleted;
     }
 
     return { document: formattedDocument, index, record };
@@ -217,10 +213,12 @@ const formatCase = (applicationContext, caseDetail) => {
 
   result.docketRecordWithDocument = [];
 
-  if (result.documents)
+  if (result.documents) {
     result.documents = result.documents.map(d =>
       formatDocument(applicationContext, d),
     );
+  }
+
   if (result.docketRecord) {
     result.docketRecord = result.docketRecord.map(d =>
       formatDocketRecord(applicationContext, d),
@@ -292,9 +290,9 @@ const formatCase = (applicationContext, caseDetail) => {
     .getUtilities()
     .formatDateString(result.irsSendDate, 'DATE_TIME');
 
-  result.docketNumberWithSuffix = `${
-    result.docketNumber
-  }${result.docketNumberSuffix || ''}`;
+  result.docketNumberWithSuffix = `${result.docketNumber}${
+    result.docketNumberSuffix || ''
+  }`;
 
   result.irsNoticeDateFormatted = result.irsNoticeDate
     ? applicationContext

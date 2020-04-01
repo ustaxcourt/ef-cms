@@ -253,7 +253,6 @@ module.exports = {
           'semibold',
           'seriatim',
           'servoss',
-          'sinon',
           'sisqo',
           'skipnav',
           'sortable',

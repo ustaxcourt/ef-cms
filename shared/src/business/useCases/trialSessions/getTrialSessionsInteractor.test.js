@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { getTrialSessionsInteractor } = require('./getTrialSessionsInteractor');
 const { omit } = require('lodash');
 const { User } = require('../../entities/User');
@@ -11,24 +14,11 @@ const MOCK_TRIAL_SESSION = {
 };
 
 describe('Get trial sessions', () => {
-  let applicationContext;
-
   it('throws error if user is unauthorized', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getTrialSessions: () => {},
-        };
-      },
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
+    applicationContext.getUniqueId.mockReturnValue(
+      'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    );
+
     await expect(
       getTrialSessionsInteractor({
         applicationContext,
@@ -37,23 +27,19 @@ describe('Get trial sessions', () => {
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getTrialSessions: () =>
-            Promise.resolve([omit(MOCK_TRIAL_SESSION, 'maxCases')]),
-        };
-      },
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
+    applicationContext.getCurrentUser.mockImplementation(() => {
+      return {
+        role: User.ROLES.petitionsClerk,
+        userId: 'petitionsclerk',
+      };
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessions.mockImplementation(() =>
+        Promise.resolve([omit(MOCK_TRIAL_SESSION, 'maxCases')]),
+      );
     let error;
+
     try {
       await getTrialSessionsInteractor({
         applicationContext,
@@ -61,6 +47,7 @@ describe('Get trial sessions', () => {
     } catch (err) {
       error = err;
     }
+
     expect(error.message).toContain(
       'The TrialSession entity was invalid ValidationError: "maxCases" is required',
     );

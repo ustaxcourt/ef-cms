@@ -8,7 +8,7 @@ import { tryCatchDecorator } from './tryCatchDecorator';
 describe('decorateWithTryCatch', () => {
   it('catches and returns the expected error on 500 status', async () => {
     const functions = {
-      fun: function() {
+      fun: function () {
         return Promise.reject({
           response: {
             status: '500',
@@ -28,7 +28,7 @@ describe('decorateWithTryCatch', () => {
 
   it('catches and returns the expected error on 400 status', async () => {
     const functions = {
-      fun: function() {
+      fun: function () {
         return Promise.reject({
           response: {
             status: '400',
@@ -48,7 +48,7 @@ describe('decorateWithTryCatch', () => {
 
   it('catches and returns the expected error on 401 status', async () => {
     const functions = {
-      fun: function() {
+      fun: function () {
         return Promise.reject({
           response: {
             status: 401,
@@ -67,7 +67,7 @@ describe('decorateWithTryCatch', () => {
   });
   it('catches and returns the expected error on 403 status', async () => {
     const functions = {
-      fun: function() {
+      fun: function () {
         return Promise.reject({
           response: {
             status: 403,
@@ -87,7 +87,7 @@ describe('decorateWithTryCatch', () => {
 
   it('catches and returns the expected error on other error', async () => {
     const functions = {
-      fun: function() {
+      fun: function () {
         return Promise.reject({
           response: {
             status: '200',

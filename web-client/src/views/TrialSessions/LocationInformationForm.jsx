@@ -12,12 +12,12 @@ export const LocationInformationForm = connect(
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function LocationInformationForm({
     form,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <h2 className="margin-top-4">Location Information</h2>

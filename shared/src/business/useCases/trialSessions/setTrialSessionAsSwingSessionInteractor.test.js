@@ -1,4 +1,6 @@
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const {
   setTrialSessionAsSwingSessionInteractor,
 } = require('./setTrialSessionAsSwingSessionInteractor');
@@ -24,29 +26,26 @@ const OTHER_MOCK_TRIAL_SESSION = {
   trialSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
 };
 
+let user;
+
 describe('Set trial session as swing session', () => {
-  let applicationContext;
-  const getTrialSessionByIdStub = sinon
-    .stub()
-    .returns(OTHER_MOCK_TRIAL_SESSION);
-  const updateTrialSessionStub = sinon.stub().returns();
+  beforeEach(() => {
+    applicationContext.environment.stage = 'local';
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(OTHER_MOCK_TRIAL_SESSION);
+    applicationContext
+      .getPersistenceGateway()
+      .updateTrialSession.mockReturnValue();
+  });
 
   it('throws error if user is unauthorized', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getTrialSessionById: getTrialSessionByIdStub,
-          updateTrialSession: updateTrialSessionStub,
-        };
-      },
+    user = {
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
     };
+
     await expect(
       setTrialSessionAsSwingSessionInteractor({
         applicationContext,
@@ -57,20 +56,9 @@ describe('Set trial session as swing session', () => {
   });
 
   it('calls getTrialSessionById and updateTrialSession persistence methods with correct parameters', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getTrialSessionById: getTrialSessionByIdStub,
-          updateTrialSession: updateTrialSessionStub,
-        };
-      },
+    user = {
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
     };
 
     await setTrialSessionAsSwingSessionInteractor({
@@ -79,13 +67,19 @@ describe('Set trial session as swing session', () => {
       trialSessionId: OTHER_MOCK_TRIAL_SESSION.trialSessionId,
     });
 
-    expect(getTrialSessionByIdStub.called).toEqual(true);
-    expect(getTrialSessionByIdStub.getCall(0).args[0].trialSessionId).toEqual(
-      '208a959f-9526-4db5-b262-e58c476a4604',
-    );
-    expect(updateTrialSessionStub.called).toEqual(true);
     expect(
-      updateTrialSessionStub.getCall(0).args[0].trialSessionToUpdate,
+      applicationContext.getPersistenceGateway().getTrialSessionById,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getTrialSessionById.mock
+        .calls[0][0].trialSessionId,
+    ).toEqual('208a959f-9526-4db5-b262-e58c476a4604');
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession.mock
+        .calls[0][0].trialSessionToUpdate,
     ).toMatchObject({
       ...OTHER_MOCK_TRIAL_SESSION,
       swingSession: true,

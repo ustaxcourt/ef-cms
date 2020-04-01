@@ -1,4 +1,7 @@
+const baseConfig = require('../jest.config');
+
 module.exports = {
+  ...baseConfig,
   collectCoverage: true,
   collectCoverageFrom: [
     'src/presenter/**/*.js',

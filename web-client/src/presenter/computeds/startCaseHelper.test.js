@@ -1,3 +1,4 @@
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { getTrialCityName } from '../computeds/formattedTrialCity';
@@ -10,11 +11,13 @@ const startCaseHelper = withAppContextDecorator(
   applicationContext,
 );
 
-applicationContext.getCurrentUser = () => ({
-  role: User.ROLES.petitioner,
-});
-
 describe('start a case computed', () => {
+  beforeAll(() => {
+    applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.petitioner,
+    });
+  });
+
   it('sets showPetitionFileValid false when the petition file is not added to the petition', () => {
     const result = runCompute(startCaseHelper, {
       state: {
@@ -87,5 +90,49 @@ describe('start a case computed', () => {
     });
     expect(result.showNotHasIrsNoticeOptions).toBeTruthy();
     expect(result.showHasIrsNoticeOptions).toBeFalsy();
+  });
+
+  it('returns petitioner filing types if user is petitioner role', () => {
+    const result = runCompute(startCaseHelper, {
+      state: {
+        form: {
+          hasIrsNotice: false,
+        },
+        getTrialCityName,
+      },
+    });
+    expect(result.filingTypes).toEqual(Case.FILING_TYPES.petitioner);
+  });
+
+  it('returns privatePractitioner filing types if user is privatePractitioner role', () => {
+    applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.privatePractitioner,
+    });
+
+    const result = runCompute(startCaseHelper, {
+      state: {
+        form: {
+          hasIrsNotice: false,
+        },
+        getTrialCityName,
+      },
+    });
+    expect(result.filingTypes).toEqual(Case.FILING_TYPES.privatePractitioner);
+  });
+
+  it('returns petitioner filing types by default if user is not petitioner or privatePractitioner role', () => {
+    applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.irsPractitioner,
+    });
+
+    const result = runCompute(startCaseHelper, {
+      state: {
+        form: {
+          hasIrsNotice: false,
+        },
+        getTrialCityName,
+      },
+    });
+    expect(result.filingTypes).toEqual(Case.FILING_TYPES.petitioner);
   });
 });

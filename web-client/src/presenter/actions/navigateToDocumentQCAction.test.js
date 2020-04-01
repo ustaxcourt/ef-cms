@@ -5,7 +5,7 @@ import { runAction } from 'cerebral/test';
 describe('navigateToDocumentQCAction', () => {
   let routeStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     routeStub = jest.fn();
 
     presenter.providers.router = {
@@ -20,6 +20,6 @@ describe('navigateToDocumentQCAction', () => {
       },
     });
 
-    expect(routeStub).toHaveBeenCalledWith('/document-qc');
+    expect(routeStub).toHaveBeenCalledWith('/document-qc/my/inbox');
   });
 });

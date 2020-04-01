@@ -9,7 +9,12 @@ export const DocumentDisplayIframe = connect(
     documentDetailHelper: state.documentDetailHelper,
     token: state.token,
   },
-  ({ baseUrl, caseDetail, documentDetailHelper, token }) => {
+  function DocumentDisplayIframe({
+    baseUrl,
+    caseDetail,
+    documentDetailHelper,
+    token,
+  }) {
     return (
       <>
         {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}

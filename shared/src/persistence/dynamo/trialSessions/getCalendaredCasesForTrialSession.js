@@ -1,4 +1,5 @@
 const client = require('../../dynamodbClientService');
+const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
 
 exports.getCalendaredCasesForTrialSession = async ({
   applicationContext,
@@ -14,42 +15,15 @@ exports.getCalendaredCasesForTrialSession = async ({
 
   const { caseOrder } = trialSession;
 
-  const results = await client.batchGet({
-    applicationContext,
-    keys: caseOrder.map(({ caseId }) => ({
-      pk: `case|${caseId}`,
-      sk: `case|${caseId}`,
-    })),
-  });
-
-  const resultsWithDocketRecords = [];
-
-  for (let result of results) {
-    let docketRecord = await client.query({
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-        '#sk': 'sk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `case|${result.caseId}`,
-        ':prefix': 'docket-record',
-      },
-      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-      applicationContext,
-    });
-
-    docketRecord = docketRecord.length > 0 ? docketRecord : result.docketRecord;
-
-    resultsWithDocketRecords.push({
-      ...result,
-      docketRecord,
-    });
+  for (let i = 0; i < caseOrder.length; i++) {
+    caseOrder[i] = {
+      ...caseOrder[i],
+      ...(await getCaseByCaseId({
+        applicationContext,
+        caseId: caseOrder[i].caseId,
+      })),
+    };
   }
 
-  const afterMapping = caseOrder.map(myCase => ({
-    ...myCase,
-    ...resultsWithDocketRecords.find(r => myCase.caseId === r.caseId),
-  }));
-
-  return afterMapping;
+  return caseOrder;
 };

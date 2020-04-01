@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { getFormCombinedWithCaseDetailAction } from '../actions/getFormCombinedWithCaseDetailAction';
+import { getCaseDetailFormWithComputedDatesAction } from '../actions/getCaseDetailFormWithComputedDatesAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/caseDetailEdit/navigateToReviewSavedPetitionAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -11,7 +11,7 @@ export const navigateToReviewSavedPetitionSequence = showProgressSequenceDecorat
   [
     startShowValidationAction,
     clearAlertsAction,
-    getFormCombinedWithCaseDetailAction,
+    getCaseDetailFormWithComputedDatesAction,
     validateCaseDetailAction,
     {
       error: [setValidationAlertErrorsAction],

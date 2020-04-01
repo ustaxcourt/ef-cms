@@ -1,28 +1,27 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateExternalDocumentInformationAction } from './validateExternalDocumentInformationAction';
-import sinon from 'sinon';
+
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+const applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
+
+const {
+  validateExternalDocumentInformationInteractor,
+} = applicationContext.getUseCases();
 
 describe('validateExternalDocumentInformationAction', () => {
-  let validateExternalDocumentInformationStub;
   let successStub;
   let errorStub;
 
   let mockDocInfo;
 
-  beforeEach(() => {
-    validateExternalDocumentInformationStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+  beforeAll(() => {
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     mockDocInfo = {
       data: 'hello world',
-    };
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateExternalDocumentInformationInteractor: validateExternalDocumentInformationStub,
-      }),
     };
 
     presenter.providers.path = {
@@ -32,7 +31,7 @@ describe('validateExternalDocumentInformationAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateExternalDocumentInformationStub.returns(null);
+    validateExternalDocumentInformationInteractor.mockReturnValue(null);
     await runAction(validateExternalDocumentInformationAction, {
       modules: {
         presenter,
@@ -42,11 +41,11 @@ describe('validateExternalDocumentInformationAction', () => {
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateExternalDocumentInformationStub.returns('error');
+    validateExternalDocumentInformationInteractor.mockReturnValue('error');
     await runAction(validateExternalDocumentInformationAction, {
       modules: {
         presenter,
@@ -56,6 +55,6 @@ describe('validateExternalDocumentInformationAction', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

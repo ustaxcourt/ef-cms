@@ -1,4 +1,4 @@
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getShouldRedirectToSigningAction } from './getShouldRedirectToSigningAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
@@ -7,7 +7,7 @@ let yesMock;
 let noMock;
 
 describe('getShouldRedirectToSigningAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     yesMock = jest.fn();
     noMock = jest.fn();
 

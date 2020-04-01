@@ -5,13 +5,19 @@ import React from 'react';
 
 export const ProcedureType = connect(
   {
+    PROCEDURE_TYPES: state.constants.PROCEDURE_TYPES,
     legend: props.legend,
     onChange: props.onChange,
-    procedureTypes: state.procedureTypes,
     validationErrors: state.validationErrors,
     value: props.value,
   },
-  ({ legend, onChange, procedureTypes, validationErrors, value }) => {
+  function ProcedureType({
+    legend,
+    onChange,
+    PROCEDURE_TYPES,
+    validationErrors,
+    value,
+  }) {
     return (
       <FormGroup errorText={validationErrors.procedureType}>
         <fieldset
@@ -21,7 +27,7 @@ export const ProcedureType = connect(
           <legend className="usa-legend" id="procedure-type-legend">
             {legend}
           </legend>
-          {procedureTypes.map((procedureType, idx) => (
+          {PROCEDURE_TYPES.map((procedureType, idx) => (
             <div className="usa-radio usa-radio__inline" key={procedureType}>
               <input
                 aria-describedby="procedure-type-legend"

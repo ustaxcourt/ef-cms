@@ -12,13 +12,13 @@ export const submitCaseAdvancedSearchAction = async ({
   applicationContext,
   get,
 }) => {
-  const form = get(state.advancedSearchForm);
+  const searchParams = get(state.advancedSearchForm.caseSearchByName);
 
   const searchResults = await applicationContext
     .getUseCases()
     .caseAdvancedSearchInteractor({
       applicationContext,
-      searchParams: form,
+      searchParams,
     });
 
   return { searchResults };

@@ -1,18 +1,13 @@
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { associatePrivatePractitionerWithCaseAction } from './associatePrivatePractitionerWithCaseAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
+
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('associatePrivatePractitionerWithCaseAction', () => {
   it('should run associatePrivatePractitionerWithCaseInteractor and success path', async () => {
-    const successStub = sinon.stub();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        associatePrivatePractitionerWithCaseInteractor: () =>
-          'hello from associate practitioner with case',
-      }),
-    };
+    const successStub = jest.fn();
 
     presenter.providers.path = {
       success: successStub,
@@ -33,6 +28,6 @@ describe('associatePrivatePractitionerWithCaseAction', () => {
         },
       },
     });
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 });

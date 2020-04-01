@@ -6,7 +6,6 @@ import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
 import petitionerFilesDocumentForCase from './journey/petitionerFilesDocumentForCase';
-import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
 import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
 import petitionerViewsCaseDetailAfterFilingDocument from './journey/petitionerViewsCaseDetailAfterFilingDocument';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
@@ -23,16 +22,15 @@ describe('Chambers dashboard', () => {
   const createdCases = [];
 
   loginAs(test, 'petitioner');
-  petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
   petitionerViewsDashboard(test);
   petitionerViewsCaseDetail(test);
   petitionerFilesDocumentForCase(test, fakeFile);
+  petitionerAddNewCaseToTestObj(test, createdCases);
   petitionerViewsCaseDetailAfterFilingDocument(test);
   petitionerViewsDashboard(test);
-  petitionerAddNewCaseToTestObj(test, createdCases);
 
   loginAs(test, 'petitionsclerk');
   petitionsClerkCreatesMessageToChambers(

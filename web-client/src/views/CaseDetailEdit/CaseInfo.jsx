@@ -9,28 +9,24 @@ import React from 'react';
 export const CaseInfo = connect(
   {
     baseUrl: state.baseUrl,
-    caseDetail: state.caseDetail,
     caseDetailEditHelper: state.caseDetailEditHelper,
-    caseDetailErrors: state.caseDetailErrors,
     constants: state.constants,
     form: state.form,
     token: state.token,
-    updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateCaseDetailSequence: sequences.validateCaseDetailSequence,
+    validationErrors: state.validationErrors,
   },
-  ({
+  function CaseInfo({
     baseUrl,
-    caseDetail,
     caseDetailEditHelper,
-    caseDetailErrors,
     constants,
     form,
     token,
-    updateCaseValueSequence,
     updateFormValueSequence,
     validateCaseDetailSequence,
-  }) => {
+    validationErrors,
+  }) {
     return (
       <div className="blue-container">
         <div className="subsection">
@@ -42,9 +38,9 @@ export const CaseInfo = connect(
               className="usa-textarea"
               id="case-caption"
               name="caseCaption"
-              value={caseDetail.caseCaption}
+              value={form.caseCaption}
               onChange={e => {
-                updateCaseValueSequence({
+                updateFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -55,10 +51,10 @@ export const CaseInfo = connect(
             </span>
           </div>
         </div>
-        {caseDetail.isPaper && (
+        {form.isPaper && (
           <>
             <DateInput
-              errorText={caseDetailErrors.receivedAt}
+              errorText={validationErrors.receivedAt}
               id="received-at"
               label="Date received"
               names={{
@@ -77,7 +73,7 @@ export const CaseInfo = connect(
 
             <div className="usa-form-group read-only">
               <div className="label">Mailing date</div>
-              <p>{caseDetail.mailingDate}</p>
+              <p>{form.mailingDate}</p>
             </div>
           </>
         )}
@@ -85,9 +81,9 @@ export const CaseInfo = connect(
         <div className="usa-form-group">
           <ProcedureType
             legend="Case procedure"
-            value={caseDetail.procedureType}
+            value={form.procedureType}
             onChange={e => {
-              updateCaseValueSequence({
+              updateFormValueSequence({
                 key: 'procedureType',
                 value: e.target.value,
               });
@@ -96,13 +92,13 @@ export const CaseInfo = connect(
 
           <div className="order-checkbox">
             <input
-              checked={caseDetail.orderToShowCause}
+              checked={form.orderToShowCause}
               className="usa-checkbox__input"
               id="order-to-show-cause"
               name="orderToShowCause"
               type="checkbox"
               onChange={e => {
-                updateCaseValueSequence({
+                updateFormValueSequence({
                   key: e.target.name,
                   value: e.target.checked,
                 });
@@ -130,13 +126,13 @@ export const CaseInfo = connect(
                 <p className="margin-top-0">No trial location selected</p>
                 <div className="order-checkbox">
                   <input
-                    checked={caseDetail.orderDesignatingPlaceOfTrial}
+                    checked={form.orderDesignatingPlaceOfTrial}
                     className="usa-checkbox__input"
                     id="order-designating-place-of-trial"
                     name="orderDesignatingPlaceOfTrial"
                     type="checkbox"
                     onChange={e => {
-                      updateCaseValueSequence({
+                      updateFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
@@ -155,7 +151,7 @@ export const CaseInfo = connect(
               <>
                 <a
                   aria-label="View PDF: Ownership Disclosure Statement"
-                  href={`${baseUrl}/case-documents/${caseDetail.caseId}/${caseDetailEditHelper.requestForPlaceOfTrialDocumentId}/document-download-url?token=${token}`}
+                  href={`${baseUrl}/case-documents/${form.caseId}/${caseDetailEditHelper.requestForPlaceOfTrialDocumentId}/document-download-url?token=${token}`}
                   rel="noopener noreferrer"
                   target="_blank"
                 >
@@ -164,13 +160,13 @@ export const CaseInfo = connect(
                 </a>
                 <div className="order-checkbox">
                   <input
-                    checked={caseDetail.orderToChangePlaceOfTrial}
+                    checked={form.orderToChangePlaceOfTrial}
                     className="usa-checkbox__input"
                     id="order-to-change-place-of-trial"
                     name="orderToChangePlaceOfTrial"
                     type="checkbox"
                     onChange={e => {
-                      updateCaseValueSequence({
+                      updateFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
@@ -186,29 +182,29 @@ export const CaseInfo = connect(
               </>
             )}
             {caseDetailEditHelper.showReadOnlyTrialLocation &&
-              `Request for Place of Trial at ${caseDetail.preferredTrialCity}`}
+              `Request for Place of Trial at ${form.preferredTrialCity}`}
           </div>
         </div>
 
         <PetitionPaymentForm
-          bind="caseDetail"
+          bind="form"
           dateBind="form"
           updateDateSequence={updateFormValueSequence}
-          updateSequence={updateCaseValueSequence}
+          updateSequence={updateFormValueSequence}
           validateSequence={validateCaseDetailSequence}
-          validationErrorsBind="caseDetailErrors"
+          validationErrorsBind="validationErrors"
         />
 
         {caseDetailEditHelper.showOrderForFilingFee && (
           <div className="order-checkbox">
             <input
-              checked={caseDetail.orderForFilingFee}
+              checked={form.orderForFilingFee}
               className="usa-checkbox__input"
               id="order-for-filing-fee"
               name="orderForFilingFee"
               type="checkbox"
               onChange={e => {
-                updateCaseValueSequence({
+                updateFormValueSequence({
                   key: e.target.name,
                   value: e.target.checked,
                 });
@@ -234,13 +230,13 @@ export const CaseInfo = connect(
           <div className="usa-form-group" role="listitem">
             <input
               aria-describedby="orders-needed"
-              checked={caseDetail.orderForRatification}
+              checked={form.orderForRatification}
               className="usa-checkbox__input"
               id="order-for-ratification"
               name="orderForRatification"
               type="checkbox"
               onChange={e => {
-                updateCaseValueSequence({
+                updateFormValueSequence({
                   key: e.target.name,
                   value: e.target.checked,
                 });
@@ -256,13 +252,13 @@ export const CaseInfo = connect(
           <div className="usa-form-group" role="listitem">
             <input
               aria-describedby="orders-needed"
-              checked={caseDetail.noticeOfAttachments}
+              checked={form.noticeOfAttachments}
               className="usa-checkbox__input"
               id="notice-of-attachments"
               name="noticeOfAttachments"
               type="checkbox"
               onChange={e => {
-                updateCaseValueSequence({
+                updateFormValueSequence({
                   key: e.target.name,
                   value: e.target.checked,
                 });
@@ -278,13 +274,13 @@ export const CaseInfo = connect(
           <div className="usa-form-group" role="listitem">
             <input
               aria-describedby="orders-needed"
-              checked={caseDetail.orderForAmendedPetition}
+              checked={form.orderForAmendedPetition}
               className="usa-checkbox__input"
               id="order-for-amended-petition"
               name="orderForAmendedPetition"
               type="checkbox"
               onChange={e => {
-                updateCaseValueSequence({
+                updateFormValueSequence({
                   key: e.target.name,
                   value: e.target.checked,
                 });
@@ -300,13 +296,13 @@ export const CaseInfo = connect(
           <div className="usa-form-group margin-bottom-0" role="listitem">
             <input
               aria-describedby="orders-needed"
-              checked={caseDetail.orderForAmendedPetitionAndFilingFee}
+              checked={form.orderForAmendedPetitionAndFilingFee}
               className="usa-checkbox__input"
               id="order-for-amended-petition-and-filing-fee"
               name="orderForAmendedPetitionAndFilingFee"
               type="checkbox"
               onChange={e => {
-                updateCaseValueSequence({
+                updateFormValueSequence({
                   key: e.target.name,
                   value: e.target.checked,
                 });

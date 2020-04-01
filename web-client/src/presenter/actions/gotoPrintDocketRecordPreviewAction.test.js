@@ -1,4 +1,4 @@
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { gotoPrintDocketRecordPreviewAction } from './gotoPrintDocketRecordPreviewAction';
 
 import { presenter } from '../presenter';
@@ -8,7 +8,7 @@ const routeMock = jest.fn();
 const openInNewTabMock = jest.fn();
 
 describe('gotoPrintDocketRecordPreviewAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
       openInNewTab: openInNewTabMock,

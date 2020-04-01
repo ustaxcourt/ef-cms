@@ -1,13 +1,11 @@
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setCaseDeadlineFormAction } from './setCaseDeadlineFormAction';
 
-describe('setCaseDeadlineFormAction', () => {
-  beforeEach(() => {
-    presenter.providers.applicationContext = applicationContext;
-  });
+presenter.providers.applicationContext = applicationContextForClient;
 
+describe('setCaseDeadlineFormAction', () => {
   it('does not set a caseDeadline on the state.form if props.caseDeadlineId does not match any of the caseDeadlineIds', async () => {
     const result = await runAction(setCaseDeadlineFormAction, {
       modules: { presenter },

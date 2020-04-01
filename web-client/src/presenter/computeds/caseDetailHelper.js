@@ -8,7 +8,7 @@ export const caseDetailHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
   const documentDetailTab =
-    get(state.caseDetailPage.primaryTab) || 'docketRecord';
+    get(state.currentViewMetadata.caseDetail.primaryTab) || 'docketRecord';
   const currentPage = get(state.currentPage);
   const isExternalUser = applicationContext
     .getUtilities()
@@ -123,10 +123,12 @@ export const caseDetailHelper = (get, applicationContext) => {
     showEditPetitionDetailsButton: permissions.EDIT_PETITION_DETAILS,
     showEditPetitionerInformation,
     showEditSecondaryContactModal:
-      get(state.showModal) === 'EditSecondaryContact',
+      get(state.modal.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
     showFilingFeeExternal:
-      isExternalUser && user.role !== USER_ROLES.irsPractitioner,
+      isExternalUser &&
+      user.role !== USER_ROLES.irsPractitioner &&
+      user.role !== USER_ROLES.irsSuperuser,
     showIrsServedDate: !!caseDetail.irsSendDate,
     showJudgesNotes,
     showPractitionerSection:

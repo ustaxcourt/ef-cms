@@ -1,9 +1,3 @@
-const {
-  getCasePrivatePractitioners,
-} = require('./getCasePrivatePractitioners');
-const { getCaseDocketRecord } = require('./getCaseDocketRecord');
-const { getCaseDocuments } = require('./getCaseDocuments');
-const { getCaseIrsPractitioners } = require('./getCaseIrsPractitioners');
 const { query } = require('../../dynamodbClientService');
 
 /**
@@ -15,7 +9,7 @@ const { query } = require('../../dynamodbClientService');
  * @returns {Promise} the promise of the call to persistence
  */
 exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
-  let items = await query({
+  let casesByLeadCaseId = await query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },
@@ -27,18 +21,14 @@ exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
     applicationContext,
   });
 
-  items = await Promise.all(
-    items.map(getCaseDocketRecord({ applicationContext })),
-  );
-  items = await Promise.all(
-    items.map(getCaseDocuments({ applicationContext })),
-  );
-  items = await Promise.all(
-    items.map(getCasePrivatePractitioners({ applicationContext })),
-  );
-  items = await Promise.all(
-    items.map(getCaseIrsPractitioners({ applicationContext })),
+  const cases = await Promise.all(
+    casesByLeadCaseId.map(({ caseId }) =>
+      applicationContext.getPersistenceGateway().getCaseByCaseId({
+        applicationContext,
+        caseId,
+      }),
+    ),
   );
 
-  return items;
+  return cases;
 };

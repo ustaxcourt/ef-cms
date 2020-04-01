@@ -3,11 +3,11 @@ import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('closeFileUploadStatusModalAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.spyOn(global, 'setTimeout');
   });
 
-  afterEach(() => {
+  afterAll(() => {
     jest.restoreAllMocks();
   });
 
@@ -22,10 +22,14 @@ describe('closeFileUploadStatusModalAction', () => {
     // inspecting arguments of 4th call because it seems `store.set` also invokes setTimeout
     expect(global.setTimeout.mock.calls[3][1]).toBe('77');
     expect(result.state).toMatchObject({
-      isUploading: false,
-      percentComplete: 100,
-      showModal: '',
-      timeRemaining: 0,
+      fileUploadProgress: {
+        isUploading: false,
+        percentComplete: 100,
+        timeRemaining: 0,
+      },
+      modal: {
+        showModal: '',
+      },
     });
   });
 });

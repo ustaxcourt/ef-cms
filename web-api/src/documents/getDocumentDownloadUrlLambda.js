@@ -10,7 +10,7 @@ const {
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handler = event =>
+exports.getDocumentDownloadUrlLambda = event =>
   redirect(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);

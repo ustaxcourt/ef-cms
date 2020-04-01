@@ -19,6 +19,8 @@ const {
   updateWorkItemTrialDate,
 } = require('../workitems/updateWorkItemTrialDate');
 const { differenceWith, isEqual } = require('lodash');
+const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
+const { omit } = require('lodash');
 
 /**
  * updateCase
@@ -29,12 +31,9 @@ const { differenceWith, isEqual } = require('lodash');
  * @returns {Promise} the promise of the persistence calls
  */
 exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
-  const oldCase = await client.get({
-    Key: {
-      pk: `case|${caseToUpdate.caseId}`,
-      sk: `case|${caseToUpdate.caseId}`,
-    },
+  const oldCase = await getCaseByCaseId({
     applicationContext,
+    caseId: caseToUpdate.caseId,
   });
 
   const requests = [];
@@ -77,11 +76,14 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     );
   });
 
+  const oldIrsPractitioners = oldCase.irsPractitioners.map(irsPractitioner =>
+    omit(irsPractitioner, ['pk', 'sk']),
+  );
   const {
     added: addedIrsPractitioners,
     removed: deletedIrsPractitioners,
     updated: updatedIrsPractitioners,
-  } = diff(oldCase.irsPractitioners, caseToUpdate.irsPractitioners, 'userId');
+  } = diff(oldIrsPractitioners, caseToUpdate.irsPractitioners, 'userId');
 
   deletedIrsPractitioners.forEach(practitioner => {
     requests.push(
@@ -110,12 +112,16 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     },
   );
 
+  const oldPrivatePractitioners = oldCase.privatePractitioners.map(
+    privatePractitioner => omit(privatePractitioner, ['pk', 'sk']),
+  );
+
   const {
     added: addedPrivatePractitioners,
     removed: deletedPrivatePractitioners,
     updated: updatedPrivatePractitioners,
   } = diff(
-    oldCase.privatePractitioners,
+    oldPrivatePractitioners,
     caseToUpdate.privatePractitioners,
     'userId',
   );
@@ -231,18 +237,23 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     ? { gsi1pk: caseToUpdate.leadCaseId }
     : {};
 
-  const [results] = await Promise.all([
+  await Promise.all([
     client.put({
       Item: {
         pk: `case|${caseToUpdate.caseId}`,
         sk: `case|${caseToUpdate.caseId}`,
         ...setLeadCase,
-        ...caseToUpdate,
+        ...omit(caseToUpdate, [
+          'documents',
+          'irsPractitioners',
+          'privatePractitioners',
+          'docketRecord',
+        ]),
       },
       applicationContext,
     }),
     ...requests,
   ]);
 
-  return results;
+  return caseToUpdate;
 };

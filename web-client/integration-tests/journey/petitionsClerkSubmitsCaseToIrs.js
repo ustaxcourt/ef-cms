@@ -1,11 +1,17 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { getPetitionDocumentForCase } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
 export default test => {
   return it('Petitions clerk submits case to IRS', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
+    const petitionDocument = getPetitionDocumentForCase(
+      test.getState('caseDetail'),
+    );
+
+    await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
+      documentId: petitionDocument.documentId,
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -34,7 +40,7 @@ export default test => {
     });
 
     await test.runSequence('navigateToReviewSavedPetitionSequence');
-    expect(test.getState('caseDetailErrors')).toEqual({
+    expect(test.getState('validationErrors')).toEqual({
       irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[0].message,
     });
 
@@ -44,7 +50,7 @@ export default test => {
     });
 
     await test.runSequence('navigateToReviewSavedPetitionSequence');
-    expect(test.getState('caseDetailErrors')).toEqual({});
+    expect(test.getState('validationErrors')).toEqual({});
     await test.runSequence('saveCaseAndServeToIrsSequence');
 
     test.setState('caseDetail', {});

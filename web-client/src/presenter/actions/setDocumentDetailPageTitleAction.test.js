@@ -1,11 +1,13 @@
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { setDocumentDetailPageTitleAction } from './setDocumentDetailPageTitleAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('setDocumentDetailPageTitleAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('sets the page title with the docket number and document type from the case if the document is on the case', async () => {
     await runAction(setDocumentDetailPageTitleAction, {
       state: {

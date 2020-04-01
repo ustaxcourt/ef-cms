@@ -6,7 +6,7 @@ describe('isEditingDocketEntryAction', () => {
   let noStub;
   let yesStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     noStub = jest.fn();
     yesStub = jest.fn();
 

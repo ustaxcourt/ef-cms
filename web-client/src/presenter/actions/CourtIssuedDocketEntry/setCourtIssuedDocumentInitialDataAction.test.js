@@ -1,5 +1,5 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setCourtIssuedDocumentInitialDataAction } from './setCourtIssuedDocumentInitialDataAction';

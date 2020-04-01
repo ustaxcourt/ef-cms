@@ -1,35 +1,38 @@
 module.exports = {
-  addCoversheetLambda: require('./documents/addCoversheetLambda').handler,
+  addCoversheetLambda: require('./documents/addCoversheetLambda')
+    .addCoversheetLambda,
   archiveDraftDocumentLambda: require('./documents/archiveDraftDocumentLambda')
-    .handler,
+    .archiveDraftDocumentLambda,
   completeDocketEntryQCLambda: require('./documents/completeDocketEntryQCLambda')
-    .handler,
-  createWorkItemLambda: require('./workitems/createWorkItemLambda').handler,
+    .completeDocketEntryQCLambda,
+  createWorkItemLambda: require('./workitems/createWorkItemLambda')
+    .createWorkItemLambda,
   downloadPolicyUrlLambda: require('./documents/downloadPolicyUrlLambda')
-    .handler,
+    .downloadPolicyUrlLambda,
   fileCourtIssuedDocketEntryLambda: require('./documents/fileCourtIssuedDocketEntryLambda')
-    .handler,
+    .fileCourtIssuedDocketEntryLambda,
   fileCourtIssuedOrderToCaseLambda: require('./documents/fileCourtIssuedOrderToCaseLambda')
-    .handler,
+    .fileCourtIssuedOrderToCaseLambda,
   fileDocketEntryToCaseLambda: require('./documents/fileDocketEntryToCaseLambda')
-    .handler,
+    .fileDocketEntryToCaseLambda,
   fileExternalDocumentToCaseLambda: require('./documents/fileExternalDocumentToCaseLambda')
-    .handler,
+    .fileExternalDocumentToCaseLambda,
   fileExternalDocumentToConsolidatedCasesLambda: require('./documents/fileExternalDocumentToConsolidatedCasesLambda')
-    .handler,
+    .fileExternalDocumentToConsolidatedCasesLambda,
   getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrlLambda')
-    .handler,
+    .getDocumentDownloadUrlLambda,
   saveIntermediateDocketEntryLambda: require('./documents/saveIntermediateDocketEntryLambda')
-    .handler,
+    .saveIntermediateDocketEntryLambda,
   serveCourtIssuedDocumentLambda: require('./cases/serveCourtIssuedDocumentLambda')
-    .handler,
-  signDocumentLambda: require('./documents/signDocumentLambda').handler,
+    .serveCourtIssuedDocumentLambda,
+  signDocumentLambda: require('./documents/signDocumentLambda')
+    .signDocumentLambda,
   updateCourtIssuedDocketEntryLambda: require('./documents/updateCourtIssuedDocketEntryLambda')
-    .handler,
+    .updateCourtIssuedDocketEntryLambda,
   updateCourtIssuedOrderToCaseLambda: require('./documents/updateCourtIssuedOrderToCaseLambda')
-    .handler,
+    .updateCourtIssuedOrderToCaseLambda,
   updateDocketEntryMetaLambda: require('./documents/updateDocketEntryMetaLambda')
-    .handler,
+    .updateDocketEntryMetaLambda,
   updateDocketEntryOnCaseLambda: require('./documents/updateDocketEntryOnCaseLambda')
-    .handler,
+    .updateDocketEntryOnCaseLambda,
 };
