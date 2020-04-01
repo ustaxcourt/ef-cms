@@ -1,11 +1,15 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
+import { setIrsNoticeFalseSequence } from '../sequences/setIrsNoticeFalseSequence';
 
 describe('setIrsNoticeFalseSequence', () => {
   let test;
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
+    presenter.sequences = {
+      setIrsNoticeFalseSequence,
+    };
     test = CerebralTest(presenter);
   });
   // hasIrsNotice is the original value submitted from the petitioner, hasVerifiedIrsNotice is a different field used by the petitionsclerk
