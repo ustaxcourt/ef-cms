@@ -12,7 +12,7 @@ const { uploadExternalDocumentsInteractor } = applicationContext.getUseCases();
 const { addCoversheetInteractor } = applicationContext.getUseCases();
 
 describe('uploadExternalDocumentsAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.path = {
       error: () => null,
       success: () => null,

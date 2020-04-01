@@ -6,7 +6,7 @@ describe('validateFileExternalDocumentAction', () => {
   let pathSuccessStub;
   let pathErrorStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     pathSuccessStub = jest.fn();
     pathErrorStub = jest.fn();
 

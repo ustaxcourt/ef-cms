@@ -5,7 +5,7 @@ import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('getEligibleCasesForTrialSessionAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext
       .getUseCases()

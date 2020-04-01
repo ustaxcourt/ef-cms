@@ -6,7 +6,7 @@ import { submitEditPrivatePractitionersModalAction } from './submitEditPrivatePr
 describe('submitEditPrivatePractitionersModalAction', () => {
   let successStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
 
     presenter.providers.applicationContext = applicationContextForClient;

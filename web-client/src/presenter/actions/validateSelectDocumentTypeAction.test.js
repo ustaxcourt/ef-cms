@@ -7,7 +7,7 @@ const errorMock = jest.fn();
 const successMock = jest.fn();
 
 describe('validateSelectDocumentTypeAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorMock,

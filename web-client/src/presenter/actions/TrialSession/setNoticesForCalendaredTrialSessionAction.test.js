@@ -6,7 +6,7 @@ import { setNoticesForCalendaredTrialSessionAction } from './setNoticesForCalend
 describe('setNoticesForCalendaredTrialSessionAction', () => {
   let createObjectURLStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     global.window = global;
     global.Blob = () => {};
 
