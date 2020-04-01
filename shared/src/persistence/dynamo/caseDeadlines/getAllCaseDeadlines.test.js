@@ -2,6 +2,10 @@ const client = require('../../dynamodbClientService');
 const { getAllCaseDeadlines } = require('./getAllCaseDeadlines');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+
 describe('getAllCaseDeadlines', () => {
   beforeEach(() => {
     client.query = jest.fn().mockReturnValue([
@@ -24,11 +28,6 @@ describe('getAllCaseDeadlines', () => {
   });
 
   it('should get the all cases deadlines', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-    };
     const result = await getAllCaseDeadlines({
       applicationContext,
     });
