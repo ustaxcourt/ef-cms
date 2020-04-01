@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 import { setDocumentDetailTabAction } from './setDocumentDetailTabAction';
 
 describe('setDocumentDetailTabAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

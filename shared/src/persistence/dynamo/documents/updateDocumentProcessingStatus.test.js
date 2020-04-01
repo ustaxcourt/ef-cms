@@ -1,15 +1,12 @@
 const client = require('../../dynamodbClientService');
 const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+const {
   updateDocumentProcessingStatus,
 } = require('./updateDocumentProcessingStatus');
 
-const applicationContext = {
-  environment: {
-    stage: 'local',
-  },
-  filterCaseMetadata: ({ cases }) => cases,
-  isAuthorizedForWorkItems: () => true,
-};
+applicationContext.filterCaseMetadata.mockImplementation(({ cases }) => cases);
 
 describe('updateDocumentProcessingStatus', () => {
   beforeEach(() => {

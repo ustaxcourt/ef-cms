@@ -113,12 +113,12 @@ describe('genericHandler', () => {
     expect(logged.includes('Event')).toBeTruthy();
   });
 
-  it('can optionally disable logging of `user` and `results` and enable `event`', async () => {
+  it('can optionally disable logging of `user`, `results`, and `event`', async () => {
     const callback = () => null;
 
     await genericHandler(MOCK_EVENT, callback, {
       applicationContext,
-      logEvent: true,
+      logEvent: false,
       logResults: false,
       logUser: false,
       user: MOCK_USER,
@@ -126,7 +126,7 @@ describe('genericHandler', () => {
 
     expect(logged.includes('User')).toBeFalsy();
     expect(logged.includes('Results')).toBeFalsy();
-    expect(logged.includes('Event')).toBeTruthy();
+    expect(logged.includes('Event')).toBeFalsy();
   });
 
   it('can use a custom label for logged `user`, `results`, and `event` data', async () => {

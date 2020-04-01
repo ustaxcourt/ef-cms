@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../business/test/createTestApplicationContext');
 const { getScannerInterface } = require('./getScannerInterface');
 const { JSDOM } = require('jsdom');
 import { Scan } from '../../business/entities/Scan';
@@ -20,11 +23,7 @@ const mockRemoveAllImages = jest.fn();
 
 const { SCAN_MODES } = Scan;
 
-const applicationContext = {
-  convertBlobToUInt8Array: () => new Uint8Array([]),
-  getConstants: () => ({ SCAN_MODES }),
-  getScannerResourceUri: () => 'abc',
-};
+applicationContext.getScannerResourceUri.mockReturnValue('abc');
 
 const DWObject = {
   AcquireImage: mockAcquireImage,

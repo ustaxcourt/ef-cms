@@ -23,7 +23,7 @@ presenter.providers.path = {
 };
 
 describe('updateTrialSessionAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
     applicationContext

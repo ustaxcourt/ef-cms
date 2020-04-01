@@ -1,13 +1,14 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { sendServedPartiesEmails } = require('./sendServedPartiesEmails');
 
 describe('sendServedPartiesEmails', () => {
   const sendBulkTemplatedEmailMock = jest.fn();
 
-  const applicationContext = {
-    getDispatchers: () => ({
-      sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
-    }),
-  };
+  applicationContext
+    .getDispatchers()
+    .sendBulkTemplatedEmail.mockImplementation(sendBulkTemplatedEmailMock);
 
   beforeEach(() => {
     jest.clearAllMocks();

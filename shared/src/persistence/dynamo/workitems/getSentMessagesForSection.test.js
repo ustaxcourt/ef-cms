@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { getSentMessagesForSection } = require('./getSentMessagesForSection');
 
 describe('getSentMessagesForSection', () => {
@@ -40,18 +43,13 @@ describe('getSentMessagesForSection', () => {
   });
 
   it('should filter out the work items returned from persistence to only have sent work items for a section', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getCurrentUser: () => ({
-        section: 'docket',
-        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-      getDocumentClient: () => ({
-        query: queryStub,
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      section: 'docket',
+      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+    applicationContext.getDocumentClient.mockReturnValue({
+      query: queryStub,
+    });
     const items = await getSentMessagesForSection({
       applicationContext,
       section: 'docket',

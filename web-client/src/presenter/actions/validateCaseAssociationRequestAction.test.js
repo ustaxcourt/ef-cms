@@ -8,7 +8,7 @@ describe('validateCaseAssociationRequest', () => {
   let errorStub;
   let mockCaseAssociationRequest;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

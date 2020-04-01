@@ -8,7 +8,7 @@ describe('caseExistsAction', () => {
   let successMock;
   let errorMock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successMock = jest.fn();
     errorMock = jest.fn();
 

@@ -1,13 +1,10 @@
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { getInternalUsers } = require('./getInternalUsers');
 
-const applicationContext = {
-  environment: {
-    stage: 'local',
-  },
-  filterCaseMetadata: ({ cases }) => cases,
-  isAuthorizedForWorkItems: () => true,
-};
+applicationContext.filterCaseMetadata.mockImplementation(({ cases }) => cases);
 
 describe('getInternalUsers', () => {
   beforeEach(() => {
