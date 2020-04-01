@@ -1,14 +1,13 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateTitleAction } from './generateTitleAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-
-const applicationContext = applicationContextForClient;
-presenter.providers.applicationContext = applicationContext;
-const { generateDocumentTitleInteractor } = applicationContext.getUseCases();
-
 describe('generateTitleAction', () => {
+  const { generateDocumentTitleInteractor } = applicationContext.getUseCases();
+
+  presenter.providers.applicationContext = applicationContext;
+
   it('should call generateDocumentTitle with correct data for only a primary document', async () => {
     generateDocumentTitleInteractor.mockReturnValue(null);
     await runAction(generateTitleAction, {
