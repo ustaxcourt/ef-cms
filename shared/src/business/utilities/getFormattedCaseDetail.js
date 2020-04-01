@@ -164,10 +164,6 @@ const formatDocketRecordWithDocument = (
       if (formattedDocument.additionalInfo) {
         record.description += ` ${formattedDocument.additionalInfo}`;
       }
-
-      formattedDocument.canEdit =
-        !formattedDocument.isPetition &&
-        !formattedDocument.qcWorkItemsCompleted;
     }
 
     return { document: formattedDocument, index, record };
