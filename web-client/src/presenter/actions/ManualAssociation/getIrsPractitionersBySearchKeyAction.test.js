@@ -8,7 +8,7 @@ presenter.providers.applicationContext = applicationContext;
 describe('getIrsPractitionersBySearchKeyAction', () => {
   let successStub, errorStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

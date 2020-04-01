@@ -16,7 +16,7 @@ describe('validateExternalDocumentInformationAction', () => {
 
   let mockDocInfo;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

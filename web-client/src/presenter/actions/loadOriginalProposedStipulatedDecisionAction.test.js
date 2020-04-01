@@ -4,7 +4,7 @@ import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('loadOriginalProposedStipulatedDecisionAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

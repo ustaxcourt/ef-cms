@@ -7,7 +7,7 @@ const errorMock = jest.fn();
 const successMock = jest.fn();
 
 describe('validateUserContactAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorMock,

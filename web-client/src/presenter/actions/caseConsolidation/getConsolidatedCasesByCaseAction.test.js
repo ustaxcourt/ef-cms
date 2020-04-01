@@ -4,7 +4,7 @@ import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('getConsolidatedCasesByCaseAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getUseCases()
       .getConsolidatedCasesByCaseInteractor.mockResolvedValue([

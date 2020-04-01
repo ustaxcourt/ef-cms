@@ -9,7 +9,7 @@ import { setUserPermissionsAction } from './setUserPermissionsAction';
 describe('setUserPermissionsAction', () => {
   const mockUser = { role: User.ROLES.docketClerk };
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

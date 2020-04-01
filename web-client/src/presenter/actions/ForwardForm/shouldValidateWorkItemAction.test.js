@@ -6,7 +6,7 @@ describe('shouldValidateWorkItemAction', () => {
   let validateStub;
   let ignoreStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     validateStub = jest.fn();
     ignoreStub = jest.fn();
 

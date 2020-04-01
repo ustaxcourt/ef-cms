@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 import { updateTrialSessionWorkingCopyAction } from './updateTrialSessionWorkingCopyAction';
 
 describe('updateTrialSessionWorkingCopyAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

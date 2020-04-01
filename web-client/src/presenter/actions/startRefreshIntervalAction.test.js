@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 import { startRefreshIntervalAction } from './startRefreshIntervalAction';
 
 describe('startRefreshIntervalAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     global.clearInterval = jest.fn();
     global.setInterval = jest.fn().mockImplementation(cb => {
       cb.apply();
