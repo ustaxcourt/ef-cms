@@ -12,7 +12,7 @@ describe('setSignatureNameForPdfSigningAction', () => {
     name: 'Judge Armen',
   };
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getUseCases()
       .getJudgeForUserChambersInteractor.mockReturnValue(judgeUser);

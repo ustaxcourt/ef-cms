@@ -11,7 +11,7 @@ describe('validateDocketRecordAction', () => {
 
   let mockDocketRecord;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

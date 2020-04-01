@@ -4,7 +4,7 @@ import { removeConsolidatedCasesAction } from './removeConsolidatedCasesAction';
 import { runAction } from 'cerebral/test';
 
 describe('removeConsolidatedCasesAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

@@ -6,7 +6,7 @@ describe('hasOrderTypeSelectedAction', () => {
   let noStub;
   let proceedStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     noStub = jest.fn();
     proceedStub = jest.fn();
 

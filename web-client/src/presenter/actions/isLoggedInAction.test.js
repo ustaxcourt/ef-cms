@@ -7,7 +7,7 @@ describe('isLoggedInAction', () => {
   const isLoggedInStub = jest.fn();
   const unauthorizedStub = jest.fn();
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
     presenter.providers.path = {

@@ -6,7 +6,7 @@ import { runAction } from 'cerebral/test';
 import { saveCaseDetailInternalEditAction } from './saveCaseDetailInternalEditAction';
 
 describe('saveCaseDetailInternalEditAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

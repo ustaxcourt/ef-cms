@@ -4,7 +4,7 @@ import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('createOrderAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     window.DOMParser = class {
       constructor() {}
     };
