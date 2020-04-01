@@ -1,5 +1,5 @@
 import { generateTitleForSupportingDocumentsAction } from './generateTitleForSupportingDocumentsAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';

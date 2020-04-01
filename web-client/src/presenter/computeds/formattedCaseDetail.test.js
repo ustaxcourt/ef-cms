@@ -521,7 +521,7 @@ describe('formattedCaseDetail', () => {
         showDocumentEditLink: true,
       },
       {
-        editLink: '/edit',
+        editLink: '',
         showDocumentEditLink: true,
       },
     ]);
