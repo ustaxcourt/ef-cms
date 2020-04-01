@@ -1,6 +1,6 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintableFilingReceiptAction } from './generatePrintableFilingReceiptAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 const applicationContext = applicationContextForClient;
