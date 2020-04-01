@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
-const { applicationContext } = require('../test/createTestApplicationContext');
+const {
+  createISODateString,
+  formatDateString,
+} = require('../utilities/DateHandler');
 const {
   getDocumentTypeForAddressChange,
 } = require('../utilities/generateChangeOfAddressTemplate');
