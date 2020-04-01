@@ -6,6 +6,10 @@ import { runAction } from 'cerebral/test';
 describe('removeCaseDetailPendingItemAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('should call the removeCasePendingItemInteractor with the data from props', async () => {
     await runAction(removeCaseDetailPendingItemAction, {
       modules: {

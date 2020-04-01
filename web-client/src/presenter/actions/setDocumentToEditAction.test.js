@@ -12,7 +12,7 @@ describe('setDocumentToEditAction', () => {
 
   documentToMatch.draftState = { ...documentToMatch };
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

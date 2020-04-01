@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 import { setBaseUrlAction } from './setBaseUrlAction';
 
 describe('setBaseUrlAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

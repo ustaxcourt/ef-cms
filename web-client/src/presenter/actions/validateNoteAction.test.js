@@ -9,7 +9,7 @@ describe('validateNote', () => {
 
   let mockNote;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

@@ -8,7 +8,7 @@ describe('validateAddIrsPractitioner', () => {
   let errorStub;
   let mockAddIrsPractitioner;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

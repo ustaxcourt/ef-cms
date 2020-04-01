@@ -10,7 +10,7 @@ const { addCoversheetInteractor } = applicationContext.getUseCases();
 describe('uploadExternalDocumentsForConsolidatedAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.path = {
       error: () => null,
       success: () => null,
