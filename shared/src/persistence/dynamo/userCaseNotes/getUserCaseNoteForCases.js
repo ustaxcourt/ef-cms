@@ -18,7 +18,7 @@ exports.getUserCaseNoteForCases = async ({
     applicationContext,
     keys: caseIds.map(caseId => ({
       pk: `user-case-note|${caseId}`,
-      sk: userId,
+      sk: `user|${userId}`,
     })),
   });
 };

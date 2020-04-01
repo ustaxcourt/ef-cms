@@ -7,18 +7,12 @@ import {
 
 import { AddIrsPractitioner } from '../../shared/src/business/entities/caseAssociation/AddIrsPractitioner';
 import { AddPrivatePractitionerFactory } from '../../shared/src/business/entities/caseAssociation/AddPrivatePractitionerFactory';
-import {
-  CHAMBERS_SECTION,
-  CHAMBERS_SECTIONS,
-  SECTIONS,
-} from '../../shared/src/business/entities/WorkQueue';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
 import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { CaseExternal } from '../../shared/src/business/entities/cases/CaseExternal';
 import { CaseExternalInformationFactory } from '../../shared/src/business/entities/cases/CaseExternalInformationFactory';
 import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
-import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { CourtIssuedDocumentFactory } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentFactory';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
@@ -29,9 +23,6 @@ import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
-import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/cases/CaseConstants';
-import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { Scan } from '../../shared/src/business/entities/Scan';
 import {
   compareISODateStrings,
   compareStrings,
@@ -44,29 +35,11 @@ import { validateDocketRecordInteractor } from '../../shared/src/business/useCas
 const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
-import {
-  FORMATS,
-  createISODateString,
-  createISODateStringFromObject,
-  deconstructDate,
-  formatDateString,
-  formatNow,
-  isStringISOFormatted,
-  isValidDateString,
-  prepareDateFromString,
-} from '../../shared/src/business/utilities/DateHandler';
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
-import {
-  MAX_FILE_SIZE_BYTES,
-  MAX_FILE_SIZE_MB,
-} from '../../shared/src/persistence/s3/getUploadPolicy';
 import { NewTrialSession } from '../../shared/src/business/entities/trialSessions/NewTrialSession';
 import { Note } from '../../shared/src/business/entities/notes/Note';
-import { Order } from '../../shared/src/business/entities/orders/Order';
 import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
-import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
-import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
@@ -93,6 +66,16 @@ import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadl
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
+import {
+  createISODateString,
+  createISODateStringFromObject,
+  deconstructDate,
+  formatDateString,
+  formatNow,
+  isStringISOFormatted,
+  isValidDateString,
+  prepareDateFromString,
+} from '../../shared/src/business/utilities/DateHandler';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { createWorkItemInteractor } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
@@ -241,7 +224,7 @@ import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virus
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
 
-const MINUTES = 60 * 1000;
+import { getConstants } from './getConstants';
 
 let user;
 
@@ -440,58 +423,7 @@ const applicationContext = {
     );
   },
   getConstants: () =>
-    (process.env.USTC_DEBUG ? i => i : deepFreeze)({
-      BUSINESS_TYPES: ContactFactory.BUSINESS_TYPES,
-      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-      CASE_INVENTORY_PAGE_SIZE: 2,
-      CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-      CASE_TYPES: Case.CASE_TYPES,
-      CATEGORIES: Document.CATEGORIES,
-      CATEGORY_MAP: Document.CATEGORY_MAP,
-      CHAMBERS_SECTION,
-      CHAMBERS_SECTIONS,
-      CHIEF_JUDGE: Case.CHIEF_JUDGE,
-      CONTACT_CHANGE_DOCUMENT_TYPES: Document.CONTACT_CHANGE_DOCUMENT_TYPES,
-      COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-      COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
-      DATE_FORMATS: FORMATS,
-      ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
-      FILING_TYPES: Case.FILING_TYPES,
-      INITIAL_DOCUMENT_TYPES: Document.INITIAL_DOCUMENT_TYPES,
-      INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
-      MAX_FILE_SIZE_BYTES,
-      MAX_FILE_SIZE_MB,
-      NOTICE_EVENT_CODES: Document.NOTICE_EVENT_CODES,
-      ORDER_TYPES_MAP: Order.ORDER_TYPES,
-      OTHER_TYPES: ContactFactory.OTHER_TYPES,
-      PARTY_TYPES: ContactFactory.PARTY_TYPES,
-      PAYMENT_STATUS: Case.PAYMENT_STATUS,
-      PROCEDURE_TYPES: Case.PROCEDURE_TYPES,
-      REFRESH_INTERVAL: 20 * MINUTES,
-      ROLE_PERMISSIONS,
-      SCAN_MODES: Scan.SCAN_MODES,
-      SECTIONS,
-      SERVICE_INDICATOR_TYPES,
-      SERVICE_STAMP_OPTIONS,
-      SESSION_DEBOUNCE: 250,
-      SESSION_MODAL_TIMEOUT: 5 * MINUTES,
-      SESSION_STATUS_GROUPS: TrialSession.SESSION_STATUS_GROUPS,
-      SESSION_TIMEOUT:
-        (process.env.SESSION_TIMEOUT &&
-          parseInt(process.env.SESSION_TIMEOUT)) ||
-        55 * MINUTES,
-      SIGNED_DOCUMENT_TYPES: Document.SIGNED_DOCUMENT_TYPES,
-      STATUS_TYPES: Case.STATUS_TYPES,
-      STATUS_TYPES_MANUAL_UPDATE: Case.STATUS_TYPES_MANUAL_UPDATE,
-      STATUS_TYPES_WITH_ASSOCIATED_JUDGE:
-        Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
-      TRANSCRIPT_EVENT_CODE: Document.TRANSCRIPT_EVENT_CODE,
-      TRIAL_CITIES: TrialSession.TRIAL_CITIES,
-      TRIAL_SESSION_TYPES: TrialSession.SESSION_TYPES,
-      TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-      US_STATES: ContactFactory.US_STATES,
-      USER_ROLES: User.ROLES,
-    }),
+    (process.env.USTC_DEBUG ? i => i : deepFreeze)(getConstants()),
   getCurrentUser,
   getCurrentUserPermissions: () => {
     const user = getCurrentUser();

@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext.js';
 import { getInternalCaseCaptionForCaseInfoTabAction } from './getInternalCaseCaptionForCaseInfoTabAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getInternalCaseCaptionForCaseInfoTabAction', () => {
