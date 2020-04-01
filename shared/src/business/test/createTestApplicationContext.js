@@ -338,6 +338,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       stage: 'local',
       tempDocumentsBucketName: 'MockDocumentBucketName',
     },
+    filterCaseMetadata: jest.fn(),
     getBaseUrl: () => 'http://localhost',
     getCaseCaptionNames: jest.fn().mockImplementation(Case.getCaseCaptionNames),
     getChiefJudgeNameForSigning: jest
