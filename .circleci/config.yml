@@ -518,7 +518,10 @@ workflows:
       - build-api:
           requires:
             - bundle
-      - build-client:
+      - build-client-unit:
+          requires:
+            - bundle
+      - build-client-integration:
           requires:
             - bundle
       - e2e-pa11y:
@@ -531,7 +534,8 @@ workflows:
           requires:
             - build-shared
             - build-api
-            - build-client
+            - build-client-unit
+            - build-client-integration
             - e2e-pa11y
             - e2e-cypress
       - deploy-api-west:
@@ -575,7 +579,14 @@ workflows:
             branches:
               ignore:
                 - develop
-      - build-client:
+      - build-client-unit:
+          requires:
+            - bundle
+          filters:
+            branches:
+              ignore:
+                - develop
+      - build-client-integration:
           requires:
             - bundle
           filters:
@@ -600,7 +611,8 @@ workflows:
           requires:
             - build-shared
             - build-api
-            - build-client
+            - build-client-unit
+            - build-client-integration
             - e2e-pa11y
             - e2e-cypress
           filters:
