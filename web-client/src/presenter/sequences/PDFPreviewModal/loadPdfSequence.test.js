@@ -1,6 +1,7 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../../presenter';
+import { loadPdfSequence } from '../../sequences/PDFPreviewModal/loadPdfSequence';
+import { presenter } from '../../presenter-mock';
 
 const mocks = {
   readAsArrayBufferMock: jest.fn(function () {
@@ -35,6 +36,9 @@ describe('loadPdfSequence', () => {
       new MockFileReader(),
     );
     presenter.providers.applicationContext = applicationContext;
+    presenter.sequences = {
+      loadPdfSequence,
+    };
     test = CerebralTest(presenter);
   });
   it('should load the expected objects onto the store and try to render the page into the context', async () => {

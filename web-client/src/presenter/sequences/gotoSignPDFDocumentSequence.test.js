@@ -1,7 +1,7 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
-
+import { gotoSignPDFDocumentSequence } from '../sequences/gotoSignPDFDocumentSequence';
+import { presenter } from '../presenter-mock';
 describe('gotoSignPDFDocumentSequence', () => {
   let test;
   beforeAll(() => {
@@ -15,6 +15,9 @@ describe('gotoSignPDFDocumentSequence', () => {
       ],
     });
     presenter.providers.applicationContext = applicationContext;
+    presenter.sequences = {
+      gotoSignPDFDocumentSequence,
+    };
     test = CerebralTest(presenter);
   });
   it('Should set state.pdfForSigning and show the PDFSigner page', async () => {
