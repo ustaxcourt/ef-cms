@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 describe('checkForActiveBatchesAction', () => {
   let presenter;
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter = {
       providers: {
         path: {

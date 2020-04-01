@@ -17,10 +17,6 @@ presenter.providers.path = {
 };
 
 describe('batchDownloadTrialSessionAction', () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   it('initializes the batch download for a trial session', async () => {
     await runAction(batchDownloadTrialSessionAction, {
       modules: {

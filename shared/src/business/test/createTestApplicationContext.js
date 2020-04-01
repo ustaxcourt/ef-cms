@@ -1,6 +1,7 @@
 const createWebApiApplicationContext = require('../../../../web-api/src/applicationContext');
 const DateHandler = require('../utilities/DateHandler');
 const docketNumberGenerator = require('../../persistence/dynamo/cases/docketNumberGenerator');
+const path = require('path');
 const sharedAppContext = require('../../sharedAppContext');
 const {
   addWorkItemToSectionInbox,
@@ -101,14 +102,24 @@ const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
 
+const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
+
 const webApiApplicationContext = createWebApiApplicationContext({});
 
-const createTestApplicationContext = ({ user } = {}) => {
-  const mockCognitoReturnValue = {
-    adminCreateUser: jest.fn(),
-    adminGetUser: jest.fn(),
-    adminUpdateUserAttributes: jest.fn(),
+const appContextProxy = (initial = {}, makeMock = true) => {
+  const applicationContextHandler = {
+    get(target, name, receiver) {
+      if (!Reflect.has(target, name)) {
+        Reflect.set(target, name, jest.fn(), receiver);
+      }
+      return Reflect.get(target, name, receiver);
+    },
   };
+  const proxied = new Proxy(initial, applicationContextHandler);
+  return makeMock ? jest.fn().mockReturnValue(proxied) : proxied;
+};
+
+const createTestApplicationContext = ({ user } = {}) => {
   const mockGetPdfJsReturnValue = {
     getDocument: jest.fn().mockReturnValue({
       promise: Promise.resolve({
@@ -124,120 +135,11 @@ const createTestApplicationContext = ({ user } = {}) => {
       }),
     }),
   };
-  const mockGetUseCasesReturnValue = {
-    addCaseToTrialSessionInteractor: jest.fn(),
-    addConsolidatedCaseInteractor: jest.fn(),
-    addCoversheetInteractor: jest.fn(),
-    archiveDraftDocumentInteractor: jest.fn(),
-    assignWorkItemsInteractor: jest.fn(),
-    associateIrsPractitionerWithCaseInteractor: jest.fn(),
-    associatePrivatePractitionerWithCaseInteractor: jest.fn(),
-    authorizeCodeInteractor: jest.fn(),
-    batchDownloadTrialSessionInteractor: jest.fn(),
-    caseAdvancedSearchInteractor: jest.fn(),
-    casePublicSearchInteractor: jest.fn(),
-    completeDocketEntryQCInteractor: jest.fn(),
-    completeWorkItemInteractor: jest.fn(),
-    createAttorneyUserInteractor: jest.fn(),
-    createCaseDeadlineInteractor: jest.fn(),
-    createCourtIssuedOrderPdfFromHtmlInteractor: jest.fn(),
-    createTrialSessionInteractor: jest.fn(),
-    createWorkItemInteractor: jest.fn(),
-    deleteCaseNoteInteractor: jest.fn(),
-    deleteCounselFromCaseInteractor: jest.fn(),
-    deleteTrialSessionInteractor: jest.fn(),
-    deleteUserCaseNoteInteractor: jest.fn(),
-    fetchPendingItemsInteractor: jest.fn(),
-    fileCourtIssuedDocketEntryInteractor: jest.fn(),
-    fileCourtIssuedOrderInteractor: jest.fn(),
-    fileDocketEntryInteractor: jest.fn(),
-    fileExternalDocumentForConsolidatedInteractor: jest.fn(),
-    fileExternalDocumentInteractor: jest.fn(),
-    filePetitionFromPaperInteractor: jest.fn(),
-    filePetitionInteractor: jest.fn(),
-    generateCourtIssuedDocumentTitleInteractor: jest.fn(),
-    generateDocketRecordPdfInteractor: jest.fn(),
-    generateDocumentTitleInteractor: jest.fn(),
-    generatePDFFromJPGDataInteractor: jest.fn(),
-    generatePdfFromHtmlInteractor: jest.fn(),
-    generatePrintableCaseInventoryReportInteractor: jest.fn(),
-    generatePrintableFilingReceiptInteractor: jest.fn(),
-    generatePrintablePendingReportInteractor: jest.fn(),
-    generatePublicDocketRecordPdfInteractor: jest.fn(),
-    generateSignedDocumentInteractor: jest.fn(),
-    generateTrialCalendarPdfInteractor: jest.fn(),
-    getAllCaseDeadlinesInteractor: jest.fn(),
-    getBlockedCasesInteractor: jest.fn(),
-    getCalendaredCasesForTrialSessionInteractor: jest.fn(),
-    getCaseDeadlinesForCaseInteractor: jest.fn(),
-    getCaseInteractor: jest.fn(),
-    getCaseInventoryReportInteractor: jest.fn(),
-    getCasesByUserInteractor: jest.fn(),
-    getConsolidatedCasesByCaseInteractor: jest.fn(),
-    getEligibleCasesForTrialSessionInteractor: jest.fn(),
-    getInboxMessagesForSectionInteractor: jest.fn(),
-    getInboxMessagesForUserInteractor: jest.fn(),
-    getIrsPractitionersBySearchKeyInteractor: jest.fn(),
-    getJudgeForUserChambersInteractor: jest.fn(),
-    getNotificationsInteractor: jest.fn(),
-    getPrivatePractitionersBySearchKeyInteractor: jest.fn(),
-    getTrialSessionDetailsInteractor: jest.fn(),
-    getTrialSessionWorkingCopyInteractor: jest.fn(),
-    getTrialSessionsInteractor: jest.fn(),
-    getUserByIdInteractor: jest.fn(),
-    getUserCaseNoteForCasesInteractor: jest.fn(),
-    getUserCaseNoteInteractor: jest.fn(),
-    getUserInteractor: jest.fn(),
-    getUsersInSectionInteractor: jest.fn(),
-    loadPDFForPreviewInteractor: jest.fn(),
-    loadPDFForSigningInteractor: jest.fn(),
-    refreshTokenInteractor: jest.fn(),
-    removeCasePendingItemInteractor: jest.fn(),
-    removeConsolidatedCasesInteractor: jest.fn(),
-    removeItemInteractor: jest.fn(),
-    runTrialSessionPlanningReportInteractor: jest.fn(),
-    saveCaseNoteInteractor: jest.fn(),
-    saveIntermediateDocketEntryInteractor: jest.fn(),
-    serveCaseToIrsInteractor: jest.fn(),
-    setItemInteractor: jest.fn(),
-    setNoticesForCalendaredTrialSessionInteractor: jest.fn(),
-    setTrialSessionAsSwingSessionInteractor: jest.fn(),
-    setTrialSessionCalendarInteractor: jest.fn(),
-    setWorkItemAsReadInteractor: jest.fn(),
-    signDocumentInteractor: jest.fn(),
-    submitCaseAssociationRequestInteractor: jest.fn(),
-    submitPendingCaseAssociationRequestInteractor: jest.fn(),
-    updateCase: jest.fn(),
-    updateCaseContextInteractor: jest.fn(),
-    updateCounselOnCaseInteractor: jest.fn(),
-    updateCourtIssuedDocketEntryInteractor: jest.fn(),
-    updateDocketEntryInteractor: jest.fn(),
-    updateDocketEntryMetaInteractor: jest.fn(),
-    updateQcCompleteForTrialInteractor: jest.fn(),
-    updateTrialSessionInteractor: jest.fn(),
-    updateTrialSessionWorkingCopyInteractor: jest.fn(),
-    updateUserCaseNoteInteractor: jest.fn(),
-    uploadExternalDocumentsInteractor: jest.fn(),
-    uploadOrderDocumentInteractor: jest.fn(),
-    validateAddIrsPractitionerInteractor: jest.fn(),
-    validateAddPrivatePractitionerInteractor: jest.fn(),
-    validateCaseAdvancedSearchInteractor: jest.fn(),
-    validateCaseDeadlineInteractor: jest.fn(),
-    validateCourtIssuedDocketEntryInteractor: jest.fn(),
-    validateDocketEntryInteractor: jest.fn(),
-    validateDocketRecordInteractor: jest.fn(),
-    validateEditPrivatePractitionerInteractor: jest.fn(),
-    validateExternalDocumentInformationInteractor: jest.fn(),
-    validatePdfInteractor: jest.fn(),
-    validateStartCaseWizardInteractor: jest.fn(),
-    validateTrialSessionInteractor: jest.fn(),
-    verifyPendingCaseForUserInteractor: jest.fn(),
-    virusScanPdfInteractor: jest.fn(),
-  };
 
   const mockGetScannerReturnValue = {
     getSourceNameByIndex: jest.fn().mockReturnValue('scanner'),
     getSources: jest.fn(),
+    loadDynamsoft: jest.fn().mockReturnValue('dynam-scanner-injection'),
     setSourceByIndex: jest.fn(),
     setSourceByName: jest.fn().mockReturnValue(null),
     startScanSession: jest.fn().mockReturnValue({
@@ -245,46 +147,39 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
   };
 
-  const mockStorageClientReturnValue = {
-    deleteObject: jest.fn(),
-    getObject: jest.fn(),
-  };
-
-  const mockGetUtilitiesReturnValue = {
+  const mockGetUtilities = appContextProxy({
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
+    createISODateStringFromObject: jest
+      .fn()
+      .mockImplementation(DateHandler.createISODateStringFromObject),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
-    formatDateString: jest.fn().mockReturnValue(DateHandler.formatDateString),
+    formatDateString: jest
+      .fn()
+      .mockImplementation(DateHandler.formatDateString),
     formatDocument: jest.fn().mockImplementation(v => v),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
-    getDocumentTypeForAddressChange: jest.fn(),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
+    isValidDateString: jest
+      .fn()
+      .mockImplementation(DateHandler.isValidDateString),
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
-  };
+  });
 
-  const mockGetNotificationGatewayReturnValue = {
-    sendNotificationToUser: jest.fn(),
-  };
-
-  const mockGetUseCaseHelpers = {
-    appendPaperServiceAddressPageToPdf: jest.fn(),
-    generateCaseConfirmationPdf: jest.fn(),
-    generateCaseInventoryReportPdf: jest.fn(),
-    getCaseInventoryReport: jest.fn(),
-    sendServedPartiesEmails: jest.fn(),
+  const mockGetUseCaseHelpers = appContextProxy({
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
-  };
+  });
 
   const getTemplateGeneratorsReturnMock = {
     generateChangeOfAddressTemplate: jest.fn().mockResolvedValue('<div></div>'),
@@ -297,89 +192,46 @@ const createTestApplicationContext = ({ user } = {}) => {
     generateStandingPretrialOrderTemplate: jest.fn(),
   };
 
-  const mockGetPersistenceGatewayReturnValue = {
+  const mockGetPersistenceGateway = appContextProxy({
     addWorkItemToSectionInbox,
-    associateUserWithCase: jest.fn(),
-    associateUserWithCasePending: jest.fn(),
-    createAttorneyUser: jest.fn(),
     createCase,
-    createCaseTrialSortMappingRecords: jest.fn(),
     createSectionInboxRecord,
-    createTrialSession: jest.fn(),
-    createTrialSessionWorkingCopy: jest.fn(),
     createUserInboxRecord,
     createWorkItem: createWorkItemPersistence,
-    deleteCaseDeadline: jest.fn(),
-    deleteCaseTrialSortMappingRecords: jest.fn(),
-    deleteDocument: jest.fn(),
     deleteSectionOutboxRecord,
-    deleteTrialSession: jest.fn(),
-    deleteTrialSessionWorkingCopy: jest.fn(),
-    deleteUserCaseNote: jest.fn(),
-    deleteUserConnection: jest.fn(),
-    deleteUserFromCase: jest.fn(),
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
-    getAllCaseDeadlines: jest.fn(),
-    getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByCaseId: jest.fn().mockImplementation(getCaseByCaseId),
-    getCaseByDocketNumber: jest.fn(),
-    getCaseByUser: jest.fn(),
     getCaseDeadlinesByCaseId: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByCaseId),
-    getCasesByLeadCaseId: jest.fn(),
-    getCasesByUser: jest.fn(),
-    getDocument: jest.fn(),
     getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
     getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
-    getDownloadPolicyUrl: jest.fn(),
-    getEligibleCasesForTrialSession: jest.fn(),
     getInboxMessagesForSection: jest
       .fn()
       .mockImplementation(getInboxMessagesForSection),
     getInboxMessagesForUser: getInboxMessagesForUserPersistence,
-    getItem: jest.fn(),
-    getSentMessagesForSection: jest.fn(),
     getSentMessagesForUser: jest
       .fn()
       .mockImplementation(getSentMessagesForUserPersistence),
-    getTrialSessionById: jest.fn(),
-    getTrialSessions: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
-    getUserCaseNote: jest.fn(),
-    getUserCaseNoteForCases: jest.fn(),
-    getUsersBySearchKey: jest.fn(),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
-    putWorkItemInUsersOutbox: jest.fn(),
-    saveDocumentFromLambda: jest.fn(),
-    saveUserConnection: jest.fn(),
     saveWorkItemForNonPaper: jest
       .fn()
       .mockImplementation(saveWorkItemForNonPaper),
     saveWorkItemForPaper,
-    setItem: jest.fn(),
-    setPriorityOnAllWorkItems: jest.fn(),
     setWorkItemAsRead,
-    updateAttorneyUser: jest.fn(),
     updateCase: jest.fn().mockImplementation(updateCase),
-    updateTrialSession: jest.fn(),
-    updateTrialSessionWorkingCopy: jest.fn(),
-    updateUser: jest.fn(),
-    updateUserCaseNote: jest.fn(),
     updateWorkItem,
     updateWorkItemInCase,
-    uploadDocumentFromClient: jest.fn(),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
-    verifyPendingCaseForUser: jest.fn(),
-    zipDocuments: jest.fn(),
-  };
+  });
 
   const nodeSassMockReturnValue = {
     render: (data, cb) => cb(data, { css: '' }),
@@ -398,10 +250,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseCaptionNames: jest.fn().mockImplementation(Case.getCaseCaptionNames),
     getChiefJudgeNameForSigning: jest
       .fn()
-      .mockImplementation(sharedAppContext.getChiefJudgeNameForSigning),
+      .mockImplementation(
+        webClientApplicationContext.getChiefJudgeNameForSigning,
+      ),
     getChromiumBrowser: jest.fn(),
     getClerkOfCourtNameForSigning: jest.fn(),
-    getCognito: () => mockCognitoReturnValue,
+    getCognito: appContextProxy(),
     getConstants: jest.fn().mockReturnValue({
       ...webClientApplicationContext.getConstants(),
       ...webApiApplicationContext.getConstants(),
@@ -440,27 +294,23 @@ const createTestApplicationContext = ({ user } = {}) => {
       }),
     })),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
-    getNotificationGateway: jest.fn().mockImplementation(() => {
-      return mockGetNotificationGatewayReturnValue;
-    }),
+    getNotificationGateway: appContextProxy(),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfStyles: jest.fn(),
-    getPersistenceGateway: jest.fn().mockImplementation(() => {
-      return mockGetPersistenceGatewayReturnValue;
-    }),
+    getPersistenceGateway: mockGetPersistenceGateway,
     getPug: jest.fn(),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
-    getStorageClient: jest.fn().mockImplementation(() => {
-      return mockStorageClientReturnValue;
-    }),
+    getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
+    getSearchClient: jest.fn(),
+    getStorageClient: appContextProxy(),
     getTempDocumentsBucketName: jest.fn(),
     getTemplateGenerators: jest
       .fn()
       .mockReturnValue(getTemplateGeneratorsReturnMock),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
-    getUseCaseHelpers: jest.fn().mockReturnValue(mockGetUseCaseHelpers),
-    getUseCases: jest.fn().mockReturnValue(mockGetUseCasesReturnValue),
-    getUtilities: jest.fn().mockReturnValue(mockGetUtilitiesReturnValue),
+    getUseCaseHelpers: mockGetUseCaseHelpers,
+    getUseCases: appContextProxy(),
+    getUtilities: mockGetUtilities,
     isAuthorizedForWorkItems: jest.fn().mockReturnValue(() => true),
     logger: {
       error: jest.fn(),

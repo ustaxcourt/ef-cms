@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 import { updateUserCaseNoteAction } from './updateUserCaseNoteAction';
 
 describe('updateUserCaseNoteAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

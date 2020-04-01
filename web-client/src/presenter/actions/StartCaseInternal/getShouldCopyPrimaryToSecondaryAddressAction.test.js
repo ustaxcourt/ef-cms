@@ -7,7 +7,7 @@ describe('getShouldCopyPrimaryToSecondaryAddressAction', () => {
   let yesMock;
   let noMock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     yesMock = jest.fn();
     noMock = jest.fn();
 

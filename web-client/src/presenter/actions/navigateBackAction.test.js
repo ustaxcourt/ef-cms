@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 
 const mockBack = jest.fn();
 describe('navigateBackAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.router = {
       back: mockBack,
     };

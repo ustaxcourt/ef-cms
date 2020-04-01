@@ -6,7 +6,7 @@ import { runAction } from 'cerebral/test';
 describe('removeCaseDetailPendingItemAction', () => {
   const applicationContext = applicationContextForClient;
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

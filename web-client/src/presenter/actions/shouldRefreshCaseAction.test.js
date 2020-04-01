@@ -6,7 +6,7 @@ describe('shouldRefreshCaseAction', () => {
   let pathYesStub;
   let pathNoStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     pathYesStub = jest.fn();
     pathNoStub = jest.fn();
 

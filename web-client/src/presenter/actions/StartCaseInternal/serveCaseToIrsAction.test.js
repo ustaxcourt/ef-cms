@@ -8,7 +8,7 @@ describe('serveCaseToIrsAction', () => {
   let pathElectronicStub;
   let createObjectURLStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     global.window = global;
     global.Blob = () => {};
 

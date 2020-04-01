@@ -12,7 +12,7 @@ describe('rescanBatchAction', () => {
 
   global.alert = () => null;
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext.getScanner().startScanSession.mockReturnValue({
       scannedBuffer: [{ e: 5 }, { f: 6 }],
     });

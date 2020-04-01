@@ -26,7 +26,7 @@ API | Front-End | Shared Code
 
 <a href="docs/images/screenshot_petition.png"><img src="docs/images/screenshot_petition.png" width="80%" style="float: left; margin: 4px 4px 0 0;" /></a>
 
-### Trial session details 
+### Trial session details
 
 <a href="docs/images/screenshot_trialsession.png"><img src="docs/images/screenshot_trialsession.png" width="80%" style="float: left; margin: 4px 0 0 4px;" /></a>
 
@@ -137,6 +137,7 @@ privatePractitioner
 privatePractitioner1 - privatePractitioner4
 irsPractitioner
 irsPractitioner1 - irsPractitioner4
+irsSuperuser
 ```
 
 #### Internal Users
@@ -172,6 +173,7 @@ To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm
 petitioner1@example.com – petitioner5@example.com
 privatePractitioner1@example.com – privatePractitioner10@example.com
 irsPractitioner1@example.com – irsPractitioner10@example.com
+service.agent.test@irs.gov (IRS Superuser)
 ```
 
 #### Internal Users
