@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validatePetitionerInformationFormAction } from './validatePetitionerInformationFormAction';
 
@@ -8,7 +8,7 @@ describe('validatePetitionerInformationFormAction', () => {
   let errorStub;
   let SERVICE_INDICATOR_TYPES;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

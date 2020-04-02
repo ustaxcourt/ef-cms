@@ -1,5 +1,5 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateAddPrivatePractitionerAction } from './validateAddPrivatePractitionerAction';
 
@@ -9,7 +9,7 @@ describe('validateAddPrivatePractitioner', () => {
 
   let mockAddPrivatePractitioner;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

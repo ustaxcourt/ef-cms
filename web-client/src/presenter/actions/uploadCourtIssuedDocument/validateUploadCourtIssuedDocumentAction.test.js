@@ -1,4 +1,4 @@
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateUploadCourtIssuedDocumentAction } from './validateUploadCourtIssuedDocumentAction';
 
@@ -10,7 +10,7 @@ describe('validateUploadCourtIssuedDocumentAction', () => {
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

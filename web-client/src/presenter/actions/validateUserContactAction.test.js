@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateUserContactAction } from './validateUserContactAction';
 
@@ -7,7 +7,7 @@ const errorMock = jest.fn();
 const successMock = jest.fn();
 
 describe('validateUserContactAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorMock,

@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateDocketEntryWithoutFileAction } from './updateDocketEntryWithoutFileAction';
 
@@ -8,7 +8,7 @@ presenter.providers.applicationContext = applicationContext;
 describe('updateDocketEntryWithoutFileAction', () => {
   let caseDetail;
 
-  beforeEach(() => {
+  beforeAll(() => {
     caseDetail = {
       caseId: '123',
       docketNumber: '123-45',

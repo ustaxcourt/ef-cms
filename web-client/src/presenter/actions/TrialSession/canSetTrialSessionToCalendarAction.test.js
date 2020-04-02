@@ -1,6 +1,6 @@
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { canSetTrialSessionToCalendarAction } from './canSetTrialSessionToCalendarAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 const VALID_TRIAL_SESSION = {
@@ -17,7 +17,7 @@ describe('canSetTrialSessionToCalendarAction', () => {
   let pathNoStub;
   let pathYesStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     canSetTrialSessionAsCalendaredInteractorStub = jest.fn();
     pathNoStub = jest.fn();
     pathYesStub = jest.fn();

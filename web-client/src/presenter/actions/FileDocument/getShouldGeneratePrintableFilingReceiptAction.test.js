@@ -1,12 +1,12 @@
 import { getShouldGeneratePrintableFilingReceiptAction } from './getShouldGeneratePrintableFilingReceiptAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 let trueMock;
 let falseMock;
 
 describe('getShouldGeneratePrintableFilingReceiptAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     trueMock = jest.fn();
     falseMock = jest.fn();
 

@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateCourtIssuedDocketEntryAction } from './validateCourtIssuedDocketEntryAction';
 
@@ -8,7 +8,7 @@ describe('validateCourtIssuedDocketEntryAction', () => {
   let errorStub;
   let mockDocketEntry;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

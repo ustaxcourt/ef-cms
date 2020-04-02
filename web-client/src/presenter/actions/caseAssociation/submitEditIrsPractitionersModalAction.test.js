@@ -1,12 +1,12 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitEditIrsPractitionersModalAction } from './submitEditIrsPractitionersModalAction';
 
 describe('submitEditIrsPractitionersModalAction', () => {
   let successStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
 
     presenter.providers.applicationContext = applicationContextForClient;

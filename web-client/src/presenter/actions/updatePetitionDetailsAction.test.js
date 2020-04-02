@@ -1,12 +1,12 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updatePetitionDetailsAction } from './updatePetitionDetailsAction';
 
 describe('updatePetitionDetailsAction', () => {
   let PAYMENT_STATUS;
 
-  beforeEach(() => {
+  beforeAll(() => {
     ({ PAYMENT_STATUS } = applicationContext.getConstants());
     presenter.providers.applicationContext = applicationContext;
 

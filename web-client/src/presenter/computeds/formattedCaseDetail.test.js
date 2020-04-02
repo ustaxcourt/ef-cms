@@ -521,7 +521,7 @@ describe('formattedCaseDetail', () => {
         showDocumentEditLink: true,
       },
       {
-        editLink: '/edit',
+        editLink: '',
         showDocumentEditLink: true,
       },
     ]);
@@ -529,7 +529,7 @@ describe('formattedCaseDetail', () => {
 
   describe('sorts docket records', () => {
     let sortedCaseDetail;
-    beforeEach(() => {
+    beforeAll(() => {
       sortedCaseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         caseId: 'abdc-1234-5678-xyz',
@@ -951,7 +951,7 @@ describe('formattedCaseDetail', () => {
   describe('draft documents', () => {
     let caseDetail;
 
-    beforeEach(() => {
+    beforeAll(() => {
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         docketRecord: [
@@ -1135,7 +1135,7 @@ describe('formattedCaseDetail', () => {
   describe('showEditDocketRecordEntry', () => {
     let caseDetail;
 
-    beforeEach(() => {
+    beforeAll(() => {
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         contactPrimary: {

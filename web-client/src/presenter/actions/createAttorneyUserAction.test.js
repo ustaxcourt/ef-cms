@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { createAttorneyUserAction } from './createAttorneyUserAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 presenter.providers.applicationContext = applicationContext;
@@ -11,7 +11,7 @@ describe('createAttorneyUserAction', () => {
   let successMock;
   let errorMock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successMock = jest.fn();
     errorMock = jest.fn();
 

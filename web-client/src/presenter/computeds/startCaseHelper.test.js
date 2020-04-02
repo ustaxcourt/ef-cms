@@ -12,7 +12,7 @@ const startCaseHelper = withAppContextDecorator(
 );
 
 describe('start a case computed', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext.getCurrentUser = () => ({
       role: User.ROLES.petitioner,
     });

@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext.js';
 import { deleteTrialSessionAction } from './deleteTrialSessionAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 const successMock = jest.fn();
@@ -14,7 +14,7 @@ presenter.providers.path = {
 const trialSessionId = '18a1deae-30ee-4d5a-9107-0342a40c5333';
 
 describe('deleteTrialSessionAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
     applicationContext

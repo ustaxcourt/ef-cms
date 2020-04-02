@@ -1,4 +1,4 @@
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateTrialSessionPlanningAction } from './validateTrialSessionPlanningAction';
 
@@ -6,7 +6,7 @@ describe('validateTrialSessionPlanningAction', () => {
   let successMock;
   let errorMock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successMock = jest.fn();
     errorMock = jest.fn();
 

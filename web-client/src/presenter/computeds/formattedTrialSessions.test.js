@@ -45,10 +45,11 @@ const baseState = {
 let TRIAL_SESSIONS_LIST = [];
 
 describe('formattedTrialSessions', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     nextYear = (parseInt(formatNow('YYYY')) + 1).toString();
+  });
+  beforeEach(() => {
     currentUser = testJudgeUser;
-
     TRIAL_SESSIONS_LIST = [
       {
         caseOrder: [],

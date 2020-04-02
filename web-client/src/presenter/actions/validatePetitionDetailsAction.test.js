@@ -1,6 +1,6 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validatePetitionDetailsAction } from './validatePetitionDetailsAction';
 
@@ -9,7 +9,7 @@ describe('validatePetitionDetailsAction', () => {
   let errorStub;
   let PAYMENT_STATUS;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

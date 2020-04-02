@@ -1,5 +1,5 @@
 import { chooseMetaTypePathAction } from './chooseMetaTypePathAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('chooseMetaTypePathAction', () => {
@@ -7,7 +7,7 @@ describe('chooseMetaTypePathAction', () => {
   let documentStub;
   let noDocumentStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     courtIssuedStub = jest.fn();
     documentStub = jest.fn();
     noDocumentStub = jest.fn();

@@ -4,13 +4,13 @@ import {
   createCaseFromPaperAction,
   setupPercentDone,
 } from './createCaseFromPaperAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('createCaseFromPaperAction', () => {
   let errorStub, successStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
     errorStub = jest.fn();

@@ -1,12 +1,12 @@
 import { isEditModeAction } from './isEditModeAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('isEditModeAction', () => {
   let noStub;
   let yesStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     noStub = jest.fn();
     yesStub = jest.fn();
 

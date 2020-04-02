@@ -1,11 +1,10 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setWorkItemAction } from './setWorkItemAction';
 
 describe('setWorkItemAction', () => {
-  beforeEach(() => {
-    presenter.providers.applicationContext = applicationContext;
+  beforeAll(() => {
+    presenter.providers.applicationContext = {};
   });
 
   it('sets workItem in state', async () => {

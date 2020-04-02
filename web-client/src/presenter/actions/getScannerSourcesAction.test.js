@@ -1,12 +1,12 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getScannerSourcesAction } from './getScannerSourcesAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 const mockSources = ['Test Source 1', 'Test Source 2'];
 
 describe('getScannerSourcesAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext.getScanner.mockReturnValue({
       getSources: () => mockSources,

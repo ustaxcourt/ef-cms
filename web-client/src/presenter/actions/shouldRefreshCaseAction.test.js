@@ -1,4 +1,4 @@
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { shouldRefreshCaseAction } from './shouldRefreshCaseAction';
 
@@ -6,7 +6,7 @@ describe('shouldRefreshCaseAction', () => {
   let pathYesStub;
   let pathNoStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     pathYesStub = jest.fn();
     pathNoStub = jest.fn();
 

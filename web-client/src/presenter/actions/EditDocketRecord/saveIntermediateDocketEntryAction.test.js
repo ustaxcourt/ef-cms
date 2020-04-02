@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { saveIntermediateDocketEntryAction } from './saveIntermediateDocketEntryAction';
 
@@ -9,7 +9,7 @@ describe('saveIntermediateDocketEntryAction', () => {
     docketNumber: '123-45',
   };
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getUseCases()
       .saveIntermediateDocketEntryInteractor.mockReturnValue(caseDetail);

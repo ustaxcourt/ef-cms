@@ -1,6 +1,6 @@
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { runPathForUserRoleAction } from './runPathForUserRoleAction';
 
@@ -13,7 +13,7 @@ let judgeStub;
 let otherInternalUserStub;
 
 describe('runPathForUserRoleAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     petitionerStub = jest.fn();
     privatePractitionerStub = jest.fn();
     irsPractitionerStub = jest.fn();

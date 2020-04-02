@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateFileSizeAction } from './validateFileSizeAction';
 
@@ -8,7 +8,7 @@ describe('validateFileSizeAction', () => {
   let mockInvalid;
   let fakeFile;
 
-  beforeEach(() => {
+  beforeAll(() => {
     mockValid = jest.fn();
     mockInvalid = jest.fn();
 

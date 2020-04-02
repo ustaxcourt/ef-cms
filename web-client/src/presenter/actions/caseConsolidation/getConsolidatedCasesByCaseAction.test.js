@@ -1,10 +1,10 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getConsolidatedCasesByCaseAction } from './getConsolidatedCasesByCaseAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getConsolidatedCasesByCaseAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext
       .getUseCases()
       .getConsolidatedCasesByCaseInteractor.mockResolvedValue([

@@ -1,11 +1,11 @@
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { selectDocumentForPreviewAction } from './selectDocumentForPreviewAction';
 
 describe('selectDocumentForPreviewAction', () => {
   let createObjectURLMock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     createObjectURLMock = jest.fn();
 
     presenter.providers.router = {

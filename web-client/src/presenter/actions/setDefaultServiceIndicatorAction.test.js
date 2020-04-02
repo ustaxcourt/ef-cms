@@ -1,12 +1,12 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDefaultServiceIndicatorAction } from './setDefaultServiceIndicatorAction';
 
 describe('setDefaultServiceIndicatorAction', () => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

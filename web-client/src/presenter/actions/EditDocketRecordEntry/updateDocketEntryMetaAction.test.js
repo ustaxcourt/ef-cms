@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateDocketEntryMetaAction } from './updateDocketEntryMetaAction';
 
@@ -9,7 +9,7 @@ describe('updateDocketEntryMetaAction', () => {
   let errorMock;
   let successMock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     errorMock = jest.fn();
     successMock = jest.fn();
 
