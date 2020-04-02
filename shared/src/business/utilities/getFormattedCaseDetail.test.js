@@ -809,25 +809,25 @@ describe('sortDocketRecords', () => {
     expect(result[0].index).toEqual('1');
   });
 
-  it('should evaluate sort items by index if sorted by date and item dates match', () => {
+  it('should sort items by index when item calendar dates match', () => {
     const result = sortDocketRecords(
       [
         {
           index: '2',
           record: {
-            filingDate: '2019-08-03',
+            filingDate: '2019-08-03T00:10:02.000Z',
           },
         },
         {
           index: '1',
           record: {
-            filingDate: '2019-08-03',
+            filingDate: '2019-08-03T00:10:00.000Z',
           },
         },
         {
           index: '4',
           record: {
-            filingDate: '2019-08-03',
+            filingDate: '2019-08-03T00:06:10.000Z',
           },
         },
         {
@@ -847,6 +847,23 @@ describe('sortDocketRecords', () => {
     );
 
     expect(result[0].index).toEqual('1');
+    expect(result).toMatchObject([
+      {
+        index: '1',
+      },
+      {
+        index: '2',
+      },
+      {
+        index: '3',
+      },
+      {
+        index: '4',
+      },
+      {
+        index: '5',
+      },
+    ]);
   });
 
   it('should sort docket records by index when sortBy is byIndex', () => {
