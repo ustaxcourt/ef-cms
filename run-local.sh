@@ -100,6 +100,8 @@ echo "starting migrate service"
 npx sls offline start "$@" --config web-api/serverless-migrate.yml &
 echo "starting reports service"
 npx sls offline start "$@" --config web-api/serverless-reports.yml &
+echo "starting practitioners service"
+npx sls offline start "$@" --config web-api/serverless-practitioners.yml &
 
 echo "starting proxy"
 node ./web-api/proxy.js

@@ -1,23 +1,16 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { deleteWorkItemFromInbox } = require('./deleteWorkItemFromInbox');
 
 describe('deleteWorkItemFromInbox', () => {
-  let deleteStub;
-
-  beforeEach(() => {
-    deleteStub = jest.fn().mockReturnValue({
+  beforeAll(() => {
+    applicationContext.getDocumentClient().delete.mockReturnValue({
       promise: async () => true,
     });
   });
 
   it('invokes the persistence layer with pk of {assigneeId}|workItem, docket|workItem and other expected params', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        delete: deleteStub,
-      }),
-    };
     await deleteWorkItemFromInbox({
       applicationContext,
       workItem: {
@@ -26,13 +19,17 @@ describe('deleteWorkItemFromInbox', () => {
         workItemId: '123',
       },
     });
-    expect(deleteStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls[0][0],
+    ).toMatchObject({
       Key: {
         pk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
         sk: 'work-item|123',
       },
     });
-    expect(deleteStub.mock.calls[1][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls[1][0],
+    ).toMatchObject({
       Key: {
         pk: 'section|docket',
         sk: 'work-item|123',
@@ -41,14 +38,6 @@ describe('deleteWorkItemFromInbox', () => {
   });
 
   it('invokes the persistence layer with pk of docket|workItem and other expected params when assigneeId is not set', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        delete: deleteStub,
-      }),
-    };
     await deleteWorkItemFromInbox({
       applicationContext,
       workItem: {
@@ -56,7 +45,9 @@ describe('deleteWorkItemFromInbox', () => {
         workItemId: '123',
       },
     });
-    expect(deleteStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls[0][0],
+    ).toMatchObject({
       Key: {
         pk: 'section|docket',
         sk: 'work-item|123',

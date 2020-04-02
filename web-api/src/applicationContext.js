@@ -430,6 +430,9 @@ const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
+  getPractitionersByNameInteractor,
+} = require('../../shared/src/business/useCases/practitioners/getPractitionersByNameInteractor');
+const {
   getPrivatePractitionersBySearchKeyInteractor,
 } = require('../../shared/src/business/useCases/users/getPrivatePractitionersBySearchKeyInteractor');
 const {
@@ -1162,6 +1165,7 @@ module.exports = (appContextUser = {}) => {
         getIrsPractitionersBySearchKeyInteractor,
         getJudgeForUserChambersInteractor,
         getNotificationsInteractor,
+        getPractitionersByNameInteractor,
         getPrivatePractitionersBySearchKeyInteractor,
         getPublicCaseInteractor,
         getPublicDownloadPolicyUrlInteractor,

@@ -1,44 +1,36 @@
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('./createCaseInteractor');
 const { User } = require('../entities/User');
 
 describe('createCaseInteractor', () => {
-  let applicationContext;
   let user;
-  const createCaseSpy = jest.fn();
-  const saveWorkItemForNonPaperSpy = jest.fn();
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
     user = new User({
       name: 'Test Petitioner',
       role: User.ROLES.petitioner,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    applicationContext = {
-      docketNumberGenerator: {
-        createDocketNumber: () => Promise.resolve('00101-00'),
-      },
-      environment: { stage: 'local' },
-      getCurrentUser: () => user,
-      getPersistenceGateway: () => {
-        return {
-          createCase: createCaseSpy,
-          getUserById: () => user,
-          saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
-        };
-      },
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      getUseCases: () => ({
-        getUserInteractor: () => user,
-      }),
-    };
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+    applicationContext.docketNumberGenerator.createDocketNumber.mockResolvedValue(
+      '00101-00',
+    );
+    applicationContext.environment.stage = 'local';
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => user);
+
+    applicationContext
+      .getUseCases()
+      .getUserInteractor.mockImplementation(() => user);
   });
 
   it('throws an error if the user is not valid or authorized', async () => {
     user = {};
+
     await expect(
       createCaseInteractor({
         applicationContext,
@@ -54,8 +46,12 @@ describe('createCaseInteractor', () => {
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       }),
     ).rejects.toThrow('Unauthorized');
-    expect(createCaseSpy).not.toBeCalled();
-    expect(saveWorkItemForNonPaperSpy).not.toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().createCase,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+    ).not.toBeCalled();
   });
 
   it('should create a case successfully as a petitioner', async () => {
@@ -92,13 +88,15 @@ describe('createCaseInteractor', () => {
     });
 
     expect(result).toBeDefined();
-    expect(createCaseSpy).toBeCalled();
-    expect(saveWorkItemForNonPaperSpy).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().createCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+    ).toBeCalled();
   });
 
   it('should create a case successfully as a practitioner', async () => {
     user = new User({
-      name: 'Olivia Jade',
+      name: 'Mister Peanutbutter',
       role: User.ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -141,13 +139,15 @@ describe('createCaseInteractor', () => {
     expect(
       result.privatePractitioners[0].representingSecondary,
     ).toBeUndefined();
-    expect(createCaseSpy).toBeCalled();
-    expect(saveWorkItemForNonPaperSpy).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().createCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+    ).toBeCalled();
   });
 
   it('should create a case with contact primary and secondary successfully as a practitioner', async () => {
     user = new User({
-      name: 'Olivia Jade',
+      name: 'Carole Baskin',
       role: User.ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -199,7 +199,9 @@ describe('createCaseInteractor', () => {
     expect(result).toBeDefined();
     expect(result.privatePractitioners[0].representingPrimary).toEqual(true);
     expect(result.privatePractitioners[0].representingSecondary).toEqual(true);
-    expect(createCaseSpy).toBeCalled();
-    expect(saveWorkItemForNonPaperSpy).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().createCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+    ).toBeCalled();
   });
 });
