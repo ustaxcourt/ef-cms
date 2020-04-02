@@ -1,18 +1,9 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { sendServedPartiesEmails } = require('./sendServedPartiesEmails');
 
 describe('sendServedPartiesEmails', () => {
-  const sendBulkTemplatedEmailMock = jest.fn();
-
-  const applicationContext = {
-    getDispatchers: () => ({
-      sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
-    }),
-  };
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('should call sendBulkTemplatedEmail if there are electronic service parties on the case', async () => {
     await sendServedPartiesEmails({
       applicationContext,
@@ -29,9 +20,12 @@ describe('sendServedPartiesEmails', () => {
       },
     });
 
-    expect(sendBulkTemplatedEmailMock).toBeCalled();
     expect(
-      sendBulkTemplatedEmailMock.mock.calls[0][0].destinations,
+      applicationContext.getDispatchers().sendBulkTemplatedEmail,
+    ).toBeCalled();
+    expect(
+      applicationContext.getDispatchers().sendBulkTemplatedEmail.mock
+        .calls[0][0].destinations,
     ).toMatchObject([
       {
         email: '1@example.com',
@@ -53,6 +47,8 @@ describe('sendServedPartiesEmails', () => {
       },
     });
 
-    expect(sendBulkTemplatedEmailMock).not.toBeCalled();
+    expect(
+      applicationContext.getDispatchers().sendBulkTemplatedEmail,
+    ).not.toBeCalled();
   });
 });

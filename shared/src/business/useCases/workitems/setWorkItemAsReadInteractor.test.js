@@ -1,17 +1,24 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   setWorkItemAsReadInteractor,
 } = require('./setWorkItemAsReadInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 describe('setWorkItemAsReadInteractor', () => {
+  let user;
+
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+  });
+
   it('unauthorized user tries to invoke this interactor', async () => {
-    const applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => ({
-        userId: 'baduser',
-      }),
+    user = {
+      userId: 'baduser',
     };
+
     let error;
     try {
       await setWorkItemAsReadInteractor({
@@ -26,16 +33,13 @@ describe('setWorkItemAsReadInteractor', () => {
   });
 
   it('returns the expected result', async () => {
-    const applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => ({
-        role: User.ROLES.petitionsClerk,
-        userId: 'petitionsclerk',
-      }),
-      getPersistenceGateway: () => ({
-        setWorkItemAsRead: async () => [],
-      }),
+    user = {
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
     };
+    applicationContext
+      .getPersistenceGateway()
+      .setWorkItemAsRead.mockResolvedValue([]);
 
     const res = await setWorkItemAsReadInteractor({
       applicationContext,
