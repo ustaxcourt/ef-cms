@@ -25,6 +25,10 @@ const testPdfDocBytes = () => {
 };
 
 describe('addCoversheetInteractor', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   let testPdfDoc;
 
   const testingCaseData = {
