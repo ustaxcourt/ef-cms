@@ -681,6 +681,16 @@ const router = {
     );
 
     registerRoute(
+      '/practitioner-detail/*',
+      ifHasAccess(practitionerUserId => {
+        setPageTitle('Practitioner Detail');
+        return app.getSequence('gotoPractitionerDetailSequence')({
+          practitionerUserId,
+        });
+      }),
+    );
+
+    registerRoute(
       '/print-preview/*',
       ifHasAccess(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
