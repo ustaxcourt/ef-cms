@@ -11,10 +11,6 @@ describe('switch-environment-color', () => {
       promise: async () => {},
     });
 
-    beforeEach(() => {
-      jest.clearAllMocks();
-    });
-
     it('should call updateBasePathMapping with the green stack id when switching from blue to green', async () => {
       await switchBasePathMappings({
         apigateway: {
