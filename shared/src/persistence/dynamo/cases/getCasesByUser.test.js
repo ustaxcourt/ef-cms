@@ -2,22 +2,20 @@ const client = require('../../../../../shared/src/persistence/dynamodbClientServ
 const { getCasesByUser } = require('./getCasesByUser');
 const { User } = require('../../../business/entities/User');
 
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+
 let queryStub = jest.fn().mockReturnValue({
   promise: async () => ({
     Items: [],
   }),
 });
 
-const applicationContext = {
-  environment: {
-    stage: 'local',
-  },
-  filterCaseMetadata: ({ cases }) => cases,
-  getDocumentClient: () => ({
-    query: queryStub,
-  }),
-  isAuthorizedForWorkItems: () => true,
-};
+applicationContext.filterCaseMetadata.mockImplementation(({ cases }) => cases);
+applicationContext.getDocumentClient.mockReturnValue({
+  query: queryStub,
+});
 
 const user = {
   role: User.ROLES.petitioner,

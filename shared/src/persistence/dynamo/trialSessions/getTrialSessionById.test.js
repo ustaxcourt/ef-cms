@@ -1,4 +1,7 @@
 const client = require('../../dynamodbClientService');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { getTrialSessionById } = require('./getTrialSessionById');
 
 describe('getTrialSessionById', () => {
@@ -11,11 +14,6 @@ describe('getTrialSessionById', () => {
   });
 
   it('should get the trial session by id', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-    };
     const result = await getTrialSessionById({
       applicationContext,
       trialSessionId: '123',

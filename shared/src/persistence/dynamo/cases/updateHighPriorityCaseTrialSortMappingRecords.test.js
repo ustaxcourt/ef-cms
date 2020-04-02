@@ -3,11 +3,9 @@ const {
   updateHighPriorityCaseTrialSortMappingRecords,
 } = require('./updateHighPriorityCaseTrialSortMappingRecords');
 
-const applicationContext = {
-  environment: {
-    stage: 'local',
-  },
-};
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 
 const caseId = 'abc';
 const caseSortTags = {
