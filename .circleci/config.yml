@@ -124,7 +124,7 @@ jobs:
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: 2xlarge
-    parallelism: 2
+    parallelism: 3
     steps:
       - attach_workspace:
           at: ~/
@@ -137,7 +137,9 @@ jobs:
             SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /tmp/web-client/server-output.txt &
             ./wait-until.sh http://localhost:3000/api/swagger
             TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" | circleci tests split --split-by=timings)
-            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest --runInBand --config web-client/jest.config.js ${TESTFILES}
+            TESTFILES_GLOB=$(echo $TESTFILES | sed 's/ /\"\ --collectCoverageFrom \"/g')
+            echo "GLOB IS $TESTFILES_GLOB"
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest ${TESTFILES_GLOB} --runInBand --config web-client/jest-integration.config.js --coverageDirectory="./coverage-integration-${CIRCLE_NODE_INDEX}" ${TESTFILES}
       - store_artifacts:
           path: /tmp/web-client
 

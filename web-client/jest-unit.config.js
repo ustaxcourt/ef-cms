@@ -14,7 +14,10 @@ module.exports = {
     },
   },
   globals: {
-    window: true,
+    File: function () {},
+    FileReader: () => {},
+    atob: x => x,
+    window: { document: {} },
   },
   //this is to ignore imported html files
   testEnvironment: 'node',
