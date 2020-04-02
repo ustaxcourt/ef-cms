@@ -20,9 +20,17 @@ describe('completeDocumentSigningAction', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       userId: '1',
     });
+
+    global.window = {
+      pdfjsObj: {
+        getData: jest.fn().mockResolvedValue(true),
+      },
+    };
+
     global.window.pdfjsObj = {
       getData: jest.fn().mockResolvedValue(true),
     };
+
     global.File = jest.fn();
 
     uploadDocumentFromClient.mockReturnValue(
