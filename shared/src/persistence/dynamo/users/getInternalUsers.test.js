@@ -4,10 +4,11 @@ const {
 } = require('../../../business/test/createTestApplicationContext');
 const { getInternalUsers } = require('./getInternalUsers');
 
-applicationContext.filterCaseMetadata.mockImplementation(({ cases }) => cases);
-
 describe('getInternalUsers', () => {
-  beforeEach(() => {
+  beforeAll(() => {
+    applicationContext.filterCaseMetadata.mockImplementation(
+      ({ cases }) => cases,
+    );
     client.query = jest.fn().mockReturnValue([
       {
         pk: 'section|petitions',

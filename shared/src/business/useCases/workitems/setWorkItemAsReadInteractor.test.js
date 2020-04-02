@@ -11,7 +11,6 @@ describe('setWorkItemAsReadInteractor', () => {
   let user;
 
   beforeEach(() => {
-    applicationContext.environment.stage = 'local';
     applicationContext.getCurrentUser.mockImplementation(() => user);
   });
 

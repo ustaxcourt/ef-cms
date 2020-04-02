@@ -4,17 +4,13 @@ const {
 const { updateWorkItem } = require('./updateWorkItem');
 
 describe('updateWorkItem', () => {
-  let putStub;
-  beforeEach(() => {
-    putStub = jest.fn().mockReturnValue({
+  beforeAll(() => {
+    applicationContext.getDocumentClient().put.mockReturnValue({
       promise: async () => null,
     });
   });
 
   it('invokes the persistence layer with pk of {workItemId}, sk of {workItemId} and other expected params', async () => {
-    applicationContext.getDocumentClient.mockReturnValue({
-      put: putStub,
-    });
     await updateWorkItem({
       applicationContext,
       workItemToUpdate: {
@@ -22,7 +18,10 @@ describe('updateWorkItem', () => {
         workItemId: '123',
       },
     });
-    expect(putStub.mock.calls[0][0]).toMatchObject({
+
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0],
+    ).toMatchObject({
       Item: {
         assigneeId: 'bob',
         pk: 'work-item|123',

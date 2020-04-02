@@ -9,7 +9,6 @@ describe('updateQcCompleteForTrialInteractor', () => {
   let user;
 
   beforeEach(() => {
-    applicationContext.environment.stage = 'local';
     applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext
       .getPersistenceGateway()

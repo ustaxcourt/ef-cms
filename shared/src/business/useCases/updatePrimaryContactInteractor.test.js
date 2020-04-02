@@ -23,8 +23,6 @@ describe('update primary contact on a case', () => {
 
     applicationContext.getUseCases().userIsAssociated.mockReturnValue(true);
 
-    applicationContext.environment.stage = 'local';
-
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'bob',
