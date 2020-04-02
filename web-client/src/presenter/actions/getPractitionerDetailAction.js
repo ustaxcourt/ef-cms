@@ -33,5 +33,5 @@ export const getPractitionerDetailAction = async ({
   }
 
   // TODO: Handle not found
-  return practitionerDetail;
+  return { practitionerDetail };
 };

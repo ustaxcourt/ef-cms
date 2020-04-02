@@ -14,6 +14,6 @@ exports.getPractitionerByBarNumberInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/users/practitioners/${barNumber}`,
+    endpoint: `/practitioners/${barNumber}`,
   });
 };
