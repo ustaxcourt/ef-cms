@@ -22,6 +22,7 @@ const PROXY_DESTINATIONS = {
   '/documents': `http://${PROXY_HOST}:3004`,
   '/migrate': `http://${PROXY_HOST}:3030`,
   '/notifications': `http://${PROXY_HOST}:3011`,
+  '/practitioners': `http://${PROXY_HOST}:3017`,
   '/public-api': `http://${PROXY_HOST}:3013`,
   '/reports': `http://${PROXY_HOST}:3016`,
   '/sections': `http://${PROXY_HOST}:3006`,
