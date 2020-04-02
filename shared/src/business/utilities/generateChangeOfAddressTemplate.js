@@ -1,3 +1,5 @@
+const { union } = require('lodash');
+
 /**
  * creates a lookup of changed contact fields
  *
@@ -8,7 +10,7 @@
  */
 const getAddressPhoneDiff = ({ newData, oldData }) => {
   const diff = {};
-  const fields = Object.keys(newData);
+  const fields = union(Object.keys(newData), Object.keys(oldData));
   fields.forEach(key => {
     const oldValue = oldData[key];
     const newValue = newData[key];

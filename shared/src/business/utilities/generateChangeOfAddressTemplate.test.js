@@ -57,9 +57,22 @@ describe('getDocumentTypeForAddressChange', () => {
 
     expect(result).toBeUndefined();
   });
+  it('Returns Notice of Change of Address when address 2 fields differ', () => {
+    const result = getDocumentTypeForAddressChange({
+      newData: caseDetail.contactPrimary,
+      oldData: { ...caseDetail.contactPrimary, address2: 'something' },
+    });
+
+    expect(result).toEqual({
+      eventCode: 'NCA',
+      title: 'Notice of Change of Address',
+    });
+  });
+
   it('Returns Notice of Change of Address when only address fields differ', () => {
     const result = getDocumentTypeForAddressChange({
       newData: {
+        ...caseDetail.contactPrimary,
         address1: 'Address One',
       },
       oldData: caseDetail.contactPrimary,
@@ -74,6 +87,7 @@ describe('getDocumentTypeForAddressChange', () => {
   it('Returns Notice of Change of Telephone Number when only the phone fields differ', () => {
     const result = getDocumentTypeForAddressChange({
       newData: {
+        ...caseDetail.contactPrimary,
         phone: '321-321-4321',
       },
       oldData: caseDetail.contactPrimary,
