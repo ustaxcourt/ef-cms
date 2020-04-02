@@ -6,6 +6,7 @@ import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
 import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import { addCaseToTrialSessionSequence } from './sequences/addCaseToTrialSessionSequence';
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
+import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabChangeSequence';
 import { archiveDraftDocumentModalSequence } from './sequences/archiveDraftDocumentModalSequence';
 import { archiveDraftDocumentSequence } from './sequences/archiveDraftDocumentSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
@@ -389,6 +390,7 @@ export const presenter = {
   sequences: {
     addCaseToTrialSessionSequence,
     addSupportingDocumentToFormSequence,
+    advancedSearchTabChangeSequence,
     archiveDraftDocumentModalSequence,
     archiveDraftDocumentSequence,
     assignSelectedWorkItemsSequence,
