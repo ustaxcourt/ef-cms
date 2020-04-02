@@ -15,6 +15,7 @@ export const caseExistsAction = async ({ applicationContext, path, props }) => {
         applicationContext,
         docketNumber: props.caseId,
       });
+
     return path.success({ caseDetail });
   } catch (e) {
     return path.error();
