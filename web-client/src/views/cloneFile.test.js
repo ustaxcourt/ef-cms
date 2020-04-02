@@ -1,7 +1,7 @@
 import { JSDOM } from 'jsdom';
 import { cloneFile } from './cloneFile';
 
-describe.skip('cloneFile', () => {
+describe('cloneFile', () => {
   const readAsArrayBufferSpy = jest.fn().mockResolvedValue();
   const keys = {};
 
