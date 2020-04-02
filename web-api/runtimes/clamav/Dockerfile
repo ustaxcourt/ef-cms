@@ -56,7 +56,6 @@ RUN yum install shadow-utils.x86_64 -y
 RUN groupadd clamav	
 RUN useradd -g clamav -s /bin/false -c "Clam Antivirus" clamav	
 RUN useradd -g clamav -s /bin/false -c "Clam Antivirus" clamupdate	
-RUN chown clamav:clamav /var/lib/clamav/
 
 RUN LD_LIBRARY_PATH=./lib ./bin/freshclam --config-file=bin/freshclam.conf	
 
