@@ -109,26 +109,26 @@ describe('processStreamRecordsInteractor', () => {
         },
         {
           dynamodb: {
-            Keys: { pk: { S: 'user|123' } },
+            Keys: { pk: { S: 'user|5' } },
             NewImage: {
-              caseId: { S: '4' },
-              pk: { S: 'user|123' },
-              sk: { S: 'user|123' },
+              pk: { S: 'user|5' },
+              sk: { S: 'user|5' },
+              userId: { S: '5' },
             },
           },
           eventName: 'MODIFY',
         },
         {
           dynamodb: {
-            Keys: { pk: { S: '5' } },
+            Keys: { pk: { S: '6' } },
             NewImage: {
-              documentId: { S: '5' },
-              pk: { S: '5' },
-              sk: { S: '5' },
+              documentId: { S: '6' },
+              pk: { S: '6' },
+              sk: { S: '6' },
               workItems: [
                 {
                   blah: true,
-                  documents: [{ documentId: '5' }],
+                  documents: [{ documentId: '6' }],
                 },
               ],
             },
@@ -139,7 +139,7 @@ describe('processStreamRecordsInteractor', () => {
     });
 
     expect(bulkSpy).toHaveBeenCalled();
-    expect(bulkSpy.mock.calls[0][0].body.length).toEqual(8);
+    expect(bulkSpy.mock.calls[0][0].body.length).toEqual(10);
     expect(bulkSpy.mock.calls[0][0].body).toEqual([
       { index: { _id: '1_1', _index: 'efcms' } },
       { caseId: { S: '1' }, pk: { S: '1' }, sk: { S: '1' } },
@@ -152,8 +152,14 @@ describe('processStreamRecordsInteractor', () => {
         pk: { S: '4' },
         sk: { S: '4' },
       },
-      { index: { _id: '5_5', _index: 'efcms' } },
-      { documentId: { S: '5' }, pk: { S: '5' }, sk: { S: '5' } },
+      { index: { _id: 'user|5_user|5', _index: 'efcms' } },
+      {
+        pk: { S: 'user|5' },
+        sk: { S: 'user|5' },
+        userId: { S: '5' },
+      },
+      { index: { _id: '6_6', _index: 'efcms' } },
+      { documentId: { S: '6' }, pk: { S: '6' }, sk: { S: '6' } },
     ]);
   });
 

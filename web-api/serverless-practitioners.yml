@@ -149,8 +149,8 @@ resources:
             MetricsEnabled: true
 
 functions:
-  getPractitionersBySearchKey:
-    handler: web-api/${self:provider.dir}/practitionersHandlers.getPractitionersBySearchKeyLambda
+  getPractitionersByName:
+    handler: web-api/${self:provider.dir}/practitionersHandlers.getPractitionersByNameLambda
     events:
       - http:
           path: /

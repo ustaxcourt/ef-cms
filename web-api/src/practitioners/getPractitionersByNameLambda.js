@@ -6,15 +6,14 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getPractitionersBySearchKeyLambda = event =>
+exports.getPractitionersByNameLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { barNumber, name } = event.queryStringParameters;
+    const { name } = event.queryStringParameters;
 
     return await applicationContext
       .getUseCases()
-      .getPractitionersBySearchKeyInteractor({
+      .getPractitionersByNameInteractor({
         applicationContext,
-        barNumber,
         name,
       });
   });
