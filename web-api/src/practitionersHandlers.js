@@ -1,4 +1,6 @@
 module.exports = {
-  getPractitionersByNameLambda: require('./practitioners/getPractitionersByNameLambda')
+  getPractitionerByBarNumberLambda: require('./practitioners/getPractitionerByBarNumberLambda')
     .getPractitionersByNameLambda,
+  getPractitionersByNameLambda: require('./practitioners/getPractitionersByNameLambda')
+    .getPractitionerByBarNumberLambda,
 };
