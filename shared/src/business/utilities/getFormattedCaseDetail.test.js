@@ -815,31 +815,31 @@ describe('sortDocketRecords', () => {
         {
           index: '2',
           record: {
-            filingDate: '2019-08-03T00:10:02.000Z',
+            filingDate: '2019-08-03T00:10:02.000Z', // 8/2 @ 8:10:02PM EST
           },
         },
         {
           index: '1',
           record: {
-            filingDate: '2019-08-03T00:10:00.000Z',
+            filingDate: '2019-08-03T00:10:00.000Z', // 8/2 @ 8:10:00PM EST
           },
         },
         {
           index: '4',
           record: {
-            filingDate: '2019-08-03T00:06:10.000Z',
+            filingDate: '2019-08-03T02:06:10.000Z', // 8/2 @ 10:10:00PM EST
           },
         },
         {
           index: '3',
           record: {
-            filingDate: '2019-08-03T00:06:44.000Z',
+            filingDate: '2019-08-03T06:06:44.000Z', // 8/3 @ 2:10:02AM EST
           },
         },
         {
           index: '5',
           record: {
-            filingDate: '2019-09-01T00:01:12.025Z',
+            filingDate: '2019-09-01T00:01:12.025Z', // 8/31 @ 8:01:12AM EST
           },
         },
       ],
