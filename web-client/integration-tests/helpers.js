@@ -7,6 +7,7 @@ import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/tria
 import { User } from '../../shared/src/business/entities/User';
 import { applicationContext } from '../src/applicationContext';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
+import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import {
   image1,
   image2,
@@ -357,6 +358,9 @@ export const setupTest = ({ useCases = {} } = {}) => {
   };
   global.WebSocket = require('websocket').w3cwebsocket;
   presenter.providers.applicationContext = applicationContext;
+  presenter.providers.applicationContext = Object.assign(applicationContext, {
+    getScanner: getScannerInterface,
+  });
   const { initialize: initializeSocketProvider, start, stop } = socketProvider({
     socketRouter,
   });
