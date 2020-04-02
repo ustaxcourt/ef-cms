@@ -49,6 +49,7 @@ const formatRecord = record => {
   }
 
   returnData.additionalPhone = record.additionalPhone;
+  returnData.admissionsStatus = record.admissionsStatus;
   returnData.alternateEmail = record.alternateEmail;
   returnData.barNumber = record.barNumber;
   returnData.email = record.email;
