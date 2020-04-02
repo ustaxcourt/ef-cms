@@ -211,6 +211,7 @@ export const state = {
     signatureData: null,
   },
   permissions: null,
+  practitionerDetail: {},
   previewPdfFile: null,
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
