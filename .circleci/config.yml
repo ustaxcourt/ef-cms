@@ -103,22 +103,10 @@ jobs:
       - run:
           name: Web Client - Unit Test
           command: npm run build:assets && CI=false npm run test:client:unit
-      - run:
-          name: Web Client - SonarQube
-          command: |
-            export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /home/app/sonar_home/bin/sonar-scanner \
-            -Dsonar.projectKey="${UI_SONAR_KEY}" \
-            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-            -Dsonar.organization="${SONAR_ORG}" \
-            -Dsonar.projectBaseDir="web-client" \
-            -Dproject.settings="web-client/sonar-project.properties" \
-            -Dsonar.login="${UI_SONAR_TOKEN}" \
-            -Dsonar.host.url="https://sonarcloud.io"
       - persist_to_workspace:
           root: ~/
           paths:
-            - project
+            - project/web-client/coverage-integration-*
 
   build-client-integration:
     docker:
@@ -150,7 +138,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project
+            - project/web-client/coverage-integration-*
 
   build-client-coverage:
     docker:
@@ -168,6 +156,18 @@ jobs:
             ./web-client/coverage-integration-0/coverage-final.json \
             ./web-client/coverage-integration-1/coverage-final.json \
             ./web-client/coverage-unit/coverage-final.json
+      - run:
+          name: Web Client - SonarQube
+          command: |
+            export SONAR_SCANNER_OPTS="-Xmx2048m"
+            /home/app/sonar_home/bin/sonar-scanner \
+            -Dsonar.projectKey="${UI_SONAR_KEY}" \
+            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
+            -Dsonar.organization="${SONAR_ORG}" \
+            -Dsonar.projectBaseDir="web-client" \
+            -Dproject.settings="web-client/sonar-project.properties" \
+            -Dsonar.login="${UI_SONAR_TOKEN}" \
+            -Dsonar.host.url="https://sonarcloud.io"
 
   e2e-pa11y:
     docker:
