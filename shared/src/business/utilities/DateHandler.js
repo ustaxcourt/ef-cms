@@ -7,6 +7,7 @@ const FORMATS = {
   MMDDYY: 'MM/DD/YY',
   MMDDYYYY: 'MM/DD/YYYY',
   MONTH_DAY_YEAR: 'MMMM D, YYYY',
+  SORTABLE_CALENDAR: 'YYYY/MM/DD',
   TIME: 'hh:mm a',
   TIME_TZ: 'h:mm a [ET]',
   YEAR: 'YYYY',
@@ -113,6 +114,24 @@ const dateStringsCompared = (a, b) => {
 };
 
 /**
+ * @param {string} a the first date to be compared
+ * @param {string} b the second date to be compared
+ * @returns {number} -1 if date a is larger, 1 if date b is larger, 0 if dates are equal
+ */
+const calendarDateCompared = (a, b) => {
+  const aFormatEst = formatDateString(a, FORMATS.SORTABLE_CALENDAR);
+  const bFormatEst = formatDateString(b, FORMATS.SORTABLE_CALENDAR);
+
+  if (aFormatEst < bFormatEst) {
+    return -1;
+  } else if (aFormatEst > bFormatEst) {
+    return 1;
+  } else {
+    return 0;
+  }
+};
+
+/**
  * @param {string} dateString date to be deconstructed
  * @returns {object} deconstructed date object
  */
@@ -163,6 +182,7 @@ module.exports = {
   FORMATS,
   calculateDifferenceInDays,
   calculateISODate,
+  calendarDateCompared,
   createISODateString,
   createISODateStringFromObject,
   dateStringsCompared,
