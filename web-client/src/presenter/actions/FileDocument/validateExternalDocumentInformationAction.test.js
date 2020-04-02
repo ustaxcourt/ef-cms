@@ -1,11 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateExternalDocumentInformationAction } from './validateExternalDocumentInformationAction';
 
 describe('validateExternalDocumentInformationAction', () => {
-  presenter.providers.applicationContext = applicationContext;
-
   const {
     validateExternalDocumentInformationInteractor,
   } = applicationContext.getUseCases();
@@ -16,6 +14,8 @@ describe('validateExternalDocumentInformationAction', () => {
   let mockDocInfo;
 
   beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
     successStub = jest.fn();
     errorStub = jest.fn();
 

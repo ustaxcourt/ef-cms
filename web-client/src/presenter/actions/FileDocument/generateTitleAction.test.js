@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateTitleAction } from './generateTitleAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('generateTitleAction', () => {

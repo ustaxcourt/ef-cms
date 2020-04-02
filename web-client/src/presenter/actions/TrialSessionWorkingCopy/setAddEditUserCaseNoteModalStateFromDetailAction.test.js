@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setAddEditUserCaseNoteModalStateFromDetailAction } from './setAddEditUserCaseNoteModalStateFromDetailAction';
 
@@ -24,6 +24,7 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
         },
       },
     );
+
     expect(result.state.modal.caseCaptionNames).toEqual('Sisqo');
     expect(result.state.modal.caseId).toEqual(
       'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -48,6 +49,7 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
         },
       },
     );
+
     expect(result.state.modal.caseCaptionNames).toEqual('');
     expect(result.state.modal.caseId).toEqual(
       'c54ba5a9-b37b-479d-9201-067ec6e335bb',

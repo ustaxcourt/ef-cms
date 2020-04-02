@@ -1,17 +1,17 @@
 import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitCaseAssociationRequestAction } from './submitCaseAssociationRequestAction';
 
-const {
-  submitCaseAssociationRequestInteractor,
-} = applicationContext.getUseCases();
-const {
-  submitPendingCaseAssociationRequestInteractor,
-} = applicationContext.getUseCases();
-
 describe('submitCaseAssociationRequestAction', () => {
+  const {
+    submitCaseAssociationRequestInteractor,
+  } = applicationContext.getUseCases();
+  const {
+    submitPendingCaseAssociationRequestInteractor,
+  } = applicationContext.getUseCases();
+
   presenter.providers.applicationContext = applicationContext;
 
   applicationContext.getCurrentUser.mockReturnValue(

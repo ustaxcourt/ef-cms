@@ -1,5 +1,5 @@
 import { getShouldMarkReadAction } from './getShouldMarkReadAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 const markReadStub = jest.fn();

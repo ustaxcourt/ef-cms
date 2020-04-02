@@ -1,4 +1,4 @@
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { primePropsFromCaseDetailAction } from './primePropsFromCaseDetailAction';
 import { runAction } from 'cerebral/test';
 
