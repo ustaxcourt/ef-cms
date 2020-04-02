@@ -9,6 +9,8 @@ export const PractitionerSearchByName = connect(
     advancedSearchForm: state.advancedSearchForm,
     clearCaseSearchByNameFormSequence:
       sequences.clearCaseSearchByNameFormSequence,
+    submitPractitionerNameSearchSequence:
+      sequences.submitPractitionerNameSearchSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     validationErrors: state.validationErrors,
@@ -16,7 +18,7 @@ export const PractitionerSearchByName = connect(
   function PractitionerSearchByName({
     advancedSearchForm,
     clearCaseSearchByNameFormSequence,
-    submitPractitionerBarNumberSearchSequence,
+    submitPractitionerNameSearchSequence,
     updateAdvancedSearchFormValueSequence,
     validationErrors,
   }) {
@@ -29,7 +31,7 @@ export const PractitionerSearchByName = connect(
           <form
             onSubmit={e => {
               e.preventDefault();
-              submitPractitionerBarNumberSearchSequence();
+              submitPractitionerNameSearchSequence();
             }}
           >
             <div className="grid-row grid-gap">

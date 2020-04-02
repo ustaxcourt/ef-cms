@@ -38,6 +38,18 @@ describe('advancedSearchHelper', () => {
     };
   });
 
+  it('returns appropriate defaults if permissions are not defined in state', () => {
+    const result = runCompute(advancedSearchHelper, {
+      state: {
+        advancedSearchForm: {},
+      },
+    });
+    expect(result).toEqual({
+      showPractitionerSearch: undefined,
+      showStateSelect: false,
+    });
+  });
+
   it('returns only showStateSelect and showPractitionerSearch when searchResults is undefined', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
@@ -142,11 +154,12 @@ describe('advancedSearchHelper', () => {
     });
   });
 
-  it('formats search results', () => {
+  it('formats search results for a case search', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab: 'case',
         searchResults: [
           {
             caseCaption: 'Test Petitioner, Petitioner',
@@ -195,12 +208,13 @@ describe('advancedSearchHelper', () => {
     ]);
   });
 
-  it('only returns formatted results that should be currently shown based on form.currentPage', () => {
+  it('only returns formatted results that should be currently shown based on form.currentPage for a case search', () => {
     pageSizeOverride = 1;
     let result = runCompute(advancedSearchHelper, {
       state: {
         ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab: 'case',
         searchResults: [
           {
             caseCaption: 'Test Petitioner, Petitioner',
@@ -242,7 +256,8 @@ describe('advancedSearchHelper', () => {
     result = runCompute(advancedSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 3 },
+        advancedSearchForm: { currentPage: 4 },
+        advancedSearchTab: 'case',
         searchResults: [
           {
             caseCaption: 'Test Petitioner, Petitioner',
@@ -274,11 +289,17 @@ describe('advancedSearchHelper', () => {
             docketNumberSuffix: 'W',
             receivedAt: '2018-04-01T05:00:00.000Z',
           },
+          {
+            contactSecondary: { name: 'Another Person', state: 'AX' },
+            docketNumber: '102-18',
+            docketNumberSuffix: 'W',
+            receivedAt: '2018-05-01T05:00:00.000Z',
+          },
         ],
       },
     });
     expect(result.showLoadMore).toEqual(false);
-    expect(result.formattedSearchResults.length).toEqual(3);
+    expect(result.formattedSearchResults.length).toEqual(4);
     expect(result.formattedSearchResults).toMatchObject([
       {
         caseCaptionNames: 'Test Petitioner',
@@ -307,6 +328,48 @@ describe('advancedSearchHelper', () => {
         fullStateNamePrimary: 'California',
         fullStateNameSecondary: 'Tennessee',
       },
+      {
+        caseCaptionNames: '',
+        contactPrimaryName: undefined,
+        contactSecondaryName: 'Another Person',
+        docketNumberWithSuffix: '102-18W',
+        formattedFiledDate: '05/01/18',
+        fullStateNamePrimary: undefined,
+        fullStateNameSecondary: 'AX',
+      },
+    ]);
+  });
+
+  it('does not attempt to format results but only returns results that should be currently shown based on form.currentPage for a practitioner search', () => {
+    pageSizeOverride = 1;
+    let result = runCompute(advancedSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab: 'practitioner',
+        searchResults: [{ barNumber: '1111' }, { barNumber: '2222' }],
+      },
+    });
+    expect(result.showLoadMore).toEqual(true);
+    expect(result.formattedSearchResults.length).toEqual(1);
+    expect(result.formattedSearchResults).toMatchObject([
+      { barNumber: '1111' },
+    ]);
+
+    pageSizeOverride = 3;
+    result = runCompute(advancedSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab: 'practitioner',
+        searchResults: [{ barNumber: '1111' }, { barNumber: '2222' }],
+      },
+    });
+    expect(result.showLoadMore).toEqual(false);
+    expect(result.formattedSearchResults.length).toEqual(2);
+    expect(result.formattedSearchResults).toMatchObject([
+      { barNumber: '1111' },
+      { barNumber: '2222' },
     ]);
   });
 });
