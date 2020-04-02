@@ -35,6 +35,7 @@ export const fakeFile = (() => {
     type: 'application/pdf',
   });
   myFile.name = 'fakeFile.pdf';
+  myFile.size = myFile.length;
   return myFile;
 })();
 
@@ -502,6 +503,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     },
     document: {},
     localStorage: {
+      getItem: () => null,
       removeItem: () => null,
       setItem: () => null,
     },
