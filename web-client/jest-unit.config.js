@@ -17,6 +17,7 @@ module.exports = {
     File: function () {},
     FileReader: function () {},
     atob: x => x,
+    presenter: { providers: { applicationContext: {} } },
     window: { document: {} },
   },
   //this is to ignore imported html files
