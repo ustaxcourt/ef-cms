@@ -11,6 +11,7 @@ const { User } = require('../../entities/User');
 
 const mockUser = {
   admissionsDate: '2019-03-01T21:40:46.415Z',
+  admissionsStatus: 'Active',
   birthYear: 2019,
   employer: 'Private',
   isAdmitted: true,
