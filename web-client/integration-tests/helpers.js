@@ -521,7 +521,7 @@ export const wait = time => {
 
 export const refreshElasticsearchIndex = async () => {
   await axios.post('http://localhost:9200/efcms/_refresh');
-  return await wait(3000);
+  return await wait(1500);
 };
 
 export const base64ToUInt8Array = b64 => {

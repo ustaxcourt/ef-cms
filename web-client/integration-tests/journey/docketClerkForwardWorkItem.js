@@ -67,7 +67,7 @@ export const docketClerkForwardWorkItem = test => {
       assigneeName: 'Test ADC',
     });
     const messages = orderBy(workItem.messages, 'createdAt', 'desc');
-    expect(messages.length).toEqual(3);
+    expect(messages.length).toEqual(2);
     expect(messages[0]).toMatchObject({
       from: 'Test Docketclerk',
       fromUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',

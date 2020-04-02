@@ -5,19 +5,18 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 export const docketClerkViewsMessages = test => {
   return it('Docket clerk views messages', async () => {
-    await test.runSequence('gotoMessagesSequence', {
+    await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
-      queue: 'my',
+      queue: 'section',
       workQueueIsInternal: false,
     });
+
     expect(test.getState('currentPage')).toEqual('Messages');
     expect(test.getState('workQueue').length).toBeGreaterThan(0);
     expect(test.getState('users').length).toBeGreaterThan(0);
     const workItem = test
       .getState('workQueue')
-      .find(
-        workItem => workItem.workItemId === test.selectedWorkItem.workItemId,
-      );
+      .find(workItem => workItem.workItemId === test.workItemId);
     expect(workItem).toBeDefined();
     test.documentId = workItem.document.documentId;
     test.workItemId = workItem.workItemId;
