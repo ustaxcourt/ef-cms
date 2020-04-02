@@ -115,6 +115,10 @@ jobs:
             -Dproject.settings="web-client/sonar-project.properties" \
             -Dsonar.login="${UI_SONAR_TOKEN}" \
             -Dsonar.host.url="https://sonarcloud.io"
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project
 
   build-client-integration:
     docker:
@@ -140,9 +144,31 @@ jobs:
             TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" | circleci tests split --split-by=timings)
             TESTFILES_GLOB=$(echo $TESTFILES | sed 's/ /\"\ --collectCoverageFrom \"/g')
             echo "GLOB IS $TESTFILES_GLOB"
-            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest ${TESTFILES_GLOB} --runInBand --config web-client/jest-integration.config.js --coverageDirectory="./coverage-integration-${CIRCLE_NODE_INDEX}" ${TESTFILES}
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest ${TESTFILES_GLOB} --runInBand --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --config web-client/jest-integration.config.js ${TESTFILES}
       - store_artifacts:
           path: /tmp/web-client
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project
+
+  build-client-coverage:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Combine Coverage
+          command: |
+            istanbul-combine -d coverage -r lcov \
+            ./web-client/coverage-integration-0/coverage-final.json
+            ./web-client/coverage-integration-0/coverage-final.json
+            ./web-client/coverage-integration-1/coverage-final.json
+            ./web-client/coverage-unit/coverage-final.json
 
   e2e-pa11y:
     docker:
@@ -533,14 +559,17 @@ workflows:
       - e2e-cypress:
           requires:
             - bundle
-      - pre-deploy:
+      - build-client-coverage:
           requires:
             - build-shared
             - build-api
             - build-client-unit
-            - build-client-integration
+            - build-client-coverage
             - e2e-pa11y
             - e2e-cypress
+      - pre-deploy:
+          requires:
+            - build-client-coverage
       - deploy-api-west:
           requires:
             - pre-deploy
@@ -610,14 +639,21 @@ workflows:
             branches:
               ignore:
                 - develop
-      - pre-deploy:
+      - build-client-coverage:
           requires:
             - build-shared
             - build-api
             - build-client-unit
-            - build-client-integration
+            - build-client-coverage
             - e2e-pa11y
             - e2e-cypress
+          filters:
+            branches:
+              ignore:
+                - develop
+      - pre-deploy:
+          requires:
+            - build-client-coverage
           filters:
             branches:
               only:
