@@ -1,4 +1,7 @@
 const client = require('../../dynamodbClientService');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { getWorkItemById } = require('./getWorkItemById');
 
 describe('getWorkItemById', () => {
@@ -11,11 +14,6 @@ describe('getWorkItemById', () => {
   });
 
   it('makes a post request to the expected endpoint with the expected data', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-    };
     const result = await getWorkItemById({
       applicationContext,
     });
