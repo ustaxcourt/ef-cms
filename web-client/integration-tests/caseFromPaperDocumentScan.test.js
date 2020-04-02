@@ -1,10 +1,4 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
-import { MAX_FILE_SIZE_MB } from '../../shared/src/persistence/s3/getUploadPolicy';
-import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
-import { User } from '../../shared/src/business/entities/User';
-import { fakeData, fakeFile, loginAs, setupTest } from './helpers';
-import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
+import { fakeFile, loginAs, setupTest } from './helpers';
 import petitionsClerkAddsScannedBatch from './journey/petitionsClerkAddsScannedBatch';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
 import petitionsClerkCreatesScannedPDF from './journey/petitionsClerkCreatesScannedPDF';
