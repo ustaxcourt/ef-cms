@@ -144,7 +144,7 @@ jobs:
             TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" | circleci tests split --split-by=timings)
             TESTFILES_GLOB=$(echo $TESTFILES | sed 's/ /\"\ --collectCoverageFrom \"/g')
             echo "GLOB IS $TESTFILES_GLOB"
-            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest ${TESTFILES_GLOB} --runInBand --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --config web-client/jest-integration.config.js ${TESTFILES}
+            CI=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest ${TESTFILES_GLOB} --runInBand --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --config web-client/jest-integration.config.js ${TESTFILES}
       - store_artifacts:
           path: /tmp/web-client
       - persist_to_workspace:

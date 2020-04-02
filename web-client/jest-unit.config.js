@@ -15,7 +15,7 @@ module.exports = {
   },
   globals: {
     File: function () {},
-    FileReader: () => {},
+    FileReader: function () {},
     atob: x => x,
     window: { document: {} },
   },
