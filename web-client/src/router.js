@@ -682,10 +682,10 @@ const router = {
 
     registerRoute(
       '/practitioner-detail/*',
-      ifHasAccess(practitionerUserId => {
+      ifHasAccess(barNumber => {
         setPageTitle('Practitioner Detail');
         return app.getSequence('gotoPractitionerDetailSequence')({
-          practitionerUserId,
+          barNumber,
         });
       }),
     );
