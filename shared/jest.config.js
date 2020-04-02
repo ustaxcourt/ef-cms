@@ -16,5 +16,6 @@ module.exports = {
     '!src/test/**/*.js',
     '!src/**/*_.js',
   ],
+  testTimeout: 30000,
   verbose: false,
 };
