@@ -152,7 +152,7 @@ jobs:
       - run:
           name: Combine Coverage
           command: |
-            istanbul-combine -d coverage -r lcov \
+            npx istanbul-combine -d coverage -r lcov \
             ./web-client/coverage-integration-0/coverage-final.json \
             ./web-client/coverage-integration-1/coverage-final.json \
             ./web-client/coverage-unit/coverage-final.json
