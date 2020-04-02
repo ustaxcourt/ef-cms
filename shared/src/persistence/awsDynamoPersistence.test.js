@@ -1,14 +1,11 @@
 jest.mock('../../../shared/src/persistence/dynamodbClientService');
 const client = require('../../../shared/src/persistence/dynamodbClientService');
+const {
+  applicationContext,
+} = require('../business/test/createTestApplicationContext');
 const { getRecordViaMapping } = require('./dynamo/helpers/getRecordViaMapping');
 const { incrementCounter } = require('./dynamo/helpers/incrementCounter');
 const { stripWorkItems } = require('./dynamo/helpers/stripWorkItems');
-
-const applicationContext = {
-  environment: {
-    stage: 'local',
-  },
-};
 
 describe('awsDynamoPersistence', function () {
   beforeEach(() => {

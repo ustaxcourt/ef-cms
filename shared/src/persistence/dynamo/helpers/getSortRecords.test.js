@@ -1,4 +1,7 @@
 const client = require('../../dynamodbClientService');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { getSortRecords } = require('./getSortRecords');
 
 describe('getSortRecords', () => {
@@ -9,12 +12,7 @@ describe('getSortRecords', () => {
   });
 
   it('invokes the persistence layer with the expected pk and sk', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getCurrentUser: getCurrentUserStub,
-    };
+    applicationContext.getCurrentUser.mockImplementation(getCurrentUserStub);
     await getSortRecords({
       afterDate: 'now',
       applicationContext,

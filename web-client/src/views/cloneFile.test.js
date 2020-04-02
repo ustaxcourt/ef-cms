@@ -9,8 +9,6 @@ describe('cloneFile', () => {
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
     const FileReader = jest.spyOn(global, 'FileReader');
     FileReader.mockImplementation(() => ({
       addEventListener: addEventListenerSpy,

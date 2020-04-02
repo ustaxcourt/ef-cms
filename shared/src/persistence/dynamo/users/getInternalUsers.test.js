@@ -1,16 +1,14 @@
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { getInternalUsers } = require('./getInternalUsers');
 
-const applicationContext = {
-  environment: {
-    stage: 'local',
-  },
-  filterCaseMetadata: ({ cases }) => cases,
-  isAuthorizedForWorkItems: () => true,
-};
-
 describe('getInternalUsers', () => {
-  beforeEach(() => {
+  beforeAll(() => {
+    applicationContext.filterCaseMetadata.mockImplementation(
+      ({ cases }) => cases,
+    );
     client.query = jest.fn().mockReturnValue([
       {
         pk: 'section|petitions',
