@@ -17,6 +17,12 @@ module.exports = {
       statements: 50,
     },
   },
+  globals: {
+    File: function () {},
+    FileReader: () => {},
+    atob: x => x,
+    window: { document: {} },
+  },
   testEnvironment: 'node',
   //this is to ignore imported html files
   transform: {
