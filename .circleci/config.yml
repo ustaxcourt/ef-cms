@@ -129,7 +129,7 @@ jobs:
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: 2xlarge
-    parallelism: 3
+    parallelism: 2
     steps:
       - attach_workspace:
           at: ~/
@@ -165,9 +165,8 @@ jobs:
           name: Combine Coverage
           command: |
             istanbul-combine -d coverage -r lcov \
-            ./web-client/coverage-integration-0/coverage-final.json
-            ./web-client/coverage-integration-0/coverage-final.json
-            ./web-client/coverage-integration-1/coverage-final.json
+            ./web-client/coverage-integration-0/coverage-final.json \
+            ./web-client/coverage-integration-1/coverage-final.json \
             ./web-client/coverage-unit/coverage-final.json
 
   e2e-pa11y:
