@@ -15,19 +15,9 @@ const testPdfDocBytes = () => {
 const testPdfDoc = testPdfDocBytes();
 
 describe('appendPaperServiceAddressPageToPdf', () => {
-  const generatePaperServiceAddressPagePdfMock = jest
-    .fn()
-    .mockResolvedValue(testPdfDoc);
-
   applicationContext
     .getUseCaseHelpers()
-    .generatePaperServiceAddressPagePdf.mockImplementation(
-      generatePaperServiceAddressPagePdfMock,
-    );
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+    .generatePaperServiceAddressPagePdf.mockResolvedValue(testPdfDoc);
 
   it('should generate address page for each paper service party and combine into single pdf', async () => {
     const newPdfDoc = await PDFDocument.create();

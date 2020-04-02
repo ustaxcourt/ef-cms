@@ -35,8 +35,6 @@ describe('send websocket notification to browser', () => {
     .mockReturnValue({ promise: () => Promise.resolve('ok') });
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
     applicationContext.getNotificationClient
       .mockImplementationOnce(() => {
         throw notificationError;

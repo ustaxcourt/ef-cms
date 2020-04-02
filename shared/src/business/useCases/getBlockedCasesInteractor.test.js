@@ -3,35 +3,27 @@ const { getBlockedCasesInteractor } = require('./getBlockedCasesInteractor');
 const { User } = require('../entities/User');
 
 describe('getBlockedCasesInteractor', () => {
-  let searchSpy = jest.fn();
-
   it('calls search function with correct params and returns records', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     });
 
-    applicationContext.getSearchClient.mockReturnValue({
-      search: searchSpy,
-    });
-
-    searchSpy.mockImplementation(() => {
-      return {
-        hits: {
-          hits: [
-            {
-              _source: {
-                caseId: { S: '1' },
-              },
+    applicationContext.getSearchClient().search.mockReturnValue({
+      hits: {
+        hits: [
+          {
+            _source: {
+              caseId: { S: '1' },
             },
-            {
-              _source: {
-                caseId: { S: '2' },
-              },
+          },
+          {
+            _source: {
+              caseId: { S: '2' },
             },
-          ],
-        },
-      };
+          },
+        ],
+      },
     });
 
     const results = await getBlockedCasesInteractor({

@@ -8,31 +8,30 @@ const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
-const MOCK_TRIAL_SESSION = {
-  caseOrder: [
-    { caseId: MOCK_CASE.caseId },
-    { caseId: 'fa1179bd-04f5-4934-a716-964d8d7babc6' },
-  ],
-  maxCases: 100,
-  sessionType: 'Regular',
-  startDate: '3000-03-01T00:00:00.000Z',
-  term: 'Fall',
-  termYear: '3000',
-  trialLocation: 'Birmingham, Alabama',
-  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-};
-
-let user;
-let mockTrialSession;
-
 describe('remove case from trial session', () => {
+  const MOCK_TRIAL_SESSION = {
+    caseOrder: [
+      { caseId: MOCK_CASE.caseId },
+      { caseId: 'fa1179bd-04f5-4934-a716-964d8d7babc6' },
+    ],
+    maxCases: 100,
+    sessionType: 'Regular',
+    startDate: '3000-03-01T00:00:00.000Z',
+    term: 'Fall',
+    termYear: '3000',
+    trialLocation: 'Birmingham, Alabama',
+    trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+  };
+
+  let user;
+  let mockTrialSession;
+
   beforeEach(() => {
     user = {
       role: User.ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     };
 
-    applicationContext.environment.stage = 'local';
     applicationContext.getCurrentUser.mockImplementation(() => user);
 
     applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({

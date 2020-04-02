@@ -6,18 +6,11 @@ const {
 } = require('../../test/createTestApplicationContext');
 
 describe('casePublicSearchInteractor', () => {
-  let searchSpy;
-
-  beforeEach(() => {
-    searchSpy = jest.fn();
-    applicationContext.getSearchClient.mockReturnValue({
-      search: searchSpy,
-    });
+  beforeAll(() => {
+    applicationContext.getSearchClient().search.mockReturnValue({});
   });
 
   it('returns empty array if no search params are passed in', async () => {
-    searchSpy.mockReturnValue({});
-
     const results = await casePublicSearchInteractor({
       applicationContext,
     });
@@ -26,7 +19,7 @@ describe('casePublicSearchInteractor', () => {
   });
 
   it('calls search function with correct params and returns records for an exact match result', async () => {
-    searchSpy.mockReturnValue({
+    applicationContext.getSearchClient().search.mockReturnValue({
       hits: {
         hits: [
           {
@@ -66,8 +59,11 @@ describe('casePublicSearchInteractor', () => {
       petitionerName: 'test person',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must,
+    ).toEqual([
       {
         bool: {
           should: [
@@ -163,43 +159,45 @@ describe('casePublicSearchInteractor', () => {
       },
     ];
 
-    searchSpy.mockImplementation(async args => {
-      //expected args for an exact matches search
-      if (args.body.query.bool.must[0].bool.should[0].bool) {
-        return {
-          hits: {},
-        };
-      } else {
-        return {
-          hits: {
-            hits: [
-              {
-                _source: {
-                  caseCaption: { S: 'Test Case Caption One' },
-                  caseId: { S: '8675309b-28d0-43ec-bafb-654e83405412' },
-                  contactPrimary: { O: {} },
-                  contactSecondary: { O: {} },
-                  docketNumber: { S: '123-19' },
-                  docketNumberSuffix: { S: 'S' },
-                  receivedAt: { S: '2019-03-01T21:40:46.415Z' },
+    applicationContext
+      .getSearchClient()
+      .search.mockImplementation(async args => {
+        //expected args for an exact matches search
+        if (args.body.query.bool.must[0].bool.should[0].bool) {
+          return {
+            hits: {},
+          };
+        } else {
+          return {
+            hits: {
+              hits: [
+                {
+                  _source: {
+                    caseCaption: { S: 'Test Case Caption One' },
+                    caseId: { S: '8675309b-28d0-43ec-bafb-654e83405412' },
+                    contactPrimary: { O: {} },
+                    contactSecondary: { O: {} },
+                    docketNumber: { S: '123-19' },
+                    docketNumberSuffix: { S: 'S' },
+                    receivedAt: { S: '2019-03-01T21:40:46.415Z' },
+                  },
                 },
-              },
-              {
-                _source: {
-                  caseCaption: { S: 'Test Case Caption Two' },
-                  caseId: { S: '8675309b-28d0-43ec-bafb-654e83405413' },
-                  contactPrimary: { O: {} },
-                  contactSecondary: { O: {} },
-                  docketNumber: { S: '456-19' },
-                  docketNumberSuffix: { S: 'S' },
-                  receivedAt: { S: '2019-03-01T21:40:46.415Z' },
+                {
+                  _source: {
+                    caseCaption: { S: 'Test Case Caption Two' },
+                    caseId: { S: '8675309b-28d0-43ec-bafb-654e83405413' },
+                    contactPrimary: { O: {} },
+                    contactSecondary: { O: {} },
+                    docketNumber: { S: '456-19' },
+                    docketNumberSuffix: { S: 'S' },
+                    receivedAt: { S: '2019-03-01T21:40:46.415Z' },
+                  },
                 },
-              },
-            ],
-          },
-        };
-      }
-    });
+              ],
+            },
+          };
+        }
+      });
 
     const results = await casePublicSearchInteractor({
       applicationContext,
@@ -210,8 +208,11 @@ describe('casePublicSearchInteractor', () => {
       yearFiledMin: '2018',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must,
+    ).toEqual([
       {
         bool: {
           should: [
@@ -247,7 +248,10 @@ describe('casePublicSearchInteractor', () => {
       },
       ...commonExpectedQuery,
     ]);
-    expect(searchSpy.mock.calls[1][0].body.query.bool.must).toEqual([
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[1][0].body.query
+        .bool.must,
+    ).toEqual([
       {
         bool: {
           should: [
@@ -298,8 +302,11 @@ describe('casePublicSearchInteractor', () => {
       yearFiledMax: '2018',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must[1].range).toEqual({
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must[1].range,
+    ).toEqual({
       'receivedAt.S': {
         format: 'yyyy',
         gte: `${CaseSearch.CASE_SEARCH_MIN_YEAR}||/y`,
@@ -317,8 +324,11 @@ describe('casePublicSearchInteractor', () => {
       yearFiledMin: '2016',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must[1].range).toEqual({
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must[1].range,
+    ).toEqual({
       'receivedAt.S': {
         format: 'yyyy',
         gte: '2016||/y',

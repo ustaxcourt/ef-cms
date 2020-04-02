@@ -6,10 +6,11 @@ const {
   updateDocumentProcessingStatus,
 } = require('./updateDocumentProcessingStatus');
 
-applicationContext.filterCaseMetadata.mockImplementation(({ cases }) => cases);
-
 describe('updateDocumentProcessingStatus', () => {
-  beforeEach(() => {
+  beforeAll(() => {
+    applicationContext.filterCaseMetadata.mockImplementation(
+      ({ cases }) => cases,
+    );
     client.update = jest.fn().mockReturnValue({
       caseId: '123',
       pk: '123',

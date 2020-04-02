@@ -6,11 +6,11 @@ const {
 const { zipDocuments } = require('./zipDocuments');
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 
-const testAsset = name => {
-  return fs.readFileSync(testAssetsPath + name);
-};
-
 describe('zipDocuments', () => {
+  const testAsset = name => {
+    return fs.readFileSync(testAssetsPath + name);
+  };
+
   const s3ClientMock = {
     getObject: () => {
       return {

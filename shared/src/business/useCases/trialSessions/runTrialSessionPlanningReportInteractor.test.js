@@ -13,7 +13,6 @@ describe('run trial session planning report', () => {
   let user;
 
   beforeEach(() => {
-    applicationContext.environment.stage = 'local';
     applicationContext.getCurrentUser.mockImplementation(() => user);
   });
 

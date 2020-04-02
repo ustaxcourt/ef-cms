@@ -7,22 +7,13 @@ const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
 describe('getDownloadPolicyUrlInteractor', () => {
-  let verifyCaseForUserMock;
-  let getCaseByCaseIdMock;
-
   beforeEach(() => {
-    verifyCaseForUserMock = jest.fn();
-    getCaseByCaseIdMock = jest.fn().mockReturnValue(MOCK_CASE);
-
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockImplementation(getCaseByCaseIdMock);
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue('localhost');
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockImplementation(verifyCaseForUserMock);
   });
 
   it('throw unauthorized error on invalid role', async () => {
@@ -45,7 +36,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
       role: User.ROLES.petitioner,
       userId: 'petitioner',
     });
-    verifyCaseForUserMock.mockReturnValue(false);
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
 
     await expect(
       getDownloadPolicyUrlInteractor({
@@ -61,8 +54,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
       role: User.ROLES.petitioner,
       userId: 'petitioner',
     });
-
-    verifyCaseForUserMock.mockReturnValue(true);
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
 
     const duplicatedMockCase = cloneDeep(MOCK_CASE);
     duplicatedMockCase.documents.push({
@@ -77,7 +71,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
       userId: 'petitioner',
       workItems: [],
     });
-    getCaseByCaseIdMock.mockReturnValue(duplicatedMockCase);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(duplicatedMockCase);
 
     await expect(
       getDownloadPolicyUrlInteractor({
@@ -93,7 +89,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
       role: User.ROLES.petitioner,
       userId: 'petitioner',
     });
-    verifyCaseForUserMock.mockReturnValue(true);
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
 
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
@@ -108,8 +106,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
       role: User.ROLES.petitioner,
       userId: 'petitioner',
     });
-
-    verifyCaseForUserMock.mockReturnValue(true);
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
 
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
@@ -124,8 +123,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
       role: User.ROLES.petitioner,
       userId: 'petitioner',
     });
-
-    verifyCaseForUserMock.mockReturnValue(true);
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
 
     await expect(
       getDownloadPolicyUrlInteractor({
@@ -141,8 +141,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
       role: User.ROLES.petitionsClerk,
       userId: 'petitionsClerk',
     });
-
-    verifyCaseForUserMock.mockReturnValue(false);
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
 
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
@@ -163,7 +164,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
         documentType: 'Petition',
       },
     ];
-    getCaseByCaseIdMock.mockReturnValue(MOCK_CASE);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
 
     await expect(
       getDownloadPolicyUrlInteractor({
@@ -186,7 +189,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
         servedAt: '2019-03-01T21:40:46.415Z',
       },
     ];
-    getCaseByCaseIdMock.mockReturnValue(MOCK_CASE);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
 
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,

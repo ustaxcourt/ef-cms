@@ -8,29 +8,26 @@ const { omit } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
-const MOCK_TRIAL_SESSION = {
-  maxCases: 100,
-  sessionType: 'Regular',
-  startDate: '3000-03-01T00:00:00.000Z',
-  term: 'Fall',
-  termYear: '3000',
-  trialLocation: 'Birmingham, Alabama',
-  trialSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
-};
-
-let user;
-
 describe('Get trial session details', () => {
+  const MOCK_TRIAL_SESSION = {
+    maxCases: 100,
+    sessionType: 'Regular',
+    startDate: '3000-03-01T00:00:00.000Z',
+    term: 'Fall',
+    termYear: '3000',
+    trialLocation: 'Birmingham, Alabama',
+    trialSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
+  };
+
   beforeEach(() => {
-    applicationContext.environment.stage = 'local';
-    applicationContext.getCurrentUser.mockImplementation(() => user);
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
+    });
   });
 
   it('throws error if user is unauthorized', async () => {
-    user = {
-      role: 'unauthorizedRole',
-      userId: 'unauthorizedUser',
-    };
+    applicationContext.getCurrentUser.mockReturnValue({});
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({});
@@ -44,10 +41,6 @@ describe('Get trial session details', () => {
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    user = {
-      role: User.ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    };
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue(
@@ -65,10 +58,6 @@ describe('Get trial session details', () => {
   });
 
   it('throws a not found error if persistence does not return any results', async () => {
-    user = {
-      role: User.ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    };
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue(null);
@@ -84,10 +73,6 @@ describe('Get trial session details', () => {
   });
 
   it('correctly returns data from persistence', async () => {
-    user = {
-      role: User.ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    };
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue(MOCK_TRIAL_SESSION);

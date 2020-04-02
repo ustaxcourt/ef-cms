@@ -6,7 +6,7 @@ const {
 } = require('./getElasticsearchReindexRecords');
 
 describe('getElasticsearchReindexRecords', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => ({
         Items: [{ caseId: '123', pk: 'case-123', sk: 'abc' }],
