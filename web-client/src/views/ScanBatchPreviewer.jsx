@@ -362,7 +362,7 @@ export const ScanBatchPreviewer = connect(
     const renderUpload = () => {
       return (
         <div className="document-detail-one-third">
-          <FormGroup errorText={validationErrors.stinFile}>
+          <FormGroup>
             <label
               className="usa-label ustc-upload-stin with-hint"
               htmlFor={`${documentType}-file`}

@@ -5,6 +5,12 @@ import { setDocumentDetailPageTitleAction } from './setDocumentDetailPageTitleAc
 
 describe('setDocumentDetailPageTitleAction', () => {
   beforeAll(() => {
+    global.window = {
+      document: {
+        title: '',
+      },
+    };
+
     presenter.providers.applicationContext = applicationContext;
   });
 
@@ -23,7 +29,7 @@ describe('setDocumentDetailPageTitleAction', () => {
         documentId: '321-cba-321-cba',
       },
     });
-    expect(window.document.title).toEqual(
+    expect(global.window.document.title).toEqual(
       'Docket 123-19 | Answer | U.S. Tax Court',
     );
   });
@@ -43,7 +49,7 @@ describe('setDocumentDetailPageTitleAction', () => {
         documentId: 'no',
       },
     });
-    expect(window.document.title).toEqual(
+    expect(global.window.document.title).toEqual(
       'Docket 123-19 | Document details | U.S. Tax Court',
     );
   });
@@ -57,7 +63,7 @@ describe('setDocumentDetailPageTitleAction', () => {
         documentId: '321-cba-321-cba',
       },
     });
-    expect(window.document.title).toEqual(
+    expect(global.window.document.title).toEqual(
       'Docket 123-19 | Document details | U.S. Tax Court',
     );
   });
