@@ -210,7 +210,7 @@
     "test:pa11y:smoketests": ". ./set-tokens.sh && pa11y-ci --config web-client/pa11y-ci-smoketests.config.js",
     "test:pdf": "npm run build:assets && node ./shared/pdf-tests/pdfReportTester.js",
     "test:public:integration": "npm run test:_client -- \"web-client/integration-tests-public/.*\\.test\\.js\"",
-    "test:shared": "npm run build:assets && jest --maxWorkers=100% --config shared/jest.config.js \"shared/.*\\.test\\.js\"",
+    "test:shared": "npm run build:assets && jest --maxWorkers=90% --config shared/jest.config.js \"shared/.*\\.test\\.js\"",
     "test:watch": "jest --watch .*test\\.js$",
     "test": "echo 'Best run with start:api:ci and start:client:ci' && sleep 3 && CI=true npx run-s test:shared test:api test:client test:pa11y cypress lint",
     "watch": "nodemon -e yml --exec sls offline start"
