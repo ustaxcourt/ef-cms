@@ -1,18 +1,16 @@
 const client = require('../../dynamodbClientService');
 const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+const {
   updateDocumentProcessingStatus,
 } = require('./updateDocumentProcessingStatus');
 
-const applicationContext = {
-  environment: {
-    stage: 'local',
-  },
-  filterCaseMetadata: ({ cases }) => cases,
-  isAuthorizedForWorkItems: () => true,
-};
-
 describe('updateDocumentProcessingStatus', () => {
-  beforeEach(() => {
+  beforeAll(() => {
+    applicationContext.filterCaseMetadata.mockImplementation(
+      ({ cases }) => cases,
+    );
     client.update = jest.fn().mockReturnValue({
       caseId: '123',
       pk: '123',

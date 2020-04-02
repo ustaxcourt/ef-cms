@@ -7,16 +7,10 @@ const {
 const { User } = require('../../entities/User');
 
 describe('getPractitionersByNameInteractor', () => {
-  let searchSpy = jest.fn();
-
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitionsClerk,
       userId: 'petitionsClerk',
-    });
-
-    applicationContext.getSearchClient.mockReturnValue({
-      search: searchSpy,
     });
   });
 
@@ -42,32 +36,27 @@ describe('getPractitionersByNameInteractor', () => {
   });
 
   it('calls search function with correct params and returns records for a name search', async () => {
-    searchSpy = jest.fn(async () => {
-      return {
-        hits: {
-          hits: [
-            {
-              _source: {
-                barNumber: { S: 'PT1234' },
-                name: { S: 'Test Practitioner1' },
-                role: { S: 'irsPractitioner' },
-                userId: { S: '8190d648-e643-4964-988e-141e4e0db861' },
-              },
+    applicationContext.getSearchClient().search.mockReturnValue({
+      hits: {
+        hits: [
+          {
+            _source: {
+              barNumber: { S: 'PT1234' },
+              name: { S: 'Test Practitioner1' },
+              role: { S: 'irsPractitioner' },
+              userId: { S: '8190d648-e643-4964-988e-141e4e0db861' },
             },
-            {
-              _source: {
-                barNumber: { S: 'PT5432' },
-                name: { S: 'Test Practitioner2' },
-                role: { S: 'privatePractitioner' },
-                userId: { S: '12d5bb3a-e867-4066-bda5-2f178a76191f' },
-              },
+          },
+          {
+            _source: {
+              barNumber: { S: 'PT5432' },
+              name: { S: 'Test Practitioner2' },
+              role: { S: 'privatePractitioner' },
+              userId: { S: '12d5bb3a-e867-4066-bda5-2f178a76191f' },
             },
-          ],
-        },
-      };
-    });
-    applicationContext.getSearchClient.mockReturnValue({
-      search: searchSpy,
+          },
+        ],
+      },
     });
 
     const results = await getPractitionersByNameInteractor({
@@ -75,8 +64,11 @@ describe('getPractitionersByNameInteractor', () => {
       name: 'Test Practitioner',
     });
 
-    expect(searchSpy).toBeCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+    expect(applicationContext.getSearchClient().search).toBeCalled();
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must,
+    ).toEqual([
       {
         bool: {
           must: [
@@ -144,15 +136,10 @@ describe('getPractitionersByNameInteractor', () => {
   });
 
   it('calls search function with correct params and returns empty array if no records are found for a name search', async () => {
-    searchSpy = jest.fn(async () => {
-      return {
-        hits: {
-          hits: [],
-        },
-      };
-    });
-    applicationContext.getSearchClient.mockReturnValue({
-      search: searchSpy,
+    applicationContext.getSearchClient().search.mockReturnValue({
+      hits: {
+        hits: [],
+      },
     });
 
     const results = await getPractitionersByNameInteractor({
@@ -160,8 +147,11 @@ describe('getPractitionersByNameInteractor', () => {
       name: 'Test Practitioner',
     });
 
-    expect(searchSpy).toBeCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+    expect(applicationContext.getSearchClient().search).toBeCalled();
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must,
+    ).toEqual([
       {
         bool: {
           must: [
