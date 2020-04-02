@@ -563,7 +563,7 @@ workflows:
             - build-shared
             - build-api
             - build-client-unit
-            - build-client-coverage
+            - build-client-integration
             - e2e-pa11y
             - e2e-cypress
       - pre-deploy:
@@ -643,7 +643,7 @@ workflows:
             - build-shared
             - build-api
             - build-client-unit
-            - build-client-coverage
+            - build-client-integration
             - e2e-pa11y
             - e2e-cypress
           filters:
