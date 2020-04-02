@@ -1,11 +1,14 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
-
+import { presenter } from '../presenter-mock';
+import { setFocusedWorkItemSequence } from '../sequences/setFocusedWorkItemSequence';
 describe('setFocusedWorkItemSequence', () => {
   let test;
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
+    presenter.sequences = {
+      setFocusedWorkItemSequence,
+    };
     test = CerebralTest(presenter);
   });
   it('should set the workItem to isFocused true when called', async () => {

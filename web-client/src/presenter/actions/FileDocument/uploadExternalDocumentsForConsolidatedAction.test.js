@@ -1,13 +1,14 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { uploadExternalDocumentsForConsolidatedAction } from './uploadExternalDocumentsForConsolidatedAction';
 
-const { uploadExternalDocumentsInteractor } = applicationContext.getUseCases();
-const { addCoversheetInteractor } = applicationContext.getUseCases();
-
 describe('uploadExternalDocumentsForConsolidatedAction', () => {
+  const {
+    uploadExternalDocumentsInteractor,
+  } = applicationContext.getUseCases();
+  const { addCoversheetInteractor } = applicationContext.getUseCases();
   presenter.providers.applicationContext = applicationContext;
 
   beforeAll(() => {

@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setAddEditSessionNoteModalStateAction } from './setAddEditSessionNoteModalStateAction';
 
@@ -21,6 +21,7 @@ describe('setAddEditSessionNoteModalStateAction', () => {
         },
       },
     });
+
     expect(result.state.modal.notes).toEqual('i got some notes');
   });
 });
