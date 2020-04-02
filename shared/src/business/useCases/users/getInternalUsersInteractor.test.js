@@ -1,13 +1,18 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { getInternalUsersInteractor } = require('./getInternalUsersInteractor');
 const { User } = require('../../entities/User');
 
 describe('Get internal users', () => {
-  const applicationContext = {
-    getCurrentUser: () => {
-      return { role: User.ROLES.docketClerk, userId: 'docketclerk' };
-    },
-    getPersistenceGateway: () => ({
-      getInternalUsers: () => [
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.docketClerk,
+      userId: 'docketclerk',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getInternalUsers.mockReturnValue([
         {
           userId: 'abc',
         },
@@ -17,9 +22,8 @@ describe('Get internal users', () => {
         {
           userId: 'gg',
         },
-      ],
-    }),
-  };
+      ]);
+  });
 
   it('returns the same users that were returned from mocked persistence', async () => {
     const users = await getInternalUsersInteractor({ applicationContext });
@@ -37,15 +41,14 @@ describe('Get internal users', () => {
   });
 
   it('throws unauthorized error for unauthorized users', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
+    });
     let error;
     try {
       await getInternalUsersInteractor({
-        applicationContext: {
-          getCurrentUser: () => ({
-            role: User.ROLES.petitioner,
-            userId: 'petitioner',
-          }),
-        },
+        applicationContext,
       });
     } catch (err) {
       error = err;

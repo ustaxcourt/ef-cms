@@ -1,25 +1,16 @@
 const { casePublicSearchInteractor } = require('./casePublicSearchInteractor');
 import { CaseSearch } from '../../entities/cases/CaseSearch';
 import { formatNow } from '../../utilities/DateHandler';
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 
 describe('casePublicSearchInteractor', () => {
-  let searchSpy;
-
-  const applicationContext = {
-    environment: { stage: 'local' },
-    getSearchClient: () => ({
-      search: searchSpy,
-    }),
-    getUtilities: () => ({
-      formatNow,
-    }),
-  };
+  beforeAll(() => {
+    applicationContext.getSearchClient().search.mockReturnValue({});
+  });
 
   it('returns empty array if no search params are passed in', async () => {
-    searchSpy = jest.fn(async () => {
-      return {};
-    });
-
     const results = await casePublicSearchInteractor({
       applicationContext,
     });
@@ -28,41 +19,39 @@ describe('casePublicSearchInteractor', () => {
   });
 
   it('calls search function with correct params and returns records for an exact match result', async () => {
-    searchSpy = jest.fn(async () => {
-      return {
-        hits: {
-          hits: [
-            {
-              _source: {
-                caseCaption: { S: 'Test Case Caption One' },
-                caseId: { S: '8675309b-28d0-43ec-bafb-654e83405412' },
-                docketNumber: { S: '123-19' },
-                docketNumberSuffix: { S: 'S' },
-                receivedAt: { S: '2019-03-01T21:40:46.415Z' },
-              },
+    applicationContext.getSearchClient().search.mockReturnValue({
+      hits: {
+        hits: [
+          {
+            _source: {
+              caseCaption: { S: 'Test Case Caption One' },
+              caseId: { S: '8675309b-28d0-43ec-bafb-654e83405412' },
+              docketNumber: { S: '123-19' },
+              docketNumberSuffix: { S: 'S' },
+              receivedAt: { S: '2019-03-01T21:40:46.415Z' },
             },
-            {
-              _source: {
-                caseCaption: { S: 'Test Case Caption Two' },
-                caseId: { S: '8675309b-28d0-43ec-bafb-654e83405413' },
-                docketNumber: { S: '456-19' },
-                docketNumberSuffix: { S: 'S' },
-                receivedAt: { S: '2019-03-01T21:40:46.415Z' },
-              },
+          },
+          {
+            _source: {
+              caseCaption: { S: 'Test Case Caption Two' },
+              caseId: { S: '8675309b-28d0-43ec-bafb-654e83405413' },
+              docketNumber: { S: '456-19' },
+              docketNumberSuffix: { S: 'S' },
+              receivedAt: { S: '2019-03-01T21:40:46.415Z' },
             },
-            {
-              _source: {
-                caseCaption: { S: 'Sealed Case Caption Three' },
-                caseId: { S: '8675309b-28d0-43ec-bafb-654e83405416' },
-                docketNumber: { S: '222-20' },
-                docketNumberSuffix: { S: 'S' },
-                receivedAt: { S: '2020-03-01T21:40:46.415Z' },
-                sealedDate: { S: '2020-03-01T21:40:46.415Z' },
-              },
+          },
+          {
+            _source: {
+              caseCaption: { S: 'Sealed Case Caption Three' },
+              caseId: { S: '8675309b-28d0-43ec-bafb-654e83405416' },
+              docketNumber: { S: '222-20' },
+              docketNumberSuffix: { S: 'S' },
+              receivedAt: { S: '2020-03-01T21:40:46.415Z' },
+              sealedDate: { S: '2020-03-01T21:40:46.415Z' },
             },
-          ],
-        },
-      };
+          },
+        ],
+      },
     });
 
     const results = await casePublicSearchInteractor({
@@ -70,8 +59,11 @@ describe('casePublicSearchInteractor', () => {
       petitionerName: 'test person',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must,
+    ).toEqual([
       {
         bool: {
           should: [
@@ -167,43 +159,45 @@ describe('casePublicSearchInteractor', () => {
       },
     ];
 
-    searchSpy = jest.fn(async args => {
-      //expected args for an exact matches search
-      if (args.body.query.bool.must[0].bool.should[0].bool) {
-        return {
-          hits: {},
-        };
-      } else {
-        return {
-          hits: {
-            hits: [
-              {
-                _source: {
-                  caseCaption: { S: 'Test Case Caption One' },
-                  caseId: { S: '8675309b-28d0-43ec-bafb-654e83405412' },
-                  contactPrimary: { O: {} },
-                  contactSecondary: { O: {} },
-                  docketNumber: { S: '123-19' },
-                  docketNumberSuffix: { S: 'S' },
-                  receivedAt: { S: '2019-03-01T21:40:46.415Z' },
+    applicationContext
+      .getSearchClient()
+      .search.mockImplementation(async args => {
+        //expected args for an exact matches search
+        if (args.body.query.bool.must[0].bool.should[0].bool) {
+          return {
+            hits: {},
+          };
+        } else {
+          return {
+            hits: {
+              hits: [
+                {
+                  _source: {
+                    caseCaption: { S: 'Test Case Caption One' },
+                    caseId: { S: '8675309b-28d0-43ec-bafb-654e83405412' },
+                    contactPrimary: { O: {} },
+                    contactSecondary: { O: {} },
+                    docketNumber: { S: '123-19' },
+                    docketNumberSuffix: { S: 'S' },
+                    receivedAt: { S: '2019-03-01T21:40:46.415Z' },
+                  },
                 },
-              },
-              {
-                _source: {
-                  caseCaption: { S: 'Test Case Caption Two' },
-                  caseId: { S: '8675309b-28d0-43ec-bafb-654e83405413' },
-                  contactPrimary: { O: {} },
-                  contactSecondary: { O: {} },
-                  docketNumber: { S: '456-19' },
-                  docketNumberSuffix: { S: 'S' },
-                  receivedAt: { S: '2019-03-01T21:40:46.415Z' },
+                {
+                  _source: {
+                    caseCaption: { S: 'Test Case Caption Two' },
+                    caseId: { S: '8675309b-28d0-43ec-bafb-654e83405413' },
+                    contactPrimary: { O: {} },
+                    contactSecondary: { O: {} },
+                    docketNumber: { S: '456-19' },
+                    docketNumberSuffix: { S: 'S' },
+                    receivedAt: { S: '2019-03-01T21:40:46.415Z' },
+                  },
                 },
-              },
-            ],
-          },
-        };
-      }
-    });
+              ],
+            },
+          };
+        }
+      });
 
     const results = await casePublicSearchInteractor({
       applicationContext,
@@ -214,8 +208,11 @@ describe('casePublicSearchInteractor', () => {
       yearFiledMin: '2018',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must,
+    ).toEqual([
       {
         bool: {
           should: [
@@ -251,7 +248,10 @@ describe('casePublicSearchInteractor', () => {
       },
       ...commonExpectedQuery,
     ]);
-    expect(searchSpy.mock.calls[1][0].body.query.bool.must).toEqual([
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[1][0].body.query
+        .bool.must,
+    ).toEqual([
       {
         bool: {
           should: [
@@ -296,16 +296,17 @@ describe('casePublicSearchInteractor', () => {
   });
 
   it('uses a default minimum year when providing only a maximum year', async () => {
-    searchSpy = jest.fn();
-
     await casePublicSearchInteractor({
       applicationContext,
       petitionerName: 'test person',
       yearFiledMax: '2018',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must[1].range).toEqual({
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must[1].range,
+    ).toEqual({
       'receivedAt.S': {
         format: 'yyyy',
         gte: `${CaseSearch.CASE_SEARCH_MIN_YEAR}||/y`,
@@ -315,7 +316,6 @@ describe('casePublicSearchInteractor', () => {
   });
 
   it('uses a default maximum year when providing only a minimum year', async () => {
-    searchSpy = jest.fn();
     const currentYear = formatNow('YYYY');
 
     await casePublicSearchInteractor({
@@ -324,8 +324,11 @@ describe('casePublicSearchInteractor', () => {
       yearFiledMin: '2016',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must[1].range).toEqual({
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must[1].range,
+    ).toEqual({
       'receivedAt.S': {
         format: 'yyyy',
         gte: '2016||/y',

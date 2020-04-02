@@ -1,16 +1,15 @@
-import { Case } from '../entities/cases/Case';
 import {
   generateHtmlForFilingReceipt,
   generatePrintableFilingReceiptInteractor,
 } from './generatePrintableFilingReceiptInteractor';
-import { getFormattedCaseDetail } from '../utilities/getFormattedCaseDetail';
+const { applicationContext } = require('../test/createTestApplicationContext');
+
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 let generatePdfFromHtmlInteractorMock;
 let generatePrintableFilingReceiptTemplateMock;
 let saveDocumentFromLambdaMock;
 let getDownloadPolicyUrlMock;
-let applicationContext;
 let caseDetail;
 
 describe('generatePrintableFilingReceiptInteractor', () => {
@@ -54,49 +53,34 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       privatePractitioners: [],
     };
 
-    applicationContext = {
-      getCaseCaptionNames: Case.getCaseCaptionNames,
-      getConstants: () => ({
-        ORDER_TYPES_MAP: [
-          {
-            documentType: 'Decision',
-          },
-        ],
-      }),
-      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      getEntityConstructors: () => ({
-        Case,
-      }),
-      getPersistenceGateway: () => ({
-        getCaseByCaseId: () => ({
-          ...caseDetail,
-        }),
-        getDownloadPolicyUrl: getDownloadPolicyUrlMock,
-        saveDocumentFromLambda: saveDocumentFromLambdaMock,
-      }),
-      getTemplateGenerators: () => {
-        return {
-          generatePrintableFilingReceiptTemplate: async ({ content }) => {
-            generatePrintableFilingReceiptTemplateMock();
-            return `<!DOCTYPE html>${content.documentsFiledContent}</html>`;
-          },
-        };
-      },
-      getUniqueId: () => 'unique-id-1',
-      getUseCases: () => {
-        return {
-          generatePdfFromHtmlInteractor: ({ contentHtml }) => {
-            generatePdfFromHtmlInteractorMock();
-            return contentHtml;
-          },
-        };
-      },
-      getUtilities: () => ({
-        formatDateString: date => date,
-        getFormattedCaseDetail,
-        setServiceIndicatorsForCase: () => null,
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue(
+      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(caseDetail);
+    applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockImplementation(getDownloadPolicyUrlMock);
+    applicationContext
+      .getPersistenceGateway()
+      .saveDocumentFromLambda.mockImplementation(saveDocumentFromLambdaMock);
+
+    applicationContext
+      .getTemplateGenerators()
+      .generatePrintableFilingReceiptTemplate.mockImplementation(
+        ({ content }) => {
+          generatePrintableFilingReceiptTemplateMock();
+          return `<!DOCTYPE html>${content.documentsFiledContent}</html>`;
+        },
+      );
+
+    applicationContext
+      .getUseCases()
+      .generatePdfFromHtmlInteractor.mockImplementation(({ contentHtml }) => {
+        generatePdfFromHtmlInteractorMock();
+        return contentHtml;
+      });
   });
 
   it('Calls generatePrintableFilingReceiptTemplate and generatePdfFromHtmlInteractor to build a PDF, then saveDocumentFromLambda and getDownloadPolicyUrl to store the PDF and return the link to it', async () => {
