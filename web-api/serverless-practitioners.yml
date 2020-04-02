@@ -162,7 +162,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getPractitionerByBarNumber:
-    handler: web-api/${self:provider.dir}/practitionersHandlers.getPractitionersByNameLambda
+    handler: web-api/${self:provider.dir}/practitionersHandlers.getPractitionerByBarNumberLambda
     events:
       - http:
           path: /{barNumber}
