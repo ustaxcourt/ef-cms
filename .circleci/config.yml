@@ -68,6 +68,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
+    resource_class: 2xlarge
     steps:
       - attach_workspace:
           at: ~/
