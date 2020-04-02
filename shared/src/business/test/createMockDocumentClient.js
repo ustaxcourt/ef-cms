@@ -40,7 +40,7 @@ const mockDynamoUsers = {
 
 const createMockDocumentClient = () => {
   return {
-    batchGet: ({ RequestItems }) => {
+    batchGet: jest.fn().mockImplementation(({ RequestItems }) => {
       const { Keys } = RequestItems['efcms-local'];
       const arr = [];
       for (let { pk, sk } of Keys) {
@@ -53,7 +53,7 @@ const createMockDocumentClient = () => {
           },
         }),
       };
-    },
+    }),
     batchWrite: jest.fn().mockImplementation(() => {
       return {
         promise: async () => null,
@@ -163,6 +163,11 @@ const createMockDocumentClient = () => {
           };
         },
       ),
+    updateConsistent: jest.fn().mockImplementation(() => {
+      return {
+        promise: async () => null,
+      };
+    }),
   };
 };
 

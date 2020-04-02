@@ -141,6 +141,7 @@
     "build:api:documents": "npm run build:_api -- web-api/src/documentsHandlers.js",
     "build:api:migrate": "npm run build:_api -- web-api/src/migrateHandlers.js",
     "build:api:notifications": "npm run build:_api -- web-api/src/notificationHandlers.js",
+    "build:api:practitioners": "npm run build:_api -- web-api/src/practitionersHandlers.js",
     "build:api:public": "npm run build:_api -- web-api/src/publicApiHandlers.js",
     "build:api:reports": "npm run build:_api -- web-api/src/reportsHandlers.js",
     "build:api:sections": "npm run build:_api -- web-api/src/sectionsHandlers.js",

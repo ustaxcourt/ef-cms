@@ -1,12 +1,11 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setSupportingDocumentScenarioAction } from './setSupportingDocumentScenarioAction';
 
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-const applicationContext = applicationContextForClient;
-presenter.providers.applicationContext = applicationContext;
-
 describe('setSupportingDocumentScenarioAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   it('should set scenario and document title for supporting document', async () => {
     const result = await runAction(setSupportingDocumentScenarioAction, {
       modules: { presenter },

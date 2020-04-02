@@ -1,10 +1,13 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   fileCourtIssuedOrderInteractor,
 } = require('./fileCourtIssuedOrderInteractor');
 const { User } = require('../../entities/User');
 
 describe('fileCourtIssuedOrderInteractor', () => {
-  let caseRecord = {
+  const caseRecord = {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     caseType: 'Deficiency',
@@ -47,38 +50,31 @@ describe('fileCourtIssuedOrderInteractor', () => {
     userId: 'petitioner',
   };
 
-  let applicationContext;
-  let currentUser;
-  let getCaseByCaseIdSpy = jest.fn().mockResolvedValue(caseRecord);
-  let updateCaseSpy = jest.fn();
-
   beforeEach(() => {
-    jest.clearAllMocks();
-
-    currentUser = new User({
-      name: 'Olivia Jade',
-      role: User.ROLES.petitionsClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => currentUser,
-      getPersistenceGateway: () => ({
-        getCaseByCaseId: getCaseByCaseIdSpy,
-        getUserById: async () => currentUser,
-        updateCase: updateCaseSpy,
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'Olivia Jade',
+        role: User.ROLES.petitionsClerk,
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
-      getUniqueId: () => 'unique-id-1',
-    };
+    );
+
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue(
+      new User({
+        name: 'Olivia Jade',
+        role: User.ROLES.petitionsClerk,
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
-    currentUser = {
-      name: 'Olivia Jade',
-      role: User.ROLES.privatePractitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
+    applicationContext.getCurrentUser.mockReturnValue({});
+
     await expect(
       fileCourtIssuedOrderInteractor({
         applicationContext,
@@ -101,9 +97,13 @@ describe('fileCourtIssuedOrderInteractor', () => {
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
-    expect(getCaseByCaseIdSpy).toHaveBeenCalled();
+
     expect(
-      updateCaseSpy.mock.calls[0][0].caseToUpdate.documents.length,
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents.length,
     ).toEqual(4);
   });
 
@@ -119,12 +119,17 @@ describe('fileCourtIssuedOrderInteractor', () => {
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
-    expect(getCaseByCaseIdSpy).toHaveBeenCalled();
+
     expect(
-      updateCaseSpy.mock.calls[0][0].caseToUpdate.documents.length,
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents.length,
     ).toEqual(4);
     expect(
-      updateCaseSpy.mock.calls[0][0].caseToUpdate.documents[3],
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents[3],
     ).toMatchObject({ freeText: 'Order to do anything' });
   });
 
@@ -140,13 +145,16 @@ describe('fileCourtIssuedOrderInteractor', () => {
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
-    expect(getCaseByCaseIdSpy).toHaveBeenCalled();
+
     expect(
-      updateCaseSpy.mock.calls[0][0].caseToUpdate.documents.length,
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents.length,
     ).toEqual(4);
-
-    const result = updateCaseSpy.mock.calls[0][0].caseToUpdate.documents[3];
-
+    const result = applicationContext.getPersistenceGateway().updateCase.mock
+      .calls[0][0].caseToUpdate.documents[3];
     expect(result).toMatchObject({ freeText: 'Notice to be nice' });
     expect(result.signedAt).toBeTruthy();
   });

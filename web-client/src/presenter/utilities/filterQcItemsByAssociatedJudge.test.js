@@ -1,6 +1,6 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { User } from '../../../../shared/src/business/entities/User';
-import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { filterQcItemsByAssociatedJudge } from './filterQcItemsByAssociatedJudge';
 
 let currentUser;
@@ -8,8 +8,6 @@ let itemsToFilter;
 let judgeUser;
 
 describe('filterQcItemsByAssociatedJudge', () => {
-  const applicationContext = applicationContextForClient;
-
   beforeAll(() => {
     applicationContext.getCurrentUser.mockImplementation(() => currentUser);
     applicationContext.getConstants.mockReturnValue({
