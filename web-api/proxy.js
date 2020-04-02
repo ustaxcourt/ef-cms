@@ -2,7 +2,6 @@
 const express = require('express');
 const isReachable = require('is-reachable');
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const fs = require('fs');
 
 // https://github.com/chimurai/http-proxy-middleware#options
 
@@ -46,10 +45,6 @@ const proxyMain = async () => {
     console.log('Router:', router);
   }
 
-  const uuid = require('uuid/v4');
-  const requests = {};
-  const times = {};
-
   const proxyObj = createProxyMiddleware('**', {
     headers: {
       Connection: 'keep-alive',
@@ -58,39 +53,7 @@ const proxyMain = async () => {
     pathRewrite,
     router,
     target: `http://${PROXY_HOST}:1234`,
-    onProxyReq: (proxyReq, req, res) => {
-      const requestId = uuid();
-      req.requestId = requestId;
-
-      requests[requestId] = {
-        requestedAt: new Date(),
-        endpoint: req.headers.referer,
-      };
-    },
-    onProxyRes: (proxyReq, req, res) => {
-      const request = requests[res.req.requestId];
-      const endpoint = request.endpoint;
-
-      if (!times[endpoint]) {
-        times[endpoint] = {
-          requests: 0,
-          totalTime: 0,
-          average: 0,
-        };
-      }
-      times[endpoint].requests++;
-      times[endpoint].totalTime += new Date() - request.requestedAt;
-      times[endpoint].average =
-        times[endpoint].totalTime / times[endpoint].requests;
-    },
   });
-
-  setInterval(() => {
-    fs.writeFileSync(
-      'proxy-request-times.json',
-      JSON.stringify(times, null, 2),
-    );
-  }, 5000);
 
   const app = express();
   app.use('/', proxyObj);
