@@ -1,11 +1,11 @@
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { resetContactsAction } from './resetContactsAction';
 import { runAction } from 'cerebral/test';
 
 describe('resetContactsAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

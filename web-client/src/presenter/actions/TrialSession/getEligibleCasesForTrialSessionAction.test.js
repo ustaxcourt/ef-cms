@@ -1,11 +1,11 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getEligibleCasesForTrialSessionAction } from './getEligibleCasesForTrialSessionAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 
 import { runAction } from 'cerebral/test';
 
 describe('getEligibleCasesForTrialSessionAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext
       .getUseCases()

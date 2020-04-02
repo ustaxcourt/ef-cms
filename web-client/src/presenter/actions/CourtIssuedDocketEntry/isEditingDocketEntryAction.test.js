@@ -1,12 +1,12 @@
 import { isEditingDocketEntryAction } from './isEditingDocketEntryAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('isEditingDocketEntryAction', () => {
   let noStub;
   let yesStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     noStub = jest.fn();
     yesStub = jest.fn();
 

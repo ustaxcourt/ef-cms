@@ -1,10 +1,10 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setupTrialYearsAction } from './setupTrialYearsAction';
 
 describe('setupTrialYearsAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext.getUtilities().formatNow.mockReturnValue('2000');
     presenter.providers.applicationContext = applicationContext;
   });

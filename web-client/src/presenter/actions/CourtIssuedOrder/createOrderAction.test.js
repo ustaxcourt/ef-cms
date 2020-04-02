@@ -1,10 +1,10 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createOrderAction } from './createOrderAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('createOrderAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     window.DOMParser = class {
       constructor() {}
     };

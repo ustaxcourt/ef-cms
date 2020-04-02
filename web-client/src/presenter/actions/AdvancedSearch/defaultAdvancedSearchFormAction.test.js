@@ -1,7 +1,7 @@
 import { ContactFactory } from '../../../../../shared/src/business/entities/contacts/ContactFactory';
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { defaultAdvancedSearchFormAction } from './defaultAdvancedSearchFormAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 presenter.providers.applicationContext = applicationContextForClient;

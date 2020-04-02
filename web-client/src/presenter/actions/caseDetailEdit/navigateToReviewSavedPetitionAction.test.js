@@ -1,11 +1,11 @@
 import { navigateToReviewSavedPetitionAction } from './navigateToReviewSavedPetitionAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('navigateToReviewSavedPetitionAction', () => {
   let routeStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     routeStub = jest.fn();
 
     presenter.providers.router = {

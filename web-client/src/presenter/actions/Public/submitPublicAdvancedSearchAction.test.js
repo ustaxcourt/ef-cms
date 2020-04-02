@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 import { submitPublicAdvancedSearchAction } from './submitPublicAdvancedSearchAction';
 
 describe('submitPublicAdvancedSearchAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContextForClient;
   });
 

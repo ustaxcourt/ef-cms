@@ -1,13 +1,13 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { isLoggedInAction } from './isLoggedInAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('isLoggedInAction', () => {
   const isLoggedInStub = jest.fn();
   const unauthorizedStub = jest.fn();
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
     presenter.providers.path = {

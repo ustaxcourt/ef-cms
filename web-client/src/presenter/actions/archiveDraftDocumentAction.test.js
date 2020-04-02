@@ -1,11 +1,13 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { archiveDraftDocumentAction } from './archiveDraftDocumentAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('archiveDraftDocumentAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('archives a drafted document successfully', async () => {
     const result = await runAction(archiveDraftDocumentAction, {
       modules: {

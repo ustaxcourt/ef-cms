@@ -1,13 +1,13 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCachedScannerSourceAction } from './getCachedScannerSourceAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getCachedScannerSourceAction', () => {
   let mockSelectSource;
   let mockSuccess;
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
     global.File = class {

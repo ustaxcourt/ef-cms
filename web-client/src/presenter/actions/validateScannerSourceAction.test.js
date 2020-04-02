@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateScannerSourceAction } from './validateScannerSourceAction';
 
@@ -7,7 +7,7 @@ const invalidMock = jest.fn();
 const validMock = jest.fn();
 
 describe('validateScannerSourceAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       invalid: invalidMock,

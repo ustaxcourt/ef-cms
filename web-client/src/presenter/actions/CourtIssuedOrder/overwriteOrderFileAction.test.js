@@ -1,15 +1,13 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { overwriteOrderFileAction } from './overwriteOrderFileAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('overwriteOrderFileAction', () => {
   let errorStub;
   let successStub;
 
-  beforeEach(() => {
-    jest.restoreAllMocks();
-
+  beforeAll(() => {
     errorStub = jest.fn();
     successStub = jest.fn();
 

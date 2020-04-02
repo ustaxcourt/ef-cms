@@ -1,6 +1,6 @@
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateUpdateCaseModalAction } from './validateUpdateCaseModalAction';
 
@@ -10,7 +10,7 @@ describe('validateUpdateCaseModalAction', () => {
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

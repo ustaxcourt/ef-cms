@@ -1,3 +1,4 @@
+import 'react-calendar/dist/Calendar.css';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import Calendar from 'react-calendar';

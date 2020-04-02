@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext.js';
 import { createTrialSessionAction } from './createTrialSessionAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 const MOCK_TRIAL = {
@@ -16,15 +16,15 @@ const successStub = jest.fn();
 const errorStub = jest.fn();
 
 describe('createTrialSessionAction', () => {
-  beforeEach(() => {
-    jest.restoreAllMocks();
-
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
     };
+  });
 
+  beforeEach(() => {
     applicationContext
       .getUseCases()
       .createTrialSessionInteractor.mockResolvedValue(MOCK_TRIAL);

@@ -1,4 +1,4 @@
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { refreshExternalDocumentTitleFromEventCodeAction } from './refreshExternalDocumentTitleFromEventCodeAction';
 import { runAction } from 'cerebral/test';
 

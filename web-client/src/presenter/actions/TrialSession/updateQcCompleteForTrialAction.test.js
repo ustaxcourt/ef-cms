@@ -1,6 +1,6 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateQcCompleteForTrialAction } from './updateQcCompleteForTrialAction';
 
@@ -8,7 +8,7 @@ const successMock = jest.fn();
 const errorMock = jest.fn();
 
 describe('updateQcCompleteForTrialAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorMock,

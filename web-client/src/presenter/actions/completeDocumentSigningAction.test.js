@@ -1,28 +1,28 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { completeDocumentSigningAction } from './completeDocumentSigningAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
-const {
-  completeWorkItemInteractor,
-  generateSignedDocumentInteractor,
-  getInboxMessagesForUserInteractor,
-  signDocumentInteractor,
-} = applicationContext.getUseCases();
-const { uploadDocumentFromClient } = applicationContext.getPersistenceGateway();
-
-applicationContext.getCurrentUser.mockReturnValue({
-  userId: '1',
-});
-
 describe('completeDocumentSigningAction', () => {
-  global.window.pdfjsObj = {
-    getData: jest.fn().mockResolvedValue(true),
-  };
+  const {
+    completeWorkItemInteractor,
+    generateSignedDocumentInteractor,
+    getInboxMessagesForUserInteractor,
+    signDocumentInteractor,
+  } = applicationContext.getUseCases();
+  const {
+    uploadDocumentFromClient,
+  } = applicationContext.getPersistenceGateway();
 
-  beforeEach(() => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      userId: '1',
+    });
+    global.window.pdfjsObj = {
+      getData: jest.fn().mockResolvedValue(true),
+    };
     global.File = jest.fn();
 
     uploadDocumentFromClient.mockReturnValue(
@@ -36,10 +36,6 @@ describe('completeDocumentSigningAction', () => {
         workItemId: '1',
       },
     ]);
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 
   it('should sign a document via executing various use cases', async () => {

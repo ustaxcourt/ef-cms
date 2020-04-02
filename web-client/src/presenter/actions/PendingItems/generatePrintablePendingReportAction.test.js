@@ -1,12 +1,12 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintablePendingReportAction } from './generatePrintablePendingReportAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('generatePrintablePendingReportAction', () => {
   let resultUrl;
 
-  beforeEach(() => {
+  beforeAll(() => {
     resultUrl = 'https://example.com';
     presenter.providers.applicationContext = applicationContextForClient;
 

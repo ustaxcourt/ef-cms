@@ -1,5 +1,5 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { uploadExternalDocumentsAction } from './uploadExternalDocumentsAction';
 
@@ -12,7 +12,7 @@ const { uploadExternalDocumentsInteractor } = applicationContext.getUseCases();
 const { addCoversheetInteractor } = applicationContext.getUseCases();
 
 describe('uploadExternalDocumentsAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.path = {
       error: () => null,
       success: () => null,

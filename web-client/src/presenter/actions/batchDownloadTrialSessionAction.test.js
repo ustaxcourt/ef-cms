@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { batchDownloadTrialSessionAction } from './batchDownloadTrialSessionAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 presenter.providers.applicationContext = applicationContext;
@@ -17,10 +17,6 @@ presenter.providers.path = {
 };
 
 describe('batchDownloadTrialSessionAction', () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   it('initializes the batch download for a trial session', async () => {
     await runAction(batchDownloadTrialSessionAction, {
       modules: {

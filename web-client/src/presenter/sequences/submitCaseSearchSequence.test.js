@@ -1,7 +1,8 @@
 import { CerebralTest } from 'cerebral/test';
 import { NotFoundError } from '../errors/NotFoundError';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
+import { submitCaseSearchSequence } from '../sequences/submitCaseSearchSequence';
 
 describe('submitCaseSearchSequence', () => {
   let test;
@@ -13,10 +14,13 @@ describe('submitCaseSearchSequence', () => {
       route: async route => routeStub(route),
     };
     presenter.providers.applicationContext = applicationContext;
+    presenter.sequences = {
+      submitCaseSearchSequence,
+    };
     test = CerebralTest(presenter);
     test.setState('searchTerm', '111-19');
   });
-  beforeEach(() => {
+  beforeAll(() => {
     routeStub = jest.fn().mockReturnValue({});
   });
 

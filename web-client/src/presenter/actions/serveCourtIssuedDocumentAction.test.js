@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { serveCourtIssuedDocumentAction } from './serveCourtIssuedDocumentAction';
 
@@ -8,7 +8,7 @@ describe('serveCourtIssuedDocumentAction', () => {
   global.Blob = () => {};
   let mockCreateObjectUrl;
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
     mockCreateObjectUrl = jest.fn();

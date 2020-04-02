@@ -1,23 +1,20 @@
 import { assignPetitionToAuthenticatedUserAction } from './assignPetitionToAuthenticatedUserAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-const applicationContext = applicationContextForClient;
-presenter.providers.applicationContext = applicationContext;
-const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
-
-applicationContext.getCurrentUser.mockReturnValue({
-  name: 'Some One',
-  userId: 'abc',
-});
-const { assignWorkItemsInteractor } = applicationContext.getUseCases();
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('assignPetitionToAuthenticatedUserAction', () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
+  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
+  const { assignWorkItemsInteractor } = applicationContext.getUseCases();
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
 
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Some One',
+      userId: 'abc',
+    });
+  });
   it('should not assign the workitem if the qc work item is not present', async () => {
     await runAction(assignPetitionToAuthenticatedUserAction, {
       modules: {

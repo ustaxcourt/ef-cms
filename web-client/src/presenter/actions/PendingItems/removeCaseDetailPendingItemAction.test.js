@@ -1,12 +1,12 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { removeCaseDetailPendingItemAction } from './removeCaseDetailPendingItemAction';
 import { runAction } from 'cerebral/test';
 
 describe('removeCaseDetailPendingItemAction', () => {
   const applicationContext = applicationContextForClient;
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 

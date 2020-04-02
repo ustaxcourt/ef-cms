@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { isUserAssociatedWithTrialSessionAction } from './isUserAssociatedWithTrialSessionAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('isUserAssociatedWithTrialSessionAction', () => {
@@ -9,7 +9,7 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
 
   const { USER_ROLES } = applicationContext.getConstants();
 
-  beforeEach(() => {
+  beforeAll(() => {
     pathYesStub = jest.fn();
     pathNoStub = jest.fn();
 

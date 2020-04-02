@@ -1,12 +1,12 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPdfFileAction } from './getPdfFileAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getPdfFileAction', () => {
   let createObjectURLStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     global.File = jest.fn();
     createObjectURLStub = jest.fn();
 
