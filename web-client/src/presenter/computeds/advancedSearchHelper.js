@@ -48,7 +48,7 @@ export const advancedSearchHelper = (get, applicationContext) => {
   const advancedSearchTab = get(state.advancedSearchTab);
   const currentPage = get(state.advancedSearchForm.currentPage);
   let result = {
-    showPractitionerSearch: permissions.MANAGE_ATTORNEY_USERS,
+    showPractitionerSearch: permissions.MANAGE_PRACTITIONER_USERS,
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
   };
   if (searchResults) {
