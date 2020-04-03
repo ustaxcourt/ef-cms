@@ -1,6 +1,6 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
-export default test => {
+export const irsSuperuserAdvancedSearchForCaseDocketNumber = test => {
   return it('irsSuperuser performs an advanced search for a case', async () => {
     await refreshElasticsearchIndex();
 

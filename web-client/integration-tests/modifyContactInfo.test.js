@@ -1,16 +1,16 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { docketClerkViewsNoticeOfChangeOfAddress } from './journey/docketClerkViewsNoticeOfChangeOfAddress';
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import petitionerEditsCasePrimaryContactAddress from './journey/petitionerEditsCasePrimaryContactAddress';
-import petitionerEditsCasePrimaryContactAddressAndPhone from './journey/petitionerEditsCasePrimaryContactAddressAndPhone';
-import petitionerEditsCasePrimaryContactPhone from './journey/petitionerEditsCasePrimaryContactPhone';
-import petitionerEditsCaseSecondaryContactAddress from './journey/petitionerEditsCaseSecondaryContactAddress';
-import petitionerEditsCaseSecondaryContactAddressAndPhone from './journey/petitionerEditsCaseSecondaryContactAddressAndPhone';
-import petitionerEditsCaseSecondaryContactPhone from './journey/petitionerEditsCaseSecondaryContactPhone';
-import petitionerNavigatesToEditPrimaryContact from './journey/petitionerNavigatesToEditPrimaryContact';
-import petitionerNavigatesToEditSecondaryContact from './journey/petitionerNavigatesToEditSecondaryContact';
-import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
+import { petitionerEditsCasePrimaryContactAddress } from './journey/petitionerEditsCasePrimaryContactAddress';
+import { petitionerEditsCasePrimaryContactAddressAndPhone } from './journey/petitionerEditsCasePrimaryContactAddressAndPhone';
+import { petitionerEditsCasePrimaryContactPhone } from './journey/petitionerEditsCasePrimaryContactPhone';
+import { petitionerEditsCaseSecondaryContactAddress } from './journey/petitionerEditsCaseSecondaryContactAddress';
+import { petitionerEditsCaseSecondaryContactAddressAndPhone } from './journey/petitionerEditsCaseSecondaryContactAddressAndPhone';
+import { petitionerEditsCaseSecondaryContactPhone } from './journey/petitionerEditsCaseSecondaryContactPhone';
+import { petitionerNavigatesToEditPrimaryContact } from './journey/petitionerNavigatesToEditPrimaryContact';
+import { petitionerNavigatesToEditSecondaryContact } from './journey/petitionerNavigatesToEditSecondaryContact';
+import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
+import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 const test = setupTest();
 
