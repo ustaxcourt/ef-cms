@@ -21,7 +21,7 @@ export const OrderSearch = connect({}, function OrderSearch(
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-12">
               <h4>Enter Keyword or Phrase</h4>
-              <FormGroup errorText="something bad happened ;(">
+              <FormGroup>
                 <label className="usa-label" htmlFor="order-search">
                   Search for...
                 </label>
@@ -30,13 +30,6 @@ export const OrderSearch = connect({}, function OrderSearch(
                   id="order-search"
                   name="petitionerName"
                   type="text"
-                  // onChange={e => {
-                  //   updateAdvancedSearchFormValueSequence({
-                  //     formType: 'caseSearchByName',
-                  //     key: e.target.name,
-                  //     value: e.target.value,
-                  //   });
-                  // }}
                 />
               </FormGroup>
             </div>
