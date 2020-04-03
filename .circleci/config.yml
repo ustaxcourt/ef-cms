@@ -130,9 +130,7 @@ jobs:
             SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /tmp/web-client/server-output.txt &
             ./wait-until.sh http://localhost:3000/api/swagger
             TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" | circleci tests split --split-by=timings)
-            TESTFILES_GLOB=$(echo $TESTFILES | sed 's/ /\"\ --collectCoverageFrom \"/g')
-            echo "GLOB IS $TESTFILES_GLOB"
-            CI=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest ${TESTFILES_GLOB} --runInBand --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --config web-client/jest-integration.config.js ${TESTFILES}
+            CI=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest ${TESTFILES_GLOB} --runInBand --config web-client/jest-integration.config.js ${TESTFILES}
       - store_artifacts:
           path: /tmp/web-client
       - persist_to_workspace:
@@ -152,7 +150,7 @@ jobs:
       - run:
           name: Combine Coverage
           command: |
-            npx istanbul-combine -d coverage -r lcov \
+            npx istanbul-combine -d combined-coverage -p both -r lcov \
             ./web-client/coverage-integration-0/coverage-final.json \
             ./web-client/coverage-integration-1/coverage-final.json \
             ./web-client/coverage-unit/coverage-final.json
@@ -168,6 +166,8 @@ jobs:
             -Dproject.settings="web-client/sonar-project.properties" \
             -Dsonar.login="${UI_SONAR_TOKEN}" \
             -Dsonar.host.url="https://sonarcloud.io"
+      - store_artifacts:
+          path: ~/project/combined-coverage
 
   e2e-pa11y:
     docker:
