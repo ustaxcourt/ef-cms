@@ -296,28 +296,6 @@
     "email": "irsPractitioner"
   },
   {
-    "role": "privatePractitioner",
-    "serviceIndicator": "Electronic",
-    "barNumber": "PT1234",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test Private Practitioner",
-    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "section": "privatePractitioner",
-    "representingPrimary": true,
-    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "privatePractitioner"
-  },
-  {
     "documentType": "Ownership Disclosure Statement",
     "filingDate": "2019-08-16T17:29:10.133Z",
     "workItems": [],

@@ -4,10 +4,9 @@ import React from 'react';
 
 export const PractitionerDetail = connect(
   {
-    practitionerDetail: state.practitionerDetail,
+    practitionerDetail: state.practitionerDetailHelper,
   },
   function PractitionerDetail({ practitionerDetail }) {
-    console.log(practitionerDetail);
     return (
       <React.Fragment>
         <div className="big-blue-header">
@@ -214,7 +213,7 @@ export const PractitionerDetail = connect(
                           >
                             Admission date
                           </label>
-                          {practitionerDetail.admissionsDate}
+                          {practitionerDetail.admissionsDateFormatted}
                         </div>
                       </div>
                     </div>
