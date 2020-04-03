@@ -26,9 +26,8 @@ import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStep
 import { chooseStartCaseWizardStepSequence } from './sequences/chooseStartCaseWizardStepSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
+import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearAlertSequence } from './sequences/clearAlertSequence';
-import { clearCaseSearchByNameFormSequence } from './sequences/clearCaseSearchByNameFormSequence';
-import { clearDocketNumberSearchFormSequence } from './sequences/clearDocketNumberSearchFormSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
@@ -410,9 +409,8 @@ export const presenter = {
     chooseStartCaseWizardStepSequence,
     chooseWizardStepSequence,
     chooseWorkQueueSequence,
+    clearAdvancedSearchFormSequence,
     clearAlertSequence,
-    clearCaseSearchByNameFormSequence,
-    clearDocketNumberSearchFormSequence,
     clearExistingDocumentSequence,
     clearModalFormSequence,
     clearModalSequence,
