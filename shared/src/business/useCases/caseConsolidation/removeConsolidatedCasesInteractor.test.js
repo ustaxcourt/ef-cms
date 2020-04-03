@@ -1,12 +1,12 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   removeConsolidatedCasesInteractor,
 } = require('./removeConsolidatedCasesInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
-let getCaseByCaseIdMock;
-let updateCaseMock;
-let applicationContext;
 let mockCases;
 
 describe('removeConsolidatedCasesInteractor', () => {
@@ -49,29 +49,30 @@ describe('removeConsolidatedCasesInteractor', () => {
       },
     };
 
-    getCaseByCaseIdMock = jest.fn(({ caseId }) => mockCases[caseId]);
-    updateCaseMock = jest.fn(({ caseToUpdate }) => caseToUpdate);
-
-    applicationContext = {
-      getCurrentUser: () => ({
-        role: User.ROLES.docketClerk,
-      }),
-      getPersistenceGateway: () => ({
-        getCaseByCaseId: getCaseByCaseIdMock,
-        getCasesByLeadCaseId: ({ leadCaseId }) => {
-          return Object.keys(mockCases)
-            .map(key => mockCases[key])
-            .filter(mockCase => mockCase.leadCaseId === leadCaseId);
-        },
-        updateCase: updateCaseMock,
-      }),
-      getUniqueId: () => 'unique-id-1',
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.docketClerk,
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockImplementation(({ caseId }) => {
+        return mockCases[caseId];
+      });
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByLeadCaseId.mockImplementation(({ leadCaseId }) => {
+        return Object.keys(mockCases)
+          .map(key => mockCases[key])
+          .filter(mockCase => mockCase.leadCaseId === leadCaseId);
+      });
+    applicationContext
+      .getPersistenceGateway()
+      .updateCase.mockImplementation(({ caseToUpdate }) => caseToUpdate);
   });
 
   it('Should return an Unauthorized error if the user does not have the CONSOLIDATE_CASES permission', async () => {
     let error;
-    applicationContext.getCurrentUser = () => ({
+
+    applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitioner,
     });
 
@@ -95,7 +96,9 @@ describe('removeConsolidatedCasesInteractor', () => {
       caseIdsToRemove: ['aaaba5a9-b37b-479d-9201-067ec6e33aaa'], // docketNumber: '101-19'
     });
 
-    expect(getCaseByCaseIdMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toHaveBeenCalled();
   });
 
   it('Should return a Not Found error if the case to update can not be found', async () => {
@@ -141,8 +144,13 @@ describe('removeConsolidatedCasesInteractor', () => {
       caseIdsToRemove: ['cccca5a9-b37b-479d-9201-067ec6e33ccc'], // docketNumber: '102-19'
     });
 
-    expect(updateCaseMock).toHaveBeenCalledTimes(1);
-    expect(updateCaseMock.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({
       caseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc',
       leadCaseId: undefined,
     });
@@ -155,18 +163,29 @@ describe('removeConsolidatedCasesInteractor', () => {
       caseIdsToRemove: ['aaaba5a9-b37b-479d-9201-067ec6e33aaa'], // docketNumber: '101-19'
     });
 
-    expect(updateCaseMock).toHaveBeenCalledTimes(3);
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
+    ).toEqual(3);
     // first updates cases with new lead case id
-    expect(updateCaseMock.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({
       caseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc',
       leadCaseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc',
     });
-    expect(updateCaseMock.mock.calls[1][0].caseToUpdate).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[1][0]
+        .caseToUpdate,
+    ).toMatchObject({
       caseId: 'da210494-c410-428f-9d0a-a3fc24405f8d',
       leadCaseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc',
     });
     // then removes leadCaseId from case to remove
-    expect(updateCaseMock.mock.calls[2][0].caseToUpdate).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[2][0]
+        .caseToUpdate,
+    ).toMatchObject({
       caseId: 'aaaba5a9-b37b-479d-9201-067ec6e33aaa',
       leadCaseId: undefined,
     });
@@ -179,14 +198,22 @@ describe('removeConsolidatedCasesInteractor', () => {
       caseIdsToRemove: ['fccca5a9-b37b-479d-9201-067ec6e33ccc'], // docketNumber: '105-19'
     });
 
-    expect(updateCaseMock).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
+    ).toEqual(2);
     // first removes leadCaseId from original case
-    expect(updateCaseMock.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({
       caseId: 'eaaba5a9-b37b-479d-9201-067ec6e33aaa',
       leadCaseId: undefined,
     });
     // then removes leadCaseId from case to remove
-    expect(updateCaseMock.mock.calls[1][0].caseToUpdate).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[1][0]
+        .caseToUpdate,
+    ).toMatchObject({
       caseId: 'fccca5a9-b37b-479d-9201-067ec6e33ccc',
       leadCaseId: undefined,
     });
@@ -199,14 +226,22 @@ describe('removeConsolidatedCasesInteractor', () => {
       caseIdsToRemove: ['eaaba5a9-b37b-479d-9201-067ec6e33aaa'], // docketNumber: '104-19'
     });
 
-    expect(updateCaseMock).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
+    ).toEqual(2);
     // first removes leadCaseId from original case
-    expect(updateCaseMock.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({
       caseId: 'fccca5a9-b37b-479d-9201-067ec6e33ccc',
       leadCaseId: undefined,
     });
     // then removes leadCaseId from case to remove
-    expect(updateCaseMock.mock.calls[1][0].caseToUpdate).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[1][0]
+        .caseToUpdate,
+    ).toMatchObject({
       caseId: 'eaaba5a9-b37b-479d-9201-067ec6e33aaa',
       leadCaseId: undefined,
     });

@@ -1,36 +1,24 @@
 import { generatePdfReportInteractor } from './generatePdfReportInteractor';
+const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('generatePdfReportInteractor', () => {
-  let errorMock;
-  let generatePdfFromHtmlInteractorMock;
   let uploadMock;
-  let applicationContext;
 
   const mockUniqueId = 'aaa-bbb-ccc';
 
   beforeEach(() => {
-    errorMock = jest.fn();
-    generatePdfFromHtmlInteractorMock = jest.fn();
     uploadMock = jest.fn();
 
-    applicationContext = {
-      environment: {
-        tempDocumentsBucketName: 'test',
-      },
-      getStorageClient: () => ({
-        upload: (params, cb) => {
-          uploadMock();
-          cb();
-        },
-      }),
-      getUniqueId: () => mockUniqueId,
-      getUseCases: () => ({
-        generatePdfFromHtmlInteractor: generatePdfFromHtmlInteractorMock,
-      }),
-      logger: {
-        error: errorMock,
-      },
-    };
+    applicationContext
+      .getStorageClient()
+      .upload.mockImplementation((params, cb) => {
+        uploadMock();
+        cb();
+      });
+
+    applicationContext.getUseCases().generatePdfFromHtmlInteractor.mockReset();
+
+    applicationContext.getUniqueId.mockReturnValue(mockUniqueId);
   });
 
   it('should call the pdf generator', async () => {
@@ -39,15 +27,17 @@ describe('generatePdfReportInteractor', () => {
       contentHtml: '<p>Test</p>',
     });
 
-    expect(generatePdfFromHtmlInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+    ).toHaveBeenCalled();
   });
 
   it('catch errors thrown by the pdf generator', async () => {
     let error;
 
-    generatePdfFromHtmlInteractorMock = jest
-      .fn()
-      .mockRejectedValue(new Error('Whoops'));
+    applicationContext
+      .getUseCases()
+      .generatePdfFromHtmlInteractor.mockRejectedValue(new Error('Whoops'));
 
     try {
       await generatePdfReportInteractor({
@@ -58,7 +48,7 @@ describe('generatePdfReportInteractor', () => {
       error = err;
     }
 
-    expect(errorMock).toHaveBeenCalled();
+    expect(applicationContext.logger.error).toHaveBeenCalled();
     expect(error.message).toEqual('Whoops');
   });
 

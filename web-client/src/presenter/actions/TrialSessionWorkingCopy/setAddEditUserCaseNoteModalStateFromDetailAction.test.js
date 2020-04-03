@@ -1,12 +1,11 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setAddEditUserCaseNoteModalStateFromDetailAction } from './setAddEditUserCaseNoteModalStateFromDetailAction';
 
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-const applicationContext = applicationContextForClient;
-presenter.providers.applicationContext = applicationContext;
-
 describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   it('should set the modal state from caseDetail and props', async () => {
     const result = await runAction(
       setAddEditUserCaseNoteModalStateFromDetailAction,
@@ -25,6 +24,7 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
         },
       },
     );
+
     expect(result.state.modal.caseCaptionNames).toEqual('Sisqo');
     expect(result.state.modal.caseId).toEqual(
       'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -49,6 +49,7 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
         },
       },
     );
+
     expect(result.state.modal.caseCaptionNames).toEqual('');
     expect(result.state.modal.caseId).toEqual(
       'c54ba5a9-b37b-479d-9201-067ec6e335bb',

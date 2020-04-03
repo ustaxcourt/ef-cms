@@ -1,6 +1,7 @@
 const {
   saveCaseDetailInternalEditInteractor,
 } = require('./saveCaseDetailInternalEditInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
@@ -43,25 +44,15 @@ const MOCK_CASE = {
   userId: 'userId',
 };
 
-describe('updateCase', () => {
-  let applicationContext;
+beforeAll(() => {
+  applicationContext.getCurrentUser.mockReturnValue({
+    role: User.ROLES.petitionsClerk,
+    userId: 'petitionsclerk',
+  });
+});
 
+describe('updateCase', () => {
   it('should throw an error if the caseToUpdate passed in is an invalid case', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          updateCase: () => Promise.resolve(MOCK_CASE),
-        };
-      },
-      getUniqueId: () => 'unique-id-1',
-    };
     let error;
     try {
       await saveCaseDetailInternalEditInteractor({
@@ -80,21 +71,6 @@ describe('updateCase', () => {
   });
 
   it('should throw an error if caseToUpdate is not passed in', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          updateCase: () => Promise.resolve(MOCK_CASE),
-        };
-      },
-      getUniqueId: () => 'unique-id-1',
-    };
     let error;
     try {
       await saveCaseDetailInternalEditInteractor({
@@ -112,21 +88,7 @@ describe('updateCase', () => {
   it('should update a case', async () => {
     const caseToUpdate = Object.assign(MOCK_CASE);
     caseToUpdate.documents = MOCK_DOCUMENTS;
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          updateCase: () => Promise.resolve(MOCK_CASE),
-        };
-      },
-      getUniqueId: () => 'unique-id-1',
-    };
+
     let updatedCase;
 
     updatedCase = await saveCaseDetailInternalEditInteractor({
@@ -147,22 +109,6 @@ describe('updateCase', () => {
   it('should update the validated documents on a case', async () => {
     const caseToUpdate = Object.assign(MOCK_CASE);
     caseToUpdate.documents = MOCK_DOCUMENTS;
-
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          updateCase: () => Promise.resolve(MOCK_CASE),
-        };
-      },
-      getUniqueId: () => 'unique-id-1',
-    };
 
     const updatedCase = await saveCaseDetailInternalEditInteractor({
       applicationContext,
@@ -216,22 +162,6 @@ describe('updateCase', () => {
     const caseToUpdate = Object.assign(MOCK_CASE);
     caseToUpdate.documents = MOCK_DOCUMENTS;
 
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          updateCase: () => Promise.resolve(MOCK_CASE),
-        };
-      },
-      getUniqueId: () => 'unique-id-1',
-    };
-
     let error = null;
     try {
       await saveCaseDetailInternalEditInteractor({
@@ -251,20 +181,11 @@ describe('updateCase', () => {
   });
 
   it('should throw an error if the user is unauthorized to update a case', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          userId: 'nope',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          updateCase: () => Promise.resolve(MOCK_CASE),
-        };
-      },
-      getUniqueId: () => 'unique-id-1',
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: 'nope',
+      userId: 'nope',
+    });
+
     let error;
     try {
       await saveCaseDetailInternalEditInteractor({
@@ -281,21 +202,11 @@ describe('updateCase', () => {
   });
 
   it('should throw an error if the user is unauthorized to update a case part deux', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: 'nope',
-          userId: 'nope',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          updateCase: () => Promise.resolve(MOCK_CASE),
-        };
-      },
-      getUniqueId: () => 'unique-id-1',
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: 'nope',
+      userId: 'nope',
+    });
+
     let error;
     try {
       await saveCaseDetailInternalEditInteractor({

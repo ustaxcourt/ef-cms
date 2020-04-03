@@ -45,21 +45,26 @@ export const advancedSearchHelper = (get, applicationContext) => {
     COUNTRY_TYPES,
   } = applicationContext.getConstants();
   const searchResults = get(state.searchResults);
+  const advancedSearchTab = get(state.advancedSearchTab);
   const currentPage = get(state.advancedSearchForm.currentPage);
   let result = {
-    showPractitionerSearch: permissions.MANAGE_ATTORNEY_USERS,
+    showPractitionerSearch: permissions.MANAGE_PRACTITIONER_USERS,
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
   };
   if (searchResults) {
-    const formattedSearchResults = searchResults.map(searchResult =>
-      formatSearchResultRecord(searchResult, { applicationContext }),
+    let formattedSearchResults = searchResults.slice(
+      0,
+      currentPage * CASE_SEARCH_PAGE_SIZE,
     );
+    if (advancedSearchTab === 'case') {
+      formattedSearchResults = formattedSearchResults.map(searchResult =>
+        formatSearchResultRecord(searchResult, { applicationContext }),
+      );
+    }
+
     result = {
       ...result,
-      formattedSearchResults: formattedSearchResults.slice(
-        0,
-        currentPage * CASE_SEARCH_PAGE_SIZE,
-      ),
+      formattedSearchResults,
       searchResultsCount: searchResults.length,
       showLoadMore: searchResults.length > currentPage * CASE_SEARCH_PAGE_SIZE,
       showNoMatches: searchResults.length === 0,

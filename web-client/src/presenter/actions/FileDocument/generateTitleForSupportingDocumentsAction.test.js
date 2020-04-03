@@ -1,14 +1,13 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateTitleForSupportingDocumentsAction } from './generateTitleForSupportingDocumentsAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-
-const applicationContext = applicationContextForClient;
-presenter.providers.applicationContext = applicationContext;
-const { generateDocumentTitleInteractor } = applicationContext.getUseCases();
-
 describe('generateTitleForSupportingDocumentsAction', () => {
+  const { generateDocumentTitleInteractor } = applicationContext.getUseCases();
+
+  presenter.providers.applicationContext = applicationContext;
+
   it('should call generateDocumentTitle with correct data for supporting documents', async () => {
     generateDocumentTitleInteractor.mockReturnValue(null);
     await runAction(generateTitleForSupportingDocumentsAction, {

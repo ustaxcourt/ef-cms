@@ -1,28 +1,28 @@
 import { User } from '../../../../../shared/src/business/entities/User';
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitCaseAssociationRequestAction } from './submitCaseAssociationRequestAction';
 
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-const applicationContext = applicationContextForClient;
-presenter.providers.applicationContext = applicationContext;
-const {
-  submitCaseAssociationRequestInteractor,
-} = applicationContext.getUseCases();
-const {
-  submitPendingCaseAssociationRequestInteractor,
-} = applicationContext.getUseCases();
-
-applicationContext.getCurrentUser.mockReturnValue(
-  new User({
-    email: 'practitioner1@example.com',
-    name: 'richard',
-    role: User.ROLES.privatePractitioner,
-    userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-  }),
-);
-
 describe('submitCaseAssociationRequestAction', () => {
+  const {
+    submitCaseAssociationRequestInteractor,
+  } = applicationContext.getUseCases();
+  const {
+    submitPendingCaseAssociationRequestInteractor,
+  } = applicationContext.getUseCases();
+
+  presenter.providers.applicationContext = applicationContext;
+
+  applicationContext.getCurrentUser.mockReturnValue(
+    new User({
+      email: 'practitioner1@example.com',
+      name: 'richard',
+      role: User.ROLES.privatePractitioner,
+      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+    }),
+  );
+
   it('should call submitCaseAssociationRequest', async () => {
     await runAction(submitCaseAssociationRequestAction, {
       modules: {
