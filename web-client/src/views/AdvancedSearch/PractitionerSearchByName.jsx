@@ -60,6 +60,7 @@ export const PractitionerSearchByName = connect(
               <div className="tablet:grid-col-6">
                 <Button
                   className="advanced-search__button margin-top-2"
+                  id="practitioner-search-by-name-button"
                   onClick={e => {
                     e.preventDefault();
                     submitPractitionerNameSearchSequence();
