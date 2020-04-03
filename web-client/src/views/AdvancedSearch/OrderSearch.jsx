@@ -4,12 +4,7 @@ import { connect } from '@cerebral/react';
 import React from 'react';
 
 export const OrderSearch = connect({}, function OrderSearch(
-  advancedSearchForm,
-  advancedSearchHelper,
-  clearCaseSearchByNameFormSequence,
-  constants,
   submitAdvancedSearchSequence,
-  updateAdvancedSearchFormValueSequence,
 ) {
   return (
     <>
@@ -38,16 +33,13 @@ export const OrderSearch = connect({}, function OrderSearch(
                   id="order-search"
                   name="petitionerName"
                   type="text"
-                  // value={
-                  //   advancedSearchForm.caseSearchByName.petitionerName || ''
-                  // }
-                  onChange={e => {
-                    updateAdvancedSearchFormValueSequence({
-                      formType: 'caseSearchByName',
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
+                  // onChange={e => {
+                  //   updateAdvancedSearchFormValueSequence({
+                  //     formType: 'caseSearchByName',
+                  //     key: e.target.name,
+                  //     value: e.target.value,
+                  //   });
+                  // }}
                 />
               </FormGroup>
             </div>
@@ -65,9 +57,9 @@ export const OrderSearch = connect({}, function OrderSearch(
               <Button
                 link
                 className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-                onClick={() => {
-                  clearCaseSearchByNameFormSequence();
-                }}
+                // onClick={() => {
+                //   clearCaseSearchByNameFormSequence();
+                // }}
               >
                 Clear Search
               </Button>
