@@ -1,6 +1,7 @@
 import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from './CaseSearchForm';
 import { ErrorNotification } from '../ErrorNotification';
+import { OrderSearchForm } from './OrderSearchForm';
 import { PractitionerSearchForm } from './PractitionerSearchForm';
 import { SearchResults } from './SearchResults';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -51,6 +52,9 @@ export const AdvancedSearch = connect(
                   submitCaseDocketNumberSearchSequence
                 }
               />
+            </Tab>
+            <Tab id="tab-order" tabName="order" title="Order">
+              <OrderSearchForm />
             </Tab>
             {advancedSearchHelper.showPractitionerSearch && (
               <Tab
