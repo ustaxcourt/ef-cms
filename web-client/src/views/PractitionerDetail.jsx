@@ -122,7 +122,29 @@ export const PractitionerDetail = connect(
                         >
                           Address
                         </label>
-                        <div className="margin-bottom-4">[ Address ]</div>
+                        <div className="margin-bottom-4">
+                          {/* TODO: use helper (international) */}
+                          {practitionerDetail.contact.address1}
+                          {practitionerDetail.contact.address2 && (
+                            <>
+                              <div className="margin-top-1">
+                                {practitionerDetail.contact.address2}
+                              </div>
+                            </>
+                          )}
+                          {practitionerDetail.contact.address3 && (
+                            <>
+                              <div className="margin-top-1">
+                                {practitionerDetail.contact.address3}
+                              </div>
+                            </>
+                          )}
+                          <div className="margin-top-1">
+                            {practitionerDetail.contact.city},{' '}
+                            {practitionerDetail.contact.state}{' '}
+                            {practitionerDetail.contact.postalCode}
+                          </div>
+                        </div>
                         <label
                           className="usa-label usa-label-display"
                           htmlFor="practitioner-practitioner-type"

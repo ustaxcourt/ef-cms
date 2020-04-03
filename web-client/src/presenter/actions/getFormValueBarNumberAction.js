@@ -8,7 +8,6 @@ import { state } from 'cerebral';
  * @returns {object} object containing barNumber from state.form
  */
 export const getFormValueBarNumberAction = ({ get }) => {
-  // TODO: Clean this up
   const barNumber = get(
     state.advancedSearchForm.practitionerSearchByBarNumber.barNumber,
   );
