@@ -1,7 +1,7 @@
 import { clearAdvancedSearchFormAction } from './clearAdvancedSearchFormAction';
 import { runAction } from 'cerebral/test';
 
-describe.only('clearAdvancedSearchFormAction', () => {
+describe('clearAdvancedSearchFormAction', () => {
   it('should clear the advanced search form ONLY for the props.formType', async () => {
     const result = await runAction(clearAdvancedSearchFormAction, {
       props: { formType: 'practitionerSearchByName' },
