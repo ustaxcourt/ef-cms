@@ -2,6 +2,7 @@ import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from './CaseSearchForm';
 import { ErrorNotification } from '../ErrorNotification';
 import { PractitionerSearchForm } from './PractitionerSearchForm';
+import { PractitionerSearchResults } from './PractitionerSearchResults';
 import { SearchResults } from './SearchResults';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -11,6 +12,7 @@ import React from 'react';
 export const AdvancedSearch = connect(
   {
     advancedSearchHelper: state.advancedSearchHelper,
+    advancedSearchTabChangeSequence: sequences.advancedSearchTabChangeSequence,
     submitCaseAdvancedSearchSequence:
       sequences.submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence:
@@ -22,6 +24,7 @@ export const AdvancedSearch = connect(
   },
   function AdvancedSearch({
     advancedSearchHelper,
+    advancedSearchTabChangeSequence,
     submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence,
     submitPractitionerBarNumberSearchSequence,
@@ -36,6 +39,9 @@ export const AdvancedSearch = connect(
           <Tabs
             bind="advancedSearchTab"
             className="classic-horizontal-header3 tab-border"
+            onSelect={() => {
+              advancedSearchTabChangeSequence();
+            }}
           >
             <Tab id="tab-case" tabName="case" title="Case">
               <p>
@@ -51,6 +57,7 @@ export const AdvancedSearch = connect(
                   submitCaseDocketNumberSearchSequence
                 }
               />
+              <SearchResults />
             </Tab>
             {advancedSearchHelper.showPractitionerSearch && (
               <Tab
@@ -66,11 +73,10 @@ export const AdvancedSearch = connect(
                     submitPractitionerNameSearchSequence
                   }
                 />
+                <PractitionerSearchResults />
               </Tab>
             )}
           </Tabs>
-
-          <SearchResults />
         </section>
       </>
     );
