@@ -148,8 +148,7 @@ const helpers = {
   workQueueSectionHelper,
 };
 
-export const state = {
-  ...helpers,
+export const baseState = {
   advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
   archiveDraftDocument: {
     // used by the delete draft document modal
@@ -242,4 +241,9 @@ export const state = {
   workItemMetadata: {},
   workQueue: [],
   workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
+};
+
+export const state = {
+  ...helpers,
+  ...baseState,
 };

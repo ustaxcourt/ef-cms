@@ -351,9 +351,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCognitoClientId: jest.fn(),
     getCognitoRedirectUrl: jest.fn(),
     getCognitoTokenUrl: jest.fn(),
-    getConstants: jest.fn().mockReturnValue({
-      ...getConstants(),
-    }),
+    getConstants: jest.fn().mockImplementation(getConstants),
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {

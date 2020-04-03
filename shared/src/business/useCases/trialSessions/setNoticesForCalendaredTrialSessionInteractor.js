@@ -53,6 +53,15 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
   }
 
   if (calendaredCases.length === 0) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'notice_generation_complete',
+        hasPaper: false,
+      },
+      userId: user.userId,
+    });
+
     return;
   }
 
