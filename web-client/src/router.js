@@ -557,18 +557,18 @@ const router = {
     );
 
     registerRoute(
-      '/users/create-attorney',
+      '/users/create-practitioner',
       ifHasAccess(() => {
-        setPageTitle('EF-CMS User Management - Create Attorney User');
-        return app.getSequence('gotoCreateAttorneyUserSequence')();
+        setPageTitle('EF-CMS User Management - Create Practitioner User');
+        return app.getSequence('gotoCreatePractitionerUserSequence')();
       }),
     );
 
     registerRoute(
-      '/users/edit-attorney/*',
+      '/users/edit-practitioner/*',
       ifHasAccess(userId => {
-        setPageTitle('EF-CMS User Management - Edit Attorney User');
-        return app.getSequence('gotoEditAttorneyUserSequence')({ userId });
+        setPageTitle('EF-CMS User Management - Edit Practitioner User');
+        return app.getSequence('gotoEditPractitionerUserSequence')({ userId });
       }),
     );
 

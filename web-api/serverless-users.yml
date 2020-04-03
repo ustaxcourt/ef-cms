@@ -197,11 +197,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  createAttorneyUser:
-    handler: web-api/${self:provider.dir}/usersHandlers.createAttorneyUserLambda
+  createPractitionerUser:
+    handler: web-api/${self:provider.dir}/usersHandlers.createPractitionerUserLambda
     events:
       - http:
-          path: /attorney
+          path: /practitioner
           method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -209,11 +209,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updateAttorneyUser:
-    handler: web-api/${self:provider.dir}/usersHandlers.updateAttorneyUserLambda
+  updatePractitionerUser:
+    handler: web-api/${self:provider.dir}/usersHandlers.updatePractitionerUserLambda
     events:
       - http:
-          path: /attorney
+          path: /practitioner
           method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
