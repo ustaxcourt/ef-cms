@@ -1,3 +1,4 @@
+import { clearPractitionerDetailAction } from '../actions/clearPractitionerDetailAction';
 import { getFormValueBarNumberAction } from '../actions/getFormValueBarNumberAction';
 import { getPractitionerDetailAction } from '../actions/getPractitionerDetailAction';
 import { hasPractitionerDetailAction } from '../actions/hasPractitionerDetailAction';
@@ -5,8 +6,7 @@ import { navigateToPractitionerDetailSequence } from './navigateToPractitionerDe
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 
 export const submitPractitionerBarNumberSearchSequence = [
-  // TODO: clear practitionerDetail?
-  getFormValueBarNumberAction,
+  clearPractitionerDetailAction,
   getFormValueBarNumberAction,
   getPractitionerDetailAction,
   hasPractitionerDetailAction,
