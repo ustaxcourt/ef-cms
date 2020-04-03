@@ -1,11 +1,13 @@
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setTrialSessionDetailsOnFormAction } from './setTrialSessionDetailsOnFormAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('setTrialSessionDetailsOnFormAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('sets the props.trialSession on state.form, splitting the startDate into month, day, and year', async () => {
     const result = await runAction(setTrialSessionDetailsOnFormAction, {
       modules: {

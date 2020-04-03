@@ -1,27 +1,42 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { completeDocumentSigningAction } from './completeDocumentSigningAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('completeDocumentSigningAction', () => {
-  let uploadDocumentStub;
-  let generateSignedDocumentInteractorStub;
-  let signDocumentInteractorStub;
-  let getInboxMessagesForUserInteractorStub;
-  let completeWorkItemInteractorStub;
+  const {
+    completeWorkItemInteractor,
+    generateSignedDocumentInteractor,
+    getInboxMessagesForUserInteractor,
+    signDocumentInteractor,
+  } = applicationContext.getUseCases();
+  const {
+    uploadDocumentFromClient,
+  } = applicationContext.getPersistenceGateway();
 
-  global.window.pdfjsObj = {
-    getData: jest.fn().mockResolvedValue(true),
-  };
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
 
-  beforeEach(() => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      userId: '1',
+    });
+
+    global.window = {
+      pdfjsObj: {
+        getData: jest.fn().mockResolvedValue(true),
+      },
+    };
+
+    global.window.pdfjsObj = {
+      getData: jest.fn().mockResolvedValue(true),
+    };
+
     global.File = jest.fn();
 
-    uploadDocumentStub = jest
-      .fn()
-      .mockReturnValue('abc81f4d-1e47-423a-8caf-6d2fdc3d3859');
-    generateSignedDocumentInteractorStub = jest.fn();
-    signDocumentInteractorStub = jest.fn();
-    getInboxMessagesForUserInteractorStub = jest.fn().mockReturnValue([
+    uploadDocumentFromClient.mockReturnValue(
+      'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    );
+    getInboxMessagesForUserInteractor.mockReturnValue([
       {
         document: {
           documentType: 'Proposed Stipulated Decision',
@@ -29,24 +44,6 @@ describe('completeDocumentSigningAction', () => {
         workItemId: '1',
       },
     ]);
-    completeWorkItemInteractorStub = jest.fn();
-
-    presenter.providers.applicationContext = {
-      getCurrentUser: () => ({ userId: '1' }),
-      getPersistenceGateway: () => ({
-        uploadDocumentFromClient: uploadDocumentStub,
-      }),
-      getUseCases: () => ({
-        completeWorkItemInteractor: completeWorkItemInteractorStub,
-        generateSignedDocumentInteractor: generateSignedDocumentInteractorStub,
-        getInboxMessagesForUserInteractor: getInboxMessagesForUserInteractorStub,
-        signDocumentInteractor: signDocumentInteractorStub,
-      }),
-    };
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 
   it('should sign a document via executing various use cases', async () => {
@@ -88,10 +85,10 @@ describe('completeDocumentSigningAction', () => {
       },
     });
 
-    expect(uploadDocumentStub.mock.calls.length).toBe(1);
-    expect(generateSignedDocumentInteractorStub.mock.calls.length).toBe(1);
-    expect(signDocumentInteractorStub.mock.calls.length).toBe(1);
-    expect(completeWorkItemInteractorStub.mock.calls.length).toBe(1);
+    expect(uploadDocumentFromClient.mock.calls.length).toBe(1);
+    expect(generateSignedDocumentInteractor.mock.calls.length).toBe(1);
+    expect(signDocumentInteractor.mock.calls.length).toBe(1);
+    expect(completeWorkItemInteractor.mock.calls.length).toBe(1);
     expect(result.output).toMatchObject({
       alertSuccess: {
         message: 'Your signature has been added',
@@ -137,10 +134,10 @@ describe('completeDocumentSigningAction', () => {
       },
     });
 
-    expect(uploadDocumentStub.mock.calls.length).toBe(0);
-    expect(generateSignedDocumentInteractorStub.mock.calls.length).toBe(0);
-    expect(signDocumentInteractorStub.mock.calls.length).toBe(0);
-    expect(completeWorkItemInteractorStub.mock.calls.length).toBe(1);
+    expect(uploadDocumentFromClient.mock.calls.length).toBe(0);
+    expect(generateSignedDocumentInteractor.mock.calls.length).toBe(0);
+    expect(signDocumentInteractor.mock.calls.length).toBe(0);
+    expect(completeWorkItemInteractor.mock.calls.length).toBe(1);
     expect(result.output).toMatchObject({
       alertSuccess: {
         message: 'Your signature has been added',

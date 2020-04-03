@@ -1,11 +1,10 @@
 const {
   validateCaseAdvancedSearchInteractor,
 } = require('./validateCaseAdvancedSearchInteractor');
-
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { CaseSearch } = require('../entities/cases/CaseSearch');
 
 describe('validateCaseAdvancedSearchInteractor', () => {
-  const applicationContext = {};
   let validatorSpy;
 
   beforeEach(() => {

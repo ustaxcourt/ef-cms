@@ -1,24 +1,11 @@
 import { addConsolidatedCaseAction } from './addConsolidatedCaseAction';
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('addConsolidatedCaseAction', () => {
-  let addConsolidatedCaseInteractorMock;
-  let caseDetail;
-
-  beforeEach(() => {
-    caseDetail = {
-      caseId: '123',
-      docketNumber: '123-45',
-    };
-
-    addConsolidatedCaseInteractorMock = jest.fn(() => caseDetail);
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        addConsolidatedCaseInteractor: addConsolidatedCaseInteractorMock,
-      }),
-    };
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('should call addConsolidatedCaseInteractor and return caseId and caseToConsolidateId', async () => {
@@ -32,7 +19,10 @@ describe('addConsolidatedCaseAction', () => {
       },
     });
 
-    expect(addConsolidatedCaseInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addConsolidatedCaseInteractor.mock.calls
+        .length,
+    ).toEqual(1);
     expect(result.output).toEqual({
       caseId: '123',
       caseToConsolidateId: '456',

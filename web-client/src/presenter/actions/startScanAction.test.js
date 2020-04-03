@@ -1,12 +1,10 @@
 import { Scan } from '../../../../shared/src/business/entities/Scan';
-import { applicationContextForClient } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { startScanAction } from './startScanAction';
 
 global.alert = () => null;
-
-const applicationContext = applicationContextForClient;
 
 describe('startScanAction', () => {
   beforeAll(() => {

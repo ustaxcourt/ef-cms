@@ -1,13 +1,12 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.advancedSearchForm.docketNumberSearch to an empty object
+ * clears the state.searchResults and sets the currentPage to 1
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  */
-export const clearDocketNumberSearchFormAction = ({ store }) => {
-  store.set(state.advancedSearchForm.caseSearchByDocketNumber, {});
+export const clearSearchResultsAction = ({ store }) => {
   store.unset(state.searchResults);
   store.set(state.advancedSearchForm.currentPage, 1);
 };

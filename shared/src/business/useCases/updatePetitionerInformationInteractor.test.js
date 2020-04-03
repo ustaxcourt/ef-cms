@@ -3,7 +3,7 @@ const path = require('path');
 const {
   createISODateString,
   formatDateString,
-} = require('../../../../shared/src/business/utilities/DateHandler');
+} = require('../utilities/DateHandler');
 const {
   getDocumentTypeForAddressChange,
 } = require('../utilities/generateChangeOfAddressTemplate');
@@ -123,7 +123,6 @@ const applicationContext = {
 describe('update petitioner contact information on a case', () => {
   beforeEach(() => {
     userObj = userData;
-    jest.clearAllMocks();
   });
 
   it('updates case even if no change of address or phone is detected', async () => {

@@ -1,24 +1,16 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateCourtIssuedDocumentTitleAction } from './generateCourtIssuedDocumentTitleAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('generateCourtIssuedDocumentTitleAction', () => {
-  let generateCourtIssuedDocumentTitleStub;
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-    generateCourtIssuedDocumentTitleStub = jest
-      .fn()
-      .mockReturnValue('Order for something');
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        generateCourtIssuedDocumentTitleInteractor: generateCourtIssuedDocumentTitleStub,
-      }),
-    };
-  });
-
   it('should call generateCourtIssuedDocumentTitle with correct data and set state.form.generatedDocumentTitle to what is returned', async () => {
+    applicationContext
+      .getUseCases()
+      .generateCourtIssuedDocumentTitleInteractor.mockReturnValue(
+        'Order for something',
+      );
+    presenter.providers.applicationContext = applicationContext;
     const results = await runAction(generateCourtIssuedDocumentTitleAction, {
       modules: {
         presenter,
@@ -36,9 +28,14 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
       },
     });
 
-    expect(generateCourtIssuedDocumentTitleStub.mock.calls.length).toEqual(1);
     expect(
-      generateCourtIssuedDocumentTitleStub.mock.calls[0][0].documentMetadata,
+      applicationContext.getUseCases()
+        .generateCourtIssuedDocumentTitleInteractor.mock.calls.length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases()
+        .generateCourtIssuedDocumentTitleInteractor.mock.calls[0][0]
+        .documentMetadata,
     ).toMatchObject({
       date: '12-12-2019',
       documentType: 'Order',
@@ -49,6 +46,12 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
   });
 
   it('should call generateCourtIssuedDocumentTitle with correct data and set state.form.generatedDocumentTitle to what is returned with Attachments added if it is true on the form', async () => {
+    applicationContext
+      .getUseCases()
+      .generateCourtIssuedDocumentTitleInteractor.mockReturnValue(
+        'Order for something',
+      );
+    presenter.providers.applicationContext = applicationContext;
     const results = await runAction(generateCourtIssuedDocumentTitleAction, {
       modules: {
         presenter,
@@ -67,9 +70,14 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
       },
     });
 
-    expect(generateCourtIssuedDocumentTitleStub.mock.calls.length).toEqual(1);
     expect(
-      generateCourtIssuedDocumentTitleStub.mock.calls[0][0].documentMetadata,
+      applicationContext.getUseCases()
+        .generateCourtIssuedDocumentTitleInteractor.mock.calls.length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases()
+        .generateCourtIssuedDocumentTitleInteractor.mock.calls[0][0]
+        .documentMetadata,
     ).toMatchObject({
       date: '12-12-2019',
       documentType: 'Order',
@@ -80,7 +88,10 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
   });
 
   it('should call generateCourtIssuedDocumentTitle with correct data and unset state.form.generatedDocumentTitle if a document title is not returned', async () => {
-    generateCourtIssuedDocumentTitleStub = jest.fn().mockReturnValue(null);
+    applicationContext
+      .getUseCases()
+      .generateCourtIssuedDocumentTitleInteractor.mockReturnValue(null);
+    presenter.providers.applicationContext = applicationContext;
     const results = await runAction(generateCourtIssuedDocumentTitleAction, {
       modules: {
         presenter,
@@ -99,9 +110,14 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
       },
     });
 
-    expect(generateCourtIssuedDocumentTitleStub.mock.calls.length).toEqual(1);
     expect(
-      generateCourtIssuedDocumentTitleStub.mock.calls[0][0].documentMetadata,
+      applicationContext.getUseCases()
+        .generateCourtIssuedDocumentTitleInteractor.mock.calls.length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases()
+        .generateCourtIssuedDocumentTitleInteractor.mock.calls[0][0]
+        .documentMetadata,
     ).toMatchObject({
       date: '12-12-2019',
       documentType: 'Order',

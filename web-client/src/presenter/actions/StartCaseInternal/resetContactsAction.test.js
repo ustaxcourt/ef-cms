@@ -1,12 +1,12 @@
-import { ContactFactory } from '../../../../../shared/src/business/entities/contacts/ContactFactory';
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext.js';
+import { presenter } from '../../presenter-mock';
 import { resetContactsAction } from './resetContactsAction';
 import { runAction } from 'cerebral/test';
 
 presenter.providers.applicationContext = applicationContext;
 
 describe('resetContactsAction', () => {
+  const { PARTY_TYPES } = applicationContext.getConstants();
   it('clears the contactPrimary except for countryType for a domestic address', async () => {
     const { state } = await runAction(resetContactsAction, {
       modules: { presenter },
@@ -21,7 +21,7 @@ describe('resetContactsAction', () => {
             state: 'AL',
             zip: '12345',
           },
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -29,7 +29,7 @@ describe('resetContactsAction', () => {
       contactPrimary: {
         countryType: 'domestic',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
     });
   });
 
@@ -47,7 +47,7 @@ describe('resetContactsAction', () => {
             phone: '1234567890',
             zip: '12345',
           },
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -55,7 +55,7 @@ describe('resetContactsAction', () => {
       contactPrimary: {
         countryType: 'domestic',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
     });
   });
 
@@ -81,7 +81,7 @@ describe('resetContactsAction', () => {
             state: 'AL',
             zip: '12345',
           },
-          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+          partyType: PARTY_TYPES.petitionerSpouse,
         },
       },
     });
@@ -90,7 +90,7 @@ describe('resetContactsAction', () => {
         countryType: 'domestic',
       },
       contactSecondary: { countryType: 'domestic' },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
   });
 
@@ -116,7 +116,7 @@ describe('resetContactsAction', () => {
             state: 'AL',
             zip: '12345',
           },
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -125,7 +125,7 @@ describe('resetContactsAction', () => {
       contactPrimary: {
         countryType: 'domestic',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
     });
   });
 });

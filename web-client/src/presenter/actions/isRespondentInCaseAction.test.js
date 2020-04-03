@@ -1,12 +1,12 @@
 import { isRespondentInCaseAction } from './isRespondentInCaseAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 let yesStub;
 let noStub;
 
 describe('isRespondentInCaseAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     yesStub = jest.fn();
     noStub = jest.fn();
 

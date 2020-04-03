@@ -141,7 +141,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   });
 
   //This functionality will probably change soon
-  // const deletedStinDocumentId = await exports.deleteStinIfAvailable({
+  //  deletedStinDocumentId = await exports.deleteStinIfAvailable({
   //   applicationContext,
   //   caseEntity,
   // });

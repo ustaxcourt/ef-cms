@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+const {
   getDocumentQCServedForSection,
 } = require('./getDocumentQCServedForSection');
 
@@ -39,18 +42,13 @@ describe('getDocumentQCServedForSection', () => {
   });
 
   it('invokes the persistence layer with pk of {userId}|outbox and {section}|outbox and other expected params', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getCurrentUser: () => ({
-        section: 'docket',
-        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-      getDocumentClient: () => ({
-        query: queryStub,
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      section: 'docket',
+      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+    applicationContext.getDocumentClient.mockReturnValue({
+      query: queryStub,
+    });
     const items = await getDocumentQCServedForSection({
       applicationContext,
       section: 'docket',

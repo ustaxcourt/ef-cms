@@ -1,27 +1,30 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   getPrivatePractitionersBySearchKeyInteractor,
 } = require('./getPrivatePractitionersBySearchKeyInteractor');
 const { User } = require('../../entities/User');
 
+let user;
 describe('getPrivatePractitionersBySearchKeyInteractor', () => {
-  let applicationContext;
+  beforeEach(() => {
+    applicationContext.environment.stage = 'local';
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+  });
 
   it('should throw an error when not authorized', async () => {
     let error;
+    user = {
+      name: 'Olivia Jade',
+      role: User.ROLES.petitioner,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    };
+    applicationContext
+      .getPersistenceGateway()
+      .getUsersBySearchKey.mockResolvedValue([]);
+
     try {
-      applicationContext = {
-        environment: { stage: 'local' },
-        getCurrentUser: () => {
-          return {
-            name: 'Olivia Jade',
-            role: User.ROLES.petitioner,
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          };
-        },
-        getPersistenceGateway: () => ({
-          getUsersBySearchKey: async () => [],
-        }),
-      };
       await getPrivatePractitionersBySearchKeyInteractor({
         applicationContext,
         searchKey: 'something',
@@ -33,24 +36,19 @@ describe('getPrivatePractitionersBySearchKeyInteractor', () => {
   });
 
   it('should return users from persistence', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          name: 'Olivia Jade',
-          role: User.ROLES.petitionsClerk,
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        };
-      },
-      getPersistenceGateway: () => ({
-        getUsersBySearchKey: async () => [
-          {
-            name: 'Test Practitioner',
-            userId: 'f3e91236-495b-4412-b684-1cffe59ed9d9',
-          },
-        ],
-      }),
+    user = {
+      name: 'Olivia Jade',
+      role: User.ROLES.petitionsClerk,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
+    applicationContext
+      .getPersistenceGateway()
+      .getUsersBySearchKey.mockResolvedValue([
+        {
+          name: 'Test Practitioner',
+          userId: 'f3e91236-495b-4412-b684-1cffe59ed9d9',
+        },
+      ]);
 
     const result = await getPrivatePractitionersBySearchKeyInteractor({
       applicationContext,

@@ -1,12 +1,9 @@
 import { Scan } from '../../../shared/src/business/entities/Scan';
-import { applicationContextForClient } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { getScanModeLabel } from './getScanModeLabel';
 
 describe('getScanModeLabel', () => {
   const { SCAN_MODES } = Scan;
-
-  const applicationContext = applicationContextForClient;
-  applicationContext.getConstants.mockReturnValue({ SCAN_MODES });
 
   it('Returns Single Sided when the scan mode is feeder', () => {
     expect(getScanModeLabel(applicationContext, SCAN_MODES.FEEDER)).toEqual(

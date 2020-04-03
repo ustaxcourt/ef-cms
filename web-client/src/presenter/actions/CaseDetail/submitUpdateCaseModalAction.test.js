@@ -1,9 +1,7 @@
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitUpdateCaseModalAction } from './submitUpdateCaseModalAction';
-
-let updateCaseContextInteractorMock;
 
 const caseMock = {
   caption: 'Test Caption',
@@ -11,18 +9,9 @@ const caseMock = {
   status: 'New',
 };
 
+presenter.providers.applicationContext = applicationContext;
+
 describe('submitUpdateCaseModalAction', () => {
-  beforeEach(() => {
-    updateCaseContextInteractorMock = jest.fn();
-
-    presenter.providers.applicationContext = {
-      ...applicationContext,
-      getUseCases: () => ({
-        updateCaseContextInteractor: updateCaseContextInteractorMock,
-      }),
-    };
-  });
-
   it('Calls the update case context interactor if the case caption has been updated', async () => {
     await runAction(submitUpdateCaseModalAction, {
       modules: {
@@ -36,8 +25,13 @@ describe('submitUpdateCaseModalAction', () => {
       },
     });
 
-    expect(updateCaseContextInteractorMock).toHaveBeenCalled();
-    expect(updateCaseContextInteractorMock.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().updateCaseContextInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().updateCaseContextInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       caseCaption: 'Updated Test Caption',
       caseId: '123',
     });
@@ -56,8 +50,13 @@ describe('submitUpdateCaseModalAction', () => {
       },
     });
 
-    expect(updateCaseContextInteractorMock).toHaveBeenCalled();
-    expect(updateCaseContextInteractorMock.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().updateCaseContextInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().updateCaseContextInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       caseId: '123',
       caseStatus: 'General Docket - Not at Issue',
     });
@@ -76,8 +75,13 @@ describe('submitUpdateCaseModalAction', () => {
       },
     });
 
-    expect(updateCaseContextInteractorMock).toHaveBeenCalled();
-    expect(updateCaseContextInteractorMock.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().updateCaseContextInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().updateCaseContextInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       caseId: '123',
       caseStatus: 'General Docket - Not at Issue',
     });
@@ -97,8 +101,13 @@ describe('submitUpdateCaseModalAction', () => {
       },
     });
 
-    expect(updateCaseContextInteractorMock).toHaveBeenCalled();
-    expect(updateCaseContextInteractorMock.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().updateCaseContextInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().updateCaseContextInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       caseId: '123',
       caseStatus: 'General Docket - Not at Issue',
     });

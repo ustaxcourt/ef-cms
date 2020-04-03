@@ -1,27 +1,26 @@
 import { CerebralTest } from 'cerebral/test';
 import { NotFoundError } from '../errors/NotFoundError';
-import { presenter } from '../presenter';
-
-let test;
-let getCaseInteractor = async () => true;
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    getCaseInteractor,
-  }),
-};
-presenter.providers.props = { caseId: () => '111-19' };
-
-let routeStub;
-presenter.providers.router = {
-  route: async route => routeStub(route),
-};
-
-test = CerebralTest(presenter);
-test.setState('searchTerm', '111-19');
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
+import { submitCaseSearchSequence } from '../sequences/submitCaseSearchSequence';
 
 describe('submitCaseSearchSequence', () => {
-  beforeEach(() => {
+  let test;
+  let routeStub;
+  beforeAll(() => {
+    presenter.providers.props = { caseId: () => '111-19' };
+
+    presenter.providers.router = {
+      route: async route => routeStub(route),
+    };
+    presenter.providers.applicationContext = applicationContext;
+    presenter.sequences = {
+      submitCaseSearchSequence,
+    };
+    test = CerebralTest(presenter);
+    test.setState('searchTerm', '111-19');
+  });
+  beforeAll(() => {
     routeStub = jest.fn().mockReturnValue({});
   });
 
@@ -34,11 +33,13 @@ describe('submitCaseSearchSequence', () => {
   });
 
   it('does not navigate AND sets error state if endpoint throws NotFoundError', async () => {
-    getCaseInteractor = () => {
-      return Promise.reject(
-        new NotFoundError({ message: "404 Can't find it" }),
-      );
-    };
+    applicationContext
+      .getUseCases()
+      .getCaseInteractor.mockImplementation(() => {
+        return Promise.reject(
+          new NotFoundError({ message: "404 Can't find it" }),
+        );
+      });
 
     await test.runSequence('submitCaseSearchSequence', {
       searchTerm: '111-19',

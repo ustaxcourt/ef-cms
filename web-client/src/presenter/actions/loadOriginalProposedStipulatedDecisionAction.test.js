@@ -1,18 +1,11 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { loadOriginalProposedStipulatedDecisionAction } from './loadOriginalProposedStipulatedDecisionAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('loadOriginalProposedStipulatedDecisionAction', () => {
-  let loadPDFForSigningStub;
-
-  beforeEach(() => {
-    loadPDFForSigningStub = jest.fn();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        loadPDFForSigningInteractor: loadPDFForSigningStub,
-      }),
-    };
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('does nothing if state.caseDetail does not exist', async () => {
@@ -30,7 +23,9 @@ describe('loadOriginalProposedStipulatedDecisionAction', () => {
   });
 
   it('loads original proposed stipulated decision', async () => {
-    loadPDFForSigningStub = jest.fn().mockReturnValue({ foo: 'bar' });
+    applicationContext
+      .getUseCases()
+      .loadPDFForSigningInteractor.mockReturnValue({ foo: 'bar' });
 
     const result = await runAction(
       loadOriginalProposedStipulatedDecisionAction,

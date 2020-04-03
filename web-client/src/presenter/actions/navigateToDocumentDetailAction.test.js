@@ -1,11 +1,11 @@
 import { navigateToDocumentDetailAction } from './navigateToDocumentDetailAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('navigateToDocumentDetailAction', () => {
   let routeStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     routeStub = jest.fn();
 
     presenter.providers.router = {

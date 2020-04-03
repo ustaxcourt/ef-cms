@@ -1,17 +1,13 @@
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { associatePrivatePractitionerWithCaseAction } from './associatePrivatePractitionerWithCaseAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
+
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('associatePrivatePractitionerWithCaseAction', () => {
   it('should run associatePrivatePractitionerWithCaseInteractor and success path', async () => {
     const successStub = jest.fn();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        associatePrivatePractitionerWithCaseInteractor: () =>
-          'hello from associate practitioner with case',
-      }),
-    };
 
     presenter.providers.path = {
       success: successStub,

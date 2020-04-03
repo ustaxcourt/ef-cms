@@ -1,16 +1,14 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateCourtIssuedDocketEntryAction } from './validateCourtIssuedDocketEntryAction';
 
 describe('validateCourtIssuedDocketEntryAction', () => {
-  let validateCourtIssuedDocketEntryStub;
   let successStub;
   let errorStub;
-
   let mockDocketEntry;
 
-  beforeEach(() => {
-    validateCourtIssuedDocketEntryStub = jest.fn();
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
@@ -18,11 +16,7 @@ describe('validateCourtIssuedDocketEntryAction', () => {
       data: 'hello world',
     };
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateCourtIssuedDocketEntryInteractor: validateCourtIssuedDocketEntryStub,
-      }),
-    };
+    presenter.providers.applicationContext = applicationContext;
 
     presenter.providers.path = {
       error: errorStub,
@@ -31,7 +25,9 @@ describe('validateCourtIssuedDocketEntryAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateCourtIssuedDocketEntryStub = jest.fn().mockReturnValue(null);
+    applicationContext
+      .getUseCases()
+      .validateCourtIssuedDocketEntryInteractor.mockReturnValue(null);
     await runAction(validateCourtIssuedDocketEntryAction, {
       modules: {
         presenter,
@@ -45,7 +41,9 @@ describe('validateCourtIssuedDocketEntryAction', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateCourtIssuedDocketEntryStub = jest.fn().mockReturnValue('error');
+    applicationContext
+      .getUseCases()
+      .validateCourtIssuedDocketEntryInteractor.mockReturnValue('error');
     await runAction(validateCourtIssuedDocketEntryAction, {
       modules: {
         presenter,

@@ -1,4 +1,4 @@
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { shouldLoadCaseAction } from './shouldLoadCaseAction';
 
@@ -6,9 +6,7 @@ describe('shouldLoadCaseAction', () => {
   let pathLoadStub = jest.fn();
   let pathIgnoreStub = jest.fn();
 
-  beforeEach(() => {
-    jest.resetAllMocks();
-
+  beforeAll(() => {
     presenter.providers.path = {
       ignore: pathIgnoreStub,
       load: pathLoadStub,

@@ -1,5 +1,5 @@
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateAttorneyUserAction } from './validateAttorneyUserAction';
 
@@ -7,7 +7,7 @@ describe('validateAttorneyUserAction', () => {
   let successMock;
   let errorMock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successMock = jest.fn();
     errorMock = jest.fn();
 
