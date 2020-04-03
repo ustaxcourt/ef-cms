@@ -6,7 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting the getPractitionerDetail use case
  * @param {object} providers.props the cerebral props object containing the props.barNumber
- * @returns {object} contains the details of a trial session
+ * @returns {object} containing practitionerDetail
  */
 
 export const getPractitionerDetailAction = async ({
@@ -15,23 +15,25 @@ export const getPractitionerDetailAction = async ({
   props,
 }) => {
   const { barNumber } = props;
-  let practitionerDetail = get(state.practitionerDetail);
+  const currentPractitionerDetail = get(state.practitionerDetail);
 
-  if (practitionerDetail && practitionerDetail.barNumber === barNumber) {
+  if (
+    currentPractitionerDetail &&
+    currentPractitionerDetail.barNumber === barNumber
+  ) {
     // we already have detail in state, so return that
     return {
-      practitionerDetail,
+      practitionerDetail: currentPractitionerDetail,
     };
   } else {
     // fetch practitionerDetail from use case
-    practitionerDetail = await applicationContext
+    const practitionerDetail = await applicationContext
       .getUseCases()
       .getPractitionerByBarNumberInteractor({
         applicationContext,
         barNumber,
       });
-  }
 
-  // TODO: Handle not found
-  return { practitionerDetail };
+    return { practitionerDetail };
+  }
 };

@@ -1,5 +1,4 @@
 import { caseExistsAction } from '../actions/caseExistsAction';
-import { clearCaseSearchByNameFormAction } from '../actions/clearCaseSearchByNameFormAction';
 import { clearSearchTermAction } from '../actions/clearSearchTermAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { set, unset } from 'cerebral/factories';
@@ -12,7 +11,6 @@ import { validateCaseDocketNumberSearchAction } from '../actions/AdvancedSearch/
 
 export const submitCaseDocketNumberSearchSequence = [
   clearSearchTermAction,
-  clearCaseSearchByNameFormAction,
   validateCaseDocketNumberSearchAction,
   {
     error: [
