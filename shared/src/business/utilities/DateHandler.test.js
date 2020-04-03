@@ -47,6 +47,15 @@ describe('DateHandler', () => {
       );
       expect(result).toEqual(-5);
     });
+    it('returns positive value if first date provided is later than second', () => {
+      const firstDate = '2020-01-06T12:00:00.000Z';
+      const fiveDaysEarlier = '2020-01-01T12:00:00.000Z';
+      const result = DateHandler.calculateDifferenceInDays(
+        firstDate,
+        fiveDaysEarlier,
+      );
+      expect(result).toEqual(5);
+    });
     it('returns a difference of 1 day if first day is "today at 4pm EST" and second day is "tomorrow at 8am EST"', () => {
       const firstDate = '2020-01-01T21:00:00.000Z'; // 4pm EST
       const sameDate = '2020-01-02T13:00:00.000Z'; // 8am EST
