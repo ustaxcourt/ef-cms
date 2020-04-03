@@ -1,16 +1,15 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateAddPrivatePractitionerAction } from './validateAddPrivatePractitionerAction';
 
 describe('validateAddPrivatePractitioner', () => {
-  let validateAddPrivatePractitionerInteractorStub;
   let successStub;
   let errorStub;
 
   let mockAddPrivatePractitioner;
 
-  beforeEach(() => {
-    validateAddPrivatePractitionerInteractorStub = jest.fn();
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
@@ -19,12 +18,7 @@ describe('validateAddPrivatePractitioner', () => {
       user: { userId: 'abc' },
     };
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateAddPrivatePractitionerInteractor: validateAddPrivatePractitionerInteractorStub,
-      }),
-    };
-
+    presenter.providers.applicationContext = applicationContextForClient;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -32,9 +26,10 @@ describe('validateAddPrivatePractitioner', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateAddPrivatePractitionerInteractorStub = jest
-      .fn()
-      .mockReturnValue(null);
+    applicationContextForClient
+      .getUseCases()
+      .validateAddPrivatePractitionerInteractor.mockReturnValue(null);
+
     await runAction(validateAddPrivatePractitionerAction, {
       modules: {
         presenter,
@@ -44,13 +39,14 @@ describe('validateAddPrivatePractitioner', () => {
       },
     });
 
-    expect(successStub.mock.calls.length).toEqual(1);
+    expect(successStub).toHaveBeenCalledTimes(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateAddPrivatePractitionerInteractorStub = jest
-      .fn()
-      .mockReturnValue('error');
+    applicationContextForClient
+      .getUseCases()
+      .validateAddPrivatePractitionerInteractor.mockReturnValue('error');
+
     await runAction(validateAddPrivatePractitionerAction, {
       modules: {
         presenter,
@@ -60,6 +56,6 @@ describe('validateAddPrivatePractitioner', () => {
       },
     });
 
-    expect(errorStub.mock.calls.length).toEqual(1);
+    expect(errorStub).toHaveBeenCalledTimes(1);
   });
 });

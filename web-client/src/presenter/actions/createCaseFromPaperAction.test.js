@@ -1,34 +1,31 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   createCaseFromPaperAction,
   setupPercentDone,
 } from './createCaseFromPaperAction';
-import { prepareDateFromString } from '../../../../shared/src/business/utilities/DateHandler';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-let filePetitionFromPaperInteractorStub;
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    filePetitionFromPaperInteractor: filePetitionFromPaperInteractorStub,
-  }),
-  getUtilities: () => ({
-    prepareDateFromString,
-  }),
-};
-
-const errorStub = jest.fn();
-const successStub = jest.fn();
-
-presenter.providers.path = {
-  error: errorStub,
-  success: successStub,
-};
-
 describe('createCaseFromPaperAction', () => {
+  let errorStub, successStub;
+
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
+    errorStub = jest.fn();
+    successStub = jest.fn();
+
+    presenter.providers.path = {
+      error: errorStub,
+      success: successStub,
+    };
+  });
+
   it('should call filePetitionFromPaperInteractor with the petition metadata and files and call the success path when finished', async () => {
-    filePetitionFromPaperInteractorStub = jest.fn().mockReturnValue(MOCK_CASE);
+    applicationContext
+      .getUseCases()
+      .filePetitionFromPaperInteractor.mockReturnValue(MOCK_CASE);
 
     await runAction(createCaseFromPaperAction, {
       modules: {
@@ -53,8 +50,13 @@ describe('createCaseFromPaperAction', () => {
       },
     });
 
-    expect(filePetitionFromPaperInteractorStub).toBeCalled();
-    expect(filePetitionFromPaperInteractorStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().filePetitionFromPaperInteractor,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCases().filePetitionFromPaperInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       applicationForWaiverOfFilingFeeFile: {},
       ownershipDisclosureFile: {},
       petitionFile: {},
@@ -68,9 +70,11 @@ describe('createCaseFromPaperAction', () => {
   });
 
   it('should call filePetitionFromPaperInteractor and call path.error when finished if it throws an error', async () => {
-    filePetitionFromPaperInteractorStub = jest.fn().mockImplementation(() => {
-      throw new Error('error');
-    });
+    applicationContext
+      .getUseCases()
+      .filePetitionFromPaperInteractor.mockImplementation(() => {
+        throw new Error('error');
+      });
 
     await runAction(createCaseFromPaperAction, {
       modules: {
@@ -90,8 +94,13 @@ describe('createCaseFromPaperAction', () => {
       },
     });
 
-    expect(filePetitionFromPaperInteractorStub).toBeCalled();
-    expect(filePetitionFromPaperInteractorStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().filePetitionFromPaperInteractor,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCases().filePetitionFromPaperInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
@@ -130,17 +139,19 @@ describe('setupPercentDone', () => {
       trial: {},
       waiverOfFilingFee: {},
     });
-    expect(storeObject.percentComplete).toEqual(0);
-    expect(storeObject.timeRemaining).toEqual(Number.POSITIVE_INFINITY);
-    expect(storeObject.isUploading).toEqual(true);
+    expect(storeObject['fileUploadProgress.percentComplete']).toEqual(0);
+    expect(storeObject['fileUploadProgress.timeRemaining']).toEqual(
+      Number.POSITIVE_INFINITY,
+    );
+    expect(storeObject['fileUploadProgress.isUploading']).toEqual(true);
 
     result.ownership({ isDone: true });
     result.petition({ isDone: true });
     result.stin({ isDone: true });
     result.trial({ isDone: true });
     result.waiverOfFilingFee({ loaded: 0, total: 1 });
-    expect(storeObject.percentComplete).toEqual(90);
+    expect(storeObject['fileUploadProgress.percentComplete']).toEqual(90);
     result.waiverOfFilingFee({ isDone: true });
-    expect(storeObject.percentComplete).toEqual(100);
+    expect(storeObject['fileUploadProgress.percentComplete']).toEqual(100);
   });
 });

@@ -1,17 +1,10 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { removeCaseDetailPendingItemAction } from './removeCaseDetailPendingItemAction';
 import { runAction } from 'cerebral/test';
 
 describe('removeCaseDetailPendingItemAction', () => {
-  let applicationContext;
-  const removeCasePendingItemInteractorSpy = jest.fn();
-
-  beforeEach(() => {
-    applicationContext = {
-      getUseCases: () => ({
-        removeCasePendingItemInteractor: removeCasePendingItemInteractorSpy,
-      }),
-    };
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 
@@ -29,7 +22,10 @@ describe('removeCaseDetailPendingItemAction', () => {
       },
     });
 
-    expect(removeCasePendingItemInteractorSpy.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().removeCasePendingItemInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       caseId: '23456',
       documentId: '123abc',
     });

@@ -14,14 +14,14 @@ export const IRSNotice = connect(
       sequences.validatePetitionFromPaperSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function IRSNotice({
     CASE_TYPES,
     form,
     startCaseInternalHelper,
     updateFormValueSequence,
     validatePetitionFromPaperSequence,
     validationErrors,
-  }) => {
+  }) {
     const renderIrsNoticeRadios = () => {
       return (
         <fieldset className="usa-fieldset" id="irs-verified-notice-radios">

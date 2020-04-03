@@ -1,9 +1,10 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { completeWorkItemInteractor } = require('./completeWorkItemInteractor');
 const { User } = require('../../entities/User');
 
 describe('completeWorkItemInteractor', () => {
-  let applicationContext;
-
   let mockWorkItem = {
     assigneeId: 'docketclerk',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -19,20 +20,18 @@ describe('completeWorkItemInteractor', () => {
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
+  const mockPetitionerUser = {
+    name: 'Petitioner',
+    role: User.ROLES.petitioner,
+    userId: 'petitioner',
+  };
+
   it('throws an error if the user does not have access to the interactor', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          name: 'Petitioner',
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
-      getPersistenceGateway: () => ({
-        getWorkItemById: async () => mockWorkItem,
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue(mockPetitionerUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getWorkItemById.mockResolvedValue(mockWorkItem);
+
     let error;
     try {
       await completeWorkItemInteractor({

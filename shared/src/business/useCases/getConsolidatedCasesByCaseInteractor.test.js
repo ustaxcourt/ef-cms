@@ -1,11 +1,11 @@
 const {
   getConsolidatedCasesByCaseInteractor,
 } = require('./getConsolidatedCasesByCaseInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('getConsolidatedCasesByCaseInteractor', () => {
-  let applicationContext;
   let getCasesByLeadCaseIdStub;
 
   beforeEach(() => {
@@ -22,13 +22,12 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
       },
     ]);
 
-    applicationContext = {
-      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      getPersistenceGateway: () => ({
-        getCasesByLeadCaseId: getCasesByLeadCaseIdStub,
-      }),
-      getUniqueId: () => 'unique-id-1',
-    };
+    applicationContext.getCurrentUser.mockResolvedValue(
+      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByLeadCaseId.mockImplementation(getCasesByLeadCaseIdStub);
   });
 
   it('returns cases by the leadCaseId', async () => {

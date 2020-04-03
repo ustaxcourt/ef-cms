@@ -108,6 +108,20 @@ const NavigationItems = (
           </a>
         </li>
       )}
+      {helper.showSearchNavItem && (
+        <li className={classNames('usa-nav__primary-item')}>
+          <a
+            className={classNames(
+              'usa-nav__link',
+              helper.pageIsDashboard && 'usa-current',
+            )}
+            href="/"
+            onClick={() => toggleMobileMenuSequence()}
+          >
+            Search
+          </a>
+        </li>
+      )}
       {helper.showTrialSessions && (
         <li className={classNames('usa-nav__primary-item')}>
           <a
@@ -148,7 +162,7 @@ export const Header = connect(
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     user: state.user,
   },
-  ({
+  function Header({
     headerHelper,
     isAccountMenuOpen,
     isReportsMenuOpen,
@@ -158,7 +172,7 @@ export const Header = connect(
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
     user,
-  }) => {
+  }) {
     const headerRef = useRef(null);
 
     useEffect(() => {

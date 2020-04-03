@@ -26,7 +26,7 @@ export const AppComponentPublic = connect(
   {
     currentPage: state.currentPage,
   },
-  ({ currentPage }) => {
+  function AppComponentPublic({ currentPage }) {
     const focusMain = e => {
       e && e.preventDefault();
       const header = document.querySelector('#main-content h1');

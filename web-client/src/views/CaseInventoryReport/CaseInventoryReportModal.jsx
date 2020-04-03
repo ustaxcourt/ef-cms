@@ -15,14 +15,14 @@ export const CaseInventoryReportModal = connect(
       sequences.validateCaseInventoryReportModalSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function CaseInventoryReportModal({
     cancelSequence,
     caseInventoryReportHelper,
     confirmSequence,
     updateScreenMetadataSequence,
     validateCaseInventoryReportModalSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"

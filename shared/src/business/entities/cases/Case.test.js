@@ -1,4 +1,3 @@
-const moment = require('moment');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
@@ -12,8 +11,10 @@ const { DocketRecord } = require('../DocketRecord');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
+const { prepareDateFromString } = require('../../utilities/DateHandler');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { TrialSession } = require('../trialSessions/TrialSession');
+const { User } = require('../User');
 const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
@@ -1277,7 +1278,7 @@ describe('Case entity', () => {
         {
           documents: [
             {
-              createdAt: moment().toISOString(),
+              createdAt: prepareDateFromString().toISOString(),
               eventCode: 'A',
             },
           ],
@@ -1295,7 +1296,7 @@ describe('Case entity', () => {
         {
           documents: [
             {
-              createdAt: moment()
+              createdAt: prepareDateFromString()
                 .subtract(1, 'year')
                 .toISOString(),
               eventCode: 'ZZZs',
@@ -1316,17 +1317,12 @@ describe('Case entity', () => {
       Note: As of this writing on 2020-03-20, there may be a bug in the `moment` library as it pertains to 
       leap-years and/or leap-days and maybe daylight saving time, too. Meaning that if *this* test runs
       at a time when it is calculating date/time differences across the existence of a leap year and DST, it may fail.
-      I expect that this would work correctly in a production environment. 
-      I suspect that possibly:
-       const differenceInDays = moment().diff(moment().subtract(45, 'day'), 'day', true);
-       console.log('differenceInDays', differenceInDays); // yields '46' instead of '45'
-      But I haven't nailed down the bug. :(
       */
       const caseToCheck = new Case(
         {
           documents: [
             {
-              createdAt: moment()
+              createdAt: prepareDateFromString()
                 .subtract(
                   Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS,
                   Case.ANSWER_CUTOFF_UNIT,
@@ -1348,7 +1344,7 @@ describe('Case entity', () => {
     });
 
     it("should not change the status to 'Ready for Trial' when an answer document has been filed before the cutoff but case is not 'Not at issue'", () => {
-      const createdAt = moment()
+      const createdAt = prepareDateFromString()
         .subtract(
           Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10,
           Case.ANSWER_CUTOFF_UNIT,
@@ -1374,7 +1370,7 @@ describe('Case entity', () => {
     });
 
     it("should change the status to 'Ready for Trial' when an answer document has been filed before the cutoff", () => {
-      const createdAt = moment()
+      const createdAt = prepareDateFromString()
         .subtract(
           Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10,
           Case.ANSWER_CUTOFF_UNIT,
@@ -2737,26 +2733,31 @@ describe('Case entity', () => {
   });
 
   describe('isAssociatedUser', () => {
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        irsPractitioners: [{ userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' }],
-        privatePractitioners: [
-          { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
-        ],
-      },
-      {
-        applicationContext: {
-          getCurrentUser: () =>
-            MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+    let caseEntity;
+    beforeEach(() => {
+      caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          irsPractitioners: [
+            { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
+          ],
+          privatePractitioners: [
+            { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
+          ],
         },
-      },
-    );
+        {
+          applicationContext: {
+            getCurrentUser: () =>
+              MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+          },
+        },
+      );
+    });
 
     it('returns true if the user is an irsPractitioner on the case', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
-        userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72',
+        user: { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
       });
 
       expect(isAssociated).toBeTruthy();
@@ -2765,16 +2766,61 @@ describe('Case entity', () => {
     it('returns true if the user is a privatePractitioner on the case', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
-        userId: '271e5918-6461-4e67-bc38-274bc0aa0248',
+        user: { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
       });
 
       expect(isAssociated).toBeTruthy();
     });
 
-    it('returns false if the user is a not a privatePractitioner or irsPractitioner on the case', () => {
+    it('returns false if the user is an irs superuser but the petition document is not served', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
-        userId: '4b32e14b-f583-4631-ba44-1439a093d6d0',
+        user: {
+          role: User.ROLES.irsSuperuser,
+          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+        },
+      });
+
+      expect(isAssociated).toBeFalsy();
+    });
+
+    it('returns true if the user is an irs superuser and the petition document is served', () => {
+      caseEntity.documents = [
+        {
+          documentType: 'Petition',
+          servedAt: '2019-03-01T21:40:46.415Z',
+        },
+      ];
+
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        user: {
+          role: User.ROLES.irsSuperuser,
+          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+        },
+      });
+
+      expect(isAssociated).toBeTruthy();
+    });
+
+    it('returns false if the user is an irs superuser and the case does not have documents', () => {
+      caseEntity.documents = undefined;
+
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity,
+        user: {
+          role: User.ROLES.irsSuperuser,
+          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+        },
+      });
+
+      expect(isAssociated).toBeFalsy();
+    });
+
+    it('returns false if the user is a not a privatePractitioner or irsPractitioner on the case and is not an irs superuser', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        user: { userId: '4b32e14b-f583-4631-ba44-1439a093d6d0' },
       });
 
       expect(isAssociated).toBeFalsy();

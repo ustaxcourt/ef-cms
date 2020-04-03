@@ -8,7 +8,7 @@ const PdfPreviewComponent = connect(
     clearPdfPreviewUrlSequence: sequences.clearPdfPreviewUrlSequence,
     pdfPreviewUrl: state.pdfPreviewUrl,
   },
-  ({ clearPdfPreviewUrlSequence, pdfPreviewUrl }) => {
+  function PdfPreviewComponent({ clearPdfPreviewUrlSequence, pdfPreviewUrl }) {
     // always renders. use life-cycle hooks here.
 
     const onRemove = () => {
@@ -35,7 +35,7 @@ export const PdfPreview = connect(
   {
     pdfPreviewUrl: state.pdfPreviewUrl,
   },
-  ({ pdfPreviewUrl }) => {
+  function PdfPreview({ pdfPreviewUrl }) {
     // conditional rendering, no life-cycle hooks.
     if (!pdfPreviewUrl || process.env.CI) {
       return '';

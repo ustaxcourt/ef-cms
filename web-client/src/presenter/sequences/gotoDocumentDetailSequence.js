@@ -9,6 +9,7 @@ import { parallel } from 'cerebral/factories';
 import { set } from 'cerebral/factories';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultDocumentDetailTabAction } from '../actions/setDefaultDocumentDetailTabAction';
 import { setDocumentDetailPageTitleAction } from '../actions/setDocumentDetailPageTitleAction';
@@ -31,6 +32,7 @@ export const gotoDocumentDetailSequence = [
   setDocumentIdAction,
   getCaseAction,
   setCaseAction,
+  setCaseOnFormAction,
   setFormForCaseAction,
   setDefaultDocumentDetailTabAction,
   setBaseUrlAction,

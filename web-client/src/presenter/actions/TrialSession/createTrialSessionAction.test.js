@@ -1,38 +1,33 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext.js';
 import { createTrialSessionAction } from './createTrialSessionAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 const MOCK_TRIAL = {
   maxCases: 100,
   sessionType: 'Regular',
   startDate: '2019-12-01T00:00:00.000Z',
-  swingSession: true,
-  swingSessionId: '456',
   term: 'Fall',
   trialLocation: 'Birmingham, Alabama',
   trialSessionId: '123',
 };
 
-let createTrialSessionStub;
-const setTrialSessionAsSwingSessionStub = jest.fn();
 const successStub = jest.fn();
 const errorStub = jest.fn();
 
-presenter.providers.path = {
-  error: errorStub,
-  success: successStub,
-};
-
 describe('createTrialSessionAction', () => {
-  beforeEach(() => {
-    createTrialSessionStub = jest.fn().mockResolvedValue(MOCK_TRIAL);
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        createTrialSessionInteractor: createTrialSessionStub,
-        setTrialSessionAsSwingSessionInteractor: setTrialSessionAsSwingSessionStub,
-      }),
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.path = {
+      error: errorStub,
+      success: successStub,
     };
+  });
+
+  beforeEach(() => {
+    applicationContext
+      .getUseCases()
+      .createTrialSessionInteractor.mockResolvedValue(MOCK_TRIAL);
   });
 
   it('goes to success path if trial session is created', async () => {
@@ -44,13 +39,17 @@ describe('createTrialSessionAction', () => {
         form: { ...MOCK_TRIAL },
       },
     });
+
     expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('goes to error path if error', async () => {
-    createTrialSessionStub = jest.fn().mockImplementation(() => {
-      throw new Error('sadas');
-    });
+    applicationContext
+      .getUseCases()
+      .createTrialSessionInteractor.mockImplementation(() => {
+        throw new Error('sadas');
+      });
+
     await runAction(createTrialSessionAction, {
       modules: {
         presenter,
@@ -59,6 +58,7 @@ describe('createTrialSessionAction', () => {
         form: { ...MOCK_TRIAL },
       },
     });
+
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 
@@ -68,12 +68,23 @@ describe('createTrialSessionAction', () => {
         presenter,
       },
       state: {
-        form: { ...MOCK_TRIAL },
+        form: {
+          ...MOCK_TRIAL,
+          swingSession: true,
+          swingSessionId: '456',
+        },
       },
     });
-    expect(createTrialSessionStub).toBeCalled();
-    expect(setTrialSessionAsSwingSessionStub).toBeCalled();
-    expect(setTrialSessionAsSwingSessionStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().createTrialSessionInteractor,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor
+        .mock.calls[0][0],
+    ).toMatchObject({
       swingSessionId: '123',
       trialSessionId: '456',
     });

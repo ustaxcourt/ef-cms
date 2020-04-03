@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { deleteWorkItemFromSection } = require('./deleteWorkItemFromSection');
 
 describe('deleteWorkItemFromSection', () => {
@@ -10,14 +13,9 @@ describe('deleteWorkItemFromSection', () => {
   });
 
   it('invokes the persistence layer with pk of irsHoldingQueue|workItem and other expected params', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        delete: deleteStub,
-      }),
-    };
+    applicationContext.getDocumentClient.mockReturnValue({
+      delete: deleteStub,
+    });
     await deleteWorkItemFromSection({
       applicationContext,
       workItem: {

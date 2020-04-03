@@ -1,8 +1,3 @@
-import {
-  formattedCaseDetail,
-  formattedCases,
-} from './computeds/formattedCaseDetail';
-
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
@@ -20,6 +15,7 @@ import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
+import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
@@ -38,6 +34,10 @@ import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
+import {
+  formattedCaseDetail,
+  formattedCases,
+} from './computeds/formattedCaseDetail';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
 import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
@@ -91,6 +91,7 @@ const helpers = {
   caseDetailSubnavHelper,
   caseInformationHelper,
   caseInventoryReportHelper,
+  caseSearchBoxHelper,
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
   confirmInitiateServiceModalHelper,
@@ -147,8 +148,7 @@ const helpers = {
   workQueueSectionHelper,
 };
 
-export const state = {
-  ...helpers,
+export const baseState = {
   advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
   archiveDraftDocument: {
     // used by the delete draft document modal
@@ -159,7 +159,6 @@ export const state = {
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloads: {}, // batch download of PDFs
   caseDetail: {},
-  caseDetailErrors: {}, // field level validation errors on update case screen TODO: move to validationErrors
   cases: [],
   cognitoLoginUrl: null,
   completeForm: {}, // TODO: replace with state.form
@@ -181,9 +180,14 @@ export const state = {
     },
   },
   docketRecordIndex: 0, // needs its own object because it's present when other forms are on screen
-  document: {},
   documentId: null,
   fieldOrder: [], // TODO: related to errors
+  fileUploadProgress: {
+    // used for the progress bar shown in modal when uploading files
+    isUploading: false,
+    percentComplete: 0,
+    timeRemaining: Number.POSITIVE_INFINITY,
+  },
   form: {}, // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
@@ -191,7 +195,10 @@ export const state = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
-  modal: {},
+  modal: {
+    pdfPreviewModal: undefined,
+    showModal: undefined, // the name of the modal to display
+  },
   navigation: {},
   notifications: {},
   pdfForSigning: {
@@ -202,10 +209,13 @@ export const state = {
     signatureApplied: false,
     signatureData: null,
   },
-  pdfPreviewModal: {}, // how is this different than the modal?
-  percentComplete: 0,
   permissions: null,
   previewPdfFile: null,
+  progressIndicator: {
+    // used for the spinner that shows when waiting for network responses
+    waitingForResponse: false,
+    waitingForResponseRequests: 0,
+  },
   scanner: {
     batchIndexToDelete: null,
     batchIndexToRescan: null, // batch index for re-scanning
@@ -222,17 +232,18 @@ export const state = {
   sessionMetadata: {
     docketRecordSort: [],
   },
-  showModal: '',
   showValidation: false,
-  timeRemaining: Number.POSITIVE_INFINITY,
   user: null,
   users: [],
   validationErrors: {},
-  waitingForResponse: false,
-  waitingForResponseRequests: 0,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
   workQueue: [],
   workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
+};
+
+export const state = {
+  ...helpers,
+  ...baseState,
 };

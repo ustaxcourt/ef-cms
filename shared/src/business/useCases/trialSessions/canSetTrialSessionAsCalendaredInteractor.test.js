@@ -1,7 +1,9 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   canSetTrialSessionAsCalendaredInteractor,
 } = require('./canSetTrialSessionAsCalendaredInteractor');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { User } = require('../../entities/User');
 
 const MOCK_TRIAL = {
@@ -13,18 +15,18 @@ const MOCK_TRIAL = {
   trialLocation: 'Birmingham, Alabama',
 };
 
+let user;
+
 describe('canSetTrialSessionAsCalendaredInteractor', () => {
-  let applicationContext;
+  beforeEach(() => {
+    applicationContext.environment.stage = 'local';
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+  });
 
   it('throws an error if a user is unauthorized', () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: 'unauthorizedRole',
-          userId: 'unauthorizedUser',
-        };
-      },
+    user = {
+      role: 'unauthorizedRole',
+      userId: 'unauthorizedUser',
     };
 
     let error;
@@ -43,19 +45,12 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
   });
 
   it('gets the result back from the interactor', () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
-        };
-      },
-      getEntityConstructors: () => ({
-        TrialSession,
-      }),
-      getUniqueId: () => 'easy-as-abc-123',
+    user = {
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
     };
+
+    applicationContext.getUniqueId.mockReturnValue('easy-as-abc-123');
 
     const result = canSetTrialSessionAsCalendaredInteractor({
       applicationContext,

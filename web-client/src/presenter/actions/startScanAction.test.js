@@ -1,43 +1,28 @@
 import { Scan } from '../../../../shared/src/business/entities/Scan';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { startScanAction } from './startScanAction';
-
-let mockStartScanSession = jest.fn(() => ({
-  scannedBuffer: [],
-}));
-const mockRemoveItemInteractor = jest.fn();
-const { SCAN_MODES } = Scan;
-
-presenter.providers.applicationContext = {
-  getConstants: () => ({
-    SCAN_MODES,
-  }),
-  getScanner: () => ({
-    getSourceNameByIndex: () => 'scanner',
-    setSourceByIndex: () => null,
-    startScanSession: mockStartScanSession,
-  }),
-  getUseCases: () => ({
-    removeItemInteractor: mockRemoveItemInteractor,
-  }),
-};
-
-presenter.providers.path = {
-  error: jest.fn(),
-  success: jest.fn(),
-};
 
 global.alert = () => null;
 
 describe('startScanAction', () => {
+  beforeAll(() => {
+    Object.assign(presenter.providers, {
+      applicationContext,
+      path: {
+        error: jest.fn(),
+        success: jest.fn(),
+      },
+    });
+  });
   it('tells the TWAIN library to begin image acquisition', async () => {
     const result = await runAction(startScanAction, {
       modules: {
         presenter,
       },
       props: {
-        scanMode: SCAN_MODES.FEEDER,
+        scanMode: Scan.SCAN_MODES.FEEDER,
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },
@@ -60,8 +45,17 @@ describe('startScanAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        scanMode: Scan.SCAN_MODES.FEEDER,
+        scannerSourceIndex: 0,
+        scannerSourceName: 'scanner',
+      },
       state: {
+        currentViewMetadata: {
+          documentSelectedForScan: 0,
+        },
         scanner: {
+          batches: [],
           isScanning: false,
         },
       },
@@ -96,8 +90,8 @@ describe('startScanAction', () => {
   });
 
   it('calls the error path on errors', async () => {
-    mockStartScanSession = jest.fn(() => {
-      throw new Error('no images in buffer');
+    applicationContext.getScanner().startScanSession.mockImplementation(() => {
+      return Promise.reject(new Error('no images in buffer'));
     });
 
     await runAction(startScanAction, {
@@ -105,7 +99,7 @@ describe('startScanAction', () => {
         presenter,
       },
       props: {
-        scanMode: SCAN_MODES.FEEDER,
+        scanMode: Scan.SCAN_MODES.FEEDER,
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },

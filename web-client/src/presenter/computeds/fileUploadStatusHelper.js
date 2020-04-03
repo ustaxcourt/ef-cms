@@ -1,9 +1,9 @@
 import { state } from 'cerebral';
 
 export const fileUploadStatusHelper = get => {
-  const timeRemaining = get(state.timeRemaining);
-  const percentComplete = get(state.percentComplete);
-  const isUploading = get(state.isUploading);
+  const timeRemaining = get(state.fileUploadProgress.timeRemaining);
+  const percentComplete = get(state.fileUploadProgress.percentComplete);
+  const isUploading = get(state.fileUploadProgress.isUploading);
   const isCancelable = !!(
     Number.isFinite(timeRemaining) && percentComplete < 100
   );

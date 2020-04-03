@@ -10,7 +10,7 @@ export const CaseDifferenceModalOverlay = connect(
   {
     clearModalSequence: sequences.clearModalSequence,
   },
-  ({ clearModalSequence }) => {
+  function CaseDifferenceModalOverlay({ clearModalSequence }) {
     return (
       <>
         <Overlay

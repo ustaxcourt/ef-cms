@@ -16,7 +16,7 @@ export const AddIrsPractitionerModal = connect(
     validateSequence: sequences.validateAddIrsPractitionerSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function AddIrsPractitionerModal({
     cancelSequence,
     caseDetailHelper,
     confirmSequence,
@@ -24,7 +24,7 @@ export const AddIrsPractitionerModal = connect(
     updateModalValueSequence,
     validateSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"

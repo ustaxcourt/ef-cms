@@ -15,13 +15,13 @@ export const CaseInventoryReport = connect(
       sequences.gotoPrintableCaseInventoryReportSequence,
     screenMetadata: state.screenMetadata,
   },
-  ({
+  function CaseInventoryReport({
     caseInventoryReportHelper,
     caseInventoryReportLoadMoreSequence,
     getCaseInventoryReportSequence,
     gotoPrintableCaseInventoryReportSequence,
     screenMetadata,
-  }) => {
+  }) {
     return (
       <>
         <BigHeader text="Reports" />

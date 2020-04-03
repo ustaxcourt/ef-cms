@@ -15,7 +15,7 @@ export const PDFSignerPageButtons = connect(
     setPage: sequences.setPDFPageForSigningSequence,
     totalPages: state.documentSigningHelper.totalPages,
   },
-  ({
+  function PDFSignerPageButtons({
     currentPageNumber,
     disableNext,
     disablePrevious,
@@ -23,7 +23,7 @@ export const PDFSignerPageButtons = connect(
     previousPageNumber,
     setPage,
     totalPages,
-  }) => {
+  }) {
     const getPreviousPage = () => {
       if (disablePrevious) {
         return;

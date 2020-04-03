@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { updateTrialSession } = require('./updateTrialSession');
 
 describe('updateTrialSession', () => {
@@ -9,14 +12,9 @@ describe('updateTrialSession', () => {
   });
 
   it('invokes the persistence layer with pk of trial-session|{trialSessionId}, sk of trial-session|{trialSessionId} and other expected params', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        put: putStub,
-      }),
-    };
+    applicationContext.getDocumentClient.mockReturnValue({
+      put: putStub,
+    });
     await updateTrialSession({
       applicationContext,
       trialSessionToUpdate: {
@@ -31,7 +29,7 @@ describe('updateTrialSession', () => {
         trialLocation: 'VEGAS BABY',
         trialSessionId: '123',
       },
-      applicationContext: { environment: { stage: 'dev' } },
+      applicationContext: { environment: { stage: 'local' } },
     });
   });
 });

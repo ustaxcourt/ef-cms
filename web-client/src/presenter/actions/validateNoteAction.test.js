@@ -1,16 +1,15 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateNoteAction } from './validateNoteAction';
 
 describe('validateNote', () => {
-  let validateNoteStub;
   let successStub;
   let errorStub;
 
   let mockNote;
 
-  beforeEach(() => {
-    validateNoteStub = jest.fn();
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
@@ -18,12 +17,7 @@ describe('validateNote', () => {
       notes: 'hello notes',
     };
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateNoteInteractor: validateNoteStub,
-      }),
-    };
-
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -31,7 +25,10 @@ describe('validateNote', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateNoteStub = jest.fn().mockReturnValue(null);
+    applicationContext
+      .getUseCases()
+      .validateNoteInteractor.mockReturnValue(null);
+
     await runAction(validateNoteAction, {
       modules: {
         presenter,
@@ -45,7 +42,9 @@ describe('validateNote', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateNoteStub = jest.fn().mockReturnValue('error');
+    applicationContext
+      .getUseCases()
+      .validateNoteInteractor.mockReturnValue('error');
     await runAction(validateNoteAction, {
       modules: {
         presenter,

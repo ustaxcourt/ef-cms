@@ -1,9 +1,9 @@
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateCreateOrderModalFormValueAction } from './updateCreateOrderModalFormValueAction';
 
-presenter.providers.applicationContext = applicationContext;
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('updateCreateOrderModalFormValueAction', () => {
   it('sets state.modal values correctly if valid event code is passed in', async () => {

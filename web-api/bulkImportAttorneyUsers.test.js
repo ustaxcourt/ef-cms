@@ -17,6 +17,7 @@ describe('formatRecord', () => {
 
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30T05:00:00.000Z',
+      admissionsStatus: 'Active',
       birthYear: 1999,
       employer: 'IRS',
       isAdmitted: true,
@@ -28,7 +29,7 @@ describe('formatRecord', () => {
 
   it('formats a record for a non-admitted DOJ employee', () => {
     const initialRecord = {
-      admissionsStatus: 'Ineligible',
+      admissionsStatus: 'Inactive',
       birthYear: '1999',
       firstName: 'Mike',
       isDojEmployee: 'Y',
@@ -43,6 +44,7 @@ describe('formatRecord', () => {
 
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30T05:00:00.000Z',
+      admissionsStatus: 'Inactive',
       birthYear: 1999,
       employer: 'DOJ',
       isAdmitted: false,
@@ -69,6 +71,7 @@ describe('formatRecord', () => {
 
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30T05:00:00.000Z',
+      admissionsStatus: 'Active',
       birthYear: undefined,
       employer: 'Private',
       isAdmitted: true,
@@ -100,6 +103,7 @@ describe('formatRecord', () => {
 
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30T05:00:00.000Z',
+      admissionsStatus: 'Active',
       birthYear: undefined,
       contact: {
         address1: 'knows how to party',

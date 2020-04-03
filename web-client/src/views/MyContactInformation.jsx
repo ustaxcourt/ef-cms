@@ -9,7 +9,7 @@ export const MyContactInformation = connect(
     constants: state.constants,
     user: state.user,
   },
-  ({ constants, user }) => {
+  function MyContactInformation({ constants, user }) {
     return (
       <>
         <div className="case-search">

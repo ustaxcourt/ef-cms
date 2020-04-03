@@ -136,7 +136,7 @@ function TrialSession(rawSession, { applicationContext }) {
   this.init(rawSession, { applicationContext });
 }
 
-TrialSession.prototype.init = function(rawSession, { applicationContext }) {
+TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
@@ -199,57 +199,26 @@ TrialSession.VALIDATION_ERROR_MESSAGES = {
 
 TrialSession.validationRules = {
   COMMON: {
-    address1: joi
-      .string()
-      .allow('')
-      .optional(),
-    address2: joi
-      .string()
-      .allow('')
-      .optional(),
-    city: joi
-      .string()
-      .allow('')
-      .optional(),
+    address1: joi.string().allow('').optional(),
+    address2: joi.string().allow('').optional(),
+    city: joi.string().allow('').optional(),
     courtReporter: joi.string().optional(),
-    courthouseName: joi
-      .string()
-      .allow('')
-      .optional(),
-    createdAt: joi
-      .date()
-      .iso()
-      .optional(),
+    courthouseName: joi.string().allow('').optional(),
+    createdAt: joi.date().iso().optional(),
     irsCalendarAdministrator: joi.string().optional(),
     isCalendared: joi.boolean().required(),
     judge: joi.object().optional(),
-    maxCases: joi
-      .number()
-      .greater(0)
-      .integer()
-      .required(),
-    notes: joi
-      .string()
-      .max(400)
-      .optional(),
-    noticeIssuedDate: joi
-      .date()
-      .iso()
-      .optional(),
+    maxCases: joi.number().greater(0).integer().required(),
+    notes: joi.string().max(400).optional(),
+    noticeIssuedDate: joi.date().iso().optional(),
     postalCode: JoiValidationConstants.US_POSTAL_CODE.optional(),
     sessionType: joi
       .string()
       .valid(...TrialSession.SESSION_TYPES)
       .required(),
-    startDate: joi
-      .date()
-      .iso()
-      .required(),
+    startDate: joi.date().iso().required(),
     startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES,
-    state: joi
-      .string()
-      .allow('')
-      .optional(),
+    state: joi.string().allow('').optional(),
     swingSession: joi.boolean().optional(),
     swingSessionId: joi.when('swingSession', {
       is: true,
@@ -296,16 +265,13 @@ joiValidationDecorator(
         removedFromTrialDate: joi.when('removedFromTrial', {
           is: true,
           otherwise: joi.optional().allow(null),
-          then: joi
-            .date()
-            .iso()
-            .required(),
+          then: joi.date().iso().required(),
         }),
       }),
     ),
     isCalendared: joi.boolean().required(),
   }),
-  function() {
+  function () {
     return !this.getFormattedValidationErrors();
   },
   TrialSession.VALIDATION_ERROR_MESSAGES,
@@ -316,7 +282,7 @@ joiValidationDecorator(
  * @param {string} swingSessionId the id of the swing session to associate with the session
  * @returns {TrialSession} the trial session entity
  */
-TrialSession.prototype.setAsSwingSession = function(swingSessionId) {
+TrialSession.prototype.setAsSwingSession = function (swingSessionId) {
   this.swingSessionId = swingSessionId;
   this.swingSession = true;
   return this;
@@ -327,7 +293,7 @@ TrialSession.prototype.setAsSwingSession = function(swingSessionId) {
  *
  * @returns {string} the sort key prefix
  */
-TrialSession.prototype.generateSortKeyPrefix = function() {
+TrialSession.prototype.generateSortKeyPrefix = function () {
   const { sessionType, trialLocation } = this;
 
   const caseProcedureSymbol =
@@ -347,7 +313,7 @@ TrialSession.prototype.generateSortKeyPrefix = function() {
  *
  * @returns {TrialSession} the trial session entity
  */
-TrialSession.prototype.setAsCalendared = function() {
+TrialSession.prototype.setAsCalendared = function () {
   this.isCalendared = true;
   return this;
 };
@@ -358,7 +324,7 @@ TrialSession.prototype.setAsCalendared = function() {
  * @param {object} caseEntity the case entity to add to the calendar
  * @returns {TrialSession} the trial session entity
  */
-TrialSession.prototype.addCaseToCalendar = function(caseEntity) {
+TrialSession.prototype.addCaseToCalendar = function (caseEntity) {
   const { caseId } = caseEntity;
   this.caseOrder.push({ caseId });
   return this;
@@ -370,7 +336,7 @@ TrialSession.prototype.addCaseToCalendar = function(caseEntity) {
  * @param {object} caseEntity the case entity to add to the calendar
  * @returns {TrialSession} the trial session entity
  */
-TrialSession.prototype.manuallyAddCaseToCalendar = function(caseEntity) {
+TrialSession.prototype.manuallyAddCaseToCalendar = function (caseEntity) {
   const { caseId } = caseEntity;
   this.caseOrder.push({ caseId, isManuallyAdded: true });
   return this;
@@ -382,7 +348,7 @@ TrialSession.prototype.manuallyAddCaseToCalendar = function(caseEntity) {
  * @param {object} caseEntity the case entity to check if already on the case
  * @returns {boolean} if the case is already on the trial session
  */
-TrialSession.prototype.isCaseAlreadyCalendared = function(caseEntity) {
+TrialSession.prototype.isCaseAlreadyCalendared = function (caseEntity) {
   return !!this.caseOrder
     .filter(order => order.caseId === caseEntity.caseId)
     .filter(order => order.removedFromTrial !== true).length;
@@ -396,7 +362,7 @@ TrialSession.prototype.isCaseAlreadyCalendared = function(caseEntity) {
  * @param {string} arguments.disposition the reason the case is being removed from the calendar
  * @returns {TrialSession} the trial session entity
  */
-TrialSession.prototype.removeCaseFromCalendar = function({
+TrialSession.prototype.removeCaseFromCalendar = function ({
   caseId,
   disposition,
 }) {
@@ -418,7 +384,7 @@ TrialSession.prototype.removeCaseFromCalendar = function({
  * @param {string} arguments.caseId the id of the case to remove from the calendar
  * @returns {TrialSession} the trial session entity
  */
-TrialSession.prototype.deleteCaseFromCalendar = function({ caseId }) {
+TrialSession.prototype.deleteCaseFromCalendar = function ({ caseId }) {
   const index = this.caseOrder.findIndex(
     trialCase => trialCase.caseId === caseId,
   );
@@ -434,7 +400,7 @@ TrialSession.prototype.deleteCaseFromCalendar = function({ caseId }) {
  *
  * @returns {boolean} TRUE if can set as calendared (properties were all not empty), FALSE otherwise
  */
-TrialSession.prototype.canSetAsCalendared = function() {
+TrialSession.prototype.canSetAsCalendared = function () {
   return isEmpty(this.getEmptyFields());
 };
 
@@ -443,7 +409,7 @@ TrialSession.prototype.canSetAsCalendared = function() {
  *
  * @returns {Array} A list of property names of the trial session that are empty
  */
-TrialSession.prototype.getEmptyFields = function() {
+TrialSession.prototype.getEmptyFields = function () {
   const missingProperties = TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING.filter(
     property => isEmpty(this[property]),
   );
@@ -456,7 +422,7 @@ TrialSession.prototype.getEmptyFields = function() {
  *
  * @returns {TrialSession} the trial session entity
  */
-TrialSession.prototype.setNoticesIssued = function() {
+TrialSession.prototype.setNoticesIssued = function () {
   this.noticeIssuedDate = createISODateString();
   return this;
 };

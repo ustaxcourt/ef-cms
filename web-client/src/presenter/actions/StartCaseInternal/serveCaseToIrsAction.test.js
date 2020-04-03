@@ -1,35 +1,26 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { serveCaseToIrsAction } from './serveCaseToIrsAction';
 
 describe('serveCaseToIrsAction', () => {
-  let serveCaseToIrsInteractorStub;
   let pathPaperStub;
   let pathElectronicStub;
   let createObjectURLStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     global.window = global;
     global.Blob = () => {};
 
-    serveCaseToIrsInteractorStub = jest.fn().mockReturnValue(null);
     pathPaperStub = jest.fn();
     pathElectronicStub = jest.fn();
-    createObjectURLStub = jest.fn();
+    createObjectURLStub = jest.fn().mockReturnValue('123456-abcdef');
 
     presenter.providers.router = {
-      createObjectURL: () => {
-        createObjectURLStub();
-        return '123456-abcdef';
-      },
+      createObjectURL: createObjectURLStub,
     };
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        serveCaseToIrsInteractor: serveCaseToIrsInteractorStub,
-      }),
-    };
-
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       electronic: pathElectronicStub,
       paper: pathPaperStub,
@@ -48,12 +39,16 @@ describe('serveCaseToIrsAction', () => {
       },
     });
 
-    expect(serveCaseToIrsInteractorStub).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().serveCaseToIrsInteractor,
+    ).toHaveBeenCalled();
     expect(pathElectronicStub).toHaveBeenCalled();
   });
 
   it('serves a paper case and return the paper path', async () => {
-    serveCaseToIrsInteractorStub.mockReturnValue(['pdf-bytes']);
+    applicationContext
+      .getUseCases()
+      .serveCaseToIrsInteractor.mockReturnValue(['pdf-bytes']);
 
     await runAction(serveCaseToIrsAction, {
       modules: {
@@ -66,7 +61,9 @@ describe('serveCaseToIrsAction', () => {
       },
     });
 
-    expect(serveCaseToIrsInteractorStub).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().serveCaseToIrsInteractor,
+    ).toHaveBeenCalled();
     expect(pathPaperStub).toHaveBeenCalled();
   });
 });

@@ -19,7 +19,7 @@ export const scanBatchPreviewerHelper = (get, applicationContext) => {
 
   const bufferToBase64 = buf => {
     const binstr = Array.prototype.map
-      .call(buf, function(ch) {
+      .call(buf, function (ch) {
         return String.fromCharCode(ch);
       })
       .join('');
@@ -55,7 +55,8 @@ export const scanBatchPreviewerHelper = (get, applicationContext) => {
       ? batches.find(b => b.index === selectedBatchIndex)
       : {},
     selectedPageImage: selectPageImage,
-    showScannerSourceModal: get(state.showModal) === 'SelectScannerSourceModal',
+    showScannerSourceModal:
+      get(state.modal.showModal) === 'SelectScannerSourceModal',
     totalPages: selectedBatch.pages.length,
     uploadMode: documentUploadMode,
   };

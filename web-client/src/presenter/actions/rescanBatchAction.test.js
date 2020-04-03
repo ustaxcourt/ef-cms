@@ -1,38 +1,30 @@
 import { Scan } from '../../../../shared/src/business/entities/Scan';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { rescanBatchAction } from './rescanBatchAction';
 import { runAction } from 'cerebral/test';
 
-let mockStartScanSession = jest.fn(() => ({
-  scannedBuffer: [{ e: 5 }, { f: 6 }],
-}));
-const mockRemoveItemInteractor = jest.fn();
-const { SCAN_MODES } = Scan;
-
-presenter.providers.applicationContext = {
-  getConstants: () => ({
-    SCAN_MODES,
-  }),
-  getScanner: () => ({
-    getSourceNameByIndex: () => 'scanner',
-    setSourceByIndex: () => null,
-    startScanSession: mockStartScanSession,
-  }),
-  getUseCases: () => ({
-    removeItemInteractor: mockRemoveItemInteractor,
-  }),
-};
-
-const successStub = jest.fn();
-const errorStub = jest.fn();
-
-presenter.providers.path = {
-  error: errorStub,
-  success: successStub,
-};
-global.alert = () => null;
-
 describe('rescanBatchAction', () => {
+  const { SCAN_MODES } = Scan;
+
+  const successStub = jest.fn();
+  const errorStub = jest.fn();
+
+  global.alert = () => null;
+
+  beforeAll(() => {
+    applicationContext.getScanner().startScanSession.mockReturnValue({
+      scannedBuffer: [{ e: 5 }, { f: 6 }],
+    });
+
+    presenter.providers.applicationContext = applicationContext;
+
+    presenter.providers.path = {
+      error: errorStub,
+      success: successStub,
+    };
+  });
+
   it('rescans the batch based on the state.scanner.batchIndexToRescan and state.currentViewMetadata.documentSelectedForScan and replaces that batch with the return from startScanSession', async () => {
     const result = await runAction(rescanBatchAction, {
       modules: {
@@ -61,7 +53,7 @@ describe('rescanBatchAction', () => {
     });
 
     expect(result.state.scanner.isScanning).toBeFalsy();
-    expect(mockStartScanSession).toHaveBeenCalled();
+    expect(applicationContext.getScanner().startScanSession).toHaveBeenCalled();
     expect(result.state.scanner.batches.petition[1].pages).toEqual([
       { e: 5 },
       { f: 6 },
@@ -125,7 +117,7 @@ describe('rescanBatchAction', () => {
   });
 
   it('should call path of error on errors', async () => {
-    mockStartScanSession = jest.fn(() => {
+    applicationContext.getScanner().startScanSession.mockImplementation(() => {
       throw new Error('no images in buffer');
     });
 

@@ -24,7 +24,7 @@ export const EditDocketEntryMetaFormDocument = connect(
     validateDocketRecordSequence: sequences.validateDocketRecordSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function EditDocketEntryMetaFormDocument({
     caseDetail,
     editDocketEntryMetaHelper,
     form,
@@ -32,7 +32,7 @@ export const EditDocketEntryMetaFormDocument = connect(
     updateDocketEntryMetaDocumentFormValueSequence,
     validateDocketRecordSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <div className="blue-container">
         <FormGroup errorText={validationErrors.lodged}>
@@ -294,7 +294,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             </div>
           </fieldset>
         </FormGroup>
-        {!editDocketEntryMetaHelper.showObjection && (
+        {editDocketEntryMetaHelper.showObjection && (
           <FormGroup errorText={validationErrors.objections}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="objections-legend">
