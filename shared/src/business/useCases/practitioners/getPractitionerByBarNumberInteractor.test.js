@@ -124,11 +124,11 @@ describe('getPractitionerByBarNumberInteractor', () => {
       .getPersistenceGateway()
       .getPractitionerByBarNumber.mockReturnValue(undefined);
 
-    await expect(
-      getPractitionerByBarNumberInteractor({
-        applicationContext,
-        barNumber: 'BN0000',
-      }),
-    ).rejects.toThrow('No practitioner with the given bar number was found');
+    const practitioner = await getPractitionerByBarNumberInteractor({
+      applicationContext,
+      barNumber: 'BN0000',
+    });
+
+    expect(practitioner).toBeUndefined();
   });
 });

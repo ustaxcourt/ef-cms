@@ -4,6 +4,7 @@ import { getPractitionerDetailAction } from '../actions/getPractitionerDetailAct
 import { hasPractitionerDetailAction } from '../actions/hasPractitionerDetailAction';
 import { navigateToPractitionerDetailSequence } from './navigateToPractitionerDetailSequence';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
+import { setPractitionerResultsAction } from '../actions/AdvancedSearch/setPractitionerResultsAction';
 
 export const submitPractitionerBarNumberSearchSequence = [
   clearPractitionerDetailAction,
@@ -11,7 +12,7 @@ export const submitPractitionerBarNumberSearchSequence = [
   getPractitionerDetailAction,
   hasPractitionerDetailAction,
   {
-    noResults: [],
+    noResults: [setPractitionerResultsAction],
     success: [
       setPractitionerDetailAction,
       ...navigateToPractitionerDetailSequence,
