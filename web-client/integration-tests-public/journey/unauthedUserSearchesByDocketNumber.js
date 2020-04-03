@@ -16,7 +16,9 @@ export default (test, params) => {
     expect(searchResults).toEqual([]);
     expect(test.currentRouteUrl.indexOf('/case-detail')).toEqual(-1);
 
-    await test.runSequence('clearDocketNumberSearchFormSequence');
+    await test.runSequence('clearAdvancedSearchFormSequence', {
+      formType: 'caseSearchByDocketNumber',
+    });
     expect(test.getState('searchResults')).toBeUndefined();
     expect(
       test.getState('advancedSearchForm.caseSearchByDocketNumber'),
