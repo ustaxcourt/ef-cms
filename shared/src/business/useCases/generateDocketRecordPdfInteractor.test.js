@@ -91,6 +91,7 @@ describe('generateDocketRecordPdfInteractor', () => {
         },
       };
     },
+    getUniqueId: () => 'unique-id-1',
     getUseCases: () => {
       return {
         generatePdfFromHtmlInteractor: ({ contentHtml }) => {

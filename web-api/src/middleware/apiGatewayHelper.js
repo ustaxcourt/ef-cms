@@ -64,6 +64,7 @@ exports.handle = async (event, fun) => {
           response = pick(response, fieldsArr);
         }
       }
+
       return exports.sendOk(response);
     }
   } catch (err) {

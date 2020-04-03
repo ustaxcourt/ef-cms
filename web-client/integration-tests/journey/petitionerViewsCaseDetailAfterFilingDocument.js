@@ -33,7 +33,9 @@ export default (test, overrides = {}) => {
     //verify that the documents were added in the correct order
     expect(caseDetail.documents[0].eventCode).toEqual('P');
     expect(caseDetail.documents[1].eventCode).toEqual('STIN');
-    expect(caseDetail.docketRecord[1].eventCode).toEqual('RQT');
+    expect(
+      caseDetailFormatted.docketRecordWithDocument[1].record.eventCode,
+    ).toEqual('RQT');
     expect(caseDetail.documents[2].eventCode).toEqual('M014');
     expect(caseDetail.documents[3].eventCode).toEqual('AFF');
     expect(caseDetail.documents[4].eventCode).toEqual('MISL');

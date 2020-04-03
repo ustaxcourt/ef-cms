@@ -2,7 +2,10 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default (test, draftOrderIndex) => {
+export const docketClerkViewsSavedCourtIssuedDocketEntryInProgress = (
+  test,
+  draftOrderIndex,
+) => {
   return it('Docket Clerk views an in-progress docket entry for the given court-issued document', async () => {
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),

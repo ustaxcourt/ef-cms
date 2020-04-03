@@ -20,12 +20,13 @@ export const SectionWorkQueueOutbox = connect(
           <thead>
             <tr>
               <th aria-label="Docket Number" colSpan="2">
-                <span className="padding-left-2px">Docket</span>
+                <span className="padding-left-2px">Docket number</span>
               </th>
               {workQueueHelper.showReceivedColumn && <th>Filed</th>}
               {workQueueHelper.showSentColumn && <th>Sent</th>}
               <th>Case title</th>
               <th>Document</th>
+              <th>Processed by</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
               {!workQueueHelper.hideCaseStatusColumn && <th>Case status</th>}
               {workQueueHelper.showMessagesSentFromColumn && <th>From</th>}
@@ -79,6 +80,7 @@ export const SectionWorkQueueOutbox = connect(
                     </div>
                   )}
                 </td>
+                <td className="message-queue-row">{item.sentBy}</td>
                 {!workQueueHelper.hideFiledByColumn && (
                   <td className="message-queue-row">{item.document.filedBy}</td>
                 )}

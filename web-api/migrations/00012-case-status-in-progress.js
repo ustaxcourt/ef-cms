@@ -11,7 +11,7 @@ const mutateRecord = item => {
     const caseEntity = new Case(
       {
         ...item,
-        status: Case.STATUS_TYPES.inProgress,
+        status: Case.STATUS_TYPES.new,
       },
       { applicationContext },
     )

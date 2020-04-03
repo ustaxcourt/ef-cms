@@ -3,7 +3,7 @@ import { orderBy } from 'lodash';
 
 const { VALIDATION_ERROR_MESSAGES } = ForwardMessage;
 
-export default test => {
+export const docketClerkForwardWorkItem = test => {
   return it('Docket clerk forward work item', async () => {
     await test.runSequence('validateForwardMessageSequence', {
       workItemId: test.workItemId,

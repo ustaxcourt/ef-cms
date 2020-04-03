@@ -32,9 +32,10 @@ pkill -f s3rver
 
 echo "starting s3rver"
 rm -rf ./web-api/storage/s3/*
-node ./web-api/start-s3rver &
+npm run start:s3rver &
 S3RVER_PID=$!
 ./wait-until.sh http://localhost:9000/ 200
+npm run seed:s3
 
 if [ ! -z "$RESUME" ]; then
   echo "Resuming operation with previous s3 and dynamo data"
@@ -59,6 +60,7 @@ set -- \
   --noTimeout \
   --region us-east-1 \
   --run_dir "${RUN_DIR}" \
+  --skipCacheInvalidation "${SKIP_CACHE_INVALIDATION}" \
   --stage local \
   --stageColor "blue" \
   --dynamo_stream_arn "arn:aws:dynamodb:ddblocal:000000000000:table/efcms-local/stream/*" \
@@ -96,6 +98,8 @@ echo "starting case meta service"
 npx sls offline start "$@" --config web-api/serverless-case-meta.yml &
 echo "starting migrate service"
 npx sls offline start "$@" --config web-api/serverless-migrate.yml &
+echo "starting reports service"
+npx sls offline start "$@" --config web-api/serverless-reports.yml &
 
 echo "starting proxy"
 node ./web-api/proxy.js

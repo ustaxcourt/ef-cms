@@ -57,7 +57,8 @@ describe('generatePaperServiceAddressPagePdf', () => {
       await generatePaperServiceAddressPagePdf({
         applicationContext,
         contactData: {
-          name: 'Test Person',
+          name:
+            'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
         },
       });
     } catch (err) {
@@ -75,7 +76,8 @@ describe('generatePaperServiceAddressPagePdf', () => {
       result = await generatePaperServiceAddressPagePdf({
         applicationContext,
         contactData: {
-          name: 'Test Person',
+          name:
+            'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
         },
       });
     } catch (err) {
@@ -94,7 +96,8 @@ describe('generatePaperServiceAddressPagePdf', () => {
       await generatePaperServiceAddressPagePdf({
         applicationContext,
         contactData: {
-          name: 'Test Person',
+          name:
+            'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
         },
       });
     } catch (err) {
@@ -111,7 +114,8 @@ describe('generatePaperServiceAddressPagePdf', () => {
       caseEntity: {
         ...MOCK_CASE,
         contactData: {
-          name: 'Test Person',
+          name:
+            'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
         },
       },
     });

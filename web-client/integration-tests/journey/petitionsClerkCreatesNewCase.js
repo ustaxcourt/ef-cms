@@ -43,7 +43,8 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'caseCaption',
-      value: 'Test Person, Deceased, Test Person, Surviving Spouse, Petitioner',
+      value:
+        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Surviving Spouse, Petitioner',
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -128,7 +129,8 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
-      value: 'Test Person',
+      value:
+        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
     });
 
     await test.runSequence('updateFormValueSequence', {

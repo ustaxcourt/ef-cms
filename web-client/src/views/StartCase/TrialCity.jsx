@@ -38,16 +38,16 @@ export const TrialCity = connect(
         {showHint && (
           <span className="usa-hint">
             {showSmallTrialCitiesHint && (
-              <React.Fragment>
+              <>
                 Trial locations are unavailable in the following states: DE, NH,
                 NJ, RI.
-              </React.Fragment>
+              </>
             )}
             {showRegularTrialCitiesHint && (
-              <React.Fragment>
+              <>
                 Trial locations are unavailable in the following states: DE, KS,
                 ME, NH, NJ, ND, RI, SD, VT, WY.
-              </React.Fragment>
+              </>
             )}
           </span>
         )}

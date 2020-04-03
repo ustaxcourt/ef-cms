@@ -5,7 +5,7 @@ const test = setupTest();
 
 describe('docket clerk edits the petitioner information', () => {
   beforeEach(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(50000);
   });
 
   let caseDetail;

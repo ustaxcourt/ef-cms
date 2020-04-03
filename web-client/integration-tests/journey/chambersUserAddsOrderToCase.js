@@ -4,7 +4,7 @@ import { first } from 'lodash';
 
 const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
-export default test => {
+export const chambersUserAddsOrderToCase = test => {
   return it('Chambers user adds order to case', async () => {
     await test.runSequence('openCreateMessageModalSequence');
 

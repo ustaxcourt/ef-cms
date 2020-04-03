@@ -13,6 +13,7 @@
           {
             "docketNumberSuffix": "L",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "eventCode": "P",
               "createdAt": "2019-12-11T15:25:09.285Z",
@@ -84,6 +85,8 @@
     "partyType": "Petitioner",
     "receivedAt": "2019-12-11T15:25:09.284Z",
     "caseType": "CDP (Lien/Levy)",
+    "sortableDocketNumber": 19000111,
+    "entityName": "Case",
     "orderDesignatingPlaceOfTrial": false,
     "contactPrimary": {
       "city": "Flavortown",
@@ -115,27 +118,31 @@
     "respondents": [],
     "practitioners": [],
     "hasPendingItems": false,
-    "docketRecord": [
-      {
-        "description": "Petition",
-        "eventCode": "P",
-        "index": 1,
-        "documentId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
-        "filingDate": "2019-12-11T15:25:09.285Z",
-        "filedBy": "Petr. Guy Fieri"
-      },
-      {
-        "eventCode": "RQT",
-        "description": "Request for Place of Trial at Birmingham, Alabama",
-        "index": 2,
-        "filingDate": "2019-12-11T15:25:09.284Z"
-      }
-    ],
     "orderForAmendedPetitionAndFilingFee": false,
     "leadCaseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
     "pk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
     "docketNumber": "111-19",
     "status": "Submitted"
+  },
+  {
+    "description": "Petition",
+    "eventCode": "P",
+    "index": 1,
+    "documentId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
+    "filingDate": "2019-12-11T15:25:09.285Z",
+    "filedBy": "Petr. Guy Fieri",
+    "docketRecordId": "2bdfa4ce-2ebe-4b95-9965-ddec14c67e3c",
+    "pk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "sk": "docket-record|2bdfa4ce-2ebe-4b95-9965-ddec14c67e3c"
+  },
+  {
+    "eventCode": "RQT",
+    "description": "Request for Place of Trial at Birmingham, Alabama",
+    "index": 2,
+    "filingDate": "2019-12-11T15:25:09.284Z",
+    "docketRecordId": "decc1a72-5e38-4b66-8781-ad7bc5bd5a9e",
+    "pk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "sk": "docket-record|decc1a72-5e38-4b66-8781-ad7bc5bd5a9e"
   },
   {
     "sk": "fd8d1139-5e54-4117-9b94-7a69359423c2",

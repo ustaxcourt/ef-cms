@@ -124,22 +124,22 @@ createChambersAccount() {
   done
 }
 
-createPractitionerAccount() {
+createPrivatePractitionerAccount() {
   index=$1
   barNumber=$2
   overrideName=$3
-  name=${overrideName:-Test practitioner${index}}
+  name=${overrideName:-Test private practitioner${index}}
 
-  createAccount "practitioner${index}@example.com" "practitioner" "${index}" "${barNumber}" "practitioner" "${name}"
+  createAccount "privatePractitioner${index}@example.com" "privatePractitioner" "${index}" "${barNumber}" "privatePractitioner" "${name}"
 }
 
-createRespondentAccount() {
+createIRSPractitionerAccount() {
   index=$1
   barNumber=$2
   overrideName=$3
-  name=${overrideName:-Test respondent${index}}
+  name=${overrideName:-Test IRS practitioner${index}}
 
-  createAccount "respondent${index}@example.com" "respondent" "${index}" "${barNumber}" "respondent" "${name}"
+  createAccount "irsPractitioner${index}@example.com" "irsPractitioner" "${index}" "${barNumber}" "irsPractitioner" "${name}"
 }
 
 createJudgeAccount() {
@@ -152,8 +152,8 @@ createJudgeAccount() {
 createAdmin "ustcadmin@example.com" "admin" "admin"
 
 createAccount "migrator@example.com" "admin" "" "" "admin"
-createAccount "flexionustc+practitioner@gmail.com" "practitioner" "" "GM9999" "practitioner" "Practitioner Gmail"
-createAccount "flexionustc+respondent@gmail.com" "respondent" "" "GM4444" "respondent" "Respondent Gmail"
+createAccount "flexionustc+privatePractitioner@gmail.com" "privatePractitioner" "" "GM9999" "privatePractitioner" "Private Practitioner Gmail"
+createAccount "flexionustc+irsPractitioner@gmail.com" "irsPractitioner" "" "GM4444" "irsPractitioner" "IRS Practitioner Gmail"
 createAccount "flexionustc+petitioner@gmail.com" "petitioner" "" "" "petitioner" "Petitioner Gmail"
 createManyAccounts "10" "adc" "adc"
 createManyAccounts "10" "admissionsclerk" "admissions"
@@ -165,23 +165,23 @@ createManyAccounts "30" "petitioner" "petitioner"
 createChambersAccount "ashfordsChambers" "chambers"
 createChambersAccount "buchsChambers" "chambers"
 createChambersAccount "cohensChambers" "chambers"
-createPractitionerAccount "1" "PT1234"
-createPractitionerAccount "2" "PT5432"
-createPractitionerAccount "3" "PT1111"
-createPractitionerAccount "4" "PT2222"
-createPractitionerAccount "5" "PT3333"
-createPractitionerAccount "6" "PT4444" "Test practitioner"
-createPractitionerAccount "7" "PT5555" "Test practitioner"
-createPractitionerAccount "8" "PT6666" "Test practitioner"
-createPractitionerAccount "9" "PT7777" "Test practitioner"
-createPractitionerAccount "10" "PT8888" "Test practitioner"
-createRespondentAccount "1" "RT6789"
-createRespondentAccount "2" "RT0987"
-createRespondentAccount "3" "RT7777"
-createRespondentAccount "4" "RT8888"
-createRespondentAccount "5" "RT9999"
-createRespondentAccount "6" "RT6666" "Test respondent"
-createRespondentAccount "7" "RT0000" "Test respondent"
-createRespondentAccount "8" "RT1111" "Test respondent"
-createRespondentAccount "9" "RT2222" "Test respondent"
-createRespondentAccount "10" "RT3333" "Test respondent"
+createPrivatePractitionerAccount "1" "PT1234"
+createPrivatePractitionerAccount "2" "PT5432"
+createPrivatePractitionerAccount "3" "PT1111"
+createPrivatePractitionerAccount "4" "PT2222"
+createPrivatePractitionerAccount "5" "PT3333"
+createPrivatePractitionerAccount "6" "PT4444" "Test private practitioner"
+createPrivatePractitionerAccount "7" "PT5555" "Test private practitioner"
+createPrivatePractitionerAccount "8" "PT6666" "Test private practitioner"
+createPrivatePractitionerAccount "9" "PT7777" "Test private practitioner"
+createPrivatePractitionerAccount "10" "PT8888" "Test private practitioner"
+createIRSPractitionerAccount "1" "RT6789"
+createIRSPractitionerAccount "2" "RT0987"
+createIRSPractitionerAccount "3" "RT7777"
+createIRSPractitionerAccount "4" "RT8888"
+createIRSPractitionerAccount "5" "RT9999"
+createIRSPractitionerAccount "6" "RT6666" "Test IRS practitioner"
+createIRSPractitionerAccount "7" "RT0000" "Test IRS practitioner"
+createIRSPractitionerAccount "8" "RT1111" "Test IRS practitioner"
+createIRSPractitionerAccount "9" "RT2222" "Test IRS practitioner"
+createIRSPractitionerAccount "10" "RT3333" "Test IRS practitioner"

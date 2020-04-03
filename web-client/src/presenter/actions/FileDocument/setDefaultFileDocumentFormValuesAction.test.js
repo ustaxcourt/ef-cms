@@ -24,7 +24,7 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
   });
   it('does not set form.partyPrimary if the user is not a petitioner', async () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
     });
     const result = await runAction(setDefaultFileDocumentFormValuesAction, {
       modules: { presenter },

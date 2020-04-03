@@ -1,6 +1,6 @@
 # Electronic Filing / Case Management System
 
-An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS, which began in October 2018. Work is not yet in production, so `master` does not deploy. For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
+An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS, which began in October 2018. It is not yet in production use. For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
 
 ### Build Status
 
@@ -34,9 +34,9 @@ API | Front-End | Shared Code
 
 <br clear="both">
 
-The fork of this project in which the bulk of development is occurring is [Flexion’s fork](https://github.com/flexion/ef-cms).
+The fork of this project in which the bulk of development is occurring is [Flexion’s fork](https://github.com/flexion/ef-cms), but all changes are pulled into the U.S. Tax Court’s repository every two weeks.
 
-Artifacts for ongoing development, such as designs, research data, user workflows etc., are located in the [wiki](https://github.com/flexion/ef-cms/wiki).
+Artifacts for ongoing development such as designs, research data, user workflows etc. are located in the [wiki](https://github.com/flexion/ef-cms/wiki). See also [documentation about how we work](https://github.com/ustaxcourt/ef-cms/blob/staging/docs/how-we-work.md): our principles, product team, technical strategy, meetings cadence, tools, etc.
 
 ## Technical overview
 
@@ -95,9 +95,11 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 - Node v12.13.1
 - npm v6.12.1
 - ClamAV v0.101.2 (see Setup below)
+-  Java 11
 
 ### Setup
 
+- Install the JDK from https://www.oracle.com/java/technologies/javase-jdk13-downloads.html
 For ClamAV, macOS users can do the following:
 - `brew install clamav`
 - `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`
@@ -113,7 +115,7 @@ Both the front-end (`/web-client`) and API (`/web-api`) share code that exists i
 
 ##### Other Start Commands
 
-- Run `cd web-client && npm start:client:no-scanner` to start the UI without Dynamsoft (or if you don't have a scanner)
+- Run `cd web-client && npm run start:client:no-scanner` to start the UI without Dynamsoft (or if you don't have a scanner)
 - Run `npm run start:public` to start the UI for the public access portion of the site
 
 #### Terminal B
@@ -132,10 +134,10 @@ You can log in using the following accounts.
 
 ```
 petitioner
-practitioner
-practitioner1 - practitioner4
-respondent
-respondent1 - respondent4
+privatePractitioner
+privatePractitioner1 - privatePractitioner4
+irsPractitioner
+irsPractitioner1 - irsPractitioner4
 ```
 
 #### Internal Users
@@ -169,8 +171,8 @@ To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm
 #### External Users
 ```
 petitioner1@example.com – petitioner5@example.com
-practitioner1@example.com – practitioner10@example.com
-respondent1@example.com – respondent10@example.com
+privatePractitioner1@example.com – privatePractitioner10@example.com
+irsPractitioner1@example.com – irsPractitioner10@example.com
 ```
 
 #### Internal Users

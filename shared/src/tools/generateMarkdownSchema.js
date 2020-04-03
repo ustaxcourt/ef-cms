@@ -1,5 +1,53 @@
 const fs = require('fs');
 const json2md = require('json2md');
+const {
+  getNextFriendForIncompetentPersonContact,
+} = require('../business/entities/contacts/NextFriendForIncompetentPersonContact');
+const {
+  getNextFriendForMinorContact,
+} = require('../business/entities/contacts/NextFriendForMinorContact');
+const {
+  getPartnershipAsTaxMattersPartnerPrimaryContact,
+} = require('../business/entities/contacts/PartnershipAsTaxMattersPartnerContact');
+const {
+  getPartnershipBBAPrimaryContact,
+} = require('../business/entities/contacts/PartnershipBBAContact');
+const {
+  getPartnershipOtherThanTaxMattersPrimaryContact,
+} = require('../business/entities/contacts/PartnershipOtherThanTaxMattersContact');
+const {
+  getPetitionerConservatorContact,
+} = require('../business/entities/contacts/PetitionerConservatorContact');
+const {
+  getPetitionerCorporationContact,
+} = require('../business/entities/contacts/PetitionerCorporationContact');
+const {
+  getPetitionerCustodianContact,
+} = require('../business/entities/contacts/PetitionerCustodianContact');
+const {
+  getPetitionerDeceasedSpouseContact,
+} = require('../business/entities/contacts/PetitionerDeceasedSpouseContact');
+const {
+  getPetitionerEstateWithExecutorPrimaryContact,
+} = require('../business/entities/contacts/PetitionerEstateWithExecutorPrimaryContact');
+const {
+  getPetitionerGuardianContact,
+} = require('../business/entities/contacts/PetitionerGuardianContact');
+const {
+  getPetitionerIntermediaryContact,
+} = require('../business/entities/contacts/PetitionerIntermediaryContact');
+const {
+  getPetitionerPrimaryContact,
+} = require('../business/entities/contacts/PetitionerPrimaryContact');
+const {
+  getPetitionerSpouseContact,
+} = require('../business/entities/contacts/PetitionerSpouseContact');
+const {
+  getPetitionerTrustContact,
+} = require('../business/entities/contacts/PetitionerTrustContact');
+const {
+  getSurvivingSpouseContact,
+} = require('../business/entities/contacts/SurvivingSpouseContact');
 const { Case } = require('../business/entities/cases/Case');
 const { CaseDeadline } = require('../business/entities/CaseDeadline');
 const { DocketRecord } = require('../business/entities/DocketRecord');
@@ -155,6 +203,134 @@ exports.generateMarkdownSchema = (entity, entityName) => {
 
   fs.writeFileSync(`./docs/entities/${entityName}.md`, json2md(json));
 };
+
+exports.generateMarkdownSchema(
+  getNextFriendForIncompetentPersonContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/NextFriendForIncompetentPersonContact',
+);
+
+exports.generateMarkdownSchema(
+  getNextFriendForMinorContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/NextFriendForMinorContact',
+);
+
+exports.generateMarkdownSchema(
+  getPartnershipAsTaxMattersPartnerPrimaryContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/PartnershipAsTaxMattersPartnerContact',
+);
+
+exports.generateMarkdownSchema(
+  getPartnershipBBAPrimaryContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/PartnershipBBAPrimaryContact',
+);
+
+exports.generateMarkdownSchema(
+  getPartnershipOtherThanTaxMattersPrimaryContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/PartnershipOtherThanTaxMattersPrimaryContact',
+);
+
+exports.generateMarkdownSchema(
+  getPetitionerConservatorContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/PetitionerConservatorContact',
+);
+
+exports.generateMarkdownSchema(
+  getPetitionerCorporationContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/PetitionerCorporationContact',
+);
+
+exports.generateMarkdownSchema(
+  getPetitionerCustodianContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/PetitionerCustodianContact',
+);
+
+exports.generateMarkdownSchema(
+  getPetitionerDeceasedSpouseContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/PetitionerDeceasedSpouseContact',
+);
+
+exports.generateMarkdownSchema(
+  getPetitionerEstateWithExecutorPrimaryContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/PetitionerEstateWithExecutorPrimaryContact',
+);
+
+exports.generateMarkdownSchema(
+  getPetitionerGuardianContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/PetitionerGuardianContact',
+);
+
+exports.generateMarkdownSchema(
+  getPetitionerIntermediaryContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/PetitionerIntermediaryContact',
+);
+
+exports.generateMarkdownSchema(
+  getPetitionerPrimaryContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/PetitionerPrimaryContact',
+);
+
+exports.generateMarkdownSchema(
+  getPetitionerSpouseContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/PetitionerSpouseContact',
+);
+
+exports.generateMarkdownSchema(
+  getPetitionerTrustContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/PetitionerTrustContact',
+);
+
+exports.generateMarkdownSchema(
+  getSurvivingSpouseContact({
+    countryType: 'domestic',
+    isPaper: true,
+  }),
+  'contacts/SurvivingSpouseContact',
+);
 
 exports.generateMarkdownSchema(Case, 'Case');
 exports.generateMarkdownSchema(CaseDeadline, 'CaseDeadline');

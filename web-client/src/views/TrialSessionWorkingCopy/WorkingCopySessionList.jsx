@@ -65,7 +65,7 @@ export const WorkingCopySessionList = connect(
                       sort === 'docket' && 'sortActive',
                     )}
                   >
-                    Docket
+                    Docket number
                   </span>
                   {(sort === 'docket' && sortOrder === 'desc' && (
                     <FontAwesomeIcon icon="caret-up" />

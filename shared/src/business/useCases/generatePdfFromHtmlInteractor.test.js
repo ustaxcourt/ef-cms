@@ -174,4 +174,38 @@ describe('generatePdfFromHtmlInteractor', () => {
     const result = await generatePdfFromHtmlInteractor(args);
     expect(result.indexOf('Test Footer')).toBeGreaterThan(-1);
   });
+
+  it('should not show the default footer or additional footer content when overwriteFooter is set and footerHTML is not set', async () => {
+    const args = {
+      applicationContext,
+      contentHtml:
+        '<!doctype html><html><head></head><body>Hello World</body></html>',
+      docketNumber: '123-45',
+      overwriteFooter: true,
+    };
+
+    const defaultFooterContent = 'class="footer-default"'; // This is in the footer by default
+
+    const result = await generatePdfFromHtmlInteractor(args);
+
+    expect(result.indexOf(defaultFooterContent)).toEqual(-1);
+  });
+
+  it('should overwrite the footer with footerHTML when overwriteFooter is set', async () => {
+    const args = {
+      applicationContext,
+      contentHtml:
+        '<!doctype html><html><head></head><body>Hello World</body></html>',
+      docketNumber: '123-45',
+      footerHtml: 'Test Footer',
+      overwriteFooter: true,
+    };
+
+    const defaultFooterContent = 'class="footer-default"'; // This is in the footer by default
+
+    const result = await generatePdfFromHtmlInteractor(args);
+
+    expect(result.indexOf(defaultFooterContent)).toEqual(-1);
+    expect(result.indexOf('Test Footer')).toBeGreaterThan(-1);
+  });
 });

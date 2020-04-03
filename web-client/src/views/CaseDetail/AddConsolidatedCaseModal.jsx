@@ -7,7 +7,10 @@ import React from 'react';
 
 const NoCaseFound = () => (
   <div className="usa-form-group">
-    <label className="usa-label margin-bottom-0" htmlFor="validation-message">
+    <label
+      className="usa-label margin-bottom-0 text-secondary-dark"
+      htmlFor="validation-message"
+    >
       No results found
     </label>
     <p className="margin-top-0" id="validation-message">

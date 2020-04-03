@@ -497,7 +497,7 @@ describe('formattedCaseDetail', () => {
           workItems: [{ isQC: true }],
         },
       ],
-      status: Case.STATUS_TYPES.inProgress,
+      status: Case.STATUS_TYPES.new,
     };
     const result = runCompute(formattedCaseDetail, {
       state: {

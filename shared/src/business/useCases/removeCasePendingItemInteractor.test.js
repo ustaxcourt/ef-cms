@@ -34,6 +34,7 @@ describe('removeCasePendingItemInteractor', () => {
         getCaseDeadlinesByCaseId: getCaseDeadlinesByCaseIdMock,
         updateCase: updateCaseMock,
       }),
+      getUniqueId: () => 'unique-id-1',
       getUseCaseHelpers: () => ({
         updateCaseAutomaticBlock,
       }),

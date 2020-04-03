@@ -205,7 +205,53 @@ describe('generatePendingReportPdf', () => {
     ).rejects.toThrow();
   });
 
-  it('returns the pdf buffer produced by chromium', async () => {
+  it('calls the pdf report generator', async () => {
+    const generatePdfReportInteractorMock = jest.fn();
+    const loggerErrorMock = jest.fn();
+
+    await generatePendingReportPdf({
+      applicationContext: {
+        environment: {
+          tempDocumentsBucketName: 'MockDocumentBucketName',
+        },
+        getCaseCaptionNames: Case.getCaseCaptionNames,
+        getChromiumBrowser: () => {
+          throw new Error('bad!');
+        },
+        getCurrentUser: () => {
+          return {
+            role: User.ROLES.petitionsClerk,
+            userId: 'petitionsClerk',
+          };
+        },
+        getNodeSass: () => ({ render: (data, cb) => cb(data, { css: '' }) }),
+        getPersistenceGateway: () => ({
+          getCaseByCaseId: () => ({ docketNumber: '101-19' }),
+          getDownloadPolicyUrl: () => ({
+            url: 'https://www.example.com',
+          }),
+        }),
+        getPug: () => ({ compile: () => () => '' }),
+        getStorageClient: () => ({
+          upload: (params, callback) => callback(),
+        }),
+        getUniqueId: () => 'uniqueId',
+        getUseCases: () => ({
+          generatePdfReportInteractor: generatePdfReportInteractorMock,
+        }),
+        getUtilities: () => ({ formatDateString }),
+        logger: { error: loggerErrorMock, info: () => {} },
+      },
+      pendingItems: mockPendingItems,
+      reportTitle: 'something',
+    });
+
+    expect(generatePdfReportInteractorMock).toHaveBeenCalled();
+  });
+
+  it('returns the pdf buffer produced by the generator', async () => {
+    const generatePdfReportInteractorMock = jest.fn();
+
     const result = await generatePendingReportPdf({
       applicationContext: {
         environment: {
@@ -228,6 +274,9 @@ describe('generatePendingReportPdf', () => {
           upload: (params, callback) => callback(),
         }),
         getUniqueId: () => 'uniqueId',
+        getUseCases: () => ({
+          generatePdfReportInteractor: generatePdfReportInteractorMock,
+        }),
         getUtilities: () => ({ formatDateString }),
         logger: { error: () => {}, info: () => {} },
       },
@@ -238,8 +287,12 @@ describe('generatePendingReportPdf', () => {
     expect(result).toEqual('https://www.example.com');
   });
 
-  it('should catch, log, and rethrow an error thrown by chromium', async () => {
+  it('should catch, log, and rethrow an error thrown by the generator', async () => {
     const loggerErrorMock = jest.fn();
+    const generatePdfReportInteractorMock = jest
+      .fn()
+      .mockRejectedValue(new Error('bad!'));
+
     await expect(
       generatePendingReportPdf({
         applicationContext: {
@@ -268,6 +321,9 @@ describe('generatePendingReportPdf', () => {
             upload: (params, callback) => callback(),
           }),
           getUniqueId: () => 'uniqueId',
+          getUseCases: () => ({
+            generatePdfReportInteractor: generatePdfReportInteractorMock,
+          }),
           getUtilities: () => ({ formatDateString }),
           logger: { error: loggerErrorMock, info: () => {} },
         },
@@ -275,7 +331,5 @@ describe('generatePendingReportPdf', () => {
         reportTitle: 'something',
       }),
     ).rejects.toThrow();
-
-    expect(loggerErrorMock).toHaveBeenCalled();
   });
 });

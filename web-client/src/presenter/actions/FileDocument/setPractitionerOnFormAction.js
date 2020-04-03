@@ -15,7 +15,7 @@ export const setPractitionerOnFormAction = async ({
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
 
-  if (user.role === USER_ROLES.practitioner) {
+  if (user.role === USER_ROLES.privatePractitioner) {
     store.set(state.form.practitioner, [{ ...user, partyPractitioner: true }]);
   }
 };

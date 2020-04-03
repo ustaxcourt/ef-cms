@@ -1,4 +1,4 @@
-export default (test, shouldExist) => {
+export const docketClerkViewsSectionQCInProgress = (test, shouldExist) => {
   return it('Docket clerk views Section Document QC - In Progress', async () => {
     await test.runSequence('gotoMessagesSequence');
     expect(test.getState('currentPage')).toEqual('Messages');

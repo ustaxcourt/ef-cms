@@ -5,8 +5,8 @@ import { runPathForUserRoleAction } from './runPathForUserRoleAction';
 import sinon from 'sinon';
 
 let petitionerStub;
-let practitionerStub;
-let respondentStub;
+let privatePractitionerStub;
+let irsPractitionerStub;
 let petitionsclerkStub;
 let docketclerkStub;
 let judgeStub;
@@ -22,8 +22,8 @@ presenter.providers.applicationContext = {
 describe('runPathForUserRoleAction', () => {
   beforeEach(() => {
     petitionerStub = sinon.stub();
-    practitionerStub = sinon.stub();
-    respondentStub = sinon.stub();
+    privatePractitionerStub = sinon.stub();
+    irsPractitionerStub = sinon.stub();
     petitionsclerkStub = sinon.stub();
     docketclerkStub = sinon.stub();
     judgeStub = sinon.stub();
@@ -31,12 +31,12 @@ describe('runPathForUserRoleAction', () => {
 
     presenter.providers.path = {
       docketclerk: docketclerkStub,
+      irsPractitioner: irsPractitionerStub,
       judge: judgeStub,
       otherInternalUser: otherInternalUserStub,
       petitioner: petitionerStub,
       petitionsclerk: petitionsclerkStub,
-      practitioner: practitionerStub,
-      respondent: respondentStub,
+      privatePractitioner: privatePractitionerStub,
     };
   });
 
@@ -53,9 +53,9 @@ describe('runPathForUserRoleAction', () => {
     expect(petitionerStub.calledOnce).toEqual(true);
   });
 
-  it('should return the practitioner path for user role practitioner', async () => {
+  it('should return the privatePractitioner path for user role privatePractitioner', async () => {
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
     });
     await runAction(runPathForUserRoleAction, {
       modules: {
@@ -63,12 +63,12 @@ describe('runPathForUserRoleAction', () => {
       },
       state: {},
     });
-    expect(practitionerStub.calledOnce).toEqual(true);
+    expect(privatePractitionerStub.calledOnce).toEqual(true);
   });
 
-  it('should return the respondent path for user role respondent', async () => {
+  it('should return the irsPractitioner path for user role irsPractitioner', async () => {
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
     });
     await runAction(runPathForUserRoleAction, {
       modules: {
@@ -76,7 +76,7 @@ describe('runPathForUserRoleAction', () => {
       },
       state: {},
     });
-    expect(respondentStub.calledOnce).toEqual(true);
+    expect(irsPractitionerStub.calledOnce).toEqual(true);
   });
 
   it('should return the petitionsclerk path for user role petitionsclerk', async () => {

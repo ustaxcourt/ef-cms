@@ -45,13 +45,13 @@ describe('in progress case status migration', () => {
     expect(putStub.mock.calls.length).toBe(0);
   });
 
-  it('should not update the item when its status is already in progress', async () => {
+  it('should not update the item when its status is already new', async () => {
     scanStub = jest.fn().mockReturnValue({
       promise: async () => ({
         Items: [
           {
             ...MOCK_CASE,
-            status: Case.STATUS_TYPES.inProgress,
+            status: Case.STATUS_TYPES.new,
           },
         ],
       }),

@@ -1298,6 +1298,8 @@ hr.lighter {
 }
 
 button.usa-button.pdf-preview-btn {
+  overflow: hidden;
+  max-width: inherit;
   line-height: 1.4rem;
   text-align: left;
   word-break: break-all;

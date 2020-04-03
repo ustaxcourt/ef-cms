@@ -6,7 +6,10 @@ const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
   extractedPendingMessagesFromCaseDetailComputed,
 );
 
-export default (test, expectedValue = 1) => {
+export const docketClerkViewsCaseDetailForCourtIssuedDocketEntry = (
+  test,
+  expectedValue = 1,
+) => {
   return it('Docketclerk views case detail', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

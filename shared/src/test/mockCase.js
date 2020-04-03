@@ -19,6 +19,7 @@ exports.MOCK_CASE = {
   docketRecord: [
     {
       description: 'first record',
+      docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
       documentId: '8675309b-18d0-43ec-bafb-654e83405411',
       eventCode: 'P',
       filingDate: '2018-03-01T00:01:00.000Z',
@@ -26,6 +27,7 @@ exports.MOCK_CASE = {
     },
     {
       description: 'second record',
+      docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
       documentId: '8675309b-28d0-43ec-bafb-654e83405412',
       eventCode: 'PSDE',
       filingDate: '2018-03-01T00:02:00.000Z',
@@ -33,6 +35,7 @@ exports.MOCK_CASE = {
     },
     {
       description: 'third record',
+      docketRecordId: '8675309b-28d0-43ec-bafb-654e83405413',
       documentId: '8675309b-28d0-43ec-bafb-654e83405413',
       eventCode: 'SDEC',
       filingDate: '2018-03-01T00:03:00.000Z',
@@ -62,6 +65,7 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
   docketRecord: [
     {
       description: 'first record',
+      docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
       documentId: '8675309b-18d0-43ec-bafb-654e83405411',
       eventCode: 'P',
       filingDate: '2018-03-01T00:01:00.000Z',
@@ -69,6 +73,7 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
     },
     {
       description: 'second record',
+      docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
       documentId: '8675309b-28d0-43ec-bafb-654e83405412',
       eventCode: 'PSDE',
       filingDate: '2018-03-01T00:02:00.000Z',
@@ -76,6 +81,7 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
     },
     {
       description: 'third record',
+      docketRecordId: '8675309b-28d0-43ec-bafb-654e83405413',
       documentId: '8675309b-28d0-43ec-bafb-654e83405413',
       eventCode: 'SDEC',
       filingDate: '2018-03-01T00:03:00.000Z',
@@ -103,6 +109,7 @@ exports.MOCK_CASE_WITHOUT_NOTICE = {
   docketRecord: [
     {
       description: 'first record',
+      docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
       documentId: '8675309b-18d0-43ec-bafb-654e83405411',
       eventCode: 'P',
       filingDate: '2018-03-01T00:01:00.000Z',

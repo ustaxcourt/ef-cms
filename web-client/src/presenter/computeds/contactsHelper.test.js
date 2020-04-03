@@ -14,7 +14,7 @@ const petitionerUser = {
   role: User.ROLES.petitioner,
 };
 const practitionerUser = {
-  role: User.ROLES.practitioner,
+  role: User.ROLES.privatePractitioner,
 };
 
 describe('contactsHelper', () => {

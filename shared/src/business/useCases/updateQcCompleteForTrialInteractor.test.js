@@ -22,6 +22,7 @@ describe('updateQcCompleteForTrialInteractor', () => {
           updateCase: caseToUpdate => Promise.resolve(caseToUpdate),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     await expect(
       updateQcCompleteForTrialInteractor({
@@ -48,6 +49,7 @@ describe('updateQcCompleteForTrialInteractor', () => {
           updateCase: ({ caseToUpdate }) => Promise.resolve(caseToUpdate),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const result = await updateQcCompleteForTrialInteractor({
       applicationContext,

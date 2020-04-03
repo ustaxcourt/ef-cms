@@ -22,7 +22,7 @@ describe('validateCaseInventoryReportModalAction', () => {
         presenter,
       },
       state: {
-        modal: {
+        screenMetadata: {
           associatedJudge: 'Chief Judge',
           status: 'New',
         },
@@ -38,7 +38,7 @@ describe('validateCaseInventoryReportModalAction', () => {
         presenter,
       },
       state: {
-        modal: {},
+        screenMetadata: {},
       },
     });
 

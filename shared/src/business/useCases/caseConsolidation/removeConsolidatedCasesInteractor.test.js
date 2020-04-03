@@ -65,6 +65,7 @@ describe('removeConsolidatedCasesInteractor', () => {
         },
         updateCase: updateCaseMock,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
   });
 

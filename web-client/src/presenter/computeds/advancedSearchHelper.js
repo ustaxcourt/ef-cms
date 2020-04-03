@@ -36,6 +36,7 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
 };
 
 export const advancedSearchHelper = (get, applicationContext) => {
+  const permissions = get(state.permissions) || {};
   const countryType = get(state.advancedSearchForm.countryType);
   const {
     CASE_SEARCH_PAGE_SIZE,
@@ -43,7 +44,10 @@ export const advancedSearchHelper = (get, applicationContext) => {
   } = applicationContext.getConstants();
   const searchResults = get(state.searchResults);
   const currentPage = get(state.advancedSearchForm.currentPage);
-  let result = { showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC };
+  let result = {
+    showPractitionerSearch: permissions.MANAGE_ATTORNEY_USERS,
+    showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
+  };
   if (searchResults) {
     const formattedSearchResults = searchResults.map(searchResult =>
       formatSearchResultRecord(searchResult, { applicationContext }),

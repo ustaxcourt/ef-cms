@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const uuidv4 = require('uuid/v4');
 const {
   ENTERED_AND_SERVED_EVENT_CODES,
 } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
@@ -13,6 +12,7 @@ const { createISODateString } = require('../../utilities/DateHandler');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { Document } = require('../../entities/Document');
 const { User } = require('../../entities/User');
+const { v4: uuidv4 } = require('uuid');
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../../test-output/');
@@ -57,11 +57,13 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   const documentsWithCaseClosingEventCodes = ENTERED_AND_SERVED_EVENT_CODES.map(
     eventCode => {
       const documentId = uuidv4();
+      const docketRecordId = uuidv4();
 
       const index = dynamicallyGeneratedDocketEntries.length + 2; // 2 statically set docket records per case;
 
       dynamicallyGeneratedDocketEntries.push({
         description: `Docket Record ${index}`,
+        docketRecordId,
         documentId,
         eventCode: 'O',
         filingDate: createISODateString(),
@@ -101,6 +103,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketRecord: [
         {
           description: 'Docket Record 0',
+          docketRecordId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           eventCode: 'O',
           filingDate: createISODateString(),
@@ -108,6 +111,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         {
           description: 'Docket Record 1',
+          docketRecordId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
           documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
           eventCode: 'OAJ',
           filingDate: createISODateString(),
@@ -164,6 +168,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketRecord: [
         {
           description: 'Docket Record 0',
+          docketRecordId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           eventCode: 'O',
           filingDate: createISODateString(),
@@ -171,6 +176,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         {
           description: 'Docket Record 0',
+          docketRecordId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
           documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
           eventCode: 'OAJ',
           filingDate: createISODateString(),
@@ -278,6 +284,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       getStorageClient: () => ({
         getObject: getObjectMock,
       }),
+      getUniqueId: () => 'unique-id-1',
       getUseCaseHelpers: () => ({
         appendPaperServiceAddressPageToPdf: appendPaperServiceAddressPageToPdfMock,
         generatePaperServiceAddressPagePdf: generatePaperServiceAddressPagePdfMock,

@@ -1,20 +1,16 @@
-import { fakeFile, setupTest } from './helpers';
-import chambersLogin from './journey/chambersLogin';
-import chambersSignsOut from './journey/chambersSignsOut';
-import chambersUserAddsOrderToCase from './journey/chambersUserAddsOrderToCase';
-import chambersUserAppliesSignatureToDraftDocument from './journey/chambersUserAppliesSignatureToDraftDocument';
-import chambersUserSavesSignatureForDraftDocument from './journey/chambersUserSavesSignatureForDraftDocument';
-import chambersUserViewsCaseDetail from './journey/chambersUserViewsCaseDetail';
-import chambersUserViewsCaseDetailAfterAddingOrder from './journey/chambersUserViewsCaseDetailAfterAddingOrder';
-import chambersUserViewsDocumentDetail from './journey/chambersUserViewsDocumentDetail';
-import chambersUserViewsDraftDocuments from './journey/chambersUserViewsDraftDocuments';
-import chambersUserViewsSignDraftDocument from './journey/chambersUserViewsSignDraftDocument';
+import { chambersUserAddsOrderToCase } from './journey/chambersUserAddsOrderToCase';
+import { chambersUserAppliesSignatureToDraftDocument } from './journey/chambersUserAppliesSignatureToDraftDocument';
+import { chambersUserSavesSignatureForDraftDocument } from './journey/chambersUserSavesSignatureForDraftDocument';
+import { chambersUserViewsCaseDetail } from './journey/chambersUserViewsCaseDetail';
+import { chambersUserViewsCaseDetailAfterAddingOrder } from './journey/chambersUserViewsCaseDetailAfterAddingOrder';
+import { chambersUserViewsDocumentDetail } from './journey/chambersUserViewsDocumentDetail';
+import { chambersUserViewsDraftDocuments } from './journey/chambersUserViewsDraftDocuments';
+import { chambersUserViewsSignDraftDocument } from './journey/chambersUserViewsSignDraftDocument';
+import { fakeFile, loginAs, setupTest } from './helpers';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerLogin from './journey/petitionerLogIn';
 import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
-import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 
 const test = setupTest({
@@ -32,15 +28,14 @@ describe('Chambers dashboard', () => {
     };
   });
 
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
   petitionerViewsDashboard(test);
-  petitionerSignsOut(test);
 
-  chambersLogin(test);
+  loginAs(test, 'armensChambers');
   chambersUserViewsCaseDetail(test);
   chambersUserViewsDraftDocuments(test);
   chambersUserAddsOrderToCase(test);
@@ -50,5 +45,4 @@ describe('Chambers dashboard', () => {
   chambersUserViewsSignDraftDocument(test);
   chambersUserAppliesSignatureToDraftDocument(test);
   chambersUserSavesSignatureForDraftDocument(test);
-  chambersSignsOut(test);
 });

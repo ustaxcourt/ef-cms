@@ -83,6 +83,7 @@ describe('getConsolidatedCasesByUserInteractor', () => {
           return casesByUserId[userId];
         },
       }),
+      getUniqueId: () => 'unique-id-1',
     };
 
     const cases = await getConsolidatedCasesByUserInteractor({

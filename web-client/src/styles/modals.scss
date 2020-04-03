@@ -265,14 +265,20 @@ button {
   background: color($theme-color-primary-darker);
   text-align: left;
 
-  h3 {
+  h3,
+  .heading-3 {
     margin-bottom: 0;
     color: $color-white;
 
-    .back {
+    &.back {
       position: relative;
       top: 0;
       color: $color-white;
+      text-decoration: none;
+      .svg-inline--fa {
+        color: $color-white;
+        vertical-align: 0;
+      }
     }
   }
 }

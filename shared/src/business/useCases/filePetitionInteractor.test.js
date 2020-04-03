@@ -59,7 +59,7 @@ describe('filePetitionInteractor', () => {
       await filePetitionInteractor({
         applicationContext: createApplicationContext({
           getCurrentUser: () => ({
-            role: User.ROLES.respondent,
+            role: User.ROLES.irsPractitioner,
             userId: 'respondent',
           }),
         }),

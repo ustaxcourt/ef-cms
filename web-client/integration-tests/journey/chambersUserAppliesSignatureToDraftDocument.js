@@ -1,4 +1,4 @@
-export default test => {
+export const chambersUserAppliesSignatureToDraftDocument = test => {
   return it('Chambers user applies signature to a draft document', async () => {
     expect(test.getState('pdfForSigning.nameForSigning')).toEqual(
       'Robert N. Armen, Jr.',

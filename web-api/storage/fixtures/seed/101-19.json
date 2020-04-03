@@ -1,5 +1,24 @@
 [
   {
+    "pk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "sk": "docket-record|af1aa3f3-e2e3-43e6-885d-4ce341588c76",
+    "docketRecordId": "af1aa3f3-e2e3-43e6-885d-4ce341588c76",
+    "filingDate": "2019-03-01T21:40:46.415Z",
+    "description": "Petition",
+    "filedBy": "Test Petitioner",
+    "eventCode": "P",
+    "index": 1
+  },
+  {
+    "pk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "sk": "docket-record|331aa3f3-e2e3-43e6-885d-4ce341588c76",
+    "docketRecordId": "331aa3f3-e2e3-43e6-885d-4ce341588c76",
+    "filingDate": "2019-03-01T21:40:46.415Z",
+    "description": "Request for Place of Trial at Birmingham, Alabama",
+    "eventCode": "RQT",
+    "index": 2
+  },
+  {
     "procedureType": "Regular",
     "docketNumberSuffix": "W",
     "documents": [
@@ -13,6 +32,7 @@
           {
             "docketNumberSuffix": "W",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "createdAt": "2019-03-01T21:40:46.415Z",
               "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
@@ -90,6 +110,8 @@
     "partyType": "Petitioner",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "caseType": "Whistleblower",
+    "sortableDocketNumber": 19000101,
+    "entityName": "Case",
     "contactPrimary": {
       "address3": "Architecto assumenda",
       "address2": "Suscipit animi solu",
@@ -106,21 +128,6 @@
     "createdAt": "2019-03-01T21:40:46.415Z",
     "receivedAt": "2019-03-01T21:40:46.415Z",
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-    "docketRecord": [
-      {
-        "filingDate": "2019-03-01T21:40:46.415Z",
-        "description": "Petition",
-        "filedBy": "Test Petitioner",
-        "eventCode": "P",
-        "index": 1
-      },
-      {
-        "filingDate": "2019-03-01T21:40:46.415Z",
-        "description": "Request for Place of Trial at Birmingham, Alabama",
-        "eventCode": "RQT",
-        "index": 2
-      }
-    ],
     "sk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "caseCaption": "Brett Osborne, Petitioner",
     "caseTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
@@ -156,6 +163,7 @@
     "pk": "section-petitions",
     "docketNumberSuffix": "W",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "processingStatus": "complete",
       "createdAt": "2019-03-01T21:40:46.415Z",
@@ -196,6 +204,7 @@
     "pk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
     "docketNumberSuffix": "W",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "processingStatus": "complete",
       "receivedAt": "2019-03-01T21:40:46.415Z",

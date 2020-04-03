@@ -7,7 +7,7 @@ const formattedTrialSessions = withAppContextDecorator(
   formattedTrialSessionsComputed,
 );
 
-export default (test, overrides = {}) => {
+export const docketClerkViewsTrialSessionList = (test, overrides = {}) => {
   return it('Docket clerk views trial session list', async () => {
     await test.runSequence('gotoTrialSessionsSequence');
     expect(test.getState('currentPage')).toEqual('TrialSessions');

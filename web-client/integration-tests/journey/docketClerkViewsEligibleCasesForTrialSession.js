@@ -1,4 +1,4 @@
-export default test => {
+export const docketClerkViewsEligibleCasesForTrialSession = test => {
   return it('Docket clerk views eligible cases for a trial session', async () => {
     await test.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: test.trialSessionId,

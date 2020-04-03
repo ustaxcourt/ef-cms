@@ -21,6 +21,7 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
       getPersistenceGateway: () => ({
         getCalendaredCasesForTrialSession: () => [MOCK_CASE],
       }),
+      getUniqueId: () => 'unique-id-1',
       getUseCases: () => ({
         getJudgeForUserChambersInteractor: () => ({
           role: 'judge',
@@ -50,6 +51,7 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
       getPersistenceGateway: () => ({
         getCalendaredCasesForTrialSession: () => [MOCK_CASE],
       }),
+      getUniqueId: () => 'unique-id-1',
       getUseCases: () => ({
         getJudgeForUserChambersInteractor: () => ({
           role: 'judge',

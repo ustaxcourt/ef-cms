@@ -75,7 +75,7 @@ describe('User entity', () => {
       barNumber: 'gg',
       firstName: 'firstName',
       lastName: 'bob',
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
       token: 'abc',
       userId: 'Tester',
     });
@@ -84,7 +84,7 @@ describe('User entity', () => {
 
   it('Creates a valid respondent user', () => {
     const user = new User({
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
       userId: 'respondent',
     });
     expect(user.isValid()).toBeTruthy();
@@ -105,10 +105,10 @@ describe('User entity', () => {
       expect(User.isExternalUser(User.ROLES.petitioner)).toEqual(true);
     });
     it('should return true when the user role is practitioner', () => {
-      expect(User.isExternalUser(User.ROLES.practitioner)).toEqual(true);
+      expect(User.isExternalUser(User.ROLES.privatePractitioner)).toEqual(true);
     });
     it('should return true when the user role is respondent', () => {
-      expect(User.isExternalUser(User.ROLES.respondent)).toEqual(true);
+      expect(User.isExternalUser(User.ROLES.irsPractitioner)).toEqual(true);
     });
   });
 

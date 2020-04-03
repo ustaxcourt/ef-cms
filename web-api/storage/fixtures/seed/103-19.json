@@ -12,6 +12,7 @@
           {
             "docketNumberSuffix": "S",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "createdAt": "2019-03-01T22:53:50.098Z",
               "documentType": "Petition",
@@ -67,11 +68,12 @@
         "processingStatus": "complete",
         "documentType": "Answer",
         "filedBy": "Test Respondent",
-        "filingDate": "2019-03-01T22:54:05.993Z",
+        "filingDate": "2019-08-14T20:35:52.915Z",
         "workItems": [
           {
             "docketNumberSuffix": "S",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "createdAt": "2019-03-01T22:54:05.993Z",
               "documentType": "Answer",
@@ -106,7 +108,6 @@
         "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
         "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
         "receivedAt": "2019-08-14T20:35:52.915Z",
-        "filingDate": "2019-08-14T20:35:52.915Z",
         "userId": "respondent"
       },
       {
@@ -129,6 +130,7 @@
           {
             "docketNumberSuffix": "S",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "isPaper": true,
               "attachments": true,
@@ -198,6 +200,8 @@
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Deficiency",
+    "sortableDocketNumber": 19000103,
+    "entityName": "Case",
     "contactPrimary": {
       "address3": "Officiis sit consect",
       "address2": "Eiusmod officiis dol",
@@ -229,10 +233,10 @@
     "preferredTrialCity": "Mobile, Alabama",
     "respondents": [
       {
-        "role": "respondent",
+        "role": "irsPractitioner",
         "serviceIndicator": "Electronic",
-        "name": "Test Respondent",
-        "custom:role": "respondent",
+        "name": "Test IRS Practitioner",
+        "custom:role": "irsPractitioner",
         "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "contact": {
           "address1": "234 Main St",
@@ -246,47 +250,57 @@
         },
         "barNumber": "RT6789",
         "iat": 1551480838,
-        "respondentId": "respondent",
-        "email": "respondent",
+        "respondentId": "irsPractitioner",
+        "email": "irsPractitioner",
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InJlc3BvbmRlbnQiLCJlbWFpbCI6InJlc3BvbmRlbnQiLCJuYW1lIjoiVGVzdCBSZXNwb25kZW50Iiwicm9sZSI6InJlc3BvbmRlbnQiLCJzZWN0aW9uIjoicGV0aXRpb25zIiwidXNlcklkIjoicmVzcG9uZGVudCIsImlhdCI6MTU1MTQ4MDgzOH0.U72pP7ZEwQkQIzlhpKvaEdMbcQhCjSLQbp0FP06LKao"
       }
     ],
     "practitioners": [],
-    "docketRecord": [
-      {
-        "description": "Petition",
-        "eventCode": "P",
-        "index": 1,
-        "filingDate": "2019-03-01T22:53:50.098Z",
-        "filedBy": "Test Petitioner"
-      },
-      {
-        "description": "Request for Place of Trial at Mobile, Alabama",
-        "eventCode": "RQT",
-        "filingDate": "2019-03-01T22:53:50.097Z",
-        "index": 2
-      },
-      {
-        "description": "Answer",
-        "eventCode": "A",
-        "index": 3,
-        "filingDate": "2019-03-01T22:54:05.993Z",
-        "filedBy": "Test Respondent"
-      },
-      {
-        "description": "Simultaneous Answering Brief",
-        "eventCode": "SIAB",
-        "index": 4,
-        "documentId": "dc2664a1-f552-418f-bcc7-8a67f4246568",
-        "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"ATOB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Simultaneous Answering Brief\",\"documentType\":\"Simultaneous Answering Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyRespondent\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"caseId\":\"491b05b4-483f-4b85-8dd7-2dd4c069eb50\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
-        "filingDate": "2001-10-10T23:54:05.993Z"
-      }
-    ],
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "docketNumber": "103-19",
     "status": "New",
     "associatedJudge": "Chief Judge"
+  },
+  {
+    "description": "Petition",
+    "eventCode": "P",
+    "index": 1,
+    "filingDate": "2019-03-01T22:53:50.098Z",
+    "filedBy": "Test Petitioner",
+    "docketRecordId": "9aff1148-8a28-4a9d-82ea-100d3cde192d",
+    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "sk": "docket-record|9aff1148-8a28-4a9d-82ea-100d3cde192d"
+  },
+  {
+    "description": "Request for Place of Trial at Mobile, Alabama",
+    "eventCode": "RQT",
+    "filingDate": "2019-03-01T22:53:50.097Z",
+    "index": 2,
+    "docketRecordId": "89ddfd4e-1def-4cfb-984b-42d06655a180",
+    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "sk": "docket-record|89ddfd4e-1def-4cfb-984b-42d06655a180"
+  },
+  {
+    "description": "Answer",
+    "eventCode": "A",
+    "index": 3,
+    "filingDate": "2019-03-01T22:54:05.993Z",
+    "filedBy": "Test Respondent",
+    "docketRecordId": "261725bd-4976-4e2b-9ce9-53540f4eff06",
+    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "sk": "docket-record|261725bd-4976-4e2b-9ce9-53540f4eff06"
+  },
+  {
+    "description": "Simultaneous Answering Brief",
+    "eventCode": "SIAB",
+    "index": 4,
+    "documentId": "dc2664a1-f552-418f-bcc7-8a67f4246568",
+    "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"ATOB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Simultaneous Answering Brief\",\"documentType\":\"Simultaneous Answering Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyRespondent\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"caseId\":\"491b05b4-483f-4b85-8dd7-2dd4c069eb50\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
+    "filingDate": "2001-10-10T23:54:05.993Z",
+    "docketRecordId": "63b1503d-26cc-448c-a4a4-670b846518c4",
+    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "sk": "docket-record|63b1503d-26cc-448c-a4a4-670b846518c4"
   },
   {
     "sk": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
@@ -306,6 +320,7 @@
     "gsi1pk": "workitem-9055257a-0a95-4b80-a728-5bb754c60e59",
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "filingDate": "2019-03-01T21:40:46.415Z",
@@ -345,8 +360,8 @@
     "gsi1pk": "workitem-9055257a-0a95-4b80-a728-5bb754c60e59",
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
-      "receivedAt": "2019-03-01T21:40:46.415Z",
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "createdAt": "2019-03-01T22:53:50.098Z",
       "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
@@ -384,6 +399,7 @@
     "gsi1pk": "workitem-337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
       "receivedAt": "2019-03-01T21:40:46.415Z",
@@ -422,6 +438,7 @@
     "pk": "workitem-337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "document": {
       "filingDate": "2019-03-01T22:54:05.993Z",
       "createdAt": "2019-03-01T22:54:05.993Z",
@@ -461,6 +478,7 @@
   {
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
@@ -500,6 +518,7 @@
   {
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
@@ -539,6 +558,7 @@
   {
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
     "caseTitle": "Samson Workman",
     "document": {
@@ -578,6 +598,7 @@
   {
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
@@ -617,6 +638,7 @@
   {
     "docketNumberSuffix": "S",
     "caseStatus": "New",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",

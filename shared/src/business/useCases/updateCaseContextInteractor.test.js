@@ -38,6 +38,7 @@ describe('updateCaseContextInteractor', () => {
           updateCase: caseToUpdate => Promise.resolve(caseToUpdate),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {
@@ -68,6 +69,7 @@ describe('updateCaseContextInteractor', () => {
           updateCase: ({ caseToUpdate }) => Promise.resolve(caseToUpdate),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const result = await updateCaseContextInteractor({
       applicationContext,
@@ -108,6 +110,7 @@ describe('updateCaseContextInteractor', () => {
           updateTrialSession: updateTrialSessionStub,
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const result = await updateCaseContextInteractor({
       applicationContext,
@@ -151,6 +154,7 @@ describe('updateCaseContextInteractor', () => {
           updateTrialSession: updateTrialSessionStub,
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const result = await updateCaseContextInteractor({
       applicationContext,
@@ -184,6 +188,7 @@ describe('updateCaseContextInteractor', () => {
           updateCase: ({ caseToUpdate }) => Promise.resolve(caseToUpdate),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const result = await updateCaseContextInteractor({
       applicationContext,
@@ -216,6 +221,7 @@ describe('updateCaseContextInteractor', () => {
           updateCase: ({ caseToUpdate }) => Promise.resolve(caseToUpdate),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const result = await updateCaseContextInteractor({
       applicationContext,
@@ -247,6 +253,7 @@ describe('updateCaseContextInteractor', () => {
           updateCase: ({ caseToUpdate }) => Promise.resolve(caseToUpdate),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const result = await updateCaseContextInteractor({
       applicationContext,
@@ -278,6 +285,7 @@ describe('updateCaseContextInteractor', () => {
           updateCase: ({ caseToUpdate }) => Promise.resolve(caseToUpdate),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const result = await updateCaseContextInteractor({
       applicationContext,
@@ -304,6 +312,7 @@ describe('updateCaseContextInteractor', () => {
           updateCase: ({ caseToUpdate }) => Promise.resolve(caseToUpdate),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const result = await updateCaseContextInteractor({
       applicationContext,

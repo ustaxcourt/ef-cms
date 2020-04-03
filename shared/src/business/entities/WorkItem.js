@@ -22,6 +22,7 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.assigneeName = rawWorkItem.assigneeName;
   this.caseId = rawWorkItem.caseId;
   this.caseStatus = rawWorkItem.caseStatus;
+  this.caseIsInProgress = rawWorkItem.caseIsInProgress;
   this.caseTitle = rawWorkItem.caseTitle;
   this.completedAt = rawWorkItem.completedAt;
   this.completedBy = rawWorkItem.completedBy;
@@ -69,6 +70,7 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .required(),
+    caseIsInProgress: joi.boolean().optional(),
     caseStatus: joi.string().optional(),
     caseTitle: joi.string().optional(),
     completedAt: joi

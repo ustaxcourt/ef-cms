@@ -3,6 +3,7 @@ import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/prese
 import {
   fakeFile,
   loginAs,
+  refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
   uploadProposedStipulatedDecision,
@@ -54,7 +55,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
   });
 
-  loginAs(test, 'respondent');
+  loginAs(test, 'irsPractitioner');
   it('respondent uploads a proposed stipulated decision', async () => {
     await viewCaseDetail({
       docketNumber: caseDetail.docketNumber,
@@ -75,8 +76,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(1);
 
-    // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await refreshElasticsearchIndex();
 
     await test.runSequence('gotoPendingReportSequence');
     const currentPendingItemsCount = (test.getState('pendingItems') || [])

@@ -1,6 +1,6 @@
 import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/cases/CaseConstants';
 
-export default test => {
+export const docketClerkEditsServiceIndicatorForPetitioner = test => {
   return it('docket clerk edits service indicator for a petitioner', async () => {
     await test.runSequence('gotoEditPetitionerInformationSequence', {
       docketNumber: test.docketNumber,

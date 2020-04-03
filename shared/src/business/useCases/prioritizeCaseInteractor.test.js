@@ -23,6 +23,7 @@ describe('prioritizeCaseInteractor', () => {
           updateHighPriorityCaseTrialSortMappingRecords: updateHighPriorityCaseTrialSortMappingRecordsMock,
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const result = await prioritizeCaseInteractor({
       applicationContext,
@@ -50,6 +51,7 @@ describe('prioritizeCaseInteractor', () => {
           userId: 'nope',
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {
@@ -84,6 +86,7 @@ describe('prioritizeCaseInteractor', () => {
           updateHighPriorityCaseTrialSortMappingRecords: updateHighPriorityCaseTrialSortMappingRecordsMock,
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {
@@ -123,6 +126,7 @@ describe('prioritizeCaseInteractor', () => {
           updateHighPriorityCaseTrialSortMappingRecords: updateHighPriorityCaseTrialSortMappingRecordsMock,
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {

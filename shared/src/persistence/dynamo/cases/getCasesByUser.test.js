@@ -3,11 +3,20 @@ const sinon = require('sinon');
 const { getCasesByUser } = require('./getCasesByUser');
 const { User } = require('../../../business/entities/User');
 
+let queryStub = jest.fn().mockReturnValue({
+  promise: async () => ({
+    Items: [],
+  }),
+});
+
 const applicationContext = {
   environment: {
     stage: 'local',
   },
   filterCaseMetadata: ({ cases }) => cases,
+  getDocumentClient: () => ({
+    query: queryStub,
+  }),
   isAuthorizedForWorkItems: () => true,
 };
 
@@ -70,7 +79,7 @@ describe('getCasesByUser', () => {
       user,
     });
     expect(result).toEqual([
-      { caseId: '123', pk: '123', sk: '123', status: 'New' },
+      { caseId: '123', docketRecord: [], pk: '123', sk: '123', status: 'New' },
     ]);
   });
 

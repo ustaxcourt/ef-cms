@@ -6,7 +6,7 @@ const formattedTrialSessions = withAppContextDecorator(
   formattedTrialSessionsComputed,
 );
 
-export default (test, overrides = {}) => {
+export const docketClerkViewsTrialSessionsTab = (test, overrides = {}) => {
   const status = overrides.tab || 'Open';
   return it(`Docket clerk views ${status} Trial Sessions tab`, async () => {
     await test.runSequence('gotoTrialSessionsSequence', {

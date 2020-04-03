@@ -14,6 +14,7 @@ import { serveCaseToIrsAction } from '../actions/StartCaseInternal/serveCaseToIr
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseConfirmationFormDocumentTitleAction } from '../actions/StartCaseInternal/setCaseConfirmationFormDocumentTitleAction';
+import { setCaseNotInProgressAction } from '../actions/StartCaseInternal/setCaseNotInProgressAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
@@ -27,6 +28,7 @@ export const createCaseFromPaperAndServeToIrsSequence = [
   clearPdfPreviewUrlAction,
   showProgressSequenceDecorator([
     openFileUploadStatusModalAction,
+    setCaseNotInProgressAction,
     createCaseFromPaperAction,
     {
       error: [openFileUploadErrorModal],

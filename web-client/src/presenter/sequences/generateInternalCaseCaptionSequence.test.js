@@ -1,4 +1,3 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { applicationContext } from '../../applicationContext';
@@ -22,7 +21,7 @@ describe('generateInternalCaseCaptionSequence', () => {
     });
 
     expect(test.getState('form.caseCaption')).toBe(
-      `Carl Fredricksen, Petitioner ${Case.CASE_CAPTION_POSTFIX}`,
+      'Carl Fredricksen, Petitioner',
     );
   });
 });

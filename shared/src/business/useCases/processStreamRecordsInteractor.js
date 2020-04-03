@@ -4,7 +4,8 @@ const filterRecords = records => {
   return records.filter(
     record =>
       !record.dynamodb.Keys.pk.S.includes('workitem-') &&
-      !record.dynamodb.Keys.pk.S.includes('|user'),
+      !record.dynamodb.Keys.pk.S.includes('|user') &&
+      ['INSERT', 'MODIFY'].includes(record.eventName),
   );
 };
 
@@ -21,26 +22,45 @@ exports.processStreamRecordsInteractor = async ({
   applicationContext.logger.info('Time', createISODateString());
   const searchClient = applicationContext.getSearchClient();
 
-  const filteredRecords = filterRecords(recordsToProcess);
+  const filteredRecords = filterRecords(recordsToProcess).map(record => ({
+    ...record.dynamodb.NewImage,
+  }));
 
-  for (const record of filteredRecords) {
-    if (['INSERT', 'MODIFY'].includes(record.eventName)) {
-      try {
-        await searchClient.index({
-          body: { ...record.dynamodb.NewImage },
-          id: record.dynamodb.Keys.pk.S,
-          index: 'efcms',
-        });
-      } catch (e) {
-        await applicationContext
-          .getPersistenceGateway()
-          .createElasticsearchReindexRecord({
-            applicationContext,
-            recordPk: record.dynamodb.Keys.pk.S,
-            recordSk: record.dynamodb.Keys.sk.S,
-          });
+  const body = filteredRecords.flatMap(doc => [
+    { index: { _id: doc.pk.S, _index: 'efcms' } },
+    doc,
+  ]);
 
-        applicationContext.logger.info('Error', e);
+  if (body && body.length) {
+    try {
+      await searchClient.bulk({
+        body,
+        refresh: true,
+      });
+    } catch {
+      //if the bulk index fails, try each single index individually and
+      //add the failing ones to the reindex list
+      const recordsToReprocess = filterRecords(recordsToProcess);
+      for (const record of recordsToReprocess) {
+        if (['INSERT', 'MODIFY'].includes(record.eventName)) {
+          try {
+            await searchClient.index({
+              body: { ...record.dynamodb.NewImage },
+              id: record.dynamodb.Keys.pk.S,
+              index: 'efcms',
+            });
+          } catch (e) {
+            await applicationContext
+              .getPersistenceGateway()
+              .createElasticsearchReindexRecord({
+                applicationContext,
+                recordPk: record.dynamodb.Keys.pk.S,
+                recordSk: record.dynamodb.Keys.sk.S,
+              });
+
+            applicationContext.logger.info('Error', e);
+          }
+        }
       }
     }
   }

@@ -5,7 +5,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const extractedDocument = withAppContextDecorator(extractedDocumentComputed);
 
-export default test => {
+export const docketClerkViewsDocument = test => {
   return it('Docket clerk views document detail', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,

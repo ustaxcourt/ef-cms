@@ -6,7 +6,7 @@ export default test => {
     });
     expect(test.getState('currentPage')).toEqual('CaseDetail');
     expect(test.getState('caseDetail.practitioners.0.name')).toEqual(
-      'Test Practitioner',
+      'Test Private Practitioner',
     );
     expect(
       test.getState('caseDetail.practitioners.0.representingPrimary'),

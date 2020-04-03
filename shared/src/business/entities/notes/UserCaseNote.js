@@ -18,7 +18,7 @@ function UserCaseNote(rawProps) {
 }
 
 UserCaseNote.VALIDATION_ERROR_MESSAGES = {
-  notes: 'Enter note',
+  notes: 'Add note',
 };
 
 UserCaseNote.schema = joi.object().keys({

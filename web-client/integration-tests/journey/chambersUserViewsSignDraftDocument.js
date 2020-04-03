@@ -1,4 +1,4 @@
-export default test => {
+export const chambersUserViewsSignDraftDocument = test => {
   return it('Chambers user views sign draft document', async () => {
     await test.runSequence('gotoSignPDFDocumentSequence', {
       docketNumber: test.docketNumber,

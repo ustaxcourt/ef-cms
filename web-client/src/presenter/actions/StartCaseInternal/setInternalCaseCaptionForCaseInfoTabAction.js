@@ -11,9 +11,5 @@ export const setInternalCaseCaptionForCaseInfoTabAction = ({
   props,
   store,
 }) => {
-  const { tab } = props;
-
-  if (tab === 'caseInfo') {
-    store.set(state.form.caseCaption, props.caseCaption);
-  }
+  store.set(state.form.caseCaption, props.caseCaption);
 };

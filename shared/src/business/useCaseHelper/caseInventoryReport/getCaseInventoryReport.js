@@ -7,12 +7,16 @@ const { get } = require('lodash');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.associatedJudge the optional judge filter
+ * @param {number} providers.from the item index to start from
+ * @param {number} providers.pageSize the number of items to retrieve
  * @param {string} providers.status the optional status filter
- * @returns {Array} the pending items found
+ * @returns {object} the items found and the total count
  */
 exports.getCaseInventoryReport = async ({
   applicationContext,
   associatedJudge,
+  from = 0,
+  pageSize,
   status,
 }) => {
   const source = [
@@ -22,18 +26,29 @@ exports.getCaseInventoryReport = async ({
     'docketNumberSuffix',
     'status',
   ];
+  const { CASE_INVENTORY_MAX_PAGE_SIZE } = applicationContext.getConstants();
+  const size =
+    pageSize && pageSize <= CASE_INVENTORY_MAX_PAGE_SIZE
+      ? pageSize
+      : CASE_INVENTORY_MAX_PAGE_SIZE;
 
   const foundCases = [];
 
   const searchParameters = {
     body: {
       _source: source,
+      from,
       query: {
         bool: {
-          must: [],
+          must: [
+            {
+              match: { 'entityName.S': 'Case' },
+            },
+          ],
         },
       },
-      size: 5000,
+      size,
+      sort: [{ 'sortableDocketNumber.N.keyword': { order: 'asc' } }],
     },
     index: 'efcms',
   };

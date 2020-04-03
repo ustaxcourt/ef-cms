@@ -10,15 +10,12 @@ import React from 'react';
 
 export const CaseDetailEdit = connect(
   {
-    generateCaseCaptionForSavedPetitionSequence:
-      sequences.generateCaseCaptionForSavedPetitionSequence,
     navigateBackSequence: sequences.navigateBackSequence,
     navigateToReviewSavedPetitionSequence:
       sequences.navigateToReviewSavedPetitionSequence,
     screenMetadata: state.screenMetadata,
   },
   ({
-    generateCaseCaptionForSavedPetitionSequence,
     navigateBackSequence,
     navigateToReviewSavedPetitionSequence,
     screenMetadata,
@@ -30,9 +27,6 @@ export const CaseDetailEdit = connect(
           bind="documentDetail.tab"
           className="container-tabs tab-button-h3"
           id="case-detail-tabs"
-          onSelect={tab => {
-            generateCaseCaptionForSavedPetitionSequence({ tab });
-          }}
         >
           <Tab id="tab-parties" tabName="partyInfo" title="Parties">
             <PartyInformation />

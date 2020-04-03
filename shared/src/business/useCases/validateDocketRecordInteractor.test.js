@@ -13,6 +13,7 @@ describe('validateDocketRecordInteractor', () => {
         getEntityConstructors: () => ({
           DocketRecord,
         }),
+        getUniqueId: () => 'unique-id-1',
       },
       docketRecord: {},
     });
@@ -30,6 +31,7 @@ describe('validateDocketRecordInteractor', () => {
         getEntityConstructors: () => ({
           DocketRecord,
         }),
+        getUniqueId: () => 'unique-id-1',
       },
       docketRecord: {
         description: 'Test Description',

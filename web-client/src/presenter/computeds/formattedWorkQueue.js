@@ -192,6 +192,16 @@ export const getWorkItemDocumentLink = ({
     ) {
       editLink = '/edit';
     }
+  } else if (
+    showDocumentEditLink &&
+    permissions.UPDATE_CASE &&
+    formattedDocument &&
+    !workQueueIsInternal &&
+    formattedDocument.isPetition &&
+    result.caseIsInProgress &&
+    !formattedDocument.servedAt
+  ) {
+    editLink = '/review';
   }
   if (!editLink) {
     const messageId = result.messages[0] && result.messages[0].messageId;
@@ -248,7 +258,8 @@ export const filterWorkItems = ({
             // PetitionsClerks
             (item.assigneeId === user.userId &&
               user.role === USER_ROLES.petitionsClerk &&
-              item.caseStatus === STATUS_TYPES.inProgress)
+              item.caseStatus === STATUS_TYPES.new &&
+              item.caseIsInProgress === true)
           );
         },
         inbox: item => {
@@ -259,7 +270,7 @@ export const filterWorkItems = ({
             item.section === user.section &&
             item.document.isFileAttached !== false &&
             !item.inProgress &&
-            item.caseStatus !== STATUS_TYPES.inProgress
+            item.caseIsInProgress !== true
           );
         },
         outbox: item => {
@@ -283,7 +294,8 @@ export const filterWorkItems = ({
               (item.document.isFileAttached === false || item.inProgress)) ||
             // PetitionsClerks
             (user.role === USER_ROLES.petitionsClerk &&
-              item.caseStatus === STATUS_TYPES.inProgress)
+              item.caseStatus === STATUS_TYPES.new &&
+              item.caseIsInProgress === true)
           );
         },
         inbox: item => {
@@ -294,7 +306,7 @@ export const filterWorkItems = ({
             item.document.isFileAttached !== false &&
             !item.inProgress &&
             additionalFilters(item) &&
-            item.caseStatus !== STATUS_TYPES.inProgress
+            item.caseIsInProgress !== true
           );
         },
         outbox: item => {

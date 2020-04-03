@@ -1,4 +1,4 @@
-export default test => {
+export const docketClerkSelectsAssignee = test => {
   return it('Docket clerk select an assignee', async () => {
     expect(test.getState('assigneeId')).toBeUndefined();
     await test.runSequence('selectAssigneeSequence', {

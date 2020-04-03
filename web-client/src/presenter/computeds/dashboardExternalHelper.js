@@ -6,7 +6,9 @@ export const dashboardExternalHelper = (get, applicationContext) => {
 
   return {
     showCaseList: cases.length > 0,
-    showCaseSearch: ['practitioner', 'respondent'].includes(user.role),
+    showCaseSearch: ['privatePractitioner', 'irsPractitioner'].includes(
+      user.role,
+    ),
     showWhatToExpect: cases.length === 0,
   };
 };

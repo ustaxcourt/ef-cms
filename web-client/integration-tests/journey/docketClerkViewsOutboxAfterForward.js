@@ -1,4 +1,4 @@
-export default test => {
+export const docketClerkViewsOutboxAfterForward = test => {
   return it('Docket clerk views outbox after forwarding', async () => {
     await test.runSequence('gotoMessagesSequence');
     await test.runSequence('chooseWorkQueueSequence', {

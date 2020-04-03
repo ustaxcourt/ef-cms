@@ -6,7 +6,7 @@ const validateFilingTypes = filingTypes => {
   filingTypes.forEach(filingType => {
     if (
       !Case.getFilingTypes('petitioner').includes(filingType) &&
-      !Case.getFilingTypes('practitioner').includes(filingType)
+      !Case.getFilingTypes('privatePractitioner').includes(filingType)
     ) {
       throw new Error('invalid filing type');
     }
@@ -39,11 +39,11 @@ describe('Get case filing types', () => {
     expect(error).toBeUndefined();
   });
 
-  it('returns a collection of filing types for user role practitioner', async () => {
+  it('returns a collection of filing types for user role privatePractitioner', async () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {
-          role: User.ROLES.practitioner,
+          role: User.ROLES.privatePractitioner,
           userId: 'someLawyer',
         };
       },
@@ -62,7 +62,7 @@ describe('Get case filing types', () => {
     expect(error).toBeUndefined();
   });
 
-  it('throws a UnauthorizedError if user is unauthorized', async () => {
+  it('throws an UnauthorizedError if user is unauthorized', async () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {

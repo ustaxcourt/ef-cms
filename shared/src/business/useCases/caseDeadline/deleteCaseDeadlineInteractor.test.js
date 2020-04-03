@@ -38,6 +38,7 @@ describe('deleteCaseDeadlineInteractor', () => {
         getCaseDeadlinesByCaseId: getCaseDeadlinesByCaseIdMock,
         updateCase: updateCaseMock,
       }),
+      getUniqueId: () => 'unique-id-1',
       getUseCaseHelpers: () => ({
         updateCaseAutomaticBlock,
       }),

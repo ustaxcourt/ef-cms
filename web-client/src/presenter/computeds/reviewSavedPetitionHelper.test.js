@@ -31,7 +31,6 @@ describe('reviewSavedPetitionHelper', () => {
       hasIrsNoticeFormatted: 'No',
       hasOrders: false,
       irsNoticeDateFormatted: undefined,
-      mailingDateFormatted: undefined,
       ownershipDisclosureFile: undefined,
       petitionFile: undefined,
       petitionPaymentStatusFormatted: 'Not paid',

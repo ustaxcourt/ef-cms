@@ -49,12 +49,14 @@ set -- \
   --userPoolId "${USER_POOL_ID}" \
   --dynamo_stream_arn="${DYNAMO_STREAM_ARN}" \
   --elasticsearch_endpoint="${ELASTICSEARCH_ENDPOINT}" \
-  --verbose
+  --verbose \
+  --circleHoneybadgerApiKeyDev="${CIRCLE_HONEYBADGER_API_KEY_DEV}" \
+  --circleHoneybadgerApiKeyStg="${CIRCLE_HONEYBADGER_API_KEY_STG}"
 
-./node_modules/.bin/sls create_domain "$@" 
+./node_modules/.bin/sls create_domain "$@"
 echo "done running create_domain"
 
-ENVIRONMENT="${slsStage}" ./node_modules/.bin/sls deploy --verbose "$@" 
+ENVIRONMENT="${slsStage}" ./node_modules/.bin/sls deploy --verbose "$@"
 echo "done running sls deploy"
 
 echo "slsStage: ${slsStage}"

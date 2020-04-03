@@ -10,6 +10,7 @@ import { serveCaseToIrsAction } from '../actions/StartCaseInternal/serveCaseToIr
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseConfirmationFormDocumentTitleAction } from '../actions/StartCaseInternal/setCaseConfirmationFormDocumentTitleAction';
+import { setCaseNotInProgressAction } from '../actions/StartCaseInternal/setCaseNotInProgressAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
@@ -20,6 +21,7 @@ import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 export const saveCaseAndServeToIrsSequence = [
   clearPdfPreviewUrlAction,
   showProgressSequenceDecorator([
+    setCaseNotInProgressAction,
     getFormCombinedWithCaseDetailAction,
     saveCaseDetailInternalEditAction,
     setCaseAction,

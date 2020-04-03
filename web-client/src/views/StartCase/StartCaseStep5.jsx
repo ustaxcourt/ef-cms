@@ -4,7 +4,6 @@ import { CaseDifferenceModalOverlay } from './CaseDifferenceModalOverlay';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@cerebral/react';
@@ -79,12 +78,6 @@ export const StartCaseStep5 = connect(
                             <div>
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
-                                  <FontAwesomeIcon
-                                    className="fa-icon-blue"
-                                    icon={['fas', 'file-pdf']}
-                                  />
-                                </div>
-                                <div className="grid-col flex-fill">
                                   <PDFPreviewButton
                                     file={form.petitionFile}
                                     title="Petition"
@@ -145,13 +138,6 @@ export const StartCaseStep5 = connect(
                           <div>
                             <div className="grid-row">
                               <div className="grid-col flex-auto">
-                                <FontAwesomeIcon
-                                  className="fa-icon-blue"
-                                  icon={['fas', 'file-pdf']}
-                                />
-                              </div>
-                              <div className="grid-col flex-fill">
-                                {' '}
                                 <PDFPreviewButton
                                   file={form.stinFile}
                                   title="Statement of Taxpayer Identification"
@@ -172,12 +158,6 @@ export const StartCaseStep5 = connect(
                             <div>
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
-                                  <FontAwesomeIcon
-                                    className="fa-icon-blue"
-                                    icon={['fas', 'file-pdf']}
-                                  />
-                                </div>
-                                <div className="grid-col flex-fill">
                                   <PDFPreviewButton
                                     file={form.ownershipDisclosureFile}
                                     title="Ownership Disclosure Statement"

@@ -1,6 +1,6 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 
-export default test => {
+export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
   return it('Docket clerk updates case status to General Docket - At Issue (Ready for Trial)', async () => {
     test.setState('caseDetail', {});
 

@@ -35,8 +35,8 @@ exports.saveIntermediateDocketEntryInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const initialDocketEntry = caseEntity.docketRecord.find(
-    entry => entry.documentId === entryMetadata.documentId,
+  const initialDocketEntry = caseEntity.getDocketRecordByDocumentId(
+    entryMetadata.documentId,
   );
 
   const docketRecordEntry = new DocketRecord(

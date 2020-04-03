@@ -14,7 +14,7 @@ describe('getCaseAssociation', () => {
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: '123',
     });
 
@@ -41,7 +41,7 @@ describe('getCaseAssociation', () => {
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: '1234',
     });
 
@@ -68,7 +68,7 @@ describe('getCaseAssociation', () => {
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: '1234',
     });
 
@@ -95,7 +95,7 @@ describe('getCaseAssociation', () => {
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
       userId: '789',
     });
 
@@ -122,7 +122,7 @@ describe('getCaseAssociation', () => {
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
       userId: '789',
     });
 

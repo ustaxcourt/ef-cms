@@ -34,4 +34,15 @@ describe('setFormValueAction', () => {
     });
     expect(result.state.form.appleType).toEqual(undefined);
   });
+
+  it('unsets the state.form[props.key] if the passed in props.value is null', async () => {
+    const result = await runAction(setFormValueAction, {
+      props: {
+        key: 'appleType',
+        value: null,
+      },
+      state: { form: { appleType: 'Fuji' } },
+    });
+    expect(result.state.form.appleType).toEqual(undefined);
+  });
 });

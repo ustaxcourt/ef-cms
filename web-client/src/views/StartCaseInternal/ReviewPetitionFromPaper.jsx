@@ -1,11 +1,11 @@
 import { AddressDisplay } from '../CaseDetail/PetitionerInformation';
+import { BigHeader } from './../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDifferenceModalOverlay } from '../StartCase/CaseDifferenceModalOverlay';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { OrdersNeededSummary } from './OrdersNeededSummary';
 import { PDFPreviewButton } from '../PDFPreviewButton';
@@ -55,18 +55,19 @@ export const ReviewPetitionFromPaper = connect(
   }) => {
     return (
       <>
+        <BigHeader text="Create Case" />
         <section
           className="usa-section grid-container"
           id="ustc-start-a-case-form"
         >
           <Focus>
             <h2 id="file-a-document-header" tabIndex="-1">
-              Review The Petition
+              Review the Petition
             </h2>
           </Focus>
 
           {reviewPetitionFromPaperHelper.hasOrders && (
-            <OrdersNeededSummary data={form} />
+            <OrdersNeededSummary caseInformation={form} />
           )}
 
           <div className="grid-container padding-x-0 create-case-review">
@@ -171,7 +172,7 @@ export const ReviewPetitionFromPaper = connect(
                           >
                             Case caption
                           </label>
-                          {form.caseCaption}
+                          {form.caseCaption} {constants.CASE_CAPTION_POSTFIX}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
                           <label
@@ -180,7 +181,9 @@ export const ReviewPetitionFromPaper = connect(
                           >
                             Requested trial location
                           </label>
-                          {form.preferredTrialCity}
+                          {
+                            reviewPetitionFromPaperHelper.preferredTrialCityFormatted
+                          }
                         </div>
                       </div>
                       <div className="tablet:grid-col-6 margin-bottom-1">
@@ -191,7 +194,7 @@ export const ReviewPetitionFromPaper = connect(
                           >
                             Mailing date
                           </label>
-                          {reviewPetitionFromPaperHelper.mailingDateFormatted}
+                          {form.mailingDate}
                         </div>
 
                         <div className="margin-top-3 margin-bottom-2">
@@ -313,12 +316,6 @@ export const ReviewPetitionFromPaper = connect(
                         </label>
                         <div className="grid-row">
                           <div className="grid-col flex-auto">
-                            <FontAwesomeIcon
-                              className="fa-icon-blue"
-                              icon={['fas', 'file-pdf']}
-                            />
-                          </div>
-                          <div className="grid-col flex-fill">
                             <PDFPreviewButton
                               file={form.petitionFile}
                               title="Petition"
@@ -336,12 +333,6 @@ export const ReviewPetitionFromPaper = connect(
                         <div>
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
-                              <FontAwesomeIcon
-                                className="fa-icon-blue"
-                                icon={['fas', 'file-pdf']}
-                              />
-                            </div>
-                            <div className="grid-col flex-fill">
                               <PDFPreviewButton
                                 file={form.stinFile}
                                 title="Statement of Taxpayer Identification"
@@ -361,12 +352,6 @@ export const ReviewPetitionFromPaper = connect(
                           <div>
                             <div className="grid-row">
                               <div className="grid-col flex-auto">
-                                <FontAwesomeIcon
-                                  className="fa-icon-blue"
-                                  icon={['fas', 'file-pdf']}
-                                />
-                              </div>
-                              <div className="grid-col flex-fill">
                                 <PDFPreviewButton
                                   file={form.requestForPlaceOfTrialFile}
                                   title="Request for Place of Trial"
@@ -387,12 +372,6 @@ export const ReviewPetitionFromPaper = connect(
                           <div>
                             <div className="grid-row">
                               <div className="grid-col flex-auto">
-                                <FontAwesomeIcon
-                                  className="fa-icon-blue"
-                                  icon={['fas', 'file-pdf']}
-                                />
-                              </div>
-                              <div className="grid-col flex-fill">
                                 <PDFPreviewButton
                                   file={form.ownershipDisclosureFile}
                                   title="Ownership Disclosure Statement"

@@ -15,6 +15,7 @@ describe('archiveDraftDocumentInteractor', () => {
       getPersistenceGateway: () => ({
         updateCase: () => null,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {
@@ -39,6 +40,7 @@ describe('archiveDraftDocumentInteractor', () => {
         getCaseByCaseId: () => MOCK_CASE,
         updateCase: updateCaseSpy,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
     await archiveDraftDocumentInteractor({
       applicationContext,
