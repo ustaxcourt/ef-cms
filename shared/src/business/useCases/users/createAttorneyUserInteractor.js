@@ -2,7 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { Attorney } = require('../../entities/Attorney');
+const { Practitioner } = require('../../entities/Practitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -26,7 +26,7 @@ exports.createAttorneyUserInteractor = async ({ applicationContext, user }) => {
       user,
     });
 
-  return new Attorney(createdUser, { applicationContext })
+  return new Practitioner(createdUser, { applicationContext })
     .validate()
     .toRawObject();
 };

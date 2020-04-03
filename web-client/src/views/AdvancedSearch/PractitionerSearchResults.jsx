@@ -42,7 +42,7 @@ export const PractitionerSearchResults = connect(
                       </td>
                       <td>{result.name}</td>
                       <td>{result.contact.state}</td>
-                      <td>{result.isAdmitted}</td>
+                      <td>{result.admissionsStatus}</td>
                     </tr>
                   ),
                 )}
