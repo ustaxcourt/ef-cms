@@ -1,32 +1,25 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setNoticesForCalendaredTrialSessionAction } from './setNoticesForCalendaredTrialSessionAction';
 
 describe('setNoticesForCalendaredTrialSessionAction', () => {
-  let setNoticesForCalendaredTrialSessionInteractorStub;
   let createObjectURLStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     global.window = global;
     global.Blob = () => {};
 
-    setNoticesForCalendaredTrialSessionInteractorStub = jest
-      .fn()
-      .mockReturnValue(null);
-    createObjectURLStub = jest.fn();
+    createObjectURLStub = jest.fn().mockReturnValue('123456-abcdef');
 
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
-      createObjectURL: () => {
-        createObjectURLStub();
-        return '123456-abcdef';
-      },
+      createObjectURL: createObjectURLStub,
     };
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        setNoticesForCalendaredTrialSessionInteractor: setNoticesForCalendaredTrialSessionInteractorStub,
-      }),
-    };
+    applicationContext
+      .getUseCases()
+      .setNoticesForCalendaredTrialSessionInteractor.mockReturnValue(null);
   });
 
   it('invokes the set notice interactor', async () => {
@@ -42,7 +35,8 @@ describe('setNoticesForCalendaredTrialSessionAction', () => {
     });
 
     expect(
-      setNoticesForCalendaredTrialSessionInteractorStub,
+      applicationContext.getUseCases()
+        .setNoticesForCalendaredTrialSessionInteractor,
     ).toHaveBeenCalled();
   });
 });

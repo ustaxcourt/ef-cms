@@ -1,5 +1,6 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseDeadlinesForCaseAction } from './getCaseDeadlinesForCaseAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 const mockCaseDeadlines = [
@@ -18,14 +19,12 @@ const mockCaseDeadlines = [
     description: 'Another test case deadline.',
   },
 ];
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    getCaseDeadlinesForCaseInteractor: () => mockCaseDeadlines,
-  }),
-  getUtilities: () => ({
-    createISODateString: () => '2019-03-01T21:42:29.073Z',
-  }),
-};
+
+presenter.providers.applicationContext = applicationContext;
+
+applicationContext
+  .getUseCases()
+  .getCaseDeadlinesForCaseInteractor.mockReturnValue(mockCaseDeadlines);
 
 describe('getCaseDeadlinesForCaseAction', () => {
   it('calls getCaseDeadlinesForCaseInteractor', async () => {

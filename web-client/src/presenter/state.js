@@ -15,6 +15,7 @@ import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
+import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
@@ -90,6 +91,7 @@ const helpers = {
   caseDetailSubnavHelper,
   caseInformationHelper,
   caseInventoryReportHelper,
+  caseSearchBoxHelper,
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
   confirmInitiateServiceModalHelper,
@@ -146,8 +148,7 @@ const helpers = {
   workQueueSectionHelper,
 };
 
-export const state = {
-  ...helpers,
+export const baseState = {
   advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
   archiveDraftDocument: {
     // used by the delete draft document modal
@@ -240,4 +241,9 @@ export const state = {
   workItemMetadata: {},
   workQueue: [],
   workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
+};
+
+export const state = {
+  ...helpers,
+  ...baseState,
 };

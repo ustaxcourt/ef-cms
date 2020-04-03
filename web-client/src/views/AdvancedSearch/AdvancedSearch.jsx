@@ -2,6 +2,7 @@ import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from './CaseSearchForm';
 import { ErrorNotification } from '../ErrorNotification';
 import { PractitionerSearchForm } from './PractitionerSearchForm';
+import { PractitionerSearchResults } from './PractitionerSearchResults';
 import { SearchResults } from './SearchResults';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -11,6 +12,7 @@ import React from 'react';
 export const AdvancedSearch = connect(
   {
     advancedSearchHelper: state.advancedSearchHelper,
+    advancedSearchTabChangeSequence: sequences.advancedSearchTabChangeSequence,
     submitCaseAdvancedSearchSequence:
       sequences.submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence:
@@ -22,6 +24,7 @@ export const AdvancedSearch = connect(
   },
   function AdvancedSearch({
     advancedSearchHelper,
+    advancedSearchTabChangeSequence,
     submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence,
     submitPractitionerBarNumberSearchSequence,
@@ -33,25 +36,28 @@ export const AdvancedSearch = connect(
 
         <section className="usa-section grid-container advanced-search">
           <ErrorNotification />
-
-          <p>
-            Anyone can search for a case in our system for cases filed{' '}
-            <span className="text-semibold">on or after May 1, 1986</span>. If
-            you aren’t affiliated with that case, you will only see limited
-            information about that case.
-          </p>
-
           <Tabs
             bind="advancedSearchTab"
             className="classic-horizontal-header3 tab-border"
+            onSelect={() => {
+              advancedSearchTabChangeSequence();
+            }}
           >
             <Tab id="tab-case" tabName="case" title="Case">
+              <p>
+                Anyone can search for a case in our system for cases filed{' '}
+                <span className="text-semibold">on or after May 1, 1986</span>.
+                If you aren’t affiliated with that case, you will only see
+                limited information about that case.
+              </p>
+
               <CaseSearchForm
                 submitAdvancedSearchSequence={submitCaseAdvancedSearchSequence}
                 submitDocketNumberSearchSequence={
                   submitCaseDocketNumberSearchSequence
                 }
               />
+              <SearchResults />
             </Tab>
             {advancedSearchHelper.showPractitionerSearch && (
               <Tab
@@ -67,11 +73,10 @@ export const AdvancedSearch = connect(
                     submitPractitionerNameSearchSequence
                   }
                 />
+                <PractitionerSearchResults />
               </Tab>
             )}
           </Tabs>
-
-          <SearchResults />
         </section>
       </>
     );

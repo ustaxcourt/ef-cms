@@ -1,12 +1,14 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setupEditPetitionDetailFormAction } from './setupEditPetitionDetailFormAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('setupEditPetitionDetailFormAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('sets the payment waived date on the form as month, day, year if payment status is waived', async () => {
     const result = await runAction(setupEditPetitionDetailFormAction, {
       modules: {

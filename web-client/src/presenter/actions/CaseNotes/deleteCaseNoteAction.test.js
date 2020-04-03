@@ -1,19 +1,11 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { deleteCaseNoteAction } from './deleteCaseNoteAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-const deleteCaseNoteInteractorMock = jest.fn();
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    deleteCaseNoteInteractor: deleteCaseNoteInteractorMock,
-  }),
-};
+presenter.providers.applicationContext = applicationContext;
 
 describe('deleteCaseNote', () => {
-  beforeEach(() => {
-    jest.resetAllMocks();
-  });
-
   it('deletes a procedural note using caseDetail.caseId', async () => {
     const caseId = '123-abc';
     await runAction(deleteCaseNoteAction, {
@@ -26,6 +18,8 @@ describe('deleteCaseNote', () => {
         },
       },
     });
-    expect(deleteCaseNoteInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().deleteCaseNoteInteractor,
+    ).toHaveBeenCalled();
   });
 });

@@ -1,10 +1,10 @@
 import { ContactFactory } from '../../../../../shared/src/business/entities/contacts/ContactFactory';
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { defaultAdvancedSearchFormAction } from './defaultAdvancedSearchFormAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('defaultAdvancedSearchFormAction', () => {
   it('sets defaults on state.advancedSearchForm if state.advancedSearchForm is empty', async () => {

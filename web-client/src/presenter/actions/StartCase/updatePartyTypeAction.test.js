@@ -1,18 +1,13 @@
 import { ContactFactory } from '../../../../../shared/src/business/entities/contacts/ContactFactory';
 import { User } from '../../../../../shared/src/business/entities/User';
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updatePartyTypeAction } from './updatePartyTypeAction';
 
-const updateCaseStub = jest.fn().mockReturnValue({});
+applicationContext.getUseCases().updateCase.mockReturnValue({});
 
-presenter.providers.applicationContext = {
-  ...applicationContext,
-  getUseCases: () => ({
-    updateCase: updateCaseStub,
-  }),
-};
+presenter.providers.applicationContext = applicationContext;
 
 const getFixtures = (props, state = {}) => ({
   modules: {

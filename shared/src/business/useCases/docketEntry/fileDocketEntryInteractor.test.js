@@ -1,35 +1,21 @@
 const {
-  updateCaseAutomaticBlock,
-} = require('../../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { Case } = require('../../entities/cases/Case');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { fileDocketEntryInteractor } = require('./fileDocketEntryInteractor');
 const { User } = require('../../entities/User');
 
 describe('fileDocketEntryInteractor', () => {
-  let applicationContext;
-  let user;
-  const saveWorkItemForDocketClerkFilingExternalDocumentSpy = jest.fn();
-  const saveWorkItemForDocketEntryWithoutFileSpy = jest.fn();
-  const saveWorkItemForNonPaperSpy = jest.fn();
-  const updateCaseSpy = jest.fn().mockImplementation(v => v);
-  const deleteCaseTrialSortMappingRecordsSpy = jest.fn();
-  let getCaseDeadlinesByCaseIdSpy;
-
+  const user = {
+    name: 'Olivia Jade',
+    role: User.ROLES.docketClerk,
+    section: 'docket',
+    userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+  };
   let caseRecord;
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-
-    getCaseDeadlinesByCaseIdSpy = jest.fn().mockReturnValue([]);
-
-    user = {
-      name: 'Olivia Jade',
-      role: User.ROLES.docketClerk,
-      section: 'docket',
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-
+  beforeAll(() => {
     caseRecord = {
       caseCaption: 'Caption',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -73,29 +59,21 @@ describe('fileDocketEntryInteractor', () => {
       userId: 'petitioner',
     };
 
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => user,
-      getPersistenceGateway: () => ({
-        deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsSpy,
-        getCaseByCaseId: async () => caseRecord,
-        getCaseDeadlinesByCaseId: getCaseDeadlinesByCaseIdSpy,
-        getUserById: async () => user,
-        saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
-        saveWorkItemForDocketEntryWithoutFile: saveWorkItemForDocketEntryWithoutFileSpy,
-        saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
-        updateCase: updateCaseSpy,
-      }),
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      getUseCaseHelpers: () => ({ updateCaseAutomaticBlock }),
-    };
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(user);
+  });
+
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockReturnValue(user);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
-    user = {
-      name: 'Olivia Jade',
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
+    applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
       fileDocketEntryInteractor({
@@ -123,8 +101,11 @@ describe('fileDocketEntryInteractor', () => {
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
-    expect(saveWorkItemForNonPaperSpy).not.toBeCalled();
-    expect(updateCaseSpy).toBeCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+    ).not.toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 
   it('sets the eventCode to MISL when the document is lodged', async () => {
@@ -138,8 +119,10 @@ describe('fileDocketEntryInteractor', () => {
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
+
     expect(
-      updateCaseSpy.mock.calls[0][0].caseToUpdate.documents[3].eventCode,
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents[3].eventCode,
     ).toEqual('MISL');
   });
 
@@ -167,14 +150,17 @@ describe('fileDocketEntryInteractor', () => {
       secondaryDocumentFileId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
       secondarySupportingDocumentFileId: 'e54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
+
     expect(
-      updateCaseSpy.mock.calls[0][0].caseToUpdate.documents[4],
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents[4],
     ).toMatchObject({
       eventCode: 'MISL',
       lodged: true,
     });
     expect(
-      updateCaseSpy.mock.calls[0][0].caseToUpdate.documents[5],
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents[5],
     ).toMatchObject({
       eventCode: 'MISL',
       lodged: true,
@@ -194,19 +180,27 @@ describe('fileDocketEntryInteractor', () => {
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
-    expect(updateCaseSpy).toBeCalled();
-    expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
+
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
     });
-    expect(deleteCaseTrialSortMappingRecordsSpy).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .deleteCaseTrialSortMappingRecords,
+    ).toBeCalled();
   });
 
   it('sets the case as blocked with due dates if the document filed is a tracked document type and the case has due dates', async () => {
-    getCaseDeadlinesByCaseIdSpy = jest
-      .fn()
-      .mockReturnValue([{ deadline: 'something' }]);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseDeadlinesByCaseId.mockReturnValue([{ deadline: 'something' }]);
+
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
@@ -219,12 +213,19 @@ describe('fileDocketEntryInteractor', () => {
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
-    expect(updateCaseSpy).toBeCalled();
-    expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
+
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
-    expect(deleteCaseTrialSortMappingRecordsSpy).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .deleteCaseTrialSortMappingRecords,
+    ).toBeCalled();
   });
 });

@@ -1,5 +1,6 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { handleInvalidScannerSourceAction } from './handleInvalidScannerSourceAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 const mockStorage = {
@@ -7,15 +8,17 @@ const mockStorage = {
   scannerSourceName: 'TC3000 Tricorder',
 };
 
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    removeItemInteractor: ({ key }) => {
-      mockStorage[key] = null;
-    },
-  }),
-};
-
 describe('handleInvalidScannerSourceAction', () => {
+  beforeAll(() => {
+    applicationContext.getUseCases().removeItemInteractor = jest.fn(
+      ({ key }) => {
+        mockStorage[key] = null;
+      },
+    );
+
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('should clear the scanner source and show the ScanErrorModal modal when a scan source is invalid', async () => {
     const result = await runAction(handleInvalidScannerSourceAction, {
       modules: {

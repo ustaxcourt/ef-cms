@@ -108,6 +108,20 @@ const NavigationItems = (
           </a>
         </li>
       )}
+      {helper.showSearchNavItem && (
+        <li className={classNames('usa-nav__primary-item')}>
+          <a
+            className={classNames(
+              'usa-nav__link',
+              helper.pageIsDashboard && 'usa-current',
+            )}
+            href="/"
+            onClick={() => toggleMobileMenuSequence()}
+          >
+            Search
+          </a>
+        </li>
+      )}
       {helper.showTrialSessions && (
         <li className={classNames('usa-nav__primary-item')}>
           <a
