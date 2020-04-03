@@ -1,7 +1,7 @@
 import { getFormContactPrimaryAction } from '../actions/StartCaseInternal/getFormContactPrimaryAction';
-import { setFormContactSecondaryAction } from '../actions/StartCaseInternal/setFormContactSecondaryAction';
+import { setFormContactSecondaryAddressAction } from '../actions/StartCaseInternal/setFormContactSecondaryAddressAction';
 
 export const copyPrimaryContactSequence = [
   getFormContactPrimaryAction,
-  setFormContactSecondaryAction,
+  setFormContactSecondaryAddressAction,
 ];

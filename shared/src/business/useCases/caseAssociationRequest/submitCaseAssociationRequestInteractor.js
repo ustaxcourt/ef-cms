@@ -41,8 +41,8 @@ exports.submitCaseAssociationRequestInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const isPractitioner = authorizedUser.role === User.ROLES.practitioner;
-  const isRespondent = authorizedUser.role === User.ROLES.respondent;
+  const isPractitioner = authorizedUser.role === User.ROLES.privatePractitioner;
+  const isRespondent = authorizedUser.role === User.ROLES.irsPractitioner;
 
   if (isPractitioner) {
     return await associatePractitionerToCase({

@@ -1,22 +1,12 @@
-import { clearModalAction } from '../actions/clearModalAction';
-import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearCaseInventoryReportDataAction } from '../actions/CaseInventoryReport/clearCaseInventoryReportDataAction';
 import { getCaseInventoryReportAction } from '../actions/CaseInventoryReport/getCaseInventoryReportAction';
-import { navigateToCaseInventoryReportAction } from '../actions/CaseInventoryReport/navigateToCaseInventoryReportAction';
-import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
-import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { validateCaseInventoryReportModalAction } from '../actions/CaseInventoryReport/validateCaseInventoryReportModalAction';
+import { updateScreenMetadataSequence } from './updateScreenMetadataSequence';
 
-export const getCaseInventoryReportSequence = [
-  startShowValidationAction,
-  validateCaseInventoryReportModalAction,
-  {
-    error: [setValidationErrorsAction],
-    success: showProgressSequenceDecorator([
-      clearModalAction,
-      getCaseInventoryReportAction,
-      clearModalStateAction,
-      navigateToCaseInventoryReportAction,
-    ]),
-  },
-];
+export const getCaseInventoryReportSequence = showProgressSequenceDecorator([
+  clearAlertsAction,
+  updateScreenMetadataSequence,
+  clearCaseInventoryReportDataAction,
+  getCaseInventoryReportAction,
+]);

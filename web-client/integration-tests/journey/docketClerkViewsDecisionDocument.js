@@ -1,4 +1,4 @@
-export default test => {
+export const docketClerkViewsDecisionDocument = test => {
   return it('Docket clerk views decision document detail', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
@@ -21,10 +21,10 @@ export default test => {
     });
 
     expect(workItem.messages[0]).toMatchObject({
-      from: 'Test Respondent',
+      from: 'Test IRS Practitioner',
       fromUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
       message:
-        'Proposed Stipulated Decision filed by Respondent is ready for review.',
+        'Proposed Stipulated Decision filed by Irspractitioner is ready for review.',
     });
   });
 };

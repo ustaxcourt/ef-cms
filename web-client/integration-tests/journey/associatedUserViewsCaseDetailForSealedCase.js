@@ -1,4 +1,4 @@
-export default test => {
+export const associatedUserViewsCaseDetailForSealedCase = test => {
   return it('associated user views case detail for a sealed case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

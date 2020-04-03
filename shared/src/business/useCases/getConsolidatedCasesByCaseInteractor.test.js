@@ -27,6 +27,7 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
       getPersistenceGateway: () => ({
         getCasesByLeadCaseId: getCasesByLeadCaseIdStub,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
   });
 

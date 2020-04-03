@@ -549,10 +549,18 @@ const router = {
     );
 
     route(
-      '/case-detail/*/orders-needed',
-      ifHasAccess(docketNumber => {
-        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Orders needed`);
-        app.getSequence('gotoOrdersNeededSequence')({ docketNumber });
+      '/users/create-attorney',
+      ifHasAccess(() => {
+        setPageTitle('EF-CMS User Management - Create Attorney User');
+        app.getSequence('gotoCreateAttorneyUserSequence')();
+      }),
+    );
+
+    route(
+      '/users/edit-attorney/*',
+      ifHasAccess(userId => {
+        setPageTitle('EF-CMS User Management - Edit Attorney User');
+        app.getSequence('gotoEditAttorneyUserSequence')({ userId });
       }),
     );
 
@@ -626,6 +634,14 @@ const router = {
           trialSessionId,
         });
       }, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY),
+    );
+
+    route(
+      '/trial-session-planning-report',
+      ifHasAccess(() => {
+        setPageTitle('Trial session planning report');
+        app.getSequence('gotoTrialSessionPlanningReportSequence')();
+      }),
     );
 
     route(
@@ -729,6 +745,11 @@ const router = {
     route('/style-guide', () => {
       setPageTitle('Style guide');
       app.getSequence('gotoStyleGuideSequence')();
+    });
+
+    route('/accessibility-statement', () => {
+      setPageTitle('Accessibility statement');
+      app.getSequence('gotoAccessibilityStatementSequence')();
     });
 
     route(
@@ -853,7 +874,6 @@ const router = {
       }
 
       if (process.env.COGNITO) {
-        // USTC_ENV is undefined in prod
         setPageTitle('Dashboard');
         app.getSequence('gotoDashboardSequence')();
       } else {

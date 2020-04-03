@@ -1,6 +1,5 @@
-import { fakeFile, setupTest } from './helpers';
+import { fakeFile, loginAs, setupTest } from './helpers';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkPrioritizesCase from './journey/petitionsClerkPrioritizesCase';
 import petitionsClerkUnprioritizesCase from './journey/petitionsClerkUnprioritizesCase';
 
@@ -11,7 +10,7 @@ describe('Prioritize a Case', () => {
     jest.setTimeout(30000);
   });
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkCreatesNewCase(test, fakeFile, 'Jackson, Mississippi');
   petitionsClerkPrioritizesCase(test);
   petitionsClerkUnprioritizesCase(test);

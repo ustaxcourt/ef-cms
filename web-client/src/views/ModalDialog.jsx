@@ -126,9 +126,18 @@ export const ModalDialog = ({
             {message && <p className="margin-bottom-5">{message}</p>}
             {children}
             <div className="margin-top-5">
-              <Button onClick={runConfirmSequence}>{confirmLabel}</Button>
+              <Button
+                className="modal-button-confirm"
+                onClick={runConfirmSequence}
+              >
+                {confirmLabel}
+              </Button>
               {cancelLabel && (
-                <Button secondary onClick={runCancelSequence}>
+                <Button
+                  secondary
+                  className="modal-button-cancel"
+                  onClick={runCancelSequence}
+                >
                   {cancelLabel}
                 </Button>
               )}

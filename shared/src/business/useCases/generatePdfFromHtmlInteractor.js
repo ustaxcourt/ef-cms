@@ -15,6 +15,7 @@ exports.generatePdfFromHtmlInteractor = async ({
   docketNumber,
   footerHtml,
   headerHtml,
+  overwriteFooter,
   overwriteHeader,
 }) => {
   let browser = null;
@@ -49,13 +50,15 @@ exports.generatePdfFromHtmlInteractor = async ({
       </html>
     `;
 
-    const footerTemplate = `
+    const footerTemplate = overwriteFooter
+      ? `${footerHtml ? footerHtml : ''}`
+      : `
       <!doctype html>
       <html>
         <head>
         </head>
         <body style="margin: 0px;">
-          <div style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
+          <div class="footer-default" style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
             ${footerHtml ? footerHtml : ''}
           </div>
         </body>

@@ -1,13 +1,11 @@
-import { fakeFile, setupTest } from './helpers';
+import { fakeFile, loginAs, setupTest } from './helpers';
 import petitionerCancelsCreateCase from './journey/petitionerCancelsCreateCase';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
 import petitionerFilesAmendedMotion from './journey/petitionerFilesAmendedMotion';
 import petitionerFilesDocumentForCase from './journey/petitionerFilesDocumentForCase';
-import petitionerLogin from './journey/petitionerLogIn';
 import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
-import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
 import petitionerViewsCaseDetailAfterFilingDocument from './journey/petitionerViewsCaseDetailAfterFilingDocument';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
@@ -19,7 +17,7 @@ describe('petitioner files document', () => {
     jest.setTimeout(30000);
   });
 
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   petitionerCancelsCreateCase(test);
   petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test);
@@ -30,5 +28,4 @@ describe('petitioner files document', () => {
   petitionerFilesDocumentForCase(test, fakeFile);
   petitionerViewsCaseDetailAfterFilingDocument(test);
   petitionerFilesAmendedMotion(test, fakeFile);
-  petitionerSignsOut(test);
 });

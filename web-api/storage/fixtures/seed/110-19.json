@@ -13,6 +13,7 @@
           {
             "docketNumberSuffix": "W",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "createdAt": "2019-03-01T21:40:46.415Z",
               "filingDate": "2019-03-01T21:40:46.415Z",
@@ -92,6 +93,8 @@
     "partyType": "Petitioner",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "caseType": "Whistleblower",
+    "sortableDocketNumber": 19000110,
+    "entityName": "Case",
     "contactPrimary": {
       "address3": "Architecto assumenda",
       "address2": "Suscipit animi solu",
@@ -108,21 +111,6 @@
     "createdAt": "2019-03-01T21:40:46.415Z",
     "receivedAt": "2019-03-01T21:40:46.415Z",
     "caseId": "2fb2da8d-4328-4a20-a5d7-a76637e1dc01",
-    "docketRecord": [
-      {
-        "filingDate": "2019-03-01T21:40:46.415Z",
-        "description": "Petition",
-        "eventCode": "P",
-        "filedBy": "Test Petitioner",
-        "index": 1
-      },
-      {
-        "filingDate": "2019-03-01T21:40:46.415Z",
-        "description": "Request for Place of Trial at Birmingham, Alabama",
-        "eventCode": "RQT",
-        "index": 2
-      }
-    ],
     "sk": "2fb2da8d-4328-4a20-a5d7-a76637e1dc01",
     "blocked": false,
     "highPriority": true,
@@ -147,6 +135,25 @@
     "docketNumber": "110-19",
     "status": "New",
     "associatedJudge": "Chief Judge"
+  },
+  {
+    "filingDate": "2019-03-01T21:40:46.415Z",
+    "description": "Petition",
+    "eventCode": "P",
+    "filedBy": "Test Petitioner",
+    "index": 1,
+    "docketRecordId": "ca9d204a-5ff6-4915-a31b-94e3d016e4a6",
+    "pk": "case|2fb2da8d-4328-4a20-a5d7-a76637e1dc01",
+    "sk": "docket-record|ca9d204a-5ff6-4915-a31b-94e3d016e4a6"
+  },
+  {
+    "filingDate": "2019-03-01T21:40:46.415Z",
+    "description": "Request for Place of Trial at Birmingham, Alabama",
+    "eventCode": "RQT",
+    "index": 2,
+    "docketRecordId": "25099fe1-0353-4e57-b84e-6eacc06e2ebb",
+    "pk": "case|2fb2da8d-4328-4a20-a5d7-a76637e1dc01",
+    "sk": "docket-record|25099fe1-0353-4e57-b84e-6eacc06e2ebb"
   },
   {
     "sk": "2fb2da8d-4328-4a20-a5d7-a76637e1dc01",

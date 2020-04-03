@@ -7,18 +7,22 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  genericHandler(event, async ({ applicationContext }) => {
-    const results = await applicationContext
-      .getUseCases()
-      .onDisconnectInteractor({
-        applicationContext,
-        connectionId: event.requestContext.connectionId,
-      });
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      const results = await applicationContext
+        .getUseCases()
+        .onDisconnectInteractor({
+          applicationContext,
+          connectionId: event.requestContext.connectionId,
+        });
 
-    applicationContext.logger.info(
-      'Connection',
-      event.requestContext.connectionId,
-    );
+      applicationContext.logger.info(
+        'Connection',
+        event.requestContext.connectionId,
+      );
 
-    return results;
-  });
+      return results;
+    },
+    { user: {} },
+  );

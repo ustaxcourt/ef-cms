@@ -3,7 +3,7 @@ plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  - serverless-plugin-aws-alerts
+  # - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -23,6 +23,7 @@ custom:
     number: 3
 
   serverless-offline:
+    skipCacheInvalidation: ${opt:skipCacheInvalidation}
     host: 0.0.0.0
     port: 3007
 
@@ -105,6 +106,8 @@ provider:
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
     EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
     EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
+    CIRCLE_HONEYBADGER_API_KEY_DEV: ${opt:circleHoneybadgerApiKeyDev}
+    CIRCLE_HONEYBADGER_API_KEY_STG: ${opt:circleHoneybadgerApiKeyStg}
 
 package:
   exclude:
@@ -316,22 +319,6 @@ functions:
     events:
       - http:
           path: /{trialSessionId}/cases/{caseId}
-          method: post
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  runTrialSessionPlanningReport:
-    handler: web-api/${self:provider.dir}/trialSessionsHandlers.runTrialSessionPlanningReportLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: /planning-report
           method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

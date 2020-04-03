@@ -77,7 +77,7 @@ describe('fileExternalDocumentInteractor', () => {
 
     globalUser = new User({
       name: 'Respondent',
-      role: User.ROLES.respondent,
+      role: User.ROLES.irsPractitioner,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
 

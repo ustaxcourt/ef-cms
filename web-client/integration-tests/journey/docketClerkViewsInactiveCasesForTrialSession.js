@@ -7,7 +7,7 @@ const formattedTrialSessionDetails = withAppContextDecorator(
   formattedTrialSessionDetailsComputed,
 );
 
-export default test => {
+export const docketClerkViewsInactiveCasesForTrialSession = test => {
   return it('Docket clerk views inactive cases for a trial session', async () => {
     await test.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: test.trialSessionId,

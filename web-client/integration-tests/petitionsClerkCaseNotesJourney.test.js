@@ -1,10 +1,7 @@
-import { setupTest, uploadPetition } from './helpers';
-import petitionerLogin from './journey/petitionerLogIn';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkAddsCaseNote from './journey/petitionsClerkAddsCaseNote';
 import petitionsClerkDeletesCaseNote from './journey/petitionsClerkDeletesCaseNote';
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
-import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
 
@@ -13,15 +10,13 @@ describe('petitions clerk case notes journey', () => {
     jest.setTimeout(30000);
   });
 
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   it('Create case', async () => {
     await uploadPetition(test);
   });
   petitionerViewsDashboard(test);
-  userSignsOut(test);
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkAddsCaseNote(test);
   petitionsClerkDeletesCaseNote(test);
-  userSignsOut(test);
 });

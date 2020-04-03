@@ -3,7 +3,7 @@ plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  - serverless-plugin-aws-alerts
+  # - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -23,6 +23,7 @@ custom:
     number: 3
 
   serverless-offline:
+    skipCacheInvalidation: ${opt:skipCacheInvalidation}
     host: 0.0.0.0
     port: 3003
 
@@ -104,6 +105,8 @@ provider:
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
     EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
     EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
+    CIRCLE_HONEYBADGER_API_KEY_DEV: ${opt:circleHoneybadgerApiKeyDev}
+    CIRCLE_HONEYBADGER_API_KEY_STG: ${opt:circleHoneybadgerApiKeyStg}
 
 package:
   exclude:
@@ -159,6 +162,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  getUserById:
+    handler: web-api/${self:provider.dir}/usersHandlers.getUserByIdLambda
+    events:
+      - http:
+          path: /{userId}
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getInternalUsers:
     handler: web-api/${self:provider.dir}/usersHandlers.getInternalUsersLambda
     events:
@@ -177,6 +192,30 @@ functions:
       - http:
           path: /
           method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createAttorneyUser:
+    handler: web-api/${self:provider.dir}/usersHandlers.createAttorneyUserLambda
+    events:
+      - http:
+          path: /attorney
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateAttorneyUser:
+    handler: web-api/${self:provider.dir}/usersHandlers.updateAttorneyUserLambda
+    events:
+      - http:
+          path: /attorney
+          method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS

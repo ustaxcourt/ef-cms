@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @returns {object} the next path based on if validation was successful or error
  */
 export const validateCaseInventoryReportModalAction = ({ get, path }) => {
-  const { associatedJudge, status } = get(state.modal);
+  const { associatedJudge, status } = get(state.screenMetadata);
 
   let errors;
   if (!associatedJudge && !status) {

@@ -1,4 +1,4 @@
-export default test => {
+export const docketClerkAssignWorkItems = test => {
   return it('Docket clerk assigns the selected work items to another user', async () => {
     expect(test.getState('selectedWorkItems').length).toEqual(1);
     let sectionWorkQueue = test.getState('workQueue');

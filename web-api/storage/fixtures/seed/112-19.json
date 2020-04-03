@@ -14,6 +14,7 @@
           {
             "docketNumberSuffix": "L",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "eventCode": "P",
               "createdAt": "2019-12-11T15:25:55.007Z",
@@ -85,6 +86,8 @@
     "partyType": "Petitioner",
     "receivedAt": "2019-12-11T15:25:55.006Z",
     "caseType": "CDP (Lien/Levy)",
+    "sortableDocketNumber": 19000112,
+    "entityName": "Case",
     "orderDesignatingPlaceOfTrial": false,
     "contactPrimary": {
       "city": "Los Angeles",
@@ -116,27 +119,31 @@
     "respondents": [],
     "practitioners": [],
     "hasPendingItems": false,
-    "docketRecord": [
-      {
-        "description": "Petition",
-        "index": 1,
-        "documentId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
-        "filingDate": "2019-12-11T15:25:55.007Z",
-        "eventCode": "P",
-        "filedBy": "Petr. Brian Earl Spilner"
-      },
-      {
-        "eventCode": "RQT",
-        "description": "Request for Place of Trial at Birmingham, Alabama",
-        "index": 2,
-        "filingDate": "2019-12-11T15:25:55.006Z"
-      }
-    ],
     "orderForAmendedPetitionAndFilingFee": false,
     "leadCaseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
     "pk": "459925e4-db20-46e0-8348-47a98537edeb",
     "docketNumber": "112-19",
     "status": "Submitted"
+  },
+  {
+    "description": "Petition",
+    "index": 1,
+    "documentId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
+    "filingDate": "2019-12-11T15:25:55.007Z",
+    "eventCode": "P",
+    "filedBy": "Petr. Brian Earl Spilner",
+    "docketRecordId": "4335db5e-b56a-4bd8-ab55-df641944b810",
+    "pk": "case|459925e4-db20-46e0-8348-47a98537edeb",
+    "sk": "docket-record|4335db5e-b56a-4bd8-ab55-df641944b810"
+  },
+  {
+    "eventCode": "RQT",
+    "description": "Request for Place of Trial at Birmingham, Alabama",
+    "index": 2,
+    "filingDate": "2019-12-11T15:25:55.006Z",
+    "docketRecordId": "6f109a09-056a-43ee-8bcd-d2280cab1484",
+    "pk": "case|459925e4-db20-46e0-8348-47a98537edeb",
+    "sk": "docket-record|6f109a09-056a-43ee-8bcd-d2280cab1484"
   },
   {
     "sk": "459925e4-db20-46e0-8348-47a98537edeb",

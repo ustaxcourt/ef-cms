@@ -21,7 +21,7 @@ export const AllCases = connect(
         >
           <thead>
             <tr>
-              <th>Docket</th>
+              <th>Docket number</th>
               <th aria-label="manually added indicator"></th>
               <th>Case title</th>
               <th>Case status</th>

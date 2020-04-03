@@ -86,4 +86,37 @@ describe('getDocumentQCServedForUserInteractor', () => {
       },
     ]);
   });
+
+  it('successfully returns the work items for a docket clerk', async () => {
+    user = {
+      role: User.ROLES.docketClerk,
+      userId: 'docketclerk',
+    };
+
+    const result = await getDocumentQCServedForUserInteractor({
+      applicationContext,
+      section: 'docket',
+    });
+    expect(result).toMatchObject([
+      {
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '101-18',
+        docketNumberSuffix: 'S',
+        document: { sentBy: 'petitioner' },
+        isQC: true,
+        messages: [],
+        section: 'docket',
+        sentBy: 'docketclerk',
+      },
+      {
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '101-18',
+        docketNumberSuffix: 'S',
+        document: { sentBy: 'petitioner' },
+        messages: [],
+        section: 'irsBatchSection',
+        sentBy: 'docketclerk',
+      },
+    ]);
+  });
 });

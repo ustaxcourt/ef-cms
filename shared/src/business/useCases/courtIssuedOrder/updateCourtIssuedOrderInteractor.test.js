@@ -58,7 +58,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         getCurrentUser: () => {
           return {
             name: 'Olivia Jade',
-            role: User.ROLES.practitioner,
+            role: User.ROLES.privatePractitioner,
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           };
         },
@@ -67,6 +67,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
           getUserById: async () => ({ name: 'bob' }),
           updateCase: async () => caseRecord,
         }),
+        getUniqueId: () => 'unique-id-1',
       };
       await updateCourtIssuedOrderInteractor({
         applicationContext,
@@ -104,6 +105,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
           }),
           updateCase: updateCaseSpy,
         }),
+        getUniqueId: () => 'unique-id-1',
       };
       await updateCourtIssuedOrderInteractor({
         applicationContext,

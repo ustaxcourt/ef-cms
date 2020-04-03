@@ -16,18 +16,8 @@ export const caseDetailHelper = (get, applicationContext) => {
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const modalState = get(state.modal);
   let showEditPetitionerInformation = false;
-  const {
-    noticeOfAttachments,
-    orderDesignatingPlaceOfTrial,
-    orderForAmendedPetition,
-    orderForAmendedPetitionAndFilingFee,
-    orderForFilingFee,
-    orderForOds,
-    orderForRatification,
-    orderToShowCause,
-  } = caseDetail;
   const permissions = get(state.permissions);
-  const showJudgesNotes = permissions.TRIAL_SESSION_WORKING_COPY;
+  const showJudgesNotes = permissions.JUDGES_NOTES;
 
   let showFileDocumentButton =
     permissions.FILE_EXTERNAL_DOCUMENT && ['CaseDetail'].includes(currentPage);
@@ -69,9 +59,9 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   if (user.role === USER_ROLES.petitioner) {
     showEditContacts = true;
-  } else if (user.role === USER_ROLES.respondent) {
+  } else if (user.role === USER_ROLES.irsPractitioner) {
     showEditContacts = false;
-  } else if (user.role === USER_ROLES.practitioner) {
+  } else if (user.role === USER_ROLES.privatePractitioner) {
     showEditContacts = userAssociatedWithCase;
   } else if (user.role === USER_ROLES.docketClerk) {
     showEditPetitionerInformation = true;
@@ -105,17 +95,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     });
   }
 
-  const hasOrders = [
-    noticeOfAttachments,
-    orderForAmendedPetition,
-    orderForAmendedPetitionAndFilingFee,
-    orderForFilingFee,
-    orderForOds,
-    orderForRatification,
-    orderToShowCause,
-    orderDesignatingPlaceOfTrial,
-  ].some(hasOrder => !!hasOrder);
-
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
   return {
@@ -123,7 +102,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     caseDeadlines,
     documentDetailTab,
     hasConsolidatedCases,
-    hasOrders,
     practitionerMatchesFormatted,
     practitionerSearchResultsCount:
       modalState &&
@@ -148,7 +126,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
     showFilingFeeExternal:
-      isExternalUser && user.role !== USER_ROLES.respondent,
+      isExternalUser && user.role !== USER_ROLES.irsPractitioner,
     showIrsServedDate: !!caseDetail.irsSendDate,
     showJudgesNotes,
     showPractitionerSection:

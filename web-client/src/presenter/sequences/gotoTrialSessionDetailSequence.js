@@ -5,6 +5,9 @@ import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSe
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
+import { mergeCaseOrderIntoCalendaredCasesAction } from '../actions/TrialSession/mergeCaseOrderIntoCalendaredCasesAction';
+import { mergeCaseOrderIntoEligibleCasesAction } from '../actions/TrialSession/mergeCaseOrderIntoEligibleCasesAction';
+import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -19,21 +22,27 @@ const gotoTrialSessionDetails = [
   setDefaultTrialSessionDetailTabAction,
   clearErrorAlertsAction,
   setTrialSessionIdAction,
-  getTrialSessionDetailsAction,
-  setTrialSessionDetailsAction,
-  getUsersInSectionAction({}),
-  setUsersByKeyAction('sectionUsers'),
-  isTrialSessionCalendaredAction,
-  {
-    no: [
-      getEligibleCasesForTrialSessionAction,
-      setEligibleCasesOnTrialSessionAction,
+  parallel([
+    [
+      getTrialSessionDetailsAction,
+      setTrialSessionDetailsAction,
+      isTrialSessionCalendaredAction,
+      {
+        no: [
+          getEligibleCasesForTrialSessionAction,
+          setEligibleCasesOnTrialSessionAction,
+          mergeCaseOrderIntoEligibleCasesAction,
+        ],
+        yes: [
+          getCalendaredCasesForTrialSessionAction,
+          setCalendaredCasesOnTrialSessionAction,
+          mergeCaseOrderIntoCalendaredCasesAction,
+        ],
+      },
     ],
-    yes: [
-      getCalendaredCasesForTrialSessionAction,
-      setCalendaredCasesOnTrialSessionAction,
-    ],
-  },
+    [getUsersInSectionAction({}), setUsersByKeyAction('sectionUsers')],
+  ]),
+
   setCurrentPageAction('TrialSessionDetail'),
 ];
 

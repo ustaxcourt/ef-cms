@@ -64,6 +64,23 @@ module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/reports/pending-report',
   {
     actions: [
+      'wait for element .case-inventory-report-modal to be visible',
+      'wait for #select-case-inventory-status to be visible',
+      'set field #select-case-inventory-status to New',
+      'check field #select-case-inventory-status',
+      'wait for #select-case-inventory-judge to be visible',
+      'set field #select-case-inventory-judge to Chief Judge',
+      'check field #select-case-inventory-judge',
+      'click element .modal-button-confirm',
+      'screen capture case-inventory-report-1.png',
+      'wait for element table.case-inventory to be visible',
+    ],
+    notes: 'checks a11y of case inventory report builder',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/reports/case-inventory-report',
+  },
+  {
+    actions: [
       'wait for element #certificate-of-service to be visible',
       'click element #certificate-of-service+label',
       'wait for element #service-date-month to be visible',

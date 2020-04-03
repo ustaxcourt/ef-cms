@@ -1,4 +1,4 @@
-export default test => {
+export const adcViewsDocumentDetail = test => {
   return it('ADC views document detail', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,

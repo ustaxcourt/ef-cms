@@ -23,6 +23,6 @@ exports.generatePrintablePendingReportInteractor = ({
   }
   return get({
     applicationContext,
-    endpoint: `/api/pending-report${queryString}`,
+    endpoint: `/reports/pending-report${queryString}`,
   });
 };

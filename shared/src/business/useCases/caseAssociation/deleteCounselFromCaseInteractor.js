@@ -42,9 +42,9 @@ exports.deleteCounselFromCaseInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  if (userToDelete.role === User.ROLES.practitioner) {
+  if (userToDelete.role === User.ROLES.privatePractitioner) {
     caseEntity.removePractitioner(userToDelete);
-  } else if (userToDelete.role === User.ROLES.respondent) {
+  } else if (userToDelete.role === User.ROLES.irsPractitioner) {
     caseEntity.removeRespondent(userToDelete);
   } else {
     throw new Error('User is not a practitioner or respondent');

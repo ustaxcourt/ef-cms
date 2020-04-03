@@ -16,7 +16,7 @@ function Note(rawProps) {
 }
 
 Note.VALIDATION_ERROR_MESSAGES = {
-  notes: 'Enter note',
+  notes: 'Add note',
 };
 
 Note.schema = joi.object().keys({

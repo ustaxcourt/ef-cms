@@ -10,6 +10,10 @@ exports.getInProgressTab = () => {
   return cy.get('button#tab-messages-in-progress');
 };
 
+exports.getCaseInfoTab = () => {
+  return cy.get('button#tab-case-info');
+};
+
 exports.getCreateMessageButton = () => {
   return cy.get('button#create-message-button');
 };

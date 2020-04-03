@@ -2,15 +2,13 @@ import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
-import { getUserAction } from '../actions/getUserAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { parallel, set } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
-import { set } from 'cerebral/factories';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
-import { setUserAction } from '../actions/setUserAction';
 import { setUsersAction } from '../actions/setUsersAction';
 import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
@@ -18,40 +16,42 @@ import { takePathForRoles } from './takePathForRoles';
 const goToMessages = [
   setCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
-  getUserAction,
-  setUserAction,
   set(state.selectedWorkItems, []),
   clearErrorAlertsAction,
-  runPathForUserRoleAction,
-  {
-    ...takePathForRoles(
-      [
-        'admin',
-        'adc',
-        'admissionsclerk',
-        'chambers',
-        'clerkofcourt',
-        'floater',
-        'trialclerk',
-      ],
-      [],
-    ),
-    clerkofcourt: [
-      getUsersInSectionAction({ section: 'docket' }),
-      setUsersAction,
+  parallel([
+    [
+      runPathForUserRoleAction,
+      {
+        ...takePathForRoles(
+          [
+            'admin',
+            'adc',
+            'admissionsclerk',
+            'chambers',
+            'clerkofcourt',
+            'floater',
+            'trialclerk',
+          ],
+          [],
+        ),
+        clerkofcourt: [
+          getUsersInSectionAction({ section: 'docket' }),
+          setUsersAction,
+        ],
+        docketclerk: [
+          getUsersInSectionAction({ section: 'docket' }),
+          setUsersAction,
+        ],
+        judge: [getTrialSessionsAction, setTrialSessionsAction],
+        petitionsclerk: [
+          getUsersInSectionAction({ section: 'petitions' }),
+          setUsersAction,
+        ],
+      },
     ],
-    docketclerk: [
-      getUsersInSectionAction({ section: 'docket' }),
-      setUsersAction,
-    ],
-    judge: [getTrialSessionsAction, setTrialSessionsAction],
-    petitionsclerk: [
-      getUsersInSectionAction({ section: 'petitions' }),
-      setUsersAction,
-    ],
-  },
+    chooseWorkQueueSequence,
+  ]),
   setCurrentPageAction('Messages'),
-  chooseWorkQueueSequence,
 ];
 
 export const gotoMessagesSequence = [

@@ -1,4 +1,4 @@
-export default test => {
+export const docketClerkViewsMessagesAfterForward = test => {
   return it('Docket clerk views messages', async () => {
     await test.runSequence('gotoMessagesSequence');
     expect(test.getState('currentPage')).toEqual('Messages');

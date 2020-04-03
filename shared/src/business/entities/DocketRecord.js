@@ -15,6 +15,8 @@ function DocketRecord(rawDocketRecord, { applicationContext }) {
     throw new TypeError('applicationContext must be defined');
   }
 
+  this.docketRecordId =
+    rawDocketRecord.docketRecordId || applicationContext.getUniqueId();
   this.action = rawDocketRecord.action;
   this.description = rawDocketRecord.description;
   this.documentId = rawDocketRecord.documentId;

@@ -24,6 +24,7 @@ describe('Get case', () => {
           getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const caseRecord = await getCaseInteractor({
       applicationContext,
@@ -46,6 +47,7 @@ describe('Get case', () => {
           getCaseByCaseId: () => Promise.resolve(null),
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     try {
       await getCaseInteractor({
@@ -73,6 +75,7 @@ describe('Get case', () => {
       getPersistenceGateway: () => ({
         getCaseByDocketNumber: getCaseByDocketNumberStub,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
 
     const caseRecord = await getCaseInteractor({
@@ -107,6 +110,7 @@ describe('Get case', () => {
             procedureType: 'Regular',
           }),
       }),
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {
@@ -144,6 +148,7 @@ describe('Get case', () => {
             },
           ]),
       }),
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {
@@ -161,7 +166,7 @@ describe('Get case', () => {
     let user;
     beforeEach(() => {
       user = {
-        role: User.ROLES.practitioner,
+        role: User.ROLES.privatePractitioner,
         userId: 'practitioner2',
       };
       applicationContext = {

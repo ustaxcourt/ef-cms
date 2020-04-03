@@ -20,9 +20,11 @@ export default (test, createdDocketNumberIndex) => {
       'Notice of Change of Address',
     );
     expect(changeOfAddressDocument.additionalInfo).toBe(
-      'for Test Practitioner',
+      'for Test Private Practitioner',
     );
-    expect(changeOfAddressDocument.filedBy).toBe('Counsel Test Practitioner');
+    expect(changeOfAddressDocument.filedBy).toBe(
+      'Counsel Test Private Practitioner',
+    );
 
     expect(changeOfAddressDocument).toBeDefined();
   });

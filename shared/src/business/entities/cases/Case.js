@@ -47,7 +47,6 @@ Case.STATUS_TYPES = {
   closed: 'Closed', // Judge has made a ruling to close the case
   generalDocket: 'General Docket - Not at Issue', // Submitted to the IRS
   generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)', // Case is ready for trial
-  inProgress: 'In Progress', // Case has been saved for later
   jurisdictionRetained: 'Jurisdiction Retained', // Jurisdiction of a case is retained by a specific judge — usually after the case is on a judge’s trial calendar
   new: 'New', // Case has not been QCed
   onAppeal: 'On Appeal', // After the trial, the case has gone to the appeals court
@@ -108,7 +107,7 @@ Case.FILING_TYPES = {
     'A business',
     'Other',
   ],
-  [User.ROLES.practitioner]: [
+  [User.ROLES.privatePractitioner]: [
     'Individual petitioner',
     'Petitioner and spouse',
     'A business',
@@ -205,6 +204,7 @@ Case.VALIDATION_ERROR_MESSAGES = {
     },
     'Your Request for Place of Trial file size is empty',
   ],
+  sortableDocketNumber: 'Sortable docket number is required',
   stinFile: 'Upload a statement of taxpayer identification',
   stinFileSize: [
     {
@@ -224,26 +224,28 @@ Case.validationName = 'Case';
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function Case(rawCase, { applicationContext }) {
+function Case(rawCase, { applicationContext, filtered = false }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.entityName = 'Case';
 
-  if (User.isInternalUser(applicationContext.getCurrentUser().role)) {
+  if (
+    !filtered ||
+    User.isInternalUser(applicationContext.getCurrentUser().role)
+  ) {
+    this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
+    this.automaticBlocked = rawCase.automaticBlocked;
+    this.automaticBlockedDate = rawCase.automaticBlockedDate;
+    this.automaticBlockedReason = rawCase.automaticBlockedReason;
+    this.blocked = rawCase.blocked;
+    this.blockedDate = rawCase.blockedDate;
+    this.blockedReason = rawCase.blockedReason;
     this.caseNote = rawCase.caseNote;
+    this.highPriority = rawCase.highPriority;
+    this.highPriorityReason = rawCase.highPriorityReason;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   }
-
-  // TODO: as part of the security task, these values also need to be restricted
-  this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
-  this.automaticBlocked = rawCase.automaticBlocked;
-  this.automaticBlockedDate = rawCase.automaticBlockedDate;
-  this.automaticBlockedReason = rawCase.automaticBlockedReason;
-  this.blocked = rawCase.blocked;
-  this.blockedDate = rawCase.blockedDate;
-  this.blockedReason = rawCase.blockedReason;
-  this.highPriority = rawCase.highPriority;
-  this.highPriorityReason = rawCase.highPriorityReason;
 
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.userId = rawCase.userId;
@@ -258,6 +260,7 @@ function Case(rawCase, { applicationContext }) {
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
+  this.inProgress = rawCase.inProgress || false;
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.irsSendDate = rawCase.irsSendDate;
   this.isPaper = rawCase.isPaper;
@@ -273,6 +276,8 @@ function Case(rawCase, { applicationContext }) {
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt || createISODateString();
+  this.sortableDocketNumber =
+    rawCase.sortableDocketNumber || this.generateSortableDocketNumber();
   this.sealedDate = rawCase.sealedDate;
   this.trialDate = rawCase.trialDate;
   this.trialLocation = rawCase.trialLocation;
@@ -457,7 +462,9 @@ joiValidationDecorator(
       .date()
       .iso()
       .required()
-      .description('When the case was added to the system.'),
+      .description(
+        'When the paper or electronic case was added to the system. This value cannot be edited.',
+      ),
     docketNumber: joi
       .string()
       .regex(DOCKET_NUMBER_MATCHER)
@@ -481,11 +488,15 @@ joiValidationDecorator(
       .min(1)
       .required()
       .description('List of Document Entities for the case.'),
+    entityName: joi
+      .string()
+      .valid('Case')
+      .required(),
     filingType: joi
       .string()
       .valid(
         ...Case.FILING_TYPES[User.ROLES.petitioner],
-        ...Case.FILING_TYPES[User.ROLES.practitioner],
+        ...Case.FILING_TYPES[User.ROLES.privatePractitioner],
       )
       .optional(),
     hasIrsNotice: joi.boolean().optional(),
@@ -669,8 +680,9 @@ joiValidationDecorator(
       .date()
       .iso()
       .required()
-      .allow(null)
-      .description('When the case was received by the court.'),
+      .description(
+        'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
+      ),
     respondents: joi
       .array()
       .optional()
@@ -683,6 +695,12 @@ joiValidationDecorator(
       .optional()
       .allow(null)
       .description('When the case was sealed from the public.'),
+    sortableDocketNumber: joi
+      .number()
+      .required()
+      .description(
+        'A sortable representation of the docket number (auto-generated by constructor).',
+      ),
     status: joi
       .string()
       .valid(...Object.values(Case.STATUS_TYPES))
@@ -966,9 +984,10 @@ Case.prototype.updateCaseTitleDocketRecord = function({ applicationContext }) {
     }
   });
 
-  const hasTitleChanged = this.initialTitle && lastTitle !== this.caseTitle;
+  const needsTitleChangedRecord =
+    this.initialTitle && lastTitle !== this.caseTitle && !this.isPaper;
 
-  if (hasTitleChanged) {
+  if (needsTitleChangedRecord) {
     this.addDocketRecord(
       new DocketRecord(
         {
@@ -1007,9 +1026,10 @@ Case.prototype.updateDocketNumberRecord = function({ applicationContext }) {
     }
   });
 
-  const hasDocketNumberChanged = lastDocketNumber !== newDocketNumber;
+  const needsDocketNumberChangeRecord =
+    lastDocketNumber !== newDocketNumber && !this.isPaper;
 
-  if (hasDocketNumberChanged) {
+  if (needsDocketNumberChangeRecord) {
     this.addDocketRecord(
       new DocketRecord(
         {
@@ -1092,10 +1112,24 @@ Case.prototype.addDocketRecord = function(docketRecordEntity) {
  */
 Case.prototype.updateDocketRecordEntry = function(updatedDocketEntry) {
   const foundEntry = this.docketRecord.find(
-    entry => entry.documentId === updatedDocketEntry.documentId,
+    entry => entry.docketRecordId === updatedDocketEntry.docketRecordId,
   );
   if (foundEntry) Object.assign(foundEntry, updatedDocketEntry);
   return this;
+};
+
+/**
+ * finds a docket record by its documentId
+ *
+ * @param {string} documentId the document id
+ * @returns {DocketRecord|undefined} the updated case entity
+ */
+Case.prototype.getDocketRecordByDocumentId = function(documentId) {
+  const foundEntry = this.docketRecord.find(
+    entry => entry.documentId === documentId,
+  );
+
+  return foundEntry;
 };
 
 /**
@@ -1218,6 +1252,21 @@ Case.prototype.checkForReadyForTrial = function() {
   }
 
   return this;
+};
+
+/**
+ * generates a sortable docket number in ${year}${index} format
+ *
+ * @returns {string} the sortable docket number
+ */
+Case.prototype.generateSortableDocketNumber = function() {
+  if (!this.docketNumber) {
+    return;
+  }
+  // Note: This does not yet take into account pre-2000's years
+  const docketNumberSplit = this.docketNumber.split('-');
+  docketNumberSplit[0] = docketNumberSplit[0].padStart(6, '0');
+  return parseInt(`${docketNumberSplit[1]}${docketNumberSplit[0]}`);
 };
 
 /**
@@ -1596,7 +1645,6 @@ Case.prototype.getConsolidationStatus = function({ caseEntity }) {
 Case.prototype.canConsolidate = function(caseToConsolidate) {
   const ineligibleStatusTypes = [
     Case.STATUS_TYPES.new,
-    Case.STATUS_TYPES.inProgress,
     Case.STATUS_TYPES.generalDocket,
     Case.STATUS_TYPES.closed,
     Case.STATUS_TYPES.onAppeal,

@@ -1,4 +1,4 @@
-export default test => {
+export const docketClerkUnconsolidatesCase = test => {
   it('Docket clerk unconsolidate a case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.leadDocketNumber,

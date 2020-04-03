@@ -9,7 +9,6 @@ export const PartyInformation = connect(
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     caseDetailEditHelper: state.caseDetailEditHelper,
-    constants: state.constants,
     token: state.token,
     updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
@@ -18,35 +17,12 @@ export const PartyInformation = connect(
     baseUrl,
     caseDetail,
     caseDetailEditHelper,
-    constants,
     token,
     updateCasePartyTypeSequence,
     updateCaseValueSequence,
   }) => {
     return (
       <div className="blue-container document-detail-one-third">
-        <div className="subsection">
-          <div className="usa-form-group">
-            <label className="usa-label" htmlFor="case-caption">
-              Case caption
-            </label>
-            <textarea
-              className="usa-textarea"
-              id="case-caption"
-              name="caseCaption"
-              value={caseDetail.caseCaption}
-              onChange={e => {
-                updateCaseValueSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-            <span className="display-inline-block margin-top-1">
-              {constants.CASE_CAPTION_POSTFIX}
-            </span>
-          </div>
-        </div>
         <div className="subsection party-type">
           <div className="usa-form-group">
             <label className="usa-label" htmlFor="party-type">
@@ -130,7 +106,7 @@ export const PartyInformation = connect(
               showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
               showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
               onBlur="validateCaseDetailSequence"
-              onChange="updateCaseValueSequence"
+              onChange="updateCaseValueAndInternalCaseCaptionSequence"
             />
           </div>
         )}

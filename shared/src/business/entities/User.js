@@ -15,11 +15,12 @@ User.ROLES = {
   clerkOfCourt: 'clerkofcourt',
   docketClerk: 'docketclerk',
   floater: 'floater',
+  inactivePractitioner: 'inactivePractitioner',
+  irsPractitioner: 'irsPractitioner',
   judge: 'judge',
   petitioner: 'petitioner',
   petitionsClerk: 'petitionsclerk',
-  practitioner: 'practitioner',
-  respondent: 'respondent',
+  privatePractitioner: 'privatePractitioner',
   trialClerk: 'trialclerk',
 };
 
@@ -143,7 +144,7 @@ const VALIDATION_ERROR_MESSAGES = {
 /**
  * constructor
  *
- * @param {Object} rawUser the raw user data
+ * @param {object} rawUser the raw user data
  * @constructor
  */
 function User(rawUser) {
@@ -162,8 +163,8 @@ joiValidationDecorator(
 User.isExternalUser = function(role) {
   const externalRoles = [
     User.ROLES.petitioner,
-    User.ROLES.practitioner,
-    User.ROLES.respondent,
+    User.ROLES.privatePractitioner,
+    User.ROLES.irsPractitioner,
   ];
   return externalRoles.includes(role);
 };

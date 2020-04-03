@@ -19,6 +19,7 @@ describe('saveCaseNoteInteractor', () => {
       getCurrentUser: () => {
         return {};
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {
@@ -46,6 +47,7 @@ describe('saveCaseNoteInteractor', () => {
         getCaseByCaseId: getCaseByCaseIdMock,
         updateCase: updateCaseMock,
       }),
+      getUniqueId: () => 'unique-id-1',
     };
 
     let error;

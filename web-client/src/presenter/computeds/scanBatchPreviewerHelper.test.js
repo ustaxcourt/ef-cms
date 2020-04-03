@@ -16,7 +16,9 @@ const scanBatchPreviewerHelper = withAppContextDecorator(
   applicationContext,
 );
 
-applicationContext.getCurrentUser = () => ({ role: User.ROLES.practitioner });
+applicationContext.getCurrentUser = () => ({
+  role: User.ROLES.privatePractitioner,
+});
 applicationContext.getConstants = () => ({ SCAN_MODES });
 
 describe('scanBatchPreviewerHelper', () => {

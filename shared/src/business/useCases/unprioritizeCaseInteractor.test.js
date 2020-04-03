@@ -36,6 +36,7 @@ describe('unprioritizeCaseInteractor', () => {
           updateCaseTrialSortMappingRecords: updateCaseTrialSortMappingRecordsMock,
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const result = await unprioritizeCaseInteractor({
       applicationContext,
@@ -75,6 +76,7 @@ describe('unprioritizeCaseInteractor', () => {
           updateCaseTrialSortMappingRecords: updateCaseTrialSortMappingRecordsMock,
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     const result = await unprioritizeCaseInteractor({
       applicationContext,
@@ -100,6 +102,7 @@ describe('unprioritizeCaseInteractor', () => {
           userId: 'nope',
         };
       },
+      getUniqueId: () => 'unique-id-1',
     };
     let error;
     try {

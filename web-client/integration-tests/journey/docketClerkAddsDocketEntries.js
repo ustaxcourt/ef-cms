@@ -2,7 +2,7 @@ import { DocketEntryFactory } from '../../../shared/src/business/entities/docket
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
-export default (test, fakeFile) => {
+export const docketClerkAddsDocketEntries = (test, fakeFile) => {
   return it('Docketclerk adds docket entries', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

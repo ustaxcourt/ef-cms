@@ -6,7 +6,7 @@ const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
   extractedPendingMessagesFromCaseDetailComputed,
 );
 
-export default test => {
+export const adcViewsCaseDetailAfterComplete = test => {
   return it('ADC views case detail', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {

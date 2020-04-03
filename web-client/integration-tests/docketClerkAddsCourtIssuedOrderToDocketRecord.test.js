@@ -1,18 +1,14 @@
-import { fakeFile, setupTest } from './helpers';
+import { fakeFile, loginAs, setupTest } from './helpers';
 
 // docketClerk
-import docketClerkAddsDocketEntryFromOrder from './journey/docketClerkAddsDocketEntryFromOrder';
-import docketClerkAddsDocketEntryFromOrderOfDismissal from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
-import docketClerkCancelsAddDocketEntryFromOrder from './journey/docketClerkCancelsAddDocketEntryFromOrder';
-import docketClerkCreatesAnOrder from './journey/docketClerkCreatesAnOrder';
-import docketClerkLogIn from './journey/docketClerkLogIn';
-import docketClerkSignsOut from './journey/docketClerkSignsOut';
-import docketClerkViewsCaseDetailForCourtIssuedDocketEntry from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
-import docketClerkViewsDraftOrder from './journey/docketClerkViewsDraftOrder';
-import docketClerkViewsSavedCourtIssuedDocketEntryInProgress from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
+import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
+import { docketClerkCancelsAddDocketEntryFromOrder } from './journey/docketClerkCancelsAddDocketEntryFromOrder';
+import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
+import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
+import { docketClerkViewsSavedCourtIssuedDocketEntryInProgress } from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
 // petitionsClerk
-import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
-import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkViewsDocketEntry from './journey/petitionsClerkViewsDocketEntry';
 import petitionsClerkViewsDraftOrder from './journey/petitionsClerkViewsDraftOrder';
@@ -20,9 +16,7 @@ import petitionsClerkViewsDraftOrder from './journey/petitionsClerkViewsDraftOrd
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerLogin from './journey/petitionerLogIn';
 import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
-import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
 
 const test = setupTest({
@@ -33,14 +27,13 @@ const test = setupTest({
 test.draftOrders = [];
 
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
-  petitionerSignsOut(test);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkCreatesAnOrder(test, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
@@ -51,14 +44,12 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
-  docketClerkSignsOut(test);
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkViewsCaseDetail(test, 4);
   petitionsClerkViewsDraftOrder(test, 0);
-  petitionsClerkSignsOut(test);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsDraftOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
@@ -69,13 +60,10 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
   docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsSavedCourtIssuedDocketEntryInProgress(test, 1);
-  docketClerkSignsOut(test);
 
-  petitionsClerkLogIn(test);
+  loginAs(test, 'petitionsclerk');
   petitionsClerkViewsDocketEntry(test, 1);
-  petitionsClerkSignsOut(test);
 
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   petitionerViewsCaseDetail(test, { documentCount: 4 });
-  petitionerSignsOut(test);
 });

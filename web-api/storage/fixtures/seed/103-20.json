@@ -11,6 +11,7 @@
   {
     "docketNumberSuffix": "L",
     "caseStatus": "Calendared",
+    "caseIsInProgress": false,
     "document": {
       "eventCode": "P",
       "createdAt": "2020-01-23T21:44:54.043Z",
@@ -56,6 +57,7 @@
   {
     "docketNumberSuffix": "L",
     "caseStatus": "Calendared",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-2a3955ca-baad-4ca7-be23-d862d2ef5310",
     "document": {
       "hasSupportingDocuments": false,
@@ -118,6 +120,7 @@
   {
     "docketNumberSuffix": "L",
     "caseStatus": "Calendared",
+    "caseIsInProgress": false,
     "gsi1pk": "workitem-2a3955ca-baad-4ca7-be23-d862d2ef5310",
     "document": {
       "hasSupportingDocuments": false,
@@ -172,6 +175,7 @@
   {
     "docketNumberSuffix": "L",
     "caseStatus": "Calendared",
+    "caseIsInProgress": false,
     "document": {
       "eventCode": "P",
       "createdAt": "2020-01-23T21:44:54.043Z",
@@ -234,6 +238,7 @@
           {
             "docketNumberSuffix": "L",
             "caseStatus": "New",
+            "caseIsInProgress": false,
             "document": {
               "eventCode": "P",
               "createdAt": "2020-01-23T21:44:54.043Z",
@@ -350,6 +355,7 @@
           {
             "docketNumberSuffix": "L",
             "caseStatus": "Calendared",
+            "caseIsInProgress": false,
             "document": {
               "hasSupportingDocuments": false,
               "attachments": false,
@@ -415,6 +421,8 @@
     "partyType": "Petitioner",
     "receivedAt": "2020-01-23T21:44:54.034Z",
     "caseType": "CDP (Lien/Levy)",
+    "sortableDocketNumber": 20000103,
+    "entityName": "Case",
     "trialLocation": "Houston, Texas",
     "orderDesignatingPlaceOfTrial": false,
     "contactPrimary": {
@@ -454,40 +462,50 @@
     "respondents": [],
     "practitioners": [],
     "hasPendingItems": false,
-    "docketRecord": [
-      {
-        "eventCode": "P",
-        "description": "Petition",
-        "index": 1,
-        "documentId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
-        "filingDate": "2020-01-23T21:44:54.043Z",
-        "filedBy": "Petr. Reuben Blair"
-      },
-      {
-        "eventCode": "RQT",
-        "description": "Request for Place of Trial at Houston, Texas",
-        "index": 2,
-        "filingDate": "2020-01-23T21:44:54.034Z"
-      },
-      {
-        "eventCode": "NDT",
-        "description": "Notice of Trial",
-        "index": 3,
-        "documentId": "4d736f72-6312-4f7f-886e-210a0074fdc3",
-        "filingDate": "2020-01-23T21:45:14.136Z",
-        "filedBy": "Test Docketclerk"
-      },
-      {
-        "eventCode": "ADMR",
-        "description": "Administrative Record",
-        "index": 4,
-        "documentId": "2cca1543-21b2-4783-a1de-eeaaf269d32c",
-        "filingDate": "2020-01-23T21:45:34.520Z"
-      }
-    ],
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "24fcb050-9c95-4d69-a149-96acba0196b8",
     "docketNumber": "103-20",
     "status": "Calendared"
+  },
+  {
+    "eventCode": "P",
+    "description": "Petition",
+    "index": 1,
+    "documentId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
+    "filingDate": "2020-01-23T21:44:54.043Z",
+    "filedBy": "Petr. Reuben Blair",
+    "docketRecordId": "6083daae-a943-4987-a658-1d28b2f2f029",
+    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "sk": "docket-record|6083daae-a943-4987-a658-1d28b2f2f029"
+  },
+  {
+    "eventCode": "RQT",
+    "description": "Request for Place of Trial at Houston, Texas",
+    "index": 2,
+    "filingDate": "2020-01-23T21:44:54.034Z",
+    "docketRecordId": "2a3825e3-9144-446c-96c1-3c2b2f4b7b1c",
+    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "sk": "docket-record|2a3825e3-9144-446c-96c1-3c2b2f4b7b1c"
+  },
+  {
+    "eventCode": "NDT",
+    "description": "Notice of Trial",
+    "index": 3,
+    "documentId": "4d736f72-6312-4f7f-886e-210a0074fdc3",
+    "filingDate": "2020-01-23T21:45:14.136Z",
+    "filedBy": "Test Docketclerk",
+    "docketRecordId": "f9ee32b9-f2b5-4f45-9b08-0d34263b456f",
+    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "sk": "docket-record|f9ee32b9-f2b5-4f45-9b08-0d34263b456f"
+  },
+  {
+    "eventCode": "ADMR",
+    "description": "Administrative Record",
+    "index": 4,
+    "documentId": "2cca1543-21b2-4783-a1de-eeaaf269d32c",
+    "filingDate": "2020-01-23T21:45:34.520Z",
+    "docketRecordId": "f4e8b2a1-71d3-4225-b904-1e87dbddd854",
+    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "sk": "docket-record|f4e8b2a1-71d3-4225-b904-1e87dbddd854"
   }
 ]

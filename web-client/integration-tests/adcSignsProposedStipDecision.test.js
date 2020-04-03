@@ -1,36 +1,28 @@
 require('isomorphic-fetch');
 
-import { fakeFile, setupTest } from './helpers';
+import { fakeFile, loginAs, setupTest } from './helpers';
 
 // docketclerk
-import docketClerkLogIn from './journey/docketClerkLogIn';
-import docketClerkSendsStipDecisionToADC from './journey/docketClerkSendsStipDecisionToADC';
-import docketClerkSignsOut from './journey/docketClerkSignsOut';
-import docketClerkVerifiesStipulatedDecisionExistsInInbox from './journey/docketClerkVerifiesStipulatedDecisionExistsInInbox';
-import docketClerkVerifiesStipulatedDecisionExistsInOutbox from './journey/docketClerkVerifiesStipulatedDecisionExistsInOutbox';
-import docketClerkViewsStipulatedDecision from './journey/docketClerkViewsStipulatedDecision';
+import { docketClerkSendsStipDecisionToADC } from './journey/docketClerkSendsStipDecisionToADC';
+import { docketClerkVerifiesStipulatedDecisionExistsInInbox } from './journey/docketClerkVerifiesStipulatedDecisionExistsInInbox';
+import { docketClerkVerifiesStipulatedDecisionExistsInOutbox } from './journey/docketClerkVerifiesStipulatedDecisionExistsInOutbox';
+import { docketClerkViewsStipulatedDecision } from './journey/docketClerkViewsStipulatedDecision';
 
 // practitioner
 import practitionerFilesDocumentForStipulatedDecision from './journey/practitionerFilesDocumentForStipulatedDecision';
-import practitionerLogin from './journey/practitionerLogIn';
-import practitionerSignsOut from './journey/practitionerSignsOut';
 import practitionerViewsCaseDetail from './journey/practitionerViewsCaseDetail';
 
 // petitioner
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerLogIn from './journey/petitionerLogIn';
 import petitionerNavigatesToCreateCase from './journey/petitionerNavigatesToCreateCase';
-import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 
 // adc
-import adcLogIn from './journey/adcLogIn';
-import adcSignsOut from './journey/adcSignsOut';
-import adcVerifiesStipulatedDecisionDoesNotExistInInbox from './journey/adcVerifiesStipulatedDecisionDoesNotExistInInbox';
-import adcVerifiesStipulatedDecisionExistsInOutbox from './journey/adcVerifiesStipulatedDecisionExistsInOutbox';
-import adcViewsStipulatedDecisionForSigning from './journey/adcViewsStipulatedDecisionForSigning';
+import { adcVerifiesStipulatedDecisionDoesNotExistInInbox } from './journey/adcVerifiesStipulatedDecisionDoesNotExistInInbox';
+import { adcVerifiesStipulatedDecisionExistsInOutbox } from './journey/adcVerifiesStipulatedDecisionExistsInOutbox';
+import { adcViewsStipulatedDecisionForSigning } from './journey/adcViewsStipulatedDecisionForSigning';
 const test = setupTest({
   useCases: {
     loadPDFForSigningInteractor: () => Promise.resolve(null),
@@ -45,31 +37,27 @@ describe('Sr. Attorney Signs Proposed Stipulated Decision', () => {
     };
   });
 
-  petitionerLogIn(test);
+  loginAs(test, 'petitioner');
   petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
   petitionerViewsDashboard(test);
-  petitionerSignsOut(test);
 
-  practitionerLogin(test);
+  loginAs(test, 'privatePractitioner');
   practitionerViewsCaseDetail(test);
   practitionerFilesDocumentForStipulatedDecision(test, fakeFile);
-  practitionerSignsOut(test);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkViewsStipulatedDecision(test);
   docketClerkSendsStipDecisionToADC(test);
-  docketClerkSignsOut(test);
 
-  adcLogIn(test);
+  loginAs(test, 'adc');
   adcViewsStipulatedDecisionForSigning(test);
   adcVerifiesStipulatedDecisionDoesNotExistInInbox(test);
   adcVerifiesStipulatedDecisionExistsInOutbox(test);
-  adcSignsOut(test);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkVerifiesStipulatedDecisionExistsInOutbox(
     test,
     'Jeff, this is ready for review and signature',
@@ -78,5 +66,4 @@ describe('Sr. Attorney Signs Proposed Stipulated Decision', () => {
     test,
     'Donna, this is not ready to serve. I need to follow up on something first',
   );
-  docketClerkSignsOut(test);
 });

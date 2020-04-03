@@ -93,4 +93,39 @@ describe('resetContactsAction', () => {
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
   });
+
+  it('unsets the contactSecondary when the party type only includes a primary contact', async () => {
+    const { state } = await runAction(resetContactsAction, {
+      modules: { presenter },
+      state: {
+        form: {
+          contactPrimary: {
+            address1: '123 Abc Ln',
+            city: 'Bobville',
+            countryType: 'domestic',
+            name: 'Bob',
+            phone: '1234567890',
+            state: 'AL',
+            zip: '12345',
+          },
+          contactSecondary: {
+            address1: '123 Abc Ln',
+            city: 'Bobville',
+            countryType: 'domestic',
+            name: 'Bob',
+            state: 'AL',
+            zip: '12345',
+          },
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
+        },
+      },
+    });
+
+    expect(state.form).toEqual({
+      contactPrimary: {
+        countryType: 'domestic',
+      },
+      partyType: ContactFactory.PARTY_TYPES.petitioner,
+    });
+  });
 });

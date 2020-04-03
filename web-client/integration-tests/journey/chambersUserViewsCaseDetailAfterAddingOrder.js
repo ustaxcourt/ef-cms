@@ -1,6 +1,6 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 
-export default test => {
+export const chambersUserViewsCaseDetailAfterAddingOrder = test => {
   return it('Chambers user views case detail after adding order', async () => {
     test.setState('caseDetail', {});
 

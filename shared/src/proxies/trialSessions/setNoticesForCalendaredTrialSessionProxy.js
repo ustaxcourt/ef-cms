@@ -20,9 +20,5 @@ exports.setNoticesForCalendaredTrialSessionInteractor = ({
       caseId,
     },
     endpoint: `/trial-sessions/${trialSessionId}/generate-notices`,
-    headers: {
-      Accept: 'application/pdf',
-    },
-    options: { responseType: 'blob' },
   });
 };

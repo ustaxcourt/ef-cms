@@ -1,4 +1,4 @@
-export default test => {
+export const docketClerkOpensCaseUnconsolidateModal = test => {
   it('Docket clerk opens the unconsolidate modal', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

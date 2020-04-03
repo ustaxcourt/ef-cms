@@ -1,18 +1,14 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
+import { docketClerkViewsNoticeOfChangeOfAddress } from './journey/docketClerkViewsNoticeOfChangeOfAddress';
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import docketClerkLogIn from './journey/docketClerkLogIn';
-import docketClerkSignsOut from './journey/docketClerkSignsOut';
-import docketClerkViewsNoticeOfChangeOfAddress from './journey/docketClerkViewsNoticeOfChangeOfAddress';
 import petitionerEditsCasePrimaryContactAddress from './journey/petitionerEditsCasePrimaryContactAddress';
 import petitionerEditsCasePrimaryContactAddressAndPhone from './journey/petitionerEditsCasePrimaryContactAddressAndPhone';
 import petitionerEditsCasePrimaryContactPhone from './journey/petitionerEditsCasePrimaryContactPhone';
 import petitionerEditsCaseSecondaryContactAddress from './journey/petitionerEditsCaseSecondaryContactAddress';
 import petitionerEditsCaseSecondaryContactAddressAndPhone from './journey/petitionerEditsCaseSecondaryContactAddressAndPhone';
 import petitionerEditsCaseSecondaryContactPhone from './journey/petitionerEditsCaseSecondaryContactPhone';
-import petitionerLogin from './journey/petitionerLogIn';
 import petitionerNavigatesToEditPrimaryContact from './journey/petitionerNavigatesToEditPrimaryContact';
 import petitionerNavigatesToEditSecondaryContact from './journey/petitionerNavigatesToEditSecondaryContact';
-import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 
@@ -48,10 +44,9 @@ describe('Modify Petitioner Contact Information', () => {
   petitionerEditsCasePrimaryContactAddress(test);
   petitionerEditsCasePrimaryContactPhone(test);
   petitionerEditsCasePrimaryContactAddressAndPhone(test);
-  petitionerSignsOut(test);
 
   // attempt to modify secondary contact information
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   petitionerViewsDashboard(test, { caseIndex: 2 });
   petitionerViewsCaseDetail(test, {
     docketNumberSuffix: 'L',
@@ -61,9 +56,7 @@ describe('Modify Petitioner Contact Information', () => {
   petitionerEditsCaseSecondaryContactAddress(test);
   petitionerEditsCaseSecondaryContactPhone(test);
   petitionerEditsCaseSecondaryContactAddressAndPhone(test);
-  petitionerSignsOut(test);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkViewsNoticeOfChangeOfAddress(test);
-  docketClerkSignsOut(test);
 });

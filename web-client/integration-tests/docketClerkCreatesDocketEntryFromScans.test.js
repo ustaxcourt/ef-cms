@@ -11,24 +11,22 @@ import {
   selectScannerSource,
 } from './scanHelpers.js';
 import { applicationContext } from '../src/applicationContext';
+import { docketClerkAddsDocketEntryFile } from './journey/docketClerkAddsDocketEntryFile';
+import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
+import { docketClerkSavesDocketEntry } from './journey/docketClerkSavesDocketEntry';
+import { docketClerkViewsEditDocketRecord } from './journey/docketClerkViewsEditDocketRecord';
+import { docketClerkViewsQCInProgress } from './journey/docketClerkViewsQCInProgress';
+import { docketClerkViewsSectionQCInProgress } from './journey/docketClerkViewsSectionQCInProgress';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { isFunction, mapValues } from 'lodash';
+import { loginAs } from './helpers';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
 import FormData from 'form-data';
-import docketClerkAddsDocketEntryFile from './journey/docketClerkAddsDocketEntryFile';
-import docketClerkAddsDocketEntryWithoutFile from './journey/docketClerkAddsDocketEntryWithoutFile';
-import docketClerkLogIn from './journey/docketClerkLogIn';
-import docketClerkSavesDocketEntry from './journey/docketClerkSavesDocketEntry';
-import docketClerkViewsEditDocketRecord from './journey/docketClerkViewsEditDocketRecord';
-import docketClerkViewsQCInProgress from './journey/docketClerkViewsQCInProgress';
-import docketClerkViewsSectionQCInProgress from './journey/docketClerkViewsSectionQCInProgress';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerLogin from './journey/petitionerLogIn';
 import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
-import petitionerSignsOut from './journey/petitionerSignsOut';
 
 let test;
 global.FormData = FormData;
@@ -121,14 +119,13 @@ describe('Create Docket Entry From Scans', () => {
     });
   });
 
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile, { caseType: 'CDP (Lien/Levy)' });
-  petitionerSignsOut(test);
 
-  docketClerkLogIn(test);
+  loginAs(test, 'docketclerk');
   docketClerkAddsDocketEntryWithoutFile(test);
   docketClerkSavesDocketEntry(test, false);
   docketClerkViewsQCInProgress(test, true);

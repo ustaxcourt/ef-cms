@@ -1,13 +1,14 @@
 import { AddressDisplay } from '../CaseDetail/PetitionerInformation';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { CaseDifferenceModalOverlay } from '../StartCase/CaseDifferenceModalOverlay';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { OrdersNeededSummary } from '../StartCaseInternal/OrdersNeededSummary';
+import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -56,18 +57,19 @@ export const ReviewSavedPetition = connect(
 
     return (
       <>
+        <CaseDetailHeader />
         <section
           className="usa-section grid-container"
           id="ustc-start-a-case-form"
         >
           <Focus>
             <h2 id="file-a-document-header" tabIndex="-1">
-              Review The Petition
+              Review the Petition
             </h2>
           </Focus>
 
           {reviewSavedPetitionHelper.hasOrders && (
-            <OrdersNeededSummary data={caseDetail} />
+            <OrdersNeededSummary caseInformation={caseDetail} />
           )}
 
           <div className="grid-container padding-x-0 create-case-review">
@@ -183,7 +185,8 @@ export const ReviewSavedPetition = connect(
                           >
                             Case caption
                           </label>
-                          {caseDetail.caseCaption}
+                          {caseDetail.caseCaption}{' '}
+                          {constants.CASE_CAPTION_POSTFIX}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
                           <label
@@ -313,19 +316,10 @@ export const ReviewSavedPetition = connect(
                           </label>
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
-                              <FontAwesomeIcon
-                                className="fa-icon-blue"
-                                icon={['fas', 'file-pdf']}
+                              <PDFPreviewButton
+                                file={reviewSavedPetitionHelper.petitionFile}
+                                title="Petition"
                               />
-                            </div>
-                            <div className="grid-col flex-fill">
-                              <Button
-                                link
-                                className="pdf-preview-btn padding-0"
-                                href={`/case-detail/${reviewSavedPetitionHelper.petitionFile.caseId}/documents/${reviewSavedPetitionHelper.petitionFile.documentId}`}
-                              >
-                                Petition
-                              </Button>
                             </div>
                           </div>
                         </div>
@@ -341,19 +335,10 @@ export const ReviewSavedPetition = connect(
                           <div>
                             <div className="grid-row">
                               <div className="grid-col flex-auto">
-                                <FontAwesomeIcon
-                                  className="fa-icon-blue"
-                                  icon={['fas', 'file-pdf']}
+                                <PDFPreviewButton
+                                  file={reviewSavedPetitionHelper.stinFile}
+                                  title="Statement of Taxpayer Identification"
                                 />
-                              </div>
-                              <div className="grid-col flex-fill">
-                                <Button
-                                  link
-                                  className="pdf-preview-btn padding-0"
-                                  href={`/case-detail/${reviewSavedPetitionHelper.stinFile.caseId}/documents/${reviewSavedPetitionHelper.stinFile.documentId}`}
-                                >
-                                  Statement of Taxpayer Identification
-                                </Button>
                               </div>
                             </div>
                           </div>
@@ -370,19 +355,12 @@ export const ReviewSavedPetition = connect(
                           <div>
                             <div className="grid-row">
                               <div className="grid-col flex-auto">
-                                <FontAwesomeIcon
-                                  className="fa-icon-blue"
-                                  icon={['fas', 'file-pdf']}
+                                <PDFPreviewButton
+                                  file={
+                                    reviewSavedPetitionHelper.requestForPlaceOfTrialFile
+                                  }
+                                  title="Request for Place of Trial"
                                 />
-                              </div>
-                              <div className="grid-col flex-fill">
-                                <Button
-                                  link
-                                  className="pdf-preview-btn padding-0"
-                                  href={`/case-detail/${reviewSavedPetitionHelper.requestForPlaceOfTrialFile.caseId}/documents/${reviewSavedPetitionHelper.requestForPlaceOfTrialFile.documentId}`}
-                                >
-                                  Request for Place of Trial
-                                </Button>
                               </div>
                             </div>
                           </div>
@@ -399,19 +377,12 @@ export const ReviewSavedPetition = connect(
                           <div>
                             <div className="grid-row">
                               <div className="grid-col flex-auto">
-                                <FontAwesomeIcon
-                                  className="fa-icon-blue"
-                                  icon={['fas', 'file-pdf']}
+                                <PDFPreviewButton
+                                  file={
+                                    reviewSavedPetitionHelper.ownershipDisclosureFile
+                                  }
+                                  title="Ownership Disclosure Statement"
                                 />
-                              </div>
-                              <div className="grid-col flex-fill">
-                                <Button
-                                  link
-                                  className="pdf-preview-btn padding-0"
-                                  href={`/cases/${reviewSavedPetitionHelper.ownershipDisclosureFile.caseId}/documents/${reviewSavedPetitionHelper.ownershipDisclosureFile.documentId}`}
-                                >
-                                  Ownership Disclosure Statement
-                                </Button>
                               </div>
                             </div>
                           </div>

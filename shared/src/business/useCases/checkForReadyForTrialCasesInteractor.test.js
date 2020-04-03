@@ -21,6 +21,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
           MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
         updateCase: () => {},
       }),
+      getUniqueId: () => 'unique-id-1',
       logger: {
         info: () => {},
       },
@@ -51,6 +52,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
         getCaseByCaseId: () => undefined,
         updateCase: () => {},
       }),
+      getUniqueId: () => 'unique-id-1',
       logger: {
         info: () => {},
       },
@@ -82,6 +84,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
         getCaseByCaseId: () => MOCK_CASE,
         updateCase: updateCaseSpy,
       }),
+      getUniqueId: () => 'unique-id-1',
       logger: {
         info: () => {},
       },
@@ -125,6 +128,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
         }),
         updateCase: updateCaseSpy,
       }),
+      getUniqueId: () => 'unique-id-1',
       logger: {
         info: () => {},
       },
@@ -166,6 +170,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
         }),
         updateCase: updateCaseSpy,
       }),
+      getUniqueId: () => 'unique-id-1',
       logger: {
         info: () => {},
       },

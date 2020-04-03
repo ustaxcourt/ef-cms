@@ -1,4 +1,4 @@
-export default test => {
+export const docketClerkConsolidatesCases = test => {
   return it('Docket clerk consolidates cases', async () => {
     test.setState('modal.confirmSelection', true);
     await test.runSequence('submitAddConsolidatedCaseSequence');

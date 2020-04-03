@@ -2,6 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
+import { mergeCaseOrderIntoCalendaredCasesAction } from '../actions/TrialSession/mergeCaseOrderIntoCalendaredCasesAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setNoticesForCalendaredTrialSessionAction } from '../actions/TrialSession/setNoticesForCalendaredTrialSessionAction';
 import { setTrialSessionCalendarAction } from '../actions/TrialSession/setTrialSessionCalendarAction';
@@ -17,6 +18,7 @@ export const setTrialSessionCalendarSequence = showProgressSequenceDecorator([
   setTrialSessionDetailsAction,
   getCalendaredCasesForTrialSessionAction,
   setCalendaredCasesOnTrialSessionAction,
+  mergeCaseOrderIntoCalendaredCasesAction,
   startWebSocketConnectionAction,
   setNoticesForCalendaredTrialSessionAction,
 ]);

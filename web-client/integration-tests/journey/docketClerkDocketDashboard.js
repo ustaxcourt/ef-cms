@@ -5,7 +5,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
-export default test => {
+export const docketClerkDocketDashboard = test => {
   return it('Docket clerk docket work queue messages', async () => {
     let sectionOutboxWorkQueue;
     let answerWorkItem;
@@ -42,10 +42,10 @@ export default test => {
     test.workItemId = workItem.workItemId;
 
     expect(workItem.messages[0]).toMatchObject({
-      from: 'Test Respondent',
+      from: 'Test IRS Practitioner',
       fromUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
       message:
-        'Proposed Stipulated Decision filed by Respondent is ready for review.',
+        'Proposed Stipulated Decision filed by Irspractitioner is ready for review.',
     });
 
     await test.runSequence('chooseWorkQueueSequence', {

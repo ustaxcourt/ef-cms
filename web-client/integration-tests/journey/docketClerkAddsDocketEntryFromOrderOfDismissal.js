@@ -3,7 +3,10 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default (test, draftOrderIndex) => {
+export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
+  test,
+  draftOrderIndex,
+) => {
   return it('Docket Clerk adds a docket entry from an Order of Dismissal', async () => {
     let caseDetailFormatted;
     let helperComputed;

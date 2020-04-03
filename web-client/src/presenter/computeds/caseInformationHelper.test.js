@@ -27,7 +27,7 @@ describe('case information helper', () => {
 
   it('should not show add counsel section if user is an external user', () => {
     const user = {
-      role: User.ROLES.practitioner,
+      role: User.ROLES.privatePractitioner,
       userId: '123',
     };
     const result = runCompute(caseInformationHelper, {

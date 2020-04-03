@@ -1,6 +1,10 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 
-export default (test, draftOrderIndex, expectedCaseStatus) => {
+export const docketClerkViewsCaseDetailAfterServingCourtIssuedDocument = (
+  test,
+  draftOrderIndex,
+  expectedCaseStatus,
+) => {
   return it('Docketclerk views case detail after serving court-issued document', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

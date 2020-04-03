@@ -18,7 +18,7 @@ exports.runTrialSessionPlanningReportInteractor = ({
       term,
       year,
     },
-    endpoint: '/trial-sessions/planning-report',
+    endpoint: '/reports/planning-report',
     headers: {
       Accept: 'application/pdf',
     },

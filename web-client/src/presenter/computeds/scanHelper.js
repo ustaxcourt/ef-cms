@@ -1,5 +1,5 @@
+import { getScanModeLabel } from '../../utilities/getScanModeLabel';
 import { state } from 'cerebral';
-import getScanModeLabel from '../../utilities/getScanModeLabel';
 
 export const scanHelper = (get, applicationContext) => {
   // Master switch for the time being

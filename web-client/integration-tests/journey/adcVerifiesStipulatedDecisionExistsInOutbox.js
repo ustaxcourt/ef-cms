@@ -1,5 +1,6 @@
 import { getFormattedMyOutbox } from '../helpers';
-export default test => {
+
+export const adcVerifiesStipulatedDecisionExistsInOutbox = test => {
   describe('ADC navigates to My Outbox', () => {
     it('navigates to outbox', async () => {
       await test.runSequence('navigateToPathSequence', {

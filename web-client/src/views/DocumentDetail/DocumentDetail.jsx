@@ -16,10 +16,8 @@ import React from 'react';
 export const DocumentDetail = connect(
   {
     caseDetail: state.caseDetail,
-    caseDetailHelper: state.caseDetailHelper,
     documentDetailHelper: state.documentDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
-    gotoOrdersNeededSequence: sequences.gotoOrdersNeededSequence,
     messageId: state.messageId,
     navigateToPathSequence: sequences.navigateToPathSequence,
     navigateToPrintableCaseConfirmationSequence:
@@ -30,10 +28,8 @@ export const DocumentDetail = connect(
   },
   ({
     caseDetail,
-    caseDetailHelper,
     documentDetailHelper,
     formattedCaseDetail,
-    gotoOrdersNeededSequence,
     messageId,
     navigateToPathSequence,
     navigateToPrintableCaseConfirmationSequence,
@@ -84,20 +80,6 @@ export const DocumentDetail = connect(
       return (
         <div className="document-detail__action-buttons">
           <div className="float-left">
-            {caseDetailHelper.hasOrders &&
-              documentDetailHelper.showViewOrdersNeededButton && (
-                <Button
-                  link
-                  onClick={() => {
-                    gotoOrdersNeededSequence({
-                      docketNumber: caseDetail.docketNumber,
-                    });
-                  }}
-                >
-                  View Orders Needed
-                </Button>
-              )}
-
             {documentDetailHelper.isDraftDocument && (
               <div>
                 {!documentDetailHelper.formattedDocument.signedAt && (

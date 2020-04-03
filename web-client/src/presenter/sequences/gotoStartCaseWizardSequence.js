@@ -11,10 +11,12 @@ import { setCaseTypesAction } from '../actions/setCaseTypesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setFilingTypesAction } from '../actions/setFilingTypesAction';
 import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
+import { setStartInternalCaseDefaultTabAction } from '../actions/StartCaseInternal/setStartInternalCaseDefaultTabAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { takePathForRoles } from './takePathForRoles';
 
 const gotoStartCaseInternal = [
+  setStartInternalCaseDefaultTabAction,
   set(state.documentUploadMode, 'scan'),
   set(state.documentSelectedForScan, 'petitionFile'),
   setCurrentPageAction('StartCaseInternal'),
@@ -52,6 +54,9 @@ export const gotoStartCaseWizardSequence = [
       ],
       gotoStartCaseInternal,
     ),
-    ...takePathForRoles(['petitioner', 'practitioner'], gotoStartCaseExternal),
+    ...takePathForRoles(
+      ['petitioner', 'privatePractitioner'],
+      gotoStartCaseExternal,
+    ),
   },
 ];

@@ -1,18 +1,14 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
-import { fakeFile, setupTest } from './helpers';
+import { fakeFile, loginAs, setupTest } from './helpers';
 import { uploadPetition } from './helpers';
-import petitionerLogin from './journey/petitionerLogIn';
-import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import practitionerCreatesNewCase from './journey/practitionerCreatesNewCase';
 import practitionerFilesDocumentForOwnedCase from './journey/practitionerFilesDocumentForOwnedCase';
-import practitionerLogin from './journey/practitionerLogIn';
 import practitionerNavigatesToCreateCase from './journey/practitionerNavigatesToCreateCase';
 import practitionerRequestsAccessToCase from './journey/practitionerRequestsAccessToCase';
 import practitionerRequestsPendingAccessToCase from './journey/practitionerRequestsPendingAccessToCase';
 import practitionerSearchesForCase from './journey/practitionerSearchesForCase';
 import practitionerSearchesForNonexistentCase from './journey/practitionerSearchesForNonexistentCase';
-import practitionerSignsOut from './journey/practitionerSignsOut';
 import practitionerViewsCaseDetail from './journey/practitionerViewsCaseDetail';
 import practitionerViewsCaseDetailOfOwnedCase from './journey/practitionerViewsCaseDetailOfOwnedCase';
 import practitionerViewsCaseDetailOfPendingCase from './journey/practitionerViewsCaseDetailOfPendingCase';
@@ -27,15 +23,14 @@ describe('Practitioner requests access to case', () => {
   });
 
   //tests for practitioner starting a new case
-  practitionerLogin(test);
+  loginAs(test, 'privatePractitioner');
   practitionerNavigatesToCreateCase(test);
   practitionerCreatesNewCase(test, fakeFile);
   practitionerViewsCaseDetailOfOwnedCase(test);
-  practitionerSignsOut(test);
 
   //tests for practitioner requesting access to existing case
   //petitioner must first create a case for practitioner to request access to
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   it('Create test case #1', async () => {
     await uploadPetition(test, {
       contactSecondary: {
@@ -51,9 +46,8 @@ describe('Practitioner requests access to case', () => {
     });
   });
   petitionerViewsDashboard(test);
-  petitionerSignsOut(test);
 
-  practitionerLogin(test);
+  loginAs(test, 'privatePractitioner');
   practitionerSearchesForNonexistentCase(test);
   practitionerViewsDashboardBeforeAddingCase(test);
   practitionerSearchesForCase(test);
@@ -62,11 +56,10 @@ describe('Practitioner requests access to case', () => {
   practitionerViewsDashboard(test);
   practitionerViewsCaseDetailOfOwnedCase(test);
   practitionerFilesDocumentForOwnedCase(test, fakeFile);
-  practitionerSignsOut(test);
 
   //tests for practitioner requesting access to existing case
   //petitioner must first create a case for practitioner to request access to
-  petitionerLogin(test);
+  loginAs(test, 'petitioner');
   petitionerViewsDashboard(test);
   it('Create test case #2', async () => {
     await uploadPetition(test, {
@@ -83,12 +76,10 @@ describe('Practitioner requests access to case', () => {
     });
   });
   petitionerViewsDashboard(test);
-  petitionerSignsOut(test);
 
-  practitionerLogin(test);
+  loginAs(test, 'privatePractitioner');
   practitionerSearchesForCase(test);
   practitionerViewsCaseDetail(test);
   practitionerRequestsPendingAccessToCase(test, fakeFile);
   practitionerViewsCaseDetailOfPendingCase(test);
-  practitionerSignsOut(test);
 });

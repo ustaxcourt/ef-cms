@@ -180,6 +180,9 @@ export default test => {
     //submit and route to case detail
     await test.runSequence('navigateToReviewSavedPetitionSequence');
     await test.runSequence('saveSavedCaseForLaterSequence');
+    await test.runSequence('navigateToPathSequence', {
+      path: `/case-detail/${test.caseId}`,
+    });
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

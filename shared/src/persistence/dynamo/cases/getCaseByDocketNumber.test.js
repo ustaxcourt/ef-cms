@@ -67,6 +67,12 @@ describe('getCaseByDocketNumber', () => {
     });
     expect(result).toEqual({
       caseId: '123',
+      docketRecord: [
+        {
+          pk: '123',
+          sk: '123',
+        },
+      ],
       pk: '123',
       sk: '123',
       status: 'New',

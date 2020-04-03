@@ -35,7 +35,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     },
   ];
 
-  if (user.role === USER_ROLES.practitioner) {
+  if (user.role === USER_ROLES.privatePractitioner) {
     documents.push(
       {
         documentTitleTemplate:
@@ -68,8 +68,8 @@ export const requestAccessHelper = (get, applicationContext) => {
   const documentsForSelect = getDocumentTypesForSelect(documents);
 
   const shouldShowExhibits = ![
-    USER_ROLES.practitioner,
-    USER_ROLES.respondent,
+    USER_ROLES.privatePractitioner,
+    USER_ROLES.irsPractitioner,
   ].includes(user.role);
 
   const documentWithExhibits =
@@ -111,7 +111,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     (documentWithAttachments && !form.attachments) ||
     (documentWithSupportingDocuments && !form.hasSupportingDocuments);
 
-  const showPartiesRepresenting = user.role === USER_ROLES.practitioner;
+  const showPartiesRepresenting = user.role === USER_ROLES.privatePractitioner;
 
   let exported = {
     certificateOfServiceDateFormatted,

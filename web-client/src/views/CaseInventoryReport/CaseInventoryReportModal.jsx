@@ -9,9 +9,8 @@ export const CaseInventoryReportModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
     caseInventoryReportHelper: state.caseInventoryReportHelper,
-    confirmSequence: sequences.getCaseInventoryReportSequence,
-    modal: state.modal,
-    updateModalValueSequence: sequences.updateModalValueSequence,
+    confirmSequence: sequences.submitCaseInventoryReportModalSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validateCaseInventoryReportModalSequence:
       sequences.validateCaseInventoryReportModalSequence,
     validationErrors: state.validationErrors,
@@ -20,7 +19,7 @@ export const CaseInventoryReportModal = connect(
     cancelSequence,
     caseInventoryReportHelper,
     confirmSequence,
-    updateModalValueSequence,
+    updateScreenMetadataSequence,
     validateCaseInventoryReportModalSequence,
     validationErrors,
   }) => {
@@ -48,9 +47,10 @@ export const CaseInventoryReportModal = connect(
                   'usa-select',
                   validationErrors.status && 'usa-select--error',
                 )}
+                id="select-case-inventory-status"
                 name="status"
                 onChange={e => {
-                  updateModalValueSequence({
+                  updateScreenMetadataSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
@@ -80,9 +80,10 @@ export const CaseInventoryReportModal = connect(
                   'usa-select',
                   validationErrors.associatedJudge && 'usa-select--error',
                 )}
+                id="select-case-inventory-judge"
                 name="associatedJudge"
                 onChange={e => {
-                  updateModalValueSequence({
+                  updateScreenMetadataSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });

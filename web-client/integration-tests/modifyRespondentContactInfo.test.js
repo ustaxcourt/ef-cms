@@ -1,6 +1,4 @@
-import { loginAs, setupTest, uploadPetition, wait } from './helpers';
-import respondentLogIn from './journey/respondentLogIn';
-import respondentSignsOut from './journey/respondentSignsOut';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import respondentUpdatesAddress from './journey/respondentUpdatesAddress';
 import respondentViewsCaseDetailNoticeOfChangeOfAddress from './journey/respondentViewsCaseDetailNoticeOfChangeOfAddress';
 
@@ -38,10 +36,9 @@ describe('Modify Respondent Contact Information', () => {
     });
   }
 
-  respondentLogIn(test);
+  loginAs(test, 'irsPractitioner');
   respondentUpdatesAddress(test);
   for (let i = 0; i < 3; i++) {
     respondentViewsCaseDetailNoticeOfChangeOfAddress(test, i);
   }
-  respondentSignsOut(test);
 });

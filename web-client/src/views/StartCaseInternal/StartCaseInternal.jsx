@@ -16,8 +16,6 @@ export const StartCaseInternal = connect(
   {
     documentSelectedForScan: state.documentSelectedForScan,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    generateInternalCaseCaptionSequence:
-      sequences.generateInternalCaseCaptionSequence,
     navigateToReviewPetitionFromPaperSequence:
       sequences.navigateToReviewPetitionFromPaperSequence,
     showModal: state.showModal,
@@ -25,7 +23,6 @@ export const StartCaseInternal = connect(
   ({
     documentSelectedForScan,
     formCancelToggleCancelSequence,
-    generateInternalCaseCaptionSequence,
     navigateToReviewPetitionFromPaperSequence,
     showModal,
   }) => {
@@ -48,9 +45,6 @@ export const StartCaseInternal = connect(
                 <Tabs
                   bind="startCaseInternal.tab"
                   className="container-tabs no-full-border-bottom flex tab-button-h3"
-                  onSelect={tab => {
-                    generateInternalCaseCaptionSequence({ tab });
-                  }}
                 >
                   <Tab id="tab-parties" tabName="partyInfo" title="Parties">
                     <Parties />

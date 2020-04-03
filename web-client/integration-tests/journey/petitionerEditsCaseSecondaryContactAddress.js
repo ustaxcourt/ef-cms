@@ -1,3 +1,7 @@
+import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
 export default test => {
   return it('petitioner updates secondary contact address', async () => {
     await test.runSequence('updateCaseValueSequence', {
@@ -26,8 +30,15 @@ export default test => {
     expect(test.getState('caseDetail.contactSecondary.address3')).toEqual(
       'Apt. 104',
     );
-    expect(test.getState('caseDetail.docketRecord')[2].description).toEqual(
-      'Notice of Change of Address',
+
+    const caseDetailFormatted = runCompute(
+      withAppContextDecorator(formattedCaseDetail),
+      {
+        state: test.getState(),
+      },
     );
+    expect(
+      caseDetailFormatted.docketRecordWithDocument[2].record.description,
+    ).toContain('Notice of Change of Address');
   });
 };
