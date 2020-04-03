@@ -158,28 +158,6 @@
     "pk": "catalog"
   },
   {
-    "role": "privatePractitioner",
-    "serviceIndicator": "Electronic",
-    "barNumber": "PT1234",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test Private Practitioner",
-    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "section": "privatePractitioner",
-    "representingPrimary": true,
-    "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "privatePractitioner"
-  },
-  {
     "documentType": "Petition",
     "filingDate": "2019-03-27T21:53:00.297Z",
     "workItems": [
