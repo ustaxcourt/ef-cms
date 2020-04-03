@@ -1,11 +1,5 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
-import { Document } from '../../shared/src/business/entities/Document';
 import { JSDOM } from 'jsdom';
-import { Order } from '../../shared/src/business/entities/orders/Order';
-import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
-import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
-import { User } from '../../shared/src/business/entities/User';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -13,7 +7,6 @@ import {
   externalRoute,
   openInNewTab,
   revokeObjectURL,
-  route,
   router,
 } from '../src/router';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
@@ -385,6 +378,10 @@ export const setupTest = ({ useCases = {} } = {}) => {
       return withAppContextDecorator(value, applicationContext);
     }
     return value;
+  });
+
+  presenter.providers.applicationContext = Object.assign(applicationContext, {
+    getScanner: getScannerInterface,
   });
 
   test = CerebralTest(presenter);
