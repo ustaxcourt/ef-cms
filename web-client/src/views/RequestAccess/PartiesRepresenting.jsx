@@ -13,13 +13,13 @@ export const PartiesRepresenting = connect(
     validateCaseAssociationRequestSequence:
       sequences.validateCaseAssociationRequestSequence,
   },
-  ({
+  function PartiesRepresenting({
     form,
     formattedCaseDetail,
     requestAccessHelper,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         <h2 className="margin-top-4">

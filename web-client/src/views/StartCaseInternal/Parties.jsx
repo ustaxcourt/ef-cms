@@ -14,13 +14,13 @@ export const Parties = connect(
       sequences.validatePetitionFromPaperSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function Parties({
     form,
     startCaseInternalHelper,
     updateStartCaseInternalPartyTypeSequence,
     validatePetitionFromPaperSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <div className="blue-container margin-bottom-4 document-detail-one-third">
         <FormGroup errorText={validationErrors.partyType}>

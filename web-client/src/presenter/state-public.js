@@ -24,8 +24,11 @@ export const state = {
     showUsaBannerDetails: false,
   },
   currentPage: 'Interstitial',
+  progressIndicator: {
+    // used for the spinner that shows when waiting for network responses
+    waitingForResponse: false,
+    waitingForResponseRequests: 0,
+  },
   user: {},
   validationErrors: {},
-  waitingForResponse: false,
-  waitingForResponseRequests: 0,
 };

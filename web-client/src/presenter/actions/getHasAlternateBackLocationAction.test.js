@@ -1,12 +1,12 @@
 import { getHasAlternateBackLocationAction } from './getHasAlternateBackLocationAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getHasAlternateBackLocationAction', () => {
   let trueStub;
   let falseStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     trueStub = jest.fn();
     falseStub = jest.fn();
 

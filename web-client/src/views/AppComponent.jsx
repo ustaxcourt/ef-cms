@@ -17,6 +17,7 @@ import { CreateAttorneyUser } from './CreateAttorneyUser';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
+import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
 import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
@@ -86,6 +87,7 @@ const pages = {
   CreateOrder,
   DashboardChambers,
   DashboardInactive,
+  DashboardIrsSuperuser,
   DashboardJudge,
   DashboardPetitioner,
   DashboardPractitioner,
@@ -136,10 +138,10 @@ const pages = {
 export const AppComponent = connect(
   {
     currentPage: state.currentPage,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     zipInProgress: state.batchDownloads.zipInProgress,
   },
-  ({ currentPage, showModal, zipInProgress }) => {
+  function AppComponent({ currentPage, showModal, zipInProgress }) {
     const focusMain = e => {
       e && e.preventDefault();
       const header = document.querySelector('#main-content h1');

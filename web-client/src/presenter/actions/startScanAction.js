@@ -26,7 +26,6 @@ export const startScanAction = async ({
       applicationContext,
       scanMode,
     });
-
     const documentSelectedForScan = get(
       state.currentViewMetadata.documentSelectedForScan,
     );

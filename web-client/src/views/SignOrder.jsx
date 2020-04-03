@@ -19,7 +19,7 @@ export const SignOrder = connect(
     signatureApplied: state.pdfForSigning.signatureApplied,
     signatureData: state.pdfForSigning.signatureData,
   },
-  ({
+  function SignOrder({
     currentPageNumber,
     docketNumber,
     documentId,
@@ -30,7 +30,7 @@ export const SignOrder = connect(
     setSignatureData,
     signatureApplied,
     signatureData,
-  }) => {
+  }) {
     const canvasRef = useRef(null);
     const signatureRef = useRef(null);
 

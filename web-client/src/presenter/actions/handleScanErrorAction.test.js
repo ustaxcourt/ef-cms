@@ -1,5 +1,5 @@
 import { handleScanErrorAction } from './handleScanErrorAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('handleScanErrorAction', () => {
@@ -21,7 +21,7 @@ describe('handleScanErrorAction', () => {
       },
     });
 
-    expect(result.state.showModal).toEqual('EmptyHopperModal');
+    expect(result.state.modal.showModal).toEqual('EmptyHopperModal');
     expect(result.state.scanner.isScanning).toBeFalsy();
   });
 
@@ -43,7 +43,7 @@ describe('handleScanErrorAction', () => {
       },
     });
 
-    expect(result.state.showModal).toEqual('ScanErrorModal');
+    expect(result.state.modal.showModal).toEqual('ScanErrorModal');
     expect(result.state.scanner.isScanning).toBeFalsy();
   });
 });

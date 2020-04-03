@@ -41,6 +41,6 @@ export default (
     const editedDraftOrder = formattedAfterEdit.draftDocuments[0];
 
     expect(editedDraftOrder.draftState.richText).toEqual(setRichText);
-    expect(test.currentRouteUrl).toContain('/sign');
+    expect(test.getState('currentPage')).toEqual('SignOrder');
   });
 };

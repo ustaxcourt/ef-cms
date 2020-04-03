@@ -24,7 +24,7 @@ describe('reviewSavedPetitionHelper', () => {
   it('returns defaults when there is no form', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        caseDetail: {},
+        form: {},
       },
     });
     expect(result).toEqual({
@@ -45,7 +45,7 @@ describe('reviewSavedPetitionHelper', () => {
   it('returns defaults when the are values', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        caseDetail: {
+        form: {
           documents: [
             { documentType: INITIAL_DOCUMENT_TYPES.petition.documentType },
             {
@@ -94,7 +94,7 @@ describe('reviewSavedPetitionHelper', () => {
   it('returns a message when preferred trial city has not been selected', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        caseDetail: {},
+        form: {},
       },
     });
 
@@ -117,7 +117,7 @@ describe('reviewSavedPetitionHelper', () => {
     const mockCity = 'Nowhere, USA';
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        caseDetail: {
+        form: {
           preferredTrialCity: mockCity,
         },
       },

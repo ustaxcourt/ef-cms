@@ -19,12 +19,12 @@ export const CreateOrder = connect(
     openEditOrderTitleModalSequence: sequences.openEditOrderTitleModalSequence,
     refreshPdfWhenSwitchingCreateOrderTabSequence:
       sequences.refreshPdfWhenSwitchingCreateOrderTabSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     submitCourtIssuedOrderSequence: sequences.submitCourtIssuedOrderSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
-  ({
+  function CreateOrder({
     createOrderHelper,
     form,
     formCancelToggleCancelSequence,
@@ -34,7 +34,7 @@ export const CreateOrder = connect(
     submitCourtIssuedOrderSequence,
     updateFormValueSequence,
     updateScreenMetadataSequence,
-  }) => {
+  }) {
     const { pageTitle } = createOrderHelper;
 
     return (

@@ -1,20 +1,13 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setScannerSourceAction } from './setScannerSourceAction';
 
-const mockSetItem = jest.fn();
-const mockSetSourceByName = jest.fn();
-
-presenter.providers.applicationContext = {
-  getScanner: () => ({
-    setSourceByName: mockSetSourceByName,
-  }),
-  getUseCases: () => ({
-    setItemInteractor: mockSetItem,
-  }),
-};
-
 describe('setScannerSourceAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('does nothing if scannerSourceName is not in props', async () => {
     await runAction(setScannerSourceAction, {
       modules: {
@@ -22,8 +15,13 @@ describe('setScannerSourceAction', () => {
       },
       props: {},
     });
-    expect(mockSetSourceByName).not.toHaveBeenCalled();
-    expect(mockSetItem).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getScanner().setSourceByName.mock.calls.length,
+    ).toEqual(0);
+    expect(
+      applicationContext.getUseCases().setItemInteractor.mock.calls.length,
+    ).toEqual(0);
   });
 
   it('sets the scanner source from props in local storage', async () => {
@@ -35,7 +33,12 @@ describe('setScannerSourceAction', () => {
         scannerSourceName: 'Mock Scanner Source',
       },
     });
-    expect(mockSetSourceByName).toHaveBeenCalled();
-    expect(mockSetItem).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getScanner().setSourceByName.mock.calls.length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases().setItemInteractor.mock.calls.length,
+    ).toEqual(3);
   });
 });

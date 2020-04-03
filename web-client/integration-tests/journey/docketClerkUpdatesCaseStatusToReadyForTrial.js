@@ -12,7 +12,7 @@ export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
 
     await test.runSequence('openUpdateCaseModalSequence');
 
-    expect(test.getState('showModal')).toEqual('UpdateCaseModalDialog');
+    expect(test.getState('modal.showModal')).toEqual('UpdateCaseModalDialog');
 
     expect(test.getState('modal.caseStatus')).toEqual(currentStatus);
 
@@ -24,12 +24,11 @@ export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
     await test.runSequence('clearModalSequence');
 
     expect(test.getState('caseDetail.status')).toEqual(currentStatus);
-    expect(test.getState('showModal')).toEqual('');
-    expect(test.getState('modal.caseStatus')).toBeUndefined();
+    expect(test.getState('modal')).toEqual({});
 
     await test.runSequence('openUpdateCaseModalSequence');
 
-    expect(test.getState('showModal')).toEqual('UpdateCaseModalDialog');
+    expect(test.getState('modal.showModal')).toEqual('UpdateCaseModalDialog');
     expect(test.getState('modal.caseStatus')).toEqual(currentStatus);
 
     await test.runSequence('updateModalValueSequence', {
@@ -45,7 +44,6 @@ export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
     expect(test.getState('caseDetail.associatedJudge')).toEqual(
       Case.CHIEF_JUDGE,
     );
-    expect(test.getState('showModal')).toEqual('');
-    expect(test.getState('modal.caseStatus')).toBeUndefined();
+    expect(test.getState('modal')).toEqual({});
   });
 };

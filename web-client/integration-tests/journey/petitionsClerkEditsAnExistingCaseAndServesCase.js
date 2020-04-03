@@ -38,15 +38,17 @@ export default test => {
     });
     await test.runSequence('openConfirmServeToIrsModalSequence');
 
-    expect(test.getState('showModal')).toBe('ConfirmServeToIrsModal');
+    expect(test.getState('modal.showModal')).toBe('ConfirmServeToIrsModal');
   });
 
   it('should redirect to case detail after successfully serving to irs', async () => {
     await test.runSequence('saveCaseAndServeToIrsSequence');
     await wait(5000);
 
-    expect(test.currentRouteUrl).toEqual(`/case-detail/${test.caseId}`);
-    expect(test.getState('showModal')).toEqual('PaperServiceConfirmModal');
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(test.getState('modal.showModal')).toEqual(
+      'PaperServiceConfirmModal',
+    );
   });
 
   it('should add served case to individual served queue', async () => {

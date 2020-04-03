@@ -183,10 +183,6 @@ describe('updateCase', () => {
   });
 
   describe('irsPractitioners', () => {
-    beforeEach(() => {
-      jest.clearAllMocks();
-    });
-
     it('adds a irsPractitioner to a case with no existing irsPractitioners', async () => {
       await updateCase({
         applicationContext,
@@ -331,10 +327,6 @@ describe('updateCase', () => {
   });
 
   describe('PrivatePractitioners', () => {
-    beforeEach(() => {
-      jest.clearAllMocks();
-    });
-
     it('adds a privatePractitioner to a case with no existing privatePractitioners', async () => {
       await updateCase({
         applicationContext,

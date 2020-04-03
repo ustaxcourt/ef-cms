@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { assignWorkItemsInteractor } = require('./assignWorkItemsInteractor');
 const { Case } = require('../../entities/cases/Case');
 const { omit } = require('lodash');
@@ -35,12 +38,9 @@ const MOCK_WORK_ITEM = {
 
 describe('assignWorkItemsInteractor', () => {
   it('unauthorized user tries to assign a work item', async () => {
-    const applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => ({
-        userId: 'baduser',
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      userId: 'baduser',
+    });
     let error;
     try {
       await assignWorkItemsInteractor({
@@ -53,17 +53,13 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('fail on validation if the work items provided are invalid', async () => {
-    const applicationContext = {
-      environment: { stage: 'local' },
-      getPersistenceGateway: () => {
-        return {
-          getWorkItemById: async () => omit(MOCK_WORK_ITEM, 'caseId'),
-        };
-      },
-      user: {
-        name: 'bob',
-        role: User.ROLES.petitionsClerk,
-      },
+    applicationContext
+      .getPersistenceGateway()
+      .getWorkItemById.mockReturnValue(omit(MOCK_WORK_ITEM, 'caseId'));
+
+    applicationContext.user = {
+      name: 'bob',
+      role: User.ROLES.petitionsClerk,
     };
     let error;
     try {

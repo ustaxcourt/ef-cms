@@ -1,19 +1,19 @@
-import { User } from '../../../../../shared/src/business/entities/User';
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { isUserAssociatedWithTrialSessionAction } from './isUserAssociatedWithTrialSessionAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-
-presenter.providers.applicationContext = applicationContext;
 
 describe('isUserAssociatedWithTrialSessionAction', () => {
   let pathYesStub;
   let pathNoStub;
 
-  beforeEach(() => {
+  const { USER_ROLES } = applicationContext.getConstants();
+
+  beforeAll(() => {
     pathYesStub = jest.fn();
     pathNoStub = jest.fn();
 
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       no: pathNoStub,
       yes: pathYesStub,
@@ -21,8 +21,8 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
   });
 
   it('should return path.yes() if the judge is associated with the trial session', async () => {
-    applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.judge,
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.judge,
       userId: '123',
     });
     await runAction(isUserAssociatedWithTrialSessionAction, {
@@ -40,8 +40,8 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
   });
 
   it('should return path.no() if the judge is not associated with the trial session', async () => {
-    applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.judge,
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.judge,
       userId: '234',
     });
     await runAction(isUserAssociatedWithTrialSessionAction, {
@@ -59,8 +59,8 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
   });
 
   it('should return path.no() if the user is in the chambers section and their judge is not associated with the trial session', async () => {
-    applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.chambers,
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.chambers,
       userId: '234',
     });
     await runAction(isUserAssociatedWithTrialSessionAction, {
@@ -71,7 +71,7 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
         trialSession: {
           judge: { userId: '123' },
         },
-        users: [{ role: User.ROLES.judge, userId: '456' }],
+        users: [{ role: USER_ROLES.judge, userId: '456' }],
       },
     });
 
@@ -79,8 +79,8 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
   });
 
   it('should return path.yes() if the user is in the chambers section and their judge is associated with the trial session', async () => {
-    applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.chambers,
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.chambers,
       userId: '234',
     });
     await runAction(isUserAssociatedWithTrialSessionAction, {
@@ -91,7 +91,7 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
         trialSession: {
           judge: { userId: '123' },
         },
-        users: [{ role: User.ROLES.judge, userId: '123' }],
+        users: [{ role: USER_ROLES.judge, userId: '123' }],
       },
     });
 
@@ -99,8 +99,8 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
   });
 
   it('should return path.yes() if the current user is a trial clerk for this trial session', async () => {
-    applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.trialClerk,
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.trialClerk,
       userId: '123',
     });
     await runAction(isUserAssociatedWithTrialSessionAction, {
@@ -118,8 +118,8 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
   });
 
   it('should return path.no() if the current user is a trial clerk but is NOT the trial clerk for this trial session', async () => {
-    applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.trialClerk,
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.trialClerk,
       userId: '234',
     });
     await runAction(isUserAssociatedWithTrialSessionAction, {

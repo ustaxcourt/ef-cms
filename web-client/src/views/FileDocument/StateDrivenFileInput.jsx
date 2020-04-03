@@ -15,7 +15,7 @@ export const StateDrivenFileInput = connect(
     updateFormValueSequence: sequences[props.updateFormValueSequence],
     validationSequence: sequences[props.validationSequence],
   },
-  ({
+  function StateDrivenFileInput({
     ariaDescribedBy,
     constants,
     form,
@@ -23,7 +23,7 @@ export const StateDrivenFileInput = connect(
     name,
     updateFormValueSequence,
     validationSequence,
-  }) => {
+  }) {
     let inputRef;
 
     return (

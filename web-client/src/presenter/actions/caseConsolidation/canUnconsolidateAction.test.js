@@ -1,12 +1,12 @@
 import { canUnconsolidateAction } from './canUnconsolidateAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('canUnConsolidateAction', () => {
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

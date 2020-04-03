@@ -19,9 +19,9 @@ export const CaseNotes = connect(
       sequences.openDeleteCaseNoteConfirmModalSequence,
     openDeleteUserCaseNoteConfirmModalSequence:
       sequences.openDeleteUserCaseNoteConfirmModalSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
-  ({
+  function CaseNotes({
     caseDetail,
     caseDetailHelper,
     openAddEditCaseNoteModalSequence,
@@ -29,7 +29,7 @@ export const CaseNotes = connect(
     openDeleteCaseNoteConfirmModalSequence,
     openDeleteUserCaseNoteConfirmModalSequence,
     showModal,
-  }) => {
+  }) {
     return (
       <>
         <div className="case-notes">

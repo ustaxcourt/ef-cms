@@ -58,6 +58,7 @@ const goToDashboard = [
       setCasesAction,
       setCurrentPageAction('DashboardRespondent'),
     ],
+    irsSuperuser: [setCurrentPageAction('DashboardIrsSuperuser')],
     judge: [
       setMessageInboxPropsAction,
       ...chooseWorkQueueSequence,

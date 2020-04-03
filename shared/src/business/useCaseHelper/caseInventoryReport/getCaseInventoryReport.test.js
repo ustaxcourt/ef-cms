@@ -1,23 +1,13 @@
 const AWS = require('aws-sdk');
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { getCaseInventoryReport } = require('./getCaseInventoryReport');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('getCaseInventoryReport', () => {
   let searchSpy;
   const CASE_INVENTORY_MAX_PAGE_SIZE = 10;
-
-  const applicationContext = {
-    getConstants: () => ({
-      CASE_INVENTORY_MAX_PAGE_SIZE,
-    }),
-    getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-    getPersistenceGateway: () => ({
-      getCaseByCaseId: searchSpy,
-    }),
-    getSearchClient: () => ({
-      search: searchSpy,
-    }),
-  };
 
   const mockDataOne = {
     associatedJudge: 'Chief Judge',
@@ -31,8 +21,21 @@ describe('getCaseInventoryReport', () => {
     status: 'Closed',
   };
 
+  beforeEach(() => {
+    searchSpy = jest.fn();
+    applicationContext.getConstants.mockReturnValue({
+      CASE_INVENTORY_MAX_PAGE_SIZE,
+    });
+    applicationContext.getCurrentUser.mockReturnValue(
+      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+    );
+    applicationContext.getSearchClient.mockReturnValue({
+      search: searchSpy,
+    });
+  });
+
   it('calls search function with correct params when provided a judge and returns records', async () => {
-    searchSpy = jest.fn().mockResolvedValue({
+    searchSpy.mockResolvedValue({
       hits: {
         hits: [
           {
@@ -71,7 +74,7 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls search function with correct params when provided a status and returns records', async () => {
-    searchSpy = jest.fn().mockResolvedValue({
+    searchSpy.mockResolvedValue({
       hits: {
         hits: [
           {
@@ -106,7 +109,7 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls search function with correct params when provided a judge and status and returns records', async () => {
-    searchSpy = jest.fn().mockResolvedValue({
+    searchSpy.mockResolvedValue({
       hits: {
         hits: [
           {
@@ -149,7 +152,7 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls the search function with a default page size if one is not provided', async () => {
-    searchSpy = jest.fn();
+    searchSpy.mockReset();
 
     await getCaseInventoryReport({
       applicationContext,
@@ -163,7 +166,7 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls the search function with the given page size', async () => {
-    searchSpy = jest.fn();
+    searchSpy.mockReset();
 
     await getCaseInventoryReport({
       applicationContext,
@@ -176,7 +179,7 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls the search function with max page size if the given page size exceeds the max page size', async () => {
-    searchSpy = jest.fn();
+    searchSpy.mockReset();
 
     await getCaseInventoryReport({
       applicationContext,
@@ -191,7 +194,7 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls the search function with a default starting index (`from` param) of 0 if one is not provided', async () => {
-    searchSpy = jest.fn();
+    searchSpy.mockReset();
 
     await getCaseInventoryReport({
       applicationContext,
@@ -203,7 +206,7 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('calls the search function with the given starting index (`from` param)', async () => {
-    searchSpy = jest.fn();
+    searchSpy.mockReset();
 
     await getCaseInventoryReport({
       applicationContext,
@@ -216,7 +219,7 @@ describe('getCaseInventoryReport', () => {
   });
 
   it('returns an empty array when no hits are returned from the search client', async () => {
-    searchSpy = jest.fn().mockResolvedValue({
+    searchSpy.mockResolvedValue({
       hits: {
         hits: [],
       },

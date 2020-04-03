@@ -18,14 +18,14 @@ export const StartCaseInternal = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateToReviewPetitionFromPaperSequence:
       sequences.navigateToReviewPetitionFromPaperSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
-  ({
+  function StartCaseInternal({
     documentSelectedForScan,
     formCancelToggleCancelSequence,
     navigateToReviewPetitionFromPaperSequence,
     showModal,
-  }) => {
+  }) {
     return (
       <>
         <BigHeader text="Create Case" />

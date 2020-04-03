@@ -1,37 +1,16 @@
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitDocketEntryAction } from './submitDocketEntryAction';
 
+presenter.providers.applicationContext = applicationContext;
+
 describe('submitDocketEntryAction', () => {
-  let addCoversheetStub;
-  let fileDocketEntryStub;
-  let validatePdfStub;
-  let virusScanPdfStub;
-  let updateDocketEntryStub;
-
-  beforeEach(() => {
-    addCoversheetStub = jest.fn();
-    fileDocketEntryStub = jest.fn();
-    validatePdfStub = jest.fn();
-    updateDocketEntryStub = jest.fn();
-    virusScanPdfStub = jest.fn();
-
-    presenter.providers.applicationContext = {
-      ...applicationContext,
-      getUniqueId: () => '123',
-      getUseCases: () => ({
-        addCoversheetInteractor: addCoversheetStub,
-        fileDocketEntryInteractor: fileDocketEntryStub,
-        updateDocketEntryInteractor: updateDocketEntryStub,
-        validatePdfInteractor: validatePdfStub,
-        virusScanPdfInteractor: virusScanPdfStub,
-      }),
-    };
-  });
-
   it('should call fileDocketEntry', async () => {
-    fileDocketEntryStub = jest.fn().mockReturnValue({ documents: [] });
+    applicationContext
+      .getUseCases()
+      .fileDocketEntryInteractor.mockReturnValue({ documents: [] });
+
     await runAction(submitDocketEntryAction, {
       modules: {
         presenter,
@@ -44,13 +23,17 @@ describe('submitDocketEntryAction', () => {
       },
     });
 
-    expect(fileDocketEntryStub.mock.calls.length).toEqual(1);
+    expect(
+      applicationContext.getUseCases().fileDocketEntryInteractor.mock.calls
+        .length,
+    ).toEqual(1);
   });
 
   it('should call virusScan and validation and if a file is attached', async () => {
-    fileDocketEntryStub = jest.fn().mockReturnValue({
+    applicationContext.getUseCases().fileDocketEntryInteractor.mockReturnValue({
       caseId: applicationContext.getUniqueId(),
     });
+
     await runAction(submitDocketEntryAction, {
       modules: {
         presenter,
@@ -68,14 +51,21 @@ describe('submitDocketEntryAction', () => {
       },
     });
 
-    expect(validatePdfStub.mock.calls.length).toEqual(1);
-    expect(virusScanPdfStub.mock.calls.length).toEqual(1);
+    expect(
+      applicationContext.getUseCases().validatePdfInteractor.mock.calls.length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases().virusScanPdfInteractor.mock.calls.length,
+    ).toEqual(1);
   });
 
   it('should update docket entry with attached file', async () => {
-    updateDocketEntryStub = jest.fn().mockReturnValue({
-      caseId: applicationContext.getUniqueId(),
-    });
+    applicationContext
+      .getUseCases()
+      .updateDocketEntryInteractor.mockReturnValue({
+        caseId: applicationContext.getUniqueId(),
+      });
+
     await runAction(submitDocketEntryAction, {
       modules: {
         presenter,
@@ -94,8 +84,15 @@ describe('submitDocketEntryAction', () => {
       },
     });
 
-    expect(validatePdfStub.mock.calls.length).toEqual(1);
-    expect(virusScanPdfStub.mock.calls.length).toEqual(1);
-    expect(updateDocketEntryStub.mock.calls.length).toEqual(1);
+    expect(
+      applicationContext.getUseCases().validatePdfInteractor.mock.calls.length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases().virusScanPdfInteractor.mock.calls.length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases().updateDocketEntryInteractor.mock.calls
+        .length,
+    ).toEqual(1);
   });
 });

@@ -1,11 +1,11 @@
 import { openPdfPreviewInNewTabAction } from './openPdfPreviewInNewTabAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('openPdfPreviewInNewTabAction', () => {
   const openInNewTabMock = jest.fn();
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.router = {
       openInNewTab: openInNewTabMock,
     };

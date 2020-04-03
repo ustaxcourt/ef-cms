@@ -1,27 +1,16 @@
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { sealCaseInteractor } = require('./sealCaseInteractor');
 const { User } = require('../entities/User');
 
 describe('sealCaseInteractor', () => {
-  let applicationContext;
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+  });
 
   it('should throw an error if the user is unauthorized to seal a case', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
-          updateCase: caseToUpdate => Promise.resolve(caseToUpdate),
-        };
-      },
-      getUniqueId: () => 'unique-id-1',
-    };
     await expect(
       sealCaseInteractor({
         applicationContext,
@@ -33,22 +22,11 @@ describe('sealCaseInteractor', () => {
   });
 
   it('should call updateCase with the sealedDate set on the case and return the updated case', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.docketClerk, // user has SEAL_CASE permission
-          userId: 'docketClerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
-          updateCase: ({ caseToUpdate }) => Promise.resolve(caseToUpdate),
-        };
-      },
-      getUniqueId: () => 'unique-id-1',
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.docketClerk,
+      userId: 'docketClerk',
+    });
+
     const result = await sealCaseInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,

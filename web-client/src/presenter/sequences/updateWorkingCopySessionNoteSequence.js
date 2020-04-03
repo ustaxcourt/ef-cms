@@ -1,5 +1,4 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -21,7 +20,6 @@ export const updateWorkingCopySessionNoteSequence = [
       updateNotePropsFromModalStateAction,
       updateSessionNoteInTrialSessionWorkingCopyAction,
       updateTrialSessionWorkingCopyAction,
-      clearModalAction,
       clearModalStateAction,
     ]),
   },

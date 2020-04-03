@@ -22,7 +22,7 @@ export const SecondarySupportingDocumentForm = connect(
       sequences.validateExternalDocumentInformationSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function SecondarySupportingDocumentForm({
     constants,
     fileDocumentHelper,
     form,
@@ -31,7 +31,7 @@ export const SecondarySupportingDocumentForm = connect(
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <h2 className="margin-top-4">

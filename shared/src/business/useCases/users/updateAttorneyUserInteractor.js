@@ -2,7 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { Attorney } = require('../../entities/Attorney');
+const { Practitioner } = require('../../entities/Practitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -19,7 +19,7 @@ exports.updateAttorneyUserInteractor = async ({ applicationContext, user }) => {
     throw new UnauthorizedError('Unauthorized for updating attorney user');
   }
 
-  const validatedUserData = new Attorney(user, { applicationContext })
+  const validatedUserData = new Practitioner(user, { applicationContext })
     .validate()
     .toRawObject();
 
@@ -30,7 +30,7 @@ exports.updateAttorneyUserInteractor = async ({ applicationContext, user }) => {
       user: validatedUserData,
     });
 
-  return new Attorney(updatedUser, { applicationContext })
+  return new Practitioner(updatedUser, { applicationContext })
     .validate()
     .toRawObject();
 };

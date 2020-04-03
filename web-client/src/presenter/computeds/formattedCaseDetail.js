@@ -106,7 +106,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
         } else if (
           !document.isCourtIssuedDocument &&
           !document.isPetition &&
-          qcWorkItemsUntouched
+          qcWorkItemsUntouched &&
+          permissions.DOCKET_ENTRY
         ) {
           editLink = '/edit';
         } else if (document.isPetition && !document.servedAt) {
@@ -125,7 +126,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
       return {
         action: record.action,
-        canEdit: document && document.canEdit,
         createdAtFormatted: record.createdAtFormatted,
         description: record.description,
         descriptionDisplay,

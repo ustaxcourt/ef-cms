@@ -1,21 +1,18 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
+import { runAction } from 'cerebral/test';
 import { setWorkItemAsReadAction } from './setWorkItemAsReadAction';
 
 describe('setWorkItemAsReadAction', () => {
-  let get;
-  let applicationContext;
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
 
   it('should set message as read', async () => {
-    let setWorkItemAsReadStub = jest.fn();
-    get = jest.fn();
-    applicationContext = {
-      getUseCases: () => ({
-        setWorkItemAsReadInteractor: setWorkItemAsReadStub,
-      }),
-    };
+    await runAction(setWorkItemAsReadAction, { modules: { presenter } });
 
-    await setWorkItemAsReadAction({ applicationContext, get });
-
-    expect(setWorkItemAsReadStub.mock.calls.length).toEqual(1);
-    expect(get.mock.calls.length).toEqual(1);
+    expect(
+      applicationContext.getUseCases().setWorkItemAsReadInteractor,
+    ).toHaveBeenCalled();
   });
 });

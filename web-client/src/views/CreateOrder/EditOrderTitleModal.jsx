@@ -15,7 +15,7 @@ export const EditOrderTitleModal = connect(
     validateSequence: sequences.validateOrderWithoutBodySequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function EditOrderTitleModal({
     cancelSequence,
     confirmSequence,
     modal,
@@ -23,7 +23,7 @@ export const EditOrderTitleModal = connect(
     updateModalValue,
     validateSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"

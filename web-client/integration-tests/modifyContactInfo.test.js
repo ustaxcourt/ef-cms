@@ -42,7 +42,9 @@ describe('Modify Petitioner Contact Information', () => {
   petitionerViewsCaseDetail(test, { docketNumberSuffix: 'L' });
   petitionerNavigatesToEditPrimaryContact(test);
   petitionerEditsCasePrimaryContactAddress(test);
+  petitionerNavigatesToEditPrimaryContact(test);
   petitionerEditsCasePrimaryContactPhone(test);
+  petitionerNavigatesToEditPrimaryContact(test);
   petitionerEditsCasePrimaryContactAddressAndPhone(test);
 
   // attempt to modify secondary contact information
@@ -54,7 +56,9 @@ describe('Modify Petitioner Contact Information', () => {
   });
   petitionerNavigatesToEditSecondaryContact(test);
   petitionerEditsCaseSecondaryContactAddress(test);
+  petitionerNavigatesToEditSecondaryContact(test);
   petitionerEditsCaseSecondaryContactPhone(test);
+  petitionerNavigatesToEditSecondaryContact(test);
   petitionerEditsCaseSecondaryContactAddressAndPhone(test);
 
   loginAs(test, 'docketclerk');

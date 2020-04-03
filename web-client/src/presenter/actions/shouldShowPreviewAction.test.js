@@ -1,5 +1,5 @@
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { shouldShowPreviewAction } from './shouldShowPreviewAction';
 
@@ -7,16 +7,15 @@ const mockFile = {
   name: 'mockfile.pdf',
 };
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('shouldShowPreviewAction', () => {
   let pathYesStub;
   let pathNoStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     pathYesStub = jest.fn();
     pathNoStub = jest.fn();
 
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       no: pathNoStub,
       yes: pathYesStub,

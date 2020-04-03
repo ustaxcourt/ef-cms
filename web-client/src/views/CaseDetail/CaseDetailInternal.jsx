@@ -27,10 +27,10 @@ export const CaseDetailInternal = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     primaryTab: state.currentViewMetadata.caseDetail.primaryTab,
     showEditPetition: state.currentViewMetadata.caseDetail.showEditPetition,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     token: state.token,
   },
-  ({
+  function CaseDetailInternal({
     baseUrl,
     caseDetail,
     formattedCaseDetail,
@@ -38,7 +38,7 @@ export const CaseDetailInternal = connect(
     showEditPetition,
     showModal,
     token,
-  }) => {
+  }) {
     return (
       <>
         <CaseDetailHeader className="margin-bottom-0" />

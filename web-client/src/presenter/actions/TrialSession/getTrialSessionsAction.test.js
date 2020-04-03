@@ -1,18 +1,14 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getTrialSessionsAction } from './getTrialSessionsAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getTrialSessionsAction', () => {
-  let getTrialSessionsInteractorStub;
-
-  beforeEach(() => {
-    getTrialSessionsInteractorStub = jest.fn().mockReturnValue([]);
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        getTrialSessionsInteractor: getTrialSessionsInteractorStub,
-      }),
-    };
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+    applicationContext
+      .getUseCases()
+      .getTrialSessionsInteractor.mockReturnValue([]);
   });
 
   it('should retrieve trial sessions', async () => {

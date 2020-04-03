@@ -1,24 +1,18 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitCourtIssuedOrderAction } from './submitCourtIssuedOrderAction';
 
 describe('submitCourtIssuedOrderAction', () => {
-  let fileCourtIssuedOrderStub;
-
-  beforeEach(() => {
-    fileCourtIssuedOrderStub = jest.fn();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        fileCourtIssuedOrderInteractor: fileCourtIssuedOrderStub,
-        validatePdfInteractor: () => {},
-        virusScanPdfInteractor: () => {},
-      }),
-    };
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContextForClient;
   });
 
   it('should call fileCourtIssuedOrder', async () => {
-    fileCourtIssuedOrderStub = jest.fn().mockReturnValue({ documents: [] });
+    applicationContextForClient
+      .getUseCases()
+      .fileCourtIssuedOrderInteractor.mockReturnValue({ documents: [] });
+
     await runAction(submitCourtIssuedOrderAction, {
       modules: {
         presenter,
@@ -35,6 +29,14 @@ describe('submitCourtIssuedOrderAction', () => {
       },
     });
 
-    expect(fileCourtIssuedOrderStub.mock.calls.length).toEqual(1);
+    expect(
+      applicationContextForClient.getUseCases().fileCourtIssuedOrderInteractor,
+    ).toBeCalled();
+    expect(
+      applicationContextForClient.getUseCases().validatePdfInteractor,
+    ).toBeCalled();
+    expect(
+      applicationContextForClient.getUseCases().virusScanPdfInteractor,
+    ).toBeCalled();
   });
 });

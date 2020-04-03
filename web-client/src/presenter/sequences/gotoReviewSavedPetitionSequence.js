@@ -2,7 +2,7 @@ import { canNavigateToReviewSavedPetitionScreenAction } from '../actions/caseDet
 import { getCaseAction } from '../actions/getCaseAction';
 import { navigateToDocumentDetailAction } from '../actions/navigateToDocumentDetailAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCaseToFormAction } from '../actions/setCaseToFormAction';
+import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { shouldLoadCaseAction } from '../actions/shouldLoadCaseAction';
 
@@ -14,7 +14,7 @@ export const gotoReviewSavedPetitionSequence = [
       shouldLoadCaseAction,
       {
         ignore: [],
-        load: [getCaseAction, setCaseAction, setCaseToFormAction],
+        load: [getCaseAction, setCaseAction, setCaseOnFormAction],
       },
       setCurrentPageAction('ReviewSavedPetition'),
     ],

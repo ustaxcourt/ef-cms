@@ -1,20 +1,19 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { createCaseAction } from './createCaseAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-let filePetitionInteractorStub;
-let addCoversheetInteractorStub;
+presenter.providers.applicationContext = applicationContext;
 
-presenter.providers.applicationContext = {
-  getCurrentUser: () => ({
-    email: 'petitioner1@example.com',
-  }),
-  getUseCases: () => ({
-    addCoversheetInteractor: addCoversheetInteractorStub,
-    filePetitionInteractor: filePetitionInteractorStub,
-  }),
-};
+const {
+  addCoversheetInteractor,
+  filePetitionInteractor,
+} = applicationContext.getUseCases();
+
+applicationContext.getCurrentUser.mockReturnValue({
+  email: 'petitioner1@example.com',
+});
 
 const errorStub = jest.fn();
 const successStub = jest.fn();
@@ -26,8 +25,7 @@ presenter.providers.path = {
 
 describe('createCaseAction', () => {
   it('should call filePetitionInteractor and addCoversheetInteractor with the petition metadata and files and call the success path when finished', async () => {
-    filePetitionInteractorStub = jest.fn().mockReturnValue(MOCK_CASE);
-    addCoversheetInteractorStub = jest.fn();
+    filePetitionInteractor.mockReturnValue(MOCK_CASE);
 
     await runAction(createCaseAction, {
       modules: {
@@ -44,8 +42,8 @@ describe('createCaseAction', () => {
       },
     });
 
-    expect(filePetitionInteractorStub).toBeCalled();
-    expect(filePetitionInteractorStub.mock.calls[0][0]).toMatchObject({
+    expect(filePetitionInteractor).toBeCalled();
+    expect(filePetitionInteractor.mock.calls[0][0]).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
@@ -53,15 +51,14 @@ describe('createCaseAction', () => {
       },
       stinFile: {},
     });
-    expect(addCoversheetInteractorStub).toBeCalled();
+    expect(addCoversheetInteractor).toBeCalled();
     expect(successStub).toBeCalled();
   });
 
   it('should call filePetitionInteractor and call path.error when finished if it throws an error', async () => {
-    filePetitionInteractorStub = jest.fn().mockImplementation(() => {
+    filePetitionInteractor.mockImplementation(() => {
       throw new Error('error');
     });
-    addCoversheetInteractorStub = jest.fn();
 
     await runAction(createCaseAction, {
       modules: {
@@ -78,8 +75,8 @@ describe('createCaseAction', () => {
       },
     });
 
-    expect(filePetitionInteractorStub).toBeCalled();
-    expect(filePetitionInteractorStub.mock.calls[0][0]).toMatchObject({
+    expect(filePetitionInteractor).toBeCalled();
+    expect(filePetitionInteractor.mock.calls[0][0]).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
@@ -87,7 +84,7 @@ describe('createCaseAction', () => {
       },
       stinFile: {},
     });
-    expect(addCoversheetInteractorStub).not.toBeCalled();
+    expect(addCoversheetInteractor).not.toBeCalled();
     expect(errorStub).toBeCalled();
   });
 });

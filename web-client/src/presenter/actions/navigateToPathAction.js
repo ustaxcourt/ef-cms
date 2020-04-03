@@ -8,5 +8,5 @@
  */
 export const navigateToPathAction = async ({ props, router }) => {
   const { path } = props;
-  await router.route(path);
+  await router.route(path || '/');
 };

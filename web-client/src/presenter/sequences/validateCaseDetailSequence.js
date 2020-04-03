@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { getFormCombinedWithCaseDetailAction } from '../actions/getFormCombinedWithCaseDetailAction';
+import { getCaseDetailFormWithComputedDatesAction } from '../actions/getCaseDetailFormWithComputedDatesAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
@@ -9,7 +9,7 @@ export const validateCaseDetailSequence = [
   {
     ignore: [],
     validate: [
-      getFormCombinedWithCaseDetailAction,
+      getCaseDetailFormWithComputedDatesAction,
       validateCaseDetailAction,
       {
         error: [setValidationErrorsAction],

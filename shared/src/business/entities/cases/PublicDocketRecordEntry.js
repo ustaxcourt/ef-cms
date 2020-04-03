@@ -22,19 +22,9 @@ joiValidationDecorator(
   joi.object().keys({
     description: joi.string().optional(),
     documentId: joi.string().optional(),
-    filedBy: joi
-      .date()
-      .iso()
-      .optional(),
-    filingDate: joi
-      .date()
-      .max('now')
-      .iso()
-      .optional(), // Required on DocketRecord so probably should be required here.
-    index: joi
-      .number()
-      .integer()
-      .optional(),
+    filedBy: joi.date().iso().optional(),
+    filingDate: joi.date().max('now').iso().optional(), // Required on DocketRecord so probably should be required here.
+    index: joi.number().integer().optional(),
   }),
   undefined,
   {},

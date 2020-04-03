@@ -10,7 +10,7 @@ export const PrintableDocketRecord = connect(
   {
     navigateBackSequence: sequences.navigateBackSequence,
   },
-  ({ navigateBackSequence }) => {
+  function PrintableDocketRecord({ navigateBackSequence }) {
     return (
       <>
         <CaseDetailHeader hideActionButtons />
