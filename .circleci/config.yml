@@ -48,6 +48,9 @@ jobs:
           name: Web API - Test
           command: npm run test:api
       - run:
+          name: Normalize Coverage for SonarQube
+          command: npx istanbul-combine -d coverage coverage/coverage-final.json
+      - run:
           name: Web API - SonarQube
           command: |
             export SONAR_SCANNER_OPTS="-Xmx2048m"
@@ -75,6 +78,9 @@ jobs:
       - run:
           name: Shared - Test
           command: npm run test:shared
+      - run:
+          name: Normalize Coverage for SonarQube
+          command: npx istanbul-combine -d coverage coverage/coverage-final.json
       - run:
           name: Shared - SonarQube
           command: |
