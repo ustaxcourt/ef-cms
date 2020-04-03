@@ -1,11 +1,11 @@
 const {
   validateCaseDetailInteractor,
 } = require('./validateCaseDetailInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_USERS } = require('../../test/mockUsers');
 const { User } = require('../entities/User');
-
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
 const contactPrimary = {
@@ -19,13 +19,10 @@ const contactPrimary = {
 };
 
 describe('validate case detail', () => {
-  let applicationContext;
-
   beforeAll(() => {
-    applicationContext = {
-      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
+    applicationContext.getCurrentUser.mockReturnValue(
+      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+    );
   });
 
   it('returns the expected errors object on an empty case', () => {

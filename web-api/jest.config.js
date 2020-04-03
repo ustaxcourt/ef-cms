@@ -3,7 +3,7 @@ module.exports = {
   ...baseConfig,
   collectCoverage: true,
   collectCoverageFrom: [
-    'bulkImportAttorneyUsers.js',
+    'bulkImportPractitionerUsers.js',
     'switch-environment-color.js',
     'migrations/*.js',
     'src/**/*.js',

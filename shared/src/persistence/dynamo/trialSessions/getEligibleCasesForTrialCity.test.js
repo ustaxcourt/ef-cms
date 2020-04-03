@@ -1,5 +1,8 @@
 const client = require('../../dynamodbClientService');
 const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+const {
   getEligibleCasesForTrialCity,
 } = require('./getEligibleCasesForTrialCity');
 
@@ -16,11 +19,6 @@ describe('getEligibleCasesForTrialCity', () => {
   });
 
   it('should get the cases for a trial city', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-    };
     const result = await getEligibleCasesForTrialCity({
       applicationContext,
       procedureType: 'Regular',

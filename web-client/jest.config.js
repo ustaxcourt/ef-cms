@@ -21,7 +21,6 @@ module.exports = {
     File: function () {},
     FileReader: () => {},
     atob: x => x,
-    window: { document: {} },
   },
   testEnvironment: 'node',
   testTimeout: 30000,

@@ -1,7 +1,7 @@
 import { clearAlertsAction } from './clearAlertsAction';
 import { runAction } from 'cerebral/test';
 
-describe.only('clearAlertsAction', () => {
+describe('clearAlertsAction', () => {
   it('should save alertError and alertSuccess but clear validationErrors if state.saveAlertsForNavigation is true', async () => {
     const result = await runAction(clearAlertsAction, {
       state: {

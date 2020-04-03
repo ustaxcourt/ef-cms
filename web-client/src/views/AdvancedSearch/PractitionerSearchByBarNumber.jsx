@@ -7,15 +7,14 @@ import React from 'react';
 export const PractitionerSearchByBarNumber = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
-    clearCaseSearchByNameFormSequence:
-      sequences.clearCaseSearchByNameFormSequence,
+    clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     validationErrors: state.validationErrors,
   },
   function PractitionerSearchByBarNumber({
     advancedSearchForm,
-    clearCaseSearchByNameFormSequence,
+    clearAdvancedSearchFormSequence,
     submitPractitionerNameSearchSequence,
     updateAdvancedSearchFormValueSequence,
     validationErrors,
@@ -26,12 +25,7 @@ export const PractitionerSearchByBarNumber = connect(
           <h3>Search by Bar Number</h3>
         </div>
         <div className="blue-container">
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              submitPractitionerNameSearchSequence();
-            }}
-          >
+          <form>
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-6">
                 <FormGroup errorText={validationErrors.barNumber}>
@@ -63,15 +57,21 @@ export const PractitionerSearchByBarNumber = connect(
               <div className="tablet:grid-col-6">
                 <Button
                   className="advanced-search__button margin-top-2"
-                  type="submit"
+                  onClick={e => {
+                    e.preventDefault();
+                    submitPractitionerNameSearchSequence();
+                  }}
                 >
                   Search
                 </Button>
                 <Button
                   link
                   className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-                  onClick={() => {
-                    clearCaseSearchByNameFormSequence();
+                  onClick={e => {
+                    e.preventDefault();
+                    clearAdvancedSearchFormSequence({
+                      formType: 'practitionerSearchByBarNumber',
+                    });
                   }}
                 >
                   Clear Search

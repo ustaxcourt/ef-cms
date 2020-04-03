@@ -1,5 +1,9 @@
 const { updateWorkItemInCase } = require('./updateWorkItemInCase');
 
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+
 describe('updateWorkItemInCase', () => {
   let updateStub;
   beforeEach(() => {
@@ -9,14 +13,9 @@ describe('updateWorkItemInCase', () => {
   });
 
   it('invokes the persistence layer with pk of {workItemId}, sk of {workItemId} and other expected params', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        update: updateStub,
-      }),
-    };
+    applicationContext.getDocumentClient.mockReturnValue({
+      update: updateStub,
+    });
     await updateWorkItemInCase({
       applicationContext,
       caseToUpdate: {
@@ -42,7 +41,7 @@ describe('updateWorkItemInCase', () => {
         sk: 'document|321',
       },
       UpdateExpression: 'SET #workItems[0] = :workItem',
-      applicationContext: { environment: { stage: 'dev' } },
+      applicationContext: { environment: { stage: 'local' } },
     });
   });
 });

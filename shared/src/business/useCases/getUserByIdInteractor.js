@@ -14,8 +14,8 @@ const { User } = require('../entities/User');
 exports.getUserByIdInteractor = async ({ applicationContext, userId }) => {
   const requestUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_ATTORNEY_USERS)) {
-    throw new UnauthorizedError('Unauthorized for getting attorney user');
+  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)) {
+    throw new UnauthorizedError('Unauthorized for getting practitioner user');
   }
 
   const user = await applicationContext
@@ -28,7 +28,7 @@ exports.getUserByIdInteractor = async ({ applicationContext, userId }) => {
     )
   ) {
     throw new UnauthorizedError(
-      'Unauthorized to retrieve users other than attorneys',
+      'Unauthorized to retrieve users other than practitioners',
     );
   }
 

@@ -45,8 +45,10 @@ export default test => {
     await test.runSequence('saveCaseAndServeToIrsSequence');
     await wait(5000);
 
-    expect(test.currentRouteUrl).toEqual(`/case-detail/${test.caseId}`);
-    expect(test.getState('modal.showModal')).toEqual('PaperServiceConfirmModal');
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(test.getState('modal.showModal')).toEqual(
+      'PaperServiceConfirmModal',
+    );
   });
 
   it('should add served case to individual served queue', async () => {

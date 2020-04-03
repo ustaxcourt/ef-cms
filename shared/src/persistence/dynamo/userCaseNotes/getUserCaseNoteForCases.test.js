@@ -1,4 +1,7 @@
 const client = require('../../dynamodbClientService');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { getUserCaseNoteForCases } = require('./getUserCaseNoteForCases');
 
 describe('getUserCaseNoteForCases', () => {
@@ -15,11 +18,6 @@ describe('getUserCaseNoteForCases', () => {
   });
 
   it('should get the case notes by case id and user id', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-    };
     const result = await getUserCaseNoteForCases({
       applicationContext,
       caseIds: ['123'],
