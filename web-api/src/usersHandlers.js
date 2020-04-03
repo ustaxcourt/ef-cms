@@ -1,6 +1,6 @@
 module.exports = {
-  createAttorneyUserLambda: require('./users/createAttorneyUserLambda')
-    .createAttorneyUserLambda,
+  createPractitionerUserLambda: require('./users/createPractitionerUserLambda')
+    .createPractitionerUserLambda,
   createUserLambda: require('./users/createUserLambda').createUserLambda,
   getCasesByUserLambda: require('./cases/getCasesByUserLambda')
     .getCasesByUserLambda,
@@ -26,8 +26,8 @@ module.exports = {
     .privatePractitionerCaseAssociationLambda,
   privatePractitionerPendingCaseAssociationLambda: require('./cases/privatePractitionerPendingCaseAssociationLambda')
     .privatePractitionerPendingCaseAssociationLambda,
-  updateAttorneyUserLambda: require('./users/updateAttorneyUserLambda')
-    .updateAttorneyUserLambda,
+  updatePractitionerUserLambda: require('./users/updatePractitionerUserLambda')
+    .updatePractitionerUserLambda,
   updateUserContactInformationLambda: require('./users/updateUserContactInformationLambda')
     .updateUserContactInformationLambda,
   verifyPendingCaseForUserLambda: require('./cases/verifyPendingCaseForUserLambda')

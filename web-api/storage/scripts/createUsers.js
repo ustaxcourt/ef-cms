@@ -4,8 +4,8 @@ const {
   createUserRecords,
 } = require('../../../shared/src/persistence/dynamo/users/createUser.js');
 const {
-  createUserRecords: createAttorneyUserRecords,
-} = require('../../../shared/src/persistence/dynamo/users/createAttorneyUser.js');
+  createUserRecords: createPractitionerUserRecords,
+} = require('../../../shared/src/persistence/dynamo/users/createPractitionerUser.js');
 const { omit } = require('lodash');
 const { User } = require('../../../shared/src/business/entities/User');
 
@@ -37,7 +37,7 @@ module.exports.createUsers = async () => {
           User.ROLES.inactivePractitioner,
         ].includes(userRecord.role)
       ) {
-        return createAttorneyUserRecords({
+        return createPractitionerUserRecords({
           applicationContext,
           user: omit(userRecord, EXCLUDE_PROPS),
           userId,
