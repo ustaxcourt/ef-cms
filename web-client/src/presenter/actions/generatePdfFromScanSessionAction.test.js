@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePdfFromScanSessionAction } from './generatePdfFromScanSessionAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('generatePdfFromScanSessionAction', () => {

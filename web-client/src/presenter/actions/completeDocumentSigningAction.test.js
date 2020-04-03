@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { completeDocumentSigningAction } from './completeDocumentSigningAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('completeDocumentSigningAction', () => {
@@ -20,9 +20,17 @@ describe('completeDocumentSigningAction', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       userId: '1',
     });
+
+    global.window = {
+      pdfjsObj: {
+        getData: jest.fn().mockResolvedValue(true),
+      },
+    };
+
     global.window.pdfjsObj = {
       getData: jest.fn().mockResolvedValue(true),
     };
+
     global.File = jest.fn();
 
     uploadDocumentFromClient.mockReturnValue(

@@ -1,33 +1,25 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   generateTrialCalendarPdfInteractor,
 } = require('./generateTrialCalendarPdfInteractor');
-
-const getCalendaredCasesForTrialSessionStub = jest
-    .fn()
-    .mockReturnValue(['case1', 'case2', 'case3']),
-  getTrialSessionByIdStub = jest.fn(),
-  generatePdfFromHtmlInteractorStub = jest.fn(),
-  generateTrialCalendarTemplateStub = jest.fn().mockResolvedValue(true),
-  formattedTrialSessionDetailsStub = jest.fn(),
-  getFormattedCaseDetailStub = jest.fn();
+const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('generateTrialCalendarPdfInteractor', () => {
-  const applicationContext = {
-    getPersistenceGateway: () => ({
-      getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionStub,
-      getTrialSessionById: getTrialSessionByIdStub,
-    }),
-    getTemplateGenerators: () => ({
-      generateTrialCalendarTemplate: generateTrialCalendarTemplateStub,
-    }),
-    getUseCases: () => ({
-      generatePdfFromHtmlInteractor: generatePdfFromHtmlInteractorStub,
-    }),
-    getUtilities: () => ({
-      formattedTrialSessionDetails: formattedTrialSessionDetailsStub,
-      getFormattedCaseDetail: getFormattedCaseDetailStub,
-    }),
-  };
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([
+        MOCK_CASE,
+        MOCK_CASE,
+        MOCK_CASE,
+      ]);
+
+    applicationContext
+      .getTemplateGenerators()
+      .generateTrialCalendarTemplate.mockReturnValue(true);
+  });
 
   it('should find the cases for a trial session successfully', async () => {
     await expect(
@@ -38,10 +30,26 @@ describe('generateTrialCalendarPdfInteractor', () => {
         },
       }),
     ).resolves.not.toThrow();
-    expect(getTrialSessionByIdStub.mock.calls.length).toBe(1);
-    expect(formattedTrialSessionDetailsStub.mock.calls.length).toBe(1);
-    expect(getFormattedCaseDetailStub.mock.calls.length).toBe(3);
-    expect(generateTrialCalendarTemplateStub.mock.calls.length).toBe(1);
-    expect(generatePdfFromHtmlInteractorStub.mock.calls.length).toBe(1);
+
+    expect(
+      applicationContext.getPersistenceGateway().getTrialSessionById.mock.calls
+        .length,
+    ).toBe(1);
+    expect(
+      applicationContext.getUtilities().formattedTrialSessionDetails.mock.calls
+        .length,
+    ).toBe(1);
+    expect(
+      applicationContext.getUtilities().getFormattedCaseDetail.mock.calls
+        .length,
+    ).toBe(3);
+    expect(
+      applicationContext.getTemplateGenerators().generateTrialCalendarTemplate
+        .mock.calls.length,
+    ).toBe(1);
+    expect(
+      applicationContext.getUseCases().generatePdfFromHtmlInteractor.mock.calls
+        .length,
+    ).toBe(1);
   });
 });

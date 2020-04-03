@@ -1,12 +1,12 @@
-import { assignPetitionToAuthenticatedUserAction } from './assignPetitionToAuthenticatedUserAction';
-import { presenter } from '../../presenter';
-import { runAction } from 'cerebral/test';
-
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { assignPetitionToAuthenticatedUserAction } from './assignPetitionToAuthenticatedUserAction';
+import { presenter } from '../../presenter-mock';
+import { runAction } from 'cerebral/test';
 
 describe('assignPetitionToAuthenticatedUserAction', () => {
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   const { assignWorkItemsInteractor } = applicationContext.getUseCases();
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
@@ -15,6 +15,7 @@ describe('assignPetitionToAuthenticatedUserAction', () => {
       userId: 'abc',
     });
   });
+
   it('should not assign the workitem if the qc work item is not present', async () => {
     await runAction(assignPetitionToAuthenticatedUserAction, {
       modules: {

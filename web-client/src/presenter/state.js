@@ -21,8 +21,8 @@ import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentT
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactEditHelper } from './computeds/contactEditHelper';
 import { contactsHelper } from './computeds/contactsHelper';
-import { createAttorneyUserHelper } from './computeds/createAttorneyUserHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
+import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
@@ -97,8 +97,8 @@ const helpers = {
   confirmInitiateServiceModalHelper,
   contactEditHelper,
   contactsHelper,
-  createAttorneyUserHelper,
   createOrderHelper,
+  createPractitionerUserHelper,
   dashboardExternalHelper,
   docketRecordHelper,
   documentDetailHelper,
@@ -148,8 +148,7 @@ const helpers = {
   workQueueSectionHelper,
 };
 
-export const state = {
-  ...helpers,
+export const baseState = {
   advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
   archiveDraftDocument: {
     // used by the delete draft document modal
@@ -242,4 +241,9 @@ export const state = {
   workItemMetadata: {},
   workQueue: [],
   workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
+};
+
+export const state = {
+  ...helpers,
+  ...baseState,
 };

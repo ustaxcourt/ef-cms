@@ -1,29 +1,31 @@
 const {
   updateQcCompleteForTrialInteractor,
 } = require('./updateQcCompleteForTrialInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
 describe('updateQcCompleteForTrialInteractor', () => {
-  let applicationContext;
+  let user;
+
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockResolvedValue(MOCK_CASE);
+    applicationContext
+      .getPersistenceGateway()
+      .updateCase.mockImplementation(({ caseToUpdate }) =>
+        Promise.resolve(caseToUpdate),
+      );
+  });
 
   it('should throw an error if the user is unauthorized to update a trial session', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
-          updateCase: caseToUpdate => Promise.resolve(caseToUpdate),
-        };
-      },
-      getUniqueId: () => 'unique-id-1',
+    user = {
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
     };
+
     await expect(
       updateQcCompleteForTrialInteractor({
         applicationContext,
@@ -35,22 +37,11 @@ describe('updateQcCompleteForTrialInteractor', () => {
   });
 
   it('should call updateCase with the updated qcCompleteForTrial value and return the updated case', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsClerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
-          updateCase: ({ caseToUpdate }) => Promise.resolve(caseToUpdate),
-        };
-      },
-      getUniqueId: () => 'unique-id-1',
+    user = {
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsClerk',
     };
+
     const result = await updateQcCompleteForTrialInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,

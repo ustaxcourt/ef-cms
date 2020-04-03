@@ -1,11 +1,9 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseInventoryReportAction } from './getCaseInventoryReportAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getCaseInventoryReportAction', () => {
-  const applicationContext = applicationContextForClient;
-
   beforeAll(() => {
     applicationContext
       .getUseCases()

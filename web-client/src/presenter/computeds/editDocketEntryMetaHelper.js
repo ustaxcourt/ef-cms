@@ -29,6 +29,8 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
     'Application to Take Deposition',
   ];
 
+  const amendmentEventCodes = ['AMAT', 'ADMT'];
+
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
@@ -47,7 +49,10 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
   return {
     partyValidationError,
     primary: optionsForCategory,
-    showObjection: objectionDocumentTypes.includes(form.documentType),
+    showObjection:
+      objectionDocumentTypes.includes(form.documentType) ||
+      (amendmentEventCodes.includes(form.eventCode) &&
+        objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     showSecondaryParty,
   };
 };
