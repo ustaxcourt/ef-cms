@@ -9,9 +9,10 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setNoticesForCalendaredTrialSessionAction } from '../actions/TrialSession/setNoticesForCalendaredTrialSessionAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateAddToTrialSessionAction } from '../actions/CaseDetail/validateAddToTrialSessionAction';
 
 const showSuccessAlert = [
@@ -27,18 +28,21 @@ export const addCaseToTrialSessionSequence = [
   validateAddToTrialSessionAction,
   {
     error: [setValidationErrorsAction],
-    success: showProgressSequenceDecorator([
+    success: [
+      // this is intentionally NOT using showProgressSequenceDecorator
+      // because we want the spinner to show until the websocket response is received
+      setWaitingForResponseAction,
       clearModalAction,
       addCaseToTrialSessionAction,
       getTrialSessionDetailsAction,
       isTrialSessionCalendaredAction,
       {
-        no: showSuccessAlert,
+        no: [unsetWaitingForResponseAction, showSuccessAlert],
         yes: [
           startWebSocketConnectionAction,
           setNoticesForCalendaredTrialSessionAction,
         ],
       },
-    ]),
+    ],
   },
 ];

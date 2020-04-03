@@ -125,7 +125,6 @@
     "umzug": "^2.3.0",
     "uswds": "^2.6.0",
     "uuid": "^7.0.2",
-    "weak-napi": "^1.0.3",
     "webpack": "^4.42.1",
     "websocket": "^1.0.31",
     "wicg-inert": "^3.0.2"
@@ -142,6 +141,7 @@
     "build:api:documents": "npm run build:_api -- web-api/src/documentsHandlers.js",
     "build:api:migrate": "npm run build:_api -- web-api/src/migrateHandlers.js",
     "build:api:notifications": "npm run build:_api -- web-api/src/notificationHandlers.js",
+    "build:api:practitioners": "npm run build:_api -- web-api/src/practitionersHandlers.js",
     "build:api:public": "npm run build:_api -- web-api/src/publicApiHandlers.js",
     "build:api:reports": "npm run build:_api -- web-api/src/reportsHandlers.js",
     "build:api:sections": "npm run build:_api -- web-api/src/sectionsHandlers.js",

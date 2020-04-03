@@ -1,5 +1,8 @@
 const client = require('../../dynamodbClientService');
 const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+const {
   getCalendaredCasesForTrialSession,
 } = require('./getCalendaredCasesForTrialSession');
 
@@ -46,11 +49,6 @@ describe('getCalendaredCasesForTrialSession', () => {
   });
 
   it('should get the cases calendared for a trial session', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-    };
     const result = await getCalendaredCasesForTrialSession({
       applicationContext,
     });
