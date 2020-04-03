@@ -11,7 +11,7 @@ export const OrderSearch = connect({}, function OrderSearch(
       <div className="header-with-blue-background grid-row">
         <h3>Search Orders</h3>
       </div>
-      <div className="blue-container advanced-search__form-container grid-row">
+      <div className="blue-container order-search-container grid-row">
         <form
           onSubmit={e => {
             e.preventDefault();
@@ -20,12 +20,9 @@ export const OrderSearch = connect({}, function OrderSearch(
         >
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-12">
-              <FormGroup>
-                <h4 className="margin-top-105">Enter Keyword or Phrase</h4>
-                <label
-                  className="usa-label margin-bottom-05"
-                  htmlFor="order-search"
-                >
+              <h4>Enter Keyword or Phrase</h4>
+              <FormGroup errorText="something bad happened ;(">
+                <label className="usa-label" htmlFor="order-search">
                   Search for...
                 </label>
                 <input
@@ -48,7 +45,7 @@ export const OrderSearch = connect({}, function OrderSearch(
           <div className="grid-row">
             <div className="tablet:grid-col-12">
               <Button
-                className="advanced-search__button"
+                className="margin-bottom-0"
                 id="advanced-search-button"
                 type="submit"
               >
@@ -56,7 +53,7 @@ export const OrderSearch = connect({}, function OrderSearch(
               </Button>
               <Button
                 link
-                className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                className="padding-0 ustc-button--mobile-inline"
                 // onClick={() => {
                 //   clearCaseSearchByNameFormSequence();
                 // }}
