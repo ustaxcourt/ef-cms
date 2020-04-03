@@ -4,9 +4,9 @@ import React from 'react';
 
 export const PractitionerDetail = connect(
   {
-    practitionerDetail: state.practitionerDetailHelper,
+    practitionerDetailHelper: state.practitionerDetailHelper,
   },
-  function PractitionerDetail({ practitionerDetail }) {
+  function PractitionerDetail({ practitionerDetailHelper }) {
     return (
       <React.Fragment>
         <div className="big-blue-header">
@@ -14,14 +14,14 @@ export const PractitionerDetail = connect(
             <div className="grid-row">
               <div className="tablet:grid-col-12">
                 <h1 className="captioned" tabIndex="-1">
-                  {practitionerDetail.name}
+                  {practitionerDetailHelper.name}
                 </h1>
                 <span className="usa-tag">Active</span>
               </div>
             </div>
             <div className="grid-row">
               <div className="tablet:grid-col-12">
-                {practitionerDetail.barNumber}
+                {practitionerDetailHelper.barNumber}
               </div>
             </div>
           </div>
@@ -43,7 +43,7 @@ export const PractitionerDetail = connect(
                           Practitioner name
                         </label>
                         <div className="margin-bottom-4">
-                          {practitionerDetail.name}
+                          {practitionerDetailHelper.name}
                         </div>
                         <label
                           className="usa-label usa-label-display"
@@ -51,7 +51,7 @@ export const PractitionerDetail = connect(
                         >
                           Practitioner type
                         </label>
-                        {practitionerDetail.practitionerType}
+                        {practitionerDetailHelper.practitionerType}
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
@@ -63,7 +63,7 @@ export const PractitionerDetail = connect(
                           Birth year
                         </label>
                         <div className="margin-bottom-4">
-                          {practitionerDetail.birthYear}
+                          {practitionerDetailHelper.birthYear}
                         </div>
                         <label
                           className="usa-label usa-label-display"
@@ -71,7 +71,7 @@ export const PractitionerDetail = connect(
                         >
                           Employer
                         </label>
-                        {practitionerDetail.employer}
+                        {practitionerDetailHelper.employer}
                       </div>
                     </div>
                   </div>
@@ -93,7 +93,7 @@ export const PractitionerDetail = connect(
                           Firm name
                         </label>
                         <div className="margin-bottom-4">
-                          {practitionerDetail.employer}
+                          {practitionerDetailHelper.employer}
                         </div>
                         <label
                           className="usa-label usa-label-display"
@@ -102,7 +102,7 @@ export const PractitionerDetail = connect(
                           Phone number
                         </label>
                         <div className="margin-bottom-4">
-                          {practitionerDetail.contact.phone}
+                          {practitionerDetailHelper.contact.phone}
                         </div>
                         <label
                           className="usa-label usa-label-display"
@@ -110,7 +110,7 @@ export const PractitionerDetail = connect(
                         >
                           Email address
                         </label>
-                        {practitionerDetail.email}
+                        {practitionerDetailHelper.email}
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
@@ -123,25 +123,25 @@ export const PractitionerDetail = connect(
                         </label>
                         <div className="margin-bottom-4">
                           {/* TODO: use helper (international) */}
-                          {practitionerDetail.contact.address1}
-                          {practitionerDetail.contact.address2 && (
+                          {practitionerDetailHelper.contact.address1}
+                          {practitionerDetailHelper.contact.address2 && (
                             <>
                               <div className="margin-top-1">
-                                {practitionerDetail.contact.address2}
+                                {practitionerDetailHelper.contact.address2}
                               </div>
                             </>
                           )}
-                          {practitionerDetail.contact.address3 && (
+                          {practitionerDetailHelper.contact.address3 && (
                             <>
                               <div className="margin-top-1">
-                                {practitionerDetail.contact.address3}
+                                {practitionerDetailHelper.contact.address3}
                               </div>
                             </>
                           )}
                           <div className="margin-top-1">
-                            {practitionerDetail.contact.city},{' '}
-                            {practitionerDetail.contact.state}{' '}
-                            {practitionerDetail.contact.postalCode}
+                            {practitionerDetailHelper.contact.city},{' '}
+                            {practitionerDetailHelper.contact.state}{' '}
+                            {practitionerDetailHelper.contact.postalCode}
                           </div>
                         </div>
                         <label
@@ -151,7 +151,7 @@ export const PractitionerDetail = connect(
                           Additional phone number
                         </label>
                         <div className="margin-bottom-4">
-                          {practitionerDetail.additionalPhone}
+                          {practitionerDetailHelper.additionalPhone}
                         </div>
                         <label
                           className="usa-label usa-label-display"
@@ -159,7 +159,7 @@ export const PractitionerDetail = connect(
                         >
                           Alternate email address
                         </label>
-                        {practitionerDetail.alternateEmail}
+                        {practitionerDetailHelper.alternateEmail}
                       </div>
                     </div>
                   </div>
@@ -182,7 +182,7 @@ export const PractitionerDetail = connect(
                           >
                             Bar number
                           </label>
-                          {practitionerDetail.barNumber}
+                          {practitionerDetailHelper.barNumber}
                         </div>
                         <div className="tablet:grid-col-6 margin-bottom-1">
                           <label
@@ -191,7 +191,7 @@ export const PractitionerDetail = connect(
                           >
                             Admission status
                           </label>
-                          {practitionerDetail.admissionsStatus}
+                          {practitionerDetailHelper.admissionsStatus}
                         </div>
                       </div>
                     </div>
@@ -204,7 +204,7 @@ export const PractitionerDetail = connect(
                           >
                             Original bar state
                           </label>
-                          {practitionerDetail.originalBarState}
+                          {practitionerDetailHelper.originalBarState}
                         </div>
                         <div className="tablet:grid-col-6 margin-bottom-1">
                           <label
@@ -213,7 +213,7 @@ export const PractitionerDetail = connect(
                           >
                             Admission date
                           </label>
-                          {practitionerDetail.admissionsDateFormatted}
+                          {practitionerDetailHelper.admissionsDateFormatted}
                         </div>
                       </div>
                     </div>
