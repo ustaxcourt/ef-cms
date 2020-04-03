@@ -183,49 +183,6 @@
     "pk": "case|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "role": "irsPractitioner",
-    "serviceIndicator": "Electronic",
-    "barNumber": "RT6789",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test IRS Practitioner",
-    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "section": "irsPractitioner",
-    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irsPractitioner"
-  },
-  {
-    "role": "privatePractitioner",
-    "serviceIndicator": "Electronic",
-    "barNumber": "PT5432",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test Private Practitioner",
-    "sk": "privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "section": "privatePractitioner",
-    "representingPrimary": true,
-    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "email": "privatePractitioner1"
-  },
-  {
     "documentType": "Statement of Taxpayer Identification",
     "filingDate": "2020-01-21T16:41:39.483Z",
     "practitioner": [],
