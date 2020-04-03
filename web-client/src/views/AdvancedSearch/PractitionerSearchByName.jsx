@@ -7,8 +7,7 @@ import React from 'react';
 export const PractitionerSearchByName = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
-    clearCaseSearchByNameFormSequence:
-      sequences.clearCaseSearchByNameFormSequence,
+    clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     submitPractitionerNameSearchSequence:
       sequences.submitPractitionerNameSearchSequence,
     updateAdvancedSearchFormValueSequence:
@@ -17,7 +16,7 @@ export const PractitionerSearchByName = connect(
   },
   function PractitionerSearchByName({
     advancedSearchForm,
-    clearCaseSearchByNameFormSequence,
+    clearAdvancedSearchFormSequence,
     submitPractitionerNameSearchSequence,
     updateAdvancedSearchFormValueSequence,
     validationErrors,
@@ -28,12 +27,7 @@ export const PractitionerSearchByName = connect(
           <h3>Search by Name</h3>
         </div>
         <div className="blue-container">
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              submitPractitionerNameSearchSequence();
-            }}
-          >
+          <form>
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-6">
                 <FormGroup errorText={validationErrors.practitionerName}>
@@ -66,15 +60,21 @@ export const PractitionerSearchByName = connect(
               <div className="tablet:grid-col-6">
                 <Button
                   className="advanced-search__button margin-top-2"
-                  type="submit"
+                  onClick={e => {
+                    e.preventDefault();
+                    submitPractitionerNameSearchSequence();
+                  }}
                 >
                   Search
                 </Button>
                 <Button
                   link
                   className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-                  onClick={() => {
-                    clearCaseSearchByNameFormSequence();
+                  onClick={e => {
+                    e.preventDefault();
+                    clearAdvancedSearchFormSequence({
+                      formType: 'practitionerSearchByName',
+                    });
                   }}
                 >
                   Clear Search
