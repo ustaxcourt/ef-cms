@@ -6,6 +6,14 @@ const { userDecorator, userValidation } = require('./User');
 
 const EMPLOYER_OPTIONS = ['IRS', 'DOJ', 'Private'];
 const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
+const ADMISSIONS_STATUS_OPTIONS = [
+  'Active',
+  'Suspended',
+  'Disbarred',
+  'Resigned',
+  'Deceased',
+  'Inactive',
+];
 
 /**
  * constructor
@@ -13,10 +21,11 @@ const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
  * @param {object} rawUser the raw user data
  * @constructor
  */
-function Attorney(rawUser) {
+function Practitioner(rawUser) {
   userDecorator(this, rawUser);
   this.additionalPhone = rawUser.additionalPhone;
   this.admissionsDate = rawUser.admissionsDate;
+  this.admissionsStatus = rawUser.admissionsStatus;
   this.alternateEmail = rawUser.alternateEmail;
   this.birthYear = rawUser.birthYear;
   this.employer = rawUser.employer;
@@ -27,11 +36,15 @@ function Attorney(rawUser) {
 }
 
 joiValidationDecorator(
-  Attorney,
+  Practitioner,
   joi.object().keys({
     ...userValidation,
     additionalPhone: joi.string().optional().allow(null),
     admissionsDate: joi.date().iso().max('now').required(),
+    admissionsStatus: joi
+      .string()
+      .valid(...ADMISSIONS_STATUS_OPTIONS)
+      .required(),
     alternateEmail: joi.string().optional().allow(null),
     birthYear: joi.number().required(),
     employer: joi
@@ -50,6 +63,6 @@ joiValidationDecorator(
   {},
 );
 
-Attorney.validationName = 'Attorney';
+Practitioner.validationName = 'Practitioner';
 
-module.exports = { Attorney };
+module.exports = { Practitioner };
