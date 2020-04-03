@@ -4,6 +4,7 @@ exports.getPractitionerByBarNumber = async ({
   applicationContext,
   barNumber,
 }) => {
+  // TODO: Ask Cody about doing this better
   const users = [
     ...(await getRecordsViaMapping({
       applicationContext,
