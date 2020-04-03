@@ -2,8 +2,8 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { Practitioner } = require('../../entities/Practitioner');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * getPractitionerByBarNumberInteractor
@@ -21,15 +21,15 @@ exports.getPractitionerByBarNumberInteractor = async ({
     throw new UnauthorizedError('Unauthorized for getting attorney user');
   }
 
-  const practitioner = await applicationContext
+  const foundPractitioner = await applicationContext
     .getPersistenceGateway()
     .getPractitionerByBarNumber({ applicationContext, barNumber });
 
-  if (!practitioner) {
-    throw new NotFoundError(
-      'No practitioner with the given bar number was found',
-    );
+  let practitioner;
+
+  if (foundPractitioner) {
+    practitioner = new Practitioner(foundPractitioner).validate().toRawObject();
   }
 
-  return new Practitioner(practitioner).validate().toRawObject();
+  return practitioner;
 };
