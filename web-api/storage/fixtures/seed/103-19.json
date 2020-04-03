@@ -461,6 +461,27 @@
     "pk": "catalog"
   },
   {
+    "role": "irsPractitioner",
+    "serviceIndicator": "Electronic",
+    "barNumber": "RT6789",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test IRS Practitioner",
+    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "irsPractitioner",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InJlc3BvbmRlbnQiLCJlbWFpbCI6InJlc3BvbmRlbnQiLCJuYW1lIjoiVGVzdCBSZXNwb25kZW50Iiwicm9sZSI6InJlc3BvbmRlbnQiLCJzZWN0aW9uIjoicGV0aXRpb25zIiwidXNlcklkIjoicmVzcG9uZGVudCIsImlhdCI6MTU1MTQ4MDgzOH0.U72pP7ZEwQkQIzlhpKvaEdMbcQhCjSLQbp0FP06LKao"
+  },
+  {
     "documentType": "Statement of Taxpayer Identification",
     "filingDate": "2019-08-14T20:35:52.915Z",
     "workItems": [],
