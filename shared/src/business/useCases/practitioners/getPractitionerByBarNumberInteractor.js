@@ -17,7 +17,7 @@ exports.getPractitionerByBarNumberInteractor = async ({
 }) => {
   const requestUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_ATTORNEY_USERS)) {
+  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)) {
     throw new UnauthorizedError('Unauthorized for getting attorney user');
   }
 

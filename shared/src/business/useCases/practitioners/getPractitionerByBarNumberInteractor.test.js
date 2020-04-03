@@ -7,7 +7,7 @@ const {
 const { User } = require('../../entities/User');
 
 describe('getPractitionerByBarNumberInteractor', () => {
-  it('throws an unauthrized error if the request user does not have the MANAGE_ATTORNEY_USERS permissions', async () => {
+  it('throws an unauthrized error if the request user does not have the MANAGE_PRACTITIONER_USERS permissions', async () => {
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'Test Petitioner',
