@@ -7,7 +7,7 @@ const {
 const { User } = require('../../entities/User');
 
 describe('getPractitionerByBarNumberInteractor', () => {
-  it('throws an unauthrized error if the request user does not have the MANAGE_PRACTITIONER_USERS permissions', async () => {
+  it('throws an unauthorized error if the request user does not have the MANAGE_PRACTITIONER_USERS permissions', async () => {
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'Test Petitioner',
@@ -48,19 +48,11 @@ describe('getPractitionerByBarNumberInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
 
-    let error;
-    let practitioner;
+    const practitioner = await getPractitionerByBarNumberInteractor({
+      applicationContext,
+      barNumber: 'PP1234',
+    });
 
-    try {
-      practitioner = await getPractitionerByBarNumberInteractor({
-        applicationContext,
-        barNumber: 'PP1234',
-      });
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeUndefined();
     expect(practitioner).toEqual({
       admissionsDate: '2019-03-01T21:42:29.073Z',
       admissionsStatus: 'Active',
@@ -76,7 +68,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
   });
 
-  it('calls the persistence method to get a private practitioner with the given bar number', async () => {
+  it('calls the persistence method to get an IRS practitioner with the given bar number', async () => {
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'Test Petitionsclerk',
@@ -100,19 +92,11 @@ describe('getPractitionerByBarNumberInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
 
-    let error;
-    let practitioner;
+    const practitioner = await getPractitionerByBarNumberInteractor({
+      applicationContext,
+      barNumber: 'PI5678',
+    });
 
-    try {
-      practitioner = await getPractitionerByBarNumberInteractor({
-        applicationContext,
-        barNumber: 'PI5678',
-      });
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeUndefined();
     expect(practitioner).toEqual({
       admissionsDate: '2019-03-01T21:42:29.073Z',
       admissionsStatus: 'Active',
@@ -128,7 +112,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
   });
 
-  it('throws a not found error if no pracititoner is found with the given bar number', async () => {
+  it('throws a not found error if no practitioner is found with the given bar number', async () => {
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'Test Petitionsclerk',
