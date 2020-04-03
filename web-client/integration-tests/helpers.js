@@ -360,6 +360,8 @@ export const uploadPetition = async (
     },
   );
 
+  test.setState('caseDetail', response.data);
+
   return response.data;
 };
 
