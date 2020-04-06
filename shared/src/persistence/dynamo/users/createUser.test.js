@@ -13,7 +13,7 @@ const petitionsClerkUser = {
 };
 
 const privatePractitionerUser = {
-  barNumber: 'PT1234',
+  barNumber: 'pt1234', //intentionally lower case - should be converted to upper case when persisted
   name: 'Test Private Practitioner',
   role: User.ROLES.privatePractitioner,
   section: 'privatePractitioner',

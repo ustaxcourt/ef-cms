@@ -8,10 +8,10 @@ import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkVerifiesDocketEntryMetaUpdates } from './journey/docketClerkVerifiesDocketEntryMetaUpdates';
 
 // petitioner
-import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
-import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
-import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerFilesADocumentForCase from './journey/petitionerFilesADocumentForCase';
+import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
+import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
+import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
+import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
 
 const test = setupTest();
 test.draftOrders = [];

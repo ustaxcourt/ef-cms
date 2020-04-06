@@ -1,15 +1,15 @@
 import { docketClerkCreatesMessageToJudge } from './journey/docketClerkCreatesMessageToJudge';
 import { fakeFile, loginAs, setupTest } from './helpers';
-import judgeViewsCaseDetail from './journey/judgeViewsCaseDetail';
-import judgeViewsDashboardMessages from './journey/judgeViewsDashboardMessages';
-import petitionerAddNewCaseToTestObj from './journey/petitionerAddNewCaseToTestObj';
-import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
-import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
-import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerFilesDocumentForCase from './journey/petitionerFilesDocumentForCase';
-import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
-import petitionerViewsCaseDetailAfterFilingDocument from './journey/petitionerViewsCaseDetailAfterFilingDocument';
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
+import { judgeViewsCaseDetail } from './journey/judgeViewsCaseDetail';
+import { judgeViewsDashboardMessages } from './journey/judgeViewsDashboardMessages';
+import { petitionerAddNewCaseToTestObj } from './journey/petitionerAddNewCaseToTestObj';
+import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
+import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
+import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
+import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumentForCase';
+import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
+import { petitionerViewsCaseDetailAfterFilingDocument } from './journey/petitionerViewsCaseDetailAfterFilingDocument';
+import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import petitionsClerkCreatesMessageToJudge from './journey/petitionsClerkCreatesMessageToJudge';
 
 const test = setupTest();

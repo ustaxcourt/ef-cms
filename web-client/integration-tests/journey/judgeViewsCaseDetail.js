@@ -1,4 +1,4 @@
-export default test => {
+export const judgeViewsCaseDetail = test => {
   return it('Judge views case detail', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
