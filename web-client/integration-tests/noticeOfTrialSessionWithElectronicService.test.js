@@ -1,6 +1,6 @@
 import { loginAs, setupTest } from './helpers';
+import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { uploadPetition } from './helpers';
-import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 
 import { docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring } from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';

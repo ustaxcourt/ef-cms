@@ -4,7 +4,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
 
-export default (test, overrides = {}) => {
+export const petitionerChoosesProcedureType = (test, overrides = {}) => {
   it('petitioner chooses the procedure types to get the trial cities', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
     let helper = runCompute(startCaseHelper, {

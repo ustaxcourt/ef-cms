@@ -8,7 +8,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import petitionerFilesDocumentForCase from './journey/petitionerFilesDocumentForCase';
+import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumentForCase';
 import petitionsClerkManuallyAddsCaseToCalendaredTrialSession from './journey/petitionsClerkManuallyAddsCaseToCalendaredTrialSession';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 

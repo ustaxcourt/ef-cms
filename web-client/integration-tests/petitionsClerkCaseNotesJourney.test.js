@@ -1,5 +1,5 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
+import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import petitionsClerkAddsCaseNote from './journey/petitionsClerkAddsCaseNote';
 import petitionsClerkDeletesCaseNote from './journey/petitionsClerkDeletesCaseNote';
 

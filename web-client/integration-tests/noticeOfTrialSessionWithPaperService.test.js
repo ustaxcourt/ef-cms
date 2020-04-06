@@ -1,7 +1,7 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
+import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 
 import { docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring } from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';

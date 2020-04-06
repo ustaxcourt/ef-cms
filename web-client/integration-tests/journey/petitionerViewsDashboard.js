@@ -1,4 +1,4 @@
-export default test => {
+export const petitionerViewsDashboard = test => {
   return it('petitioner views dashboard', async () => {
     await test.runSequence('gotoDashboardSequence');
     expect(test.getState('currentPage')).toEqual('DashboardPetitioner');

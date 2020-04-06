@@ -349,4 +349,5 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=practitioner-search-results',
   },
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/practitioner-detail/PT1234',
 ];

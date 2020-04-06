@@ -3,7 +3,7 @@ import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseR
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
+import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 
