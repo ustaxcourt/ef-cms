@@ -8,7 +8,7 @@
 exports.createBarNumber = async ({ applicationContext, initials }) => {
   const id = await applicationContext.getPersistenceGateway().incrementCounter({
     applicationContext,
-    key: 'barnNumberCounter',
+    key: 'barNumberCounter',
   });
   const padded = id.toString(10).padStart(3, '0');
   const lastTwo = applicationContext.getUtilities().formatNow('YY');
