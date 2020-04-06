@@ -18,6 +18,8 @@ export const AdvancedSearch = connect(
       sequences.submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence:
       sequences.submitCaseDocketNumberSearchSequence,
+    submitOrderAdvancedSearchSequence:
+      sequences.submitOrderAdvancedSearchSequence,
     submitPractitionerBarNumberSearchSequence:
       sequences.submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence:
@@ -28,6 +30,7 @@ export const AdvancedSearch = connect(
     advancedSearchTabChangeSequence,
     submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence,
+    submitOrderAdvancedSearchSequence,
     submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence,
   }) {
@@ -61,7 +64,9 @@ export const AdvancedSearch = connect(
               <SearchResults />
             </Tab>
             <Tab id="tab-order" tabName="order" title="Order">
-              <OrderSearchForm />
+              <OrderSearchForm
+                submitAdvancedSearchSequence={submitOrderAdvancedSearchSequence}
+              />
             </Tab>
             {advancedSearchHelper.showPractitionerSearch && (
               <Tab
