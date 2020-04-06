@@ -1,4 +1,5 @@
 import { fakeFile, loginAs, setupTest } from './helpers';
+import { petitionsClerkSearchesForPractitionerByBarNumber } from './journey/petitionsClerkSearchesForPractitionerByBarNumber';
 import { petitionsClerkSearchesForPractitionersByName } from './journey/petitionsClerkSearchesForPractitionersByName';
 import petitionsClerkAdvancedSearchForCase from './journey/petitionsClerkAdvancedSearchForCase';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
@@ -17,4 +18,5 @@ describe('petitions clerk advanced search', () => {
 
   // practitioner advanced search
   petitionsClerkSearchesForPractitionersByName(test);
+  petitionsClerkSearchesForPractitionerByBarNumber(test);
 });
