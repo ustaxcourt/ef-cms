@@ -573,6 +573,7 @@ workflows:
               only:
                 - staging
                 - test
+                - migration
                 - master
                 - experimental
       - deploy-api-east:
@@ -583,6 +584,7 @@ workflows:
               only:
                 - staging
                 - test
+                - migration
                 - master
                 - experimental
       - deploy-api-west:
@@ -593,6 +595,7 @@ workflows:
               only:
                 - staging
                 - test
+                - migration
                 - master
                 - experimental
       - switch-and-deploy-ui:
@@ -604,6 +607,7 @@ workflows:
               only:
                 - staging
                 - test
+                - migration
                 - master
                 - experimental
       - post-deploy:
@@ -614,5 +618,6 @@ workflows:
               only:
                 - staging
                 - test
+                - migration
                 - master
                 - experimental
