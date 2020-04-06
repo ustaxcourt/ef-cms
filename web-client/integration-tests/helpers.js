@@ -1,11 +1,5 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
-import { Document } from '../../shared/src/business/entities/Document';
 import { JSDOM } from 'jsdom';
-import { Order } from '../../shared/src/business/entities/orders/Order';
-import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
-import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
-import { User } from '../../shared/src/business/entities/User';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -13,7 +7,6 @@ import {
   externalRoute,
   openInNewTab,
   revokeObjectURL,
-  route,
   router,
 } from '../src/router';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
@@ -433,6 +426,17 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return {
       ...originalUseCases,
       ...useCases,
+    };
+  };
+
+  const constantsOverrides = {
+    CASE_SEARCH_PAGE_SIZE: 1,
+  };
+  const originalConstants = applicationContext.getConstants();
+  presenter.providers.applicationContext.getConstants = () => {
+    return {
+      ...originalConstants,
+      ...constantsOverrides,
     };
   };
 
