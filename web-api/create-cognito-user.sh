@@ -1,4 +1,10 @@
 #!/bin/bash -e
+
+# usage:
+#   ./create-cognito-user.sh $ENV $email $password $role $section "$name"
+#   where $ENV is dev|stg|prod|test|...
+#   see shared/src/business/entities/User.js for valid roles and sections 
+
 ENV=$1
 REGION="us-east-1"
 
@@ -16,13 +22,14 @@ CLIENT_ID="${CLIENT_ID#\"}"
 
 generate_post_data() {
   email=$1
-  role=$2
-  section=$3
-  name=$3
+  password=$2
+  role=$3
+  section=$4
+  name=$5
   cat <<EOF
 {
   "email": "$email",
-  "password": "Testing1234$",
+  "password": "$password",
   "role": "$role",
   "section": "$section",
   "name": "$name",
@@ -43,9 +50,10 @@ EOF
 
 createAccount() {
   email=$1
-  role=$2
-  section=$3
-  name=$4
+  password=$2
+  role=$3
+  section=$4
+  name=$5
 
   response=$(aws cognito-idp admin-initiate-auth \
     --user-pool-id "${USER_POOL_ID}" \
@@ -58,7 +66,7 @@ createAccount() {
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${adminToken}" \
     --request POST \
-    --data "$(generate_post_data "${email}" "${role}" "${section}" "${name}")" \
+    --data "$(generate_post_data "${email}" "${password}" "${role}" "${section}" "${name}")" \
       "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"
 
   response=$(aws cognito-idp admin-initiate-auth \
@@ -66,7 +74,7 @@ createAccount() {
     --client-id "${CLIENT_ID}" \
     --region "${REGION}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
-    --auth-parameters USERNAME="${email}"',PASSWORD="Testing1234$"')
+    --auth-parameters USERNAME="${email}",PASSWORD="${password}")
   
   session=$(echo "${response}" | jq -r ".Session")
   
@@ -76,13 +84,14 @@ createAccount() {
       --client-id "${CLIENT_ID}" \
       --region "${REGION}" \
       --challenge-name NEW_PASSWORD_REQUIRED \
-      --challenge-responses 'NEW_PASSWORD="Testing1234$",'USERNAME="${email}" \
+      --challenge-responses NEW_PASSWORD="${password}",USERNAME="${email}" \
       --session "${session}"
   fi
 }
 
 email=$2
-role=$3
-section=$4
-name=$4
-createAccount "${email}" "${role}" "${section}" "${name}"
+password=$3
+role=$4
+section=$5
+name=$6
+createAccount "${email}" "${password}" "${role}" "${section}" "${name}"
