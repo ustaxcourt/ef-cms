@@ -2,12 +2,12 @@ import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * validate case advanced search form
+ * validate practitioner search by name form
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
- * @returns {Promise} async action
+ * @param {object} providers.path the next object in the path
+ * @returns {Promise<*>} the success or error path
  */
 export const validatePractitionerSearchByNameAction = async ({ get, path }) => {
   const { practitionerName } = get(
