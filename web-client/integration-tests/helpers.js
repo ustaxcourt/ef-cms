@@ -436,6 +436,17 @@ export const setupTest = ({ useCases = {} } = {}) => {
     };
   };
 
+  const constantsOverrides = {
+    CASE_SEARCH_PAGE_SIZE: 1,
+  };
+  const originalConstants = applicationContext.getConstants();
+  presenter.providers.applicationContext.getConstants = () => {
+    return {
+      ...originalConstants,
+      ...constantsOverrides,
+    };
+  };
+
   presenter.state = mapValues(presenter.state, value => {
     if (isFunction(value)) {
       return withAppContextDecorator(value, applicationContext);
