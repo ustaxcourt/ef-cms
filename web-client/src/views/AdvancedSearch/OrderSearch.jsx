@@ -4,35 +4,57 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const OrderSearch = connect({}, function OrderSearch(
-  submitAdvancedSearchSequence,
-) {
-  return (
-    <>
-      <div className="header-with-blue-background grid-row">
-        <h3>Search Orders</h3>
-      </div>
-      <div className="blue-container order-search-container grid-row">
-        <form
-          onSubmit={e => {
-            e.preventDefault();
-            submitAdvancedSearchSequence();
-          }}
-        >
-          <div className="grid-row grid-gap">
-            <div className="tablet:grid-col-12">
-              <h4>Enter Keyword or Phrase</h4>
-              <FormGroup>
-                <label className="usa-label" htmlFor="order-search">
-                  Search for...
-                </label>
-                <input
-                  className="usa-input"
-                  id="order-search"
-                  name="petitionerName"
-                  type="text"
-                />
-              </FormGroup>
+export const OrderSearch = connect(
+  {
+    advancedSearchForm: state.advancedSearchForm,
+    updateAdvancedSearchFormValueSequence:
+      sequences.updateAdvancedSearchFormValueSequence,
+    validateOrderSearchSequence: sequences.validateOrderSearchSequence,
+    validationErrors: state.validationErrors,
+  },
+  function OrderSearch({
+    advancedSearchForm,
+    submitAdvancedSearchSequence,
+    updateAdvancedSearchFormValueSequence,
+    validateOrderSearchSequence,
+    validationErrors,
+  }) {
+    return (
+      <>
+        <div className="header-with-blue-background grid-row">
+          <h3>Search Orders</h3>
+        </div>
+        <div className="blue-container order-search-container grid-row">
+          <form
+            onSubmit={e => {
+              e.preventDefault();
+              submitAdvancedSearchSequence();
+            }}
+          >
+            <div className="grid-row grid-gap">
+              <div className="tablet:grid-col-12">
+                <h4>Enter Keyword or Phrase</h4>
+                <FormGroup errorText={validationErrors.orderKeyword}>
+                  <label className="usa-label" htmlFor="order-search">
+                    Search for...
+                  </label>
+                  <input
+                    className="usa-input"
+                    id="order-search"
+                    name="orderKeyword"
+                    type="text"
+                    value={advancedSearchForm.orderSearch.orderKeyword || ''}
+                    onChange={e => {
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'orderSearch',
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                      validateOrderSearchSequence();
+                    }}
+                  />
+                </FormGroup>
+              </div>
             </div>
 
             <div className="grid-row">
@@ -49,9 +71,9 @@ export const OrderSearch = connect({}, function OrderSearch(
                 </Button>
               </div>
             </div>
-          </div>
-        </form>
-      </div>
-    </>
-  );
-});
+          </form>
+        </div>
+      </>
+    );
+  },
+);
