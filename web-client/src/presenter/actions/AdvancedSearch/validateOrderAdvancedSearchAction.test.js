@@ -19,7 +19,7 @@ describe('validateOrderAdvancedSearchAction', () => {
     };
   });
 
-  it('validates advanced case search successfully', async () => {
+  it('validates advanced order search successfully', async () => {
     applicationContext
       .getUseCases()
       .validateOrderAdvancedSearchInteractor.mockReturnValue({});
@@ -38,7 +38,7 @@ describe('validateOrderAdvancedSearchAction', () => {
     expect(successStub.mock.calls.length).toEqual(1);
   });
 
-  it('fails validation for advanced case search', async () => {
+  it('fails validation for advanced order search', async () => {
     applicationContext
       .getUseCases()
       .validateOrderAdvancedSearchInteractor.mockReturnValue({ foo: 'bar' });

@@ -2,11 +2,12 @@ import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * validate case advanced search form
+ * validate order advanced search form
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
+ * @param {Function} providers.path the cerebral path options
  * @returns {Promise} async action
  */
 export const validateOrderAdvancedSearchAction = async ({
@@ -19,7 +20,7 @@ export const validateOrderAdvancedSearchAction = async ({
     .getUseCases()
     .validateOrderAdvancedSearchInteractor({
       applicationContext,
-      orderSearch: orderSearch,
+      orderSearch,
     });
 
   const isValid = isEmpty(errors);

@@ -7,7 +7,6 @@ import React from 'react';
 export const OrderSearch = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
-    orderKeyword: state.advancedSearchForm.orderKeyword,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     validationErrors: state.validationErrors,
@@ -42,7 +41,7 @@ export const OrderSearch = connect(
                     id="order-search"
                     name="orderKeyword"
                     type="text"
-                    value={advancedSearchForm.orderSearch.orderKeyword || ''}
+                    value={advancedSearchForm.orderSearch.orderKeyword}
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
                         formType: 'orderSearch',
