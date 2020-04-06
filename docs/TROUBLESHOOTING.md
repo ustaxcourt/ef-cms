@@ -95,7 +95,13 @@ If this happens, we can utilize our `serverless-prune-plugin` library by navigat
 'after:deploy:deploy': this.postDeploy.bind(this)
 ```
 
-What you can do here is change `after` to `before`. Next, we'll need to build the ClamAV layer by executing the following command:
+What you can do here is change `after` to `before`:
+
+```javascript
+'before:deploy:deploy': this.postDeploy.bind(this)
+```
+
+Next, we'll need to build the ClamAV layer by executing the following command:
 
 - `cd web-api/runtimes/clamav && ./build.sh`
 
