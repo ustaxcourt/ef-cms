@@ -1,12 +1,11 @@
 import { caseExistsAction } from '../actions/caseExistsAction';
+import { clearSearchResultsAction } from '../actions/AdvancedSearch/clearSearchResultsAction';
 import { clearSearchTermAction } from '../actions/clearSearchTermAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-import { set, unset } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setDocketNumberFromAdvancedSearchAction } from '../actions/AdvancedSearch/setDocketNumberFromAdvancedSearchAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
-import { state } from 'cerebral';
 import { validateCaseDocketNumberSearchAction } from '../actions/AdvancedSearch/validateCaseDocketNumberSearchAction';
 
 export const submitCaseDocketNumberSearchSequence = [
@@ -16,13 +15,13 @@ export const submitCaseDocketNumberSearchSequence = [
     error: [
       setAlertErrorAction,
       setValidationErrorsAction,
-      unset(state.searchResults),
+      clearSearchResultsAction,
     ],
     success: showProgressSequenceDecorator([
       setDocketNumberFromAdvancedSearchAction,
       caseExistsAction,
       {
-        error: [set(state.searchResults, [])],
+        error: [clearSearchResultsAction],
         success: [navigateToCaseDetailAction],
       },
     ]),
