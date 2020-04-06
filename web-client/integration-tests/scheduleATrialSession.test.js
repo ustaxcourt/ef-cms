@@ -4,8 +4,8 @@ import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseR
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
+import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
+import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import petitionsClerkManuallyAddsCaseToTrial from './journey/petitionsClerkManuallyAddsCaseToTrial';
 import petitionsClerkManuallyRemovesCaseFromTrial from './journey/petitionsClerkManuallyRemovesCaseFromTrial';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
