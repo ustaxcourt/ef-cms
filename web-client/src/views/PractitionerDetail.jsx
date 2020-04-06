@@ -36,41 +36,41 @@ export const PractitionerDetail = connect(
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-6 margin-bottom-1">
                       <div className="tablet:margin-bottom-0 margin-bottom-205">
-                        <label
+                        <span
                           className="usa-label usa-label-display"
                           htmlFor="practitioner-name"
                         >
                           Practitioner name
-                        </label>
+                        </span>
                         <div className="margin-bottom-4">
                           {practitionerDetailHelper.name}
                         </div>
-                        <label
+                        <span
                           className="usa-label usa-label-display"
                           htmlFor="practitioner-practitioner-type"
                         >
                           Practitioner type
-                        </label>
+                        </span>
                         {practitionerDetailHelper.practitionerType}
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
                       <div className="tablet:margin-bottom-0 margin-bottom-205">
-                        <label
+                        <span
                           className="usa-label usa-label-display"
                           htmlFor="practitioner-birth-year"
                         >
                           Birth year
-                        </label>
+                        </span>
                         <div className="margin-bottom-4">
                           {practitionerDetailHelper.birthYear}
                         </div>
-                        <label
+                        <span
                           className="usa-label usa-label-display"
                           htmlFor="practitioner-employer"
                         >
                           Employer
-                        </label>
+                        </span>
                         {practitionerDetailHelper.employer}
                       </div>
                     </div>
@@ -86,41 +86,41 @@ export const PractitionerDetail = connect(
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-6 margin-bottom-1">
                       <div className="tablet:margin-bottom-0 margin-bottom-205">
-                        <label
+                        <span
                           className="usa-label usa-label-display"
                           htmlFor="practitioner-name"
                         >
                           Firm name
-                        </label>
+                        </span>
                         <div className="margin-bottom-4">
                           {practitionerDetailHelper.employer}
                         </div>
-                        <label
+                        <span
                           className="usa-label usa-label-display"
                           htmlFor="practitioner-practitioner-type"
                         >
                           Phone number
-                        </label>
+                        </span>
                         <div className="margin-bottom-4">
                           {practitionerDetailHelper.contact.phone}
                         </div>
-                        <label
+                        <span
                           className="usa-label usa-label-display"
                           htmlFor="practitioner-practitioner-type"
                         >
                           Email address
-                        </label>
+                        </span>
                         {practitionerDetailHelper.email}
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
                       <div className="tablet:margin-bottom-0 margin-bottom-205">
-                        <label
+                        <span
                           className="usa-label usa-label-display"
                           htmlFor="practitioner-name"
                         >
                           Address
-                        </label>
+                        </span>
                         <div className="margin-bottom-4">
                           {/* TODO: use helper (international) */}
                           {practitionerDetailHelper.contact.address1}
@@ -144,21 +144,21 @@ export const PractitionerDetail = connect(
                             {practitionerDetailHelper.contact.postalCode}
                           </div>
                         </div>
-                        <label
+                        <span
                           className="usa-label usa-label-display"
                           htmlFor="practitioner-practitioner-type"
                         >
                           Additional phone number
-                        </label>
+                        </span>
                         <div className="margin-bottom-4">
                           {practitionerDetailHelper.additionalPhone}
                         </div>
-                        <label
+                        <span
                           className="usa-label usa-label-display"
                           htmlFor="practitioner-practitioner-type"
                         >
                           Alternate email address
-                        </label>
+                        </span>
                         {practitionerDetailHelper.alternateEmail}
                       </div>
                     </div>
@@ -176,21 +176,21 @@ export const PractitionerDetail = connect(
                     <div className="tablet:grid-col-4 margin-bottom-1">
                       <div className="grid-row grid-gap">
                         <div className="tablet:grid-col-6 margin-bottom-1">
-                          <label
+                          <span
                             className="usa-label usa-label-display"
                             htmlFor="practitioner-birth-year"
                           >
                             Bar number
-                          </label>
+                          </span>
                           {practitionerDetailHelper.barNumber}
                         </div>
                         <div className="tablet:grid-col-6 margin-bottom-1">
-                          <label
+                          <span
                             className="usa-label usa-label-display"
                             htmlFor="practitioner-birth-year"
                           >
                             Admission status
-                          </label>
+                          </span>
                           {practitionerDetailHelper.admissionsStatus}
                         </div>
                       </div>
@@ -198,21 +198,21 @@ export const PractitionerDetail = connect(
                     <div className="tablet:grid-col-8 margin-bottom-1">
                       <div className="grid-row grid-gap">
                         <div className="tablet:grid-col-6 margin-bottom-1">
-                          <label
+                          <span
                             className="usa-label usa-label-display"
                             htmlFor="practitioner-birth-year"
                           >
                             Original bar state
-                          </label>
+                          </span>
                           {practitionerDetailHelper.originalBarState}
                         </div>
                         <div className="tablet:grid-col-6 margin-bottom-1">
-                          <label
+                          <span
                             className="usa-label usa-label-display"
                             htmlFor="practitioner-birth-year"
                           >
                             Admission date
-                          </label>
+                          </span>
                           {practitionerDetailHelper.admissionsDateFormatted}
                         </div>
                       </div>
