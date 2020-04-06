@@ -2697,7 +2697,7 @@
       "get": {
         "tags": ["practitioners"],
         "summary": "get the practitioner via bar number",
-        "description": "Get the practitioner via bar numberGet all cases for a user.\n",
+        "description": "Get the practitioner via bar number.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
