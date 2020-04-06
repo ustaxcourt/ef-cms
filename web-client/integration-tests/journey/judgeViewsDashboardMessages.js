@@ -1,4 +1,4 @@
-export default test => {
+export const judgeViewsDashboardMessages = test => {
   return it('Judge views dashboard messages', async () => {
     await test.runSequence('gotoDashboardSequence');
     expect(test.getState('currentPage')).toEqual('DashboardJudge');

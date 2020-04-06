@@ -139,7 +139,7 @@ describe('generateNoticeOfDocketChangePdf', () => {
   });
 
   it('catches a thrown exception', async () => {
-    const chromiumBroserPdfErrorMock = {
+    const chromiumBrowserPdfErrorMock = {
       close: () => {},
       newPage: () => ({
         pdf: () => {
@@ -151,7 +151,7 @@ describe('generateNoticeOfDocketChangePdf', () => {
       }),
     };
     applicationContext.getChromiumBrowser.mockReturnValue(
-      chromiumBroserPdfErrorMock,
+      chromiumBrowserPdfErrorMock,
     );
 
     let err;

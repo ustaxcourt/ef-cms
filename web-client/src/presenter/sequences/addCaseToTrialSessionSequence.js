@@ -12,6 +12,7 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateAddToTrialSessionAction } from '../actions/CaseDetail/validateAddToTrialSessionAction';
 
 const showSuccessAlert = [
@@ -36,7 +37,7 @@ export const addCaseToTrialSessionSequence = [
       getTrialSessionDetailsAction,
       isTrialSessionCalendaredAction,
       {
-        no: showSuccessAlert,
+        no: [unsetWaitingForResponseAction, showSuccessAlert],
         yes: [
           startWebSocketConnectionAction,
           setNoticesForCalendaredTrialSessionAction,

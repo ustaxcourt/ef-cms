@@ -21,7 +21,7 @@ exports.getPractitionersByNameInteractor = async ({
   const authenticatedUser = applicationContext.getCurrentUser();
 
   if (
-    !isAuthorized(authenticatedUser, ROLE_PERMISSIONS.MANAGE_ATTORNEY_USERS)
+    !isAuthorized(authenticatedUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)
   ) {
     throw new UnauthorizedError('Unauthorized for searching practitioners');
   }
