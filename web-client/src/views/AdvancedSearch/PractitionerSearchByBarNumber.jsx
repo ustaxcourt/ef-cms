@@ -8,6 +8,8 @@ export const PractitionerSearchByBarNumber = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    submitPractitionerBarNumberSearchSequence:
+      sequences.submitPractitionerBarNumberSearchSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     validationErrors: state.validationErrors,
@@ -15,7 +17,7 @@ export const PractitionerSearchByBarNumber = connect(
   function PractitionerSearchByBarNumber({
     advancedSearchForm,
     clearAdvancedSearchFormSequence,
-    submitPractitionerNameSearchSequence,
+    submitPractitionerBarNumberSearchSequence,
     updateAdvancedSearchFormValueSequence,
     validationErrors,
   }) {
@@ -59,7 +61,7 @@ export const PractitionerSearchByBarNumber = connect(
                   className="advanced-search__button margin-top-2"
                   onClick={e => {
                     e.preventDefault();
-                    submitPractitionerNameSearchSequence();
+                    submitPractitionerBarNumberSearchSequence();
                   }}
                 >
                   Search

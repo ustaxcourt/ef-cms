@@ -1,10 +1,3 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
-import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
-import { User } from '../../shared/src/business/entities/User';
-const {
-  ContactFactory,
-} = require('../../shared/src/business/entities/contacts/ContactFactory');
-import { Document } from '../../shared/src/business/entities/Document';
 import { adcMarksStipulatedWorkItemAsCompleted } from './journey/adcMarksStipulatedWorkItemAsCompleted';
 import { adcViewsCaseDetail } from './journey/adcViewsCaseDetail';
 import { adcViewsCaseDetailAfterComplete } from './journey/adcViewsCaseDetailAfterComplete';
