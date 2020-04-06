@@ -9,12 +9,14 @@ export const OrderSearch = connect(
     advancedSearchForm: state.advancedSearchForm,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
+    validateOrderSearchSequence: sequences.validateOrderSearchSequence,
     validationErrors: state.validationErrors,
   },
   function OrderSearch({
     advancedSearchForm,
     submitAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence,
+    validateOrderSearchSequence,
     validationErrors,
   }) {
     return (
@@ -41,13 +43,14 @@ export const OrderSearch = connect(
                     id="order-search"
                     name="orderKeyword"
                     type="text"
-                    value={advancedSearchForm.orderSearch.orderKeyword}
+                    value={advancedSearchForm.orderSearch.orderKeyword || ''}
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
                         formType: 'orderSearch',
                         key: e.target.name,
                         value: e.target.value,
                       });
+                      validateOrderSearchSequence();
                     }}
                   />
                 </FormGroup>
