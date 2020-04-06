@@ -1,7 +1,7 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { loginAs, setupTest } from './helpers';
+import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { uploadPetition } from './helpers';
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkAddsPractitionersToCase from './journey/petitionsClerkAddsPractitionersToCase';
 import petitionsClerkAddsRespondentsToCase from './journey/petitionsClerkAddsRespondentsToCase';
 import petitionsClerkEditsPractitionerOnCase from './journey/petitionsClerkEditsPractitionerOnCase';

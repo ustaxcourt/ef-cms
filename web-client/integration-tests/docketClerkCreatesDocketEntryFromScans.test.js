@@ -20,12 +20,12 @@ import { docketClerkViewsSectionQCInProgress } from './journey/docketClerkViewsS
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { isFunction, mapValues } from 'lodash';
 import { loginAs } from './helpers';
+import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
+import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
+import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
 import FormData from 'form-data';
-import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
-import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
-import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
 
 let test;
 global.FormData = FormData;

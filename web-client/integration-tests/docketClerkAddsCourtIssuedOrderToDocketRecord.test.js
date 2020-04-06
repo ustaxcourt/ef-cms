@@ -13,10 +13,10 @@ import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDeta
 import petitionsClerkViewsDocketEntry from './journey/petitionsClerkViewsDocketEntry';
 import petitionsClerkViewsDraftOrder from './journey/petitionsClerkViewsDraftOrder';
 // petitioner
-import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
-import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
-import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
+import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
+import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
+import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
+import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 
 const test = setupTest({
   useCases: {
