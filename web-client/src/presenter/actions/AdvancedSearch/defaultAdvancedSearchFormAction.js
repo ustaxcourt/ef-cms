@@ -32,4 +32,7 @@ export const defaultAdvancedSearchFormAction = ({
   if (!advancedSearchForm.searchMode) {
     store.set(state.advancedSearchForm.searchMode, 'byName');
   }
+  if (!advancedSearchForm.orderSearch) {
+    store.set(state.advancedSearchForm.orderSearch, {});
+  }
 };
