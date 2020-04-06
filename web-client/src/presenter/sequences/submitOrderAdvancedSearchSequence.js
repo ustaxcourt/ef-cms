@@ -6,6 +6,7 @@ import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { validateOrderAdvancedSearchAction } from '../actions/AdvancedSearch/validateOrderAdvancedSearchAction';
 
 export const submitOrderAdvancedSearchSequence = [
@@ -16,6 +17,7 @@ export const submitOrderAdvancedSearchSequence = [
       setAlertErrorAction,
       setValidationErrorsAction,
       clearSearchResultsAction,
+      startShowValidationAction,
     ],
     success: showProgressSequenceDecorator([
       clearAlertsAction,
