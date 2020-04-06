@@ -1,6 +1,5 @@
 import { chambersUserViewsDashboard } from './journey/chambersUserViewsDashboard';
 import { fakeFile, loginAs, setupTest } from './helpers';
-
 import petitionerAddNewCaseToTestObj from './journey/petitionerAddNewCaseToTestObj';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
@@ -9,7 +8,6 @@ import petitionerFilesDocumentForCase from './journey/petitionerFilesDocumentFor
 import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
 import petitionerViewsCaseDetailAfterFilingDocument from './journey/petitionerViewsCaseDetailAfterFilingDocument';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
-
 import petitionsClerkCreatesMessageToChambers from './journey/petitionsClerkCreatesMessageToChambers';
 
 const test = setupTest();
