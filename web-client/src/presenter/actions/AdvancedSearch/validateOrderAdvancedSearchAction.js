@@ -14,7 +14,7 @@ export const validateOrderAdvancedSearchAction = async ({
   get,
   path,
 }) => {
-  const orderSearch = get(state.advancedSearchForm.orderKeyword);
+  const orderSearch = get(state.advancedSearchForm.orderSearch);
   const errors = applicationContext
     .getUseCases()
     .validateOrderAdvancedSearchInteractor({
