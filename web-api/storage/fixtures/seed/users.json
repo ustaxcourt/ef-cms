@@ -125,6 +125,9 @@
     "section": "privatePractitioner",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatePractitioner",
+    "alternateEmail": "privatePractitioner@example.com",
+    "additionalPhone": "111-111-1111",
+    "originalBarState": "Maryland",
     "barNumber": "PT1234",
     "contact": {
       "address1": "234 Main St",
