@@ -19,6 +19,9 @@ export const petitionsClerkSearchesForPractitionersByName = test => {
     ).toEqual({});
     expect(test.getState('searchResults')).toBeUndefined();
 
+    await test.runSequence('submitPractitionerNameSearchSequence');
+    expect(test.getState('validationErrors.practitionerName')).toBeDefined();
+
     // non-exact matches
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'practitionerSearchByName',
@@ -27,6 +30,7 @@ export const petitionsClerkSearchesForPractitionersByName = test => {
     });
 
     await test.runSequence('submitPractitionerNameSearchSequence');
+    expect(test.getState('validationErrors.practitionerName')).toBeUndefined();
 
     expect(test.getState('searchResults').length).toBeGreaterThan(0);
 
