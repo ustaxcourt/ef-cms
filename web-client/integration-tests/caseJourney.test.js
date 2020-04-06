@@ -70,7 +70,6 @@ describe('Case journey', () => {
   petitionsClerkAssignsWorkItemToOther(test);
   loginAs(test, 'petitionsclerk1');
   petitionsClerkViewsMessagesAfterReassign(test);
-  petitionsClerkAddsCaseNote(test);
   petitionsClerkPrioritizesCase(test);
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkUpdatesCaseDetail(test);
