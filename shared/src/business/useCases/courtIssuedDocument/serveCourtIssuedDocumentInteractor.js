@@ -185,6 +185,10 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     }
   }
 
+  courtIssuedDocument.documentContents =
+    courtIssuedDocument.draftState.documentContents;
+  courtIssuedDocument.draftState = null;
+
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
