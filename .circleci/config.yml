@@ -161,6 +161,11 @@ jobs:
             ./web-client/coverage-integration-1/coverage-final.json \
             ./web-client/coverage-unit/coverage-final.json
       - run:
+          name: Check Coverage
+          command: |
+            npx istanbul check-coverage --include=combined-coverage/coverage-final.json \
+            --statements 95 --functions 95 --branches 95 --lines 95
+      - run:
           name: Web Client - SonarQube
           command: |
             export SONAR_SCANNER_OPTS="-Xmx2048m"
