@@ -51,6 +51,7 @@ import { menuHelper } from './computeds/menuHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
+import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewPetitionFromPaperHelper } from './computeds/reviewPetitionFromPaperHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
@@ -125,6 +126,7 @@ const helpers = {
   orderTypesHelper,
   pdfPreviewModalHelper,
   pdfSignerHelper,
+  practitionerDetailHelper,
   requestAccessHelper,
   reviewPetitionFromPaperHelper,
   reviewSavedPetitionHelper,
@@ -210,6 +212,7 @@ export const baseState = {
     signatureData: null,
   },
   permissions: null,
+  practitionerDetail: {},
   previewPdfFile: null,
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses

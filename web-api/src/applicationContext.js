@@ -430,6 +430,12 @@ const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
+  getPractitionerByBarNumber,
+} = require('../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber');
+const {
+  getPractitionerByBarNumberInteractor,
+} = require('../../shared/src/business/useCases/practitioners/getPractitionerByBarNumberInteractor');
+const {
   getPractitionersByNameInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionersByNameInteractor');
 const {
@@ -976,6 +982,7 @@ module.exports = (appContextUser = {}) => {
         getInboxMessagesForSection,
         getInboxMessagesForUser,
         getInternalUsers,
+        getPractitionerByBarNumber,
         getPublicDownloadPolicyUrl,
         getRecord,
         getSentMessagesForSection,
@@ -1165,6 +1172,7 @@ module.exports = (appContextUser = {}) => {
         getIrsPractitionersBySearchKeyInteractor,
         getJudgeForUserChambersInteractor,
         getNotificationsInteractor,
+        getPractitionerByBarNumberInteractor,
         getPractitionersByNameInteractor,
         getPrivatePractitionersBySearchKeyInteractor,
         getPublicCaseInteractor,
