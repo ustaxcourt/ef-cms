@@ -12,6 +12,8 @@ elif [[ $BRANCH == 'staging' ]]  ; then
   echo "${POST_CONFIRMATION_ROLE_ARN_STG}"
 elif [[ $BRANCH == 'test' ]]  ; then
   echo "${POST_CONFIRMATION_ROLE_ARN_TEST}"
+elif [[ $BRANCH == 'migration' ]]  ; then
+  echo "${POST_CONFIRMATION_ROLE_ARN_MIGRATION}"
 else
   exit 1;
 fi
