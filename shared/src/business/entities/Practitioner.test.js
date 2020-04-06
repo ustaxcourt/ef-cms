@@ -6,6 +6,7 @@ describe('Practitioner', () => {
     const user = new Practitioner({
       admissionsDate: '2019-03-01T21:40:46.415Z',
       admissionsStatus: 'Active',
+      barNumber: 'PT20001',
       birthYear: 2019,
       contact: {
         address1: '234 Main St',
@@ -19,6 +20,7 @@ describe('Practitioner', () => {
         state: 'IL',
       },
       employer: 'Private',
+      firmName: 'GW Law Offices',
       isAdmitted: true,
       name: 'Test Practitioner',
       practitionerType: 'Attorney',
@@ -39,6 +41,7 @@ describe('Practitioner', () => {
     const user = new Practitioner({
       admissionsDate: '2019-03-01T21:40:46.415Z',
       admissionsStatus: 'Active',
+      barNumber: 'PT20001',
       birthYear: 2019,
       contact: {
         address1: '234 Main St',
@@ -65,6 +68,7 @@ describe('Practitioner', () => {
     const user = new Practitioner({
       admissionsDate: '2019-03-01T21:40:46.415Z',
       admissionsStatus: 'Active',
+      barNumber: 'PT20001',
       birthYear: 2019,
       contact: {
         address1: '234 Main St',
@@ -78,6 +82,7 @@ describe('Practitioner', () => {
         state: 'IL',
       },
       employer: 'Something else',
+      firmName: 'GW Law Offices',
       isAdmitted: true,
       name: 'Test Practitioner',
       practitionerType: 'Purple',
@@ -91,6 +96,7 @@ describe('Practitioner', () => {
     const user = new Practitioner({
       admissionsDate: '2019-03-01T21:40:46.415Z',
       admissionsStatus: 'Invalid',
+      barNumber: 'PT20001',
       birthYear: 2019,
       contact: {
         address1: '234 Main St',
@@ -104,6 +110,7 @@ describe('Practitioner', () => {
         state: 'IL',
       },
       employer: 'Something else',
+      firmName: 'GW Law Offices',
       isAdmitted: true,
       name: 'Test Practitioner',
       practitionerType: 'Purple',

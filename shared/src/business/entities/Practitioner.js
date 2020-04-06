@@ -2,7 +2,11 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { userDecorator, userValidation } = require('./User');
+const {
+  userDecorator,
+  userValidation,
+  VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
+} = require('./User');
 
 const EMPLOYER_OPTIONS = ['IRS', 'DOJ', 'Private'];
 const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
@@ -35,6 +39,17 @@ function Practitioner(rawUser) {
   this.practitionerType = rawUser.practitionerType;
 }
 
+const VALIDATION_ERROR_MESSAGES = {
+  ...USER_VALIDATION_ERROR_MESSAGES,
+  admissionsDate: 'Enter an admission date',
+  admissionsStatus: 'Select an admission status',
+  barNumber: 'Bar number is required',
+  birthYear: 'Enter a valid birth year',
+  employer: 'Select an employer',
+  firmName: 'Enter a firm name',
+  practitionerType: 'Select a practitioner type',
+};
+
 joiValidationDecorator(
   Practitioner,
   joi.object().keys({
@@ -46,12 +61,13 @@ joiValidationDecorator(
       .valid(...ADMISSIONS_STATUS_OPTIONS)
       .required(),
     alternateEmail: joi.string().optional().allow(null),
+    barNumber: joi.string().required(),
     birthYear: joi.number().required(),
     employer: joi
       .string()
       .valid(...EMPLOYER_OPTIONS)
       .required(),
-    firmName: joi.string().optional().allow(null),
+    firmName: joi.string().required(),
     isAdmitted: joi.boolean().required(),
     originalBarState: joi.string().optional().allow(null),
     practitionerType: joi
@@ -60,7 +76,7 @@ joiValidationDecorator(
       .required(),
   }),
   undefined,
-  {},
+  VALIDATION_ERROR_MESSAGES,
 );
 
 Practitioner.validationName = 'Practitioner';
