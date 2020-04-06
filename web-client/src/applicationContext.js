@@ -23,6 +23,7 @@ import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
+import { OrderSearch } from '../../shared/src/business/entities/orders/OrderSearch';
 import {
   compareISODateStrings,
   compareStrings,
@@ -210,6 +211,7 @@ import { validateExternalDocumentInteractor } from '../../shared/src/business/us
 import { validateForwardMessageInteractor } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validateInitialWorkItemMessageInteractor } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validateNoteInteractor } from '../../shared/src/business/useCases/caseNote/validateNoteInteractor';
+import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
 import { validateOrderWithoutBodyInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/validateOrderWithoutBodyInteractor';
 import { validatePdfInteractor } from '../../shared/src/proxies/documents/validatePdfProxy';
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
@@ -385,6 +387,7 @@ const allUseCases = {
   validateForwardMessageInteractor,
   validateInitialWorkItemMessageInteractor,
   validateNoteInteractor,
+  validateOrderAdvancedSearchInteractor,
   validateOrderWithoutBodyInteractor,
   validatePdfInteractor,
   validatePetitionFromPaperInteractor,
@@ -453,6 +456,7 @@ const applicationContext = {
     InitialWorkItemMessage,
     NewTrialSession,
     Note,
+    OrderSearch,
     OrderWithoutBody,
     TrialSession,
     User,
