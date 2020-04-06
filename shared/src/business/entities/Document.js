@@ -49,6 +49,7 @@ function Document(rawDocument, { applicationContext }) {
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
   this.draftState = rawDocument.draftState;
+  this.documentContents = rawDocument.documentContents;
   this.eventCode = rawDocument.eventCode;
   this.exhibits = rawDocument.exhibits;
   this.filedBy = rawDocument.filedBy;
@@ -300,6 +301,7 @@ joiValidationDecorator(
       .regex(DOCKET_NUMBER_MATCHER)
       .optional()
       .description('Docket Number of the associated Case in XXXXX-YY format.'),
+    documentContents: joi.string().optional(),
     documentId: joi
       .string()
       .uuid({
@@ -316,7 +318,7 @@ joiValidationDecorator(
       .valid(...Document.getDocumentTypes())
       .required()
       .description('The type of this document.'),
-    draftState: joi.object().optional(),
+    draftState: joi.object().allow(null).optional(),
     eventCode: joi.string().optional(),
     exhibits: joi.boolean().optional(),
     filedBy: joi.string().allow('').optional(),

@@ -26,73 +26,75 @@ exports.orderAdvancedSearchInteractor = async providers => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const {
-    commonQuery,
-    exactMatchesQuery,
-    nonExactMatchesQuery,
-  } = aggregateCommonQueryParams(providers);
+  return [];
 
-  const exactMatchesBody = await applicationContext.getSearchClient().search({
-    body: {
-      _source: [
-        'caseCaption',
-        'contactPrimary',
-        'contactSecondary',
-        'docketNumber',
-        'docketNumberSuffix',
-        'irsPractitioners',
-        'privatePractitioners',
-        'receivedAt',
-        'sealedDate',
-      ],
-      query: {
-        bool: {
-          must: [...exactMatchesQuery, ...commonQuery],
-        },
-      },
-      size: 5000,
-    },
-    index: 'efcms',
-  });
+  // const {
+  //   commonQuery,
+  //   exactMatchesQuery,
+  //   nonExactMatchesQuery,
+  // } = aggregateCommonQueryParams(providers);
 
-  let foundCases = [];
-  const exactMatchesHits = get(exactMatchesBody, 'hits.hits');
-  const unmarshallHit = hit =>
-    AWS.DynamoDB.Converter.unmarshall(hit['_source']);
+  // const exactMatchesBody = await applicationContext.getSearchClient().search({
+  //   body: {
+  //     _source: [
+  //       'caseCaption',
+  //       'contactPrimary',
+  //       'contactSecondary',
+  //       'docketNumber',
+  //       'docketNumberSuffix',
+  //       'irsPractitioners',
+  //       'privatePractitioners',
+  //       'receivedAt',
+  //       'sealedDate',
+  //     ],
+  //     query: {
+  //       bool: {
+  //         must: [...exactMatchesQuery, ...commonQuery],
+  //       },
+  //     },
+  //     size: 5000,
+  //   },
+  //   index: 'efcms',
+  // });
 
-  if (!isEmpty(exactMatchesHits)) {
-    foundCases = exactMatchesHits.map(unmarshallHit);
-  } else {
-    const nonExactMatchesBody = await applicationContext
-      .getSearchClient()
-      .search({
-        body: {
-          _source: [
-            'caseCaption',
-            'contactPrimary',
-            'contactSecondary',
-            'docketNumber',
-            'docketNumberSuffix',
-            'receivedAt',
-            'sealedDate',
-          ],
-          query: {
-            bool: {
-              must: [...nonExactMatchesQuery, ...commonQuery],
-            },
-          },
-        },
-        index: 'efcms',
-      });
+  // let foundCases = [];
+  // const exactMatchesHits = get(exactMatchesBody, 'hits.hits');
+  // const unmarshallHit = hit =>
+  //   AWS.DynamoDB.Converter.unmarshall(hit['_source']);
 
-    const nonExactMatchesHits = get(nonExactMatchesBody, 'hits.hits');
+  // if (!isEmpty(exactMatchesHits)) {
+  //   foundCases = exactMatchesHits.map(unmarshallHit);
+  // } else {
+  //   const nonExactMatchesBody = await applicationContext
+  //     .getSearchClient()
+  //     .search({
+  //       body: {
+  //         _source: [
+  //           'caseCaption',
+  //           'contactPrimary',
+  //           'contactSecondary',
+  //           'docketNumber',
+  //           'docketNumberSuffix',
+  //           'receivedAt',
+  //           'sealedDate',
+  //         ],
+  //         query: {
+  //           bool: {
+  //             must: [...nonExactMatchesQuery, ...commonQuery],
+  //           },
+  //         },
+  //       },
+  //       index: 'efcms',
+  //     });
 
-    if (!isEmpty(nonExactMatchesHits)) {
-      foundCases = nonExactMatchesHits.map(unmarshallHit);
-    }
-  }
+  //   const nonExactMatchesHits = get(nonExactMatchesBody, 'hits.hits');
 
-  foundCases = caseSearchFilter(foundCases, authorizedUser);
+  //   if (!isEmpty(nonExactMatchesHits)) {
+  //     foundCases = nonExactMatchesHits.map(unmarshallHit);
+  //   }
+  // }
 
-  return foundCases;
+  // foundCases = caseSearchFilter(foundCases, authorizedUser);
+
+  // return foundCases;
 };

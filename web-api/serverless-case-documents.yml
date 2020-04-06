@@ -368,3 +368,11 @@ functions:
           path: /{caseId}/{documentId}/document-download-url
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+
+  orderAdvancedSearch:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.orderAdvancedSearchLambda
+    events:
+      - http:
+          path: /order-search
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
