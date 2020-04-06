@@ -49,8 +49,8 @@ set -- \
   --userPoolId "${USER_POOL_ID}" \
   --dynamo_stream_arn="${DYNAMO_STREAM_ARN}" \
   --elasticsearch_endpoint="${ELASTICSEARCH_ENDPOINT}" \
-  --verbose \
-  --circleHoneybadgerApiKey="${CIRCLE_HONEYBADGER_API_KEY}"
+  --circleHoneybadgerApiKey="${CIRCLE_HONEYBADGER_API_KEY}" \
+  --verbose
 
 ./node_modules/.bin/sls create_domain "$@"
 echo "done running create_domain"
