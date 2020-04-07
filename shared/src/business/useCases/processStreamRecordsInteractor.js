@@ -61,10 +61,7 @@ exports.processStreamRecordsInteractor = async ({
             let record = body[i * 2 + 1];
             let caseId;
 
-            if (
-              record.pk.S.includes('case|') &&
-              record.sk.S.includes('case|')
-            ) {
+            if (record.pk.S.includes('case|')) {
               caseId = record.pk.S.split('|')[1];
 
               record = AWS.DynamoDB.Converter.marshall(
@@ -107,10 +104,7 @@ exports.processStreamRecordsInteractor = async ({
             let newImage = record.dynamodb.NewImage;
             let caseId;
 
-            if (
-              record.dynamodb.Keys.pk.S.includes('case|') &&
-              record.dynamodb.Keys.sk.S.includes('case|')
-            ) {
+            if (record.dynamodb.Keys.pk.S.includes('case|')) {
               caseId = record.dynamodb.Keys.pk.S.split('|')[1];
 
               newImage = AWS.DynamoDB.Converter.marshall(
