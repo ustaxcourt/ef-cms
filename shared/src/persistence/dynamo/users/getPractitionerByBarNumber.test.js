@@ -52,6 +52,19 @@ describe('getPractitionerByBarNumber', () => {
     });
   });
 
+  it('should convert bar number to upper case for queries', async () => {
+    await getPractitionerByBarNumber({
+      applicationContext,
+      barNumber: 'pt1234',
+    });
+    expect(
+      client.query.mock.calls[0][0].ExpressionAttributeValues[':pk'],
+    ).toEqual('irsPractitioner|PT1234');
+    expect(
+      client.query.mock.calls[1][0].ExpressionAttributeValues[':pk'],
+    ).toEqual('privatePractitioner|PT1234');
+  });
+
   it('should return privatePractitioner with matching bar number', async () => {
     const result = await getPractitionerByBarNumber({
       applicationContext,

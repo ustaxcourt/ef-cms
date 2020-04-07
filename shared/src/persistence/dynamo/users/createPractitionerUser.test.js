@@ -10,14 +10,14 @@ const { User } = require('../../../business/entities/User');
 const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
 
 const privatePractitionerUser = {
-  barNumber: 'PT1234',
+  barNumber: 'pt1234', //intentionally lower case - should be converted to upper case when persisted
   name: 'Test Private Practitioner',
   role: User.ROLES.privatePractitioner,
   section: 'privatePractitioner',
 };
 
 const privatePractitionerUserWithSection = {
-  barNumber: 'PT1234',
+  barNumber: 'pt1234',
   email: 'test@example.com',
   name: 'Test Private Practitioner',
   role: User.ROLES.privatePractitioner,
@@ -32,7 +32,7 @@ const privatePractitionerUserWithoutBarNumber = {
 };
 
 const otherUser = {
-  barNumber: 'PT1234',
+  barNumber: 'pt1234',
   email: 'test@example.com',
   name: 'Test Other',
   role: User.ROLES.other,

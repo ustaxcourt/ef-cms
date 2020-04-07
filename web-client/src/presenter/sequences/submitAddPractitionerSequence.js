@@ -1,18 +1,21 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { createPractitionerUserAction } from '../actions/createPractitionerUserAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
+import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { validatePractitionerUserAction } from '../actions/validatePractitionerUserAction';
+import { validateAddPractitionerAction } from '../actions/validateAddPractitionerAction';
 
-export const submitCreatePractitionerUserSequence = [
+export const submitAddPractitionerSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  validatePractitionerUserAction,
+  computeFormDateAction,
+  validateAddPractitionerAction,
   {
-    error: [setAlertErrorAction],
+    error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [
       setCurrentPageAction('Interstitial'),
       createPractitionerUserAction,
