@@ -68,7 +68,7 @@ joiValidationDecorator(
       .required(),
     firmName: joi.string().optional().allow(null),
     isAdmitted: joi.boolean().required(),
-    originalBarState: joi.string().optional().allow(null),
+    originalBarState: joi.string().required(),
     practitionerType: joi
       .string()
       .valid(...PRACTITIONER_TYPE_OPTIONS)
