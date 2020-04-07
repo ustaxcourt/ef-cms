@@ -6,11 +6,14 @@ import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitCaseAdvancedSearchAction } from '../actions/AdvancedSearch/submitCaseAdvancedSearchAction';
 import { validateCaseAdvancedSearchAction } from '../actions/AdvancedSearch/validateCaseAdvancedSearchAction';
 
 export const submitCaseAdvancedSearchSequence = [
   clearSearchTermAction,
+  startShowValidationAction,
   validateCaseAdvancedSearchAction,
   {
     error: [
@@ -19,6 +22,7 @@ export const submitCaseAdvancedSearchSequence = [
       clearSearchResultsAction,
     ],
     success: showProgressSequenceDecorator([
+      stopShowValidationAction,
       clearAlertsAction,
       submitCaseAdvancedSearchAction,
       set(state.searchResults, props.searchResults),
