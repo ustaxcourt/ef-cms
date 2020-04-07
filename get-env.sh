@@ -8,6 +8,8 @@ elif [[ $BRANCH == 'experimental' ]] ; then
   echo 'exp'
 elif [[ $BRANCH == 'test' ]] ; then
   echo 'test'
+elif [[ $BRANCH == 'migration' ]] ; then
+  echo 'migration'
 elif [[ $BRANCH == 'staging' ]] ; then
   echo 'stg'
 elif [[ $BRANCH == 'master' ]] ; then
