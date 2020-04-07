@@ -1,7 +1,7 @@
 const DateHandler = require('../../../business/utilities/DateHandler');
 const { createBarNumber } = require('./barNumberGenerator');
 
-describe('Create docket number', function () {
+describe('Create bar number', function () {
   it('should create a bar number', async () => {
     const result = await createBarNumber({
       applicationContext: {

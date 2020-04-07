@@ -139,7 +139,8 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Alabama"
   },
   {
     "role": "privatePractitioner",
@@ -165,7 +166,7 @@
       "postalCode": "61234",
       "state": "IL"
     },
-    "originalBarState": "Oregon",
+    "originalBarState": "Oregon"
   },
   {
     "role": "privatePractitioner",
@@ -191,7 +192,7 @@
       "postalCode": "61234",
       "state": "IL"
     },
-    "originalBarState": "N/A",
+    "originalBarState": "N/A"
   },
   {
     "role": "privatePractitioner",
@@ -217,7 +218,7 @@
       "postalCode": "61234",
       "state": "IL"
     },
-    "originalBarState": "Texas",
+    "originalBarState": "Texas"
   },
   {
     "role": "privatePractitioner",
@@ -243,7 +244,7 @@
       "postalCode": "61234",
       "state": "IL"
     },
-    "originalBarState": "Florida",
+    "originalBarState": "Florida"
   },
   {
     "role": "irsPractitioner",
@@ -268,7 +269,7 @@
       "postalCode": "61234",
       "state": "IL"
     },
-    "originalBarState": "Maryland",
+    "originalBarState": "Maryland"
   },
   {
     "role": "irsPractitioner",
@@ -293,7 +294,7 @@
       "postalCode": "61234",
       "state": "IL"
     },
-    "originalBarState": "Arkansas",
+    "originalBarState": "Arkansas"
   },
   {
     "role": "irsPractitioner",
@@ -318,7 +319,7 @@
       "postalCode": "61234",
       "state": "IL"
     },
-    "originalBarState": "Colorado",
+    "originalBarState": "Colorado"
   },
   {
     "role": "irsPractitioner",
@@ -342,7 +343,8 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Nevada"
   },
   {
     "role": "irsPractitioner",
@@ -360,7 +362,7 @@
     "address2": "Hanover, MI 49241",
     "barNumber": "LJ9999",
     "phone": "517-563-1536",
-    "originalBarState": "Tennessee",
+    "originalBarState": "Tennessee"
   },
   {
     "role": "petitioner",
@@ -469,7 +471,7 @@
     "barNumber": "IP1111",
     "userId": "c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
     "email": "inactivePractitioner",
-    "originalBarState": "California",
+    "originalBarState": "California"
   },
   {
     "role": "irsSuperuser",
