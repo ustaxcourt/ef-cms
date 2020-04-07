@@ -3,14 +3,15 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { get } = require('lodash');
+const { get, map } = require('lodash');
+const { Order } = require('../entities/orders/Order');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
  * orderAdvancedSearchInteractor
  *
- * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
- * @returns {object} the case data
+ * @param {object} providers the providers object containing applicationContext, orderKeyword
+ * @returns {object} the orders data
  */
 exports.orderAdvancedSearchInteractor = async ({
   applicationContext,
@@ -22,42 +23,38 @@ exports.orderAdvancedSearchInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  console.log('............', orderKeyword);
+  const orderEventCodes = map(Order.ORDER_TYPES, 'eventCode');
 
-  const blockedSearchBody = {
+  const orderSearchBody = {
     _source: [
       'docketNumber',
       'documentContents',
       'docketNumberSuffix',
       'documentTitle',
-      'pk',
-      'sk',
     ],
     query: {
       bool: {
         must: [
-          //add pk case| and sk document| and check for type order
+          { match: { 'pk.S': 'case|' } },
+          { match: { 'sk.S': 'document|' } },
+          {
+            bool: {
+              should: orderEventCodes.map(eventCode => ({
+                match: {
+                  'eventCode.S': eventCode,
+                },
+              })),
+            },
+          },
           {
             exists: {
               field: 'servedAt',
             },
           },
           {
-            exists: {
-              field: 'documentTitle',
-            },
-          },
-          //FIXME ask Amy or someone if all documents must have a docket number to be searched - maybe can do a should for title and docket no
-          {
-            exists: {
-              field: 'docketNumber',
-            },
-          },
-          {
             simple_query_string: {
               default_operator: 'or',
-              // only include fields that are required by UX
-              fields: ['*'],
+              fields: ['documentContents.S', 'documentTitle.S'],
               query: orderKeyword,
             },
           },
@@ -67,9 +64,8 @@ exports.orderAdvancedSearchInteractor = async ({
     size: 5000,
   };
 
-  // search served documents that are orders for keyword phrase
   const exactMatchesBody = await applicationContext.getSearchClient().search({
-    body: blockedSearchBody,
+    body: orderSearchBody,
     index: 'efcms',
   });
 
@@ -78,77 +74,5 @@ exports.orderAdvancedSearchInteractor = async ({
     AWS.DynamoDB.Converter.unmarshall(hit['_source']),
   );
 
-  console.log('things we got back : ', foundOrders);
-
-  return [];
-
-  // const {
-  //   commonQuery,
-  //   exactMatchesQuery,
-  //   nonExactMatchesQuery,
-  // } = aggregateCommonQueryParams(providers);
-
-  // const exactMatchesBody = await applicationContext.getSearchClient().search({
-  //   body: {
-  //     _source: [
-  //       'caseCaption',
-  //       'contactPrimary',
-  //       'contactSecondary',
-  //       'docketNumber',
-  //       'docketNumberSuffix',
-  //       'irsPractitioners',
-  //       'privatePractitioners',
-  //       'receivedAt',
-  //       'sealedDate',
-  //     ],
-  //     query: {
-  //       bool: {
-  //         must: [...exactMatchesQuery, ...commonQuery],
-  //       },
-  //     },
-  //     size: 5000,
-  //   },
-  //   index: 'efcms',
-  // });
-
-  // let foundCases = [];
-  // const exactMatchesHits = get(exactMatchesBody, 'hits.hits');
-  // const unmarshallHit = hit =>
-  //   AWS.DynamoDB.Converter.unmarshall(hit['_source']);
-
-  // if (!isEmpty(exactMatchesHits)) {
-  //   foundCases = exactMatchesHits.map(unmarshallHit);
-  // } else {
-  //   const nonExactMatchesBody = await applicationContext
-  //     .getSearchClient()
-  //     .search({
-  //       body: {
-  //         _source: [
-  //           'caseCaption',
-  //           'contactPrimary',
-  //           'contactSecondary',
-  //           'docketNumber',
-  //           'docketNumberSuffix',
-  //           'receivedAt',
-  //           'sealedDate',
-  //         ],
-  //         query: {
-  //           bool: {
-  //             must: [...nonExactMatchesQuery, ...commonQuery],
-  //           },
-  //         },
-  //       },
-  //       index: 'efcms',
-  //     });
-
-  //   const nonExactMatchesHits = get(nonExactMatchesBody, 'hits.hits');
-
-  //   if (!isEmpty(nonExactMatchesHits)) {
-  //     foundCases = nonExactMatchesHits.map(unmarshallHit);
-  //   }
-  // }
-
-  // foundCases = caseSearchFilter(foundCases, authorizedUser);
-
-  // return foundCases;
+  return foundOrders;
 };
