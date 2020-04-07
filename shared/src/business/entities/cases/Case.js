@@ -247,8 +247,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.highPriorityReason = rawCase.highPriorityReason;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
     this.status = rawCase.status || Case.STATUS_TYPES.new;
-    this.userId = rawCase.userId;
   }
+
+  this.userId = rawCase.userId;
 
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
