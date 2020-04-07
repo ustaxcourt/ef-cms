@@ -10,6 +10,8 @@ export const CaseSearchByDocketNumber = connect(
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
+    validateCaseDocketNumberSearchFormSequence:
+      sequences.validateCaseDocketNumberSearchFormSequence,
     validationErrors: state.validationErrors,
   },
   function CaseSearchByDocketNumber({
@@ -17,6 +19,7 @@ export const CaseSearchByDocketNumber = connect(
     clearAdvancedSearchFormSequence,
     submitDocketNumberSearchSequence,
     updateAdvancedSearchFormValueSequence,
+    validateCaseDocketNumberSearchFormSequence,
     validationErrors,
   }) {
     return (
@@ -47,6 +50,9 @@ export const CaseSearchByDocketNumber = connect(
                       advancedSearchForm.caseSearchByDocketNumber
                         .docketNumber || ''
                     }
+                    onBlur={() => {
+                      validateCaseDocketNumberSearchFormSequence();
+                    }}
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
                         formType: 'caseSearchByDocketNumber',
