@@ -37,6 +37,7 @@ const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
+import { NewPractitioner } from '../../shared/src/business/entities/NewPractitioner';
 import { NewTrialSession } from '../../shared/src/business/entities/trialSessions/NewTrialSession';
 import { Note } from '../../shared/src/business/entities/notes/Note';
 import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
@@ -199,6 +200,7 @@ import { uploadExternalDocumentsInteractor } from '../../shared/src/business/use
 import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadOrderDocumentInteractor';
 import { uploadPdfFromClient } from '../../shared/src/persistence/s3/uploadPdfFromClient';
 import { validateAddIrsPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddIrsPractitionerInteractor';
+import { validateAddPractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validateAddPractitionerInteractor';
 import { validateAddPrivatePractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddPrivatePractitionerInteractor';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
@@ -375,6 +377,7 @@ const allUseCases = {
   uploadExternalDocumentsInteractor,
   uploadOrderDocumentInteractor,
   validateAddIrsPractitionerInteractor,
+  validateAddPractitionerInteractor,
   validateAddPrivatePractitionerInteractor,
   validateCaseAdvancedSearchInteractor,
   validateCaseAssociationRequestInteractor,
@@ -456,6 +459,7 @@ const applicationContext = {
     ExternalDocumentInformationFactory,
     ForwardMessage,
     InitialWorkItemMessage,
+    NewPractitioner,
     NewTrialSession,
     Note,
     OrderSearch,

@@ -257,6 +257,7 @@ import { signOutSequence } from './sequences/signOutSequence';
 import { startScanSequence } from './sequences/startScanSequence';
 import { state } from './state';
 import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolidatedCaseSequence';
+import { submitAddPractitionerSequence } from './sequences/submitAddPractitionerSequence';
 import { submitCaseAdvancedSearchSequence } from './sequences/submitCaseAdvancedSearchSequence';
 import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAssociationRequestSequence';
 import { submitCaseDocketNumberSearchSequence } from './sequences/submitCaseDocketNumberSearchSequence';
@@ -267,7 +268,6 @@ import { submitCompleteSequence } from './sequences/submitCompleteSequence';
 import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIssuedDocketEntrySequence';
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
-import { submitCreatePractitionerUserSequence } from './sequences/submitCreatePractitionerUserSequence';
 import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
 import { submitEditIrsPractitionersModalSequence } from './sequences/submitEditIrsPractitionersModalSequence';
@@ -340,6 +340,7 @@ import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserC
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
 import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
 import { validateAddIrsPractitionerSequence } from './sequences/caseAssociation/validateAddIrsPractitionerSequence';
+import { validateAddPractitionerSequence } from './sequences/validateAddPractitionerSequence';
 import { validateAddPrivatePractitionerSequence } from './sequences/caseAssociation/validateAddPrivatePractitionerSequence';
 import { validateAddToTrialSessionSequence } from './sequences/validateAddToTrialSessionSequence';
 import { validateBlockFromTrialSequence } from './sequences/validateBlockFromTrialSequence';
@@ -366,7 +367,6 @@ import { validatePetitionFromPaperSequence } from './sequences/validatePetitionF
 import { validatePetitionerInformationFormSequence } from './sequences/validatePetitionerInformationFormSequence';
 import { validatePractitionerSearchByBarNumberFormSequence } from './sequences/validatePractitionerSearchByBarNumberFormSequence';
 import { validatePractitionerSearchByNameFormSequence } from './sequences/validatePractitionerSearchByNameFormSequence';
-import { validatePractitionerUserSequence } from './sequences/validatePractitionerUserSequence';
 import { validatePrimaryContactSequence } from './sequences/validatePrimaryContactSequence';
 import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCaseSequence';
 import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemoveFromTrialSessionSequence';
@@ -645,6 +645,7 @@ export const presenter = {
     signOutSequence,
     startScanSequence,
     submitAddConsolidatedCaseSequence,
+    submitAddPractitionerSequence,
     submitCaseAdvancedSearchSequence,
     submitCaseAssociationRequestSequence,
     submitCaseDocketNumberSearchSequence,
@@ -655,7 +656,6 @@ export const presenter = {
     submitCourtIssuedDocketEntrySequence,
     submitCourtIssuedOrderSequence,
     submitCreateOrderModalSequence,
-    submitCreatePractitionerUserSequence,
     submitDocketEntrySequence,
     submitEditDocketEntryMetaSequence,
     submitEditIrsPractitionersModalSequence,
@@ -728,6 +728,7 @@ export const presenter = {
     updateWorkingCopySessionNoteSequence,
     uploadCourtIssuedDocumentSequence,
     validateAddIrsPractitionerSequence,
+    validateAddPractitionerSequence,
     validateAddPrivatePractitionerSequence,
     validateAddToTrialSessionSequence,
     validateBlockFromTrialSequence,
@@ -754,7 +755,6 @@ export const presenter = {
     validatePetitionerInformationFormSequence,
     validatePractitionerSearchByBarNumberFormSequence,
     validatePractitionerSearchByNameFormSequence,
-    validatePractitionerUserSequence,
     validatePrimaryContactSequence,
     validatePrioritizeCaseSequence,
     validateRemoveFromTrialSessionSequence,
