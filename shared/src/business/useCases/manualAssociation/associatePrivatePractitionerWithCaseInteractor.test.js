@@ -1,11 +1,12 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   associatePrivatePractitionerWithCaseInteractor,
 } = require('./associatePrivatePractitionerWithCaseInteractor');
 const { User } = require('../../entities/User');
 
 describe('associatePrivatePractitionerWithCaseInteractor', () => {
-  let applicationContext;
-
   let caseRecord = {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -37,65 +38,36 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
   };
 
   it('should throw an error when not authorized', async () => {
-    let error;
-    try {
-      applicationContext = {
-        environment: { stage: 'local' },
-        getCurrentUser: () => {
-          return {
-            name: 'Olivia Jade',
-            role: User.ROLES.petitioner,
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          };
-        },
-        getPersistenceGateway: () => ({
-          getCaseByCaseId: async () => caseRecord,
-          getUserById: async () => ({
-            name: 'Olivia Jade',
-            role: User.ROLES.adc,
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          }),
-          updateCase: async () => caseRecord,
-          verifyCaseForUser: async () => true,
-        }),
-        getUniqueId: () => 'unique-id-1',
-      };
-      await associatePrivatePractitionerWithCaseInteractor({
+    await expect(
+      associatePrivatePractitionerWithCaseInteractor({
         applicationContext,
         caseId: caseRecord.caseId,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain('Unauthorized');
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('should add mapping for a practitioner', async () => {
-    let updateCaseSpy = jest.fn();
-
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Olivia Jade',
+      role: User.ROLES.adc,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => {
         return {
-          name: 'Olivia Jade',
-          role: User.ROLES.adc,
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        };
-      },
-      getPersistenceGateway: () => ({
-        associateUserWithCase: () => {},
-        getCaseByCaseId: async () => caseRecord,
-        getUserById: async () => ({
           name: 'Olivia Jade',
           role: User.ROLES.privatePractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        }),
-        updateCase: updateCaseSpy,
-        verifyCaseForUser: async () => false,
-      }),
-      getUniqueId: () => 'unique-id-1',
-    };
+        };
+      });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(caseRecord);
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
 
     await associatePrivatePractitionerWithCaseInteractor({
       applicationContext,
@@ -105,6 +77,6 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(updateCaseSpy).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 });

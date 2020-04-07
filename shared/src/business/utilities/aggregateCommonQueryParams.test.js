@@ -1,18 +1,10 @@
 const { aggregateCommonQueryParams } = require('./aggregateCommonQueryParams');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { CaseSearch } = require('../entities/cases/CaseSearch');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { formatNow } = require('./DateHandler');
 
-let applicationContext;
-
 describe('aggregateCommonQueryParams', () => {
-  beforeEach(() => {
-    applicationContext = {
-      getUtilities: () => ({
-        formatNow,
-      }),
-    };
-  });
   it('should return an object containing aggregated query param arrays', () => {
     const result = aggregateCommonQueryParams({}, {});
 
