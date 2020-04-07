@@ -75,3 +75,38 @@ Error: Error applying plan:
 ```
 
 If this occurs, rerun the build.
+
+### Lambda Code Storage Size Exceeded
+
+```
+  Serverless Error ---------------------------------------
+ 
+  ServerlessError: An error occurred: CasePublicSearchLambdaFunction - Code storage limit exceeded. (Service: AWSLambdaInternal; Status Code: 400; Error Code: CodeStorageExceededException
+```
+
+This usually occurs after ClamAV is rebuilt and redeployed. After opening a ticket with AWS previously, CloudFormation retries creation after 60 seconds. Further debugging revealed that creating a layer using 110 MB zip file took around ~37 seconds; however, creating a layer using a 180MB zip file took ~60 seconds. Since our ClamAV layer is ~184MB, this meets the criteria for CloudFormation to continuously create dozens (in most cases, at least 100) of layers.
+
+
+#### Solution
+
+If this happens, we can utilize our `serverless-prune-plugin` library by navigating to it in `node_modules` and opening its `index.js` file. Here, you'll find (as of 4/6/2020) some [Serverless lifecycle events](https://serverless.com/framework/docs/providers/aws/guide/plugins#lifecycle-events) — specifically, at line `57`:
+
+```javascript
+'after:deploy:deploy': this.postDeploy.bind(this)
+```
+
+What you can do here is change `after` to `before`:
+
+```javascript
+'before:deploy:deploy': this.postDeploy.bind(this)
+```
+
+Next, we'll need to build the ClamAV layer by executing the following command:
+
+- `cd web-api/runtimes/clamav && ./build.sh`
+
+After this successfully runs, you can navigate to the project root (via `cd ../..`) and execute the following command to _first_ prune all other ClamAV layers and redeploy it:
+
+- `./web-api/run-serverless-clamav.sh <env> <region>`, where `<env>` would be your environment (dev, stg, prod, etc.) and `<region>` would be your AWS region (us-east-1, us-west-1, etc.)
+
+To revert your `serverless-prune-plugin`, just change `before` back to `after` or run `npm i` again.
