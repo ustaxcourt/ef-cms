@@ -14,14 +14,14 @@ export const CreateCaseDeadlineModalDialog = connect(
     validateCaseDeadlineSequence: sequences.validateCaseDeadlineSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function CreateCaseDeadlineModalDialog({
     cancelSequence,
     confirmSequence,
     form,
     updateFormValueSequence,
     validateCaseDeadlineSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"

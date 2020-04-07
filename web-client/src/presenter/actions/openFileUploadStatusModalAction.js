@@ -5,8 +5,8 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.router the riot.router object that is used for changing the route
- * @param {Function} providers.get the cerebral get function used for getting the path to navigate to in state.path
+ * @param {Function} providers.get the cerebral get function
  */
 export const openFileUploadStatusModalAction = ({ store }) => {
-  store.set(state.showModal, 'FileUploadStatusModal');
+  store.set(state.modal.showModal, 'FileUploadStatusModal');
 };

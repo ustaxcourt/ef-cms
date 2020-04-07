@@ -13,8 +13,8 @@ exports.updateCaseDeadline = async ({
 }) => {
   await client.put({
     Item: {
-      pk: `case-deadline-${caseDeadlineToUpdate.caseDeadlineId}`,
-      sk: `case-deadline-${caseDeadlineToUpdate.caseDeadlineId}`,
+      pk: `case-deadline|${caseDeadlineToUpdate.caseDeadlineId}`,
+      sk: `case-deadline|${caseDeadlineToUpdate.caseDeadlineId}`,
       ...caseDeadlineToUpdate,
     },
     applicationContext,

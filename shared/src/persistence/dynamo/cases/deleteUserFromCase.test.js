@@ -1,23 +1,11 @@
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { deleteUserFromCase } = require('./deleteUserFromCase');
 
-describe('deleteUserFromCase', function() {
-  let applicationContext;
-  let deleteStub;
-
-  beforeEach(() => {
-    deleteStub = sinon.stub().returns({
-      promise: async () => null,
-    });
-
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        delete: deleteStub,
-      }),
-    };
+describe('deleteUserFromCase', () => {
+  beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
   });
 
   it('attempts to delete the user from the case', async () => {
@@ -27,10 +15,12 @@ describe('deleteUserFromCase', function() {
       userId: '123',
     });
 
-    expect(deleteStub.getCall(0).args[0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls[0][0],
+    ).toMatchObject({
       Key: {
-        pk: '123|case',
-        sk: '456',
+        pk: 'user|123',
+        sk: 'case|456',
       },
       TableName: 'efcms-dev',
     });

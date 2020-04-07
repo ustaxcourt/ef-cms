@@ -7,7 +7,7 @@ const sendNotificationToConnection = async ({
 }) => {
   let result;
   try {
-    const { endpoint } = connection;
+    const { connectionId, endpoint } = connection;
 
     const notificationClient = applicationContext.getNotificationClient({
       endpoint,
@@ -15,7 +15,7 @@ const sendNotificationToConnection = async ({
 
     await notificationClient
       .postToConnection({
-        ConnectionId: connection.sk,
+        ConnectionId: connectionId,
         Data: messageStringified,
       })
       .promise();

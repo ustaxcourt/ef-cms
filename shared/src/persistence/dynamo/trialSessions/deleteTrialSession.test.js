@@ -1,37 +1,27 @@
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { deleteTrialSession } = require('./deleteTrialSession');
 
+const mockTrialSessionId = '123';
+
 describe('deleteTrialSession', () => {
-  let applicationContext;
-  let deleteStub;
-
-  const trialSessionId = '123';
-
-  beforeEach(() => {
-    deleteStub = sinon.stub().returns({
-      promise: async () => null,
-    });
-
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        delete: deleteStub,
-      }),
-    };
+  beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
   });
 
   it('attempts to remove the trial session', async () => {
     await deleteTrialSession({
       applicationContext,
-      trialSessionId,
+      trialSessionId: mockTrialSessionId,
     });
 
-    expect(deleteStub.getCall(0).args[0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls[0][0],
+    ).toMatchObject({
       Key: {
-        pk: `trial-session-${trialSessionId}`,
-        sk: `trial-session-${trialSessionId}`,
+        pk: `trial-session|${mockTrialSessionId}`,
+        sk: `trial-session|${mockTrialSessionId}`,
       },
       TableName: 'efcms-dev',
     });

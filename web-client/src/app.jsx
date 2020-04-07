@@ -103,10 +103,8 @@ const app = {
     const scanMode = await applicationContext
       .getUseCases()
       .getItemInteractor({ applicationContext, key: 'scanMode' });
-    presenter.state.scanner = {
-      scanMode,
-      scannerSourceName,
-    };
+    presenter.state.scanner.scannerSourceName = scannerSourceName;
+    presenter.state.scanner.scanMode = scanMode;
 
     const user =
       (await applicationContext

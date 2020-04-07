@@ -5,7 +5,7 @@ import React from 'react';
 
 export const IdleLogout = connect(
   { redirectToLoginSequence: sequences.redirectToLoginSequence },
-  ({ redirectToLoginSequence }) => {
+  function IdleLogout({ redirectToLoginSequence }) {
     return (
       <section className="usa-section grid-container">
         <h1 tabIndex="-1">Session Timeout</h1>

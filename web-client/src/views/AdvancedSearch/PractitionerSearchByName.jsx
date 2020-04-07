@@ -7,18 +7,19 @@ import React from 'react';
 export const PractitionerSearchByName = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
-    clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    clearCaseSearchByNameFormSequence:
+      sequences.clearCaseSearchByNameFormSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function PractitionerSearchByName({
     advancedSearchForm,
-    clearAdvancedSearchFormSequence,
+    clearCaseSearchByNameFormSequence,
     submitPractitionerBarNumberSearchSequence,
     updateAdvancedSearchFormValueSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <div className="header-with-blue-background display-flex flex-justify">
@@ -28,7 +29,7 @@ export const PractitionerSearchByName = connect(
             className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
             icon={['fas', 'times-circle']}
             onClick={() => {
-              clearAdvancedSearchFormSequence();
+              clearCaseSearchByNameFormSequence();
             }}
           >
             Clear Search
@@ -53,9 +54,13 @@ export const PractitionerSearchByName = connect(
                     id="practitioner-name"
                     name="practitionerName"
                     type="text"
-                    value={advancedSearchForm.practitionerName || ''}
+                    value={
+                      advancedSearchForm.practitionerSearchByName
+                        .practitionerName || ''
+                    }
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
+                        formType: 'practitionerSearchByName',
                         key: e.target.name,
                         value: e.target.value,
                       });

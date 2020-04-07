@@ -12,8 +12,8 @@ exports.deleteTrialSession = async ({ applicationContext, trialSessionId }) => {
   return await client.delete({
     applicationContext,
     key: {
-      pk: `trial-session-${trialSessionId}`,
-      sk: `trial-session-${trialSessionId}`,
+      pk: `trial-session|${trialSessionId}`,
+      sk: `trial-session|${trialSessionId}`,
     },
   });
 };

@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   compareISODateStrings,
   compareStrings,
@@ -25,7 +24,7 @@ describe('run trial session planning report', () => {
       },
       getPersistenceGateway: () => {
         return {
-          getEligibleCasesForTrialCity: sinon.stub().returns([]),
+          getEligibleCasesForTrialCity: jest.fn().mockReturnValue([]),
         };
       },
       getUtilities: () => {
@@ -42,8 +41,8 @@ describe('run trial session planning report', () => {
   });
 
   it('returns the created pdf', async () => {
-    const generateTrialSessionPlanningReportTemplateStub = sinon.stub();
-    const generatePdfFromHtmlInteractorStub = sinon.stub();
+    const generateTrialSessionPlanningReportTemplateStub = jest.fn();
+    const generatePdfFromHtmlInteractorStub = jest.fn();
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
@@ -54,10 +53,10 @@ describe('run trial session planning report', () => {
       },
       getPersistenceGateway: () => {
         return {
-          getEligibleCasesForTrialCity: sinon
-            .stub()
-            .returns([{ caseId: '123' }]),
-          getTrialSessions: sinon.stub().returns([
+          getEligibleCasesForTrialCity: jest
+            .fn()
+            .mockReturnValue([{ caseId: '123' }]),
+          getTrialSessions: jest.fn().mockReturnValue([
             {
               judge: { name: 'Judge Armen' },
               sessionType: 'Regular',
@@ -99,17 +98,17 @@ describe('run trial session planning report', () => {
       year: '2020',
     });
 
-    expect(generateTrialSessionPlanningReportTemplateStub.called).toEqual(true);
-    expect(generatePdfFromHtmlInteractorStub.called).toEqual(true);
+    expect(generateTrialSessionPlanningReportTemplateStub).toBeCalled();
+    expect(generatePdfFromHtmlInteractorStub).toBeCalled();
     expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
   });
 
   describe('getTrialSessionPlanningReportData', () => {
     it('returns previous terms and the trial locations and case counts', async () => {
-      const getEligibleCasesForTrialCityStub = sinon
-        .stub()
-        .returns([{ caseId: '123' }, { caseId: '123' }]);
-      const getTrialSessionsStub = sinon.stub().returns([
+      const getEligibleCasesForTrialCityStub = jest
+        .fn()
+        .mockReturnValue([{ caseId: '123' }, { caseId: '123' }]);
+      const getTrialSessionsStub = jest.fn().mockReturnValue([
         {
           judge: { name: 'Judge Armen' },
           sessionType: 'Regular',

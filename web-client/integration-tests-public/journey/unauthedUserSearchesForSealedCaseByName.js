@@ -8,7 +8,7 @@ export default test => {
       petitionerName: 'NOTAREALNAMEFORTESTINGPUBLIC',
     };
 
-    test.setState('advancedSearchForm', queryParams);
+    test.setState('advancedSearchForm.caseSearchByName', queryParams);
 
     await test.runSequence('submitPublicAdvancedSearchSequence', {});
 

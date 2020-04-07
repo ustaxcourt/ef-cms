@@ -1,6 +1,6 @@
-import { AddRespondentModal } from './AddRespondentModal';
+import { AddIrsPractitionerModal } from './AddIrsPractitionerModal';
 import { Button } from '../../ustc-ui/Button/Button';
-import { EditRespondentsModal } from './EditRespondentsModal';
+import { EditIrsPractitionersModal } from './EditIrsPractitionersModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { RespondentExistsModal } from './RespondentExistsModal';
@@ -52,30 +52,31 @@ const RespondentInformation = connect(
     constants: state.constants,
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
-    openAddRespondentModalSequence: sequences.openAddRespondentModalSequence,
-    openEditRespondentsModalSequence:
-      sequences.openEditRespondentsModalSequence,
-    showModal: state.showModal,
+    openAddIrsPractitionerModalSequence:
+      sequences.openAddIrsPractitionerModalSequence,
+    openEditIrsPractitionersModalSequence:
+      sequences.openEditIrsPractitionersModalSequence,
+    showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function RespondentInformation({
     caseDetailHelper,
     caseInformationHelper,
     constants,
     form,
     formattedCaseDetail,
-    openAddRespondentModalSequence,
-    openEditRespondentsModalSequence,
+    openAddIrsPractitionerModalSequence,
+    openEditIrsPractitionersModalSequence,
     showModal,
     updateFormValueSequence,
     validationErrors,
-  }) => {
+  }) {
     const respondentPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
-          {formattedCaseDetail.respondents &&
-            formattedCaseDetail.respondents.map((respondent, index) => (
+          {formattedCaseDetail.irsPractitioners &&
+            formattedCaseDetail.irsPractitioners.map((respondent, index) => (
               <div
                 className={classNames(
                   'tablet:grid-col-3 counsel-information',
@@ -127,7 +128,7 @@ const RespondentInformation = connect(
               className="usa-search"
               onSubmit={e => {
                 e.preventDefault();
-                openAddRespondentModalSequence();
+                openAddIrsPractitionerModalSequence();
               }}
             >
               <div role="search">
@@ -179,12 +180,12 @@ const RespondentInformation = connect(
                 <div className="grid-row header-row">
                   <div className="grid-col-6 display-flex" id="secondary-label">
                     <h3>Respondent Counsel</h3>
-                    {caseInformationHelper.showEditRespondents && (
+                    {caseInformationHelper.showEditIrsPractitioners && (
                       <Button
                         link
                         className="margin-left-205 padding-0 height-3"
-                        id="edit-respondents-button"
-                        onClick={() => openEditRespondentsModalSequence()}
+                        id="edit-irsPractitioners-button"
+                        onClick={() => openEditIrsPractitionersModalSequence()}
                       >
                         <FontAwesomeIcon icon="edit" size="sm" />
                         Edit
@@ -198,8 +199,10 @@ const RespondentInformation = connect(
             </div>
           </div>
         )}
-        {showModal === 'AddRespondentModal' && <AddRespondentModal />}
-        {showModal === 'EditRespondentsModal' && <EditRespondentsModal />}
+        {showModal === 'AddIrsPractitionerModal' && <AddIrsPractitionerModal />}
+        {showModal === 'EditIrsPractitionersModal' && (
+          <EditIrsPractitionersModal />
+        )}
         {showModal === 'RespondentExistsModal' && <RespondentExistsModal />}
       </>
     );

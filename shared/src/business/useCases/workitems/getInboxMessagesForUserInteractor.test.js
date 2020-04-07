@@ -1,10 +1,16 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   getInboxMessagesForUserInteractor,
 } = require('./getInboxMessagesForUserInteractor');
 const { User } = require('../../entities/User');
 
 describe('getInboxMessagesForUserInteractor', () => {
-  let applicationContext;
+  const mockPetitionerUser = {
+    role: User.ROLES.petitioner,
+    userId: 'petitioner',
+  };
 
   let mockWorkItem = {
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -20,18 +26,11 @@ describe('getInboxMessagesForUserInteractor', () => {
   };
 
   it('throws an error if the user does not have access to the work item', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
-      getPersistenceGateway: () => ({
-        getDocumentQCServedForSection: async () => mockWorkItem,
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue(mockPetitionerUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCServedForSection.mockResolvedValue(mockWorkItem);
+
     let error;
     try {
       await getInboxMessagesForUserInteractor({

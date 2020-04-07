@@ -54,7 +54,7 @@ joiValidationDecorator(
     preferredTrialCity: CaseExternal.commonRequirements.preferredTrialCity,
     procedureType: CaseExternal.commonRequirements.procedureType,
   }),
-  function() {
+  function () {
     return !this.getFormattedValidationErrors();
   },
   CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES,

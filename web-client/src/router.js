@@ -37,7 +37,7 @@ const router = {
     const { ROLE_PERMISSIONS } = app.getState('constants');
 
     const ifHasAccess = (cb, permissionToCheck) => {
-      return function() {
+      return function () {
         const gotoLoginPage = () => {
           const path = app.getState('cognitoLoginUrl');
           externalRoute(path);
@@ -150,7 +150,7 @@ const router = {
         if (!isEmpty(app.getState('form'))) {
           const { tab } = route.query();
 
-          app.getSequence('gotoEditSavedDocumentDetailSequence')({
+          app.getSequence('gotoEditSavedPetitionSequence')({
             docketNumber,
             documentId,
             tab,

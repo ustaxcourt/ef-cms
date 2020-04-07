@@ -7,8 +7,8 @@ exports.getInboxMessagesForUser = async ({ applicationContext, userId }) => {
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `user-${userId}`,
-      ':prefix': 'workitem',
+      ':pk': `user|${userId}`,
+      ':prefix': 'work-item',
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,

@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   generatePaperServiceAddressPagePdf,
 } = require('./generatePaperServiceAddressPagePdf');
 jest.mock('../../../authorization/authorizationClientService');
@@ -22,23 +25,21 @@ const chromiumBrowserMock = {
   newPage: () => pageMock,
 };
 
-let applicationContext = {
-  getChromiumBrowser: () => chromiumBrowserMock,
-  getCurrentUser: () => ({
-    role: User.ROLES.petitioner,
-    userId: 'petitioner',
-  }),
-  getDocumentsBucketName: () => 'DocumentBucketName',
-  getNodeSass: () => ({ render: (data, cb) => cb(data, { css: '' }) }),
-  getPersistenceGateway: () => ({
-    getCaseByCaseId: () => ({ docketNumber: '101-19' }),
-  }),
-  getPug: () => ({ compile: () => () => '' }),
-  logger: { error: jest.fn(), info: () => {} },
+const mockCurrentUser = {
+  role: User.ROLES.petitioner,
+  userId: 'petitioner',
 };
+
+const mockCase = { docketNumber: '101-19' };
 
 describe('generatePaperServiceAddressPagePdf', () => {
   beforeEach(() => {
+    applicationContext.getChromiumBrowser.mockReturnValue(chromiumBrowserMock);
+    applicationContext.getCurrentUser.mockReturnValue(mockCurrentUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(mockCase);
+    applicationContext.getPug.mockReturnValue({ compile: () => () => '' });
     isAuthorized.mockReturnValue(true);
   });
   afterEach(() => {

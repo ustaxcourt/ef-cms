@@ -9,7 +9,10 @@ export const HeaderDashboardInternal = connect(
     navigateToPathSequence: sequences.navigateToPathSequence,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ navigateToPathSequence, workQueueHelper }) => {
+  function HeaderDashboardInternal({
+    navigateToPathSequence,
+    workQueueHelper,
+  }) {
     return (
       <div className="big-blue-header">
         <div className="grid-container">

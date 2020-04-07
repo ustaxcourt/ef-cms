@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   updateCourtIssuedOrderInteractor,
 } = require('./updateCourtIssuedOrderInteractor');
@@ -27,19 +26,19 @@ describe('updateCourtIssuedOrderInteractor', () => {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'respondent',
+        userId: 'irsPractitioner',
       },
       {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'respondent',
+        userId: 'irsPractitioner',
       },
       {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'respondent',
+        userId: 'irsPractitioner',
       },
     ],
     filingType: 'Myself',
@@ -85,8 +84,8 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
   it('update existing document within case', async () => {
     let error;
-    let getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
-    let updateCaseSpy = sinon.spy();
+    let getCaseByCaseIdSpy = jest.fn().mockReturnValue(caseRecord);
+    let updateCaseSpy = jest.fn();
     try {
       applicationContext = {
         environment: { stage: 'local' },
@@ -119,9 +118,9 @@ describe('updateCourtIssuedOrderInteractor', () => {
       error = err;
     }
     expect(error).toBeUndefined();
-    expect(getCaseByCaseIdSpy.called).toEqual(true);
+    expect(getCaseByCaseIdSpy).toBeCalled();
     expect(
-      updateCaseSpy.getCall(0).args[0].caseToUpdate.documents.length,
+      updateCaseSpy.mock.calls[0][0].caseToUpdate.documents.length,
     ).toEqual(3);
   });
 });

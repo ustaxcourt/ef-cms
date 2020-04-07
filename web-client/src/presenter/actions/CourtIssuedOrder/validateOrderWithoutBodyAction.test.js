@@ -1,7 +1,6 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateOrderWithoutBodyAction } from './validateOrderWithoutBodyAction';
-import sinon from 'sinon';
 
 describe('validateOrderWithoutBodyAction', () => {
   let validateOrderWithoutBodyStub;
@@ -11,9 +10,9 @@ describe('validateOrderWithoutBodyAction', () => {
   let mockOrderWithoutBody;
 
   beforeEach(() => {
-    validateOrderWithoutBodyStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+    validateOrderWithoutBodyStub = jest.fn();
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     mockOrderWithoutBody = {
       documentTitle: 'Order of Dismissal and Decision',
@@ -34,30 +33,30 @@ describe('validateOrderWithoutBodyAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateOrderWithoutBodyStub.returns(null);
+    validateOrderWithoutBodyStub = jest.fn().mockReturnValue(null);
     await runAction(validateOrderWithoutBodyAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockOrderWithoutBody,
+        modal: mockOrderWithoutBody,
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateOrderWithoutBodyStub.returns('error');
+    validateOrderWithoutBodyStub = jest.fn().mockReturnValue('error');
     await runAction(validateOrderWithoutBodyAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockOrderWithoutBody,
+        modal: mockOrderWithoutBody,
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

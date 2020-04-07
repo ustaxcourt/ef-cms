@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const { setPriorityOnAllWorkItems } = require('./setPriorityOnAllWorkItems');
 
 describe('setPriorityOnAllWorkItems', () => {
@@ -6,7 +5,7 @@ describe('setPriorityOnAllWorkItems', () => {
   let queryStub;
 
   beforeEach(() => {
-    queryStub = sinon.stub().returns({
+    queryStub = jest.fn().mockReturnValue({
       promise: async () => ({
         Items: [
           {
@@ -20,7 +19,7 @@ describe('setPriorityOnAllWorkItems', () => {
         ],
       }),
     });
-    updateStub = sinon.stub().returns({
+    updateStub = jest.fn().mockReturnValue({
       promise: async () => true,
     });
   });
@@ -41,7 +40,7 @@ describe('setPriorityOnAllWorkItems', () => {
       highPriority: true,
       trialDate: '2019-03-01T21:40:46.415Z',
     });
-    expect(updateStub.getCall(0).args[0]).toMatchObject({
+    expect(updateStub.mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':highPriority': true,
         ':trialDate': '2019-03-01T21:40:46.415Z',
@@ -51,7 +50,7 @@ describe('setPriorityOnAllWorkItems', () => {
         sk: '62685fab-04f3-43d2-b34d-cf1b1b38f300',
       },
     });
-    expect(updateStub.getCall(1).args[0]).toMatchObject({
+    expect(updateStub.mock.calls[1][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':highPriority': true,
         ':trialDate': '2019-03-01T21:40:46.415Z',
@@ -78,7 +77,7 @@ describe('setPriorityOnAllWorkItems', () => {
       caseId: '80f89505-f137-45f0-8e82-9f9870322efc',
       highPriority: false,
     });
-    expect(updateStub.getCall(0).args[0]).toMatchObject({
+    expect(updateStub.mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':highPriority': false,
         ':trialDate': null,
@@ -88,7 +87,7 @@ describe('setPriorityOnAllWorkItems', () => {
         sk: '62685fab-04f3-43d2-b34d-cf1b1b38f300',
       },
     });
-    expect(updateStub.getCall(1).args[0]).toMatchObject({
+    expect(updateStub.mock.calls[1][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':highPriority': false,
         ':trialDate': null,

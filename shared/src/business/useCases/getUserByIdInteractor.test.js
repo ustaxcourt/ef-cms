@@ -43,7 +43,7 @@ describe('getUserByIdInteractor', () => {
     ).rejects.toThrow('Unauthorized for getting attorney user');
   });
 
-  it('throws an error if the user retrieved is not a practitioner or respondent user', async () => {
+  it('throws an error if the user retrieved is not a privatePractitioner or irsPractitioner user', async () => {
     mockRetrievedUser = new User({
       name: 'Test Petitioner',
       role: User.ROLES.petitioner,

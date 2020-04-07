@@ -13,10 +13,10 @@ export const PendingMessages = connect(
     constants: state.constants,
     documentDetailHelper: state.documentDetailHelper,
     form: state.form,
-    messageId: state.messageId,
+    messageId: state.currentViewMetadata.messageId,
     openCreateMessageModalSequence: sequences.openCreateMessageModalSequence,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,
     updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
@@ -27,7 +27,7 @@ export const PendingMessages = connect(
     workItemMetadata: state.workItemMetadata,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({
+  function PendingMessages({
     constants,
     documentDetailHelper,
     form,
@@ -44,7 +44,7 @@ export const PendingMessages = connect(
     validationErrors,
     workItemMetadata,
     workQueueSectionHelper,
-  }) => {
+  }) {
     return (
       <>
         <div className="blue-container">

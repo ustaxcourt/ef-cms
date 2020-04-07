@@ -5,16 +5,19 @@ const {
 describe('reprocessFailedRecordsInteractor', () => {
   let getElasticsearchReindexRecordsSpy;
   let indexSpy;
+  let getCaseByCaseIdSpy = jest.fn();
   const createElasticsearchReindexRecordSpy = jest.fn();
   const deleteElasticsearchReindexRecordSpy = jest.fn();
+  let getRecordSpy;
 
   const applicationContext = {
     environment: { stage: 'local' },
     getPersistenceGateway: () => ({
       createElasticsearchReindexRecord: createElasticsearchReindexRecordSpy,
       deleteElasticsearchReindexRecord: deleteElasticsearchReindexRecordSpy,
+      getCaseByCaseId: getCaseByCaseIdSpy,
       getElasticsearchReindexRecords: getElasticsearchReindexRecordsSpy,
-      getRecord: () => ({ caseId: '123', pk: 'case-123', sk: 'abc' }),
+      getRecord: getRecordSpy,
     }),
     getSearchClient: () => ({
       index: indexSpy,
@@ -30,7 +33,13 @@ describe('reprocessFailedRecordsInteractor', () => {
     indexSpy = jest.fn();
     getElasticsearchReindexRecordsSpy = jest
       .fn()
-      .mockResolvedValue([{ recordPk: 'case-123', recordSk: 'abc' }]);
+      .mockResolvedValue([{ recordPk: 'case|123', recordSk: 'abc' }]);
+    getCaseByCaseIdSpy = jest.fn().mockResolvedValue({
+      caseId: 'case|123',
+    });
+    getRecordSpy = jest
+      .fn()
+      .mockResolvedValue({ caseId: '123', pk: 'case|123', sk: 'abc' });
   });
 
   it('does not call index function if there are no records to process', async () => {
@@ -50,13 +59,40 @@ describe('reprocessFailedRecordsInteractor', () => {
 
     expect(indexSpy).toHaveBeenCalled();
     expect(indexSpy.mock.calls[0][0]).toMatchObject({
-      body: { caseId: { S: '123' }, pk: { S: 'case-123' }, sk: { S: 'abc' } },
-      id: 'case-123',
+      body: { caseId: { S: '123' }, pk: { S: 'case|123' }, sk: { S: 'abc' } },
+      id: 'case|123_abc',
     });
     expect(deleteElasticsearchReindexRecordSpy).toHaveBeenCalled();
     expect(deleteElasticsearchReindexRecordSpy.mock.calls[0][0]).toMatchObject({
-      recordPk: 'case-123',
+      recordPk: 'case|123',
       recordSk: 'abc',
+    });
+  });
+
+  it('calls index function for a record, sees that its a case item, and retrieves the aggregated case', async () => {
+    getElasticsearchReindexRecordsSpy.mockResolvedValue([
+      { recordPk: 'case|123', recordSk: 'case|123' },
+    ]);
+
+    await reprocessFailedRecordsInteractor({
+      applicationContext,
+    });
+
+    expect(indexSpy).toHaveBeenCalled();
+    expect(indexSpy.mock.calls[0][0]).toMatchObject({
+      body: {
+        caseId: { S: 'case|123' },
+      },
+      id: 'case|123_case|123',
+    });
+    expect(getCaseByCaseIdSpy).toHaveBeenCalled();
+    expect(getCaseByCaseIdSpy.mock.calls[0][0]).toMatchObject({
+      caseId: '123',
+    });
+    expect(deleteElasticsearchReindexRecordSpy).toHaveBeenCalled();
+    expect(deleteElasticsearchReindexRecordSpy.mock.calls[0][0]).toMatchObject({
+      recordPk: 'case|123',
+      recordSk: 'case|123',
     });
   });
 

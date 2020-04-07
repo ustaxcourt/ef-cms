@@ -50,21 +50,21 @@ describe('fileExternalDocumentInteractor', () => {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
         {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
         {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
       ],
       filingType: 'Myself',
@@ -76,7 +76,7 @@ describe('fileExternalDocumentInteractor', () => {
     };
 
     globalUser = new User({
-      name: 'Respondent',
+      name: 'irsPractitioner',
       role: User.ROLES.irsPractitioner,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });

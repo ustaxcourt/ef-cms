@@ -33,9 +33,9 @@ exports.getAddressPages = async ({
         .generatePaperServiceAddressPagePdf({
           applicationContext,
           contactData: party,
-          docketNumberWithSuffix: `${
-            caseEntity.docketNumber
-          }${caseEntity.docketNumberSuffix || ''}`,
+          docketNumberWithSuffix: `${caseEntity.docketNumber}${
+            caseEntity.docketNumberSuffix || ''
+          }`,
         }),
     );
   }

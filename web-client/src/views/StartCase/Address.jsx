@@ -11,19 +11,21 @@ export const Address = connect(
   {
     data: state[props.bind],
     type: props.type,
+    updateFormValueAndSecondaryContactInfoSequence: sequences[props.onChange],
     updateFormValueSequence: sequences[props.onChange],
     usStates: state.constants.US_STATES,
     validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
-  ({
+  function Address({
     data,
     type,
+    updateFormValueAndSecondaryContactInfoSequence,
     updateFormValueSequence,
     usStates,
     validateStartCaseSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         <FormGroup
@@ -47,7 +49,7 @@ export const Address = connect(
               validateStartCaseSequence();
             }}
             onChange={e => {
-              updateFormValueSequence({
+              updateFormValueAndSecondaryContactInfoSequence({
                 key: e.target.name,
                 value: e.target.value,
               });

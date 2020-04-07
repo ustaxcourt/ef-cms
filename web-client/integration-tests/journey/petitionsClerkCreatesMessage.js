@@ -1,9 +1,13 @@
-export default (test, message) => {
+import { getPetitionDocumentForCase } from '../helpers';
+
+export default (test, message, createdCases) => {
   return it('Petitions clerk sends message to petitionsclerk1', async () => {
-    const workItem = test.petitionerNewCases[0].documents[0].workItems[0];
+    const petitionDocument = getPetitionDocumentForCase(createdCases[0]);
+    const workItem = petitionDocument.workItems[0];
+
     await test.runSequence('gotoDocumentDetailSequence', {
-      docketNumber: test.petitionerNewCases[0].docketNumber,
-      documentId: test.petitionerNewCases[0].documents[0].documentId,
+      docketNumber: createdCases[0].docketNumber,
+      documentId: petitionDocument.documentId,
     });
 
     // petitionsclerk1

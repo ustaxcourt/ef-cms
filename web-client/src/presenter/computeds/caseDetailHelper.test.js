@@ -30,7 +30,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { practitioners: [{ userId: '123' }] },
+        caseDetail: { privatePractitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -49,7 +49,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { practitioners: [] },
+        caseDetail: { privatePractitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -105,7 +105,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { practitioners: [{ userId: '123' }] },
+        caseDetail: { privatePractitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: { isAssociated: true },
@@ -122,7 +122,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { practitioners: [{ userId: '234' }] },
+        caseDetail: { privatePractitioners: [{ userId: '234' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: { isAssociated: false },
@@ -139,7 +139,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { respondents: [{ userId: '789' }] },
+        caseDetail: { irsPractitioners: [{ userId: '789' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -159,7 +159,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { respondents: [{ userId: '123' }] },
+        caseDetail: { irsPractitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -310,7 +310,7 @@ describe('case detail computed', () => {
     expect(result.showPractitionerSection).toEqual(true);
   });
 
-  it('should show practitioner section if user is an external user and there are practitioners on the case', () => {
+  it('should show practitioner section if user is an external user and there are privatePractitioners on the case', () => {
     const user = {
       role: User.ROLES.privatePractitioner,
       userId: '123',
@@ -318,14 +318,14 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { practitioners: [{ name: 'Test Practitioner' }] },
+        caseDetail: { privatePractitioners: [{ name: 'Test Practitioner' }] },
         form: {},
       },
     });
     expect(result.showPractitionerSection).toEqual(true);
   });
 
-  it('should not show practitioner section if user is an external user and there are no practitioners on the case', () => {
+  it('should not show practitioner section if user is an external user and there are no privatePractitioners on the case', () => {
     const user = {
       role: User.ROLES.privatePractitioner,
       userId: '123',
@@ -333,7 +333,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { practitioners: [] },
+        caseDetail: { privatePractitioners: [] },
         form: {},
       },
     });
@@ -355,7 +355,7 @@ describe('case detail computed', () => {
     expect(result.showRespondentSection).toEqual(true);
   });
 
-  it('should show respondent section if user is an external user and there are respondents on the case', () => {
+  it('should show respondent section if user is an external user and there are irsPractitioners on the case', () => {
     const user = {
       role: User.ROLES.privatePractitioner,
       userId: '123',
@@ -363,14 +363,14 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { respondents: [{ name: 'Test Respondents' }] },
+        caseDetail: { irsPractitioners: [{ name: 'Test Respondents' }] },
         form: {},
       },
     });
     expect(result.showRespondentSection).toEqual(true);
   });
 
-  it('should not show respondent section if user is an external user and there are no respondents on the case', () => {
+  it('should not show respondent section if user is an external user and there are no irsPractitioners on the case', () => {
     const user = {
       role: User.ROLES.privatePractitioner,
       userId: '123',
@@ -378,7 +378,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { respondents: [] },
+        caseDetail: { irsPractitioners: [] },
         form: {},
       },
     });
@@ -393,7 +393,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { practitioners: [{ userId: '2' }] },
+        caseDetail: { privatePractitioners: [{ userId: '2' }] },
         form: {},
         modal: {
           practitionerMatches: [
@@ -485,7 +485,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { respondents: [{ userId: '1' }] },
+        caseDetail: { irsPractitioners: [{ userId: '1' }] },
         form: {},
         modal: {
           respondentMatches: [

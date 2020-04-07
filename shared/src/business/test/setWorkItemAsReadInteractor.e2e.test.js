@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   assignWorkItemsInteractor,
 } = require('../useCases/workitems/assignWorkItemsInteractor');
@@ -23,18 +22,18 @@ describe('setWorkItemAsReadInteractor integration test', () => {
   let applicationContext;
 
   beforeEach(() => {
-    sinon.stub(window.Date.prototype, 'toISOString').returns(DATETIME);
+    window.Date.prototype.toISOString = jest.fn().mockReturnValue(DATETIME);
     applicationContext = createTestApplicationContext({
       user: {
         name: 'Rick Petitioner',
         role: User.ROLES.petitioner,
-        userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
   });
 
   afterEach(() => {
-    window.Date.prototype.toISOString.restore();
+    jest.restoreAllMocks();
   });
 
   it('should create the expected case into the database', async () => {

@@ -10,11 +10,11 @@ export const TrialSessionsSummary = connect(
       state.formattedDashboardTrialSessions.formattedUpcomingSessions,
     trialSessionsSummaryHelper: state.trialSessionsSummaryHelper,
   },
-  ({
+  function TrialSessionsSummary({
     formattedRecentSessions,
     formattedUpcomingSessions,
     trialSessionsSummaryHelper,
-  }) => {
+  }) {
     return (
       <div aria-label="trial sessions" className="card" id="sessions-summary">
         <div className="grid-container content-wrapper gray">

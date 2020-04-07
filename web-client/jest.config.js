@@ -1,4 +1,7 @@
+const baseConfig = require('../jest.config');
+
 module.exports = {
+  ...baseConfig,
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.js',
@@ -13,16 +16,9 @@ module.exports = {
     '!src/index-public.dev.js',
     '!src/index-public.prod.js',
   ],
-  coverageDirectory: './coverage',
-  coverageThreshold: {
-    global: {
-      branches: 95,
-      functions: 95,
-      lines: 95,
-      statements: 95,
-    },
-  },
   globals: {
+    File: function() {},
+    FileReader: () => {},
     atob: x => x,
     window: { document: {} },
   },
@@ -33,5 +29,4 @@ module.exports = {
     '^.+\\.js$': 'babel-jest',
     '^.+\\.jsx$': 'babel-jest',
   },
-  verbose: false,
 };

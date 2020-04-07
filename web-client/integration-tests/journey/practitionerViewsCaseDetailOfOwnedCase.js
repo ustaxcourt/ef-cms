@@ -5,14 +5,14 @@ export default test => {
       docketNumber: test.docketNumber,
     });
     expect(test.getState('currentPage')).toEqual('CaseDetail');
-    expect(test.getState('caseDetail.practitioners.0.name')).toEqual(
+    expect(test.getState('caseDetail.privatePractitioners.0.name')).toEqual(
       'Test Private Practitioner',
     );
     expect(
-      test.getState('caseDetail.practitioners.0.representingPrimary'),
+      test.getState('caseDetail.privatePractitioners.0.representingPrimary'),
     ).toEqual(true);
     expect(
-      test.getState('caseDetail.practitioners.0.representingSecondary'),
+      test.getState('caseDetail.privatePractitioners.0.representingSecondary'),
     ).toEqual(true);
   });
 };

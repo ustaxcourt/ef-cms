@@ -15,8 +15,8 @@ exports.createSectionOutboxRecord = async ({
 }) => {
   await put({
     Item: {
-      gsi1pk: `workitem-${workItem.workItemId}`,
-      pk: `section-outbox-${section}`,
+      gsi1pk: `work-item|${workItem.workItemId}`,
+      pk: `section-outbox|${section}`,
       sk: workItem.createdAt,
       ...workItem,
     },

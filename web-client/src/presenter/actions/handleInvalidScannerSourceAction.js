@@ -12,8 +12,8 @@ export const handleInvalidScannerSourceAction = async ({
     applicationContext,
     key: 'scannerSourceName',
   });
-  store.set(state.isScanning, false);
-  store.set(state.showModal, 'ScanErrorModal');
+  store.set(state.scanner.isScanning, false);
+  store.set(state.modal.showModal, 'ScanErrorModal');
   store.unset(state.scanner.scannerSourceName);
   store.unset(state.scanner.scannerSourceIndex);
 };

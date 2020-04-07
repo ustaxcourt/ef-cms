@@ -17,7 +17,7 @@ exports.deleteCaseTrialSortMappingRecords = async ({
       '#gsi1pk': 'gsi1pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `eligible-for-trial-case-catalog-${caseId}`,
+      ':gsi1pk': `eligible-for-trial-case-catalog|${caseId}`,
     },
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',

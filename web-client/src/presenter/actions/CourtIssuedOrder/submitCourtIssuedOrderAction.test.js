@@ -1,13 +1,12 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { submitCourtIssuedOrderAction } from './submitCourtIssuedOrderAction';
-import sinon from 'sinon';
 
 describe('submitCourtIssuedOrderAction', () => {
   let fileCourtIssuedOrderStub;
 
   beforeEach(() => {
-    fileCourtIssuedOrderStub = sinon.stub();
+    fileCourtIssuedOrderStub = jest.fn();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
@@ -19,7 +18,7 @@ describe('submitCourtIssuedOrderAction', () => {
   });
 
   it('should call fileCourtIssuedOrder', async () => {
-    fileCourtIssuedOrderStub.returns({ documents: [] });
+    fileCourtIssuedOrderStub = jest.fn().mockReturnValue({ documents: [] });
     await runAction(submitCourtIssuedOrderAction, {
       modules: {
         presenter,
@@ -36,6 +35,6 @@ describe('submitCourtIssuedOrderAction', () => {
       },
     });
 
-    expect(fileCourtIssuedOrderStub.calledOnce).toEqual(true);
+    expect(fileCourtIssuedOrderStub.mock.calls.length).toEqual(1);
   });
 });

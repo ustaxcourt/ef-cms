@@ -1,7 +1,6 @@
 import { getTrialSessionWorkingCopyAction } from './getTrialSessionWorkingCopyAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 let getTrialSessionWorkingCopyStub;
 
@@ -15,7 +14,7 @@ describe('getTrialSessionWorkingCopyAction', () => {
   });
 
   it('call the use case to get the trial session working copy', async () => {
-    getTrialSessionWorkingCopyStub = sinon.stub().resolves({
+    getTrialSessionWorkingCopyStub = jest.fn().mockResolvedValue({
       sort: 'practitioner',
       sortOrder: 'desc',
       trialSessionId: '123',
@@ -31,9 +30,9 @@ describe('getTrialSessionWorkingCopyAction', () => {
       },
       state: {},
     });
-    expect(getTrialSessionWorkingCopyStub.calledOnce).toEqual(true);
+    expect(getTrialSessionWorkingCopyStub.mock.calls.length).toEqual(1);
     expect(
-      getTrialSessionWorkingCopyStub.getCall(0).args[0].trialSessionId,
+      getTrialSessionWorkingCopyStub.mock.calls[0][0].trialSessionId,
     ).toEqual('123');
   });
 });

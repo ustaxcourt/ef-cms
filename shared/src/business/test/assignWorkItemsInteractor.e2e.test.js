@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   assignWorkItemsInteractor,
 } = require('../useCases/workitems/assignWorkItemsInteractor');
@@ -19,7 +18,7 @@ describe('assignWorkItemsInteractor integration test', () => {
   let applicationContext;
 
   beforeEach(() => {
-    sinon.stub(window.Date.prototype, 'toISOString').returns(CREATED_DATE);
+    window.Date.prototype.toISOString = jest.fn().mockReturnValue(CREATED_DATE);
     applicationContext = createTestApplicationContext({
       user: {
         name: 'Rick Petitioner',
@@ -30,7 +29,7 @@ describe('assignWorkItemsInteractor integration test', () => {
   });
 
   afterEach(() => {
-    window.Date.prototype.toISOString.restore();
+    jest.restoreAllMocks();
   });
 
   it('should create the expected case into the database', async () => {
@@ -104,6 +103,7 @@ describe('assignWorkItemsInteractor integration test', () => {
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
+
     expect(inbox).toMatchObject([
       {
         assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -141,6 +141,7 @@ describe('assignWorkItemsInteractor integration test', () => {
       applicationContext,
       caseId,
     });
+
     expect(
       caseAfterAssign.documents.find(d => d.documentType === 'Petition'),
     ).toMatchObject({

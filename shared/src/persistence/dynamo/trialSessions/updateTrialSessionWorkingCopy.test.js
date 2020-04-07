@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   updateTrialSessionWorkingCopy,
 } = require('./updateTrialSessionWorkingCopy');
@@ -6,7 +5,7 @@ const {
 describe('updateTrialSessionWorkingCopy', () => {
   let putStub;
   beforeEach(() => {
-    putStub = sinon.stub().returns({
+    putStub = jest.fn().mockReturnValue({
       promise: async () => null,
     });
   });
@@ -29,10 +28,10 @@ describe('updateTrialSessionWorkingCopy', () => {
         userId: '123',
       },
     });
-    expect(putStub.getCall(0).args[0]).toMatchObject({
+    expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {
         pk: 'trial-session-working-copy|456',
-        sk: '123',
+        sk: 'user|123',
         sort: 'practitioner',
         sortOrder: 'desc',
         trialSessionId: '456',

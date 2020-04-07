@@ -18,10 +18,10 @@ export const stashWizardDataAction = ({ get, props, store }) => {
       dateReceivedMonth,
       dateReceivedYear,
       lodged,
+      partyIrsPractitioner,
       partyPrimary,
-      partyRespondent,
       partySecondary,
-      practitioner,
+      privatePractitioners,
     } = get(state.form);
 
     const documentMetadata = {
@@ -29,10 +29,10 @@ export const stashWizardDataAction = ({ get, props, store }) => {
       dateReceivedDay,
       dateReceivedMonth,
       dateReceivedYear,
+      partyIrsPractitioner,
       partyPrimary,
-      partyRespondent,
       partySecondary,
-      practitioner,
+      privatePractitioners,
     };
 
     store.set(state.screenMetadata.primary, { ...documentMetadata, lodged });

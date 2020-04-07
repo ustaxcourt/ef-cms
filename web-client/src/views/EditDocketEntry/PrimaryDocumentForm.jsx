@@ -28,7 +28,7 @@ export const PrimaryDocumentForm = connect(
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function PrimaryDocumentForm({
     addDocketEntryHelper,
     caseDetail,
     form,
@@ -38,7 +38,7 @@ export const PrimaryDocumentForm = connect(
     updateScreenMetadataSequence,
     validateDocketEntrySequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <div className="blue-container docket-entry-form">
@@ -344,10 +344,10 @@ export const PrimaryDocumentForm = connect(
               )}
               <div className="usa-checkbox">
                 <input
-                  checked={form.partyRespondent || false}
+                  checked={form.partyIrsPractitioner || false}
                   className="usa-checkbox__input"
-                  id="party-respondent"
-                  name="partyRespondent"
+                  id="party-irs-practitioner"
+                  name="partyIrsPractitioner"
                   type="checkbox"
                   onChange={e => {
                     updateDocketEntryFormValueSequence({
@@ -359,7 +359,7 @@ export const PrimaryDocumentForm = connect(
                 />
                 <label
                   className="usa-checkbox__label inline-block"
-                  htmlFor="party-respondent"
+                  htmlFor="party-irs-practitioner"
                 >
                   Respondent
                 </label>

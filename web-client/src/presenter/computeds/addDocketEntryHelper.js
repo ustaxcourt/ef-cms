@@ -67,7 +67,7 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     validationErrors &&
     (validationErrors.partyPrimary ||
       validationErrors.partySecondary ||
-      validationErrors.partyRespondent);
+      validationErrors.partyIrsPractitioner);
 
   const { certificateOfServiceDate } = form;
   let certificateOfServiceDateFormatted;

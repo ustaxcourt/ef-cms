@@ -15,11 +15,11 @@ const mocks = {
       numPages: 5,
     }),
   })),
-  readAsArrayBufferMock: jest.fn(function() {
+  readAsArrayBufferMock: jest.fn(function () {
     this.result = 'def';
     this.onload();
   }),
-  readAsDataURLMock: jest.fn(function() {
+  readAsDataURLMock: jest.fn(function () {
     this.result = 'abc';
     this.onload();
   }),
@@ -27,7 +27,7 @@ const mocks = {
 
 presenter.providers.applicationContext = {
   getFileReader: () =>
-    function() {
+    function () {
       this.onload = null;
       this.onerror = null;
       this.readAsDataURL = mocks.readAsDataURLMock;
@@ -111,7 +111,7 @@ describe('loadPdfAction', () => {
   });
 
   it('should error out when the FileReader fails', async () => {
-    mocks.readAsDataURLMock = jest.fn().mockImplementationOnce(function() {
+    mocks.readAsDataURLMock = jest.fn().mockImplementationOnce(function () {
       this.result = 'abc';
       this.onerror('An error called via reader.onerror.');
     });
@@ -129,7 +129,7 @@ describe('loadPdfAction', () => {
       },
     });
 
-    expect(result.state.pdfPreviewModal).toMatchObject({
+    expect(result.state.modal.pdfPreviewModal).toMatchObject({
       ctx: 'abc',
       error: 'An error called via reader.onerror.',
     });

@@ -7,8 +7,8 @@ exports.associateUserWithCasePending = async ({
 }) => {
   return client.put({
     Item: {
-      pk: `${userId}|case|pending`,
-      sk: caseId,
+      pk: `user|${userId}`,
+      sk: `pending-case|${caseId}`,
     },
     applicationContext,
   });

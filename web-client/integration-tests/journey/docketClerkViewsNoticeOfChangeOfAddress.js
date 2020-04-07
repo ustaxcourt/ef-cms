@@ -5,9 +5,11 @@ export const docketClerkViewsNoticeOfChangeOfAddress = test => {
       docketNumber: test.docketNumber,
     });
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    const noticeDocument = test.getState('caseDetail.documents.2');
 
-    expect(noticeDocument.documentType).toEqual('Notice of Change of Address');
+    const noticeDocument = test
+      .getState('caseDetail.documents')
+      .find(d => d.documentTitle === 'Notice of Change of Address');
+
     expect(noticeDocument.servedAt).toBeDefined();
   });
 };
