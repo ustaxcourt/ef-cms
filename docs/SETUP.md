@@ -90,3 +90,5 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
 15. Update CircleCI to have all the new environment variables needed:
      - DYNAMSOFT_PRODUCT_KEYS_`$ENVIRONMENT`
      - POST_CONFIRMATION_ROLE_ARN_`$ENVIRONMENT`
+
+A deploy of a new environment is likely to require _two_ attempts to work, due to Terraform limitations. See [the troubleshooting guide](TROUBLESHOOTING.md) for solutions to problems that may arise during this deploy process.
