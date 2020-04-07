@@ -14,7 +14,7 @@ OrderSearch.validationName = 'OrderSearch';
  * @constructor
  */
 function OrderSearch(rawProps = {}) {
-  this.orderKeyword = rawProps.orderKeyword || '';
+  this.orderKeyword = rawProps.orderKeyword;
 }
 
 OrderSearch.VALIDATION_ERROR_MESSAGES = {

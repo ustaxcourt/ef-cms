@@ -4,15 +4,16 @@ exports.getPractitionerByBarNumber = async ({
   applicationContext,
   barNumber,
 }) => {
+  const upperCaseBarNumber = barNumber.toUpperCase();
   const users = [
     ...(await getRecordsViaMapping({
       applicationContext,
-      pk: `irsPractitioner|${barNumber}`,
+      pk: `irsPractitioner|${upperCaseBarNumber}`,
       prefix: 'user',
     })),
     ...(await getRecordsViaMapping({
       applicationContext,
-      pk: `privatePractitioner|${barNumber}`,
+      pk: `privatePractitioner|${upperCaseBarNumber}`,
       prefix: 'user',
     })),
   ];
