@@ -551,6 +551,9 @@ const {
   onDisconnectInteractor,
 } = require('../../shared/src/business/useCases/notifications/onDisconnectInteractor');
 const {
+  orderAdvancedSearchInteractor,
+} = require('../../shared/src/business/useCases/orderAdvancedSearchInteractor');
+const {
   prioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/prioritizeCaseInteractor');
 const {
@@ -1191,6 +1194,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemInteractor,
         onConnectInteractor,
         onDisconnectInteractor,
+        orderAdvancedSearchInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
         removeCaseFromTrialInteractor,
