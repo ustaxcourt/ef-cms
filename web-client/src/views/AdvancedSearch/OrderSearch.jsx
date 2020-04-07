@@ -44,13 +44,13 @@ export const OrderSearch = connect(
                     name="orderKeyword"
                     type="text"
                     value={advancedSearchForm.orderSearch.orderKeyword || ''}
+                    onBlur={() => validateOrderSearchSequence()}
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
                         formType: 'orderSearch',
                         key: e.target.name,
                         value: e.target.value,
                       });
-                      validateOrderSearchSequence();
                     }}
                   />
                 </FormGroup>
