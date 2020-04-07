@@ -12,6 +12,8 @@ export const PractitionerSearchByBarNumber = connect(
       sequences.submitPractitionerBarNumberSearchSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
+    validatePractitionerSearchByBarNumberFormSequence:
+      sequences.validatePractitionerSearchByBarNumberFormSequence,
     validationErrors: state.validationErrors,
   },
   function PractitionerSearchByBarNumber({
@@ -19,6 +21,7 @@ export const PractitionerSearchByBarNumber = connect(
     clearAdvancedSearchFormSequence,
     submitPractitionerBarNumberSearchSequence,
     updateAdvancedSearchFormValueSequence,
+    validatePractitionerSearchByBarNumberFormSequence,
     validationErrors,
   }) {
     return (
@@ -43,6 +46,9 @@ export const PractitionerSearchByBarNumber = connect(
                       advancedSearchForm.practitionerSearchByBarNumber
                         .barNumber || ''
                     }
+                    onBlur={() => {
+                      validatePractitionerSearchByBarNumberFormSequence();
+                    }}
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
                         formType: 'practitionerSearchByBarNumber',

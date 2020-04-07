@@ -10,9 +10,12 @@ import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAct
 import { setPractitionerResultsAction } from '../actions/AdvancedSearch/setPractitionerResultsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validatePractitionerSearchByBarNumberAction } from '../actions/AdvancedSearch/validatePractitionerSearchByBarNumberAction';
 
 export const submitPractitionerBarNumberSearchSequence = [
+  startShowValidationAction,
   validatePractitionerSearchByBarNumberAction,
   {
     error: [
@@ -21,6 +24,7 @@ export const submitPractitionerBarNumberSearchSequence = [
       clearSearchResultsAction,
     ],
     success: showProgressSequenceDecorator([
+      stopShowValidationAction,
       clearAlertsAction,
       clearPractitionerDetailAction,
       getFormValueBarNumberAction,
