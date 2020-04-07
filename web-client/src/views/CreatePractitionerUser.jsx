@@ -198,7 +198,7 @@ export const CreatePractitionerUser = connect(
                     <FormGroup errorText={validationErrors.practitionerType}>
                       <fieldset className="usa-fieldset">
                         <legend className="usa-legend">
-                          Practitioner Type
+                          Practitioner type
                         </legend>
                         {PRACTITIONER_TYPE_OPTIONS.map(type => (
                           <div
@@ -208,7 +208,7 @@ export const CreatePractitionerUser = connect(
                             <input
                               checked={form.practitionerType === type}
                               className="usa-radio__input"
-                              id={`filing-status-${type}`}
+                              id={`practitioner-type-${type}`}
                               name="practitionerType"
                               type="radio"
                               value={type}
@@ -222,7 +222,7 @@ export const CreatePractitionerUser = connect(
                             />
                             <label
                               className="usa-radio__label"
-                              htmlFor={`filing-status-${type}`}
+                              htmlFor={`practitioner-type-${type}`}
                             >
                               {type}
                             </label>
@@ -278,7 +278,7 @@ export const CreatePractitionerUser = connect(
                   <div className="grid-col-12">
                     <FormGroup errorText={validationErrors.firmName}>
                       <label className="usa-label" htmlFor="firmName">
-                        Firm Name
+                        Firm name
                       </label>
                       <input
                         autoCapitalize="none"
@@ -364,15 +364,15 @@ export const CreatePractitionerUser = connect(
                     </FormGroup>
 
                     <FormGroup>
-                      <label className="usa-label" htmlFor="admissionStatue">
-                        Admission Status
+                      <label className="usa-label" htmlFor="admissionStatus">
+                        Admission status
                       </label>
 
-                      <p id="admissionStatue">Active</p>
+                      <p id="admissionStatus">Active</p>
                     </FormGroup>
 
                     <DateInput
-                      errorText={validationErrors.receivedAt}
+                      errorText={validationErrors.admissionsDate}
                       id="admissionsDate"
                       label="Admissions Date"
                       names={{
