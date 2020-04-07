@@ -9,6 +9,7 @@ const AWS =
 
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
 
+const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
@@ -831,6 +832,7 @@ module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
   return {
+    barNumberGenerator,
     docketNumberGenerator,
     environment,
     getCaseCaptionNames: Case.getCaseCaptionNames,
