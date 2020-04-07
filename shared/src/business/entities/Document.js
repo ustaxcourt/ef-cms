@@ -40,6 +40,9 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
     !filtered ||
     User.isInternalUser(applicationContext.getCurrentUser().role)
   ) {
+    this.qcAt = rawDocument.qcAt;
+    this.qcByUser = rawDocument.qcByUser;
+    this.qcByUserId = rawDocument.qcByUserId;
     this.workItems = (rawDocument.workItems || []).map(
       workItem => new WorkItem(workItem, { applicationContext }),
     );
@@ -82,9 +85,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.previousDocument = rawDocument.previousDocument; // TODO: restricted
   this.privatePractitioners = rawDocument.privatePractitioners; // TODO: look into this
   this.processingStatus = rawDocument.processingStatus || 'pending'; // TODO: restricted
-  this.qcAt = rawDocument.qcAt; // TODO: restricted
-  this.qcByUser = rawDocument.qcByUser; // TODO: restricted
-  this.qcByUserId = rawDocument.qcByUserId; // TODO: restricted
   this.receivedAt = rawDocument.receivedAt || createISODateString();
   this.relationship = rawDocument.relationship; // TODO: look into this
   this.scenario = rawDocument.scenario; // TODO: look into this
