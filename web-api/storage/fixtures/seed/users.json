@@ -253,7 +253,6 @@
     "section": "irsPractitioner",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "irsPractitioner",
-    "firmName": "Internal Revenue Service",
     "barNumber": "RT6789",
     "contact": {
       "address1": "234 Main St",
@@ -278,7 +277,6 @@
     "section": "irsPractitioner",
     "userId": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
     "email": "irsPractitioner1",
-    "firmName": "Internal Revenue Service",
     "barNumber": "RT0987",
     "contact": {
       "address1": "234 Main St",
@@ -303,7 +301,6 @@
     "section": "irsPractitioner",
     "userId": "2d9a7229-7d5a-459f-84ad-754504a9f10f",
     "email": "irsPractitioner2",
-    "firmName": "Internal Revenue Service",
     "barNumber": "WN7777",
     "contact": {
       "address1": "234 Main St",
@@ -328,7 +325,6 @@
     "section": "irsPractitioner",
     "userId": "5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
     "email": "irsPractitioner3",
-    "firmName": "Internal Revenue Service",
     "barNumber": "MS8888",
     "contact": {
       "address1": "234 Main St",
@@ -353,7 +349,6 @@
     "section": "irsPractitioner",
     "userId": "726c38b1-1432-49b3-9383-77a998c0ba4f",
     "email": "irsPractitioner4",
-    "firmName": "Internal Revenue Service",
     "address1": "3202 Elk Avenue",
     "address2": "Hanover, MI 49241",
     "barNumber": "LJ9999",

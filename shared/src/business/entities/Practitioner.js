@@ -46,7 +46,6 @@ const VALIDATION_ERROR_MESSAGES = {
   barNumber: 'Bar number is required',
   birthYear: 'Enter a valid birth year',
   employer: 'Select an employer',
-  firmName: 'Enter a firm name',
   practitionerType: 'Select a practitioner type',
 };
 
@@ -67,7 +66,7 @@ joiValidationDecorator(
       .string()
       .valid(...EMPLOYER_OPTIONS)
       .required(),
-    firmName: joi.string().required(),
+    firmName: joi.string().optional().allow(null),
     isAdmitted: joi.boolean().required(),
     originalBarState: joi.string().optional().allow(null),
     practitionerType: joi
