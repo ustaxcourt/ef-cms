@@ -18,6 +18,7 @@ function NewPractitioner(rawUser) {
 
 const VALIDATION_ERROR_MESSAGES = {
   ...Practitioner.VALIDATION_ERROR_MESSAGES,
+  email: 'Enter email',
   firstName: 'Enter first name',
   lastName: 'Enter last name',
 };
@@ -28,6 +29,7 @@ joiValidationDecorator(
     ...Practitioner.validationRules,
     admissionsStatus: joi.string().optional().allow(null),
     barNumber: joi.string().optional().allow(null),
+    email: joi.string().required(),
     firstName: joi.string().required(),
     isAdmitted: joi.string().optional().allow(null),
     lastName: joi.string().required(),
