@@ -55,13 +55,7 @@ export const PractitionerContactEditForm = connect(
         )}
         <div className="grid-row">
           <div className="grid-col-6">
-            <FormGroup
-              errorText={
-                validationErrors &&
-                validationErrors.contact &&
-                validationErrors.contact.phone
-              }
-            >
+            <FormGroup errorText={validationErrors.phone}>
               <label className="usa-label" htmlFor="phone">
                 Phone number
               </label>
@@ -86,13 +80,7 @@ export const PractitionerContactEditForm = connect(
           </div>
 
           <div className="grid-col-6">
-            <FormGroup
-              errorText={
-                validationErrors &&
-                validationErrors.contact &&
-                validationErrors.contact.additionalPhone
-              }
-            >
+            <FormGroup>
               <label className="usa-label" htmlFor="additionalPhone">
                 Additional phone number{' '}
                 <span className="usa-hint">(optional)</span>
@@ -101,12 +89,9 @@ export const PractitionerContactEditForm = connect(
                 autoCapitalize="none"
                 className="usa-input"
                 id="phone"
-                name="contact.additionalPhone"
+                name="additionalPhone"
                 type="tel"
-                value={form.contact.additionalPhone || ''}
-                onBlur={() => {
-                  onBlurValidationSequence();
-                }}
+                value={form.additionalPhone || ''}
                 onChange={e => {
                   onChangeUpdateSequence({
                     key: e.target.name,
@@ -120,13 +105,7 @@ export const PractitionerContactEditForm = connect(
 
         <div className="grid-row">
           <div className="grid-col-6">
-            <FormGroup
-              errorText={
-                validationErrors &&
-                validationErrors.contact &&
-                validationErrors.contact.email
-              }
-            >
+            <FormGroup errorText={validationErrors.email}>
               <label className="usa-label" htmlFor="email">
                 Email address
               </label>
@@ -134,8 +113,8 @@ export const PractitionerContactEditForm = connect(
                 autoCapitalize="none"
                 className="usa-input"
                 id="email"
-                name="contact.email"
-                value={form.contact.email || ''}
+                name="email"
+                value={form.email || ''}
                 onBlur={() => {
                   onBlurValidationSequence();
                 }}
@@ -150,13 +129,7 @@ export const PractitionerContactEditForm = connect(
           </div>
 
           <div className="grid-col-6">
-            <FormGroup
-              errorText={
-                validationErrors &&
-                validationErrors.contact &&
-                validationErrors.contact.alternateEmail
-              }
-            >
+            <FormGroup>
               <label className="usa-label" htmlFor="alternateEmail">
                 Alternative email address{' '}
                 <span className="usa-hint">(optional)</span>
@@ -165,11 +138,8 @@ export const PractitionerContactEditForm = connect(
                 autoCapitalize="none"
                 className="usa-input"
                 id="alternateEmail"
-                name="contact.alternateEmail"
-                value={form.contact.alternateEmail || ''}
-                onBlur={() => {
-                  onBlurValidationSequence();
-                }}
+                name="alternateEmail"
+                value={form.alternateEmail || ''}
                 onChange={e => {
                   onChangeUpdateSequence({
                     key: e.target.name,
