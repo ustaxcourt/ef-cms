@@ -42,6 +42,12 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   ) {
     this.draftState = rawDocument.draftState;
     this.judge = rawDocument.judge;
+    this.pending =
+      rawDocument.pending === undefined
+        ? Document.isPendingOnCreation(rawDocument)
+        : rawDocument.pending;
+    this.previousDocument = rawDocument.previousDocument;
+    this.processingStatus = rawDocument.processingStatus || 'pending'; // TODO: restricted
     this.qcAt = rawDocument.qcAt;
     this.qcByUser = rawDocument.qcByUser;
     this.qcByUserId = rawDocument.qcByUserId;
@@ -80,13 +86,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.partyPrimary = rawDocument.partyPrimary; // TODO: add info about purpose
   this.partyIrsPractitioner = rawDocument.partyIrsPractitioner;
   this.partySecondary = rawDocument.partySecondary; // TODO: add info about purpose
-  this.pending =
-    rawDocument.pending === undefined
-      ? Document.isPendingOnCreation(rawDocument)
-      : rawDocument.pending; // TODO: restricted
-  this.previousDocument = rawDocument.previousDocument; // TODO: restricted
   this.privatePractitioners = rawDocument.privatePractitioners; // TODO: look into this
-  this.processingStatus = rawDocument.processingStatus || 'pending'; // TODO: restricted
   this.receivedAt = rawDocument.receivedAt || createISODateString();
   this.relationship = rawDocument.relationship; // TODO: look into this
   this.scenario = rawDocument.scenario; // TODO: look into this
