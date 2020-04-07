@@ -23,6 +23,7 @@ describe('Practitioner', () => {
       firmName: 'GW Law Offices',
       isAdmitted: true,
       name: 'Test Practitioner',
+      originalBarState: 'Illinois',
       practitionerType: 'Attorney',
       role: User.ROLES.Practitioner,
       userId: 'practitioner',
