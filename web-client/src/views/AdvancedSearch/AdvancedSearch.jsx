@@ -5,6 +5,7 @@ import { OrderSearchForm } from './OrderSearchForm';
 import { PractitionerSearchForm } from './PractitionerSearchForm';
 import { PractitionerSearchResults } from './PractitionerSearchResults';
 import { SearchResults } from './SearchResults';
+import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -39,6 +40,7 @@ export const AdvancedSearch = connect(
         <BigHeader text="Advanced Search" />
 
         <section className="usa-section grid-container advanced-search">
+          <SuccessNotification />
           <ErrorNotification />
           <Tabs
             bind="advancedSearchTab"
