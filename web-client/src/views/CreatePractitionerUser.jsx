@@ -15,12 +15,10 @@ export const CreatePractitionerUser = connect(
     createPractitionerUserHelper: state.createPractitionerUserHelper,
     form: state.form,
     navigateBackSequence: sequences.navigateBackSequence,
-    submitCreatePractitionerUserSequence:
-      sequences.submitCreatePractitionerUserSequence,
+    submitAddPractitionerSequence: sequences.submitAddPractitionerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     usStates: state.constants.US_STATES,
-    validatePractitionerUserSequence:
-      sequences.validatePractitionerUserSequence,
+    validateAddPractitionerSequence: sequences.validateAddPractitionerSequence,
     validationErrors: state.validationErrors,
   },
   function CreatePractitionerUser({
@@ -28,10 +26,10 @@ export const CreatePractitionerUser = connect(
     form,
     navigateBackSequence,
     PRACTITIONER_TYPE_OPTIONS,
-    submitCreatePractitionerUserSequence,
+    submitAddPractitionerSequence,
     updateFormValueSequence,
     usStates,
-    validatePractitionerUserSequence,
+    validateAddPractitionerSequence,
     validationErrors,
   }) {
     return (
@@ -67,7 +65,7 @@ export const CreatePractitionerUser = connect(
                         type="text"
                         value={form.firstName || ''}
                         onBlur={() => {
-                          validatePractitionerUserSequence();
+                          validateAddPractitionerSequence();
                         }}
                         onChange={e => {
                           updateFormValueSequence({
@@ -92,7 +90,7 @@ export const CreatePractitionerUser = connect(
                         type="text"
                         value={form.middleName || ''}
                         onBlur={() => {
-                          validatePractitionerUserSequence();
+                          validateAddPractitionerSequence();
                         }}
                         onChange={e => {
                           updateFormValueSequence({
@@ -117,7 +115,7 @@ export const CreatePractitionerUser = connect(
                         type="text"
                         value={form.lastName || ''}
                         onBlur={() => {
-                          validatePractitionerUserSequence();
+                          validateAddPractitionerSequence();
                         }}
                         onChange={e => {
                           updateFormValueSequence({
@@ -142,7 +140,7 @@ export const CreatePractitionerUser = connect(
                         type="text"
                         value={form.suffix || ''}
                         onBlur={() => {
-                          validatePractitionerUserSequence();
+                          validateAddPractitionerSequence();
                         }}
                         onChange={e => {
                           updateFormValueSequence({
@@ -179,7 +177,7 @@ export const CreatePractitionerUser = connect(
                             type="text"
                             value={form.birthYear || ''}
                             onBlur={() => {
-                              validatePractitionerUserSequence();
+                              validateAddPractitionerSequence();
                             }}
                             onChange={e => {
                               updateFormValueSequence({
@@ -214,7 +212,7 @@ export const CreatePractitionerUser = connect(
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
-                                validatePractitionerUserSequence();
+                                validateAddPractitionerSequence();
                               }}
                             />
                             <label
@@ -248,7 +246,7 @@ export const CreatePractitionerUser = connect(
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
-                                validatePractitionerUserSequence();
+                                validateAddPractitionerSequence();
                               }}
                             />
                             <label
@@ -285,7 +283,7 @@ export const CreatePractitionerUser = connect(
                         type="text"
                         value={form.firmName || ''}
                         onBlur={() => {
-                          validatePractitionerUserSequence();
+                          validateAddPractitionerSequence();
                         }}
                         onChange={e => {
                           updateFormValueSequence({
@@ -300,7 +298,7 @@ export const CreatePractitionerUser = connect(
                       bind="form"
                       changeCountryTypeSequenceName="countryTypeUserContactChangeSequence"
                       type="contact"
-                      onBlurSequenceName="validatePractitionerUserSequence"
+                      onBlurSequenceName="validateAddPractitionerSequence"
                       onChangeSequenceName="updateFormValueSequence"
                     />
                   </div>
@@ -330,10 +328,11 @@ export const CreatePractitionerUser = connect(
                             key: e.target.name,
                             value: e.target.value,
                           });
-                          validatePractitionerUserSequence();
+                          validateAddPractitionerSequence();
                         }}
                       >
                         <option value="">- Select -</option>
+                        <option value="N/A">N/A</option>
                         <optgroup label="State">
                           {Object.keys(usStates).map(abbrev => {
                             const label = usStates[abbrev];
@@ -371,18 +370,18 @@ export const CreatePractitionerUser = connect(
                     <DateInput
                       errorText={validationErrors.admissionsDate}
                       id="admissionsDate"
-                      label="Admissions Date"
+                      label="Admissions date"
                       names={{
-                        day: 'admissionsDay',
-                        month: 'admissionsMonth',
-                        year: 'admissionsYear',
+                        day: 'day',
+                        month: 'month',
+                        year: 'year',
                       }}
                       values={{
-                        day: form.admissionsDay,
-                        month: form.admissionsMonth,
-                        year: form.admissionsYear,
+                        day: form.day,
+                        month: form.month,
+                        year: form.year,
                       }}
-                      onBlur={validatePractitionerUserSequence}
+                      onBlur={validateAddPractitionerSequence}
                       onChange={updateFormValueSequence}
                     />
                   </div>
@@ -395,7 +394,7 @@ export const CreatePractitionerUser = connect(
             <div className="grid-col-12">
               <Button
                 onClick={() => {
-                  submitCreatePractitionerUserSequence();
+                  submitAddPractitionerSequence();
                 }}
               >
                 Add Practitioner
