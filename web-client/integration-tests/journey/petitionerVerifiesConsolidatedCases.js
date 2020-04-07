@@ -1,4 +1,4 @@
-export default test => {
+export const petitionerVerifiesConsolidatedCases = test => {
   return it('Petitioner verifies there are consolidated cases', async () => {
     const cases = test.getState('cases');
 

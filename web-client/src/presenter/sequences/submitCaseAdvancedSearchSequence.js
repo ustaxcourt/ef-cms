@@ -1,8 +1,8 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearDocketNumberSearchFormAction } from '../actions/clearDocketNumberSearchFormAction';
+import { clearSearchResultsAction } from '../actions/AdvancedSearch/clearSearchResultsAction';
 import { clearSearchTermAction } from '../actions/clearSearchTermAction';
 import { props, state } from 'cerebral';
-import { set, unset } from 'cerebral/factories';
+import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -11,13 +11,12 @@ import { validateCaseAdvancedSearchAction } from '../actions/AdvancedSearch/vali
 
 export const submitCaseAdvancedSearchSequence = [
   clearSearchTermAction,
-  clearDocketNumberSearchFormAction,
   validateCaseAdvancedSearchAction,
   {
     error: [
       setAlertErrorAction,
       setValidationErrorsAction,
-      unset(state.searchResults),
+      clearSearchResultsAction,
     ],
     success: showProgressSequenceDecorator([
       clearAlertsAction,

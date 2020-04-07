@@ -1,13 +1,10 @@
 const client = require('../../dynamodbClientService');
 const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+const {
   updateCaseTrialSortMappingRecords,
 } = require('./updateCaseTrialSortMappingRecords');
-
-const applicationContext = {
-  environment: {
-    stage: 'local',
-  },
-};
 
 const caseId = 'abc';
 const caseSortTags = {

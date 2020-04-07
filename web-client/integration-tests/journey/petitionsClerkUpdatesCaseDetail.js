@@ -95,6 +95,7 @@ export default test => {
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('navigateToReviewSavedPetitionSequence');
+
     await test.runSequence('saveSavedCaseForLaterSequence');
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
@@ -196,7 +197,7 @@ export default test => {
     await test.runSequence('navigateToReviewSavedPetitionSequence');
     await test.runSequence('saveSavedCaseForLaterSequence');
     await test.runSequence('navigateToPathSequence', {
-      path: `/case-detail/${test.caseId}`,
+      path: `/case-detail/${test.docketNumber}`,
     });
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
