@@ -65,4 +65,7 @@ joiValidationDecorator(
 
 Practitioner.validationName = 'Practitioner';
 
+Practitioner.PRACTITIONER_TYPE_OPTIONS = PRACTITIONER_TYPE_OPTIONS;
+Practitioner.EMPLOYER_OPTIONS = EMPLOYER_OPTIONS;
+
 module.exports = { Practitioner };
