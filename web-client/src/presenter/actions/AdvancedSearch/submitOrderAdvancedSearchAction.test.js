@@ -20,15 +20,20 @@ describe('submitOrderAdvancedSearchAction', () => {
       },
     });
 
+    console.log(
+      applicationContext.getUseCases().orderAdvancedSearchInteractor.mock
+        .calls[0][0],
+    );
+
     expect(
       applicationContext.getUseCases().orderAdvancedSearchInteractor.mock.calls
         .length,
     ).toEqual(1);
     expect(
       applicationContext.getUseCases().orderAdvancedSearchInteractor.mock
-        .calls[0][0].searchParams,
+        .calls[0][0],
     ).toMatchObject({
-      orderKeyword: 'a',
+      searchParams: 'a',
     });
   });
 });
