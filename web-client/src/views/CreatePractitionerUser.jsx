@@ -13,6 +13,8 @@ import React from 'react';
 
 export const CreatePractitionerUser = connect(
   {
+    EMPLOYER_OPTIONS: state.constants.EMPLOYER_OPTIONS,
+    PRACTITIONER_TYPE_OPTIONS: state.constants.PRACTITIONER_TYPE_OPTIONS,
     createPractitionerUserHelper: state.createPractitionerUserHelper,
     form: state.form,
     navigateBackSequence: sequences.navigateBackSequence,
@@ -25,8 +27,10 @@ export const CreatePractitionerUser = connect(
     validationErrors: state.validationErrors,
   },
   function CreatePractitionerUser({
+    EMPLOYER_OPTIONS,
     form,
     navigateBackSequence,
+    PRACTITIONER_TYPE_OPTIONS,
     submitCreatePractitionerUserSequence,
     updateFormValueSequence,
     usStates,
@@ -54,17 +58,17 @@ export const CreatePractitionerUser = connect(
               <div className="blue-container">
                 <div className="grid-row grid-gap-3">
                   <div className="grid-col-3">
-                    <FormGroup errorText={validationErrors.firstname}>
-                      <label className="usa-label" htmlFor="firstname">
+                    <FormGroup errorText={validationErrors.firstName}>
+                      <label className="usa-label" htmlFor="firstName">
                         First name
                       </label>
                       <input
                         autoCapitalize="none"
                         className="usa-input"
-                        id="firstname"
-                        name="firstname"
+                        id="firstName"
+                        name="firstName"
                         type="text"
-                        value={form.firstname || ''}
+                        value={form.firstName || ''}
                         onBlur={() => {
                           validatePractitionerUserSequence();
                         }}
@@ -79,17 +83,17 @@ export const CreatePractitionerUser = connect(
                   </div>
 
                   <div className="grid-col-3">
-                    <FormGroup errorText={validationErrors.middlename}>
-                      <label className="usa-label" htmlFor="middlename">
+                    <FormGroup errorText={validationErrors.middleName}>
+                      <label className="usa-label" htmlFor="middleName">
                         Middle name <span className="usa-hint">(optional)</span>
                       </label>
                       <input
                         autoCapitalize="none"
                         className="usa-input"
-                        id="middlename"
-                        name="middlename"
+                        id="middleName"
+                        name="middleName"
                         type="text"
-                        value={form.middlename || ''}
+                        value={form.middleName || ''}
                         onBlur={() => {
                           validatePractitionerUserSequence();
                         }}
@@ -104,17 +108,17 @@ export const CreatePractitionerUser = connect(
                   </div>
 
                   <div className="grid-col-3">
-                    <FormGroup errorText={validationErrors.lastname}>
-                      <label className="usa-label" htmlFor="lastname">
+                    <FormGroup errorText={validationErrors.lastName}>
+                      <label className="usa-label" htmlFor="lastName">
                         Last name
                       </label>
                       <input
                         autoCapitalize="none"
                         className="usa-input"
-                        id="lastname"
-                        name="lastname"
+                        id="lastName"
+                        name="lastName"
                         type="text"
-                        value={form.lastname || ''}
+                        value={form.lastName || ''}
                         onBlur={() => {
                           validatePractitionerUserSequence();
                         }}
@@ -129,7 +133,7 @@ export const CreatePractitionerUser = connect(
                   </div>
 
                   <div className="grid-col-3">
-                    <FormGroup errorText={validationErrors.suffix}>
+                    <FormGroup>
                       <label className="usa-label" htmlFor="suffix">
                         Suffix <span className="usa-hint">(optional)</span>
                       </label>
@@ -156,9 +160,12 @@ export const CreatePractitionerUser = connect(
 
                 <div className="grid-row grid-gap-3">
                   <div className="grid-col-12">
-                    <FormGroup errorText={false}>
+                    <FormGroup errorText={validationErrors.birthYear}>
                       <fieldset className="usa-fieldset margin-bottom-0">
-                        <legend className="display-block" id="year-legend">
+                        <legend
+                          className="display-block"
+                          id="birth-year-legend"
+                        >
                           Birth year
                           <br />
                           <span className="usa-hint">
@@ -167,13 +174,13 @@ export const CreatePractitionerUser = connect(
                         </legend>
                         <div className="usa-form-group--year display-inline-block">
                           <input
-                            aria-describedby="year-legend"
-                            aria-label="starting year, four digits"
+                            aria-describedby="birth-year-legend"
+                            aria-label="birth year, four digits"
                             className="usa-input"
-                            id="year"
-                            name="year"
+                            id="birthYear"
+                            name="birthYear"
                             type="text"
-                            value={form.year || ''}
+                            value={form.birthYear || ''}
                             onBlur={() => {
                               validatePractitionerUserSequence();
                             }}
@@ -193,145 +200,68 @@ export const CreatePractitionerUser = connect(
                         <legend className="usa-legend">
                           Practitioner Type
                         </legend>
-                        <div
-                          className="usa-radio usa-radio__inline"
-                          key={'Attorney'}
-                        >
-                          <input
-                            checked={form.practitionerType === 'Attorney'}
-                            className="usa-radio__input"
-                            id={'filing-status-attorney'}
-                            name="practitionerType"
-                            type="radio"
-                            value={'Attorney'}
-                            onChange={e => {
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                              validatePractitionerUserSequence();
-                            }}
-                          />
-                          <label
-                            className="usa-radio__label"
-                            htmlFor={'filing-status-attorney'}
+                        {PRACTITIONER_TYPE_OPTIONS.map(type => (
+                          <div
+                            className="usa-radio usa-radio__inline"
+                            key={type}
                           >
-                            Attorney
-                          </label>
-                        </div>
-
-                        <div
-                          className="usa-radio usa-radio__inline"
-                          key={'Non-Attorney'}
-                        >
-                          <input
-                            checked={form.practitionerType === 'Non-Attorney'}
-                            className="usa-radio__input"
-                            id={'filing-status-non-attorney'}
-                            name="practitionerType"
-                            type="radio"
-                            value={'Non-Attorney'}
-                            onChange={e => {
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                              validatePractitionerUserSequence();
-                            }}
-                          />
-                          <label
-                            className="usa-radio__label"
-                            htmlFor={'filing-status-non-attorney'}
-                          >
-                            Non-Attorney
-                          </label>
-                        </div>
+                            <input
+                              checked={form.practitionerType === type}
+                              className="usa-radio__input"
+                              id={`filing-status-${type}`}
+                              name="practitionerType"
+                              type="radio"
+                              value={type}
+                              onChange={e => {
+                                updateFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                                validatePractitionerUserSequence();
+                              }}
+                            />
+                            <label
+                              className="usa-radio__label"
+                              htmlFor={`filing-status-${type}`}
+                            >
+                              {type}
+                            </label>
+                          </div>
+                        ))}
                       </fieldset>
                     </FormGroup>
 
-                    <FormGroup errorText={validationErrors.employeer}>
+                    <FormGroup errorText={validationErrors.employer}>
                       <fieldset className="usa-fieldset">
-                        <legend className="usa-legend">Employeer</legend>
-                        <div
-                          className="usa-radio usa-radio__inline"
-                          key={'Private'}
-                        >
-                          <input
-                            checked={form.employeer === 'Private'}
-                            className="usa-radio__input"
-                            id={'employeer-private'}
-                            name="employeer"
-                            type="radio"
-                            value={'Private'}
-                            onChange={e => {
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                              validatePractitionerUserSequence();
-                            }}
-                          />
-                          <label
-                            className="usa-radio__label"
-                            htmlFor={'employeer-private'}
+                        <legend className="usa-legend">Employer</legend>
+                        {EMPLOYER_OPTIONS.map(option => (
+                          <div
+                            className="usa-radio usa-radio__inline"
+                            key={option}
                           >
-                            Private
-                          </label>
-                        </div>
-
-                        <div
-                          className="usa-radio usa-radio__inline"
-                          key={'IRS'}
-                        >
-                          <input
-                            checked={form.employeer === 'IRS'}
-                            className="usa-radio__input"
-                            id={'employeer-irs'}
-                            name="employeer"
-                            type="radio"
-                            value={'IRS'}
-                            onChange={e => {
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                              validatePractitionerUserSequence();
-                            }}
-                          />
-                          <label
-                            className="usa-radio__label"
-                            htmlFor={'employeer-irs'}
-                          >
-                            IRS
-                          </label>
-                        </div>
-
-                        <div
-                          className="usa-radio usa-radio__inline"
-                          key={'DOJ'}
-                        >
-                          <input
-                            checked={form.employeer === 'DOJ'}
-                            className="usa-radio__input"
-                            id={'employeer-doj'}
-                            name="employeer"
-                            type="radio"
-                            value={'DOJ'}
-                            onChange={e => {
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                              validatePractitionerUserSequence();
-                            }}
-                          />
-                          <label
-                            className="usa-radio__label"
-                            htmlFor={'employeer-doj'}
-                          >
-                            DOJ
-                          </label>
-                        </div>
+                            <input
+                              checked={form.employer === option}
+                              className="usa-radio__input"
+                              id={`employer-${option}`}
+                              name="employer"
+                              type="radio"
+                              value={option}
+                              onChange={e => {
+                                updateFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                                validatePractitionerUserSequence();
+                              }}
+                            />
+                            <label
+                              className="usa-radio__label"
+                              htmlFor={`employer-${option}`}
+                            >
+                              {option}
+                            </label>
+                          </div>
+                        ))}
                       </fieldset>
                     </FormGroup>
                   </div>
@@ -388,15 +318,15 @@ export const CreatePractitionerUser = connect(
               <div className="blue-container">
                 <div className="grid-row grid-gap-3">
                   <div className="grid-col-12">
-                    <FormGroup errorText={validationErrors.firmName}>
-                      <label className="usa-label" htmlFor="firmName">
-                        Original Bar State
+                    <FormGroup errorText={validationErrors.originalBarState}>
+                      <label className="usa-label" htmlFor="originalBarState">
+                        Original bar state
                       </label>
 
                       <select
                         className="usa-select"
-                        id={'originalBarState'}
-                        name={'originalBarState'}
+                        id="originalBarState"
+                        name="originalBarState"
                         value={form.originalBarState || ''}
                         onChange={e => {
                           updateFormValueSequence({
@@ -433,12 +363,12 @@ export const CreatePractitionerUser = connect(
                       </select>
                     </FormGroup>
 
-                    <FormGroup errorText={validationErrors.firmName}>
-                      <label className="usa-label" htmlFor="firmName">
+                    <FormGroup>
+                      <label className="usa-label" htmlFor="admissionStatue">
                         Admission Status
                       </label>
 
-                      <p>Active</p>
+                      <p id="admissionStatue">Active</p>
                     </FormGroup>
 
                     <DateInput
