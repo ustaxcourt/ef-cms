@@ -12,6 +12,8 @@ export const PractitionerSearchByName = connect(
       sequences.submitPractitionerNameSearchSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
+    validatePractitionerSearchByNameFormSequence:
+      sequences.validatePractitionerSearchByNameFormSequence,
     validationErrors: state.validationErrors,
   },
   function PractitionerSearchByName({
@@ -19,6 +21,7 @@ export const PractitionerSearchByName = connect(
     clearAdvancedSearchFormSequence,
     submitPractitionerNameSearchSequence,
     updateAdvancedSearchFormValueSequence,
+    validatePractitionerSearchByNameFormSequence,
     validationErrors,
   }) {
     return (
@@ -44,6 +47,9 @@ export const PractitionerSearchByName = connect(
                       advancedSearchForm.practitionerSearchByName
                         .practitionerName || ''
                     }
+                    onBlur={() => {
+                      validatePractitionerSearchByNameFormSequence();
+                    }}
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
                         formType: 'practitionerSearchByName',
