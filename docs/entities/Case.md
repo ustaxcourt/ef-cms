@@ -172,9 +172,6 @@ An array of [`DocketRecord`](./DocketRecord.md)s
 
 #### Rules
 
-
-At least `1` item(s) must be selected.
-
 ### documents
 
 
@@ -184,11 +181,6 @@ List of Document Entities for the case.
 
 
 An array of [`Document`](./Document.md)s
-
-#### Rules
-
-
-At least `1` item(s) must be selected.
 
 ### entityName
 
@@ -266,6 +258,13 @@ Last date that the petitioner is allowed to file before.
 > `date` | optional
 
 ##### Can be null.
+
+### irsPractitioners
+
+
+List of IRS practitioners (also known as respondents) associated with the case.
+
+> `array` | optional
 
 ### irsSendDate
 
@@ -443,13 +442,6 @@ If `petitionPaymentStatus` = `Waived`, then this field is `date` and is `require
 
 Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
-### practitioners
-
-
-List of practitioners associated with the case.
-
-> `array` | optional
-
 ### preferredTrialCity
 
 
@@ -552,6 +544,13 @@ Where the petitioner would prefer to hold the case trial.
 
 `/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/`
 
+### privatePractitioners
+
+
+List of private practitioners associated with the case.
+
+> `array` | optional
+
 ### procedureType
 
 
@@ -581,13 +580,6 @@ Restricted
 When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.
 
 > `date` | required
-
-### respondents
-
-
-List of respondents (from the IRS) associated with the case.
-
-> `array` | optional
 
 ### sealedDate
 
