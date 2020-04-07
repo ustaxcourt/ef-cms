@@ -13,6 +13,7 @@ import {
   MAX_FILE_SIZE_MB,
 } from '../../shared/src/persistence/s3/getUploadPolicy';
 import { Order } from '../../shared/src/business/entities/orders/Order';
+import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
 import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/cases/CaseConstants';
 import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
@@ -38,6 +39,7 @@ export const getConstants = () => ({
   COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
   DATE_FORMATS: FORMATS,
+  EMPLOYER_OPTIONS: Practitioner.EMPLOYER_OPTIONS,
   ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
   FILING_TYPES: Case.FILING_TYPES,
   INITIAL_DOCUMENT_TYPES: Document.INITIAL_DOCUMENT_TYPES,
@@ -49,6 +51,7 @@ export const getConstants = () => ({
   OTHER_TYPES: ContactFactory.OTHER_TYPES,
   PARTY_TYPES: ContactFactory.PARTY_TYPES,
   PAYMENT_STATUS: Case.PAYMENT_STATUS,
+  PRACTITIONER_TYPE_OPTIONS: Practitioner.PRACTITIONER_TYPE_OPTIONS,
   PROCEDURE_TYPES: Case.PROCEDURE_TYPES,
   REFRESH_INTERVAL: 20 * MINUTES,
   ROLE_PERMISSIONS,

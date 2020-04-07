@@ -343,9 +343,11 @@ import { validateAddIrsPractitionerSequence } from './sequences/caseAssociation/
 import { validateAddPrivatePractitionerSequence } from './sequences/caseAssociation/validateAddPrivatePractitionerSequence';
 import { validateAddToTrialSessionSequence } from './sequences/validateAddToTrialSessionSequence';
 import { validateBlockFromTrialSequence } from './sequences/validateBlockFromTrialSequence';
+import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
+import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
 import { validateCaseInventoryReportModalSequence } from './sequences/validateCaseInventoryReportModalSequence';
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
@@ -362,6 +364,8 @@ import { validateOrderWithoutBodySequence } from './sequences/validateOrderWitho
 import { validatePetitionDetailsSequence } from './sequences/validatePetitionDetailsSequence';
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
 import { validatePetitionerInformationFormSequence } from './sequences/validatePetitionerInformationFormSequence';
+import { validatePractitionerSearchByBarNumberFormSequence } from './sequences/validatePractitionerSearchByBarNumberFormSequence';
+import { validatePractitionerSearchByNameFormSequence } from './sequences/validatePractitionerSearchByNameFormSequence';
 import { validatePractitionerUserSequence } from './sequences/validatePractitionerUserSequence';
 import { validatePrimaryContactSequence } from './sequences/validatePrimaryContactSequence';
 import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCaseSequence';
@@ -727,9 +731,11 @@ export const presenter = {
     validateAddPrivatePractitionerSequence,
     validateAddToTrialSessionSequence,
     validateBlockFromTrialSequence,
+    validateCaseAdvancedSearchFormSequence,
     validateCaseAssociationRequestSequence,
     validateCaseDeadlineSequence,
     validateCaseDetailSequence,
+    validateCaseDocketNumberSearchFormSequence,
     validateCaseInventoryReportModalSequence,
     validateCourtIssuedDocketEntrySequence,
     validateDocketEntrySequence,
@@ -746,6 +752,8 @@ export const presenter = {
     validatePetitionDetailsSequence,
     validatePetitionFromPaperSequence,
     validatePetitionerInformationFormSequence,
+    validatePractitionerSearchByBarNumberFormSequence,
+    validatePractitionerSearchByNameFormSequence,
     validatePractitionerUserSequence,
     validatePrimaryContactSequence,
     validatePrioritizeCaseSequence,
