@@ -30,7 +30,6 @@ import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import petitionsClerkAssignsWorkItemToOther from './journey/petitionsClerkAssignsWorkItemToOther';
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
-import petitionsClerkPrioritizesCase from './journey/petitionsClerkPrioritizesCase';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesCaseDetail from './journey/petitionsClerkUpdatesCaseDetail';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
@@ -70,7 +69,6 @@ describe('Case journey', () => {
   petitionsClerkAssignsWorkItemToOther(test);
   loginAs(test, 'petitionsclerk1');
   petitionsClerkViewsMessagesAfterReassign(test);
-  petitionsClerkPrioritizesCase(test);
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkUpdatesCaseDetail(test);
   petitionsClerkSubmitsCaseToIrs(test);
