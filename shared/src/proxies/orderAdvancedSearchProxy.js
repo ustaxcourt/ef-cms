@@ -19,6 +19,7 @@ exports.orderAdvancedSearchInteractor = ({
       );
     })
     .join('&');
+  console.log('???????????', queryString);
 
   return get({
     applicationContext,
