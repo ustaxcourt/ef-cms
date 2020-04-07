@@ -16,6 +16,7 @@ const mockUser = {
   firmName: 'GW Law Offices',
   isAdmitted: true,
   name: 'Test Attorney',
+  originalBarState: 'Oklahoma',
   practitionerType: 'Attorney',
   role: User.ROLES.privatePractitioner,
   userId: 'practitioner1@example.com',

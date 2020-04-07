@@ -164,7 +164,8 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Oregon",
   },
   {
     "role": "privatePractitioner",
@@ -189,7 +190,8 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "N/A",
   },
   {
     "role": "privatePractitioner",
@@ -214,7 +216,8 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Texas",
   },
   {
     "role": "privatePractitioner",
@@ -239,7 +242,8 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Florida",
   },
   {
     "role": "irsPractitioner",
@@ -263,7 +267,8 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Maryland",
   },
   {
     "role": "irsPractitioner",
@@ -287,7 +292,8 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Arkansas",
   },
   {
     "role": "irsPractitioner",
@@ -311,7 +317,8 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Colorado",
   },
   {
     "role": "irsPractitioner",
@@ -352,7 +359,8 @@
     "address1": "3202 Elk Avenue",
     "address2": "Hanover, MI 49241",
     "barNumber": "LJ9999",
-    "phone": "517-563-1536"
+    "phone": "517-563-1536",
+    "originalBarState": "Tennessee",
   },
   {
     "role": "petitioner",
@@ -460,7 +468,8 @@
     "section": "inactivePractitioner",
     "barNumber": "IP1111",
     "userId": "c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
-    "email": "inactivePractitioner"
+    "email": "inactivePractitioner",
+    "originalBarState": "California",
   },
   {
     "role": "irsSuperuser",
