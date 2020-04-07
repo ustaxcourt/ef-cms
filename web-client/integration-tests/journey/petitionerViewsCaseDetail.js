@@ -38,5 +38,17 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
     ).toEqual('RQT');
 
     expect(caseDetail.preferredTrialCity).toEqual('Seattle, Washington');
+
+    expect(caseDetail.associatedJudge).toBeUndefined();
+    expect(caseDetail.blocked).toBeUndefined();
+    expect(caseDetail.blockedDate).toBeUndefined();
+    expect(caseDetail.blockedReason).toBeUndefined();
+    expect(caseDetail.caseNote).toBeUndefined();
+    expect(caseDetail.highPriority).toBeUndefined();
+    expect(caseDetail.highPriorityReason).toBeUndefined();
+    expect(caseDetail.qcCompleteForTrial).toBeUndefined();
+    // expect(caseDetail.status).toBeUndefined();
+    // expect(caseDetail.userId).toBeUndefined();
+    expect(caseDetail.workItems).toBeUndefined();
   });
 };

@@ -246,9 +246,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.highPriority = rawCase.highPriority;
     this.highPriorityReason = rawCase.highPriorityReason;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
+    this.status = rawCase.status || Case.STATUS_TYPES.new;
   }
 
-  this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.userId = rawCase.userId;
 
   this.caseCaption = rawCase.caseCaption;
@@ -277,9 +277,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt || createISODateString();
+  this.sealedDate = rawCase.sealedDate;
   this.sortableDocketNumber =
     rawCase.sortableDocketNumber || this.generateSortableDocketNumber();
-  this.sealedDate = rawCase.sealedDate;
   this.trialDate = rawCase.trialDate;
   this.trialLocation = rawCase.trialLocation;
   this.trialSessionId = rawCase.trialSessionId;
