@@ -14,6 +14,8 @@ export const CaseSearchByName = connect(
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     usStates: state.constants.US_STATES,
+    validateCaseAdvancedSearchFormSequence:
+      sequences.validateCaseAdvancedSearchFormSequence,
     validationErrors: state.validationErrors,
   },
   function CaseSearchByName({
@@ -24,6 +26,7 @@ export const CaseSearchByName = connect(
     submitAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence,
     usStates,
+    validateCaseAdvancedSearchFormSequence,
     validationErrors,
   }) {
     return (
@@ -47,6 +50,9 @@ export const CaseSearchByName = connect(
                     value={
                       advancedSearchForm.caseSearchByName.petitionerName || ''
                     }
+                    onBlur={() => {
+                      validateCaseAdvancedSearchFormSequence();
+                    }}
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
                         formType: 'caseSearchByName',
@@ -80,6 +86,9 @@ export const CaseSearchByName = connect(
                         value={
                           advancedSearchForm.caseSearchByName.yearFiledMin || ''
                         }
+                        onBlur={() => {
+                          validateCaseAdvancedSearchFormSequence();
+                        }}
                         onChange={e => {
                           updateAdvancedSearchFormValueSequence({
                             formType: 'caseSearchByName',
@@ -101,6 +110,9 @@ export const CaseSearchByName = connect(
                         value={
                           advancedSearchForm.caseSearchByName.yearFiledMax || ''
                         }
+                        onBlur={() => {
+                          validateCaseAdvancedSearchFormSequence();
+                        }}
                         onChange={e => {
                           updateAdvancedSearchFormValueSequence({
                             formType: 'caseSearchByName',
