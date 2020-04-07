@@ -25,6 +25,9 @@ describe('createPractitionerUserAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        computedDate: '2019-03-01T21:40:46.415Z',
+      },
       state: {
         form: {
           user: {},
