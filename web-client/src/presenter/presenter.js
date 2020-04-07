@@ -279,6 +279,7 @@ import { submitExternalDocumentSequence } from './sequences/submitExternalDocume
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitForwardSequence } from './sequences/submitForwardSequence';
 import { submitLoginSequence } from './sequences/submitLoginSequence';
+import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
 import { submitPractitionerBarNumberSearchSequence } from './sequences/submitPractitionerBarNumberSearchSequence';
 import { submitPractitionerNameSearchSequence } from './sequences/submitPractitionerNameSearchSequence';
 import { submitRemoveConsolidatedCasesSequence } from './sequences/submitRemoveConsolidatedCasesSequence';
@@ -356,6 +357,7 @@ import { validateForwardMessageSequence } from './sequences/validateForwardMessa
 import { validateInitialWorkItemMessageInModalSequence } from './sequences/validateInitialWorkItemMessageInModalSequence';
 import { validateInitialWorkItemMessageSequence } from './sequences/validateInitialWorkItemMessageSequence';
 import { validateNoteSequence } from './sequences/validateNoteSequence';
+import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
 import { validateOrderWithoutBodySequence } from './sequences/validateOrderWithoutBodySequence';
 import { validatePetitionDetailsSequence } from './sequences/validatePetitionDetailsSequence';
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
@@ -661,6 +663,7 @@ export const presenter = {
     submitFilePetitionSequence,
     submitForwardSequence,
     submitLoginSequence,
+    submitOrderAdvancedSearchSequence,
     submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence,
     submitRemoveConsolidatedCasesSequence,
@@ -738,6 +741,7 @@ export const presenter = {
     validateInitialWorkItemMessageInModalSequence,
     validateInitialWorkItemMessageSequence,
     validateNoteSequence,
+    validateOrderSearchSequence,
     validateOrderWithoutBodySequence,
     validatePetitionDetailsSequence,
     validatePetitionFromPaperSequence,
