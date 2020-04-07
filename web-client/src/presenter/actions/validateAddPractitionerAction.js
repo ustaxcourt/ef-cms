@@ -34,15 +34,32 @@ export const validateAddPractitionerAction = ({
       'birthYear',
       'practitionerType',
       'employer',
-      'address1',
-      'city',
-      'state',
-      'postalCode',
+      'contact.country',
+      'contact.address1',
+      'contact.city',
+      'contact.state',
+      'contact.postalCode',
       'phone',
       'email',
       'originalBarState',
       'admissionsDate',
     ];
+
+    if (
+      errors.address1 ||
+      errors.city ||
+      errors.country ||
+      errors.postalCode ||
+      errors.state
+    ) {
+      errors.contact = {};
+      ['address1', 'city', 'country', 'postalCode', 'state'].forEach(key => {
+        if (errors[key]) {
+          errors.contact[key] = errors[key];
+          delete errors[key];
+        }
+      });
+    }
 
     return path.error({
       alertError: {
