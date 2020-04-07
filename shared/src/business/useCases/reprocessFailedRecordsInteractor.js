@@ -20,10 +20,7 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
       try {
         let fullRecord;
 
-        if (
-          record.recordPk.includes('case|') &&
-          record.recordSk.includes('case|')
-        ) {
+        if (record.recordPk.includes('case|')) {
           fullRecord = await applicationContext
             .getPersistenceGateway()
             .getCaseByCaseId({
