@@ -5,9 +5,12 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setPractitionerResultsAction } from '../actions/AdvancedSearch/setPractitionerResultsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validatePractitionerSearchByNameAction } from '../actions/AdvancedSearch/validatePractitionerSearchByNameAction';
 
 export const submitPractitionerNameSearchSequence = [
+  startShowValidationAction,
   validatePractitionerSearchByNameAction,
   {
     error: [
@@ -16,6 +19,7 @@ export const submitPractitionerNameSearchSequence = [
       clearSearchResultsAction,
     ],
     success: showProgressSequenceDecorator([
+      stopShowValidationAction,
       clearAlertsAction,
       getPractitionersByNameAction,
       setPractitionerResultsAction,
