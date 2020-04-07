@@ -18,15 +18,29 @@ exports.createPractitionerUserInteractor = async ({
   user,
 }) => {
   const requestUser = applicationContext.getCurrentUser();
+
   if (!isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)) {
     throw new UnauthorizedError('Unauthorized for creating practitioner user');
   }
+
+  const barNumber = await applicationContext.barNumberGenerator.createBarNumber(
+    {
+      applicationContext,
+      initials: user.firstName.charAt(0) + user.lastName.charAt(0),
+    },
+  );
+  const practitioner = new Practitioner({
+    ...user,
+    barNumber,
+    isAdmitted: true,
+    userId: applicationContext.getUniqueId(),
+  }).validate();
 
   const createdUser = await applicationContext
     .getPersistenceGateway()
     .createPractitionerUser({
       applicationContext,
-      user,
+      user: practitioner.toRawObject(),
     });
 
   return new Practitioner(createdUser, { applicationContext })

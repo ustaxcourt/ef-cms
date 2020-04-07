@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { createPractitionerUserAction } from '../actions/createPractitionerUserAction';
+import { navigateBackAction } from '../actions/navigateBackAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -21,7 +22,11 @@ export const submitAddPractitionerSequence = [
       createPractitionerUserAction,
       {
         error: [],
-        success: [setAlertSuccessAction, setSaveAlertsForNavigationAction],
+        success: [
+          setAlertSuccessAction,
+          setSaveAlertsForNavigationAction,
+          navigateBackAction,
+        ],
       },
     ],
   },
