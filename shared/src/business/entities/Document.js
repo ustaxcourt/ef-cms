@@ -40,9 +40,13 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
     !filtered ||
     User.isInternalUser(applicationContext.getCurrentUser().role)
   ) {
+    this.draftState = rawDocument.draftState;
+    this.judge = rawDocument.judge;
     this.qcAt = rawDocument.qcAt;
     this.qcByUser = rawDocument.qcByUser;
     this.qcByUserId = rawDocument.qcByUserId;
+    this.signedAt = rawDocument.signedAt;
+    this.signedByUserId = rawDocument.signedByUserId;
     this.workItems = (rawDocument.workItems || []).map(
       workItem => new WorkItem(workItem, { applicationContext }),
     );
@@ -61,7 +65,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.documentId = rawDocument.documentId;
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
-  this.draftState = rawDocument.draftState; // TODO: restricted
   this.eventCode = rawDocument.eventCode;
   this.filedBy = rawDocument.filedBy;
   this.filingDate = rawDocument.filingDate || createISODateString();
@@ -70,7 +73,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.hasSupportingDocuments = rawDocument.hasSupportingDocuments;
   this.isFileAttached = rawDocument.isFileAttached;
   this.isPaper = rawDocument.isPaper;
-  this.judge = rawDocument.judge; // TODO: restricted
   this.lodged = rawDocument.lodged;
   this.mailingDate = rawDocument.mailingDate;
   this.objections = rawDocument.objections;
@@ -94,8 +96,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.servedParties = rawDocument.servedParties;
   this.serviceDate = rawDocument.serviceDate;
   this.serviceStamp = rawDocument.serviceStamp;
-  this.signedAt = rawDocument.signedAt; // TODO: restricted
-  this.signedByUserId = rawDocument.signedByUserId; // TODO: restricted
   this.status = rawDocument.status; // TODO: look into this
   this.supportingDocument = rawDocument.supportingDocument;
   this.trialLocation = rawDocument.trialLocation; // TODO: look into this
