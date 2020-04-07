@@ -1,13 +1,9 @@
 const AWS = require('aws-sdk');
 const {
-  aggregateCommonQueryParams,
-} = require('../utilities/aggregateCommonQueryParams');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { caseSearchFilter } = require('../utilities/caseFilter');
-const { get, isEmpty } = require('lodash');
+const { get } = require('lodash');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -17,7 +13,6 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @returns {object} the case data
  */
 exports.orderAdvancedSearchInteractor = async providers => {
-  // FIXME I dont know what to do !!!!!!!!!!!!!!
   const { applicationContext } = providers;
 
   const authorizedUser = applicationContext.getCurrentUser();
@@ -25,6 +20,40 @@ exports.orderAdvancedSearchInteractor = async providers => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  // search served documents that are orders for keyword phrase
+  const exactMatchesBody = await applicationContext.getSearchClient().search({
+    body: {
+      _source: ['docketNumber', 'documentTitle', 'filingDate', 'judge'],
+      query: {
+        bool: {
+          must: [
+            {
+              exists: {
+                field: 'servedAt',
+              },
+            },
+            {
+              simple_query_string: {
+                default_operator: 'or',
+                fields: ['documentTitle', 'documentContents'],
+                query: 'a',
+              },
+            },
+          ],
+        },
+      },
+      size: 5000,
+    },
+    index: 'efcms',
+  });
+
+  const hits = get(exactMatchesBody, 'hits.hits', []);
+  const foundOrders = hits.map(hit =>
+    AWS.DynamoDB.Converter.unmarshall(hit['_source']),
+  );
+
+  console.log('things we got back : ', foundOrders);
 
   return [];
 

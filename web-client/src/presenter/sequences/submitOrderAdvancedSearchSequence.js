@@ -7,6 +7,7 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { submitOrderAdvancedSearchAction } from '../actions/AdvancedSearch/submitOrderAdvancedSearchAction';
 import { validateOrderAdvancedSearchAction } from '../actions/AdvancedSearch/validateOrderAdvancedSearchAction';
 
 export const submitOrderAdvancedSearchSequence = [
@@ -21,6 +22,7 @@ export const submitOrderAdvancedSearchSequence = [
     ],
     success: showProgressSequenceDecorator([
       clearAlertsAction,
+      submitOrderAdvancedSearchAction,
       set(state.searchResults, props.searchResults),
     ]),
   },
