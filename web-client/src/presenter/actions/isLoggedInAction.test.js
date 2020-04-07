@@ -1,10 +1,9 @@
 import { isLoggedInAction } from './isLoggedInAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
-const isLoggedInStub = sinon.stub();
-const unauthorizedStub = sinon.stub();
+const isLoggedInStub = jest.fn();
+const unauthorizedStub = jest.fn();
 
 presenter.providers.path = {
   isLoggedIn: isLoggedInStub,
@@ -30,7 +29,7 @@ describe('isLoggedInAction', () => {
       state: {},
     });
 
-    expect(isLoggedInStub.called).toEqual(true);
+    expect(isLoggedInStub).toBeCalled();
   });
 
   it('should call the unauthorized path if currentUser is undefined', async () => {
@@ -43,6 +42,6 @@ describe('isLoggedInAction', () => {
       state: {},
     });
 
-    expect(unauthorizedStub.called).toEqual(true);
+    expect(unauthorizedStub).toBeCalled();
   });
 });

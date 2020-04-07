@@ -7,8 +7,8 @@ exports.associateUserWithCase = async ({
 }) => {
   return client.put({
     Item: {
-      pk: `${userId}|case`,
-      sk: caseId,
+      pk: `user|${userId}`,
+      sk: `case|${caseId}`,
     },
     applicationContext,
   });

@@ -1,7 +1,9 @@
 export default test => {
   return it('Petitions clerk deletes a batch', async () => {
-    const selectedDocumentType = test.getState('documentSelectedForScan');
-    const batches = test.getState(`batches.${selectedDocumentType}`);
+    const selectedDocumentType = test.getState(
+      'currentViewMetadata.documentSelectedForScan',
+    );
+    const batches = test.getState(`scanner.batches.${selectedDocumentType}`);
 
     await test.runSequence('openConfirmDeleteBatchModalSequence', {
       batchIndexToDelete: 0,

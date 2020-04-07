@@ -15,7 +15,7 @@ exports.updateUserCaseNote = async ({
   return await client.put({
     Item: {
       pk: `user-case-note|${caseNoteToUpdate.caseId}`,
-      sk: `${caseNoteToUpdate.userId}`,
+      sk: `user|${caseNoteToUpdate.userId}`,
       ...caseNoteToUpdate,
     },
     applicationContext,

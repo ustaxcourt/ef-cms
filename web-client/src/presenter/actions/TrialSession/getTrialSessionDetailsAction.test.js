@@ -1,7 +1,6 @@
 import { getTrialSessionDetailsAction } from './getTrialSessionDetailsAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 let getTrialSessionDetailsStub;
 
@@ -15,7 +14,7 @@ describe('getTrialSessionDetailsAction', () => {
   });
 
   it('call the use case to get the trial details', async () => {
-    getTrialSessionDetailsStub = sinon.stub().resolves({
+    getTrialSessionDetailsStub = jest.fn().mockResolvedValue({
       trialSessionId: '123',
     });
 
@@ -28,14 +27,14 @@ describe('getTrialSessionDetailsAction', () => {
       },
       state: {},
     });
-    expect(getTrialSessionDetailsStub.calledOnce).toEqual(true);
-    expect(
-      getTrialSessionDetailsStub.getCall(0).args[0].trialSessionId,
-    ).toEqual('123');
+    expect(getTrialSessionDetailsStub.mock.calls.length).toEqual(1);
+    expect(getTrialSessionDetailsStub.mock.calls[0][0].trialSessionId).toEqual(
+      '123',
+    );
   });
 
   it('call the use case a second time if the trial session is a swing session', async () => {
-    getTrialSessionDetailsStub = sinon.stub().resolves({
+    getTrialSessionDetailsStub = jest.fn().mockResolvedValue({
       swingSession: true,
       swingSessionId: '234',
       trialSessionId: '123',
@@ -50,12 +49,12 @@ describe('getTrialSessionDetailsAction', () => {
       },
       state: {},
     });
-    expect(getTrialSessionDetailsStub.calledTwice).toEqual(true);
-    expect(
-      getTrialSessionDetailsStub.getCall(0).args[0].trialSessionId,
-    ).toEqual('123');
-    expect(
-      getTrialSessionDetailsStub.getCall(1).args[0].trialSessionId,
-    ).toEqual('234');
+    expect(getTrialSessionDetailsStub.mock.calls.length).toEqual(2);
+    expect(getTrialSessionDetailsStub.mock.calls[0][0].trialSessionId).toEqual(
+      '123',
+    );
+    expect(getTrialSessionDetailsStub.mock.calls[1][0].trialSessionId).toEqual(
+      '234',
+    );
   });
 });

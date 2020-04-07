@@ -1,13 +1,12 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setTrialSessionCalendarAction } from './setTrialSessionCalendarAction';
-import sinon from 'sinon';
 
 let setTrialSessionCalendarStub;
 
 describe('setTrialSessionCalendarAction', () => {
   beforeEach(() => {
-    setTrialSessionCalendarStub = sinon.stub().resolves([
+    setTrialSessionCalendarStub = jest.fn().mockResolvedValue([
       {
         trialSessionId: '345',
       },
@@ -30,6 +29,6 @@ describe('setTrialSessionCalendarAction', () => {
       },
       state: {},
     });
-    expect(setTrialSessionCalendarStub.calledOnce).toEqual(true);
+    expect(setTrialSessionCalendarStub.mock.calls.length).toEqual(1);
   });
 });

@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const { Case } = require('../../entities/cases/Case');
 const { createWorkItemInteractor } = require('./createWorkItemInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -10,8 +9,8 @@ describe('createWorkItem', () => {
   let updateCaseStub;
 
   beforeEach(() => {
-    createWorkItemStub = sinon.stub().resolves(null);
-    updateCaseStub = sinon.stub().resolves(null);
+    createWorkItemStub = jest.fn().mockResolvedValue(null);
+    updateCaseStub = jest.fn().mockResolvedValue(null);
   });
 
   const createApplicationContext = overrides => ({
@@ -64,8 +63,8 @@ describe('createWorkItem', () => {
       documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       message: 'testing',
     });
-    expect(createWorkItemStub.calledOnce).toBeTruthy();
-    expect(createWorkItemStub.getCall(0).args[0].workItem).toMatchObject({
+    expect(createWorkItemStub.mock.calls.length).toEqual(1);
+    expect(createWorkItemStub.mock.calls[0][0].workItem).toMatchObject({
       assigneeId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
       assigneeName: 'Docketclerk1',
       caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -109,9 +108,9 @@ describe('createWorkItem', () => {
       documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       message: 'testing',
     });
-    expect(updateCaseStub.calledOnce).toBeTruthy();
+    expect(updateCaseStub.mock.calls.length).toEqual(1);
     expect(
-      updateCaseStub.getCall(0).args[0].caseToUpdate.documents[2].workItems[0],
+      updateCaseStub.mock.calls[0][0].caseToUpdate.documents[2].workItems[0],
     ).toMatchObject({
       assigneeId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
       assigneeName: 'Docketclerk1',

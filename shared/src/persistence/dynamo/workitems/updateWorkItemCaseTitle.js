@@ -10,7 +10,7 @@ exports.updateWorkItemCaseTitle = async ({
       '#gsi1pk': 'gsi1pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `workitem-${workItemId}`,
+      ':gsi1pk': `work-item|${workItemId}`,
     },
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',

@@ -76,7 +76,7 @@ describe('fetchPendingItems', () => {
       },
     ]);
 
-    expect(results).toEqual([
+    expect(results).toMatchObject([
       { caseId: '1', documentId: 'def', pending: true },
       { caseId: '2', documentId: 'abc', pending: true },
     ]);
@@ -109,7 +109,7 @@ describe('fetchPendingItems', () => {
       },
     ]);
 
-    expect(results).toEqual([
+    expect(results).toMatchObject([
       { caseId: '1', documentId: 'def', pending: true },
       { caseId: '2', documentId: 'abc', pending: true },
     ]);
@@ -135,7 +135,8 @@ describe('fetchPendingItems', () => {
       },
     ]);
 
-    expect(results).toEqual([]);
+    expect(results.length).toEqual(0);
+    expect(results).toMatchObject([]);
   });
 
   it('uses caseId filter and calls getCaseByCaseId and returns the pending items for that case', async () => {

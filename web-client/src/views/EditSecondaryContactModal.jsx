@@ -8,7 +8,7 @@ export const EditSecondaryContactModal = connect(
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.dismissModalSequence,
   },
-  ({ cancelSequence, confirmSequence }) => {
+  function EditSecondaryContactModal({ cancelSequence, confirmSequence }) {
     return (
       <ModalDialog
         cancelSequence={cancelSequence}

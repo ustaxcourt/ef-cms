@@ -17,7 +17,7 @@ exports.getSentMessagesForSection = async ({ applicationContext, section }) => {
     },
     ExpressionAttributeValues: {
       ':afterDate': afterDate,
-      ':pk': `section-outbox-${section}`,
+      ':pk': `section-outbox|${section}`,
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,

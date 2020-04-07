@@ -1,41 +1,32 @@
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const {
   createTrialSessionWorkingCopy,
 } = require('./createTrialSessionWorkingCopy');
 
+const mockTrialSessionWorkingCopy = {
+  trialSessionId: '456',
+  userId: '123',
+};
+
 describe('createTrialSessionWorkingCopy', () => {
-  let applicationContext;
-  let putStub;
-
-  const trialSessionWorkingCopy = {
-    trialSessionId: '456',
-    userId: '123',
-  };
-
-  beforeEach(() => {
-    putStub = sinon.stub().returns({
-      promise: async () => null,
-    });
-
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        put: putStub,
-      }),
-    };
+  beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
   });
 
   it('attempts to persist the trial session', async () => {
     await createTrialSessionWorkingCopy({
       applicationContext,
-      trialSessionWorkingCopy,
+      trialSessionWorkingCopy: mockTrialSessionWorkingCopy,
     });
-    expect(putStub.getCall(0).args[0]).toMatchObject({
+
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0],
+    ).toMatchObject({
       Item: {
         pk: 'trial-session-working-copy|456',
-        sk: '123',
+        sk: 'user|123',
         trialSessionId: '456',
         userId: '123',
       },

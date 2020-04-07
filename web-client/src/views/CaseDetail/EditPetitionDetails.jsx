@@ -13,7 +13,7 @@ import React from 'react';
 
 export const EditPetitionDetails = connect(
   {
-    caseTypes: state.caseTypes,
+    CASE_TYPES: state.constants.CASE_TYPES,
     docketNumber: state.caseDetail.docketNumber,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -21,15 +21,15 @@ export const EditPetitionDetails = connect(
     validatePetitionDetailsSequence: sequences.validatePetitionDetailsSequence,
     validationErrors: state.validationErrors,
   },
-  ({
-    caseTypes,
+  function EditPetitionDetails({
+    CASE_TYPES,
     docketNumber,
     form,
     updateFormValueSequence,
     updatePetitionDetailsSequence,
     validatePetitionDetailsSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <CaseDetailHeader />
@@ -47,7 +47,7 @@ export const EditPetitionDetails = connect(
 
               <CaseTypeSelect
                 allowDefaultOption={true}
-                caseTypes={caseTypes}
+                caseTypes={CASE_TYPES}
                 legend="Type of case"
                 validation="validatePetitionDetailsSequence"
                 value={form.caseType}

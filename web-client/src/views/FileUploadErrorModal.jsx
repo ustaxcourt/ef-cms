@@ -7,7 +7,7 @@ export const FileUploadErrorModal = connect(
   {
     cancelSequence: sequences.cancelFileUploadSequence,
   },
-  ({ cancelSequence, confirmSequence }) => {
+  function FileUploadErrorModal({ cancelSequence, confirmSequence }) {
     return (
       <ModalDialog
         cancelLabel="Cancel Upload"

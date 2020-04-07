@@ -6,5 +6,5 @@
  * @returns {Promise} async action
  */
 export const navigateToDocumentQCAction = async ({ router }) => {
-  await router.route('/document-qc');
+  await router.route('/document-qc/my/inbox');
 };

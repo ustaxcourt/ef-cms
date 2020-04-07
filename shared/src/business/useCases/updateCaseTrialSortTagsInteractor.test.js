@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   updateCaseTrialSortTagsInteractor,
 } = require('./updateCaseTrialSortTagsInteractor');
@@ -10,7 +9,7 @@ const { User } = require('../entities/User');
 describe('Update case trial sort tags', () => {
   let applicationContext;
   let mockCase;
-  let updateCaseTrialSortMappingRecordsStub = sinon.stub().resolves(null);
+  let updateCaseTrialSortMappingRecordsStub = jest.fn().mockResolvedValue(null);
 
   beforeEach(() => {
     mockCase = MOCK_CASE;
@@ -39,7 +38,7 @@ describe('Update case trial sort tags', () => {
       caseId: mockCase.caseId,
     });
 
-    expect(updateCaseTrialSortMappingRecordsStub.called).toBeFalsy();
+    expect(updateCaseTrialSortMappingRecordsStub).not.toBeCalled();
   });
 
   it('calls persistence if case status is ready for trial', async () => {
@@ -49,7 +48,7 @@ describe('Update case trial sort tags', () => {
       caseId: mockCase.caseId,
     });
 
-    expect(updateCaseTrialSortMappingRecordsStub.called).toBeTruthy();
+    expect(updateCaseTrialSortMappingRecordsStub).toBeCalled();
   });
 
   it('throws unauthorized error if user is unauthorized', async () => {

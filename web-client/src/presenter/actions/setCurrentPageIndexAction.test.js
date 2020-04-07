@@ -2,19 +2,21 @@ import { runAction } from 'cerebral/test';
 import { setCurrentPageIndexAction } from './setCurrentPageIndexAction';
 
 describe('setCurrentPageIndexAction', () => {
-  it('sets the state.currentPageIndex to the passed in props.currentPageIndex if it is valid', async () => {
+  it('sets the state.scanner.currentPageIndex to the passed in props.currentPageIndex if it is valid', async () => {
     const { state } = await runAction(setCurrentPageIndexAction, {
       props: {
         currentPageIndex: 2,
       },
       state: {
-        currentPageIndex: 1,
         scanBatchPreviewerHelper: {
           totalPages: 5,
         },
+        scanner: {
+          currentPageIndex: 1,
+        },
       },
     });
-    expect(state.currentPageIndex).toEqual(2);
+    expect(state.scanner.currentPageIndex).toEqual(2);
   });
 
   it('sets currentPageIndex to totalPages-1 if currentPageIndex is greater than or equal to totalPages', async () => {
@@ -23,13 +25,15 @@ describe('setCurrentPageIndexAction', () => {
         currentPageIndex: 5,
       },
       state: {
-        currentPageIndex: 1,
         scanBatchPreviewerHelper: {
           totalPages: 5,
         },
+        scanner: {
+          currentPageIndex: 1,
+        },
       },
     });
-    expect(state.currentPageIndex).toEqual(4);
+    expect(state.scanner.currentPageIndex).toEqual(4);
   });
 
   it('sets currentPageIndex to 0 if currentPageIndex is less than 0', async () => {
@@ -38,12 +42,14 @@ describe('setCurrentPageIndexAction', () => {
         currentPageIndex: -1,
       },
       state: {
-        currentPageIndex: 1,
         scanBatchPreviewerHelper: {
           totalPages: 5,
         },
+        scanner: {
+          currentPageIndex: 1,
+        },
       },
     });
-    expect(state.currentPageIndex).toEqual(0);
+    expect(state.scanner.currentPageIndex).toEqual(0);
   });
 });

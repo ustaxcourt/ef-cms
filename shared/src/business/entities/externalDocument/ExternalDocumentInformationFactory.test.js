@@ -52,9 +52,7 @@ describe('ExternalDocumentInformationFactory', () => {
       });
 
       it('should not allow certificate of service date to be in the future', () => {
-        baseDoc.certificateOfServiceDate = moment()
-          .add(1, 'days')
-          .format();
+        baseDoc.certificateOfServiceDate = moment().add(1, 'days').format();
         expect(errors().certificateOfServiceDate).toEqual(
           VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
         );
@@ -378,11 +376,11 @@ describe('ExternalDocumentInformationFactory', () => {
       });
     });
 
-    it('should require one of [partyPrimary, partySecondary, partyRespondent] to be selected', () => {
+    it('should require one of [partyPrimary, partySecondary, partyIrsPractitioner] to be selected', () => {
       expect(errors().partyPrimary).toEqual(
         VALIDATION_ERROR_MESSAGES.partyPrimary,
       );
-      baseDoc.partyRespondent = true;
+      baseDoc.partyIrsPractitioner = true;
       expect(errors().partyPrimary).toEqual(undefined);
     });
 
@@ -392,18 +390,18 @@ describe('ExternalDocumentInformationFactory', () => {
         baseDoc.selectedCases = ['101-19', '102-19'];
       });
 
-      it('should require a party per case or partyRespondent to be selected', () => {
+      it('should require a party per case or partyIrsPractitioner to be selected', () => {
         expect(errors().partyPrimary).toEqual(
           VALIDATION_ERROR_MESSAGES.partyPrimary,
         );
       });
 
-      describe('Respondent Selected', () => {
+      describe('IRS Practitioner Selected', () => {
         beforeEach(() => {
-          baseDoc.partyRespondent = true;
+          baseDoc.partyIrsPractitioner = true;
         });
 
-        it('should allow having only a respondent as a party to all cases', () => {
+        it('should allow having only an irsPractitioner as a party to all cases', () => {
           expect(errors().partyPrimary).toEqual(undefined);
         });
       });

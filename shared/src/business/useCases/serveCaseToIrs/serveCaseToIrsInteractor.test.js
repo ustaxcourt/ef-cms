@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
@@ -60,25 +59,31 @@ const MOCK_PDF_DATA =
   'FydHhyZWYKNTEwCiUlRU9G';
 
 describe('serveCaseToIrsInteractor', () => {
-  let deleteWorkItemFromInboxStub = sinon.stub().resolves(null);
-  let zipDocumentsStub = sinon.stub().resolves(null);
-  let deleteDocumentStub = sinon.stub().resolves(null);
-  let updateCaseStub = sinon.stub().resolves(null);
-  let updateWorkItemStub = sinon.stub().resolves(null);
-  let putWorkItemInUsersOutboxStub = sinon.stub().resolves(null);
-  let generateCaseConfirmationPdfStub = jest.fn();
-  let appendPaperServiceAddressPageToPdfStub = jest.fn();
+  let deleteWorkItemFromInboxStub;
+  let zipDocumentsStub;
+  let deleteDocumentStub;
+  let updateCaseStub;
+  let updateWorkItemStub;
+  let putWorkItemInUsersOutboxStub;
+  let generateCaseConfirmationPdfStub;
+  let appendPaperServiceAddressPageToPdfStub;
+  let addCoversheetInteractorStub;
+  let getUseCasesStub;
 
   let applicationContext;
   let mockCase;
 
   beforeEach(() => {
-    deleteWorkItemFromInboxStub = sinon.stub().resolves(null);
-    zipDocumentsStub = sinon.stub().resolves(null);
-    deleteDocumentStub = sinon.stub().resolves(null);
+    deleteWorkItemFromInboxStub = jest.fn(null);
+    zipDocumentsStub = jest.fn(null);
+    deleteDocumentStub = jest.fn(null);
     updateCaseStub = jest.fn();
-    updateWorkItemStub = sinon.stub().resolves(null);
-    putWorkItemInUsersOutboxStub = sinon.stub().resolves(null);
+    updateWorkItemStub = jest.fn(null);
+    putWorkItemInUsersOutboxStub = jest.fn(null);
+    appendPaperServiceAddressPageToPdfStub = jest.fn();
+    addCoversheetInteractorStub = jest.fn();
+    getUseCasesStub = jest.fn();
+    generateCaseConfirmationPdfStub = jest.fn();
 
     mockCase = MOCK_CASE;
     mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
@@ -103,6 +108,60 @@ describe('serveCaseToIrsInteractor', () => {
     }
 
     expect(error.message).toContain('Unauthorized');
+  });
+
+  it('should add a coversheet to the served petition', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: true,
+      mailingDate: 'some day',
+    };
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'bob',
+          role: User.ROLES.petitionsClerk,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getEntityConstructors: () => ({
+        Case,
+        DocketRecord,
+      }),
+      getPersistenceGateway: () => {
+        return {
+          deleteDocument: deleteDocumentStub,
+          deleteWorkItemFromInbox: deleteWorkItemFromInboxStub,
+          getCaseByCaseId: () => Promise.resolve(mockCase),
+          getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
+          updateCase: updateCaseStub,
+          updateWorkItem: updateWorkItemStub,
+          zipDocuments: zipDocumentsStub,
+        };
+      },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({
+        appendPaperServiceAddressPageToPdf: appendPaperServiceAddressPageToPdfStub,
+        generateCaseConfirmationPdf: () => {
+          return MOCK_PDF_DATA;
+        },
+      }),
+      getUseCases: () => {
+        return { addCoversheetInteractor: addCoversheetInteractorStub };
+      },
+      getUtilities: () => ({
+        formatDateString: () => '12/27/18',
+      }),
+    };
+
+    await serveCaseToIrsInteractor({
+      applicationContext,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(addCoversheetInteractorStub).toHaveBeenCalled();
   });
 
   it('should not return a paper service pdf when the case is electronic', async () => {
@@ -141,6 +200,9 @@ describe('serveCaseToIrsInteractor', () => {
           appendPaperServiceAddressPageToPdf: appendPaperServiceAddressPageToPdfStub,
           generateCaseConfirmationPdf: generateCaseConfirmationPdfStub,
         };
+      },
+      getUseCases: () => {
+        return { addCoversheetInteractor: addCoversheetInteractorStub };
       },
       getUtilities: () => ({
         formatDateString: () => '12/27/18',
@@ -181,6 +243,7 @@ describe('serveCaseToIrsInteractor', () => {
           deleteWorkItemFromInbox: deleteWorkItemFromInboxStub,
           getCaseByCaseId: () => Promise.resolve(mockCase),
           getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          getUseCases: getUseCasesStub,
           putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
           updateCase: updateCaseStub,
           updateWorkItem: updateWorkItemStub,
@@ -194,6 +257,9 @@ describe('serveCaseToIrsInteractor', () => {
           return MOCK_PDF_DATA;
         },
       }),
+      getUseCases: () => {
+        return { addCoversheetInteractor: addCoversheetInteractorStub };
+      },
       getUtilities: () => ({
         formatDateString: () => '12/27/18',
       }),
@@ -258,6 +324,7 @@ describe('serveCaseToIrsInteractor', () => {
           deleteWorkItemFromInbox: deleteWorkItemFromInboxStub,
           getCaseByCaseId: () => Promise.resolve(mockCase),
           getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          getUseCases: getUseCasesStub,
           putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
           updateCase: updateCaseStub,
           updateWorkItem: updateWorkItemStub,
@@ -271,6 +338,9 @@ describe('serveCaseToIrsInteractor', () => {
           return MOCK_PDF_DATA;
         },
       }),
+      getUseCases: () => {
+        return { addCoversheetInteractor: addCoversheetInteractorStub };
+      },
       getUtilities: () => ({
         formatDateString: () => '12/27/18',
       }),

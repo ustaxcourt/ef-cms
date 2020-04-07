@@ -6,9 +6,9 @@ import React from 'react';
 export const Loading = connect(
   {
     loadingHelper: state.loadingHelper,
-    waitingForResponse: state.waitingForResponse,
+    waitingForResponse: state.progressIndicator.waitingForResponse,
   },
-  ({ loadingHelper, waitingForResponse }) => {
+  function Loading({ loadingHelper, waitingForResponse }) {
     return (
       !loadingHelper.pageIsInterstitial &&
       waitingForResponse && (

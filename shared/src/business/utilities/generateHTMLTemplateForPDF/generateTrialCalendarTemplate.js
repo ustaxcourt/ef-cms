@@ -28,12 +28,14 @@ const generateTrialCalendarTemplate = async ({
       </td>
       <td class="line-height-13">${item.caseCaption}</td>
       <td style="width: 25%;" class="line-height-13">
-        ${item.practitioners
+        ${item.privatePractitioners
           .map(practitioner => practitioner.name)
           .join('<br />')}
       </td>
       <td style="width: 25%;" class="line-height-13">
-        ${item.respondents.map(respondent => respondent.name).join('<br />')}
+        ${item.irsPractitioners
+          .map(respondent => respondent.name)
+          .join('<br />')}
       </td>
     </tr>`;
   };

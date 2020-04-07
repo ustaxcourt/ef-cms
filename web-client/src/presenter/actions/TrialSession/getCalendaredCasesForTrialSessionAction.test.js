@@ -1,13 +1,12 @@
 import { getCalendaredCasesForTrialSessionAction } from './getCalendaredCasesForTrialSessionAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 let getCalendaredCasesForTrialSessionStub;
 
 describe('getCalendaredCasesForTrialSessionAction', () => {
   beforeEach(() => {
-    getCalendaredCasesForTrialSessionStub = sinon.stub().resolves([
+    getCalendaredCasesForTrialSessionStub = jest.fn().mockResolvedValue([
       {
         caseId: '345',
       },
@@ -30,6 +29,6 @@ describe('getCalendaredCasesForTrialSessionAction', () => {
       },
       state: {},
     });
-    expect(getCalendaredCasesForTrialSessionStub.calledOnce).toEqual(true);
+    expect(getCalendaredCasesForTrialSessionStub.mock.calls.length).toEqual(1);
   });
 });

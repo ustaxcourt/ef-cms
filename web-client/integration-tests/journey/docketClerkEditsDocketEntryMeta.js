@@ -33,7 +33,7 @@ export const docketClerkEditsDocketEntryMeta = test => {
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'partyRespondent',
+      key: 'partyIrsPractitioner',
       value: 'true',
     });
 

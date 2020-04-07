@@ -13,7 +13,7 @@ const {
 exports.getCaseDeadlinesByCaseId = async ({ applicationContext, caseId }) => {
   return await getRecordsViaMapping({
     applicationContext,
-    key: caseId,
-    type: 'case-deadline',
+    pk: `case|${caseId}`,
+    prefix: 'case-deadline',
   });
 };

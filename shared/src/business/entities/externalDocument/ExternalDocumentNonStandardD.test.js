@@ -19,9 +19,7 @@ describe('ExternalDocumentNonStandardD', () => {
     });
 
     it('should have error message for future date', () => {
-      const serviceDate = moment()
-        .add(1, 'days')
-        .format();
+      const serviceDate = moment().add(1, 'days').format();
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',

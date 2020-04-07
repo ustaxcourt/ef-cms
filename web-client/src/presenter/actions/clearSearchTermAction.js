@@ -7,5 +7,5 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.caseId
  */
 export const clearSearchTermAction = ({ store }) => {
-  store.set(state.searchTerm, '');
+  store.set(state.header.searchTerm, '');
 };

@@ -1,4 +1,6 @@
+const baseConfig = require('../jest.config');
 module.exports = {
+  ...baseConfig,
   collectCoverage: true,
   collectCoverageFrom: [
     'bulkImportAttorneyUsers.js',
@@ -10,14 +12,5 @@ module.exports = {
     '!src/**/*Lambda.js',
     '!src/**/*.test.js',
   ],
-  coverageDirectory: './coverage',
-  coverageThreshold: {
-    global: {
-      branches: 95,
-      functions: 95,
-      lines: 95,
-      statements: 95,
-    },
-  },
   verbose: false,
 };

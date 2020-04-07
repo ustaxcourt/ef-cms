@@ -12,14 +12,14 @@ export const CaseDetailPendingReportList = connect(
       sequences.openConfirmRemoveCaseDetailPendingItemModalSequence,
     pendingItemsDocketEntries:
       state.formattedCaseDetail.pendingItemsDocketEntries,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
-  ({
+  function CaseDetailPendingReportList({
     formattedCaseDetail,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     pendingItemsDocketEntries,
     showModal,
-  }) => {
+  }) {
     return (
       <>
         <div className="margin-top-neg-3">

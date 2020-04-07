@@ -1,15 +1,14 @@
-const sinon = require('sinon');
 const { updateTrialSession } = require('./updateTrialSession');
 
 describe('updateTrialSession', () => {
   let putStub;
   beforeEach(() => {
-    putStub = sinon.stub().returns({
+    putStub = jest.fn().mockReturnValue({
       promise: async () => null,
     });
   });
 
-  it('invokes the persistence layer with pk of trial-session-{trialSessionId}, sk of trial-session-{trialSessionId} and other expected params', async () => {
+  it('invokes the persistence layer with pk of trial-session|{trialSessionId}, sk of trial-session|{trialSessionId} and other expected params', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',
@@ -25,10 +24,10 @@ describe('updateTrialSession', () => {
         trialSessionId: '123',
       },
     });
-    expect(putStub.getCall(0).args[0]).toMatchObject({
+    expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {
-        pk: 'trial-session-123',
-        sk: 'trial-session-123',
+        pk: 'trial-session|123',
+        sk: 'trial-session|123',
         trialLocation: 'VEGAS BABY',
         trialSessionId: '123',
       },

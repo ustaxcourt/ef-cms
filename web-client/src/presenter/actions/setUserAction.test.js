@@ -1,28 +1,20 @@
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { setUserAction } from './setUserAction';
-import sinon from 'sinon';
 
-const setCurrentUserStub = sinon.stub().returns(null);
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    setItemInteractor: ({ key, value }) => {
-      return window.localStorage.setItem(key, JSON.stringify(value));
-    },
-  }),
-  setCurrentUser: setCurrentUserStub,
-};
+const setCurrentUserStub = jest.fn().mockReturnValue(null);
+const setItemInteractorStub = jest.fn();
 
 describe('setUserAction', () => {
   beforeEach(() => {
     process.env.USTC_ENV = 'dev';
-    global.window = {
-      localStorage: {
-        setItem() {},
-      },
+
+    presenter.providers.applicationContext = {
+      getUseCases: () => ({
+        setItemInteractor: setItemInteractorStub,
+      }),
+      setCurrentUser: setCurrentUserStub,
     };
-    sinon.stub(window.localStorage, 'setItem');
   });
 
   afterEach(() => {
@@ -43,11 +35,12 @@ describe('setUserAction', () => {
       },
       state: {},
     });
-    expect(setCurrentUserStub.getCall(0).args[0]).toMatchObject(user);
-    expect(setCurrentUserStub.calledOnce).toEqual(true);
-    expect(window.localStorage.setItem.getCall(0).args[0]).toEqual('user');
-    expect(window.localStorage.setItem.getCall(0).args[1]).toEqual(
-      JSON.stringify(user),
-    );
+    expect(setCurrentUserStub.mock.calls.length).toEqual(1);
+    expect(setCurrentUserStub.mock.calls[0][0]).toMatchObject(user);
+    expect(setItemInteractorStub.mock.calls.length).toEqual(1);
+    expect(setItemInteractorStub.mock.calls[0][0]).toMatchObject({
+      key: 'user',
+      value: user,
+    });
   });
 });

@@ -7,7 +7,7 @@ export const InactiveCases = connect(
   {
     inactiveCases: state.formattedTrialSessionDetails.inactiveCases,
   },
-  ({ inactiveCases }) => {
+  function InactiveCases({ inactiveCases }) {
     return (
       <React.Fragment>
         <div className="text-semibold push-right margin-bottom-2">

@@ -6,6 +6,8 @@ export const reviewPetitionFromPaperHelper = (get, applicationContext) => {
     dateReceived,
     hasVerifiedIrsNotice,
     irsNoticeDate,
+    petitionPaymentDate,
+    petitionPaymentMethod,
     petitionPaymentStatus,
     preferredTrialCity,
     ...form
@@ -22,7 +24,14 @@ export const reviewPetitionFromPaperHelper = (get, applicationContext) => {
   const shouldShowIrsNoticeDate = hasVerifiedIrsNotice === true;
 
   const petitionPaymentStatusFormatted =
-    petitionPaymentStatus === PAYMENT_STATUS.PAID ? 'Paid' : 'Not paid';
+    petitionPaymentStatus === PAYMENT_STATUS.PAID
+      ? `Paid ${applicationContext
+          .getUtilities()
+          .formatDateString(
+            petitionPaymentDate,
+            'MMDDYYYY',
+          )} ${petitionPaymentMethod}`
+      : 'Not paid';
 
   const preferredTrialCityFormatted = preferredTrialCity
     ? preferredTrialCity
@@ -44,6 +53,7 @@ export const reviewPetitionFromPaperHelper = (get, applicationContext) => {
     'orderDesignatingPlaceOfTrial',
     'orderToShowCause',
     'noticeOfAttachments',
+    'orderForRequestedTrialLocation',
   ].some(key => Boolean(form[key]));
 
   return {

@@ -1,9 +1,10 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { getWorkItemInteractor } = require('./getWorkItemInteractor');
 const { User } = require('../../entities/User');
 
 describe('getWorkItemInteractor', () => {
-  let applicationContext;
-
   let mockWorkItem = {
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     createdAt: '',
@@ -19,19 +20,21 @@ describe('getWorkItemInteractor', () => {
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
+  const mockPetitionerUser = {
+    role: User.ROLES.petitioner,
+    userId: 'petitioner',
+  };
+
+  const mockDocketClerkUser = {
+    role: User.ROLES.docketClerk,
+    userId: 'docketclerk',
+  };
+
   it('throws an error if the work item was not found', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
-      getPersistenceGateway: () => ({
-        getWorkItemById: async () => null,
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue(mockPetitionerUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getWorkItemById.mockResolvedValue(null);
     let error;
     try {
       await getWorkItemInteractor({
@@ -45,18 +48,11 @@ describe('getWorkItemInteractor', () => {
   });
 
   it('throws an error if the user does not have access to the work item', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
-      getPersistenceGateway: () => ({
-        getWorkItemById: async () => mockWorkItem,
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue(mockPetitionerUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getWorkItemById.mockResolvedValue(mockWorkItem);
+
     let error;
     try {
       await getWorkItemInteractor({
@@ -70,18 +66,11 @@ describe('getWorkItemInteractor', () => {
   });
 
   it('successfully returns the work item for a docketclerk', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.docketClerk,
-          userId: 'docketclerk',
-        };
-      },
-      getPersistenceGateway: () => ({
-        getWorkItemById: async () => mockWorkItem,
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue(mockDocketClerkUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getWorkItemById.mockResolvedValue(mockWorkItem);
+
     const result = await getWorkItemInteractor({
       applicationContext,
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

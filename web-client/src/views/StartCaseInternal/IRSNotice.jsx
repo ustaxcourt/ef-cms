@@ -6,23 +6,22 @@ import React from 'react';
 
 export const IRSNotice = connect(
   {
-    caseTypes: state.caseTypes,
+    CASE_TYPES: state.constants.CASE_TYPES,
     form: state.form,
-    setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
     startCaseInternalHelper: state.startCaseInternalHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validatePetitionFromPaperSequence:
       sequences.validatePetitionFromPaperSequence,
     validationErrors: state.validationErrors,
   },
-  ({
-    caseTypes,
+  function IRSNotice({
+    CASE_TYPES,
     form,
     startCaseInternalHelper,
     updateFormValueSequence,
     validatePetitionFromPaperSequence,
     validationErrors,
-  }) => {
+  }) {
     const renderIrsNoticeRadios = () => {
       return (
         <fieldset className="usa-fieldset" id="irs-verified-notice-radios">
@@ -110,7 +109,7 @@ export const IRSNotice = connect(
 
         <CaseTypeSelect
           allowDefaultOption={true}
-          caseTypes={caseTypes}
+          caseTypes={CASE_TYPES}
           legend="Type of case"
           validation="validatePetitionFromPaperSequence"
           value={form.caseType}

@@ -6,14 +6,13 @@ import {
   onInputChange,
   reactSelectValue,
 } from './documentTypeSelectHelper';
-import sinon from 'sinon';
 
 describe('documentTypeSelectHelper', () => {
   let updateSequenceSpy, validateSequenceSpy;
 
   beforeEach(() => {
-    updateSequenceSpy = sinon.spy();
-    validateSequenceSpy = sinon.spy();
+    updateSequenceSpy = jest.fn();
+    validateSequenceSpy = jest.fn();
   });
 
   describe('fileDocumentPrimaryOnChange', () => {
@@ -33,28 +32,28 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy.called).toEqual(true);
-      expect(updateSequenceSpy.getCall(0).args[0]).toEqual({
+      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'category',
         value: inputValue.category,
       });
-      expect(updateSequenceSpy.getCall(1).args[0]).toEqual({
+      expect(updateSequenceSpy.mock.calls[1][0]).toEqual({
         key: 'documentType',
         value: inputValue.documentType,
       });
-      expect(updateSequenceSpy.getCall(2).args[0]).toEqual({
+      expect(updateSequenceSpy.mock.calls[2][0]).toEqual({
         key: 'documentTitle',
         value: inputValue.documentTitle,
       });
-      expect(updateSequenceSpy.getCall(3).args[0]).toEqual({
+      expect(updateSequenceSpy.mock.calls[3][0]).toEqual({
         key: 'eventCode',
         value: inputValue.eventCode,
       });
-      expect(updateSequenceSpy.getCall(4).args[0]).toEqual({
+      expect(updateSequenceSpy.mock.calls[4][0]).toEqual({
         key: 'scenario',
         value: inputValue.scenario,
       });
-      expect(validateSequenceSpy.called).toEqual(true);
+      expect(validateSequenceSpy).toBeCalled();
     });
 
     it('should call update sequence a single time followed by validate sequence if "action" is "clear"', () => {
@@ -64,12 +63,12 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy.called).toEqual(true);
-      expect(updateSequenceSpy.getCall(0).args[0]).toEqual({
+      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'category',
         value: '',
       });
-      expect(validateSequenceSpy.called).toEqual(true);
+      expect(validateSequenceSpy).toBeCalled();
     });
 
     it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
@@ -79,8 +78,8 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy.called).toEqual(false);
-      expect(validateSequenceSpy.called).toEqual(false);
+      expect(updateSequenceSpy).not.toBeCalled();
+      expect(validateSequenceSpy).not.toBeCalled();
     });
   });
 
@@ -101,28 +100,28 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy.called).toEqual(true);
-      expect(updateSequenceSpy.getCall(0).args[0]).toEqual({
+      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'secondaryDocument.category',
         value: inputValue.category,
       });
-      expect(updateSequenceSpy.getCall(1).args[0]).toEqual({
+      expect(updateSequenceSpy.mock.calls[1][0]).toEqual({
         key: 'secondaryDocument.documentType',
         value: inputValue.documentType,
       });
-      expect(updateSequenceSpy.getCall(2).args[0]).toEqual({
+      expect(updateSequenceSpy.mock.calls[2][0]).toEqual({
         key: 'secondaryDocument.documentTitle',
         value: inputValue.documentTitle,
       });
-      expect(updateSequenceSpy.getCall(3).args[0]).toEqual({
+      expect(updateSequenceSpy.mock.calls[3][0]).toEqual({
         key: 'secondaryDocument.eventCode',
         value: inputValue.eventCode,
       });
-      expect(updateSequenceSpy.getCall(4).args[0]).toEqual({
+      expect(updateSequenceSpy.mock.calls[4][0]).toEqual({
         key: 'secondaryDocument.scenario',
         value: inputValue.scenario,
       });
-      expect(validateSequenceSpy.called).toEqual(true);
+      expect(validateSequenceSpy).toBeCalled();
     });
 
     it('should call update sequence a single time followed by validate sequence if "action" is "clear"', () => {
@@ -132,12 +131,12 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy.called).toEqual(true);
-      expect(updateSequenceSpy.getCall(0).args[0]).toEqual({
+      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'secondaryDocument.category',
         value: '',
       });
-      expect(validateSequenceSpy.called).toEqual(true);
+      expect(validateSequenceSpy).toBeCalled();
     });
 
     it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
@@ -147,8 +146,8 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy.called).toEqual(false);
-      expect(validateSequenceSpy.called).toEqual(false);
+      expect(updateSequenceSpy).not.toBeCalled();
+      expect(validateSequenceSpy).not.toBeCalled();
     });
   });
 
@@ -166,12 +165,12 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy.called).toEqual(true);
-      expect(updateSequenceSpy.getCall(0).args[0]).toEqual({
+      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'primaryDocument.eventCode',
         value: inputValue.value,
       });
-      expect(validateSequenceSpy.called).toEqual(true);
+      expect(validateSequenceSpy).toBeCalled();
     });
 
     it('should call update sequence a single time followed by validate sequence if "action" is "clear"', () => {
@@ -182,12 +181,12 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy.called).toEqual(true);
-      expect(updateSequenceSpy.getCall(0).args[0]).toEqual({
+      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'primaryDocument.eventCode',
         value: '',
       });
-      expect(validateSequenceSpy.called).toEqual(true);
+      expect(validateSequenceSpy).toBeCalled();
     });
 
     it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
@@ -197,8 +196,8 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy.called).toEqual(false);
-      expect(validateSequenceSpy.called).toEqual(false);
+      expect(updateSequenceSpy).not.toBeCalled();
+      expect(validateSequenceSpy).not.toBeCalled();
     });
   });
 
@@ -218,24 +217,24 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy.called).toEqual(true);
-      expect(updateSequenceSpy.getCall(0).args[0]).toEqual({
+      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'documentType',
         value: inputValue.documentType,
       });
-      expect(updateSequenceSpy.getCall(1).args[0]).toEqual({
+      expect(updateSequenceSpy.mock.calls[1][0]).toEqual({
         key: 'documentTitle',
         value: inputValue.documentTitle,
       });
-      expect(updateSequenceSpy.getCall(2).args[0]).toEqual({
+      expect(updateSequenceSpy.mock.calls[2][0]).toEqual({
         key: 'eventCode',
         value: inputValue.eventCode,
       });
-      expect(updateSequenceSpy.getCall(3).args[0]).toEqual({
+      expect(updateSequenceSpy.mock.calls[3][0]).toEqual({
         key: 'scenario',
         value: inputValue.scenario,
       });
-      expect(validateSequenceSpy.called).toEqual(true);
+      expect(validateSequenceSpy).toBeCalled();
     });
 
     it('should call update sequence multiple times followed by validate sequence if "action" is "clear"', () => {
@@ -245,24 +244,24 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy.called).toEqual(true);
-      expect(updateSequenceSpy.getCall(0).args[0]).toEqual({
+      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'documentType',
         value: '',
       });
-      expect(updateSequenceSpy.getCall(1).args[0]).toEqual({
+      expect(updateSequenceSpy.mock.calls[1][0]).toEqual({
         key: 'documentTitle',
         value: '',
       });
-      expect(updateSequenceSpy.getCall(2).args[0]).toEqual({
+      expect(updateSequenceSpy.mock.calls[2][0]).toEqual({
         key: 'eventCode',
         value: '',
       });
-      expect(updateSequenceSpy.getCall(3).args[0]).toEqual({
+      expect(updateSequenceSpy.mock.calls[3][0]).toEqual({
         key: 'scenario',
         value: '',
       });
-      expect(validateSequenceSpy.called).toEqual(true);
+      expect(validateSequenceSpy).toBeCalled();
     });
 
     it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
@@ -272,8 +271,8 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy.called).toEqual(false);
-      expect(validateSequenceSpy.called).toEqual(false);
+      expect(updateSequenceSpy).not.toBeCalled();
+      expect(validateSequenceSpy).not.toBeCalled();
     });
   });
 
@@ -285,8 +284,8 @@ describe('documentTypeSelectHelper', () => {
         updateSequence: updateSequenceSpy,
       });
 
-      expect(updateSequenceSpy.called).toEqual(true);
-      expect(updateSequenceSpy.getCall(0).args[0]).toEqual({
+      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'searchText',
         value: 'something',
       });
@@ -299,7 +298,7 @@ describe('documentTypeSelectHelper', () => {
         updateSequence: updateSequenceSpy,
       });
 
-      expect(updateSequenceSpy.called).toEqual(false);
+      expect(updateSequenceSpy).not.toBeCalled();
     });
   });
 

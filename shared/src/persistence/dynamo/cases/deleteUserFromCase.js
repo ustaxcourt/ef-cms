@@ -13,8 +13,8 @@ exports.deleteUserFromCase = async ({ applicationContext, caseId, userId }) => {
   return client.delete({
     applicationContext,
     key: {
-      pk: `${userId}|case`,
-      sk: caseId,
+      pk: `user|${userId}`,
+      sk: `case|${caseId}`,
     },
   });
 };

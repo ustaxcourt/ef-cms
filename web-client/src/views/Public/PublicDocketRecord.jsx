@@ -9,7 +9,7 @@ export const PublicDocketRecord = connect(
   {
     publicCaseDetailHelper: state.publicCaseDetailHelper,
   },
-  ({ publicCaseDetailHelper }) => {
+  function PublicDocketRecord({ publicCaseDetailHelper }) {
     return (
       <>
         <PublicDocketRecordHeader />

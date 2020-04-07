@@ -24,7 +24,7 @@ export const EditDocketEntryMetaFormDocument = connect(
     validateDocketRecordSequence: sequences.validateDocketRecordSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function EditDocketEntryMetaFormDocument({
     caseDetail,
     editDocketEntryMetaHelper,
     form,
@@ -32,7 +32,7 @@ export const EditDocketEntryMetaFormDocument = connect(
     updateDocketEntryMetaDocumentFormValueSequence,
     validateDocketRecordSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <div className="blue-container">
         <FormGroup errorText={validationErrors.lodged}>
@@ -272,10 +272,10 @@ export const EditDocketEntryMetaFormDocument = connect(
             )}
             <div className="usa-checkbox">
               <input
-                checked={form.partyRespondent || false}
+                checked={form.partyIrsPractitioner || false}
                 className="usa-checkbox__input"
-                id="party-respondent"
-                name="partyRespondent"
+                id="party-irs-practitioner"
+                name="partyIrsPractitioner"
                 type="checkbox"
                 onChange={e => {
                   updateDocketEntryMetaDocumentFormValueSequence({
@@ -287,7 +287,7 @@ export const EditDocketEntryMetaFormDocument = connect(
               />
               <label
                 className="usa-checkbox__label inline-block"
-                htmlFor="party-respondent"
+                htmlFor="party-irs-practitioner"
               >
                 Respondent
               </label>

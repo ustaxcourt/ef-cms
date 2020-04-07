@@ -4,10 +4,9 @@ import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { saveCaseDetailInternalEditAction } from './saveCaseDetailInternalEditAction';
-import sinon from 'sinon';
 
-let saveCaseDetailInternalEditStub = sinon.stub().returns({});
-const updateCaseTrialSortTagsStub = sinon.stub().resolves();
+let saveCaseDetailInternalEditStub = jest.fn().mockReturnValue({});
+const updateCaseTrialSortTagsStub = jest.fn();
 
 presenter.providers.applicationContext = {
   ...applicationContext,
@@ -18,13 +17,17 @@ presenter.providers.applicationContext = {
 };
 
 describe('saveCaseDetailInternalEditAction', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should call the updateCaseTrialSortTags use case if case status is ready for trial', async () => {
     const caseDetail = {
       ...MOCK_CASE,
       createdAt: '2019-03-01T21:40:46.415Z',
       status: Case.STATUS_TYPES.generalDocketReadyForTrial,
     };
-    saveCaseDetailInternalEditStub = sinon.stub().returns(caseDetail);
+    saveCaseDetailInternalEditStub = jest.fn().mockReturnValue(caseDetail);
 
     await runAction(saveCaseDetailInternalEditAction, {
       modules: {
@@ -35,7 +38,7 @@ describe('saveCaseDetailInternalEditAction', () => {
         caseDetail,
       },
     });
-    expect(updateCaseTrialSortTagsStub.getCall(0).args[0].caseId).toEqual(
+    expect(updateCaseTrialSortTagsStub.mock.calls[0][0].caseId).toEqual(
       'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     );
   });
@@ -45,7 +48,7 @@ describe('saveCaseDetailInternalEditAction', () => {
       ...MOCK_CASE,
       status: Case.STATUS_TYPES.new,
     };
-    saveCaseDetailInternalEditStub = sinon.stub().returns(caseDetail);
+    saveCaseDetailInternalEditStub = jest.fn().mockReturnValue(caseDetail);
 
     await runAction(saveCaseDetailInternalEditAction, {
       modules: {
@@ -56,6 +59,6 @@ describe('saveCaseDetailInternalEditAction', () => {
         caseDetail,
       },
     });
-    expect(updateCaseTrialSortTagsStub.getCall(1)).toEqual(null);
+    expect(updateCaseTrialSortTagsStub).not.toBeCalled();
   });
 });

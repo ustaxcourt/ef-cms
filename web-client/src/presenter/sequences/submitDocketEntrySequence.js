@@ -52,8 +52,8 @@ const afterEntryCreatedOrUpdated = showProgressSequenceDecorator([
       clearFormAction,
       clearScreenMetadataAction,
       set(state.form.lodged, false),
-      set(state.form.practitioner, []),
-      set(state.documentUploadMode, 'scan'),
+      set(state.form.privatePractitioners, []),
+      set(state.currentViewMetadata.documentUploadMode, 'scan'),
     ],
     caseDetail: [
       getDocketEntryAlertSuccessAction,

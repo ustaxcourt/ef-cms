@@ -1,7 +1,6 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateDocketEntryAction } from './validateDocketEntryAction';
-import sinon from 'sinon';
 
 describe('validateDocketEntryAction', () => {
   let validateDocketEntryStub;
@@ -11,9 +10,9 @@ describe('validateDocketEntryAction', () => {
   let mockDocketEntry;
 
   beforeEach(() => {
-    validateDocketEntryStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+    validateDocketEntryStub = jest.fn();
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     mockDocketEntry = {
       data: 'hello world',
@@ -32,7 +31,7 @@ describe('validateDocketEntryAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateDocketEntryStub.returns(null);
+    validateDocketEntryStub = jest.fn().mockReturnValue(null);
     await runAction(validateDocketEntryAction, {
       modules: {
         presenter,
@@ -42,11 +41,11 @@ describe('validateDocketEntryAction', () => {
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateDocketEntryStub.returns('error');
+    validateDocketEntryStub = jest.fn().mockReturnValue('error');
     await runAction(validateDocketEntryAction, {
       modules: {
         presenter,
@@ -56,6 +55,6 @@ describe('validateDocketEntryAction', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

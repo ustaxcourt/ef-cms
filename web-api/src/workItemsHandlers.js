@@ -1,8 +1,11 @@
 module.exports = {
-  assignWorkItemsLambda: require('./workitems/assignWorkItemsLambda').handler,
-  completeWorkItemLambda: require('./workitems/completeWorkItemLambda').handler,
-  forwardWorkItemLambda: require('./workitems/forwardWorkItemLambda').handler,
-  getWorkItemLambda: require('./workitems/getWorkItemLambda').handler,
+  assignWorkItemsLambda: require('./workitems/assignWorkItemsLambda')
+    .assignWorkItemsLambda,
+  completeWorkItemLambda: require('./workitems/completeWorkItemLambda')
+    .completeWorkItemLambda,
+  forwardWorkItemLambda: require('./workitems/forwardWorkItemLambda')
+    .forwardWorkItemLambda,
+  getWorkItemLambda: require('./workitems/getWorkItemLambda').getWorkItemLambda,
   setWorkItemAsReadLambda: require('./workitems/setWorkItemAsReadLambda')
-    .handler,
+    .setWorkItemAsReadLambda,
 };

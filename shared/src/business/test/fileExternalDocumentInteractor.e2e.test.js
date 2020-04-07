@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
@@ -23,7 +22,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
   let applicationContext;
 
   beforeEach(() => {
-    sinon.stub(window.Date.prototype, 'toISOString').returns(CREATED_DATE);
+    window.Date.prototype.toISOString = jest.fn().mockReturnValue(CREATED_DATE);
     applicationContext = createTestApplicationContext({
       user: {
         name: 'Test Petitioner',
@@ -38,7 +37,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
   });
 
   afterEach(() => {
-    window.Date.prototype.toISOString.restore();
+    jest.restoreAllMocks();
   });
 
   it('should attach the expected documents to the case', async () => {
@@ -428,8 +427,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
       orderForRatification: false,
       orderToShowCause: false,
       partyType: ContactFactory.PARTY_TYPES.petitioner,
-      practitioners: [],
       preferredTrialCity: 'Aberdeen, South Dakota',
+      privatePractitioners: [],
       procedureType: 'Small',
       status: Case.STATUS_TYPES.new,
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
