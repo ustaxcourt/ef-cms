@@ -13,6 +13,7 @@ const { createISODateString } = require('../utilities/DateHandler');
 const { flatten } = require('lodash');
 const { Order } = require('./orders/Order');
 const { TrialSession } = require('./trialSessions/TrialSession');
+const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
 
 Document.CATEGORIES = Object.keys(documentMapExternal);
@@ -22,7 +23,6 @@ Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
 Document.PETITION_DOCUMENT_TYPES = ['Petition'];
-
 Document.validationName = 'Document';
 
 /**
@@ -31,10 +31,20 @@ Document.validationName = 'Document';
  * @param {object} rawDocument the raw document data
  * @constructor
  */
-function Document(rawDocument, { applicationContext }) {
+function Document(rawDocument, { applicationContext, filtered = false }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+
+  if (
+    !filtered ||
+    User.isInternalUser(applicationContext.getCurrentUser().role)
+  ) {
+    this.workItems = (rawDocument.workItems || []).map(
+      workItem => new WorkItem(workItem, { applicationContext }),
+    );
+  }
+
   this.additionalInfo = rawDocument.additionalInfo;
   this.additionalInfo2 = rawDocument.additionalInfo2;
   this.addToCoversheet = rawDocument.addToCoversheet;
@@ -90,10 +100,6 @@ function Document(rawDocument, { applicationContext }) {
   this.supportingDocument = rawDocument.supportingDocument;
   this.trialLocation = rawDocument.trialLocation; // TODO: look into this
   this.userId = rawDocument.userId; // TODO: restricted
-  this.workItems = (rawDocument.workItems || []).map(
-    // TODO: restricted
-    workItem => new WorkItem(workItem, { applicationContext }),
-  );
 
   this.generateFiledBy(rawDocument);
 }
