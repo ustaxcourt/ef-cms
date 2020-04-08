@@ -169,8 +169,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('trialSession.eligibleCases').length).toEqual(4);
       const eligibleCases = test.getState('trialSession.eligibleCases');
       expect(eligibleCases.length).toEqual(4);
-      // this case should be first because it is a CDP case
-      expect(eligibleCases[0].caseId).toEqual(createdCaseIds[4]);
+      // these cases should be first because they are CDP/Passport cases
+      expect(eligibleCases[0].caseId).toEqual(createdCaseIds[3]);
+      expect(eligibleCases[1].caseId).toEqual(createdCaseIds[4]);
       // order of the rest of the cases doesn't matter - they're all equal
       expect(
         eligibleCases.find(
@@ -180,11 +181,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(
         eligibleCases.find(
           eligibleCase => eligibleCase.caseId === createdCaseIds[1],
-        ),
-      ).toBeDefined();
-      expect(
-        eligibleCases.find(
-          eligibleCase => eligibleCase.caseId === createdCaseIds[3],
         ),
       ).toBeDefined();
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
@@ -221,18 +217,10 @@ describe('Trial Session Eligible Cases Journey', () => {
       // this case should be first because it's high priority
       expect(eligibleCases[0].caseId).toEqual(createdCaseIds[1]);
       // this case should be second because it's a CDP case
-      expect(eligibleCases[1].caseId).toEqual(createdCaseIds[4]);
-      // the order of the rest doesn't matter
-      expect(
-        eligibleCases.find(
-          eligibleCase => eligibleCase.caseId === createdCaseIds[0],
-        ),
-      ).toBeDefined();
-      expect(
-        eligibleCases.find(
-          eligibleCase => eligibleCase.caseId === createdCaseIds[3],
-        ),
-      ).toBeDefined();
+      expect(eligibleCases[1].caseId).toEqual(createdCaseIds[3]);
+      // this case should be third because it's a Passport case
+      expect(eligibleCases[2].caseId).toEqual(createdCaseIds[4]);
+      expect(eligibleCases[3].caseId).toEqual(createdCaseIds[0]);
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
   });
@@ -258,7 +246,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       const eligibleCases = test.getState('trialSession.eligibleCases');
       expect(eligibleCases.length).toEqual(4);
       // this case should be first because it's a CDP case
-      expect(eligibleCases[0].caseId).toEqual(createdCaseIds[4]);
+      expect(eligibleCases[0].caseId).toEqual(createdCaseIds[3]);
+      // this case should be second because it's a Passport case
+      expect(eligibleCases[1].caseId).toEqual(createdCaseIds[4]);
       // the order of the rest of the cases doesn't matter
       expect(
         eligibleCases.find(
@@ -268,11 +258,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(
         eligibleCases.find(
           eligibleCase => eligibleCase.caseId === createdCaseIds[1],
-        ),
-      ).toBeDefined();
-      expect(
-        eligibleCases.find(
-          eligibleCase => eligibleCase.caseId === createdCaseIds[3],
         ),
       ).toBeDefined();
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
