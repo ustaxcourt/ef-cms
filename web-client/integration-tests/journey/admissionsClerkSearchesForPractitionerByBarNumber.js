@@ -1,5 +1,5 @@
-export const petitionsClerkSearchesForPractitionerByBarNumber = test => {
-  return it('petitions clerk searches for practitioner by bar number', async () => {
+export const admissionsClerkSearchesForPractitionerByBarNumber = test => {
+  return it('admissions clerk searches for practitioner by bar number', async () => {
     await test.runSequence('gotoAdvancedSearchSequence');
 
     // simulate switching to the Practitioner tab
@@ -15,6 +15,9 @@ export const petitionsClerkSearchesForPractitionerByBarNumber = test => {
     ).toEqual({});
     expect(test.getState('searchResults')).toBeUndefined();
 
+    await test.runSequence('submitPractitionerBarNumberSearchSequence');
+    expect(test.getState('validationErrors.barNumber')).toBeDefined();
+
     // no matches
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'practitionerSearchByBarNumber',
@@ -23,6 +26,7 @@ export const petitionsClerkSearchesForPractitionerByBarNumber = test => {
     });
 
     await test.runSequence('submitPractitionerBarNumberSearchSequence');
+    expect(test.getState('validationErrors.barNumber')).toBeUndefined();
 
     expect(test.getState('searchResults').length).toEqual(0);
     expect(test.getState('currentPage')).toEqual('AdvancedSearch');

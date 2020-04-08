@@ -16,6 +16,7 @@ module.exports = {
     '!src/index-public.dev.js',
     '!src/index-public.prod.js',
   ],
+  coverageDirectory: './coverage',
   globals: {
     File: function () {},
     FileReader: () => {},

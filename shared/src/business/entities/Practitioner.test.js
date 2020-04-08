@@ -6,6 +6,7 @@ describe('Practitioner', () => {
     const user = new Practitioner({
       admissionsDate: '2019-03-01T21:40:46.415Z',
       admissionsStatus: 'Active',
+      barNumber: 'PT20001',
       birthYear: 2019,
       contact: {
         address1: '234 Main St',
@@ -19,8 +20,10 @@ describe('Practitioner', () => {
         state: 'IL',
       },
       employer: 'Private',
+      firmName: 'GW Law Offices',
       isAdmitted: true,
       name: 'Test Practitioner',
+      originalBarState: 'Illinois',
       practitionerType: 'Attorney',
       role: User.ROLES.Practitioner,
       userId: 'practitioner',
@@ -39,6 +42,7 @@ describe('Practitioner', () => {
     const user = new Practitioner({
       admissionsDate: '2019-03-01T21:40:46.415Z',
       admissionsStatus: 'Active',
+      barNumber: 'PT20001',
       birthYear: 2019,
       contact: {
         address1: '234 Main St',
@@ -65,6 +69,7 @@ describe('Practitioner', () => {
     const user = new Practitioner({
       admissionsDate: '2019-03-01T21:40:46.415Z',
       admissionsStatus: 'Active',
+      barNumber: 'PT20001',
       birthYear: 2019,
       contact: {
         address1: '234 Main St',
@@ -78,6 +83,7 @@ describe('Practitioner', () => {
         state: 'IL',
       },
       employer: 'Something else',
+      firmName: 'GW Law Offices',
       isAdmitted: true,
       name: 'Test Practitioner',
       practitionerType: 'Purple',
@@ -91,6 +97,7 @@ describe('Practitioner', () => {
     const user = new Practitioner({
       admissionsDate: '2019-03-01T21:40:46.415Z',
       admissionsStatus: 'Invalid',
+      barNumber: 'PT20001',
       birthYear: 2019,
       contact: {
         address1: '234 Main St',
@@ -104,6 +111,7 @@ describe('Practitioner', () => {
         state: 'IL',
       },
       employer: 'Something else',
+      firmName: 'GW Law Offices',
       isAdmitted: true,
       name: 'Test Practitioner',
       practitionerType: 'Purple',
@@ -111,5 +119,57 @@ describe('Practitioner', () => {
       userId: 'practitioner',
     });
     expect(user.isValid()).toBeFalsy();
+  });
+  it('should set the role to "irsPractitioner" when employer is "IRS"', () => {
+    const user = new Practitioner({
+      employer: 'IRS',
+    });
+    expect(user.role).toEqual('irsPractitioner');
+  });
+
+  it('should set the role to "irsPractitioner" when employer is "DOJ"', () => {
+    const user = new Practitioner({
+      employer: 'DOJ',
+    });
+    expect(user.role).toEqual('irsPractitioner');
+  });
+
+  it('should set the role to "privatePractitioner" when employer is "Private"', () => {
+    const user = new Practitioner({
+      employer: 'Private',
+    });
+    expect(user.role).toEqual('privatePractitioner');
+  });
+
+  it('Combines firstName and lastName properties to set the name property if provided', () => {
+    const user = new Practitioner({
+      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsStatus: 'Active',
+      barNumber: 'PT20001',
+      birthYear: 2019,
+      contact: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        country: 'Brazil',
+        countryType: 'international',
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
+      employer: 'Private',
+      firmName: 'GW Law Offices',
+      firstName: 'Test',
+      isAdmitted: true,
+      lastName: 'Practitioner',
+      originalBarState: 'Illinois',
+      practitionerType: 'Attorney',
+      role: User.ROLES.Practitioner,
+      userId: 'practitioner',
+    });
+    expect(user.name).toEqual('Test Practitioner');
+    expect(user.firstName).toBeUndefined();
+    expect(user.latName).toBeUndefined();
   });
 });

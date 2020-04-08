@@ -10,6 +10,7 @@ import {
   router,
 } from '../src/router';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
+import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import {
   image1,
   image2,
@@ -41,6 +42,7 @@ export const fakeFile = (() => {
     type: 'application/pdf',
   });
   myFile.name = 'fakeFile.pdf';
+  myFile.size = myFile.length;
   return myFile;
 })();
 
@@ -403,6 +405,10 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
+  presenter.providers.applicationContext = Object.assign(applicationContext, {
+    getScanner: getScannerInterface,
+  });
+
   test = CerebralTest(presenter);
   test.getSequence = name => async obj => await test.runSequence(name, obj);
   test.closeSocket = stop;
@@ -434,6 +440,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     },
     document: {},
     localStorage: {
+      getItem: () => null,
       removeItem: () => null,
       setItem: () => null,
     },
