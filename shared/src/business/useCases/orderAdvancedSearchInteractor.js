@@ -33,6 +33,8 @@ exports.orderAdvancedSearchInteractor = async ({
       'documentContents',
       'docketNumberSuffix',
       'documentTitle',
+      'judge',
+      'filingDate',
     ],
     query: {
       bool: {
