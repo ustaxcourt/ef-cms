@@ -120,6 +120,26 @@ describe('Practitioner', () => {
     });
     expect(user.isValid()).toBeFalsy();
   });
+  it('should set the role to "irsPractitioner" when employer is "IRS"', () => {
+    const user = new Practitioner({
+      employer: 'IRS',
+    });
+    expect(user.role).toEqual('irsPractitioner');
+  });
+
+  it('should set the role to "irsPractitioner" when employer is "DOJ"', () => {
+    const user = new Practitioner({
+      employer: 'DOJ',
+    });
+    expect(user.role).toEqual('irsPractitioner');
+  });
+
+  it('should set the role to "privatePractitioner" when employer is "Private"', () => {
+    const user = new Practitioner({
+      employer: 'Private',
+    });
+    expect(user.role).toEqual('privatePractitioner');
+  });
 
   it('Combines firstName and lastName properties to set the name property if provided', () => {
     const user = new Practitioner({

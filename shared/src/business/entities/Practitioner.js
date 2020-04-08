@@ -3,7 +3,6 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
-  User,
   userDecorator,
   userValidation,
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
@@ -30,6 +29,12 @@ function Practitioner(rawUser) {
   this.init(rawUser);
 }
 
+const roleMap = {
+  DOJ: 'irsPractitioner',
+  IRS: 'irsPractitioner',
+  Private: 'privatePractitioner',
+};
+
 Practitioner.prototype.init = function (rawUser) {
   userDecorator(this, rawUser);
   this.name = rawUser.name || `${rawUser.firstName} ${rawUser.lastName}`;
@@ -42,8 +47,9 @@ Practitioner.prototype.init = function (rawUser) {
   this.firmName = rawUser.firmName;
   this.isAdmitted = rawUser.isAdmitted;
   this.originalBarState = rawUser.originalBarState;
-  this.role = rawUser.role || User.ROLES.privatePractitioner;
   this.practitionerType = rawUser.practitionerType;
+  this.role = roleMap[this.employer];
+  this.section = this.role;
 };
 
 const VALIDATION_ERROR_MESSAGES = {

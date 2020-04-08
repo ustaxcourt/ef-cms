@@ -33,6 +33,7 @@ joiValidationDecorator(
     firstName: joi.string().required(),
     isAdmitted: joi.string().optional().allow(null),
     lastName: joi.string().required(),
+    role: joi.string().optional().allow(null),
     userId: joi.string().optional().allow(null),
   }),
   undefined,
