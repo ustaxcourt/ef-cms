@@ -58,31 +58,67 @@ const VALIDATION_ERROR_MESSAGES = {
 
 const validationRules = {
   ...userValidation,
-  additionalPhone: joi.string().optional().allow(null),
-  admissionsDate: joi.date().iso().max('now').required(),
+  additionalPhone: joi
+    .string()
+    .optional()
+    .allow(null)
+    .description('An alternate phone number for the practitioner.'),
+  admissionsDate: joi
+    .date()
+    .iso()
+    .max('now')
+    .required()
+    .description(
+      'The date the practitioner was admitted to the bar in their state.',
+    ), // TODO: Verify what this actually is
   admissionsStatus: joi
     .string()
     .valid(...ADMISSIONS_STATUS_OPTIONS)
-    .required(),
-  alternateEmail: joi.string().optional().allow(null),
-  barNumber: joi.string().required(),
+    .required()
+    .description('The bar admission status for the practitioner.'), // TODO: Verify what this actually is
+  alternateEmail: joi
+    .string()
+    .optional()
+    .allow(null)
+    .description('An alternate email address for the practitioner.'),
+  barNumber: joi
+    .string()
+    .required()
+    .description(
+      'A unique identifier comprising of the practitioner initials, date, and series number.',
+    ),
   birthYear: joi
     .number()
     .integer()
     .min(1900)
     .max(new Date().getFullYear())
-    .required(),
+    .required()
+    .description('The year the practitioner was born'),
   employer: joi
     .string()
     .valid(...EMPLOYER_OPTIONS)
-    .required(),
-  firmName: joi.string().optional().allow(null),
-  isAdmitted: joi.boolean().required(),
-  originalBarState: joi.string().required(),
+    .required()
+    .description('The employer designation for the practitioner.'),
+  firmName: joi
+    .string()
+    .optional()
+    .allow(null)
+    .description('The firm name for the practitioner.'),
+  isAdmitted: joi
+    .boolean()
+    .required()
+    .description('Whether the practitioner is admitted to the bar.'), // TODO: Verify what this should actually be
+  originalBarState: joi
+    .string()
+    .required()
+    .description(
+      'The state in which the practitioner passed their bar examination.',
+    ), // TODO: Verify what this should actually be
   practitionerType: joi
     .string()
     .valid(...PRACTITIONER_TYPE_OPTIONS)
-    .required(),
+    .required()
+    .description('The type of practitioner - either Attorney or Non-Attorney.'),
 };
 
 joiValidationDecorator(
