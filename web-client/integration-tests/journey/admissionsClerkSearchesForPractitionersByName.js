@@ -37,6 +37,14 @@ export const admissionsClerkSearchesForPractitionersByName = test => {
     expect(test.getState('validationErrors.practitionerName')).toBeUndefined();
 
     expect(test.getState('searchResults').length).toBeGreaterThan(0);
+    let helper = runCompute(withAppContextDecorator(advancedSearchHelper), {
+      state: test.getState(),
+    });
+
+    expect(helper.formattedSearchResults.length).toEqual(
+      test.getState('constants.CASE_SEARCH_PAGE_SIZE'),
+    );
+    expect(helper.showLoadMore).toBeTruthy();
 
     await test.runSequence('clearAdvancedSearchFormSequence', {
       formType: 'practitionerSearchByName',
@@ -63,15 +71,6 @@ export const admissionsClerkSearchesForPractitionersByName = test => {
     const currentTwoDigitYear = formatNow('YY');
     expect(test.getState('searchResults.0.barNumber')).toContain(
       `EJ${currentTwoDigitYear}`,
-    );
-
-    let helper = runCompute(withAppContextDecorator(advancedSearchHelper), {
-      state: test.getState(),
-    });
-
-    expect(helper.showLoadMore).toBeTruthy();
-    expect(helper.formattedSearchResults.length).toEqual(
-      test.getState('constants.CASE_SEARCH_PAGE_SIZE'),
     );
 
     // no matches
