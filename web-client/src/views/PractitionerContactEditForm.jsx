@@ -81,14 +81,14 @@ export const PractitionerContactEditForm = connect(
 
           <div className="grid-col-6">
             <FormGroup>
-              <label className="usa-label" htmlFor="additionalPhone">
+              <label className="usa-label" htmlFor="additional-phone">
                 Additional phone number{' '}
                 <span className="usa-hint">(optional)</span>
               </label>
               <input
                 autoCapitalize="none"
                 className="usa-input"
-                id="additionalPhone"
+                id="additional-phone"
                 name="additionalPhone"
                 type="tel"
                 value={form.additionalPhone || ''}
