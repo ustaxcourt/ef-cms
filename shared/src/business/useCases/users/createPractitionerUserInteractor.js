@@ -29,10 +29,16 @@ exports.createPractitionerUserInteractor = async ({
       initials: user.lastName.charAt(0) + user.firstName.charAt(0),
     },
   );
+
+  // The NewPractitioner entity splits the name. Combine them to
+  // match our User / Practitioner convention of a single field
+  const name = `${user.firstName} ${user.lastName}`;
+
   const practitioner = new Practitioner({
     ...user,
     barNumber,
     isAdmitted: true,
+    name,
     userId: applicationContext.getUniqueId(),
   }).validate();
 
