@@ -71,12 +71,12 @@ const validationRules = {
     .required()
     .description(
       'The date the practitioner was admitted to the Tax Court bar.',
-    ), // TODO: Verify what this actually is
+    ),
   admissionsStatus: joi
     .string()
     .valid(...ADMISSIONS_STATUS_OPTIONS)
     .required()
-    .description('The bar admission status for the practitioner.'), // TODO: Verify what this actually is
+    .description('The Tax Court bar admission status for the practitioner.'),
   alternateEmail: joi
     .string()
     .optional()
@@ -108,13 +108,13 @@ const validationRules = {
   isAdmitted: joi
     .boolean()
     .required()
-    .description('Whether the practitioner is admitted to the bar.'), // TODO: Verify what this should actually be
+    .description('Whether the practitioner is admitted to the Tax Court bar.'),
   originalBarState: joi
     .string()
     .required()
     .description(
       'The state in which the practitioner passed their bar examination.',
-    ), // TODO: Verify what this should actually be
+    ),
   practitionerType: joi
     .string()
     .valid(...PRACTITIONER_TYPE_OPTIONS)
