@@ -37,7 +37,7 @@ export const OrderSearchResults = connect(
                   (result, idx) => (
                     <tr className="search-result" key={idx}>
                       <td>
-                        <a href={`/practitioner-detail/${result.barNumber}`}>
+                        <a href={`/case-detail/${result.docketNumber}`}>
                           {result.docketNumberWithSuffix}
                         </a>
                       </td>
