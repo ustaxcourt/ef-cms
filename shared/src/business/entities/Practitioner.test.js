@@ -120,28 +120,40 @@ describe('Practitioner', () => {
     });
     expect(user.isValid()).toBeFalsy();
   });
-  it('should set the role to "irsPractitioner" when employer is "IRS"', () => {
+
+  it('should set the role to "irsPractitioner" when employer is "IRS" and isAdmitted is true', () => {
     const user = new Practitioner({
       employer: 'IRS',
+      isAdmitted: true,
     });
-    expect(user.role).toEqual('irsPractitioner');
+    expect(user.role).toEqual(User.ROLES.irsPractitioner);
   });
 
-  it('should set the role to "irsPractitioner" when employer is "DOJ"', () => {
+  it('should set the role to "irsPractitioner" when employer is "DOJ" and isAdmitted is true', () => {
     const user = new Practitioner({
       employer: 'DOJ',
+      isAdmitted: true,
     });
-    expect(user.role).toEqual('irsPractitioner');
+    expect(user.role).toEqual(User.ROLES.irsPractitioner);
   });
 
-  it('should set the role to "privatePractitioner" when employer is "Private"', () => {
+  it('should set the role to "privatePractitioner" when employer is "Private" and isAdmitted is true', () => {
     const user = new Practitioner({
       employer: 'Private',
+      isAdmitted: true,
     });
-    expect(user.role).toEqual('privatePractitioner');
+    expect(user.role).toEqual(User.ROLES.privatePractitioner);
   });
 
-  it('Combines firstName and lastName properties to set the name property if provided', () => {
+  it('should set the role to "inactivePractitioner" when employer is "Private" and isAdmitted is false', () => {
+    const user = new Practitioner({
+      employer: 'Private',
+      isAdmitted: false,
+    });
+    expect(user.role).toEqual(User.ROLES.inactivePractitioner);
+  });
+
+  it('Combines firstName and lastName properties to set the name property if provided and isAdmitted is true', () => {
     const user = new Practitioner({
       admissionsDate: '2019-03-01T21:40:46.415Z',
       admissionsStatus: 'Active',

@@ -49,8 +49,8 @@ describe('formatRecord', () => {
       employer: 'DOJ',
       isAdmitted: false,
       name: 'Mike Wazowski',
-      role: 'irsPractitioner',
-      section: 'irsPractitioner',
+      role: 'inactivePractitioner',
+      section: 'inactivePractitioner',
     });
   });
 
