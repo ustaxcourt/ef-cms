@@ -88,7 +88,7 @@ export const PractitionerContactEditForm = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input"
-                id="phone"
+                id="additionalPhone"
                 name="additionalPhone"
                 type="tel"
                 value={form.additionalPhone || ''}
