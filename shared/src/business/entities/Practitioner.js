@@ -32,6 +32,7 @@ function Practitioner(rawUser) {
 
 Practitioner.prototype.init = function (rawUser) {
   userDecorator(this, rawUser);
+  this.name = rawUser.name || `${rawUser.firstName} ${rawUser.lastName}`;
   this.additionalPhone = rawUser.additionalPhone;
   this.admissionsDate = rawUser.admissionsDate;
   this.admissionsStatus = rawUser.admissionsStatus || 'Active';
@@ -69,7 +70,7 @@ const validationRules = {
     .max('now')
     .required()
     .description(
-      'The date the practitioner was admitted to the bar in their state.',
+      'The date the practitioner was admitted to the Tax Court bar.',
     ), // TODO: Verify what this actually is
   admissionsStatus: joi
     .string()

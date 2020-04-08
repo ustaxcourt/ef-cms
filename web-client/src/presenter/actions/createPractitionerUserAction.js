@@ -27,9 +27,7 @@ export const createPractitionerUserAction = async ({
       });
     return path.success({
       alertSuccess: {
-        message:
-          'The user has been notified via the email addressed provided that they can now login to the system. You may continue creating Practitioner Users with the form below.',
-        title: 'The Practitioner User has been added.',
+        message: 'Practitioner has been successfully added to the database.',
       },
       practitionerUser,
     });
