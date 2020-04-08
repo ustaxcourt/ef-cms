@@ -52,6 +52,7 @@ import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
+import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewPetitionFromPaperHelper } from './computeds/reviewPetitionFromPaperHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
@@ -127,6 +128,7 @@ const helpers = {
   pdfPreviewModalHelper,
   pdfSignerHelper,
   practitionerDetailHelper,
+  practitionerSearchFormHelper,
   requestAccessHelper,
   reviewPetitionFromPaperHelper,
   reviewSavedPetitionHelper,

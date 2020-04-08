@@ -5,6 +5,7 @@ import { OrderSearchForm } from './OrderSearchForm';
 import { PractitionerSearchForm } from './PractitionerSearchForm';
 import { PractitionerSearchResults } from './PractitionerSearchResults';
 import { SearchResults } from './SearchResults';
+import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -18,6 +19,8 @@ export const AdvancedSearch = connect(
       sequences.submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence:
       sequences.submitCaseDocketNumberSearchSequence,
+    submitOrderAdvancedSearchSequence:
+      sequences.submitOrderAdvancedSearchSequence,
     submitPractitionerBarNumberSearchSequence:
       sequences.submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence:
@@ -28,6 +31,7 @@ export const AdvancedSearch = connect(
     advancedSearchTabChangeSequence,
     submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence,
+    submitOrderAdvancedSearchSequence,
     submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence,
   }) {
@@ -36,6 +40,7 @@ export const AdvancedSearch = connect(
         <BigHeader text="Advanced Search" />
 
         <section className="usa-section grid-container advanced-search">
+          <SuccessNotification />
           <ErrorNotification />
           <Tabs
             bind="advancedSearchTab"
@@ -61,7 +66,9 @@ export const AdvancedSearch = connect(
               <SearchResults />
             </Tab>
             <Tab id="tab-order" tabName="order" title="Order">
-              <OrderSearchForm />
+              <OrderSearchForm
+                submitAdvancedSearchSequence={submitOrderAdvancedSearchSequence}
+              />
             </Tab>
             {advancedSearchHelper.showPractitionerSearch && (
               <Tab
