@@ -1,5 +1,5 @@
-export const petitionsClerkAddsNewPractitioner = test => {
-  return it('petitions clerk adds a new practitioner', async () => {
+export const admissionsClerkAddsNewPractitioner = test => {
+  return it('admissions clerk adds a new practitioner', async () => {
     test.currentTimestamp = Date.now();
 
     await test.runSequence('gotoCreatePractitionerUserSequence');

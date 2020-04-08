@@ -4,8 +4,8 @@ import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const petitionsClerkSearchesForPractitionersByName = test => {
-  return it('petitions clerk searches for practitioners by name', async () => {
+export const admissionsClerkSearchesForPractitionersByName = test => {
+  return it('admissions clerk searches for practitioners by name', async () => {
     await test.runSequence('gotoAdvancedSearchSequence');
 
     await refreshElasticsearchIndex();
