@@ -153,7 +153,7 @@ describe('Practitioner', () => {
     expect(user.role).toEqual(User.ROLES.inactivePractitioner);
   });
 
-  it('Combines firstName and lastName properties to set the name property if provided and isAdmitted is true', () => {
+  it('Combines firstName and lastName properties to set the name property if provided', () => {
     const user = new Practitioner({
       admissionsDate: '2019-03-01T21:40:46.415Z',
       admissionsStatus: 'Active',
