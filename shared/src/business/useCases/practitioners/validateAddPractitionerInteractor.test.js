@@ -16,6 +16,7 @@ describe('validateAddPractitionerInteractor', () => {
 
     expect(Object.keys(errors)).toEqual([
       'email',
+      'role',
       'admissionsDate',
       'birthYear',
       'employer',
