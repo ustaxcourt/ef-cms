@@ -1,10 +1,14 @@
 import { advancedSearchHelper } from '../../src/presenter/computeds/advancedSearchHelper';
+import { formatNow } from '../../../shared/src/business/utilities/DateHandler';
+import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const petitionsClerkSearchesForPractitionersByName = test => {
   return it('petitions clerk searches for practitioners by name', async () => {
     await test.runSequence('gotoAdvancedSearchSequence');
+
+    await refreshElasticsearchIndex();
 
     // simulate switching to the Practitioner tab
     await test.runSequence('cerebralBindSimpleSetStateSequence', {
@@ -47,14 +51,18 @@ export const petitionsClerkSearchesForPractitionersByName = test => {
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'practitionerSearchByName',
       key: 'practitionerName',
-      value: 'test irs practitioner',
+      value: `Joe ${test.currentTimestamp} Exotic Tiger King`,
     });
 
     await test.runSequence('submitPractitionerNameSearchSequence');
 
     expect(test.getState('searchResults').length).toBeGreaterThan(0);
     expect(test.getState('searchResults.0.name')).toEqual(
-      'Test IRS Practitioner',
+      `joe ${test.currentTimestamp} exotic tiger king`,
+    );
+    const currentTwoDigitYear = formatNow('YY');
+    expect(test.getState('searchResults.0.barNumber')).toContain(
+      `EJ${currentTwoDigitYear}`,
     );
 
     let helper = runCompute(withAppContextDecorator(advancedSearchHelper), {
