@@ -2661,6 +2661,44 @@
           }
         ]
       },
+      "post": {
+        "tags": ["practitioners"],
+        "summary": "creates a practitioner user",
+        "description": "creates a practitioner user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["practitioners"],
+        "summary": "updates a practitioner user",
+        "description": "updates a practitioner user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
       "options": {
         "consumes": ["application/json"],
         "produces": ["application/json"],
@@ -2698,69 +2736,6 @@
         "tags": ["practitioners"],
         "summary": "get the practitioner via bar number",
         "description": "Get the practitioner via bar number.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users/practitioner": {
-      "post": {
-        "tags": ["user"],
-        "summary": "creates a practitioner user",
-        "description": "creates a practitioner user.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "put": {
-        "tags": ["user"],
-        "summary": "updates a practitioner user",
-        "description": "updates a practitioner user.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
