@@ -26,7 +26,9 @@ exports.createPractitionerUserInteractor = async ({
   const barNumber = await applicationContext.barNumberGenerator.createBarNumber(
     {
       applicationContext,
-      initials: user.lastName.charAt(0) + user.firstName.charAt(0),
+      initials:
+        user.lastName.charAt(0).toUpperCase() +
+        user.firstName.charAt(0).toUpperCase(),
     },
   );
 
