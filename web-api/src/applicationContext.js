@@ -127,7 +127,7 @@ const {
 } = require('../../shared/src/persistence/dynamo/users/createPractitionerUser');
 const {
   createPractitionerUserInteractor,
-} = require('../../shared/src/business/useCases/users/createPractitionerUserInteractor');
+} = require('../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor');
 const {
   createSectionInboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/createSectionInboxRecord');
@@ -715,7 +715,7 @@ const {
 } = require('../../shared/src/persistence/dynamo/users/updatePractitionerUser');
 const {
   updatePractitionerUserInteractor,
-} = require('../../shared/src/business/useCases/users/updatePractitionerUserInteractor');
+} = require('../../shared/src/business/useCases/practitioners/updatePractitionerUserInteractor');
 const {
   updatePrimaryContactInteractor,
 } = require('../../shared/src/business/useCases/updatePrimaryContactInteractor');
