@@ -8,6 +8,7 @@ const { createISODateString } = require('../utilities/DateHandler');
  */
 exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
   applicationContext.logger.info('Time', createISODateString());
+  const honeybadger = applicationContext.initHoneybadger();
 
   const recordsToProcess = await applicationContext
     .getPersistenceGateway()
@@ -65,6 +66,7 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
           });
       } catch (e) {
         applicationContext.logger.info('Error', e);
+        honeybadger && honeybadger.notify(e);
       }
     }
 
