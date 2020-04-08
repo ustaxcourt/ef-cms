@@ -3,6 +3,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
+  User,
   userDecorator,
   userValidation,
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
@@ -33,13 +34,14 @@ Practitioner.prototype.init = function (rawUser) {
   userDecorator(this, rawUser);
   this.additionalPhone = rawUser.additionalPhone;
   this.admissionsDate = rawUser.admissionsDate;
-  this.admissionsStatus = rawUser.admissionsStatus;
+  this.admissionsStatus = rawUser.admissionsStatus || 'Active';
   this.alternateEmail = rawUser.alternateEmail;
   this.birthYear = rawUser.birthYear;
   this.employer = rawUser.employer;
   this.firmName = rawUser.firmName;
   this.isAdmitted = rawUser.isAdmitted;
   this.originalBarState = rawUser.originalBarState;
+  this.role = rawUser.role || User.ROLES.privatePractitioner;
   this.practitionerType = rawUser.practitionerType;
 };
 
@@ -98,5 +100,6 @@ Practitioner.PRACTITIONER_TYPE_OPTIONS = PRACTITIONER_TYPE_OPTIONS;
 Practitioner.EMPLOYER_OPTIONS = EMPLOYER_OPTIONS;
 Practitioner.validationRules = validationRules;
 Practitioner.VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
+Practitioner.ADMISSIONS_STATUS_OPTIONS = ADMISSIONS_STATUS_OPTIONS;
 
 module.exports = { Practitioner };
