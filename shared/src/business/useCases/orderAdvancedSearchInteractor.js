@@ -35,6 +35,7 @@ exports.orderAdvancedSearchInteractor = async ({
       'documentTitle',
       'judge',
       'filingDate',
+      'caseId',
     ],
     query: {
       bool: {
@@ -77,6 +78,17 @@ exports.orderAdvancedSearchInteractor = async ({
   const foundOrders = hits.map(hit =>
     AWS.DynamoDB.Converter.unmarshall(hit['_source']),
   );
+
+  for (const order of foundOrders) {
+    const { caseId } = order;
+
+    const matchingCase = await applicationContext
+      .getUseCases()
+      .getCaseInteractor({ applicationContext, caseId });
+
+    order.docketNumberSuffix = matchingCase.docketNumberSuffix;
+    order.caseTitle = matchingCase.caseTitle;
+  }
 
   return foundOrders;
 };
