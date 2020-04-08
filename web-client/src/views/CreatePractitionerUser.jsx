@@ -390,7 +390,7 @@ export const CreatePractitionerUser = connect(
             </div>
           </div>
 
-          <div className="grid-row">
+          <div className="grid-row margin-bottom-6">
             <div className="grid-col-12">
               <Button
                 onClick={() => {
