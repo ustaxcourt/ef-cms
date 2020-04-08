@@ -1,5 +1,5 @@
-export const petitionsClerkSearchesForPractitionerByBarNumber = test => {
-  return it('petitions clerk searches for practitioner by bar number', async () => {
+export const admissionsClerkSearchesForPractitionerByBarNumber = test => {
+  return it('admissions clerk searches for practitioner by bar number', async () => {
     await test.runSequence('gotoAdvancedSearchSequence');
 
     // simulate switching to the Practitioner tab
