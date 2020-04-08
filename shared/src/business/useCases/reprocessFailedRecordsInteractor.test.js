@@ -10,7 +10,7 @@ describe('reprocessFailedRecordsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getElasticsearchReindexRecords.mockResolvedValue([
-        { recordPk: 'case|123', recordSk: 'abc' },
+        { recordPk: 'abc|123', recordSk: 'abc' },
       ]);
 
     applicationContext
@@ -21,7 +21,7 @@ describe('reprocessFailedRecordsInteractor', () => {
 
     applicationContext.getPersistenceGateway().getRecord.mockResolvedValue({
       caseId: '123',
-      pk: 'case|123',
+      pk: 'abc|123',
       sk: 'abc',
     });
   });
@@ -38,7 +38,7 @@ describe('reprocessFailedRecordsInteractor', () => {
     expect(applicationContext.getSearchClient().index).not.toHaveBeenCalled();
   });
 
-  it('calls index function for a record, then deletes the record', async () => {
+  it('calls index function for a non-case record, then deletes the record', async () => {
     await reprocessFailedRecordsInteractor({
       applicationContext,
     });
@@ -47,8 +47,8 @@ describe('reprocessFailedRecordsInteractor', () => {
     expect(
       applicationContext.getSearchClient().index.mock.calls[0][0],
     ).toMatchObject({
-      body: { caseId: { S: '123' }, pk: { S: 'case|123' }, sk: { S: 'abc' } },
-      id: 'case|123_abc',
+      body: { caseId: { S: '123' }, pk: { S: 'abc|123' }, sk: { S: 'abc' } },
+      id: 'abc|123_abc',
     });
     expect(
       applicationContext.getPersistenceGateway()
@@ -58,7 +58,7 @@ describe('reprocessFailedRecordsInteractor', () => {
       applicationContext.getPersistenceGateway()
         .deleteElasticsearchReindexRecord.mock.calls[0][0],
     ).toMatchObject({
-      recordPk: 'case|123',
+      recordPk: 'abc|123',
       recordSk: 'abc',
     });
   });
@@ -80,6 +80,54 @@ describe('reprocessFailedRecordsInteractor', () => {
     ).toMatchObject({
       body: {
         caseId: { S: 'case|123' },
+      },
+      id: 'case|123_case|123',
+    });
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId.mock
+        .calls[0][0],
+    ).toMatchObject({
+      caseId: '123',
+    });
+    expect(
+      applicationContext.getPersistenceGateway()
+        .deleteElasticsearchReindexRecord,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .deleteElasticsearchReindexRecord.mock.calls[0][0],
+    ).toMatchObject({
+      recordPk: 'case|123',
+      recordSk: 'case|123',
+    });
+  });
+
+  it('calls index function for a record, attempts to get a case by case id, but does not index if it does not return a full case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockResolvedValue({
+        documents: [],
+      });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getElasticsearchReindexRecords.mockResolvedValue([
+        { recordPk: 'case|123', recordSk: 'case|123' },
+      ]);
+
+    await reprocessFailedRecordsInteractor({
+      applicationContext,
+    });
+
+    expect(applicationContext.getSearchClient().index).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().index.mock.calls[0][0],
+    ).toMatchObject({
+      body: {
+        caseId: { S: '123' },
       },
       id: 'case|123_case|123',
     });
