@@ -29,6 +29,7 @@ exports.createPractitionerUserInteractor = async ({
       initials: user.lastName.charAt(0) + user.firstName.charAt(0),
     },
   );
+
   const practitioner = new Practitioner({
     ...user,
     barNumber,
