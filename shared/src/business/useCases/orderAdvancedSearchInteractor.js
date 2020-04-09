@@ -36,6 +36,7 @@ exports.orderAdvancedSearchInteractor = async ({
       'judge',
       'filingDate',
       'caseId',
+      'documentId',
     ],
     query: {
       bool: {
@@ -87,7 +88,7 @@ exports.orderAdvancedSearchInteractor = async ({
       .getCaseInteractor({ applicationContext, caseId });
 
     order.docketNumberSuffix = matchingCase.docketNumberSuffix;
-    order.caseTitle = matchingCase.caseTitle;
+    order.caseCaption = matchingCase.caseCaption;
   }
 
   return foundOrders;
