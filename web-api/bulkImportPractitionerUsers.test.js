@@ -20,7 +20,10 @@ describe('formatRecord', () => {
       admissionsStatus: 'Active',
       birthYear: 1999,
       employer: 'IRS',
-      name: 'Bob the Builder yeswecan',
+      firstName: 'Bob',
+      lastName: 'Builder',
+      middleName: 'the',
+      suffix: 'yeswecan',
     });
   });
 
@@ -44,7 +47,8 @@ describe('formatRecord', () => {
       admissionsStatus: 'Inactive',
       birthYear: 1999,
       employer: 'DOJ',
-      name: 'Mike Wazowski',
+      firstName: 'Mike',
+      lastName: 'Wazowski',
     });
   });
 
@@ -68,7 +72,8 @@ describe('formatRecord', () => {
       admissionsStatus: 'Active',
       birthYear: undefined,
       employer: 'Private',
-      name: 'Rachael Ray',
+      firstName: 'Rachael',
+      lastName: 'Ray',
     });
   });
 
@@ -82,11 +87,11 @@ describe('formatRecord', () => {
       isDojEmployee: 'N',
       isIrsEmployee: 'N',
       lastName: 'Ray',
-      middleName: '',
+      middleName: 'R',
       phone: '1234567890',
       postalCode: '11111',
       state: 'CA',
-      suffix: '',
+      suffix: 'Esquire',
       unformattedAdmissionsDate: '11-30-2000',
     };
 
@@ -105,7 +110,10 @@ describe('formatRecord', () => {
         state: 'CA',
       },
       employer: 'Private',
-      name: 'Rachael Ray',
+      firstName: 'Rachael',
+      lastName: 'Ray',
+      middleName: 'R',
+      suffix: 'Esquire',
     });
   });
 });

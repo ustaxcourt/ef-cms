@@ -12,10 +12,10 @@ export const admissionsClerkAddsNewPractitioner = test => {
       'admissionsDate',
       'birthYear',
       'employer',
-      'originalBarState',
-      'practitionerType',
       'firstName',
       'lastName',
+      'originalBarState',
+      'practitionerType',
       'contact',
     ]);
 
