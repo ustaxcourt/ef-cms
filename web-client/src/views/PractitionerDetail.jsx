@@ -93,7 +93,7 @@ export const PractitionerDetail = connect(
                           Firm name
                         </span>
                         <div className="margin-bottom-4">
-                          {practitionerDetailHelper.employer}
+                          {practitionerDetailHelper.firmNameFormatted}
                         </div>
                         <span
                           className="usa-label usa-label-display"
