@@ -47,6 +47,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
       it('Create case #1', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         createdCaseIds.push(caseDetail.caseId);
+        test.docketNumber = caseDetail.docketNumber;
       });
 
       loginAs(test, 'petitionsclerk');
@@ -69,6 +70,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
       it('Create case #2', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         createdCaseIds.push(caseDetail.caseId);
+        test.docketNumber = caseDetail.docketNumber;
       });
 
       loginAs(test, 'petitionsclerk');
@@ -91,6 +93,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
       it('Create case #3', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         createdCaseIds.push(caseDetail.caseId);
+        test.docketNumber = caseDetail.docketNumber;
       });
 
       loginAs(test, 'petitionsclerk');

@@ -41,6 +41,7 @@ describe('Schedule A Trial Session', () => {
       const caseDetail = await uploadPetition(test, caseOverrides);
       createdCaseIds.push(caseDetail.caseId);
       createdDocketNumbers.push(caseDetail.docketNumber);
+      test.docketNumber = caseDetail.docketNumber;
     });
 
     loginAs(test, 'petitionsclerk');
