@@ -1098,14 +1098,14 @@ describe('Case entity', () => {
     });
   });
 
-  describe('updateCaseTitleDocketRecord', () => {
+  describe('updateCaseCaptionDocketRecord', () => {
     it('should not add to the docket record when the caption is not set', () => {
       const caseToVerify = new Case(
         {},
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord({
+      ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
       expect(caseToVerify.docketRecord.length).toEqual(0);
@@ -1119,47 +1119,45 @@ describe('Case entity', () => {
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord({
+      ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
-    it('should not add to the docket record when the caption is equivalent to the initial title', () => {
+    it('should not add to the docket record when the caption is equivalent to the initial caption', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'Caption',
-          initialTitle:
-            'Caption v. Commissioner of Internal Revenue, Respondent',
+          initialCaption: 'Caption',
         },
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord({
+      ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
-    it('should add to the docket record with event code MINC when the caption changes from the initial title', () => {
+    it('should add to the docket record with event code MINC when the caption changes from the initial caption', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A New Caption',
-          initialTitle:
-            'Caption v. Commissioner of Internal Revenue, Respondent',
+          initialCaption: 'Caption',
           status: Case.STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord({
+      ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
       expect(caseToVerify.docketRecord.length).toEqual(1);
       expect(caseToVerify.docketRecord[0].eventCode).toEqual('MINC');
     });
 
-    it('should not add to the docket record when the caption is equivalent to the last updated title', () => {
+    it('should not add to the docket record when the caption is equivalent to the last updated caption', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A Very New Caption',
@@ -1173,19 +1171,18 @@ describe('Case entity', () => {
                 "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
             },
           ],
-          initialTitle:
-            'Caption v. Commissioner of Internal Revenue, Respondent',
+          initialCaption: 'Caption',
         },
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord({
+      ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
       expect(caseToVerify.docketRecord.length).toEqual(2);
     });
 
-    it('should add to the docket record when the caption changes from the last updated title', () => {
+    it('should add to the docket record when the caption changes from the last updated caption', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A Very Berry New Caption',
@@ -1199,14 +1196,13 @@ describe('Case entity', () => {
                 "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
             },
           ],
-          initialTitle:
-            'Caption v. Commissioner of Internal Revenue, Respondent',
+          initialCaption: 'Caption',
           status: Case.STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord({
+      ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
       expect(caseToVerify.docketRecord.length).toEqual(3);
