@@ -12,6 +12,8 @@ elif [[ $BRANCH == 'staging' ]] ; then
   echo 'stg'
 elif [[ $BRANCH == 'master' ]] ; then
   echo 'prod'
+elif [[ $BRANCH == 'migration' ]] ; then
+  echo 'mig'
 else
   exit 1;
 fi
