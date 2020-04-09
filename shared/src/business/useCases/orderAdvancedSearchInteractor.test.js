@@ -57,6 +57,9 @@ describe('orderAdvancedSearchInteractor', () => {
               pk: {
                 S: 'case|491b05b4-483f-4b85-8dd7-2dd4c069eb50',
               },
+              signedJudgeName: {
+                S: 'Guy Fieri',
+              },
               sk: {
                 S: 'document|8da3946f-f0e0-426e-a5bb-cb4c482fb737',
               },
@@ -81,6 +84,9 @@ describe('orderAdvancedSearchInteractor', () => {
               },
               pk: {
                 S: 'case|491b05b4-483f-4b85-8dd7-2dd4c069eb50',
+              },
+              signedJudgeName: {
+                S: 'Guy Fieri',
               },
               sk: {
                 S: 'document|8da3946f-f0e0-426e-a5bb-cb4c482fb737',
@@ -140,6 +146,7 @@ describe('orderAdvancedSearchInteractor', () => {
         documentTitle: 'Order for More Candy',
         eventCode: 'ODD',
         pk: 'case|491b05b4-483f-4b85-8dd7-2dd4c069eb50',
+        signedJudgeName: 'Guy Fieri',
         sk: 'document|8da3946f-f0e0-426e-a5bb-cb4c482fb737',
       },
       {
@@ -151,6 +158,7 @@ describe('orderAdvancedSearchInteractor', () => {
         documentTitle: 'Order for KitKats',
         eventCode: 'ODD',
         pk: 'case|491b05b4-483f-4b85-8dd7-2dd4c069eb50',
+        signedJudgeName: 'Guy Fieri',
         sk: 'document|8da3946f-f0e0-426e-a5bb-cb4c482fb737',
       },
     ]);

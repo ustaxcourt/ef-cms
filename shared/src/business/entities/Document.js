@@ -53,6 +53,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
     this.qcByUserId = rawDocument.qcByUserId;
     this.signedAt = rawDocument.signedAt;
     this.signedByUserId = rawDocument.signedByUserId;
+    this.signedJudgeName = rawDocument.signedJudgeName;
     this.workItems = (rawDocument.workItems || []).map(
       workItem => new WorkItem(workItem, { applicationContext }),
     );
@@ -378,6 +379,7 @@ joiValidationDecorator(
     serviceStamp: joi.string().optional(),
     signedAt: joi.date().iso().optional().allow(null),
     signedByUserId: joi.string().optional().allow(null),
+    signedJudgeName: joi.string().optional().allow(null),
     status: joi.string().valid('served').optional(),
     supportingDocument: joi.string().optional().allow(null),
     trialLocation: joi
@@ -470,10 +472,12 @@ Document.prototype.generateFiledBy = function (caseDetail, force = false) {
  * attaches a signedAt date to the document
  *
  * @param {string} signByUserId the user id of the user who signed the document
+ * @param {string} signedJudgeName the judge's signature for the document
  *
  */
-Document.prototype.setSigned = function (signByUserId) {
+Document.prototype.setSigned = function (signByUserId, signedJudgeName) {
   this.signedByUserId = signByUserId;
+  this.signedJudgeName = signedJudgeName;
   this.signedAt = createISODateString();
 };
 
@@ -489,6 +493,7 @@ Document.prototype.setQCed = function (user) {
 
 Document.prototype.unsignDocument = function () {
   this.signedAt = null;
+  this.signedJudgeName = null;
   this.signedByUserId = null;
 };
 
