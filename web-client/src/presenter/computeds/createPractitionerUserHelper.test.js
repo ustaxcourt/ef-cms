@@ -14,16 +14,21 @@ describe('createPractitionerUserHelper', () => {
     const result = runCompute(createPractitionerUserHelper, {
       state: {
         form: {
-          documentTitle: 'Order',
+          employer: 'Private',
         },
       },
     });
+    expect(result.showFirmName).toBeTruthy();
+  });
 
-    expect(result.roles).toEqual([
-      User.ROLES.privatePractitioner,
-      User.ROLES.irsPractitioner,
-      User.ROLES.inactivePractitioner,
-      User.ROLES.inactivePractitioner,
-    ]);
+  it('returns only practitioner and respondent roles', () => {
+    const result = runCompute(createPractitionerUserHelper, {
+      state: {
+        form: {
+          employer: 'DOJ',
+        },
+      },
+    });
+    expect(result.showFirmName).toBeFalsy();
   });
 });

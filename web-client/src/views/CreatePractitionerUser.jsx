@@ -273,7 +273,7 @@ export const CreatePractitionerUser = connect(
                 <div className="grid-row grid-gap-3">
                   <div className="grid-col-12">
                     {createPractitionerUserHelper.showFirmName && (
-                      <FormGroup errorText={validationErrors.firmName}>
+                      <FormGroup>
                         <label className="usa-label" htmlFor="firmName">
                           Firm name <span className="usa-hint">(optional)</span>
                         </label>
@@ -284,9 +284,6 @@ export const CreatePractitionerUser = connect(
                           name="firmName"
                           type="text"
                           value={form.firmName || ''}
-                          onBlur={() => {
-                            validateAddPractitionerSequence();
-                          }}
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
