@@ -379,6 +379,7 @@ joiValidationDecorator(
     serviceStamp: joi.string().optional(),
     signedAt: joi.date().iso().optional().allow(null),
     signedByUserId: joi.string().optional().allow(null),
+    signedJudgeName: joi.string().optional().allow(null),
     status: joi.string().valid('served').optional(),
     supportingDocument: joi.string().optional().allow(null),
     trialLocation: joi
