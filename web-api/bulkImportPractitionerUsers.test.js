@@ -20,7 +20,10 @@ describe('formatRecord', () => {
       admissionsStatus: 'Active',
       birthYear: 1999,
       employer: 'IRS',
-      name: 'Bob the Builder yeswecan',
+      firstName: 'Bob',
+      lastName: 'Builder',
+      middleName: 'the',
+      suffix: 'yeswecan',
     });
   });
 
@@ -46,7 +49,6 @@ describe('formatRecord', () => {
       employer: 'DOJ',
       firstName: 'Mike',
       lastName: 'Wazowski',
-      name: 'Mike Wazowski',
     });
   });
 
@@ -72,7 +74,6 @@ describe('formatRecord', () => {
       employer: 'Private',
       firstName: 'Rachael',
       lastName: 'Ray',
-      name: 'Rachael Ray',
     });
   });
 
@@ -112,7 +113,6 @@ describe('formatRecord', () => {
       firstName: 'Rachael',
       lastName: 'Ray',
       middleName: 'R',
-      name: 'Rachael R Ray Esquire',
       suffix: 'Esquire',
     });
   });

@@ -17,14 +17,6 @@ const formatRecord = record => {
     }
   });
 
-  const nameArray = [
-    record.firstName,
-    record.middleName,
-    record.lastName,
-    record.suffix,
-  ].filter(item => item);
-  returnData.name = nameArray.join(' ');
-
   returnData.firstName = record.firstName;
   returnData.middleName = record.middleName;
   returnData.lastName = record.lastName;
@@ -156,13 +148,13 @@ const formatRecord = record => {
           },
         );
         if (result.status === 200) {
-          console.log(`SUCCESS ${record.name} ${record.barNumber}`);
+          console.log(`SUCCESS ${record.name}`);
         } else {
-          console.log(`ERROR ${record.name} ${record.barNumber}`);
+          console.log(`ERROR ${record.name}`);
           console.log(result);
         }
       } catch (err) {
-        console.log(`ERROR ${record.name} ${record.barNumber}`);
+        console.log(`ERROR ${record.barNumber}`);
         console.log(err);
       }
     }
