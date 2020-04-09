@@ -21,7 +21,6 @@ describe('Practitioner', () => {
       },
       employer: 'Private',
       firmName: 'GW Law Offices',
-      isAdmitted: true,
       name: 'Test Practitioner',
       originalBarState: 'Illinois',
       practitionerType: 'Attorney',
@@ -56,7 +55,6 @@ describe('Practitioner', () => {
         state: 'IL',
       },
       employer: 'Something else',
-      isAdmitted: true,
       name: 'Test Practitioner',
       practitionerType: 'Attorney',
       role: User.ROLES.Practitioner,
@@ -84,7 +82,6 @@ describe('Practitioner', () => {
       },
       employer: 'Something else',
       firmName: 'GW Law Offices',
-      isAdmitted: true,
       name: 'Test Practitioner',
       practitionerType: 'Purple',
       role: User.ROLES.Practitioner,
@@ -112,7 +109,6 @@ describe('Practitioner', () => {
       },
       employer: 'Something else',
       firmName: 'GW Law Offices',
-      isAdmitted: true,
       name: 'Test Practitioner',
       practitionerType: 'Purple',
       role: User.ROLES.Practitioner,
@@ -120,25 +116,37 @@ describe('Practitioner', () => {
     });
     expect(user.isValid()).toBeFalsy();
   });
-  it('should set the role to "irsPractitioner" when employer is "IRS"', () => {
+
+  it('should set the role to "irsPractitioner" when employer is "IRS" and admissionsStatus is Active', () => {
     const user = new Practitioner({
+      admissionsStatus: 'Active',
       employer: 'IRS',
     });
-    expect(user.role).toEqual('irsPractitioner');
+    expect(user.role).toEqual(User.ROLES.irsPractitioner);
   });
 
-  it('should set the role to "irsPractitioner" when employer is "DOJ"', () => {
+  it('should set the role to "irsPractitioner" when employer is "DOJ" and admissionsStatus is Active', () => {
     const user = new Practitioner({
+      admissionsStatus: 'Active',
       employer: 'DOJ',
     });
-    expect(user.role).toEqual('irsPractitioner');
+    expect(user.role).toEqual(User.ROLES.irsPractitioner);
   });
 
-  it('should set the role to "privatePractitioner" when employer is "Private"', () => {
+  it('should set the role to "privatePractitioner" when employer is "Private" and admissionsStatus is Active', () => {
     const user = new Practitioner({
+      admissionsStatus: 'Active',
       employer: 'Private',
     });
-    expect(user.role).toEqual('privatePractitioner');
+    expect(user.role).toEqual(User.ROLES.privatePractitioner);
+  });
+
+  it('should set the role to "inactivePractitioner" when employer is "Private" and admissionsStatus is Inactive', () => {
+    const user = new Practitioner({
+      admissionsStatus: 'Inactive',
+      employer: 'Private',
+    });
+    expect(user.role).toEqual(User.ROLES.inactivePractitioner);
   });
 
   it('Combines firstName and lastName properties to set the name property if provided', () => {
@@ -161,7 +169,6 @@ describe('Practitioner', () => {
       employer: 'Private',
       firmName: 'GW Law Offices',
       firstName: 'Test',
-      isAdmitted: true,
       lastName: 'Practitioner',
       originalBarState: 'Illinois',
       practitionerType: 'Attorney',

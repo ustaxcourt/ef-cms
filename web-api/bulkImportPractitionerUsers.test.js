@@ -20,10 +20,7 @@ describe('formatRecord', () => {
       admissionsStatus: 'Active',
       birthYear: 1999,
       employer: 'IRS',
-      isAdmitted: true,
       name: 'Bob the Builder yeswecan',
-      role: 'irsPractitioner',
-      section: 'irsPractitioner',
     });
   });
 
@@ -47,10 +44,7 @@ describe('formatRecord', () => {
       admissionsStatus: 'Inactive',
       birthYear: 1999,
       employer: 'DOJ',
-      isAdmitted: false,
       name: 'Mike Wazowski',
-      role: 'irsPractitioner',
-      section: 'irsPractitioner',
     });
   });
 
@@ -74,10 +68,7 @@ describe('formatRecord', () => {
       admissionsStatus: 'Active',
       birthYear: undefined,
       employer: 'Private',
-      isAdmitted: true,
       name: 'Rachael Ray',
-      role: 'privatePractitioner',
-      section: 'privatePractitioner',
     });
   });
 
@@ -114,10 +105,7 @@ describe('formatRecord', () => {
         state: 'CA',
       },
       employer: 'Private',
-      isAdmitted: true,
       name: 'Rachael Ray',
-      role: 'privatePractitioner',
-      section: 'privatePractitioner',
     });
   });
 });
