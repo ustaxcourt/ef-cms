@@ -36,16 +36,10 @@ const formatRecord = record => {
 
   if (record.isIrsEmployee === 'Y') {
     returnData.employer = 'IRS';
-    returnData.role = 'irsPractitioner';
-    returnData.section = 'irsPractitioner';
   } else if (record.isDojEmployee === 'Y') {
     returnData.employer = 'DOJ';
-    returnData.role = 'irsPractitioner';
-    returnData.section = 'irsPractitioner';
   } else {
     returnData.employer = 'Private';
-    returnData.role = 'privatePractitioner';
-    returnData.section = 'privatePractitioner';
   }
 
   returnData.additionalPhone = record.additionalPhone;
