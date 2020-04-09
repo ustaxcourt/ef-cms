@@ -952,7 +952,7 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
     const result = caseCaptionRegex.exec(docketRecord.description);
     if (result) {
       const [, , changedCaption] = result;
-      lastCaption = changedCaption;
+      lastCaption = changedCaption.replace(` ${Case.CASE_CAPTION_POSTFIX}`, '');
     }
   });
 
