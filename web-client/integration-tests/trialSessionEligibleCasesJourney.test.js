@@ -53,6 +53,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
         console.log('case #1 test.docketNumber', test.docketNumber);
+        console.log('case #1 receivedAt', caseDetail.receivedAt);
       });
 
       loginAs(test, 'petitionsclerk');
@@ -78,6 +79,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
         console.log('case #2 test.docketNumber', test.docketNumber);
+        console.log('case #2 receivedAt', caseDetail.receivedAt);
       });
 
       loginAs(test, 'petitionsclerk');
@@ -103,6 +105,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
         console.log('case #3 test.docketNumber', test.docketNumber);
+        console.log('case #3 receivedAt', caseDetail.receivedAt);
       });
 
       loginAs(test, 'petitionsclerk');
@@ -128,6 +131,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
         console.log('case #4 test.docketNumber', test.docketNumber);
+        console.log('case #4 receivedAt', caseDetail.receivedAt);
       });
 
       loginAs(test, 'petitionsclerk');
@@ -153,6 +157,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
         console.log('case #5 test.docketNumber', test.docketNumber);
+        console.log('case #5 receivedAt', caseDetail.receivedAt);
       });
 
       loginAs(test, 'petitionsclerk');
@@ -174,20 +179,12 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('trialSession.eligibleCases').length).toEqual(4);
       const eligibleCases = test.getState('trialSession.eligibleCases');
       expect(eligibleCases.length).toEqual(4);
-      // these cases should be first because they are CDP/Passport cases
+      // cases with index 3 and 4 should be first because they are CDP/Passport cases
       expect(eligibleCases[0].caseId).toEqual(createdCaseIds[3]);
       expect(eligibleCases[1].caseId).toEqual(createdCaseIds[4]);
       // order of the rest of the cases doesn't matter - they're all equal
-      expect(
-        eligibleCases.find(
-          eligibleCase => eligibleCase.caseId === createdCaseIds[0],
-        ),
-      ).toBeDefined();
-      expect(
-        eligibleCases.find(
-          eligibleCase => eligibleCase.caseId === createdCaseIds[1],
-        ),
-      ).toBeDefined();
+      expect(eligibleCases[2].caseId).toEqual(createdCaseIds[0]);
+      expect(eligibleCases[3].caseId).toEqual(createdCaseIds[1]);
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
   });
@@ -254,17 +251,8 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(eligibleCases[0].caseId).toEqual(createdCaseIds[3]);
       // this case should be second because it's a Passport case
       expect(eligibleCases[1].caseId).toEqual(createdCaseIds[4]);
-      // the order of the rest of the cases doesn't matter
-      expect(
-        eligibleCases.find(
-          eligibleCase => eligibleCase.caseId === createdCaseIds[0],
-        ),
-      ).toBeDefined();
-      expect(
-        eligibleCases.find(
-          eligibleCase => eligibleCase.caseId === createdCaseIds[1],
-        ),
-      ).toBeDefined();
+      expect(eligibleCases[2].caseId).toEqual(createdCaseIds[0]);
+      expect(eligibleCases[3].caseId).toEqual(createdCaseIds[1]);
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
   });
@@ -389,6 +377,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
 
       await test.runSequence('addCaseToTrialSessionSequence');
+      await wait(1000);
 
       expect(test.getState('validationErrors')).toEqual({
         trialSessionId: 'Select a Trial Session',
