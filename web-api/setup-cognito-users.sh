@@ -34,7 +34,6 @@ generate_post_data() {
   "birthYear": "1950",
   "employer": "$employer",
   "firmName": "Some Firm",
-  "isAdmitted": true,
   "practitionerType": "Attorney",
   "contact": {
     "address1": "234 Main St",
