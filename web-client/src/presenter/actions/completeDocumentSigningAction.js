@@ -71,6 +71,7 @@ export const completeDocumentSigningAction = async ({
     await applicationContext.getUseCases().signDocumentInteractor({
       applicationContext,
       caseId,
+      nameForSigning,
       originalDocumentId,
       signedDocumentId,
     });
