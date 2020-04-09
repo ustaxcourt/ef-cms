@@ -44,7 +44,7 @@ export const OrderSearchResults = connect(
                       <td>{result.caseTitle}</td>
                       <td>{result.documentTitle}</td>
                       <td>{result.formattedFiledDate}</td>
-                      <td>{result.judge}</td>
+                      <td>{result.signedJudgeName}</td>
                     </tr>
                   ),
                 )}
