@@ -13,7 +13,10 @@ describe('orderAdvancedSearchInteractor', () => {
   });
 
   it('returns an unauthorized error on petitioner user role', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: 'petitioner',
+    });
+
     await expect(
       orderAdvancedSearchInteractor({
         applicationContext,
@@ -21,7 +24,7 @@ describe('orderAdvancedSearchInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('returns empty array if no it search params are passed in', async () => {
+  it('returns empty array when no search param is passed in', async () => {
     const results = await orderAdvancedSearchInteractor({
       applicationContext,
     });
@@ -96,10 +99,12 @@ describe('orderAdvancedSearchInteractor', () => {
         ],
       },
     });
-    applicationContext.getUseCases().getCaseInteractor.mockResolvedValue({
-      caseCaption: 'Samson Workman, Petitioner',
-      docketNumberSuffix: 'AAA',
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockResolvedValue({
+        caseCaption: 'Samson Workman, Petitioner',
+        docketNumberSuffix: 'AAA',
+      });
 
     const results = await orderAdvancedSearchInteractor({
       applicationContext,
