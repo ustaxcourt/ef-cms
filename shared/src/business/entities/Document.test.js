@@ -810,14 +810,16 @@ describe('Document entity', () => {
   describe('unsignDocument', () => {
     it('signs and unsigns the document', () => {
       const document = new Document(A_VALID_DOCUMENT, { applicationContext });
-      document.setSigned('abc-123');
+      document.setSigned('abc-123', 'Joe Exotic');
 
       expect(document.signedByUserId).toEqual('abc-123');
+      expect(document.signedJudgeName).toEqual('Joe Exotic');
       expect(document.signedAt).toBeDefined();
 
       document.unsignDocument();
 
       expect(document.signedByUserId).toEqual(null);
+      expect(document.signedJudgeName).toEqual(null);
       expect(document.signedAt).toEqual(null);
     });
   });
