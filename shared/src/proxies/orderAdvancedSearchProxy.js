@@ -2,14 +2,14 @@ const querystring = require('querystring');
 const { get } = require('./requests');
 
 /**
- * caseAdvancedSearchInteractor
+ * orderAdvancedSearchInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.searchParams the search params (can include petitionerName, country, state, yearFiledMin, yearFiledMax)
+ * @param {string} providers.searchParams the search params
  * @returns {Promise<*>} the promise of the api call
  */
-exports.caseAdvancedSearchInteractor = ({
+exports.orderAdvancedSearchInteractor = ({
   applicationContext,
   searchParams,
 }) => {
@@ -17,6 +17,6 @@ exports.caseAdvancedSearchInteractor = ({
 
   return get({
     applicationContext,
-    endpoint: `/cases/search?${queryString}`,
+    endpoint: `/case-documents/order-search?${queryString}`,
   });
 };

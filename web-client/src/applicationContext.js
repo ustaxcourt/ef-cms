@@ -149,6 +149,7 @@ import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getU
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForPreviewInteractor } from '../../shared/src/business/useCases/loadPDFForPreviewInteractor';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
+import { orderAdvancedSearchInteractor } from '../../shared/src/proxies/orderAdvancedSearchProxy';
 import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCaseProxy';
 import { refreshTokenInteractor } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { removeCaseFromTrialInteractor } from '../../shared/src/proxies/trialSessions/removeCaseFromTrialProxy';
@@ -332,6 +333,7 @@ const allUseCases = {
   getWorkItemInteractor,
   loadPDFForPreviewInteractor,
   loadPDFForSigningInteractor,
+  orderAdvancedSearchInteractor,
   prioritizeCaseInteractor,
   refreshTokenInteractor,
   removeCaseFromTrialInteractor,
