@@ -52,6 +52,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         createdCaseIds.push(caseDetail.caseId);
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
+        console.log('case #1 test.docketNumber', test.docketNumber);
       });
 
       loginAs(test, 'petitionsclerk');
@@ -76,6 +77,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         createdCaseIds.push(caseDetail.caseId);
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
+        console.log('case #2 test.docketNumber', test.docketNumber);
       });
 
       loginAs(test, 'petitionsclerk');
@@ -100,6 +102,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         createdCaseIds.push(caseDetail.caseId);
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
+        console.log('case #3 test.docketNumber', test.docketNumber);
       });
 
       loginAs(test, 'petitionsclerk');
@@ -124,6 +127,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         createdCaseIds.push(caseDetail.caseId);
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
+        console.log('case #4 test.docketNumber', test.docketNumber);
       });
 
       loginAs(test, 'petitionsclerk');
@@ -148,6 +152,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         createdCaseIds.push(caseDetail.caseId);
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
+        console.log('case #5 test.docketNumber', test.docketNumber);
       });
 
       loginAs(test, 'petitionsclerk');
@@ -295,6 +300,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('trialSession.calendaredCases.1.caseId')).toEqual(
         createdCaseIds[4],
       );
+      // this could be either case 0 or 1 depending on which was marked eligible first
       expect(test.getState('trialSession.calendaredCases.2.caseId')).toEqual(
         createdCaseIds[0],
       );

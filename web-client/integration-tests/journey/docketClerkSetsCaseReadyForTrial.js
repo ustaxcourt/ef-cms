@@ -28,5 +28,9 @@ export const docketClerkSetsCaseReadyForTrial = test => {
     if (test.casesReadyForTrial) {
       test.casesReadyForTrial.push(test.getState('caseDetail'));
     }
+    console.log(
+      'set for trial, case with docket number',
+      test.getState('caseDetail.docketNumber'),
+    );
   });
 };
