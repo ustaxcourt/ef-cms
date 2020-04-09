@@ -31,8 +31,8 @@ describe('caseFilter', () => {
         caseId: '123',
         docketNumber: '102-20',
         foo: 'bar',
-        practitioners: [{ userId: 'authPractitioner' }],
-        respondents: [{ userId: 'authRespondent' }],
+        irsPractitioners: [{ userId: 'authRespondent' }],
+        privatePractitioners: [{ userId: 'authPractitioner' }],
         sealedDate: '2020-01-02T03:04:05.007Z',
       },
     ];

@@ -1,7 +1,6 @@
 import { CerebralTest } from 'cerebral/test';
 import { NotFoundError } from '../errors/NotFoundError';
 import { presenter } from '../presenter';
-import sinon from 'sinon';
 
 let test;
 let getCaseInteractor = async () => true;
@@ -23,15 +22,15 @@ test.setState('searchTerm', '111-19');
 
 describe('submitCaseSearchSequence', () => {
   beforeEach(() => {
-    routeStub = sinon.stub().returns({});
+    routeStub = jest.fn().mockReturnValue({});
   });
 
   it('navigates to found case', async () => {
     await test.runSequence('submitCaseSearchSequence', {
       searchTerm: '111-19',
     });
-    expect(routeStub.called).toBeTruthy();
-    expect(routeStub.getCall(0).args[0]).toContain('/case-detail');
+    expect(routeStub).toBeCalled();
+    expect(routeStub.mock.calls[0][0]).toContain('/case-detail');
   });
 
   it('does not navigate AND sets error state if endpoint throws NotFoundError', async () => {
@@ -44,7 +43,7 @@ describe('submitCaseSearchSequence', () => {
     await test.runSequence('submitCaseSearchSequence', {
       searchTerm: '111-19',
     });
-    expect(routeStub.called).toBeTruthy();
-    expect(routeStub.getCall(0).args[0]).toContain('/search/no-matches');
+    expect(routeStub).toBeCalled();
+    expect(routeStub.mock.calls[0][0]).toContain('/search/no-matches');
   });
 });

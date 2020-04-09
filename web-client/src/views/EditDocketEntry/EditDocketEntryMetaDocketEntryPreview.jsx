@@ -9,12 +9,12 @@ export const EditDocketEntryMetaDocketEntryPreview = connect(
     editType: state.screenMetadata.editType,
     noDocumentDescription: state.form.description,
   },
-  ({
+  function EditDocketEntryMetaDocketEntryPreview({
     addCourtIssuedDocketEntryHelper,
     documentTitlePreview,
     editType,
     noDocumentDescription,
-  }) => {
+  }) {
     return (
       <>
         {(editType === 'CourtIssued' &&

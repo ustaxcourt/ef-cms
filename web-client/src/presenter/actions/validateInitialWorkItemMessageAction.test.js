@@ -1,7 +1,6 @@
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { validateInitialWorkItemMessageAction } from './validateInitialWorkItemMessageAction';
-import sinon from 'sinon';
 
 describe('validateInitialWorkItemMessage', () => {
   let validateInitialWorkItemMessageStub;
@@ -11,9 +10,9 @@ describe('validateInitialWorkItemMessage', () => {
   let mockMessage;
 
   beforeEach(() => {
-    validateInitialWorkItemMessageStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+    validateInitialWorkItemMessageStub = jest.fn();
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     mockMessage = {
       message: 'hello world',
@@ -34,7 +33,7 @@ describe('validateInitialWorkItemMessage', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateInitialWorkItemMessageStub.returns(null);
+    validateInitialWorkItemMessageStub = jest.fn().mockReturnValue(null);
     await runAction(validateInitialWorkItemMessageAction, {
       modules: {
         presenter,
@@ -44,11 +43,11 @@ describe('validateInitialWorkItemMessage', () => {
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateInitialWorkItemMessageStub.returns('error');
+    validateInitialWorkItemMessageStub = jest.fn().mockReturnValue('error');
     await runAction(validateInitialWorkItemMessageAction, {
       modules: {
         presenter,
@@ -58,6 +57,6 @@ describe('validateInitialWorkItemMessage', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

@@ -26,7 +26,12 @@ export const AddConsolidatedCaseModal = connect(
     error: state.modal.error,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
-  ({ caseDetail, confirmSelection, error, updateModalValueSequence }) => {
+  function AddConsolidatedCaseModal({
+    caseDetail,
+    confirmSelection,
+    error,
+    updateModalValueSequence,
+  }) {
     return (
       <ConfirmModal
         cancelLabel="Cancel"

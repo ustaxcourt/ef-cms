@@ -1,8 +1,5 @@
 const client = require('../../dynamodbClientService');
-const {
-  getRecordViaMapping,
-} = require('../../dynamo/helpers/getRecordViaMapping');
-const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
+const { getCaseByCaseId } = require('../../dynamo/cases/getCaseByCaseId');
 
 /**
  * getCaseByDocketNumber
@@ -16,38 +13,29 @@ exports.getCaseByDocketNumber = async ({
   applicationContext,
   docketNumber,
 }) => {
-  const theCase = await getRecordViaMapping({
+  const results = await client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `case-by-docket-number|${docketNumber}`,
+    },
+    KeyConditionExpression: '#pk = :pk',
     applicationContext,
-    key: docketNumber,
-    type: 'case',
-  }).then(aCase =>
-    stripWorkItems(aCase, applicationContext.isAuthorizedForWorkItems()),
-  );
+  });
 
-  let docketRecord = [];
-
-  if (theCase) {
-    docketRecord = await client.query({
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-        '#sk': 'sk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `case|${theCase.caseId}`,
-        ':prefix': 'docket-record',
-      },
-      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-      applicationContext,
-    });
-
-    docketRecord =
-      docketRecord.length > 0 ? docketRecord : theCase.docketRecord;
-
-    return {
-      ...theCase,
-      docketRecord, // this is temp until sesed data fixed
-    };
-  } else {
+  if (results.length === 0) {
     return null;
   }
+
+  const [firstEntry] = results;
+
+  const [, caseId] = firstEntry.sk.split('|');
+
+  const fullCase = await getCaseByCaseId({
+    applicationContext,
+    caseId,
+  });
+
+  return fullCase;
 };

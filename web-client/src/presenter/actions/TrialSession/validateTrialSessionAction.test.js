@@ -1,7 +1,6 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateTrialSessionAction } from './validateTrialSessionAction';
-import sinon from 'sinon';
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
@@ -23,9 +22,9 @@ describe('validateTrialSessionAction', () => {
   let errorStub;
 
   beforeEach(() => {
-    validateTrialSessionStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+    validateTrialSessionStub = jest.fn();
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
@@ -40,7 +39,7 @@ describe('validateTrialSessionAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateTrialSessionStub.returns(null);
+    validateTrialSessionStub = jest.fn().mockReturnValue(null);
     await runAction(validateTrialSessionAction, {
       modules: {
         presenter,
@@ -50,11 +49,11 @@ describe('validateTrialSessionAction', () => {
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateTrialSessionStub.returns({ some: 'error' });
+    validateTrialSessionStub = jest.fn().mockReturnValue({ some: 'error' });
     await runAction(validateTrialSessionAction, {
       modules: {
         presenter,
@@ -64,11 +63,11 @@ describe('validateTrialSessionAction', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when term is summer', async () => {
-    validateTrialSessionStub.returns({ term: 'error' });
+    validateTrialSessionStub = jest.fn().mockReturnValue({ term: 'error' });
     await runAction(validateTrialSessionAction, {
       modules: {
         presenter,
@@ -78,6 +77,6 @@ describe('validateTrialSessionAction', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

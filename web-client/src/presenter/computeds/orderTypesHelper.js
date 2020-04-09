@@ -3,7 +3,7 @@ import { state } from 'cerebral';
 export const orderTypesHelper = (get, applicationContext) => {
   const { ORDER_TYPES_MAP, USER_ROLES } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
-  const eventCode = get(state.form.eventCode);
+  const eventCode = get(state.modal.eventCode);
 
   let orderTypes = ORDER_TYPES_MAP;
 

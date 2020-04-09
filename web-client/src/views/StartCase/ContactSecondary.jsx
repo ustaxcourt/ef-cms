@@ -11,30 +11,31 @@ export const ContactSecondary = connect(
     bind: props.bind,
     constants: state.constants,
     contactsHelper: state[props.contactsHelper],
-    copyPrimaryContactSequence: sequences.copyPrimaryContactSequence,
     data: state[props.bind],
     onBlur: props.onBlur,
     onBlurSequence: sequences[props.onBlur],
     onChange: props.onChange,
     onChangeSequence: sequences[props.onChange],
     parentView: props.parentView,
+    updateFormValueAndSecondaryContactInfoSequence:
+      sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function ContactSecondary({
     bind,
     constants,
     contactsHelper,
-    copyPrimaryContactSequence,
     data,
     onBlur,
     onBlurSequence,
     onChange,
     onChangeSequence,
     parentView,
+    updateFormValueAndSecondaryContactInfoSequence,
     useSameAsPrimary,
     validationErrors,
     wrapperClassName,
-  }) => {
+  }) {
     return (
       <>
         {parentView === 'StartCase' ? (
@@ -81,12 +82,14 @@ export const ContactSecondary = connect(
               <input
                 className="usa-checkbox__input"
                 id="use-same-address-above"
+                name="useSameAsPrimary"
                 type="checkbox"
                 value={true}
                 onChange={e => {
-                  if (Boolean(e.target.value) === true) {
-                    copyPrimaryContactSequence();
-                  }
+                  updateFormValueAndSecondaryContactInfoSequence({
+                    key: e.target.name,
+                    value: e.target.checked,
+                  });
                 }}
               />
               <label

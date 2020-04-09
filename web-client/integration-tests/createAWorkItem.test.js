@@ -32,14 +32,14 @@ function getDocketNumber(test) {
  * @param {object} test the current test object
  * @returns {void} runs createWorkItemSequence
  */
-function createWorkItem(test) {
+async function createWorkItem(test) {
   test.setState('form', {
     assigneeId: DOCKET_CLERK_1_ID,
     message: MESSAGE,
     section: 'docket',
   });
 
-  return test.runSequence('createWorkItemSequence');
+  return await test.runSequence('createWorkItemSequence');
 }
 
 /**

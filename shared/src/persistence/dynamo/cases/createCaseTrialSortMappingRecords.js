@@ -18,7 +18,7 @@ exports.createCaseTrialSortMappingRecords = async ({
   await put({
     Item: {
       caseId,
-      gsi1pk: `eligible-for-trial-case-catalog-${caseId}`,
+      gsi1pk: `eligible-for-trial-case-catalog|${caseId}`,
       pk: 'eligible-for-trial-case-catalog',
       sk: nonHybrid,
     },
@@ -28,7 +28,7 @@ exports.createCaseTrialSortMappingRecords = async ({
   await put({
     Item: {
       caseId,
-      gsi1pk: `eligible-for-trial-case-catalog-${caseId}`,
+      gsi1pk: `eligible-for-trial-case-catalog|${caseId}`,
       pk: 'eligible-for-trial-case-catalog',
       sk: hybrid,
     },

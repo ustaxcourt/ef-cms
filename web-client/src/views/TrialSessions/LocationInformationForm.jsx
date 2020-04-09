@@ -12,12 +12,12 @@ export const LocationInformationForm = connect(
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function LocationInformationForm({
     form,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <h2 className="margin-top-4">Location Information</h2>
@@ -66,7 +66,7 @@ export const LocationInformationForm = connect(
 
           <div className="usa-form-group">
             <label className="usa-label" htmlFor="address1">
-              Address Line 1 <span className="usa-hint">(optional)</span>
+              Address line 1 <span className="usa-hint">(optional)</span>
             </label>
             <input
               autoCapitalize="none"

@@ -8,7 +8,7 @@ presenter.providers.applicationContext = {
   }),
 };
 
-describe('setPathAction', () => {
+describe('assignSelectedWorkItemsAction', () => {
   it('updates only the section queue items to have the new assignee information', async () => {
     const result = await runAction(assignSelectedWorkItemsAction, {
       modules: {

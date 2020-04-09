@@ -9,7 +9,7 @@ export const PublicFilingsAndProceedings = connect(
     caseDetail: state.caseDetail,
     entry: props.entry,
   },
-  ({ baseUrl, caseDetail, entry }) => {
+  function PublicFilingsAndProceedings({ baseUrl, caseDetail, entry }) {
     return (
       <React.Fragment>
         {entry.showLinkToDocument && (

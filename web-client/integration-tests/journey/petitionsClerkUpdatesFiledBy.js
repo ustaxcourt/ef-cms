@@ -1,10 +1,21 @@
+import { getPetitionDocumentForCase } from '../helpers';
+
 export default (test, overrides = {}) => {
   return it('Petitions clerk updates filed by', async () => {
-    expect(test.getState('caseDetailErrors')).toEqual({});
-
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
+
+    const petitionDocument = getPetitionDocumentForCase(
+      test.getState('caseDetail'),
+    );
+
+    await test.runSequence('gotoDocumentDetailSequence', {
+      docketNumber: test.docketNumber,
+      documentId: petitionDocument.documentId,
+    });
+
+    expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('updateFormValueSequence', {
       key: 'receivedAtMonth',

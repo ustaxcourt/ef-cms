@@ -5,83 +5,6 @@
     "contactSecondary": {},
     "isPaper": false,
     "initialTitle": "Bill Burr, Petitioner v. Commissioner of Internal Revenue, Respondent",
-    "documents": [
-      {
-        "documentType": "Petition",
-        "practitioner": [],
-        "partyPrimary": true,
-        "workItems": [
-          {
-            "docketNumberSuffix": "S",
-            "caseStatus": "New",
-            "caseIsInProgress": false,
-            "document": {
-              "eventCode": "P",
-              "createdAt": "2020-01-02T16:05:45.979Z",
-              "processingStatus": "pending",
-              "documentType": "Petition",
-              "practitioner": [],
-              "filedBy": "Petr. Bill Burr",
-              "partyPrimary": true,
-              "pending": false,
-              "partySecondary": false,
-              "documentId": "cb323daf-c541-4645-bb44-232255d03d40",
-              "receivedAt": "2020-01-02T16:05:45.979Z",
-              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-            },
-            "caseTitle": "Bill Burr",
-            "section": "petitions",
-            "workItemId": "c4b34a7e-2b0a-4b6b-a406-b53b19d08cc4",
-            "isInitializeCase": true,
-            "assigneeId": null,
-            "isQC": true,
-            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
-            "createdAt": "2020-01-02T16:05:45.979Z",
-            "assigneeName": null,
-            "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
-            "messages": [
-              {
-                "createdAt": "2020-01-02T16:05:45.980Z",
-                "messageId": "3947f4e4-9c7b-4d3d-a19b-bf8d89065be9",
-                "from": "Test Petitioner",
-                "message": "Petition filed by Bill Burr is ready for review.",
-                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-              }
-            ],
-            "docketNumber": "101-20",
-            "updatedAt": "2020-01-02T16:05:45.979Z"
-          }
-        ],
-        "pending": false,
-        "receivedAt": "2020-01-02T16:05:45.979Z",
-        "filingDate": "2020-01-02T16:05:45.979Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "eventCode": "P",
-        "createdAt": "2020-01-02T16:05:45.979Z",
-        "processingStatus": "complete",
-        "filedBy": "Petr. Bill Burr",
-        "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
-        "partySecondary": false,
-        "documentId": "cb323daf-c541-4645-bb44-232255d03d40"
-      },
-      {
-        "documentType": "Statement of Taxpayer Identification",
-        "practitioner": [],
-        "partyPrimary": true,
-        "workItems": [],
-        "pending": false,
-        "receivedAt": "2020-01-02T16:05:45.980Z",
-        "filingDate": "2020-01-02T16:05:45.980Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "eventCode": "STIN",
-        "createdAt": "2020-01-02T16:05:45.980Z",
-        "processingStatus": "complete",
-        "filedBy": "Petr. Bill Burr",
-        "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
-        "partySecondary": false,
-        "documentId": "0048b9e5-15e8-4315-8b9c-8a2e181205e4"
-      }
-    ],
     "petitionPaymentStatus": "Not Paid",
     "orderForFilingFee": false,
     "partyType": "Petitioner",
@@ -106,7 +29,7 @@
     "trialTime": "10:00",
     "caseCaption": "Bill Burr, Petitioner",
     "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
-    "sk": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "sk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -121,21 +44,19 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Houston, Texas",
-    "respondents": [],
-    "practitioners": [],
     "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "docketNumber": "101-20",
     "status": "Calendared"
   },
   {
-    "sk": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
-    "pk": "101-20|case"
+    "sk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "pk": "case-by-docket-number|101-20"
   },
   {
-    "sk": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "pk": "case-by-docket-number|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
@@ -156,5 +77,85 @@
     "description": "Request for Place of Trial at Houston, Texas",
     "index": 2,
     "filingDate": "2020-01-02T16:05:45.978Z"
+  },
+  {
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2020-01-02T16:05:45.980Z",
+    "practitioner": [],
+    "partyPrimary": true,
+    "workItems": [],
+    "pending": false,
+    "receivedAt": "2020-01-02T16:05:45.980Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "STIN",
+    "createdAt": "2020-01-02T16:05:45.980Z",
+    "processingStatus": "complete",
+    "filedBy": "Petr. Bill Burr",
+    "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "sk": "document|0048b9e5-15e8-4315-8b9c-8a2e181205e4",
+    "partySecondary": false,
+    "documentId": "0048b9e5-15e8-4315-8b9c-8a2e181205e4",
+    "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0"
+  },
+  {
+    "documentType": "Petition",
+    "filingDate": "2020-01-02T16:05:45.979Z",
+    "practitioner": [],
+    "partyPrimary": true,
+    "workItems": [
+      {
+        "associatedJudge": "Chief Judge",
+        "docketNumberSuffix": "S",
+        "caseStatus": "New",
+        "caseIsInProgress": false,
+        "document": {
+          "eventCode": "P",
+          "createdAt": "2020-01-02T16:05:45.979Z",
+          "processingStatus": "pending",
+          "documentType": "Petition",
+          "practitioner": [],
+          "filedBy": "Petr. Bill Burr",
+          "partyPrimary": true,
+          "pending": false,
+          "partySecondary": false,
+          "documentId": "cb323daf-c541-4645-bb44-232255d03d40",
+          "receivedAt": "2020-01-02T16:05:45.979Z",
+          "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        "caseTitle": "Bill Burr",
+        "section": "petitions",
+        "workItemId": "c4b34a7e-2b0a-4b6b-a406-b53b19d08cc4",
+        "isInitializeCase": true,
+        "assigneeId": null,
+        "isQC": true,
+        "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "createdAt": "2020-01-02T16:05:45.979Z",
+        "assigneeName": null,
+        "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+        "messages": [
+          {
+            "createdAt": "2020-01-02T16:05:45.980Z",
+            "messageId": "3947f4e4-9c7b-4d3d-a19b-bf8d89065be9",
+            "from": "Test Petitioner",
+            "message": "Petition filed by Bill Burr is ready for review.",
+            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+          }
+        ],
+        "docketNumber": "101-20",
+        "updatedAt": "2020-01-02T16:05:45.979Z"
+      }
+    ],
+    "pending": false,
+    "receivedAt": "2020-01-02T16:05:45.979Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "createdAt": "2020-01-02T16:05:45.979Z",
+    "processingStatus": "complete",
+    "filedBy": "Petr. Bill Burr",
+    "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "sk": "document|cb323daf-c541-4645-bb44-232255d03d40",
+    "partySecondary": false,
+    "documentId": "cb323daf-c541-4645-bb44-232255d03d40",
+    "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0"
   }
 ]

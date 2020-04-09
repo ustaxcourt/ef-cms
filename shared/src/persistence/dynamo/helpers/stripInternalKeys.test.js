@@ -4,14 +4,14 @@ describe('stripInternalKeys', () => {
   it('strips internal keys from an array of items', () => {
     const items = [
       {
-        gsi1pk: 'trial-session-123',
+        gsi1pk: 'trial-session|123',
         mayorOf: 'Flavortown',
         name: 'Guy Fieri',
         pk: 'case-123',
         sk: 'item-123',
       },
       {
-        gsi1pk: 'trial-session-321',
+        gsi1pk: 'trial-session|321',
         name: 'Guy Fieri, Jr.',
         pk: 'case-321',
         sk: 'item-321',
@@ -35,7 +35,7 @@ describe('stripInternalKeys', () => {
 
   it('strips internal keys from one item', () => {
     const item = {
-      gsi1pk: 'trial-session-321',
+      gsi1pk: 'trial-session|321',
       name: 'Guy Fieri, Jr.',
       pk: 'case-321',
       sk: 'item-321',

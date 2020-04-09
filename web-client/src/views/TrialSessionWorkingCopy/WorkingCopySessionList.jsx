@@ -25,7 +25,7 @@ export const WorkingCopySessionList = connect(
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
     trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
   },
-  ({
+  function WorkingCopySessionList({
     autoSaveTrialSessionWorkingCopySequence,
     casesShownCount,
     formattedCases,
@@ -35,7 +35,7 @@ export const WorkingCopySessionList = connect(
     sortOrder,
     toggleWorkingCopySortSequence,
     trialStatusOptions,
-  }) => {
+  }) {
     return (
       <div className="margin-top-4">
         <WorkingCopyFilterHeader />
@@ -122,12 +122,12 @@ export const WorkingCopySessionList = connect(
                   </td>
                   <td>{item.caseCaptionNames}</td>
                   <td>
-                    {item.practitioners.map((practitioner, idx) => (
+                    {item.privatePractitioners.map((practitioner, idx) => (
                       <div key={idx}>{practitioner.name}</div>
                     ))}
                   </td>
                   <td>
-                    {item.respondents.map((respondent, idx) => (
+                    {item.irsPractitioners.map((respondent, idx) => (
                       <div key={idx}>{respondent.name}</div>
                     ))}
                   </td>

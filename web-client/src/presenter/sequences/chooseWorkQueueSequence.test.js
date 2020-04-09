@@ -1,13 +1,12 @@
 import { CerebralTest } from 'cerebral/test';
 import { User } from '../../../../shared/src/business/entities/User';
 import { presenter } from '../presenter';
-import sinon from 'sinon';
 
 let test;
-const setCurrentUserStub = sinon.stub().returns({ section: 'petitions' });
-const getInboxMessagesForSectionStub = sinon
-  .stub()
-  .returns([{ document: { isFileAttached: true }, isQC: false }]);
+const setCurrentUserStub = jest.fn().mockReturnValue({ section: 'petitions' });
+const getInboxMessagesForSectionStub = jest
+  .fn()
+  .mockReturnValue([{ document: { isFileAttached: true }, isQC: false }]);
 presenter.providers.applicationContext = {
   getConstants: () => ({ USER_ROLES: User.ROLES }),
   getCurrentUser: setCurrentUserStub,
@@ -36,6 +35,6 @@ describe('chooseWorkQueueSequence', () => {
       queue: 'section',
       workQueueIsInternal: true,
     });
-    expect(getInboxMessagesForSectionStub.called).toBeTruthy();
+    expect(getInboxMessagesForSectionStub).toBeCalled();
   });
 });

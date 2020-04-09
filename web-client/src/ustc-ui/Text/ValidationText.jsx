@@ -7,7 +7,7 @@ export const ValidationText = connect(
   {
     setFieldOrderSequence: sequences.setFieldOrderSequence,
   },
-  ({ field, setFieldOrderSequence }) => {
+  function ValidationText({ field, setFieldOrderSequence }) {
     useEffect(() => {
       setFieldOrderSequence({ field });
     }, []);

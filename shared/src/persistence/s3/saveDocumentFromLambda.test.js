@@ -1,31 +1,28 @@
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../business/test/createTestApplicationContext');
 const { saveDocumentFromLambda } = require('./saveDocumentFromLambda');
 
 describe('saveDocumentFromLambda', () => {
-  const putObjectStub = sinon.stub().returns({
-    promise: async () => null,
+  const putObjectStub = jest.fn().mockReturnValue({
+    promise: () => Promise.resolve(true),
   });
 
   it('saves the document', async () => {
-    let applicationContext = {
-      getDocumentsBucketName: () => {
-        return 'aBucket';
-      },
-      getStorageClient: () => ({
-        putObject: putObjectStub,
-      }),
-      getTempDocumentsBucketName: () => {
-        return 'aTempBucket';
-      },
-    };
+    applicationContext.getStorageClient = () => ({
+      putObject: putObjectStub,
+    });
+    applicationContext.getDocumentsBucketName.mockReturnValue('aBucket');
     const expectedDocumentId = 'abc';
     const expectedArray = new Uint8Array(['a']);
+
     await saveDocumentFromLambda({
       applicationContext,
       document: new Uint8Array(['a']),
       documentId: expectedDocumentId,
     });
-    expect(putObjectStub.getCall(0).args[0]).toMatchObject({
+
+    expect(putObjectStub).toHaveBeenCalledWith({
       Body: Buffer.from(expectedArray),
       Bucket: 'aBucket',
       ContentType: 'application/pdf',
@@ -34,26 +31,23 @@ describe('saveDocumentFromLambda', () => {
   });
 
   it('saves the document in the temp bucket', async () => {
-    let applicationContext = {
-      getDocumentsBucketName: () => {
-        return 'aBucket';
-      },
-      getStorageClient: () => ({
-        putObject: putObjectStub,
-      }),
-      getTempDocumentsBucketName: () => {
-        return 'aTempBucket';
-      },
-    };
+    applicationContext.getStorageClient = () => ({
+      putObject: putObjectStub,
+    });
+    applicationContext.getTempDocumentsBucketName.mockReturnValue(
+      'aTempBucket',
+    );
     const expectedDocumentId = 'abc';
     const expectedArray = new Uint8Array(['a']);
+
     await saveDocumentFromLambda({
       applicationContext,
       document: new Uint8Array(['a']),
       documentId: expectedDocumentId,
       useTempBucket: true,
     });
-    expect(putObjectStub.getCall(1).args[0]).toMatchObject({
+
+    expect(putObjectStub).toHaveBeenCalledWith({
       Body: Buffer.from(expectedArray),
       Bucket: 'aTempBucket',
       ContentType: 'application/pdf',

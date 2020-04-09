@@ -35,14 +35,18 @@ const BetaBar = toggleBetaBarSequence => {
 
 export const HeaderPublic = connect(
   {
-    betaBar: state.betaBar,
     navigateToCognitoSequence: sequences.navigateToCognitoSequence,
+    showBetaBar: state.header.showBetaBar,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
   },
-  ({ betaBar, navigateToCognitoSequence, toggleBetaBarSequence }) => {
+  function HeaderPublic({
+    navigateToCognitoSequence,
+    showBetaBar,
+    toggleBetaBarSequence,
+  }) {
     return (
       <div className="header-public">
-        {betaBar.isVisible && BetaBar(toggleBetaBarSequence)}
+        {showBetaBar && BetaBar(toggleBetaBarSequence)}
         <div className="grid-container no-mobile-padding">
           <header
             className="usa-header usa-header--basic ustc-header"

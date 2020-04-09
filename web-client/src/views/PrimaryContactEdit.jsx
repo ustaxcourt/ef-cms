@@ -12,28 +12,28 @@ import React from 'react';
 
 export const PrimaryContactEdit = connect(
   {
-    caseDetail: state.caseDetail,
     contactEditHelper: state.contactEditHelper,
+    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     submitEditPrimaryContactSequence:
       sequences.submitEditPrimaryContactSequence,
-    updateCaseValueSequence: sequences.updateCaseValueSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
     validatePrimaryContactSequence: sequences.validatePrimaryContactSequence,
     validationErrors: state.validationErrors,
   },
-  ({
-    caseDetail,
+  function PrimaryContactEdit({
     contactEditHelper,
+    form,
     formCancelToggleCancelSequence,
     showModal,
     submitEditPrimaryContactSequence,
-    updateCaseValueSequence,
+    updateFormValueSequence,
     validatePrimaryContactSequence,
     validationErrors,
-  }) => {
+  }) {
     const type = 'contactPrimary';
-    const bind = 'caseDetail';
+    const bind = 'form';
     const onBlur = 'validatePrimaryContactSequence';
 
     return (
@@ -60,7 +60,7 @@ export const PrimaryContactEdit = connect(
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
               <p className="usa-label">Contact name</p>
-              <p className="margin-top-0">{caseDetail.contactPrimary.name}</p>
+              <p className="margin-top-0">{form.contactPrimary.name}</p>
             </div>
 
             {contactEditHelper.contactPrimary?.showInCareOf && (
@@ -74,12 +74,12 @@ export const PrimaryContactEdit = connect(
                   id="inCareOf"
                   name="contactPrimary.inCareOf"
                   type="text"
-                  value={caseDetail.contactPrimary.inCareOf || ''}
+                  value={form.contactPrimary.inCareOf || ''}
                   onBlur={() => {
                     validatePrimaryContactSequence();
                   }}
                   onChange={e => {
-                    updateCaseValueSequence({
+                    updateFormValueSequence({
                       key: e.target.name,
                       value: e.target.value,
                     });
@@ -92,21 +92,21 @@ export const PrimaryContactEdit = connect(
               bind={bind}
               clearTypeOnCountryChange={true}
               type={type}
-              onChange="countryTypeChangeSequence"
+              onChange="contactPrimaryCountryTypeChangeSequence"
             />
-            {caseDetail.contactPrimary.countryType === 'domestic' ? (
+            {form.contactPrimary.countryType === 'domestic' ? (
               <Address
                 bind={bind}
                 type={type}
                 onBlur={onBlur}
-                onChange="updateCaseValueSequence"
+                onChange="updateFormValueSequence"
               />
             ) : (
               <InternationalAddress
                 bind={bind}
                 type={type}
                 onBlur={onBlur}
-                onChange="updateCaseValueSequence"
+                onChange="updateFormValueSequence"
               />
             )}
             <FormGroup
@@ -125,12 +125,12 @@ export const PrimaryContactEdit = connect(
                 id="phone"
                 name="contactPrimary.phone"
                 type="tel"
-                value={caseDetail.contactPrimary.phone || ''}
+                value={form.contactPrimary.phone || ''}
                 onBlur={() => {
                   validatePrimaryContactSequence();
                 }}
                 onChange={e => {
-                  updateCaseValueSequence({
+                  updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });

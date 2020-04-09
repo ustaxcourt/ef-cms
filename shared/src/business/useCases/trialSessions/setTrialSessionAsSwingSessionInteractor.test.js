@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   setTrialSessionAsSwingSessionInteractor,
 } = require('./setTrialSessionAsSwingSessionInteractor');
@@ -26,10 +25,10 @@ const OTHER_MOCK_TRIAL_SESSION = {
 
 describe('Set trial session as swing session', () => {
   let applicationContext;
-  const getTrialSessionByIdStub = sinon
-    .stub()
-    .returns(OTHER_MOCK_TRIAL_SESSION);
-  const updateTrialSessionStub = sinon.stub().returns();
+  const getTrialSessionByIdStub = jest
+    .fn()
+    .mockReturnValue(OTHER_MOCK_TRIAL_SESSION);
+  const updateTrialSessionStub = jest.fn().mockReturnValue();
 
   it('throws error if user is unauthorized', async () => {
     applicationContext = {
@@ -79,13 +78,13 @@ describe('Set trial session as swing session', () => {
       trialSessionId: OTHER_MOCK_TRIAL_SESSION.trialSessionId,
     });
 
-    expect(getTrialSessionByIdStub.called).toEqual(true);
-    expect(getTrialSessionByIdStub.getCall(0).args[0].trialSessionId).toEqual(
+    expect(getTrialSessionByIdStub).toBeCalled();
+    expect(getTrialSessionByIdStub.mock.calls[0][0].trialSessionId).toEqual(
       '208a959f-9526-4db5-b262-e58c476a4604',
     );
-    expect(updateTrialSessionStub.called).toEqual(true);
+    expect(updateTrialSessionStub).toBeCalled();
     expect(
-      updateTrialSessionStub.getCall(0).args[0].trialSessionToUpdate,
+      updateTrialSessionStub.mock.calls[0][0].trialSessionToUpdate,
     ).toMatchObject({
       ...OTHER_MOCK_TRIAL_SESSION,
       swingSession: true,

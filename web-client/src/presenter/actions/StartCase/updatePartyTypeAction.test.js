@@ -4,9 +4,8 @@ import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { updatePartyTypeAction } from './updatePartyTypeAction';
-import sinon from 'sinon';
 
-const updateCaseStub = sinon.stub().returns({});
+const updateCaseStub = jest.fn().mockReturnValue({});
 
 presenter.providers.applicationContext = {
   ...applicationContext,

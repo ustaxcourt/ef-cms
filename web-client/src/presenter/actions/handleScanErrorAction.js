@@ -12,9 +12,9 @@ import { state } from 'cerebral';
 export const handleScanErrorAction = async ({ props, store }) => {
   const err = props.error;
   if (err.message && err.message.includes('no images in buffer')) {
-    store.set(state.showModal, 'EmptyHopperModal');
+    store.set(state.modal.showModal, 'EmptyHopperModal');
   } else {
-    store.set(state.showModal, 'ScanErrorModal');
+    store.set(state.modal.showModal, 'ScanErrorModal');
   }
-  store.set(state.isScanning, false);
+  store.set(state.scanner.isScanning, false);
 };

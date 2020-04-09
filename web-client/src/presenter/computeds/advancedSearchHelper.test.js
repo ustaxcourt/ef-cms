@@ -73,7 +73,9 @@ describe('advancedSearchHelper', () => {
       state: {
         ...getBaseState(globalUser),
         advancedSearchForm: {
-          countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+          caseSearchByName: {
+            countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+          },
         },
       },
     });
@@ -88,7 +90,9 @@ describe('advancedSearchHelper', () => {
       state: {
         ...getBaseState(globalUser),
         advancedSearchForm: {
-          countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+          caseSearchByName: {
+            countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+          },
         },
       },
     });

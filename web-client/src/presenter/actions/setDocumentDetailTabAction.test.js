@@ -15,6 +15,8 @@ describe('setDocumentDetailTabAction', () => {
         path: 'docketClerk',
       },
     });
-    expect(result.state.documentDetail.tab).toEqual('caseInfo');
+    expect(result.state.currentViewMetadata.documentDetail.tab).toEqual(
+      'caseInfo',
+    );
   });
 });

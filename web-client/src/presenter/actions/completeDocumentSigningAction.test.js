@@ -72,7 +72,9 @@ describe('completeDocumentSigningAction', () => {
             },
           ],
         },
-        messageId: '123',
+        currentViewMetadata: {
+          messageId: '123',
+        },
         pdfForSigning: {
           documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           pageNumber: 3,
@@ -124,7 +126,9 @@ describe('completeDocumentSigningAction', () => {
             },
           ],
         },
-        messageId: '123',
+        currentViewMetadata: {
+          messageId: '123',
+        },
         pdfForSigning: {
           documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           pageNumber: 3,

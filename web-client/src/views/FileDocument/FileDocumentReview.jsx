@@ -18,10 +18,10 @@ export const FileDocumentReview = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     formattedCaseDetail: state.formattedCaseDetail,
     navigateBackSequence: sequences.navigateBackSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
   },
-  ({
+  function FileDocumentReview({
     fileDocumentHelper,
     form,
     formattedCaseDetail,
@@ -29,7 +29,7 @@ export const FileDocumentReview = connect(
     navigateBackSequence,
     showModal,
     submitExternalDocumentSequence,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         <Focus>
@@ -326,7 +326,7 @@ export const FileDocumentReview = connect(
                                 Petitioner
                               </li>
                             )}
-                            {form.partyRespondent && <li>Respondent</li>}
+                            {form.partyIrsPractitioner && <li>Respondent</li>}
                           </ul>
                         </div>
                       </div>

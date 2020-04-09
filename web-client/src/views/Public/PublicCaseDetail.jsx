@@ -9,7 +9,7 @@ export const PublicCaseDetail = connect(
   {
     formattedCaseDetail: state.publicCaseDetailHelper.formattedCaseDetail,
   },
-  ({ formattedCaseDetail }) => {
+  function PublicCaseDetail({ formattedCaseDetail }) {
     return (
       <>
         <PublicCaseDetailHeader />

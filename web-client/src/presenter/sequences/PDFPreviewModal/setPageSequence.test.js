@@ -18,11 +18,11 @@ const mocks = {
       numPages: 5,
     }),
   })),
-  readAsArrayBufferMock: jest.fn(function() {
+  readAsArrayBufferMock: jest.fn(function () {
     this.result = 'def';
     this.onload();
   }),
-  readAsDataURLMock: jest.fn(function() {
+  readAsDataURLMock: jest.fn(function () {
     this.result = 'abc';
     this.onload();
   }),
@@ -31,7 +31,7 @@ const mocks = {
 presenter.providers.applicationContext = {
   ...applicationContext,
   getFileReader: () =>
-    function() {
+    function () {
       this.onload = null;
       this.onerror = null;
       this.readAsDataURL = mocks.readAsDataURLMock;
@@ -52,7 +52,7 @@ fakeFile.name = 'fakeFile.pdf';
 
 describe('setPageSequence', () => {
   beforeEach(async () => {
-    test.setState('pdfPreviewModal', {});
+    test.setState('modal.pdfPreviewModal', {});
     await test.runSequence('loadPdfSequence', {
       ctx: 'abc',
       file: fakeFile,
@@ -63,7 +63,7 @@ describe('setPageSequence', () => {
     await test.runSequence('setPageSequence', {
       currentPage: 100,
     });
-    expect(test.getState('pdfPreviewModal')).toMatchObject({
+    expect(test.getState('modal.pdfPreviewModal')).toMatchObject({
       currentPage: 5,
     });
   });
@@ -72,7 +72,7 @@ describe('setPageSequence', () => {
     await test.runSequence('setPageSequence', {
       currentPage: -200,
     });
-    expect(test.getState('pdfPreviewModal')).toMatchObject({
+    expect(test.getState('modal.pdfPreviewModal')).toMatchObject({
       currentPage: 1,
     });
   });
@@ -81,7 +81,7 @@ describe('setPageSequence', () => {
     await test.runSequence('setPageSequence', {
       currentPage: 3,
     });
-    expect(test.getState('pdfPreviewModal')).toMatchObject({
+    expect(test.getState('modal.pdfPreviewModal')).toMatchObject({
       currentPage: 3,
     });
   });

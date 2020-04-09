@@ -28,7 +28,7 @@
     "createdAt": "2019-08-16T19:21:46.147Z",
     "assigneeName": "IRS Holding Queue",
     "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
-    "sk": "workitem-ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "sk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
     "messages": [
       {
         "createdAt": "2019-08-16T19:21:46.147Z",
@@ -38,7 +38,7 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "workitem-ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "pk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
     "docketNumber": "108-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk",
@@ -49,81 +49,6 @@
     "contactSecondary": {},
     "isPaper": false,
     "initialTitle": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
-    "documents": [
-      {
-        "eventCode": "P",
-        "createdAt": "2019-08-16T19:21:46.146Z",
-        "processingStatus": "complete",
-        "documentType": "Petition",
-        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
-        "workItems": [
-          {
-            "completedAt": "2019-08-16T19:22:13.925Z",
-            "docketNumberSuffix": null,
-            "caseStatus": "New",
-            "caseIsInProgress": false,
-            "completedMessage": "Served on IRS",
-            "document": {
-              "eventCode": "P",
-              "createdAt": "2019-08-16T19:21:46.146Z",
-              "processingStatus": "pending",
-              "documentType": "Petition",
-              "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
-              "workItems": [],
-              "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
-              "receivedAt": "2019-08-16T19:21:46.146Z",
-              "filingDate": "2019-08-16T19:21:46.146Z",
-              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-            },
-            "section": "irsSystem",
-            "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
-            "isInitializeCase": true,
-            "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
-            "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-            "sentBy": "Test Petitionsclerk",
-            "sentBySection": "petitions",
-            "isQC": true,
-            "createdAt": "2019-08-16T19:21:46.147Z",
-            "assigneeName": "IRS Holding Queue",
-            "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
-            "messages": [
-              {
-                "createdAt": "2019-08-16T19:21:46.147Z",
-                "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
-                "from": "Test Petitioner",
-                "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
-                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-              }
-            ],
-            "docketNumber": "108-19",
-            "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-            "completedBy": "Test Petitionsclerk",
-            "updatedAt": "2019-08-16T19:21:46.147Z"
-          }
-        ],
-        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
-        "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
-        "servedAt": "2019-08-16T19:22:13.925Z",
-        "receivedAt": "2019-08-16T19:21:46.146Z",
-        "filingDate": "2019-08-16T19:21:46.146Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "status": "served"
-      },
-      {
-        "eventCode": "STIN",
-        "createdAt": "2019-08-16T19:21:46.147Z",
-        "processingStatus": "complete",
-        "documentType": "Statement of Taxpayer Identification",
-        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
-        "workItems": [],
-        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
-        "documentId": "3adb712b-d0c5-40e8-98c1-d2f38757e27a",
-        "receivedAt": "2019-08-16T19:21:46.147Z",
-        "filingDate": "2019-08-16T19:21:46.147Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "status": "served"
-      }
-    ],
     "irsNoticeDate": null,
     "orderForFilingFee": false,
     "partyType": "Trust",
@@ -152,7 +77,7 @@
     "trialTime": "10:00",
     "caseCaption": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)",
     "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
-    "sk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "sk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "filingType": "Other",
     "orderForOds": false,
     "orderForRatification": false,
@@ -166,10 +91,8 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Houston, Texas",
-    "respondents": [],
-    "practitioners": [],
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "pk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "docketNumber": "108-19",
     "status": "Calendared"
   },
@@ -217,7 +140,7 @@
       "filingDate": "2019-08-16T19:21:46.146Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
-    "gsi1pk": "workitem-ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "gsi1pk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
     "section": "irsSystem",
     "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
     "isInitializeCase": true,
@@ -239,7 +162,7 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-outbox-petitions",
+    "pk": "section-outbox|petitions",
     "docketNumber": "108-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk",
@@ -263,7 +186,7 @@
       "filingDate": "2019-08-16T19:21:46.146Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
-    "gsi1pk": "workitem-ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "gsi1pk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
     "section": "irsSystem",
     "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
     "isInitializeCase": true,
@@ -285,22 +208,101 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "user-outbox-3805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "user-outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "108-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk",
     "updatedAt": "2019-08-16T19:21:46.147Z"
   },
   {
-    "sk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
-    "pk": "108-19|case"
+    "sk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "pk": "case-by-docket-number|108-19"
   },
   {
-    "sk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "sk": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
-    "pk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5|workItem"
+    "sk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "pk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5"
+  },
+  {
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2019-08-16T19:21:46.147Z",
+    "workItems": [],
+    "pending": false,
+    "receivedAt": "2019-08-16T19:21:46.147Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "STIN",
+    "createdAt": "2019-08-16T19:21:46.147Z",
+    "processingStatus": "complete",
+    "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "sk": "document|3adb712b-d0c5-40e8-98c1-d2f38757e27a",
+    "documentId": "3adb712b-d0c5-40e8-98c1-d2f38757e27a",
+    "pk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "status": "served"
+  },
+  {
+    "documentType": "Petition",
+    "filingDate": "2019-08-16T19:21:46.146Z",
+    "workItems": [
+      {
+        "associatedJudge": "Chief Judge",
+        "completedAt": "2019-08-16T19:22:13.925Z",
+        "docketNumberSuffix": null,
+        "caseStatus": "New",
+        "completedMessage": "Served on IRS",
+        "caseIsInProgress": false,
+        "document": {
+          "eventCode": "P",
+          "createdAt": "2019-08-16T19:21:46.146Z",
+          "processingStatus": "pending",
+          "documentType": "Petition",
+          "filingDate": "2019-08-16T19:21:46.146Z",
+          "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+          "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+          "receivedAt": "2019-08-16T19:21:46.146Z",
+          "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        "section": "irsSystem",
+        "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+        "isInitializeCase": true,
+        "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
+        "isQC": true,
+        "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+        "sentBy": "Test Petitionsclerk",
+        "sentBySection": "petitions",
+        "createdAt": "2019-08-16T19:21:46.147Z",
+        "assigneeName": "IRS Holding Queue",
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+        "messages": [
+          {
+            "createdAt": "2019-08-16T19:21:46.147Z",
+            "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
+            "from": "Test Petitioner",
+            "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
+            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+          }
+        ],
+        "docketNumber": "108-19",
+        "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+        "completedBy": "Test Petitionsclerk",
+        "updatedAt": "2019-08-16T19:21:46.147Z"
+      }
+    ],
+    "pending": false,
+    "receivedAt": "2019-08-16T19:21:46.146Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "createdAt": "2019-08-16T19:21:46.146Z",
+    "processingStatus": "complete",
+    "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "sk": "document|3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+    "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+    "servedAt": "2019-08-16T19:22:13.925Z",
+    "pk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "status": "served"
   }
 ]

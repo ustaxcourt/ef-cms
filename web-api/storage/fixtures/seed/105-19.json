@@ -2,65 +2,6 @@
   {
     "procedureType": "Regular",
     "contactSecondary": {},
-    "documents": [
-      {
-        "createdAt": "2019-03-27T21:53:00.297Z",
-        "filingDate": "2019-03-27T21:53:00.297Z",
-        "documentType": "Petition",
-        "filedBy": "Test Practitioner",
-        "processingStatus": "complete",
-        "workItems": [
-          {
-            "docketNumberSuffix": null,
-            "caseStatus": "New",
-            "caseIsInProgress": false,
-            "document": {
-              "createdAt": "2019-03-27T21:53:00.297Z",
-              "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
-              "documentType": "Petition",
-              "documentTitle": "Petition",
-              "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-              "filedBy": "Test Practitioner",
-              "workItems": []
-            },
-            "section": "petitions",
-            "workItemId": "98c7130f-f924-423f-9f2c-89f0616f446a",
-            "isQC": true,
-            "isInitializeCase": true,
-            "assigneeId": null,
-            "sentBy": "9805d1ab-18d0-43ec-bafb-654e83405416",
-            "createdAt": "2019-03-27T21:53:00.297Z",
-            "assigneeName": null,
-            "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-            "messages": [
-              {
-                "createdAt": "2019-03-27T21:53:00.297Z",
-                "messageId": "231a499c-854e-4813-a665-c5ad3d49e069",
-                "from": "Test Practitioner",
-                "message": "Petition filed by Caryn Wall is ready for review.",
-                "fromUserId": "9805d1ab-18d0-43ec-bafb-654e83405416"
-              }
-            ],
-            "docketNumber": "105-19",
-            "updatedAt": "2019-03-27T21:53:00.297Z"
-          }
-        ],
-        "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
-        "userId": "9805d1ab-18d0-43ec-bafb-654e83405416"
-      },
-      {
-        "processingStatus": "complete",
-        "createdAt": "2019-03-27T21:53:00.298Z",
-        "filingDate": "2019-03-27T21:53:00.298Z",
-        "documentType": "Statement of Taxpayer Identification",
-        "filedBy": "Test Practitioner",
-        "workItems": [],
-        "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-        "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
-        "userId": "9805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "irsNoticeDate": "1997-07-13",
     "orderForFilingFee": false,
     "partyType": "Petitioner",
@@ -86,7 +27,7 @@
     "caseCaption": "Caryn Wall, Petitioner",
     "initialTitle": "Caryn Wall, Petitioner v. Commissioner of Internal Revenue, Respondent",
     "caseTitle": "Caryn Wall, Petitioner v. Commissioner of Internal Revenue, Respondent",
-    "sk": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "sk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "filingType": "Individual petitioner",
     "orderForOds": false,
     "orderForRatification": false,
@@ -95,36 +36,12 @@
     "petitionPaymentWaivedDate": "2019-03-27T21:53:00.297Z",
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
-    "practitioners": [
-      {
-        "role": "privatePractitioner",
-        "serviceIndicator": "Electronic",
-        "contact": {
-          "address1": "234 Main St",
-          "address2": "Apartment 4",
-          "address3": "Under the stairs",
-          "city": "Chicago",
-          "countryType": "domestic",
-          "phone": "+1 (555) 555-5555",
-          "postalCode": "61234",
-          "state": "IL"
-        },
-        "representingPrimary": true,
-        "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "name": "Test Private Practitioner",
-        "section": "privatePractitioner",
-        "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "email": "privatePractitioner",
-        "barNumber": "PT1234"
-      }
-    ],
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Jackson, Mississippi",
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "docketNumber": "105-19",
     "status": "New",
     "associatedJudge": "Chief Judge"
@@ -150,17 +67,17 @@
     "sk": "docket-record|89cb2500-becf-4da9-83b9-e3ca561c2622"
   },
   {
-    "sk": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-    "pk": "9805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "sk": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-    "pk": "105-19|case"
+    "sk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "pk": "case-by-docket-number|105-19"
   },
   {
-    "sk": "workitem-98c7130f-f924-423f-9f2c-89f0616f446a",
-    "gsi1pk": "workitem-98c7130f-f924-423f-9f2c-89f0616f446a",
-    "pk": "section-petitions",
+    "sk": "work-item|98c7130f-f924-423f-9f2c-89f0616f446a",
+    "gsi1pk": "work-item|98c7130f-f924-423f-9f2c-89f0616f446a",
+    "pk": "section|petitions",
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -197,9 +114,9 @@
     "updatedAt": "2019-03-27T21:53:00.297Z"
   },
   {
-    "sk": "workitem-98c7130f-f924-423f-9f2c-89f0616f446a",
-    "pk": "workitem-98c7130f-f924-423f-9f2c-89f0616f446a",
-    "gsi1pk": "workitem-98c7130f-f924-423f-9f2c-89f0616f446a",
+    "sk": "work-item|98c7130f-f924-423f-9f2c-89f0616f446a",
+    "pk": "work-item|98c7130f-f924-423f-9f2c-89f0616f446a",
+    "gsi1pk": "work-item|98c7130f-f924-423f-9f2c-89f0616f446a",
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -239,5 +156,92 @@
     "sk": "case-6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "pk": "catalog"
+  },
+  {
+    "role": "privatePractitioner",
+    "serviceIndicator": "Electronic",
+    "barNumber": "PT1234",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test Private Practitioner",
+    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
+    "section": "privatePractitioner",
+    "representingPrimary": true,
+    "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "privatePractitioner"
+  },
+  {
+    "documentType": "Petition",
+    "filingDate": "2019-03-27T21:53:00.297Z",
+    "workItems": [
+      {
+        "associatedJudge": "Chief Judge",
+        "docketNumberSuffix": null,
+        "caseStatus": "New",
+        "caseIsInProgress": false,
+        "document": {
+          "createdAt": "2019-03-27T21:53:00.297Z",
+          "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+          "documentTitle": "Petition",
+          "documentType": "Petition",
+          "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+          "filedBy": "Test Practitioner"
+        },
+        "section": "petitions",
+        "workItemId": "98c7130f-f924-423f-9f2c-89f0616f446a",
+        "isInitializeCase": true,
+        "assigneeId": null,
+        "isQC": true,
+        "sentBy": "9805d1ab-18d0-43ec-bafb-654e83405416",
+        "createdAt": "2019-03-27T21:53:00.297Z",
+        "assigneeName": null,
+        "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+        "messages": [
+          {
+            "createdAt": "2019-03-27T21:53:00.297Z",
+            "messageId": "231a499c-854e-4813-a665-c5ad3d49e069",
+            "from": "Test Practitioner",
+            "message": "Petition filed by Caryn Wall is ready for review.",
+            "fromUserId": "9805d1ab-18d0-43ec-bafb-654e83405416"
+          }
+        ],
+        "docketNumber": "105-19",
+        "updatedAt": "2019-03-27T21:53:00.297Z"
+      }
+    ],
+    "pending": false,
+    "receivedAt": "2020-03-06T20:04:07.309Z",
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-03-27T21:53:00.297Z",
+    "processingStatus": "complete",
+    "filedBy": "Test Practitioner",
+    "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "sk": "document|35306555-83f2-4f61-9be6-438bd107e5eb",
+    "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+    "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd"
+  },
+  {
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2019-03-27T21:53:00.298Z",
+    "workItems": [],
+    "pending": false,
+    "receivedAt": "2020-03-06T20:04:07.310Z",
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-03-27T21:53:00.298Z",
+    "processingStatus": "complete",
+    "filedBy": "Test Practitioner",
+    "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "sk": "document|f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd"
   }
 ]

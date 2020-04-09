@@ -14,7 +14,7 @@ export const PDFSignerMessage = connect(
     validationErrors: state.validationErrors,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({
+  function PDFSignerMessage({
     constants,
     form,
     updateMessageValueSequence,
@@ -22,7 +22,7 @@ export const PDFSignerMessage = connect(
     validateInitialWorkItemMessageSequence,
     validationErrors,
     workQueueSectionHelper,
-  }) => {
+  }) {
     return (
       <div>
         <h3>

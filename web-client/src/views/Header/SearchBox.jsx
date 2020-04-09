@@ -5,17 +5,17 @@ import React from 'react';
 
 export const SearchBox = connect(
   {
-    searchTerm: state.searchTerm,
+    searchTerm: state.header.searchTerm,
     submitCaseSearchSequence: sequences.submitCaseSearchSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     updateSearchTermSequence: sequences.updateSearchTermSequence,
   },
-  ({
+  function SearchBox({
     searchTerm,
     submitCaseSearchSequence,
     toggleMobileMenuSequence,
     updateSearchTermSequence,
-  }) => {
+  }) {
     return (
       <form
         noValidate

@@ -164,7 +164,7 @@ const createCase = async ({
       .updateDocumentProcessingStatus({
         applicationContext,
         caseId: caseDetail.caseId,
-        documentIndex: idx,
+        documentId: document.documentId,
       });
 
     idx++;

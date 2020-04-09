@@ -5,6 +5,6 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 
 export const openConfirmRescanBatchModalSequence = [
   clearModalStateAction,
-  set(state.batchIndexToRescan, props.batchIndexToRescan),
+  set(state.scanner.batchIndexToRescan, props.batchIndexToRescan),
   setShowModalFactoryAction('ConfirmRescanBatchModal'),
 ];

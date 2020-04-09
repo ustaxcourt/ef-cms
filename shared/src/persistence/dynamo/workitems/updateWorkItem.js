@@ -3,8 +3,8 @@ const client = require('../../dynamodbClientService');
 exports.updateWorkItem = async ({ applicationContext, workItemToUpdate }) => {
   await client.put({
     Item: {
-      pk: `workitem-${workItemToUpdate.workItemId}`,
-      sk: `workitem-${workItemToUpdate.workItemId}`,
+      pk: `work-item|${workItemToUpdate.workItemId}`,
+      sk: `work-item|${workItemToUpdate.workItemId}`,
       ...workItemToUpdate,
     },
     applicationContext,
