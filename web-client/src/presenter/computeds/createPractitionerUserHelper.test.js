@@ -1,4 +1,3 @@
-import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { createPractitionerUserHelper as createPractitionerUserHelperComputed } from './createPractitionerUserHelper';
 import { runCompute } from 'cerebral/test';
