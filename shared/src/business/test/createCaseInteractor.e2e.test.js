@@ -102,9 +102,9 @@ describe('createCase integration test', () => {
           workItems: [],
         },
       ],
-      initialDocketNumberSuffix: 'S',
-      initialTitle:
+      initialCaption:
         'Rick Petitioner, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      initialDocketNumberSuffix: 'S',
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
