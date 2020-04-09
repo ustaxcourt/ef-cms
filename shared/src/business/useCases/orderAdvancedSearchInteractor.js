@@ -58,10 +58,10 @@ exports.orderAdvancedSearchInteractor = async ({
             },
           },
           {
-            simple_query_string: {
+            query_string: {
               default_operator: 'or',
               fields: ['documentContents.S', 'documentTitle.S'],
-              query: orderKeyword,
+              query: `*${orderKeyword}*`,
             },
           },
         ],
