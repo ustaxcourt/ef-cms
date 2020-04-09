@@ -32,8 +32,6 @@ const formatRecord = record => {
 
   returnData.birthYear = parseInt(record.birthYear) || undefined;
 
-  returnData.isAdmitted = record.admissionsStatus === 'Active';
-
   if (record.isIrsEmployee === 'Y') {
     returnData.employer = 'IRS';
   } else if (record.isDojEmployee === 'Y') {
