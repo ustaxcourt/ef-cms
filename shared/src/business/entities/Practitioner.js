@@ -3,7 +3,6 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
-  User,
   userDecorator,
   userValidation,
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
@@ -30,8 +29,15 @@ function Practitioner(rawUser) {
   this.init(rawUser);
 }
 
+const roleMap = {
+  DOJ: 'irsPractitioner',
+  IRS: 'irsPractitioner',
+  Private: 'privatePractitioner',
+};
+
 Practitioner.prototype.init = function (rawUser) {
   userDecorator(this, rawUser);
+  this.name = rawUser.name || `${rawUser.firstName} ${rawUser.lastName}`;
   this.additionalPhone = rawUser.additionalPhone;
   this.admissionsDate = rawUser.admissionsDate;
   this.admissionsStatus = rawUser.admissionsStatus || 'Active';
@@ -41,8 +47,9 @@ Practitioner.prototype.init = function (rawUser) {
   this.firmName = rawUser.firmName;
   this.isAdmitted = rawUser.isAdmitted;
   this.originalBarState = rawUser.originalBarState;
-  this.role = rawUser.role || User.ROLES.privatePractitioner;
   this.practitionerType = rawUser.practitionerType;
+  this.role = roleMap[this.employer];
+  this.section = this.role;
 };
 
 const VALIDATION_ERROR_MESSAGES = {
@@ -58,31 +65,67 @@ const VALIDATION_ERROR_MESSAGES = {
 
 const validationRules = {
   ...userValidation,
-  additionalPhone: joi.string().optional().allow(null),
-  admissionsDate: joi.date().iso().max('now').required(),
+  additionalPhone: joi
+    .string()
+    .optional()
+    .allow(null)
+    .description('An alternate phone number for the practitioner.'),
+  admissionsDate: joi
+    .date()
+    .iso()
+    .max('now')
+    .required()
+    .description(
+      'The date the practitioner was admitted to the Tax Court bar.',
+    ),
   admissionsStatus: joi
     .string()
     .valid(...ADMISSIONS_STATUS_OPTIONS)
-    .required(),
-  alternateEmail: joi.string().optional().allow(null),
-  barNumber: joi.string().required(),
+    .required()
+    .description('The Tax Court bar admission status for the practitioner.'),
+  alternateEmail: joi
+    .string()
+    .optional()
+    .allow(null)
+    .description('An alternate email address for the practitioner.'),
+  barNumber: joi
+    .string()
+    .required()
+    .description(
+      'A unique identifier comprising of the practitioner initials, date, and series number.',
+    ),
   birthYear: joi
     .number()
     .integer()
     .min(1900)
     .max(new Date().getFullYear())
-    .required(),
+    .required()
+    .description('The year the practitioner was born'),
   employer: joi
     .string()
     .valid(...EMPLOYER_OPTIONS)
-    .required(),
-  firmName: joi.string().optional().allow(null),
-  isAdmitted: joi.boolean().required(),
-  originalBarState: joi.string().required(),
+    .required()
+    .description('The employer designation for the practitioner.'),
+  firmName: joi
+    .string()
+    .optional()
+    .allow(null)
+    .description('The firm name for the practitioner.'),
+  isAdmitted: joi
+    .boolean()
+    .required()
+    .description('Whether the practitioner is admitted to the Tax Court bar.'),
+  originalBarState: joi
+    .string()
+    .required()
+    .description(
+      'The state in which the practitioner passed their bar examination.',
+    ),
   practitionerType: joi
     .string()
     .valid(...PRACTITIONER_TYPE_OPTIONS)
-    .required(),
+    .required()
+    .description('The type of practitioner - either Attorney or Non-Attorney.'),
 };
 
 joiValidationDecorator(

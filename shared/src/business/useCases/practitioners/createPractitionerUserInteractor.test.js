@@ -29,8 +29,8 @@ describe('create practitioner user', () => {
 
   beforeEach(() => {
     testUser = {
-      role: 'petitionsclerk',
-      userId: 'petitionsclerk',
+      role: 'admissionsclerk',
+      userId: 'admissionsclerk',
     };
 
     applicationContext.environment.stage = 'local';

@@ -197,30 +197,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  createPractitionerUser:
-    handler: web-api/${self:provider.dir}/usersHandlers.createPractitionerUserLambda
-    events:
-      - http:
-          path: /practitioner
-          method: post
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  updatePractitionerUser:
-    handler: web-api/${self:provider.dir}/usersHandlers.updatePractitionerUserLambda
-    events:
-      - http:
-          path: /practitioner
-          method: put
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   getCasesByUser:
     handler: web-api/${self:provider.dir}/usersHandlers.getCasesByUserLambda
     events:
