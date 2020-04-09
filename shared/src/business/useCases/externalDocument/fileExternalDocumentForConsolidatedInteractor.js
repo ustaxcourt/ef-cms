@@ -172,12 +172,12 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
                 assigneeId: null,
                 assigneeName: null,
                 associatedJudge: caseEntity.associatedJudge,
+                caseCaption: Case.getCaseCaptionNames(
+                  Case.getCaseCaption(caseEntity),
+                ),
                 caseId: caseEntity.caseId,
                 caseIsInProgress: caseEntity.inProgress,
                 caseStatus: caseEntity.status,
-                caseTitle: Case.getCaseCaptionNames(
-                  Case.getCaseCaption(caseEntity),
-                ),
                 docketNumber: caseEntity.docketNumber,
                 docketNumberSuffix: caseEntity.docketNumberSuffix,
                 document: {

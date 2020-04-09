@@ -1,8 +1,8 @@
 const client = require('../../dynamodbClientService');
 
-exports.updateWorkItemCaseTitle = async ({
+exports.updateWorkItemCaseCaption = async ({
   applicationContext,
-  caseTitle,
+  caseCaption,
   workItemId,
 }) => {
   const workItems = await client.query({
@@ -17,22 +17,22 @@ exports.updateWorkItemCaseTitle = async ({
     applicationContext,
   });
 
-  const updateCaseTitle = workItem => {
+  const updateCaseCaption = workItem => {
     return client.update({
       ExpressionAttributeNames: {
-        '#caseTitle': 'caseTitle',
+        '#caseCaption': 'caseCaption',
       },
       ExpressionAttributeValues: {
-        ':caseTitle': caseTitle,
+        ':caseCaption': caseCaption,
       },
       Key: {
         pk: workItem.pk,
         sk: workItem.sk,
       },
-      UpdateExpression: 'SET #caseTitle = :caseTitle',
+      UpdateExpression: 'SET #caseCaption = :caseCaption',
       applicationContext,
     });
   };
 
-  await Promise.all(workItems.map(updateCaseTitle));
+  await Promise.all(workItems.map(updateCaseCaption));
 };
