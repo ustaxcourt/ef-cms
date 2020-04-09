@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -6,13 +7,17 @@ import React from 'react';
 export const OrderSearchResults = connect(
   {
     advancedOrderSearchHelper: state.advancedOrderSearchHelper,
+    baseUrl: state.baseUrl,
     pageSize: state.constants.CASE_SEARCH_PAGE_SIZE,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
+    token: state.token,
   },
   function OrderSearchResults({
     advancedOrderSearchHelper,
+    baseUrl,
     pageSize,
     showMoreResultsSequence,
+    token,
   }) {
     return (
       <>
@@ -22,9 +27,10 @@ export const OrderSearchResults = connect(
               ({advancedOrderSearchHelper.searchResultsCount}) Results
             </h1>
 
-            <table className="usa-table search-results docket-record responsive-table row-border-only">
+            <table className="usa-table search-results responsive-table row-border-only">
               <thead>
                 <tr>
+                  <th aria-hidden="true"></th>
                   <th>Docket number</th>
                   <th>Case title</th>
                   <th>Order</th>
@@ -36,13 +42,20 @@ export const OrderSearchResults = connect(
                 {advancedOrderSearchHelper.formattedSearchResults.map(
                   (result, idx) => (
                     <tr className="search-result" key={idx}>
+                      <td aria-hidden="true">{idx + 1}</td>
                       <td>
-                        <a href={`/case-detail/${result.docketNumber}`}>
-                          {result.docketNumberWithSuffix}
+                        <CaseLink formattedCase={result} />
+                      </td>
+                      <td>{result.caseCaption}</td>
+                      <td>
+                        <a
+                          href={`${baseUrl}/case-documents/${result.caseId}/${result.documentId}/document-download-url?token=${token}`}
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          {result.documentTitle}
                         </a>
                       </td>
-                      <td>{result.caseTitle}</td>
-                      <td>{result.documentTitle}</td>
                       <td>{result.formattedFiledDate}</td>
                       <td>{result.judge}</td>
                     </tr>
