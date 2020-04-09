@@ -21,7 +21,9 @@ describe('Practitioner', () => {
       },
       employer: 'Private',
       firmName: 'GW Law Offices',
+      firstName: 'Test',
       isAdmitted: true,
+      lastName: 'Practitioner',
       name: 'Test Practitioner',
       originalBarState: 'Illinois',
       practitionerType: 'Attorney',
@@ -56,7 +58,9 @@ describe('Practitioner', () => {
         state: 'IL',
       },
       employer: 'Something else',
+      firstName: 'Test',
       isAdmitted: true,
+      lastName: 'Practitioner',
       name: 'Test Practitioner',
       practitionerType: 'Attorney',
       role: User.ROLES.Practitioner,
@@ -84,7 +88,9 @@ describe('Practitioner', () => {
       },
       employer: 'Something else',
       firmName: 'GW Law Offices',
+      firstName: 'Test',
       isAdmitted: true,
+      lastName: 'Practitioner',
       name: 'Test Practitioner',
       practitionerType: 'Purple',
       role: User.ROLES.Practitioner,
@@ -112,7 +118,9 @@ describe('Practitioner', () => {
       },
       employer: 'Something else',
       firmName: 'GW Law Offices',
+      firstName: 'Test',
       isAdmitted: true,
+      lastName: 'Practitioner',
       name: 'Test Practitioner',
       practitionerType: 'Purple',
       role: User.ROLES.Practitioner,
@@ -153,7 +161,7 @@ describe('Practitioner', () => {
     expect(user.role).toEqual(User.ROLES.inactivePractitioner);
   });
 
-  it('Combines firstName and lastName properties to set the name property if provided', () => {
+  it('Combines firstName, middleName, lastName, and suffix properties to set the name property', () => {
     const user = new Practitioner({
       admissionsDate: '2019-03-01T21:40:46.415Z',
       admissionsStatus: 'Active',
@@ -175,13 +183,67 @@ describe('Practitioner', () => {
       firstName: 'Test',
       isAdmitted: true,
       lastName: 'Practitioner',
+      middleName: 'Middle',
       originalBarState: 'Illinois',
       practitionerType: 'Attorney',
       role: User.ROLES.Practitioner,
+      suffix: 'Sfx',
       userId: 'practitioner',
     });
-    expect(user.name).toEqual('Test Practitioner');
-    expect(user.firstName).toBeUndefined();
-    expect(user.latName).toBeUndefined();
+    expect(user.name).toEqual('Test Middle Practitioner Sfx');
+  });
+
+  describe('getFullName', () => {
+    let userData;
+
+    beforeEach(() => {
+      userData = {
+        admissionsDate: '2019-03-01T21:40:46.415Z',
+        admissionsStatus: 'Active',
+        barNumber: 'PT20001',
+        birthYear: 2019,
+        contact: {
+          address1: '234 Main St',
+          address2: 'Apartment 4',
+          address3: 'Under the stairs',
+          city: 'Chicago',
+          country: 'Brazil',
+          countryType: 'international',
+          phone: '+1 (555) 555-5555',
+          postalCode: '61234',
+          state: 'IL',
+        },
+        employer: 'Private',
+        firmName: 'GW Law Offices',
+        firstName: 'Test',
+        isAdmitted: true,
+        lastName: 'Practitioner',
+        originalBarState: 'Illinois',
+        practitionerType: 'Attorney',
+        role: User.ROLES.Practitioner,
+        userId: 'practitioner',
+      };
+    });
+
+    it('should return the first and last names if only they are provided in the practitioner data', () => {
+      expect(Practitioner.getFullName(userData)).toEqual('Test Practitioner');
+    });
+
+    it('should return the first, middle, and last names if only they are provided in the practitioner data', () => {
+      userData.middleName = 'Foo';
+
+      expect(Practitioner.getFullName(userData)).toEqual(
+        'Test Foo Practitioner',
+      );
+    });
+
+    it('should return the first, middle, and last names with suffix if they are provided in the practitioner data', () => {
+      userData.middleName = 'Foo';
+      userData.suffix = 'Bar';
+
+      expect(Practitioner.getFullName(userData)).toEqual(
+        'Test Foo Practitioner Bar',
+      );
+    });
   });
 });
