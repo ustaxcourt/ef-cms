@@ -1,4 +1,4 @@
-export default test => {
+export const petitionerChoosesCaseType = test => {
   it('petitioner chooses the case type', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'hasIrsNotice',

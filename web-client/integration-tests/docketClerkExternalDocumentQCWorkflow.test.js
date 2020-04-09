@@ -17,7 +17,7 @@ const test = setupTest();
 
 describe('Create a work item', () => {
   beforeEach(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(40000);
   });
 
   let caseDetail;
@@ -155,6 +155,8 @@ describe('Create a work item', () => {
     const noticeDocument = test.getState('caseDetail.documents.5');
     expect(noticeDocument.documentType).toEqual('Notice of Docket Change');
     expect(noticeDocument.servedAt).toBeDefined();
-    expect(test.getState('modal.showModal')).toEqual('PaperServiceConfirmModal');
+    expect(test.getState('modal.showModal')).toEqual(
+      'PaperServiceConfirmModal',
+    );
   });
 });

@@ -197,30 +197,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  createAttorneyUser:
-    handler: web-api/${self:provider.dir}/usersHandlers.createAttorneyUserLambda
-    events:
-      - http:
-          path: /attorney
-          method: post
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  updateAttorneyUser:
-    handler: web-api/${self:provider.dir}/usersHandlers.updateAttorneyUserLambda
-    events:
-      - http:
-          path: /attorney
-          method: put
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   getCasesByUser:
     handler: web-api/${self:provider.dir}/usersHandlers.getCasesByUserLambda
     events:

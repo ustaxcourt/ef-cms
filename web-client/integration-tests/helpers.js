@@ -1,11 +1,5 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
-import { Document } from '../../shared/src/business/entities/Document';
 import { JSDOM } from 'jsdom';
-import { Order } from '../../shared/src/business/entities/orders/Order';
-import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
-import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
-import { User } from '../../shared/src/business/entities/User';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -13,10 +7,10 @@ import {
   externalRoute,
   openInNewTab,
   revokeObjectURL,
-  route,
   router,
 } from '../src/router';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
+import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import {
   image1,
   image2,
@@ -45,6 +39,7 @@ export const fakeFile = (() => {
     type: 'application/pdf',
   });
   myFile.name = 'fakeFile.pdf';
+  myFile.size = myFile.length;
   return myFile;
 })();
 
@@ -385,6 +380,10 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
+  presenter.providers.applicationContext = Object.assign(applicationContext, {
+    getScanner: getScannerInterface,
+  });
+
   test = CerebralTest(presenter);
   test.getSequence = name => async obj => await test.runSequence(name, obj);
   test.closeSocket = stop;
@@ -416,6 +415,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     },
     document: {},
     localStorage: {
+      getItem: () => null,
       removeItem: () => null,
       setItem: () => null,
     },
@@ -433,6 +433,17 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return {
       ...originalUseCases,
       ...useCases,
+    };
+  };
+
+  const constantsOverrides = {
+    CASE_SEARCH_PAGE_SIZE: 1,
+  };
+  const originalConstants = applicationContext.getConstants();
+  presenter.providers.applicationContext.getConstants = () => {
+    return {
+      ...originalConstants,
+      ...constantsOverrides,
     };
   };
 

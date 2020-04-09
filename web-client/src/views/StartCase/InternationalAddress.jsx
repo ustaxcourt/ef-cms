@@ -151,11 +151,7 @@ export const InternationalAddress = connect(
             validationErrors[type].postalCode
           }
         >
-          <label
-            aria-label="postal code"
-            className="usa-label"
-            htmlFor={`${type}.postalCode`}
-          >
+          <label className="usa-label" htmlFor={`${type}.postalCode`}>
             Postal code
           </label>
           <input

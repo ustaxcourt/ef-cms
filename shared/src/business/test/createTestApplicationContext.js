@@ -331,6 +331,9 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const applicationContext = {
     ...sharedAppContext,
+    barNumberGenerator: {
+      createBarNumber: jest.fn().mockReturnValue('CS20001'),
+    },
     convertBlobToUInt8Array: jest
       .fn()
       .mockImplementation(() => new Uint8Array([])),
@@ -351,9 +354,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCognitoClientId: jest.fn(),
     getCognitoRedirectUrl: jest.fn(),
     getCognitoTokenUrl: jest.fn(),
-    getConstants: jest.fn().mockReturnValue({
-      ...getConstants(),
-    }),
+    getConstants: jest.fn().mockImplementation(getConstants),
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {

@@ -9,22 +9,24 @@ export const CaseSearchByName = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     advancedSearchHelper: state.advancedSearchHelper,
-    clearCaseSearchByNameFormSequence:
-      sequences.clearCaseSearchByNameFormSequence,
+    clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     constants: state.constants,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     usStates: state.constants.US_STATES,
+    validateCaseAdvancedSearchFormSequence:
+      sequences.validateCaseAdvancedSearchFormSequence,
     validationErrors: state.validationErrors,
   },
   function CaseSearchByName({
     advancedSearchForm,
     advancedSearchHelper,
-    clearCaseSearchByNameFormSequence,
+    clearAdvancedSearchFormSequence,
     constants,
     submitAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence,
     usStates,
+    validateCaseAdvancedSearchFormSequence,
     validationErrors,
   }) {
     return (
@@ -33,12 +35,7 @@ export const CaseSearchByName = connect(
           <h3>Search by Name</h3>
         </div>
         <div className="blue-container advanced-search__form-container">
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              submitAdvancedSearchSequence();
-            }}
-          >
+          <form>
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-6">
                 <FormGroup errorText={validationErrors.petitionerName}>
@@ -53,6 +50,9 @@ export const CaseSearchByName = connect(
                     value={
                       advancedSearchForm.caseSearchByName.petitionerName || ''
                     }
+                    onBlur={() => {
+                      validateCaseAdvancedSearchFormSequence();
+                    }}
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
                         formType: 'caseSearchByName',
@@ -86,6 +86,9 @@ export const CaseSearchByName = connect(
                         value={
                           advancedSearchForm.caseSearchByName.yearFiledMin || ''
                         }
+                        onBlur={() => {
+                          validateCaseAdvancedSearchFormSequence();
+                        }}
                         onChange={e => {
                           updateAdvancedSearchFormValueSequence({
                             formType: 'caseSearchByName',
@@ -107,6 +110,9 @@ export const CaseSearchByName = connect(
                         value={
                           advancedSearchForm.caseSearchByName.yearFiledMax || ''
                         }
+                        onBlur={() => {
+                          validateCaseAdvancedSearchFormSequence();
+                        }}
                         onChange={e => {
                           updateAdvancedSearchFormValueSequence({
                             formType: 'caseSearchByName',
@@ -187,15 +193,21 @@ export const CaseSearchByName = connect(
                 <Button
                   className="advanced-search__button"
                   id="advanced-search-button"
-                  type="submit"
+                  onClick={e => {
+                    e.preventDefault();
+                    submitAdvancedSearchSequence();
+                  }}
                 >
                   Search
                 </Button>
                 <Button
                   link
                   className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-                  onClick={() => {
-                    clearCaseSearchByNameFormSequence();
+                  onClick={e => {
+                    e.preventDefault();
+                    clearAdvancedSearchFormSequence({
+                      formType: 'caseSearchByName',
+                    });
                   }}
                 >
                   Clear Search

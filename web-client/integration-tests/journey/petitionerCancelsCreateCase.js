@@ -1,4 +1,4 @@
-export default test => {
+export const petitionerCancelsCreateCase = test => {
   it('petitioner navigates to create case and cancels', async () => {
     await test.runSequence('gotoStartCaseWizardSequence', {
       step: '1',

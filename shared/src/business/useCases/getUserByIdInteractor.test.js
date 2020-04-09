@@ -16,7 +16,7 @@ const MOCK_RETRIEVED_USER = {
 };
 
 describe('getUserByIdInteractor', () => {
-  it('throws an error if the user is not authorized to manage attorney users', async () => {
+  it('throws an error if the user is not authorized to manage practitioner users', async () => {
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'Test Petitioner',
@@ -30,7 +30,7 @@ describe('getUserByIdInteractor', () => {
         applicationContext,
         userId: '4f67802c-1948-4749-b070-38f7316b15c5',
       }),
-    ).rejects.toThrow('Unauthorized for getting attorney user');
+    ).rejects.toThrow('Unauthorized for getting practitioner user');
   });
 
   it('throws an error if the user retrieved is not a privatePractitioner or irsPractitioner user', async () => {
@@ -48,7 +48,9 @@ describe('getUserByIdInteractor', () => {
         applicationContext,
         userId: '4f67802c-1948-4749-b070-38f7316b15c5',
       }),
-    ).rejects.toThrow('Unauthorized to retrieve users other than attorneys');
+    ).rejects.toThrow(
+      'Unauthorized to retrieve users other than practitioners',
+    );
   });
 
   it('calls the persistence method to get the user', async () => {
