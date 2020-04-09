@@ -31,7 +31,6 @@ joiValidationDecorator(
     barNumber: joi.string().optional().allow(null),
     email: joi.string().required(),
     firstName: joi.string().required(),
-    isAdmitted: joi.string().optional().allow(null),
     lastName: joi.string().required(),
     role: joi.string().optional().allow(null),
     userId: joi.string().optional().allow(null),
