@@ -64,8 +64,9 @@ exports.getPractitionersByNameInteractor = async ({
   });
 
   nonExactMatchesQuery.push({
-    bool: {
-      must: [{ match: { 'name.S': name } }],
+    query_string: {
+      fields: ['name.S'],
+      query: `*${name}*`,
     },
   });
 
