@@ -25,6 +25,11 @@ const formatRecord = record => {
   ].filter(item => item);
   returnData.name = nameArray.join(' ');
 
+  returnData.firstName = record.firstName;
+  returnData.middleName = record.middleName;
+  returnData.lastName = record.lastName;
+  returnData.suffix = record.suffix;
+
   returnData.admissionsDate = createISODateString(
     record.unformattedAdmissionsDate,
     'MM-DD-YYYY',
