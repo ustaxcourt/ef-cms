@@ -57,7 +57,7 @@ export const OrderSearchResults = connect(
                         </a>
                       </td>
                       <td>{result.formattedFiledDate}</td>
-                      <td>{result.judge}</td>
+                      <td>{result.signedJudgeName}</td>
                     </tr>
                   ),
                 )}

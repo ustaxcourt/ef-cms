@@ -33,7 +33,7 @@ exports.orderAdvancedSearchInteractor = async ({
       'documentContents',
       'docketNumberSuffix',
       'documentTitle',
-      'judge',
+      'signedJudgeName',
       'filingDate',
       'caseId',
       'documentId',
