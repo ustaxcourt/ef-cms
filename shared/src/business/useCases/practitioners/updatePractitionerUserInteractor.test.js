@@ -14,6 +14,8 @@ const mockUser = {
   birthYear: 2019,
   employer: 'Private',
   firmName: 'GW Law Offices',
+  firstName: 'Test',
+  lastName: 'Attorney',
   name: 'Test Attorney',
   originalBarState: 'Oklahoma',
   practitionerType: 'Attorney',
