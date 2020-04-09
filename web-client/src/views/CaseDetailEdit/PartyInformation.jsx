@@ -55,7 +55,7 @@ export const PartyInformation = connect(
         {caseDetailEditHelper.showOwnershipDisclosureStatement && (
           <div className="subsection">
             <div className="usa-form-group">
-              <label className="usa-label" htmlFor="ods-link">
+              <label className="usa-label">
                 Ownership Disclosure Statement
               </label>
               {caseDetailEditHelper.ownershipDisclosureStatementDocumentId && (
