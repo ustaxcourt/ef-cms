@@ -117,7 +117,7 @@ exports.fileDocketEntryInteractor = async ({
           assigneeId: null,
           assigneeName: null,
           associatedJudge: caseToUpdate.associatedJudge,
-          caseCaption: Case.getCaseCaptionNames(
+          caseCaptionNames: Case.getCaseCaptionNames(
             Case.getCaseCaption(caseEntity),
           ),
           caseId: caseId,
