@@ -346,7 +346,7 @@ export const uploadPetition = async (
     ...userMap[loginUsername],
     sub: userMap[loginUsername].userId,
   };
-  const petitionerToken = jwt.sign(user, 'secret');
+  const userToken = jwt.sign(user, 'secret');
 
   const response = await axios.post(
     'http://localhost:3002/',
@@ -357,7 +357,7 @@ export const uploadPetition = async (
     },
     {
       headers: {
-        Authorization: `Bearer ${petitionerToken}`,
+        Authorization: `Bearer ${userToken}`,
       },
     },
   );
