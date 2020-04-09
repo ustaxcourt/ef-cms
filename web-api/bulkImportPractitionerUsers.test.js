@@ -20,7 +20,6 @@ describe('formatRecord', () => {
       admissionsStatus: 'Active',
       birthYear: 1999,
       employer: 'IRS',
-      isAdmitted: true,
       name: 'Bob the Builder yeswecan',
     });
   });
@@ -45,7 +44,6 @@ describe('formatRecord', () => {
       admissionsStatus: 'Inactive',
       birthYear: 1999,
       employer: 'DOJ',
-      isAdmitted: false,
       name: 'Mike Wazowski',
     });
   });
@@ -70,7 +68,6 @@ describe('formatRecord', () => {
       admissionsStatus: 'Active',
       birthYear: undefined,
       employer: 'Private',
-      isAdmitted: true,
       name: 'Rachael Ray',
     });
   });
@@ -108,7 +105,6 @@ describe('formatRecord', () => {
         state: 'CA',
       },
       employer: 'Private',
-      isAdmitted: true,
       name: 'Rachael Ray',
     });
   });

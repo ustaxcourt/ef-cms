@@ -46,10 +46,9 @@ Practitioner.prototype.init = function (rawUser) {
   this.birthYear = rawUser.birthYear;
   this.employer = rawUser.employer;
   this.firmName = rawUser.firmName;
-  this.isAdmitted = rawUser.isAdmitted;
   this.originalBarState = rawUser.originalBarState;
   this.practitionerType = rawUser.practitionerType;
-  if (this.isAdmitted) {
+  if (this.admissionsStatus === 'Active') {
     this.role = roleMap[this.employer];
   } else {
     this.role = User.ROLES.inactivePractitioner;
@@ -116,10 +115,6 @@ const validationRules = {
     .optional()
     .allow(null)
     .description('The firm name for the practitioner.'),
-  isAdmitted: joi
-    .boolean()
-    .required()
-    .description('Whether the practitioner is admitted to the Tax Court bar.'),
   originalBarState: joi
     .string()
     .required()
