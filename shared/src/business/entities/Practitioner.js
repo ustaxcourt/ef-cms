@@ -49,10 +49,9 @@ Practitioner.prototype.init = function (rawUser) {
   this.birthYear = rawUser.birthYear;
   this.employer = rawUser.employer;
   this.firmName = rawUser.firmName;
-  this.isAdmitted = rawUser.isAdmitted;
   this.originalBarState = rawUser.originalBarState;
   this.practitionerType = rawUser.practitionerType;
-  if (this.isAdmitted) {
+  if (this.admissionsStatus === 'Active') {
     this.role = roleMap[this.employer];
   } else {
     this.role = User.ROLES.inactivePractitioner;
@@ -63,10 +62,22 @@ Practitioner.prototype.init = function (rawUser) {
 
 const VALIDATION_ERROR_MESSAGES = {
   ...USER_VALIDATION_ERROR_MESSAGES,
-  admissionsDate: 'Enter an admission date',
+  admissionsDate: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Admission date cannot be in the future. Enter a valid date.',
+    },
+    'Enter an admission date',
+  ],
   admissionsStatus: 'Select an admission status',
   barNumber: 'Bar number is required',
-  birthYear: 'Enter a valid birth year',
+  birthYear: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Birth year cannot be in the future. Enter a valid year.',
+    },
+    'Enter a valid birth year',
+  ],
   employer: 'Select an employer',
   originalBarState: 'Select an original bar state',
   practitionerType: 'Select a practitioner type',
@@ -124,10 +135,6 @@ const validationRules = {
     .string()
     .required()
     .description('The first name of the practitioner.'),
-  isAdmitted: joi
-    .boolean()
-    .required()
-    .description('Whether the practitioner is admitted to the Tax Court bar.'),
   lastName: joi
     .string()
     .required()

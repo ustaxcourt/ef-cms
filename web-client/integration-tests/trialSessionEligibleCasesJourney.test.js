@@ -1,15 +1,12 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
-import { captureCreatedCase } from './journey/captureCreatedCase';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition, wait } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
-import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
-import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
 
 const test = setupTest();
 
@@ -29,7 +26,7 @@ describe('Trial Session Eligible Cases Journey', () => {
     sessionType: 'Small',
     trialLocation,
   };
-  const createdCases = [];
+  const createdCaseIds = [];
   const createdDocketNumbers = [];
 
   describe(`Create trial session with Small session type for '${trialLocation}' with max case count = 1`, () => {
@@ -45,19 +42,16 @@ describe('Trial Session Eligible Cases Journey', () => {
         ...overrides,
         caseType: 'Deficiency',
         procedureType: 'Small',
-        receivedAtDay: '01',
-        receivedAtMonth: '01',
-        receivedAtYear: '2019',
       };
       loginAs(test, 'petitioner');
       it('Create case #1', async () => {
-        await uploadPetition(test, caseOverrides);
+        const caseDetail = await uploadPetition(test, caseOverrides);
+        createdCaseIds.push(caseDetail.caseId);
+        createdDocketNumbers.push(caseDetail.docketNumber);
+        test.docketNumber = caseDetail.docketNumber;
       });
-      petitionerViewsDashboard(test);
-      captureCreatedCase(test, createdCases, createdDocketNumbers);
 
       loginAs(test, 'petitionsclerk');
-      petitionsClerkUpdatesFiledBy(test, caseOverrides);
       petitionsClerkSubmitsCaseToIrs(test);
 
       loginAs(test, 'docketclerk');
@@ -69,19 +63,16 @@ describe('Trial Session Eligible Cases Journey', () => {
         ...overrides,
         caseType: 'Deficiency',
         procedureType: 'Small',
-        receivedAtDay: '02',
-        receivedAtMonth: '01',
-        receivedAtYear: '2019',
       };
       loginAs(test, 'petitioner');
       it('Create case #2', async () => {
-        await uploadPetition(test, caseOverrides);
+        const caseDetail = await uploadPetition(test, caseOverrides);
+        createdCaseIds.push(caseDetail.caseId);
+        createdDocketNumbers.push(caseDetail.docketNumber);
+        test.docketNumber = caseDetail.docketNumber;
       });
-      petitionerViewsDashboard(test);
-      captureCreatedCase(test, createdCases, createdDocketNumbers);
 
       loginAs(test, 'petitionsclerk');
-      petitionsClerkUpdatesFiledBy(test, caseOverrides);
       petitionsClerkSubmitsCaseToIrs(test);
 
       loginAs(test, 'docketclerk');
@@ -93,19 +84,16 @@ describe('Trial Session Eligible Cases Journey', () => {
         ...overrides,
         caseType: 'Deficiency',
         procedureType: 'Regular',
-        receivedAtDay: '01',
-        receivedAtMonth: '01',
-        receivedAtYear: '2019',
       };
       loginAs(test, 'petitioner');
       it('Create case #3', async () => {
-        await uploadPetition(test, caseOverrides);
+        const caseDetail = await uploadPetition(test, caseOverrides);
+        createdCaseIds.push(caseDetail.caseId);
+        createdDocketNumbers.push(caseDetail.docketNumber);
+        test.docketNumber = caseDetail.docketNumber;
       });
-      petitionerViewsDashboard(test);
-      captureCreatedCase(test, createdCases, createdDocketNumbers);
 
       loginAs(test, 'petitionsclerk');
-      petitionsClerkUpdatesFiledBy(test, caseOverrides);
       petitionsClerkSubmitsCaseToIrs(test);
 
       loginAs(test, 'docketclerk');
@@ -117,19 +105,16 @@ describe('Trial Session Eligible Cases Journey', () => {
         ...overrides,
         caseType: 'CDP (Lien/Levy)',
         procedureType: 'Small',
-        receivedAtDay: '01', //
-        receivedAtMonth: '02',
-        receivedAtYear: '2019',
       };
       loginAs(test, 'petitioner');
       it('Create case #4', async () => {
-        await uploadPetition(test, caseOverrides);
+        const caseDetail = await uploadPetition(test, caseOverrides);
+        createdCaseIds.push(caseDetail.caseId);
+        createdDocketNumbers.push(caseDetail.docketNumber);
+        test.docketNumber = caseDetail.docketNumber;
       });
-      petitionerViewsDashboard(test);
-      captureCreatedCase(test, createdCases, createdDocketNumbers);
 
       loginAs(test, 'petitionsclerk');
-      petitionsClerkUpdatesFiledBy(test, caseOverrides);
       petitionsClerkSubmitsCaseToIrs(test);
 
       loginAs(test, 'docketclerk');
@@ -141,19 +126,16 @@ describe('Trial Session Eligible Cases Journey', () => {
         ...overrides,
         caseType: 'Passport',
         procedureType: 'Small',
-        receivedAtDay: '01',
-        receivedAtMonth: '03',
-        receivedAtYear: '2019',
       };
       loginAs(test, 'petitioner');
       it('Create case #5', async () => {
-        await uploadPetition(test, caseOverrides);
+        const caseDetail = await uploadPetition(test, caseOverrides);
+        createdCaseIds.push(caseDetail.caseId);
+        createdDocketNumbers.push(caseDetail.docketNumber);
+        test.docketNumber = caseDetail.docketNumber;
       });
-      petitionerViewsDashboard(test);
-      captureCreatedCase(test, createdCases, createdDocketNumbers);
 
       loginAs(test, 'petitionsclerk');
-      petitionsClerkUpdatesFiledBy(test, caseOverrides);
       petitionsClerkSubmitsCaseToIrs(test);
 
       loginAs(test, 'docketclerk');
@@ -170,18 +152,13 @@ describe('Trial Session Eligible Cases Journey', () => {
       });
 
       expect(test.getState('trialSession.eligibleCases').length).toEqual(4);
-      expect(test.getState('trialSession.eligibleCases.0.caseId')).toEqual(
-        createdCases[3],
-      );
-      expect(test.getState('trialSession.eligibleCases.1.caseId')).toEqual(
-        createdCases[4],
-      );
-      expect(test.getState('trialSession.eligibleCases.2.caseId')).toEqual(
-        createdCases[0],
-      );
-      expect(test.getState('trialSession.eligibleCases.3.caseId')).toEqual(
-        createdCases[1],
-      );
+      const eligibleCases = test.getState('trialSession.eligibleCases');
+      expect(eligibleCases.length).toEqual(4);
+      // cases with index 3 and 4 should be first because they are CDP/Passport cases
+      expect(eligibleCases[0].caseId).toEqual(createdCaseIds[3]);
+      expect(eligibleCases[1].caseId).toEqual(createdCaseIds[4]);
+      expect(eligibleCases[2].caseId).toEqual(createdCaseIds[0]);
+      expect(eligibleCases[3].caseId).toEqual(createdCaseIds[1]);
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
   });
@@ -211,19 +188,15 @@ describe('Trial Session Eligible Cases Journey', () => {
         trialSessionId: test.trialSessionId,
       });
 
-      expect(test.getState('trialSession.eligibleCases').length).toEqual(4);
-      expect(test.getState('trialSession.eligibleCases.0.caseId')).toEqual(
-        createdCases[1],
-      );
-      expect(test.getState('trialSession.eligibleCases.1.caseId')).toEqual(
-        createdCases[3],
-      );
-      expect(test.getState('trialSession.eligibleCases.2.caseId')).toEqual(
-        createdCases[4],
-      );
-      expect(test.getState('trialSession.eligibleCases.3.caseId')).toEqual(
-        createdCases[0],
-      );
+      const eligibleCases = test.getState('trialSession.eligibleCases');
+      expect(eligibleCases.length).toEqual(4);
+      // this case should be first because it's high priority
+      expect(eligibleCases[0].caseId).toEqual(createdCaseIds[1]);
+      // this case should be second because it's a CDP case
+      expect(eligibleCases[1].caseId).toEqual(createdCaseIds[3]);
+      // this case should be third because it's a Passport case
+      expect(eligibleCases[2].caseId).toEqual(createdCaseIds[4]);
+      expect(eligibleCases[3].caseId).toEqual(createdCaseIds[0]);
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
   });
@@ -246,19 +219,14 @@ describe('Trial Session Eligible Cases Journey', () => {
         trialSessionId: test.trialSessionId,
       });
 
-      expect(test.getState('trialSession.eligibleCases').length).toEqual(4);
-      expect(test.getState('trialSession.eligibleCases.0.caseId')).toEqual(
-        createdCases[3],
-      );
-      expect(test.getState('trialSession.eligibleCases.1.caseId')).toEqual(
-        createdCases[4],
-      );
-      expect(test.getState('trialSession.eligibleCases.2.caseId')).toEqual(
-        createdCases[0],
-      );
-      expect(test.getState('trialSession.eligibleCases.3.caseId')).toEqual(
-        createdCases[1],
-      );
+      const eligibleCases = test.getState('trialSession.eligibleCases');
+      expect(eligibleCases.length).toEqual(4);
+      // this case should be first because it's a CDP case
+      expect(eligibleCases[0].caseId).toEqual(createdCaseIds[3]);
+      // this case should be second because it's a Passport case
+      expect(eligibleCases[1].caseId).toEqual(createdCaseIds[4]);
+      expect(eligibleCases[2].caseId).toEqual(createdCaseIds[0]);
+      expect(eligibleCases[3].caseId).toEqual(createdCaseIds[1]);
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
   });
@@ -266,10 +234,10 @@ describe('Trial Session Eligible Cases Journey', () => {
   describe('Calendar clerk marks all eligible cases as QCed', () => {
     loginAs(test, 'petitionsclerk');
     markAllCasesAsQCed(test, () => [
-      createdCases[0],
-      createdCases[1],
-      createdCases[3],
-      createdCases[4],
+      createdCaseIds[0],
+      createdCaseIds[1],
+      createdCaseIds[3],
+      createdCaseIds[4],
     ]);
   });
 
@@ -289,13 +257,14 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('trialSession.calendaredCases').length).toEqual(3);
       expect(test.getState('trialSession.isCalendared')).toEqual(true);
       expect(test.getState('trialSession.calendaredCases.0.caseId')).toEqual(
-        createdCases[3],
+        createdCaseIds[3],
       );
       expect(test.getState('trialSession.calendaredCases.1.caseId')).toEqual(
-        createdCases[4],
+        createdCaseIds[4],
       );
+      // this could be either case 0 or 1 depending on which was marked eligible first
       expect(test.getState('trialSession.calendaredCases.2.caseId')).toEqual(
-        createdCases[0],
+        createdCaseIds[0],
       );
     });
 

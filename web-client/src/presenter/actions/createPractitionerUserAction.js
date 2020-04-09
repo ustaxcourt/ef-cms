@@ -29,6 +29,7 @@ export const createPractitionerUserAction = async ({
       alertSuccess: {
         message: 'Practitioner has been successfully added to the database.',
       },
+      barNumber: practitionerUser.barNumber,
       practitionerUser,
     });
   } catch (err) {
