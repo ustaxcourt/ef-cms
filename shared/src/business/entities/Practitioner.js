@@ -183,7 +183,7 @@ Practitioner.ADMISSIONS_STATUS_OPTIONS = ADMISSIONS_STATUS_OPTIONS;
  * returns the full concatenated name for the given practitioner data
  *
  * @param {object} practitionerData data to pull name parts from
- * @returns {string} the sortable docket number
+ * @returns {string} the concatenated firstName, middleName, and lastName with suffix
  */
 Practitioner.getFullName = function (practitionerData) {
   const { firstName, lastName } = practitionerData;
