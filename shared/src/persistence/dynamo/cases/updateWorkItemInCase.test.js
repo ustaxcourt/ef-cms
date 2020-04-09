@@ -1,10 +1,9 @@
-const sinon = require('sinon');
 const { updateWorkItemInCase } = require('./updateWorkItemInCase');
 
 describe('updateWorkItemInCase', () => {
   let updateStub;
   beforeEach(() => {
-    updateStub = sinon.stub().returns({
+    updateStub = jest.fn().mockReturnValue({
       promise: async () => null,
     });
   });
@@ -34,15 +33,15 @@ describe('updateWorkItemInCase', () => {
         workItemId: '456',
       },
     });
-    expect(updateStub.getCall(0).args[0]).toMatchObject({
+    expect(updateStub.mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':workItem': { assigneeId: 'bob', workItemId: '456' },
       },
       Key: {
-        pk: '123',
-        sk: '123',
+        pk: 'case|123',
+        sk: 'document|321',
       },
-      UpdateExpression: 'SET #documents[0].#workItems[0] = :workItem',
+      UpdateExpression: 'SET #workItems[0] = :workItem',
       applicationContext: { environment: { stage: 'dev' } },
     });
   });

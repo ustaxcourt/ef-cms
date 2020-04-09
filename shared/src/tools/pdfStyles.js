@@ -1,5 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
-exports.pdfStyles = function() {
+exports.pdfStyles = function () {
   return `
 @font-face {
   font-family: 'nimbus_roman';

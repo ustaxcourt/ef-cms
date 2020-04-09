@@ -5,22 +5,22 @@ const { SERVICE_INDICATOR_TYPES } = require('../entities/cases/CaseConstants');
  * sets the service indicators for parties on the given case
  *
  * @param {object} caseDetail case to set service indicators on
- * @returns {object} service indicators for petitioner, practitioners, and respondents
+ * @returns {object} service indicators for petitioner, privatePractitioners, and irsPractitioners
  */
 const setServiceIndicatorsForCase = caseDetail => {
   const {
     contactPrimary,
     contactSecondary,
     isPaper,
-    practitioners,
+    privatePractitioners,
   } = caseDetail;
 
   let hasPrimaryPractitioner = false;
   let hasSecondaryPractitioner = false;
 
-  // practitioners
-  if (practitioners && practitioners.length) {
-    practitioners.forEach(practitioner => {
+  // privatePractitioners
+  if (privatePractitioners && privatePractitioners.length) {
+    privatePractitioners.forEach(practitioner => {
       if (practitioner.representingPrimary) {
         hasPrimaryPractitioner = true;
       }

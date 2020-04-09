@@ -9,15 +9,15 @@ exports.getInternalUsers = async ({ applicationContext }) => {
   const users = [
     ...(await getUsersInSection({
       applicationContext,
-      section: DOCKET_SECTION,
+      section: `section|${DOCKET_SECTION}`,
     })),
     ...(await getUsersInSection({
       applicationContext,
-      section: PETITIONS_SECTION,
+      section: `section|${PETITIONS_SECTION}`,
     })),
     ...(await getUsersInSection({
       applicationContext,
-      section: ADC_SECTION,
+      section: `section|${ADC_SECTION}`,
     })),
   ];
 

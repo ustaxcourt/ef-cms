@@ -88,7 +88,7 @@ describe('editDocketEntryMetaHelper', () => {
             documentId: '123',
           },
           validationErrors: {
-            partyRespondent: 'error',
+            partyIrsPractitioner: 'error',
           },
         },
       });

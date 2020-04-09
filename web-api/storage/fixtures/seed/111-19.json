@@ -5,82 +5,7 @@
     "contactSecondary": {},
     "isPaper": false,
     "initialTitle": "Guy Fieri, Petitioner v. Commissioner of Internal Revenue, Respondent",
-    "documents": [
-      {
-        "documentType": "Petition",
-        "partyPrimary": true,
-        "workItems": [
-          {
-            "docketNumberSuffix": "L",
-            "caseStatus": "New",
-            "caseIsInProgress": false,
-            "document": {
-              "eventCode": "P",
-              "createdAt": "2019-12-11T15:25:09.285Z",
-              "processingStatus": "pending",
-              "documentType": "Petition",
-              "filedBy": "Petr. Guy Fieri",
-              "partyPrimary": true,
-              "pending": false,
-              "partySecondary": false,
-              "documentId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
-              "receivedAt": "2019-12-11T15:25:09.285Z",
-              "filingDate": "2019-12-11T15:25:09.285Z",
-              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-            },
-            "caseTitle": "Guy Fieri",
-            "section": "petitions",
-            "workItemId": "9fc70206-15c6-4c68-87bb-295dee8f002d",
-            "isInitializeCase": true,
-            "assigneeId": null,
-            "isQC": true,
-            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
-            "createdAt": "2019-12-11T15:25:09.285Z",
-            "assigneeName": null,
-            "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
-            "messages": [
-              {
-                "createdAt": "2019-12-11T15:25:09.286Z",
-                "messageId": "f0073d7f-e07a-4e56-af40-b4270c604908",
-                "from": "Test Petitioner",
-                "message": "Petition filed by Guy Fieri is ready for review.",
-                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-              }
-            ],
-            "docketNumber": "111-19",
-            "updatedAt": "2019-12-11T15:25:09.286Z"
-          }
-        ],
-        "pending": false,
-        "receivedAt": "2019-12-11T15:25:09.285Z",
-        "filingDate": "2019-12-11T15:25:09.285Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "eventCode": "P",
-        "createdAt": "2019-12-11T15:25:09.285Z",
-        "processingStatus": "complete",
-        "filedBy": "Petr. Guy Fieri",
-        "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
-        "partySecondary": false,
-        "documentId": "9de27a7d-7c6b-434b-803b-7655f82d5e07"
-      },
-      {
-        "documentType": "Statement of Taxpayer Identification",
-        "partyPrimary": true,
-        "workItems": [],
-        "pending": false,
-        "receivedAt": "2019-12-11T15:25:09.286Z",
-        "filingDate": "2019-12-11T15:25:09.286Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "eventCode": "STIN",
-        "createdAt": "2019-12-11T15:25:09.286Z",
-        "processingStatus": "complete",
-        "filedBy": "Petr. Guy Fieri",
-        "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
-        "partySecondary": false,
-        "documentId": "59ccf18f-5bac-48b0-a8e0-9c9e1d995b62"
-      }
-    ],
-    "gsi1pk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "gsi1pk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "receivedAt": "2019-12-11T15:25:09.284Z",
@@ -102,7 +27,7 @@
     "noticeOfAttachments": false,
     "caseCaption": "Guy Fieri, Petitioner",
     "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
-    "sk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "sk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -115,12 +40,10 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
-    "respondents": [],
-    "practitioners": [],
     "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
     "leadCaseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
-    "pk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "pk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
     "docketNumber": "111-19",
     "status": "Submitted"
   },
@@ -145,11 +68,89 @@
     "sk": "docket-record|decc1a72-5e38-4b66-8781-ad7bc5bd5a9e"
   },
   {
-    "sk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
-    "pk": "111-19|case"
+    "sk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "pk": "case-by-docket-number|111-19"
   },
   {
-    "sk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2019-12-11T15:25:09.286Z",
+    "partyPrimary": true,
+    "workItems": [],
+    "pending": false,
+    "receivedAt": "2019-12-11T15:25:09.286Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "STIN",
+    "createdAt": "2019-12-11T15:25:09.286Z",
+    "processingStatus": "complete",
+    "filedBy": "Petr. Guy Fieri",
+    "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "sk": "document|59ccf18f-5bac-48b0-a8e0-9c9e1d995b62",
+    "partySecondary": false,
+    "documentId": "59ccf18f-5bac-48b0-a8e0-9c9e1d995b62",
+    "pk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2"
+  },
+  {
+    "documentType": "Petition",
+    "filingDate": "2019-12-11T15:25:09.285Z",
+    "partyPrimary": true,
+    "workItems": [
+      {
+        "associatedJudge": "Chief Judge",
+        "docketNumberSuffix": "L",
+        "caseStatus": "New",
+        "caseIsInProgress": false,
+        "document": {
+          "eventCode": "P",
+          "createdAt": "2019-12-11T15:25:09.285Z",
+          "processingStatus": "pending",
+          "documentType": "Petition",
+          "filingDate": "2019-12-11T15:25:09.285Z",
+          "filedBy": "Petr. Guy Fieri",
+          "partyPrimary": true,
+          "pending": false,
+          "partySecondary": false,
+          "documentId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
+          "receivedAt": "2019-12-11T15:25:09.285Z",
+          "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        "caseTitle": "Guy Fieri",
+        "section": "petitions",
+        "workItemId": "9fc70206-15c6-4c68-87bb-295dee8f002d",
+        "isInitializeCase": true,
+        "assigneeId": null,
+        "isQC": true,
+        "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "createdAt": "2019-12-11T15:25:09.285Z",
+        "assigneeName": null,
+        "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+        "messages": [
+          {
+            "createdAt": "2019-12-11T15:25:09.286Z",
+            "messageId": "f0073d7f-e07a-4e56-af40-b4270c604908",
+            "from": "Test Petitioner",
+            "message": "Petition filed by Guy Fieri is ready for review.",
+            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+          }
+        ],
+        "docketNumber": "111-19",
+        "updatedAt": "2019-12-11T15:25:09.286Z"
+      }
+    ],
+    "pending": false,
+    "receivedAt": "2019-12-11T15:25:09.285Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "createdAt": "2019-12-11T15:25:09.285Z",
+    "processingStatus": "complete",
+    "filedBy": "Petr. Guy Fieri",
+    "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "sk": "document|9de27a7d-7c6b-434b-803b-7655f82d5e07",
+    "partySecondary": false,
+    "documentId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
+    "pk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2"
   }
 ]

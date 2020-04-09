@@ -10,12 +10,12 @@ export const PDFSignerToolbar = connect(
     isPdfAlreadySigned: state.pdfForSigning.isPdfAlreadySigned,
     signatureApplied: state.pdfForSigning.signatureApplied,
   },
-  ({
+  function PDFSignerToolbar({
     applySignature,
     clearSignature,
     isPdfAlreadySigned,
     signatureApplied,
-  }) => {
+  }) {
     return (
       <div className="sign-pdf-control">
         <h3>Sign Document</h3>

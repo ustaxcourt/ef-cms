@@ -8,12 +8,15 @@ export const CaseDetailSubnavTabs = connect(
     caseDetailSubnavHelper: state.caseDetailSubnavHelper,
     clearAlertSequence: sequences.clearAlertSequence,
   },
-  ({ caseDetailSubnavHelper, clearAlertSequence }) => {
+  function CaseDetailSubnavTabs({
+    caseDetailSubnavHelper,
+    clearAlertSequence,
+  }) {
     return (
       <div className="case-detail-primary-tabs__container">
         <div className="case-detail-primary-tabs__tabs">
           <Tabs
-            bind="caseDetailPage.primaryTab"
+            bind="currentViewMetadata.caseDetail.primaryTab"
             className="container-tabs-dark"
             onSelect={() => clearAlertSequence()}
           >

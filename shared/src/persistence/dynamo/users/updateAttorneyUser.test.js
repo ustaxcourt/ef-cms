@@ -1,32 +1,15 @@
-const { updateUserRecords } = require('./updateAttorneyUser');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+const {
+  updateAttorneyUser,
+  updateUserRecords,
+} = require('./updateAttorneyUser');
 const { User } = require('../../../business/entities/User');
 
+const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
+
 describe('updateAttorneyUser', () => {
-  let applicationContext;
-  let putStub;
-  let deleteStub;
-
-  const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
-
-  beforeEach(() => {
-    putStub = jest.fn().mockReturnValue({
-      promise: async () => null,
-    });
-    deleteStub = jest.fn().mockReturnValue({
-      promise: async () => null,
-    });
-
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        delete: deleteStub,
-        put: putStub,
-      }),
-    };
-  });
-
   it('attempts to update a private practitioner user to inactivePractitioner', async () => {
     const oldUser = {
       barNumber: 'PT1234',
@@ -40,6 +23,7 @@ describe('updateAttorneyUser', () => {
       role: User.ROLES.inactivePractitioner,
       section: 'inactivePractitioner',
     };
+
     await updateUserRecords({
       applicationContext,
       oldUser,
@@ -47,49 +31,140 @@ describe('updateAttorneyUser', () => {
       userId,
     });
 
-    expect(deleteStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls[0][0],
+    ).toMatchObject({
       Key: {
-        pk: 'privatePractitioner|user',
-        sk: userId,
+        pk: 'section|privatePractitioner',
+        sk: `user|${userId}`,
       },
     });
-    expect(putStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0],
+    ).toMatchObject({
       Item: {
-        pk: 'inactivePractitioner|user',
-        sk: userId,
+        pk: 'section|inactivePractitioner',
+        sk: `user|${userId}`,
       },
     });
-    expect(putStub.mock.calls[1][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[1][0],
+    ).toMatchObject({
       Item: {
-        pk: userId,
-        sk: userId,
+        pk: `user|${userId}`,
+        sk: `user|${userId}`,
         ...updatedUser,
         userId,
       },
     });
-    expect(deleteStub.mock.calls[1][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls[1][0],
+    ).toMatchObject({
       Key: {
-        pk: 'Test Private Practitioner|privatePractitioner',
-        sk: userId,
+        pk: 'privatePractitioner|Test Private Practitioner',
+        sk: `user|${userId}`,
       },
     });
-    expect(deleteStub.mock.calls[2][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls[2][0],
+    ).toMatchObject({
       Key: {
-        pk: 'PT1234|privatePractitioner',
-        sk: userId,
+        pk: 'privatePractitioner|PT1234',
+        sk: `user|${userId}`,
       },
     });
-    expect(putStub.mock.calls[2][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[2][0],
+    ).toMatchObject({
       Item: {
-        pk: 'Test Private Practitioner|inactivePractitioner',
-        sk: userId,
+        pk: 'inactivePractitioner|Test Private Practitioner',
+        sk: `user|${userId}`,
       },
     });
-    expect(putStub.mock.calls[3][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[3][0],
+    ).toMatchObject({
       Item: {
-        pk: 'PT1234|inactivePractitioner',
-        sk: userId,
+        pk: 'inactivePractitioner|PT1234',
+        sk: `user|${userId}`,
       },
     });
+  });
+});
+
+describe('updateAttorneyUser', () => {
+  it('should log an error', async () => {
+    applicationContext.getDocumentClient().get.mockReturnValue({
+      promise: async () => ({
+        Item: {
+          barNumber: 'PT1234',
+          name: 'Test Practitioner',
+          role: User.ROLES.inactivePractitioner,
+          section: 'inactivePractitioner',
+        },
+      }),
+    });
+    const updatedUser = {
+      barNumber: 'PT1234',
+      name: 'Test Practitioner',
+      role: User.ROLES.inactivePractitioner,
+      section: 'inactivePractitioner',
+    };
+
+    await updateAttorneyUser({
+      applicationContext,
+      user: updatedUser,
+    });
+
+    expect(applicationContext.logger.error).toHaveBeenCalled();
+  });
+});
+
+describe('updateAttorneyUser', () => {
+  it('should not log an error', async () => {
+    applicationContext.getCognito().adminGetUser.mockReturnValue({
+      promise: () => null,
+    });
+    applicationContext.getDocumentClient().get.mockReturnValue({
+      promise: async () => ({
+        Item: {
+          barNumber: 'PT1234',
+          name: 'Test Practitioner',
+          role: User.ROLES.inactivePractitioner,
+          section: 'inactivePractitioner',
+        },
+      }),
+    });
+    const updatedUser = {
+      barNumber: 'PT1234',
+      name: 'Test Practitioner',
+      role: User.ROLES.inactivePractitioner,
+      section: 'inactivePractitioner',
+    };
+
+    await updateAttorneyUser({
+      applicationContext,
+      user: updatedUser,
+    });
+
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
+  });
+});
+
+describe('updateAttorneyUser - with a cognito response', () => {
+  it('should not log an error', async () => {
+    const updatedUser = {
+      barNumber: 'PT1234',
+      name: 'Test Practitioner',
+      role: User.ROLES.inactivePractitioner,
+      section: 'inactivePractitioner',
+    };
+
+    await updateAttorneyUser({
+      applicationContext,
+      user: updatedUser,
+    });
+
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
   });
 });

@@ -7,7 +7,7 @@ export const FiledInMultiCasesReview = connect(
     formattedSelectedCasesAsCase:
       state.fileDocumentHelper.formattedSelectedCasesAsCase,
   },
-  ({ formattedSelectedCasesAsCase }) => {
+  function FiledInMultiCasesReview({ formattedSelectedCasesAsCase }) {
     return (
       <>
         <h3 className="underlined">Filed In These Cases</h3>

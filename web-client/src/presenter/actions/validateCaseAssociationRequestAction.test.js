@@ -1,7 +1,6 @@
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { validateCaseAssociationRequestAction } from './validateCaseAssociationRequestAction';
-import sinon from 'sinon';
 
 describe('validateCaseAssociationRequest', () => {
   let validateCaseAssociationRequestStub;
@@ -11,9 +10,9 @@ describe('validateCaseAssociationRequest', () => {
   let mockCaseAssociationRequest;
 
   beforeEach(() => {
-    validateCaseAssociationRequestStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+    validateCaseAssociationRequestStub = jest.fn();
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     mockCaseAssociationRequest = {
       certificateOfService: true,
@@ -39,7 +38,7 @@ describe('validateCaseAssociationRequest', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateCaseAssociationRequestStub.returns(null);
+    validateCaseAssociationRequestStub = jest.fn().mockReturnValue(null);
     await runAction(validateCaseAssociationRequestAction, {
       modules: {
         presenter,
@@ -49,11 +48,11 @@ describe('validateCaseAssociationRequest', () => {
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateCaseAssociationRequestStub.returns('error');
+    validateCaseAssociationRequestStub = jest.fn().mockReturnValue('error');
     await runAction(validateCaseAssociationRequestAction, {
       modules: {
         presenter,
@@ -63,6 +62,6 @@ describe('validateCaseAssociationRequest', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

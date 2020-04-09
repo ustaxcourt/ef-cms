@@ -7,13 +7,13 @@ const { User } = require('../../entities/User');
 let applicationContext;
 let updateCaseMock;
 
-const mockPractitioners = [
+const mockPrivatePractitioners = [
   { role: User.ROLES.privatePractitioner, userId: '456' },
   { role: User.ROLES.privatePractitioner, userId: '789' },
   { role: User.ROLES.privatePractitioner, userId: '012' },
 ];
 
-const mockRespondents = [
+const mockIrsPractitioners = [
   { role: User.ROLES.irsPractitioner, userId: '654' },
   { role: User.ROLES.irsPractitioner, userId: '987' },
   { role: User.ROLES.irsPractitioner, userId: '210' },
@@ -47,15 +47,15 @@ describe('updateCounselOnCaseInteractor', () => {
           ],
           documents: MOCK_CASE.documents,
           filingType: 'Myself',
+          irsPractitioners: mockIrsPractitioners,
           partyType: 'Petitioner',
-          practitioners: mockPractitioners,
           preferredTrialCity: 'Fresno, California',
+          privatePractitioners: mockPrivatePractitioners,
           procedureType: 'Regular',
-          respondents: mockRespondents,
         }),
         getUserById: ({ userId }) => {
-          return mockPractitioners
-            .concat(mockRespondents)
+          return mockPrivatePractitioners
+            .concat(mockIrsPractitioners)
             .concat(mockPetitioners)
             .find(user => user.userId === userId);
         },
@@ -100,12 +100,12 @@ describe('updateCounselOnCaseInteractor', () => {
     expect(updateCaseMock).toHaveBeenCalled();
   });
 
-  it('updates a respondent with the given userId on the associated case', async () => {
+  it('updates an irsPractitioner with the given userId on the associated case', async () => {
     await updateCounselOnCaseInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       userData: {
-        email: 'respondent@example.com',
+        email: 'irsPractitioner@example.com',
       },
       userIdToUpdate: '987',
     });
@@ -113,7 +113,7 @@ describe('updateCounselOnCaseInteractor', () => {
     expect(updateCaseMock).toHaveBeenCalled();
   });
 
-  it('throws an error if the userIdToUpdate is not a practitioner or respondent role', async () => {
+  it('throws an error if the userIdToUpdate is not a privatePractitioner or irsPractitioner role', async () => {
     let error;
     try {
       await updateCounselOnCaseInteractor({
@@ -127,6 +127,6 @@ describe('updateCounselOnCaseInteractor', () => {
     } catch (err) {
       error = err;
     }
-    expect(error.message).toEqual('User is not a practitioner or respondent');
+    expect(error.message).toEqual('User is not a practitioner');
   });
 });

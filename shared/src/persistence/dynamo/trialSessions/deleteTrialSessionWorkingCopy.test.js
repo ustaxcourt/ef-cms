@@ -1,41 +1,31 @@
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const {
   deleteTrialSessionWorkingCopy,
 } = require('./deleteTrialSessionWorkingCopy');
 
+const mockTrialSessionId = '456';
+const mockUserId = '338';
+
 describe('deleteTrialSessionWorkingCopy', () => {
-  let applicationContext;
-  let deleteStub;
-
-  const trialSessionId = '456';
-  const userId = '338';
-
-  beforeEach(() => {
-    deleteStub = sinon.stub().returns({
-      promise: async () => null,
-    });
-
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        delete: deleteStub,
-      }),
-    };
+  beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
   });
 
   it('attempts to remove the trial session', async () => {
     await deleteTrialSessionWorkingCopy({
       applicationContext,
-      trialSessionId,
-      userId,
+      trialSessionId: mockTrialSessionId,
+      userId: mockUserId,
     });
 
-    expect(deleteStub.getCall(0).args[0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls[0][0],
+    ).toMatchObject({
       Key: {
-        pk: `trial-session-working-copy|${trialSessionId}`,
-        sk: `${userId}`,
+        pk: `trial-session-working-copy|${mockTrialSessionId}`,
+        sk: `user|${mockUserId}`,
       },
       TableName: 'efcms-dev',
     });

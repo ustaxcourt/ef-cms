@@ -1,4 +1,4 @@
-const sinon = require('sinon');
+jest.mock('uuid');
 const uuid = require('uuid');
 const {
   createCaseFromPaperInteractor,
@@ -12,16 +12,14 @@ describe('createCaseFromPaperInteractor', () => {
   let applicationContext;
   const MOCK_CASE_ID = '413f62ce-d7c8-446e-aeda-14a2a625a626';
   const DATE = '2018-11-21T20:49:28.192Z';
-  let v4Stub;
 
   beforeEach(() => {
-    v4Stub = sinon.stub(uuid, 'v4').returns(MOCK_CASE_ID);
-    sinon.stub(window.Date.prototype, 'toISOString').returns(DATE);
+    uuid.v4 = jest.fn().mockReturnValue(MOCK_CASE_ID);
+    window.Date.prototype.toISOString = jest.fn().mockReturnValue(DATE);
   });
 
   afterEach(() => {
-    window.Date.prototype.toISOString.restore();
-    v4Stub.restore();
+    jest.restoreAllMocks();
   });
 
   it('throws an error if the user is not valid or authorized', async () => {

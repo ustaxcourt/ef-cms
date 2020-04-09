@@ -16,7 +16,6 @@ describe('incrementScreenMetadataPageAction', () => {
     });
 
     expect(result.state.screenMetadata.page).toEqual(2);
-    expect(result.state.isScanning).toBeFalsy();
   });
 
   it('defaults the value of screenMetadata.page to one if not set', async () => {
@@ -30,6 +29,5 @@ describe('incrementScreenMetadataPageAction', () => {
     });
 
     expect(result.state.screenMetadata.page).toEqual(2);
-    expect(result.state.isScanning).toBeFalsy();
   });
 });

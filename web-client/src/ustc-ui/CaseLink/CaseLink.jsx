@@ -2,7 +2,7 @@ import { connect } from '@cerebral/react';
 import React from 'react';
 import classNames from 'classnames';
 
-export const CaseLink = connect(props => {
+export const CaseLink = connect(function CaseLink(props) {
   const { children, className, docketNumber, formattedCase, onlyText } = props;
 
   const docketNumberString =

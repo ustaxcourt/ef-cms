@@ -4,5 +4,5 @@ import { chooseByTruthyStateActionFactory } from '../editUploadCourtIssuedDocume
  * allow navigation if the caseDetail is filled in. This is to prevent refresh staying on the page.
  */
 export const canNavigateToReviewSavedPetitionScreenAction = chooseByTruthyStateActionFactory(
-  'caseDetail.partyType',
+  'form.partyType',
 );

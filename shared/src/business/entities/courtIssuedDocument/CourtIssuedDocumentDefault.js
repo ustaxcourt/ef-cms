@@ -13,7 +13,7 @@ function CourtIssuedDocumentDefault(rawProps) {
   this.documentType = rawProps.documentType;
 }
 
-CourtIssuedDocumentDefault.prototype.getDocumentTitle = function() {
+CourtIssuedDocumentDefault.prototype.getDocumentTitle = function () {
   return this.documentTitle;
 };
 

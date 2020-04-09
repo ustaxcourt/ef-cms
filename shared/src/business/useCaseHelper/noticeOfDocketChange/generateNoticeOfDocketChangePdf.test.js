@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   generateNoticeOfDocketChangePdf,
   generatePage,
 } = require('./generateNoticeOfDocketChangePdf');
@@ -6,10 +9,8 @@ jest.mock('../../../authorization/authorizationClientService');
 const {
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
 const { User } = require('../../entities/User');
 const PDF_MOCK_BUFFER = 'Hello World';
-import { formatDateString } from '../../utilities/DateHandler';
 const pug = require('pug');
 const sass = require('node-sass');
 
@@ -26,28 +27,12 @@ const chromiumBrowserMock = {
   newPage: () => pageMock,
 };
 
-let applicationContext = {
-  getCaseCaptionNames: Case.getCaseCaptionNames,
-  getChromiumBrowser: () => chromiumBrowserMock,
-  getCurrentUser: () => {
-    return { role: User.ROLES.petitioner, userId: 'petitioner' };
-  },
-  getDocumentsBucketName: () => 'DocumentBucketName',
-  getNodeSass: () => sass,
-  getPersistenceGateway: () => ({
-    getCaseByCaseId: () => ({ docketNumber: '101-19' }),
-    getDownloadPolicyUrl: () => ({
-      url: 'https://www.example.com',
-    }),
-  }),
-  getPug: () => pug,
-  getStorageClient: () => ({
-    upload: (params, callback) => callback(),
-  }),
-  getUniqueId: () => 'uniqueId',
-  getUtilities: () => ({ formatDateString }),
-  logger: { error: () => {}, info: () => {} },
+const mockPetitionerUser = {
+  role: User.ROLES.petitioner,
+  userId: 'petitioner',
 };
+
+const mockCase = { docketNumber: '101-19' };
 
 const docketChangeInfo = {
   caseTitle: 'This is a Case Title',
@@ -58,6 +43,23 @@ const docketChangeInfo = {
 };
 
 describe('generatePage', () => {
+  beforeEach(() => {
+    applicationContext.getChromiumBrowser.mockReturnValue(chromiumBrowserMock);
+    applicationContext.getCurrentUser.mockReturnValue(mockPetitionerUser);
+    applicationContext.getNodeSass.mockReturnValue(sass);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(mockCase);
+    applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockReturnValue({
+        url: 'https://www.example.com',
+      });
+    applicationContext.getPug.mockReturnValue(pug);
+    applicationContext.getStorageClient.mockReturnValue({
+      upload: (params, callback) => callback(),
+    });
+  });
   it('returns a correctly-generated HTML output based on information provided', async () => {
     const result = await generatePage({ applicationContext, docketChangeInfo });
     expect(result.indexOf('Sausage')).not.toEqual(-1);
@@ -124,7 +126,10 @@ describe('generateNoticeOfDocketChangePdf', () => {
     expect(result).not.toBeDefined();
     expect(error.message).toEqual('Unauthorized');
   });
+
   it('returns the pdf buffer produced by chromium', async () => {
+    applicationContext.getUniqueId.mockReturnValue('uniqueId');
+    applicationContext.getChromiumBrowser.mockReturnValue(chromiumBrowserMock);
     const result = await generateNoticeOfDocketChangePdf({
       applicationContext,
       docketChangeInfo,
@@ -134,20 +139,20 @@ describe('generateNoticeOfDocketChangePdf', () => {
   });
 
   it('catches a thrown exception', async () => {
-    applicationContext = {
-      ...applicationContext,
-      getChromiumBrowser: jest.fn().mockReturnValue({
-        close: () => {},
-        newPage: () => ({
-          pdf: () => {
-            throw new Error('error pdf');
-          },
-          setContent: () => {
-            throw new Error('error setContent');
-          },
-        }),
+    const chromiumBrowserPdfErrorMock = {
+      close: () => {},
+      newPage: () => ({
+        pdf: () => {
+          throw new Error('error pdf');
+        },
+        setContent: () => {
+          throw new Error('error setContent');
+        },
       }),
     };
+    applicationContext.getChromiumBrowser.mockReturnValue(
+      chromiumBrowserPdfErrorMock,
+    );
 
     let err;
 

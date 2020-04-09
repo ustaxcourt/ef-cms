@@ -69,7 +69,7 @@ joiValidationDecorator(
     eventCode: joi.string().optional(),
     orderBody: joi.string().required(),
   }),
-  function() {
+  function () {
     return !this.getFormattedValidationErrors();
   },
   Order.VALIDATION_ERROR_MESSAGES,

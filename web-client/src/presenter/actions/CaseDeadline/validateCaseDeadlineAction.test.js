@@ -1,7 +1,6 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateCaseDeadlineAction } from './validateCaseDeadlineAction';
-import sinon from 'sinon';
 
 describe('validateCaseDeadlineAction', () => {
   let validateCaseDeadlineStub;
@@ -11,9 +10,9 @@ describe('validateCaseDeadlineAction', () => {
   let mockCaseDeadline;
 
   beforeEach(() => {
-    validateCaseDeadlineStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+    validateCaseDeadlineStub = jest.fn();
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     mockCaseDeadline = {
       caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -37,7 +36,7 @@ describe('validateCaseDeadlineAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateCaseDeadlineStub.returns(null);
+    validateCaseDeadlineStub = jest.fn().mockReturnValue(null);
     await runAction(validateCaseDeadlineAction, {
       modules: {
         presenter,
@@ -47,11 +46,11 @@ describe('validateCaseDeadlineAction', () => {
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateCaseDeadlineStub.returns('error');
+    validateCaseDeadlineStub = jest.fn().mockReturnValue('error');
     await runAction(validateCaseDeadlineAction, {
       modules: {
         presenter,
@@ -61,6 +60,6 @@ describe('validateCaseDeadlineAction', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

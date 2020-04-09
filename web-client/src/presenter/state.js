@@ -1,8 +1,3 @@
-import {
-  formattedCaseDetail,
-  formattedCases,
-} from './computeds/formattedCaseDetail';
-
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
@@ -38,6 +33,10 @@ import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
+import {
+  formattedCaseDetail,
+  formattedCases,
+} from './computeds/formattedCaseDetail';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
 import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
@@ -73,80 +72,42 @@ import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
-export const state = {
+const helpers = {
   addCourtIssuedDocketEntryHelper,
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
   addEditUserCaseNoteModalHelper,
   addToTrialSessionModalHelper,
-  advancedSearchForm: {},
   advancedSearchHelper,
   alertHelper,
-  archiveDraftDocument: {
-    caseId: null,
-    documentId: null,
-    documentTitle: null,
-  },
-  assigneeId: null,
   batchDownloadHelper,
-  batchDownloads: {},
-  batchIndexToRescan: null,
-  batches: [],
-  betaBar: {
-    isVisible: true,
-  },
   blockedCasesReportHelper,
-  caseCaption: '',
   caseDeadlineReportHelper,
-  caseDetail: {},
   caseDetailEditContactsHelper,
   caseDetailEditHelper,
-  caseDetailErrors: {},
   caseDetailHeaderHelper,
   caseDetailHelper,
-  caseDetailPage: {},
   caseDetailSubnavHelper,
   caseInformationHelper,
   caseInventoryReportHelper,
   caseTypeDescriptionHelper,
-  caseTypes: [],
-  cases: [],
-  cognitoLoginUrl: null,
   completeDocumentTypeSectionHelper,
-  completeForm: {},
   confirmInitiateServiceModalHelper,
   contactEditHelper,
   contactsHelper,
   createAttorneyUserHelper,
   createOrderHelper,
-  currentPage: 'Interstitial',
-  currentPageHeader: '',
-  currentPageIndex: 0,
-  currentTab: '',
   dashboardExternalHelper,
-  docketNumberSearchForm: {},
   docketRecordHelper,
-  docketRecordIndex: 0,
-  document: {},
-  documentDetail: {
-    tab: '',
-  },
   documentDetailHelper,
-  documentId: null,
-  documentSelectedForPreview: null,
-  documentSelectedForScan: null,
   documentSigningHelper,
-  documentUploadMode: 'scan',
   editDocketEntryHelper,
   editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
-  fieldOrder: [],
   fileDocumentHelper,
   fileUploadStatusHelper,
-  filingTypes: [],
-  form: {},
   formattedCaseDetail,
   formattedCases,
   formattedDashboardTrialSessions,
@@ -157,20 +118,88 @@ export const state = {
   getTrialCityName,
   headerHelper,
   internalTypesHelper,
-  isAccountMenuOpen: false,
   loadingHelper,
   menuHelper,
-  mobileMenu: {
-    isVisible: false,
+  orderTypesHelper,
+  pdfPreviewModalHelper,
+  pdfSignerHelper,
+  requestAccessHelper,
+  reviewPetitionFromPaperHelper,
+  reviewSavedPetitionHelper,
+  scanBatchPreviewerHelper,
+  scanHelper,
+  selectDocumentSelectHelper,
+  selectDocumentTypeHelper,
+  showAppTimeoutModalHelper,
+  startCaseHelper,
+  startCaseInternalContactsHelper,
+  startCaseInternalHelper,
+  trialCitiesHelper,
+  trialSessionDetailsHelper,
+  trialSessionHeaderHelper,
+  trialSessionWorkingCopyHelper,
+  trialSessionsHelper,
+  trialSessionsSummaryHelper,
+  updateCaseModalHelper,
+  viewAllDocumentsHelper,
+  workQueueHelper,
+  workQueueSectionHelper,
+};
+
+export const state = {
+  ...helpers,
+  advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
+  archiveDraftDocument: {
+    // used by the delete draft document modal
+    caseId: null,
+    documentId: null,
+    documentTitle: null,
   },
-  modal: {},
+  assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
+  batchDownloads: {}, // batch download of PDFs
+  caseDetail: {},
+  cases: [],
+  cognitoLoginUrl: null,
+  completeForm: {}, // TODO: replace with state.form
+  currentPage: 'Interstitial',
+  currentViewMetadata: {
+    caseDetail: {},
+    documentDetail: {
+      tab: '',
+    },
+    documentSelectedForScan: null,
+    documentUploadMode: 'scan',
+    messageId: '',
+    startCaseInternal: {
+      tab: '',
+    },
+    tab: '',
+    trialSessions: {
+      tab: null,
+    },
+  },
+  docketRecordIndex: 0, // needs its own object because it's present when other forms are on screen
+  documentId: null,
+  fieldOrder: [], // TODO: related to errors
+  fileUploadProgress: {
+    // used for the progress bar shown in modal when uploading files
+    isUploading: false,
+    percentComplete: 0,
+    timeRemaining: Number.POSITIVE_INFINITY,
+  },
+  form: {}, // shared object for creating new entities, clear before using
+  header: {
+    searchTerm: '',
+    showBetaBar: true,
+    showMobileMenu: false,
+    showUsaBannerDetails: false,
+  },
+  modal: {
+    pdfPreviewModal: undefined,
+    showModal: undefined, // the name of the modal to display
+  },
   navigation: {},
   notifications: {},
-  orderTypesHelper,
-  path: '/',
-  paymentInfo: {
-    showDetails: false,
-  },
   pdfForSigning: {
     documentId: null,
     nameForSigning: '',
@@ -179,63 +208,36 @@ export const state = {
     signatureApplied: false,
     signatureData: null,
   },
-  pdfPreviewModal: {},
-  pdfPreviewModalHelper,
-  pdfSignerHelper,
-  percentComplete: 0,
   permissions: null,
-  petition: {},
   previewPdfFile: null,
-  procedureTypes: [],
-  requestAccessHelper,
-  reviewPetitionFromPaperHelper,
-  reviewSavedPetitionHelper,
-  scanBatchPreviewerHelper,
-  scanHelper,
-  scanner: {},
+  progressIndicator: {
+    // used for the spinner that shows when waiting for network responses
+    waitingForResponse: false,
+    waitingForResponseRequests: 0,
+  },
+  scanner: {
+    batchIndexToDelete: null,
+    batchIndexToRescan: null, // batch index for re-scanning
+    batchToDeletePageCount: null,
+    batches: [],
+    currentPageIndex: 0, // batches from scanning
+    isScanning: false,
+    selectedBatchIndex: 0,
+  },
   screenMetadata: {},
-  searchMode: 'byName',
-  searchTerm: '',
   sectionInboxCount: 0,
   sectionUsers: [],
-  selectDocumentSelectHelper,
-  selectDocumentTypeHelper,
-  selectedBatchIndex: 0,
   selectedWorkItems: [],
   sessionMetadata: {
     docketRecordSort: [],
   },
-  showAppTimeoutModalHelper,
-  showModal: '',
   showValidation: false,
-  startCaseHelper,
-  startCaseInternalContactsHelper,
-  startCaseInternalHelper,
-  timeRemaining: Number.POSITIVE_INFINITY,
-  trialCitiesHelper,
-  trialSessionDetailsHelper,
-  trialSessionHeaderHelper,
-  trialSessionWorkingCopyHelper,
-  trialSessionsHelper,
-  trialSessionsSummaryHelper,
-  trialSessionsTab: {
-    group: null,
-  },
-  updateCaseModalHelper,
-  usaBanner: {
-    showDetails: false,
-  },
   user: null,
   users: [],
   validationErrors: {},
-  viewAllDocumentsHelper,
-  waitingForResponse: false,
-  waitingForResponseRequests: 0,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
   workQueue: [],
-  workQueueHelper,
-  workQueueSectionHelper,
   workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
 };

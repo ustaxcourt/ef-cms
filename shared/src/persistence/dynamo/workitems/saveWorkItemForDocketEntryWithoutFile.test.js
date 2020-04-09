@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   saveWorkItemForDocketEntryWithoutFile,
 } = require('./saveWorkItemForDocketEntryWithoutFile');
@@ -8,13 +7,13 @@ describe('saveWorkItemForDocketEntryWithoutFile', () => {
   let getStub;
 
   beforeEach(() => {
-    putStub = sinon.stub().returns({
+    putStub = jest.fn().mockReturnValue({
       promise: async () => ({
         section: 'docket',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     });
-    getStub = sinon.stub().returns({
+    getStub = jest.fn().mockReturnValue({
       promise: async () => ({
         Item: {
           section: 'docket',
@@ -48,28 +47,28 @@ describe('saveWorkItemForDocketEntryWithoutFile', () => {
       },
     });
 
-    expect(putStub.getCall(0).args[0]).toMatchObject({
+    expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {
-        pk: 'workitem-123',
-        sk: 'workitem-123',
+        pk: 'work-item|123',
+        sk: 'work-item|123',
       },
     });
-    expect(putStub.getCall(1).args[0]).toMatchObject({
+    expect(putStub.mock.calls[1][0]).toMatchObject({
       Item: {
-        pk: 'section-docket',
+        pk: 'section|docket',
         workItemId: '123',
       },
     });
-    expect(putStub.getCall(2).args[0]).toMatchObject({
+    expect(putStub.mock.calls[2][0]).toMatchObject({
       Item: {
-        pk: 'user-1805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
         workItemId: '123',
       },
     });
-    expect(putStub.getCall(3).args[0]).toMatchObject({
+    expect(putStub.mock.calls[3][0]).toMatchObject({
       Item: {
-        pk: '456|workItem',
-        sk: '123',
+        pk: 'case|456',
+        sk: 'work-item|123',
       },
     });
   });

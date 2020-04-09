@@ -11,7 +11,7 @@ const { post } = require('../requests');
  */
 exports.setNoticesForCalendaredTrialSessionInteractor = ({
   applicationContext,
-  caseId,
+  caseId = null, // because sending undefined in an http request breaks lambda
   trialSessionId,
 }) => {
   return post({

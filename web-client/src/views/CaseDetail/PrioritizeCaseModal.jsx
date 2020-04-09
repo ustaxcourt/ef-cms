@@ -13,14 +13,14 @@ export const PrioritizeCaseModal = connect(
     validatePrioritizeCaseSequence: sequences.validatePrioritizeCaseSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function PrioritizeCaseModal({
     cancelSequence,
     confirmSequence,
     modal,
     updateModalValueSequence,
     validatePrioritizeCaseSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"

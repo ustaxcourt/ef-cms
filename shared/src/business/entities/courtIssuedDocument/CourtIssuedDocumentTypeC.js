@@ -17,7 +17,7 @@ function CourtIssuedDocumentTypeC(rawProps) {
   this.documentType = rawProps.documentType;
 }
 
-CourtIssuedDocumentTypeC.prototype.getDocumentTitle = function() {
+CourtIssuedDocumentTypeC.prototype.getDocumentTitle = function () {
   return replaceBracketed(this.documentTitle, this.docketNumbers);
 };
 

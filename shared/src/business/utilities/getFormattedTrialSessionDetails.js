@@ -1,9 +1,9 @@
 const { compact, isEmpty, isEqual } = require('lodash');
 
 exports.formatCase = ({ applicationContext, caseItem }) => {
-  caseItem.docketNumberWithSuffix = `${
-    caseItem.docketNumber
-  }${caseItem.docketNumberSuffix || ''}`;
+  caseItem.docketNumberWithSuffix = `${caseItem.docketNumber}${
+    caseItem.docketNumberSuffix || ''
+  }`;
   caseItem.caseCaptionNames = applicationContext.getCaseCaptionNames(
     caseItem.caseCaption || '',
   );

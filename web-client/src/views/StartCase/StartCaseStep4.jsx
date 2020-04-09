@@ -20,14 +20,14 @@ export const StartCaseStep4 = connect(
     navigateBackSequence: sequences.navigateBackSequence,
     openCaseDifferenceModalSequence: sequences.openCaseDifferenceModalSequence,
     screenMetadata: state.screenMetadata,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
     toggleCaseDifferenceSequence: sequences.toggleCaseDifferenceSequence,
     trialCitiesHelper: state.trialCitiesHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateStartCaseWizardSequence: sequences.validateStartCaseWizardSequence,
   },
-  ({
+  function StartCaseStep4({
     clearPreferredTrialCitySequence,
     completeStartCaseWizardStepSequence,
     form,
@@ -41,7 +41,7 @@ export const StartCaseStep4 = connect(
     trialCitiesHelper,
     updateFormValueSequence,
     validateStartCaseWizardSequence,
-  }) => {
+  }) {
     return (
       <>
         <Focus>

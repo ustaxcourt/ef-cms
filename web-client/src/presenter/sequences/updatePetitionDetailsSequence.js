@@ -22,7 +22,7 @@ export const updatePetitionDetailsSequence = [
       setCurrentPageAction('Interstitial'),
       updatePetitionDetailsAction,
       setCaseAction,
-      set(state.caseDetailPage.showEditPetition, false),
+      set(state.currentViewMetadata.caseDetail.showEditPetition, false),
       setSaveAlertsForNavigationAction,
       setAlertSuccessAction,
       setAlertErrorAction,

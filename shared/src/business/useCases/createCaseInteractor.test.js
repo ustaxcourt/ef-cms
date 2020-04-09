@@ -137,8 +137,10 @@ describe('createCaseInteractor', () => {
     });
 
     expect(result).toBeDefined();
-    expect(result.practitioners[0].representingPrimary).toEqual(true);
-    expect(result.practitioners[0].representingSecondary).toBeUndefined();
+    expect(result.privatePractitioners[0].representingPrimary).toEqual(true);
+    expect(
+      result.privatePractitioners[0].representingSecondary,
+    ).toBeUndefined();
     expect(createCaseSpy).toBeCalled();
     expect(saveWorkItemForNonPaperSpy).toBeCalled();
   });
@@ -195,8 +197,8 @@ describe('createCaseInteractor', () => {
     });
 
     expect(result).toBeDefined();
-    expect(result.practitioners[0].representingPrimary).toEqual(true);
-    expect(result.practitioners[0].representingSecondary).toEqual(true);
+    expect(result.privatePractitioners[0].representingPrimary).toEqual(true);
+    expect(result.privatePractitioners[0].representingSecondary).toEqual(true);
     expect(createCaseSpy).toBeCalled();
     expect(saveWorkItemForNonPaperSpy).toBeCalled();
   });

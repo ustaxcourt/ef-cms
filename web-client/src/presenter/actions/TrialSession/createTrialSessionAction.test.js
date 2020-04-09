@@ -1,7 +1,6 @@
 import { createTrialSessionAction } from './createTrialSessionAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 const MOCK_TRIAL = {
   maxCases: 100,
@@ -15,9 +14,9 @@ const MOCK_TRIAL = {
 };
 
 let createTrialSessionStub;
-const setTrialSessionAsSwingSessionStub = sinon.stub();
-const successStub = sinon.stub();
-const errorStub = sinon.stub();
+const setTrialSessionAsSwingSessionStub = jest.fn();
+const successStub = jest.fn();
+const errorStub = jest.fn();
 
 presenter.providers.path = {
   error: errorStub,
@@ -26,7 +25,7 @@ presenter.providers.path = {
 
 describe('createTrialSessionAction', () => {
   beforeEach(() => {
-    createTrialSessionStub = sinon.stub().resolves(MOCK_TRIAL);
+    createTrialSessionStub = jest.fn().mockResolvedValue(MOCK_TRIAL);
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
@@ -45,11 +44,13 @@ describe('createTrialSessionAction', () => {
         form: { ...MOCK_TRIAL },
       },
     });
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('goes to error path if error', async () => {
-    createTrialSessionStub.throws('sadas');
+    createTrialSessionStub = jest.fn().mockImplementation(() => {
+      throw new Error('sadas');
+    });
     await runAction(createTrialSessionAction, {
       modules: {
         presenter,
@@ -58,7 +59,7 @@ describe('createTrialSessionAction', () => {
         form: { ...MOCK_TRIAL },
       },
     });
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 
   it('calls setTrialSessionAsSwingSession if swingSession is true and swingSessionId is set', async () => {
@@ -70,9 +71,9 @@ describe('createTrialSessionAction', () => {
         form: { ...MOCK_TRIAL },
       },
     });
-    expect(createTrialSessionStub.called).toEqual(true);
-    expect(setTrialSessionAsSwingSessionStub.called).toEqual(true);
-    expect(setTrialSessionAsSwingSessionStub.getCall(0).args[0]).toMatchObject({
+    expect(createTrialSessionStub).toBeCalled();
+    expect(setTrialSessionAsSwingSessionStub).toBeCalled();
+    expect(setTrialSessionAsSwingSessionStub.mock.calls[0][0]).toMatchObject({
       swingSessionId: '123',
       trialSessionId: '456',
     });

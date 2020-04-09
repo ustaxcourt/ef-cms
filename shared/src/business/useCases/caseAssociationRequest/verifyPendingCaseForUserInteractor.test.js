@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const {
   verifyPendingCaseForUserInteractor,
 } = require('./verifyPendingCaseForUserInteractor');
@@ -13,7 +12,7 @@ describe('verifyPendingCaseForUser', () => {
   };
 
   it('should return results retrieved from persistence', async () => {
-    let verifyPendingCaseForUserSpy = sinon.stub().returns(true);
+    let verifyPendingCaseForUserSpy = jest.fn().mockReturnValue(true);
 
     applicationContext = {
       environment: { stage: 'local' },
@@ -35,6 +34,6 @@ describe('verifyPendingCaseForUser', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(verifyPendingCaseForUserSpy.called).toEqual(true);
+    expect(verifyPendingCaseForUserSpy).toBeCalled();
   });
 });

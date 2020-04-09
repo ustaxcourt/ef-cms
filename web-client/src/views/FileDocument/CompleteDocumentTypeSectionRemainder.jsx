@@ -27,7 +27,7 @@ export const CompleteDocumentTypeSectionRemainder = connect(
       sequences.validateSelectDocumentTypeSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function CompleteDocumentTypeSectionRemainder({
     completeDocumentTypeSectionHelper,
     form,
     openSelectDocumentWizardOverlaySequence,
@@ -35,7 +35,7 @@ export const CompleteDocumentTypeSectionRemainder = connect(
     updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         {completeDocumentTypeSectionHelper.primary.showNonstandardForm && (

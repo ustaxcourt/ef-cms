@@ -1,15 +1,14 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { submitCaseAssociationRequestAction } from './submitCaseAssociationRequestAction';
-import sinon from 'sinon';
 
 describe('submitCaseAssociationRequestAction', () => {
   let submitCaseAssociationRequestStub;
   let submitPendingCaseAssociationRequestStub;
 
   beforeEach(() => {
-    submitCaseAssociationRequestStub = sinon.stub();
-    submitPendingCaseAssociationRequestStub = sinon.stub();
+    submitCaseAssociationRequestStub = jest.fn();
+    submitPendingCaseAssociationRequestStub = jest.fn();
 
     presenter.providers.applicationContext = {
       getCurrentUser: () => ({
@@ -36,7 +35,7 @@ describe('submitCaseAssociationRequestAction', () => {
       },
     });
 
-    expect(submitCaseAssociationRequestStub.calledOnce).toEqual(true);
+    expect(submitCaseAssociationRequestStub.mock.calls.length).toEqual(1);
   });
 
   it('should call submitPendingCaseAssociationRequest', async () => {
@@ -53,6 +52,8 @@ describe('submitCaseAssociationRequestAction', () => {
       },
     });
 
-    expect(submitPendingCaseAssociationRequestStub.calledOnce).toEqual(true);
+    expect(submitPendingCaseAssociationRequestStub.mock.calls.length).toEqual(
+      1,
+    );
   });
 });

@@ -31,12 +31,12 @@ const gotoRequestAccess = [
       runPathForUserRoleAction,
       {
         irsPractitioner: [
-          set(state.form.partyRespondent, true),
+          set(state.form.partyIrsPractitioner, true),
           set(state.wizardStep, 'RequestAccess'),
           setCurrentPageAction('RequestAccessWizard'),
         ],
         privatePractitioner: [
-          set(state.form.partyPractitioner, true),
+          set(state.form.partyPrivatePractitioner, true),
           set(state.wizardStep, 'RequestAccess'),
           setCurrentPageAction('RequestAccessWizard'),
         ],

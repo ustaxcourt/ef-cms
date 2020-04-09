@@ -1,18 +1,18 @@
 module.exports = {
-  associatePractitionerWithCaseLambda: require('./manualAssociation/associatePractitionerWithCaseLambda')
-    .handler,
-  associateRespondentWithCaseLambda: require('./manualAssociation/associateRespondentWithCaseLambda')
-    .handler,
+  associateIrsPractitionerWithCaseLambda: require('./manualAssociation/associateIrsPractitionerWithCaseLambda')
+    .associateIrsPractitionerWithCaseLambda,
+  associatePrivatePractitionerWithCaseLambda: require('./manualAssociation/associatePrivatePractitionerWithCaseLambda')
+    .associatePrivatePractitionerWithCaseLambda,
   deleteCounselFromCaseLambda: require('./cases/deleteCounselFromCaseLambda')
-    .handler,
+    .deleteCounselFromCaseLambda,
   updateCounselOnCaseLambda: require('./cases/updateCounselOnCaseLambda')
-    .handler,
+    .updateCounselOnCaseLambda,
   updatePetitionDetailsLambda: require('./cases/updatePetitionDetailsLambda')
-    .handler,
+    .updatePetitionDetailsLambda,
   updatePetitionerInformationLambda: require('./cases/updatePetitionerInformationLambda')
-    .handler,
+    .updatePetitionerInformationLambda,
   updatePrimaryContactLambda: require('./cases/updatePrimaryContactLambda')
-    .handler,
+    .updatePrimaryContactLambda,
   updateSecondaryContactLambda: require('./cases/updateSecondaryContactLambda')
-    .handler,
+    .updateSecondaryContactLambda,
 };
