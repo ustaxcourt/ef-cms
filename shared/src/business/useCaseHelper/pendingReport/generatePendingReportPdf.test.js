@@ -47,7 +47,7 @@ const mockPendingItems = [
       {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Docketclerk',
-        caseCaption: 'Brett Osborne',
+        caseCaptionNames: 'Brett Osborne',
         caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
         caseStatus: 'New',
         completedAt: '2019-11-13T00:38:59.049Z',
@@ -132,7 +132,7 @@ const mockPendingItems = [
       {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Docketclerk',
-        caseCaption: 'Brett Osborne',
+        caseCaptionNames: 'Brett Osborne',
         caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
         caseStatus: 'New',
         completedAt: '2019-11-13T02:27:07.801Z',

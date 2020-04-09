@@ -192,7 +192,7 @@ exports.updateUserContactInformationInteractor = async ({
           assigneeId: null,
           assigneeName: null,
           associatedJudge: caseEntity.associatedJudge,
-          caseCaption: Case.getCaseCaptionNames(
+          caseCaptionNames: Case.getCaseCaptionNames(
             Case.getCaseCaption(caseEntity),
           ),
           caseId: caseEntity.caseId,

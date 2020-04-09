@@ -1226,7 +1226,7 @@ describe('Case entity', () => {
         {
           assigneeId: 'bob',
           assigneeName: 'bob',
-          caseCaption: 'testing',
+          caseCaptionNames: 'testing',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: Case.STATUS_TYPES.new,
           docketNumber: '101-18',
@@ -1243,6 +1243,7 @@ describe('Case entity', () => {
         {
           assigneeId: 'bob',
           assigneeName: 'bob',
+          caseCaptionNames: 'testing',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: Case.STATUS_TYPES.new,
           docketNumber: '101-18',

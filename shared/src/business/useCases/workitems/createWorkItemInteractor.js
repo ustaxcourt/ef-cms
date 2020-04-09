@@ -71,7 +71,9 @@ exports.createWorkItemInteractor = async ({
   const newWorkItem = new WorkItem(
     {
       associatedJudge: theCase.associatedJudge,
-      caseCaption: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
+      caseCaptionNames: Case.getCaseCaptionNames(
+        Case.getCaseCaption(caseEntity),
+      ),
       caseId: caseId,
       caseIsInProgress: theCase.inProgress,
       caseStatus: theCase.status,
