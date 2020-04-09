@@ -77,7 +77,7 @@ import {
   isValidDateString,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
-import { createPractitionerUserInteractor } from '../../shared/src/proxies/createPractitionerUserProxy';
+import { createPractitionerUserInteractor } from '../../shared/src/proxies/practitioners/createPractitionerUserProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { createWorkItemInteractor } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
@@ -187,7 +187,7 @@ import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/
 import { updateDocketEntryMetaInteractor } from '../../shared/src/proxies/documents/updateDocketEntryMetaProxy';
 import { updatePetitionDetailsInteractor } from '../../shared/src/proxies/updatePetitionDetailsProxy';
 import { updatePetitionerInformationInteractor } from '../../shared/src/proxies/updatePetitionerInformationProxy';
-import { updatePractitionerUserInteractor } from '../../shared/src/proxies/updatePractitionerUserProxy';
+import { updatePractitionerUserInteractor } from '../../shared/src/proxies/practitioners/updatePractitionerUserProxy';
 import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
 import { updateQcCompleteForTrialInteractor } from '../../shared/src/proxies/updateQcCompleteForTrialProxy';
 import { updateSecondaryContactInteractor } from '../../shared/src/proxies/updateSecondaryContactProxy';

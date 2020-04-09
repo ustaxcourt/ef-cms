@@ -7,6 +7,7 @@ import React from 'react';
 export const OrderSearch = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
+    clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     validateOrderSearchSequence: sequences.validateOrderSearchSequence,
@@ -14,6 +15,7 @@ export const OrderSearch = connect(
   },
   function OrderSearch({
     advancedSearchForm,
+    clearAdvancedSearchFormSequence,
     submitAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence,
     validateOrderSearchSequence,
@@ -66,7 +68,16 @@ export const OrderSearch = connect(
                 >
                   Search
                 </Button>
-                <Button link className="padding-0 ustc-button--mobile-inline">
+                <Button
+                  link
+                  className="padding-0 ustc-button--mobile-inline"
+                  onClick={e => {
+                    e.preventDefault();
+                    clearAdvancedSearchFormSequence({
+                      formType: 'orderSearch',
+                    });
+                  }}
+                >
                   Clear Search
                 </Button>
               </div>

@@ -185,9 +185,11 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     }
   }
 
-  courtIssuedDocument.documentContents =
-    courtIssuedDocument.draftState.documentContents;
-  courtIssuedDocument.draftState = null;
+  if (courtIssuedDocument.draftState) {
+    courtIssuedDocument.documentContents =
+      courtIssuedDocument.draftState.documentContents;
+    courtIssuedDocument.draftState = null;
+  }
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

@@ -104,18 +104,22 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
 
     expect(practitioner).toEqual({
+      additionalPhone: undefined,
       admissionsDate: '2019-03-01T21:42:29.073Z',
       admissionsStatus: 'Active',
+      alternateEmail: undefined,
       barNumber: 'PI5678',
       birthYear: '1983',
+      email: undefined,
       employer: 'Private',
       firmName: 'GW Law Offices',
       isAdmitted: true,
       name: 'IRS Practitioner',
       originalBarState: 'Oklahoma',
       practitionerType: 'Attorney',
-      role: User.ROLES.irsPractitioner,
+      role: 'privatePractitioner',
       section: 'privatePractitioner',
+      token: undefined,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
   });

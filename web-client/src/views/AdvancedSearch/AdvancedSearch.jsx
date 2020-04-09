@@ -2,6 +2,7 @@ import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from './CaseSearchForm';
 import { ErrorNotification } from '../ErrorNotification';
 import { OrderSearchForm } from './OrderSearchForm';
+import { OrderSearchResults } from './OrderSearchResults';
 import { PractitionerSearchForm } from './PractitionerSearchForm';
 import { PractitionerSearchResults } from './PractitionerSearchResults';
 import { SearchResults } from './SearchResults';
@@ -69,6 +70,7 @@ export const AdvancedSearch = connect(
               <OrderSearchForm
                 submitAdvancedSearchSequence={submitOrderAdvancedSearchSequence}
               />
+              <OrderSearchResults />
             </Tab>
             {advancedSearchHelper.showPractitionerSearch && (
               <Tab

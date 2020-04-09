@@ -11,6 +11,8 @@ const { UnauthorizedError } = require('../../errors/errors');
  * orderAdvancedSearchInteractor
  *
  * @param {object} providers the providers object containing applicationContext, orderKeyword
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.orderKeyword the search term to look for in documents
  * @returns {object} the orders data
  */
 exports.orderAdvancedSearchInteractor = async ({
@@ -31,6 +33,9 @@ exports.orderAdvancedSearchInteractor = async ({
       'documentContents',
       'docketNumberSuffix',
       'documentTitle',
+      'judge',
+      'filingDate',
+      'caseId',
     ],
     query: {
       bool: {
@@ -73,6 +78,17 @@ exports.orderAdvancedSearchInteractor = async ({
   const foundOrders = hits.map(hit =>
     AWS.DynamoDB.Converter.unmarshall(hit['_source']),
   );
+
+  for (const order of foundOrders) {
+    const { caseId } = order;
+
+    const matchingCase = await applicationContext
+      .getUseCases()
+      .getCaseInteractor({ applicationContext, caseId });
+
+    order.docketNumberSuffix = matchingCase.docketNumberSuffix;
+    order.caseTitle = matchingCase.caseTitle;
+  }
 
   return foundOrders;
 };
