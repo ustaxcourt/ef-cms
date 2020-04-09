@@ -3,6 +3,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
+  User,
   userDecorator,
   userValidation,
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
@@ -30,9 +31,9 @@ function Practitioner(rawUser) {
 }
 
 const roleMap = {
-  DOJ: 'irsPractitioner',
-  IRS: 'irsPractitioner',
-  Private: 'privatePractitioner',
+  DOJ: User.ROLES.irsPractitioner,
+  IRS: User.ROLES.irsPractitioner,
+  Private: User.ROLES.privatePractitioner,
 };
 
 Practitioner.prototype.init = function (rawUser) {
@@ -45,10 +46,13 @@ Practitioner.prototype.init = function (rawUser) {
   this.birthYear = rawUser.birthYear;
   this.employer = rawUser.employer;
   this.firmName = rawUser.firmName;
-  this.isAdmitted = rawUser.isAdmitted;
   this.originalBarState = rawUser.originalBarState;
   this.practitionerType = rawUser.practitionerType;
-  this.role = roleMap[this.employer];
+  if (this.admissionsStatus === 'Active') {
+    this.role = roleMap[this.employer];
+  } else {
+    this.role = User.ROLES.inactivePractitioner;
+  }
   this.section = this.role;
 };
 
@@ -111,10 +115,6 @@ const validationRules = {
     .optional()
     .allow(null)
     .description('The firm name for the practitioner.'),
-  isAdmitted: joi
-    .boolean()
-    .required()
-    .description('Whether the practitioner is admitted to the Tax Court bar.'),
   originalBarState: joi
     .string()
     .required()

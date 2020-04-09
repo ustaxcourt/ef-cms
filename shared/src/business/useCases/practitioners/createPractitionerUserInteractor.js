@@ -35,7 +35,6 @@ exports.createPractitionerUserInteractor = async ({
   const practitioner = new Practitioner({
     ...user,
     barNumber,
-    isAdmitted: true,
     userId: applicationContext.getUniqueId(),
   }).validate();
 
