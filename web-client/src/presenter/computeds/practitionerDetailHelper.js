@@ -9,5 +9,6 @@ export const practitionerDetailHelper = (get, applicationContext) => {
       .getUtilities()
       .formatDateString(practitionerDetail.admissionsDate, 'MM/DD/YYYY'),
     alternateEmail: practitionerDetail.alternateEmail || 'Not provided',
+    firmNameFormatted: practitionerDetail.firmName || 'None',
   };
 };
