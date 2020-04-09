@@ -1,5 +1,4 @@
 import { clearAlertsAction } from '../../actions/clearAlertsAction';
-import { clearDocketNumberSearchFormAction } from '../../actions/clearDocketNumberSearchFormAction';
 import { clearSearchTermAction } from '../../actions/clearSearchTermAction';
 import { props, state } from 'cerebral';
 import { set, unset } from 'cerebral/factories';
@@ -11,7 +10,6 @@ import { validateCaseAdvancedSearchAction } from '../../actions/AdvancedSearch/v
 
 export const submitPublicAdvancedSearchSequence = [
   clearSearchTermAction,
-  clearDocketNumberSearchFormAction,
   validateCaseAdvancedSearchAction,
   {
     error: [

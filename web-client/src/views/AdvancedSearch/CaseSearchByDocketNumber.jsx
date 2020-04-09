@@ -7,17 +7,19 @@ import React from 'react';
 export const CaseSearchByDocketNumber = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
-    clearDocketNumberSearchFormSequence:
-      sequences.clearDocketNumberSearchFormSequence,
+    clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
+    validateCaseDocketNumberSearchFormSequence:
+      sequences.validateCaseDocketNumberSearchFormSequence,
     validationErrors: state.validationErrors,
   },
   function CaseSearchByDocketNumber({
     advancedSearchForm,
-    clearDocketNumberSearchFormSequence,
+    clearAdvancedSearchFormSequence,
     submitDocketNumberSearchSequence,
     updateAdvancedSearchFormValueSequence,
+    validateCaseDocketNumberSearchFormSequence,
     validationErrors,
   }) {
     return (
@@ -26,12 +28,7 @@ export const CaseSearchByDocketNumber = connect(
           <h3>Search by Docket Number</h3>
         </div>
         <div className="blue-container advanced-search__form-container">
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              submitDocketNumberSearchSequence();
-            }}
-          >
+          <form>
             <div className="grid-row">
               <div className="tablet:grid-col-6">
                 <FormGroup
@@ -53,6 +50,9 @@ export const CaseSearchByDocketNumber = connect(
                       advancedSearchForm.caseSearchByDocketNumber
                         .docketNumber || ''
                     }
+                    onBlur={() => {
+                      validateCaseDocketNumberSearchFormSequence();
+                    }}
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
                         formType: 'caseSearchByDocketNumber',
@@ -70,15 +70,21 @@ export const CaseSearchByDocketNumber = connect(
                 <Button
                   className="advanced-search__button"
                   id="docket-search-button"
-                  type="submit"
+                  onClick={e => {
+                    e.preventDefault();
+                    submitDocketNumberSearchSequence();
+                  }}
                 >
                   Search
                 </Button>
                 <Button
                   link
                   className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-                  onClick={() => {
-                    clearDocketNumberSearchFormSequence();
+                  onClick={e => {
+                    e.preventDefault();
+                    clearAdvancedSearchFormSequence({
+                      formType: 'caseSearchByDocketNumber',
+                    });
                   }}
                 >
                   Clear Search

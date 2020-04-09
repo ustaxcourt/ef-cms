@@ -9,6 +9,7 @@ const AWS =
 
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
 
+const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
@@ -89,12 +90,6 @@ const {
   ContactFactory,
 } = require('../../shared/src/business/entities/contacts/ContactFactory');
 const {
-  createAttorneyUser,
-} = require('../../shared/src/persistence/dynamo/users/createAttorneyUser');
-const {
-  createAttorneyUserInteractor,
-} = require('../../shared/src/business/useCases/users/createAttorneyUserInteractor');
-const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
 const {
@@ -127,6 +122,12 @@ const {
   formatNow,
   prepareDateFromString,
 } = require('../../shared/src/business/utilities/DateHandler');
+const {
+  createPractitionerUser,
+} = require('../../shared/src/persistence/dynamo/users/createPractitionerUser');
+const {
+  createPractitionerUserInteractor,
+} = require('../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor');
 const {
   createSectionInboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/createSectionInboxRecord');
@@ -430,6 +431,12 @@ const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
+  getPractitionerByBarNumber,
+} = require('../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber');
+const {
+  getPractitionerByBarNumberInteractor,
+} = require('../../shared/src/business/useCases/practitioners/getPractitionerByBarNumberInteractor');
+const {
   getPractitionersByNameInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionersByNameInteractor');
 const {
@@ -656,12 +663,6 @@ const {
   unprioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/unprioritizeCaseInteractor');
 const {
-  updateAttorneyUser,
-} = require('../../shared/src/persistence/dynamo/users/updateAttorneyUser');
-const {
-  updateAttorneyUserInteractor,
-} = require('../../shared/src/business/useCases/users/updateAttorneyUserInteractor');
-const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
@@ -709,6 +710,12 @@ const {
 const {
   updatePetitionerInformationInteractor,
 } = require('../../shared/src/business/useCases/updatePetitionerInformationInteractor');
+const {
+  updatePractitionerUser,
+} = require('../../shared/src/persistence/dynamo/users/updatePractitionerUser');
+const {
+  updatePractitionerUserInteractor,
+} = require('../../shared/src/business/useCases/practitioners/updatePractitionerUserInteractor');
 const {
   updatePrimaryContactInteractor,
 } = require('../../shared/src/business/useCases/updatePrimaryContactInteractor');
@@ -825,6 +832,7 @@ module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
   return {
+    barNumberGenerator,
     docketNumberGenerator,
     environment,
     getCaseCaptionNames: Case.getCaseCaptionNames,
@@ -932,12 +940,12 @@ module.exports = (appContextUser = {}) => {
         addWorkItemToSectionInbox,
         associateUserWithCase,
         associateUserWithCasePending,
-        createAttorneyUser,
         createCase,
         createCaseCatalogRecord,
         createCaseDeadline,
         createCaseTrialSortMappingRecords,
         createElasticsearchReindexRecord,
+        createPractitionerUser,
         createSectionInboxRecord,
         createTrialSession,
         createTrialSessionWorkingCopy,
@@ -976,6 +984,7 @@ module.exports = (appContextUser = {}) => {
         getInboxMessagesForSection,
         getInboxMessagesForUser,
         getInternalUsers,
+        getPractitionerByBarNumber,
         getPublicDownloadPolicyUrl,
         getRecord,
         getSentMessagesForSection,
@@ -1004,12 +1013,12 @@ module.exports = (appContextUser = {}) => {
         saveWorkItemForPaper,
         setPriorityOnAllWorkItems,
         setWorkItemAsRead,
-        updateAttorneyUser,
         updateCase,
         updateCaseDeadline,
         updateCaseTrialSortMappingRecords,
         updateDocumentProcessingStatus,
         updateHighPriorityCaseTrialSortMappingRecords,
+        updatePractitionerUser,
         updateTrialSession,
         updateTrialSessionWorkingCopy,
         updateUser,
@@ -1113,11 +1122,11 @@ module.exports = (appContextUser = {}) => {
         checkForReadyForTrialCasesInteractor,
         completeDocketEntryQCInteractor,
         completeWorkItemInteractor,
-        createAttorneyUserInteractor,
         createCaseDeadlineInteractor,
         createCaseFromPaperInteractor,
         createCaseInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
+        createPractitionerUserInteractor,
         createTrialSessionInteractor,
         createUserInteractor,
         createWorkItemInteractor,
@@ -1165,6 +1174,7 @@ module.exports = (appContextUser = {}) => {
         getIrsPractitionersBySearchKeyInteractor,
         getJudgeForUserChambersInteractor,
         getNotificationsInteractor,
+        getPractitionerByBarNumberInteractor,
         getPractitionersByNameInteractor,
         getPrivatePractitionersBySearchKeyInteractor,
         getPublicCaseInteractor,
@@ -1205,7 +1215,6 @@ module.exports = (appContextUser = {}) => {
         submitPendingCaseAssociationRequestInteractor,
         unblockCaseFromTrialInteractor,
         unprioritizeCaseInteractor,
-        updateAttorneyUserInteractor,
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
         updateCaseTrialSortTagsInteractor,
@@ -1216,6 +1225,7 @@ module.exports = (appContextUser = {}) => {
         updateDocketEntryMetaInteractor,
         updatePetitionDetailsInteractor,
         updatePetitionerInformationInteractor,
+        updatePractitionerUserInteractor,
         updatePrimaryContactInteractor,
         updateQcCompleteForTrialInteractor,
         updateSecondaryContactInteractor,

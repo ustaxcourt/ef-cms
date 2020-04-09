@@ -21,8 +21,8 @@ import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentT
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactEditHelper } from './computeds/contactEditHelper';
 import { contactsHelper } from './computeds/contactsHelper';
-import { createAttorneyUserHelper } from './computeds/createAttorneyUserHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
+import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
@@ -51,6 +51,8 @@ import { menuHelper } from './computeds/menuHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
+import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
+import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewPetitionFromPaperHelper } from './computeds/reviewPetitionFromPaperHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
@@ -97,8 +99,8 @@ const helpers = {
   confirmInitiateServiceModalHelper,
   contactEditHelper,
   contactsHelper,
-  createAttorneyUserHelper,
   createOrderHelper,
+  createPractitionerUserHelper,
   dashboardExternalHelper,
   docketRecordHelper,
   documentDetailHelper,
@@ -125,6 +127,8 @@ const helpers = {
   orderTypesHelper,
   pdfPreviewModalHelper,
   pdfSignerHelper,
+  practitionerDetailHelper,
+  practitionerSearchFormHelper,
   requestAccessHelper,
   reviewPetitionFromPaperHelper,
   reviewSavedPetitionHelper,
@@ -148,8 +152,7 @@ const helpers = {
   workQueueSectionHelper,
 };
 
-export const state = {
-  ...helpers,
+export const baseState = {
   advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
   archiveDraftDocument: {
     // used by the delete draft document modal
@@ -211,6 +214,7 @@ export const state = {
     signatureData: null,
   },
   permissions: null,
+  practitionerDetail: {},
   previewPdfFile: null,
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
@@ -242,4 +246,9 @@ export const state = {
   workItemMetadata: {},
   workQueue: [],
   workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
+};
+
+export const state = {
+  ...helpers,
+  ...baseState,
 };

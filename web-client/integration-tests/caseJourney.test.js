@@ -1,10 +1,3 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
-import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
-import { User } from '../../shared/src/business/entities/User';
-const {
-  ContactFactory,
-} = require('../../shared/src/business/entities/contacts/ContactFactory');
-import { Document } from '../../shared/src/business/entities/Document';
 import { adcMarksStipulatedWorkItemAsCompleted } from './journey/adcMarksStipulatedWorkItemAsCompleted';
 import { adcViewsCaseDetail } from './journey/adcViewsCaseDetail';
 import { adcViewsCaseDetailAfterComplete } from './journey/adcViewsCaseDetailAfterComplete';
@@ -28,12 +21,12 @@ import { docketClerkViewsMessagesAfterForward } from './journey/docketClerkViews
 import { docketClerkViewsMessagesWithoutWorkItem } from './journey/docketClerkViewsMessagesWithoutWorkItem';
 import { docketClerkViewsOutboxAfterForward } from './journey/docketClerkViewsOutboxAfterForward';
 import { fakeFile, loginAs, setupTest } from './helpers';
-import petitionerCancelsCreateCase from './journey/petitionerCancelsCreateCase';
-import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
-import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
-import petitionerCreatesNewCaseTestAllOptions from './journey/petitionerCreatesNewCaseTestAllOptions';
-import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
+import { petitionerCancelsCreateCase } from './journey/petitionerCancelsCreateCase';
+import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
+import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
+import { petitionerCreatesNewCaseTestAllOptions } from './journey/petitionerCreatesNewCaseTestAllOptions';
+import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
+import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import petitionsClerkAssignsWorkItemToOther from './journey/petitionsClerkAssignsWorkItemToOther';
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';

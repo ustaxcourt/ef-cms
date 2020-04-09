@@ -5,7 +5,6 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { get, isEmpty, uniqBy } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 /**
  * getPractitionersByNameInteractor
@@ -22,7 +21,7 @@ exports.getPractitionersByNameInteractor = async ({
   const authenticatedUser = applicationContext.getCurrentUser();
 
   if (
-    !isAuthorized(authenticatedUser, ROLE_PERMISSIONS.MANAGE_ATTORNEY_USERS)
+    !isAuthorized(authenticatedUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)
   ) {
     throw new UnauthorizedError('Unauthorized for searching practitioners');
   }
@@ -70,7 +69,7 @@ exports.getPractitionersByNameInteractor = async ({
     },
   });
 
-  const source = ['barNumber', 'contact', 'isAdmitted', 'name', 'userId']; //TODO isAdmitted should be admissionsStatus
+  const source = ['admissionsStatus', 'barNumber', 'contact', 'name'];
 
   let foundUsers = [];
 
@@ -119,5 +118,5 @@ exports.getPractitionersByNameInteractor = async ({
 
   const uniqueFoundUsers = uniqBy(foundUsers, 'barNumber');
 
-  return User.validateRawCollection(uniqueFoundUsers, { applicationContext });
+  return uniqueFoundUsers;
 };

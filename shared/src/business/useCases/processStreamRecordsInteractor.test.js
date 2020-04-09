@@ -158,6 +158,13 @@ describe('processStreamRecordsInteractor', () => {
           },
           eventName: 'INSERT',
         },
+        {
+          dynamodb: {
+            Keys: { pk: { S: '3' }, sk: { S: '4' } },
+            NewImage: { caseId: { S: '3' }, pk: { S: '3' }, sk: { S: '3' } },
+          },
+          eventName: 'DELETE',
+        },
       ],
     });
 
@@ -297,7 +304,7 @@ describe('processStreamRecordsInteractor', () => {
     });
   });
 
-  it('calls getCaseByCaseId to index an entire case item', async () => {
+  it('calls getCaseByCaseId to index an entire case item even if only a document record changes', async () => {
     applicationContext.getSearchClient().bulk.mockResolvedValue({
       body: {
         errors: [{ badError: true }],
@@ -311,17 +318,25 @@ describe('processStreamRecordsInteractor', () => {
         ],
       },
     });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockImplementation(({ caseId }) => ({
+        caseId,
+        documents: [{ documentId: '1' }],
+        pk: `case|${caseId}`,
+        sk: `case|${caseId}`,
+      }));
 
     await processStreamRecordsInteractor({
       applicationContext,
       recordsToProcess: [
         {
           dynamodb: {
-            Keys: { pk: { S: 'case|1' }, sk: { S: 'case|1' } },
+            Keys: { pk: { S: 'case|1' }, sk: { S: 'document|1' } },
             NewImage: {
               caseId: { S: '1' },
               pk: { S: 'case|1' },
-              sk: { S: 'case|1' },
+              sk: { S: 'document|1' },
             },
           },
           eventName: 'INSERT',
@@ -346,17 +361,98 @@ describe('processStreamRecordsInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().getCaseByCaseId.mock.calls,
-    ).toMatchObject([[{ caseId: '4' }], [{ caseId: '1' }], [{ caseId: '4' }]]);
+    ).toMatchObject([[{ caseId: '1' }], [{ caseId: '4' }]]);
     expect(
       applicationContext.getSearchClient().bulk.mock.calls[0][0].body.length,
-    ).toEqual(4);
+    ).toEqual(8);
     expect(
       applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
     ).toEqual([
-      { index: { _id: 'case|1_case|1', _index: 'efcms' } },
-      { caseId: { S: '1' }, pk: { S: 'case|1' }, sk: { S: 'case|1' } },
+      { index: { _id: 'case|1_document|1', _index: 'efcms' } },
+      { caseId: { S: '1' }, pk: { S: 'case|1' }, sk: { S: 'document|1' } },
       { index: { _id: 'case|4_case|4', _index: 'efcms' } },
       { caseId: { S: '4' }, pk: { S: 'case|4' }, sk: { S: 'case|4' } },
+      { index: { _id: 'case|1_case|1', _index: 'efcms' } },
+      {
+        caseId: { S: '1' },
+        documents: { L: [{ M: { documentId: { S: '1' } } }] },
+        pk: { S: 'case|1' },
+        sk: { S: 'case|1' },
+      },
+      { index: { _id: 'case|4_case|4', _index: 'efcms' } },
+      {
+        caseId: { S: '4' },
+        documents: { L: [{ M: { documentId: { S: '1' } } }] },
+        pk: { S: 'case|4' },
+        sk: { S: 'case|4' },
+      },
+    ]);
+  });
+
+  it('does not attempt to index a case record if getCaseByCaseId does not return a case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue({ documents: [] });
+
+    await processStreamRecordsInteractor({
+      applicationContext,
+      recordsToProcess: [
+        {
+          dynamodb: {
+            Keys: { pk: { S: 'case|1' }, sk: { S: 'document|1' } },
+            NewImage: {
+              caseId: { S: '1' },
+              pk: { S: 'case|1' },
+              sk: { S: 'document|1' },
+            },
+          },
+          eventName: 'MODIFY',
+        },
+      ],
+    });
+
+    expect(applicationContext.getSearchClient().bulk).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().bulk.mock.calls[0][0].body.length,
+    ).toEqual(2);
+    expect(
+      applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
+    ).toEqual([
+      { index: { _id: 'case|1_document|1', _index: 'efcms' } },
+      { caseId: { S: '1' }, pk: { S: 'case|1' }, sk: { S: 'document|1' } },
+    ]);
+  });
+
+  it('does not call getCaseByCaseId if there are no case records present in recordsToProcess', async () => {
+    await processStreamRecordsInteractor({
+      applicationContext,
+      recordsToProcess: [
+        {
+          dynamodb: {
+            Keys: { pk: { S: 'user|1' }, sk: { S: 'user|1' } },
+            NewImage: {
+              pk: { S: 'user|1' },
+              sk: { S: 'user|1' },
+              userId: { S: '1' },
+            },
+          },
+          eventName: 'MODIFY',
+        },
+      ],
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).not.toBeCalled();
+    expect(applicationContext.getSearchClient().bulk).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().bulk.mock.calls[0][0].body.length,
+    ).toEqual(2);
+    expect(
+      applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
+    ).toEqual([
+      { index: { _id: 'user|1_user|1', _index: 'efcms' } },
+      { pk: { S: 'user|1' }, sk: { S: 'user|1' }, userId: { S: '1' } },
     ]);
   });
 });
