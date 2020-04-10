@@ -8,7 +8,7 @@ describe('prepareCreatePractitionerUserFormAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should create a contact object on form with the countryType set to Domestic', async () => {
+  it('should create a contact object on form with the countryType set to Domestic and admissionsStatus set to Active', async () => {
     const result = await runAction(prepareCreatePractitionerUserFormAction, {
       modules: {
         presenter,
@@ -17,6 +17,7 @@ describe('prepareCreatePractitionerUserFormAction', () => {
     });
 
     expect(result.state.form).toEqual({
+      admissionsStatus: 'Active',
       contact: {
         countryType: 'domestic',
       },

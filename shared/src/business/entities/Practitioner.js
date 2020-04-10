@@ -3,6 +3,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
+  User,
   userDecorator,
   userValidation,
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
@@ -30,14 +31,17 @@ function Practitioner(rawUser) {
 }
 
 const roleMap = {
-  DOJ: 'irsPractitioner',
-  IRS: 'irsPractitioner',
-  Private: 'privatePractitioner',
+  DOJ: User.ROLES.irsPractitioner,
+  IRS: User.ROLES.irsPractitioner,
+  Private: User.ROLES.privatePractitioner,
 };
 
 Practitioner.prototype.init = function (rawUser) {
   userDecorator(this, rawUser);
-  this.name = rawUser.name || `${rawUser.firstName} ${rawUser.lastName}`;
+  this.name = rawUser.name || Practitioner.getFullName(rawUser);
+  this.firstName = rawUser.firstName;
+  this.lastName = rawUser.lastName;
+  this.middleName = rawUser.middleName;
   this.additionalPhone = rawUser.additionalPhone;
   this.admissionsDate = rawUser.admissionsDate;
   this.admissionsStatus = rawUser.admissionsStatus || 'Active';
@@ -45,19 +49,35 @@ Practitioner.prototype.init = function (rawUser) {
   this.birthYear = rawUser.birthYear;
   this.employer = rawUser.employer;
   this.firmName = rawUser.firmName;
-  this.isAdmitted = rawUser.isAdmitted;
   this.originalBarState = rawUser.originalBarState;
   this.practitionerType = rawUser.practitionerType;
-  this.role = roleMap[this.employer];
+  if (this.admissionsStatus === 'Active') {
+    this.role = roleMap[this.employer];
+  } else {
+    this.role = User.ROLES.inactivePractitioner;
+  }
+  this.suffix = rawUser.suffix;
   this.section = this.role;
 };
 
 const VALIDATION_ERROR_MESSAGES = {
   ...USER_VALIDATION_ERROR_MESSAGES,
-  admissionsDate: 'Enter an admission date',
+  admissionsDate: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Admission date cannot be in the future. Enter a valid date.',
+    },
+    'Enter an admission date',
+  ],
   admissionsStatus: 'Select an admission status',
   barNumber: 'Bar number is required',
-  birthYear: 'Enter a valid birth year',
+  birthYear: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Birth year cannot be in the future. Enter a valid year.',
+    },
+    'Enter a valid birth year',
+  ],
   employer: 'Select an employer',
   originalBarState: 'Select an original bar state',
   practitionerType: 'Select a practitioner type',
@@ -100,7 +120,7 @@ const validationRules = {
     .min(1900)
     .max(new Date().getFullYear())
     .required()
-    .description('The year the practitioner was born'),
+    .description('The year the practitioner was born.'),
   employer: joi
     .string()
     .valid(...EMPLOYER_OPTIONS)
@@ -111,10 +131,19 @@ const validationRules = {
     .optional()
     .allow(null)
     .description('The firm name for the practitioner.'),
-  isAdmitted: joi
-    .boolean()
+  firstName: joi
+    .string()
     .required()
-    .description('Whether the practitioner is admitted to the Tax Court bar.'),
+    .description('The first name of the practitioner.'),
+  lastName: joi
+    .string()
+    .required()
+    .description('The last name of the practitioner.'),
+  middleName: joi
+    .string()
+    .optional()
+    .allow(null)
+    .description('The optional middle name of the practitioner.'),
   originalBarState: joi
     .string()
     .required()
@@ -126,6 +155,11 @@ const validationRules = {
     .valid(...PRACTITIONER_TYPE_OPTIONS)
     .required()
     .description('The type of practitioner - either Attorney or Non-Attorney.'),
+  suffix: joi
+    .string()
+    .optional()
+    .allow(null)
+    .description('The name suffix of the practitioner.'),
 };
 
 joiValidationDecorator(
@@ -144,5 +178,21 @@ Practitioner.EMPLOYER_OPTIONS = EMPLOYER_OPTIONS;
 Practitioner.validationRules = validationRules;
 Practitioner.VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
 Practitioner.ADMISSIONS_STATUS_OPTIONS = ADMISSIONS_STATUS_OPTIONS;
+
+/**
+ * returns the full concatenated name for the given practitioner data
+ *
+ * @param {object} practitionerData data to pull name parts from
+ * @returns {string} the concatenated firstName, middleName, and lastName with suffix
+ */
+Practitioner.getFullName = function (practitionerData) {
+  const { firstName, lastName } = practitionerData;
+  const middleName = practitionerData.middleName
+    ? ' ' + practitionerData.middleName
+    : '';
+  const suffix = practitionerData.suffix ? ' ' + practitionerData.suffix : '';
+
+  return `${firstName}${middleName} ${lastName}${suffix}`;
+};
 
 module.exports = { Practitioner };
