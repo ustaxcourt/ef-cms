@@ -86,24 +86,13 @@ describe('aggregateCommonQueryParams', () => {
       ],
       nonExactMatchesQuery: [
         {
-          bool: {
-            should: [
-              {
-                match: {
-                  'contactPrimary.M.name.S': 'Test Search',
-                },
-              },
-              {
-                match: {
-                  'contactPrimary.M.secondaryName.S': 'Test Search',
-                },
-              },
-              {
-                match: {
-                  'contactSecondary.M.name.S': 'Test Search',
-                },
-              },
+          query_string: {
+            fields: [
+              'contactPrimary.M.name.S',
+              'contactPrimary.M.secondaryName.S',
+              'contactSecondary.M.name.S',
             ],
+            query: '*Test Search*',
           },
         },
       ],

@@ -64,8 +64,9 @@ exports.getPractitionersByNameInteractor = async ({
   });
 
   nonExactMatchesQuery.push({
-    bool: {
-      must: [{ match: { 'name.S': name } }],
+    query_string: {
+      fields: ['name.S'],
+      query: `*${name}*`,
     },
   });
 
@@ -93,6 +94,10 @@ exports.getPractitionersByNameInteractor = async ({
 
   if (!isEmpty(exactMatchesHits)) {
     exactMatchesHits.map(hit => foundUsers.push(unmarshallHit(hit)));
+
+    foundUsers.sort((a, b) => {
+      return a.barNumber.localeCompare(b.barNumber);
+    });
   }
 
   const nonExactMatchesBody = await applicationContext
