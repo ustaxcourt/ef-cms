@@ -131,7 +131,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   exports.addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
 
   caseEntity
-    .updateCaseTitleDocketRecord({ applicationContext })
+    .updateCaseCaptionDocketRecord({ applicationContext })
     .updateDocketNumberRecord({ applicationContext })
     .validate();
 

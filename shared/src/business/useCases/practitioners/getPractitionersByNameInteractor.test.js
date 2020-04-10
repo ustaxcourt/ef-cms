@@ -204,4 +204,49 @@ describe('getPractitionersByNameInteractor', () => {
     ]);
     expect(results).toMatchObject([]);
   });
+
+  it('sorts exact matches by bar number', async () => {
+    applicationContext.getSearchClient().search.mockReturnValue({
+      hits: {
+        hits: [
+          {
+            _source: {
+              barNumber: { S: 'PT5432' },
+              name: { S: 'Test Practitioner' },
+              role: { S: 'privatePractitioner' },
+              userId: { S: '12d5bb3a-e867-4066-bda5-2f178a76191f' },
+            },
+          },
+          {
+            _source: {
+              barNumber: { S: 'PT1234' },
+              name: { S: 'Test Practitioner' },
+              role: { S: 'privatePractitioner' },
+              userId: { S: '8190d648-e643-4964-988e-141e4e0db861' },
+            },
+          },
+        ],
+      },
+    });
+
+    const results = await getPractitionersByNameInteractor({
+      applicationContext,
+      name: 'Test Practitioner',
+    });
+
+    expect(results).toMatchObject([
+      {
+        barNumber: 'PT1234',
+        name: 'Test Practitioner',
+        role: 'privatePractitioner',
+        userId: '8190d648-e643-4964-988e-141e4e0db861',
+      },
+      {
+        barNumber: 'PT5432',
+        name: 'Test Practitioner',
+        role: 'privatePractitioner',
+        userId: '12d5bb3a-e867-4066-bda5-2f178a76191f',
+      },
+    ]);
+  });
 });

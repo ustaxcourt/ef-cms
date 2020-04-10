@@ -22,6 +22,7 @@ export const CreatePractitionerUser = connect(
     validationErrors: state.validationErrors,
   },
   function CreatePractitionerUser({
+    createPractitionerUserHelper,
     EMPLOYER_OPTIONS,
     form,
     navigateBackSequence,
@@ -271,28 +272,27 @@ export const CreatePractitionerUser = connect(
               <div className="blue-container">
                 <div className="grid-row grid-gap-3">
                   <div className="grid-col-12">
-                    <FormGroup errorText={validationErrors.firmName}>
-                      <label className="usa-label" htmlFor="firmName">
-                        Firm name
-                      </label>
-                      <input
-                        autoCapitalize="none"
-                        className="usa-input"
-                        id="firmName"
-                        name="firmName"
-                        type="text"
-                        value={form.firmName || ''}
-                        onBlur={() => {
-                          validateAddPractitionerSequence();
-                        }}
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                    </FormGroup>
+                    {createPractitionerUserHelper.showFirmName && (
+                      <FormGroup>
+                        <label className="usa-label" htmlFor="firmName">
+                          Firm name <span className="usa-hint">(optional)</span>
+                        </label>
+                        <input
+                          autoCapitalize="none"
+                          className="usa-input"
+                          id="firmName"
+                          name="firmName"
+                          type="text"
+                          value={form.firmName || ''}
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                          }}
+                        />
+                      </FormGroup>
+                    )}
 
                     <PractitionerContactEditForm
                       bind="form"
@@ -390,7 +390,7 @@ export const CreatePractitionerUser = connect(
             </div>
           </div>
 
-          <div className="grid-row">
+          <div className="grid-row margin-bottom-6">
             <div className="grid-col-12">
               <Button
                 onClick={() => {

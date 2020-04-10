@@ -2,8 +2,8 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  updatePractitionerUserInteractor,
-} = require('./updatePractitionerUserInteractor');
+  createPractitionerUserInteractor,
+} = require('./createPractitionerUserInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
@@ -14,7 +14,8 @@ const mockUser = {
   birthYear: 2019,
   employer: 'Private',
   firmName: 'GW Law Offices',
-  isAdmitted: true,
+  firstName: 'bob',
+  lastName: 'sagot',
   name: 'Test Attorney',
   originalBarState: 'Oklahoma',
   practitionerType: 'Attorney',
@@ -22,28 +23,28 @@ const mockUser = {
   userId: 'practitioner1@example.com',
 };
 
-describe('update practitioner user', () => {
+describe('create practitioner user', () => {
   let testUser;
 
   beforeEach(() => {
     testUser = {
-      role: 'petitionsclerk',
-      userId: 'petitionsclerk',
+      role: 'admissionsclerk',
+      userId: 'admissionsclerk',
     };
 
     applicationContext.environment.stage = 'local';
     applicationContext.getCurrentUser.mockImplementation(() => testUser);
     applicationContext
       .getPersistenceGateway()
-      .updatePractitionerUser.mockResolvedValue(mockUser);
+      .createPractitionerUser.mockResolvedValue(mockUser);
   });
 
-  it('updates the practitioner user', async () => {
-    const updatedUser = await updatePractitionerUserInteractor({
+  it('creates the practitioner user', async () => {
+    const user = await createPractitionerUserInteractor({
       applicationContext,
       user: mockUser,
     });
-    expect(updatedUser).not.toBeUndefined();
+    expect(user).not.toBeUndefined();
   });
 
   it('throws unauthorized for a non-internal user', async () => {
@@ -53,7 +54,7 @@ describe('update practitioner user', () => {
     };
 
     await expect(
-      updatePractitionerUserInteractor({
+      createPractitionerUserInteractor({
         applicationContext,
         user: mockUser,
       }),

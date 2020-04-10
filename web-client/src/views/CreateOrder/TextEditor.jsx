@@ -73,6 +73,7 @@ export const TextEditor = ({
         tabIndex={0}
         onChange={(content, delta, source, editor) => {
           const fullDelta = editor.getContents();
+          const documentContents = editor.getText();
           const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
             inlineStyles: {
               size: inlineStylesFontSizes,
@@ -82,6 +83,10 @@ export const TextEditor = ({
           updateFormValueSequence({
             key: 'richText',
             value: html,
+          });
+          updateFormValueSequence({
+            key: 'documentContents',
+            value: documentContents,
           });
           updateScreenMetadataSequence({
             key: 'pristine',
