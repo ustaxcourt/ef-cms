@@ -1,3 +1,4 @@
+import { SuccessNotification } from './SuccessNotification';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -29,6 +30,9 @@ export const PractitionerDetail = connect(
 
         <div className="grid-container">
           <div className="grid-row grid-gap">
+            <div className="grid-col-12">
+              <SuccessNotification />
+            </div>
             <div className="tablet:grid-col-4 margin-bottom-4">
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper">
