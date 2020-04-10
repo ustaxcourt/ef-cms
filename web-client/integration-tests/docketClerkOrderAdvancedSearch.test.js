@@ -1,5 +1,8 @@
+import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesOrder } from './journey/docketClerkServesOrder';
+
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest({
@@ -11,6 +14,7 @@ const test = setupTest({
 describe('docket clerk order advanced search', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+    test.draftOrders = [];
   });
 
   const caseCreationCount = 3;
@@ -24,53 +28,61 @@ describe('docket clerk order advanced search', () => {
     });
   }
 
-  loginAs(test, 'docketclerk');
-  //   Case xx1-20
-  // Create sign, serve Order to Show Cause
-  it('set docket number', async () => {
-    test.docketNumber = createdCases[0].docketNumber;
-    test.draftOrders = [];
-  });
-  docketClerkCreatesAnOrder(test, {
-    documentTitle: 'Order to do something',
-    eventCode: 'O',
-    expectedDocumentType: 'Order',
-  });
+  // loginAs(test, 'docketclerk');
+  // it('set docket number', async () => {
+  //   test.docketNumber = createdCases[0].docketNumber;
+  // });
+  // docketClerkCreatesAnOrder(test, {
+  //   documentTitle: 'Order',
+  //   eventCode: 'O',
+  //   expectedDocumentType: 'Order',
+  //   signedAtFormatted: '01/02/2020',
+  // });
+  // docketClerkAddsDocketEntryFromOrder(test, 0);
   // docketClerkServesOrder(test, 0);
 
-  // // Create, sign and serve Order "for the Cause of Something"
+  // it('set docket number', async () => {
+  //   test.docketNumber = createdCases[0].docketNumber;
+  // });
   // docketClerkCreatesAnOrder(test, {
   //   documentTitle: 'Order of Dismissal',
   //   eventCode: 'OD',
   //   expectedDocumentType: 'Order of Dismissal',
   // });
-  // docketClerkServesOrder(test, 0);
+  // docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
+  // docketClerkServesOrder(test, 1);
 
-  // // Case xx2-20
-  // // Create sign, serve Order for Dismissal
   // it('set docket number', async () => {
   //   test.docketNumber = createdCases[1].docketNumber;
   // });
   // docketClerkCreatesAnOrder(test, {
-  //   documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
-  //   eventCode: 'ODJ',
-  //   expectedDocumentType: 'Order of Dismissal for Lack of Jurisdiction',
+  //   documentTitle: 'Order of Dismissal',
+  //   eventCode: 'OD',
+  //   expectedDocumentType: 'Order of Dismissal',
   // });
-  // docketClerkServesOrder(test, 0);
+  // docketClerkAddsDocketEntryFromOrderOfDismissal(test, 2);
+  // docketClerkServesOrder(test, 2);
 
-  // // Case xx3-20
-  // // Create, sign, serve Order for Dismissal
-  // it('set docket number', async () => {
-  //   test.docketNumber = createdCases[2].docketNumber;
-  // });
-  // docketClerkCreatesAnOrder(test, {
-  //   documentTitle: 'Order of something',
-  //   eventCode: 'O',
-  //   expectedDocumentType: 'Order',
-  // });
-  // docketClerkServesOrder(test, 0);
+  it('set docket number', async () => {
+    test.docketNumber = createdCases[2].docketNumber;
+  });
+  docketClerkCreatesAnOrder(test, {
+    documentTitle: 'Order of something',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+  });
+  docketClerkAddsDocketEntryFromOrder(test, 0);
+  docketClerkServesOrder(test, 0);
 
   // go to advanced order search
+  // await runAction(navigateToPathAction, {
+  //   modules: {
+  //     presenter,
+  //   },
+  //   props: {
+  //     path: '/search',
+  //   },
+  // });
 
   // search for 'red fish'
   // expect zero results

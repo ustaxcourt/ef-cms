@@ -19,8 +19,6 @@ export const docketClerkServesOrder = (test, draftOrderIndex) => {
       doc => doc.documentId === documentId,
     );
 
-    expect(orderDocument).toBeTruthy();
-
     await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
       docketNumber: test.docketNumber,
       documentId: orderDocument.documentId,
@@ -29,6 +27,7 @@ export const docketClerkServesOrder = (test, draftOrderIndex) => {
     expect(test.getState('currentPage')).toEqual('CourtIssuedDocketEntry');
 
     await test.runSequence('openConfirmInitiateServiceModalSequence');
+
     await test.runSequence('serveCourtIssuedDocumentSequence');
   });
 };
