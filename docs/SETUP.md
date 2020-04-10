@@ -4,7 +4,6 @@
 - [Create an AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/).
 - [Install the AWS CLI on your local system](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) and [configure it to use your IAM credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
 - [Install Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) on your local system.
-- (e.g. `ef-cms.example.gov.`).
 - Create a `CircleCI` user in [AWS Identity and Access Management](https://console.aws.amazon.com/iam/):
      - Create the IAM policy for Circle CI via the project Terraform scripts:
           - Make the intended domain name available on your local system, e.g. `export EFCMS_DOMAIN="ef-cms.example.gov"`
