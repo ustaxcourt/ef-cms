@@ -2,8 +2,8 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  createPractitionerUserInteractor,
-} = require('./createPractitionerUserInteractor');
+  updatePractitionerUserInteractor,
+} = require('./updatePractitionerUserInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
@@ -14,9 +14,8 @@ const mockUser = {
   birthYear: 2019,
   employer: 'Private',
   firmName: 'GW Law Offices',
-  firstName: 'bob',
-  isAdmitted: true,
-  lastName: 'sagot',
+  firstName: 'Test',
+  lastName: 'Attorney',
   name: 'Test Attorney',
   originalBarState: 'Oklahoma',
   practitionerType: 'Attorney',
@@ -24,7 +23,7 @@ const mockUser = {
   userId: 'practitioner1@example.com',
 };
 
-describe('create practitioner user', () => {
+describe('update practitioner user', () => {
   let testUser;
 
   beforeEach(() => {
@@ -37,15 +36,15 @@ describe('create practitioner user', () => {
     applicationContext.getCurrentUser.mockImplementation(() => testUser);
     applicationContext
       .getPersistenceGateway()
-      .createPractitionerUser.mockResolvedValue(mockUser);
+      .updatePractitionerUser.mockResolvedValue(mockUser);
   });
 
-  it('creates the practitioner user', async () => {
-    const user = await createPractitionerUserInteractor({
+  it('updates the practitioner user', async () => {
+    const updatedUser = await updatePractitionerUserInteractor({
       applicationContext,
       user: mockUser,
     });
-    expect(user).not.toBeUndefined();
+    expect(updatedUser).not.toBeUndefined();
   });
 
   it('throws unauthorized for a non-internal user', async () => {
@@ -55,7 +54,7 @@ describe('create practitioner user', () => {
     };
 
     await expect(
-      createPractitionerUserInteractor({
+      updatePractitionerUserInteractor({
         applicationContext,
         user: mockUser,
       }),
