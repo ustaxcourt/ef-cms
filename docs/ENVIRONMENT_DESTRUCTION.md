@@ -14,7 +14,7 @@ Follow these instructions to destroy an environment that was previously created 
 
 6. In AWS’s [CloudFront console](https://console.aws.amazon.com/cloudfront/), search for the distributions for the environment by entering `[ENV]` in the search bar. There should be one for ui and one for ui-public. For each one of those, click on it, go to the "Behaviors" tab, and edit the behavior. At the bottom of the Edit page, there is a Lambda Function Associations section. Click the `X` to delete that association.
 
-7. Destroy web-client: `cd web-client/terraform/main && ../bin/environment-destroy.sh [ENV]`. An expected error will occur:
+7. If not already installed and configured, install the AWS CLI on your local system and configure it to use your IAM credentials. Then destroy web-client: `cd web-client/terraform/main && ../bin/environment-destroy.sh [ENV]`. An expected error will occur:
 
 ```
 * module.environment.aws_lambda_function.header_security_lambda (destroy): 1 error(s) occurred:
