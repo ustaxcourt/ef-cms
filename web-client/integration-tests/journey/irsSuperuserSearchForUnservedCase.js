@@ -6,7 +6,7 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export default test => {
+export const irsSuperuserSearchForUnservedCase = test => {
   return it('irsSuperuser searches for an unserved case by docket number from dashboard', async () => {
     await test.runSequence('gotoDashboardSequence');
     test.setState('header.searchTerm', test.docketNumber);

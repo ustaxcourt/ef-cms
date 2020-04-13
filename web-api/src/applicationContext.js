@@ -9,6 +9,7 @@ const AWS =
 
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
 
+const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
@@ -126,7 +127,7 @@ const {
 } = require('../../shared/src/persistence/dynamo/users/createPractitionerUser');
 const {
   createPractitionerUserInteractor,
-} = require('../../shared/src/business/useCases/users/createPractitionerUserInteractor');
+} = require('../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor');
 const {
   createSectionInboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/createSectionInboxRecord');
@@ -551,6 +552,9 @@ const {
   onDisconnectInteractor,
 } = require('../../shared/src/business/useCases/notifications/onDisconnectInteractor');
 const {
+  orderAdvancedSearchInteractor,
+} = require('../../shared/src/business/useCases/orderAdvancedSearchInteractor');
+const {
   prioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/prioritizeCaseInteractor');
 const {
@@ -714,7 +718,7 @@ const {
 } = require('../../shared/src/persistence/dynamo/users/updatePractitionerUser');
 const {
   updatePractitionerUserInteractor,
-} = require('../../shared/src/business/useCases/users/updatePractitionerUserInteractor');
+} = require('../../shared/src/business/useCases/practitioners/updatePractitionerUserInteractor');
 const {
   updatePrimaryContactInteractor,
 } = require('../../shared/src/business/useCases/updatePrimaryContactInteractor');
@@ -831,6 +835,7 @@ module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
   return {
+    barNumberGenerator,
     docketNumberGenerator,
     environment,
     getCaseCaptionNames: Case.getCaseCaptionNames,
@@ -952,7 +957,7 @@ module.exports = (appContextUser = {}) => {
         createWorkItem,
         deleteCaseDeadline,
         deleteCaseTrialSortMappingRecords,
-        deleteDocument,
+        deleteDocument: args => (process.env.CI ? null : deleteDocument(args)),
         deleteElasticsearchReindexRecord,
         deleteSectionOutboxRecord,
         deleteTrialSession,
@@ -1191,6 +1196,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemInteractor,
         onConnectInteractor,
         onDisconnectInteractor,
+        orderAdvancedSearchInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
         removeCaseFromTrialInteractor,

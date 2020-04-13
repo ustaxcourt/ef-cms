@@ -20,6 +20,7 @@ describe('defaultAdvancedSearchFormAction', () => {
       caseSearchByName: {
         countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
       },
+      orderSearch: {},
       practitionerSearchByBarNumber: {},
       practitionerSearchByName: {},
       searchMode: 'byName',
@@ -36,6 +37,7 @@ describe('defaultAdvancedSearchFormAction', () => {
             countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
             no: false,
           },
+          orderSearch: { taco: 'tuesday' },
           practitionerSearchByBarNumber: { red: 'blue' },
           practitionerSearchByName: { one: 'two' },
           searchMode: 'byDocketNumber',
@@ -49,6 +51,7 @@ describe('defaultAdvancedSearchFormAction', () => {
         countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
         no: false,
       },
+      orderSearch: { taco: 'tuesday' },
       practitionerSearchByBarNumber: { red: 'blue' },
       practitionerSearchByName: { one: 'two' },
       searchMode: 'byDocketNumber',

@@ -1,10 +1,14 @@
 import { advancedSearchHelper } from '../../src/presenter/computeds/advancedSearchHelper';
+import { formatNow } from '../../../shared/src/business/utilities/DateHandler';
+import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const petitionsClerkSearchesForPractitionersByName = test => {
-  return it('petitions clerk searches for practitioners by name', async () => {
+export const admissionsClerkSearchesForPractitionersByName = test => {
+  return it('admissions clerk searches for practitioners by name', async () => {
     await test.runSequence('gotoAdvancedSearchSequence');
+
+    await refreshElasticsearchIndex();
 
     // simulate switching to the Practitioner tab
     await test.runSequence('cerebralBindSimpleSetStateSequence', {
@@ -19,6 +23,9 @@ export const petitionsClerkSearchesForPractitionersByName = test => {
     ).toEqual({});
     expect(test.getState('searchResults')).toBeUndefined();
 
+    await test.runSequence('submitPractitionerNameSearchSequence');
+    expect(test.getState('validationErrors.practitionerName')).toBeDefined();
+
     // non-exact matches
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'practitionerSearchByName',
@@ -27,8 +34,17 @@ export const petitionsClerkSearchesForPractitionersByName = test => {
     });
 
     await test.runSequence('submitPractitionerNameSearchSequence');
+    expect(test.getState('validationErrors.practitionerName')).toBeUndefined();
 
     expect(test.getState('searchResults').length).toBeGreaterThan(0);
+    let helper = runCompute(withAppContextDecorator(advancedSearchHelper), {
+      state: test.getState(),
+    });
+
+    expect(helper.formattedSearchResults.length).toEqual(
+      test.getState('constants.CASE_SEARCH_PAGE_SIZE'),
+    );
+    expect(helper.showLoadMore).toBeTruthy();
 
     await test.runSequence('clearAdvancedSearchFormSequence', {
       formType: 'practitionerSearchByName',
@@ -43,23 +59,18 @@ export const petitionsClerkSearchesForPractitionersByName = test => {
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'practitionerSearchByName',
       key: 'practitionerName',
-      value: 'test irs practitioner',
+      value: `Joe ${test.currentTimestamp} Exotic Tiger King`,
     });
 
     await test.runSequence('submitPractitionerNameSearchSequence');
 
     expect(test.getState('searchResults').length).toBeGreaterThan(0);
     expect(test.getState('searchResults.0.name')).toEqual(
-      'Test IRS Practitioner',
+      `joe ${test.currentTimestamp} exotic tiger king`,
     );
-
-    let helper = runCompute(withAppContextDecorator(advancedSearchHelper), {
-      state: test.getState(),
-    });
-
-    expect(helper.showLoadMore).toBeTruthy();
-    expect(helper.formattedSearchResults.length).toEqual(
-      test.getState('constants.CASE_SEARCH_PAGE_SIZE'),
+    const currentTwoDigitYear = formatNow('YY');
+    expect(test.getState('searchResults.0.barNumber')).toContain(
+      `EJ${currentTwoDigitYear}`,
     );
 
     // no matches

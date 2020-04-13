@@ -24,6 +24,7 @@ describe('saveSignedDocumentInteractor', () => {
       applicationContext,
       caseId: mockCase.caseId,
       docketNumber: MOCK_CASE.docketNumber,
+      nameForSigning: 'Guy Fieri',
       originalDocumentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       signedDocumentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
@@ -37,6 +38,7 @@ describe('saveSignedDocumentInteractor', () => {
     );
 
     expect(signedDocumentEntity.isPaper).toEqual(false);
+    expect(signedDocumentEntity.signedJudgeName).toEqual('Guy Fieri');
     expect(signedDocumentEntity.documentType).toEqual('Stipulated Decision');
   });
 
@@ -44,6 +46,7 @@ describe('saveSignedDocumentInteractor', () => {
     const caseEntity = await saveSignedDocumentInteractor({
       applicationContext,
       caseId: mockCase.caseId,
+      nameForSigning: 'Guy Fieri',
       originalDocumentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       signedDocumentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });

@@ -5,12 +5,12 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { updatePractitionerUserAction } from '../actions/updatePractitionerUserAction';
-import { validatePractitionerUserAction } from '../actions/validatePractitionerUserAction';
+import { validateAddPractitionerAction } from '../actions/validateAddPractitionerAction';
 
 export const submitUpdatePractitionerUserSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  validatePractitionerUserAction,
+  validateAddPractitionerAction,
   {
     error: [setAlertErrorAction],
     success: [

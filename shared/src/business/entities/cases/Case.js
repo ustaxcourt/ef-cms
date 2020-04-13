@@ -246,9 +246,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.highPriority = rawCase.highPriority;
     this.highPriorityReason = rawCase.highPriorityReason;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
+    this.status = rawCase.status || Case.STATUS_TYPES.new;
   }
 
-  this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.userId = rawCase.userId;
 
   this.caseCaption = rawCase.caseCaption;
@@ -261,7 +261,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
-  this.inProgress = rawCase.inProgress || false;
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.irsSendDate = rawCase.irsSendDate;
   this.isPaper = rawCase.isPaper;
@@ -277,9 +276,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt || createISODateString();
+  this.sealedDate = rawCase.sealedDate;
   this.sortableDocketNumber =
     rawCase.sortableDocketNumber || this.generateSortableDocketNumber();
-  this.sealedDate = rawCase.sealedDate;
   this.trialDate = rawCase.trialDate;
   this.trialLocation = rawCase.trialLocation;
   this.trialSessionId = rawCase.trialSessionId;
@@ -290,7 +289,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 
   if (rawCase.caseCaption) {
     this.setCaseTitle(rawCase.caseCaption);
-    this.initialTitle = rawCase.initialTitle || this.caseTitle;
+    this.initialCaption = rawCase.initialCaption || this.caseCaption;
   }
 
   if (Array.isArray(rawCase.documents)) {
@@ -496,16 +495,16 @@ joiValidationDecorator(
         then: joi.string().required(),
       })
       .meta({ tags: ['Restricted'] }),
+    initialCaption: joi
+      .string()
+      .allow(null)
+      .optional()
+      .description('Case caption before modification.'),
     initialDocketNumberSuffix: joi
       .string()
       .allow(null)
       .optional()
       .description('Case docket number suffix before modification.'),
-    initialTitle: joi
-      .string()
-      .allow(null)
-      .optional()
-      .description('Case title before modification.'),
     irsNoticeDate: joi
       .date()
       .iso()
@@ -943,26 +942,28 @@ Case.prototype.markAsSentToIRS = function (sendDate) {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateCaseTitleDocketRecord = function ({ applicationContext }) {
-  const caseTitleRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
-  let lastTitle = this.initialTitle;
+Case.prototype.updateCaseCaptionDocketRecord = function ({
+  applicationContext,
+}) {
+  const caseCaptionRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
+  let lastCaption = this.initialCaption;
 
   this.docketRecord.forEach(docketRecord => {
-    const result = caseTitleRegex.exec(docketRecord.description);
+    const result = caseCaptionRegex.exec(docketRecord.description);
     if (result) {
-      const [, , changedTitle] = result;
-      lastTitle = changedTitle;
+      const [, , changedCaption] = result;
+      lastCaption = changedCaption.replace(` ${Case.CASE_CAPTION_POSTFIX}`, '');
     }
   });
 
-  const needsTitleChangedRecord =
-    this.initialTitle && lastTitle !== this.caseTitle && !this.isPaper;
+  const needsCaptionChangedRecord =
+    this.initialCaption && lastCaption !== this.caseCaption && !this.isPaper;
 
-  if (needsTitleChangedRecord) {
+  if (needsCaptionChangedRecord) {
     this.addDocketRecord(
       new DocketRecord(
         {
-          description: `Caption of case is amended from '${lastTitle}' to '${this.caseTitle}'`,
+          description: `Caption of case is amended from '${lastCaption} ${Case.CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${Case.CASE_CAPTION_POSTFIX}'`,
           eventCode: 'MINC',
           filingDate: createISODateString(),
         },

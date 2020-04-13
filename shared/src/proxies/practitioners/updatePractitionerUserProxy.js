@@ -1,4 +1,4 @@
-const { put } = require('./requests');
+const { put } = require('../requests');
 
 /**
  * updatePractitionerUserInteractor
@@ -12,6 +12,6 @@ exports.updatePractitionerUserInteractor = ({ applicationContext, user }) => {
   return put({
     applicationContext,
     body: { user },
-    endpoint: '/users/practitioner',
+    endpoint: '/practitioners',
   });
 };

@@ -1,11 +1,7 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 
-export default (test, fakeFile) => {
+export const petitionerFilesDocumentForCase = (test, fakeFile) => {
   return it('petitioner files document for case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
     await test.runSequence('gotoFileDocumentSequence', {
       docketNumber: test.docketNumber,
     });

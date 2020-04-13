@@ -1,5 +1,5 @@
 import { fakeFile, loginAs, setupTest } from './helpers';
-import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
+import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import petitionsClerkAddsDocketEntryFromOrder from './journey/petitionsClerkAddsDocketEntryFromOrder';
 import petitionsClerkCreateOrder from './journey/petitionsClerkCreateOrder';
 import petitionsClerkServesOrder from './journey/petitionsClerkServesOrder';
