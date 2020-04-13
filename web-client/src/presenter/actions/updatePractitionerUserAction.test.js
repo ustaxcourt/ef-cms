@@ -19,6 +19,12 @@ describe('updatePractitionerUserAction', () => {
   });
 
   it('calls the update practitioner user interactor', async () => {
+    applicationContext
+      .getUseCases()
+      .updatePractitionerUserInteractor.mockReturnValue({
+        barNumber: 'AB1111',
+      });
+
     await runAction(updatePractitionerUserAction, {
       modules: {
         presenter,

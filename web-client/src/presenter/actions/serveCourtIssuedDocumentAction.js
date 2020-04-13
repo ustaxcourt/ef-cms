@@ -39,9 +39,7 @@ export const serveCourtIssuedDocumentAction = async ({
 
   return {
     alertSuccess: {
-      message:
-        'Remember to print all documents for parties with paper service.',
-      title: 'This document has been served',
+      message: 'Document served. ',
     },
     pdfUrl,
   };
