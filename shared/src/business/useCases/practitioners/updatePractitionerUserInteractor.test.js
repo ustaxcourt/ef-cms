@@ -37,6 +37,12 @@ describe('update practitioner user', () => {
     applicationContext
       .getPersistenceGateway()
       .updatePractitionerUser.mockResolvedValue(mockUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockResolvedValue(mockUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByUser.mockResolvedValue([]);
   });
 
   it('updates the practitioner user', async () => {
