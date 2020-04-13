@@ -7,6 +7,7 @@ import React from 'react';
 
 export const PractitionerForm = connect(
   {
+    ADMISSIONS_STATUS_OPTIONS: state.constants.ADMISSIONS_STATUS_OPTIONS,
     EMPLOYER_OPTIONS: state.constants.EMPLOYER_OPTIONS,
     PRACTITIONER_TYPE_OPTIONS: state.constants.PRACTITIONER_TYPE_OPTIONS,
     createPractitionerUserHelper: state.createPractitionerUserHelper,
@@ -17,6 +18,7 @@ export const PractitionerForm = connect(
     validationErrors: state.validationErrors,
   },
   function PractitionerForm({
+    ADMISSIONS_STATUS_OPTIONS,
     createPractitionerUserHelper,
     EMPLOYER_OPTIONS,
     form,
@@ -332,13 +334,42 @@ export const PractitionerForm = connect(
                     </select>
                   </FormGroup>
 
-                  <FormGroup>
-                    <label className="usa-label" htmlFor="admissionStatus">
-                      Admission status
-                    </label>
+                  {createPractitionerUserHelper.canEditAdmissionStatus ? (
+                    <FormGroup errorText={validationErrors.admissionsStatus}>
+                      <label className="usa-label" htmlFor="admissionStatus">
+                        Admission status
+                      </label>
 
-                    <p id="admissionStatus">Active</p>
-                  </FormGroup>
+                      <select
+                        className="usa-select"
+                        id="admissionsStatus"
+                        name="admissionsStatus"
+                        value={form.admissionsStatus || ''}
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                          validateAddPractitionerSequence();
+                        }}
+                      >
+                        <option value="">- Select -</option>
+                        {ADMISSIONS_STATUS_OPTIONS.map((status, idx) => (
+                          <option key={idx} value={status}>
+                            {status}
+                          </option>
+                        ))}
+                      </select>
+                    </FormGroup>
+                  ) : (
+                    <FormGroup>
+                      <label className="usa-label" htmlFor="admissionStatus">
+                        Admission status
+                      </label>
+
+                      <p id="admissionStatus">Active</p>
+                    </FormGroup>
+                  )}
 
                   <DateInput
                     errorText={validationErrors.admissionsDate}
