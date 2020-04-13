@@ -1,15 +1,15 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitCourtIssuedOrderAction } from './submitCourtIssuedOrderAction';
 
 describe('submitCourtIssuedOrderAction', () => {
   beforeAll(() => {
-    presenter.providers.applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('should call fileCourtIssuedOrder', async () => {
-    applicationContextForClient
+    applicationContext
       .getUseCases()
       .fileCourtIssuedOrderInteractor.mockReturnValue({ documents: [] });
 
@@ -30,13 +30,46 @@ describe('submitCourtIssuedOrderAction', () => {
     });
 
     expect(
-      applicationContextForClient.getUseCases().fileCourtIssuedOrderInteractor,
+      applicationContext.getUseCases().fileCourtIssuedOrderInteractor,
     ).toBeCalled();
+    expect(applicationContext.getUseCases().validatePdfInteractor).toBeCalled();
     expect(
-      applicationContextForClient.getUseCases().validatePdfInteractor,
+      applicationContext.getUseCases().virusScanPdfInteractor,
     ).toBeCalled();
+  });
+
+  it('should set document draftState', async () => {
+    applicationContext
+      .getUseCases()
+      .fileCourtIssuedOrderInteractor.mockReturnValue({ documents: [] });
+
+    await runAction(submitCourtIssuedOrderAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        primaryDocumentFileId: 'abc',
+      },
+      state: {
+        caseDetail: {
+          caseId: '5678',
+          docketNumber: '111-20',
+        },
+        form: {
+          documentIdToEdit: '1234',
+          documentType: 'Notice of Intervention',
+          primaryDocumentFile: {},
+        },
+      },
+    });
+
     expect(
-      applicationContextForClient.getUseCases().virusScanPdfInteractor,
-    ).toBeCalled();
+      applicationContext.getUseCases().updateCourtIssuedOrderInteractor.mock
+        .calls[0][0].documentMetadata.draftState,
+    ).toEqual({
+      caseId: '5678',
+      docketNumber: '111-20',
+      documentType: 'Notice of Intervention',
+    });
   });
 });

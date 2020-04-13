@@ -92,7 +92,6 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   // Serve on all parties
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  // TODO: set draftState = null
   courtIssuedDocument.setAsServed(servedParties.all);
 
   const { Body: pdfData } = await applicationContext

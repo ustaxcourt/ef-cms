@@ -162,13 +162,22 @@ describe('Document entity', () => {
   describe('validate', () => {
     it('should do nothing if valid', () => {
       let error;
+      let document;
       try {
-        const document = new Document(A_VALID_DOCUMENT, { applicationContext });
+        document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentContents: 'this is the content of the document',
+          },
+          { applicationContext },
+        );
         document.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
         document.validate();
       } catch (err) {
         error = err;
       }
+
+      expect(document.documentContents).toBeDefined();
       expect(error).not.toBeDefined();
     });
 

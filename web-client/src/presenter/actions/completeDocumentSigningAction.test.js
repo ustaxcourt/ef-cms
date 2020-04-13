@@ -91,8 +91,7 @@ describe('completeDocumentSigningAction', () => {
     expect(completeWorkItemInteractor.mock.calls.length).toBe(1);
     expect(result.output).toMatchObject({
       alertSuccess: {
-        message: 'Your signature has been added',
-        title: '',
+        message: 'Signature added.',
       },
       caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -140,8 +139,7 @@ describe('completeDocumentSigningAction', () => {
     expect(completeWorkItemInteractor.mock.calls.length).toBe(1);
     expect(result.output).toMatchObject({
       alertSuccess: {
-        message: 'Your signature has been added',
-        title: '',
+        message: 'Signature added.',
       },
       caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
