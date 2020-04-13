@@ -82,6 +82,8 @@ export const admissionsClerkAddsNewPractitioner = test => {
 
     await test.runSequence('submitAddPractitionerSequence');
 
+    test.barNumber = test.getState('practitionerDetail.barNumber');
+
     expect(test.getState('validationErrors')).toEqual({});
   });
 };
