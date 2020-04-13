@@ -6,8 +6,7 @@
 export const getUploadCourtIssuedDocumentAlertSuccessAction = () => {
   return {
     alertSuccess: {
-      message:
-        'Draft saved.',
+      message: 'Draft saved.',
     },
   };
 };
