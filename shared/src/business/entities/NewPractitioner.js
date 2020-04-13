@@ -27,7 +27,7 @@ joiValidationDecorator(
   NewPractitioner,
   joi.object().keys({
     ...Practitioner.validationRules,
-    admissionsStatus: joi.string().optional().allow(null),
+    admissionsStatus: joi.string().required(),
     barNumber: joi.string().optional().allow(null),
     email: joi.string().required(),
     firstName: joi.string().required(),
