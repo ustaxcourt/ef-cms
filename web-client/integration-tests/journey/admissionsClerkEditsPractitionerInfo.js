@@ -41,7 +41,7 @@ export const admissionsClerkEditsPractitionerInfo = test => {
     );
 
     await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: '105-19',
+      docketNumber: test.docketNumber,
     });
 
     const caseDetail = test.getState('caseDetail');
