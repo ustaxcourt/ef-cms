@@ -4,7 +4,6 @@ import { admissionsClerkEditsPractitionerInfo } from './journey/admissionsClerkE
 import { admissionsClerkSearchesForPractitionerByBarNumber } from './journey/admissionsClerkSearchesForPractitionerByBarNumber';
 import { admissionsClerkSearchesForPractitionersByName } from './journey/admissionsClerkSearchesForPractitionersByName';
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
@@ -23,7 +22,7 @@ describe('admissions clerk practitioner journey', () => {
 
   loginAs(test, 'petitioner');
   it('Create test case', async () => {
-    await uploadPetition(test, {
+    const caseDetail = await uploadPetition(test, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -35,9 +34,9 @@ describe('admissions clerk practitioner journey', () => {
       },
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
-  });
 
-  petitionerViewsDashboard(test);
+    test.docketNumber = caseDetail.docketNumber;
+  });
 
   loginAs(test, 'petitionsclerk');
   petitionsClerkViewsCaseDetail(test);
