@@ -13,6 +13,7 @@ custom:
     includeLayers: true
   jetpack:
     mode: npm
+    lockfile: ../package-lock.json
 
 provider:
   name: aws
