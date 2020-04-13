@@ -12,8 +12,7 @@ export const getDocketEntryAlertSuccessAction = ({ get, props }) => {
   const { isAddAnother } = props;
   const isUpdatingWithFile = get(state.isUpdatingWithFile);
 
-  let title,
-    message = '';
+  let message = '';
 
   if (isUpdatingWithFile) {
     message = 'Entry updated.';
@@ -28,7 +27,6 @@ export const getDocketEntryAlertSuccessAction = ({ get, props }) => {
   return {
     alertSuccess: {
       message,
-      title,
     },
   };
 };

@@ -26,8 +26,7 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
     expect(result.output).toMatchObject({
       alertSuccess: {
         message:
-          'If approved, you will gain full access to this case. Please check your dashboard for updates.',
-        title: 'Your filing has been successfully submitted.',
+          'Document filed and pending approval. Please check your dashboard for updates.',
       },
     });
   });
