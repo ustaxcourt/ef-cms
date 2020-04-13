@@ -15,16 +15,13 @@ exports.signDocumentLambda = event =>
         pathParameters: { caseId, documentId: originalDocumentId },
       } = event;
 
-      const { nameForSigning, signedDocumentId } = JSON.parse(body);
-
       return await applicationContext
         .getUseCases()
         .saveSignedDocumentInteractor({
           applicationContext,
           caseId,
-          nameForSigning,
           originalDocumentId,
-          signedDocumentId,
+          ...JSON.parse(body),
         });
     },
     {
