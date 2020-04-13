@@ -111,25 +111,11 @@ describe('docket clerk order advanced search', () => {
 
     await test.runSequence('submitOrderAdvancedSearchSequence');
 
-    expect(test.getState('searchResults')).toEqual([
-      {
-        caseCaption: 'Mona Schultz, Petitioner',
-        caseId: '954179f9-e00e-40e2-b3e1-2e6d3cff2054',
-        docketNumber: '105-20',
-        docketNumberSuffix: 'L',
-        documentId: '1ee72ece-a4d1-4b96-9279-bd6455741596',
-        documentTitle: 'Order of Dismissal Entered, Judge Buch for Something',
-        filingDate: '2020-04-10T21:45:04.340Z',
-      },
-      {
-        caseCaption: 'Mona Schultz, Petitioner',
-        caseId: 'bb690ddf-2be6-4d63-809b-c0bcc502f125',
-        docketNumber: '109-20',
-        docketNumberSuffix: 'L',
-        documentId: 'f34c3e7a-280c-45e3-a2eb-1722ee64ead9',
-        documentTitle: 'Order of Dismissal Entered, Judge Buch for Something',
-        filingDate: '2020-04-10T21:33:07.908Z',
-      },
-    ]);
+    expect(test.getState('searchResults')).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ documentId: test.draftOrders[1].documentId }),
+        expect.objectContaining({ documentId: test.draftOrders[2].documentId }),
+      ]),
+    );
   });
 });
