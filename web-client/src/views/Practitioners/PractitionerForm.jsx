@@ -336,7 +336,7 @@ export const PractitionerForm = connect(
 
                   {createPractitionerUserHelper.canEditAdmissionStatus ? (
                     <FormGroup errorText={validationErrors.admissionsStatus}>
-                      <label className="usa-label" htmlFor="admissionStatus">
+                      <label className="usa-label" htmlFor="admissionsStatus">
                         Admission status
                       </label>
 
