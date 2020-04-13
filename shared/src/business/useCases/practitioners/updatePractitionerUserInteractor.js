@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
 const { Practitioner } = require('../../entities/Practitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -22,9 +23,19 @@ exports.updatePractitionerUserInteractor = async ({
     throw new UnauthorizedError('Unauthorized for updating practitioner user');
   }
 
+  const oldUserInfo = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: user.userId });
+
   const validatedUserData = new Practitioner(user, { applicationContext })
     .validate()
     .toRawObject();
+
+  await generateChangeOfAddress({
+    applicationContext,
+    contactInfo: validatedUserData.contact,
+    user: oldUserInfo,
+  });
 
   const updatedUser = await applicationContext
     .getPersistenceGateway()
