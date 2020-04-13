@@ -27,8 +27,7 @@ export const createPractitionerUserAction = async ({
       });
     return path.success({
       alertSuccess: {
-        message:
-          'Practitioner added.',
+        message: 'Practitioner added.',
       },
       barNumber: practitionerUser.barNumber,
       practitionerUser,
