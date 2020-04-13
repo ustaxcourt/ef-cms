@@ -5,8 +5,6 @@ export default test => {
       documentIdToEdit: test.documentId,
     });
 
-    expect(test.getState('alertSuccess.message')).toEqual(
-      'Your signature has been removed',
-    );
+    expect(test.getState('alertSuccess.message')).toEqual('Signature removed.');
   });
 };

@@ -44,8 +44,7 @@ export const forwardWorkItemAction = async ({
 
   return {
     alertSuccess: {
-      message: 'Your message has been sent.',
-      title: 'Message sent',
+      message: 'Message sent',
     },
   };
 };

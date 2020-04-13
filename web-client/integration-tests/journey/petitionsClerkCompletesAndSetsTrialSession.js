@@ -62,8 +62,7 @@ export default (test, overrides = {}) => {
     } else {
       expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
       expect(test.getState('alertSuccess')).toEqual({
-        message: 'You can view all cases set for this trial session below.',
-        title: 'Eligible cases have been set for this trial session.',
+        message: 'Eligible cases set for trial.',
       });
     }
   });

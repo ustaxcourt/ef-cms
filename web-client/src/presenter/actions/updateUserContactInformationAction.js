@@ -45,8 +45,7 @@ export const updateUserContactInformationAction = async ({
   return path.success({
     alertSuccess: {
       message:
-        'It may take several minutes for all of your cases to display the updated information.',
-      title: 'Your contact information has been updated.',
+        'Contact information updated. It may take several minutes for all of your cases to display the updated information.',
     },
   });
 };
