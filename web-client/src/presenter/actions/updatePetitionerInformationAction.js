@@ -31,7 +31,7 @@ export const updatePetitionerInformationAction = async ({
 
   return {
     alertSuccess: {
-      title: 'Your changes have been saved.',
+      message: 'Changes saved.',
     },
     caseDetail: updatedCase,
     caseId: updatedCase.docketNumber,

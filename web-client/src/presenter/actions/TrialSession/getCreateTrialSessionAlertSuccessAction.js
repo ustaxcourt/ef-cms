@@ -6,8 +6,7 @@
 export const getCreateTrialSessionAlertSuccessAction = () => {
   return {
     alertSuccess: {
-      message: 'You can view the new trial session below.',
-      title: 'A new trial session has been added.',
+      message: 'Trial session added.',
     },
   };
 };
