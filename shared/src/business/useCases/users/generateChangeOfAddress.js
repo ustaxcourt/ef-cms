@@ -50,7 +50,7 @@ exports.generateChangeOfAddress = async ({
     if (irsPractitioner) {
       oldData = clone(irsPractitioner.contact);
       irsPractitioner.contact = contactInfo;
-      privatePractitioner.name = name;
+      irsPractitioner.name = name;
     }
 
     // we do this again so that it will convert '' to null
