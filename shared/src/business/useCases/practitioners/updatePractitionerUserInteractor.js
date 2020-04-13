@@ -11,11 +11,13 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {object} providers.barNumber the barNumber of the user to update
  * @param {object} providers.user the user data
  * @returns {Promise} the promise of the createUser call
  */
 exports.updatePractitionerUserInteractor = async ({
   applicationContext,
+  barNumber,
   user,
 }) => {
   const requestUser = applicationContext.getCurrentUser();
@@ -25,7 +27,11 @@ exports.updatePractitionerUserInteractor = async ({
 
   const oldUserInfo = await applicationContext
     .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: user.userId });
+    .getPractitionerByBarNumber({ applicationContext, barNumber });
+
+  if (oldUserInfo.userId !== user.userId) {
+    throw new Error('Bar number does not match user data.');
+  }
 
   // do not allow edit of bar number or email
   const validatedUserData = new Practitioner(

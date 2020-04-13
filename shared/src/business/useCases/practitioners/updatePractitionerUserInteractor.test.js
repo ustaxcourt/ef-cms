@@ -40,7 +40,7 @@ describe('update practitioner user', () => {
       .updatePractitionerUser.mockResolvedValue(mockUser);
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockResolvedValue(mockUser);
+      .getPractitionerByBarNumber.mockResolvedValue(mockUser);
     applicationContext
       .getPersistenceGateway()
       .getCasesByUser.mockResolvedValue([]);
@@ -49,6 +49,7 @@ describe('update practitioner user', () => {
   it('updates the practitioner user and overrides a bar number or email passed in with the old user data', async () => {
     const updatedUser = await updatePractitionerUserInteractor({
       applicationContext,
+      barNumber: 'AB1111',
       user: { ...mockUser, barNumber: 'AB2222', email: 'bc@example.com' },
     });
     expect(updatedUser).toBeDefined();
@@ -59,6 +60,28 @@ describe('update practitioner user', () => {
       applicationContext.getPersistenceGateway().updatePractitionerUser.mock
         .calls[0][0],
     ).toMatchObject({ user: mockUser });
+  });
+
+  it('throws an error if the barNumber/userId combo passed in does not match the user retrieved from getPractitionerByBarNumber', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getPractitionerByBarNumber.mockResolvedValue({
+        ...mockUser,
+        userId: '2',
+      });
+
+    await expect(
+      updatePractitionerUserInteractor({
+        applicationContext,
+        barNumber: 'AB1111',
+        user: {
+          ...mockUser,
+          barNumber: 'AB1111',
+          email: 'bc@example.com',
+          userId: '1',
+        },
+      }),
+    ).rejects.toThrow('Bar number does not match user data.');
   });
 
   it('throws unauthorized for a non-internal user', async () => {
