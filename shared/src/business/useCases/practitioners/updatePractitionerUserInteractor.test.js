@@ -10,8 +10,9 @@ const { User } = require('../../entities/User');
 const mockUser = {
   admissionsDate: '2019-03-01T21:40:46.415Z',
   admissionsStatus: 'Active',
-  barNumber: 'AT5678',
+  barNumber: 'AB1111',
   birthYear: 2019,
+  email: 'ab@example.com',
   employer: 'Private',
   firmName: 'GW Law Offices',
   firstName: 'Test',
@@ -28,8 +29,8 @@ describe('update practitioner user', () => {
 
   beforeEach(() => {
     testUser = {
-      role: 'petitionsclerk',
-      userId: 'petitionsclerk',
+      role: 'admissionsclerk',
+      userId: 'admissionsclerk',
     };
 
     applicationContext.environment.stage = 'local';
@@ -37,14 +38,27 @@ describe('update practitioner user', () => {
     applicationContext
       .getPersistenceGateway()
       .updatePractitionerUser.mockResolvedValue(mockUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockResolvedValue(mockUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByUser.mockResolvedValue([]);
   });
 
-  it('updates the practitioner user', async () => {
+  it('updates the practitioner user and overrides a bar number or email passed in with the old user data', async () => {
     const updatedUser = await updatePractitionerUserInteractor({
       applicationContext,
-      user: mockUser,
+      user: { ...mockUser, barNumber: 'AB2222', email: 'bc@example.com' },
     });
-    expect(updatedUser).not.toBeUndefined();
+    expect(updatedUser).toBeDefined();
+    expect(
+      applicationContext.getPersistenceGateway().updatePractitionerUser,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updatePractitionerUser.mock
+        .calls[0][0],
+    ).toMatchObject({ user: mockUser });
   });
 
   it('throws unauthorized for a non-internal user', async () => {
