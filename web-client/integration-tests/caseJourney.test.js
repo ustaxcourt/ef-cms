@@ -32,7 +32,7 @@ import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssigns
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesCaseDetail from './journey/petitionsClerkUpdatesCaseDetail';
-import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
+import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkViewsMessages from './journey/petitionsClerkViewsMessages';
 import petitionsClerkViewsMessagesAfterReassign from './journey/petitionsClerkViewsMessagesAfterReassign';
 import respondentAddsAnswer from './journey/respondentAddsAnswer';

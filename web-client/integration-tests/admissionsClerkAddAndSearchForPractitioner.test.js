@@ -6,7 +6,7 @@ import { admissionsClerkSearchesForPractitionersByName } from './journey/admissi
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
-import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
+import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
 const test = setupTest();
 
