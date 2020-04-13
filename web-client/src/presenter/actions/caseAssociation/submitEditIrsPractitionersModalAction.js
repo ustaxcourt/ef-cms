@@ -38,8 +38,7 @@ export const submitEditIrsPractitionersModalAction = async ({
 
   return path.success({
     alertSuccess: {
-      message: 'You can view your changes below.',
-      title: 'Respondent Counsel has been updated.',
+      message: 'Respondent counsel updated.',
     },
   });
 };

@@ -31,8 +31,7 @@ export const createCaseDeadlineAction = async ({
 
   return path.success({
     alertSuccess: {
-      message: 'You can view all case deadlines on the Deadlines tab.',
-      title: 'Your deadline has been saved',
+      message: 'Deadline saved.',
     },
     caseDeadline: createCaseDeadlineResult,
   });
