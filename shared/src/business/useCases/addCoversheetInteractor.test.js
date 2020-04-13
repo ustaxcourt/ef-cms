@@ -71,6 +71,8 @@ describe('addCoversheetInteractor', () => {
   };
 
   beforeAll(() => {
+    jest.setTimeout(30000);
+
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: async () => ({
         Body: testPdfDoc,

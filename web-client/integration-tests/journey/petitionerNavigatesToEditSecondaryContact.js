@@ -1,4 +1,4 @@
-export default test => {
+export const petitionerNavigatesToEditSecondaryContact = test => {
   it('petitioner views secondary contact edit page', async () => {
     await test.runSequence('gotoSecondaryContactEditSequence', {
       docketNumber: test.getState('caseDetail.docketNumber'),

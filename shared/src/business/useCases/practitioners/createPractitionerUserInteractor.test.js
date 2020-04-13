@@ -10,10 +10,14 @@ const { User } = require('../../entities/User');
 const mockUser = {
   admissionsDate: '2019-03-01T21:40:46.415Z',
   admissionsStatus: 'Active',
+  barNumber: 'AT5678',
   birthYear: 2019,
   employer: 'Private',
-  isAdmitted: true,
+  firmName: 'GW Law Offices',
+  firstName: 'bob',
+  lastName: 'sagot',
   name: 'Test Attorney',
+  originalBarState: 'Oklahoma',
   practitionerType: 'Attorney',
   role: User.ROLES.privatePractitioner,
   userId: 'practitioner1@example.com',
@@ -24,8 +28,8 @@ describe('create practitioner user', () => {
 
   beforeEach(() => {
     testUser = {
-      role: 'petitionsclerk',
-      userId: 'petitionsclerk',
+      role: 'admissionsclerk',
+      userId: 'admissionsclerk',
     };
 
     applicationContext.environment.stage = 'local';

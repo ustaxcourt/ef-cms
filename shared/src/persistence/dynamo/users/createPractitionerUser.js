@@ -34,9 +34,10 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
       },
       applicationContext,
     });
+    const upperCaseBarNumber = user.barNumber.toUpperCase();
     await client.put({
       Item: {
-        pk: `${user.role}|${user.barNumber}`,
+        pk: `${user.role}|${upperCaseBarNumber}`,
         sk: `user|${userId}`,
       },
       applicationContext,
@@ -90,6 +91,7 @@ exports.createPractitionerUser = async ({ applicationContext, user }) => {
         userId = response.User.Username;
       }
     } catch (err) {
+      applicationContext.logger.error(err);
       // the user already exists
       const response = await applicationContext
         .getCognito()

@@ -23,6 +23,7 @@ import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
+import { OrderSearch } from '../../shared/src/business/entities/orders/OrderSearch';
 import {
   compareISODateStrings,
   compareStrings,
@@ -36,6 +37,7 @@ const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
+import { NewPractitioner } from '../../shared/src/business/entities/NewPractitioner';
 import { NewTrialSession } from '../../shared/src/business/entities/trialSessions/NewTrialSession';
 import { Note } from '../../shared/src/business/entities/notes/Note';
 import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
@@ -75,7 +77,7 @@ import {
   isValidDateString,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
-import { createPractitionerUserInteractor } from '../../shared/src/proxies/createPractitionerUserProxy';
+import { createPractitionerUserInteractor } from '../../shared/src/proxies/practitioners/createPractitionerUserProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { createWorkItemInteractor } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
@@ -147,6 +149,7 @@ import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getU
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForPreviewInteractor } from '../../shared/src/business/useCases/loadPDFForPreviewInteractor';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
+import { orderAdvancedSearchInteractor } from '../../shared/src/proxies/orderAdvancedSearchProxy';
 import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCaseProxy';
 import { refreshTokenInteractor } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { removeCaseFromTrialInteractor } from '../../shared/src/proxies/trialSessions/removeCaseFromTrialProxy';
@@ -184,7 +187,7 @@ import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/
 import { updateDocketEntryMetaInteractor } from '../../shared/src/proxies/documents/updateDocketEntryMetaProxy';
 import { updatePetitionDetailsInteractor } from '../../shared/src/proxies/updatePetitionDetailsProxy';
 import { updatePetitionerInformationInteractor } from '../../shared/src/proxies/updatePetitionerInformationProxy';
-import { updatePractitionerUserInteractor } from '../../shared/src/proxies/updatePractitionerUserProxy';
+import { updatePractitionerUserInteractor } from '../../shared/src/proxies/practitioners/updatePractitionerUserProxy';
 import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
 import { updateQcCompleteForTrialInteractor } from '../../shared/src/proxies/updateQcCompleteForTrialProxy';
 import { updateSecondaryContactInteractor } from '../../shared/src/proxies/updateSecondaryContactProxy';
@@ -198,6 +201,7 @@ import { uploadExternalDocumentsInteractor } from '../../shared/src/business/use
 import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadOrderDocumentInteractor';
 import { uploadPdfFromClient } from '../../shared/src/persistence/s3/uploadPdfFromClient';
 import { validateAddIrsPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddIrsPractitionerInteractor';
+import { validateAddPractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validateAddPractitionerInteractor';
 import { validateAddPrivatePractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddPrivatePractitionerInteractor';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
@@ -211,6 +215,7 @@ import { validateExternalDocumentInteractor } from '../../shared/src/business/us
 import { validateForwardMessageInteractor } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validateInitialWorkItemMessageInteractor } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validateNoteInteractor } from '../../shared/src/business/useCases/caseNote/validateNoteInteractor';
+import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
 import { validateOrderWithoutBodyInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/validateOrderWithoutBodyInteractor';
 import { validatePdfInteractor } from '../../shared/src/proxies/documents/validatePdfProxy';
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
@@ -328,6 +333,7 @@ const allUseCases = {
   getWorkItemInteractor,
   loadPDFForPreviewInteractor,
   loadPDFForSigningInteractor,
+  orderAdvancedSearchInteractor,
   prioritizeCaseInteractor,
   refreshTokenInteractor,
   removeCaseFromTrialInteractor,
@@ -373,6 +379,7 @@ const allUseCases = {
   uploadExternalDocumentsInteractor,
   uploadOrderDocumentInteractor,
   validateAddIrsPractitionerInteractor,
+  validateAddPractitionerInteractor,
   validateAddPrivatePractitionerInteractor,
   validateCaseAdvancedSearchInteractor,
   validateCaseAssociationRequestInteractor,
@@ -387,6 +394,7 @@ const allUseCases = {
   validateForwardMessageInteractor,
   validateInitialWorkItemMessageInteractor,
   validateNoteInteractor,
+  validateOrderAdvancedSearchInteractor,
   validateOrderWithoutBodyInteractor,
   validatePdfInteractor,
   validatePetitionFromPaperInteractor,
@@ -453,8 +461,10 @@ const applicationContext = {
     ExternalDocumentInformationFactory,
     ForwardMessage,
     InitialWorkItemMessage,
+    NewPractitioner,
     NewTrialSession,
     Note,
+    OrderSearch,
     OrderWithoutBody,
     TrialSession,
     User,

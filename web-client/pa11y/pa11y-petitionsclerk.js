@@ -258,16 +258,17 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/documents/89c781f6-71ba-4ead-93d8-c681c2183a73&info=reveal-notice-options',
   },
-  {
-    actions: [
-      'wait for #tab-parties to be visible',
-      'click element #tab-parties',
-      'wait for #tabContent-partyInfo to be visible',
-    ],
-    notes: 'check a11y of content within parties tab of document detail',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/documents/c63be3f2-2240-451e-b6bd-8206d52a070b&info=tab-parties',
-  },
+  // Feel free to uncomment this once html-sniffer is back to a stable version
+  // {
+  //   actions: [
+  //     'wait for #tab-parties to be visible',
+  //     'click element #tab-parties',
+  //     'wait for #tabContent-partyInfo to be visible',
+  //   ],
+  //   notes: 'check a11y of content within parties tab of document detail',
+  //   url:
+  //     'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/documents/c63be3f2-2240-451e-b6bd-8206d52a070b&info=tab-parties',
+  // },
   {
     actions: [
       'wait for #tab-case-info to be visible',
@@ -349,4 +350,5 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=practitioner-search-results',
   },
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/practitioner-detail/PT1234',
 ];
