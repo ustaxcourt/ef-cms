@@ -41,6 +41,7 @@ exports.getPractitionersByNameInteractor = async ({
         should: [
           { match: { 'role.S': 'irsPractitioner' } },
           { match: { 'role.S': 'privatePractitioner' } },
+          { match: { 'role.S': 'inactivePractitioner' } },
         ],
       },
     },
