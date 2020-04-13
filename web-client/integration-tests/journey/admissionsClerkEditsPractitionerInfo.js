@@ -37,5 +37,17 @@ export const admissionsClerkEditsPractitionerInfo = test => {
     expect(test.getState('practitionerDetail.contact.address1')).toEqual(
       '123 Legal Way',
     );
+
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: '105-19',
+    });
+
+    const caseDetail = test.getState('caseDetail');
+    const noticeDocument = caseDetail.documents.find(
+      document => document.documentType === 'Notice of Change of Address',
+    );
+
+    expect(noticeDocument).toBeTruthy();
+    expect(noticeDocument.additionalInfo).toEqual('for Ben Leighton Matlock');
   });
 };
