@@ -11,21 +11,18 @@ export const getFileExternalDocumentAlertSuccessAction = ({ get, props }) => {
   const documentToEdit = get(state.documentToEdit);
 
   const alertSuccess = {
-    message:
-      'You can access your documents at any time from the docket record below.',
-    title: 'Your filing has been successfully submitted.',
+    message: 'Document filed and is accessible from the Docket Record.',
   };
 
   if (props.documentWithPendingAssociation) {
     alertSuccess.message =
-      'If approved, you will gain full access to this case. Please check your dashboard for updates.';
+      'Document filed and pending approval. Please check your dashboard for updates.';
   }
 
   if (documentToEdit) {
     return {
       alertSuccess: {
-        message: 'You can view the updated document below.',
-        title: 'Your changes have been saved.',
+        message: 'Changes saved.',
       },
     };
   }

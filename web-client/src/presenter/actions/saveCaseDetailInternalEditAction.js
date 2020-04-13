@@ -34,8 +34,7 @@ export const saveCaseDetailInternalEditAction = async ({
 
   return {
     alertSuccess: {
-      message: `Case ${caseDetail.docketNumber} has been updated.`,
-      title: 'Success',
+      message: `Case ${caseDetail.docketNumber} updated.`,
     },
     caseDetail,
   };

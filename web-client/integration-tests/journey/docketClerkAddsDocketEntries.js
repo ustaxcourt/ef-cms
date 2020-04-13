@@ -121,8 +121,8 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       isAddAnother: true,
     });
 
-    expect(test.getState('alertSuccess').title).toEqual(
-      'Your entry has been added to the docket record.',
+    expect(test.getState('alertSuccess').message).toEqual(
+      'Entry added. Continue adding docket entries below.',
     );
 
     expect(test.getState('currentPage')).toEqual('AddDocketEntry');
