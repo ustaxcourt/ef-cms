@@ -30,6 +30,7 @@ describe('docket clerk order advanced search', () => {
   }
 
   loginAs(test, 'docketclerk');
+
   it('set docket number', async () => {
     test.docketNumber = createdCases[0].docketNumber;
   });
@@ -65,16 +66,16 @@ describe('docket clerk order advanced search', () => {
   docketClerkServesOrder(test, 2);
 
   // TODO - CANT CREATE THIS FOR SOME REASON, ASK FOR HELP ON MONDAY
-  // it('set docket number', async () => {
-  //   test.docketNumber = createdCases[2].docketNumber;
-  // });
-  // docketClerkCreatesAnOrder(test, {
-  //   documentTitle: 'Order of something',
-  //   eventCode: 'O',
-  //   expectedDocumentType: 'Order',
-  // });
-  // docketClerkAddsDocketEntryFromOrder(test, 3);
-  // docketClerkServesOrder(test, 3);
+  it('set docket number', async () => {
+    test.docketNumber = createdCases[2].docketNumber;
+  });
+  docketClerkCreatesAnOrder(test, {
+    documentTitle: 'Order of something',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+  });
+  docketClerkAddsDocketEntryFromOrder(test, 3);
+  docketClerkServesOrder(test, 3);
 
   it('go to advanced order search tab', async () => {
     await refreshElasticsearchIndex();

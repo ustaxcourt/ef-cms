@@ -5,7 +5,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
-  return it('Docket Clerk adds a docket entry from the given order', async () => {
+  return it(`Docket Clerk adds a docket entry from the given order ${draftOrderIndex}`, async () => {
     let caseDetailFormatted;
     let nonstandardHelperComputed;
     let addCourtIssuedDocketEntryHelperComputed;
