@@ -12,6 +12,7 @@ exports.updatePractitionerUserLambda = event =>
       .getUseCases()
       .updatePractitionerUserInteractor({
         applicationContext,
+        barNumber: event.pathParameters.barNumber,
         user: JSON.parse(event.body).user,
       });
   });
