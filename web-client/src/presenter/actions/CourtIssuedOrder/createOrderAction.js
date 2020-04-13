@@ -21,7 +21,8 @@ export const createOrderAction = async ({ applicationContext, get }) => {
     /\t/g,
     '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
   );
-  const caseCaption = get(state.caseDetail.caseCaption) || '';
+  const caseDetail = get(state.caseDetail);
+  const caseCaption = caseDetail.caseCaption || '';
   const isOrderEvent = get(state.form.eventCode) == 'NOT'; // 'NOT' === 'notice'
   let caseCaptionNames = applicationContext.getCaseCaptionNames(caseCaption);
   let caseCaptionPostfix = '';
@@ -33,9 +34,10 @@ export const createOrderAction = async ({ applicationContext, get }) => {
   if (isOrderEvent) {
     signatureForNotice = `<p>${applicationContext.getClerkOfCourtNameForSigning()}<br />Clerk of the Court</p>`;
   }
-  const docketNumberWithSuffix = get(
-    state.formattedCaseDetail.docketNumberWithSuffix,
-  );
+
+  const docketNumberWithSuffix = applicationContext
+    .getUtilities()
+    .formatDocketNumberWithSuffix(caseDetail);
 
   const doc = replaceWithID(
     {
