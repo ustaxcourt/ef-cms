@@ -1,5 +1,5 @@
-import { Button } from '../ustc-ui/Button/Button';
-import { SuccessNotification } from './SuccessNotification';
+import { Button } from '../../ustc-ui/Button/Button';
+import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -38,7 +38,7 @@ export const PractitionerDetail = connect(
               <Button
                 link
                 className="push-right margin-bottom-1"
-                href="/edit-practitioner"
+                href={`/users/edit-practitioner/${practitionerDetailHelper.barNumber}`}
                 icon="edit"
               >
                 Edit
