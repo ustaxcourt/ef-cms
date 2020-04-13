@@ -65,7 +65,6 @@ describe('docket clerk order advanced search', () => {
   docketClerkAddsDocketEntryFromOrderOfDismissal(test, 2);
   docketClerkServesOrder(test, 2);
 
-  // TODO - CANT CREATE THIS FOR SOME REASON, ASK FOR HELP ON MONDAY
   it('set docket number', async () => {
     test.docketNumber = createdCases[2].docketNumber;
   });
