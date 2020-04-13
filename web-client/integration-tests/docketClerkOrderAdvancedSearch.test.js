@@ -51,6 +51,14 @@ describe('docket clerk order advanced search', () => {
   docketClerkAddsDocketEntryFromOrderOfDismissal(test, 2);
   docketClerkServesOrder(test, 2);
 
+  docketClerkCreatesAnOrder(test, {
+    documentTitle: 'Order of something',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+  });
+  docketClerkAddsDocketEntryFromOrder(test, 3);
+  docketClerkServesOrder(test, 3);
+
   it('go to advanced order search tab', async () => {
     await refreshElasticsearchIndex();
 
