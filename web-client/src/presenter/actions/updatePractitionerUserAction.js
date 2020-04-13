@@ -26,6 +26,7 @@ export const updatePractitionerUserAction = async ({
       alertSuccess: {
         message: 'Practitioner updated.',
       },
+      barNumber: practitionerUser.barNumber,
       practitionerUser,
     });
   } catch (err) {

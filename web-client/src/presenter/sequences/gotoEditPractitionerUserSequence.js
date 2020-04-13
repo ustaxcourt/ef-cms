@@ -1,9 +1,9 @@
-import { getUserByIdAction } from '../actions/getUserByIdAction';
+import { getPractitionerDetailAction } from '../actions/getPractitionerDetailAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setFullUserOnFormAction } from '../actions/setFullUserOnFormAction';
+import { setPractitionerDetailOnFormAction } from '../actions/Practitioners/setPractitionerDetailOnFormAction';
 
 export const gotoEditPractitionerUserSequence = [
-  getUserByIdAction,
-  setFullUserOnFormAction,
+  getPractitionerDetailAction,
+  setPractitionerDetailOnFormAction,
   setCurrentPageAction('EditPractitionerUser'),
 ];
