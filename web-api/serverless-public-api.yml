@@ -12,7 +12,7 @@ plugins:
 
 custom:
   jetpack:
-    mode: yarn
+    mode: npm
 
   prune:
     automatic: true
