@@ -19,7 +19,7 @@ exports.updatePractitionerUserInteractor = async ({
   user,
 }) => {
   const requestUser = applicationContext.getCurrentUser();
-  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)) {
+  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER)) {
     throw new UnauthorizedError('Unauthorized for updating practitioner user');
   }
 
@@ -27,7 +27,11 @@ exports.updatePractitionerUserInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: user.userId });
 
-  const validatedUserData = new Practitioner(user, { applicationContext })
+  // do not allow edit of bar number or email
+  const validatedUserData = new Practitioner(
+    { ...user, barNumber: oldUserInfo.barNumber, email: oldUserInfo.email },
+    { applicationContext },
+  )
     .validate()
     .toRawObject();
 
