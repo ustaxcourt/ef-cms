@@ -70,7 +70,7 @@ export default test => {
       .find(x => x.docketNumber === test.docketNumber);
 
     expect(servedCase).toMatchObject({
-      caseTitle: 'Mona Schultz',
+      caseCaptionNames: 'Mona Schultz',
     });
     expect(servedCase.caseStatus).toEqual(Case.STATUS_TYPES.generalDocket);
   });
@@ -96,7 +96,7 @@ export default test => {
       .find(x => x.docketNumber === test.docketNumber);
 
     expect(sectionServedCase).toMatchObject({
-      caseTitle: 'Mona Schultz',
+      caseCaptionNames: 'Mona Schultz',
     });
     expect(sectionServedCase.caseStatus).toEqual(
       Case.STATUS_TYPES.generalDocket,

@@ -128,7 +128,7 @@ export const SectionWorkQueueInProgress = connect(
                   <span className="no-wrap">{item.received}</span>
                 </td>
                 <td className="message-queue-row message-queue-case-title">
-                  {item.caseTitle}
+                  {item.caseCaptionNames}
                 </td>
                 <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">
