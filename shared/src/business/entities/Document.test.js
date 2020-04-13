@@ -134,9 +134,9 @@ describe('Document entity', () => {
         {
           assigneeId: 'bob',
           assigneeName: 'bob',
+          caseCaptionNames: 'testing',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: 'new',
-          caseTitle: 'testing',
           docketNumber: '101-18',
           document: {},
           isQC: true,
@@ -844,9 +844,9 @@ describe('Document entity', () => {
             {
               assigneeId: 'bill',
               assigneeName: 'bill',
+              caseCaptionNames: 'testing',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
-              caseTitle: 'testing',
               docketNumber: '101-18',
               document: {},
               isQC: false,
@@ -864,9 +864,9 @@ describe('Document entity', () => {
             {
               assigneeId: 'bob',
               assigneeName: 'bob',
+              caseCaptionNames: 'testing',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
-              caseTitle: 'testing',
               docketNumber: '101-18',
               document: {},
               isQC: true,
@@ -899,9 +899,9 @@ describe('Document entity', () => {
             {
               assigneeId: 'bill',
               assigneeName: 'bill',
+              caseCaptionNames: 'testing',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
-              caseTitle: 'testing',
               docketNumber: '101-18',
               document: {},
               isQC: false,
