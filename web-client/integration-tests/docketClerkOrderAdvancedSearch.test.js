@@ -18,21 +18,15 @@ describe('docket clerk order advanced search', () => {
     test.draftOrders = [];
   });
 
-  const caseCreationCount = 3;
-  let createdCases = [];
+  let caseDetail;
 
   loginAs(test, 'petitioner');
-  for (let i = 0; i < caseCreationCount; i++) {
-    it(`create case ${i + 1}`, async () => {
-      const caseDetail = await uploadPetition(test);
-      createdCases.push(caseDetail);
-    });
-  }
+  it('create case', async () => {
+    caseDetail = await uploadPetition(test);
+    test.docketNumber = caseDetail.docketNumber;
+  });
 
   loginAs(test, 'docketclerk');
-  it('set docket number', async () => {
-    test.docketNumber = createdCases[0].docketNumber;
-  });
   docketClerkCreatesAnOrder(test, {
     documentTitle: 'Order',
     eventCode: 'O',
@@ -42,20 +36,13 @@ describe('docket clerk order advanced search', () => {
   docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkServesOrder(test, 0);
 
-  it('set docket number', async () => {
-    test.docketNumber = createdCases[0].docketNumber;
-  });
   docketClerkCreatesAnOrder(test, {
     documentTitle: 'Order of Dismissal',
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
   docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
-  docketClerkServesOrder(test, 1);
 
-  it('set docket number', async () => {
-    test.docketNumber = createdCases[1].docketNumber;
-  });
   docketClerkCreatesAnOrder(test, {
     documentTitle: 'Order of Dismissal',
     eventCode: 'OD',
@@ -100,8 +87,12 @@ describe('docket clerk order advanced search', () => {
 
     expect(test.getState('searchResults')).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ documentId: test.draftOrders[1].documentId }),
         expect.objectContaining({ documentId: test.draftOrders[2].documentId }),
+      ]),
+    );
+    expect(test.getState('searchResults')).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ documentId: test.draftOrders[1].documentId }),
       ]),
     );
   });
