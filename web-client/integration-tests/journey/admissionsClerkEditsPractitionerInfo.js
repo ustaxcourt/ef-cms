@@ -1,11 +1,11 @@
 export const admissionsClerkEditsPractitionerInfo = test => {
   return it('admissions clerk edits practitioner information', async () => {
     await test.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: 'PT1234',
+      barNumber: test.barNumber,
     });
 
     expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
-    expect(test.getState('form.barNumber')).toEqual('PT1234');
+    expect(test.getState('form.barNumber')).toEqual(test.barNumber);
 
     await test.runSequence('updateFormValueSequence', {
       key: 'firstName',
@@ -30,7 +30,9 @@ export const admissionsClerkEditsPractitionerInfo = test => {
     await test.runSequence('submitUpdatePractitionerUserSequence');
 
     expect(test.getState('currentPage')).toEqual('PractitionerDetail');
-    expect(test.getState('practitionerDetail.barNumber')).toEqual('PT1234');
+    expect(test.getState('practitionerDetail.barNumber')).toEqual(
+      test.barNumber,
+    );
     expect(test.getState('practitionerDetail.name')).toEqual(
       'Ben Leighton Matlock',
     );
