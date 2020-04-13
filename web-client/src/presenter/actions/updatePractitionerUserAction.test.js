@@ -19,20 +19,35 @@ describe('updatePractitionerUserAction', () => {
   });
 
   it('calls the update practitioner user interactor', async () => {
+    applicationContext
+      .getUseCases()
+      .updatePractitionerUserInteractor.mockReturnValue({
+        barNumber: 'AB1111',
+      });
+
     await runAction(updatePractitionerUserAction, {
       modules: {
         presenter,
       },
       state: {
         form: {
-          user: {},
+          firstName: 'Joe',
+          lastName: 'Exotic',
         },
+        practitionerDetail: { barNumber: 'AB1111' },
       },
     });
 
     expect(
       applicationContext.getUseCases().updatePractitionerUserInteractor,
     ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().updatePractitionerUserInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
+      barNumber: 'AB1111',
+      user: { firstName: 'Joe', lastName: 'Exotic' },
+    });
     expect(successMock).toHaveBeenCalled();
   });
 

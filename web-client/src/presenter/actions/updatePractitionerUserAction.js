@@ -14,18 +14,21 @@ export const updatePractitionerUserAction = async ({
   path,
 }) => {
   const user = get(state.form);
+  const barNumber = get(state.practitionerDetail.barNumber);
 
   try {
     const practitionerUser = await applicationContext
       .getUseCases()
       .updatePractitionerUserInteractor({
         applicationContext,
+        barNumber,
         user,
       });
     return path.success({
       alertSuccess: {
-        title: 'The Practitioner User has been updated.',
+        message: 'Practitioner updated.',
       },
+      barNumber: practitionerUser.barNumber,
       practitionerUser,
     });
   } catch (err) {

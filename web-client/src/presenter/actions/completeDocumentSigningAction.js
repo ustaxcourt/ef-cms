@@ -91,8 +91,7 @@ export const completeDocumentSigningAction = async ({
 
   return {
     alertSuccess: {
-      message: 'Your signature has been added',
-      title: '',
+      message: 'Signature added.',
     },
     caseId,
     documentId: documentIdToReturn,
