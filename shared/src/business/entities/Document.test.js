@@ -162,13 +162,22 @@ describe('Document entity', () => {
   describe('validate', () => {
     it('should do nothing if valid', () => {
       let error;
+      let document;
       try {
-        const document = new Document(A_VALID_DOCUMENT, { applicationContext });
+        document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentContents: 'this is the content of the document',
+          },
+          { applicationContext },
+        );
         document.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
         document.validate();
       } catch (err) {
         error = err;
       }
+
+      expect(document.documentContents).toBeDefined();
       expect(error).not.toBeDefined();
     });
 
@@ -972,6 +981,48 @@ describe('Document entity', () => {
         { applicationContext },
       );
       expect(document.isAutoServed()).toBeFalsy();
+    });
+  });
+
+  describe('setAsServed', () => {
+    it('sets the Document as served', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          draftState: {
+            documentContents: 'Yee to the haw',
+          },
+        },
+        { applicationContext },
+      );
+      document.setAsServed();
+
+      expect(document.status).toEqual('served');
+      expect(document.servedAt).toBeDefined();
+      expect(document.draftState).toEqual(null);
+    });
+
+    it('sets the Document as served with served parties', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          draftState: {
+            documentContents: 'Yee to the haw',
+          },
+        },
+        { applicationContext },
+      );
+
+      document.setAsServed([
+        {
+          name: 'Served Party',
+        },
+      ]);
+
+      expect(document.status).toEqual('served');
+      expect(document.servedAt).toBeDefined();
+      expect(document.draftState).toEqual(null);
+      expect(document.servedParties).toMatchObject([{ name: 'Served Party' }]);
     });
   });
 });
