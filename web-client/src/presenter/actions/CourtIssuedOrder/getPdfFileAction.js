@@ -16,14 +16,15 @@ export const getPdfFileAction = async ({
 }) => {
   const { htmlString } = props;
   const documentTitle = get(state.form.documentTitle);
+  const caseDetail = get(state.caseDetail);
 
   if (!htmlString) {
     throw new Error('No markup found in documentHtml');
   }
 
-  let docketNumberWithSuffix = get(
-    state.formattedCaseDetail.docketNumberWithSuffix,
-  );
+  let docketNumberWithSuffix = applicationContext
+    .getUtilities()
+    .formatDocketNumberWithSuffix(caseDetail);
 
   const pdfBlob = await applicationContext
     .getUseCases()
