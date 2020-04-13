@@ -12,7 +12,7 @@ const test = setupTest({
   },
 });
 
-describe('docket clerk order advanced search', () => {
+xdescribe('docket clerk order advanced search', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
     test.draftOrders = [];
