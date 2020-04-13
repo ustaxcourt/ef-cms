@@ -19,7 +19,7 @@ exports.createPractitionerUserInteractor = async ({
 }) => {
   const requestUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.ADD_PRACTITIONER_USER)) {
+  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER)) {
     throw new UnauthorizedError('Unauthorized for creating practitioner user');
   }
 

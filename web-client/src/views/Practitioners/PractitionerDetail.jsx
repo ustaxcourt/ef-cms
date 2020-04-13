@@ -1,3 +1,5 @@
+import { Button } from '../../ustc-ui/Button/Button';
+import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -28,6 +30,21 @@ export const PractitionerDetail = connect(
         </div>
 
         <div className="grid-container">
+          <div className="grid-row grid-gap">
+            <div className="grid-col-9">
+              <SuccessNotification />
+            </div>
+            <div className="grid-col-3">
+              <Button
+                link
+                className="push-right margin-bottom-1"
+                href={`/users/edit-practitioner/${practitionerDetailHelper.barNumber}`}
+                icon="edit"
+              >
+                Edit
+              </Button>
+            </div>
+          </div>
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-4 margin-bottom-4">
               <div className="card height-full margin-bottom-0">
@@ -78,7 +95,6 @@ export const PractitionerDetail = connect(
                 </div>
               </div>
             </div>
-
             <div className="tablet:grid-col-8 margin-bottom-4">
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper">
