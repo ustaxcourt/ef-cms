@@ -41,7 +41,7 @@ export default test => {
 
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('alertSuccess').title).toEqual(
+    expect(test.getState('alertSuccess').message).toEqual(
       'Entry added to Docket Record.',
     );
 
