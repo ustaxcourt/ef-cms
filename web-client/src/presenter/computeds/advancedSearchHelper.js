@@ -48,7 +48,7 @@ export const formatOrderSearchResultRecord = (
     result.docketNumberSuffix ? result.docketNumberSuffix : ''
   }`;
 
-  result.formattedJudgeName = result.signedJudgeName
+  result.formattedSignedJudgeName = result.signedJudgeName
     ? getJudgeLastName(result.signedJudgeName)
     : '';
 
