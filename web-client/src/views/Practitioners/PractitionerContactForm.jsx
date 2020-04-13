@@ -10,6 +10,7 @@ export const PractitionerContactForm = connect(
   {
     bind: props.bind,
     changeCountryTypeSequence: props.changeCountryTypeSequence,
+    createPractitionerUserHelper: state.createPractitionerUserHelper,
     form: state.form,
     onBlurSequenceName: props.onBlurSequenceName,
     onBlurValidationSequence: sequences[props.onBlurSequenceName],
@@ -21,6 +22,7 @@ export const PractitionerContactForm = connect(
   function PractitionerContactForm({
     bind,
     changeCountryTypeSequence,
+    createPractitionerUserHelper,
     form,
     onBlurSequenceName,
     onBlurValidationSequence,
@@ -105,27 +107,34 @@ export const PractitionerContactForm = connect(
 
         <div className="grid-row">
           <div className="grid-col-6">
-            <FormGroup errorText={validationErrors.email}>
-              <label className="usa-label" htmlFor="email">
-                Email address
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                id="email"
-                name="email"
-                value={form.email || ''}
-                onBlur={() => {
-                  onBlurValidationSequence();
-                }}
-                onChange={e => {
-                  onChangeUpdateSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </FormGroup>
+            {createPractitionerUserHelper.canEditEmail ? (
+              <FormGroup errorText={validationErrors.email}>
+                <label className="usa-label" htmlFor="email">
+                  Email address
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input"
+                  id="email"
+                  name="email"
+                  value={form.email || ''}
+                  onBlur={() => {
+                    onBlurValidationSequence();
+                  }}
+                  onChange={e => {
+                    onChangeUpdateSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </FormGroup>
+            ) : (
+              <>
+                <span className="usa-label">Email address</span>
+                <p>{form.email}</p>
+              </>
+            )}
           </div>
 
           <div className="grid-col-6">
