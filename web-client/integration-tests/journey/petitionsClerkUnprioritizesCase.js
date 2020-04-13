@@ -7,7 +7,7 @@ export default test => {
 
     await test.runSequence('unprioritizeCaseSequence');
 
-    expect(test.getState('alertSuccess').title).toEqual(
+    expect(test.getState('alertSuccess').message).toEqual(
       'High priority removed. Case is eligible for next available trial session.',
     );
     expect(test.getState('caseDetail').highPriority).toBeFalsy();

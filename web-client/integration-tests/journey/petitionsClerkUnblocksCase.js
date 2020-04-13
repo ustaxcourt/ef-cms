@@ -9,7 +9,7 @@ export default (test, trialLocation, checkReport = true) => {
 
     await test.runSequence('unblockCaseFromTrialSequence');
 
-    expect(test.getState('alertSuccess').title).toEqual(
+    expect(test.getState('alertSuccess').message).toEqual(
       'Block removed. Case is eligible for next available trial session.',
     );
     expect(test.getState('caseDetail').blocked).toBeFalsy();
