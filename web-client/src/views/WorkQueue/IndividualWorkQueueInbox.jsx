@@ -48,7 +48,7 @@ export const IndividualWorkQueueInbox = connect(
                     <span className="no-wrap">{item.received}</span>
                   </td>
                   <td className="message-queue-row message-queue-case-title">
-                    {item.caseTitle}
+                    {item.caseCaptionNames}
                   </td>
                   <td className="message-queue-row has-icon padding-right-0">
                     {item.showUnreadStatusIcon && (
