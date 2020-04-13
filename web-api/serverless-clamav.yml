@@ -12,7 +12,7 @@ custom:
     number: 3
     includeLayers: true
   jetpack:
-    mode: yarn
+    mode: npm
 
 provider:
   name: aws

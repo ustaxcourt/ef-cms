@@ -16,7 +16,7 @@ custom:
   #enabled: true
 
   jetpack:
-    mode: yarn
+    mode: npm
 
   prune:
     automatic: true
