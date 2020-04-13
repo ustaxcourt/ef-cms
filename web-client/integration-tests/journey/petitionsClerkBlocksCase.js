@@ -22,7 +22,7 @@ export default (test, trialLocation) => {
     await test.runSequence('blockCaseFromTrialSequence');
 
     expect(test.getState('alertSuccess').title).toEqual(
-      'This case is now blocked from being set for trial',
+      'Case blocked from trial.',
     );
     expect(test.getState('caseDetail').blocked).toBeTruthy();
     expect(test.getState('caseDetail').blockedReason).toEqual('just because');

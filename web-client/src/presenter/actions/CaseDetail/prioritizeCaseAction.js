@@ -22,8 +22,8 @@ export const prioritizeCaseAction = async ({ applicationContext, get }) => {
 
   return {
     alertSuccess: {
-      message: 'This case will be set for trial when the calendar is set.',
-      title: 'This case has been added to eligible cases.',
+      message:
+        'Case added to eligible list and will be set for trial when calendar is set.',
     },
     caseDetail,
   };
