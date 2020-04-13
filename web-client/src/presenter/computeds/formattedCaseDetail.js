@@ -14,7 +14,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
     .isExternalUser(user.role);
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
-
   const { Document } = applicationContext.getEntityConstructors();
   const systemGeneratedEventCodes = Object.keys(
     Document.SYSTEM_GENERATED_DOCUMENT_TYPES,
@@ -30,11 +29,13 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   let docketRecordSort;
   const caseDetail = get(state.caseDetail);
+
   const caseDeadlines = get(state.caseDeadlines);
   const caseId = get(state.caseDetail.caseId);
   if (caseId) {
     docketRecordSort = get(state.sessionMetadata.docketRecordSort[caseId]);
   }
+
   const result = {
     ...applicationContext
       .getUtilities()

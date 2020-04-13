@@ -32,8 +32,9 @@ describe('orderAdvancedSearchInteractor', () => {
     expect(results).toEqual([]);
   });
 
-  it('calls search function with correct params and returns records for an exact match result', async () => {
+  it('calls search function with correct params and returns records for a partial and exact match results', async () => {
     const mockKeywordForSearch = 'outrageous';
+    const mockWildcardKeywordForSearch = '*outrageous*';
     const orderEventCodes = map(Order.ORDER_TYPES, 'eventCode');
 
     applicationContext.getSearchClient().search.mockResolvedValue({
@@ -133,10 +134,10 @@ describe('orderAdvancedSearchInteractor', () => {
         },
       },
       {
-        simple_query_string: {
+        query_string: {
           default_operator: 'or',
           fields: ['documentContents.S', 'documentTitle.S'],
-          query: mockKeywordForSearch,
+          query: mockWildcardKeywordForSearch,
         },
       },
     ]);
