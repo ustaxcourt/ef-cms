@@ -4,20 +4,21 @@ const {
   updateWorkItemAssociatedJudge,
 } = require('../workitems/updateWorkItemAssociatedJudge');
 const {
+  updateWorkItemCaseCaptionNames,
+} = require('../workitems/updateWorkItemCaseCaptionNames');
+const {
   updateWorkItemCaseIsInProgress,
 } = require('../workitems/updateWorkItemCaseIsInProgress');
 const {
   updateWorkItemCaseStatus,
 } = require('../workitems/updateWorkItemCaseStatus');
 const {
-  updateWorkItemCaseTitle,
-} = require('../workitems/updateWorkItemCaseTitle');
-const {
   updateWorkItemDocketNumberSuffix,
 } = require('../workitems/updateWorkItemDocketNumberSuffix');
 const {
   updateWorkItemTrialDate,
 } = require('../workitems/updateWorkItemTrialDate');
+const { Case } = require('../../../business/entities/cases/Case');
 const { differenceWith, isEqual } = require('lodash');
 const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
 const { omit } = require('lodash');
@@ -187,9 +188,11 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
       }
       if (oldCase.caseCaption !== caseToUpdate.caseCaption) {
         requests.push(
-          updateWorkItemCaseTitle({
+          updateWorkItemCaseCaptionNames({
             applicationContext,
-            caseTitle: caseToUpdate.caseCaption,
+            caseCaptionNames: Case.getCaseCaptionNames(
+              caseToUpdate.caseCaption,
+            ),
             workItemId,
           }),
         );

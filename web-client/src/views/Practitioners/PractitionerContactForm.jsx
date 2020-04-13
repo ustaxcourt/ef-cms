@@ -1,15 +1,16 @@
-import { Address } from './StartCase/Address';
-import { Country } from './StartCase/Country';
-import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
-import { InternationalAddress } from './StartCase/InternationalAddress';
+import { Address } from '../StartCase/Address';
+import { Country } from '../StartCase/Country';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { InternationalAddress } from '../StartCase/InternationalAddress';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
-export const PractitionerContactEditForm = connect(
+export const PractitionerContactForm = connect(
   {
     bind: props.bind,
     changeCountryTypeSequence: props.changeCountryTypeSequence,
+    createPractitionerUserHelper: state.createPractitionerUserHelper,
     form: state.form,
     onBlurSequenceName: props.onBlurSequenceName,
     onBlurValidationSequence: sequences[props.onBlurSequenceName],
@@ -18,9 +19,10 @@ export const PractitionerContactEditForm = connect(
     type: props.type,
     validationErrors: state.validationErrors,
   },
-  function PractitionerContactEditForm({
+  function PractitionerContactForm({
     bind,
     changeCountryTypeSequence,
+    createPractitionerUserHelper,
     form,
     onBlurSequenceName,
     onBlurValidationSequence,
@@ -105,27 +107,34 @@ export const PractitionerContactEditForm = connect(
 
         <div className="grid-row">
           <div className="grid-col-6">
-            <FormGroup errorText={validationErrors.email}>
-              <label className="usa-label" htmlFor="email">
-                Email address
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                id="email"
-                name="email"
-                value={form.email || ''}
-                onBlur={() => {
-                  onBlurValidationSequence();
-                }}
-                onChange={e => {
-                  onChangeUpdateSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </FormGroup>
+            {createPractitionerUserHelper.canEditEmail ? (
+              <FormGroup errorText={validationErrors.email}>
+                <label className="usa-label" htmlFor="email">
+                  Email address
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input"
+                  id="email"
+                  name="email"
+                  value={form.email || ''}
+                  onBlur={() => {
+                    onBlurValidationSequence();
+                  }}
+                  onChange={e => {
+                    onChangeUpdateSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </FormGroup>
+            ) : (
+              <>
+                <span className="usa-label">Email address</span>
+                <p>{form.email}</p>
+              </>
+            )}
           </div>
 
           <div className="grid-col-6">

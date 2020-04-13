@@ -1,7 +1,7 @@
 let rowCount;
 let createdDocketNumber;
 
-describe('File a petition', function() {
+describe('File a petition', function () {
   before(() => {
     cy.task('seed');
     cy.login('petitioner');
@@ -80,15 +80,11 @@ describe('creation form', () => {
 
   it('clicks the Yes notice radio button', () => {
     cy.get('#irs-notice-radios').scrollIntoView();
-    cy.get('#irs-notice-radios label')
-      .first()
-      .click();
+    cy.get('#irs-notice-radios label').first().click();
   });
 
   it('selects the Notice of Deficiency case type', () => {
-    cy.get('#case-type')
-      .scrollIntoView()
-      .select('Notice of Deficiency');
+    cy.get('#case-type').scrollIntoView().select('Notice of Deficiency');
   });
 
   it('continues to wizard step 3', () => {
@@ -96,15 +92,11 @@ describe('creation form', () => {
   });
 
   it('selects on behalf of myself', () => {
-    cy.get('label[for="Myself"]')
-      .scrollIntoView()
-      .click();
+    cy.get('label[for="Myself"]').scrollIntoView().click();
   });
 
   it('fill in name', () => {
-    cy.get('input#name')
-      .scrollIntoView()
-      .type('John');
+    cy.get('input#name').scrollIntoView().type('John');
   });
 
   it('fill in contactPrimary.address1', () => {
@@ -120,9 +112,7 @@ describe('creation form', () => {
   });
 
   it('selects state', () => {
-    cy.get('select[name="contactPrimary.state"]')
-      .scrollIntoView()
-      .select('AL');
+    cy.get('select[name="contactPrimary.state"]').scrollIntoView().select('AL');
   });
 
   it('fills in zipcode', () => {
@@ -132,9 +122,7 @@ describe('creation form', () => {
   });
 
   it('fills in phone', () => {
-    cy.get('input#phone')
-      .scrollIntoView()
-      .type('1111111111');
+    cy.get('input#phone').scrollIntoView().type('1111111111');
   });
 
   it('continues to wizard step 4', () => {
@@ -143,15 +131,11 @@ describe('creation form', () => {
 
   it('click the small radio button', () => {
     cy.get('#procedure-type-radios').scrollIntoView();
-    cy.get('#procedure-type-radios label')
-      .first()
-      .click();
+    cy.get('#procedure-type-radios label').first().click();
   });
 
   it('select a city', () => {
-    cy.get('#preferred-trial-city')
-      .scrollIntoView()
-      .select('Mobile, Alabama');
+    cy.get('#preferred-trial-city').scrollIntoView().select('Mobile, Alabama');
   });
 
   it('reviews information before filing', () => {
@@ -161,9 +145,7 @@ describe('creation form', () => {
   it('submits forms and shows a success message', () => {
     cy.server();
     cy.route('POST', '**/cases').as('postCase');
-    cy.get('button#submit-case')
-      .scrollIntoView()
-      .click();
+    cy.get('button#submit-case').scrollIntoView().click();
     cy.wait('@postCase');
     cy.get('@postCase').should(xhr => {
       expect(xhr.responseBody).to.have.property('docketNumber');
@@ -171,7 +153,7 @@ describe('creation form', () => {
     });
     cy.get('.usa-alert--success', { timeout: 300000 }).should(
       'contain',
-      'successfully submitted',
+      'Petition filed',
     );
   });
   it('case list table reflects newly-added record', () => {
