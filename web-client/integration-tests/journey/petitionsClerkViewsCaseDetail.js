@@ -5,7 +5,10 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
-export default (test, expectedDocumentCount = 2) => {
+export const petitionsClerkViewsCaseDetail = (
+  test,
+  expectedDocumentCount = 2,
+) => {
   return it('Petitions clerk views case detail', async () => {
     test.setState('caseDetail', {});
 

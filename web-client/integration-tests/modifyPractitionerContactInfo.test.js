@@ -1,6 +1,6 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import practitionerUpdatesAddress from './journey/practitionerUpdatesAddress';
-import practitionerViewsCaseDetailNoticeOfChangeOfAddress from './journey/practitionerViewsCaseDetailNoticeOfChangeOfAddress';
+import { practitionerUpdatesAddress } from './journey/practitionerUpdatesAddress';
+import { practitionerViewsCaseDetailNoticeOfChangeOfAddress } from './journey/practitionerViewsCaseDetailNoticeOfChangeOfAddress';
 
 const test = setupTest();
 
