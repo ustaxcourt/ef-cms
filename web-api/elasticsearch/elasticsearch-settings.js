@@ -20,15 +20,13 @@ considerations:
   simple_query_string syntax (for future queries):
   https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html
 
+  test 'asciifolding' by putting the following into an Order contents: Déjà vu
+  then search for "deja" to see if the order is returned.
 */
 module.exports = {
   index: {
     analysis: {
       analyzer: {
-        ShingleAnalyzer: {
-          filter: ['lowercase', 'snowball', 'filter_stemmer', 'filter_shingle'],
-          tokenizer: 'standard',
-        },
         ustc_analyzer: {
           default: {
             type: 'simple',
@@ -36,14 +34,21 @@ module.exports = {
           default_search: {
             type: 'stop',
           },
-          filter: ['lowercase', 'asciifolding', 'english', 'ustc_stop'],
+          filter: [
+            'lowercase',
+            'asciifolding',
+            'english',
+            'ustc_stop',
+            'filter_stemmer',
+            'filter_shingle',
+          ],
           tokenizer: 'standard',
         },
       },
       filter: {
         english: { stopwords: '_english_', type: 'stop' },
         filter_shingle: {
-          max_shingle_size: 10,
+          max_shingle_size: 3,
           min_shingle_size: 2,
           output_unigrams: true,
           type: 'shingle',
@@ -64,21 +69,7 @@ module.exports = {
       },
     },
     'mapping.total_fields.limit': '4000',
-    mappings: {
-      test: {
-        properties: {
-          analyzer: 'ShingleAnalyzer',
-          fields: {
-            word_count: {
-              analyzer: 'ShingleAnalyzer',
-              store: 'yes',
-              type: 'token_count',
-            },
-          },
-          type: 'string',
-        },
-      },
-    },
+    // mappings: {} // TBD
     number_of_replicas: 1,
     number_of_shards: 5,
   },
