@@ -7,8 +7,7 @@ export const getUploadCourtIssuedDocumentAlertSuccessAction = () => {
   return {
     alertSuccess: {
       message:
-        'You can access your documents at any time from draft documents.',
-      title: 'Your filing has been successfully submitted.',
+        'Draft saved.',
     },
   };
 };

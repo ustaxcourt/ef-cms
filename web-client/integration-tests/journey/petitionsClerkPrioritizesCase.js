@@ -19,7 +19,7 @@ export default test => {
     await test.runSequence('prioritizeCaseSequence');
 
     expect(test.getState('alertSuccess').title).toEqual(
-      'This case has been added to eligible cases.',
+      'Case added to eligible list.',
     );
     expect(test.getState('caseDetail').highPriority).toBeTruthy();
     expect(test.getState('caseDetail').highPriorityReason).toEqual(

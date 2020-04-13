@@ -38,8 +38,7 @@ export const submitEditPrivatePractitionersModalAction = async ({
 
   return path.success({
     alertSuccess: {
-      message: 'You can view your changes below.',
-      title: 'Petitioner Counsel has been updated.',
+      message: 'Petitioner counsel updated.',
     },
   });
 };
