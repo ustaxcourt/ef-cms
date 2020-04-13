@@ -80,6 +80,8 @@ exports.generateChangeOfAddress = async ({
           oldData,
         });
 
+      if (!documentType) return;
+
       const pdfContentHtml = await applicationContext
         .getTemplateGenerators()
         .generateChangeOfAddressTemplate({
