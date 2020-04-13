@@ -16,6 +16,7 @@ custom:
 
   jetpack:
     mode: npm
+    lockfile: ../package-lock.json
 
   prune:
     automatic: true
