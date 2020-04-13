@@ -92,6 +92,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   // Serve on all parties
   const servedParties = aggregatePartiesForService(caseEntity);
 
+  // TODO: set draftState = null
   courtIssuedDocument.setAsServed(servedParties.all);
 
   const { Body: pdfData } = await applicationContext
@@ -183,12 +184,6 @@ exports.serveCourtIssuedDocumentInteractor = async ({
         trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
       });
     }
-  }
-
-  if (courtIssuedDocument.draftState) {
-    courtIssuedDocument.documentContents =
-      courtIssuedDocument.draftState.documentContents;
-    courtIssuedDocument.draftState = null;
   }
 
   await applicationContext.getPersistenceGateway().updateCase({

@@ -417,6 +417,8 @@ Document.prototype.archive = function () {
 Document.prototype.setAsServed = function (servedParties = null) {
   this.status = 'served';
   this.servedAt = createISODateString();
+  this.draftState = null;
+
   if (servedParties) {
     this.servedParties = servedParties;
   }

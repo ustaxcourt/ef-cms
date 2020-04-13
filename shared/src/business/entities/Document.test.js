@@ -974,4 +974,46 @@ describe('Document entity', () => {
       expect(document.isAutoServed()).toBeFalsy();
     });
   });
+
+  describe('setAsServed', () => {
+    it('sets the Document as served', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          draftState: {
+            documentContents: 'Yee to the haw',
+          },
+        },
+        { applicationContext },
+      );
+      document.setAsServed();
+
+      expect(document.status).toEqual('served');
+      expect(document.servedAt).toBeDefined();
+      expect(document.draftState).toEqual(null);
+    });
+
+    it('sets the Document as served with served parties', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          draftState: {
+            documentContents: 'Yee to the haw',
+          },
+        },
+        { applicationContext },
+      );
+
+      document.setAsServed([
+        {
+          name: 'Served Party',
+        },
+      ]);
+
+      expect(document.status).toEqual('served');
+      expect(document.servedAt).toBeDefined();
+      expect(document.draftState).toEqual(null);
+      expect(document.servedParties).toMatchObject([{ name: 'Served Party' }]);
+    });
+  });
 });
