@@ -69,7 +69,7 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('alertSuccess').title).toEqual(
+    expect(test.getState('alertSuccess').message).toEqual(
       'Entry added to Docket Record.',
     );
 

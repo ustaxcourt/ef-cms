@@ -47,7 +47,7 @@ export const docketClerkEditsDocketEntryMeta = test => {
     });
 
     expect(test.getState('alertSuccess')).toMatchObject({
-      message: 'Changes saved to Docket Record.',
+      message: 'Docket entry changes saved.',
     });
   });
 };
