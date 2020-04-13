@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
 const { Practitioner } = require('../../entities/Practitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -18,13 +19,27 @@ exports.updatePractitionerUserInteractor = async ({
   user,
 }) => {
   const requestUser = applicationContext.getCurrentUser();
-  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)) {
+  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER)) {
     throw new UnauthorizedError('Unauthorized for updating practitioner user');
   }
 
-  const validatedUserData = new Practitioner(user, { applicationContext })
+  const oldUserInfo = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: user.userId });
+
+  // do not allow edit of bar number or email
+  const validatedUserData = new Practitioner(
+    { ...user, barNumber: oldUserInfo.barNumber, email: oldUserInfo.email },
+    { applicationContext },
+  )
     .validate()
     .toRawObject();
+
+  await generateChangeOfAddress({
+    applicationContext,
+    contactInfo: validatedUserData.contact,
+    user: oldUserInfo,
+  });
 
   const updatedUser = await applicationContext
     .getPersistenceGateway()
