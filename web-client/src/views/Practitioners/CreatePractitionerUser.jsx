@@ -26,9 +26,7 @@ export const CreatePractitionerUser = connect(
         <section className="grid-container">
           <SuccessNotification />
           <ErrorNotification />
-        </section>
 
-        <div className="grid-container">
           <PractitionerForm />
 
           <div className="grid-row margin-bottom-6">
@@ -45,7 +43,7 @@ export const CreatePractitionerUser = connect(
               </Button>
             </div>
           </div>
-        </div>
+        </section>
       </>
     );
   },
