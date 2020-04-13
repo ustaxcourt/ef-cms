@@ -27,8 +27,7 @@ describe('archiveDraftDocumentAction', () => {
       applicationContext.getUseCases().archiveDraftDocumentInteractor,
     ).toHaveBeenCalled();
     expect(result.state.alertSuccess).toMatchObject({
-      message: 'document-title-123',
-      title: 'This document has been deleted:',
+      message: 'Document deleted.',
     });
   });
 

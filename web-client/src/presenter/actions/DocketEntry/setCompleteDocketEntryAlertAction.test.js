@@ -13,7 +13,7 @@ describe('setCompleteDocketEntryAlertAction', () => {
 
     expect(result.output).toMatchObject({
       alertSuccess: {
-        message: 'QC completed and message sent.',
+        message: 'Diners, Drive-ins, and Dives QC completed and message sent.',
       },
     });
   });
