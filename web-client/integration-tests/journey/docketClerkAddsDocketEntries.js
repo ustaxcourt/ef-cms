@@ -121,7 +121,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       isAddAnother: true,
     });
 
-    expect(test.getState('alertSuccess').title).toEqual(
+    expect(test.getState('alertSuccess').message).toEqual(
       'Entry added to Docket Record.',
     );
 
