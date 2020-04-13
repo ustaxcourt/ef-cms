@@ -1,12 +1,12 @@
-import { Address } from './StartCase/Address';
-import { Country } from './StartCase/Country';
-import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
-import { InternationalAddress } from './StartCase/InternationalAddress';
+import { Address } from '../StartCase/Address';
+import { Country } from '../StartCase/Country';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { InternationalAddress } from '../StartCase/InternationalAddress';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
-export const PractitionerContactEditForm = connect(
+export const PractitionerContactForm = connect(
   {
     bind: props.bind,
     changeCountryTypeSequence: props.changeCountryTypeSequence,
@@ -18,7 +18,7 @@ export const PractitionerContactEditForm = connect(
     type: props.type,
     validationErrors: state.validationErrors,
   },
-  function PractitionerContactEditForm({
+  function PractitionerContactForm({
     bind,
     changeCountryTypeSequence,
     form,
