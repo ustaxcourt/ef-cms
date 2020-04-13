@@ -9,7 +9,7 @@ elif [[ $BRANCH == 'experimental' ]] ; then
 elif [[ $BRANCH == 'test' ]] ; then
   echo 'test'
 elif [[ $BRANCH == 'migration' ]] ; then
-  echo 'migr'
+  echo 'mig'
 elif [[ $BRANCH == 'staging' ]] ; then
   echo 'stg'
 elif [[ $BRANCH == 'master' ]] ; then
