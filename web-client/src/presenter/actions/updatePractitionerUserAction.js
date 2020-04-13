@@ -24,7 +24,7 @@ export const updatePractitionerUserAction = async ({
       });
     return path.success({
       alertSuccess: {
-        title: 'The Practitioner User has been updated.',
+        message: 'Practitioner updated.',
       },
       practitionerUser,
     });
