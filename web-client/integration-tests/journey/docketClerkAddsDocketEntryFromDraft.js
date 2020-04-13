@@ -28,8 +28,8 @@ export const docketClerkAddsDocketEntryFromDraft = (test, draftOrderIndex) => {
 
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('alertSuccess').title).toEqual(
-      'Your entry has been added to the docket record.',
+    expect(test.getState('alertSuccess').message).toEqual(
+      'Entry added to Docket Record.',
     );
 
     await test.runSequence('gotoCaseDetailSequence', {

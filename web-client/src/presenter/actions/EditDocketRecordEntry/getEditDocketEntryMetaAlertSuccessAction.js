@@ -6,8 +6,7 @@
 export const getEditDocketEntryMetaAlertSuccessAction = () => {
   return {
     alertSuccess: {
-      message: 'You can view your updates to the Docket Record below.',
-      title: 'Your changes have been saved.',
+      message: 'Docket entry changes saved.',
     },
   };
 };

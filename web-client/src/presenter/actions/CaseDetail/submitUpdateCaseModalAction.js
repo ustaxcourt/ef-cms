@@ -44,7 +44,7 @@ export const submitUpdateCaseModalAction = async ({
 
   return {
     alertSuccess: {
-      message: 'Your changes have been saved',
+      message: 'Changes saved.',
     },
     caseDetail: updatedCase,
   };
