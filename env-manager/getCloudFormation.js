@@ -1,7 +1,7 @@
-const AWS = require('aws-sdk');
+const { CloudFormation } = require('aws-sdk');
 
 exports.getCloudFormation = ({ environment }) => {
-  const cloudFormation = new AWS.CloudFormation({
+  const cloudFormation = new CloudFormation({
     accessKeyId: environment.accessKeyId,
     apiVersion: 'latest',
     region: environment.region,
