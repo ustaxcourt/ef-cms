@@ -8,7 +8,7 @@ const environment = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   apiVersion: 'latest',
   name: 'exp',
-  region: 'us-east-1',
+  region: 'us-west-1',
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 };
 
@@ -16,8 +16,8 @@ const teardownEnvironment = async () => {
   const cloudFormation = getCloudFormation({ environment });
   const apiGateway = getApiGateway({ environment });
 
-  deleteCustomDomains({ apiGateway, environment });
-  deleteStacks({ cloudFormation, environment });
+  await deleteCustomDomains({ apiGateway, environment });
+  await deleteStacks({ cloudFormation, environment });
 
   // TODO: delete Dynamo tables
   // TODO: wait for Dynamo tables to be deleted
