@@ -11,7 +11,6 @@ import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudge
 import { parallel } from 'cerebral/factories';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
-import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setCaseDetailPageTabUnfrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabUnfrozenAction';
@@ -55,7 +54,6 @@ export const gotoCaseDetailSequence = [
   getConsolidatedCasesByCaseAction,
   setConsolidatedCasesForCaseAction,
   setDefaultDocketRecordSortAction,
-  setBaseUrlAction,
   set(state.editDocumentEntryPoint, 'CaseDetail'),
   runPathForUserRoleAction,
   {
