@@ -12,8 +12,7 @@ export default (test, overrides = {}) => {
 
     expect(test.getState('alertWarning')).toEqual({
       message:
-        'You must provide an address and a judge to be able to set this trial session ',
-      title: 'This trial session requires additional information',
+        'Provide an address and a judge to set this trial session.',
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
@@ -57,7 +56,7 @@ export default (test, overrides = {}) => {
       expect(test.getState('currentPage')).toEqual('SimplePdfPreviewPage');
       expect(test.getState('alertWarning')).toEqual({
         message:
-          'These cases have parties receiving paper service. Print and mail all paper service documents below.',
+          'Print and mail all paper service documents now.',
       });
     } else {
       expect(test.getState('currentPage')).toEqual('TrialSessionDetail');

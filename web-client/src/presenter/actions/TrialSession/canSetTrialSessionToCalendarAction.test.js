@@ -58,9 +58,7 @@ describe('canSetTrialSessionToCalendarAction', () => {
     expect(canSetTrialSessionAsCalendaredInteractorStub).toHaveBeenCalled();
     expect(pathNoStub).toHaveBeenCalledWith({
       alertWarning: {
-        message:
-          'You must provide an address and a judge to be able to set this trial session ',
-        title: 'This trial session requires additional information',
+        message: 'Provide an address and a judge to set this trial session.',
       },
     });
   });
@@ -86,9 +84,7 @@ describe('canSetTrialSessionToCalendarAction', () => {
     expect(canSetTrialSessionAsCalendaredInteractorStub).toHaveBeenCalled();
     expect(pathNoStub).toHaveBeenCalledWith({
       alertWarning: {
-        message:
-          'You must provide an address to be able to set this trial session ',
-        title: 'This trial session requires additional information',
+        message: 'Provide an address to set this trial session.',
       },
     });
   });
@@ -116,8 +112,7 @@ describe('canSetTrialSessionToCalendarAction', () => {
     expect(pathNoStub).toHaveBeenCalledWith({
       alertWarning: {
         message:
-          'You must provide a judge to be able to set this trial session ',
-        title: 'This trial session requires additional information',
+          'Provide a judge to set this trial session.',
       },
     });
   });
