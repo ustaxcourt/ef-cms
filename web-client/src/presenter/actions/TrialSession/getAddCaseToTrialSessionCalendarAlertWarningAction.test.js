@@ -17,8 +17,7 @@ describe('getAddCaseToTrialSessionCalendarAlertWarningAction', () => {
 
     expect(result.output).toEqual({
       alertWarning: {
-        message:
-          'Print and mail all paper service documents for 101-19P now.',
+        message: 'Print and mail all paper service documents for 101-19P now.',
       },
     });
   });
