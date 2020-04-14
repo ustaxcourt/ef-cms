@@ -60,6 +60,7 @@ export const docketClerkCreatesAnOrder = (test, data) => {
       prev.createdAt > current.createdAt ? prev : current,
     );
 
+    expect(newDraftOrder).toBeTruthy();
     test.draftOrders.push(newDraftOrder);
   });
 };

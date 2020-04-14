@@ -1,14 +1,11 @@
-export const createPractitionerUserHelper = (get, applicationContext) => {
-  const { USER_ROLES } = applicationContext.getConstants();
+import { state } from 'cerebral';
 
-  const roles = [
-    USER_ROLES.privatePractitioner,
-    USER_ROLES.irsPractitioner,
-    USER_ROLES.inactivePractitioner,
-    USER_ROLES.inactivePractitioner,
-  ];
+export const createPractitionerUserHelper = get => {
+  const { barNumber, employer } = get(state.form);
 
   return {
-    roles,
+    canEditAdmissionStatus: !!barNumber,
+    canEditEmail: !barNumber,
+    showFirmName: employer === 'Private',
   };
 };

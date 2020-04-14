@@ -6,7 +6,7 @@
 export const getAssignWorkItemsAlertSuccessAction = () => {
   return {
     alertSuccess: {
-      title: 'Selected documents were successfully assigned',
+      message: 'Selected documents assigned.',
     },
   };
 };

@@ -132,7 +132,7 @@ describe('caseAdvancedSearchInteractor', () => {
     ];
 
     applicationContext.getSearchClient().search.mockImplementation(args => {
-      if (args.body.query.bool.must[0].bool.should[0].bool) {
+      if (args.body.query.bool.must[0].bool) {
         return {
           hits: {},
         };
@@ -210,12 +210,13 @@ describe('caseAdvancedSearchInteractor', () => {
         .bool.must,
     ).toEqual([
       {
-        bool: {
-          should: [
-            { match: { 'contactPrimary.M.name.S': 'test person' } },
-            { match: { 'contactPrimary.M.secondaryName.S': 'test person' } },
-            { match: { 'contactSecondary.M.name.S': 'test person' } },
+        query_string: {
+          fields: [
+            'contactPrimary.M.name.S',
+            'contactPrimary.M.secondaryName.S',
+            'contactSecondary.M.name.S',
           ],
+          query: '*test person*',
         },
       },
       ...commonExpectedQuery,

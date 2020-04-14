@@ -15,7 +15,6 @@ const mockUser = {
   employer: 'Private',
   firmName: 'GW Law Offices',
   firstName: 'bob',
-  isAdmitted: true,
   lastName: 'sagot',
   name: 'Test Attorney',
   originalBarState: 'Oklahoma',
