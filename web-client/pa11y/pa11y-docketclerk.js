@@ -127,7 +127,7 @@ module.exports = [
       'click element button#advanced-search-button',
       'wait for table.search-results to be visible',
     ],
-    notes: 'checks a11y of advanced docket search',
+    notes: 'checks a11y of advanced order search',
     url: 'http://localhost:1234/mock-login?token=docketclerk&path=/search',
   },
   'http://localhost:1234/mock-login?token=docketclerk&path=/print-preview/110-19/',
