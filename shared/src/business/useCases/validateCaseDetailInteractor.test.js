@@ -40,7 +40,7 @@ describe('validate case detail', () => {
     const errors = validateCaseDetailInteractor({
       applicationContext,
       caseDetail: {
-        caseTitle: 'A case title',
+        caseCaption: 'A case caption',
       },
     });
     expect(errors).toBeTruthy();
