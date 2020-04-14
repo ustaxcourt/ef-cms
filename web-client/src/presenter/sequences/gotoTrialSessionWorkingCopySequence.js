@@ -1,6 +1,7 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { extractUserNotesFromCalendaredCasesAction } from '../actions/TrialSession/extractUserNotesFromCalendaredCasesAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
+import { getConstants } from '../../getConstants';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTrialSessionWorkingCopyAction';
@@ -24,6 +25,7 @@ import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSession
 import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTrialSessionWorkingCopyAction';
 import { setUsersAction } from '../actions/setUsersAction';
 import { takePathForRoles } from './takePathForRoles';
+const { USER_ROLES } = getConstants();
 
 const checkUserAssociationAndProceed = [
   isUserAssociatedWithTrialSessionAction,
@@ -63,11 +65,11 @@ const gotoTrialSessionDetails = [
   {
     ...takePathForRoles(
       [
-        'adc',
-        'admissionsclerk',
-        'clerkofcourt',
-        'docketclerk',
-        'petitionsclerk',
+        USER_ROLES.adc,
+        USER_ROLES.admissionsClerk,
+        USER_ROLES.clerkOfCourt,
+        USER_ROLES.docketClerk,
+        USER_ROLES.petitionsClerk,
       ],
       gotoTrialSessionDetailSequence,
     ),

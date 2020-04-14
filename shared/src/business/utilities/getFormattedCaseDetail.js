@@ -11,6 +11,9 @@ const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
 
+const formatDocketNumberWithSuffix = caseDetail =>
+  `${caseDetail.docketNumber}${caseDetail.docketNumberSuffix || ''}`;
+
 const formatDocument = (applicationContext, document) => {
   const result = cloneDeep(document);
 
@@ -290,9 +293,7 @@ const formatCase = (applicationContext, caseDetail) => {
     .getUtilities()
     .formatDateString(result.irsSendDate, 'DATE_TIME');
 
-  result.docketNumberWithSuffix = `${result.docketNumber}${
-    result.docketNumberSuffix || ''
-  }`;
+  result.docketNumberWithSuffix = formatDocketNumberWithSuffix(caseDetail);
 
   result.irsNoticeDateFormatted = result.irsNoticeDate
     ? applicationContext
@@ -461,6 +462,7 @@ module.exports = {
   documentMeetsAgeRequirements,
   formatCase,
   formatCaseDeadlines,
+  formatDocketNumberWithSuffix,
   formatDocketRecord,
   formatDocketRecordWithDocument,
   formatDocument,

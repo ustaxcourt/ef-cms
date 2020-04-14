@@ -14,6 +14,7 @@ describe('clearAdvancedSearchFormAction', () => {
             sure: 'yes',
           },
           currentPage: 83,
+          orderSearch: { orderKeyword: '' },
           practitionerSearchByName: {
             practitionerName: 'Ricky',
           },
@@ -30,6 +31,7 @@ describe('clearAdvancedSearchFormAction', () => {
         sure: 'yes',
       },
       currentPage: 83,
+      orderSearch: { orderKeyword: '' },
       practitionerSearchByName: {},
     });
   });
@@ -46,6 +48,7 @@ describe('clearAdvancedSearchFormAction', () => {
             sure: 'yes',
           },
           currentPage: 83,
+          orderSearch: { orderKeyword: '' },
           practitionerSearchByName: {
             practitionerName: 'Ricky',
           },
@@ -57,9 +60,28 @@ describe('clearAdvancedSearchFormAction', () => {
     expect(result.state.advancedSearchForm).toEqual({
       caseSearchByName: { countryType: 'domestic' },
       currentPage: 83,
+      orderSearch: { orderKeyword: '' },
       practitionerSearchByName: {
         practitionerName: 'Ricky',
       },
+    });
+  });
+
+  it('should clear the advanced search form ONLY for the props.formType and set the default orderKeyword if the formType is orderSearch', async () => {
+    const result = await runAction(clearAdvancedSearchFormAction, {
+      props: { formType: 'orderSearch' },
+      state: {
+        advancedSearchForm: {
+          orderSearch: {
+            orderKeyword: 'Order of Dismissal',
+          },
+        },
+        searchResults: [{ documentTitle: 'Order of Dismissal' }],
+      },
+    });
+
+    expect(result.state.advancedSearchForm).toEqual({
+      orderSearch: { orderKeyword: '' },
     });
   });
 });

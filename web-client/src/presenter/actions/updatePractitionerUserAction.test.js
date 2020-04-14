@@ -31,10 +31,10 @@ describe('updatePractitionerUserAction', () => {
       },
       state: {
         form: {
+          barNumber: 'AB1111',
           firstName: 'Joe',
           lastName: 'Exotic',
         },
-        practitionerDetail: { barNumber: 'AB1111' },
       },
     });
 
