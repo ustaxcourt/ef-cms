@@ -14,7 +14,6 @@ import { isUserAssociatedWithTrialSessionAction } from '../actions/TrialSession/
 import { mergeCaseOrderIntoCalendaredCasesAction } from '../actions/TrialSession/mergeCaseOrderIntoCalendaredCasesAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
-import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setCaseNotesOntoCalendaredCasesAction } from '../actions/TrialSession/setCaseNotesOntoCalendaredCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -55,7 +54,6 @@ const checkUserAssociationAndProceed = [
 const gotoTrialSessionDetails = [
   setCurrentPageAction('Interstitial'),
   clearErrorAlertsAction,
-  setBaseUrlAction,
   setTrialSessionIdAction,
   getTrialSessionDetailsAction,
   setTrialSessionDetailsAction,
