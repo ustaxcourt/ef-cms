@@ -1,3 +1,4 @@
+const pdfParse = require('pdf-parse');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -41,6 +42,26 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
+  }
+
+  if (!documentMetadata.documentContents) {
+    const { Body: pdfData } = await applicationContext
+      .getStorageClient()
+      .getObject({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: primaryDocumentFileId,
+      })
+      .promise();
+
+    try {
+      const parsedDocument = await pdfParse(pdfData);
+
+      if (parsedDocument.text) {
+        documentMetadata.documentContents = parsedDocument.text;
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   const documentEntity = new Document(
