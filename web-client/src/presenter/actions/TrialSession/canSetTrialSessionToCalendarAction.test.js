@@ -111,8 +111,7 @@ describe('canSetTrialSessionToCalendarAction', () => {
     expect(canSetTrialSessionAsCalendaredInteractorStub).toHaveBeenCalled();
     expect(pathNoStub).toHaveBeenCalledWith({
       alertWarning: {
-        message:
-          'Provide a judge to set this trial session.',
+        message: 'Provide a judge to set this trial session.',
       },
     });
   });
