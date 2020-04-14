@@ -512,28 +512,5 @@
     "partySecondary": false,
     "documentId": "f6f9ce81-8b65-433c-8c7b-f0ffa7a74068",
     "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8"
-  },
-  {
-    "documentType": "ODD - Order of Dismissal and Decision Entered,",
-    "filingDate": "2020-04-14T16:58:32.173Z",
-    "pending": false,
-    "documentContents": "Déjà vu! Mock order for advanced order search.\n",
-    "isFileAttached": true,
-    "receivedAt": "2020-04-14T16:58:32.173Z",
-    "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-    "eventCode": "ODD",
-    "processingStatus": "complete",
-    "signedJudgeName": "Maurice B. Foley",
-    "createdAt": "2020-04-14T16:58:37.029Z",
-    "scenario": "Type B",
-    "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
-    "sk": "document|ef8bc789-360f-440e-ae2b-c6dc6d557b58",
-    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
-    "signedAt": "2020-04-14T16:58:37.030Z",
-    "documentId": "ef8bc789-360f-440e-ae2b-c6dc6d557b58",
-    "signedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-    "documentTitle": "Order of Dismissal and Decision Entered, Judge Gustafson",
-    "relationship": "primaryDocument",
-    "docketNumber": "103-20"
   }
 ]
