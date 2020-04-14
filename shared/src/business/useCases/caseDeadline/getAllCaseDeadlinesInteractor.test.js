@@ -21,7 +21,10 @@ describe('getAllCaseDeadlinesInteractor', () => {
       associatedJudge: 'Judge Buch',
       caseCaption: 'A caption, Petitioner',
       caseId: '01eebcc4-08aa-4550-b41b-982ffbd75192',
+      caseType: 'CDP (Lien/Levy)',
       docketNumber: '101-19',
+      partyType: 'Petitioner',
+      procedureType: 'Regular',
     },
   ];
 
@@ -67,6 +70,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
         deadlineDate: '2019-03-01T21:40:46.415Z',
         description: 'A deadline!',
         docketNumber: '101-19',
+        docketNumberSuffix: 'L',
       },
     ]);
   });
