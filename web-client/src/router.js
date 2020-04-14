@@ -566,9 +566,11 @@ const router = {
 
     registerRoute(
       '/users/edit-practitioner/*',
-      ifHasAccess(userId => {
+      ifHasAccess(barNumber => {
         setPageTitle('EF-CMS User Management - Edit Practitioner User');
-        return app.getSequence('gotoEditPractitionerUserSequence')({ userId });
+        return app.getSequence('gotoEditPractitionerUserSequence')({
+          barNumber,
+        });
       }),
     );
 

@@ -300,15 +300,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .saveDocumentFromLambda.mockImplementation(({ document: newPdfData }) => {
-        fs.writeFileSync(
-          testOutputPath + 'serveCourtIssuedDocumentInteractor_1.pdf',
-          newPdfData,
-        );
-      });
-
     await serveCourtIssuedDocumentInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -372,15 +363,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should call sendBulkTemplatedEmail, sending an email to all electronically-served parties, and should not return paperServicePdfData', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .saveDocumentFromLambda(({ document: newPdfData }) => {
-        fs.writeFileSync(
-          testOutputPath + 'serveCourtIssuedDocumentInteractor_2.pdf',
-          newPdfData,
-        );
-      });
-
     const result = await serveCourtIssuedDocumentInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -394,15 +376,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should return paperServicePdfData when there are paper service parties on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .saveDocumentFromLambda(({ document: newPdfData }) => {
-        fs.writeFileSync(
-          testOutputPath + 'serveCourtIssuedDocumentInteractor_2.pdf',
-          newPdfData,
-        );
-      });
-
     const result = await serveCourtIssuedDocumentInteractor({
       applicationContext,
       caseId: 'd857e73a-636e-4aa7-9de2-b5cee8770ff0',
@@ -475,66 +448,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should remove the draftState and set the documentContents', async () => {
-    const mockDocumentContents = 'one fish, two fish';
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByCaseId.mockImplementation(({ caseId }) => {
-        const theCase = mockCases.find(mockCase => mockCase.caseId === caseId);
-
-        theCase.documents.find(
-          document =>
-            document.documentId === 'cf105788-5d34-4451-aa8d-dfd9a851b675',
-        ).draftState = {
-          documentContents: mockDocumentContents,
-        };
-
-        if (theCase) {
-          return {
-            ...theCase,
-            ...extendCase,
-          };
-        }
-      });
-    applicationContext
-      .getPersistenceGateway()
-      .saveDocumentFromLambda.mockImplementation(({ document: newPdfData }) => {
-        fs.writeFileSync(
-          testOutputPath + 'serveCourtIssuedDocumentInteractor_1.pdf',
-          newPdfData,
-        );
-      });
-
-    await serveCourtIssuedDocumentInteractor({
-      applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
-    });
-
-    const updatedCase = applicationContext.getPersistenceGateway().updateCase
-      .mock.calls[0][0].caseToUpdate;
-    const updatedDocument = updatedCase.documents.find(
-      document =>
-        document.documentId === 'cf105788-5d34-4451-aa8d-dfd9a851b675',
-    );
-
-    expect(updatedDocument.draftState).toBeNull();
-    expect(updatedDocument.documentContents).toBe(mockDocumentContents);
-  });
-
   documentsWithCaseClosingEventCodes.forEach(document => {
     it(`should set the case status to closed for event code: ${document.eventCode}`, async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .saveDocumentFromLambda.mockImplementation(
-          ({ document: newPdfData }) => {
-            fs.writeFileSync(
-              testOutputPath + 'serveCourtIssuedDocumentInteractor_3.pdf',
-              newPdfData,
-            );
-          },
-        );
-
       await serveCourtIssuedDocumentInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

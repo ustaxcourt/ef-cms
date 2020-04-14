@@ -12,7 +12,8 @@ plugins:
 
 custom:
   jetpack:
-    mode: yarn
+    mode: npm
+    lockfile: ../package-lock.json
 
   prune:
     automatic: true

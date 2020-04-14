@@ -1,9 +1,11 @@
 import { state } from 'cerebral';
 
 export const createPractitionerUserHelper = get => {
-  const { employer } = get(state.form);
+  const { barNumber, employer } = get(state.form);
 
   return {
+    canEditAdmissionStatus: !!barNumber,
+    canEditEmail: !barNumber,
     showFirmName: employer === 'Private',
   };
 };

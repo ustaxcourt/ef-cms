@@ -26,42 +26,45 @@ exports.orderAdvancedSearchInteractor = async ({
   }
 
   const orderEventCodes = map(Order.ORDER_TYPES, 'eventCode');
+  const sourceFields = [
+    'docketNumber',
+    'documentContents',
+    'docketNumberSuffix',
+    'documentTitle',
+    'signedJudgeName',
+    'filingDate',
+    'caseId',
+    'documentId',
+  ];
 
-  const orderSearchBody = {
-    _source: [
-      'docketNumber',
-      'documentContents',
-      'docketNumberSuffix',
-      'documentTitle',
-      'signedJudgeName',
-      'filingDate',
-      'caseId',
-      'documentId',
-    ],
+  const orderEventCodeQuery = {
+    bool: {
+      should: orderEventCodes.map(eventCode => ({
+        match: {
+          'eventCode.S': eventCode,
+        },
+      })),
+    },
+  };
+
+  const orderQuery = {
+    _source: sourceFields,
     query: {
       bool: {
         must: [
           { match: { 'pk.S': 'case|' } },
           { match: { 'sk.S': 'document|' } },
-          {
-            bool: {
-              should: orderEventCodes.map(eventCode => ({
-                match: {
-                  'eventCode.S': eventCode,
-                },
-              })),
-            },
-          },
+          orderEventCodeQuery,
           {
             exists: {
               field: 'servedAt',
             },
           },
           {
-            simple_query_string: {
+            query_string: {
               default_operator: 'or',
               fields: ['documentContents.S', 'documentTitle.S'],
-              query: orderKeyword,
+              query: `*${orderKeyword}*`,
             },
           },
         ],
@@ -70,12 +73,14 @@ exports.orderAdvancedSearchInteractor = async ({
     size: 5000,
   };
 
-  const exactMatchesBody = await applicationContext.getSearchClient().search({
-    body: orderSearchBody,
-    index: 'efcms',
-  });
+  const orderQueryMatchesBody = await applicationContext
+    .getSearchClient()
+    .search({
+      body: orderQuery,
+      index: 'efcms',
+    });
 
-  const hits = get(exactMatchesBody, 'hits.hits', []);
+  const hits = get(orderQueryMatchesBody, 'hits.hits', []);
   const foundOrders = hits.map(hit =>
     AWS.DynamoDB.Converter.unmarshall(hit['_source']),
   );
