@@ -1,12 +1,12 @@
 const client = require('../../dynamodbClientService');
 
 /**
- * getCaseByCaseId
+ * getCasesByCaseIds
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the case id to get
- * @returns {object} the case details
+ * @param {Array} providers.caseIds the case ids to get
+ * @returns {Array} the case details
  */
 exports.getCasesByCaseIds = async ({ applicationContext, caseIds }) => {
   return await client.batchGet({
