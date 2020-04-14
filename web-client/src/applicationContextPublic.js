@@ -29,6 +29,7 @@ const applicationContextPublic = {
   getCognitoLoginUrl,
   getConstants: () =>
     deepFreeze({
+      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
       CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
       COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
       US_STATES: ContactFactory.US_STATES,

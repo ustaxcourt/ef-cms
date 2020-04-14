@@ -35,7 +35,7 @@ const mockPetitionerUser = {
 const mockCase = { docketNumber: '101-19' };
 
 const docketChangeInfo = {
-  caseTitle: 'This is a Case Title',
+  caseCaption: 'This is a Case Caption',
   docketEntryIndex: '3',
   docketNumber: '123-19X',
   filingParties: { after: 'Cody', before: 'Joe' },
