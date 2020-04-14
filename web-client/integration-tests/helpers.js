@@ -405,6 +405,8 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
+  presenter.state.baseUrl = process.env.API_URL || 'http://localhost:3000';
+
   presenter.providers.applicationContext = Object.assign(applicationContext, {
     getScanner: getScannerInterface,
   });
