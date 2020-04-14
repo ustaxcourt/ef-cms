@@ -1,3 +1,4 @@
+import { getJudgeLastName } from '../../../../shared/src/business/utilities/getFormattedJudgeName';
 import { state } from 'cerebral';
 
 export const formatSearchResultRecord = (result, { applicationContext }) => {
@@ -46,6 +47,10 @@ export const formatOrderSearchResultRecord = (
   result.docketNumberWithSuffix = `${result.docketNumber}${
     result.docketNumberSuffix ? result.docketNumberSuffix : ''
   }`;
+
+  result.formattedSignedJudgeName = result.signedJudgeName
+    ? getJudgeLastName(result.signedJudgeName)
+    : '';
 
   return result;
 };

@@ -38,13 +38,13 @@ const roleMap = {
 
 Practitioner.prototype.init = function (rawUser) {
   userDecorator(this, rawUser);
-  this.name = rawUser.name || Practitioner.getFullName(rawUser);
+  this.name = Practitioner.getFullName(rawUser);
   this.firstName = rawUser.firstName;
   this.lastName = rawUser.lastName;
   this.middleName = rawUser.middleName;
   this.additionalPhone = rawUser.additionalPhone;
   this.admissionsDate = rawUser.admissionsDate;
-  this.admissionsStatus = rawUser.admissionsStatus || 'Active';
+  this.admissionsStatus = rawUser.admissionsStatus;
   this.alternateEmail = rawUser.alternateEmail;
   this.birthYear = rawUser.birthYear;
   this.employer = rawUser.employer;

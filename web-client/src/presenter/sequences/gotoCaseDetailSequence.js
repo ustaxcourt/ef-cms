@@ -6,6 +6,7 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/caseConsolidation/getConsolidatedCasesByCaseAction';
+import { getConstants } from '../../getConstants';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { parallel } from 'cerebral/factories';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
@@ -22,6 +23,8 @@ import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/set
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
 import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
+
+const { USER_ROLES } = getConstants();
 
 const gotoCaseDetailInternal = [
   showModalFromQueryAction,
@@ -58,17 +61,22 @@ export const gotoCaseDetailSequence = [
   {
     ...takePathForRoles(
       [
-        'adc',
-        'admissionsclerk',
-        'clerkofcourt',
-        'docketclerk',
-        'petitionsclerk',
-        'trialclerk',
+        USER_ROLES.adc,
+        USER_ROLES.admissionsClerk,
+        USER_ROLES.clerkOfCourt,
+        USER_ROLES.docketClerk,
+        USER_ROLES.petitionsClerk,
+        USER_ROLES.trialClerk,
       ],
       [parallel([gotoCaseDetailInternal, fetchUserNotificationsSequence])],
     ),
     ...takePathForRoles(
-      ['petitioner', 'privatePractitioner', 'irsPractitioner', 'irsSuperuser'],
+      [
+        USER_ROLES.petitioner,
+        USER_ROLES.privatePractitioner,
+        USER_ROLES.irsPractitioner,
+        USER_ROLES.irsSuperuser,
+      ],
       gotoCaseDetailExternal,
     ),
     chambers: gotoCaseDetailInternalWithNotes,

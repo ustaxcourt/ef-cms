@@ -25,6 +25,7 @@ import { User } from '../../shared/src/business/entities/User';
 const MINUTES = 60 * 1000;
 
 export const getConstants = () => ({
+  ADMISSIONS_STATUS_OPTIONS: Practitioner.ADMISSIONS_STATUS_OPTIONS,
   BUSINESS_TYPES: ContactFactory.BUSINESS_TYPES,
   CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
   CASE_INVENTORY_PAGE_SIZE: 2,
