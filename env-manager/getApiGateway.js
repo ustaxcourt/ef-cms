@@ -1,7 +1,7 @@
-const AWS = require('aws-sdk');
+const { ApiGatewayV2 } = require('aws-sdk');
 
 exports.getApiGateway = ({ environment }) => {
-  const apiGateway = new AWS.ApiGatewayV2({
+  const apiGateway = new ApiGatewayV2({
     accessKeyId: environment.accessKeyId,
     apiVersion: 'latest',
     region: environment.region,

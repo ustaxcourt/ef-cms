@@ -19,6 +19,13 @@ const teardownEnvironment = async () => {
   const customDomains = await getCustomDomains({ apiGateway, environment });
   console.log(stacks);
   console.log(customDomains);
+  // TODO: delete custom domains
+  // TODO: wait for domains to be deleted
+  // TODO: delete stacks
+  // TODO: wait for stacks to be deleted
+  // TODO: delete Dynamo tables
+  // TODO: wait for Dynamo tables to be deleted
+  // TODO: empty all of the S3 buckets for the environment
 };
 
 teardownEnvironment();
