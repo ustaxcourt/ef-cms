@@ -1,4 +1,3 @@
-import { getJudgeLastName } from '../../../../shared/src/business/utilities/getFormattedJudgeName';
 import { state } from 'cerebral';
 
 export const formatSearchResultRecord = (result, { applicationContext }) => {
@@ -49,7 +48,7 @@ export const formatOrderSearchResultRecord = (
   }`;
 
   result.formattedSignedJudgeName = result.signedJudgeName
-    ? getJudgeLastName(result.signedJudgeName)
+    ? applicationContext.getUtilities().getJudgeLastName(result.signedJudgeName)
     : '';
 
   return result;
