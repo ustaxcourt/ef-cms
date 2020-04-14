@@ -399,9 +399,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
       ],
       filingType: 'Myself',
       hasIrsNotice: false,
+      initialCaption: 'Test Petitioner, Petitioner',
       initialDocketNumberSuffix: 'S',
-      initialTitle:
-        'Test Petitioner, Petitioner v. Commissioner of Internal Revenue, Respondent',
       isPaper: false,
       noticeOfAttachments: false,
       orderForAmendedPetition: false,

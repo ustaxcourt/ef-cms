@@ -44,7 +44,7 @@
     "docketNumberSuffix": null,
     "caseCaption": "Mufutau Wade, Petitioner",
     "caseTitle": "Mufutau Wade, Petitioner v. Commissioner of Internal Revenue, Respondent",
-    "initialTitle": "Mufutau Wade, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Mufutau Wade, Petitioner",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": true,
     "orderToShowCause": true,
@@ -122,7 +122,7 @@
     "createdAt": "2019-03-05T17:34:13.490Z",
     "assigneeName": null,
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "caseTitle": "Mufutau Wade",
+    "caseCaptionNames": "Mufutau Wade",
     "messages": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
@@ -162,7 +162,7 @@
     "createdAt": "2019-03-05T17:34:13.490Z",
     "assigneeName": null,
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "caseTitle": "Mufutau Wade",
+    "caseCaptionNames": "Mufutau Wade",
     "messages": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
@@ -267,7 +267,7 @@
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
           "filedBy": "Test Petitioner"
         },
-        "caseTitle": "Mufutau Wade",
+        "caseCaptionNames": "Mufutau Wade",
         "section": "petitions",
         "workItemId": "e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
         "isInitializeCase": true,

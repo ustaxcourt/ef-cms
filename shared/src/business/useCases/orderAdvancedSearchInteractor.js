@@ -89,9 +89,11 @@ exports.orderAdvancedSearchInteractor = async ({
     const { caseId } = order;
 
     const matchingCase = await applicationContext
-      .getUseCases()
-      .getCaseInteractor({ applicationContext, caseId });
-
+      .getPersistenceGateway()
+      .getCaseByCaseId({
+        applicationContext,
+        caseId,
+      });
     order.docketNumberSuffix = matchingCase.docketNumberSuffix;
     order.caseCaption = matchingCase.caseCaption;
   }

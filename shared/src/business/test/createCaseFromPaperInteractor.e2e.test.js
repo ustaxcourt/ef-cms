@@ -124,9 +124,8 @@ describe('createCaseFromPaperInteractor integration test', () => {
           receivedAt: RECEIVED_DATE,
         },
       ],
+      initialCaption: 'Bob Jones2, Petitioner',
       initialDocketNumberSuffix: '_',
-      initialTitle:
-        'Bob Jones2, Petitioner v. Commissioner of Internal Revenue, Respondent',
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
