@@ -5,7 +5,6 @@ import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { set } from 'cerebral/factories';
-import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
@@ -23,7 +22,6 @@ export const gotoEditCourtIssuedDocketEntry = [
   setUsersByKeyAction('judgeUsers'),
   getCaseAction,
   setCaseAction,
-  setBaseUrlAction,
   setDocketEntryFormForDocketEditAction,
   setDocumentIdAction,
   set(state.isEditingDocketEntry, true),
