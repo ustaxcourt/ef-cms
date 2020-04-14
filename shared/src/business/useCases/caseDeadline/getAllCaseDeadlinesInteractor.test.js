@@ -4,39 +4,51 @@ const {
 const {
   getAllCaseDeadlinesInteractor,
 } = require('./getAllCaseDeadlinesInteractor');
-const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 describe('getAllCaseDeadlinesInteractor', () => {
-  const mockDeadlines = [];
+  const mockDeadlines = [
+    {
+      caseDeadlineId: '22c0736f-c4c5-4ab5-97c3-e41fb06bbc2f',
+      caseId: '01eebcc4-08aa-4550-b41b-982ffbd75192',
+      createdAt: '2019-01-01T21:40:46.415Z',
+      deadlineDate: '2019-03-01T21:40:46.415Z',
+      description: 'A deadline!',
+    },
+  ];
+  const mockCases = [
+    {
+      associatedJudge: 'Judge Buch',
+      caseCaption: 'A caption, Petitioner',
+      caseId: '01eebcc4-08aa-4550-b41b-982ffbd75192',
+      caseType: 'CDP (Lien/Levy)',
+      docketNumber: '101-19',
+      partyType: 'Petitioner',
+      procedureType: 'Regular',
+    },
+  ];
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext.environment.stage = 'local';
     applicationContext
       .getPersistenceGateway()
       .getAllCaseDeadlines.mockReturnValue(mockDeadlines);
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByCaseIds.mockReturnValue(mockCases);
   });
 
   it('throws an error if the user is not valid or authorized', async () => {
     applicationContext.getCurrentUser.mockReturnValue(new User({}));
 
-    let error;
-    let caseDeadlines;
-
-    try {
-      caseDeadlines = await getAllCaseDeadlinesInteractor({
+    await expect(
+      getAllCaseDeadlinesInteractor({
         applicationContext,
-      });
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error.message).toContain('Unauthorized');
-    expect(error).toBeInstanceOf(UnauthorizedError);
-    expect(caseDeadlines).toBeUndefined();
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
-  it('gets all the case deadlines', async () => {
+  it('gets all the case deadlines and combines them with case data', async () => {
     const mockPetitionsClerk = new User({
       name: 'Test Petitionsclerk',
       role: User.ROLES.petitionsClerk,
@@ -44,18 +56,22 @@ describe('getAllCaseDeadlinesInteractor', () => {
     });
     applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerk);
 
-    let error;
-    let caseDeadlines;
+    const caseDeadlines = await getAllCaseDeadlinesInteractor({
+      applicationContext,
+    });
 
-    try {
-      caseDeadlines = await getAllCaseDeadlinesInteractor({
-        applicationContext,
-      });
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeUndefined();
-    expect(caseDeadlines).toEqual(mockDeadlines);
+    expect(caseDeadlines).toEqual([
+      {
+        associatedJudge: 'Judge Buch',
+        caseCaption: 'A caption, Petitioner',
+        caseDeadlineId: '22c0736f-c4c5-4ab5-97c3-e41fb06bbc2f',
+        caseId: '01eebcc4-08aa-4550-b41b-982ffbd75192',
+        createdAt: '2019-01-01T21:40:46.415Z',
+        deadlineDate: '2019-03-01T21:40:46.415Z',
+        description: 'A deadline!',
+        docketNumber: '101-19',
+        docketNumberSuffix: 'L',
+      },
+    ]);
   });
 });
