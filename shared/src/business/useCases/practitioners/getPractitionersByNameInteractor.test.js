@@ -98,6 +98,11 @@ describe('getPractitionersByNameInteractor', () => {
                 'role.S': 'privatePractitioner',
               },
             },
+            {
+              match: {
+                'role.S': 'inactivePractitioner',
+              },
+            },
           ],
         },
       },
@@ -179,6 +184,11 @@ describe('getPractitionersByNameInteractor', () => {
             {
               match: {
                 'role.S': 'privatePractitioner',
+              },
+            },
+            {
+              match: {
+                'role.S': 'inactivePractitioner',
               },
             },
           ],
