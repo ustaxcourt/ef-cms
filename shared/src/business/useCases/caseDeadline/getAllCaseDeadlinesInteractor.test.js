@@ -28,7 +28,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
     },
   ];
 
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext.environment.stage = 'local';
     applicationContext
       .getPersistenceGateway()
