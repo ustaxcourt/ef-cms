@@ -47,10 +47,9 @@ export const canSetTrialSessionToCalendarAction = async ({
 
   return path.no({
     alertWarning: {
-      message: `You must provide ${missingFieldsForWarningMessage.join(
+      message: `Provide ${missingFieldsForWarningMessage.join(
         ' and ',
-      )} to be able to set this trial session `,
-      title: 'This trial session requires additional information',
+      )} to set this trial session.`,
     },
   });
 };
