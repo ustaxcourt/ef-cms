@@ -13,7 +13,7 @@ elif [[ $BRANCH == 'staging' ]] ; then
 elif [[ $BRANCH == 'test' ]] ; then
   echo "${DYNAMSOFT_PRODUCT_KEYS_TEST}"
 elif [[ $BRANCH == 'migration' ]] ; then
-  echo "${DYNAMSOFT_PRODUCT_KEYS_MIGRATION}"
+  echo "${DYNAMSOFT_PRODUCT_KEYS_MIG}"
 else
   exit 1;
 fi
