@@ -1,14 +1,12 @@
 const {
-  orderAdvancedSearchInteractor,
-} = require('./orderAdvancedSearchInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
+  orderPublicSearchInteractor,
+} = require('./orderPublicSearchInteractor');
 
-describe('orderAdvancedSearchInteractor', () => {
+describe('orderPublicSearchInteractor', () => {
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: 'petitionsclerk',
-    });
-
     applicationContext
       .getUseCaseHelpers()
       .orderKeywordSearch.mockResolvedValue([
@@ -36,20 +34,8 @@ describe('orderAdvancedSearchInteractor', () => {
       ]);
   });
 
-  it('returns an unauthorized error on petitioner user role', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: 'petitioner',
-    });
-
-    await expect(
-      orderAdvancedSearchInteractor({
-        applicationContext,
-      }),
-    ).rejects.toThrow('Unauthorized');
-  });
-
   it('returns results with an authorized user role (petitionsclerk)', async () => {
-    const result = await orderAdvancedSearchInteractor({
+    const result = await orderPublicSearchInteractor({
       applicationContext,
     });
 
