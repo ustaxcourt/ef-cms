@@ -1,5 +1,4 @@
-const AWS = require('aws-sdk');
-const { get } = require('lodash');
+const { search } = require('./searchClient');
 
 /**
  * getCaseInventoryReport
@@ -32,8 +31,6 @@ exports.getCaseInventoryReport = async ({
       ? pageSize
       : CASE_INVENTORY_MAX_PAGE_SIZE;
 
-  const foundCases = [];
-
   const searchParameters = {
     body: {
       _source: source,
@@ -58,27 +55,20 @@ exports.getCaseInventoryReport = async ({
       match_phrase: { 'associatedJudge.S': associatedJudge },
     });
   }
+
   if (status) {
     searchParameters.body.query.bool.must.push({
       match_phrase: { 'status.S': status },
     });
   }
 
-  const body = await applicationContext
-    .getSearchClient()
-    .search(searchParameters);
-
-  const hits = get(body, 'hits.hits');
-  const totalCount = get(body, 'hits.total.value');
-
-  if (hits && hits.length > 0) {
-    hits.forEach(hit => {
-      foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
-    });
-  }
+  const { results, total } = await search({
+    applicationContext,
+    searchParameters,
+  });
 
   return {
-    foundCases,
-    totalCount,
+    foundCases: results,
+    totalCount: total,
   };
 };
