@@ -44,7 +44,7 @@ const {
       getPug: () => pug,
     },
     content: {
-      caption: 'Jenny Craig, Petitioner',
+      caseCaption: 'Jenny Craig, Petitioner',
       docketNumberWithSuffix: '101-20S',
       trialInfo: {
         address1: '123 Testing St',
