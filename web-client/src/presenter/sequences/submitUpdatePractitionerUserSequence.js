@@ -3,6 +3,7 @@ import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { navigateToPractitionerDetailAction } from '../actions/navigateToPractitionerDetailAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -23,6 +24,7 @@ export const submitUpdatePractitionerUserSequence = [
       {
         error: [],
         success: [
+          setPractitionerDetailAction,
           setAlertSuccessAction,
           setSaveAlertsForNavigationAction,
           navigateToPractitionerDetailAction,

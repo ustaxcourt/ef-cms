@@ -12,7 +12,8 @@ plugins:
 
 custom:
   jetpack:
-    mode: yarn
+    mode: npm
+    lockfile: ../package-lock.json
 
   prune:
     automatic: true
@@ -165,4 +166,12 @@ functions:
       - http:
           path: /cases/{caseId}/generate-docket-record
           method: post
+          cors: ui-public-${self:provider.stage}.ef-cms.${opt:domain}
+
+  orderPublicSearch:
+    handler: web-api/${self:provider.dir}/publicApiHandlers.orderPublicSearchLambda
+    events:
+      - http:
+          path: /order-search
+          method: get
           cors: ui-public-${self:provider.stage}.ef-cms.${opt:domain}

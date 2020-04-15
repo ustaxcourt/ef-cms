@@ -1,9 +1,9 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-public';
 import { runAction } from 'cerebral/test';
-import { submitPublicAdvancedSearchAction } from './submitPublicAdvancedSearchAction';
+import { submitPublicCaseAdvancedSearchAction } from './submitPublicCaseAdvancedSearchAction';
 
-describe('submitPublicAdvancedSearchAction', () => {
+describe('submitPublicCaseAdvancedSearchAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContextForClient;
   });
@@ -17,7 +17,7 @@ describe('submitPublicAdvancedSearchAction', () => {
         { caseId: 'case-id-345' },
       ]);
 
-    const result = await runAction(submitPublicAdvancedSearchAction, {
+    const result = await runAction(submitPublicCaseAdvancedSearchAction, {
       modules: {
         presenter,
       },

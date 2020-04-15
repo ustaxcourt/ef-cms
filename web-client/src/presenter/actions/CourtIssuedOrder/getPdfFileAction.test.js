@@ -38,6 +38,9 @@ describe('getPdfFileAction', () => {
       applicationContextForClient.getUseCases()
         .createCourtIssuedOrderPdfFromHtmlInteractor,
     ).toBeCalled();
+    expect(
+      applicationContextForClient.getUtilities().formatDocketNumberWithSuffix,
+    ).toBeCalled();
     expect(createObjectURLStub).toBeCalled();
     expect(global.File).toBeCalled();
   });
