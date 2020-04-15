@@ -258,8 +258,6 @@ describe('formatCase', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       caseCaption: 'Test Case Caption',
-      caseTitle:
-        'Test Case Caption, Petitioners v. Internal Revenue, Respondent',
       docketNumberSuffix: undefined,
       hasVerifiedIrsNotice: true,
       trialTime: 11,

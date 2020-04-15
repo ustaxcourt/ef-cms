@@ -102,7 +102,6 @@ describe('casePublicSearchInteractor', () => {
       {
         caseCaption: 'Test Case Caption One',
         caseId: '8675309b-28d0-43ec-bafb-654e83405412',
-        caseTitle: undefined,
         contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: undefined,
@@ -116,7 +115,6 @@ describe('casePublicSearchInteractor', () => {
       {
         caseCaption: 'Test Case Caption Two',
         caseId: '8675309b-28d0-43ec-bafb-654e83405413',
-        caseTitle: undefined,
         contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: undefined,
@@ -268,7 +266,6 @@ describe('casePublicSearchInteractor', () => {
       {
         caseCaption: 'Test Case Caption One',
         caseId: '8675309b-28d0-43ec-bafb-654e83405412',
-        caseTitle: undefined,
         contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: undefined,
@@ -282,7 +279,6 @@ describe('casePublicSearchInteractor', () => {
       {
         caseCaption: 'Test Case Caption Two',
         caseId: '8675309b-28d0-43ec-bafb-654e83405413',
-        caseTitle: undefined,
         contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: undefined,
