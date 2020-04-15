@@ -112,7 +112,7 @@ export const OrderSearch = connect(
                   <input
                     className="usa-input"
                     id="order-search"
-                    name="orderKeyword"
+                    name="caseTitleOrPetitioner"
                     type="text"
                   />
                 </div>
@@ -125,7 +125,7 @@ export const OrderSearch = connect(
                   <select
                     className="usa-input"
                     id="order-search"
-                    name="orderKeyword"
+                    name="judge"
                     type="text"
                   />
                 </div>
@@ -139,10 +139,10 @@ export const OrderSearch = connect(
                 <div className="grid-col-1">
                   <input
                     aria-describedby="year-filed-legend"
-                    aria-label="starting year, four digits"
+                    aria-label="starting month, two digits"
                     className="usa-input"
-                    id="year-filed-min"
-                    name="yearFiledMin"
+                    id="month-filed-min"
+                    name="monthFiledMin"
                     placeholder="MM"
                     type="text"
                     value={''}
@@ -151,10 +151,10 @@ export const OrderSearch = connect(
                 <div className="grid-col-1">
                   <input
                     aria-describedby="year-filed-legend"
-                    aria-label="starting year, four digits"
+                    aria-label="starting date, two digits"
                     className="usa-input"
-                    id="year-filed-min"
-                    name="yearFiledMin"
+                    id="date-filed-min"
+                    name="dateFiledMin"
                     placeholder="DD"
                     type="text"
                     value={''}
@@ -190,7 +190,7 @@ export const OrderSearch = connect(
                 <div className="grid-col-1">
                   <input
                     aria-describedby="year-filed-legend"
-                    aria-label="starting year, four digits"
+                    aria-label="ending month, two digits"
                     className="usa-input"
                     id="year-filed-min"
                     name="yearFiledMin"
@@ -202,10 +202,10 @@ export const OrderSearch = connect(
                 <div className="grid-col-1">
                   <input
                     aria-describedby="year-filed-legend"
-                    aria-label="starting year, four digits"
+                    aria-label="ending year, four digits"
                     className="usa-input"
-                    id="year-filed-min"
-                    name="yearFiledMin"
+                    id="year-filed-max"
+                    name="yearFiledMax"
                     placeholder="YYYY"
                     type="text"
                     value={''}
