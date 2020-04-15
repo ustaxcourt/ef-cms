@@ -11,7 +11,6 @@ describe('PublicCase', () => {
         {
           caseCaption: 'testing',
           caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          caseTitle: 'testing',
           contactPrimary: {},
           contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
@@ -30,7 +29,6 @@ describe('PublicCase', () => {
         {
           caseCaption: 'testing',
           caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          caseTitle: 'testing',
           contactPrimary: {},
           contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
@@ -49,7 +47,6 @@ describe('PublicCase', () => {
         // docketNumberSuffix is permitted
         // isSealed is permitted
         caseCaption: expect.anything(),
-        caseTitle: expect.anything(),
         contactPrimary: expect.anything(),
         contactSecondary: expect.anything(),
         createdAt: expect.anything(),
@@ -64,7 +61,6 @@ describe('PublicCase', () => {
       {
         caseCaption: 'testing',
         caseId: 'testing',
-        caseTitle: 'testing',
         contactPrimary: {},
         contactSecondary: {},
         createdAt: 'testing',
@@ -80,7 +76,6 @@ describe('PublicCase', () => {
     expect(entity.toRawObject()).toEqual({
       caseCaption: 'testing',
       caseId: 'testing',
-      caseTitle: 'testing',
       contactPrimary: {
         name: undefined,
         state: undefined,
@@ -104,7 +99,6 @@ describe('PublicCase', () => {
       {
         caseCaption: 'testing',
         caseId: 'testing',
-        caseTitle: 'testing',
         contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: 'testing',
@@ -120,7 +114,6 @@ describe('PublicCase', () => {
     expect(entity.toRawObject()).toEqual({
       caseCaption: 'testing',
       caseId: 'testing',
-      caseTitle: 'testing',
       contactPrimary: undefined,
       contactSecondary: undefined,
       createdAt: 'testing',
@@ -138,7 +131,6 @@ describe('PublicCase', () => {
       {
         caseCaption: 'testing',
         caseId: 'testing',
-        caseTitle: 'testing',
         contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: 'testing',
@@ -162,7 +154,6 @@ describe('PublicCase', () => {
     expect(entity.toRawObject()).toEqual({
       caseCaption: 'testing',
       caseId: 'testing',
-      caseTitle: 'testing',
       contactPrimary: undefined,
       contactSecondary: undefined,
       createdAt: 'testing',
