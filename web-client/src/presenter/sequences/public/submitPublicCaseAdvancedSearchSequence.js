@@ -5,10 +5,10 @@ import { set, unset } from 'cerebral/factories';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/sequenceHelpers';
-import { submitPublicAdvancedSearchAction } from '../../actions/Public/submitPublicAdvancedSearchAction';
+import { submitPublicCaseAdvancedSearchAction } from '../../actions/Public/submitPublicCaseAdvancedSearchAction';
 import { validateCaseAdvancedSearchAction } from '../../actions/AdvancedSearch/validateCaseAdvancedSearchAction';
 
-export const submitPublicAdvancedSearchSequence = [
+export const submitPublicCaseAdvancedSearchSequence = [
   clearSearchTermAction,
   validateCaseAdvancedSearchAction,
   {
@@ -19,7 +19,7 @@ export const submitPublicAdvancedSearchSequence = [
     ],
     success: showProgressSequenceDecorator([
       clearAlertsAction,
-      submitPublicAdvancedSearchAction,
+      submitPublicCaseAdvancedSearchAction,
       set(state.searchResults, props.searchResults),
     ]),
   },

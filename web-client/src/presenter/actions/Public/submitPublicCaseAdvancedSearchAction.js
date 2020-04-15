@@ -1,14 +1,14 @@
 import { state } from 'cerebral';
 
 /**
- * submit public search form
+ * submit public case advanced search form
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
  * @returns {Promise} async action
  */
-export const submitPublicAdvancedSearchAction = async ({
+export const submitPublicCaseAdvancedSearchAction = async ({
   applicationContext,
   get,
 }) => {
