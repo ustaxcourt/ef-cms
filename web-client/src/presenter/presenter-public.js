@@ -11,7 +11,7 @@ import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence
 import { navigateToPublicSiteSequence } from './sequences/public/navigateToPublicSiteSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { submitCaseDocketNumberSearchSequence } from './sequences/submitCaseDocketNumberSearchSequence';
-import { submitPublicAdvancedSearchSequence } from './sequences/public/submitPublicAdvancedSearchSequence';
+import { submitPublicCaseAdvancedSearchSequence } from './sequences/public/submitPublicCaseAdvancedSearchSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
@@ -31,7 +31,7 @@ export const presenter = {
     navigateToPublicSiteSequence,
     showMoreResultsSequence,
     submitCaseDocketNumberSearchSequence,
-    submitPublicAdvancedSearchSequence,
+    submitPublicCaseAdvancedSearchSequence: submitPublicCaseAdvancedSearchSequence,
     toggleBetaBarSequence,
     toggleUsaBannerDetailsSequence,
     updateAdvancedSearchFormValueSequence,
