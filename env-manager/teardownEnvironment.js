@@ -1,3 +1,4 @@
+const { deleteCognitoPools } = require('./deleteCognitoPools');
 const { deleteCustomDomains } = require('./deleteCustomDomains');
 const { deleteDynamoDBTables } = require('./deleteDynamoDBTables');
 const { deleteStacks } = require('./deleteStacks');
@@ -20,14 +21,16 @@ const environmentWest = {
 };
 
 const teardownEnvironment = async () => {
-  await deleteCustomDomains({ environmentEast });
-  await deleteCustomDomains({ environmentWest });
+  await deleteCustomDomains({ environment: environmentEast });
+  await deleteCustomDomains({ environment: environmentWest });
 
-  await deleteStacks({ environmentEast });
-  await deleteStacks({ environmentWest });
+  await deleteStacks({ environment: environmentEast });
+  await deleteStacks({ environment: environmentWest });
 
-  await deleteDynamoDBTables({ environmentEast });
-  await deleteDynamoDBTables({ environmentWest });
+  await deleteDynamoDBTables({ environment: environmentEast });
+  await deleteDynamoDBTables({ environment: environmentWest });
+
+  await deleteCognitoPools({ environment: environmentEast });
 };
 
 teardownEnvironment();

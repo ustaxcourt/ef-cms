@@ -10,8 +10,8 @@ exports.deleteDynamoDBTables = async ({ environment }) => {
     environment,
   });
   for (const table of tables) {
-    console.log('Delete ', table.TableName);
-    await dynamoDB.deleteTable({ TableName: table.TableName }).promise();
+    console.log('Delete ', table);
+    await dynamoDB.deleteTable({ TableName: table }).promise();
     await sleep(5000);
   }
 

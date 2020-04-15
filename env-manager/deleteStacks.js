@@ -1,7 +1,9 @@
+const { getCloudFormation } = require('./getCloudFormation');
 const { getStacks } = require('./getStacks');
 const { sleep } = require('./sleep');
 
-exports.deleteStacks = async ({ cloudFormation, environment }) => {
+exports.deleteStacks = async ({ environment }) => {
+  const cloudFormation = getCloudFormation({ environment });
   const stacks = await getStacks({
     cloudFormation,
     environment,
