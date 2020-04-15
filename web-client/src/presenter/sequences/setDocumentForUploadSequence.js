@@ -18,10 +18,10 @@ export const setDocumentForUploadSequence = [
     valid: [
       getFormValueDocumentAction,
       updateFormValueSequence,
-      getFormValueDocumentSizeAction,
-      updateFormValueSequence,
       updateOrderForDesignatingPlaceOfTrialAction,
       updateOrderForOdsAction,
+      getFormValueDocumentSizeAction,
+      updateFormValueSequence,
       validatePetitionFromPaperSequence,
       selectDocumentForPreviewSequence,
       setDocumentUploadModeSequence,
