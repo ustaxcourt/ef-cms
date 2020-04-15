@@ -1,4 +1,3 @@
-const { Case } = require('../../entities/cases/Case');
 const { formatNow } = require('../../utilities/DateHandler');
 
 /**
@@ -49,7 +48,7 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
     .generateNoticeOfTrialIssuedTemplate({
       applicationContext,
       content: {
-        caption: Case.getCaseCaptionNames(caseCaption),
+        caseCaption,
         docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
         trialInfo: {
           address1,
