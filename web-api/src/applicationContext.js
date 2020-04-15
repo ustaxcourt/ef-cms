@@ -63,6 +63,9 @@ const {
   CaseInternal,
 } = require('../../shared/src/business/entities/cases/CaseInternal');
 const {
+  casePublicSearch: casePublicSearchPersistence,
+} = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
+const {
   casePublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
 const {
@@ -564,6 +567,9 @@ const {
   orderKeywordSearch,
 } = require('../../shared/src/business/useCaseHelper/search/orderKeywordSearch');
 const {
+  orderKeywordSearch: orderKeywordSearchPersistence,
+} = require('../../shared/src/persistence/elasticsearch/orderKeywordSearch');
+const {
   orderPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
 const {
@@ -956,6 +962,7 @@ module.exports = (appContextUser = {}) => {
         addWorkItemToSectionInbox,
         associateUserWithCase,
         associateUserWithCasePending,
+        casePublicSearch: casePublicSearchPersistence,
         createCase,
         createCaseCatalogRecord,
         createCaseDeadline,
@@ -1022,6 +1029,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemById,
         incrementCounter,
         isFileExists,
+        orderKeywordSearch: orderKeywordSearchPersistence,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocumentFromLambda,
