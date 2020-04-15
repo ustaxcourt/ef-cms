@@ -16,7 +16,7 @@ describe('generatePrintableCaseInventoryReportInteractor', () => {
       .getUseCaseHelpers()
       .generateCaseInventoryReportPdf.mockReturnValue('https://example.com');
     applicationContext
-      .getUseCaseHelpers()
+      .getPersistenceGateway()
       .getCaseInventoryReport.mockReturnValue([]);
 
     const results = await generatePrintableCaseInventoryReportInteractor({
