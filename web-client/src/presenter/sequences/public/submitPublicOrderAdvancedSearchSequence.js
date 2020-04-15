@@ -1,25 +1,28 @@
 import { clearAlertsAction } from '../../actions/clearAlertsAction';
+import { clearSearchResultsAction } from '../../actions/AdvancedSearch/clearSearchResultsAction';
 import { clearSearchTermAction } from '../../actions/clearSearchTermAction';
 import { props, state } from 'cerebral';
-import { set, unset } from 'cerebral/factories';
+import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/sequenceHelpers';
-import { submitPublicAdvancedSearchAction } from '../../actions/Public/submitPublicAdvancedSearchAction';
-import { validateCaseAdvancedSearchAction } from '../../actions/AdvancedSearch/validateCaseAdvancedSearchAction';
+import { startShowValidationAction } from '../../actions/startShowValidationAction';
+import { submitPublicOrderAdvancedSearchAction } from '../../actions/Public/submitPublicOrderAdvancedSearchAction';
+import { validateOrderAdvancedSearchAction } from '../../actions/AdvancedSearch/validateOrderAdvancedSearchAction';
 
-export const submitPublicAdvancedSearchSequence = [
+export const submitPublicOrderAdvancedSearchSequence = [
   clearSearchTermAction,
-  validateCaseAdvancedSearchAction,
+  validateOrderAdvancedSearchAction,
   {
     error: [
       setAlertErrorAction,
       setValidationErrorsAction,
-      unset(state.searchResults),
+      clearSearchResultsAction,
+      startShowValidationAction,
     ],
     success: showProgressSequenceDecorator([
       clearAlertsAction,
-      submitPublicAdvancedSearchAction,
+      submitPublicOrderAdvancedSearchAction,
       set(state.searchResults, props.searchResults),
     ]),
   },
