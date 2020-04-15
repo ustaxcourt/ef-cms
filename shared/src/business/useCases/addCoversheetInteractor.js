@@ -57,10 +57,10 @@ exports.generateCoverSheetData = ({
 
   const caseCaption = caseEntity.caseCaption || Case.getCaseCaption(caseEntity);
   let caseCaptionNames = applicationContext.getCaseCaptionNames(caseCaption);
-  let caseCaptionPostfix = '';
+  let caseCaptionExtension = '';
   if (caseCaptionNames !== caseCaption) {
     caseCaptionNames += ', ';
-    caseCaptionPostfix = caseCaption.replace(caseCaptionNames, '');
+    caseCaptionExtension = caseCaption.replace(caseCaptionNames, '');
   }
 
   let documentTitle =
@@ -73,8 +73,8 @@ exports.generateCoverSheetData = ({
     caseEntity.docketNumber + (caseEntity.docketNumberSuffix || '');
 
   const coverSheetData = {
-    caseCaptionPetitioner: caseCaptionNames,
-    caseCaptionRespondent: 'Commissioner of Internal Revenue',
+    caseCaptionExtension,
+    caseCaptionNames,
     certificateOfService:
       documentEntity.certificateOfService === true
         ? 'Certificate of Service'
@@ -87,7 +87,6 @@ exports.generateCoverSheetData = ({
     documentTitle,
     electronicallyFiled: documentEntity.isPaper ? '' : 'Electronically Filed',
     mailingDate: documentEntity.mailingDate || '',
-    petitionerLabel: caseCaptionPostfix,
   };
   return coverSheetData;
 };
