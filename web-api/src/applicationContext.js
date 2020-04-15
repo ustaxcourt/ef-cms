@@ -561,6 +561,12 @@ const {
   orderAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/orderAdvancedSearchInteractor');
 const {
+  orderKeywordSearch,
+} = require('../../shared/src/business/useCaseHelper/search/orderKeywordSearch');
+const {
+  orderPublicSearchInteractor,
+} = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
+const {
   prioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/prioritizeCaseInteractor');
 const {
@@ -874,6 +880,7 @@ module.exports = (appContextUser = {}) => {
     getConstants: () => ({
       CASE_INVENTORY_MAX_PAGE_SIZE: 5000,
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
+      SESSION_STATUS_GROUPS: TrialSession.SESSION_STATUS_GROUPS,
     }),
     getCurrentUser,
     getDispatchers: () => ({
@@ -1113,6 +1120,8 @@ module.exports = (appContextUser = {}) => {
         generateCaseInventoryReportPdf,
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
+        getCaseInventoryReport,
+        orderKeywordSearch,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
       };
@@ -1205,6 +1214,7 @@ module.exports = (appContextUser = {}) => {
         onConnectInteractor,
         onDisconnectInteractor,
         orderAdvancedSearchInteractor,
+        orderPublicSearchInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
         removeCaseFromTrialInteractor,
