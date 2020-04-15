@@ -219,6 +219,9 @@ const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
 const {
+  fetchPendingItems: fetchPendingItemsPersistence,
+} = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
+const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
 const {
@@ -333,7 +336,7 @@ const {
 } = require('../../shared/src/business/useCases/getCaseInteractor');
 const {
   getCaseInventoryReport,
-} = require('../../shared/src/business/useCaseHelper/caseInventoryReport/getCaseInventoryReport');
+} = require('../../shared/src/persistence/elasticsearch/getCaseInventoryReport');
 const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
@@ -978,12 +981,14 @@ module.exports = (appContextUser = {}) => {
         deleteUserOutboxRecord,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
+        fetchPendingItems: fetchPendingItemsPersistence,
         getAllCaseDeadlines,
         getAllCatalogCases,
         getCalendaredCasesForTrialSession,
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
+        getCaseInventoryReport,
         getCasesByCaseIds,
         getCasesByLeadCaseId,
         getCasesByUser,
