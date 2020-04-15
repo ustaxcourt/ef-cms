@@ -224,8 +224,10 @@ jobs:
           name: Pa11y - Public Site
           command: |
             SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public:ci start:api:ci > /tmp/pa11y/pa11y-server-public.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
             sleep 15
-            npm run test:pa11y:public
+            npm run test:pa11y:public --node-flags --max-old-space-size=1024
       - store_artifacts:
           path: /tmp/pa11y
 
