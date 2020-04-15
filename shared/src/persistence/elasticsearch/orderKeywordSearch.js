@@ -27,29 +27,33 @@ exports.orderKeywordSearch = async ({
   };
 
   const orderQuery = {
-    _source: sourceFields,
-    query: {
-      bool: {
-        must: [
-          { match: { 'pk.S': 'case|' } },
-          { match: { 'sk.S': 'document|' } },
-          orderEventCodeQuery,
-          {
-            exists: {
-              field: 'servedAt',
+    body: {
+      _source: sourceFields,
+      query: {
+        bool: {
+          must: [
+            { match: { 'pk.S': 'case|' } },
+            { match: { 'sk.S': 'document|' } },
+            orderEventCodeQuery,
+            {
+              exists: {
+                field: 'servedAt',
+              },
             },
-          },
-          {
-            query_string: {
-              default_operator: 'or',
-              fields: ['documentContents.S', 'documentTitle.S'],
-              query: `*${orderKeyword}*`,
+            {
+              query_string: {
+                default_operator: 'or',
+                fields: ['documentContents.S', 'documentTitle.S'],
+                query: `*${orderKeyword}*`,
+              },
             },
-          },
-        ],
+          ],
+        },
       },
+
+      size: 5000,
     },
-    size: 5000,
+    index: 'efcms',
   };
 
   const { results } = await search({

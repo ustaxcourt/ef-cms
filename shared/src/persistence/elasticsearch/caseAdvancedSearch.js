@@ -1,9 +1,7 @@
-const AWS = require('aws-sdk');
 const {
   aggregateCommonQueryParams,
 } = require('../utilities/aggregateCommonQueryParams');
-const { caseSearchFilter } = require('../utilities/caseFilter');
-const { get, isEmpty } = require('lodash');
+const { isEmpty } = require('lodash');
 const { search } = require('./searchClient');
 
 /**
