@@ -1,7 +1,8 @@
 import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from '../AdvancedSearch/CaseSearchForm';
 import { ErrorNotification } from '../ErrorNotification';
-import { PublicOrderSearch } from './PublicOrderSearch';
+import { OrderSearchForm } from '../AdvancedSearch/OrderSearchForm';
+import { OrderSearchResults } from '../AdvancedSearch/OrderSearchResults';
 import { SearchResults } from '../AdvancedSearch/SearchResults';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -11,14 +12,19 @@ import React from 'react';
 
 export const PublicSearch = connect(
   {
+    advancedSearchTabChangeSequence: sequences.advancedSearchTabChangeSequence,
     submitCaseDocketNumberSearchSequence:
       sequences.submitCaseDocketNumberSearchSequence,
-    submitPublicAdvancedSearchSequence:
-      sequences.submitPublicAdvancedSearchSequence,
+    submitPublicCaseAdvancedSearchSequence:
+      sequences.submitPublicCaseAdvancedSearchSequence,
+    submitPublicOrderAdvancedSearchSequence:
+      sequences.submitPublicOrderAdvancedSearchSequence,
   },
   function PublicSearch({
+    advancedSearchTabChangeSequence,
     submitCaseDocketNumberSearchSequence,
-    submitPublicAdvancedSearchSequence,
+    submitPublicCaseAdvancedSearchSequence,
+    submitPublicOrderAdvancedSearchSequence,
   }) {
     return (
       <>
@@ -29,10 +35,10 @@ export const PublicSearch = connect(
           <ErrorNotification />
 
           <Tabs
-            bind="publicAdvancedSearchTab"
+            bind="advancedSearchTab"
             className="classic-horizontal-header3 tab-border"
             onSelect={() => {
-              // advancedSearchTabChangeSequence();
+              advancedSearchTabChangeSequence();
             }}
           >
             <Tab id="tab-case" tabName="case" title="Case">
@@ -45,7 +51,7 @@ export const PublicSearch = connect(
 
               <CaseSearchForm
                 submitAdvancedSearchSequence={
-                  submitPublicAdvancedSearchSequence
+                  submitPublicCaseAdvancedSearchSequence
                 }
                 submitDocketNumberSearchSequence={
                   submitCaseDocketNumberSearchSequence
@@ -54,8 +60,12 @@ export const PublicSearch = connect(
               <SearchResults />
             </Tab>
             <Tab id="tab-order" tabName="order" title="Order">
-              <PublicOrderSearch />
-              {/* <PublicOrderSearchResults /> */}
+              <OrderSearchForm
+                submitAdvancedSearchSequence={
+                  submitPublicOrderAdvancedSearchSequence
+                }
+              />
+              <OrderSearchResults />
             </Tab>
           </Tabs>
         </section>

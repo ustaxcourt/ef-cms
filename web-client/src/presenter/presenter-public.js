@@ -1,5 +1,6 @@
 import { state } from './state-public';
 
+import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabChangeSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
@@ -12,14 +13,18 @@ import { navigateToPublicSiteSequence } from './sequences/public/navigateToPubli
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { submitCaseDocketNumberSearchSequence } from './sequences/submitCaseDocketNumberSearchSequence';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/public/submitPublicCaseAdvancedSearchSequence';
+import { submitPublicOrderAdvancedSearchSequence } from './sequences/public/submitPublicOrderAdvancedSearchSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
+import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
+import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
 
 export const presenter = {
   providers: {},
   sequences: {
+    advancedSearchTabChangeSequence,
     cerebralBindSimpleSetStateSequence,
     clearAdvancedSearchFormSequence,
     clearPdfPreviewUrlSequence,
@@ -32,10 +37,13 @@ export const presenter = {
     showMoreResultsSequence,
     submitCaseDocketNumberSearchSequence,
     submitPublicCaseAdvancedSearchSequence: submitPublicCaseAdvancedSearchSequence,
+    submitPublicOrderAdvancedSearchSequence,
     toggleBetaBarSequence,
     toggleUsaBannerDetailsSequence,
     updateAdvancedSearchFormValueSequence,
     updateDocketNumberSearchFormSequence,
+    validateCaseAdvancedSearchFormSequence,
+    validateOrderSearchSequence,
   },
   state,
 };
