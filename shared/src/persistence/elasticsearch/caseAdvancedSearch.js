@@ -1,34 +1,25 @@
+const AWS = require('aws-sdk');
 const {
   aggregateCommonQueryParams,
-} = require('../../business/utilities/aggregateCommonQueryParams');
+} = require('../utilities/aggregateCommonQueryParams');
+const { caseSearchFilter } = require('../utilities/caseFilter');
+const { get, isEmpty } = require('lodash');
 const { search } = require('./searchClient');
 
 /**
- * casePublicSearch
+ * caseAdvancedSearchInteractor
  *
  * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
  * @returns {object} the case data
  */
-exports.casePublicSearch = async ({
-  applicationContext,
-  countryType,
-  petitionerName,
-  petitionerState,
-  yearFiledMax,
-  yearFiledMin,
-}) => {
+exports.caseAdvancedSearch = async providers => {
+  const { applicationContext } = providers;
+
   const {
     commonQuery,
     exactMatchesQuery,
     nonExactMatchesQuery,
-  } = aggregateCommonQueryParams({
-    applicationContext,
-    countryType,
-    petitionerName,
-    petitionerState,
-    yearFiledMax,
-    yearFiledMin,
-  });
+  } = aggregateCommonQueryParams(providers);
 
   let foundCases = (
     await search({
@@ -41,6 +32,8 @@ exports.casePublicSearch = async ({
             'contactSecondary',
             'docketNumber',
             'docketNumberSuffix',
+            'irsPractitioners',
+            'privatePractitioners',
             'receivedAt',
             'sealedDate',
           ],
@@ -56,7 +49,7 @@ exports.casePublicSearch = async ({
     })
   ).results;
 
-  if (!foundCases.length) {
+  if (isEmpty(foundCases)) {
     foundCases = (
       await search({
         applicationContext,
@@ -69,6 +62,7 @@ exports.casePublicSearch = async ({
               'docketNumber',
               'docketNumberSuffix',
               'receivedAt',
+              'sealedDate',
             ],
             query: {
               bool: {
