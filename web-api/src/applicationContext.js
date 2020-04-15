@@ -333,7 +333,7 @@ const {
 } = require('../../shared/src/business/useCases/getCaseInteractor');
 const {
   getCaseInventoryReport,
-} = require('../../shared/src/business/useCaseHelper/caseInventoryReport/getCaseInventoryReport');
+} = require('../../shared/src/persistence/elasticsearch/getCaseInventoryReport');
 const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
@@ -968,6 +968,7 @@ module.exports = (appContextUser = {}) => {
         deleteUserCaseNote,
         deleteUserConnection,
         deleteUserFromCase,
+        getCaseInventoryReport,
         deleteUserOutboxRecord,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
@@ -1108,7 +1109,6 @@ module.exports = (appContextUser = {}) => {
         generateCaseInventoryReportPdf,
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
-        getCaseInventoryReport,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
       };
