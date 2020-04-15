@@ -144,6 +144,12 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
     );
   });
 
+  it('should default to Regular procedureType when creating a new case', async () => {
+    expect(test.getState('form.procedureType')).toEqual(
+      Case.PROCEDURE_TYPES[0],
+    );
+  });
+
   it('should generate case caption from primary and secondary contact information', async () => {
     for (const item of formValues) {
       if (item.key === 'partyType') {
