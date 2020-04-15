@@ -1,7 +1,7 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { getFormattedDocumentQCSectionOutbox, wait } from '../helpers';
 
-export default test => {
+export const petitionsClerkEditsAnExistingCaseAndServesCase = test => {
   it('should allow edits to an in progress case', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,

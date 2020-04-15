@@ -1,6 +1,7 @@
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
-import petitionsClerkCreatesNewCaseAndSavesForLater from './journey/petitionsClerkCreatesNewCaseAndSavesForLater';
-import petitionsClerkEditsAnExistingCaseAndServesCase from './journey/petitionsClerkEditsAnExistingCaseAndServesCase';
+import { petitionsClerkCreatesNewCaseAndSavesForLater } from './journey/petitionsClerkCreatesNewCaseAndSavesForLater';
+import { petitionsClerkEditsAnExistingCaseAndServesCase } from './journey/petitionsClerkEditsAnExistingCaseAndServesCase';
+import { petitionsClerkVerifiesOrderForOdsCheckbox } from './journey/petitionsClerkVerifiesOrderForOdsCheckbox';
 
 const test = setupTest();
 
@@ -23,4 +24,6 @@ describe('Petitions clerk paper case flow', () => {
 
   loginAs(test, 'petitionsclerk');
   petitionsClerkEditsAnExistingCaseAndServesCase(test);
+
+  petitionsClerkVerifiesOrderForOdsCheckbox(test, fakeFile);
 });
