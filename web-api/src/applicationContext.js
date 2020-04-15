@@ -219,6 +219,9 @@ const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
 const {
+  fetchPendingItems: fetchPendingItemsPersistence,
+} = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
+const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
 const {
@@ -968,16 +971,17 @@ module.exports = (appContextUser = {}) => {
         deleteUserCaseNote,
         deleteUserConnection,
         deleteUserFromCase,
-        getCaseInventoryReport,
         deleteUserOutboxRecord,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
+        fetchPendingItems: fetchPendingItemsPersistence,
         getAllCaseDeadlines,
         getAllCatalogCases,
         getCalendaredCasesForTrialSession,
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
+        getCaseInventoryReport,
         getCasesByCaseIds,
         getCasesByLeadCaseId,
         getCasesByUser,
