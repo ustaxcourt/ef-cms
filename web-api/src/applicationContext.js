@@ -558,6 +558,9 @@ const {
   orderAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/orderAdvancedSearchInteractor');
 const {
+  orderKeywordSearch,
+} = require('../../shared/src/business/useCaseHelper/search/orderKeywordSearch');
+const {
   prioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/prioritizeCaseInteractor');
 const {
@@ -1109,6 +1112,7 @@ module.exports = (appContextUser = {}) => {
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
         getCaseInventoryReport,
+        orderKeywordSearch,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
       };
