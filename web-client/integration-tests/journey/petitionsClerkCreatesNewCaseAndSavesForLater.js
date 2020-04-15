@@ -4,7 +4,11 @@ const {
   ContactFactory,
 } = require('../../../shared/src/business/entities/contacts/ContactFactory');
 
-export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
+export const petitionsClerkCreatesNewCaseAndSavesForLater = (
+  test,
+  fakeFile,
+  trialLocation = 'Birmingham, Alabama',
+) => {
   const primaryContactName = {
     key: 'contactPrimary.name',
     value: 'Shawn Johnson',
@@ -142,7 +146,14 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
 
   it('should generate case caption from primary and secondary contact information', async () => {
     for (const item of formValues) {
-      await test.runSequence('updateFormValueSequence', item);
+      if (item.key === 'partyType') {
+        await test.runSequence(
+          'updateStartCaseInternalPartyTypeSequence',
+          item,
+        );
+      } else {
+        await test.runSequence('updateFormValueSequence', item);
+      }
     }
 
     await test.runSequence('updateFormValueAndSecondaryContactInfoSequence', {
