@@ -1,11 +1,11 @@
 import { state } from 'cerebral';
 
 /**
- * sets currentViewMetadata.startCaseInternal tab to props tab
+ * sets state.form.procedureType to a default if it is not already set on the form
  *
  * @param {object} providers the providers object
- * @param {Function} providers.props the cerebral props object
- * @param {Function} providers.store the cerebral store object
+ * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.store the cerebral store object
  */
 export const setDefaultProcedureTypeAction = ({
   applicationContext,
