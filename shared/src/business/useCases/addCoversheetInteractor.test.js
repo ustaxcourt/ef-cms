@@ -607,7 +607,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.petitionerLabel).toEqual('Petitioners');
+      expect(result.caseCaptionExtension).toEqual('Petitioners');
     });
 
     it('generates cover sheet data appropriate for a single petitioner', async () => {
@@ -630,10 +630,10 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.petitionerLabel).toEqual('Petitioner');
+      expect(result.caseCaptionExtension).toEqual('Petitioner');
     });
 
-    it('generates empty string for caseCaptionPostfix if the caseCaption is not in the proper format', async () => {
+    it('generates empty string for caseCaptionExtension if the caseCaption is not in the proper format', async () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -653,7 +653,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.petitionerLabel).toEqual('');
+      expect(result.caseCaptionExtension).toEqual('');
     });
   });
 });

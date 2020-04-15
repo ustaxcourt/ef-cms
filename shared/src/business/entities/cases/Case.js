@@ -288,7 +288,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     rawCase.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
 
   if (rawCase.caseCaption) {
-    this.setCaseTitle(rawCase.caseCaption);
     this.initialCaption = rawCase.initialCaption || this.caseCaption;
   }
 
@@ -1529,18 +1528,6 @@ Case.prototype.setCaseStatus = function (caseStatus) {
  */
 Case.prototype.setCaseCaption = function (caseCaption) {
   this.caseCaption = caseCaption;
-  this.setCaseTitle(caseCaption);
-  return this;
-};
-
-/**
- * set case title
- *
- * @param {string} caseCaption the case caption to build the case title
- * @returns {Case} the updated case entity
- */
-Case.prototype.setCaseTitle = function (caseCaption) {
-  this.caseTitle = `${caseCaption.trim()} ${Case.CASE_CAPTION_POSTFIX}`;
   return this;
 };
 

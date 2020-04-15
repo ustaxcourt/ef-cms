@@ -5,7 +5,6 @@ import {
 
 const caseDetail = {
   caseCaption: 'Test Case Caption',
-  caseCaptionPostfix: 'Test Caption Postfix',
   contactPrimary: {
     address1: 'address 1',
     city: 'City',

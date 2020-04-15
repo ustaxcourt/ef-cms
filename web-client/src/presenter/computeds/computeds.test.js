@@ -1,4 +1,3 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
 import { applicationContext } from '../../applicationContext';
 import { formattedCases as formattedCasesComputed } from './formattedCaseDetail';
@@ -32,9 +31,6 @@ describe('formatted case details computed', () => {
             petitioners: [{ name: 'bob' }],
           },
         ],
-        constants: {
-          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-        },
       },
     });
     expect(result[0].irsDateFormatted).toContain('11/21/18');
@@ -50,9 +46,6 @@ describe('formatted case details computed', () => {
             petitioners: [{ name: 'bob' }],
           },
         ],
-        constants: {
-          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-        },
       },
     });
     expect(result[0].irsPractitioners[0].formattedName).toContain('test (123)');
