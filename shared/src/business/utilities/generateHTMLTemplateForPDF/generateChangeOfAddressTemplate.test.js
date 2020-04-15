@@ -3,6 +3,7 @@ const {
   generateChangeOfAddressTemplate,
 } = require('./generateChangeOfAddressTemplate');
 const applicationContext = createApplicationContext({});
+const { Case } = require('../../entities/cases/Case');
 
 describe('generateChangeOfAddressTemplate', () => {
   const caseDetail = {
@@ -37,7 +38,7 @@ describe('generateChangeOfAddressTemplate', () => {
 
     expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
     expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
-    expect(result.indexOf('Test Caption Postfix')).toBeGreaterThan(-1);
+    expect(result.indexOf(Case.CASE_CAPTION_POSTFIX)).toBeGreaterThan(-1);
     expect(result.indexOf('Notice of Change of Address')).toBeGreaterThan(-1);
     expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
     expect(result.indexOf('address 1')).toBeGreaterThan(-1);

@@ -1,6 +1,7 @@
 const {
   generatePrintableFilingReceiptTemplate,
 } = require('./generatePrintableFilingReceiptTemplate');
+const { Case } = require('../../entities/cases/Case');
 
 const createApplicationContext = require('../../../../../web-api/src/applicationContext');
 const applicationContext = createApplicationContext({});
@@ -21,7 +22,7 @@ describe('generatePrintableFilingReceiptTemplate', () => {
     });
 
     expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
-    expect(result.indexOf('Test Caption Postfix')).toBeGreaterThan(-1);
+    expect(result.indexOf(Case.CASE_CAPTION_POSTFIX)).toBeGreaterThan(-1);
     expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
     expect(
       result.indexOf('<div>Documents Filed Content</div>'),
