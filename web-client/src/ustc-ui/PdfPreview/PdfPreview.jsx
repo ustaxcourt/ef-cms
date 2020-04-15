@@ -20,13 +20,7 @@ const PdfPreviewComponent = connect(
     }, []);
 
     return (
-      !process.env.CI && (
-        <iframe
-          id="pdf-preview-iframe"
-          src={pdfPreviewUrl}
-          title="PDF Preview"
-        />
-      )
+      <iframe id="pdf-preview-iframe" src={pdfPreviewUrl} title="PDF Preview" />
     );
   },
 );

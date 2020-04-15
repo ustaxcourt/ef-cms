@@ -17,6 +17,7 @@ const { WorkItem } = require('../../entities/WorkItem');
 exports.generateChangeOfAddress = async ({
   applicationContext,
   contactInfo,
+  updatedName,
   user,
 }) => {
   const userCases = await applicationContext
@@ -31,6 +32,8 @@ exports.generateChangeOfAddress = async ({
     let oldData;
     const newData = contactInfo;
 
+    const name = updatedName ? updatedName : user.name;
+
     let caseEntity = new Case(userCase, { applicationContext });
     const privatePractitioner = caseEntity.privatePractitioners.find(
       practitioner => practitioner.userId === user.userId,
@@ -38,6 +41,7 @@ exports.generateChangeOfAddress = async ({
     if (privatePractitioner) {
       oldData = clone(privatePractitioner.contact);
       privatePractitioner.contact = contactInfo;
+      privatePractitioner.name = name;
     }
 
     const irsPractitioner = caseEntity.irsPractitioners.find(
@@ -46,6 +50,7 @@ exports.generateChangeOfAddress = async ({
     if (irsPractitioner) {
       oldData = clone(irsPractitioner.contact);
       irsPractitioner.contact = contactInfo;
+      irsPractitioner.name = name;
     }
 
     // we do this again so that it will convert '' to null
@@ -93,7 +98,7 @@ exports.generateChangeOfAddress = async ({
               caseDetail.docketNumberSuffix || ''
             }`,
             documentTitle: documentType.title,
-            name: `${user.name} (${user.barNumber})`,
+            name: `${name} (${user.barNumber})`,
             newData,
             oldData,
           },
@@ -112,7 +117,7 @@ exports.generateChangeOfAddress = async ({
 
       const documentData = {
         addToCoversheet: true,
-        additionalInfo: `for ${user.name}`,
+        additionalInfo: `for ${name}`,
         caseId: caseEntity.caseId,
         documentId: newDocumentId,
         documentTitle: documentType.title,
@@ -125,7 +130,7 @@ exports.generateChangeOfAddress = async ({
       if (user.role === User.ROLES.privatePractitioner) {
         documentData.privatePractitioners = [
           {
-            name: user.name,
+            name,
             partyPrivatePractitioner: true,
           },
         ];
@@ -174,7 +179,7 @@ exports.generateChangeOfAddress = async ({
 
       const message = new Message(
         {
-          from: user.name,
+          from: name,
           fromUserId: user.userId,
           message: `${
             changeOfAddressDocument.documentType

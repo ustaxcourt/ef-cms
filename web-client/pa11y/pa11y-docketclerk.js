@@ -118,6 +118,18 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry&info=initiate-service-modal',
   },
+  {
+    actions: [
+      'wait for #tab-order to be visible',
+      'click element #tab-order',
+      'wait for #order-search to be visible',
+      'set field #order-search to dismissal',
+      'click element button#advanced-search-button',
+      'wait for table.search-results to be visible',
+    ],
+    notes: 'checks a11y of advanced order search',
+    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/search',
+  },
   'http://localhost:1234/mock-login?token=docketclerk&path=/print-preview/110-19/',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-19/edit-petitioner-information',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19?openModal=PaperServiceConfirmModal',

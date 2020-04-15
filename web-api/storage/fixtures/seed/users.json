@@ -503,6 +503,16 @@
     "barNumber": "IP1111",
     "userId": "c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
     "email": "inactivePractitioner",
+    "contact": {
+      "address1": "234 Main St",
+      "address2": "Apartment 4",
+      "address3": "Under the stairs",
+      "city": "Chicago",
+      "countryType": "domestic",
+      "phone": "+1 (555) 555-5555",
+      "postalCode": "61234",
+      "state": "IL"
+    },
     "originalBarState": "California"
   },
   {
