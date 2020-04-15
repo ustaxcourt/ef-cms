@@ -877,6 +877,7 @@ module.exports = (appContextUser = {}) => {
     getConstants: () => ({
       CASE_INVENTORY_MAX_PAGE_SIZE: 5000,
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
+      SESSION_STATUS_GROUPS: TrialSession.SESSION_STATUS_GROUPS,
     }),
     getCurrentUser,
     getDispatchers: () => ({
