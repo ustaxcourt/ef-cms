@@ -1,4 +1,6 @@
+const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+
 /**
  * generateDocketRecordPdfInteractor
  *
@@ -13,9 +15,6 @@ exports.generateDocketRecordPdfInteractor = async ({
   docketRecordSort,
   includePartyDetail = false,
 }) => {
-  const { Case } = applicationContext.getEntityConstructors();
-  const caseCaptionPostfix = Case.CASE_CAPTION_POSTFIX;
-
   const caseSource = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
@@ -259,7 +258,6 @@ exports.generateDocketRecordPdfInteractor = async ({
       applicationContext,
       content: {
         caption: caseCaption,
-        captionPostfix: caseCaptionPostfix,
         docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
         docketRecord: getDocketRecordContent(formattedCaseDetail),
         partyInfo: includePartyDetail

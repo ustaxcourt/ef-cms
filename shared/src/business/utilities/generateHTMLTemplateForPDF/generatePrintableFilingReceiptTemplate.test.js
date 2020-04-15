@@ -8,7 +8,6 @@ const applicationContext = createApplicationContext({});
 describe('generatePrintableFilingReceiptTemplate', () => {
   const content = {
     caption: 'Test Case Caption',
-    captionPostfix: 'Test Caption Postfix',
     docketNumberWithSuffix: '123-45S',
     documentsFiledContent: '<div>Documents Filed Content</div>',
     filedAt: '10/03/19 3:09 pm ET',

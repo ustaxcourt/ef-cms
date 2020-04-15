@@ -1,14 +1,13 @@
+const createApplicationContext = require('../../../../../web-api/src/applicationContext');
 const {
   generatePrintableDocketRecordTemplate,
 } = require('./generatePrintableDocketRecordTemplate');
 
-const createApplicationContext = require('../../../../../web-api/src/applicationContext');
 const applicationContext = createApplicationContext({});
 
 describe('generatePrintableDocketRecordTemplate', () => {
   const content = {
-    caption: 'Test Case Caption',
-    captionPostfix: 'Test Caption Postfix',
+    caseCaptionWithPostfix: 'Test Case Caption',
     docketNumberWithSuffix: '123-45S',
     docketRecord: '<table id="test-docket-record"></table>',
     partyInfo: '<table id="test-party-info"></table>',
