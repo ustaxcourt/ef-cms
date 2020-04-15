@@ -6,7 +6,7 @@ const { Order } = require('../../entities/orders/Order');
 const { orderKeywordSearch } = require('./orderKeywordSearch');
 
 describe('orderKeywordSearch', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: 'petitionsclerk',
     });
