@@ -1,6 +1,6 @@
 const { DynamoDB } = require('aws-sdk');
 
-exports.getCloudFormation = ({ environment }) => {
+exports.getDynamoDB = ({ environment }) => {
   const dynamoDB = new DynamoDB({
     accessKeyId: environment.accessKeyId,
     apiVersion: 'latest',

@@ -9,6 +9,7 @@ exports.deleteCustomDomains = async ({ environment }) => {
     apiGateway,
     environment,
   });
+
   for (const domain of customDomains) {
     console.log('Delete ', domain.DomainName);
     await apiGateway

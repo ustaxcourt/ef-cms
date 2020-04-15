@@ -12,6 +12,7 @@ exports.deleteCognitoPools = async ({ environment }) => {
   });
   for (const pool of pools) {
     console.log('Delete ', pool.IdentityPoolId);
+    // this function isn't in the SDK!
     exec(
       `aws cognito-idp delete-user-pool-domain --domain auth-${environment.name}-flexion-efcms --region ${environment.region} --user-pool-id ${pool.IdentityPoolId}`,
     );
