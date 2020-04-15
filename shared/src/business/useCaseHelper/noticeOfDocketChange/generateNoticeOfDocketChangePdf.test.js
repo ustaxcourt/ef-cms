@@ -35,7 +35,8 @@ const mockPetitionerUser = {
 const mockCase = { docketNumber: '101-19' };
 
 const docketChangeInfo = {
-  caseCaption: 'This is a Case Caption',
+  caseTitle:
+    'This is a Case Caption v. Commissioner of Internal Revenue, Respondent',
   docketEntryIndex: '3',
   docketNumber: '123-19X',
   filingParties: { after: 'Cody', before: 'Joe' },
