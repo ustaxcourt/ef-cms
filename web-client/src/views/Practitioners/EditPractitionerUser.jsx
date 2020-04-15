@@ -27,7 +27,7 @@ export const EditPractitionerUser = connect(
                 <h1 className="captioned" tabIndex="-1">
                   {form.name}
                 </h1>
-                <span className="usa-tag">Active</span>
+                <span className="usa-tag">{form.admissionsStatus}</span>
               </div>
             </div>
             <div className="grid-row">

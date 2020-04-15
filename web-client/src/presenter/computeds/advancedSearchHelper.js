@@ -47,6 +47,10 @@ export const formatOrderSearchResultRecord = (
     result.docketNumberSuffix ? result.docketNumberSuffix : ''
   }`;
 
+  result.formattedSignedJudgeName = result.signedJudgeName
+    ? applicationContext.getUtilities().getJudgeLastName(result.signedJudgeName)
+    : '';
+
   return result;
 };
 

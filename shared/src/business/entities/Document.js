@@ -64,6 +64,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.addToCoversheet = rawDocument.addToCoversheet;
   this.archived = rawDocument.archived; // TODO: look into this
   this.attachments = rawDocument.attachments;
+  this.documentContents = rawDocument.documentContents;
   this.caseId = rawDocument.caseId;
   this.certificateOfService = rawDocument.certificateOfService;
   this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
@@ -417,6 +418,8 @@ Document.prototype.archive = function () {
 Document.prototype.setAsServed = function (servedParties = null) {
   this.status = 'served';
   this.servedAt = createISODateString();
+  this.draftState = null;
+
   if (servedParties) {
     this.servedParties = servedParties;
   }

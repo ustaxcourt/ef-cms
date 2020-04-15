@@ -44,6 +44,7 @@ exports.updatePractitionerUserInteractor = async ({
   await generateChangeOfAddress({
     applicationContext,
     contactInfo: validatedUserData.contact,
+    updatedName: validatedUserData.name,
     user: oldUserInfo,
   });
 
