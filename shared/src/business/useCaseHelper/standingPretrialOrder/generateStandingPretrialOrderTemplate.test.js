@@ -8,7 +8,6 @@ const applicationContext = createApplicationContext({});
 describe('generateStandingPretrialOrderTemplate', () => {
   const caseDetail = {
     caseCaption: 'Test Case Caption',
-    caseCaptionPostfix: 'Test Caption Postfix',
     docketNumber: '123-45',
     docketNumberSuffix: 'S',
   };
@@ -18,7 +17,6 @@ describe('generateStandingPretrialOrderTemplate', () => {
       applicationContext,
       content: {
         caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         trialInfo: {
