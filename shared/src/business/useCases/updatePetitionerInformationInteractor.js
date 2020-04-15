@@ -73,7 +73,6 @@ exports.updatePetitionerInformationInteractor = async ({
 
   const caseDetail = {
     ...caseEntity.validate().toRawObject(),
-    caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
   };
 
   const servedParties = aggregatePartiesForService(caseEntity);
@@ -90,7 +89,6 @@ exports.updatePetitionerInformationInteractor = async ({
         applicationContext,
         content: {
           caption: caseDetail.caseCaption,
-          captionPostfix: caseDetail.caseCaptionPostfix,
           docketNumberWithSuffix: `${caseDetail.docketNumber}${
             caseDetail.docketNumberSuffix || ''
           }`,
