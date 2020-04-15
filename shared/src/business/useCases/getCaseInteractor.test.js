@@ -111,7 +111,6 @@ describe('Get case', () => {
             ...MOCK_CASE,
             caseCaption: 'a case caption',
             caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-            caseTitle: 'a case title',
             caseType: 'Other',
             createdAt: new Date().toISOString(),
             docketNumber: '00101-18',
