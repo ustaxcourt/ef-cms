@@ -338,6 +338,9 @@ const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
 const {
+  getCasesByCaseIds,
+} = require('../../shared/src/persistence/dynamo/cases/getCasesByCaseIds');
+const {
   getCasesByLeadCaseId,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadCaseId');
 const {
@@ -974,6 +977,7 @@ module.exports = (appContextUser = {}) => {
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
+        getCasesByCaseIds,
         getCasesByLeadCaseId,
         getCasesByUser,
         getDocumentQCInboxForSection,
