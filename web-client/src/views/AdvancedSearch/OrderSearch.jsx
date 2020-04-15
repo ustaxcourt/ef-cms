@@ -1,3 +1,4 @@
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
@@ -61,7 +62,7 @@ export const OrderSearch = connect(
                 </div>
               </div>
 
-              <div className="grid-row">
+              <div className="grid-row margin-top-7">
                 <div className="tablet:grid-col-12">
                   <Button
                     className="margin-bottom-0"
@@ -96,8 +97,16 @@ export const OrderSearch = connect(
                   <input
                     className="usa-input"
                     id="order-search"
-                    name="orderKeyword"
+                    name="docketNumber"
                     type="text"
+                    value={advancedSearchForm.orderSearch.docketNumber || ''}
+                    onChange={e => {
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'orderSearch',
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
                   />
                 </div>
                 <div className="grid-col-2">
@@ -114,20 +123,39 @@ export const OrderSearch = connect(
                     id="order-search"
                     name="caseTitleOrPetitioner"
                     type="text"
+                    value={
+                      advancedSearchForm.orderSearch.caseTitleOrPetitioner || ''
+                    }
+                    onChange={e => {
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'orderSearch',
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
                   />
                 </div>
               </div>
               <div className="grid-row">
-                <div className="grid-col-2">
+                <div className="grid-col-6">
                   <legend className="usa-label" htmlFor="order-search">
                     Judge
                   </legend>
-                  <select
+                  <BindedSelect
+                    bind="advancedSearchForm.orderSearch.judge"
                     className="usa-input"
                     id="order-search"
                     name="judge"
-                    type="text"
-                  />
+                    onChange={e => {
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'orderSearch',
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  >
+                    <option value="">Select</option>
+                  </BindedSelect>
                 </div>
               </div>
               <div className="grid-row">
@@ -146,6 +174,13 @@ export const OrderSearch = connect(
                     placeholder="MM"
                     type="text"
                     value={''}
+                    onChange={e => {
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'orderSearch',
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
                   />
                 </div>
                 <div className="grid-col-1">
@@ -158,6 +193,13 @@ export const OrderSearch = connect(
                     placeholder="DD"
                     type="text"
                     value={''}
+                    onChange={e => {
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'orderSearch',
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
                   />
                 </div>
                 <div className="grid-col-1">
@@ -170,6 +212,13 @@ export const OrderSearch = connect(
                     placeholder="YYYY"
                     type="text"
                     value={''}
+                    onChange={e => {
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'orderSearch',
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
                   />
                 </div>
                 <legend className="usa-label" htmlFor="order-search">
@@ -178,25 +227,39 @@ export const OrderSearch = connect(
                 <div className="grid-col-1">
                   <input
                     aria-describedby="year-filed-legend"
-                    aria-label="starting year, four digits"
+                    aria-label="ending month, two digits"
                     className="usa-input"
-                    id="year-filed-min"
-                    name="yearFiledMin"
+                    id="month-filed-max"
+                    name="monthFiledMax"
                     placeholder="MM"
                     type="text"
                     value={''}
+                    onChange={e => {
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'orderSearch',
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
                   />
                 </div>
                 <div className="grid-col-1">
                   <input
                     aria-describedby="year-filed-legend"
-                    aria-label="ending month, two digits"
+                    aria-label="ending date, two digits"
                     className="usa-input"
-                    id="year-filed-min"
-                    name="yearFiledMin"
+                    id="date-filed-max"
+                    name="dateFiledMax"
                     placeholder="DD"
                     type="text"
                     value={''}
+                    onChange={e => {
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'orderSearch',
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
                   />
                 </div>
                 <div className="grid-col-1">
@@ -209,6 +272,13 @@ export const OrderSearch = connect(
                     placeholder="YYYY"
                     type="text"
                     value={''}
+                    onChange={e => {
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'orderSearch',
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
                   />
                 </div>
               </div>
