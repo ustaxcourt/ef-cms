@@ -101,13 +101,14 @@ export const OrderSearch = connect(
                   />
                 </div>
                 <div className="grid-col-2">
-                  <label className="usa-label" htmlFor="order-search"></label>
-                  or
+                  <legend className="usa-label" htmlFor="order-search">
+                    or
+                  </legend>
                 </div>
                 <div className="grid-col-7">
-                  <label className="usa-label" htmlFor="order-search">
+                  <legend className="usa-label" htmlFor="order-search">
                     Case title / Petitioner&apos;s name
-                  </label>
+                  </legend>
                   <input
                     className="usa-input"
                     id="order-search"
@@ -116,16 +117,100 @@ export const OrderSearch = connect(
                   />
                 </div>
               </div>
-              <div className="grid-row judge-field">
-                <label className="usa-label grid-row" htmlFor="order-search">
-                  Judge
-                </label>
-                <select
-                  className="usa-input grid-row"
-                  id="order-search"
-                  name="orderKeyword"
-                  type="text"
-                />
+              <div className="grid-row">
+                <div className="grid-col-2">
+                  <legend className="usa-label" htmlFor="order-search">
+                    Judge
+                  </legend>
+                  <select
+                    className="usa-input"
+                    id="order-search"
+                    name="orderKeyword"
+                    type="text"
+                  />
+                </div>
+              </div>
+              <div className="grid-row">
+                <legend className="display-block" id="year-filed-legend">
+                  Date
+                </legend>
+              </div>
+              <div className="grid-row">
+                <div className="grid-col-1">
+                  <input
+                    aria-describedby="year-filed-legend"
+                    aria-label="starting year, four digits"
+                    className="usa-input"
+                    id="year-filed-min"
+                    name="yearFiledMin"
+                    placeholder="MM"
+                    type="text"
+                    value={''}
+                  />
+                </div>
+                <div className="grid-col-1">
+                  <input
+                    aria-describedby="year-filed-legend"
+                    aria-label="starting year, four digits"
+                    className="usa-input"
+                    id="year-filed-min"
+                    name="yearFiledMin"
+                    placeholder="DD"
+                    type="text"
+                    value={''}
+                  />
+                </div>
+                <div className="grid-col-1">
+                  <input
+                    aria-describedby="year-filed-legend"
+                    aria-label="starting year, four digits"
+                    className="usa-input"
+                    id="year-filed-min"
+                    name="yearFiledMin"
+                    placeholder="YYYY"
+                    type="text"
+                    value={''}
+                  />
+                </div>
+                <legend className="usa-label" htmlFor="order-search">
+                  to
+                </legend>
+                <div className="grid-col-1">
+                  <input
+                    aria-describedby="year-filed-legend"
+                    aria-label="starting year, four digits"
+                    className="usa-input"
+                    id="year-filed-min"
+                    name="yearFiledMin"
+                    placeholder="MM"
+                    type="text"
+                    value={''}
+                  />
+                </div>
+                <div className="grid-col-1">
+                  <input
+                    aria-describedby="year-filed-legend"
+                    aria-label="starting year, four digits"
+                    className="usa-input"
+                    id="year-filed-min"
+                    name="yearFiledMin"
+                    placeholder="DD"
+                    type="text"
+                    value={''}
+                  />
+                </div>
+                <div className="grid-col-1">
+                  <input
+                    aria-describedby="year-filed-legend"
+                    aria-label="starting year, four digits"
+                    className="usa-input"
+                    id="year-filed-min"
+                    name="yearFiledMin"
+                    placeholder="YYYY"
+                    type="text"
+                    value={''}
+                  />
+                </div>
               </div>
             </div>
           </form>
