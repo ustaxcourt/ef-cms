@@ -68,8 +68,6 @@ describe('createCaseFromPaperInteractor integration test', () => {
 
     expect(createdCase).toMatchObject({
       caseCaption: 'Bob Jones2, Petitioner',
-      caseTitle:
-        'Bob Jones2, Petitioner v. Commissioner of Internal Revenue, Respondent',
       createdAt: RECEIVED_DATE,
       docketNumber: '101-19',
       docketNumberSuffix: null,
