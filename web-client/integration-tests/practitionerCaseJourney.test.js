@@ -1,6 +1,5 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { fakeFile, loginAs, setupTest } from './helpers';
-import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { uploadPetition } from './helpers';
 import practitionerCreatesNewCase from './journey/practitionerCreatesNewCase';
 import practitionerFilesDocumentForOwnedCase from './journey/practitionerFilesDocumentForOwnedCase';
@@ -30,7 +29,7 @@ describe('Practitioner requests access to case', () => {
   //petitioner must first create a case for practitioner to request access to
   loginAs(test, 'petitioner');
   it('Create test case #1', async () => {
-    await uploadPetition(test, {
+    const caseDetail = await uploadPetition(test, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -42,8 +41,8 @@ describe('Practitioner requests access to case', () => {
       },
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
+    test.docketNumber = caseDetail.docketNumber;
   });
-  petitionerViewsDashboard(test);
 
   loginAs(test, 'privatePractitioner');
   practitionerSearchesForNonexistentCase(test);
@@ -58,9 +57,8 @@ describe('Practitioner requests access to case', () => {
   //tests for practitioner requesting access to existing case
   //petitioner must first create a case for practitioner to request access to
   loginAs(test, 'petitioner');
-  petitionerViewsDashboard(test);
   it('Create test case #2', async () => {
-    await uploadPetition(test, {
+    const caseDetail = await uploadPetition(test, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -72,8 +70,8 @@ describe('Practitioner requests access to case', () => {
       },
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
+    test.docketNumber = caseDetail.docketNumber;
   });
-  petitionerViewsDashboard(test);
 
   loginAs(test, 'privatePractitioner');
   practitionerSearchesForCase(test);
