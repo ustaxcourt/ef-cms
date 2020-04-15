@@ -1,9 +1,9 @@
 const DateHandler = require('../../utilities/DateHandler');
-
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -19,7 +19,7 @@ const formattedCaseInfo = caseInfo => {
       : '';
   const formattedInfo = Object.assign(
     {
-      caseTitle: caseInfo.caseTitle,
+      caseTitle: `${caseInfo.caseCaption} ${Case.CASE_CAPTION_POSTFIX}`,
       countryName,
       docketNumber: `${caseInfo.docketNumber}${
         caseInfo.docketNumberSuffix || ''
