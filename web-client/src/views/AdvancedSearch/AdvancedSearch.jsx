@@ -50,6 +50,12 @@ export const AdvancedSearch = connect(
               advancedSearchTabChangeSequence();
             }}
           >
+            <Tab id="tab-order" tabName="order" title="Order">
+              <OrderSearchForm
+                submitAdvancedSearchSequence={submitOrderAdvancedSearchSequence}
+              />
+              <OrderSearchResults />
+            </Tab>
             <Tab id="tab-case" tabName="case" title="Case">
               <p>
                 Anyone can search for a case in our system for cases filed{' '}
@@ -66,12 +72,7 @@ export const AdvancedSearch = connect(
               />
               <SearchResults />
             </Tab>
-            <Tab id="tab-order" tabName="order" title="Order">
-              <OrderSearchForm
-                submitAdvancedSearchSequence={submitOrderAdvancedSearchSequence}
-              />
-              <OrderSearchResults />
-            </Tab>
+
             {advancedSearchHelper.showPractitionerSearch && (
               <Tab
                 id="tab-practitioner"
