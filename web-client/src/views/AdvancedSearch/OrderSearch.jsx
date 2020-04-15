@@ -63,7 +63,7 @@ export const OrderSearch = connect(
                 </div>
               </div>
 
-              <div className="grid-row margin-top-7">
+              <div className="grid-row margin-top-10">
                 <div className="tablet:grid-col-12">
                   <Button
                     className="margin-bottom-0"
@@ -168,27 +168,27 @@ export const OrderSearch = connect(
                       <div className="grid-row text-bold padding-top-2">
                         <span className="usa-label padding-top-1">Date</span>
                       </div>
-                        <FormGroup errorText={validationErrors.orderDateRange}>
-                      <div className="grid-row">
+                      <FormGroup errorText={validationErrors.orderDateRange}>
+                        <div className="grid-row">
                           <div className="grid-col-5">
                             <DateInput
-                              label="from Date"
                               hideLegend
                               id="deadline-date"
-                          />
+                              label="from Date"
+                            />
                           </div>
                           <div className="grid-col-2">
                             <div className="text-center padding-top-2">to</div>
                           </div>
                           <div className="grid-col-5">
                             <DateInput
-                              label="to Date"
                               hideLegend
                               id="deadline-date"
+                              label="to Date"
                             />
                           </div>
-                      </div>
-                        </FormGroup>
+                        </div>
+                      </FormGroup>
                     </div>
                   </div>
                 </FormGroup>
