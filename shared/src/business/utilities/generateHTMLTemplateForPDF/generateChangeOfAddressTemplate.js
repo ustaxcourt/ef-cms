@@ -1,3 +1,4 @@
+const { Case } = require('../../entities/cases/Case');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
 /**
@@ -14,7 +15,6 @@ const generateChangeOfAddressTemplate = async ({
 }) => {
   const {
     caption,
-    captionPostfix,
     docketNumberWithSuffix,
     documentTitle,
     name,
@@ -50,8 +50,7 @@ const generateChangeOfAddressTemplate = async ({
   });
 
   const templateContent = {
-    caption,
-    captionPostfix,
+    caseCaptionWithPostfix: `${caption} ${Case.CASE_CAPTION_POSTFIX}`,
     docketNumberWithSuffix,
     main,
   };

@@ -1,14 +1,12 @@
+const createApplicationContext = require('../../../../../web-api/src/applicationContext');
 const {
   generateChangeOfAddressTemplate,
 } = require('./generateChangeOfAddressTemplate');
-
-const createApplicationContext = require('../../../../../web-api/src/applicationContext');
 const applicationContext = createApplicationContext({});
 
 describe('generateChangeOfAddressTemplate', () => {
   const caseDetail = {
     caseCaption: 'Test Case Caption',
-    caseCaptionPostfix: 'Test Caption Postfix',
     contactPrimary: {
       address1: 'address 1',
       city: 'City',
@@ -26,7 +24,6 @@ describe('generateChangeOfAddressTemplate', () => {
       applicationContext,
       content: {
         caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -55,7 +52,6 @@ describe('generateChangeOfAddressTemplate', () => {
       applicationContext,
       content: {
         caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Test Document Title',
@@ -75,7 +71,6 @@ describe('generateChangeOfAddressTemplate', () => {
       applicationContext,
       content: {
         caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -101,7 +96,6 @@ describe('generateChangeOfAddressTemplate', () => {
       applicationContext,
       content: {
         caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Telephone Number',
@@ -129,7 +123,6 @@ describe('generateChangeOfAddressTemplate', () => {
       applicationContext,
       content: {
         caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address and Telephone Number',
@@ -158,7 +151,6 @@ describe('generateChangeOfAddressTemplate', () => {
       applicationContext,
       content: {
         caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -180,7 +172,6 @@ describe('generateChangeOfAddressTemplate', () => {
       applicationContext,
       content: {
         caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -205,7 +196,6 @@ describe('generateChangeOfAddressTemplate', () => {
       applicationContext,
       content: {
         caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -231,7 +221,6 @@ describe('generateChangeOfAddressTemplate', () => {
       applicationContext,
       content: {
         caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -254,7 +243,6 @@ describe('generateChangeOfAddressTemplate', () => {
       applicationContext,
       content: {
         caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -278,7 +266,6 @@ describe('generateChangeOfAddressTemplate', () => {
       applicationContext,
       content: {
         caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -304,7 +291,6 @@ describe('generateChangeOfAddressTemplate', () => {
       applicationContext,
       content: {
         caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
