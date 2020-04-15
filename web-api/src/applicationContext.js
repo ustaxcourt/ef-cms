@@ -562,7 +562,7 @@ const {
 } = require('../../shared/src/business/useCaseHelper/search/orderKeywordSearch');
 const {
   orderPublicSearchInteractor,
-} = require('../../shared/src/business/useCases/orderPublicSearchInteractor');
+} = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
 const {
   prioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/prioritizeCaseInteractor');

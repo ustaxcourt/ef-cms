@@ -14,6 +14,7 @@ import {
   getCognitoLoginUrl,
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext.js';
+import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
@@ -50,6 +51,7 @@ const applicationContextPublic = {
       formatDateString,
       formatDocketRecord,
       formatDocketRecordWithDocument,
+      getJudgeLastName,
       sortDocketRecords,
     };
   },
