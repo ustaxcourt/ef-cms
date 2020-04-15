@@ -6,7 +6,7 @@ describe('publicCaseDetailHeaderHelper', () => {
   beforeEach(() => {
     state = {
       caseDetail: {
-        caseTitle: 'Test Title',
+        caseCaption: 'Test Caption',
         docketNumber: '123-45',
         docketNumberSuffix: 'S',
         docketRecord: [],
@@ -17,7 +17,7 @@ describe('publicCaseDetailHeaderHelper', () => {
   it('Should return case detail helper information', () => {
     const result = runCompute(publicCaseDetailHeaderHelper, { state });
     expect(result).toMatchObject({
-      caseTitle: 'Test Title',
+      caseCaption: 'Test Caption',
       docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
       isCaseSealed: false,
