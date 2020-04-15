@@ -16,7 +16,7 @@ describe('generateStandingPretrialOrderTemplate', () => {
     const result = await generateStandingPretrialOrderTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
+        caseCaption: caseDetail.caseCaption,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         trialInfo: {
