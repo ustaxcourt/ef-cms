@@ -2,9 +2,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const {
-  orderKeywordSearch,
-} = require('../useCaseHelper/search/orderKeywordSearch');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
