@@ -173,7 +173,7 @@ export const OrderSearch = connect(
                           <div className="grid-col-5">
                             <DateInput
                               hideLegend
-                              id="deadline-date"
+                              id="start-date"
                               label="from Date"
                             />
                           </div>
@@ -183,7 +183,7 @@ export const OrderSearch = connect(
                           <div className="grid-col-5">
                             <DateInput
                               hideLegend
-                              id="deadline-date"
+                              id="end-date"
                               label="to Date"
                             />
                           </div>
