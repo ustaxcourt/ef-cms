@@ -1,10 +1,17 @@
 const { deleteCustomDomains } = require('./deleteCustomDomains');
+const { deleteDynamoDBTables } = require('./deleteDynamoDBTables');
 const { deleteStacks } = require('./deleteStacks');
-const { getApiGateway } = require('./getApiGateway');
-const { getCloudFormation } = require('./getCloudFormation');
 
 // TODO: get all values from ENV variables and validate that they exist
-const environment = {
+const environmentEast = {
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  apiVersion: 'latest',
+  name: 'exp',
+  region: 'us-east-1',
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+};
+
+const environmentWest = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   apiVersion: 'latest',
   name: 'exp',
@@ -13,15 +20,14 @@ const environment = {
 };
 
 const teardownEnvironment = async () => {
-  const cloudFormation = getCloudFormation({ environment });
-  const apiGateway = getApiGateway({ environment });
+  await deleteCustomDomains({ environmentEast });
+  await deleteCustomDomains({ environmentWest });
 
-  await deleteCustomDomains({ apiGateway, environment });
-  await deleteStacks({ cloudFormation, environment });
+  await deleteStacks({ environmentEast });
+  await deleteStacks({ environmentWest });
 
-  // TODO: delete Dynamo tables
-  // TODO: wait for Dynamo tables to be deleted
-  // TODO: empty all of the S3 buckets for the environment
+  await deleteDynamoDBTables({ environmentEast });
+  await deleteDynamoDBTables({ environmentWest });
 };
 
 teardownEnvironment();
