@@ -1,5 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -27,15 +28,15 @@ export const OrderSearch = connect(
         <div className="header-with-blue-background grid-row">
           <h3>Search Orders</h3>
         </div>
-        <div className="blue-container order-search-container grid-row">
+        <div className="blue-container order-search-container">
           <form
-            className="grid-row grid-col-12 grid-gap"
+            className="grid-container grid-row"
             onSubmit={e => {
               e.preventDefault();
               submitAdvancedSearchSequence();
             }}
           >
-            <div className="grid-col">
+            <div className="grid-col" id="order-basic">
               <div className="grid-row grid-gap">
                 <div className="tablet:grid-col-12">
                   <h4>Enter Keyword or Phrase</h4>
@@ -87,200 +88,110 @@ export const OrderSearch = connect(
               </div>
             </div>
 
-            <div className="grid-col">
-              <h3>Narrow your search (optional)</h3>
-              <div className="grid-row docket-or-petitionerName-field">
-                <div className="grid-col-3">
-                  <label className="usa-label" htmlFor="order-search">
-                    Docket number
-                  </label>
-                  <input
-                    className="usa-input"
-                    id="order-search"
-                    name="docketNumber"
-                    type="text"
-                    value={advancedSearchForm.orderSearch.docketNumber || ''}
-                    onChange={e => {
-                      updateAdvancedSearchFormValueSequence({
-                        formType: 'orderSearch',
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="grid-col-2">
-                  <legend className="usa-label" htmlFor="order-search">
-                    or
-                  </legend>
-                </div>
-                <div className="grid-col-7">
-                  <legend className="usa-label" htmlFor="order-search">
-                    Case title / Petitioner&apos;s name
-                  </legend>
-                  <input
-                    className="usa-input"
-                    id="order-search"
-                    name="caseTitleOrPetitioner"
-                    type="text"
-                    value={
-                      advancedSearchForm.orderSearch.caseTitleOrPetitioner || ''
-                    }
-                    onChange={e => {
-                      updateAdvancedSearchFormValueSequence({
-                        formType: 'orderSearch',
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="grid-row">
-                <div className="grid-col-6">
-                  <legend className="usa-label" htmlFor="order-search">
-                    Judge
-                  </legend>
-                  <BindedSelect
-                    bind="advancedSearchForm.orderSearch.judge"
-                    className="usa-input"
-                    id="order-search"
-                    name="judge"
-                    onChange={e => {
-                      updateAdvancedSearchFormValueSequence({
-                        formType: 'orderSearch',
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  >
-                    <option value="">Select</option>
-                  </BindedSelect>
-                </div>
-              </div>
-              <div className="grid-row">
-                <legend className="display-block" id="year-filed-legend">
-                  Date
-                </legend>
-              </div>
-              <div className="grid-row">
-                <div className="grid-col-1">
-                  <input
-                    aria-describedby="year-filed-legend"
-                    aria-label="starting month, two digits"
-                    className="usa-input"
-                    id="month-filed-min"
-                    name="monthFiledMin"
-                    placeholder="MM"
-                    type="text"
-                    value={''}
-                    onChange={e => {
-                      updateAdvancedSearchFormValueSequence({
-                        formType: 'orderSearch',
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="grid-col-1">
-                  <input
-                    aria-describedby="year-filed-legend"
-                    aria-label="starting date, two digits"
-                    className="usa-input"
-                    id="date-filed-min"
-                    name="dateFiledMin"
-                    placeholder="DD"
-                    type="text"
-                    value={''}
-                    onChange={e => {
-                      updateAdvancedSearchFormValueSequence({
-                        formType: 'orderSearch',
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="grid-col-1">
-                  <input
-                    aria-describedby="year-filed-legend"
-                    aria-label="starting year, four digits"
-                    className="usa-input"
-                    id="year-filed-min"
-                    name="yearFiledMin"
-                    placeholder="YYYY"
-                    type="text"
-                    value={''}
-                    onChange={e => {
-                      updateAdvancedSearchFormValueSequence({
-                        formType: 'orderSearch',
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <legend className="usa-label" htmlFor="order-search">
-                  to
-                </legend>
-                <div className="grid-col-1">
-                  <input
-                    aria-describedby="year-filed-legend"
-                    aria-label="ending month, two digits"
-                    className="usa-input"
-                    id="month-filed-max"
-                    name="monthFiledMax"
-                    placeholder="MM"
-                    type="text"
-                    value={''}
-                    onChange={e => {
-                      updateAdvancedSearchFormValueSequence({
-                        formType: 'orderSearch',
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="grid-col-1">
-                  <input
-                    aria-describedby="year-filed-legend"
-                    aria-label="ending date, two digits"
-                    className="usa-input"
-                    id="date-filed-max"
-                    name="dateFiledMax"
-                    placeholder="DD"
-                    type="text"
-                    value={''}
-                    onChange={e => {
-                      updateAdvancedSearchFormValueSequence({
-                        formType: 'orderSearch',
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="grid-col-1">
-                  <input
-                    aria-describedby="year-filed-legend"
-                    aria-label="ending year, four digits"
-                    className="usa-input"
-                    id="year-filed-max"
-                    name="yearFiledMax"
-                    placeholder="YYYY"
-                    type="text"
-                    value={''}
-                    onChange={e => {
-                      updateAdvancedSearchFormValueSequence({
-                        formType: 'orderSearch',
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
+            <div className="grid-col" id="order-advanced">
+              <div className="grid-container">
+                <h4>Narrow your search (optional)</h4>
+                <FormGroup errorText={validationErrors.orderKeyword}>
+                  <div className="grid-row">
+                    <div className="grid-col-3">
+                      <label className="usa-label" htmlFor="docket-number">
+                        Docket number
+                      </label>
+                      <input
+                        className="usa-input"
+                        id="docket-number"
+                        name="docketNumber"
+                        type="text"
+                        value={
+                          advancedSearchForm.orderSearch.docketNumber || ''
+                        }
+                        onChange={e => {
+                          updateAdvancedSearchFormValueSequence({
+                            formType: 'orderSearch',
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                    <div className="grid-col-2">
+                      <div className="text-center padding-top-6">or</div>
+                    </div>
+                    <div className="grid-col-7">
+                      <label className="usa-label" htmlFor="title-or-name">
+                        Case title / Petitioner’s name
+                      </label>
+                      <input
+                        className="usa-input"
+                        id="title-or-name"
+                        name="caseTitleOrPetitioner"
+                        type="text"
+                        value={
+                          advancedSearchForm.orderSearch
+                            .caseTitleOrPetitioner || ''
+                        }
+                        onChange={e => {
+                          updateAdvancedSearchFormValueSequence({
+                            formType: 'orderSearch',
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="grid-row judge-search-row">
+                    <label
+                      className="usa-label padding-top-105"
+                      htmlFor="order-judge"
+                    >
+                      Judge
+                    </label>
+                    <BindedSelect
+                      bind="advancedSearchForm.orderSearch.judge"
+                      className="usa-input"
+                      id="order-judge"
+                      name="judge"
+                      onChange={e => {
+                        updateAdvancedSearchFormValueSequence({
+                          formType: 'orderSearch',
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                      }}
+                    >
+                      <option value="">Select</option>
+                    </BindedSelect>
+                  </div>
+                  <div className="grid-row date-search-row">
+                    <div className="grid-container padding-left-0 padding-right-0 margin-left-0 margin-right-0">
+                      <div className="grid-row text-bold padding-top-2">
+                        <span className="usa-label padding-top-1">Date</span>
+                      </div>
+                        <FormGroup errorText={validationErrors.orderDateRange}>
+                      <div className="grid-row">
+                          <div className="grid-col-5">
+                            <DateInput
+                              label="from Date"
+                              hideLegend
+                              id="deadline-date"
+                          />
+                          </div>
+                          <div className="grid-col-2">
+                            <div className="text-center padding-top-2">to</div>
+                          </div>
+                          <div className="grid-col-5">
+                            <DateInput
+                              label="to Date"
+                              hideLegend
+                              id="deadline-date"
+                            />
+                          </div>
+                      </div>
+                        </FormGroup>
+                    </div>
+                  </div>
+                </FormGroup>
               </div>
             </div>
           </form>
