@@ -561,6 +561,9 @@ const {
   orderKeywordSearch,
 } = require('../../shared/src/business/useCaseHelper/search/orderKeywordSearch');
 const {
+  orderPublicSearchInteractor,
+} = require('../../shared/src/business/useCases/orderPublicSearchInteractor');
+const {
   prioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/prioritizeCaseInteractor');
 const {
@@ -1205,6 +1208,7 @@ module.exports = (appContextUser = {}) => {
         onConnectInteractor,
         onDisconnectInteractor,
         orderAdvancedSearchInteractor,
+        orderPublicSearchInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
         removeCaseFromTrialInteractor,
