@@ -107,7 +107,7 @@
     "sass": "^1.26.3",
     "serverless": "1.61.1",
     "serverless-domain-manager": "github:codyseibert/serverless-domain-manager",
-    "serverless-jetpack": "^0.10.1",
+    "serverless-jetpack": "^0.10.2",
     "serverless-latest-layer-version": "^2.1.0",
     "serverless-offline": "^5.12.1",
     "serverless-offline-dynamodb-streams": "^3.0.2",

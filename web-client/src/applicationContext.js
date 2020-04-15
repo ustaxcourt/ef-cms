@@ -31,6 +31,7 @@ import {
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
+import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getUserCaseNoteForCasesInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteForCasesProxy';
 import { validateDocketRecordInteractor } from '../../shared/src/business/useCases/validateDocketRecordInteractor';
 const {
@@ -535,6 +536,7 @@ const applicationContext = {
       formattedTrialSessionDetails,
       getFilingsAndProceedings,
       getFormattedCaseDetail,
+      getJudgeLastName,
       getTrialSessionStatus,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
