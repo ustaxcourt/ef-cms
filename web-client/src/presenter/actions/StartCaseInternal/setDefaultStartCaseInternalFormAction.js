@@ -7,15 +7,27 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
  */
-export const setDefaultProcedureTypeAction = ({
+export const setDefaultStartCaseInternalFormAction = ({
   applicationContext,
   get,
   store,
 }) => {
-  const { procedureType } = get(state.form);
+  const {
+    orderForRequestedTrialLocation,
+    preferredTrialCity,
+    procedureType,
+    requestForPlaceOfTrialFile,
+  } = get(state.form);
   const { PROCEDURE_TYPES } = applicationContext.getConstants();
 
   if (!procedureType) {
     store.set(state.form.procedureType, PROCEDURE_TYPES[0]);
+  }
+  if (
+    orderForRequestedTrialLocation === undefined &&
+    !preferredTrialCity &&
+    !requestForPlaceOfTrialFile
+  ) {
+    store.set(state.form.orderForRequestedTrialLocation, true);
   }
 };

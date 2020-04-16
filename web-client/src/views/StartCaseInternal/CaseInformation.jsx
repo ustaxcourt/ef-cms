@@ -146,31 +146,29 @@ export const CaseInformation = connect(
             validatePetitionFromPaperSequence();
           }}
         />
-        {startCaseInternalHelper.showOrderForRequestedTrialLocation && (
-          <FormGroup>
-            <div className="order-checkbox">
-              <input
-                checked={form.orderForRequestedTrialLocation || false}
-                className="usa-checkbox__input"
-                id="order-for-requested-trial-location"
-                name="orderForRequestedTrialLocation"
-                type="checkbox"
-                onChange={e => {
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.checked,
-                  });
-                }}
-              />
-              <label
-                className="usa-checkbox__label inline-block"
-                htmlFor="order-for-requested-trial-location"
-              >
-                Order Designating Place of Trial
-              </label>
-            </div>
-          </FormGroup>
-        )}
+        <FormGroup>
+          <div className="order-checkbox">
+            <input
+              checked={form.orderForRequestedTrialLocation || false}
+              className="usa-checkbox__input"
+              id="order-for-requested-trial-location"
+              name="orderForRequestedTrialLocation"
+              type="checkbox"
+              onChange={e => {
+                updateFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.checked,
+                });
+              }}
+            />
+            <label
+              className="usa-checkbox__label inline-block"
+              htmlFor="order-for-requested-trial-location"
+            >
+              Order Designating Place of Trial
+            </label>
+          </div>
+        </FormGroup>
         <PetitionPaymentForm
           bind="form"
           dateBind="form"

@@ -2,15 +2,15 @@ import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { setDefaultProcedureTypeAction } from './setDefaultProcedureTypeAction';
+import { setDefaultStartCaseInternalFormAction } from './setDefaultStartCaseInternalFormAction';
 
-describe('setDefaultProcedureTypeAction', () => {
+describe('setDefaultStartCaseInternalFormAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 
   it('sets state.form.procedureType to the default', async () => {
-    const result = await runAction(setDefaultProcedureTypeAction, {
+    const result = await runAction(setDefaultStartCaseInternalFormAction, {
       modules: {
         presenter,
       },
@@ -21,7 +21,7 @@ describe('setDefaultProcedureTypeAction', () => {
   });
 
   it('does not override procedureType if it is already present on the form', async () => {
-    const result = await runAction(setDefaultProcedureTypeAction, {
+    const result = await runAction(setDefaultStartCaseInternalFormAction, {
       modules: {
         presenter,
       },
