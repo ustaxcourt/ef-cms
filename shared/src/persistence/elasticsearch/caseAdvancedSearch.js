@@ -10,14 +10,12 @@ const { search } = require('./searchClient');
  * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
  * @returns {object} the case data
  */
-exports.caseAdvancedSearch = async providers => {
-  const { applicationContext } = providers;
-
+exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
   const {
     commonQuery,
     exactMatchesQuery,
     nonExactMatchesQuery,
-  } = aggregateCommonQueryParams(providers);
+  } = aggregateCommonQueryParams({ applicationContext, ...searchTerms });
 
   let foundCases = (
     await search({
