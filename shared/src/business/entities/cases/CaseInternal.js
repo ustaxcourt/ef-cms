@@ -85,7 +85,7 @@ const paperRequirements = joi.object().keys({
   mailingDate: joi.string().max(25).required(),
   ownershipDisclosureFile: joi.when('partyType', {
     is: joi
-      .string()
+      .exist()
       .valid(
         ContactFactory.PARTY_TYPES.corporation,
         ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
