@@ -17,10 +17,7 @@ export const updateOrderForDesignatingPlaceOfTrialAction = ({
   if (
     ['preferredTrialCity', 'requestForPlaceOfTrialFile'].includes(props.key)
   ) {
-    const preferredTrialCity = get(state.form.preferredTrialCity);
-    const requestForPlaceOfTrialFile = get(
-      state.form.requestForPlaceOfTrialFile,
-    );
+    const { preferredTrialCity, requestForPlaceOfTrialFile } = get(state.form);
 
     if (!preferredTrialCity && !requestForPlaceOfTrialFile) {
       store.set(state.form.orderForRequestedTrialLocation, true);
