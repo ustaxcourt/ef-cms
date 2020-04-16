@@ -1,9 +1,9 @@
 const AWS = require('aws-sdk');
 const {
   applicationContext,
-} = require('../../test/createTestApplicationContext');
+} = require('../../business/test/createTestApplicationContext');
 const { getCaseInventoryReport } = require('./getCaseInventoryReport');
-const { MOCK_USERS } = require('../../../test/mockUsers');
+const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('getCaseInventoryReport', () => {
   let searchSpy;

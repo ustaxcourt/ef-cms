@@ -63,6 +63,9 @@ const {
   CaseInternal,
 } = require('../../shared/src/business/entities/cases/CaseInternal');
 const {
+  casePublicSearch: casePublicSearchPersistence,
+} = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
+const {
   casePublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
 const {
@@ -219,6 +222,9 @@ const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
 const {
+  fetchPendingItems: fetchPendingItemsPersistence,
+} = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
+const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
 const {
@@ -333,7 +339,7 @@ const {
 } = require('../../shared/src/business/useCases/getCaseInteractor');
 const {
   getCaseInventoryReport,
-} = require('../../shared/src/business/useCaseHelper/caseInventoryReport/getCaseInventoryReport');
+} = require('../../shared/src/persistence/elasticsearch/getCaseInventoryReport');
 const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
@@ -560,6 +566,9 @@ const {
 const {
   orderKeywordSearch,
 } = require('../../shared/src/business/useCaseHelper/search/orderKeywordSearch');
+const {
+  orderKeywordSearch: orderKeywordSearchPersistence,
+} = require('../../shared/src/persistence/elasticsearch/orderKeywordSearch');
 const {
   orderPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
@@ -953,6 +962,7 @@ module.exports = (appContextUser = {}) => {
         addWorkItemToSectionInbox,
         associateUserWithCase,
         associateUserWithCasePending,
+        casePublicSearch: casePublicSearchPersistence,
         createCase,
         createCaseCatalogRecord,
         createCaseDeadline,
@@ -978,12 +988,14 @@ module.exports = (appContextUser = {}) => {
         deleteUserOutboxRecord,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
+        fetchPendingItems: fetchPendingItemsPersistence,
         getAllCaseDeadlines,
         getAllCatalogCases,
         getCalendaredCasesForTrialSession,
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
+        getCaseInventoryReport,
         getCasesByCaseIds,
         getCasesByLeadCaseId,
         getCasesByUser,
@@ -1017,6 +1029,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemById,
         incrementCounter,
         isFileExists,
+        orderKeywordSearch: orderKeywordSearchPersistence,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocumentFromLambda,

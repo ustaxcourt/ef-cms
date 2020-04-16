@@ -1,7 +1,7 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { getFormattedDocumentQCSectionOutbox, wait } from '../helpers';
 
-export default test => {
+export const petitionsClerkEditsAnExistingCaseAndServesCase = test => {
   it('should allow edits to an in progress case', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
@@ -26,7 +26,7 @@ export default test => {
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
     await test.runSequence('saveSavedCaseForLaterSequence');
-    await wait(5000);
+    await wait(500);
 
     expect(test.getState('currentPage')).toEqual('Messages');
   });
@@ -43,7 +43,7 @@ export default test => {
 
   it('should redirect to case detail after successfully serving to irs', async () => {
     await test.runSequence('saveCaseAndServeToIrsSequence');
-    await wait(5000);
+    await wait(500);
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('modal.showModal')).toEqual(
@@ -57,7 +57,7 @@ export default test => {
       queue: 'my',
       workQueueIsInternal: false,
     });
-    await wait(5000);
+    await wait(500);
 
     const workQueueToDisplay = test.getState('workQueueToDisplay');
 
@@ -81,7 +81,7 @@ export default test => {
       queue: 'section',
       workQueueIsInternal: false,
     });
-    await wait(5000);
+    await wait(500);
 
     const sectionWorkQueueToDisplay = test.getState('workQueueToDisplay');
 

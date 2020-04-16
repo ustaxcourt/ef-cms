@@ -68,9 +68,6 @@ describe('formattedCaseDetail', () => {
           irsSendDate: '2018-11-21T20:49:28.192Z',
           petitioners: [{ name: 'bob' }],
         },
-        constants: {
-          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-        },
         form: {},
       },
     });

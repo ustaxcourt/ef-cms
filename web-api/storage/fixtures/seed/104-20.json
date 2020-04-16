@@ -5,6 +5,10 @@
     "pk": "catalog"
   },
   {
+    "sk": "case|1a92894e-83a5-48ba-9994-3ada44235deb",
+    "pk": "case-by-docket-number|104-20"
+  },
+  {
     "associatedJudge": "Chief Judge",
     "caseStatus": "General Docket - Not at Issue",
     "gsi1pk": "work-item|c99d49ff-f651-4f8f-b3b3-e57b8d400868",
