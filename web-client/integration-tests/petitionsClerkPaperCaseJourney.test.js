@@ -29,5 +29,5 @@ describe('Petitions clerk paper case flow', () => {
 
   petitionsClerkVerifiesOrderForOdsCheckbox(test, fakeFile);
   petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox(test, fakeFile);
-  petitionsClerkVerifiesPetitionPaymentFeeOptions(test);
+  petitionsClerkVerifiesPetitionPaymentFeeOptions(test, fakeFile);
 });
