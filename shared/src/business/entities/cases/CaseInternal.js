@@ -56,6 +56,7 @@ function CaseInternal(rawCase) {
 CaseInternal.VALIDATION_ERROR_MESSAGES = Object.assign(
   Case.VALIDATION_ERROR_MESSAGES,
   {
+    applicationForWaiverOfFilingFeeFile: 'Upload or scan an APW',
     petitionFile: 'Upload or scan a petition',
     preferredTrialCity: 'Select a preferred trial location',
     requestForPlaceOfTrialFile: 'Upload or scan a requested place of trial',
@@ -63,7 +64,11 @@ CaseInternal.VALIDATION_ERROR_MESSAGES = Object.assign(
 );
 
 const paperRequirements = joi.object().keys({
-  applicationForWaiverOfFilingFeeFile: joi.object().optional(),
+  applicationForWaiverOfFilingFeeFile: joi.when('petitionPaymentStatus', {
+    is: Case.PAYMENT_STATUS.WAIVED,
+    otherwise: joi.optional().allow(null),
+    then: joi.object().required(),
+  }),
   applicationForWaiverOfFilingFeeFileSize: joi.when(
     'applicationForWaiverOfFilingFeeFile',
     {
