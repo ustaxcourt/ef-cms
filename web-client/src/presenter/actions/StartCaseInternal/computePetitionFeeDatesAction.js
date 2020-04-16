@@ -4,7 +4,7 @@ import { state } from 'cerebral';
  * computes the petitionPaymentDate and petitionPaymentWaivedDate from the form
  *
  * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store object
+ * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
  * @returns {object} props object
  */
