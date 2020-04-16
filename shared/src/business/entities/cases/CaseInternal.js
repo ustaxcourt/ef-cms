@@ -8,6 +8,8 @@ const {
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 
+CaseInternal.DEFAULT_PROCEDURE_TYPE = Case.PROCEDURE_TYPES[0];
+
 /**
  * CaseInternal Entity
  * Represents a Case with required documents that a Petitions Clerk is attempting to add to the system.
