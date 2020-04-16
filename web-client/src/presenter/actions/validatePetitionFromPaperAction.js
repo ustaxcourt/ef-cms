@@ -1,4 +1,3 @@
-import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -17,22 +16,24 @@ export const validatePetitionFromPaperAction = ({
   path,
   props,
 }) => {
-  const petition = get(state.petition);
+  const {
+    computedDateReceived: receivedAt,
+    petitionPaymentDate,
+    petitionPaymentWaivedDate,
+  } = props;
 
-  const receivedAt = props.computedDateReceived;
-
-  const form = omit(
-    {
-      ...get(state.form),
-    },
-    ['dateReceivedYear', 'dateReceivedMonth', 'dateReceivedDay'],
-  );
+  const form = get(state.form);
 
   const errors = applicationContext
     .getUseCases()
     .validatePetitionFromPaperInteractor({
       applicationContext,
-      petition: { ...petition, ...form, receivedAt },
+      petition: {
+        ...form,
+        petitionPaymentDate,
+        petitionPaymentWaivedDate,
+        receivedAt,
+      },
     });
 
   if (!errors) {

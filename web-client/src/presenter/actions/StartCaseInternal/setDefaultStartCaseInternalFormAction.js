@@ -13,6 +13,7 @@ export const setDefaultStartCaseInternalFormAction = ({
   store,
 }) => {
   const {
+    hasVerifiedIrsNotice,
     orderForRequestedTrialLocation,
     preferredTrialCity,
     procedureType,
@@ -23,6 +24,11 @@ export const setDefaultStartCaseInternalFormAction = ({
   if (!procedureType) {
     store.set(state.form.procedureType, PROCEDURE_TYPES[0]);
   }
+
+  if (hasVerifiedIrsNotice === undefined) {
+    store.set(state.form.hasVerifiedIrsNotice, false);
+  }
+
   if (
     orderForRequestedTrialLocation === undefined &&
     !preferredTrialCity &&

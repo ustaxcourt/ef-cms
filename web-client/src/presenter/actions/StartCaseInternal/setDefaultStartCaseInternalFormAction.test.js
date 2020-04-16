@@ -30,4 +30,26 @@ describe('setDefaultStartCaseInternalFormAction', () => {
 
     expect(result.state.form.procedureType).toEqual('A procedure type');
   });
+
+  it('sets state.form.hasVerifiedIrsNotice to false by default', async () => {
+    const result = await runAction(setDefaultStartCaseInternalFormAction, {
+      modules: {
+        presenter,
+      },
+      state: { form: {} },
+    });
+
+    expect(result.state.form.hasVerifiedIrsNotice).toEqual(false);
+  });
+
+  it('does not override hasVerifiedIrsNotice if it is already present on the form', async () => {
+    const result = await runAction(setDefaultStartCaseInternalFormAction, {
+      modules: {
+        presenter,
+      },
+      state: { form: { hasVerifiedIrsNotice: true } },
+    });
+
+    expect(result.state.form.hasVerifiedIrsNotice).toEqual(true);
+  });
 });
