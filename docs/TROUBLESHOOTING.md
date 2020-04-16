@@ -103,3 +103,14 @@ After this successfully runs, you can navigate to the project root (via `cd ../.
 - `./web-api/run-serverless-clamav.sh <env> <region>`, where `<env>` would be your environment (dev, stg, prod, etc.) and `<region>` would be your AWS region (us-east-1, us-west-1, etc.)
 
 To revert your `serverless-prune-plugin`, just change `before` back to `after` or run `npm i` again.
+
+
+### Elasticsearch total field limit
+
+`[illegal_argument_exception] Limit of total fields [4000] in index [efcms] has been exceeded`
+
+This error often occurs when we are indexing too many dynamic keys or nested objects with Elasticsearch and reach our total field limit. To investigate, run the command
+
+`./web-api/check-elasticsearch-mappings.sh [ENV]`
+
+The script will output data related to the mapping for the environment and can help pinpoint areas to look into further. To filter data from indexing, add fields or keys to the filtering functions in `processStreamRecordsInteractor.js`.
