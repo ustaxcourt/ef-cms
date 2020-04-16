@@ -3,6 +3,7 @@ import { petitionsClerkCreatesNewCaseAndSavesForLater } from './journey/petition
 import { petitionsClerkEditsAnExistingCaseAndServesCase } from './journey/petitionsClerkEditsAnExistingCaseAndServesCase';
 import { petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox } from './journey/petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox';
 import { petitionsClerkVerifiesOrderForOdsCheckbox } from './journey/petitionsClerkVerifiesOrderForOdsCheckbox';
+import { petitionsClerkVerifiesPetitionPaymentFeeOptions } from './journey/petitionsClerkVerifiesPetitionPaymentFeeOptions';
 
 const test = setupTest();
 
@@ -28,4 +29,5 @@ describe('Petitions clerk paper case flow', () => {
 
   petitionsClerkVerifiesOrderForOdsCheckbox(test, fakeFile);
   petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox(test, fakeFile);
+  petitionsClerkVerifiesPetitionPaymentFeeOptions(test);
 });
