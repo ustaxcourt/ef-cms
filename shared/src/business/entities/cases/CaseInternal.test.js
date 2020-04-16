@@ -57,6 +57,19 @@ describe('CaseInternal entity', () => {
       ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
     });
 
+    it('fails validation if petitionPaymentStatus is Wavied but applicationForWaiverOfFilingFeeFile is not set', () => {
+      const caseInternal = new CaseInternal({
+        caseCaption: 'Dr. Leo Marvin, Petitioner',
+        petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+        receivedAt: new Date().toISOString(),
+      });
+
+      expect(
+        caseInternal.getFormattedValidationErrors()
+          .applicationForWaiverOfFilingFeeFile,
+      ).toEqual(VALIDATION_ERROR_MESSAGES.applicationForWaiverOfFilingFeeFile);
+    });
+
     it('fails validation if applicationForWaiverOfFilingFeeFile is set, but applicationForWaiverOfFilingFeeFileSize is not', () => {
       const caseInternal = new CaseInternal({
         applicationForWaiverOfFilingFeeFile: new File([], 'test.pdf'),
