@@ -5,8 +5,8 @@ import { associatedUserAdvancedSearchForSealedCase } from './journey/associatedU
 import { associatedUserViewsCaseDetailForSealedCase } from './journey/associatedUserViewsCaseDetailForSealedCase';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
-import petitionsClerkAddsRespondentsToCase from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
+import petitionsClerkAddsRespondentsToCase from './journey/petitionsClerkAddsRespondentsToCase';
 import unassociatedUserAdvancedSearchForSealedCase from './journey/unassociatedUserAdvancedSearchForSealedCase';
 import unassociatedUserViewsCaseDetailForSealedCase from './journey/unassociatedUserViewsCaseDetailForSealedCase';
 

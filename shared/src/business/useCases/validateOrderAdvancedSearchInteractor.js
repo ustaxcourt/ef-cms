@@ -1,4 +1,4 @@
-import { OrderSearch } from '../entities/orders/OrderSearch';
+const { OrderSearch } = require('../entities/orders/OrderSearch');
 
 /**
  * validateOrderAdvancedSearchInteractor

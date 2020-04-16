@@ -1,4 +1,3 @@
-const AWS = require('aws-sdk');
 const { createISODateString } = require('../utilities/DateHandler');
 
 /**
@@ -15,8 +14,6 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
     .getElasticsearchReindexRecords({ applicationContext });
 
   if (recordsToProcess.length) {
-    const searchClient = applicationContext.getSearchClient();
-
     for (const record of recordsToProcess) {
       try {
         let fullRecord;
@@ -51,10 +48,10 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
             });
         }
 
-        await searchClient.index({
-          body: { ...AWS.DynamoDB.Converter.marshall(fullRecord) },
-          id: `${record.recordPk}_${record.recordSk}`,
-          index: 'efcms',
+        await applicationContext.getPersistenceGateway().indexRecord({
+          applicationContext,
+          fullRecord,
+          record,
         });
 
         await applicationContext
