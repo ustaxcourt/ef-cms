@@ -64,6 +64,7 @@ describe('processStreamRecordsInteractor', () => {
             Keys: { pk: { S: '4' } },
             NewImage: {
               caseId: { S: '4' },
+              caseMetadata: { '101-19': { M: { manuallyAdded: true } } },
               entityName: { S: 'Case' },
               pk: { S: '4' },
               qcCompleteForTrial: { '123': true, '234': true },
