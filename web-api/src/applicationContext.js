@@ -54,6 +54,9 @@ const {
   blockCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/blockCaseFromTrialInteractor');
 const {
+  bulkIndexRecords,
+} = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
+const {
   caseAdvancedSearch,
 } = require('../../shared/src/persistence/elasticsearch/caseAdvancedSearch');
 const {
@@ -974,6 +977,8 @@ module.exports = (appContextUser = {}) => {
         addWorkItemToSectionInbox,
         associateUserWithCase,
         associateUserWithCasePending,
+        bulkIndexRecords,
+
         caseAdvancedSearch,
         casePublicSearch: casePublicSearchPersistence,
         createCase,
