@@ -452,6 +452,9 @@ const {
   getPractitionerByBarNumberInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionerByBarNumberInteractor');
 const {
+  getPractitionersByName,
+} = require('../../shared/src/persistence/elasticsearch/getPractitionersByName');
+const {
   getPractitionersByNameInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionersByNameInteractor');
 const {
@@ -1004,6 +1007,7 @@ module.exports = (appContextUser = {}) => {
         getBlockedCases,
         getCalendaredCasesForTrialSession,
         getCaseByCaseId,
+        getPractitionersByName,
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
         getCaseInventoryReport,
