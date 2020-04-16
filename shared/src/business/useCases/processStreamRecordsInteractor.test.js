@@ -1,11 +1,17 @@
 const {
+  bulkIndexRecords,
+} = require('../../persistence/elasticsearch/bulkIndexRecords');
+const {
   processStreamRecordsInteractor,
 } = require('./processStreamRecordsInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { indexRecord } = require('../../persistence/elasticsearch/indexRecord');
 
 describe('processStreamRecordsInteractor', () => {
   beforeAll(() => {
     applicationContext.getSearchClient().bulk.mockReturnValue({ body: {} });
+    applicationContext.getPersistenceGateway().bulkIndexRecords = bulkIndexRecords;
+    applicationContext.getPersistenceGateway().indexRecord = indexRecord;
   });
 
   it('does not call bulk function if recordsToProcess is an empty array', async () => {
