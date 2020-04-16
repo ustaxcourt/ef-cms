@@ -13,9 +13,23 @@ describe('Order Search entity', () => {
   });
 
   it('fails validation without an order keyword name', () => {
-    const orderSearch = new OrderSearch({});
+    const orderSearch = new OrderSearch();
     const validationErrors = orderSearch.getFormattedValidationErrors();
 
     expect(validationErrors.orderKeyword).toEqual(errorMessages.orderKeyword);
+  });
+
+  it('fails validation when both caseTitle and docketNumber are provided as search terms', () => {
+    const orderSearch = new OrderSearch({
+      caseTitleOrPetitioner: 'Sam Jackson',
+      docketNumber: '123-45',
+      orderKeyword: 'sunglasses',
+    });
+
+    const validationErrors = orderSearch.getFormattedValidationErrors();
+
+    expect(validationErrors.chooseOneValue).toEqual(
+      errorMessages.chooseOneValue,
+    );
   });
 });
