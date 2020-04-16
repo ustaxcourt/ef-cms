@@ -1,6 +1,6 @@
 const {
   aggregateCommonQueryParams,
-} = require('../utilities/aggregateCommonQueryParams');
+} = require('../../business/utilities/aggregateCommonQueryParams');
 const { isEmpty } = require('lodash');
 const { search } = require('./searchClient');
 
