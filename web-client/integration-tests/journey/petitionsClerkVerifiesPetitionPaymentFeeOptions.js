@@ -1,6 +1,10 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 
-export const petitionsClerkVerifiesPetitionPaymentFeeOptions = test => {
+export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
+  test,
+  fakeFile,
+) => {
   return it('Petitions clerk verifies petition payment fee options and required fields', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
 
@@ -75,6 +79,9 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = test => {
     await test.runSequence('navigateToReviewPetitionFromPaperSequence');
 
     expect(test.getState('validationErrors')).toMatchObject({
+      applicationForWaiverOfFilingFeeFile:
+        CaseInternal.VALIDATION_ERROR_MESSAGES
+          .applicationForWaiverOfFilingFeeFile,
       petitionPaymentWaivedDate:
         Case.VALIDATION_ERROR_MESSAGES.petitionPaymentWaivedDate,
     });
@@ -90,6 +97,14 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = test => {
     await test.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'paymentDateWaivedYear',
       value: '2002',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'applicationForWaiverOfFilingFeeFile',
+      value: fakeFile,
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'applicationForWaiverOfFilingFeeFileSize',
+      value: 1,
     });
 
     await test.runSequence('navigateToReviewPetitionFromPaperSequence');
