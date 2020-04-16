@@ -114,46 +114,33 @@ exports.processStreamRecordsInteractor = async ({
   });
 
   if (filteredRecords.length) {
-    const body = filteredRecords
-      .map(record => ({
-        ...record.dynamodb.NewImage,
-      }))
-      .flatMap(doc => [
-        { index: { _id: `${doc.pk.S}_${doc.sk.S}`, _index: 'efcms' } },
-        doc,
-      ]);
-
     try {
-      const response = await searchClient.bulk({
-        body,
-        refresh: true,
+      const {
+        failedRecords,
+      } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
+        applicationContext,
+        records: filteredRecords,
       });
 
-      if (response.body.errors) {
-        for (let i = 0; i < response.body.items.length; i++) {
-          const action = response.body.items[i];
-          const operation = Object.keys(action)[0];
-          if (action[operation].error) {
-            let record = body[i * 2 + 1];
-
-            try {
-              await searchClient.index({
-                body: { ...record },
-                id: `${record.pk.S}_${record.sk.S}`,
-                index: 'efcms',
+      if (failedRecords.length) {
+        for (const failedRecord of failedRecords) {
+          try {
+            await searchClient.index({
+              body: { ...failedRecord },
+              id: `${failedRecord.pk.S}_${failedRecord.sk.S}`,
+              index: 'efcms',
+            });
+          } catch (e) {
+            await applicationContext
+              .getPersistenceGateway()
+              .createElasticsearchReindexRecord({
+                applicationContext,
+                recordPk: failedRecord.pk.S,
+                recordSk: failedRecord.sk.S,
               });
-            } catch (e) {
-              await applicationContext
-                .getPersistenceGateway()
-                .createElasticsearchReindexRecord({
-                  applicationContext,
-                  recordPk: record.pk.S,
-                  recordSk: record.sk.S,
-                });
 
-              applicationContext.logger.info('Error', e);
-              honeybadger && honeybadger.notify(e);
-            }
+            applicationContext.logger.info('Error', e);
+            honeybadger && honeybadger.notify(e);
           }
         }
       }
@@ -169,12 +156,14 @@ exports.processStreamRecordsInteractor = async ({
         try {
           let newImage = record.dynamodb.NewImage;
 
-          await searchClient.index({
-            body: {
-              ...newImage,
+          await applicationContext.getPersistenceGateway().indexRecord({
+            applicationContext,
+            fullRecord: newImage,
+            isAlreadyMarshalled: true,
+            record: {
+              recordPk: record.dynamodb.Keys.pk.S,
+              recordSk: record.dynamodb.Keys.sk.S,
             },
-            id: `${record.dynamodb.Keys.pk.S}_${record.dynamodb.Keys.sk.S}`,
-            index: 'efcms',
           });
         } catch (e) {
           await applicationContext
