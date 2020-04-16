@@ -29,6 +29,10 @@ function CaseInternal(rawCase) {
   this.partyType = rawCase.partyType;
   this.petitionFile = rawCase.petitionFile;
   this.petitionFileSize = rawCase.petitionFileSize;
+  this.petitionPaymentDate = rawCase.petitionPaymentDate;
+  this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
+  this.petitionPaymentStatus = rawCase.petitionPaymentStatus;
+  this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt;
@@ -84,6 +88,10 @@ const paperRequirements = joi.object().keys({
     otherwise: joi.optional().allow(null),
     then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
   }),
+  petitionPaymentDate: Case.validationRules.petitionPaymentDate,
+  petitionPaymentMethod: Case.validationRules.petitionPaymentMethod,
+  petitionPaymentStatus: Case.validationRules.petitionPaymentStatus,
+  petitionPaymentWaivedDate: Case.validationRules.petitionPaymentWaivedDate,
   preferredTrialCity: joi
     .alternatives()
     .conditional('requestForPlaceOfTrialFile', {
