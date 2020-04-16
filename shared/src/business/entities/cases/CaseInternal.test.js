@@ -6,6 +6,21 @@ const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
 describe('CaseInternal entity', () => {
   describe('validation', () => {
+    it('returns the expected set of errors for an empty object', () => {
+      const caseInternal = new CaseInternal({});
+      expect(caseInternal.getFormattedValidationErrors()).toEqual({
+        caseCaption: VALIDATION_ERROR_MESSAGES.caseCaption,
+        caseType: VALIDATION_ERROR_MESSAGES.caseType,
+        mailingDate: VALIDATION_ERROR_MESSAGES.mailingDate,
+        partyType: VALIDATION_ERROR_MESSAGES.partyType,
+        petitionFile: VALIDATION_ERROR_MESSAGES.petitionFile,
+        petitionPaymentStatus: VALIDATION_ERROR_MESSAGES.petitionPaymentStatus,
+        procedureType: VALIDATION_ERROR_MESSAGES.procedureType,
+        receivedAt: VALIDATION_ERROR_MESSAGES.receivedAt[1],
+        stinFile: VALIDATION_ERROR_MESSAGES.stinFile,
+      });
+    });
+
     it('creates a valid petition with minimal information', () => {
       const caseInternal = new CaseInternal({
         caseCaption: 'Dr. Leo Marvin, Petitioner',
