@@ -29,7 +29,7 @@ exports.generatePrintableCaseInventoryReportInteractor = async ({
   }
 
   const results = await applicationContext
-    .getUseCaseHelpers()
+    .getPersistenceGateway()
     .getCaseInventoryReport({ applicationContext, associatedJudge, status });
 
   return await applicationContext

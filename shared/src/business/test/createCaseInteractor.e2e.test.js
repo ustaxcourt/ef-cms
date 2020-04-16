@@ -50,8 +50,6 @@ describe('createCase integration test', () => {
 
     expect(createdCase).toMatchObject({
       caseCaption: 'Rick Petitioner, Petitioner',
-      caseTitle:
-        'Rick Petitioner, Petitioner v. Commissioner of Internal Revenue, Respondent',
       docketNumber: '101-19',
       docketNumberSuffix: 'S',
       docketRecord: [
