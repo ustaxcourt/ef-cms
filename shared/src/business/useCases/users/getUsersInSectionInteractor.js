@@ -18,7 +18,7 @@ exports.getUsersInSectionInteractor = async ({
   section,
 }) => {
   const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, ROLE_PERMISSIONS.GET_USERS_IN_SECTION)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.GET_JUDGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
   const rawUsers = await applicationContext
