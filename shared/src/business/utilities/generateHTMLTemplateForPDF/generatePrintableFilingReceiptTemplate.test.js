@@ -1,6 +1,7 @@
 const {
   generatePrintableFilingReceiptTemplate,
 } = require('./generatePrintableFilingReceiptTemplate');
+const { Case } = require('../../entities/cases/Case');
 
 const createApplicationContext = require('../../../../../web-api/src/applicationContext');
 const applicationContext = createApplicationContext({});
@@ -8,7 +9,6 @@ const applicationContext = createApplicationContext({});
 describe('generatePrintableFilingReceiptTemplate', () => {
   const content = {
     caption: 'Test Case Caption',
-    captionPostfix: 'Test Caption Postfix',
     docketNumberWithSuffix: '123-45S',
     documentsFiledContent: '<div>Documents Filed Content</div>',
     filedAt: '10/03/19 3:09 pm ET',
@@ -22,7 +22,7 @@ describe('generatePrintableFilingReceiptTemplate', () => {
     });
 
     expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
-    expect(result.indexOf('Test Caption Postfix')).toBeGreaterThan(-1);
+    expect(result.indexOf(Case.CASE_CAPTION_POSTFIX)).toBeGreaterThan(-1);
     expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
     expect(
       result.indexOf('<div>Documents Filed Content</div>'),

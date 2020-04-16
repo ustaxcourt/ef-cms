@@ -1,3 +1,6 @@
+const { map } = require('lodash');
+const { Order } = require('../../entities/orders/Order');
+
 /**
  * orderPublicSearchInteractor
  *
@@ -9,7 +12,9 @@
 exports.orderPublicSearchInteractor = async ({
   applicationContext,
   orderKeyword,
-}) =>
-  await applicationContext
+}) => {
+  const orderEventCodes = map(Order.ORDER_TYPES, 'eventCode');
+  return await applicationContext
     .getUseCaseHelpers()
-    .orderKeywordSearch({ applicationContext, orderKeyword });
+    .orderKeywordSearch({ applicationContext, orderEventCodes, orderKeyword });
+};
