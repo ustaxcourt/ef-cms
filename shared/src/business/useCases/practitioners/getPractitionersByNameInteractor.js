@@ -3,7 +3,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { uniqBy } = require('lodash');
 
 /**
  * getPractitionersByNameInteractor
@@ -36,7 +35,5 @@ exports.getPractitionersByNameInteractor = async ({
       name,
     });
 
-  const uniqueFoundUsers = uniqBy(foundUsers, 'barNumber');
-
-  return uniqueFoundUsers;
+  return foundUsers;
 };

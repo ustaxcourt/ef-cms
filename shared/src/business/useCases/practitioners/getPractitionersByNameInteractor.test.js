@@ -73,37 +73,4 @@ describe('getPractitionersByNameInteractor', () => {
       },
     ]);
   });
-
-  it('only returns unique results', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getPractitionersByName.mockReturnValue([
-        {
-          barNumber: 'PT1234',
-          name: 'Test Practitioner1',
-          role: 'irsPractitioner',
-          userId: '8190d648-e643-4964-988e-141e4e0db861',
-        },
-        {
-          barNumber: 'PT1234',
-          name: 'Test Practitioner1',
-          role: 'irsPractitioner',
-          userId: '8190d648-e643-4964-988e-141e4e0db861',
-        },
-      ]);
-
-    const results = await getPractitionersByNameInteractor({
-      applicationContext,
-      name: 'Test Practitioner',
-    });
-
-    expect(results).toMatchObject([
-      {
-        barNumber: 'PT1234',
-        name: 'Test Practitioner1',
-        role: 'irsPractitioner',
-        userId: '8190d648-e643-4964-988e-141e4e0db861',
-      },
-    ]);
-  });
 });
