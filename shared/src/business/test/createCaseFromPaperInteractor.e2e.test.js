@@ -49,6 +49,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         mailingDate: 'testing',
         petitionFile: { name: 'something' },
         petitionFileSize: 1,
+        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
         receivedAt: RECEIVED_DATE,
         requestForPlaceOfTrialFile: new File(
           [],
