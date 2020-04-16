@@ -75,15 +75,6 @@ exports.processStreamRecordsInteractor = async ({
   });
 
   if (filteredRecords.length) {
-    // const body = filteredRecords
-    //   .map(record => ({
-    //     ...record.dynamodb.NewImage,
-    //   }))
-    //   .flatMap(doc => [
-    //     { index: { _id: `${doc.pk.S}_${doc.sk.S}`, _index: 'efcms' } },
-    //     doc,
-    //   ]);
-
     try {
       const {
         failedRecords,
