@@ -6,7 +6,7 @@ import { props, state } from 'cerebral';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setDefaultProcedureTypeAction } from '../actions/StartCaseInternal/setDefaultProcedureTypeAction';
+import { setDefaultStartCaseInternalFormAction } from '../actions/StartCaseInternal/setDefaultStartCaseInternalFormAction';
 import { setStartInternalCaseDefaultTabAction } from '../actions/StartCaseInternal/setStartInternalCaseDefaultTabAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { takePathForRoles } from './takePathForRoles';
@@ -15,7 +15,7 @@ const { USER_ROLES } = getConstants();
 
 const gotoStartCaseInternal = [
   setStartInternalCaseDefaultTabAction,
-  setDefaultProcedureTypeAction,
+  setDefaultStartCaseInternalFormAction,
   updateOrderForDesignatingPlaceOfTrialAction,
   set(state.currentViewMetadata.documentUploadMode, 'scan'),
   set(state.currentViewMetadata.documentSelectedForScan, 'petitionFile'),
