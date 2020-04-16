@@ -11,9 +11,10 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
  * @returns {object} the case data
  */
-exports.caseAdvancedSearchInteractor = async providers => {
-  const { applicationContext } = providers;
-
+exports.caseAdvancedSearchInteractor = async ({
+  applicationContext,
+  ...searchTerms
+}) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
@@ -22,10 +23,7 @@ exports.caseAdvancedSearchInteractor = async providers => {
 
   let foundCases = await applicationContext
     .getPersistenceGateway()
-    .caseAdvancedSearch({
-      applicationContext,
-      providers,
-    });
+    .caseAdvancedSearch({ applicationContext, searchTerms });
 
   const filteredCases = caseSearchFilter(foundCases, authorizedUser);
 
