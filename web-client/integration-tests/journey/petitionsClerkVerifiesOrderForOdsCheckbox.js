@@ -46,5 +46,27 @@ export const petitionsClerkVerifiesOrderForOdsCheckbox = (test, fakeFile) => {
 
     expect(test.getState('form.ownershipDisclosureFile')).toBeUndefined();
     expect(test.getState('form.orderForOds')).toBeTruthy();
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'orderForOds',
+      value: false,
+    });
+
+    await test.runSequence('cerebralBindSimpleSetStateSequence', {
+      key: 'currentViewMetadata.documentSelectedForScan',
+      value: 'petitionFile',
+    });
+
+    await test.runSequence('setDocumentUploadModeSequence', {
+      documentUploadMode: 'upload',
+    });
+
+    await test.runSequence('setDocumentForUploadSequence', {
+      documentType: 'petitionFile',
+      documentUploadMode: 'preview',
+      file: fakeFile,
+    });
+
+    expect(test.getState('form.orderForOds')).toBeFalsy();
   });
 };

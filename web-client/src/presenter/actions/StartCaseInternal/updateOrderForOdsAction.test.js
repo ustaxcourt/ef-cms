@@ -14,6 +14,7 @@ describe('updateOrderForOdsAction', () => {
       modules: {
         presenter,
       },
+      props: { key: 'partyType' },
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.corporation,
@@ -29,6 +30,7 @@ describe('updateOrderForOdsAction', () => {
       modules: {
         presenter,
       },
+      props: { key: 'partyType' },
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
@@ -44,9 +46,27 @@ describe('updateOrderForOdsAction', () => {
       modules: {
         presenter,
       },
+      props: { key: 'ownershipDisclosureFile' },
       state: {
         form: {
           ownershipDisclosureFile: 'the file!',
+          partyType: ContactFactory.PARTY_TYPES.corporation,
+        },
+      },
+    });
+
+    expect(result.state.form.orderForOds).toEqual(false);
+  });
+
+  it('should not update orderForOds if props.key is not partyType or ownershipDisclosureFile', async () => {
+    const result = await runAction(updateOrderForOdsAction, {
+      modules: {
+        presenter,
+      },
+      props: { key: 'anotherField' },
+      state: {
+        form: {
+          orderForOds: false,
           partyType: ContactFactory.PARTY_TYPES.corporation,
         },
       },
