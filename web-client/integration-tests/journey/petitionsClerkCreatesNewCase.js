@@ -158,13 +158,16 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: '1234567890',
     });
 
+    await test.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'petitionPaymentStatus',
+      value: Case.PAYMENT_STATUS.UNPAID,
+    });
+
     await test.runSequence('validatePetitionFromPaperSequence');
     expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('navigateToReviewPetitionFromPaperSequence');
-
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 

@@ -4,6 +4,7 @@ import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPr
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
+import { computePetitionFeeDatesAction } from '../actions/StartCaseInternal/computePetitionFeeDatesAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { getServeToIrsAlertSuccessAction } from '../actions/StartCaseInternal/getServeToIrsAlertSuccessAction';
 import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrintPreviewPreparedAction';
@@ -25,6 +26,7 @@ import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 export const createCaseFromPaperAndServeToIrsSequence = [
   computeDateReceivedAction,
   computeIrsNoticeDateAction,
+  computePetitionFeeDatesAction,
   clearPdfPreviewUrlAction,
   showProgressSequenceDecorator([
     openFileUploadStatusModalAction,
