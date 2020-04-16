@@ -17,6 +17,8 @@ export const CaseInformation = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     updateOrderForDesignatingPlaceOfTrialSequence:
       sequences.updateOrderForDesignatingPlaceOfTrialSequence,
+    updatePetitionPaymentFormValueSequence:
+      sequences.updatePetitionPaymentFormValueSequence,
     validatePetitionFromPaperSequence:
       sequences.validatePetitionFromPaperSequence,
     validationErrors: state.validationErrors,
@@ -29,6 +31,7 @@ export const CaseInformation = connect(
     trialCitiesHelper,
     updateFormValueSequence,
     updateOrderForDesignatingPlaceOfTrialSequence,
+    updatePetitionPaymentFormValueSequence,
     validatePetitionFromPaperSequence,
     validationErrors,
   }) {
@@ -173,7 +176,7 @@ export const CaseInformation = connect(
           bind="form"
           dateBind="form"
           updateDateSequence={updateFormValueSequence}
-          updateSequence={updateFormValueSequence}
+          updateSequence={updatePetitionPaymentFormValueSequence}
           validateSequence={validatePetitionFromPaperSequence}
           validationErrorsBind="validationErrors"
         />
