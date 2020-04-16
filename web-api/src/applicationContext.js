@@ -54,6 +54,9 @@ const {
   blockCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/blockCaseFromTrialInteractor');
 const {
+  caseAdvancedSearch,
+} = require('../../shared/src/persistence/elasticsearch/caseAdvancedSearch');
+const {
   caseAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
 const {
@@ -314,6 +317,9 @@ const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
+  getBlockedCases,
+} = require('../../shared/src/persistence/elasticsearch/getBlockedCases');
+const {
   getBlockedCasesInteractor,
 } = require('../../shared/src/business/useCases/getBlockedCasesInteractor');
 const {
@@ -544,6 +550,9 @@ const {
 const {
   incrementCounter,
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
+const {
+  indexRecord,
+} = require('../../shared/src/persistence/elasticsearch/indexRecord');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -962,6 +971,7 @@ module.exports = (appContextUser = {}) => {
         addWorkItemToSectionInbox,
         associateUserWithCase,
         associateUserWithCasePending,
+        caseAdvancedSearch,
         casePublicSearch: casePublicSearchPersistence,
         createCase,
         createCaseCatalogRecord,
@@ -991,6 +1001,7 @@ module.exports = (appContextUser = {}) => {
         fetchPendingItems: fetchPendingItemsPersistence,
         getAllCaseDeadlines,
         getAllCatalogCases,
+        getBlockedCases,
         getCalendaredCasesForTrialSession,
         getCaseByCaseId,
         getCaseByDocketNumber,
@@ -1028,6 +1039,7 @@ module.exports = (appContextUser = {}) => {
         getWebSocketConnectionsByUserId,
         getWorkItemById,
         incrementCounter,
+        indexRecord,
         isFileExists,
         orderKeywordSearch: orderKeywordSearchPersistence,
         putWorkItemInOutbox,
