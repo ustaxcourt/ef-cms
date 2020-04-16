@@ -7,6 +7,8 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     await test.runSequence('gotoStartCaseWizardSequence');
     await test.runSequence('navigateToReviewPetitionFromPaperSequence');
 
+    expect(test.getState('form.hasVerifiedIrsNotice')).toEqual(false);
+
     expect(test.getState('alertError.title')).toEqual(
       'Please correct the following errors on the page:',
     );
