@@ -1,6 +1,57 @@
 const AWS = require('aws-sdk');
 const { createISODateString } = require('../utilities/DateHandler');
 
+/**
+ * recursively deletes the key from the item
+ *
+ * @param {object} item the object from which to delete the key
+ * @param {string} key the key to delete recursively from the object
+ * @returns {object} the record with all instances of the key removed
+ */
+const recursivelyDeleteKey = (item, key) => {
+  Object.keys(item).some(function (k) {
+    if (k === key) {
+      delete item[k];
+    }
+    if (item[k] && typeof item[k] === 'object') {
+      const returnItem = recursivelyDeleteKey(item[k], key);
+      item[k] = returnItem;
+    }
+  });
+  return item;
+};
+
+/**
+ * deletes objects with dynamic keys and nested data to prevent hitting our ES mapping limit
+ *
+ * @param {object} record the object from which to delete unnecessary data
+ * @returns {object} the record with unnecessary data removed
+ */
+const deleteDynamicAndNestedFields = record => {
+  let data = record.dynamodb.NewImage;
+  //dynamic keys
+  if (data.qcCompleteForTrial) {
+    delete data.qcCompleteForTrial;
+  }
+  if (data.caseMetadata) {
+    delete data.caseMetadata;
+  }
+  //nested data
+  data = recursivelyDeleteKey(data, 'workItems');
+  data = recursivelyDeleteKey(data, 'draftState');
+
+  record.dynamodb.NewImage = data;
+  return record;
+};
+
+/**
+ * filters out records we do not want to index with elasticsearch
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {Array} providers.records the array of records to filter
+ * @returns {Array} the filtered records
+ */
 const filterRecords = async ({ applicationContext, records }) => {
   const filteredRecords = records.filter(
     record =>
@@ -40,19 +91,7 @@ const filterRecords = async ({ applicationContext, records }) => {
     }
   }
 
-  return filteredRecords.map(record => {
-    if (
-      record.dynamodb.NewImage.entityName &&
-      record.dynamodb.NewImage.entityName.S === 'Case'
-    ) {
-      //delete this object because its keys are dynamic and there is a limit to the amount of keys we can map in ES
-      delete record.dynamodb.NewImage.qcCompleteForTrial;
-    } else if (record.dynamodb.NewImage.workItems) {
-      //delete nested work items because they have nested documents that can cause us to hit our mapping limit
-      delete record.dynamodb.NewImage.workItems;
-    }
-    return record;
-  });
+  return filteredRecords.map(deleteDynamicAndNestedFields);
 };
 
 /**
