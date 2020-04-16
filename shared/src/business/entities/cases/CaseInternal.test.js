@@ -1,3 +1,4 @@
+const { Case } = require('./Case');
 const { CaseInternal } = require('./CaseInternal');
 const { ContactFactory } = require('../contacts/ContactFactory');
 
@@ -24,6 +25,7 @@ describe('CaseInternal entity', () => {
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitionFile: { anObject: true },
         petitionFileSize: 1,
+        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
         procedureType: 'Small',
         receivedAt: new Date().toISOString(),
         stinFile: { anObject: true },
