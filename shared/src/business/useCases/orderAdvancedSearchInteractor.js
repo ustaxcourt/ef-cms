@@ -2,6 +2,8 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const { map } = require('lodash');
+const { Order } = require('../entities/orders/Order');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -22,7 +24,8 @@ exports.orderAdvancedSearchInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const orderEventCodes = map(Order.ORDER_TYPES, 'eventCode');
   return await applicationContext
     .getUseCaseHelpers()
-    .orderKeywordSearch({ applicationContext, orderKeyword });
+    .orderKeywordSearch({ applicationContext, orderEventCodes, orderKeyword });
 };
