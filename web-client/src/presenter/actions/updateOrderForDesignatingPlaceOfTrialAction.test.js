@@ -6,6 +6,7 @@ describe('updateOrderForDesignatingPlaceOfTrialAction', () => {
     const result = await runAction(
       updateOrderForDesignatingPlaceOfTrialAction,
       {
+        props: { key: 'preferredTrialCity' },
         state: {
           form: {},
         },
@@ -19,6 +20,7 @@ describe('updateOrderForDesignatingPlaceOfTrialAction', () => {
     const result = await runAction(
       updateOrderForDesignatingPlaceOfTrialAction,
       {
+        props: { key: 'preferredTrialCity' },
         state: {
           form: {
             preferredTrialCity: 'Seattle, WA',
@@ -34,10 +36,25 @@ describe('updateOrderForDesignatingPlaceOfTrialAction', () => {
     const result = await runAction(
       updateOrderForDesignatingPlaceOfTrialAction,
       {
+        props: { key: 'requestForPlaceOfTrialFile' },
         state: {
           form: {
             requestForPlaceOfTrialFile: 'fakeFile.pdf',
           },
+        },
+      },
+    );
+
+    expect(result.state.form.orderForRequestedTrialLocation).toBe(false);
+  });
+
+  it('does not update orderForRequestedTrialLocation if props.key is not preferredTrialCity or requestForPlaceOfTrialFile', async () => {
+    const result = await runAction(
+      updateOrderForDesignatingPlaceOfTrialAction,
+      {
+        props: { key: 'anotherField' },
+        state: {
+          form: { orderForRequestedTrialLocation: false },
         },
       },
     );
