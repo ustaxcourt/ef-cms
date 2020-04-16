@@ -1,4 +1,4 @@
-const OrderSearch = require('../entities/orders/OrderSearch');
+const { OrderSearch } = require('../entities/orders/OrderSearch');
 
 /**
  * validateOrderAdvancedSearchInteractor
