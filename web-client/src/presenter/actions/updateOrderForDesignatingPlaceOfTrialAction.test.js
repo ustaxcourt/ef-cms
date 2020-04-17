@@ -2,7 +2,7 @@ import { runAction } from 'cerebral/test';
 import { updateOrderForDesignatingPlaceOfTrialAction } from './updateOrderForDesignatingPlaceOfTrialAction';
 
 describe('updateOrderForDesignatingPlaceOfTrialAction', () => {
-  it('sets orderForRequestedTrialLocation true when preferredTrialCity and requestForPlaceOfTrialFile are undefined', async () => {
+  it('sets orderDesignatingPlaceOfTrial true when preferredTrialCity and requestForPlaceOfTrialFile are undefined', async () => {
     const result = await runAction(
       updateOrderForDesignatingPlaceOfTrialAction,
       {
@@ -13,10 +13,10 @@ describe('updateOrderForDesignatingPlaceOfTrialAction', () => {
       },
     );
 
-    expect(result.state.form.orderForRequestedTrialLocation).toBe(true);
+    expect(result.state.form.orderDesignatingPlaceOfTrial).toBe(true);
   });
 
-  it('sets orderForRequestedTrialLocation false when preferredTrialCity or requestForPlaceOfTrialFile are defined', async () => {
+  it('sets orderDesignatingPlaceOfTrial false when preferredTrialCity or requestForPlaceOfTrialFile are defined', async () => {
     const result = await runAction(
       updateOrderForDesignatingPlaceOfTrialAction,
       {
@@ -29,10 +29,10 @@ describe('updateOrderForDesignatingPlaceOfTrialAction', () => {
       },
     );
 
-    expect(result.state.form.orderForRequestedTrialLocation).toBe(false);
+    expect(result.state.form.orderDesignatingPlaceOfTrial).toBe(false);
   });
 
-  it('sets orderForRequestedTrialLocation false when preferredTrialCity or requestForPlaceOfTrialFile are defined', async () => {
+  it('sets orderDesignatingPlaceOfTrial false when preferredTrialCity or requestForPlaceOfTrialFile are defined', async () => {
     const result = await runAction(
       updateOrderForDesignatingPlaceOfTrialAction,
       {
@@ -45,20 +45,20 @@ describe('updateOrderForDesignatingPlaceOfTrialAction', () => {
       },
     );
 
-    expect(result.state.form.orderForRequestedTrialLocation).toBe(false);
+    expect(result.state.form.orderDesignatingPlaceOfTrial).toBe(false);
   });
 
-  it('does not update orderForRequestedTrialLocation if props.key is not preferredTrialCity or requestForPlaceOfTrialFile', async () => {
+  it('does not update orderDesignatingPlaceOfTrial if props.key is not preferredTrialCity or requestForPlaceOfTrialFile', async () => {
     const result = await runAction(
       updateOrderForDesignatingPlaceOfTrialAction,
       {
         props: { key: 'anotherField' },
         state: {
-          form: { orderForRequestedTrialLocation: false },
+          form: { orderDesignatingPlaceOfTrial: false },
         },
       },
     );
 
-    expect(result.state.form.orderForRequestedTrialLocation).toBe(false);
+    expect(result.state.form.orderDesignatingPlaceOfTrial).toBe(false);
   });
 });

@@ -553,12 +553,12 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
     expect(test.getState('form.orderForRatification')).toBe(true);
   });
 
-  it('should contain an order for requested trial location', async () => {
+  it('should contain an order designating place of trial', async () => {
     await test.runSequence('updateFormValueSequence', {
-      key: 'orderForRequestedTrialLocation',
+      key: 'orderDesignatingPlaceOfTrial',
       value: true,
     });
-    expect(test.getState('form.orderForRequestedTrialLocation')).toBe(true);
+    expect(test.getState('form.orderDesignatingPlaceOfTrial')).toBe(true);
   });
 
   it('should contain an order to show cause', async () => {
