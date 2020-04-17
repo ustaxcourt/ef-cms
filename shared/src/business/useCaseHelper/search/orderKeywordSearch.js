@@ -1,6 +1,3 @@
-const { map } = require('lodash');
-const { Order } = require('../../entities/orders/Order');
-
 /**
  * orderKeywordSearch
  *
@@ -9,9 +6,11 @@ const { Order } = require('../../entities/orders/Order');
  * @param {string} providers.orderKeyword the search term to look for in documents
  * @returns {object} the orders data
  */
-exports.orderKeywordSearch = async ({ applicationContext, orderKeyword }) => {
-  const orderEventCodes = map(Order.ORDER_TYPES, 'eventCode');
-
+exports.orderKeywordSearch = async ({
+  applicationContext,
+  orderEventCodes,
+  orderKeyword,
+}) => {
   const foundOrders = await applicationContext
     .getPersistenceGateway()
     .orderKeywordSearch({
