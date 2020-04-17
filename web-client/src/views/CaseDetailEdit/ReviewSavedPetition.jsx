@@ -97,21 +97,21 @@ export const ReviewSavedPetition = connect(
                     </h3>
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-4 margin-bottom-1">
-                        <label
+                        <span
                           className="usa-label usa-label-display"
                           htmlFor="filing-parties"
                         >
                           Party type
-                        </label>
+                        </span>
                         {form.partyType}
                       </div>
                       <div className="tablet:grid-col-4 margin-bottom-1">
-                        <label
+                        <span
                           className="usa-label usa-label-display"
                           htmlFor="filing-contact-primary"
                         >
                           Petitioner’s contact information
-                        </label>
+                        </span>
                         {form.contactPrimary && (
                           <address aria-labelledby="primary-label">
                             {AddressDisplay(form.contactPrimary, constants, {
@@ -125,12 +125,12 @@ export const ReviewSavedPetition = connect(
                       <div className="tablet:grid-col-4 margin-bottom-1">
                         {startCaseHelper.hasContactSecondary && (
                           <>
-                            <label
+                            <span
                               className="usa-label usa-label-display"
                               htmlFor="filing-contact-secondary"
                             >
                               Spouse’s contact information
-                            </label>
+                            </span>
                             {AddressDisplay(form.contactSecondary, constants)}
                           </>
                         )}
@@ -163,30 +163,30 @@ export const ReviewSavedPetition = connect(
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-6 margin-bottom-05">
                         <div className="margin-top-3 margin-bottom-2">
-                          <label
+                          <span
                             className="usa-label usa-label-display"
                             htmlFor="filing-type"
                           >
                             Date received
-                          </label>
+                          </span>
                           {reviewSavedPetitionHelper.receivedAtFormatted}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
-                          <label
+                          <span
                             className="usa-label usa-label-display"
                             htmlFor="filing-type"
                           >
                             Case caption
-                          </label>
+                          </span>
                           {form.caseCaption} {constants.CASE_CAPTION_POSTFIX}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
-                          <label
+                          <span
                             className="usa-label usa-label-display"
                             htmlFor="filing-location"
                           >
                             Requested trial location
-                          </label>
+                          </span>
                           {
                             reviewSavedPetitionHelper.preferredTrialCityFormatted
                           }
@@ -195,33 +195,33 @@ export const ReviewSavedPetition = connect(
                       <div className="tablet:grid-col-6 margin-bottom-1">
                         {form.mailingDate && (
                           <div className="margin-top-3 margin-bottom-2">
-                            <label
+                            <span
                               className="usa-label usa-label-display"
                               htmlFor="mailing-date"
                             >
                               Mailing date
-                            </label>
+                            </span>
                             {form.mailingDate}
                           </div>
                         )}
 
                         <div className="margin-top-3 margin-bottom-2">
-                          <label
+                          <span
                             className="usa-label usa-label-display"
                             htmlFor="filing-procedure"
                           >
                             Case procedure
-                          </label>
+                          </span>
                           {form.procedureType}
                         </div>
 
                         <div className="margin-top-3 margin-bottom-2">
-                          <label
+                          <span
                             className="usa-label usa-label-display"
                             htmlFor="filing-fee"
                           >
                             Filing fee
-                          </label>
+                          </span>
                           {
                             reviewSavedPetitionHelper.petitionPaymentStatusFormatted
                           }
@@ -260,33 +260,33 @@ export const ReviewSavedPetition = connect(
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-4 margin-bottom-1">
                         <div>
-                          <label
+                          <span
                             className="usa-label usa-label-display"
                             htmlFor="filing-type"
                           >
                             Notice attached to petition?
-                          </label>
+                          </span>
                           {reviewSavedPetitionHelper.hasIrsNoticeFormatted}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
-                          <label
+                          <span
                             className="usa-label usa-label-display"
                             htmlFor="filing-type"
                           >
                             Type of notice/case
-                          </label>
+                          </span>
                           {form.caseType}
                         </div>
                       </div>
                       <div className="tablet:grid-col-4 margin-bottom-1">
                         {reviewSavedPetitionHelper.shouldShowIrsNoticeDate && (
                           <div>
-                            <label
+                            <span
                               className="usa-label usa-label-display"
                               htmlFor="filing-type"
                             >
                               Date of notice
-                            </label>
+                            </span>
                             {reviewSavedPetitionHelper.irsNoticeDateFormatted}
                           </div>
                         )}
@@ -302,12 +302,12 @@ export const ReviewSavedPetition = connect(
                     <div>
                       {reviewSavedPetitionHelper.petitionFile && (
                         <div className="margin-top-3 margin-bottom-2">
-                          <label
+                          <span
                             className="usa-label usa-label-display"
                             htmlFor="filing-petition"
                           >
                             Petition
-                          </label>
+                          </span>
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
                               <PDFPreviewButton
@@ -320,12 +320,12 @@ export const ReviewSavedPetition = connect(
                       )}
                       {reviewSavedPetitionHelper.stinFile && (
                         <div className="margin-top-3 margin-bottom-2">
-                          <label
+                          <span
                             className="usa-label usa-label-display"
                             htmlFor="filing-parties"
                           >
                             Statement of Taxpayer Identification
-                          </label>
+                          </span>
                           <div>
                             <div className="grid-row">
                               <div className="grid-col flex-auto">
@@ -340,12 +340,12 @@ export const ReviewSavedPetition = connect(
                       )}
                       {reviewSavedPetitionHelper.requestForPlaceOfTrialFile && (
                         <div className="margin-top-3 margin-bottom-3">
-                          <label
+                          <span
                             className="usa-label usa-label-display margin-top-3"
                             htmlFor="filing-parties"
                           >
                             Request for Place of Trial
-                          </label>
+                          </span>
                           <div>
                             <div className="grid-row">
                               <div className="grid-col flex-auto">
@@ -362,12 +362,12 @@ export const ReviewSavedPetition = connect(
                       )}
                       {reviewSavedPetitionHelper.ownershipDisclosureFile && (
                         <div className="margin-top-3 margin-bottom-3">
-                          <label
+                          <span
                             className="usa-label usa-label-display margin-top-3"
                             htmlFor="filing-parties"
                           >
                             Ownership Disclosure Statement
-                          </label>
+                          </span>
                           <div>
                             <div className="grid-row">
                               <div className="grid-col flex-auto">

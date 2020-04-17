@@ -1,9 +1,10 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { User } = require('../../entities/User');
 const { userIsAssociated } = require('./userIsAssociatedInteractor');
 
 describe('userIsAssociated', () => {
-  const applicationContext = {};
-
   it('returns true if the user.userId matches the case.userId', () => {
     const caseDetail = {
       privatePractitioners: [],

@@ -1,27 +1,21 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDocumentToEditAction } from './setDocumentToEditAction';
 
-const documentIdToEdit = '123';
-const documentToMatch = {
-  documentId: documentIdToEdit,
-  documentType: 'Order',
-};
-
-documentToMatch.draftState = { ...documentToMatch };
-
-// TODO: convert to test applicationContext
-presenter.providers.applicationContext = {
-  getConstants: () => {
-    return {
-      SIGNED_DOCUMENT_TYPES: {
-        signedStipulatedDecision: { documentType: 'Stipulated Decision' },
-      },
-    };
-  },
-};
-
 describe('setDocumentToEditAction', () => {
+  const documentIdToEdit = '123';
+  const documentToMatch = {
+    documentId: documentIdToEdit,
+    documentType: 'Order',
+  };
+
+  documentToMatch.draftState = { ...documentToMatch };
+
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('sets state.documentToEdit for the given case and documentIdToEdit', async () => {
     const result = await runAction(setDocumentToEditAction, {
       modules: {

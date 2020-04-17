@@ -1,14 +1,16 @@
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { redirectToCognitoAction } from './redirectToCognitoAction';
 import { runAction } from 'cerebral/test';
 
-const externalRoute = jest.fn();
-
-presenter.providers.applicationContext = applicationContext;
-presenter.providers.router = { externalRoute };
-
 describe('redirectToCognitoAction', () => {
+  const externalRoute = jest.fn();
+
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.router = { externalRoute };
+  });
+
   it('should redirect the app to the cognito url', async () => {
     await runAction(redirectToCognitoAction, {
       modules: {

@@ -1,4 +1,4 @@
-export default (test, fakeFile, overrides = {}) => {
+export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
   return it('petitioner creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
 
@@ -111,8 +111,8 @@ export default (test, fakeFile, overrides = {}) => {
       key: 'wizardStep',
       value: '4',
     });
-
     await test.runSequence('submitFilePetitionSequence');
+
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('validationErrors')).toEqual({});

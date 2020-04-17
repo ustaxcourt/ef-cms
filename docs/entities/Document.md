@@ -497,11 +497,11 @@ A lodged document is awaiting action by the judge to enact or refuse.
 
 > `string` | optional
 
-### partyPrimary
+### partyIrsPractitioner
 
 > `boolean` | optional
 
-### partyRespondent
+### partyPrimary
 
 > `boolean` | optional
 
@@ -513,13 +513,13 @@ A lodged document is awaiting action by the judge to enact or refuse.
 
 > `boolean` | optional
 
-### practitioner
-
-> `array` | optional
-
 ### previousDocument
 
 > `object` | optional
+
+### privatePractitioners
+
+> `array` | optional
 
 ### processingStatus
 

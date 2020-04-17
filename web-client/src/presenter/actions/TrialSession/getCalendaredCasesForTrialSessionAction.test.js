@@ -1,22 +1,18 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCalendaredCasesForTrialSessionAction } from './getCalendaredCasesForTrialSessionAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-let getCalendaredCasesForTrialSessionStub;
-
 describe('getCalendaredCasesForTrialSessionAction', () => {
-  beforeEach(() => {
-    getCalendaredCasesForTrialSessionStub = jest.fn().mockResolvedValue([
-      {
-        caseId: '345',
-      },
-    ]);
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        getCalendaredCasesForTrialSessionInteractor: getCalendaredCasesForTrialSessionStub,
-      }),
-    };
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+    applicationContext
+      .getUseCases()
+      .getCalendaredCasesForTrialSessionInteractor.mockResolvedValue([
+        {
+          caseId: '345',
+        },
+      ]);
   });
 
   it('call the use case to get the calendared cases', async () => {
@@ -29,6 +25,10 @@ describe('getCalendaredCasesForTrialSessionAction', () => {
       },
       state: {},
     });
-    expect(getCalendaredCasesForTrialSessionStub.mock.calls.length).toEqual(1);
+
+    expect(
+      applicationContext.getUseCases()
+        .getCalendaredCasesForTrialSessionInteractor,
+    ).toBeCalled();
   });
 });

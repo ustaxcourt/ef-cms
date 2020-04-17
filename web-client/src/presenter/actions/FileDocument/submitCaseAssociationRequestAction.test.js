@@ -1,25 +1,27 @@
-import { presenter } from '../../presenter';
+import { User } from '../../../../../shared/src/business/entities/User';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitCaseAssociationRequestAction } from './submitCaseAssociationRequestAction';
 
 describe('submitCaseAssociationRequestAction', () => {
-  let submitCaseAssociationRequestStub;
-  let submitPendingCaseAssociationRequestStub;
+  const {
+    submitCaseAssociationRequestInteractor,
+  } = applicationContext.getUseCases();
+  const {
+    submitPendingCaseAssociationRequestInteractor,
+  } = applicationContext.getUseCases();
 
-  beforeEach(() => {
-    submitCaseAssociationRequestStub = jest.fn();
-    submitPendingCaseAssociationRequestStub = jest.fn();
+  presenter.providers.applicationContext = applicationContext;
 
-    presenter.providers.applicationContext = {
-      getCurrentUser: () => ({
-        email: 'practitioner1@example.com',
-      }),
-      getUseCases: () => ({
-        submitCaseAssociationRequestInteractor: submitCaseAssociationRequestStub,
-        submitPendingCaseAssociationRequestInteractor: submitPendingCaseAssociationRequestStub,
-      }),
-    };
-  });
+  applicationContext.getCurrentUser.mockReturnValue(
+    new User({
+      email: 'practitioner1@example.com',
+      name: 'richard',
+      role: User.ROLES.privatePractitioner,
+      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+    }),
+  );
 
   it('should call submitCaseAssociationRequest', async () => {
     await runAction(submitCaseAssociationRequestAction, {
@@ -35,7 +37,7 @@ describe('submitCaseAssociationRequestAction', () => {
       },
     });
 
-    expect(submitCaseAssociationRequestStub.mock.calls.length).toEqual(1);
+    expect(submitCaseAssociationRequestInteractor.mock.calls.length).toEqual(1);
   });
 
   it('should call submitPendingCaseAssociationRequest', async () => {
@@ -52,8 +54,8 @@ describe('submitCaseAssociationRequestAction', () => {
       },
     });
 
-    expect(submitPendingCaseAssociationRequestStub.mock.calls.length).toEqual(
-      1,
-    );
+    expect(
+      submitPendingCaseAssociationRequestInteractor.mock.calls.length,
+    ).toEqual(1);
   });
 });

@@ -5,10 +5,6 @@ const mockGet = jest.fn();
 const mockAppContext = {};
 
 describe('withAppContextDecorator', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('decorates functions with the default application context', async () => {
     const decoratedResultFunc = withAppContextDecorator(myFunc);
     expect(decoratedResultFunc).toBeInstanceOf(Function);

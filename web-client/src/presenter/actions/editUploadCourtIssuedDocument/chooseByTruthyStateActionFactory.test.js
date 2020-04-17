@@ -1,12 +1,12 @@
 import { chooseByTruthyStateActionFactory } from './chooseByTruthyStateActionFactory';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('chooseByTruthyStateActionFactory', () => {
   let noStub;
   let yesStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     noStub = jest.fn();
     yesStub = jest.fn();
 

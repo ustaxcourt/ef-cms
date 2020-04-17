@@ -1,5 +1,5 @@
 import { navigateToTrialSessionDetailAction } from './navigateToTrialSessionDetailAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 const routeMock = jest.fn();

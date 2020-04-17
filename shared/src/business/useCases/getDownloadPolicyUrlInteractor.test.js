@@ -1,35 +1,26 @@
 const {
   getDownloadPolicyUrlInteractor,
 } = require('./getDownloadPolicyUrlInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { cloneDeep } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
 describe('getDownloadPolicyUrlInteractor', () => {
-  let applicationContext;
-  let user;
-  let verifyCaseForUserMock;
-  let getCaseByCaseIdMock;
-
   beforeEach(() => {
-    getCaseByCaseIdMock = jest.fn().mockReturnValue(MOCK_CASE);
-
-    applicationContext = {
-      getCurrentUser: () => user,
-      getPersistenceGateway: () => ({
-        getCaseByCaseId: getCaseByCaseIdMock,
-        getDownloadPolicyUrl: () => 'localhost',
-        verifyCaseForUser: verifyCaseForUserMock,
-      }),
-      getUniqueId: () => 'unique-id-1',
-    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+    applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockReturnValue('localhost');
   });
 
   it('throw unauthorized error on invalid role', async () => {
-    user = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: 'admin',
       userId: 'petitioner',
-    };
+    });
 
     await expect(
       getDownloadPolicyUrlInteractor({
@@ -41,11 +32,13 @@ describe('getDownloadPolicyUrlInteractor', () => {
   });
 
   it('throw unauthorized error if user is not associated with case', async () => {
-    user = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitioner,
       userId: 'petitioner',
-    };
-    verifyCaseForUserMock = jest.fn().mockReturnValue(false);
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
 
     await expect(
       getDownloadPolicyUrlInteractor({
@@ -57,11 +50,13 @@ describe('getDownloadPolicyUrlInteractor', () => {
   });
 
   it('throw unauthorized error if user is associated with the case but the document is not available for viewing at this time', async () => {
-    user = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitioner,
       userId: 'petitioner',
-    };
-    verifyCaseForUserMock = jest.fn().mockReturnValue(true);
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
 
     const duplicatedMockCase = cloneDeep(MOCK_CASE);
     duplicatedMockCase.documents.push({
@@ -76,7 +71,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
       userId: 'petitioner',
       workItems: [],
     });
-    getCaseByCaseIdMock = jest.fn().mockReturnValue(duplicatedMockCase);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(duplicatedMockCase);
 
     await expect(
       getDownloadPolicyUrlInteractor({
@@ -88,11 +85,13 @@ describe('getDownloadPolicyUrlInteractor', () => {
   });
 
   it('returns the expected policy url for a petitioner who is associated with the case and viewing an available document', async () => {
-    user = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitioner,
       userId: 'petitioner',
-    };
-    verifyCaseForUserMock = jest.fn().mockReturnValue(true);
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
 
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
@@ -103,11 +102,13 @@ describe('getDownloadPolicyUrlInteractor', () => {
   });
 
   it('returns the expected policy url for a petitioner who is associated with the case and viewing a case confirmation pdf', async () => {
-    user = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitioner,
       userId: 'petitioner',
-    };
-    verifyCaseForUserMock = jest.fn().mockReturnValue(true);
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
 
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
@@ -118,11 +119,13 @@ describe('getDownloadPolicyUrlInteractor', () => {
   });
 
   it('throws an Unauthorized error for a petitioner attempting to access an case confirmation pdf for a different case', async () => {
-    user = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitioner,
       userId: 'petitioner',
-    };
-    verifyCaseForUserMock = jest.fn().mockReturnValue(true);
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
 
     await expect(
       getDownloadPolicyUrlInteractor({
@@ -134,11 +137,61 @@ describe('getDownloadPolicyUrlInteractor', () => {
   });
 
   it('returns the url for an internal user role even if verifyCaseForUser returns false', async () => {
-    user = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitionsClerk,
       userId: 'petitionsClerk',
-    };
-    verifyCaseForUserMock = jest.fn().mockReturnValue(false);
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
+
+    const url = await getDownloadPolicyUrlInteractor({
+      applicationContext,
+      caseId: MOCK_CASE.caseId,
+      documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    });
+    expect(url).toEqual('localhost');
+  });
+
+  it('throws an error if the user role is irsSuperuser and the petition document on the case is not served', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.irsSuperuser,
+      userId: 'irsSuperuser',
+    });
+
+    MOCK_CASE.documents = [
+      {
+        documentType: 'Petition',
+      },
+    ];
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+
+    await expect(
+      getDownloadPolicyUrlInteractor({
+        applicationContext,
+        caseId: MOCK_CASE.caseId,
+        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      }),
+    ).rejects.toThrow('Unauthorized to view case documents at this time');
+  });
+
+  it('returns the url if the user role is irsSuperuser and the petition document on the case is served', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.irsSuperuser,
+      userId: 'irsSuperuser',
+    });
+
+    MOCK_CASE.documents = [
+      {
+        documentType: 'Petition',
+        servedAt: '2019-03-01T21:40:46.415Z',
+      },
+    ];
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
 
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,

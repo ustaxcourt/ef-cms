@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { addWorkItemToSectionInbox } = require('./addWorkItemToSectionInbox');
 
 describe('addWorkItemToSectionInbox', () => {
@@ -10,14 +13,10 @@ describe('addWorkItemToSectionInbox', () => {
   });
 
   it('invokes the persistence layer with pk of {section}|workItem and other expected params', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        put: putStub,
-      }),
-    };
+    applicationContext.getDocumentClient.mockReturnValue({
+      put: putStub,
+    });
+
     await addWorkItemToSectionInbox({
       applicationContext,
       workItem: {
@@ -30,7 +29,7 @@ describe('addWorkItemToSectionInbox', () => {
         pk: 'section|docket',
         sk: 'work-item|123',
       },
-      applicationContext: { environment: { stage: 'dev' } },
+      applicationContext: { environment: { stage: 'local' } },
     });
   });
 });

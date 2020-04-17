@@ -1,12 +1,17 @@
 import { CerebralTest } from 'cerebral/test';
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
-
-presenter.providers.applicationContext = applicationContext;
-
-const test = CerebralTest(presenter);
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
+import { setDocumentDetailTabSequence } from '../sequences/setDocumentDetailTabSequence';
 
 describe('setDocumentDetailTabSequence', () => {
+  let test;
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+    presenter.sequences = {
+      setDocumentDetailTabSequence,
+    };
+    test = CerebralTest(presenter);
+  });
   it('updates the document detail tab based on props', async () => {
     test.setState('documentDetail', {
       tab: 'docketRecord',

@@ -1,23 +1,26 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateCaseDetailAction } from './validateCaseDetailAction';
 
-let validateCaseDetailStub = jest.fn().mockReturnValue(null);
-const successStub = jest.fn();
-const errorStub = jest.fn();
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    validateCaseDetailInteractor: validateCaseDetailStub,
-  }),
-};
-
-presenter.providers.path = {
-  error: errorStub,
-  success: successStub,
-};
-
 describe('validateCaseDetail', () => {
+  let successStub;
+  let errorStub;
+
+  beforeAll(() => {
+    successStub = jest.fn();
+    errorStub = jest.fn();
+
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.path = {
+      error: errorStub,
+      success: successStub,
+    };
+
+    applicationContext
+      .getUseCases()
+      .validateCaseDetailInteractor.mockReturnValue(null);
+  });
   it('should call the success path when no errors are found', async () => {
     await runAction(validateCaseDetailAction, {
       modules: {
@@ -31,7 +34,10 @@ describe('validateCaseDetail', () => {
       },
       state: {},
     });
-    expect(validateCaseDetailStub.mock.calls[0][0].caseDetail).toMatchObject({
+    expect(
+      applicationContext.getUseCases().validateCaseDetailInteractor.mock
+        .calls[0][0].caseDetail,
+    ).toMatchObject({
       caseId: '123',
       irsNoticeDate: '2009-10-13',
     });
@@ -39,7 +45,10 @@ describe('validateCaseDetail', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateCaseDetailStub = jest.fn().mockReturnValue('error');
+    applicationContext
+      .getUseCases()
+      .validateCaseDetailInteractor.mockReturnValue('error');
+
     await runAction(validateCaseDetailAction, {
       modules: {
         presenter,

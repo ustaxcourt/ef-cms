@@ -1,17 +1,17 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserByIdAction } from './getUserByIdAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    getUserByIdInteractor: () => ({
+describe('getUserByIdAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+    applicationContext.getUseCases().getUserByIdInteractor.mockReturnValue({
       role: 'privatePractitioner',
       userId: '123',
-    }),
-  }),
-};
+    });
+  });
 
-describe('getUserByIdAction', () => {
   it('should call the user and return the user from the use case', async () => {
     const results = await runAction(getUserByIdAction, {
       modules: {

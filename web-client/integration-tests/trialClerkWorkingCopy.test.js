@@ -4,14 +4,15 @@ import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseR
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
+import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
+import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
 import trialClerkAddsNotesFromWorkingCopyCaseList from './journey/trialClerkAddsNotesFromWorkingCopyCaseList';
 import trialClerkViewsNotesFromCaseDetail from './journey/trialClerkViewsNotesFromCaseDetail';
 import trialClerkViewsTrialSessionWorkingCopy from './journey/trialClerkViewsTrialSessionWorkingCopy';
+import trialClerkViewsTrialSessionWorkingCopyWithNotes from './journey/trialClerkViewsTrialSessionWorkingCopyWithNotes';
 
 const test = setupTest();
 
@@ -69,4 +70,5 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   trialClerkViewsTrialSessionWorkingCopy(test);
   trialClerkAddsNotesFromWorkingCopyCaseList(test);
   trialClerkViewsNotesFromCaseDetail(test);
+  trialClerkViewsTrialSessionWorkingCopyWithNotes(test);
 });

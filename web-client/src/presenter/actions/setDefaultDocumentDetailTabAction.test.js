@@ -1,12 +1,14 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDefaultDocumentDetailTabAction } from './setDefaultDocumentDetailTabAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('setDefaultDocumentDetailTab', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('returns "Document Info" when the case status is new and the document type is Petition', async () => {
     const { state } = await runAction(setDefaultDocumentDetailTabAction, {
       modules: {

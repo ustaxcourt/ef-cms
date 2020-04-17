@@ -1,11 +1,11 @@
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setAddEditSessionNoteModalStateAction } from './setAddEditSessionNoteModalStateAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('setAddEditSessionNoteModalStateAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   it('should set the modal caseId state', async () => {
     const result = await runAction(setAddEditSessionNoteModalStateAction, {
       modules: {
@@ -21,6 +21,7 @@ describe('setAddEditSessionNoteModalStateAction', () => {
         },
       },
     });
+
     expect(result.state.modal.notes).toEqual('i got some notes');
   });
 });

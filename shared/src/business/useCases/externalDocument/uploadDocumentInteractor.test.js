@@ -1,51 +1,18 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { uploadDocumentInteractor } = require('./uploadDocumentInteractor');
 const { User } = require('../../entities/User');
 
 describe('uploadDocumentInteractor', () => {
-  let applicationContext;
-
-  let caseRecord = {
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    createdAt: '',
-    docketNumber: '45678-18',
-    documents: [
-      {
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentType: 'Answer',
-        userId: 'irsPractitioner',
-      },
-      {
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentType: 'Answer',
-        userId: 'irsPractitioner',
-      },
-      {
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentType: 'Answer',
-        userId: 'irsPractitioner',
-      },
-    ],
-    preferredTrialCity: 'Fresno, California',
-    role: User.ROLES.petitioner,
-    userId: 'petitioner',
-  };
-
   it('throws an error when an unauthorized user tries to access the use case', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: 'other',
-          userId: 'other',
-        };
-      },
-      getPersistenceGateway: () => ({
-        uploadDocumentFromClient: async () => caseRecord,
-      }),
-    };
-    let error;
-    try {
-      await uploadDocumentInteractor({
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: 'other',
+      userId: 'other',
+    });
+
+    await expect(
+      uploadDocumentInteractor({
         applicationContext,
         documentFiles: [
           {
@@ -53,30 +20,18 @@ describe('uploadDocumentInteractor', () => {
           },
         ],
         documentMetadata: {},
-      });
-    } catch (e) {
-      error = e;
-    }
-    expect(error).toBeDefined();
-    expect(error.message).toEqual('Unauthorized');
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
-  it('runs successfully with no errors with minimum data and valid user', async () => {
-    let error;
-    try {
-      applicationContext = {
-        environment: { stage: 'local' },
-        getCurrentUser: () => {
-          return {
-            role: User.ROLES.petitionsClerk,
-            userId: 'petitionsclerk',
-          };
-        },
-        getPersistenceGateway: () => ({
-          uploadDocumentFromClient: async () => caseRecord,
-        }),
-      };
-      await uploadDocumentInteractor({
+  it('runs successfully with no errors with a valid user', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
+    });
+
+    await expect(
+      uploadDocumentInteractor({
         applicationContext,
         documentFiles: {
           primary: 'something',
@@ -85,29 +40,18 @@ describe('uploadDocumentInteractor', () => {
         progressFunctions: {
           primary: 'something',
         },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
+      }),
+    ).resolves.not.toThrow();
   });
 
   it('runs successfully with no errors with all data and valid user', async () => {
-    let error;
-    try {
-      applicationContext = {
-        environment: { stage: 'local' },
-        getCurrentUser: () => {
-          return {
-            role: User.ROLES.petitionsClerk,
-            userId: 'petitionsclerk',
-          };
-        },
-        getPersistenceGateway: () => ({
-          uploadDocumentFromClient: async () => caseRecord,
-        }),
-      };
-      await uploadDocumentInteractor({
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
+    });
+
+    await expect(
+      uploadDocumentInteractor({
         applicationContext,
         documentFiles: {
           primary: 'something',
@@ -127,29 +71,18 @@ describe('uploadDocumentInteractor', () => {
           secondary: 'something2',
           secondarySupporting0: 'something4',
         },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
+      }),
+    ).resolves.not.toThrow();
   });
 
   it('runs successfully with no errors with all data and valid user who is a docketclerk', async () => {
-    let error;
-    try {
-      applicationContext = {
-        environment: { stage: 'local' },
-        getCurrentUser: () => {
-          return {
-            role: User.ROLES.docketClerk,
-            userId: 'docketclerk',
-          };
-        },
-        getPersistenceGateway: () => ({
-          uploadDocumentFromClient: async () => caseRecord,
-        }),
-      };
-      await uploadDocumentInteractor({
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.docketClerk,
+      userId: 'docketclerk',
+    });
+
+    await expect(
+      uploadDocumentInteractor({
         applicationContext,
         documentFiles: {
           primary: 'something',
@@ -164,10 +97,7 @@ describe('uploadDocumentInteractor', () => {
           secondary: 'something2',
           secondarySupporting0: 'something4',
         },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
+      }),
+    ).resolves.not.toThrow();
   });
 });

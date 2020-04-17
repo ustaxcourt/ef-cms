@@ -294,7 +294,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             </div>
           </fieldset>
         </FormGroup>
-        {!editDocketEntryMetaHelper.showObjection && (
+        {editDocketEntryMetaHelper.showObjection && (
           <FormGroup errorText={validationErrors.objections}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="objections-legend">

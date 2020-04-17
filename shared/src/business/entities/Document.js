@@ -13,6 +13,7 @@ const { createISODateString } = require('../utilities/DateHandler');
 const { flatten } = require('lodash');
 const { Order } = require('./orders/Order');
 const { TrialSession } = require('./trialSessions/TrialSession');
+const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
 
 Document.CATEGORIES = Object.keys(documentMapExternal);
@@ -22,7 +23,6 @@ Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
 Document.PETITION_DOCUMENT_TYPES = ['Petition'];
-
 Document.validationName = 'Document';
 
 /**
@@ -31,14 +31,37 @@ Document.validationName = 'Document';
  * @param {object} rawDocument the raw document data
  * @constructor
  */
-function Document(rawDocument, { applicationContext }) {
+function Document(rawDocument, { applicationContext, filtered = false }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+
+  if (
+    !filtered ||
+    User.isInternalUser(applicationContext.getCurrentUser().role)
+  ) {
+    this.draftState = rawDocument.draftState;
+    this.judge = rawDocument.judge;
+    this.pending =
+      rawDocument.pending === undefined
+        ? Document.isPendingOnCreation(rawDocument)
+        : rawDocument.pending;
+    this.previousDocument = rawDocument.previousDocument;
+    this.processingStatus = rawDocument.processingStatus || 'pending'; // TODO: restricted
+    this.qcAt = rawDocument.qcAt;
+    this.qcByUser = rawDocument.qcByUser;
+    this.qcByUserId = rawDocument.qcByUserId;
+    this.signedAt = rawDocument.signedAt;
+    this.signedByUserId = rawDocument.signedByUserId;
+    this.workItems = (rawDocument.workItems || []).map(
+      workItem => new WorkItem(workItem, { applicationContext }),
+    );
+  }
+
   this.additionalInfo = rawDocument.additionalInfo;
   this.additionalInfo2 = rawDocument.additionalInfo2;
   this.addToCoversheet = rawDocument.addToCoversheet;
-  this.archived = rawDocument.archived;
+  this.archived = rawDocument.archived; // TODO: look into this
   this.attachments = rawDocument.attachments;
   this.caseId = rawDocument.caseId;
   this.certificateOfService = rawDocument.certificateOfService;
@@ -48,9 +71,7 @@ function Document(rawDocument, { applicationContext }) {
   this.documentId = rawDocument.documentId;
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
-  this.draftState = rawDocument.draftState;
   this.eventCode = rawDocument.eventCode;
-  this.exhibits = rawDocument.exhibits;
   this.filedBy = rawDocument.filedBy;
   this.filingDate = rawDocument.filingDate || createISODateString();
   this.freeText = rawDocument.freeText;
@@ -58,42 +79,27 @@ function Document(rawDocument, { applicationContext }) {
   this.hasSupportingDocuments = rawDocument.hasSupportingDocuments;
   this.isFileAttached = rawDocument.isFileAttached;
   this.isPaper = rawDocument.isPaper;
-  this.judge = rawDocument.judge;
   this.lodged = rawDocument.lodged;
   this.mailingDate = rawDocument.mailingDate;
   this.objections = rawDocument.objections;
   this.ordinalValue = rawDocument.ordinalValue;
-  this.partyPrimary = rawDocument.partyPrimary;
+  this.partyPrimary = rawDocument.partyPrimary; // TODO: add info about purpose
   this.partyIrsPractitioner = rawDocument.partyIrsPractitioner;
-  this.partySecondary = rawDocument.partySecondary;
-  this.pending =
-    rawDocument.pending === undefined
-      ? Document.isPendingOnCreation(rawDocument)
-      : rawDocument.pending;
-  this.previousDocument = rawDocument.previousDocument;
-  this.privatePractitioners = rawDocument.privatePractitioners;
-  this.processingStatus = rawDocument.processingStatus || 'pending';
-  this.qcAt = rawDocument.qcAt;
-  this.qcByUser = rawDocument.qcByUser;
-  this.qcByUserId = rawDocument.qcByUserId;
+  this.partySecondary = rawDocument.partySecondary; // TODO: add info about purpose
+  this.privatePractitioners = rawDocument.privatePractitioners; // TODO: look into this
   this.receivedAt = rawDocument.receivedAt || createISODateString();
-  this.relationship = rawDocument.relationship;
-  this.scenario = rawDocument.scenario;
-  this.secondaryDate = rawDocument.secondaryDate;
-  this.secondaryDocument = rawDocument.secondaryDocument;
+  this.relationship = rawDocument.relationship; // TODO: look into this
+  this.scenario = rawDocument.scenario; // TODO: look into this
+  this.secondaryDate = rawDocument.secondaryDate; // TODO: look into this
+  this.secondaryDocument = rawDocument.secondaryDocument; // TODO: look into this
   this.servedAt = rawDocument.servedAt;
   this.servedParties = rawDocument.servedParties;
   this.serviceDate = rawDocument.serviceDate;
   this.serviceStamp = rawDocument.serviceStamp;
-  this.signedAt = rawDocument.signedAt;
-  this.signedByUserId = rawDocument.signedByUserId;
-  this.status = rawDocument.status;
+  this.status = rawDocument.status; // TODO: look into this
   this.supportingDocument = rawDocument.supportingDocument;
-  this.trialLocation = rawDocument.trialLocation;
-  this.userId = rawDocument.userId;
-  this.workItems = (rawDocument.workItems || []).map(
-    workItem => new WorkItem(workItem, { applicationContext }),
-  );
+  this.trialLocation = rawDocument.trialLocation; // TODO: look into this
+  this.userId = rawDocument.userId; // TODO: restricted
 
   this.generateFiledBy(rawDocument);
 }
@@ -318,7 +324,6 @@ joiValidationDecorator(
       .description('The type of this document.'),
     draftState: joi.object().optional(),
     eventCode: joi.string().optional(),
-    exhibits: joi.boolean().optional(),
     filedBy: joi.string().allow('').optional(),
     filingDate: joi
       .date()

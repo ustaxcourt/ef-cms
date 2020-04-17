@@ -1,4 +1,4 @@
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { shouldValidateWorkItemAction } from './shouldValidateWorkItemAction';
 
@@ -6,7 +6,7 @@ describe('shouldValidateWorkItemAction', () => {
   let validateStub;
   let ignoreStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     validateStub = jest.fn();
     ignoreStub = jest.fn();
 

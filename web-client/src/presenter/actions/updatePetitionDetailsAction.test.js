@@ -1,23 +1,20 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updatePetitionDetailsAction } from './updatePetitionDetailsAction';
 
-let updatePetitionDetailsInteractorStub;
-
-presenter.providers.applicationContext = {
-  ...applicationContext,
-  getUseCases: () => ({
-    updatePetitionDetailsInteractor: updatePetitionDetailsInteractorStub,
-  }),
-};
-
 describe('updatePetitionDetailsAction', () => {
-  beforeEach(() => {
-    updatePetitionDetailsInteractorStub = jest
-      .fn()
-      .mockReturnValue({ docketNumber: '123-45' });
+  let PAYMENT_STATUS;
+
+  beforeAll(() => {
+    ({ PAYMENT_STATUS } = applicationContext.getConstants());
+    presenter.providers.applicationContext = applicationContext;
+
+    applicationContext
+      .getUseCases()
+      .updatePetitionDetailsInteractor.mockReturnValue({
+        docketNumber: '123-45',
+      });
   });
 
   it('creates date from form month, day, year fields and calls the use case with form data for a waived payment', async () => {
@@ -31,15 +28,20 @@ describe('updatePetitionDetailsAction', () => {
           paymentDateWaivedDay: '01',
           paymentDateWaivedMonth: '01',
           paymentDateWaivedYear: '2001',
-          petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+          petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         },
       },
     });
 
-    expect(updatePetitionDetailsInteractorStub).toHaveBeenCalled();
-    expect(updatePetitionDetailsInteractorStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().updatePetitionDetailsInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       petitionDetails: {
-        petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+        petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         petitionPaymentWaivedDate: '2001-01-01T05:00:00.000Z',
       },
     });
@@ -64,16 +66,21 @@ describe('updatePetitionDetailsAction', () => {
           paymentDateDay: '01',
           paymentDateMonth: '01',
           paymentDateYear: '2001',
-          petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+          petitionPaymentStatus: PAYMENT_STATUS.PAID,
         },
       },
     });
 
-    expect(updatePetitionDetailsInteractorStub).toHaveBeenCalled();
-    expect(updatePetitionDetailsInteractorStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().updatePetitionDetailsInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       petitionDetails: {
         petitionPaymentDate: '2001-01-01T05:00:00.000Z',
-        petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+        petitionPaymentStatus: PAYMENT_STATUS.PAID,
       },
     });
     expect(result.output).toEqual({
@@ -101,8 +108,13 @@ describe('updatePetitionDetailsAction', () => {
       },
     });
 
-    expect(updatePetitionDetailsInteractorStub).toHaveBeenCalled();
-    expect(updatePetitionDetailsInteractorStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().updatePetitionDetailsInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       petitionDetails: {
         irsNoticeDate: '2001-01-01T05:00:00.000Z',
       },
@@ -128,8 +140,13 @@ describe('updatePetitionDetailsAction', () => {
       },
     });
 
-    expect(updatePetitionDetailsInteractorStub).toHaveBeenCalled();
-    expect(updatePetitionDetailsInteractorStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().updatePetitionDetailsInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       petitionDetails: {
         preferredTrialCity: null,
       },
@@ -147,8 +164,13 @@ describe('updatePetitionDetailsAction', () => {
       },
     });
 
-    expect(updatePetitionDetailsInteractorStub).toHaveBeenCalled();
-    expect(updatePetitionDetailsInteractorStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().updatePetitionDetailsInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       petitionDetails: {
         preferredTrialCity: 'Fresno, California',
       },

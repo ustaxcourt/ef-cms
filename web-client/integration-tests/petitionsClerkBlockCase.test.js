@@ -10,7 +10,7 @@ import {
   uploadProposedStipulatedDecision,
   viewCaseDetail,
 } from './helpers';
-import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
+import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import petitionsClerkBlocksCase from './journey/petitionsClerkBlocksCase';
 import petitionsClerkCreatesACaseDeadline from './journey/petitionsClerkCreatesACaseDeadline';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';

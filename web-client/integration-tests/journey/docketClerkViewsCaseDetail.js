@@ -12,9 +12,11 @@ export const docketClerkViewsCaseDetail = (test, docketNumber = null) => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: docketNumber || test.docketNumber,
     });
+
     let result = runCompute(extractedPendingMessagesFromCaseDetail, {
       state: test.getState(),
     });
+
     result = result.map(message => ({
       assigneeId: message.assigneeId,
       createdAt: message.currentMessage.createdAt,
@@ -22,6 +24,7 @@ export const docketClerkViewsCaseDetail = (test, docketNumber = null) => {
       fromUserId: message.currentMessage.fromUserId,
       message: message.currentMessage.message,
     }));
+
     expect(orderBy(result, 'message')).toMatchObject(
       orderBy(
         [
@@ -56,5 +59,11 @@ export const docketClerkViewsCaseDetail = (test, docketNumber = null) => {
         'message',
       ),
     );
+
+    const caseDetail = test.getState('caseDetail');
+
+    expect(caseDetail.associatedJudge).toBeDefined();
+    expect(caseDetail.status).toBeDefined();
+    expect(caseDetail.userId).toBeDefined();
   });
 };

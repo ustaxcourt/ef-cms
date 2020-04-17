@@ -38,7 +38,7 @@ const getTrialSessionPlanningReportData = async ({
     currentYear = previous.year;
   }
 
-  const trialCities = TrialSession.TRIAL_CITIES.ALL;
+  const trialCities = [...TrialSession.TRIAL_CITIES.ALL];
   trialCities.sort((a, b) => {
     if (a.state === b.state) {
       return applicationContext.getUtilities().compareStrings(a.city, b.city);
