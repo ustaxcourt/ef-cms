@@ -29,7 +29,7 @@ exports.orderAdvancedSearchInteractor = async ({
 
   const orderEventCodes = map(Order.ORDER_TYPES, 'eventCode');
 
-  return await applicationContext.getUseCaseHelpers().orderKeywordSearch({
+  return await applicationContext.getPersistenceGateway().orderKeywordSearch({
     applicationContext,
     caseTitleOrPetitioner,
     docketNumber,
