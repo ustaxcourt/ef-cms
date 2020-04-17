@@ -8,7 +8,7 @@ export const OpenCases = connect(
   {
     openCases: state.formattedTrialSessionDetails.openCases,
   },
-  ({ openCases }) => {
+  function OpenCases({ openCases }) {
     return (
       <React.Fragment>
         <div className="text-semibold push-right margin-bottom-2">
@@ -47,12 +47,12 @@ export const OpenCases = connect(
                 </td>
                 <td>{item.caseCaptionNames}</td>
                 <td>
-                  {item.practitioners.map((practitioner, idx) => (
+                  {item.privatePractitioners.map((practitioner, idx) => (
                     <div key={idx}>{practitioner.name}</div>
                   ))}
                 </td>
                 <td>
-                  {item.respondents.map((respondent, idx) => (
+                  {item.irsPractitioners.map((respondent, idx) => (
                     <div key={idx}>{respondent.name}</div>
                   ))}
                 </td>

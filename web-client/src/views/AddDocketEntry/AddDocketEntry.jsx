@@ -17,16 +17,16 @@ export const AddDocketEntry = connect(
     caseDetail: state.caseDetail,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     isEditingDocketEntry: state.isEditingDocketEntry,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     submitDocketEntrySequence: sequences.submitDocketEntrySequence,
   },
-  ({
+  function AddDocketEntry({
     caseDetail,
     formCancelToggleCancelSequence,
     isEditingDocketEntry,
     showModal,
     submitDocketEntrySequence,
-  }) => {
+  }) {
     return (
       <>
         <CaseDetailHeader />

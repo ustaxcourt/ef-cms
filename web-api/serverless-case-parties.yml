@@ -108,8 +108,7 @@ provider:
     EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
     EFCMS_DOMAIN: ${opt:domain}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
-    CIRCLE_HONEYBADGER_API_KEY_DEV: ${opt:circleHoneybadgerApiKeyDev}
-    CIRCLE_HONEYBADGER_API_KEY_STG: ${opt:circleHoneybadgerApiKeyStg}
+    CIRCLE_HONEYBADGER_API_KEY: ${opt:circleHoneybadgerApiKey}
 
 package:
   exclude:
@@ -185,11 +184,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  associatePractitionerWithCase:
-    handler: web-api/${self:provider.dir}/casePartiesHandlers.associatePractitionerWithCaseLambda
+  associatePrivatePractitioner:
+    handler: web-api/${self:provider.dir}/casePartiesHandlers.associatePrivatePractitionerWithCaseLambda
     events:
       - http:
-          path: /{caseId}/associate-practitioner
+          path: /{caseId}/associate-private-practitioner
           method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -197,11 +196,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  associateRespondentWithCase:
-    handler: web-api/${self:provider.dir}/casePartiesHandlers.associateRespondentWithCaseLambda
+  associateIrsPractitioner:
+    handler: web-api/${self:provider.dir}/casePartiesHandlers.associateIrsPractitionerWithCaseLambda
     events:
       - http:
-          path: /{caseId}/associate-respondent
+          path: /{caseId}/associate-irs-practitioner
           method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

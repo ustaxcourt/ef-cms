@@ -1,22 +1,24 @@
 import { CerebralTest } from 'cerebral/test';
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
-
-let test;
-presenter.providers.applicationContext = applicationContext;
-
-test = CerebralTest(presenter);
-
-jest.useFakeTimers();
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
+import { setIdleStatusIdleSequence } from '../sequences/setIdleStatusIdleSequence';
 
 describe('setIdleStatusIdleSequence', () => {
-  it('should show the idle status modal and set a delayed logout timer', done => {
-    test.setState('showModal', 'SomeOtherModal');
-    test.runSequence('setIdleStatusIdleSequence');
-    expect(test.getState('showModal')).toBe('AppTimeoutModal');
+  let test;
+  beforeAll(() => {
+    jest.useFakeTimers();
+    presenter.providers.applicationContext = applicationContext;
+    presenter.sequences = {
+      setIdleStatusIdleSequence,
+    };
+    test = CerebralTest(presenter);
+  });
+  it('should show the idle status modal and set a delayed logout timer', async () => {
+    test.setState('modal.showModal', 'SomeOtherModal');
+    await test.runSequence('setIdleStatusIdleSequence');
+    expect(test.getState('modal.showModal')).toBe('AppTimeoutModal');
     const logoutTimer = test.getState('logoutTimer');
     expect(logoutTimer).not.toBeNull();
     jest.clearAllTimers();
-    done();
   });
 });

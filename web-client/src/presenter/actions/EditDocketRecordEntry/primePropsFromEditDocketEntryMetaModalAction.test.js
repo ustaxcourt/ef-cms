@@ -1,13 +1,11 @@
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { primePropsFromEditDocketEntryMetaModalAction } from './primePropsFromEditDocketEntryMetaModalAction';
 import { runAction } from 'cerebral/test';
 
-describe('primePropsFromEditDocketEntryMetaModalAction', () => {
-  beforeEach(() => {
-    presenter.providers.applicationContext = applicationContext;
-  });
+presenter.providers.applicationContext = applicationContextForClient;
 
+describe('primePropsFromEditDocketEntryMetaModalAction', () => {
   it('should update the props from state', async () => {
     const result = await runAction(
       primePropsFromEditDocketEntryMetaModalAction,

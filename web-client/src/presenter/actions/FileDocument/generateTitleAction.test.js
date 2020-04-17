@@ -1,23 +1,15 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateTitleAction } from './generateTitleAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 describe('generateTitleAction', () => {
-  let generateDocumentTitleStub;
+  const { generateDocumentTitleInteractor } = applicationContext.getUseCases();
 
-  beforeEach(() => {
-    generateDocumentTitleStub = sinon.stub();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        generateDocumentTitleInteractor: generateDocumentTitleStub,
-      }),
-    };
-  });
+  presenter.providers.applicationContext = applicationContext;
 
   it('should call generateDocumentTitle with correct data for only a primary document', async () => {
-    generateDocumentTitleStub.returns(null);
+    generateDocumentTitleInteractor.mockReturnValue(null);
     await runAction(generateTitleAction, {
       modules: {
         presenter,
@@ -30,15 +22,15 @@ describe('generateTitleAction', () => {
       },
     });
 
-    expect(generateDocumentTitleStub.calledOnce).toEqual(true);
+    expect(generateDocumentTitleInteractor.mock.calls.length).toEqual(1);
     expect(
-      generateDocumentTitleStub.getCall(0).args[0].documentMetadata
+      generateDocumentTitleInteractor.mock.calls[0][0].documentMetadata
         .documentType,
     ).toEqual('Motion for Judgment on the Pleadings');
   });
 
   it('should call generateDocumentTitle with correct data for all documents', async () => {
-    generateDocumentTitleStub.returns(null);
+    generateDocumentTitleInteractor.mockReturnValue(null);
     await runAction(generateTitleAction, {
       modules: {
         presenter,
@@ -64,19 +56,19 @@ describe('generateTitleAction', () => {
     });
 
     expect(
-      generateDocumentTitleStub.getCall(0).args[0].documentMetadata
+      generateDocumentTitleInteractor.mock.calls[0][0].documentMetadata
         .documentType,
     ).toEqual('Motion for Protective Order Pursuant to Rule 103');
     expect(
-      generateDocumentTitleStub.getCall(1).args[0].documentMetadata
+      generateDocumentTitleInteractor.mock.calls[1][0].documentMetadata
         .documentType,
     ).toEqual('Motion for Entry of Decision');
     expect(
-      generateDocumentTitleStub.getCall(2).args[0].documentMetadata
+      generateDocumentTitleInteractor.mock.calls[2][0].documentMetadata
         .documentType,
     ).toEqual('Motion for a New Trial');
     expect(
-      generateDocumentTitleStub.getCall(3).args[0].documentMetadata
+      generateDocumentTitleInteractor.mock.calls[3][0].documentMetadata
         .documentType,
     ).toEqual('Application for Waiver of Filing Fee');
   });

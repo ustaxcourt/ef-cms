@@ -7,7 +7,7 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handler = event =>
+exports.swaggerJsonLambda = event =>
   /**
    * return the swagger.json file
    *

@@ -3,7 +3,7 @@
     "docketNumberSuffix": "S",
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-77d8449a-ffe1-48e5-b056-a6112a819a4b",
+    "gsi1pk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "document": {
       "eventCode": "P",
       "createdAt": "2020-01-21T16:41:39.481Z",
@@ -29,7 +29,7 @@
     "createdAt": "2020-01-21T16:41:39.482Z",
     "assigneeName": null,
     "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "sk": "workitem-77d8449a-ffe1-48e5-b056-a6112a819a4b",
+    "sk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "messages": [
       {
         "createdAt": "2020-01-21T16:41:39.482Z",
@@ -39,32 +39,32 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "workitem-77d8449a-ffe1-48e5-b056-a6112a819a4b",
+    "pk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "docketNumber": "102-20",
     "updatedAt": "2020-01-21T16:41:39.482Z"
   },
   {
-    "sk": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "pk": "ad07b846-8933-4778-9fe2-b5d8ac8ad728|case"
+    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728"
   },
   {
-    "sk": "case-c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "pk": "catalog"
   },
   {
-    "sk": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "pk": "102-20|case"
+    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "case-by-docket-number|102-20"
   },
   {
-    "sk": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "pk": "5805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "docketNumberSuffix": "S",
     "caseStatus": "New",
     "caseIsInProgress": false,
-    "gsi1pk": "workitem-77d8449a-ffe1-48e5-b056-a6112a819a4b",
+    "gsi1pk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "document": {
       "eventCode": "P",
       "createdAt": "2020-01-21T16:41:39.481Z",
@@ -90,7 +90,7 @@
     "createdAt": "2020-01-21T16:41:39.482Z",
     "assigneeName": null,
     "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "sk": "workitem-77d8449a-ffe1-48e5-b056-a6112a819a4b",
+    "sk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "messages": [
       {
         "createdAt": "2020-01-21T16:41:39.482Z",
@@ -100,7 +100,7 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-petitions",
+    "pk": "section|petitions",
     "docketNumber": "102-20",
     "updatedAt": "2020-01-21T16:41:39.482Z"
   },
@@ -111,83 +111,6 @@
     "isPaper": false,
     "contactSecondary": {},
     "initialTitle": "Eve Brewer, Petitioner v. Commissioner of Internal Revenue, Respondent",
-    "documents": [
-      {
-        "documentType": "Petition",
-        "practitioner": [],
-        "partyPrimary": true,
-        "workItems": [
-          {
-            "docketNumberSuffix": "S",
-            "caseStatus": "New",
-            "caseIsInProgress": false,
-            "document": {
-              "eventCode": "P",
-              "createdAt": "2020-01-21T16:41:39.481Z",
-              "processingStatus": "pending",
-              "documentType": "Petition",
-              "practitioner": [],
-              "filedBy": "Petr. Eve Brewer",
-              "partyPrimary": true,
-              "pending": false,
-              "partySecondary": false,
-              "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
-              "receivedAt": "2020-01-21T16:41:39.481Z",
-              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-            },
-            "caseTitle": "Eve Brewer",
-            "section": "petitions",
-            "workItemId": "77d8449a-ffe1-48e5-b056-a6112a819a4b",
-            "isInitializeCase": true,
-            "assigneeId": null,
-            "isQC": true,
-            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
-            "createdAt": "2020-01-21T16:41:39.482Z",
-            "assigneeName": null,
-            "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-            "messages": [
-              {
-                "createdAt": "2020-01-21T16:41:39.482Z",
-                "messageId": "28bcb357-b2c3-437b-804e-c1e00ac35d86",
-                "from": "Test Petitioner",
-                "message": "Petition filed by Eve Brewer is ready for review.",
-                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-              }
-            ],
-            "docketNumber": "102-20",
-            "updatedAt": "2020-01-21T16:41:39.482Z"
-          }
-        ],
-        "pending": false,
-        "receivedAt": "2020-01-21T16:41:39.481Z",
-        "filingDate": "2020-01-21T16:41:39.481Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "eventCode": "P",
-        "createdAt": "2020-01-21T16:41:39.481Z",
-        "processingStatus": "complete",
-        "filedBy": "Petr. Eve Brewer",
-        "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-        "partySecondary": false,
-        "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5"
-      },
-      {
-        "documentType": "Statement of Taxpayer Identification",
-        "practitioner": [],
-        "partyPrimary": true,
-        "workItems": [],
-        "pending": false,
-        "receivedAt": "2020-01-21T16:41:39.483Z",
-        "filingDate": "2020-01-21T16:41:39.483Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "eventCode": "STIN",
-        "createdAt": "2020-01-21T16:41:39.482Z",
-        "processingStatus": "complete",
-        "filedBy": "Petr. Eve Brewer",
-        "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-        "partySecondary": false,
-        "documentId": "3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a"
-      }
-    ],
     "qcCompleteForTrial": {},
     "petitionPaymentStatus": "Not Paid",
     "orderForFilingFee": false,
@@ -211,7 +134,7 @@
     "noticeOfAttachments": false,
     "caseCaption": "Eve Brewer, Petitioner",
     "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "sk": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -225,52 +148,9 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Nashville, Tennessee",
-    "respondents": [
-      {
-        "role": "irsPractitioner",
-        "serviceIndicator": "Electronic",
-        "barNumber": "RT6789",
-        "contact": {
-          "address3": "Under the stairs",
-          "address2": "Apartment 4",
-          "city": "Chicago",
-          "phone": "+1 (555) 555-5555",
-          "address1": "234 Main St",
-          "postalCode": "61234",
-          "state": "IL",
-          "countryType": "domestic"
-        },
-        "name": "Test IRS Practitioner",
-        "section": "irsPractitioner",
-        "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-        "email": "irsPractitioner"
-      }
-    ],
-    "practitioners": [
-      {
-        "role": "privatePractitioner",
-        "barNumber": "PT5432",
-        "serviceIndicator": "Electronic",
-        "contact": {
-          "address3": "Under the stairs",
-          "address2": "Apartment 4",
-          "city": "Chicago",
-          "phone": "+1 (555) 555-5555",
-          "address1": "234 Main St",
-          "postalCode": "61234",
-          "state": "IL",
-          "countryType": "domestic"
-        },
-        "name": "Test Private Practitioner",
-        "section": "privatePractitioner",
-        "representingPrimary": true,
-        "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-        "email": "privatePractitioner1"
-      }
-    ],
     "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "docketNumber": "102-20",
     "status": "New"
   },
@@ -295,11 +175,134 @@
     "sk": "docket-record|f15a6532-9805-479b-ae45-e8f112153d2a"
   },
   {
-    "sk": "77d8449a-ffe1-48e5-b056-a6112a819a4b",
-    "pk": "c862926c-119f-49d5-8cc3-6e93ab703fa3|workItem"
+    "sk": "case|77d8449a-ffe1-48e5-b056-a6112a819a4b",
+    "pk": "work-item|c862926c-119f-49d5-8cc3-6e93ab703fa3"
   },
   {
-    "sk": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "work-item|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "case|7805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "role": "irsPractitioner",
+    "serviceIndicator": "Electronic",
+    "barNumber": "RT6789",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test IRS Practitioner",
+    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "section": "irsPractitioner",
+    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "irsPractitioner"
+  },
+  {
+    "role": "privatePractitioner",
+    "serviceIndicator": "Electronic",
+    "barNumber": "PT5432",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test Private Practitioner",
+    "sk": "privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
+    "section": "privatePractitioner",
+    "representingPrimary": true,
+    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
+    "email": "privatePractitioner1"
+  },
+  {
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2020-01-21T16:41:39.483Z",
+    "practitioner": [],
+    "partyPrimary": true,
+    "workItems": [],
+    "pending": false,
+    "receivedAt": "2020-01-21T16:41:39.483Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "STIN",
+    "createdAt": "2020-01-21T16:41:39.482Z",
+    "processingStatus": "complete",
+    "filedBy": "Petr. Eve Brewer",
+    "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "sk": "document|3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
+    "partySecondary": false,
+    "documentId": "3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
+    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3"
+  },
+  {
+    "documentType": "Petition",
+    "filingDate": "2020-01-21T16:41:39.481Z",
+    "practitioner": [],
+    "partyPrimary": true,
+    "workItems": [
+      {
+        "associatedJudge": "Chief Judge",
+        "docketNumberSuffix": "S",
+        "caseStatus": "New",
+        "caseIsInProgress": false,
+        "document": {
+          "eventCode": "P",
+          "createdAt": "2020-01-21T16:41:39.481Z",
+          "processingStatus": "pending",
+          "documentType": "Petition",
+          "practitioner": [],
+          "filedBy": "Petr. Eve Brewer",
+          "partyPrimary": true,
+          "pending": false,
+          "partySecondary": false,
+          "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
+          "receivedAt": "2020-01-21T16:41:39.481Z",
+          "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        "caseTitle": "Eve Brewer",
+        "section": "petitions",
+        "workItemId": "77d8449a-ffe1-48e5-b056-a6112a819a4b",
+        "isInitializeCase": true,
+        "assigneeId": null,
+        "isQC": true,
+        "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "createdAt": "2020-01-21T16:41:39.482Z",
+        "assigneeName": null,
+        "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
+        "messages": [
+          {
+            "createdAt": "2020-01-21T16:41:39.482Z",
+            "messageId": "28bcb357-b2c3-437b-804e-c1e00ac35d86",
+            "from": "Test Petitioner",
+            "message": "Petition filed by Eve Brewer is ready for review.",
+            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+          }
+        ],
+        "docketNumber": "102-20",
+        "updatedAt": "2020-01-21T16:41:39.482Z"
+      }
+    ],
+    "pending": false,
+    "receivedAt": "2020-01-21T16:41:39.481Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "createdAt": "2020-01-21T16:41:39.481Z",
+    "processingStatus": "complete",
+    "filedBy": "Petr. Eve Brewer",
+    "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "sk": "document|d854a954-7332-4e92-93bd-dc28c9fea0a5",
+    "partySecondary": false,
+    "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
+    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3"
   }
 ]

@@ -8,7 +8,7 @@ export const WorkQueue = connect(
   {
     workQueueHelper: state.workQueueHelper,
   },
-  ({ workQueueHelper }) => {
+  function WorkQueue({ workQueueHelper }) {
     return (
       <React.Fragment>
         {workQueueHelper.showIndividualWorkQueue && <IndividualWorkQueue />}

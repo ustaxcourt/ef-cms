@@ -12,6 +12,16 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=judgeArmen&path=/search?petitionerName=cairo',
   },
+  {
+    actions: [
+      'wait for #tab-practitioner to be visible',
+      'click element #tab-practitioner',
+      'wait for #practitioner-name to be visible',
+    ],
+    notes: 'checks a11y of advanced search practitioner tab',
+    url:
+      'http://localhost:1234/mock-login?token=judgeArmen&path=/search&info=practitioner-tab',
+  },
   'http://localhost:1234/mock-login?token=judgeArmen&path=/trial-sessions',
   'http://localhost:1234/mock-login?token=judgeArmen&path=/trial-sessions',
   'http://localhost:1234/mock-login?token=judgeArmen&path=/trial-session-detail/959c4338-0fac-42eb-b0eb-d53b8d0195cc&info=calendared-case',

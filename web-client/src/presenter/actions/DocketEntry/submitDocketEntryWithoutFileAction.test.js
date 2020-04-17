@@ -1,31 +1,25 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitDocketEntryWithoutFileAction } from './submitDocketEntryWithoutFileAction';
 
+presenter.providers.applicationContext = applicationContext;
+
 describe('submitDocketEntryWithoutFileAction', () => {
-  let fileDocketEntryInteractorMock;
   let caseDetail;
 
-  beforeEach(() => {
+  beforeAll(() => {
     caseDetail = {
       caseId: '123',
       docketNumber: '123-45',
     };
-
-    fileDocketEntryInteractorMock = jest.fn(() => caseDetail);
-
-    presenter.providers.applicationContext = {
-      getUniqueId: () => new Date().getTime(),
-      getUseCases: () => ({
-        fileDocketEntryInteractor: fileDocketEntryInteractorMock,
-      }),
-      getUtilities: () => ({
-        createISODateString: () => new Date().toISOString(),
-      }),
-    };
   });
 
   it('should call fileDocketEntryInteractor and return caseDetail', async () => {
+    applicationContext
+      .getUseCases()
+      .fileDocketEntryInteractor.mockReturnValue(caseDetail);
+
     const result = await runAction(submitDocketEntryWithoutFileAction, {
       modules: {
         presenter,
@@ -39,7 +33,9 @@ describe('submitDocketEntryWithoutFileAction', () => {
       },
     });
 
-    expect(fileDocketEntryInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().fileDocketEntryInteractor,
+    ).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
       caseId: caseDetail.docketNumber,

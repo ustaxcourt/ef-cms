@@ -28,6 +28,70 @@ describe('DateHandler', () => {
     });
   });
 
+  describe('calculateDifferenceInDays', () => {
+    it('returns calculated interval based on provided unit', () => {
+      const firstDate = '2020-01-09T12:00:00.000Z';
+      const tenDaysLater = '2020-01-19T12:00:00.000Z';
+      const result = DateHandler.calculateDifferenceInDays(
+        tenDaysLater,
+        firstDate,
+      );
+      expect(result).toEqual(10);
+    });
+    it('returns negative value if first date provided is earlier than second', () => {
+      const firstDate = '2020-01-01T12:00:00.000Z';
+      const fiveDaysLater = '2020-01-06T12:00:00.000Z';
+      const result = DateHandler.calculateDifferenceInDays(
+        firstDate,
+        fiveDaysLater,
+      );
+      expect(result).toEqual(-5);
+    });
+    it('returns positive value if first date provided is later than second', () => {
+      const firstDate = '2020-01-06T12:00:00.000Z';
+      const fiveDaysEarlier = '2020-01-01T12:00:00.000Z';
+      const result = DateHandler.calculateDifferenceInDays(
+        firstDate,
+        fiveDaysEarlier,
+      );
+      expect(result).toEqual(5);
+    });
+    it('returns a difference of 1 day if first day is "today at 4pm EST" and second day is "tomorrow at 8am EST"', () => {
+      const firstDate = '2020-01-01T21:00:00.000Z'; // 4pm EST
+      const sameDate = '2020-01-02T13:00:00.000Z'; // 8am EST
+      const result = DateHandler.calculateDifferenceInDays(sameDate, firstDate);
+      expect(result).toEqual(1);
+    });
+    it('returns difference of 1 day from the perspective of the EST time zone, even if dates provided occur on the same day in UTC and are only two minutes apart', () => {
+      const lateToday = '2020-01-02T04:59:00.000Z'; // 2010-01-01 at 11:59pm EST
+      const earlyTomorrow = '2020-01-02T05:01:00.000Z'; // 2020-01-02 at 12:01am EST
+      const result = DateHandler.calculateDifferenceInDays(
+        earlyTomorrow,
+        lateToday,
+      );
+      expect(result).toEqual(1);
+    });
+    it('returns difference of 1 day from the perspective of the EST time zone, even if dates provided occur on the same day in UTC', () => {
+      const earlyToday = '2020-01-02T05:01:00.000Z'; // 2010-01-02 at 12:01am EST
+      const lateTomorrow = '2020-01-04T04:59:00.000Z'; // 2020-01-03 at 11:59pm EST
+      const result = DateHandler.calculateDifferenceInDays(
+        lateTomorrow,
+        earlyToday,
+      );
+      expect(result).toEqual(1);
+    });
+    it('returns difference of 45 day from the perspective of the EST time zone when both are 1 minute before midnight EST', () => {
+      const firstDate = '2020-02-04T04:59:00.000Z'; // 2010-02-03 at 11:59pm EST of a leap year
+      const fortyFiveDaysLater = '2020-03-20T03:59:00.000Z'; // 2020-03-19 at 11:59pm EST across daylight saving line, too
+
+      const result = DateHandler.calculateDifferenceInDays(
+        fortyFiveDaysLater,
+        firstDate,
+      );
+      expect(result).toEqual(45);
+    });
+  });
+
   describe('calculateISODate', () => {
     it('returns the dateString param exactly as provided when the `howMuch` param is omitted', () => {
       const result = DateHandler.calculateISODate({ dateString: '12/1/1901' });

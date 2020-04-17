@@ -17,7 +17,7 @@ exports.getTrialSessionWorkingCopy = async ({
   return await client.get({
     Key: {
       pk: `trial-session-working-copy|${trialSessionId}`,
-      sk: `${userId}`,
+      sk: `user|${userId}`,
     },
     applicationContext,
   });

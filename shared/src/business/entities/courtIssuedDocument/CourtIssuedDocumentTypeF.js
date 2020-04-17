@@ -18,7 +18,7 @@ function CourtIssuedDocumentTypeF(rawProps) {
   this.trialLocation = rawProps.trialLocation;
 }
 
-CourtIssuedDocumentTypeF.prototype.getDocumentTitle = function() {
+CourtIssuedDocumentTypeF.prototype.getDocumentTitle = function () {
   return replaceBracketed(this.documentTitle, this.judge, this.trialLocation);
 };
 

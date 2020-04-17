@@ -1,10 +1,11 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   generateCaseInventoryReportPdf,
 } = require('./generateCaseInventoryReportPdf');
-const { Case } = require('../../entities/cases/Case');
 const { User } = require('../../entities/User');
 const PDF_MOCK_BUFFER = 'Hello World';
-import { formatDateString } from '../../../../../shared/src/business/utilities/DateHandler';
 
 const pageMock = {
   addStyleTag: () => {},
@@ -15,7 +16,7 @@ const pageMock = {
 };
 
 const chromiumBrowserMock = {
-  close: () => {},
+  close: jest.fn(),
   newPage: () => pageMock,
 };
 
@@ -33,9 +34,7 @@ const mockCases = [
 ];
 
 describe('generateCaseInventoryReportPdf', () => {
-  let applicationContext;
   let user;
-  let loggerErrorMock = jest.fn();
   let generatePdfReportInteractorMock;
   let generatedHtml;
 
@@ -47,41 +46,36 @@ describe('generateCaseInventoryReportPdf', () => {
       generatedHtml = contentHtml;
     });
 
-    applicationContext = {
-      environment: {
-        tempDocumentsBucketName: 'MockDocumentBucketName',
+    applicationContext.getCurrentUser.mockReturnValue(user);
+    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
+      docketNumber: '101-19',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockReturnValue({
+        url: 'https://www.example.com',
+      });
+    applicationContext.getPug.mockReturnValue({
+      compile: () => ({ showJudgeColumn, showStatusColumn }) => {
+        const judgeColumn = showJudgeColumn ? '<th>Judge</th>' : '';
+        const statusColumn = showStatusColumn ? '<th>Case Status</th>' : '';
+        return `${judgeColumn} ${statusColumn}`;
       },
-      getCaseCaptionNames: Case.getCaseCaptionNames,
-      getChromiumBrowser: () => chromiumBrowserMock,
-      getCurrentUser: () => user,
-      getNodeSass: () => ({ render: (data, cb) => cb(data, { css: '' }) }),
-      getPersistenceGateway: () => ({
-        getCaseByCaseId: () => ({ docketNumber: '101-19' }),
-        getDownloadPolicyUrl: () => ({
-          url: 'https://www.example.com',
-        }),
-      }),
-      getPug: () => ({
-        compile: () => ({ showJudgeColumn, showStatusColumn }) => {
-          const judgeColumn = showJudgeColumn ? '<th>Judge</th>' : '';
-          const statusColumn = showStatusColumn ? '<th>Case Status</th>' : '';
-          return `${judgeColumn} ${statusColumn}`;
-        },
-      }),
-      getStorageClient: () => ({
-        upload: (params, callback) => callback(),
-      }),
-      getUniqueId: () => 'uniqueId',
-      getUseCases: () => ({
-        generatePdfReportInteractor: generatePdfReportInteractorMock,
-      }),
-      getUtilities: () => ({ formatDateString }),
-      logger: { error: loggerErrorMock, info: () => {} },
-    };
+    });
+    applicationContext.getChromiumBrowser.mockReturnValue(chromiumBrowserMock);
+
+    applicationContext.getStorageClient.mockReturnValue({
+      upload: (params, callback) => callback(),
+    });
+    applicationContext.getUseCases.mockReturnValue({
+      generatePdfReportInteractor: generatePdfReportInteractorMock,
+    });
   });
 
   it('throws an error if the user is unauthorized', async () => {
     user = { role: User.ROLES.petitioner, userId: 'petitioner' };
+
+    applicationContext.getCurrentUser.mockReturnValue(user);
     await expect(
       generateCaseInventoryReportPdf({
         applicationContext,
@@ -115,6 +109,10 @@ describe('generateCaseInventoryReportPdf', () => {
     generatePdfReportInteractorMock = jest
       .fn()
       .mockRejectedValue(new Error('bad!'));
+
+    applicationContext.getUseCases.mockReturnValue({
+      generatePdfReportInteractor: generatePdfReportInteractorMock,
+    });
 
     await expect(
       generateCaseInventoryReportPdf({

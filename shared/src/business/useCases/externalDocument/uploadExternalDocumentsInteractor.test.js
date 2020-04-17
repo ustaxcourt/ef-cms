@@ -1,56 +1,20 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   uploadExternalDocumentsInteractor,
 } = require('./uploadExternalDocumentsInteractor');
 const { User } = require('../../entities/User');
 
 describe('uploadExternalDocumentsInteractor', () => {
-  let applicationContext;
-
-  let caseRecord = {
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    createdAt: '',
-    docketNumber: '45678-18',
-    documents: [
-      {
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentType: 'Answer',
-        userId: 'respondent',
-      },
-      {
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentType: 'Answer',
-        userId: 'respondent',
-      },
-      {
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentType: 'Answer',
-        userId: 'respondent',
-      },
-    ],
-    preferredTrialCity: 'Fresno, California',
-    role: User.ROLES.petitioner,
-    userId: 'petitioner',
-  };
-
   it('throws an error when an unauthorized user tries to access the use case', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => ({
-        uploadDocumentFromClient: async () => caseRecord,
-      }),
-      getUseCases: () => ({
-        fileExternalDocumentInteractor: () => {},
-      }),
-    };
-    let error;
-    try {
-      await uploadExternalDocumentsInteractor({
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
+    });
+
+    await expect(
+      uploadExternalDocumentsInteractor({
         applicationContext,
         documentFiles: [
           {
@@ -58,34 +22,18 @@ describe('uploadExternalDocumentsInteractor', () => {
           },
         ],
         documentMetadata: {},
-      });
-    } catch (e) {
-      error = e;
-    }
-    expect(error).toBeDefined();
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('runs successfully with no errors with minimum data and valid user', async () => {
-    let error;
-    try {
-      applicationContext = {
-        environment: { stage: 'local' },
-        getCurrentUser: () => {
-          return {
-            role: User.ROLES.irsPractitioner,
-            userId: 'respondent',
-          };
-        },
-        getPersistenceGateway: () => ({
-          uploadDocumentFromClient: async () => caseRecord,
-        }),
-        getUseCases: () => ({
-          fileExternalDocumentInteractor: () => {},
-          validatePdfInteractor: () => null,
-          virusScanPdfInteractor: () => null,
-        }),
-      };
-      await uploadExternalDocumentsInteractor({
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.irsPractitioner,
+      userId: 'irsPractitioner',
+    });
+
+    await expect(
+      uploadExternalDocumentsInteractor({
         applicationContext,
         documentFiles: {
           primary: 'something',
@@ -94,34 +42,18 @@ describe('uploadExternalDocumentsInteractor', () => {
         progressFunctions: {
           primary: 'something',
         },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
+      }),
+    ).resolves.not.toThrow();
   });
 
   it('runs successfully with no errors with all data and valid user', async () => {
-    let error;
-    try {
-      applicationContext = {
-        environment: { stage: 'local' },
-        getCurrentUser: () => {
-          return {
-            role: User.ROLES.irsPractitioner,
-            userId: 'respondent',
-          };
-        },
-        getPersistenceGateway: () => ({
-          uploadDocumentFromClient: async () => caseRecord,
-        }),
-        getUseCases: () => ({
-          fileExternalDocumentInteractor: () => {},
-          validatePdfInteractor: () => null,
-          virusScanPdfInteractor: () => null,
-        }),
-      };
-      await uploadExternalDocumentsInteractor({
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.irsPractitioner,
+      userId: 'irsPractitioner',
+    });
+
+    await expect(
+      uploadExternalDocumentsInteractor({
         applicationContext,
         documentFiles: {
           primary: 'something',
@@ -141,34 +73,18 @@ describe('uploadExternalDocumentsInteractor', () => {
           secondary: 'something2',
           secondarySupporting0: 'something4',
         },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
+      }),
+    ).resolves.not.toThrow();
   });
 
   it('runs successfully with no errors with all data and valid user who is a practitioner', async () => {
-    let error;
-    try {
-      applicationContext = {
-        environment: { stage: 'local' },
-        getCurrentUser: () => {
-          return {
-            role: User.ROLES.privatePractitioner,
-            userId: 'practitioner',
-          };
-        },
-        getPersistenceGateway: () => ({
-          uploadDocumentFromClient: async () => caseRecord,
-        }),
-        getUseCases: () => ({
-          fileExternalDocumentInteractor: () => {},
-          validatePdfInteractor: () => null,
-          virusScanPdfInteractor: () => null,
-        }),
-      };
-      await uploadExternalDocumentsInteractor({
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.irsPractitioner,
+      userId: 'irsPractitioner',
+    });
+
+    await expect(
+      uploadExternalDocumentsInteractor({
         applicationContext,
         documentFiles: {
           primary: 'something',
@@ -183,36 +99,11 @@ describe('uploadExternalDocumentsInteractor', () => {
           secondary: 'something2',
           secondarySupporting0: 'something4',
         },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
+      }),
+    ).resolves.not.toThrow();
   });
 
-  it('Should call fileExternalDocumentForConsolidatedInteractor if a leadCaseId is provided', async () => {
-    const fileExternalDocumentForConsolidatedInteractorMock = jest.fn();
-    const fileExternalDocumentInteractorMock = jest.fn();
-
-    let applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.privatePractitioner,
-          userId: 'practitioner',
-        };
-      },
-      getPersistenceGateway: () => ({
-        uploadDocumentFromClient: async () => caseRecord,
-      }),
-      getUseCases: () => ({
-        fileExternalDocumentForConsolidatedInteractor: fileExternalDocumentForConsolidatedInteractorMock,
-        fileExternalDocumentInteractor: () =>
-          fileExternalDocumentInteractorMock,
-        validatePdfInteractor: () => null,
-        virusScanPdfInteractor: () => null,
-      }),
-    };
+  it('should call fileExternalDocumentForConsolidatedInteractor when a leadCaseId is provided', async () => {
     await uploadExternalDocumentsInteractor({
       applicationContext,
       documentFiles: {
@@ -231,9 +122,12 @@ describe('uploadExternalDocumentsInteractor', () => {
       },
     });
 
-    expect(fileExternalDocumentInteractorMock).not.toHaveBeenCalled();
     expect(
-      fileExternalDocumentForConsolidatedInteractorMock,
+      applicationContext.getUseCases().fileExternalDocumentInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases()
+        .fileExternalDocumentForConsolidatedInteractor,
     ).toHaveBeenCalled();
   });
 });

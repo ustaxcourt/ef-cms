@@ -27,6 +27,46 @@ describe('editDocketEntryMetaHelper', () => {
       expect(result.showObjection).toBeTruthy();
     });
 
+    it('should show objection field if the form event code is an amendment and previous document type is a motion', () => {
+      const result = runCompute(editDocketEntryMetaHelper, {
+        state: {
+          caseDetail: {
+            documents: [],
+            partyType: 'Petitioner',
+          },
+          form: {
+            documentId: '123',
+            documentType: 'Amendment [anything]',
+            eventCode: 'ADMT',
+            previousDocument: {
+              documentType: 'Motion to Withdraw as Counsel',
+            },
+          },
+        },
+      });
+      expect(result.showObjection).toBeTruthy();
+    });
+
+    it('should not show objection field if the form event code is an amendment and previous document type is not a motion', () => {
+      const result = runCompute(editDocketEntryMetaHelper, {
+        state: {
+          caseDetail: {
+            documents: [],
+            partyType: 'Petitioner',
+          },
+          form: {
+            documentId: '123',
+            documentType: 'Amendment [anything]',
+            eventCode: 'ADMT',
+            previousDocument: {
+              documentType: 'Answer',
+            },
+          },
+        },
+      });
+      expect(result.showObjection).toBeFalsy();
+    });
+
     it('should not show objection field if the documentType is not a Motion', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
@@ -88,7 +128,7 @@ describe('editDocketEntryMetaHelper', () => {
             documentId: '123',
           },
           validationErrors: {
-            partyRespondent: 'error',
+            partyIrsPractitioner: 'error',
           },
         },
       });

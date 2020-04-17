@@ -30,10 +30,10 @@ export const CaseDetailHeaderMenu = connect(
       sequences.openCreateOrderChooseTypeModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     toggleMenuSequence: sequences.toggleMenuSequence,
   },
-  ({
+  function CaseDetailHeaderMenu({
     caseDetail,
     caseDetailHeaderHelper,
     isCaseDetailMenuOpen,
@@ -44,7 +44,7 @@ export const CaseDetailHeaderMenu = connect(
     resetCaseMenuSequence,
     showModal,
     toggleMenuSequence,
-  }) => {
+  }) {
     const menuRef = useRef(null);
     const keydown = event => {
       const pressedESC = event.keyCode === 27;

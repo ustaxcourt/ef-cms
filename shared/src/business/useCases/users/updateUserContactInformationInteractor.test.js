@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   calculateISODate,
   createISODateString,
 } = require('../../utilities/DateHandler');
@@ -15,6 +18,7 @@ const fakeData =
   'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
 
 let user;
+let mockCase;
 
 const fakeFile = Buffer.from(fakeData, 'base64');
 fakeFile.name = 'fakeFile.pdf';
@@ -31,80 +35,56 @@ const contactInfo = {
   state: 'IL',
 };
 
-let applicationContext;
-const saveDocumentFromLambdaStub = jest.fn();
-const sendServedPartiesEmailsStub = jest.fn();
-let getCasesByUserStub;
-const updateCaseSpy = jest.fn().mockImplementation(v => v.caseToUpdate);
-const updateUserSpy = jest.fn();
+const mockChromiumBrowser = {
+  close: () => null,
+  newPage: () => ({
+    pdf: () => fakeData,
+    setContent: () => null,
+  }),
+};
 
 describe('updateUserContactInformationInteractor', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
     user = MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'];
 
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCaseCaptionNames: Case.getCaseCaptionNames,
-      getChromiumBrowser: () => ({
-        close: () => null,
-        newPage: () => ({
-          pdf: () => fakeData,
-          setContent: () => null,
-        }),
-      }),
-      getCurrentUser: () => user,
-      getPersistenceGateway: () => {
-        return {
-          getCasesByUser: getCasesByUserStub,
-          getUserById: () => Promise.resolve(user),
-          saveDocumentFromLambda: saveDocumentFromLambdaStub,
-          saveWorkItemForNonPaper: () => null,
-          updateCase: updateCaseSpy,
-          updateUser: updateUserSpy,
-        };
-      },
-      getTemplateGenerators: () => {
-        return {
-          generateChangeOfAddressTemplate: async () => '<div></div>',
-          generateHTMLTemplateForPDF: () => '<div></div>',
-          generatePrintableDocketRecordTemplate: async () => '<div></div>',
-        };
-      },
-      getUniqueId: () => 'a7d90c05-f6cd-442c-a168-202db587f16f',
-      getUseCaseHelpers: () => ({
-        sendServedPartiesEmails: sendServedPartiesEmailsStub,
-      }),
-      getUseCases: () => ({
-        generatePdfFromHtmlInteractor: () => fakeFile,
-      }),
-      getUtilities: () => ({
-        formatDateString: () => '11/11/2011',
-        getDocumentTypeForAddressChange: () => ({
-          eventCode: 'NCA',
-          title: 'Notice of Change of Address',
-        }),
-      }),
-      logger: {
-        error: e => console.log(e),
-        time: () => null,
-        timeEnd: () => null,
-      },
-    };
+    applicationContext.environment.stage = 'local';
+    applicationContext.getChromiumBrowser.mockReturnValue(mockChromiumBrowser);
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByUser.mockImplementation(async () => mockCase);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(async () => user);
+    applicationContext
+      .getPersistenceGateway()
+      .updateCase.mockImplementation(v => v.caseToUpdate);
+    applicationContext.getUniqueId.mockReturnValue(
+      'a7d90c05-f6cd-442c-a168-202db587f16f',
+    );
+    applicationContext
+      .getUseCases()
+      .generatePdfFromHtmlInteractor.mockReturnValue(fakeFile);
+    applicationContext
+      .getUtilities()
+      .getDocumentTypeForAddressChange.mockReturnValue({
+        eventCode: 'NCA',
+        title: 'Notice of Change of Address',
+      });
   });
 
   it("should throw an error when the user's contact information has not changed", async () => {
-    getCasesByUserStub = jest.fn().mockResolvedValue([
+    mockCase = [
       {
         ...MOCK_CASE,
-        respondents: [
+        irsPractitioners: [
           {
             contact: {},
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
           },
         ],
       },
-    ]);
+    ];
 
     await expect(
       updateUserContactInformationInteractor({
@@ -115,32 +95,46 @@ describe('updateUserContactInformationInteractor', () => {
     ).rejects.toThrow('there were no changes found needing to be updated');
   });
 
-  it('updates the user and respondents in the case', async () => {
-    getCasesByUserStub = jest.fn().mockResolvedValue([
+  it('updates the user and irsPractitioners in the case', async () => {
+    mockCase = [
       {
         ...MOCK_CASE,
-        respondents: [
+        irsPractitioners: [
           {
             contact: {},
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
           },
         ],
       },
-    ]);
+    ];
+
     await updateUserContactInformationInteractor({
       applicationContext,
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
-    expect(sendServedPartiesEmailsStub).toHaveBeenCalled();
-    expect(updateUserSpy).toHaveBeenCalled();
 
-    expect(updateUserSpy.mock.calls[0][0].user).toMatchObject({
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateUser,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
+        .user,
+    ).toMatchObject({
       contact: contactInfo,
     });
-    expect(updateCaseSpy).toHaveBeenCalled();
-    expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
-      respondents: [
+    expect(
+      applicationContext.getPersistenceGateway().updateUser,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({
+      irsPractitioners: [
         {
           contact: contactInfo,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -149,7 +143,7 @@ describe('updateUserContactInformationInteractor', () => {
     });
   });
 
-  it('updates the user and practitioners in the case but does not update cases that have been closed for more than 6 months', async () => {
+  it('updates the user and privatePractitioners in the case but does not update cases that have been closed for more than 6 months', async () => {
     const lastYear = calculateISODate({
       dateString: createISODateString(),
       howMuch: -1,
@@ -160,10 +154,10 @@ describe('updateUserContactInformationInteractor', () => {
       howMuch: -1,
       units: 'days',
     });
-    getCasesByUserStub = jest.fn().mockResolvedValue([
+    mockCase = [
       {
         ...MOCK_CASE,
-        practitioners: [
+        privatePractitioners: [
           {
             contact: {},
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -173,7 +167,7 @@ describe('updateUserContactInformationInteractor', () => {
       {
         ...MOCK_CASE,
         closedDate: lastYear,
-        practitioners: [
+        privatePractitioners: [
           {
             contact: {},
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -184,7 +178,7 @@ describe('updateUserContactInformationInteractor', () => {
       {
         ...MOCK_CASE,
         closedDate: yesterday,
-        practitioners: [
+        privatePractitioners: [
           {
             contact: {},
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -192,30 +186,46 @@ describe('updateUserContactInformationInteractor', () => {
         ],
         status: Case.STATUS_TYPES.closed,
       },
-    ]);
+    ];
 
     await updateUserContactInformationInteractor({
       applicationContext,
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
-    expect(updateUserSpy).toHaveBeenCalled();
 
-    expect(updateUserSpy.mock.calls[0][0].user).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().updateUser,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
+        .user,
+    ).toMatchObject({
       contact: contactInfo,
     });
-    expect(updateCaseSpy).toHaveBeenCalled();
-    expect(updateCaseSpy.mock.calls.length).toEqual(2);
-    expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
-      practitioners: [
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
+    ).toEqual(2);
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({
+      privatePractitioners: [
         {
           contact: contactInfo,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
         },
       ],
     });
-    expect(updateCaseSpy.mock.calls[1][0].caseToUpdate).toMatchObject({
-      practitioners: [
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[1][0]
+        .caseToUpdate,
+    ).toMatchObject({
+      privatePractitioners: [
         {
           contact: contactInfo,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -225,10 +235,10 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   it('returns unauthorized error when user not authorized', async () => {
-    applicationContext.getCurrentUser = () => ({
+    user = {
       role: User.ROLES.petitionsClerk,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    });
+    };
 
     await expect(
       updateUserContactInformationInteractor({
@@ -252,34 +262,36 @@ describe('updateUserContactInformationInteractor', () => {
   it('includes the practitioner name in the change of address document when the practitioner changes their address', async () => {
     user = MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f'];
 
-    getCasesByUserStub = jest.fn().mockResolvedValue([
+    mockCase = [
       {
         ...MOCK_CASE,
       },
-    ]);
+    ];
 
     await updateUserContactInformationInteractor({
       applicationContext,
       contactInfo,
-      userId: '330d4b65-620a-489d-8414-6623653ebc4f',
+      userId: user.userId,
     });
 
-    const updatedCase = updateCaseSpy.mock.calls[0][0].caseToUpdate;
+    const updatedCase = applicationContext.getPersistenceGateway().updateCase
+      .mock.calls[0][0].caseToUpdate;
+
     expect(
       updatedCase.documents[updatedCase.documents.length - 1],
     ).toMatchObject({
-      additionalInfo: 'for Practitioner',
+      additionalInfo: 'for Private Practitioner',
       documentTitle: 'Notice of Change of Address',
-      filedBy: 'Counsel Practitioner',
+      filedBy: 'Counsel Private Practitioner',
     });
   });
 
-  it('includes the respondent in the change of address document when the respondent changes their address', async () => {
-    getCasesByUserStub = jest.fn().mockResolvedValue([
+  it('includes the irsPractitioner in the change of address document when the irsPractitioner changes their address', async () => {
+    mockCase = [
       {
         ...MOCK_CASE,
       },
-    ]);
+    ];
 
     await updateUserContactInformationInteractor({
       applicationContext,
@@ -287,11 +299,12 @@ describe('updateUserContactInformationInteractor', () => {
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
 
-    const updatedCase = updateCaseSpy.mock.calls[0][0].caseToUpdate;
+    const updatedCase = applicationContext.getPersistenceGateway().updateCase
+      .mock.calls[0][0].caseToUpdate;
     expect(
       updatedCase.documents[updatedCase.documents.length - 1],
     ).toMatchObject({
-      additionalInfo: 'for Respondent',
+      additionalInfo: 'for IRS Practitioner',
       documentTitle: 'Notice of Change of Address',
       filedBy: 'Resp.',
     });

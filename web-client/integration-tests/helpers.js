@@ -1,12 +1,16 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
-import { Document } from '../../shared/src/business/entities/Document';
-import { Order } from '../../shared/src/business/entities/orders/Order';
-import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
-import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
-import { User } from '../../shared/src/business/entities/User';
+import { JSDOM } from 'jsdom';
 import { applicationContext } from '../src/applicationContext';
+import {
+  back,
+  createObjectURL,
+  externalRoute,
+  openInNewTab,
+  revokeObjectURL,
+  router,
+} from '../src/router';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
+import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import {
   image1,
   image2,
@@ -35,6 +39,7 @@ export const fakeFile = (() => {
     type: 'application/pdf',
   });
   myFile.name = 'fakeFile.pdf';
+  myFile.size = myFile.length;
   return myFile;
 })();
 
@@ -264,10 +269,10 @@ export const uploadProposedStipulatedDecision = async test => {
     eventCode: 'PSDE',
     hasSecondarySupportingDocuments: false,
     hasSupportingDocuments: false,
-    partyRespondent: true,
-    practitioner: [],
+    partyIrsPractitioner: true,
     primaryDocumentFile: fakeFile,
     primaryDocumentFileSize: 115022,
+    privatePractitioners: [],
     scenario: 'Standard',
     searchError: false,
     secondaryDocument: { certificateOfServiceDate: null },
@@ -343,7 +348,10 @@ export const loginAs = (test, user) => {
       key: 'name',
       value: user,
     });
-    await test.runSequence('submitLoginSequence');
+
+    await test.runSequence('submitLoginSequence', {
+      path: '/',
+    });
   });
 };
 
@@ -355,86 +363,15 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return fakeFile;
   };
   global.WebSocket = require('websocket').w3cwebsocket;
-  presenter.providers.applicationContext = applicationContext;
-  const { initialize: initializeSocketProvider, start, stop } = socketProvider({
-    socketRouter,
-  });
-  presenter.providers.socket = { start, stop };
-
-  const originalUseCases = applicationContext.getUseCases();
-  presenter.providers.applicationContext.getUseCases = () => {
-    return {
-      ...originalUseCases,
-      ...useCases,
-    };
-  };
-
-  presenter.providers.router = {
-    createObjectURL: () => {
-      return 'fakeUrl';
+  const dom = new JSDOM(
+    `<!DOCTYPE html>
+<body>
+  <input type="file" />
+</body>`,
+    {
+      url: 'http://localhost',
     },
-    externalRoute: () => {},
-    revokeObjectURL: () => {},
-    route: async url => {
-      test.currentRouteUrl = url;
-      switch (url) {
-        case '/document-qc/section/inbox':
-          await test.runSequence('gotoMessagesSequence', {
-            box: 'inbox',
-            queue: 'section',
-            workQueueIsInternal: false,
-          });
-          break;
-        case '/document-qc':
-          await test.runSequence('gotoMessagesSequence', {
-            box: 'inbox',
-            queue: 'my',
-            workQueueIsInternal: false,
-          });
-          break;
-        case '/document-qc/my/inbox':
-          await test.runSequence('gotoMessagesSequence', {
-            box: 'inbox',
-            queue: 'my',
-            workQueueIsInternal: false,
-          });
-          break;
-        case '/messages/my/inbox':
-          await test.runSequence('gotoMessagesSequence', {
-            box: 'inbox',
-            queue: 'my',
-            workQueueIsInternal: true,
-          });
-          break;
-        case `/case-detail/${test.docketNumber}`:
-          await test.runSequence('gotoCaseDetailSequence', {
-            docketNumber: test.docketNumber,
-          });
-          break;
-        case '/search/no-matches':
-          await test.runSequence('gotoCaseSearchNoMatchesSequence');
-          break;
-        case `/print-preview/${test.caseId}`:
-          await test.runSequence('gotoPrintPreviewSequence', {
-            docketNumber: test.caseId,
-          });
-          break;
-        case `/case-detail/${test.docketNumber}/case-information`:
-          await test.runSequence('gotoCaseDetailSequence', {
-            docketNumber: test.docketNumber,
-          });
-          break;
-        case '/pdf-preview':
-          await test.runSequence('gotoPdfPreviewSequence');
-          break;
-        case '/':
-          await test.runSequence('gotoDashboardSequence');
-          break;
-        default:
-          break;
-      }
-    },
-  };
+  );
 
   presenter.state = mapValues(presenter.state, value => {
     if (isFunction(value)) {
@@ -443,14 +380,19 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
+  presenter.providers.applicationContext = Object.assign(applicationContext, {
+    getScanner: getScannerInterface,
+  });
+
   test = CerebralTest(presenter);
-  test.getSequence = name => obj => test.runSequence(name, obj);
+  test.getSequence = name => async obj => await test.runSequence(name, obj);
   test.closeSocket = stop;
   test.applicationContext = applicationContext;
 
-  initializeSocketProvider(test);
+  const { window } = dom;
 
   global.window = {
+    ...window,
     DOMParser: () => {
       return {
         parseFromString: () => {
@@ -473,27 +415,92 @@ export const setupTest = ({ useCases = {} } = {}) => {
     },
     document: {},
     localStorage: {
+      getItem: () => null,
       removeItem: () => null,
       setItem: () => null,
     },
+    location: {},
   };
 
-  test.setState('constants', {
-    CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-    CATEGORIES: Document.CATEGORIES,
-    CATEGORY_MAP: Document.CATEGORY_MAP,
-    COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-    COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
-    INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
-    ORDER_TYPES_MAP: Order.ORDER_TYPES,
-    PARTY_TYPES: ContactFactory.PARTY_TYPES,
-    STATUS_TYPES: Case.STATUS_TYPES,
-    TRIAL_CITIES: TrialSession.TRIAL_CITIES,
-    TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-    USER_ROLES: User.ROLES,
+  presenter.providers.applicationContext = applicationContext;
+  const { initialize: initializeSocketProvider, start, stop } = socketProvider({
+    socketRouter,
+  });
+  presenter.providers.socket = { start, stop };
+
+  const originalUseCases = applicationContext.getUseCases();
+  presenter.providers.applicationContext.getUseCases = () => {
+    return {
+      ...originalUseCases,
+      ...useCases,
+    };
+  };
+
+  const constantsOverrides = {
+    CASE_SEARCH_PAGE_SIZE: 1,
+  };
+  const originalConstants = applicationContext.getConstants();
+  presenter.providers.applicationContext.getConstants = () => {
+    return {
+      ...originalConstants,
+      ...constantsOverrides,
+    };
+  };
+
+  presenter.state = mapValues(presenter.state, value => {
+    if (isFunction(value)) {
+      return withAppContextDecorator(value, applicationContext);
+    }
+    return value;
   });
 
+  const routes = [];
+
+  presenter.providers.router = {
+    back,
+    createObjectURL,
+    externalRoute,
+    openInNewTab,
+    revokeObjectURL,
+    route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
+  };
+
+  test = CerebralTest(presenter);
+  test.getSequence = name => async obj => {
+    const result = await test.runSequence(name, obj);
+    return result;
+  };
+  test.closeSocket = stop;
+
+  test.setState('constants', applicationContext.getConstants());
+
+  router.initialize(test, (route, cb) => {
+    routes.push({
+      cb,
+      route,
+    });
+  });
+  initializeSocketProvider(test);
+
   return test;
+};
+
+export const gotoRoute = (routes, routeToGoTo) => {
+  for (let route of routes) {
+    const regex = new RegExp(
+      route.route.replace(/\*/g, '([a-z\\-A-Z0-9]+)').replace(/\.\./g, '(.*)') +
+        '$',
+    );
+    if (routeToGoTo.match(regex)) {
+      let match = regex.exec(routeToGoTo);
+      while (match != null) {
+        const args = match.splice(1);
+        return route.cb.call(this, ...args);
+      }
+      return null;
+    }
+  }
+  throw new Error(`route ${routeToGoTo} not found`);
 };
 
 export const viewCaseDetail = async ({ docketNumber, test }) => {
@@ -539,14 +546,30 @@ export const base64ToUInt8Array = b64 => {
 };
 
 export const setBatchPages = ({ test }) => {
-  const selectedDocumentType = test.getState('documentSelectedForScan');
-  let batches = test.getState(`batches.${selectedDocumentType}`);
+  const selectedDocumentType = test.getState(
+    'currentViewMetadata.documentSelectedForScan',
+  );
+  let batches = test.getState(`scanner.batches.${selectedDocumentType}`);
 
   test.setState(
-    `batches.${selectedDocumentType}`,
+    `scanner.batches.${selectedDocumentType}`,
     batches.map(batch => ({
       ...batch,
       pages: [base64ToUInt8Array(image1), base64ToUInt8Array(image2)],
     })),
   );
+};
+
+export const getPetitionDocumentForCase = caseDetail => {
+  // In our tests, we had numerous instances of `case.documents[0]`, which would
+  // return the petition document most of the time, but occasionally fail,
+  // producing unintended results.
+  return caseDetail.documents.find(
+    document => document.documentType === 'Petition',
+  );
+};
+
+export const getPetitionWorkItemForCase = caseDetail => {
+  const petitionDocument = getPetitionDocumentForCase(caseDetail);
+  return petitionDocument.workItems[0];
 };

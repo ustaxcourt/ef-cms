@@ -1,9 +1,8 @@
 import { navigateToTrialSessionsAction } from './navigateToTrialSessionsAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
-const routeStub = sinon.stub();
+const routeStub = jest.fn();
 
 presenter.providers.router = {
   route: routeStub,
@@ -16,6 +15,6 @@ describe('navigateToTrialSessionAction', () => {
         presenter,
       },
     });
-    expect(routeStub.calledOnce).toEqual(true);
+    expect(routeStub.mock.calls.length).toEqual(1);
   });
 });

@@ -1,23 +1,18 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setTrialSessionCalendarAction } from './setTrialSessionCalendarAction';
-import sinon from 'sinon';
-
-let setTrialSessionCalendarStub;
 
 describe('setTrialSessionCalendarAction', () => {
-  beforeEach(() => {
-    setTrialSessionCalendarStub = sinon.stub().resolves([
-      {
-        trialSessionId: '345',
-      },
-    ]);
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        setTrialSessionCalendarInteractor: setTrialSessionCalendarStub,
-      }),
-    };
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+    applicationContext
+      .getUseCases()
+      .setTrialSessionCalendarInteractor.mockResolvedValue([
+        {
+          trialSessionId: '345',
+        },
+      ]);
   });
 
   it('call the use case to get the eligible cases', async () => {
@@ -30,6 +25,10 @@ describe('setTrialSessionCalendarAction', () => {
       },
       state: {},
     });
-    expect(setTrialSessionCalendarStub.calledOnce).toEqual(true);
+
+    expect(
+      applicationContext.getUseCases().setTrialSessionCalendarInteractor.mock
+        .calls.length,
+    ).toEqual(1);
   });
 });

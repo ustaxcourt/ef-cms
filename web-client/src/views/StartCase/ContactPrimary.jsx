@@ -19,7 +19,7 @@ export const ContactPrimary = connect(
     parentView: props.parentView,
     validationErrors: state.validationErrors,
   },
-  ({
+  function ContactPrimary({
     bind,
     constants,
     contactsHelper,
@@ -31,7 +31,7 @@ export const ContactPrimary = connect(
     parentView,
     validationErrors,
     wrapperClassName,
-  }) => {
+  }) {
     return (
       <>
         {parentView === 'StartCase' ? (
@@ -186,7 +186,7 @@ export const ContactPrimary = connect(
               bind={bind}
               type="contactPrimary"
               onBlur={onBlur}
-              onChange={onChange}
+              onChange="updateFormValueAndSecondaryContactInfoSequence"
             />
           )}
           {data.contactPrimary.countryType ===

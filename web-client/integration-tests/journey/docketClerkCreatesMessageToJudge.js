@@ -1,9 +1,17 @@
-export const docketClerkCreatesMessageToJudge = (test, message) => {
+import { getPetitionDocumentForCase } from '../helpers';
+
+export const docketClerkCreatesMessageToJudge = (
+  test,
+  message,
+  createdCases,
+) => {
   return it('Docket clerk sends message to judgeArmen', async () => {
-    const workItem = test.petitionerNewCases[0].documents[3].workItems[0];
+    const petitionDocument = getPetitionDocumentForCase(createdCases[0]);
+    const workItem = petitionDocument.workItems[0];
+
     await test.runSequence('gotoDocumentDetailSequence', {
-      docketNumber: test.petitionerNewCases[0].docketNumber,
-      documentId: test.petitionerNewCases[0].documents[3].documentId,
+      docketNumber: petitionDocument.docketNumber,
+      documentId: petitionDocument.documentId,
     });
 
     // judgeArmen

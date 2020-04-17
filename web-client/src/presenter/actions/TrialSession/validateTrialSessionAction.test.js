@@ -1,13 +1,7 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateTrialSessionAction } from './validateTrialSessionAction';
-import sinon from 'sinon';
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    validateTrialSessionInteractor: () => 'hello from validate trial session',
-  }),
-};
 
 const MOCK_TRIAL = {
   maxCases: 100,
@@ -18,29 +12,30 @@ const MOCK_TRIAL = {
 };
 
 describe('validateTrialSessionAction', () => {
-  let validateTrialSessionStub;
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
-    validateTrialSessionStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+  beforeAll(() => {
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateTrialSessionInteractor: validateTrialSessionStub,
-      }),
-    };
-
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
     };
+
+    applicationContext
+      .getUseCases()
+      .validateTrialSessionInteractor.mockReturnValue(
+        'hello from validate trial session',
+      );
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateTrialSessionStub.returns(null);
+    applicationContext
+      .getUseCases()
+      .validateTrialSessionInteractor.mockReturnValue(null);
     await runAction(validateTrialSessionAction, {
       modules: {
         presenter,
@@ -50,11 +45,13 @@ describe('validateTrialSessionAction', () => {
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateTrialSessionStub.returns({ some: 'error' });
+    applicationContext
+      .getUseCases()
+      .validateTrialSessionInteractor.mockReturnValue({ some: 'error' });
     await runAction(validateTrialSessionAction, {
       modules: {
         presenter,
@@ -64,11 +61,13 @@ describe('validateTrialSessionAction', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when term is summer', async () => {
-    validateTrialSessionStub.returns({ term: 'error' });
+    applicationContext
+      .getUseCases()
+      .validateTrialSessionInteractor.mockReturnValue({ term: 'error' });
     await runAction(validateTrialSessionAction, {
       modules: {
         presenter,
@@ -78,6 +77,6 @@ describe('validateTrialSessionAction', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

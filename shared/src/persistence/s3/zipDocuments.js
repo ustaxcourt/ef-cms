@@ -41,7 +41,7 @@ exports.zipDocuments = ({
         Bucket: destinationBucket,
         Key: zipName,
       };
-      s3Client.upload(params, function() {
+      s3Client.upload(params, function () {
         resolve();
       });
 

@@ -1,20 +1,22 @@
 const client = require('../../dynamodbClientService');
 
-exports.getRecordsViaMapping = async ({ applicationContext, key, type }) => {
+exports.getRecordsViaMapping = async ({ applicationContext, pk, prefix }) => {
   const mappings = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
+      '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `${key}|${type}`,
+      ':pk': pk,
+      ':prefix': prefix,
     },
-    KeyConditionExpression: '#pk = :pk',
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
   });
 
   const ids = mappings.map(metadata => metadata.sk);
 
-  const results = await client.batchGet({
+  const batchGetResults = await client.batchGet({
     applicationContext,
     keys: ids.map(id => ({
       pk: id,
@@ -22,10 +24,18 @@ exports.getRecordsViaMapping = async ({ applicationContext, key, type }) => {
     })),
   });
 
-  const afterMapping = mappings.map(m => ({
-    ...m,
-    ...results.find(r => m.sk === r.pk),
-  }));
+  const results = [];
+  mappings.forEach(mapping => {
+    const entry = batchGetResults.find(
+      batchGetEntry => mapping.sk === batchGetEntry.pk,
+    );
+    if (entry) {
+      results.push({
+        ...mapping,
+        ...entry,
+      });
+    }
+  });
 
-  return afterMapping;
+  return results;
 };

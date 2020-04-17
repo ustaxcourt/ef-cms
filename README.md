@@ -1,24 +1,14 @@
 # Electronic Filing / Case Management System
 
-An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS, which began in October 2018. It is not yet in production use. For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
+The [U.S. Tax Court](https://ustaxcourt.gov/) currently uses a non-web-based legacy case management system operated through several, disparate desktop applications installed on individual workstations. Flexion was awarded a competitive bid in October 2018 to develop and deploy a new web-based electronic filing and case management system that would provide a single integrated point to handle all communication, documentation, and task workflows associated with moving a case through the Court from inception to completion. The new system would allow the public to file new cases, track them, and submit additional information about their cases through a secure online portal, instead of the current mail-based, paper petitioning process. It also provides the Court with the means to transfer most of their paper-based processes and workflows into easier, more efficient online ones.
 
 ### Build Status
 
 #### develop
 
-[![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop)
-
-#### master
-
-[![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/master.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/master)
-
-#### staging
-
-[![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging)
-
-#### test
-
-[![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test)
+| develop | master | staging | test |
+| ------- | ------ | ------- | ---- |
+| [![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/master.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/master) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test) |
 
 API | Front-End | Shared Code
 --- | --------- | -----------
@@ -26,11 +16,21 @@ API | Front-End | Shared Code
 
 [![Known Vulnerabilities](https://snyk.io//test/github/flexion/ef-cms/badge.svg?targetFile=package.json)](https://snyk.io//test/github/flexion/ef-cms?targetFile=package.json)
 
-<a href="docs/images/screenshot-petitioner.png"><img src="docs/images/screenshot-petitioner.png" width="47%" style="float: left; margin: 0 4px;" /></a>
-<a href="docs/images/screenshot-case.png"><img src="docs/images/screenshot-case.png" width="47%" style="float: left; margin: 0 4px;" /></a>
+## Screenshots of new system
 
-<a href="docs/images/screenshot-judge.png"><img src="docs/images/screenshot-judge.png" width="47%" style="float: left; margin: 4px 4px 0 0;" /></a>
-<a href="docs/images/screenshot-sessions.png"><img src="docs/images/screenshot-sessions.png" width="47%" style="float: left; margin: 4px 0 0 4px;" /></a>
+### Case detail page / Docket record
+<a href="docs/images/screenshot_docket.png"><img src="docs/images/screenshot_docket.png" width="80%" style="float: left; margin: 0 4px;" /></a>
+
+### Quality control for documents
+<a href="docs/images/screenshot_qc.png"><img src="docs/images/screenshot_qc.png" width="80%" style="float: left; margin: 0 4px;" /></a>
+
+### Validating a Petition
+
+<a href="docs/images/screenshot_petition.png"><img src="docs/images/screenshot_petition.png" width="80%" style="float: left; margin: 4px 4px 0 0;" /></a>
+
+### Trial session details
+
+<a href="docs/images/screenshot_trialsession.png"><img src="docs/images/screenshot_trialsession.png" width="80%" style="float: left; margin: 4px 0 0 4px;" /></a>
 
 <br clear="both">
 
@@ -138,6 +138,7 @@ privatePractitioner
 privatePractitioner1 - privatePractitioner4
 irsPractitioner
 irsPractitioner1 - irsPractitioner4
+irsSuperuser
 ```
 
 #### Internal Users
@@ -173,6 +174,7 @@ To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm
 petitioner1@example.com – petitioner5@example.com
 privatePractitioner1@example.com – privatePractitioner10@example.com
 irsPractitioner1@example.com – irsPractitioner10@example.com
+service.agent.test@irs.gov (IRS Superuser)
 ```
 
 #### Internal Users

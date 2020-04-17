@@ -1,12 +1,26 @@
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { DocketRecord } = require('./DocketRecord');
-const { MOCK_USERS } = require('../../test/mockUsers');
-
-const applicationContext = {
-  getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-  getUniqueId: () => 'unique-id-1',
-};
 
 describe('DocketRecord', () => {
+  it('fails if applicationContext is not passed into the entity', () => {
+    let error;
+    let docketRecord;
+
+    try {
+      docketRecord = new DocketRecord({
+        description: 'Test Docket Record',
+        eventCode: 'O',
+        filingDate: new Date('9000-01-01').toISOString(),
+        index: 0,
+      });
+    } catch (e) {
+      error = e;
+    }
+
+    expect(error).toBeDefined();
+    expect(docketRecord).toBeUndefined();
+  });
+
   describe('validation', () => {
     it('fails validation if a filingDate is in the future.', () => {
       expect(

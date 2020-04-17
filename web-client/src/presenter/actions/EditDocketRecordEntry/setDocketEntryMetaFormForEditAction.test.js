@@ -1,20 +1,14 @@
-const {
-  deconstructDate,
-} = require('../../../../../shared/src/business/utilities/DateHandler');
-import { presenter } from '../../presenter';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDocketEntryMetaFormForEditAction } from './setDocketEntryMetaFormForEditAction';
+
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('setDocketEntryMetaFormForEditAction', () => {
   let caseDetail;
 
-  beforeEach(() => {
-    presenter.providers.applicationContext = {
-      getUtilities: () => ({
-        deconstructDate,
-      }),
-    };
-
+  beforeAll(() => {
     caseDetail = {
       docketNumber: '123-45',
       docketRecord: [

@@ -1,15 +1,14 @@
 import { isRespondentInCaseAction } from './isRespondentInCaseAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 let yesStub;
 let noStub;
 
 describe('isRespondentInCaseAction', () => {
-  beforeEach(() => {
-    yesStub = sinon.stub();
-    noStub = sinon.stub();
+  beforeAll(() => {
+    yesStub = jest.fn();
+    noStub = jest.fn();
 
     presenter.providers.path = { no: noStub, yes: yesStub };
   });
@@ -21,7 +20,7 @@ describe('isRespondentInCaseAction', () => {
       },
       state: {
         caseDetail: {
-          respondents: [{ userId: 'abc' }],
+          irsPractitioners: [{ userId: 'abc' }],
         },
         modal: {
           respondentMatches: [{ userId: 'abc' }],
@@ -29,7 +28,7 @@ describe('isRespondentInCaseAction', () => {
       },
     });
 
-    expect(yesStub.calledOnce).toEqual(true);
+    expect(yesStub.mock.calls.length).toEqual(1);
   });
 
   it('takes no path when respondent is not already in case', async () => {
@@ -39,7 +38,7 @@ describe('isRespondentInCaseAction', () => {
       },
       state: {
         caseDetail: {
-          respondents: [{ userId: 'abc' }],
+          irsPractitioners: [{ userId: 'abc' }],
         },
         modal: {
           respondentMatches: [{ userId: '123' }],
@@ -47,6 +46,6 @@ describe('isRespondentInCaseAction', () => {
       },
     });
 
-    expect(noStub.calledOnce).toEqual(true);
+    expect(noStub.mock.calls.length).toEqual(1);
   });
 });

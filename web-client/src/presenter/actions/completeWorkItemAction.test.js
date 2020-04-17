@@ -1,22 +1,16 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { completeWorkItemAction } from './completeWorkItemAction';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-import { presenter } from '../presenter';
+presenter.providers.applicationContext = applicationContext;
 
-import { completeWorkItemAction } from './completeWorkItemAction';
+const { completeWorkItemInteractor } = applicationContext.getUseCases();
 
-import sinon from 'sinon';
-
-const completeWorkItemInteractorStub = sinon.stub().returns(null);
-
-presenter.providers.applicationContext = {
-  getCurrentUser: () => ({
-    name: 'Docket Clerk',
-    userId: 'docketclerk',
-  }),
-  getUseCases: () => ({
-    completeWorkItemInteractor: completeWorkItemInteractorStub,
-  }),
-};
+applicationContext.getCurrentUser.mockReturnValue({
+  name: 'Docket Clerk',
+  userId: 'docketclerk',
+});
 
 presenter.providers.path = {
   error() {},
@@ -54,7 +48,7 @@ describe('completeWorkItemInteractor', () => {
       },
     });
     expect(
-      completeWorkItemInteractorStub.getCall(0).args[0].completedMessage,
+      completeWorkItemInteractor.mock.calls[0][0].completedMessage,
     ).toBeUndefined();
   });
 
@@ -88,7 +82,7 @@ describe('completeWorkItemInteractor', () => {
       },
     });
     expect(
-      completeWorkItemInteractorStub.getCall(1).args[0].completedMessage,
+      completeWorkItemInteractor.mock.calls[0][0].completedMessage,
     ).toEqual('Completed');
   });
 });

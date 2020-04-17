@@ -16,12 +16,12 @@ export const StartCaseStep5 = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     user: state.user,
   },
-  ({
+  function StartCaseStep5({
     constants,
     form,
     formCancelToggleCancelSequence,
@@ -30,7 +30,7 @@ export const StartCaseStep5 = connect(
     startCaseHelper,
     submitFilePetitionSequence,
     user,
-  }) => {
+  }) {
     return (
       <>
         <Focus>
@@ -60,21 +60,21 @@ export const StartCaseStep5 = connect(
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-6 margin-bottom-05">
                       <div className="margin-bottom-2">
-                        <label
+                        <span
                           className="usa-label usa-label-display"
                           htmlFor="filing-type"
                         >
                           Type of notice/case
-                        </label>
+                        </span>
                         {form.caseType}
                         <div className="grid-row margin-top-3">
                           <div className="grid-col">
-                            <label
+                            <span
                               className="usa-label usa-label-display"
                               htmlFor="filing-petition"
                             >
                               Petition
-                            </label>
+                            </span>
                             <div>
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
@@ -90,21 +90,21 @@ export const StartCaseStep5 = connect(
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
-                      <label
+                      <span
                         className="usa-label usa-label-display"
                         htmlFor="filing-procedure"
                       >
                         Case procedure
-                      </label>
+                      </span>
                       {form.procedureType}
 
                       <div className="margin-top-3">
-                        <label
+                        <span
                           className="usa-label usa-label-display"
                           htmlFor="filing-location"
                         >
                           Requested trial location
-                        </label>
+                        </span>
                         {form.preferredTrialCity}
                       </div>
                     </div>
@@ -120,21 +120,21 @@ export const StartCaseStep5 = connect(
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-4 margin-bottom-1">
                       <>
-                        <label
+                        <span
                           className="usa-label usa-label-display"
                           htmlFor="filing-parties"
                         >
                           Party type
-                        </label>
+                        </span>
                         {form.partyType}
 
                         <div className="margin-top-3 margin-bottom-2">
-                          <label
+                          <span
                             className="usa-label usa-label-display"
                             htmlFor="filing-parties"
                           >
                             Statement of Taxpayer Identification
-                          </label>
+                          </span>
                           <div>
                             <div className="grid-row">
                               <div className="grid-col flex-auto">
@@ -149,12 +149,12 @@ export const StartCaseStep5 = connect(
 
                         {form.ownershipDisclosureFile && (
                           <div className="margin-top-3 margin-bottom-3">
-                            <label
+                            <span
                               className="usa-label usa-label-display margin-top-3"
                               htmlFor="filing-parties"
                             >
                               Ownership Disclosure Statement
-                            </label>
+                            </span>
                             <div>
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
@@ -170,12 +170,12 @@ export const StartCaseStep5 = connect(
                       </>
                     </div>
                     <div className="tablet:grid-col-4 margin-bottom-1">
-                      <label
+                      <span
                         className="usa-label usa-label-display"
                         htmlFor="filing-contact-primary"
                       >
                         {startCaseHelper.contactPrimaryLabel}
-                      </label>
+                      </span>
                       {form.contactPrimary && (
                         <address aria-labelledby="primary-label">
                           {AddressDisplay(form.contactPrimary, constants, {
@@ -189,12 +189,12 @@ export const StartCaseStep5 = connect(
                     <div className="tablet:grid-col-4 margin-bottom-1">
                       {startCaseHelper.hasContactSecondary && (
                         <>
-                          <label
+                          <span
                             className="usa-label usa-label-display"
                             htmlFor="filing-contact-secondary"
                           >
                             {startCaseHelper.contactSecondaryLabel}
-                          </label>
+                          </span>
                           {AddressDisplay(form.contactSecondary, constants)}
                         </>
                       )}
@@ -212,12 +212,12 @@ export const StartCaseStep5 = connect(
               <h3 className="underlined">Service Information</h3>
               <div className="grid-row grid-gap">
                 <div className="tablet:grid-col-12 margin-bottom-1">
-                  <label
+                  <span
                     className="usa-label usa-label-display"
                     htmlFor="filing-service-email"
                   >
                     Service email
-                  </label>
+                  </span>
                   {user.email}
                 </div>
               </div>

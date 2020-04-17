@@ -9,24 +9,25 @@ export const CreateOrderChooseTypeModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.submitCreateOrderModalSequence,
-    form: state.form,
+    modal: state.modal,
     orderTypesHelper: state.orderTypesHelper,
-    updateFormValue: sequences.updateCreateOrderModalFormValueSequence,
+    updateModalValue: sequences.updateCreateOrderModalFormValueSequence,
     validateSequence: sequences.validateOrderWithoutBodySequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function CreateOrderChooseTypeModal({
     cancelSequence,
     confirmSequence,
-    form,
+    modal,
     orderTypesHelper,
-    updateFormValue,
+    updateModalValue,
     validateSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"
+        cancelLink={true}
         cancelSequence={cancelSequence}
         className=""
         confirmLabel="Continue"
@@ -44,7 +45,7 @@ export const CreateOrderChooseTypeModal = connect(
               id="eventCode"
               name="eventCode"
               onChange={e => {
-                updateFormValue({
+                updateModalValue({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -72,9 +73,9 @@ export const CreateOrderChooseTypeModal = connect(
                 id="documentTitle"
                 name="documentTitle"
                 type="text"
-                value={form.documentTitle || ''}
+                value={modal.documentTitle || ''}
                 onChange={e => {
-                  updateFormValue({
+                  updateModalValue({
                     key: e.target.name,
                     value: e.target.value,
                   });

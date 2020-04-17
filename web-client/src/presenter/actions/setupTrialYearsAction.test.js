@@ -1,14 +1,14 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setupTrialYearsAction } from './setupTrialYearsAction';
 
-presenter.providers.applicationContext = {
-  getUtilities: () => ({
-    formatNow: () => '2000',
-  }),
-};
-
 describe('setupTrialYearsAction', () => {
+  beforeAll(() => {
+    applicationContext.getUtilities().formatNow.mockReturnValue('2000');
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('sets the trial years array on state.modal based on the current year', async () => {
     const result = await runAction(setupTrialYearsAction, {
       modules: {

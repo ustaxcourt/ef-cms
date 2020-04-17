@@ -63,14 +63,15 @@ describe('docket clerk edits the petitioner information', () => {
     await test.runSequence('updatePetitionerInformationFormSequence');
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('showModal')).toEqual('PaperServiceConfirmModal');
+    expect(test.getState('modal.showModal')).toEqual('PaperServiceConfirmModal');
 
     expect(test.getState('caseDetail.contactPrimary.address1')).toEqual(
       '123 Some Street',
     );
 
-    const noticeDocument = test.getState('caseDetail.documents.2');
-    expect(noticeDocument.documentType).toEqual('Notice of Change of Address');
+    const noticeDocument = test
+      .getState('caseDetail.documents')
+      .find(d => d.documentTitle === 'Notice of Change of Address');
     expect(noticeDocument.servedAt).toBeDefined();
   });
 });

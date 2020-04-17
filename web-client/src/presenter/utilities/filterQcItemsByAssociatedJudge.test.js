@@ -1,22 +1,22 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { filterQcItemsByAssociatedJudge } from './filterQcItemsByAssociatedJudge';
 
-let applicationContext;
 let currentUser;
 let itemsToFilter;
 let judgeUser;
 
 describe('filterQcItemsByAssociatedJudge', () => {
-  beforeEach(() => {
-    applicationContext = {
-      getConstants: () => ({
-        CHIEF_JUDGE: Case.CHIEF_JUDGE,
-        USER_ROLES: User.ROLES,
-      }),
-      getCurrentUser: () => currentUser,
-    };
+  beforeAll(() => {
+    applicationContext.getCurrentUser.mockImplementation(() => currentUser);
+    applicationContext.getConstants.mockReturnValue({
+      CHIEF_JUDGE: Case.CHIEF_JUDGE,
+      USER_ROLES: User.ROLES,
+    });
+  });
 
+  beforeEach(() => {
     itemsToFilter = [
       {
         id: 1,

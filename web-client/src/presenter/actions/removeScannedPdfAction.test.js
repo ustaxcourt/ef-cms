@@ -6,7 +6,9 @@ describe('removeScannedPdfAction', () => {
     const { state } = await runAction(removeScannedPdfAction, {
       props: {},
       state: {
-        documentSelectedForScan: 'petition',
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         form: {
           petition: 'test_petition.pdf',
           petitionSize: '100',
@@ -21,13 +23,15 @@ describe('removeScannedPdfAction', () => {
     const result = await runAction(removeScannedPdfAction, {
       props: {},
       state: {
-        documentSelectedForScan: 'petition',
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
         form: {
           petition: 'test_petition.pdf',
           petitionSize: '100',
         },
       },
     });
-    expect(result.output).toMatchObject({ documentUploadMode: 'scan' });
+    expect(result.output.documentUploadMode).toEqual('scan');
   });
 });

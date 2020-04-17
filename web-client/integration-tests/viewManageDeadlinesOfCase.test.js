@@ -1,10 +1,9 @@
 import { captureCreatedCase } from './journey/captureCreatedCase';
 import { fakeFile, loginAs, setupTest } from './helpers';
-import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
-import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
-import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
+import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
+import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
+import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
+import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import petitionsClerkCreatesACaseDeadline from './journey/petitionsClerkCreatesACaseDeadline';
 import petitionsClerkDeletesCaseDeadline from './journey/petitionsClerkDeletesCaseDeadline';
 import petitionsClerkEditsCaseDeadline from './journey/petitionsClerkEditsCaseDeadline';
@@ -23,7 +22,6 @@ describe('View and manage the deadlines of a case', () => {
 
   describe('Create a case', () => {
     loginAs(test, 'petitioner');
-    petitionerNavigatesToCreateCase(test);
     petitionerChoosesProcedureType(test);
     petitionerChoosesCaseType(test);
     petitionerCreatesNewCase(test, fakeFile);

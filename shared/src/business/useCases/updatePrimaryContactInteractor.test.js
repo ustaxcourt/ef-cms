@@ -1,11 +1,7 @@
 const {
-  createISODateString,
-  formatDateString,
-} = require('../../../../shared/src/business/utilities/DateHandler');
-const {
   updatePrimaryContactInteractor,
 } = require('./updatePrimaryContactInteractor');
-const { Case } = require('../entities/cases/Case');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
@@ -15,107 +11,44 @@ const fakeData =
 const fakeFile = Buffer.from(fakeData, 'base64');
 fakeFile.name = 'fakeFile.pdf';
 
-let updateCaseStub;
-let generateChangeOfAddressTemplateStub;
-let generatePdfFromHtmlInteractorStub;
-let getAddressPhoneDiffStub;
-let getDocumentTypeForAddressChangeStub;
-let saveDocumentFromLambdaStub;
-let sendServedPartiesEmailsStub;
-
-let persistenceGateway;
-let useCases;
-let applicationContext;
-
 describe('update primary contact on a case', () => {
   beforeEach(() => {
-    updateCaseStub = jest.fn();
-    generateChangeOfAddressTemplateStub = jest.fn();
-    generatePdfFromHtmlInteractorStub = jest.fn();
-    getAddressPhoneDiffStub = jest.fn();
-    getDocumentTypeForAddressChangeStub = jest.fn();
-    saveDocumentFromLambdaStub = jest.fn();
-    sendServedPartiesEmailsStub = jest.fn();
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
 
-    persistenceGateway = {
-      getCaseByCaseId: () => MOCK_CASE,
-      saveDocumentFromLambda: saveDocumentFromLambdaStub,
-      saveWorkItemForNonPaper: () => null,
-      updateCase: updateCaseStub,
-    };
+    applicationContext
+      .getUseCases()
+      .generatePdfFromHtmlInteractor.mockReturnValue(fakeFile);
 
-    useCases = {
-      generatePdfFromHtmlInteractor: () => {
-        generatePdfFromHtmlInteractorStub();
-        return fakeFile;
-      },
-      userIsAssociated: () => true,
-    };
+    applicationContext.getUseCases().userIsAssociated.mockReturnValue(true);
 
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCaseCaptionNames: Case.getCaseCaptionNames,
-      getChromiumBrowser: () => ({
-        close: () => null,
-        newPage: () => ({
-          pdf: () => fakeData,
-          setContent: () => null,
-        }),
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: User.ROLES.petitioner,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
-      getCurrentUser: () => {
-        return new User({
-          name: 'bob',
-          role: User.ROLES.petitioner,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
+    );
+
+    applicationContext
+      .getChromiumBrowser()
+      .newPage()
+      .pdf.mockReturnValue(fakeFile);
+
+    applicationContext.getUtilities().getAddressPhoneDiff.mockReturnValue({
+      address1: {
+        newData: 'new test',
+        oldData: 'test',
       },
-      getDispatchers: () => ({
-        sendBulkTemplatedEmail: () => null,
-      }),
-      getPersistenceGateway: () => {
-        return persistenceGateway;
-      },
-      getTemplateGenerators: () => {
-        return {
-          generateChangeOfAddressTemplate: async () => {
-            generateChangeOfAddressTemplateStub();
-            return '<html></html>';
-          },
-        };
-      },
-      getUniqueId: () => 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      getUseCaseHelpers: () => ({
-        sendServedPartiesEmails: sendServedPartiesEmailsStub,
-      }),
-      getUseCases: () => useCases,
-      getUtilities: () => {
-        return {
-          createISODateString,
-          formatDateString,
-          getAddressPhoneDiff: () => {
-            getAddressPhoneDiffStub();
-            return {
-              address1: {
-                newData: 'new test',
-                oldData: 'test',
-              },
-            };
-          },
-          getDocumentTypeForAddressChange: () => {
-            getDocumentTypeForAddressChangeStub();
-            return {
-              eventCode: 'NCA',
-              title: 'Notice of Change of Address',
-            };
-          },
-        };
-      },
-      logger: {
-        error: e => console.log(e),
-        time: () => null,
-        timeEnd: () => null,
-      },
-    };
+    });
+
+    applicationContext
+      .getUtilities()
+      .getDocumentTypeForAddressChange.mockReturnValue({
+        eventCode: 'NCA',
+        title: 'Notice of Change of Address',
+      });
   });
 
   it('updates contactPrimary', async () => {
@@ -134,10 +67,19 @@ describe('update primary contact on a case', () => {
         state: 'PA',
       },
     });
-    expect(updateCaseStub).toHaveBeenCalled();
-    expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
-    expect(sendServedPartiesEmailsStub).toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getTemplateGenerators()
+        .generateChangeOfAddressTemplate,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+    ).toHaveBeenCalled();
     expect(caseDetail.documents[4].servedAt).toBeDefined();
     expect(caseDetail.documents[4].servedParties).toEqual([
       { email: 'petitioner', name: 'Bill Burr' },
@@ -145,47 +87,45 @@ describe('update primary contact on a case', () => {
   });
 
   it('throws an error if the case was not found', async () => {
-    persistenceGateway.getCaseByCaseId = async () => null;
-    let error = null;
-    try {
-      await updatePrimaryContactInteractor({
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockResolvedValue(null);
+
+    await expect(
+      updatePrimaryContactInteractor({
         applicationContext,
         caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         contactInfo: {},
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toEqual(
+      }),
+    ).rejects.toThrow(
       'Case a805d1ab-18d0-43ec-bafb-654e83405416 was not found.',
     );
   });
 
   it('throws an error if the user making the request is not associated with the case', async () => {
-    persistenceGateway.getCaseByCaseId = async () => ({
-      ...MOCK_CASE,
-      userId: '123',
-    });
-    useCases.userIsAssociated = () => false;
-    let error = null;
-    try {
-      await updatePrimaryContactInteractor({
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockResolvedValue({
+        ...MOCK_CASE,
+        userId: '123',
+      });
+
+    applicationContext.getUseCases().userIsAssociated.mockReturnValue(false);
+
+    await expect(
+      updatePrimaryContactInteractor({
         applicationContext,
         caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         contactInfo: {},
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toEqual('Unauthorized for update case contact');
+      }),
+    ).rejects.toThrow('Unauthorized for update case contact');
   });
 
   it('does not update the case if the contact information does not change', async () => {
-    const getUtilities = applicationContext.getUtilities();
-    applicationContext.getUtilities = () => ({
-      ...getUtilities,
-      getDocumentTypeForAddressChange: () => undefined, // returns undefined when there is no diff
-    });
+    applicationContext
+      .getUtilities()
+      .getDocumentTypeForAddressChange.mockReturnValue(undefined);
+
     await updatePrimaryContactInteractor({
       applicationContext,
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
@@ -203,8 +143,15 @@ describe('update primary contact on a case', () => {
       },
     });
 
-    expect(updateCaseStub).not.toHaveBeenCalled();
-    expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getTemplateGenerators()
+        .generateChangeOfAddressTemplate,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+    ).not.toHaveBeenCalled();
   });
 });

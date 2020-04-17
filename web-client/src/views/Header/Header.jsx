@@ -108,6 +108,20 @@ const NavigationItems = (
           </a>
         </li>
       )}
+      {helper.showSearchNavItem && (
+        <li className={classNames('usa-nav__primary-item')}>
+          <a
+            className={classNames(
+              'usa-nav__link',
+              helper.pageIsDashboard && 'usa-current',
+            )}
+            href="/"
+            onClick={() => toggleMobileMenuSequence()}
+          >
+            Search
+          </a>
+        </li>
+      )}
       {helper.showTrialSessions && (
         <li className={classNames('usa-nav__primary-item')}>
           <a
@@ -138,28 +152,27 @@ const NavigationItems = (
 
 export const Header = connect(
   {
-    betaBar: state.betaBar,
-    helper: state.headerHelper,
+    headerHelper: state.headerHelper,
     isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
     isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
-    isUsersMenuOpen: state.menuHelper.isUsersMenuOpen,
-    mobileMenu: state.mobileMenu,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
+    showBetaBar: state.header.showBetaBar,
+    showMobileMenu: state.header.showMobileMenu,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     user: state.user,
   },
-  ({
-    betaBar,
-    helper,
+  function Header({
+    headerHelper,
     isAccountMenuOpen,
     isReportsMenuOpen,
-    mobileMenu,
     resetHeaderAccordionsSequence,
+    showBetaBar,
+    showMobileMenu,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
     user,
-  }) => {
+  }) {
     const headerRef = useRef(null);
 
     useEffect(() => {
@@ -190,7 +203,7 @@ export const Header = connect(
 
     return (
       <div ref={headerRef}>
-        {betaBar.isVisible && BetaBar(toggleBetaBarSequence)}
+        {showBetaBar && BetaBar(toggleBetaBarSequence)}
         <div className="grid-container no-mobile-padding">
           <header
             className="usa-header usa-header--basic ustc-header"
@@ -213,7 +226,7 @@ export const Header = connect(
               <nav
                 className={classNames(
                   'usa-nav ustc-nav',
-                  mobileMenu.isVisible && 'is-visible',
+                  showMobileMenu && 'is-visible',
                 )}
                 role="navigation"
               >
@@ -228,12 +241,12 @@ export const Header = connect(
                   />
                 </button>
                 {user &&
-                  NavigationItems(helper, {
+                  NavigationItems(headerHelper, {
                     isReportsMenuOpen,
                     toggleMobileMenuSequence,
                   })}
-                {helper.showSearchInHeader && <SearchBox />}
-                {helper.showAccountMenu && (
+                {headerHelper.showSearchInHeader && <SearchBox />}
+                {headerHelper.showAccountMenu && (
                   <AccountMenu isExpanded={isAccountMenuOpen} />
                 )}
               </nav>

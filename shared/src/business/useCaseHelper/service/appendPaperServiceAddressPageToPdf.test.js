@@ -3,8 +3,10 @@ const path = require('path');
 const {
   appendPaperServiceAddressPageToPdf,
 } = require('./appendPaperServiceAddressPageToPdf');
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { PDFDocument } = require('pdf-lib');
-
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 const testPdfDocBytes = () => {
   // sample.pdf is a 1 page document
@@ -13,19 +15,9 @@ const testPdfDocBytes = () => {
 const testPdfDoc = testPdfDocBytes();
 
 describe('appendPaperServiceAddressPageToPdf', () => {
-  const generatePaperServiceAddressPagePdfMock = jest
-    .fn()
-    .mockResolvedValue(testPdfDoc);
-
-  const applicationContext = {
-    getUseCaseHelpers: () => ({
-      generatePaperServiceAddressPagePdf: generatePaperServiceAddressPagePdfMock,
-    }),
-  };
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  applicationContext
+    .getUseCaseHelpers()
+    .generatePaperServiceAddressPagePdf.mockResolvedValue(testPdfDoc);
 
   it('should generate address page for each paper service party and combine into single pdf', async () => {
     const newPdfDoc = await PDFDocument.create();

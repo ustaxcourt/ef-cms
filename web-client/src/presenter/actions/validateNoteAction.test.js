@@ -1,30 +1,23 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateNoteAction } from './validateNoteAction';
-import sinon from 'sinon';
 
 describe('validateNote', () => {
-  let validateNoteStub;
   let successStub;
   let errorStub;
 
   let mockNote;
 
-  beforeEach(() => {
-    validateNoteStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+  beforeAll(() => {
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     mockNote = {
       notes: 'hello notes',
     };
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateNoteInteractor: validateNoteStub,
-      }),
-    };
-
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -32,7 +25,10 @@ describe('validateNote', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateNoteStub.returns(null);
+    applicationContext
+      .getUseCases()
+      .validateNoteInteractor.mockReturnValue(null);
+
     await runAction(validateNoteAction, {
       modules: {
         presenter,
@@ -42,11 +38,13 @@ describe('validateNote', () => {
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateNoteStub.returns('error');
+    applicationContext
+      .getUseCases()
+      .validateNoteInteractor.mockReturnValue('error');
     await runAction(validateNoteAction, {
       modules: {
         presenter,
@@ -56,6 +54,6 @@ describe('validateNote', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

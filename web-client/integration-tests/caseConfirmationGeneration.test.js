@@ -1,8 +1,7 @@
 import { fakeFile, loginAs, setupTest } from './helpers';
-import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
-import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
-import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
+import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
+import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
+import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
 import petitionsClerkGetsMyMessagesInboxCount from './journey/petitionsClerkGetsMyMessagesInboxCount';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
@@ -18,7 +17,6 @@ describe('Case Confirmation', () => {
 
   describe('Petitioner creates a case / Petitionsclerk Sends to Holding Queue / Petitionsclerk then has access to case confirmation', () => {
     loginAs(test, 'petitioner');
-    petitionerNavigatesToCreateCase(test);
     petitionerChoosesProcedureType(test);
     petitionerChoosesCaseType(test);
     petitionerCreatesNewCase(test, fakeFile);
@@ -29,7 +27,6 @@ describe('Case Confirmation', () => {
 
   describe('Petitioner creates a case / Petitionsclerk Sends to Holding Queue / Petitioner then has access to case confirmation', () => {
     loginAs(test, 'petitioner');
-    petitionerNavigatesToCreateCase(test);
     petitionerChoosesProcedureType(test);
     petitionerChoosesCaseType(test);
     petitionerCreatesNewCase(test, fakeFile);

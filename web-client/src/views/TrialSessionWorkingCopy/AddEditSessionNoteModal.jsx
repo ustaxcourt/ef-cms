@@ -11,7 +11,11 @@ export const AddEditSessionNoteModal = connect(
     validateNoteSequence: sequences.validateNoteSequence,
     validationErrors: state.validationErrors,
   },
-  ({ modal, validateNoteSequence, validationErrors }) => {
+  function AddEditSessionNoteModal({
+    modal,
+    validateNoteSequence,
+    validationErrors,
+  }) {
     return (
       <ConfirmModal
         cancelLabel="Cancel"

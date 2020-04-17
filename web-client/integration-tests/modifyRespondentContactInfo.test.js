@@ -1,4 +1,5 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
+import petitionsClerkAddsRespondentsToCase from './journey/petitionsClerkAddsRespondentsToCase';
 import respondentUpdatesAddress from './journey/respondentUpdatesAddress';
 import respondentViewsCaseDetailNoticeOfChangeOfAddress from './journey/respondentViewsCaseDetailNoticeOfChangeOfAddress';
 
@@ -21,19 +22,7 @@ describe('Modify Respondent Contact Information', () => {
     });
 
     loginAs(test, 'petitionsclerk');
-
-    it('associates a respondent', async () => {
-      await test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: test.createdDocketNumbers[i],
-      });
-      await test.runSequence('updateFormValueSequence', {
-        key: 'respondentSearch',
-        value: 'RT6789',
-      });
-      await test.runSequence('openAddRespondentModalSequence');
-      await test.runSequence('associateRespondentWithCaseSequence');
-      expect(test.getState('caseDetail.respondents.length')).toEqual(1);
-    });
+    petitionsClerkAddsRespondentsToCase(test);
   }
 
   loginAs(test, 'irsPractitioner');

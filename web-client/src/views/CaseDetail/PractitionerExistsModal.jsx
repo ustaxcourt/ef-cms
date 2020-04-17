@@ -10,7 +10,11 @@ export const PractitionerExistsModal = connect(
     caseDetailHelper: state.caseDetailHelper,
     confirmSequence: sequences.clearModalSequence,
   },
-  ({ cancelSequence, caseDetailHelper, confirmSequence }) => {
+  function PractitionerExistsModal({
+    cancelSequence,
+    caseDetailHelper,
+    confirmSequence,
+  }) {
     return (
       <ModalDialog
         cancelSequence={cancelSequence}

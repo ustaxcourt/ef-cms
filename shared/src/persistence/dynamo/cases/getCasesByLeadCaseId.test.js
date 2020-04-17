@@ -1,65 +1,73 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { getCasesByLeadCaseId } = require('./getCasesByLeadCaseId');
 
 describe('getCasesByLeadCaseId', () => {
-  let applicationContext;
-  let queryStub;
-
   it('attempts to retrieve the cases by leadCaseId', async () => {
-    queryStub = jest.fn(() => ({
+    applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => ({
         Items: [
           {
-            pk: '123',
-            sk: 'abc',
+            caseId: 'abc',
           },
         ],
       }),
-    }));
+    });
 
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        query: queryStub,
-      }),
-    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockResolvedValue({
+        caseId: '123',
+        docketRecord: [],
+        documents: [],
+        irsPractitioners: [],
+        pk: 'case|123',
+        privatePractitioners: [],
+        sk: 'case|123',
+        status: 'New',
+      });
 
     const result = await getCasesByLeadCaseId({
       applicationContext,
-      leadCaseId: 'abc',
+      leadCaseId: 'case|123',
     });
-    expect(queryStub).toHaveBeenCalled();
+
+    expect(applicationContext.getDocumentClient().query).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toHaveBeenCalled();
     expect(result).toEqual([
       {
-        docketRecord: [{ pk: '123', sk: 'abc' }],
-        pk: '123',
-        sk: 'abc',
+        caseId: '123',
+        docketRecord: [],
+        documents: [],
+        irsPractitioners: [],
+        pk: 'case|123',
+        privatePractitioners: [],
+        sk: 'case|123',
+        status: 'New',
       },
     ]);
   });
 
   it('returns an empty array when no items are returned', async () => {
-    queryStub = jest.fn(() => ({
+    applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => ({
         Items: [],
       }),
-    }));
-
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        query: queryStub,
-      }),
-    };
+    });
 
     const result = await getCasesByLeadCaseId({
       applicationContext,
       leadCaseId: 'abc',
     });
-    expect(queryStub).toHaveBeenCalled();
+
+    expect(applicationContext.getDocumentClient().query).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).not.toHaveBeenCalled();
+    expect(applicationContext.isAuthorizedForWorkItems).not.toHaveBeenCalled();
     expect(result).toEqual([]);
   });
 });

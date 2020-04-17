@@ -1,16 +1,13 @@
 import { User } from '../../../../shared/src/business/entities/User';
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setSectionInboxCountAction } from './setSectionInboxCountAction';
 
 describe('setSectionInboxCountAction', () => {
-  let currentUser;
   let workItems;
-  presenter.providers.applicationContext = applicationContext;
 
-  beforeEach(() => {
-    presenter.providers.applicationContext.getCurrentUser = () => currentUser;
+  beforeAll(() => {
     workItems = [
       {
         associatedJudge: 'Judge Barker',
@@ -48,12 +45,14 @@ describe('setSectionInboxCountAction', () => {
         isQC: false,
       },
     ];
+
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('sets sectionInboxCount for a docketClerk user', async () => {
-    currentUser = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.docketClerk,
-    };
+    });
 
     const result = await runAction(setSectionInboxCountAction, {
       modules: {
@@ -73,10 +72,10 @@ describe('setSectionInboxCountAction', () => {
   });
 
   it('sets sectionInboxCount for a judge user', async () => {
-    currentUser = {
+    applicationContext.getCurrentUser.mockReturnValue({
       name: 'Judge Barker',
       role: User.ROLES.judge,
-    };
+    });
 
     const result = await runAction(setSectionInboxCountAction, {
       modules: {
@@ -98,10 +97,10 @@ describe('setSectionInboxCountAction', () => {
   });
 
   it('sets sectionInboxCount for a chambers user', async () => {
-    currentUser = {
+    applicationContext.getCurrentUser.mockReturnValue({
       name: 'ADC',
       role: User.ROLES.adc,
-    };
+    });
 
     const result = await runAction(setSectionInboxCountAction, {
       modules: {

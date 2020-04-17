@@ -1,14 +1,24 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { getPetitionDocumentForCase } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
 export default test => {
   return it('Petitions clerk updates case detail', async () => {
-    expect(test.getState('caseDetailErrors')).toEqual({});
+    const petitionDocument = getPetitionDocumentForCase(
+      test.getState('caseDetail'),
+    );
+
+    await test.runSequence('gotoDocumentDetailSequence', {
+      docketNumber: test.docketNumber,
+      documentId: petitionDocument.documentId,
+    });
+
+    expect(test.getState('validationErrors')).toEqual({});
 
     // irsNoticeDate - invalid
     await test.runSequence('updateFormValueSequence', {
-      key: 'hasIrsNotice',
+      key: 'hasVerifiedIrsNotice',
       value: true,
     });
     await test.runSequence('updateFormValueSequence', {
@@ -25,13 +35,13 @@ export default test => {
     });
     await test.runSequence('navigateToReviewSavedPetitionSequence');
 
-    expect(test.getState('caseDetailErrors')).toEqual({
+    expect(test.getState('validationErrors')).toEqual({
       irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[1],
     });
 
     // irsNoticeDate - valid
     await test.runSequence('updateFormValueSequence', {
-      key: 'hasIrsNotice',
+      key: 'hasVerifiedIrsNotice',
       value: true,
     });
     await test.runSequence('updateFormValueSequence', {
@@ -47,11 +57,11 @@ export default test => {
       value: '24',
     });
     await test.runSequence('validateCaseDetailSequence');
-    expect(test.getState('caseDetailErrors')).toEqual({});
+    expect(test.getState('validationErrors')).toEqual({});
 
     // irsNoticeDate - valid
     await test.runSequence('updateFormValueSequence', {
-      key: 'hasIrsNotice',
+      key: 'hasVerifiedIrsNotice',
       value: true,
     });
     await test.runSequence('updateFormValueSequence', {
@@ -67,7 +77,7 @@ export default test => {
       value: '24',
     });
     await test.runSequence('validateCaseDetailSequence');
-    expect(test.getState('caseDetailErrors')).toEqual({});
+    expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
@@ -82,9 +92,10 @@ export default test => {
       value: '24',
     });
     await test.runSequence('validateCaseDetailSequence');
-    expect(test.getState('caseDetailErrors')).toEqual({});
+    expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('navigateToReviewSavedPetitionSequence');
+
     await test.runSequence('saveSavedCaseForLaterSequence');
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
@@ -93,9 +104,14 @@ export default test => {
 
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(null);
 
+    await test.runSequence('gotoDocumentDetailSequence', {
+      docketNumber: test.docketNumber,
+      documentId: petitionDocument.documentId,
+    });
+
     // irsNoticeDate - valid
     await test.runSequence('updateFormValueSequence', {
-      key: 'hasIrsNotice',
+      key: 'hasVerifiedIrsNotice',
       value: true,
     });
     await test.runSequence('updateFormValueSequence', {
@@ -111,21 +127,21 @@ export default test => {
       value: '24',
     });
     await test.runSequence('validateCaseDetailSequence');
-    expect(test.getState('caseDetailErrors')).toEqual({});
+    expect(test.getState('validationErrors')).toEqual({});
 
     // petitionPaymentDate
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentStatus',
       value: Case.PAYMENT_STATUS.PAID,
     });
     await test.runSequence('navigateToReviewSavedPetitionSequence');
 
-    expect(test.getState('caseDetailErrors')).toEqual({
+    expect(test.getState('validationErrors')).toEqual({
       petitionPaymentDate: VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
       petitionPaymentMethod: VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
     });
 
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentMethod',
       value: 'check',
     });
@@ -143,20 +159,20 @@ export default test => {
     });
     await test.runSequence('validateCaseDetailSequence');
 
-    expect(test.getState('caseDetailErrors')).toEqual({});
+    expect(test.getState('validationErrors')).toEqual({});
 
     //error on save
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: '',
     });
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'procedureType',
       value: '',
     });
 
     await test.runSequence('navigateToReviewSavedPetitionSequence');
-    expect(test.getState('caseDetailErrors')).toEqual({
+    expect(test.getState('validationErrors')).toEqual({
       caseType: VALIDATION_ERROR_MESSAGES.caseType,
       procedureType: VALIDATION_ERROR_MESSAGES.procedureType,
     });
@@ -169,11 +185,11 @@ export default test => {
     });
 
     //user changes value and hits save
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: 'Whistleblower',
     });
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'procedureType',
       value: 'Regular',
     });
@@ -181,7 +197,7 @@ export default test => {
     await test.runSequence('navigateToReviewSavedPetitionSequence');
     await test.runSequence('saveSavedCaseForLaterSequence');
     await test.runSequence('navigateToPathSequence', {
-      path: `/case-detail/${test.caseId}`,
+      path: `/case-detail/${test.docketNumber}`,
     });
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {

@@ -1,23 +1,19 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getTrialSessionDetailsAction } from './getTrialSessionDetailsAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
-
-let getTrialSessionDetailsStub;
 
 describe('getTrialSessionDetailsAction', () => {
-  beforeEach(() => {
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        getTrialSessionDetailsInteractor: getTrialSessionDetailsStub,
-      }),
-    };
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('call the use case to get the trial details', async () => {
-    getTrialSessionDetailsStub = sinon.stub().resolves({
-      trialSessionId: '123',
-    });
+    applicationContext
+      .getUseCases()
+      .getTrialSessionDetailsInteractor.mockResolvedValue({
+        trialSessionId: '123',
+      });
 
     await runAction(getTrialSessionDetailsAction, {
       modules: {
@@ -28,18 +24,24 @@ describe('getTrialSessionDetailsAction', () => {
       },
       state: {},
     });
-    expect(getTrialSessionDetailsStub.calledOnce).toEqual(true);
     expect(
-      getTrialSessionDetailsStub.getCall(0).args[0].trialSessionId,
+      applicationContext.getUseCases().getTrialSessionDetailsInteractor.mock
+        .calls.length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases().getTrialSessionDetailsInteractor.mock
+        .calls[0][0].trialSessionId,
     ).toEqual('123');
   });
 
   it('call the use case a second time if the trial session is a swing session', async () => {
-    getTrialSessionDetailsStub = sinon.stub().resolves({
-      swingSession: true,
-      swingSessionId: '234',
-      trialSessionId: '123',
-    });
+    applicationContext
+      .getUseCases()
+      .getTrialSessionDetailsInteractor.mockResolvedValue({
+        swingSession: true,
+        swingSessionId: '234',
+        trialSessionId: '123',
+      });
 
     await runAction(getTrialSessionDetailsAction, {
       modules: {
@@ -50,12 +52,17 @@ describe('getTrialSessionDetailsAction', () => {
       },
       state: {},
     });
-    expect(getTrialSessionDetailsStub.calledTwice).toEqual(true);
     expect(
-      getTrialSessionDetailsStub.getCall(0).args[0].trialSessionId,
+      applicationContext.getUseCases().getTrialSessionDetailsInteractor.mock
+        .calls.length,
+    ).toEqual(2);
+    expect(
+      applicationContext.getUseCases().getTrialSessionDetailsInteractor.mock
+        .calls[0][0].trialSessionId,
     ).toEqual('123');
     expect(
-      getTrialSessionDetailsStub.getCall(1).args[0].trialSessionId,
+      applicationContext.getUseCases().getTrialSessionDetailsInteractor.mock
+        .calls[1][0].trialSessionId,
     ).toEqual('234');
   });
 });

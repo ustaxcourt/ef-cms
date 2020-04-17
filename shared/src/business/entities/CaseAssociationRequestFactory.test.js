@@ -75,9 +75,7 @@ describe('CaseAssociationRequestFactory', () => {
       });
 
       it('should not allow certificate of service date to be in the future', () => {
-        rawEntity.certificateOfServiceDate = moment()
-          .add(1, 'days')
-          .format();
+        rawEntity.certificateOfServiceDate = moment().add(1, 'days').format();
         expect(errors().certificateOfServiceDate).toEqual(
           VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
         );
@@ -227,12 +225,12 @@ describe('CaseAssociationRequestFactory', () => {
         ).toEqual('Motion to Substitute Parties and Change Caption');
       });
 
-      it('should generate valid title when party is respondent', () => {
+      it('should generate valid title when party is irsPractitioner', () => {
         const caseAssoc = CaseAssociationRequestFactory({
           documentTitleTemplate:
             'Substitution of Counsel for [Petitioner Names]',
           documentType: 'Substitution of Counsel',
-          partyRespondent: true,
+          partyIrsPractitioner: true,
         });
         expect(caseAssoc.getDocumentTitle()).toEqual(
           'Substitution of Counsel for Respondent',

@@ -15,11 +15,11 @@ if [[ "$?" == "1" ]]; then
   exit 1
 fi
 
-./web-api/clear-elasticsearch-index.sh dev
-./web-api/setup-elasticsearch-index.sh dev
+./web-api/clear-elasticsearch-index.sh $1
+./web-api/setup-elasticsearch-index.sh $1
 
 pushd web-api
-node clear-dynamodb-table.js dev
-./setup-cognito-users.sh dev
-./setup-court-users.sh dev
+node clear-dynamodb-table.js $1
+./setup-cognito-users.sh $1
+./setup-court-users.sh $1
 popd

@@ -32,9 +32,14 @@ export const OrdersNeededSummary = ({ caseInformation }) => {
                   {caseInformation.noticeOfAttachments && (
                     <div>Notice of Attachments in the Nature of Evidence</div>
                   )}
-                  {caseInformation.orderDesignatingPlaceOfTrial && (
+                  {/* TODO - Currently checkbox does not clear our RQT file so it's
+                    impossible to change the designated place of trial. Add this back
+                    in when checking 'Order to Change Designated Place of Trial' has
+                    additional functionality that allows the user to upload a new RQT
+                    file and change the selected trial location. See reviewSavedPetitionHelper.js */
+                  /* {caseInformation.orderDesignatingPlaceOfTrial && (
                     <div>Order to Change Designated Place of Trial</div>
-                  )}
+                  )} */}
                   {caseInformation.orderForAmendedPetition && (
                     <div>Order for Amended Petition</div>
                   )}

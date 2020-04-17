@@ -1,46 +1,54 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateCaseDetailAction } from './validateCaseDetailAction';
-import sinon from 'sinon';
-
-const validateCaseDetailStub = sinon.stub().returns(null);
-const successStub = sinon.stub();
-const errorStub = sinon.stub();
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    validateCaseDetailInteractor: validateCaseDetailStub,
-  }),
-};
-
-presenter.providers.path = {
-  error: errorStub,
-  success: successStub,
-};
 
 describe('validateCaseDetail', () => {
+  let successStub;
+  let errorStub;
+
+  beforeAll(() => {
+    successStub = jest.fn();
+    errorStub = jest.fn();
+
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.path = {
+      error: errorStub,
+      success: successStub,
+    };
+
+    applicationContext
+      .getUseCases()
+      .validateCaseDetailInteractor.mockReturnValue(null);
+  });
   it('should call the success path when no errors are found', async () => {
     await runAction(validateCaseDetailAction, {
       modules: {
         presenter,
       },
       props: {
-        combinedCaseDetailWithForm: {
+        formWithComputedDates: {
           caseId: '123',
           irsNoticeDate: '2009-10-13',
         },
       },
       state: {},
     });
-    expect(validateCaseDetailStub.getCall(0).args[0].caseDetail).toMatchObject({
+    expect(
+      applicationContext.getUseCases().validateCaseDetailInteractor.mock
+        .calls[0][0].caseDetail,
+    ).toMatchObject({
       caseId: '123',
       irsNoticeDate: '2009-10-13',
     });
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateCaseDetailStub.returns('error');
+    applicationContext
+      .getUseCases()
+      .validateCaseDetailInteractor.mockReturnValue('error');
+
     await runAction(validateCaseDetailAction, {
       modules: {
         presenter,
@@ -56,6 +64,6 @@ describe('validateCaseDetail', () => {
         },
       },
     });
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

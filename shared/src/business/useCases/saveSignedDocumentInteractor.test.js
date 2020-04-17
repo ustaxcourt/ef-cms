@@ -1,36 +1,22 @@
 const {
   saveSignedDocumentInteractor,
 } = require('./saveSignedDocumentInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 
 describe('saveSignedDocumentInteractor', () => {
   let mockCase;
-  let applicationContext;
 
-  beforeEach(() => {
+  beforeAll(() => {
     mockCase = {
       ...MOCK_CASE,
       caseCaption: ',',
     };
 
-    applicationContext = {
-      getCurrentUser: () => ({ userId: '1' }),
-      getPersistenceGateway: () => ({
-        getCaseByCaseId: () => mockCase,
-        updateCase: () => null,
-      }),
-      getUniqueId: () => 'unique-id-1',
-      getUtilities: () => {
-        return {
-          createISODateString: () => '2018-06-01T00:00:00.000Z',
-        };
-      },
-      logger: {
-        time: () => null,
-        timeEnd: () => null,
-      },
-    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(mockCase);
   });
 
   it('should add the signed Stipulated Decision to the case given a Proposed Stipulated Decision', async () => {

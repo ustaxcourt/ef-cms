@@ -1,6 +1,6 @@
-const AWS = require('aws-sdk');
-const sinon = require('sinon');
-
+const {
+  applicationContext,
+} = require('../business/test/createTestApplicationContext');
 const {
   batchGet,
   batchWrite,
@@ -15,53 +15,13 @@ const MOCK_ITEM = {
   caseId: '123',
 };
 
-let documentClientStub;
-
-const applicationContext = {
-  environment: { stage: 'dev' },
-  getDocumentClient: () => {
-    return documentClientStub;
-  },
-};
-
-describe('dynamodbClientService', function() {
+describe('dynamodbClientService', function () {
   beforeEach(() => {
-    documentClientStub = {
-      batchGet: sinon.stub().returns({
-        promise: () =>
-          Promise.resolve({
-            Responses: {
-              'efcms-dev': [
-                {
-                  'aws:rep:deleting': 'a',
-                  'aws:rep:updateregion': 'b',
-                  'aws:rep:updatetime': 'c',
-                  ...MOCK_ITEM,
-                },
-              ],
-            },
-          }),
-      }),
-      batchWrite: sinon
-        .stub()
-        .returns({ promise: () => Promise.resolve(null) }),
-      delete: sinon.stub().returns({ promise: () => Promise.resolve(null) }),
-      get: sinon.stub().returns({
-        promise: () =>
-          Promise.resolve({
-            Item: {
-              'aws:rep:deleting': 'a',
-              'aws:rep:updateregion': 'b',
-              'aws:rep:updatetime': 'c',
-              ...MOCK_ITEM,
-            },
-          }),
-      }),
-      put: sinon.stub().returns({ promise: () => Promise.resolve(null) }),
-      query: sinon.stub().returns({
-        promise: () =>
-          Promise.resolve({
-            Items: [
+    applicationContext.getDocumentClient().batchGet.mockReturnValue({
+      promise: () =>
+        Promise.resolve({
+          Responses: {
+            'efcms-local': [
               {
                 'aws:rep:deleting': 'a',
                 'aws:rep:updateregion': 'b',
@@ -69,22 +29,61 @@ describe('dynamodbClientService', function() {
                 ...MOCK_ITEM,
               },
             ],
-          }),
-      }),
-      update: sinon.stub().returns({
-        promise: () =>
-          Promise.resolve({
-            Attributes: {
-              id: '123',
-            },
-          }),
-      }),
-    };
-    sinon.stub(AWS.DynamoDB, 'DocumentClient').returns(documentClientStub);
-  });
+          },
+        }),
+    });
 
-  afterEach(() => {
-    AWS.DynamoDB.DocumentClient.restore();
+    applicationContext.getDocumentClient().get.mockReturnValue({
+      promise: () =>
+        Promise.resolve({
+          Item: {
+            'aws:rep:deleting': 'a',
+            'aws:rep:updateregion': 'b',
+            'aws:rep:updatetime': 'c',
+            ...MOCK_ITEM,
+          },
+        }),
+    });
+
+    applicationContext
+      .getDocumentClient()
+      .delete.mockReturnValue({ promise: () => Promise.resolve(null) });
+
+    applicationContext
+      .getDocumentClient()
+      .batchWrite.mockReturnValue({ promise: () => Promise.resolve(null) });
+
+    applicationContext.getDocumentClient().update.mockReturnValue({
+      promise: () => {
+        return Promise.resolve({
+          Attributes: {
+            id: '123',
+          },
+        });
+      },
+    });
+
+    applicationContext.getDocumentClient().updateConsistent.mockReturnValue({
+      promise: () => {
+        return Promise.resolve({
+          Attributes: {
+            id: '123',
+          },
+        });
+      },
+    });
+
+    applicationContext.getDocumentClient().query.mockReturnValue({
+      promise: () => {
+        return Promise.resolve({
+          Items: [
+            {
+              caseId: '123',
+            },
+          ],
+        });
+      },
+    });
   });
 
   describe('put', () => {
@@ -98,7 +97,7 @@ describe('dynamodbClientService', function() {
   });
 
   describe('updateConsistent', () => {
-    it('should return the  same Item property passed in in the params', async () => {
+    it('should return the same Item property passed in in the params', async () => {
       const result = await updateConsistent({ applicationContext });
       expect(result).toEqual('123');
     });
@@ -110,12 +109,16 @@ describe('dynamodbClientService', function() {
       expect(result).toEqual(MOCK_ITEM);
     });
     it('should throw an error if the item is not returned', async () => {
-      documentClientStub.get.returns({ promise: () => Promise.resolve({}) });
+      applicationContext
+        .getDocumentClient()
+        .get.mockReturnValue({ promise: () => Promise.resolve({}) });
       const result = await get({ applicationContext });
       expect(result).toBeUndefined();
     });
     it('should return nothing if the promise is rejected', async () => {
-      documentClientStub.get.returns({ promise: () => Promise.reject({}) });
+      applicationContext
+        .getDocumentClient()
+        .get.mockReturnValue({ promise: () => Promise.reject({}) });
       const result = await get({ applicationContext });
       expect(result).toBeUndefined();
     });
@@ -163,9 +166,11 @@ describe('dynamodbClientService', function() {
         items: [item],
         tableName: 'a',
       });
-      expect(documentClientStub.batchWrite.getCall(0).args[0]).toEqual({
+      expect(
+        applicationContext.getDocumentClient().batchWrite.mock.calls[0][0],
+      ).toEqual({
         RequestItems: {
-          'efcms-dev': [
+          'efcms-local': [
             {
               PutRequest: {
                 ConditionExpression:
@@ -191,9 +196,11 @@ describe('dynamodbClientService', function() {
           pk: '123',
         },
       });
-      expect(documentClientStub.delete.getCall(0).args[0]).toEqual({
+      expect(
+        applicationContext.getDocumentClient().delete.mock.calls[0][0],
+      ).toEqual({
         Key: { pk: '123' },
-        TableName: 'efcms-dev',
+        TableName: 'efcms-local',
       });
     });
   });

@@ -1,14 +1,10 @@
 const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const {
   updateCaseTrialSortMappingRecords,
 } = require('./updateCaseTrialSortMappingRecords');
-
-const applicationContext = {
-  environment: {
-    stage: 'local',
-  },
-};
 
 const caseId = 'abc';
 const caseSortTags = {
@@ -18,55 +14,49 @@ const caseSortTags = {
 
 describe('updateCaseTrialSortMappingRecords', () => {
   beforeEach(() => {
-    sinon.stub(client, 'put').resolves(null);
-    sinon.stub(client, 'delete').resolves(null);
-  });
-
-  afterEach(() => {
-    client.put.restore();
-    client.delete.restore();
-    client.query.restore();
+    client.put = jest.fn().mockReturnValue(null);
+    client.delete = jest.fn().mockReturnValue(null);
   });
 
   it('should not update mapping records if sort tags have not changed', async () => {
-    sinon.stub(client, 'query').resolves([{ sk: 'abc' }, { sk: '123' }]);
+    client.query = jest.fn().mockReturnValue([{ sk: 'abc' }, { sk: '123' }]);
 
     await updateCaseTrialSortMappingRecords({
       applicationContext,
       caseId,
       caseSortTags,
     });
-    expect(client.put.getCall(0)).toEqual(null);
+    expect(client.put).not.toBeCalled();
   });
 
   it('should not attempt to put new records if no old mapping records were found', async () => {
-    sinon.stub(client, 'query').resolves([]);
+    client.query = jest.fn().mockReturnValue([]);
 
     await updateCaseTrialSortMappingRecords({
       applicationContext,
       caseId,
       caseSortTags,
     });
-    expect(client.put.getCall(0)).toEqual(null);
+    expect(client.put).not.toBeCalled();
   });
 
   it('should update mapping records if sort tags have changed', async () => {
-    sinon.stub(client, 'query').resolves([{ sk: 'abc' }, { sk: '123' }]);
+    client.query = jest.fn().mockReturnValue([{ sk: 'abc' }, { sk: '123' }]);
 
     await updateCaseTrialSortMappingRecords({
       applicationContext,
       caseId,
       caseSortTags: { hybrid: 'efg', nonHybrid: '456' },
     });
-    expect(client.put.getCall(0).args[0].Item).toMatchObject({
+    expect(client.put.mock.calls[0][0].Item).toMatchObject({
       caseId,
-      gsi1pk: 'eligible-for-trial-case-catalog-abc',
+      gsi1pk: 'eligible-for-trial-case-catalog|abc',
       pk: 'eligible-for-trial-case-catalog',
       sk: '456',
     });
-    expect(client.put.getCall(1).args[0].Item).toMatchObject({
+    expect(client.put.mock.calls[1][0].Item).toMatchObject({
       caseId,
-      gsi1pk: 'eligible-for-trial-case-catalog-abc',
+      gsi1pk: 'eligible-for-trial-case-catalog|abc',
       pk: 'eligible-for-trial-case-catalog',
       sk: 'efg',
     });
