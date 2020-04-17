@@ -59,7 +59,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: trialLocation,
     });
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(
       test.getState('validationErrors.requestForPlaceOfTrialFile'),
@@ -105,7 +105,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: 1,
     });
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(
       test.getState('validationErrors.requestForPlaceOfTrialFile'),
