@@ -21,7 +21,7 @@ export const petitionsClerkVerifiesOrderForOdsCheckbox = (test, fakeFile) => {
 
     expect(test.getState('form.orderForOds')).toBeTruthy();
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(
       test.getState('validationErrors.ownershipDisclosureFile'),
@@ -32,7 +32,7 @@ export const petitionsClerkVerifiesOrderForOdsCheckbox = (test, fakeFile) => {
       value: false,
     });
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('validationErrors.ownershipDisclosureFile')).toEqual(
       CaseInternal.VALIDATION_ERROR_MESSAGES.ownershipDisclosureFile,

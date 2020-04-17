@@ -19,7 +19,7 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
 
     expect(test.getState('form.orderForFilingFee')).toEqual(false);
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('validationErrors')).toMatchObject({
       petitionPaymentDate: Case.VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
@@ -44,7 +44,7 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
       value: 'check',
     });
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(
       test.getState('validationErrors.petitionPaymentDate'),
@@ -60,7 +60,7 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
 
     expect(test.getState('form.orderForFilingFee')).toEqual(true);
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(
       test.getState('validationErrors.petitionPaymentDate'),
@@ -76,7 +76,7 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
 
     expect(test.getState('form.orderForFilingFee')).toEqual(false);
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('validationErrors')).toMatchObject({
       applicationForWaiverOfFilingFeeFile:
@@ -107,7 +107,7 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
       value: 1,
     });
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(
       test.getState('validationErrors.petitionPaymentWaivedDate'),
