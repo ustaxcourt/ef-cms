@@ -1,6 +1,7 @@
 const {
   validatePetitionFromPaperInteractor,
 } = require('./validatePetitionFromPaperInteractor');
+const { Case } = require('../entities/cases/Case');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 
 describe('validate petition from paper', () => {
@@ -20,6 +21,7 @@ describe('validate petition from paper', () => {
       'mailingDate',
       'partyType',
       'petitionFile',
+      'petitionPaymentStatus',
       'procedureType',
       'receivedAt',
       'stinFile',
@@ -40,6 +42,7 @@ describe('validate petition from paper', () => {
         partyType: 'testing',
         petitionFile: {},
         petitionFileSize: 100,
+        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
         procedureType: 'testing',
         receivedAt: new Date().toISOString(),
         stinFile: {},

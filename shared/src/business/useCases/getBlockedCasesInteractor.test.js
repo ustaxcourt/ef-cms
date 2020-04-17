@@ -9,44 +9,28 @@ describe('getBlockedCasesInteractor', () => {
       userId: 'petitionsclerk',
     });
 
-    applicationContext.getSearchClient().search.mockReturnValue({
-      hits: {
-        hits: [
-          {
-            _source: {
-              caseId: { S: '1' },
-            },
-          },
-          {
-            _source: {
-              caseId: { S: '2' },
-            },
-          },
-        ],
+    applicationContext.getPersistenceGateway().getBlockedCases.mockReturnValue([
+      {
+        caseId: '1',
       },
-    });
+      {
+        caseId: '2',
+      },
+    ]);
 
     const results = await getBlockedCasesInteractor({
       applicationContext,
       trialLocation: 'Boise, Idaho',
     });
 
-    expect(applicationContext.getSearchClient().search).toHaveBeenCalled();
-    expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
-        .bool.must,
-    ).toEqual([
-      { match: { 'preferredTrialCity.S': 'Boise, Idaho' } },
+    expect(results).toEqual([
       {
-        bool: {
-          should: [
-            { match: { 'automaticBlocked.BOOL': true } },
-            { match: { 'blocked.BOOL': true } },
-          ],
-        },
+        caseId: '1',
+      },
+      {
+        caseId: '2',
       },
     ]);
-    expect(results).toEqual([{ caseId: '1' }, { caseId: '2' }]);
   });
 
   it('should throw an unauthorized error if the user does not have access to blocked cases', async () => {

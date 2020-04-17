@@ -1,3 +1,4 @@
+const { Case } = require('./Case');
 const { CaseInternal } = require('./CaseInternal');
 const { ContactFactory } = require('../contacts/ContactFactory');
 
@@ -24,6 +25,7 @@ describe('CaseInternal entity', () => {
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitionFile: { anObject: true },
         petitionFileSize: 1,
+        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
         procedureType: 'Small',
         receivedAt: new Date().toISOString(),
         stinFile: { anObject: true },
@@ -53,6 +55,19 @@ describe('CaseInternal entity', () => {
       expect(
         caseInternal.getFormattedValidationErrors().petitionFileSize,
       ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
+    });
+
+    it('fails validation if petitionPaymentStatus is Wavied but applicationForWaiverOfFilingFeeFile is not set', () => {
+      const caseInternal = new CaseInternal({
+        caseCaption: 'Dr. Leo Marvin, Petitioner',
+        petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+        receivedAt: new Date().toISOString(),
+      });
+
+      expect(
+        caseInternal.getFormattedValidationErrors()
+          .applicationForWaiverOfFilingFeeFile,
+      ).toEqual(VALIDATION_ERROR_MESSAGES.applicationForWaiverOfFilingFeeFile);
     });
 
     it('fails validation if applicationForWaiverOfFilingFeeFile is set, but applicationForWaiverOfFilingFeeFileSize is not', () => {
