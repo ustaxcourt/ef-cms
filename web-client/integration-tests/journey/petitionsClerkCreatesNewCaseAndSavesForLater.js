@@ -1,4 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { ContactFactory } from '../../../shared/src/business/entities/contacts/ContactFactory';
 
 export const petitionsClerkCreatesNewCaseAndSavesForLater = (
@@ -159,7 +160,7 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
 
   it('should default to Regular procedureType when creating a new case', async () => {
     expect(test.getState('form.procedureType')).toEqual(
-      Case.PROCEDURE_TYPES[0],
+      CaseInternal.DEFAULT_PROCEDURE_TYPE,
     );
   });
 
