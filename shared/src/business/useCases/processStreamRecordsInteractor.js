@@ -49,13 +49,6 @@ const filterRecords = async ({ applicationContext, records }) => {
         privatePractitioners: undefined,
       };
 
-      if (
-        caseRecord.dynamodb.NewImage.sk.S ===
-        'document|562b0a52-7960-4674-acb7-22b65cd1cf2b'
-      ) {
-        console.log('caseRecord', documentWithCaseInfo);
-      }
-
       filteredRecords.push({
         dynamodb: {
           Keys: {
