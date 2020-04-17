@@ -24,7 +24,7 @@ export const PetitionPaymentForm = connect(
     return (
       <>
         <h4 className="margin-bottom-2">Petition Fee</h4>
-        <FormGroup>
+        <FormGroup errorText={validationErrors.petitionPaymentStatus}>
           <fieldset className="usa-fieldset">
             <legend className="usa-legend" id="fee-paid-legend">
               Fee paid?
@@ -38,12 +38,13 @@ export const PetitionPaymentForm = connect(
                 name="petitionPaymentStatus"
                 type="radio"
                 value={paymentStatus.PAID}
-                onChange={e =>
+                onChange={e => {
                   updateSequence({
                     key: e.target.name,
                     value: e.target.value,
-                  })
-                }
+                  });
+                  validateSequence();
+                }}
               />
               <label className="usa-radio__label" htmlFor="payment-status-paid">
                 {paymentStatus.PAID}
@@ -59,12 +60,13 @@ export const PetitionPaymentForm = connect(
                 name="petitionPaymentStatus"
                 type="radio"
                 value={paymentStatus.UNPAID}
-                onChange={e =>
+                onChange={e => {
                   updateSequence({
                     key: e.target.name,
                     value: e.target.value,
-                  })
-                }
+                  });
+                  validateSequence();
+                }}
               />
               <label
                 className="usa-radio__label"
@@ -83,12 +85,13 @@ export const PetitionPaymentForm = connect(
                 name="petitionPaymentStatus"
                 type="radio"
                 value={paymentStatus.WAIVED}
-                onChange={e =>
+                onChange={e => {
                   updateSequence({
                     key: e.target.name,
                     value: e.target.value,
-                  })
-                }
+                  });
+                  validateSequence();
+                }}
               />
               <label
                 className="usa-radio__label"

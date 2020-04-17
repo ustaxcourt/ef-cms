@@ -29,6 +29,10 @@ function CaseInternal(rawCase) {
   this.partyType = rawCase.partyType;
   this.petitionFile = rawCase.petitionFile;
   this.petitionFileSize = rawCase.petitionFileSize;
+  this.petitionPaymentDate = rawCase.petitionPaymentDate;
+  this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
+  this.petitionPaymentStatus = rawCase.petitionPaymentStatus;
+  this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt;
@@ -52,6 +56,7 @@ function CaseInternal(rawCase) {
 CaseInternal.VALIDATION_ERROR_MESSAGES = Object.assign(
   Case.VALIDATION_ERROR_MESSAGES,
   {
+    applicationForWaiverOfFilingFeeFile: 'Upload or scan an APW',
     petitionFile: 'Upload or scan a petition',
     preferredTrialCity: 'Select a preferred trial location',
     requestForPlaceOfTrialFile: 'Upload or scan a requested place of trial',
@@ -59,7 +64,11 @@ CaseInternal.VALIDATION_ERROR_MESSAGES = Object.assign(
 );
 
 const paperRequirements = joi.object().keys({
-  applicationForWaiverOfFilingFeeFile: joi.object().optional(),
+  applicationForWaiverOfFilingFeeFile: joi.when('petitionPaymentStatus', {
+    is: Case.PAYMENT_STATUS.WAIVED,
+    otherwise: joi.optional().allow(null),
+    then: joi.object().required(),
+  }),
   applicationForWaiverOfFilingFeeFileSize: joi.when(
     'applicationForWaiverOfFilingFeeFile',
     {
@@ -84,6 +93,10 @@ const paperRequirements = joi.object().keys({
     otherwise: joi.optional().allow(null),
     then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
   }),
+  petitionPaymentDate: Case.validationRules.petitionPaymentDate,
+  petitionPaymentMethod: Case.validationRules.petitionPaymentMethod,
+  petitionPaymentStatus: Case.validationRules.petitionPaymentStatus,
+  petitionPaymentWaivedDate: Case.validationRules.petitionPaymentWaivedDate,
   preferredTrialCity: joi
     .alternatives()
     .conditional('requestForPlaceOfTrialFile', {

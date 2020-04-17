@@ -46,7 +46,6 @@ const originalGetValidationErrors = OrderSearch.prototype.getValidationErrors;
 OrderSearch.prototype.getValidationErrors = function () {
   const validationErrors = originalGetValidationErrors.call(this);
 
-
   if (validationErrors && validationErrors['object.oxor']) {
     validationErrors['chooseOneValue'] = validationErrors['object.oxor'];
     delete validationErrors['object.oxor'];
