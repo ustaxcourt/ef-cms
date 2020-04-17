@@ -56,24 +56,22 @@ function CaseInternal(rawCase) {
   this.contactSecondary = contacts.secondary;
 }
 
-CaseInternal.VALIDATION_ERROR_MESSAGES = Object.assign(
-  Case.VALIDATION_ERROR_MESSAGES,
-  {
-    applicationForWaiverOfFilingFeeFile: 'Upload or scan an APW',
-    ownershipDisclosureFile: 'Upload or scan Ownership Disclosure Statement',
-    petitionFile: 'Upload or scan a petition',
-    petitionPaymentDate: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Payment date cannot be in the future. Enter a valid date.',
-      },
-      'Enter a payment date',
-    ],
-    petitionPaymentStatus: 'Select a filing fee option',
-    preferredTrialCity: 'Select a preferred trial location',
-    requestForPlaceOfTrialFile: 'Upload or scan a requested place of trial',
-  },
-);
+CaseInternal.VALIDATION_ERROR_MESSAGES = {
+  ...Case.VALIDATION_ERROR_MESSAGES,
+  applicationForWaiverOfFilingFeeFile: 'Upload or scan an APW',
+  ownershipDisclosureFile: 'Upload or scan Ownership Disclosure Statement',
+  petitionFile: 'Upload or scan a petition',
+  petitionPaymentDate: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Payment date cannot be in the future. Enter a valid date.',
+    },
+    'Enter a payment date',
+  ],
+  petitionPaymentStatus: 'Select a filing fee option',
+  preferredTrialCity: 'Select a preferred trial location',
+  requestForPlaceOfTrialFile: 'Upload or scan a requested place of trial',
+};
 
 const paperRequirements = joi.object().keys({
   applicationForWaiverOfFilingFeeFile: joi.when('petitionPaymentStatus', {
