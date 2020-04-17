@@ -8,6 +8,8 @@ const {
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 
+CaseInternal.DEFAULT_PROCEDURE_TYPE = Case.PROCEDURE_TYPES[0];
+
 /**
  * CaseInternal Entity
  * Represents a Case with required documents that a Petitions Clerk is attempting to add to the system.
@@ -24,6 +26,7 @@ function CaseInternal(rawCase) {
   this.caseType = rawCase.caseType;
   this.filingType = rawCase.filingType;
   this.mailingDate = rawCase.mailingDate;
+  this.orderForOds = rawCase.orderForOds;
   this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
   this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
   this.partyType = rawCase.partyType;
@@ -80,7 +83,22 @@ const paperRequirements = joi.object().keys({
   caseCaption: joi.string().required(),
   caseType: joi.string().required(),
   mailingDate: joi.string().max(25).required(),
-  ownershipDisclosureFile: joi.object().optional(),
+  ownershipDisclosureFile: joi.when('partyType', {
+    is: joi
+      .exist()
+      .valid(
+        ContactFactory.PARTY_TYPES.corporation,
+        ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
+        ContactFactory.PARTY_TYPES.partnershipBBA,
+        ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
+      ),
+    otherwise: joi.optional().allow(null),
+    then: joi.when('orderForOds', {
+      is: joi.not(true),
+      otherwise: joi.optional().allow(null),
+      then: joi.object().required(),
+    }),
+  }),
   ownershipDisclosureFileSize: joi.when('ownershipDisclosureFile', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
