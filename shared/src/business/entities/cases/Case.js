@@ -333,7 +333,8 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
   this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
-  this.orderDesignatingPlaceOfTrial = rawCase.orderDesignatingPlaceOfTrial;
+  this.orderDesignatingPlaceOfTrial =
+    rawCase.orderDesignatingPlaceOfTrial || false;
   this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
   this.orderForAmendedPetitionAndFilingFee =
     rawCase.orderForAmendedPetitionAndFilingFee || false;
