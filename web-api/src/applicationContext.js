@@ -54,6 +54,12 @@ const {
   blockCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/blockCaseFromTrialInteractor');
 const {
+  bulkIndexRecords,
+} = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
+const {
+  caseAdvancedSearch,
+} = require('../../shared/src/persistence/elasticsearch/caseAdvancedSearch');
+const {
   caseAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
 const {
@@ -62,6 +68,9 @@ const {
 const {
   CaseInternal,
 } = require('../../shared/src/business/entities/cases/CaseInternal');
+const {
+  casePublicSearch: casePublicSearchPersistence,
+} = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
 const {
   casePublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
@@ -219,6 +228,9 @@ const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
 const {
+  fetchPendingItems: fetchPendingItemsPersistence,
+} = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
+const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
 const {
@@ -308,6 +320,9 @@ const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
+  getBlockedCases,
+} = require('../../shared/src/persistence/elasticsearch/getBlockedCases');
+const {
   getBlockedCasesInteractor,
 } = require('../../shared/src/business/useCases/getBlockedCasesInteractor');
 const {
@@ -333,7 +348,7 @@ const {
 } = require('../../shared/src/business/useCases/getCaseInteractor');
 const {
   getCaseInventoryReport,
-} = require('../../shared/src/business/useCaseHelper/caseInventoryReport/getCaseInventoryReport');
+} = require('../../shared/src/persistence/elasticsearch/getCaseInventoryReport');
 const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
@@ -440,6 +455,9 @@ const {
   getPractitionerByBarNumberInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionerByBarNumberInteractor');
 const {
+  getPractitionersByName,
+} = require('../../shared/src/persistence/elasticsearch/getPractitionersByName');
+const {
   getPractitionersByNameInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionersByNameInteractor');
 const {
@@ -539,6 +557,9 @@ const {
   incrementCounter,
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
 const {
+  indexRecord,
+} = require('../../shared/src/persistence/elasticsearch/indexRecord');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../shared/src/authorization/authorizationClientService');
@@ -557,6 +578,15 @@ const {
 const {
   orderAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/orderAdvancedSearchInteractor');
+const {
+  orderKeywordSearch,
+} = require('../../shared/src/business/useCaseHelper/search/orderKeywordSearch');
+const {
+  orderKeywordSearch: orderKeywordSearchPersistence,
+} = require('../../shared/src/persistence/elasticsearch/orderKeywordSearch');
+const {
+  orderPublicSearchInteractor,
+} = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
 const {
   prioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/prioritizeCaseInteractor');
@@ -871,6 +901,7 @@ module.exports = (appContextUser = {}) => {
     getConstants: () => ({
       CASE_INVENTORY_MAX_PAGE_SIZE: 5000,
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
+      SESSION_STATUS_GROUPS: TrialSession.SESSION_STATUS_GROUPS,
     }),
     getCurrentUser,
     getDispatchers: () => ({
@@ -946,6 +977,10 @@ module.exports = (appContextUser = {}) => {
         addWorkItemToSectionInbox,
         associateUserWithCase,
         associateUserWithCasePending,
+        bulkIndexRecords,
+
+        caseAdvancedSearch,
+        casePublicSearch: casePublicSearchPersistence,
         createCase,
         createCaseCatalogRecord,
         createCaseDeadline,
@@ -971,12 +1006,15 @@ module.exports = (appContextUser = {}) => {
         deleteUserOutboxRecord,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
+        fetchPendingItems: fetchPendingItemsPersistence,
         getAllCaseDeadlines,
         getAllCatalogCases,
+        getBlockedCases,
         getCalendaredCasesForTrialSession,
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
+        getCaseInventoryReport,
         getCasesByCaseIds,
         getCasesByLeadCaseId,
         getCasesByUser,
@@ -992,6 +1030,7 @@ module.exports = (appContextUser = {}) => {
         getInboxMessagesForUser,
         getInternalUsers,
         getPractitionerByBarNumber,
+        getPractitionersByName,
         getPublicDownloadPolicyUrl,
         getRecord,
         getSentMessagesForSection,
@@ -1009,7 +1048,9 @@ module.exports = (appContextUser = {}) => {
         getWebSocketConnectionsByUserId,
         getWorkItemById,
         incrementCounter,
+        indexRecord,
         isFileExists,
+        orderKeywordSearch: orderKeywordSearchPersistence,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocumentFromLambda,
@@ -1109,6 +1150,7 @@ module.exports = (appContextUser = {}) => {
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
         getCaseInventoryReport,
+        orderKeywordSearch,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
       };
@@ -1201,6 +1243,7 @@ module.exports = (appContextUser = {}) => {
         onConnectInteractor,
         onDisconnectInteractor,
         orderAdvancedSearchInteractor,
+        orderPublicSearchInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
         removeCaseFromTrialInteractor,

@@ -32,11 +32,13 @@ exports.getCaseInventoryReportInteractor = async ({
     throw new Error('Either judge or status must be provided');
   }
 
-  return await applicationContext.getUseCaseHelpers().getCaseInventoryReport({
-    applicationContext,
-    associatedJudge,
-    from,
-    pageSize,
-    status,
-  });
+  return await applicationContext
+    .getPersistenceGateway()
+    .getCaseInventoryReport({
+      applicationContext,
+      associatedJudge,
+      from,
+      pageSize,
+      status,
+    });
 };

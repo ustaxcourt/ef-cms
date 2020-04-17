@@ -1,9 +1,8 @@
-const AWS = require('aws-sdk');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { get, map } = require('lodash');
+const { map } = require('lodash');
 const { Order } = require('../entities/orders/Order');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -26,77 +25,7 @@ exports.orderAdvancedSearchInteractor = async ({
   }
 
   const orderEventCodes = map(Order.ORDER_TYPES, 'eventCode');
-  const sourceFields = [
-    'docketNumber',
-    'documentContents',
-    'docketNumberSuffix',
-    'documentTitle',
-    'signedJudgeName',
-    'filingDate',
-    'caseId',
-    'documentId',
-  ];
-
-  const orderEventCodeQuery = {
-    bool: {
-      should: orderEventCodes.map(eventCode => ({
-        match: {
-          'eventCode.S': eventCode,
-        },
-      })),
-    },
-  };
-
-  const orderQuery = {
-    _source: sourceFields,
-    query: {
-      bool: {
-        must: [
-          { match: { 'pk.S': 'case|' } },
-          { match: { 'sk.S': 'document|' } },
-          orderEventCodeQuery,
-          {
-            exists: {
-              field: 'servedAt',
-            },
-          },
-          {
-            query_string: {
-              default_operator: 'or',
-              fields: ['documentContents.S', 'documentTitle.S'],
-              query: `*${orderKeyword}*`,
-            },
-          },
-        ],
-      },
-    },
-    size: 5000,
-  };
-
-  const orderQueryMatchesBody = await applicationContext
-    .getSearchClient()
-    .search({
-      body: orderQuery,
-      index: 'efcms',
-    });
-
-  const hits = get(orderQueryMatchesBody, 'hits.hits', []);
-  const foundOrders = hits.map(hit =>
-    AWS.DynamoDB.Converter.unmarshall(hit['_source']),
-  );
-
-  for (const order of foundOrders) {
-    const { caseId } = order;
-
-    const matchingCase = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByCaseId({
-        applicationContext,
-        caseId,
-      });
-    order.docketNumberSuffix = matchingCase.docketNumberSuffix;
-    order.caseCaption = matchingCase.caseCaption;
-  }
-
-  return foundOrders;
+  return await applicationContext
+    .getUseCaseHelpers()
+    .orderKeywordSearch({ applicationContext, orderEventCodes, orderKeyword });
 };

@@ -8,6 +8,8 @@ const {
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 
+CaseInternal.DEFAULT_PROCEDURE_TYPE = Case.PROCEDURE_TYPES[0];
+
 /**
  * CaseInternal Entity
  * Represents a Case with required documents that a Petitions Clerk is attempting to add to the system.
@@ -24,11 +26,16 @@ function CaseInternal(rawCase) {
   this.caseType = rawCase.caseType;
   this.filingType = rawCase.filingType;
   this.mailingDate = rawCase.mailingDate;
+  this.orderForOds = rawCase.orderForOds;
   this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
   this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
   this.partyType = rawCase.partyType;
   this.petitionFile = rawCase.petitionFile;
   this.petitionFileSize = rawCase.petitionFileSize;
+  this.petitionPaymentDate = rawCase.petitionPaymentDate;
+  this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
+  this.petitionPaymentStatus = rawCase.petitionPaymentStatus;
+  this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt;
@@ -52,6 +59,7 @@ function CaseInternal(rawCase) {
 CaseInternal.VALIDATION_ERROR_MESSAGES = Object.assign(
   Case.VALIDATION_ERROR_MESSAGES,
   {
+    applicationForWaiverOfFilingFeeFile: 'Upload or scan an APW',
     petitionFile: 'Upload or scan a petition',
     preferredTrialCity: 'Select a preferred trial location',
     requestForPlaceOfTrialFile: 'Upload or scan a requested place of trial',
@@ -59,7 +67,11 @@ CaseInternal.VALIDATION_ERROR_MESSAGES = Object.assign(
 );
 
 const paperRequirements = joi.object().keys({
-  applicationForWaiverOfFilingFeeFile: joi.object().optional(),
+  applicationForWaiverOfFilingFeeFile: joi.when('petitionPaymentStatus', {
+    is: Case.PAYMENT_STATUS.WAIVED,
+    otherwise: joi.optional().allow(null),
+    then: joi.object().required(),
+  }),
   applicationForWaiverOfFilingFeeFileSize: joi.when(
     'applicationForWaiverOfFilingFeeFile',
     {
@@ -71,7 +83,22 @@ const paperRequirements = joi.object().keys({
   caseCaption: joi.string().required(),
   caseType: joi.string().required(),
   mailingDate: joi.string().max(25).required(),
-  ownershipDisclosureFile: joi.object().optional(),
+  ownershipDisclosureFile: joi.when('partyType', {
+    is: joi
+      .exist()
+      .valid(
+        ContactFactory.PARTY_TYPES.corporation,
+        ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
+        ContactFactory.PARTY_TYPES.partnershipBBA,
+        ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
+      ),
+    otherwise: joi.optional().allow(null),
+    then: joi.when('orderForOds', {
+      is: joi.not(true),
+      otherwise: joi.optional().allow(null),
+      then: joi.object().required(),
+    }),
+  }),
   ownershipDisclosureFileSize: joi.when('ownershipDisclosureFile', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
@@ -84,6 +111,10 @@ const paperRequirements = joi.object().keys({
     otherwise: joi.optional().allow(null),
     then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
   }),
+  petitionPaymentDate: Case.validationRules.petitionPaymentDate,
+  petitionPaymentMethod: Case.validationRules.petitionPaymentMethod,
+  petitionPaymentStatus: Case.validationRules.petitionPaymentStatus,
+  petitionPaymentWaivedDate: Case.validationRules.petitionPaymentWaivedDate,
   preferredTrialCity: joi
     .alternatives()
     .conditional('requestForPlaceOfTrialFile', {
