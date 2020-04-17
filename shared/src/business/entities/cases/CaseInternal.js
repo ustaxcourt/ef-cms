@@ -120,13 +120,11 @@ const paperRequirements = joi.object().keys({
     otherwise: joi.optional().allow(null),
     then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
   }),
-  petitionPaymentDate: joi
-    .when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.PAID,
-      otherwise: joi.date().iso().optional().allow(null),
-      then: joi.date().iso().max('now').required(),
-    })
-    .description('When the petitioner payed the case fee.'),
+  petitionPaymentDate: joi.when('petitionPaymentStatus', {
+    is: Case.PAYMENT_STATUS.PAID,
+    otherwise: joi.date().iso().optional().allow(null),
+    then: joi.date().iso().max('now').required(),
+  }),
   petitionPaymentMethod: Case.validationRules.petitionPaymentMethod,
   petitionPaymentStatus: Case.validationRules.petitionPaymentStatus,
   petitionPaymentWaivedDate: Case.validationRules.petitionPaymentWaivedDate,
