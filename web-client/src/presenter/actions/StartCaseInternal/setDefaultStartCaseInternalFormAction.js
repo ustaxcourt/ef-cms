@@ -14,7 +14,7 @@ export const setDefaultStartCaseInternalFormAction = ({
 }) => {
   const {
     hasVerifiedIrsNotice,
-    orderForRequestedTrialLocation,
+    orderDesignatingPlaceOfTrial,
     preferredTrialCity,
     procedureType,
     requestForPlaceOfTrialFile,
@@ -30,10 +30,10 @@ export const setDefaultStartCaseInternalFormAction = ({
   }
 
   if (
-    orderForRequestedTrialLocation === undefined &&
+    orderDesignatingPlaceOfTrial === undefined &&
     !preferredTrialCity &&
     !requestForPlaceOfTrialFile
   ) {
-    store.set(state.form.orderForRequestedTrialLocation, true);
+    store.set(state.form.orderDesignatingPlaceOfTrial, true);
   }
 };

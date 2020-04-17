@@ -28,7 +28,12 @@ export const TrialCity = connect(
     value,
   }) {
     return (
-      <FormGroup errorText={validationErrors.preferredTrialCity}>
+      <FormGroup
+        errorText={[
+          validationErrors.preferredTrialCity,
+          !!validationErrors.chooseAtLeastOneValue,
+        ]}
+      >
         <label
           className={classNames('usa-label', showHint && 'with-hint')}
           htmlFor="preferred-trial-city"
