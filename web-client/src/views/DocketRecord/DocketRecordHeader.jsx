@@ -9,18 +9,17 @@ export const DocketRecordHeader = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableDocketRecordSequence:
       sequences.navigateToPrintableDocketRecordSequence,
-    pdfPreviewUrl: state.pdfPreviewUrl,
     printDocketRecordSequence: sequences.printDocketRecordSequence,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
-  ({
+  function DocketRecordHeader({
     formattedCaseDetail,
     navigateToPrintableDocketRecordSequence,
     printDocketRecordSequence,
     toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
-  }) => {
+  }) {
     const openDocketRecordPrintPreview = (options = {}) => {
       updateSessionMetadataSequence({
         key: `docketRecordSort.${formattedCaseDetail.caseId}`,

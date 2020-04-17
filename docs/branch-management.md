@@ -31,6 +31,15 @@ No additional review is performed before moving work into the test environment, 
 
 Pull requests to `test` must only be merged by the product owner or their designee. This is to allow them to time the deploy so as to avoid updating the test environment while it’s actually being used for UX testing.
 
+When the pull request is accepted, AWS IAM policies must be updated. The following steps will generate the policies and publish them to IAM:
+
+```
+cd iam/terraform/account-specific/main && ../bin/deploy-app.sh
+cd ../../environment-specific/main && ../bin/deploy-app.sh test
+```
+
+Because the deploy will happen as soon as the pull request is accepted, it is possible that the deploy will fail in the time between when the PR is accepted and when these policies are updated, if the work done in that sprint requires new permissions within IAM to deploy. If this happens, simply re-run the deploy once the permissions are updated.
+
 ## Deploying to the “Production” Environment
 
 The Court maintains [a faux-production environment](https://ui-test.ef-cms.ustaxcourt.gov/) (the system is not yet in production), which is built from [the `master` branch](https://github.com/ustaxcourt/ef-cms/tree/master).
@@ -48,3 +57,12 @@ Step through every item in the checklist and ensure that everything has been don
 If all conditions have been met, but you have reservations about merging the PR — i.e., it’s technically compliant, but there is an obvious problem, you _do not need to merge it._ The checklist is a guideline. You can change it at any time, including while a review is in progress.
 
 When you are satisfied that all conditions have been met, merge the pull request to `master`.
+
+When the pull request is accepted, AWS IAM policies must be updated. The following steps will generate the policies and publish them to IAM:
+
+```
+cd iam/terraform/account-specific/main && ../bin/deploy-app.sh
+cd ../../environment-specific/main && ../bin/deploy-app.sh prod
+```
+
+Because the deploy will happen as soon as the pull request is accepted, it is possible that the deploy will fail in the time between when the PR is accepted and when these policies are updated, if the work done in that sprint requires new permissions within IAM to deploy. If this happens, simply re-run the deploy once the permissions are updated.

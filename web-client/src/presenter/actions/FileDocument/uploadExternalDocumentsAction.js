@@ -71,7 +71,10 @@ export const uploadExternalDocumentsAction = async ({
       documentId: document.documentId,
     });
   };
-  await Promise.all(pendingDocuments.map(addCoversheet));
+
+  for (let pendingDocument of pendingDocuments) {
+    await addCoversheet(pendingDocument);
+  }
 
   return path.success({
     caseDetail,

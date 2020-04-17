@@ -1,54 +1,43 @@
 import { Scan } from '../../../../shared/src/business/entities/Scan';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { startScanAction } from './startScanAction';
-
-let mockStartScanSession = jest.fn(() => ({
-  scannedBuffer: [],
-}));
-const mockRemoveItemInteractor = jest.fn();
-const { SCAN_MODES } = Scan;
-
-presenter.providers.applicationContext = {
-  getConstants: () => ({
-    SCAN_MODES,
-  }),
-  getScanner: () => ({
-    getSourceNameByIndex: () => 'scanner',
-    setSourceByIndex: () => null,
-    startScanSession: mockStartScanSession,
-  }),
-  getUseCases: () => ({
-    removeItemInteractor: mockRemoveItemInteractor,
-  }),
-};
-
-presenter.providers.path = {
-  error: jest.fn(),
-  success: jest.fn(),
-};
 
 global.alert = () => null;
 
 describe('startScanAction', () => {
+  beforeAll(() => {
+    Object.assign(presenter.providers, {
+      applicationContext,
+      path: {
+        error: jest.fn(),
+        success: jest.fn(),
+      },
+    });
+  });
   it('tells the TWAIN library to begin image acquisition', async () => {
     const result = await runAction(startScanAction, {
       modules: {
         presenter,
       },
       props: {
-        scanMode: SCAN_MODES.FEEDER,
+        scanMode: Scan.SCAN_MODES.FEEDER,
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },
       state: {
-        batches: [],
-        documentSelectedForScan: 'petition',
-        isScanning: false,
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
+        scanner: {
+          batches: [],
+          isScanning: false,
+        },
       },
     });
 
-    expect(result.state.isScanning).toBeTruthy();
+    expect(result.state.scanner.isScanning).toBeTruthy();
   });
 
   it('expect the success path to be called', async () => {
@@ -56,8 +45,19 @@ describe('startScanAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        scanMode: Scan.SCAN_MODES.FEEDER,
+        scannerSourceIndex: 0,
+        scannerSourceName: 'scanner',
+      },
       state: {
-        isScanning: false,
+        currentViewMetadata: {
+          documentSelectedForScan: 0,
+        },
+        scanner: {
+          batches: [],
+          isScanning: false,
+        },
       },
     });
 
@@ -70,24 +70,28 @@ describe('startScanAction', () => {
         presenter,
       },
       state: {
-        batches: {
-          petition: [
-            {
-              index: 5,
-            },
-          ],
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
         },
-        documentSelectedForScan: 'petition',
-        isScanning: false,
+        scanner: {
+          batches: {
+            petition: [
+              {
+                index: 5,
+              },
+            ],
+          },
+          isScanning: false,
+        },
       },
     });
 
-    expect(result.state.selectedBatchIndex).toEqual(6);
+    expect(result.state.scanner.selectedBatchIndex).toEqual(6);
   });
 
   it('calls the error path on errors', async () => {
-    mockStartScanSession = jest.fn(() => {
-      throw new Error('no images in buffer');
+    applicationContext.getScanner().startScanSession.mockImplementation(() => {
+      return Promise.reject(new Error('no images in buffer'));
     });
 
     await runAction(startScanAction, {
@@ -95,14 +99,18 @@ describe('startScanAction', () => {
         presenter,
       },
       props: {
-        scanMode: SCAN_MODES.FEEDER,
+        scanMode: Scan.SCAN_MODES.FEEDER,
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },
       state: {
-        batches: [],
-        documentSelectedForScan: 'petition',
-        isScanning: false,
+        currentViewMetadata: {
+          documentSelectedForScan: 'petition',
+        },
+        scanner: {
+          batches: [],
+          isScanning: false,
+        },
       },
     });
 

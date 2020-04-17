@@ -1,21 +1,17 @@
+const {
+  applicationContext,
+} = require('../../business/test/createTestApplicationContext');
 const { isFileExists } = require('./isFileExists');
 
 describe('isFileExists', () => {
-  const headObjectStub = jest
-    .fn()
-    .mockImplementationOnce(() => {
+  applicationContext
+    .getStorageClient()
+    .headObject.mockImplementationOnce(() => {
       return { promise: () => Promise.resolve('I found it!') };
     })
     .mockImplementation(() => {
       throw new Error('head request failed');
     });
-
-  const applicationContext = {
-    getDocumentsBucketName: () => 'my-test-bucket',
-    getStorageClient: () => ({
-      headObject: headObjectStub,
-    }),
-  };
 
   it('makes a head request to storage client to determine existence of a file', async () => {
     const result = await isFileExists({

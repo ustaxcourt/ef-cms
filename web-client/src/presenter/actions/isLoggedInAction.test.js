@@ -1,23 +1,25 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { isLoggedInAction } from './isLoggedInAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
-
-const isLoggedInStub = sinon.stub();
-const unauthorizedStub = sinon.stub();
-
-presenter.providers.path = {
-  isLoggedIn: isLoggedInStub,
-  unauthorized: unauthorizedStub,
-};
-
-presenter.providers.router = {
-  route: () => {},
-};
-
-presenter.providers.applicationContext = {};
 
 describe('isLoggedInAction', () => {
+  const isLoggedInStub = jest.fn();
+  const unauthorizedStub = jest.fn();
+
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
+    presenter.providers.path = {
+      isLoggedIn: isLoggedInStub,
+      unauthorized: unauthorizedStub,
+    };
+
+    presenter.providers.router = {
+      route: () => {},
+    };
+  });
+
   it('should call path.isLoggedIn if currentUser is defined', async () => {
     presenter.providers.applicationContext.getCurrentUser = () => ({
       email: 'petitioner1@example.com',
@@ -30,7 +32,7 @@ describe('isLoggedInAction', () => {
       state: {},
     });
 
-    expect(isLoggedInStub.called).toEqual(true);
+    expect(isLoggedInStub).toBeCalled();
   });
 
   it('should call the unauthorized path if currentUser is undefined', async () => {
@@ -43,6 +45,6 @@ describe('isLoggedInAction', () => {
       state: {},
     });
 
-    expect(unauthorizedStub.called).toEqual(true);
+    expect(unauthorizedStub).toBeCalled();
   });
 });

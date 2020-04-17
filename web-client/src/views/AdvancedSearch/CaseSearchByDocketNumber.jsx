@@ -1,50 +1,34 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseSearchByDocketNumber = connect(
   {
-    clearDocketNumberSearchFormSequence:
-      sequences.clearDocketNumberSearchFormSequence,
-    docketNumberSearchForm: state.docketNumberSearchForm,
-    updateDocketNumberSearchFormSequence:
-      sequences.updateDocketNumberSearchFormSequence,
+    advancedSearchForm: state.advancedSearchForm,
+    clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    updateAdvancedSearchFormValueSequence:
+      sequences.updateAdvancedSearchFormValueSequence,
+    validateCaseDocketNumberSearchFormSequence:
+      sequences.validateCaseDocketNumberSearchFormSequence,
     validationErrors: state.validationErrors,
   },
-  ({
-    clearDocketNumberSearchFormSequence,
-    docketNumberSearchForm,
+  function CaseSearchByDocketNumber({
+    advancedSearchForm,
+    clearAdvancedSearchFormSequence,
     submitDocketNumberSearchSequence,
-    updateDocketNumberSearchFormSequence,
+    updateAdvancedSearchFormValueSequence,
+    validateCaseDocketNumberSearchFormSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <div className="header-with-blue-background display-flex flex-justify">
           <h3>Search by Docket Number</h3>
-          <NonMobile>
-            <Button
-              link
-              className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-              icon={['fas', 'times-circle']}
-              onClick={() => {
-                clearDocketNumberSearchFormSequence();
-              }}
-            >
-              Clear Search
-            </Button>
-          </NonMobile>
         </div>
         <div className="blue-container advanced-search__form-container">
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              submitDocketNumberSearchSequence();
-            }}
-          >
+          <form>
             <div className="grid-row">
               <div className="tablet:grid-col-6">
                 <FormGroup
@@ -62,9 +46,16 @@ export const CaseSearchByDocketNumber = connect(
                     id="docket-number"
                     name="docketNumber"
                     type="text"
-                    value={docketNumberSearchForm.docketNumber || ''}
+                    value={
+                      advancedSearchForm.caseSearchByDocketNumber
+                        .docketNumber || ''
+                    }
+                    onBlur={() => {
+                      validateCaseDocketNumberSearchFormSequence();
+                    }}
                     onChange={e => {
-                      updateDocketNumberSearchFormSequence({
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'caseSearchByDocketNumber',
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -75,33 +66,31 @@ export const CaseSearchByDocketNumber = connect(
             </div>
 
             <div className="grid-row">
-              <div className="tablet:grid-col-5">
+              <div className="tablet:grid-col-6">
                 <Button
                   className="advanced-search__button"
                   id="docket-search-button"
-                  type="submit"
+                  onClick={e => {
+                    e.preventDefault();
+                    submitDocketNumberSearchSequence();
+                  }}
                 >
                   Search
                 </Button>
+                <Button
+                  link
+                  className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                  onClick={e => {
+                    e.preventDefault();
+                    clearAdvancedSearchFormSequence({
+                      formType: 'caseSearchByDocketNumber',
+                    });
+                  }}
+                >
+                  Clear Search
+                </Button>
               </div>
             </div>
-
-            <Mobile>
-              <div className="grid-row">
-                <div className="tablet:grid-col-5 text-center">
-                  <Button
-                    link
-                    className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-                    icon={['fas', 'times-circle']}
-                    onClick={() => {
-                      clearDocketNumberSearchFormSequence();
-                    }}
-                  >
-                    Clear Search
-                  </Button>
-                </div>
-              </div>
-            </Mobile>
           </form>
         </div>
       </>

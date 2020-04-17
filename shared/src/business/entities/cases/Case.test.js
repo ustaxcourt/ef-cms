@@ -1,4 +1,6 @@
-const moment = require('moment');
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
@@ -6,24 +8,16 @@ const {
 const { Case, isAssociatedUser } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
+const { IrsPractitioner } = require('../IrsPractitioner');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
-const { Practitioner } = require('../Practitioner');
-const { Respondent } = require('../Respondent');
+const { prepareDateFromString } = require('../../utilities/DateHandler');
+const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
-  let applicationContext;
-
-  beforeAll(() => {
-    applicationContext = {
-      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-  });
-
   it('should throw an error if app context is not passed in', () => {
     expect(() => new Case({}, {})).toThrow();
   });
@@ -123,6 +117,13 @@ describe('Case entity', () => {
       const myCase = new Case({}, { applicationContext });
       const result = myCase.toRawObject();
       expect(Case.prototype.doesHavePendingItems).toHaveBeenCalled();
+      expect(result.hasPendingItems).toBeFalsy();
+    });
+
+    it('does not call own function to update values if flag is set to false after decorated toRawObject', () => {
+      const myCase = new Case({}, { applicationContext });
+      const result = myCase.toRawObject(false);
+      expect(Case.prototype.doesHavePendingItems).not.toHaveBeenCalled();
       expect(result.hasPendingItems).toBeFalsy();
     });
   });
@@ -948,39 +949,43 @@ describe('Case entity', () => {
     });
   });
 
-  describe('attachRespondent', () => {
-    it('adds the user to the respondents', () => {
+  describe('attachIrsPractitioner', () => {
+    it('adds the user to the irsPractitioners', () => {
       const caseToVerify = new Case(
         {},
         {
           applicationContext,
         },
       );
-      caseToVerify.attachRespondent(
-        new Respondent({
-          userId: 'respondent',
+      caseToVerify.attachIrsPractitioner(
+        new IrsPractitioner({
+          userId: 'irsPractitioner',
         }),
       );
-      expect(caseToVerify.respondents).not.toBeNull();
-      expect(caseToVerify.respondents[0].userId).toEqual('respondent');
+      expect(caseToVerify.irsPractitioners).not.toBeNull();
+      expect(caseToVerify.irsPractitioners[0].userId).toEqual(
+        'irsPractitioner',
+      );
     });
   });
 
-  describe('attachPractitioner', () => {
-    it('adds the user to the practitioners', () => {
+  describe('attachPrivatePractitioner', () => {
+    it('adds the user to the privatePractitioners', () => {
       const caseToVerify = new Case(
         {},
         {
           applicationContext,
         },
       );
-      caseToVerify.attachPractitioner(
-        new Practitioner({
-          userId: 'practitioner',
+      caseToVerify.attachPrivatePractitioner(
+        new PrivatePractitioner({
+          userId: 'privatePractitioner',
         }),
       );
-      expect(caseToVerify.practitioners).not.toBeNull();
-      expect(caseToVerify.practitioners[0].userId).toEqual('practitioner');
+      expect(caseToVerify.privatePractitioners).not.toBeNull();
+      expect(caseToVerify.privatePractitioners[0].userId).toEqual(
+        'privatePractitioner',
+      );
     });
   });
 
@@ -996,7 +1001,7 @@ describe('Case entity', () => {
         {
           documentId: '123',
           documentType: 'Answer',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
         { applicationContext },
       );
@@ -1004,48 +1009,8 @@ describe('Case entity', () => {
       expect(caseToVerify.documents[0]).toMatchObject({
         documentId: '123',
         documentType: 'Answer',
-        userId: 'respondent',
+        userId: 'irsPractitioner',
       });
-    });
-  });
-
-  describe('getProcedureTypes', () => {
-    it('returns the procedure types', () => {
-      const procedureTypes = Case.PROCEDURE_TYPES;
-      expect(procedureTypes).not.toBeNull();
-      expect(procedureTypes.length).toEqual(2);
-      expect(procedureTypes[0]).toEqual('Regular');
-      expect(procedureTypes[1]).toEqual('Small');
-    });
-  });
-
-  describe('getFilingTypes', () => {
-    it('returns the filing types for user role petitioner', () => {
-      const filingTypes = Case.getFilingTypes(User.ROLES.petitioner);
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Myself');
-    });
-
-    it('returns the filing types for user role petitioner as default', () => {
-      const filingTypes = Case.getFilingTypes();
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Myself');
-    });
-
-    it('returns the filing types for user role petitioner for unknown role', () => {
-      const filingTypes = Case.getFilingTypes('unknown');
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Myself');
-    });
-
-    it('returns the filing types for user role practitioner', () => {
-      const filingTypes = Case.getFilingTypes(User.ROLES.privatePractitioner);
-      expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(4);
-      expect(filingTypes[0]).toEqual('Individual petitioner');
     });
   });
 
@@ -1257,7 +1222,7 @@ describe('Case entity', () => {
         {
           documentId: '123',
           documentType: 'Answer',
-          userId: 'respondent',
+          userId: 'irsPractitioner',
         },
         { applicationContext },
       );
@@ -1313,7 +1278,7 @@ describe('Case entity', () => {
         {
           documents: [
             {
-              createdAt: moment().toISOString(),
+              createdAt: prepareDateFromString().toISOString(),
               eventCode: 'A',
             },
           ],
@@ -1331,7 +1296,7 @@ describe('Case entity', () => {
         {
           documents: [
             {
-              createdAt: moment()
+              createdAt: prepareDateFromString()
                 .subtract(1, 'year')
                 .toISOString(),
               eventCode: 'ZZZs',
@@ -1346,13 +1311,22 @@ describe('Case entity', () => {
       expect(caseToCheck.status).toEqual(Case.STATUS_TYPES.generalDocket);
     });
 
-    it("should not change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
+    it("should NOT change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
+      // eslint-disable-next-line spellcheck/spell-checker
+      /*
+      Note: As of this writing on 2020-03-20, there may be a bug in the `moment` library as it pertains to 
+      leap-years and/or leap-days and maybe daylight saving time, too. Meaning that if *this* test runs
+      at a time when it is calculating date/time differences across the existence of a leap year and DST, it may fail.
+      */
       const caseToCheck = new Case(
         {
           documents: [
             {
-              createdAt: moment()
-                .subtract(Case.ANSWER_CUTOFF_AMOUNT, Case.ANSWER_CUTOFF_UNIT)
+              createdAt: prepareDateFromString()
+                .subtract(
+                  Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS,
+                  Case.ANSWER_CUTOFF_UNIT,
+                )
                 .toISOString(),
               eventCode: 'A',
             },
@@ -1370,8 +1344,11 @@ describe('Case entity', () => {
     });
 
     it("should not change the status to 'Ready for Trial' when an answer document has been filed before the cutoff but case is not 'Not at issue'", () => {
-      const createdAt = moment()
-        .subtract(Case.ANSWER_CUTOFF_AMOUNT + 10, Case.ANSWER_CUTOFF_UNIT)
+      const createdAt = prepareDateFromString()
+        .subtract(
+          Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10,
+          Case.ANSWER_CUTOFF_UNIT,
+        )
         .toISOString();
 
       const caseToCheck = new Case(
@@ -1393,8 +1370,11 @@ describe('Case entity', () => {
     });
 
     it("should change the status to 'Ready for Trial' when an answer document has been filed before the cutoff", () => {
-      const createdAt = moment()
-        .subtract(Case.ANSWER_CUTOFF_AMOUNT + 10, Case.ANSWER_CUTOFF_UNIT)
+      const createdAt = prepareDateFromString()
+        .subtract(
+          Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10,
+          Case.ANSWER_CUTOFF_UNIT,
+        )
         .toISOString();
 
       const caseToCheck = new Case(
@@ -1719,14 +1699,14 @@ describe('Case entity', () => {
     });
   });
 
-  describe('updatePractitioner', () => {
+  describe('updatePrivatePractitioner', () => {
     it('updates the given practitioner on the case', () => {
       const caseToVerify = new Case(
         {
-          practitioners: [
-            new Practitioner({
+          privatePractitioners: [
+            new PrivatePractitioner({
               representingPrimary: true,
-              userId: 'practitioner',
+              userId: 'privatePractitioner',
             }),
           ],
         },
@@ -1735,25 +1715,29 @@ describe('Case entity', () => {
         },
       );
 
-      expect(caseToVerify.practitioners).not.toBeNull();
-      expect(caseToVerify.practitioners[0].representingPrimary).toBeTruthy();
+      expect(caseToVerify.privatePractitioners).not.toBeNull();
+      expect(
+        caseToVerify.privatePractitioners[0].representingPrimary,
+      ).toBeTruthy();
 
-      caseToVerify.updatePractitioner({
+      caseToVerify.updatePrivatePractitioner({
         representingPrimary: false,
-        userId: 'practitioner',
+        userId: 'privatePractitioner',
       });
-      expect(caseToVerify.practitioners[0].representingPrimary).toBeFalsy();
+      expect(
+        caseToVerify.privatePractitioners[0].representingPrimary,
+      ).toBeFalsy();
     });
   });
 
-  describe('removePractitioner', () => {
-    it('removes the user from associated case practitioners array', () => {
+  describe('removePrivatePractitioner', () => {
+    it('removes the user from associated case privatePractitioners array', () => {
       const caseToVerify = new Case(
         {
-          practitioners: [
-            new Practitioner({ userId: 'practitioner1' }),
-            new Practitioner({ userId: 'practitioner2' }),
-            new Practitioner({ userId: 'practitioner3' }),
+          privatePractitioners: [
+            new PrivatePractitioner({ userId: 'privatePractitioner1' }),
+            new PrivatePractitioner({ userId: 'privatePractitioner2' }),
+            new PrivatePractitioner({ userId: 'privatePractitioner3' }),
           ],
         },
         {
@@ -1761,27 +1745,29 @@ describe('Case entity', () => {
         },
       );
 
-      expect(caseToVerify.practitioners).not.toBeNull();
-      expect(caseToVerify.practitioners.length).toEqual(3);
+      expect(caseToVerify.privatePractitioners).not.toBeNull();
+      expect(caseToVerify.privatePractitioners.length).toEqual(3);
 
-      caseToVerify.removePractitioner({ userId: 'practitioner2' });
-      expect(caseToVerify.practitioners.length).toEqual(2);
+      caseToVerify.removePrivatePractitioner({
+        userId: 'privatePractitioner2',
+      });
+      expect(caseToVerify.privatePractitioners.length).toEqual(2);
       expect(
-        caseToVerify.practitioners.find(
-          practitioner => practitioner.userId === 'practitioner2',
+        caseToVerify.privatePractitioners.find(
+          practitioner => practitioner.userId === 'privatePractitioner2',
         ),
       ).toBeFalsy();
     });
   });
 
-  describe('updateRespondent', () => {
-    it('updates the given respondent on the case', () => {
+  describe('updateIrsPractitioner', () => {
+    it('updates the given irsPractitioner on the case', () => {
       const caseToVerify = new Case(
         {
-          respondents: [
-            new Practitioner({
-              email: 'respondent@example.com',
-              userId: 'respondent',
+          irsPractitioners: [
+            new IrsPractitioner({
+              email: 'irsPractitioner@example.com',
+              userId: 'irsPractitioner',
             }),
           ],
         },
@@ -1790,29 +1776,29 @@ describe('Case entity', () => {
         },
       );
 
-      expect(caseToVerify.respondents).not.toBeNull();
-      expect(caseToVerify.respondents[0].email).toEqual(
-        'respondent@example.com',
+      expect(caseToVerify.irsPractitioners).not.toBeNull();
+      expect(caseToVerify.irsPractitioners[0].email).toEqual(
+        'irsPractitioner@example.com',
       );
 
-      caseToVerify.updateRespondent({
-        email: 'respondent@example.com',
-        userId: 'respondent',
+      caseToVerify.updateIrsPractitioner({
+        email: 'irsPractitioner@example.com',
+        userId: 'irsPractitioner',
       });
-      expect(caseToVerify.respondents[0].email).toEqual(
-        'respondent@example.com',
+      expect(caseToVerify.irsPractitioners[0].email).toEqual(
+        'irsPractitioner@example.com',
       );
     });
   });
 
-  describe('removeRespondent', () => {
-    it('removes the user from associated case respondents array', () => {
+  describe('removeIrsPractitioner', () => {
+    it('removes the user from associated case irsPractitioners array', () => {
       const caseToVerify = new Case(
         {
-          respondents: [
-            new Respondent({ userId: 'respondent1' }),
-            new Respondent({ userId: 'respondent2' }),
-            new Respondent({ userId: 'respondent3' }),
+          irsPractitioners: [
+            new IrsPractitioner({ userId: 'irsPractitioner1' }),
+            new IrsPractitioner({ userId: 'irsPractitioner2' }),
+            new IrsPractitioner({ userId: 'irsPractitioner3' }),
           ],
         },
         {
@@ -1820,14 +1806,14 @@ describe('Case entity', () => {
         },
       );
 
-      expect(caseToVerify.respondents).not.toBeNull();
-      expect(caseToVerify.respondents.length).toEqual(3);
+      expect(caseToVerify.irsPractitioners).not.toBeNull();
+      expect(caseToVerify.irsPractitioners.length).toEqual(3);
 
-      caseToVerify.removeRespondent({ userId: 'respondent2' });
-      expect(caseToVerify.respondents.length).toEqual(2);
+      caseToVerify.removeIrsPractitioner({ userId: 'irsPractitioner2' });
+      expect(caseToVerify.irsPractitioners.length).toEqual(2);
       expect(
-        caseToVerify.respondents.find(
-          respondent => respondent.userId === 'respondent2',
+        caseToVerify.irsPractitioners.find(
+          practitioner => practitioner.userId === 'irsPractitioner2',
         ),
       ).toBeFalsy();
     });
@@ -2203,15 +2189,15 @@ describe('Case entity', () => {
       title: 'Executor',
     };
 
-    const practitioners = [
+    const privatePractitioners = [
       {
-        name: 'Petitioner One',
+        name: 'Private Practitioner One',
       },
     ];
 
-    const respondents = [
+    const irsPractitioners = [
       {
-        name: 'Respondent One',
+        name: 'IRS Practitioner One',
       },
     ];
 
@@ -2221,9 +2207,9 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           contactPrimary,
           contactSecondary,
+          irsPractitioners,
           partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
-          practitioners,
-          respondents,
+          privatePractitioners,
         },
         {
           applicationContext,
@@ -2234,8 +2220,8 @@ describe('Case entity', () => {
       expect(caseContacts).toMatchObject({
         contactPrimary,
         contactSecondary,
-        practitioners,
-        respondents,
+        irsPractitioners,
+        privatePractitioners,
       });
     });
 
@@ -2245,9 +2231,9 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           contactPrimary,
           contactSecondary,
+          irsPractitioners,
           partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
-          practitioners,
-          respondents,
+          privatePractitioners,
         },
         {
           applicationContext,
@@ -2740,8 +2726,6 @@ describe('Case entity', () => {
       caseCaption: 'Enter a case caption',
       caseType: 'Select a case type',
       docketNumber: 'Docket number is required',
-      docketRecord: 'At least one valid Docket Record is required',
-      documents: 'At least one valid document is required',
       partyType: 'Select a party type',
       procedureType: 'Select a case procedure',
       sortableDocketNumber: 'Sortable docket number is required',
@@ -2749,43 +2733,94 @@ describe('Case entity', () => {
   });
 
   describe('isAssociatedUser', () => {
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        practitioners: [{ userId: '271e5918-6461-4e67-bc38-274bc0aa0248' }],
-        respondents: [{ userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' }],
-      },
-      {
-        applicationContext: {
-          getCurrentUser: () =>
-            MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-          getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    let caseEntity;
+    beforeEach(() => {
+      caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          irsPractitioners: [
+            { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
+          ],
+          privatePractitioners: [
+            { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
+          ],
         },
-      },
-    );
+        {
+          applicationContext: {
+            getCurrentUser: () =>
+              MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+          },
+        },
+      );
+    });
 
-    it('returns true if the user is a respondent on the case', () => {
+    it('returns true if the user is an irsPractitioner on the case', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
-        userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72',
+        user: { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
       });
 
       expect(isAssociated).toBeTruthy();
     });
 
-    it('returns true if the user is a practitioner on the case', () => {
+    it('returns true if the user is a privatePractitioner on the case', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
-        userId: '271e5918-6461-4e67-bc38-274bc0aa0248',
+        user: { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
       });
 
       expect(isAssociated).toBeTruthy();
     });
 
-    it('returns false if the user is a not a practitioner or respondent on the case', () => {
+    it('returns false if the user is an irs superuser but the petition document is not served', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
-        userId: '4b32e14b-f583-4631-ba44-1439a093d6d0',
+        user: {
+          role: User.ROLES.irsSuperuser,
+          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+        },
+      });
+
+      expect(isAssociated).toBeFalsy();
+    });
+
+    it('returns true if the user is an irs superuser and the petition document is served', () => {
+      caseEntity.documents = [
+        {
+          documentType: 'Petition',
+          servedAt: '2019-03-01T21:40:46.415Z',
+        },
+      ];
+
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        user: {
+          role: User.ROLES.irsSuperuser,
+          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+        },
+      });
+
+      expect(isAssociated).toBeTruthy();
+    });
+
+    it('returns false if the user is an irs superuser and the case does not have documents', () => {
+      caseEntity.documents = undefined;
+
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity,
+        user: {
+          role: User.ROLES.irsSuperuser,
+          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
+        },
+      });
+
+      expect(isAssociated).toBeFalsy();
+    });
+
+    it('returns false if the user is a not a privatePractitioner or irsPractitioner on the case and is not an irs superuser', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        user: { userId: '4b32e14b-f583-4631-ba44-1439a093d6d0' },
       });
 
       expect(isAssociated).toBeFalsy();
@@ -2793,6 +2828,9 @@ describe('Case entity', () => {
   });
 
   describe('DocketRecord indices must be unique', () => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+    );
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -2814,11 +2852,7 @@ describe('Case entity', () => {
         ],
       },
       {
-        applicationContext: {
-          getCurrentUser: () =>
-            MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-          getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
+        applicationContext,
       },
     );
 

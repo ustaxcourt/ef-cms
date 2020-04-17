@@ -1,39 +1,31 @@
-const sinon = require('sinon');
 const {
   createCaseFromPaperInteractor,
 } = require('../useCases/createCaseFromPaperInteractor');
-const {
-  createTestApplicationContext,
-} = require('./createTestApplicationContext');
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const {
   getDocumentQCInboxForUserInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
-const RECEIVED_DATE = '2019-02-01T22:54:06.000Z';
-
 describe('createCaseFromPaperInteractor integration test', () => {
-  let applicationContext;
+  const RECEIVED_DATE = '2019-02-01T22:54:06.000Z';
 
-  beforeEach(() => {
-    sinon.stub(window.Date.prototype, 'toISOString').returns(RECEIVED_DATE);
-    applicationContext = createTestApplicationContext({
-      user: {
-        name: 'Alex Petitionsclerk',
-        role: User.ROLES.petitionsClerk,
-        userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-      },
+  beforeAll(() => {
+    window.Date.prototype.toISOString = jest
+      .fn()
+      .mockReturnValue(RECEIVED_DATE);
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Alex Petitionsclerk',
+      role: User.ROLES.petitionsClerk,
+      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
     });
-  });
-
-  afterEach(() => {
-    window.Date.prototype.toISOString.restore();
   });
 
   it('should persist the paper case into the database', async () => {

@@ -13,18 +13,18 @@ export const EditTrialSession = connect(
   {
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
     updateTrialSessionSequence: sequences.updateTrialSessionSequence,
   },
-  ({
+  function EditTrialSession({
     form,
     formCancelToggleCancelSequence,
     showModal,
     updateTrialSessionFormDataSequence,
     updateTrialSessionSequence,
-  }) => {
+  }) {
     return (
       <>
         <TrialSessionDetailHeader />

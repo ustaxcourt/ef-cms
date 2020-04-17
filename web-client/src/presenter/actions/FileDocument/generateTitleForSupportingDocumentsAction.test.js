@@ -1,23 +1,15 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateTitleForSupportingDocumentsAction } from './generateTitleForSupportingDocumentsAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 describe('generateTitleForSupportingDocumentsAction', () => {
-  let generateDocumentTitleStub;
+  const { generateDocumentTitleInteractor } = applicationContext.getUseCases();
 
-  beforeEach(() => {
-    generateDocumentTitleStub = sinon.stub();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        generateDocumentTitleInteractor: generateDocumentTitleStub,
-      }),
-    };
-  });
+  presenter.providers.applicationContext = applicationContext;
 
   it('should call generateDocumentTitle with correct data for supporting documents', async () => {
-    generateDocumentTitleStub.returns(null);
+    generateDocumentTitleInteractor.mockReturnValue(null);
     await runAction(generateTitleForSupportingDocumentsAction, {
       modules: {
         presenter,
@@ -41,11 +33,11 @@ describe('generateTitleForSupportingDocumentsAction', () => {
     });
 
     expect(
-      generateDocumentTitleStub.getCall(0).args[0].documentMetadata
+      generateDocumentTitleInteractor.mock.calls[0][0].documentMetadata
         .documentType,
     ).toEqual('Motion for a New Trial');
     expect(
-      generateDocumentTitleStub.getCall(1).args[0].documentMetadata
+      generateDocumentTitleInteractor.mock.calls[1][0].documentMetadata
         .documentType,
     ).toEqual('Application for Waiver of Filing Fee');
   });

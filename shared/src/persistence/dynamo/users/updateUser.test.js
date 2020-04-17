@@ -1,45 +1,32 @@
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { updateUser } = require('./updateUser');
 const { User } = require('../../../business/entities/User');
 
+const mockUserId = '9b52c605-edba-41d7-b045-d5f992a499d3';
+
+const mockUser = {
+  name: 'Test User',
+  role: User.ROLES.petitionsClerk,
+  section: 'petitions',
+  userId: mockUserId,
+};
+
 describe('updateUser', () => {
-  let applicationContext;
-  let putStub;
-
-  const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
-
-  beforeEach(() => {
-    putStub = sinon.stub().returns({
-      promise: async () => null,
-    });
-
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        put: putStub,
-      }),
-    };
-  });
-
   it('makes put request with the given user data for the matching user id', async () => {
-    const user = {
-      name: 'Test User',
-      role: User.ROLES.petitionsClerk,
-      section: 'petitions',
-      userId,
-    };
     await updateUser({
       applicationContext,
-      user,
+      user: mockUser,
     });
 
-    expect(putStub.getCall(0).args[0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0],
+    ).toMatchObject({
       Item: {
-        pk: userId,
-        sk: userId,
-        ...user,
+        pk: `user|${mockUserId}`,
+        sk: `user|${mockUserId}`,
+        ...mockUser,
       },
     });
   });

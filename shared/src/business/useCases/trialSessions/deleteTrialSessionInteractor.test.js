@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   deleteTrialSessionInteractor,
 } = require('./deleteTrialSessionInteractor');
 const { User } = require('../../entities/User');
@@ -20,20 +23,27 @@ const MOCK_TRIAL = {
   trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
 };
 
+let user;
+let mockTrialSession;
+
 describe('deleteTrialSessionInteractor', () => {
-  let applicationContext;
+  beforeEach(() => {
+    mockTrialSession = MOCK_TRIAL;
+
+    applicationContext.environment.stage = 'local';
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockImplementation(() => mockTrialSession);
+  });
 
   it('throws error if user is unauthorized', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
-      getPersistenceGateway: () => ({}),
+    user = {
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
     };
+
     await expect(
       deleteTrialSessionInteractor({
         applicationContext,
@@ -43,18 +53,13 @@ describe('deleteTrialSessionInteractor', () => {
   });
 
   it('throws an exception when it fails to find a trial session', async () => {
-    applicationContext = {
-      getCurrentUser: () => {
-        return new User({
-          name: 'Docket Clerk',
-          role: User.ROLES.docketClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => ({
-        getTrialSessionById: () => null,
-      }),
-    };
+    user = new User({
+      name: 'Docket Clerk',
+      role: User.ROLES.docketClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    mockTrialSession = null;
 
     await expect(
       deleteTrialSessionInteractor({
@@ -65,22 +70,14 @@ describe('deleteTrialSessionInteractor', () => {
   });
 
   it('throws error when trial session start date is in the past', async () => {
-    applicationContext = {
-      getCurrentUser: () => {
-        return new User({
-          name: 'Docket Clerk',
-          role: User.ROLES.docketClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => ({
-        getTrialSessionById: () => ({
-          ...MOCK_TRIAL,
-        }),
-      }),
-      getUtilities: () => ({
-        createISODateString: () => '2050-12-01T00:00:00.000Z',
-      }),
+    user = new User({
+      name: 'Docket Clerk',
+      role: User.ROLES.docketClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    mockTrialSession = {
+      ...MOCK_TRIAL,
     };
 
     await expect(
@@ -92,24 +89,16 @@ describe('deleteTrialSessionInteractor', () => {
   });
 
   it('throws error if trial session is calendared', async () => {
-    applicationContext = {
-      getCurrentUser: () => {
-        return new User({
-          name: 'Docket Clerk',
-          role: User.ROLES.docketClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => ({
-        getTrialSessionById: () => ({
-          ...MOCK_TRIAL,
-          isCalendared: true,
-          startDate: '2100-12-01T00:00:00.000Z',
-        }),
-      }),
-      getUtilities: () => ({
-        createISODateString: () => '2050-12-01T00:00:00.000Z',
-      }),
+    user = new User({
+      name: 'Docket Clerk',
+      role: User.ROLES.docketClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    mockTrialSession = {
+      ...MOCK_TRIAL,
+      isCalendared: true,
+      startDate: '2100-12-01T00:00:00.000Z',
     };
 
     await expect(
@@ -121,44 +110,36 @@ describe('deleteTrialSessionInteractor', () => {
   });
 
   it('deletes the trial session and invokes expected persistence methods', async () => {
-    const deleteTrialSessionWorkingCopySpy = jest.fn();
-    const deleteTrialSessionSpy = jest.fn();
-    const updateCaseSpy = jest.fn();
-    const createCaseTrialSortMappingRecordsSpy = jest.fn();
+    user = new User({
+      name: 'Docket Clerk',
+      role: User.ROLES.docketClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
 
-    applicationContext = {
-      getCurrentUser: () => {
-        return new User({
-          name: 'Docket Clerk',
-          role: User.ROLES.docketClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => ({
-        createCaseTrialSortMappingRecords: createCaseTrialSortMappingRecordsSpy,
-        deleteTrialSession: deleteTrialSessionSpy,
-        deleteTrialSessionWorkingCopy: deleteTrialSessionWorkingCopySpy,
-        getCaseByCaseId: () => MOCK_CASE,
-        getTrialSessionById: () => ({
-          ...MOCK_TRIAL,
-          startDate: '2100-12-01T00:00:00.000Z',
-        }),
-        updateCase: updateCaseSpy,
-      }),
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      getUtilities: () => ({
-        createISODateString: () => '2050-12-01T00:00:00.000Z',
-      }),
+    mockTrialSession = {
+      ...MOCK_TRIAL,
+      startDate: '2100-12-01T00:00:00.000Z',
     };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
 
     await deleteTrialSessionInteractor({
       applicationContext,
       trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(deleteTrialSessionWorkingCopySpy).toBeCalled();
-    expect(deleteTrialSessionSpy).toBeCalled();
-    expect(createCaseTrialSortMappingRecordsSpy).toBeCalled();
-    expect(updateCaseSpy).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().deleteTrialSessionWorkingCopy,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().deleteTrialSession,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 });

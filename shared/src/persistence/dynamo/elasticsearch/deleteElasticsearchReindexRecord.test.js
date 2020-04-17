@@ -1,26 +1,11 @@
 const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+const {
   deleteElasticsearchReindexRecord,
 } = require('./deleteElasticsearchReindexRecord');
 
 describe('deleteElasticsearchReindexRecord', () => {
-  let applicationContext;
-  let deleteStub;
-
-  beforeEach(() => {
-    deleteStub = jest.fn().mockReturnValue({
-      promise: async () => null,
-    });
-
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        delete: deleteStub,
-      }),
-    };
-  });
-
   it('deletes the reindex record', async () => {
     await deleteElasticsearchReindexRecord({
       applicationContext,
@@ -28,7 +13,9 @@ describe('deleteElasticsearchReindexRecord', () => {
       recordSk: 'abc',
     });
 
-    expect(deleteStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls[0][0],
+    ).toMatchObject({
       Key: {
         pk: 'elasticsearch-reindex',
         sk: '123-abc',

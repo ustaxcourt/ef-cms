@@ -38,14 +38,14 @@ export const setupPercentDone = (files, store) => {
         (totalSize - uploadedBytes) / uploadSpeed,
       );
       const percent = parseInt((uploadedBytes / totalSize) * 100);
-      store.set(state.percentComplete, percent);
-      store.set(state.timeRemaining, timeRemaining);
+      store.set(state.fileUploadProgress.percentComplete, percent);
+      store.set(state.fileUploadProgress.timeRemaining, timeRemaining);
     };
   };
 
-  store.set(state.percentComplete, 0);
-  store.set(state.timeRemaining, Number.POSITIVE_INFINITY);
-  store.set(state.isUploading, true);
+  store.set(state.fileUploadProgress.percentComplete, 0);
+  store.set(state.fileUploadProgress.timeRemaining, Number.POSITIVE_INFINITY);
+  store.set(state.fileUploadProgress.isUploading, true);
 
   const uploadProgressCallbackMap = {};
   Object.keys(files).forEach(key => {
@@ -130,15 +130,6 @@ export const createCaseFromPaperAction = async ({
   } catch (err) {
     return path.error();
   }
-
-  const addCoversheet = document => {
-    return applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      caseId: caseDetail.caseId,
-      documentId: document.documentId,
-    });
-  };
-  await Promise.all(caseDetail.documents.map(addCoversheet));
 
   return path.success({
     caseDetail,

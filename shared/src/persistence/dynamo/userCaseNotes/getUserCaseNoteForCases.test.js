@@ -1,10 +1,12 @@
 const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { getUserCaseNoteForCases } = require('./getUserCaseNoteForCases');
 
 describe('getUserCaseNoteForCases', () => {
   beforeEach(() => {
-    sinon.stub(client, 'batchGet').resolves([
+    client.batchGet = jest.fn().mockReturnValue([
       {
         caseId: '123',
         notes: 'something',
@@ -15,16 +17,7 @@ describe('getUserCaseNoteForCases', () => {
     ]);
   });
 
-  afterEach(() => {
-    client.batchGet.restore();
-  });
-
   it('should get the case notes by case id and user id', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-    };
     const result = await getUserCaseNoteForCases({
       applicationContext,
       caseIds: ['123'],

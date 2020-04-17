@@ -1,10 +1,6 @@
-const sinon = require('sinon');
 const {
   completeWorkItemInteractor,
 } = require('../useCases/workitems/completeWorkItemInteractor');
-const {
-  createTestApplicationContext,
-} = require('./createTestApplicationContext');
 const {
   createWorkItemInteractor,
 } = require('../useCases/workitems/createWorkItemInteractor');
@@ -14,29 +10,17 @@ const {
 const {
   getSentMessagesForUserInteractor,
 } = require('../useCases/workitems/getSentMessagesForUserInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 
-const CREATED_DATE = '2019-03-01T22:54:06.000Z';
-
 describe('completeWorkItemInteractor integration test', () => {
-  let applicationContext;
+  const CREATED_DATE = '2019-03-01T22:54:06.000Z';
 
-  beforeEach(() => {
-    sinon.stub(window.Date.prototype, 'toISOString').returns(CREATED_DATE);
-    applicationContext = createTestApplicationContext({
-      user: {
-        name: 'Rick Petitioner',
-        role: User.ROLES.petitioner,
-        userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    });
-  });
-
-  afterEach(() => {
-    window.Date.prototype.toISOString.restore();
+  beforeAll(() => {
+    window.Date.prototype.toISOString = jest.fn().mockReturnValue(CREATED_DATE);
   });
 
   it('should create the expected case into the database', async () => {
@@ -67,13 +51,13 @@ describe('completeWorkItemInteractor integration test', () => {
       stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
-    applicationContext.getCurrentUser = () => {
-      return new User({
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
         name: 'richard',
         role: User.ROLES.petitionsClerk,
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-      });
-    };
+      }),
+    );
 
     const createdCase = await getCaseInteractor({
       applicationContext,

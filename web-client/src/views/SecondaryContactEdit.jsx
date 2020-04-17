@@ -12,29 +12,29 @@ import React from 'react';
 
 export const SecondaryContactEdit = connect(
   {
-    caseDetail: state.caseDetail,
     contactEditHelper: state.contactEditHelper,
+    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     submitEditSecondaryContactSequence:
       sequences.submitEditSecondaryContactSequence,
-    updateCaseValueSequence: sequences.updateCaseValueSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
     validateSecondaryContactSequence:
       sequences.validateSecondaryContactSequence,
     validationErrors: state.validationErrors,
   },
-  ({
-    caseDetail,
+  function SecondaryContactEdit({
     contactEditHelper,
+    form,
     formCancelToggleCancelSequence,
     showModal,
     submitEditSecondaryContactSequence,
-    updateCaseValueSequence,
+    updateFormValueSequence,
     validateSecondaryContactSequence,
     validationErrors,
-  }) => {
+  }) {
     const type = 'contactSecondary';
-    const bind = 'caseDetail';
+    const bind = 'form';
     const onBlur = 'validateSecondaryContactSequence';
 
     return (
@@ -61,7 +61,7 @@ export const SecondaryContactEdit = connect(
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
               <p className="usa-label">Contact name</p>
-              <p className="margin-top-0">{caseDetail.contactSecondary.name}</p>
+              <p className="margin-top-0">{form.contactSecondary.name}</p>
             </div>
 
             {contactEditHelper.contactSecondary?.showInCareOf && (
@@ -77,12 +77,12 @@ export const SecondaryContactEdit = connect(
                   id="inCareOf"
                   name="contactSecondary.inCareOf"
                   type="text"
-                  value={caseDetail.contactSecondary.inCareOf || ''}
+                  value={form.contactSecondary.inCareOf || ''}
                   onBlur={() => {
                     validateSecondaryContactSequence();
                   }}
                   onChange={e => {
-                    updateCaseValueSequence({
+                    updateFormValueSequence({
                       key: e.target.name,
                       value: e.target.value,
                     });
@@ -95,21 +95,21 @@ export const SecondaryContactEdit = connect(
               bind={bind}
               clearTypeOnCountryChange={true}
               type={type}
-              onChange="countryTypeChangeSequence"
+              onChange="contactSecondaryCountryTypeChangeSequence"
             />
-            {caseDetail.contactSecondary.countryType === 'domestic' ? (
+            {form.contactSecondary.countryType === 'domestic' ? (
               <Address
                 bind={bind}
                 type={type}
                 onBlur={onBlur}
-                onChange="updateCaseValueSequence"
+                onChange="updateFormValueSequence"
               />
             ) : (
               <InternationalAddress
                 bind={bind}
                 type={type}
                 onBlur={onBlur}
-                onChange="updateCaseValueSequence"
+                onChange="updateFormValueSequence"
               />
             )}
             <FormGroup
@@ -128,12 +128,12 @@ export const SecondaryContactEdit = connect(
                 id="phone"
                 name="contactSecondary.phone"
                 type="tel"
-                value={caseDetail.contactSecondary.phone || ''}
+                value={form.contactSecondary.phone || ''}
                 onBlur={() => {
                   validateSecondaryContactSequence();
                 }}
                 onChange={e => {
-                  updateCaseValueSequence({
+                  updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });

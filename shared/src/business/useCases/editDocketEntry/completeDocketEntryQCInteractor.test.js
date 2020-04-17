@@ -1,61 +1,41 @@
+const fs = require('fs');
+const path = require('path');
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const {
   completeDocketEntryQCInteractor,
 } = require('./completeDocketEntryQCInteractor');
 const { User } = require('../../entities/User');
-import {
-  createISODateString,
-  formatDateString,
-} from '../../../../../shared/src/business/utilities/DateHandler';
-const fs = require('fs');
-const path = require('path');
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
 describe('completeDocketEntryQCInteractor', () => {
-  const testPdfDocBytes = () => {
-    // sample.pdf is a 1 page document
-    return fs.readFileSync(testAssetsPath + 'sample.pdf');
-  };
-
-  let applicationContext;
-  let globalUser;
-  const getCaseByCaseIdSpy = jest.fn(() => caseRecord);
-  const deleteWorkItemFromInboxSpy = jest.fn();
-  const saveWorkItemForDocketClerkFilingExternalDocumentSpy = jest.fn();
-  const updateCaseSpy = jest.fn();
-  const testPdfDoc = testPdfDocBytes();
-  const addCoversheetInteractorSpy = jest.fn();
-
-  const PDF_MOCK_BUFFER = 'Hello World';
-  const pageMock = {
-    addStyleTag: () => {},
-    pdf: () => {
-      return PDF_MOCK_BUFFER;
-    },
-    setContent: () => {},
-  };
-  const chromiumBrowserMock = {
-    close: jest.fn(),
-    newPage: () => pageMock,
-  };
-
-  const workItem = {
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    docketNumber: '45678-18',
-    document: {
-      documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentType: 'Answer',
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    },
-    isQC: true,
-    section: 'docket',
-    sentBy: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    updatedAt: new Date().toISOString(),
-    workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-  };
-
   let caseRecord;
 
   beforeEach(() => {
+    const testPdfDocBytes = () => {
+      // sample.pdf is a 1 page document
+      return fs.readFileSync(testAssetsPath + 'sample.pdf');
+    };
+    const testPdfDoc = testPdfDocBytes();
+
+    const PDF_MOCK_BUFFER = 'Hello World';
+
+    const workItem = {
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: '45678-18',
+      document: {
+        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentType: 'Answer',
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+      isQC: true,
+      section: 'docket',
+      sentBy: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      updatedAt: new Date().toISOString(),
+      workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    };
+
     caseRecord = {
       caseCaption: 'Caption',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -102,88 +82,65 @@ describe('completeDocketEntryQCInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
-    jest.clearAllMocks();
-
-    globalUser = new User({
+    applicationContext.getPug.mockImplementation(() => ({
+      compile: () => () => '',
+    }));
+    applicationContext.getCurrentUser.mockReturnValue({
       name: 'Olivia Jade',
       role: User.ROLES.docketClerk,
       section: 'docket',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
-
-    applicationContext = {
-      environment: { stage: 'local' },
-      getChromiumBrowser: () => chromiumBrowserMock,
-      getCurrentUser: () => globalUser,
-      getDocumentsBucketName: () => 'DocumentBucketName',
-      getNodeSass: () => ({ render: (data, cb) => cb(data, { css: '' }) }),
-      getPersistenceGateway: () => ({
-        deleteWorkItemFromInbox: deleteWorkItemFromInboxSpy,
-        getCaseByCaseId: getCaseByCaseIdSpy,
-        getDownloadPolicyUrl: () => ({
-          url: 'www.example.com',
-        }),
-        getUserById: async () => globalUser,
-        saveDocumentFromLambda: jest.fn(),
-        saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
-        updateCase: updateCaseSpy,
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      name: 'Olivia Jade',
+      role: User.ROLES.docketClerk,
+      section: 'docket',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(caseRecord);
+    applicationContext
+      .getUseCaseHelpers()
+      .generatePaperServiceAddressPagePdf.mockReturnValue(testPdfDoc);
+    applicationContext.getUniqueId.mockReturnValue(
+      'b6f835aa-bf95-4996-b858-c8e94566db47',
+    );
+    applicationContext.getStorageClient().getObject.mockReturnValue({
+      promise: async () => ({
+        Body: testPdfDoc,
       }),
-      getPug: () => ({ compile: () => () => '' }),
-      getStorageClient: () => ({
-        getObject: jest.fn().mockReturnValue({
-          promise: async () => ({
-            Body: testPdfDoc,
-          }),
-        }),
-        upload: jest.fn().mockImplementation((params, resolve) => resolve()),
-      }),
-      getUniqueId: () => 'b6f835aa-bf95-4996-b858-c8e94566db47',
-      getUseCaseHelpers: () => ({
-        appendPaperServiceAddressPageToPdf: jest.fn(),
-        generatePaperServiceAddressPagePdf: jest
-          .fn()
-          .mockResolvedValue(testPdfDoc),
-        sendServedPartiesEmails: jest.fn(),
-      }),
-      getUseCases: () => ({
-        addCoversheetInteractor: addCoversheetInteractorSpy,
-      }),
-      getUtilities: () => {
-        return {
-          createISODateString,
-          formatDateString,
-        };
+    });
+    applicationContext
+      .getStorageClient()
+      .upload.mockImplementation((params, resolve) => resolve());
+    applicationContext.getChromiumBrowser().newPage.mockReturnValue({
+      addStyleTag: () => {},
+      pdf: () => {
+        return PDF_MOCK_BUFFER;
       },
-      logger: {
-        error: () => {},
-        time: () => {},
-        timeEnd: () => {},
-      },
-    };
+      setContent: () => {},
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockReturnValue({
+        url: 'www.example.com',
+      });
   });
 
   it('should throw an error if not authorized', async () => {
-    let error;
-    globalUser = {
-      name: 'Olivia Jade',
-      role: User.ROLES.adc,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-    try {
-      await completeDocketEntryQCInteractor({
+    applicationContext.getCurrentUser.mockReturnValue({});
+
+    await expect(
+      completeDocketEntryQCInteractor({
         applicationContext,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain('Unauthorized');
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('adds documents and workitems', async () => {
-    let error;
-
-    try {
-      await completeDocketEntryQCInteractor({
+    await expect(
+      completeDocketEntryQCInteractor({
         applicationContext,
         entryMetadata: {
           caseId: caseRecord.caseId,
@@ -193,15 +150,20 @@ describe('completeDocketEntryQCInteractor', () => {
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
         },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
-    expect(getCaseByCaseIdSpy).toBeCalled();
-    expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
-    expect(deleteWorkItemFromInboxSpy).toBeCalled();
-    expect(updateCaseSpy).toBeCalled();
+      }),
+    ).resolves.not.toThrow();
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 
   it('serves the document for electronic-only parties if a notice of docket change is generated', async () => {
@@ -215,8 +177,7 @@ describe('completeDocketEntryQCInteractor', () => {
       state: 'AK',
     };
 
-    let error;
-    let result;
+    let result, error;
 
     try {
       result = await completeDocketEntryQCInteractor({
@@ -233,11 +194,19 @@ describe('completeDocketEntryQCInteractor', () => {
     } catch (err) {
       error = err;
     }
+
     expect(error).toBeUndefined();
-    expect(getCaseByCaseIdSpy).toBeCalled();
-    expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
-    expect(deleteWorkItemFromInboxSpy).toBeCalled();
-    expect(updateCaseSpy).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(result.paperServicePdfUrl).toBeUndefined();
     expect(result.paperServiceParties.length).toEqual(0);
   });
@@ -256,10 +225,18 @@ describe('completeDocketEntryQCInteractor', () => {
         eventCode: 'MISP',
       },
     });
-    expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
-    expect(deleteWorkItemFromInboxSpy).toBeCalled();
-    expect(updateCaseSpy).toBeCalled();
-    expect(addCoversheetInteractorSpy).toBeCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toBeCalled();
   });
 
   it('generates a notice of docket change with a new coversheet if additional info fields are removed and serves the document', async () => {
@@ -274,9 +251,15 @@ describe('completeDocketEntryQCInteractor', () => {
         eventCode: 'MISP',
       },
     });
-    expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
-    expect(updateCaseSpy).toBeCalled();
-    expect(addCoversheetInteractorSpy).toBeCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toBeCalled();
   });
 
   it('does not generate a new coversheet if nothing changes', async () => {
@@ -292,7 +275,10 @@ describe('completeDocketEntryQCInteractor', () => {
         eventCode: 'A',
       },
     });
-    expect(addCoversheetInteractorSpy).not.toBeCalled();
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toBeCalled();
   });
 
   it('serves the document for parties with paper service if a notice of docket change is generated', async () => {
@@ -326,10 +312,17 @@ describe('completeDocketEntryQCInteractor', () => {
       error = err;
     }
     expect(error).toBeUndefined();
-    expect(getCaseByCaseIdSpy).toBeCalled();
-    expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
-    expect(deleteWorkItemFromInboxSpy).toBeCalled();
-    expect(updateCaseSpy).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
   });
@@ -365,10 +358,17 @@ describe('completeDocketEntryQCInteractor', () => {
       error = err;
     }
     expect(error).toBeUndefined();
-    expect(getCaseByCaseIdSpy).toBeCalled();
-    expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
-    expect(deleteWorkItemFromInboxSpy).toBeCalled();
-    expect(updateCaseSpy).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
   });
@@ -403,10 +403,17 @@ describe('completeDocketEntryQCInteractor', () => {
       error = err;
     }
     expect(error).toBeUndefined();
-    expect(getCaseByCaseIdSpy).toBeCalled();
-    expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
-    expect(deleteWorkItemFromInboxSpy).toBeCalled();
-    expect(updateCaseSpy).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(result.paperServicePdfUrl).toEqual(undefined);
     expect(result.paperServiceParties.length).toEqual(0);
   });

@@ -12,8 +12,8 @@ exports.createTrialSession = async ({ applicationContext, trialSession }) => {
   return await put({
     Item: {
       gsi1pk: 'trial-session-catalog',
-      pk: `trial-session-${trialSession.trialSessionId}`,
-      sk: `trial-session-${trialSession.trialSessionId}`,
+      pk: `trial-session|${trialSession.trialSessionId}`,
+      sk: `trial-session|${trialSession.trialSessionId}`,
       ...trialSession,
     },
     applicationContext,

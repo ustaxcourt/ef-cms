@@ -7,5 +7,5 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  */
 export const closeMobileMenuAction = ({ store }) => {
-  store.set(state.mobileMenu.isVisible, false);
+  store.set(state.header.showMobileMenu, false);
 };

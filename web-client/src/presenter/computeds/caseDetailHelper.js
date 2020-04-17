@@ -8,7 +8,7 @@ export const caseDetailHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
   const documentDetailTab =
-    get(state.caseDetailPage.primaryTab) || 'docketRecord';
+    get(state.currentViewMetadata.caseDetail.primaryTab) || 'docketRecord';
   const currentPage = get(state.currentPage);
   const isExternalUser = applicationContext
     .getUtilities()
@@ -74,8 +74,8 @@ export const caseDetailHelper = (get, applicationContext) => {
       if (practitioner.contact) {
         practitioner.cityStateZip = `${practitioner.contact.city}, ${practitioner.contact.state} ${practitioner.contact.postalCode}`;
       }
-      if (caseDetail.practitioners) {
-        practitioner.isAlreadyInCase = caseDetail.practitioners.find(
+      if (caseDetail.privatePractitioners) {
+        practitioner.isAlreadyInCase = caseDetail.privatePractitioners.find(
           casePractitioner => casePractitioner.userId === practitioner.userId,
         );
       }
@@ -87,8 +87,8 @@ export const caseDetailHelper = (get, applicationContext) => {
       if (respondent.contact) {
         respondent.cityStateZip = `${respondent.contact.city}, ${respondent.contact.state} ${respondent.contact.postalCode}`;
       }
-      if (caseDetail.respondents) {
-        respondent.isAlreadyInCase = caseDetail.respondents.find(
+      if (caseDetail.irsPractitioners) {
+        respondent.isAlreadyInCase = caseDetail.irsPractitioners.find(
           caseRespondent => caseRespondent.userId === respondent.userId,
         );
       }
@@ -123,20 +123,23 @@ export const caseDetailHelper = (get, applicationContext) => {
     showEditPetitionDetailsButton: permissions.EDIT_PETITION_DETAILS,
     showEditPetitionerInformation,
     showEditSecondaryContactModal:
-      get(state.showModal) === 'EditSecondaryContact',
+      get(state.modal.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
     showFilingFeeExternal:
-      isExternalUser && user.role !== USER_ROLES.irsPractitioner,
+      isExternalUser &&
+      user.role !== USER_ROLES.irsPractitioner &&
+      user.role !== USER_ROLES.irsSuperuser,
     showIrsServedDate: !!caseDetail.irsSendDate,
     showJudgesNotes,
     showPractitionerSection:
       !isExternalUser ||
-      (caseDetail.practitioners && !!caseDetail.practitioners.length),
+      (caseDetail.privatePractitioners &&
+        !!caseDetail.privatePractitioners.length),
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,
     showRespondentSection:
       !isExternalUser ||
-      (caseDetail.respondents && !!caseDetail.respondents.length),
+      (caseDetail.irsPractitioners && !!caseDetail.irsPractitioners.length),
     userCanViewCase:
       (isExternalUser && userAssociatedWithCase) || !caseDetail.isSealed,
     userHasAccessToCase,

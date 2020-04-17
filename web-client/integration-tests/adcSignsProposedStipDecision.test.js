@@ -13,11 +13,10 @@ import practitionerFilesDocumentForStipulatedDecision from './journey/practition
 import practitionerViewsCaseDetail from './journey/practitionerViewsCaseDetail';
 
 // petitioner
-import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
-import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
-import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerNavigatesToCreateCase from './journey/petitionerNavigatesToCreateCase';
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
+import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
+import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
+import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
+import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 // adc
 import { adcVerifiesStipulatedDecisionDoesNotExistInInbox } from './journey/adcVerifiesStipulatedDecisionDoesNotExistInInbox';
@@ -38,7 +37,6 @@ describe('Sr. Attorney Signs Proposed Stipulated Decision', () => {
   });
 
   loginAs(test, 'petitioner');
-  petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);

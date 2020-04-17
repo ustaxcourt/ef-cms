@@ -1,32 +1,23 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { completeDocketEntryQCAction } from './completeDocketEntryQCAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('completeDocketEntryQCAction', () => {
-  let completeDocketEntryQCInteractorMock;
-  let caseDetail;
+  const caseDetail = {
+    caseId: '123',
+    docketNumber: '123-45',
+    documents: [
+      { documentId: '123-456-789-abc', documentTitle: "bob's burgers" },
+    ],
+  };
 
-  beforeEach(() => {
-    caseDetail = {
-      caseId: '123',
-      docketNumber: '123-45',
-      documents: [
-        { documentId: '123-456-789-abc', documentTitle: "bob's burgers" },
-      ],
-    };
+  beforeAll(() => {
+    applicationContext
+      .getUseCases()
+      .completeDocketEntryQCInteractor.mockReturnValue({ caseDetail });
 
-    completeDocketEntryQCInteractorMock = jest.fn(() => ({
-      caseDetail,
-    }));
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        completeDocketEntryQCInteractor: completeDocketEntryQCInteractorMock,
-      }),
-      getUtilities: () => ({
-        createISODateString: () => new Date().toISOString(),
-      }),
-    };
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('should call completeDocketEntryQCInteractor and return caseDetail', async () => {
@@ -43,7 +34,11 @@ describe('completeDocketEntryQCAction', () => {
       },
     });
 
-    expect(completeDocketEntryQCInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().completeDocketEntryQCInteractor.mock
+        .calls.length,
+    ).toEqual(1);
+
     expect(result.output).toEqual({
       alertSuccess: {
         message: "bob's burgers has been completed.",

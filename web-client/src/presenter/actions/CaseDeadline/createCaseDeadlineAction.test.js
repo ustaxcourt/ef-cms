@@ -1,24 +1,18 @@
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createCaseDeadlineAction } from './createCaseDeadlineAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
+
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('createCaseDeadlineAction', () => {
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+  beforeAll(() => {
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        createCaseDeadlineInteractor: () => 'something',
-      }),
-      getUtilities: () => ({
-        createISODateString: () => '2019-03-01T21:42:29.073Z',
-      }),
-    };
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -43,6 +37,6 @@ describe('createCaseDeadlineAction', () => {
         },
       },
     });
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 });

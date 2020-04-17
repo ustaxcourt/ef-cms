@@ -12,12 +12,12 @@ export const MultiDocumentPartiesFiling = connect(
     validateExternalDocumentInformationSequence:
       sequences.validateExternalDocumentInformationSequence,
   },
-  ({
+  function MultiDocumentPartiesFiling({
     fileDocumentHelper,
     form,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
-  }) => {
+  }) {
     return (
       <React.Fragment>
         <h2 className="margin-top-4">
@@ -116,10 +116,10 @@ export const MultiDocumentPartiesFiling = connect(
               <div className="usa-checkbox">
                 <input
                   aria-describedby="who-legend"
-                  checked={form.partyRespondent || false}
+                  checked={form.partyIrsPractitioner || false}
                   className="usa-checkbox__input"
-                  id="party-respondent"
-                  name="partyRespondent"
+                  id="party-irs-practitioner"
+                  name="partyIrsPractitioner"
                   type="checkbox"
                   onChange={e => {
                     updateFileDocumentWizardFormValueSequence({
@@ -131,7 +131,7 @@ export const MultiDocumentPartiesFiling = connect(
                 />
                 <label
                   className="usa-checkbox__label inline-block"
-                  htmlFor="party-respondent"
+                  htmlFor="party-irs-practitioner"
                 >
                   Respondent
                 </label>

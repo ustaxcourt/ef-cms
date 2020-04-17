@@ -5,82 +5,7 @@
     "contactSecondary": {},
     "isPaper": false,
     "initialTitle": "Letti Toretto, Petitioner v. Commissioner of Internal Revenue, Respondent",
-    "documents": [
-      {
-        "documentType": "Petition",
-        "partyPrimary": true,
-        "workItems": [
-          {
-            "docketNumberSuffix": "L",
-            "caseStatus": "New",
-            "caseIsInProgress": false,
-            "document": {
-              "eventCode": "P",
-              "createdAt": "2019-12-11T16:02:31.174Z",
-              "processingStatus": "pending",
-              "documentType": "Petition",
-              "filedBy": "Petr. Letti Toretto",
-              "partyPrimary": true,
-              "pending": false,
-              "partySecondary": false,
-              "documentId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d",
-              "receivedAt": "2019-12-11T16:02:31.174Z",
-              "filingDate": "2019-12-11T16:02:31.174Z",
-              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-            },
-            "caseTitle": "Letti Toretto",
-            "section": "petitions",
-            "workItemId": "f1f8459d-771d-4d60-b97c-9f05c7f79b94",
-            "isInitializeCase": true,
-            "assigneeId": null,
-            "isQC": true,
-            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
-            "createdAt": "2019-12-11T16:02:31.175Z",
-            "assigneeName": null,
-            "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
-            "messages": [
-              {
-                "createdAt": "2019-12-11T16:02:31.176Z",
-                "messageId": "3a6fda20-0ec9-47b9-8856-7c7d6bb2b743",
-                "from": "Test Petitioner",
-                "message": "Petition filed by Letti Toretto is ready for review.",
-                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-              }
-            ],
-            "docketNumber": "113-19",
-            "updatedAt": "2019-12-11T16:02:31.175Z"
-          }
-        ],
-        "pending": false,
-        "receivedAt": "2019-12-11T16:02:31.174Z",
-        "filingDate": "2019-12-11T16:02:31.174Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "eventCode": "P",
-        "createdAt": "2019-12-11T16:02:31.174Z",
-        "processingStatus": "complete",
-        "filedBy": "Petr. Letti Toretto",
-        "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
-        "partySecondary": false,
-        "documentId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d"
-      },
-      {
-        "documentType": "Statement of Taxpayer Identification",
-        "partyPrimary": true,
-        "workItems": [],
-        "pending": false,
-        "receivedAt": "2019-12-11T16:02:31.176Z",
-        "filingDate": "2019-12-11T16:02:31.176Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "eventCode": "STIN",
-        "createdAt": "2019-12-11T16:02:31.176Z",
-        "processingStatus": "complete",
-        "filedBy": "Petr. Letti Toretto",
-        "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
-        "partySecondary": false,
-        "documentId": "3cf1f474-1dcd-47aa-8455-8f9a93d80183"
-      }
-    ],
-    "gsi1pk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "gsi1pk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "receivedAt": "2019-12-11T16:02:31.173Z",
@@ -102,7 +27,7 @@
     "noticeOfAttachments": false,
     "caseCaption": "Letti Toretto, Petitioner",
     "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
-    "sk": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "sk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -115,12 +40,10 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
-    "respondents": [],
-    "practitioners": [],
     "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
     "leadCaseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
-    "pk": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "pk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
     "docketNumber": "113-19",
     "status": "Submitted"
   },
@@ -145,11 +68,89 @@
     "sk": "docket-record|4760bafd-e75e-4924-8072-bdbef4739011"
   },
   {
-    "sk": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
-    "pk": "113-19|case"
+    "sk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "pk": "case-by-docket-number|113-19"
   },
   {
-    "sk": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2019-12-11T16:02:31.176Z",
+    "partyPrimary": true,
+    "workItems": [],
+    "pending": false,
+    "receivedAt": "2019-12-11T16:02:31.176Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "STIN",
+    "createdAt": "2019-12-11T16:02:31.176Z",
+    "processingStatus": "complete",
+    "filedBy": "Petr. Letti Toretto",
+    "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "sk": "document|3cf1f474-1dcd-47aa-8455-8f9a93d80183",
+    "partySecondary": false,
+    "documentId": "3cf1f474-1dcd-47aa-8455-8f9a93d80183",
+    "pk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b"
+  },
+  {
+    "documentType": "Petition",
+    "filingDate": "2019-12-11T16:02:31.174Z",
+    "partyPrimary": true,
+    "workItems": [
+      {
+        "associatedJudge": "Chief Judge",
+        "docketNumberSuffix": "L",
+        "caseStatus": "New",
+        "caseIsInProgress": false,
+        "document": {
+          "eventCode": "P",
+          "createdAt": "2019-12-11T16:02:31.174Z",
+          "processingStatus": "pending",
+          "documentType": "Petition",
+          "filingDate": "2019-12-11T16:02:31.174Z",
+          "filedBy": "Petr. Letti Toretto",
+          "partyPrimary": true,
+          "pending": false,
+          "partySecondary": false,
+          "documentId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d",
+          "receivedAt": "2019-12-11T16:02:31.174Z",
+          "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        "caseTitle": "Letti Toretto",
+        "section": "petitions",
+        "workItemId": "f1f8459d-771d-4d60-b97c-9f05c7f79b94",
+        "isInitializeCase": true,
+        "assigneeId": null,
+        "isQC": true,
+        "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "createdAt": "2019-12-11T16:02:31.175Z",
+        "assigneeName": null,
+        "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+        "messages": [
+          {
+            "createdAt": "2019-12-11T16:02:31.176Z",
+            "messageId": "3a6fda20-0ec9-47b9-8856-7c7d6bb2b743",
+            "from": "Test Petitioner",
+            "message": "Petition filed by Letti Toretto is ready for review.",
+            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+          }
+        ],
+        "docketNumber": "113-19",
+        "updatedAt": "2019-12-11T16:02:31.175Z"
+      }
+    ],
+    "pending": false,
+    "receivedAt": "2019-12-11T16:02:31.174Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "createdAt": "2019-12-11T16:02:31.174Z",
+    "processingStatus": "complete",
+    "filedBy": "Petr. Letti Toretto",
+    "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "sk": "document|6d83425c-8ef3-4c66-b776-6c7957c53f4d",
+    "partySecondary": false,
+    "documentId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d",
+    "pk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b"
   }
 ]

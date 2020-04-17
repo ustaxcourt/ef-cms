@@ -10,11 +10,11 @@ import { state } from 'cerebral';
  */
 export const isRespondentInCaseAction = async ({ get, path }) => {
   const caseDetail = get(state.caseDetail);
-  const respondents = get(state.modal.respondentMatches);
+  const irsPractitioners = get(state.modal.respondentMatches);
   if (
-    respondents.length === 1 &&
-    caseDetail.respondents.find(
-      respondent => respondent.userId === respondents[0].userId,
+    irsPractitioners.length === 1 &&
+    caseDetail.irsPractitioners.find(
+      respondent => respondent.userId === irsPractitioners[0].userId,
     )
   ) {
     return path.yes();

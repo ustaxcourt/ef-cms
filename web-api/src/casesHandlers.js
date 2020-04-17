@@ -1,14 +1,16 @@
 module.exports = {
-  caseAdvancedSearchLambda: require('./cases/caseAdvancedSearchLambda').handler,
+  caseAdvancedSearchLambda: require('./cases/caseAdvancedSearchLambda')
+    .caseAdvancedSearchLambda,
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda')
-    .handler,
-  createCaseLambda: require('./cases/createCaseLambda').handler,
-  getCaseLambda: require('./cases/getCaseLambda').handler,
+    .createCaseFromPaperLambda,
+  createCaseLambda: require('./cases/createCaseLambda').createCaseLambda,
+  getCaseLambda: require('./cases/getCaseLambda').getCaseLambda,
   getConsolidatedCasesByCaseLambda: require('./cases/getConsolidatedCasesByCaseLambda')
-    .handler,
+    .getConsolidatedCasesByCaseLambda,
   removeCasePendingItemLambda: require('./cases/removeCasePendingItemLambda')
-    .handler,
+    .removeCasePendingItemLambda,
   saveCaseDetailInternalEditLambda: require('./cases/saveCaseDetailInternalEditLambda')
-    .handler,
-  serveCaseToIrsLambda: require('./cases/serveCaseToIrsLambda').handler,
+    .saveCaseDetailInternalEditLambda,
+  serveCaseToIrsLambda: require('./cases/serveCaseToIrsLambda')
+    .serveCaseToIrsLambda,
 };

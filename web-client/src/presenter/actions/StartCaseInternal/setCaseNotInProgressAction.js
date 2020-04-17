@@ -8,5 +8,5 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 export const setCaseNotInProgressAction = ({ store }) => {
-  store.set(state.caseDetail.inProgress, false);
+  store.set(state.form.inProgress, false);
 };

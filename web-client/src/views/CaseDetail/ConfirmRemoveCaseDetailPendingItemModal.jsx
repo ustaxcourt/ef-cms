@@ -7,7 +7,7 @@ export const ConfirmRemoveCaseDetailPendingItemModal = connect(
   {
     documentTitle: state.modal.documentTitle,
   },
-  ({ documentTitle }) => {
+  function ConfirmRemoveCaseDetailPendingItemModal({ documentTitle }) {
     return (
       <ConfirmModal
         cancelLabel="No, Take Me Back"

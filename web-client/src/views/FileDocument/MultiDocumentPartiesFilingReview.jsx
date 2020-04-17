@@ -7,7 +7,7 @@ export const MultiDocumentPartiesFilingReview = connect(
   {
     form: state.form,
   },
-  ({ form, selectedCases }) => {
+  function MultiDocumentPartiesFilingReview({ form, selectedCases }) {
     return selectedCases.map(selectedCase => (
       <div
         className="tablet:grid-col-3 margin-bottom-5"
@@ -23,7 +23,7 @@ export const MultiDocumentPartiesFilingReview = connect(
           {!isEmpty(selectedCase.contactSecondary) && (
             <li>{selectedCase.contactSecondary.name}, Petitioner</li>
           )}
-          {form.partyRespondent && <li>Respondent</li>}
+          {form.partyIrsPractitioner && <li>Respondent</li>}
         </ul>
       </div>
     ));

@@ -6,10 +6,10 @@ import {
 } from '../integration-tests/helpers';
 
 // Petitioner
-import petitionerChoosesCaseType from '../integration-tests/journey/petitionerChoosesCaseType';
-import petitionerChoosesProcedureType from '../integration-tests/journey/petitionerChoosesProcedureType';
-import petitionerCreatesNewCase from '../integration-tests/journey/petitionerCreatesNewCase';
-import petitionerNavigatesToCreateCase from '../integration-tests/journey/petitionerCancelsCreateCase';
+import { petitionerCancelsCreateCase } from '../integration-tests/journey/petitionerCancelsCreateCase';
+import { petitionerChoosesCaseType } from '../integration-tests/journey/petitionerChoosesCaseType';
+import { petitionerChoosesProcedureType } from '../integration-tests/journey/petitionerChoosesProcedureType';
+import { petitionerCreatesNewCase } from '../integration-tests/journey/petitionerCreatesNewCase';
 
 // Docket clerk
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
@@ -37,8 +37,9 @@ const testClient = setupTestClient({
 testClient.draftOrders = [];
 
 describe('Petitioner creates cases to search for', () => {
+  jest.setTimeout(10000);
   loginAs(testClient, 'petitioner');
-  petitionerNavigatesToCreateCase(testClient);
+  petitionerCancelsCreateCase(testClient);
   petitionerChoosesProcedureType(testClient);
   petitionerChoosesCaseType(testClient);
   petitionerCreatesNewCase(testClient, fakeFile);

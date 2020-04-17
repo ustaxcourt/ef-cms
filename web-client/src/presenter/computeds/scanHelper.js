@@ -42,7 +42,8 @@ export const scanHelper = (get, applicationContext) => {
     requestForPlaceOfTrialFileCompleted,
     scanFeatureEnabled,
     scanModeOptions,
-    showScannerSourceModal: get(state.showModal) === 'SelectScannerSourceModal',
+    showScannerSourceModal:
+      get(state.modal.showModal) === 'SelectScannerSourceModal',
     sources: get(state.scanner.sources),
     stinFileCompleted,
   };

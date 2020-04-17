@@ -4,28 +4,21 @@ const {
   addCoversheetInteractor,
   generateCoverSheetData,
 } = require('./addCoversheetInteractor.js');
-const {
-  createISODateString,
-  formatDateString,
-  formatNow,
-  prepareDateFromString,
-} = require('../utilities/DateHandler');
-const { Case } = require('../entities/cases/Case');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { getChromiumBrowser } = require('../utilities/getChromiumBrowser');
-const { MOCK_USERS } = require('../../test/mockUsers');
 const { PDFDocument } = require('pdf-lib');
 
-const testAssetsPath = path.join(__dirname, '../../../test-assets/');
-const testOutputPath = path.join(__dirname, '../../../test-output/');
-
-const testPdfDocBytes = () => {
-  // sample.pdf is a 1 page document
-  return fs.readFileSync(testAssetsPath + 'sample.pdf');
-};
-
 describe('addCoversheetInteractor', () => {
-  let testPdfDoc;
+  const testAssetsPath = path.join(__dirname, '../../../test-assets/');
+  const testOutputPath = path.join(__dirname, '../../../test-output/');
+
+  const testPdfDocBytes = () => {
+    // sample.pdf is a 1 page document
+    return fs.readFileSync(testAssetsPath + 'sample.pdf');
+  };
+
+  const testPdfDoc = testPdfDocBytes();
 
   const testingCaseData = {
     caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -77,62 +70,24 @@ describe('addCoversheetInteractor', () => {
     partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
   };
 
-  const updateDocumentProcessingStatusStub = jest.fn(() => null);
-  const getObjectStub = jest.fn(() => ({
-    promise: async () => ({
-      Body: testPdfDoc,
-    }),
-  }));
+  beforeAll(() => {
+    jest.setTimeout(30000);
 
-  let getChromiumBrowserStub;
-  let getCaseByCaseIdStub;
-  let saveDocumentFromLambdaStub;
-  let applicationContext;
-
-  beforeEach(() => {
-    testPdfDoc = testPdfDocBytes();
-
-    getChromiumBrowserStub = jest.fn(async () => {
-      return await getChromiumBrowser();
+    applicationContext.getStorageClient().getObject.mockReturnValue({
+      promise: async () => ({
+        Body: testPdfDoc,
+      }),
     });
 
-    applicationContext = {
-      environment: { documentsBucketName: 'documents' },
-      getCaseCaptionNames: Case.getCaseCaptionNames,
-      getChromiumBrowser: getChromiumBrowserStub,
-      getCurrentUser: () => MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      getPersistenceGateway: () => ({
-        getCaseByCaseId: getCaseByCaseIdStub,
-        saveDocumentFromLambda: saveDocumentFromLambdaStub,
-        updateDocumentProcessingStatus: updateDocumentProcessingStatusStub,
-      }),
-      getStorageClient: () => ({
-        getObject: getObjectStub,
-      }),
-      getUtilities: () => {
-        return {
-          createISODateString,
-          formatDateString,
-          formatNow,
-          prepareDateFromString,
-        };
-      },
-      logger: {
-        error: e => console.log(e),
-        time: () => null,
-        timeEnd: () => null,
-      },
-    };
+    applicationContext.getChromiumBrowser.mockImplementation(
+      async () => await getChromiumBrowser(),
+    );
   });
 
   it('adds a cover page to a pdf document', async () => {
-    getCaseByCaseIdStub = jest.fn(() => testingCaseData);
-    saveDocumentFromLambdaStub = jest.fn(({ document: newPdfData }) => {
-      fs.writeFileSync(
-        testOutputPath + 'addCoverToPDFDocument_1.pdf',
-        newPdfData,
-      );
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(testingCaseData);
 
     const params = {
       applicationContext,
@@ -144,19 +99,26 @@ describe('addCoversheetInteractor', () => {
 
     const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
-    expect(saveDocumentFromLambdaStub).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
     expect(newPdfDocPages.length).toEqual(2);
-    expect(getChromiumBrowserStub).toHaveBeenCalled();
+    expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
   });
 
   it('adds a cover page to a pdf document with optional data', async () => {
-    getCaseByCaseIdStub = jest.fn(() => optionalTestingCaseData);
-    saveDocumentFromLambdaStub = jest.fn(({ document: newPdfData }) => {
-      fs.writeFileSync(
-        testOutputPath + 'addCoverToPDFDocument_2.pdf',
-        newPdfData,
-      );
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(optionalTestingCaseData);
+    applicationContext
+      .getPersistenceGateway()
+      .saveDocumentFromLambda.mockImplementation(({ document: newPdfData }) => {
+        fs.writeFileSync(
+          testOutputPath + 'addCoverToPDFDocument_2.pdf',
+          newPdfData,
+        );
+      });
 
     const params = {
       applicationContext,
@@ -168,50 +130,39 @@ describe('addCoversheetInteractor', () => {
 
     const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
-    expect(saveDocumentFromLambdaStub).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
     expect(newPdfDocPages.length).toEqual(2);
   });
 
   describe('coversheet data generator', () => {
-    let caseData, applicationContext;
-    beforeEach(() => {
-      applicationContext = {
-        getCaseCaptionNames: Case.getCaseCaptionNames,
-        getCurrentUser: () =>
-          MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-        getUtilities: () => {
-          return {
-            formatDateString,
-          };
+    const caseData = {
+      ...testingCaseData,
+      contactPrimary: {
+        name: 'Janie Petitioner',
+      },
+      contactSecondary: {
+        name: 'Janie Petitioner',
+      },
+      docketNumber: '102-19',
+      documents: [
+        {
+          ...testingCaseData.documents[0],
+          addToCoversheet: true,
+          additionalInfo: 'Additional Info Something',
+          certificateOfService: true,
+          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          documentType:
+            'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          filingDate: '2019-04-19T14:45:15.595Z',
+          isPaper: true,
+          lodged: true,
         },
-      };
-      caseData = {
-        ...testingCaseData,
-        contactPrimary: {
-          name: 'Janie Petitioner',
-        },
-        contactSecondary: {
-          name: 'Janie Petitioner',
-        },
-        docketNumber: '102-19',
-        documents: [
-          {
-            ...testingCaseData.documents[0],
-            addToCoversheet: true,
-            additionalInfo: 'Additional Info Something',
-            certificateOfService: true,
-            documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
-            documentType:
-              'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
-            filingDate: '2019-04-19T14:45:15.595Z',
-            isPaper: true,
-            lodged: true,
-          },
-        ],
-        irsSendDate: '2019-04-19T14:45:15.595Z',
-        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
-      };
-    });
+      ],
+      irsSendDate: '2019-04-19T14:45:15.595Z',
+      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+    };
 
     it('displays Certificate of Service when the document is filed with a certificate of service', async () => {
       const result = generateCoverSheetData({
@@ -255,7 +206,6 @@ describe('addCoversheetInteractor', () => {
           isPaper: true,
         },
       });
-
       expect(result.certificateOfService).toEqual('');
     });
 
@@ -278,6 +228,7 @@ describe('addCoversheetInteractor', () => {
           isPaper: true,
         },
       });
+
       expect(result.dateFiledLodged).toEqual('04/19/2019');
     });
 
@@ -609,6 +560,7 @@ describe('addCoversheetInteractor', () => {
           mailingDate: '04/16/2019',
         },
       });
+
       expect(result.mailingDate).toEqual('04/16/2019');
     });
 
@@ -631,6 +583,7 @@ describe('addCoversheetInteractor', () => {
           isPaper: true,
         },
       });
+
       expect(result.mailingDate).toEqual('');
     });
 
@@ -653,6 +606,7 @@ describe('addCoversheetInteractor', () => {
           lodged: true,
         },
       });
+
       expect(result.petitionerLabel).toEqual('Petitioners');
     });
 
@@ -675,6 +629,7 @@ describe('addCoversheetInteractor', () => {
           lodged: true,
         },
       });
+
       expect(result.petitionerLabel).toEqual('Petitioner');
     });
 
@@ -697,6 +652,7 @@ describe('addCoversheetInteractor', () => {
           lodged: true,
         },
       });
+
       expect(result.petitionerLabel).toEqual('');
     });
   });

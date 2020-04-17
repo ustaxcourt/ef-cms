@@ -20,8 +20,8 @@ exports.verifyPendingCaseForUser = async ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `${userId}|case|pending`,
-      ':sk': caseId,
+      ':pk': `user|${userId}`,
+      ':sk': `pending-case|${caseId}`,
     },
     KeyConditionExpression: '#pk = :pk AND #sk = :sk',
     applicationContext,

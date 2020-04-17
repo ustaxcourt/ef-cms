@@ -11,7 +11,7 @@ export const WhatCanIIncludeModalOverlay = connect(
   {
     clearModalSequence: sequences.clearModalSequence,
   },
-  ({ clearModalSequence }) => {
+  function WhatCanIIncludeModalOverlay({ clearModalSequence }) {
     const content = () => (
       <React.Fragment>
         <div className="includeItem">

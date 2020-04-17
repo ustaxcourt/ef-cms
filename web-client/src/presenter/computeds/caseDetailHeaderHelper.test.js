@@ -62,7 +62,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { respondents: [{ userId: '789' }] },
+        caseDetail: { irsPractitioners: [{ userId: '789' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -83,8 +83,8 @@ describe('caseDetailHeaderHelper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          irsPractitioners: [{ userId: '789' }],
           isSealed: true,
-          respondents: [{ userId: '789' }],
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -105,7 +105,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { respondents: [{ userId: '123' }] },
+        caseDetail: { irsPractitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -203,7 +203,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { practitioners: [{ userId: '123' }] },
+        caseDetail: { privatePractitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {

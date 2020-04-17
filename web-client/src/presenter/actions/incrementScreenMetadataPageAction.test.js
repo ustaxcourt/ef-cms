@@ -1,5 +1,5 @@
 import { incrementScreenMetadataPageAction } from './incrementScreenMetadataPageAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('incrementScreenMetadataPageAction', () => {
@@ -16,7 +16,6 @@ describe('incrementScreenMetadataPageAction', () => {
     });
 
     expect(result.state.screenMetadata.page).toEqual(2);
-    expect(result.state.isScanning).toBeFalsy();
   });
 
   it('defaults the value of screenMetadata.page to one if not set', async () => {
@@ -30,6 +29,5 @@ describe('incrementScreenMetadataPageAction', () => {
     });
 
     expect(result.state.screenMetadata.page).toEqual(2);
-    expect(result.state.isScanning).toBeFalsy();
   });
 });

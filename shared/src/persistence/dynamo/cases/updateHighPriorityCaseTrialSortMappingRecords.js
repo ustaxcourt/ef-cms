@@ -26,7 +26,7 @@ exports.updateHighPriorityCaseTrialSortMappingRecords = async ({
       '#pk': 'pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `eligible-for-trial-case-catalog-${caseId}`,
+      ':gsi1pk': `eligible-for-trial-case-catalog|${caseId}`,
       ':pk': 'eligible-for-trial-case-catalog',
     },
     IndexName: 'gsi1',
@@ -44,7 +44,7 @@ exports.updateHighPriorityCaseTrialSortMappingRecords = async ({
   await client.put({
     Item: {
       caseId,
-      gsi1pk: `eligible-for-trial-case-catalog-${caseId}`,
+      gsi1pk: `eligible-for-trial-case-catalog|${caseId}`,
       pk: 'eligible-for-trial-case-catalog',
       sk: nonHybrid,
     },
@@ -54,7 +54,7 @@ exports.updateHighPriorityCaseTrialSortMappingRecords = async ({
   await client.put({
     Item: {
       caseId,
-      gsi1pk: `eligible-for-trial-case-catalog-${caseId}`,
+      gsi1pk: `eligible-for-trial-case-catalog|${caseId}`,
       pk: 'eligible-for-trial-case-catalog',
       sk: hybrid,
     },
