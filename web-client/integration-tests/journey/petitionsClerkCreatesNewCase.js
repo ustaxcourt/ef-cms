@@ -8,7 +8,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     await test.runSequence('gotoStartCaseWizardSequence');
     expect(test.getState('form.hasVerifiedIrsNotice')).toEqual(false);
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('alertError.title')).toEqual(
       'Please correct the following errors on the page:',
@@ -59,7 +59,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: trialLocation,
     });
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(
       test.getState('validationErrors.requestForPlaceOfTrialFile'),
@@ -105,7 +105,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: 1,
     });
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(
       test.getState('validationErrors.requestForPlaceOfTrialFile'),
@@ -186,7 +186,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
