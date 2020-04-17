@@ -13,16 +13,22 @@ export const setDefaultStartCaseInternalFormAction = ({
   store,
 }) => {
   const {
+    hasVerifiedIrsNotice,
     orderForRequestedTrialLocation,
     preferredTrialCity,
     procedureType,
     requestForPlaceOfTrialFile,
   } = get(state.form);
-  const { PROCEDURE_TYPES } = applicationContext.getConstants();
+  const { DEFAULT_PROCEDURE_TYPE } = applicationContext.getConstants();
 
   if (!procedureType) {
-    store.set(state.form.procedureType, PROCEDURE_TYPES[0]);
+    store.set(state.form.procedureType, DEFAULT_PROCEDURE_TYPE);
   }
+
+  if (hasVerifiedIrsNotice === undefined) {
+    store.set(state.form.hasVerifiedIrsNotice, false);
+  }
+
   if (
     orderForRequestedTrialLocation === undefined &&
     !preferredTrialCity &&

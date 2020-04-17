@@ -54,6 +54,12 @@ const {
   blockCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/blockCaseFromTrialInteractor');
 const {
+  bulkIndexRecords,
+} = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
+const {
+  caseAdvancedSearch,
+} = require('../../shared/src/persistence/elasticsearch/caseAdvancedSearch');
+const {
   caseAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
 const {
@@ -314,6 +320,9 @@ const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
+  getBlockedCases,
+} = require('../../shared/src/persistence/elasticsearch/getBlockedCases');
+const {
   getBlockedCasesInteractor,
 } = require('../../shared/src/business/useCases/getBlockedCasesInteractor');
 const {
@@ -446,6 +455,9 @@ const {
   getPractitionerByBarNumberInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionerByBarNumberInteractor');
 const {
+  getPractitionersByName,
+} = require('../../shared/src/persistence/elasticsearch/getPractitionersByName');
+const {
   getPractitionersByNameInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionersByNameInteractor');
 const {
@@ -544,6 +556,9 @@ const {
 const {
   incrementCounter,
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
+const {
+  indexRecord,
+} = require('../../shared/src/persistence/elasticsearch/indexRecord');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -959,6 +974,9 @@ module.exports = (appContextUser = {}) => {
         addWorkItemToSectionInbox,
         associateUserWithCase,
         associateUserWithCasePending,
+        bulkIndexRecords,
+
+        caseAdvancedSearch,
         casePublicSearch: casePublicSearchPersistence,
         createCase,
         createCaseCatalogRecord,
@@ -988,6 +1006,7 @@ module.exports = (appContextUser = {}) => {
         fetchPendingItems: fetchPendingItemsPersistence,
         getAllCaseDeadlines,
         getAllCatalogCases,
+        getBlockedCases,
         getCalendaredCasesForTrialSession,
         getCaseByCaseId,
         getCaseByDocketNumber,
@@ -1008,6 +1027,7 @@ module.exports = (appContextUser = {}) => {
         getInboxMessagesForUser,
         getInternalUsers,
         getPractitionerByBarNumber,
+        getPractitionersByName,
         getPublicDownloadPolicyUrl,
         getRecord,
         getSentMessagesForSection,
@@ -1025,6 +1045,7 @@ module.exports = (appContextUser = {}) => {
         getWebSocketConnectionsByUserId,
         getWorkItemById,
         incrementCounter,
+        indexRecord,
         isFileExists,
         orderKeywordSearch,
         putWorkItemInOutbox,

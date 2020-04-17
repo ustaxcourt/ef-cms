@@ -91,7 +91,7 @@ export const OrderSearch = connect(
             <div className="grid-col" id="order-advanced">
               <div className="grid-container">
                 <h4>Narrow your search (optional)</h4>
-                <FormGroup errorText={validationErrors.orderKeyword}>
+                <FormGroup errorText={validationErrors.chooseOneValue}>
                   <div className="grid-row">
                     <div className="grid-col-3">
                       <label className="usa-label" htmlFor="docket-number">
@@ -105,6 +105,7 @@ export const OrderSearch = connect(
                         value={
                           advancedSearchForm.orderSearch.docketNumber || ''
                         }
+                        onBlur={() => validateOrderSearchSequence()}
                         onChange={e => {
                           updateAdvancedSearchFormValueSequence({
                             formType: 'orderSearch',
@@ -130,6 +131,7 @@ export const OrderSearch = connect(
                           advancedSearchForm.orderSearch
                             .caseTitleOrPetitioner || ''
                         }
+                        onBlur={() => validateOrderSearchSequence()}
                         onChange={e => {
                           updateAdvancedSearchFormValueSequence({
                             formType: 'orderSearch',
@@ -140,6 +142,8 @@ export const OrderSearch = connect(
                       />
                     </div>
                   </div>
+                </FormGroup>
+                <FormGroup>
                   <div className="grid-row judge-search-row">
                     <label
                       className="usa-label padding-top-105"

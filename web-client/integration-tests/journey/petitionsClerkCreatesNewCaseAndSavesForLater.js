@@ -1,8 +1,6 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-
-const {
-  ContactFactory,
-} = require('../../../shared/src/business/entities/contacts/ContactFactory');
+import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
+import { ContactFactory } from '../../../shared/src/business/entities/contacts/ContactFactory';
 
 export const petitionsClerkCreatesNewCaseAndSavesForLater = (
   test,
@@ -132,11 +130,27 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
       key: 'contactSecondary.inCareOf',
       value: 'Nora Stanton Barney',
     },
+    {
+      key: 'petitionPaymentStatus',
+      value: Case.PAYMENT_STATUS.WAIVED,
+    },
+    {
+      key: 'paymentDateWaivedDay',
+      value: '05',
+    },
+    {
+      key: 'paymentDateWaivedMonth',
+      value: '05',
+    },
+    {
+      key: 'paymentDateWaivedYear',
+      value: '2005',
+    },
   ];
 
   it('should default to parties tab when creating a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
     expect(test.getState('currentViewMetadata.startCaseInternal.tab')).toBe(
@@ -146,7 +160,7 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
 
   it('should default to Regular procedureType when creating a new case', async () => {
     expect(test.getState('form.procedureType')).toEqual(
-      Case.PROCEDURE_TYPES[0],
+      CaseInternal.DEFAULT_PROCEDURE_TYPE,
     );
   });
 
@@ -157,6 +171,8 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
           'updateStartCaseInternalPartyTypeSequence',
           item,
         );
+      } else if (item.key === 'petitionPaymentStatus') {
+        await test.runSequence('updatePetitionPaymentFormValueSequence', item);
       } else {
         await test.runSequence('updateFormValueSequence', item);
       }
@@ -232,7 +248,7 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
   });
 
   it('should navigate to review screen when case information has been validated', async () => {
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
   });
@@ -258,7 +274,7 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
       value: 'One fish, two fish',
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
     expect(test.getState('form.caseCaption')).toBe('One fish, two fish');
@@ -281,7 +297,7 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
       value: Case.CASE_TYPES_MAP.interestAbatement,
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
     expect(test.getState('form.caseType')).toBe(
@@ -300,7 +316,7 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
       value: fakeFile,
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
     expect(test.getState('form.stinFile').name).toBe('differentFakeFile.pdf');
@@ -360,7 +376,7 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
       value: 1,
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
     expect(test.getState('form.petitionFile')).toBe(fakeFile);
   });
@@ -391,7 +407,7 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
       value: 1,
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
     expect(test.getState('form.stinFile')).toBe(fakeFile);
   });
@@ -422,7 +438,7 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
       value: 1,
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
     expect(test.getState('form.requestForPlaceOfTrialFile')).toBe(fakeFile);
@@ -449,7 +465,7 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
       value: 1,
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
     expect(test.getState('form.odsFile')).toBe(fakeFile);
@@ -476,7 +492,7 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
       value: 1,
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
     expect(test.getState('form.apwFile')).toBe(fakeFile);
@@ -554,7 +570,10 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
   });
 
   it('should navigate to Document QC inbox page when saving an in progress case for later', async () => {
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
+
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
     await test.runSequence('saveInternalCaseForLaterSequence');
