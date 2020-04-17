@@ -38,6 +38,39 @@ const filterRecords = async ({ applicationContext, records }) => {
         eventName: 'MODIFY',
       });
     }
+
+    if (caseRecord.dynamodb.Keys.sk.S.includes('document|')) {
+      const documentWithCaseInfo = {
+        ...AWS.DynamoDB.Converter.marshall(fullCase),
+        ...caseRecord.dynamodb.NewImage,
+        docketRecord: undefined,
+        documents: undefined,
+        irsPractitioners: undefined,
+        privatePractitioners: undefined,
+      };
+
+      if (
+        caseRecord.dynamodb.NewImage.sk.S ===
+        'document|562b0a52-7960-4674-acb7-22b65cd1cf2b'
+      ) {
+        console.log('caseRecord', documentWithCaseInfo);
+      }
+
+      filteredRecords.push({
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: caseRecord.dynamodb.Keys.pk.S,
+            },
+            sk: {
+              S: caseRecord.dynamodb.Keys.sk.S,
+            },
+          },
+          NewImage: documentWithCaseInfo,
+        },
+        eventName: 'MODIFY',
+      });
+    }
   }
 
   return filteredRecords.map(record => {
