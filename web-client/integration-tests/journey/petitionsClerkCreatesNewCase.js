@@ -1,13 +1,14 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 
-const { VALIDATION_ERROR_MESSAGES } = Case;
+const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
 export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
   return it('Petitions clerk creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
-
     expect(test.getState('form.hasVerifiedIrsNotice')).toEqual(false);
+
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('alertError.title')).toEqual(
       'Please correct the following errors on the page:',
@@ -24,6 +25,10 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('validationErrors.petitionFile')).toEqual(
       VALIDATION_ERROR_MESSAGES.petitionFile,
     );
+
+    expect(
+      test.getState('validationErrors.requestForPlaceOfTrialFile'),
+    ).toBeUndefined();
 
     await test.runSequence('updateFormValueSequence', {
       key: 'dateReceivedMonth',
@@ -48,6 +53,17 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value:
         'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Surviving Spouse, Petitioner',
     });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'preferredTrialCity',
+      value: trialLocation,
+    });
+
+    await test.runSequence('reviewPetitionFromPaperSequence');
+
+    expect(
+      test.getState('validationErrors.requestForPlaceOfTrialFile'),
+    ).toEqual(VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile);
 
     await test.runSequence('updateFormValueSequence', {
       key: 'petitionFile',
@@ -89,6 +105,12 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: 1,
     });
 
+    await test.runSequence('reviewPetitionFromPaperSequence');
+
+    expect(
+      test.getState('validationErrors.requestForPlaceOfTrialFile'),
+    ).toBeUndefined();
+
     await test.runSequence('updateFormValueSequence', {
       key: 'applicationForWaiverOfFilingFeeFile',
       value: fakeFile,
@@ -97,11 +119,6 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     await test.runSequence('updateFormValueSequence', {
       key: 'applicationForWaiverOfFilingFeeFileSize',
       value: 1,
-    });
-
-    await test.runSequence('updateFormValueSequence', {
-      key: 'preferredTrialCity',
-      value: trialLocation,
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -169,7 +186,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
