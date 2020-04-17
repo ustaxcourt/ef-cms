@@ -333,6 +333,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
   this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
+  this.orderDesignatingPlaceOfTrial = rawCase.orderDesignatingPlaceOfTrial;
   this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
   this.orderForAmendedPetitionAndFilingFee =
     rawCase.orderForAmendedPetitionAndFilingFee || false;
@@ -342,14 +343,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.orderToShowCause = rawCase.orderToShowCause || false;
   this.orderToChangeDesignatedPlaceOfTrial =
     rawCase.orderToChangeDesignatedPlaceOfTrial || false;
-
-  this.orderDesignatingPlaceOfTrial = Case.getDefaultOrderDesignatingPlaceOfTrialValue(
-    {
-      isPaper: rawCase.isPaper,
-      preferredTrialCity: rawCase.preferredTrialCity,
-      rawValue: rawCase.orderDesignatingPlaceOfTrial,
-    },
-  );
 
   const contacts = ContactFactory.createContacts({
     contactInfo: {
@@ -544,6 +537,12 @@ Case.validationRules = {
     .iso()
     .optional()
     .description('Reminder for clerks to review the notice of trial date.'),
+  orderDesignatingPlaceOfTrial: joi
+    .boolean()
+    .optional()
+    .description(
+      'Reminder for clerks to review the Order Designating Place of Trial.',
+    ),
   orderForAmendedPetition: joi
     .boolean()
     .optional()
@@ -1353,27 +1352,6 @@ Case.prototype.isCalendared = function () {
  */
 Case.prototype.isReadyForTrial = function () {
   return this.status === Case.STATUS_TYPES.generalDocketReadyForTrial;
-};
-
-/**
- * getDefaultOrderDesignatingPlaceOfTrialValue
- *
- * @returns {boolean} the value of if an order is needed for place of trial.
- */
-Case.getDefaultOrderDesignatingPlaceOfTrialValue = function ({
-  isPaper,
-  preferredTrialCity,
-  rawValue,
-}) {
-  let orderDesignatingPlaceOfTrial;
-  if (rawValue || rawValue === false) {
-    orderDesignatingPlaceOfTrial = rawValue;
-  } else if (isPaper && !preferredTrialCity) {
-    orderDesignatingPlaceOfTrial = true;
-  } else {
-    orderDesignatingPlaceOfTrial = false;
-  }
-  return orderDesignatingPlaceOfTrial;
 };
 
 /**
