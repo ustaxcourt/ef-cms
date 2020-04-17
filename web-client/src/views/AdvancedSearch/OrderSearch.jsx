@@ -11,9 +11,10 @@ export const OrderSearch = connect(
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     judges: state.judges,
-    updateAdvancedSearchFormValueSequence:
-      sequences.updateAdvancedSearchFormValueSequence,
+    updateAdvancedOrderSearchFormValueSequence:
+      sequences.updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence: sequences.validateOrderSearchSequence,
+    validateStartDateSequence: sequences.validateStartDateSequence,
     validationErrors: state.validationErrors,
   },
   function OrderSearch({
@@ -21,7 +22,7 @@ export const OrderSearch = connect(
     clearAdvancedSearchFormSequence,
     judges,
     submitAdvancedSearchSequence,
-    updateAdvancedSearchFormValueSequence,
+    updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence,
     validationErrors,
   }) {
@@ -54,8 +55,7 @@ export const OrderSearch = connect(
                       value={advancedSearchForm.orderSearch.orderKeyword || ''}
                       onBlur={() => validateOrderSearchSequence()}
                       onChange={e => {
-                        updateAdvancedSearchFormValueSequence({
-                          formType: 'orderSearch',
+                        updateAdvancedOrderSearchFormValueSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
@@ -109,8 +109,7 @@ export const OrderSearch = connect(
                         }
                         onBlur={() => validateOrderSearchSequence()}
                         onChange={e => {
-                          updateAdvancedSearchFormValueSequence({
-                            formType: 'orderSearch',
+                          updateAdvancedOrderSearchFormValueSequence({
                             key: e.target.name,
                             value: e.target.value,
                           });
@@ -135,8 +134,7 @@ export const OrderSearch = connect(
                         }
                         onBlur={() => validateOrderSearchSequence()}
                         onChange={e => {
-                          updateAdvancedSearchFormValueSequence({
-                            formType: 'orderSearch',
+                          updateAdvancedOrderSearchFormValueSequence({
                             key: e.target.name,
                             value: e.target.value,
                           });
@@ -158,13 +156,6 @@ export const OrderSearch = connect(
                       className="usa-input"
                       id="order-judge"
                       name="judge"
-                      onChange={e => {
-                        updateAdvancedSearchFormValueSequence({
-                          formType: 'orderSearch',
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
                     >
                       <option value="">- Select -</option>
                       {judges.map((judge, idx) => (
@@ -186,6 +177,23 @@ export const OrderSearch = connect(
                               hideLegend
                               id="start-date"
                               label="from Date"
+                              names={{
+                                day: 'startDateDay',
+                                month: 'startDateMonth',
+                                year: 'startDateYear',
+                              }}
+                              values={{
+                                day:
+                                  advancedSearchForm.orderSearch.startDateDay,
+                                month:
+                                  advancedSearchForm.orderSearch.startDateMonth,
+                                year:
+                                  advancedSearchForm.orderSearch.startDateYear,
+                              }}
+                              onBlur={validateOrderSearchSequence}
+                              onChange={
+                                updateAdvancedOrderSearchFormValueSequence
+                              }
                             />
                           </div>
                           <div className="grid-col-2">
@@ -196,6 +204,22 @@ export const OrderSearch = connect(
                               hideLegend
                               id="end-date"
                               label="to Date"
+                              names={{
+                                day: 'endDateDay',
+                                month: 'endDateMonth',
+                                year: 'endDateYear',
+                              }}
+                              values={{
+                                day: advancedSearchForm.orderSearch.endDateDay,
+                                month:
+                                  advancedSearchForm.orderSearch.endDateMonth,
+                                year:
+                                  advancedSearchForm.orderSearch.endDateYear,
+                              }}
+                              onBlur={validateOrderSearchSequence}
+                              onChange={
+                                updateAdvancedOrderSearchFormValueSequence
+                              }
                             />
                           </div>
                         </div>
