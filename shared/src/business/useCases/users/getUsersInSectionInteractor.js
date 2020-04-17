@@ -18,9 +18,18 @@ exports.getUsersInSectionInteractor = async ({
   section,
 }) => {
   const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, ROLE_PERMISSIONS.GET_JUDGES)) {
+  let rolePermission;
+
+  if (section === 'judge') {
+    rolePermission = ROLE_PERMISSIONS.GET_JUDGES;
+  } else {
+    rolePermission = ROLE_PERMISSIONS.GET_USERS_IN_SECTION;
+  }
+
+  if (!isAuthorized(user, rolePermission)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
   const rawUsers = await applicationContext
     .getPersistenceGateway()
     .getUsersInSection({
