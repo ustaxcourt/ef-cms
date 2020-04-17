@@ -565,9 +565,6 @@ const {
 } = require('../../shared/src/business/useCases/orderAdvancedSearchInteractor');
 const {
   orderKeywordSearch,
-} = require('../../shared/src/business/useCaseHelper/search/orderKeywordSearch');
-const {
-  orderKeywordSearch: orderKeywordSearchPersistence,
 } = require('../../shared/src/persistence/elasticsearch/orderKeywordSearch');
 const {
   orderPublicSearchInteractor,
@@ -1029,7 +1026,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemById,
         incrementCounter,
         isFileExists,
-        orderKeywordSearch: orderKeywordSearchPersistence,
+        orderKeywordSearch,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocumentFromLambda,
@@ -1129,7 +1126,6 @@ module.exports = (appContextUser = {}) => {
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
         getCaseInventoryReport,
-        orderKeywordSearch,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
       };
