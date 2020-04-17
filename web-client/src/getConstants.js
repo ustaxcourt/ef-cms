@@ -4,6 +4,7 @@ import {
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
 import { Case } from '../../shared/src/business/entities/cases/Case';
+import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
 import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { Document } from '../../shared/src/business/entities/Document';
@@ -40,6 +41,7 @@ export const getConstants = () => ({
   COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
   DATE_FORMATS: FORMATS,
+  DEFAULT_PROCEDURE_TYPE: CaseInternal.DEFAULT_PROCEDURE_TYPE,
   EMPLOYER_OPTIONS: Practitioner.EMPLOYER_OPTIONS,
   ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
   FILING_TYPES: Case.FILING_TYPES,

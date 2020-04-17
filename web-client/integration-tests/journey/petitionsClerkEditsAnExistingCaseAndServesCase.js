@@ -20,7 +20,6 @@ export const petitionsClerkEditsAnExistingCaseAndServesCase = test => {
   });
 
   it('should save edits to an in progress case', async () => {
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
     await test.runSequence('gotoReviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');

@@ -162,7 +162,7 @@ exports.joiValidationDecorator = function (
     const errors = {};
     error.details.forEach(detail => {
       if (!Number.isInteger(detail.context.key)) {
-        errors[detail.context.key] = detail.message;
+        errors[detail.context.key || detail.type] = detail.message;
       } else {
         errors[detail.context.label] = detail.message;
       }
