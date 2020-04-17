@@ -59,6 +59,8 @@ describe('getCaseInventoryReport', () => {
       {
         match: { 'entityName.S': 'Case' },
       },
+      { match: { 'pk.S': 'case|' } },
+      { match: { 'sk.S': 'case|' } },
       {
         match_phrase: { 'associatedJudge.S': 'Chief Judge' },
       },
@@ -92,9 +94,9 @@ describe('getCaseInventoryReport', () => {
 
     expect(searchSpy).toHaveBeenCalled();
     expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
-      {
-        match: { 'entityName.S': 'Case' },
-      },
+      { match: { 'entityName.S': 'Case' } },
+      { match: { 'pk.S': 'case|' } },
+      { match: { 'sk.S': 'case|' } },
       {
         match_phrase: { 'status.S': 'New' },
       },
@@ -134,6 +136,8 @@ describe('getCaseInventoryReport', () => {
       {
         match: { 'entityName.S': 'Case' },
       },
+      { match: { 'pk.S': 'case|' } },
+      { match: { 'sk.S': 'case|' } },
       {
         match_phrase: { 'associatedJudge.S': 'Chief Judge' },
       },
@@ -236,6 +240,8 @@ describe('getCaseInventoryReport', () => {
       {
         match: { 'entityName.S': 'Case' },
       },
+      { match: { 'pk.S': 'case|' } },
+      { match: { 'sk.S': 'case|' } },
       {
         match_phrase: { 'associatedJudge.S': 'Chief Judge' },
       },
