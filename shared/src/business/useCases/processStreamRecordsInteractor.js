@@ -45,6 +45,7 @@ const filterRecords = async ({ applicationContext, records }) => {
         ...caseRecord.dynamodb.NewImage,
         docketRecord: undefined,
         documents: undefined,
+        entityName: undefined,
         irsPractitioners: undefined,
         privatePractitioners: undefined,
       };
