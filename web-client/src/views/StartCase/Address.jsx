@@ -215,13 +215,14 @@ export const Address = connect(
           }
         >
           <label
-            aria-label="zip code"
+            aria-hidden
             className="usa-label"
             htmlFor={`${type}.postalCode`}
           >
             ZIP code
           </label>
           <input
+            aria-label="zip code"
             autoCapitalize="none"
             className="usa-input max-width-200 tablet:usa-input--medium"
             id={`${type}.postalCode`}

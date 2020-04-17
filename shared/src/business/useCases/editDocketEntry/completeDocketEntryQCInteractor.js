@@ -116,7 +116,7 @@ exports.completeDocketEntryQCInteractor = async ({
     updatedDocumentTitle !== currentDocumentTitle;
 
   const docketChangeInfo = {
-    caseTitle: caseToUpdate.caseTitle,
+    caseTitle: `${caseToUpdate.caseCaption} ${Case.CASE_CAPTION_POSTFIX}`,
     docketEntryIndex: docketRecordIndexUpdated,
     docketNumber: `${caseToUpdate.docketNumber}${
       caseToUpdate.docketNumberSuffix || ''

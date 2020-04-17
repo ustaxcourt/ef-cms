@@ -699,8 +699,7 @@ const router = {
         return app.getSequence('gotoPrintPreviewSequence')({
           alertWarning: {
             message:
-              'This case has parties receiving paper service. Print and mail all paper service documents below.',
-            title: 'This document has been electronically served',
+              'Document electronically served. Print and mail all paper service documents now.',
           },
           docketNumber,
         });

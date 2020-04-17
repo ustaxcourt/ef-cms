@@ -7,12 +7,6 @@ const applicationContext = createApplicationContext({});
 
 describe('generateTrialCalendarTemplate', () => {
   const content = {
-    caption: 'Test Case Caption',
-    captionPostfix: 'Test Caption Postfix',
-    docketNumberWithSuffix: '123-45S',
-    documentsFiledContent: '<div>Documents Filed Content</div>',
-    filedAt: '10/03/19 3:09 pm ET',
-    filedBy: 'Resp. & Petr. Garrett Carpenter',
     formattedTrialSessionDetails: {
       formattedStartDateFull: '10/11/12 11:00 PM',
       trialLocation: 'Mobile, Alabama',

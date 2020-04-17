@@ -1,4 +1,3 @@
-const AWS = require('aws-sdk');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
@@ -7,17 +6,10 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('fetchPendingItems', () => {
-  let searchSpy;
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
     );
-    applicationContext.getSearchClient.mockImplementation(() => ({
-      search: searchSpy,
-    }));
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByCaseId.mockImplementation(() => searchSpy());
   });
 
   beforeEach(() => {
@@ -47,20 +39,12 @@ describe('fetchPendingItems', () => {
         },
       ],
     };
-    searchSpy = jest.fn(async () => {
-      return {
-        hits: {
-          hits: [
-            {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
-            },
-            {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
-            },
-          ],
-        },
-      };
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .fetchPendingItems.mockReturnValue([mockDataOne, mockDataTwo]);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue([mockDataOne, mockDataTwo]);
   });
 
   it('calls search function with correct params when provided a judge and returns records', async () => {
@@ -69,15 +53,9 @@ describe('fetchPendingItems', () => {
       judge: 'Judge Armen',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
-      {
-        match: { 'hasPendingItems.BOOL': true },
-      },
-      {
-        match_phrase: { 'associatedJudge.S': 'Judge Armen' },
-      },
-    ]);
+    expect(
+      applicationContext.getPersistenceGateway().fetchPendingItems,
+    ).toHaveBeenCalled();
 
     expect(results).toMatchObject([
       { caseId: '1', documentId: 'def', pending: true },
@@ -86,33 +64,22 @@ describe('fetchPendingItems', () => {
   });
 
   it('calls search function and returns no records if cases lack documents', async () => {
-    searchSpy = jest.fn(async () => ({
-      hits: {
-        hits: [
-          {
-            _source: AWS.DynamoDB.Converter.marshall({
-              caseId: '1',
-              documents: undefined,
-            }),
-          },
-        ],
-      },
-    }));
+    applicationContext
+      .getPersistenceGateway()
+      .fetchPendingItems.mockReturnValue([
+        {
+          caseId: '1',
+          documents: undefined,
+        },
+      ]);
     const results = await fetchPendingItems({
       applicationContext,
       judge: 'Judge Armen',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
-      {
-        match: { 'hasPendingItems.BOOL': true },
-      },
-      {
-        match_phrase: { 'associatedJudge.S': 'Judge Armen' },
-      },
-    ]);
-
+    expect(
+      applicationContext.getPersistenceGateway().fetchPendingItems,
+    ).toHaveBeenCalled();
     expect(results.length).toEqual(0);
   });
 
@@ -121,12 +88,9 @@ describe('fetchPendingItems', () => {
       applicationContext,
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
-      {
-        match: { 'hasPendingItems.BOOL': true },
-      },
-    ]);
+    expect(
+      applicationContext.getPersistenceGateway().fetchPendingItems,
+    ).toHaveBeenCalled();
 
     expect(results).toMatchObject([
       { caseId: '1', documentId: 'def', pending: true },
@@ -135,38 +99,31 @@ describe('fetchPendingItems', () => {
   });
 
   it('returns an empty array when no hits are returned from the search client', async () => {
-    searchSpy = jest.fn(async () => {
-      return {
-        hits: {
-          hits: [],
-        },
-      };
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .fetchPendingItems.mockReturnValue([]);
 
     const results = await fetchPendingItems({
       applicationContext,
     });
-
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
-      {
-        match: { 'hasPendingItems.BOOL': true },
-      },
-    ]);
 
     expect(results.length).toEqual(0);
     expect(results).toMatchObject([]);
   });
 
   it('uses caseId filter and calls getCaseByCaseId and returns the pending items for that case', async () => {
-    searchSpy = jest.fn(() => MOCK_CASE);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
 
     const results = await fetchPendingItems({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toHaveBeenCalled();
 
     expect(results).toMatchObject([
       {

@@ -12,7 +12,7 @@ exports.addCoversheetLambda = event =>
     async ({ applicationContext }) => {
       const { caseId, documentId } = event.pathParameters || {};
 
-      return await applicationContext.getUseCases().addCoversheetInteractor({
+      await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
         caseId,
         documentId,

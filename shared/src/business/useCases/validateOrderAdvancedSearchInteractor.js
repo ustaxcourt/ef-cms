@@ -1,3 +1,5 @@
+const { OrderSearch } = require('../entities/orders/OrderSearch');
+
 /**
  * validateOrderAdvancedSearchInteractor
  *
@@ -9,9 +11,9 @@ exports.validateOrderAdvancedSearchInteractor = ({
   applicationContext,
   orderSearch,
 }) => {
-  const { OrderSearch } = applicationContext.getEntityConstructors();
   const search = new OrderSearch(orderSearch, {
     applicationContext,
   });
+
   return search.getFormattedValidationErrors();
 };

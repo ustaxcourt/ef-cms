@@ -59,7 +59,6 @@ exports.generateChangeOfAddress = async ({
 
     const caseDetail = {
       ...rawCase,
-      caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     };
 
     let closedMoreThan6Months;
@@ -93,7 +92,6 @@ exports.generateChangeOfAddress = async ({
           applicationContext,
           content: {
             caption: caseDetail.caseCaption,
-            captionPostfix: caseDetail.caseCaptionPostfix,
             docketNumberWithSuffix: `${caseDetail.docketNumber}${
               caseDetail.docketNumberSuffix || ''
             }`,

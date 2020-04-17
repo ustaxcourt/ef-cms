@@ -1,5 +1,6 @@
 module.exports = [
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/',
+  /* start case internal */
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1',
   {
     actions: [
@@ -8,9 +9,43 @@ module.exports = [
       'check field #party-type',
       'wait for #secondary-name to be visible',
     ],
-    notes: 'checks a11y of Create Case with inputs revealed',
+    notes:
+      'checks a11y of Create Case with inputs revealed - secondary contact',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1&info=reveal-file-a-petition-inputs',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1&info=secondary-contact',
+  },
+  {
+    actions: [
+      'wait for #party-type to be visible',
+      'set field #party-type to Corporation',
+      'check field #party-type',
+      'wait for #order-for-ods to be visible',
+    ],
+    notes: 'checks a11y of Create Case with inputs revealed - Order for ODS',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1&info=order-for-ods',
+  },
+  {
+    actions: [
+      'wait for #tab-case-info to be visible',
+      'click element #tab-case-info',
+      'wait for #date-received-legend to be visible',
+    ],
+    notes: 'checks a11y of Create Case with inputs revealed - Case Info tab',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1&info=case-info-tab',
+  },
+  {
+    actions: [
+      'wait for #tab-irs-notice to be visible',
+      'click element #tab-irs-notice',
+      'wait for #irs-verified-notice-radios to be visible',
+      'click element #has-irs-verified-notice-yes',
+      'wait for #date-of-notice-legend to be visible',
+    ],
+    notes: 'checks a11y of Create Case with inputs revealed - IRS Notice tab',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1&info=irs-notice-tab',
   },
 
   /* case detail */

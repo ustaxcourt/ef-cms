@@ -95,6 +95,7 @@ option:first-child {
 
 .usa-alert--warning {
   background-image: url('images/alerts/warning.svg');
+  font-weight: 600;
 }
 
 .usa-alert--success {
@@ -135,14 +136,10 @@ option:first-child {
   .usa-alert__heading {
     margin-top: 0;
     margin-bottom: 8px;
-    font-family: $font-serif;
-    font-size: 20px;
-    font-weight: $font-bold;
+    font-family: $font-normal;
+    font-size: 17px;
+    font-weight: 600;
     line-height: 1.3em;
-  }
-
-  .usa-alert--success {
-    font-size: 2.0rem;
   }
 
   .usa-alert__body {
@@ -230,6 +227,10 @@ option:first-child {
 
 .margin-bottom-10 {
   margin-bottom: 5rem !important;
+}
+
+.margin-top-10 {
+  margin-top: 7.7rem;
 }
 
 p {
