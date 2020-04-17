@@ -10,7 +10,7 @@ describe('orderAdvancedSearchInteractor', () => {
     });
 
     applicationContext
-      .getUseCaseHelpers()
+      .getPersistenceGateway()
       .orderKeywordSearch.mockResolvedValue([
         {
           caseCaption: 'Samson Workman, Petitioner',
