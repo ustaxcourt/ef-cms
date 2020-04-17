@@ -526,29 +526,8 @@ jobs:
           name: 'Deploy - Web API - Cognito Customize'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && ./setup-cognito-ui.sh ${ENV}"
       - run:
-          name: 'Deploy - Web API - Cognito Create Users'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd web-api && ./setup-cognito-users.sh ${ENV}"
-      - run:
-          name: 'Deploy - Web API - Cognito Create Court Users'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd web-api && ./setup-court-users.sh ${ENV}"
-      - run:
-          name: 'Deploy - Web API - Cognito Create IRS User'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd web-api && ./setup-irs-user.sh ${ENV}"
-      - run:
           name: 'Deploy - Web API - Run Migrations'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "DYNAMODB_ENDPOINT=dynamodb.us-east-1.amazonaws.com" --rm efcms /bin/sh -c "npm run build:assets && ./web-api/run-umzug.sh ${ENV}"
-      - run:
-          name: 'Deploy - Web API - Smoke Tests - us-east-1'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && node smoke-tests.js ${ENV} us-east-1"
-      - run:
-          name: 'Deploy - Web API - Smoke Tests - us-west-1'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && node smoke-tests.js ${ENV} us-west-1"
-      - run:
-          name: 'Deploy - Cypress Smoke Tests'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "CYPRESS_BASE_URL='https://ui-$ENV.$EFCMS_DOMAIN' ENV=${ENV} npm run cypress:smoketests"
-      - run:
-          name: 'Deploy - Pa11y Smoke Tests'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "ENV=${ENV} npm run test:pa11y:smoketests"
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
 
@@ -676,6 +655,7 @@ workflows:
                 - irs
                 - staging
                 - test
+                - migration
                 - master
                 - experimental
       - deploy-api-east:
@@ -687,6 +667,7 @@ workflows:
                 - irs
                 - staging
                 - test
+                - migration
                 - master
                 - experimental
       - deploy-api-west:
@@ -698,6 +679,7 @@ workflows:
                 - irs
                 - staging
                 - test
+                - migration
                 - master
                 - experimental
       - switch-and-deploy-ui:
@@ -710,6 +692,7 @@ workflows:
                 - irs
                 - staging
                 - test
+                - migration
                 - master
                 - experimental
       - post-deploy:
@@ -721,5 +704,6 @@ workflows:
                 - irs
                 - staging
                 - test
+                - migration
                 - master
                 - experimental

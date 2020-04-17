@@ -12,6 +12,8 @@ elif [[ $BRANCH == 'staging' ]] ; then
   echo "1"
 elif [[ $BRANCH == 'test' ]] ; then
   echo "1"
+elif [[ $BRANCH == 'migration' ]] ; then
+  echo "1"
 elif [[ $BRANCH == 'master' ]] ; then
   echo "2"
 else
