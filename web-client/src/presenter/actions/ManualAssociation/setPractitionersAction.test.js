@@ -1,14 +1,12 @@
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setPractitionersAction } from './setPractitionersAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('setPractitionersAction', () => {
-  it('sets state.modal.practitionerMatches to the passed in props.practitioners and defaults state.modal.user to that user if there is only one match', async () => {
+  it('sets state.modal.practitionerMatches to the passed in props.privatePractitioners and defaults state.modal.user to that user if there is only one match', async () => {
     const result = await runAction(setPractitionersAction, {
-      props: { practitioners: [{ name: 'Test Practitioner', userId: '123' }] },
+      props: {
+        privatePractitioners: [{ name: 'Test Practitioner', userId: '123' }],
+      },
       state: {
         modal: {},
       },
@@ -22,10 +20,10 @@ describe('setPractitionersAction', () => {
     });
   });
 
-  it('sets state.modal.practitionerMatches to the passed in props.practitioners and does not default state.modal.user if there is more than one match', async () => {
+  it('sets state.modal.practitionerMatches to the passed in props.privatePractitioners and does not default state.modal.user if there is more than one match', async () => {
     const result = await runAction(setPractitionersAction, {
       props: {
-        practitioners: [
+        privatePractitioners: [
           { name: 'Test Practitioner', userId: '123' },
           { name: 'Test Practitioner2', userId: '234' },
         ],

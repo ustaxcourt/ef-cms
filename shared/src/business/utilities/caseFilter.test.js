@@ -23,6 +23,7 @@ describe('caseFilter', () => {
         baz: 'quux',
         caseId: '456',
         docketNumber: '101-20',
+        documents: [{ documentType: 'Petition' }],
         foo: 'baz',
         sealedDate: undefined,
       },
@@ -30,12 +31,26 @@ describe('caseFilter', () => {
         baz: 'quux',
         caseId: '123',
         docketNumber: '102-20',
+        documents: [{ documentType: 'Petition' }],
         foo: 'bar',
-        practitioners: [{ userId: 'authPractitioner' }],
-        respondents: [{ userId: 'authRespondent' }],
+        irsPractitioners: [{ userId: 'authRespondent' }],
+        privatePractitioners: [{ userId: 'authPractitioner' }],
+        sealedDate: '2020-01-02T03:04:05.007Z',
+      },
+      {
+        baz: 'quux',
+        caseId: '123',
+        docketNumber: '102-20',
+        documents: [
+          { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
+        ],
+        foo: 'bar',
+        irsPractitioners: [{ userId: 'authRespondent' }],
+        privatePractitioners: [{ userId: 'authPractitioner' }],
         sealedDate: '2020-01-02T03:04:05.007Z',
       },
     ];
+
     it('should remove sealed cases from a set of advanced search results', () => {
       const result = caseSearchFilter(caseSearchResults, {
         role: 'irsPractitioner',
@@ -47,22 +62,32 @@ describe('caseFilter', () => {
         sealedDate: undefined,
       });
     });
+
     it('should keep sealed cases in search results if user is an internal user with permission to see sealed cases', () => {
       let result = caseSearchFilter(caseSearchResults, {
         role: 'petitionsclerk',
         userId: 'petitionsClerk',
       });
-      expect(result.length).toEqual(2);
+      expect(result.length).toEqual(3);
     });
+
+    it('should keep sealed cases in search results if user is an IRS superuser with permission to see sealed cases', () => {
+      let result = caseSearchFilter(caseSearchResults, {
+        role: 'irsSuperuser',
+        userId: 'irsSuperuser',
+      });
+      expect(result.length).toEqual(3);
+    });
+
     it('should keep sealed cases in search results if user is associated as practitioner or respondent', () => {
       let result = caseSearchFilter(caseSearchResults, {
         userId: 'authPractitioner',
       });
-      expect(result.length).toEqual(2);
+      expect(result.length).toEqual(3);
       result = caseSearchFilter(caseSearchResults, {
         userId: 'authRespondent',
       });
-      expect(result.length).toEqual(2);
+      expect(result.length).toEqual(3);
     });
   });
 });

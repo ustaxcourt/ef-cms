@@ -1,4 +1,6 @@
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const {
   submitCaseAssociationRequestInteractor,
 } = require('./submitCaseAssociationRequestInteractor');
@@ -6,8 +8,6 @@ const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { User } = require('../../entities/User');
 
 describe('submitCaseAssociationRequest', () => {
-  let applicationContext;
-
   let caseRecord = {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -30,72 +30,48 @@ describe('submitCaseAssociationRequest', () => {
   };
 
   it('should throw an error when not authorized', async () => {
-    let error;
-    try {
-      applicationContext = {
-        environment: { stage: 'local' },
-        getCurrentUser: () => {
-          return {
-            name: 'Olivia Jade',
-            role: User.ROLES.adc,
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          };
-        },
-        getPersistenceGateway: () => ({
-          getCaseByCaseId: async () => caseRecord,
-          updateCase: async () => caseRecord,
-          verifyCaseForUser: async () => true,
-        }),
-        getUniqueId: () => 'unique-id-1',
-      };
-      await submitCaseAssociationRequestInteractor({
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Olivia Jade',
+      role: User.ROLES.adc,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    await expect(
+      submitCaseAssociationRequestInteractor({
         applicationContext,
         caseId: caseRecord.caseId,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain('Unauthorized');
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('should not add mapping if already there', async () => {
-    let associateUserWithCaseSpy = sinon.spy();
-    let verifyCaseForUserSpy = sinon.stub().returns(true);
-    let updateCaseSpy = sinon.spy();
-
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          name: 'Olivia Jade',
-          role: User.ROLES.privatePractitioner,
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        };
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Olivia Jade',
+      role: User.ROLES.privatePractitioner,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      contact: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        countryType: 'domestic',
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
       },
-      getPersistenceGateway: () => ({
-        createMappingRecord: associateUserWithCaseSpy,
-        getCaseByCaseId: async () => caseRecord,
-        getUserById: () => ({
-          contact: {
-            address1: '234 Main St',
-            address2: 'Apartment 4',
-            address3: 'Under the stairs',
-            city: 'Chicago',
-            countryType: 'domestic',
-            phone: '+1 (555) 555-5555',
-            postalCode: '61234',
-            state: 'IL',
-          },
-          name: 'Olivia Jade',
-          role: User.ROLES.privatePractitioner,
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        }),
-        updateCase: updateCaseSpy,
-        verifyCaseForUser: verifyCaseForUserSpy,
-      }),
-      getUniqueId: () => 'unique-id-1',
-    };
+      name: 'Olivia Jade',
+      role: User.ROLES.privatePractitioner,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(caseRecord);
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
 
     await submitCaseAssociationRequestInteractor({
       applicationContext,
@@ -105,57 +81,30 @@ describe('submitCaseAssociationRequest', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(associateUserWithCaseSpy.called).toEqual(false);
-    expect(updateCaseSpy.called).toEqual(false);
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toBeCalled();
   });
 
   it('should add mapping for a practitioner', async () => {
-    let associateUserWithCaseSpy = sinon.spy();
-    let verifyCaseForUserSpy = sinon.stub().returns(false);
-    let updateCaseSpy = sinon.spy();
-
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          contact: {
-            address1: '234 Main St',
-            address2: 'Apartment 4',
-            address3: 'Under the stairs',
-            city: 'Chicago',
-            countryType: 'domestic',
-            phone: '+1 (555) 555-5555',
-            postalCode: '61234',
-            state: 'IL',
-          },
-          name: 'Olivia Jade',
-          role: User.ROLES.privatePractitioner,
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        };
+    applicationContext.getCurrentUser.mockReturnValue({
+      contact: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        countryType: 'domestic',
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
       },
-      getPersistenceGateway: () => ({
-        associateUserWithCase: associateUserWithCaseSpy,
-        getCaseByCaseId: async () => caseRecord,
-        getUserById: () => ({
-          contact: {
-            address1: '234 Main St',
-            address2: 'Apartment 4',
-            address3: 'Under the stairs',
-            city: 'Chicago',
-            countryType: 'domestic',
-            phone: '+1 (555) 555-5555',
-            postalCode: '61234',
-            state: 'IL',
-          },
-          name: 'Olivia Jade',
-          role: User.ROLES.privatePractitioner,
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        }),
-        updateCase: updateCaseSpy,
-        verifyCaseForUser: verifyCaseForUserSpy,
-      }),
-      getUniqueId: () => 'unique-id-1',
-    };
+      name: 'Olivia Jade',
+      role: User.ROLES.privatePractitioner,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
 
     await submitCaseAssociationRequestInteractor({
       applicationContext,
@@ -165,47 +114,21 @@ describe('submitCaseAssociationRequest', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(associateUserWithCaseSpy.called).toEqual(true);
-    expect(updateCaseSpy.called).toEqual(true);
+    expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 
-  it('should add mapping for a respondent', async () => {
-    let associateUserWithCaseSpy = sinon.spy();
-    let verifyCaseForUserSpy = sinon.stub().returns(false);
-    let updateCaseSpy = sinon.spy();
-
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          name: 'Olivia Jade',
-          role: User.ROLES.irsPractitioner,
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        };
-      },
-      getPersistenceGateway: () => ({
-        associateUserWithCase: associateUserWithCaseSpy,
-        getCaseByCaseId: async () => caseRecord,
-        getUserById: () => ({
-          contact: {
-            address1: '234 Main St',
-            address2: 'Apartment 4',
-            address3: 'Under the stairs',
-            city: 'Chicago',
-            countryType: 'domestic',
-            phone: '+1 (555) 555-5555',
-            postalCode: '61234',
-            state: 'IL',
-          },
-          name: 'Olivia Jade',
-          role: User.ROLES.privatePractitioner,
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        }),
-        updateCase: updateCaseSpy,
-        verifyCaseForUser: verifyCaseForUserSpy,
-      }),
-      getUniqueId: () => 'unique-id-1',
-    };
+  it('should add mapping for an irsPractitioner', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Olivia Jade',
+      role: User.ROLES.irsPractitioner,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
 
     await submitCaseAssociationRequestInteractor({
       applicationContext,
@@ -213,7 +136,9 @@ describe('submitCaseAssociationRequest', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(associateUserWithCaseSpy.called).toEqual(true);
-    expect(updateCaseSpy.called).toEqual(true);
+    expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 });

@@ -1,71 +1,75 @@
+const {
+  applicationContext,
+} = require('../../business/test/createTestApplicationContext');
 const { getScannerInterface } = require('./getScannerInterface');
 const { JSDOM } = require('jsdom');
 import { Scan } from '../../business/entities/Scan';
 
-const jsdom = new JSDOM('');
-global.window = jsdom.window;
-
-window['EnumDWT_ImageType'] = { IT_PNG: 1 };
-window['EnumDWT_PixelType'] = { TWPT_RGB: 1 };
-window['EnumDWT_CapSupportedSizes'] = { TWSS_A4: 1 };
-const mockSources = ['Test Source 1', 'Test Source 2'];
-const mockScanCount = 1;
-
-let onPostAllTransfersCb = null;
-
-const mockAcquireImage = jest.fn(() => onPostAllTransfersCb());
-const mockCloseSource = jest.fn();
-const mockOpenSource = jest.fn();
-const mockRemoveAllImages = jest.fn();
-
-const { SCAN_MODES } = Scan;
-
-const applicationContext = {
-  convertBlobToUInt8Array: () => new Uint8Array([]),
-  getConstants: () => ({ SCAN_MODES }),
-  getScannerResourceUri: () => 'abc',
-};
-
-const DWObject = {
-  AcquireImage: mockAcquireImage,
-  CloseSource: mockCloseSource,
-  ConvertToBlob: (
-    indices,
-    enumImageType,
-    asyncSuccessFunc,
-    asyncFailureFunc,
-  ) => {
-    const args = { asyncFailureFunc, asyncSuccessFunc, enumImageType, indices };
-    return asyncSuccessFunc(args);
-  },
-  DataSource: null,
-  DataSourceStatus: 0,
-  ErrorCode: 0,
-  ErrorString: 'Successful!',
-  GetSourceNameItems: index => mockSources[index],
-  HowManyImagesInBuffer: mockScanCount,
-  IfDisableSourceAfterAcquire: false,
-  IfFeederLoaded: true,
-  OpenSource: mockOpenSource,
-  RegisterEvent: (event, cb) => {
-    onPostAllTransfersCb = cb;
-  },
-  RemoveAllImages: mockRemoveAllImages,
-  SelectSourceByIndex: idx => {
-    DWObject.DataSource = idx;
-    return true;
-  },
-  SourceCount: mockSources.length,
-  UnregisterEvent: () => null,
-};
-
-const Dynamsoft = {
-  WebTwainEnv: {
-    GetWebTwain: () => DWObject,
-  },
-};
-
 describe('getScannerInterface', () => {
+  const jsdom = new JSDOM('');
+  global.window = jsdom.window;
+
+  window['EnumDWT_ImageType'] = { IT_PNG: 1 };
+  window['EnumDWT_PixelType'] = { TWPT_RGB: 1 };
+  window['EnumDWT_CapSupportedSizes'] = { TWSS_A4: 1 };
+  const mockSources = ['Test Source 1', 'Test Source 2'];
+  const mockScanCount = 1;
+
+  let onPostAllTransfersCb = null;
+
+  const mockAcquireImage = jest.fn(() => onPostAllTransfersCb());
+  const mockCloseSource = jest.fn();
+  const mockOpenSource = jest.fn();
+  const mockRemoveAllImages = jest.fn();
+
+  const { SCAN_MODES } = Scan;
+
+  applicationContext.getScannerResourceUri.mockReturnValue('abc');
+
+  const DWObject = {
+    AcquireImage: mockAcquireImage,
+    CloseSource: mockCloseSource,
+    ConvertToBlob: (
+      indices,
+      enumImageType,
+      asyncSuccessFunc,
+      asyncFailureFunc,
+    ) => {
+      const args = {
+        asyncFailureFunc,
+        asyncSuccessFunc,
+        enumImageType,
+        indices,
+      };
+      return asyncSuccessFunc(args);
+    },
+    DataSource: null,
+    DataSourceStatus: 0,
+    ErrorCode: 0,
+    ErrorString: 'Successful!',
+    GetSourceNameItems: index => mockSources[index],
+    HowManyImagesInBuffer: mockScanCount,
+    IfDisableSourceAfterAcquire: false,
+    IfFeederLoaded: true,
+    OpenSource: mockOpenSource,
+    RegisterEvent: (event, cb) => {
+      onPostAllTransfersCb = cb;
+    },
+    RemoveAllImages: mockRemoveAllImages,
+    SelectSourceByIndex: idx => {
+      DWObject.DataSource = idx;
+      return true;
+    },
+    SourceCount: mockSources.length,
+    UnregisterEvent: () => null,
+  };
+
+  const Dynamsoft = {
+    WebTwainEnv: {
+      GetWebTwain: () => DWObject,
+    },
+  };
+
   beforeEach(() => {
     window.Dynamsoft = { ...Dynamsoft };
   });
@@ -257,7 +261,7 @@ describe('getScannerInterface', () => {
     global.document = {
       addEventListener: () => null,
       createElement: () => ({
-        cloneNode: function() {
+        cloneNode: function () {
           return {
             ...this,
           };

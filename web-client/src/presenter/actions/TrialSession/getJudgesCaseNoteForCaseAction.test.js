@@ -1,23 +1,19 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getJudgesCaseNoteForCaseAction } from './getJudgesCaseNoteForCaseAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
-
-let getUserCaseNoteStub;
 
 describe('getJudgesCaseNoteForCaseAction', () => {
-  beforeEach(() => {
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        getUserCaseNoteInteractor: getUserCaseNoteStub,
-      }),
-    };
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('call the use case to get the trial details', async () => {
-    getUserCaseNoteStub = sinon.stub().resolves({
-      note: '123',
-    });
+    applicationContext
+      .getUseCases()
+      .getUserCaseNoteInteractor.mockResolvedValue({
+        note: '123',
+      });
 
     await runAction(getJudgesCaseNoteForCaseAction, {
       modules: {
@@ -25,7 +21,13 @@ describe('getJudgesCaseNoteForCaseAction', () => {
       },
       state: { caseDetail: { caseId: '123' } },
     });
-    expect(getUserCaseNoteStub.calledOnce).toEqual(true);
-    expect(getUserCaseNoteStub.getCall(0).args[0].caseId).toEqual('123');
+    expect(
+      applicationContext.getUseCases().getUserCaseNoteInteractor.mock.calls
+        .length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases().getUserCaseNoteInteractor.mock
+        .calls[0][0].caseId,
+    ).toEqual('123');
   });
 });

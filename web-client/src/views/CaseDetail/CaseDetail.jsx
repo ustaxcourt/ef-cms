@@ -16,18 +16,17 @@ export const CaseDetail = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     caseDetailSubnavHelper: state.caseDetailSubnavHelper,
-    caseInformationTab: state.caseDetailPage.caseInformationTab,
-    formattedCaseDetail: state.formattedCaseDetail,
-    primaryTab: state.caseDetailPage.primaryTab,
+    caseInformationTab: state.currentViewMetadata.caseDetail.caseInformationTab,
+    primaryTab: state.currentViewMetadata.caseDetail.primaryTab,
     setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
   },
-  ({
+  function CaseDetail({
     caseDetailHelper,
     caseDetailSubnavHelper,
     caseInformationTab,
     primaryTab,
     setCaseDetailPageTabSequence,
-  }) => {
+  }) {
     return (
       <>
         <CaseDetailHeader className="margin-bottom-0" />
@@ -80,7 +79,7 @@ export const CaseDetail = connect(
                   <>
                     <NonMobile>
                       <Tabs
-                        bind="caseDetailPage.caseInformationTab"
+                        bind="currentViewMetadata.caseDetail.caseInformationTab"
                         className="classic-horizontal-header3 tab-border"
                       >
                         <Tab
@@ -108,7 +107,7 @@ export const CaseDetail = connect(
                     </NonMobile>
                     <Mobile>
                       <Tabs
-                        bind="caseDetailPage.caseInformationTab"
+                        bind="currentViewMetadata.caseDetail.caseInformationTab"
                         className="classic-horizontal-header3 tab-border"
                       >
                         {caseInformationTab === 'overview' && (

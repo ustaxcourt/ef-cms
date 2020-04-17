@@ -11,12 +11,12 @@ export const EditDocketEntryMetaFormNoDocument = connect(
     validateDocketRecordSequence: sequences.validateDocketRecordSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function EditDocketEntryMetaFormNoDocument({
     form,
     updateFormValueSequence,
     validateDocketRecordSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <div className="blue-container">
         <DateInput

@@ -1,9 +1,9 @@
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { refreshExternalDocumentTitleFromEventCodeAction } from './refreshExternalDocumentTitleFromEventCodeAction';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('refreshExternalDocumentTitleFromEventCodeAction', () => {
   it('sets document scenario', async () => {

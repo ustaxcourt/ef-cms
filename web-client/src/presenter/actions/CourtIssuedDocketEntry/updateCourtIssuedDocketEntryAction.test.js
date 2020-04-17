@@ -1,19 +1,10 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateCourtIssuedDocketEntryAction } from './updateCourtIssuedDocketEntryAction';
 
 describe('updateCourtIssuedDocketEntryAction', () => {
-  let updateCourtIssuedDocketEntryInteractorMock;
-
-  beforeEach(() => {
-    updateCourtIssuedDocketEntryInteractorMock = jest.fn();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        updateCourtIssuedDocketEntryInteractor: updateCourtIssuedDocketEntryInteractorMock,
-      }),
-    };
-  });
+  presenter.providers.applicationContext = applicationContext;
 
   it('Calls the interactor for filing a court-issued docket entry', async () => {
     await runAction(updateCourtIssuedDocketEntryAction, {
@@ -38,6 +29,8 @@ describe('updateCourtIssuedDocketEntryAction', () => {
       },
     });
 
-    expect(updateCourtIssuedDocketEntryInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().updateCourtIssuedDocketEntryInteractor,
+    ).toHaveBeenCalled();
   });
 });

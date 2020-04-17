@@ -1,3 +1,4 @@
+import 'react-calendar/dist/Calendar.css';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import Calendar from 'react-calendar';
@@ -9,26 +10,31 @@ export const DateSelectCalendar = connect(
     selectDateRangeFromCalendarSequence:
       sequences.selectDateRangeFromCalendarSequence,
   },
-  ({ calendarStartDate, selectDateRangeFromCalendarSequence }) => (
-    <>
-      <div className="header-with-blue-background">
-        <h3>Show Deadlines by Date(s)</h3>
-      </div>
-      <div className="blue-container">
-        <Calendar
-          selectRange={true}
-          value={calendarStartDate}
-          onChange={dateRange =>
-            selectDateRangeFromCalendarSequence({
-              endDate: dateRange[1],
-              startDate: dateRange[0],
-            })
-          }
-          onClickDay={date =>
-            selectDateRangeFromCalendarSequence({ startDate: date })
-          }
-        />
-      </div>
-    </>
-  ),
+  function DateSelectCalendar({
+    calendarStartDate,
+    selectDateRangeFromCalendarSequence,
+  }) {
+    return (
+      <>
+        <div className="header-with-blue-background">
+          <h3>Show Deadlines by Date(s)</h3>
+        </div>
+        <div className="blue-container">
+          <Calendar
+            selectRange={true}
+            value={calendarStartDate}
+            onChange={dateRange =>
+              selectDateRangeFromCalendarSequence({
+                endDate: dateRange[1],
+                startDate: dateRange[0],
+              })
+            }
+            onClickDay={date =>
+              selectDateRangeFromCalendarSequence({ startDate: date })
+            }
+          />
+        </div>
+      </>
+    );
+  },
 );

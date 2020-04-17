@@ -19,7 +19,7 @@ export const NonstandardForm = connect(
     validateSequence: sequences[props.validateSequence],
     validationErrors: state[props.validationErrors],
   },
-  ({
+  function NonstandardForm({
     caseDetail,
     form,
     helper,
@@ -29,7 +29,7 @@ export const NonstandardForm = connect(
     updateSequence,
     validateSequence,
     validationErrors,
-  }) => {
+  }) {
     namespace = namespace ? `${namespace}.` : '';
     return (
       <div className="nonstandard-form">

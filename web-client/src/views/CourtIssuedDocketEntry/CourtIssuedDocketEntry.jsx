@@ -28,7 +28,7 @@ export const CourtIssuedDocketEntry = connect(
       sequences.openCancelDraftDocumentModalSequence,
     openConfirmInitiateServiceModalSequence:
       sequences.openConfirmInitiateServiceModalSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     submitCourtIssuedDocketEntrySequence:
       sequences.submitCourtIssuedDocketEntrySequence,
     updateCourtIssuedDocketEntryFormValueSequence:
@@ -37,7 +37,7 @@ export const CourtIssuedDocketEntry = connect(
       sequences.validateCourtIssuedDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function CourtIssuedDocketEntry({
     addCourtIssuedDocketEntryHelper,
     constants,
     form,
@@ -49,7 +49,7 @@ export const CourtIssuedDocketEntry = connect(
     updateCourtIssuedDocketEntryFormValueSequence,
     validateCourtIssuedDocketEntrySequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <CaseDetailHeader />

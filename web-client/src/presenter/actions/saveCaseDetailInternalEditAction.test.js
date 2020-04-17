@@ -1,30 +1,24 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { saveCaseDetailInternalEditAction } from './saveCaseDetailInternalEditAction';
-import sinon from 'sinon';
-
-let saveCaseDetailInternalEditStub = sinon.stub().returns({});
-const updateCaseTrialSortTagsStub = sinon.stub().resolves();
-
-presenter.providers.applicationContext = {
-  ...applicationContext,
-  getUseCases: () => ({
-    saveCaseDetailInternalEditInteractor: saveCaseDetailInternalEditStub,
-    updateCaseTrialSortTagsInteractor: updateCaseTrialSortTagsStub,
-  }),
-};
 
 describe('saveCaseDetailInternalEditAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('should call the updateCaseTrialSortTags use case if case status is ready for trial', async () => {
     const caseDetail = {
       ...MOCK_CASE,
       createdAt: '2019-03-01T21:40:46.415Z',
       status: Case.STATUS_TYPES.generalDocketReadyForTrial,
     };
-    saveCaseDetailInternalEditStub = sinon.stub().returns(caseDetail);
+    applicationContext
+      .getUseCases()
+      .saveCaseDetailInternalEditInteractor.mockReturnValue(caseDetail);
 
     await runAction(saveCaseDetailInternalEditAction, {
       modules: {
@@ -35,9 +29,10 @@ describe('saveCaseDetailInternalEditAction', () => {
         caseDetail,
       },
     });
-    expect(updateCaseTrialSortTagsStub.getCall(0).args[0].caseId).toEqual(
-      'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    );
+    expect(
+      applicationContext.getUseCases().updateCaseTrialSortTagsInteractor.mock
+        .calls[0][0].caseId,
+    ).toEqual('c54ba5a9-b37b-479d-9201-067ec6e335bb');
   });
 
   it('should not call the updateCaseTrialSortTags use case if case status is not ready for trial', async () => {
@@ -45,7 +40,9 @@ describe('saveCaseDetailInternalEditAction', () => {
       ...MOCK_CASE,
       status: Case.STATUS_TYPES.new,
     };
-    saveCaseDetailInternalEditStub = sinon.stub().returns(caseDetail);
+    applicationContext
+      .getUseCases()
+      .saveCaseDetailInternalEditInteractor.mockReturnValue(caseDetail);
 
     await runAction(saveCaseDetailInternalEditAction, {
       modules: {
@@ -56,6 +53,8 @@ describe('saveCaseDetailInternalEditAction', () => {
         caseDetail,
       },
     });
-    expect(updateCaseTrialSortTagsStub.getCall(1)).toEqual(null);
+    expect(
+      applicationContext.getUseCases().updateCaseTrialSortTagsInteractor,
+    ).not.toBeCalled();
   });
 });

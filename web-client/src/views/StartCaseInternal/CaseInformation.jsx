@@ -15,20 +15,23 @@ export const CaseInformation = connect(
     startCaseInternalHelper: state.startCaseInternalHelper,
     trialCitiesHelper: state.trialCitiesHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updateOrderForDesignatingPlaceOfTrialSequence:
+      sequences.updateOrderForDesignatingPlaceOfTrialSequence,
     validatePetitionFromPaperSequence:
       sequences.validatePetitionFromPaperSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function CaseInformation({
     clearPreferredTrialCitySequence,
     constants,
     form,
     startCaseInternalHelper,
     trialCitiesHelper,
     updateFormValueSequence,
+    updateOrderForDesignatingPlaceOfTrialSequence,
     validatePetitionFromPaperSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <div className="blue-container">
         <DateInput
@@ -136,7 +139,7 @@ export const CaseInformation = connect(
           }
           value={form.preferredTrialCity}
           onChange={e => {
-            updateFormValueSequence({
+            updateOrderForDesignatingPlaceOfTrialSequence({
               key: e.target.name,
               value: e.target.value || null,
             });

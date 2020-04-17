@@ -1,26 +1,19 @@
 const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
 const { verifyPendingCaseForUser } = require('./verifyPendingCaseForUser');
 
-const applicationContext = {
-  environment: {
-    stage: 'local',
-  },
-};
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 
 const userId = '123';
 const caseId = 'abc';
 
 describe('verifyPendingCaseForUser', () => {
-  afterEach(() => {
-    client.query.restore();
-  });
-
   it('should return true if mapping record for user to case exists', async () => {
-    sinon.stub(client, 'query').resolves([
+    client.query = jest.fn().mockReturnValue([
       {
-        pk: '123|case|pending',
-        sk: '098',
+        pk: 'user|123',
+        sk: 'pending-case|098',
       },
     ]);
     const result = await verifyPendingCaseForUser({
@@ -31,7 +24,7 @@ describe('verifyPendingCaseForUser', () => {
     expect(result).toEqual(true);
   });
   it('should return false if mapping record for user to case does not exist', async () => {
-    sinon.stub(client, 'query').resolves([]);
+    client.query = jest.fn().mockReturnValue([]);
     const result = await verifyPendingCaseForUser({
       applicationContext,
       caseId,

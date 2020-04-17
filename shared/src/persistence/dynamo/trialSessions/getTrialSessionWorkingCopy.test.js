@@ -1,10 +1,12 @@
 const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { getTrialSessionWorkingCopy } = require('./getTrialSessionWorkingCopy');
 
 describe('getTrialSessionWorkingCopy', () => {
   beforeEach(() => {
-    sinon.stub(client, 'get').resolves({
+    client.get = jest.fn().mockReturnValue({
       pk: 'trial-session-working-copy|123',
       sk: '456',
       sort: 'practitioner',
@@ -14,16 +16,7 @@ describe('getTrialSessionWorkingCopy', () => {
     });
   });
 
-  afterEach(() => {
-    client.get.restore();
-  });
-
   it('should get the trial session by id', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-    };
     const result = await getTrialSessionWorkingCopy({
       applicationContext,
       trialSessionId: '123',

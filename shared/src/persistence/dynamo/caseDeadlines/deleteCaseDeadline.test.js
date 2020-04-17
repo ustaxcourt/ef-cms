@@ -1,23 +1,11 @@
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { deleteCaseDeadline } = require('./deleteCaseDeadline');
 
 describe('deleteCaseDeadline', () => {
-  let applicationContext;
-  let deleteStub;
-
-  beforeEach(() => {
-    deleteStub = sinon.stub().returns({
-      promise: async () => null,
-    });
-
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        delete: deleteStub,
-      }),
-    };
+  beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
   });
 
   it('deletes the case deadline', async () => {
@@ -27,26 +15,30 @@ describe('deleteCaseDeadline', () => {
       caseId: '456',
     });
 
-    expect(deleteStub.getCall(0).args[0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls[0][0],
+    ).toMatchObject({
       Key: {
-        pk: 'case-deadline-123',
-        sk: 'case-deadline-123',
+        pk: 'case-deadline|123',
+        sk: 'case-deadline|123',
       },
       TableName: 'efcms-dev',
     });
-
-    expect(deleteStub.getCall(1).args[0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls[1][0],
+    ).toMatchObject({
       Key: {
-        pk: '456|case-deadline',
-        sk: 'case-deadline-123',
+        pk: 'case|456',
+        sk: 'case-deadline|123',
       },
       TableName: 'efcms-dev',
     });
-
-    expect(deleteStub.getCall(2).args[0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls[2][0],
+    ).toMatchObject({
       Key: {
         pk: 'case-deadline-catalog',
-        sk: 'case-deadline-123',
+        sk: 'case-deadline|123',
       },
       TableName: 'efcms-dev',
     });

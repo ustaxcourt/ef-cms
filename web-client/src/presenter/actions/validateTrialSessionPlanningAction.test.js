@@ -1,18 +1,21 @@
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateTrialSessionPlanningAction } from './validateTrialSessionPlanningAction';
 
-const successMock = jest.fn();
-const errorMock = jest.fn();
-
-presenter.providers.path = {
-  error: errorMock,
-  success: successMock,
-};
-
-presenter.providers.applicationContext = {};
-
 describe('validateTrialSessionPlanningAction', () => {
+  let successMock;
+  let errorMock;
+
+  beforeAll(() => {
+    successMock = jest.fn();
+    errorMock = jest.fn();
+
+    presenter.providers.path = {
+      error: errorMock,
+      success: successMock,
+    };
+  });
+
   it('should return the error path if modal.term is null', async () => {
     runAction(validateTrialSessionPlanningAction, {
       modules: {

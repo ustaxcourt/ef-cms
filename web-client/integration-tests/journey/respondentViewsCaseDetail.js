@@ -5,6 +5,6 @@ export default test => {
       docketNumber: test.docketNumber,
     });
     expect(test.getState('currentPage')).toEqual('CaseDetail');
-    expect(test.getState('caseDetail.respondents')).toEqual([]);
+    expect(test.getState('caseDetail.irsPractitioners')).toEqual([]);
   });
 };

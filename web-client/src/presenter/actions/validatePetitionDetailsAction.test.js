@@ -1,29 +1,29 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validatePetitionDetailsAction } from './validatePetitionDetailsAction';
 
-let validateCaseDetailStub = jest.fn().mockReturnValue(null);
-const successStub = jest.fn();
-const errorStub = jest.fn();
-
-presenter.providers.applicationContext = {
-  ...applicationContext,
-  getUseCases: () => ({
-    validateCaseDetailInteractor: validateCaseDetailStub,
-  }),
-};
-
-presenter.providers.path = {
-  error: errorStub,
-  success: successStub,
-};
-
 describe('validatePetitionDetailsAction', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
+  let successStub;
+  let errorStub;
+  let PAYMENT_STATUS;
+
+  beforeAll(() => {
+    successStub = jest.fn();
+    errorStub = jest.fn();
+
+    ({ PAYMENT_STATUS } = applicationContext.getConstants());
+
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.path = {
+      error: errorStub,
+      success: successStub,
+    };
+
+    applicationContext
+      .getUseCases()
+      .validateCaseDetailInteractor.mockReturnValue(null);
   });
 
   it('should call the success path when no errors are found for a paid case', async () => {
@@ -38,14 +38,17 @@ describe('validatePetitionDetailsAction', () => {
           paymentDateMonth: '01',
           paymentDateYear: '2001',
           petitionPaymentMethod: 'check',
-          petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+          petitionPaymentStatus: PAYMENT_STATUS.PAID,
         },
       },
     });
-    expect(validateCaseDetailStub.mock.calls[0][0].caseDetail).toMatchObject({
+    expect(
+      applicationContext.getUseCases().validateCaseDetailInteractor.mock
+        .calls[0][0].caseDetail,
+    ).toMatchObject({
       petitionPaymentDate: '2001-01-01T05:00:00.000Z',
       petitionPaymentMethod: 'check',
-      petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+      petitionPaymentStatus: PAYMENT_STATUS.PAID,
     });
     expect(successStub).toHaveBeenCalled();
   });
@@ -58,12 +61,15 @@ describe('validatePetitionDetailsAction', () => {
       state: {
         caseDetail: MOCK_CASE,
         form: {
-          petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         },
       },
     });
-    expect(validateCaseDetailStub.mock.calls[0][0].caseDetail).toMatchObject({
-      petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+    expect(
+      applicationContext.getUseCases().validateCaseDetailInteractor.mock
+        .calls[0][0].caseDetail,
+    ).toMatchObject({
+      petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     });
     expect(successStub).toHaveBeenCalled();
   });
@@ -79,12 +85,15 @@ describe('validatePetitionDetailsAction', () => {
           paymentDateWaivedDay: '01',
           paymentDateWaivedMonth: '01',
           paymentDateWaivedYear: '2001',
-          petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+          petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         },
       },
     });
-    expect(validateCaseDetailStub.mock.calls[0][0].caseDetail).toMatchObject({
-      petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+    expect(
+      applicationContext.getUseCases().validateCaseDetailInteractor.mock
+        .calls[0][0].caseDetail,
+    ).toMatchObject({
+      petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
       petitionPaymentWaivedDate: '2001-01-01T05:00:00.000Z',
     });
     expect(successStub).toHaveBeenCalled();
@@ -104,7 +113,10 @@ describe('validatePetitionDetailsAction', () => {
         },
       },
     });
-    expect(validateCaseDetailStub.mock.calls[0][0].caseDetail).toMatchObject({
+    expect(
+      applicationContext.getUseCases().validateCaseDetailInteractor.mock
+        .calls[0][0].caseDetail,
+    ).toMatchObject({
       irsNoticeDate: '2001-01-01T05:00:00.000Z',
     });
     expect(successStub).toHaveBeenCalled();
@@ -120,7 +132,10 @@ describe('validatePetitionDetailsAction', () => {
         form: {},
       },
     });
-    expect(validateCaseDetailStub.mock.calls[0][0].caseDetail).toMatchObject({
+    expect(
+      applicationContext.getUseCases().validateCaseDetailInteractor.mock
+        .calls[0][0].caseDetail,
+    ).toMatchObject({
       preferredTrialCity: null,
     });
     expect(successStub).toHaveBeenCalled();
@@ -136,14 +151,20 @@ describe('validatePetitionDetailsAction', () => {
         form: { preferredTrialCity: 'Fresno, California' },
       },
     });
-    expect(validateCaseDetailStub.mock.calls[0][0].caseDetail).toMatchObject({
+    expect(
+      applicationContext.getUseCases().validateCaseDetailInteractor.mock
+        .calls[0][0].caseDetail,
+    ).toMatchObject({
       preferredTrialCity: 'Fresno, California',
     });
     expect(successStub).toHaveBeenCalled();
   });
 
   it('should call the error path when errors are found', async () => {
-    validateCaseDetailStub = jest.fn().mockReturnValue('error');
+    applicationContext
+      .getUseCases()
+      .validateCaseDetailInteractor.mockReturnValue('error');
+
     await runAction(validatePetitionDetailsAction, {
       modules: {
         presenter,
@@ -152,7 +173,7 @@ describe('validatePetitionDetailsAction', () => {
         caseDetail: MOCK_CASE,
         form: {
           petitionPaymentMethod: 'check',
-          petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+          petitionPaymentStatus: PAYMENT_STATUS.PAID,
         },
       },
     });

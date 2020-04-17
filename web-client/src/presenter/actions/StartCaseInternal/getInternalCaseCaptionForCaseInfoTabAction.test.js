@@ -1,12 +1,11 @@
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext.js';
 import { getInternalCaseCaptionForCaseInfoTabAction } from './getInternalCaseCaptionForCaseInfoTabAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('getInternalCaseCaptionForCaseInfoTabAction', () => {
-  const { ContactFactory } = applicationContext.getEntityConstructors();
+  presenter.providers.applicationContext = applicationContext;
+  const { PARTY_TYPES } = applicationContext.getConstants();
 
   it('should return an empty string when party type has not been selected', async () => {
     const result = await runAction(getInternalCaseCaptionForCaseInfoTabAction, {
@@ -33,7 +32,7 @@ describe('getInternalCaseCaptionForCaseInfoTabAction', () => {
           contactPrimary: {
             name: 'Carl Fredricksen',
           },
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });

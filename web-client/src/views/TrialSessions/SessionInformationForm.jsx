@@ -14,13 +14,13 @@ export const SessionInformationForm = connect(
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function SessionInformationForm({
     form,
     formattedTrialSessions,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <h2 className="margin-top-0">Session Information</h2>

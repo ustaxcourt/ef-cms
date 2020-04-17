@@ -6,7 +6,7 @@ export const TrialCityOptions = connect(
   {
     trialCitiesHelper: state.trialCitiesHelper,
   },
-  ({ trialCitiesHelper }) => {
+  function TrialCityOptions({ trialCitiesHelper }) {
     return (
       <>
         {Object.keys(trialCitiesHelper('All').trialCitiesByState).map(

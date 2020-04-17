@@ -1,68 +1,68 @@
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateCreateOrderModalFormValueAction } from './updateCreateOrderModalFormValueAction';
 
-presenter.providers.applicationContext = applicationContext;
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('updateCreateOrderModalFormValueAction', () => {
-  it('sets state.form values correctly if valid event code is passed in', async () => {
+  it('sets state.modal values correctly if valid event code is passed in', async () => {
     const result = await runAction(updateCreateOrderModalFormValueAction, {
       modules: {
         presenter,
       },
       props: { key: 'eventCode', value: 'ODD' },
       state: {
-        form: {},
+        modal: {},
       },
     });
-    expect(result.state.form.eventCode).toEqual('ODD');
-    expect(result.state.form.documentTitle).toEqual(
+    expect(result.state.modal.eventCode).toEqual('ODD');
+    expect(result.state.modal.documentTitle).toEqual(
       'Order of Dismissal and Decision',
     );
-    expect(result.state.form.documentType).toEqual(
+    expect(result.state.modal.documentType).toEqual(
       'Order of Dismissal and Decision',
     );
   });
 
-  it('sets state.form values correctly if a generic order event code is passed in', async () => {
+  it('sets state.modal values correctly if a generic order event code is passed in', async () => {
     const result = await runAction(updateCreateOrderModalFormValueAction, {
       modules: {
         presenter,
       },
       props: { key: 'eventCode', value: 'O' },
       state: {
-        form: {},
+        modal: {},
       },
     });
-    expect(result.state.form.eventCode).toEqual('O');
-    expect(result.state.form.documentTitle).toEqual('Order');
-    expect(result.state.form.documentType).toEqual('Order');
+    expect(result.state.modal.eventCode).toEqual('O');
+    expect(result.state.modal.documentTitle).toEqual('Order');
+    expect(result.state.modal.documentType).toEqual('Order');
   });
 
-  it('sets state.form values correctly if a generic notice event code is passed in', async () => {
+  it('sets state.modal values correctly if a generic notice event code is passed in', async () => {
     const result = await runAction(updateCreateOrderModalFormValueAction, {
       modules: {
         presenter,
       },
       props: { key: 'eventCode', value: 'NOT' },
       state: {
-        form: {},
+        modal: {},
       },
     });
-    expect(result.state.form.eventCode).toEqual('NOT');
-    expect(result.state.form.documentTitle).toEqual('Notice');
-    expect(result.state.form.documentType).toEqual('Notice');
+    expect(result.state.modal.eventCode).toEqual('NOT');
+    expect(result.state.modal.documentTitle).toEqual('Notice');
+    expect(result.state.modal.documentType).toEqual('Notice');
   });
 
-  it('unsets state.form values if event code is empty', async () => {
+  it('unsets state.modal values if event code is empty', async () => {
     const params = {
       modules: {
         presenter,
       },
       props: { key: 'eventCode', value: '' },
       state: {
-        form: {
+        modal: {
           documentTitle: 'Order of Dismissal and Decision',
           documentType: 'Order of Dismissal and Decision',
           eventCode: 'ODD',
@@ -70,21 +70,21 @@ describe('updateCreateOrderModalFormValueAction', () => {
       },
     };
     let result = await runAction(updateCreateOrderModalFormValueAction, params);
-    expect(result.state.form.eventCode).toBeUndefined();
-    expect(result.state.form.documentTitle).toBeUndefined();
-    expect(result.state.form.documentType).toBeUndefined();
+    expect(result.state.modal.eventCode).toBeUndefined();
+    expect(result.state.modal.documentTitle).toBeUndefined();
+    expect(result.state.modal.documentType).toBeUndefined();
 
     params.props.value = undefined;
     result = await runAction(updateCreateOrderModalFormValueAction, params);
-    expect(result.state.form.eventCode).toBeUndefined();
-    expect(result.state.form.documentTitle).toBeUndefined();
-    expect(result.state.form.documentType).toBeUndefined();
+    expect(result.state.modal.eventCode).toBeUndefined();
+    expect(result.state.modal.documentTitle).toBeUndefined();
+    expect(result.state.modal.documentType).toBeUndefined();
 
     params.props = {};
     result = await runAction(updateCreateOrderModalFormValueAction, params);
-    expect(result.state.form.eventCode).toBeUndefined();
-    expect(result.state.form.documentTitle).toBeUndefined();
-    expect(result.state.form.documentType).toBeUndefined();
+    expect(result.state.modal.eventCode).toBeUndefined();
+    expect(result.state.modal.documentTitle).toBeUndefined();
+    expect(result.state.modal.documentType).toBeUndefined();
   });
 
   it('sets documentTitle if documentTitle is passed in via props', async () => {
@@ -94,14 +94,14 @@ describe('updateCreateOrderModalFormValueAction', () => {
       },
       props: { key: 'documentTitle', value: 'Order to Do Something' },
       state: {
-        form: {
+        modal: {
           documentType: 'Order',
           eventCode: 'O',
         },
       },
     };
     let result = await runAction(updateCreateOrderModalFormValueAction, params);
-    expect(result.state.form.documentTitle).toEqual('Order to Do Something');
+    expect(result.state.modal.documentTitle).toEqual('Order to Do Something');
   });
 
   it('unsets documentTitle if documentTitle passed in via props is empty', async () => {
@@ -111,7 +111,7 @@ describe('updateCreateOrderModalFormValueAction', () => {
       },
       props: { key: 'documentTitle', value: '' },
       state: {
-        form: {
+        modal: {
           documentTitle: 'Order to Do Something',
           documentType: 'Order',
           eventCode: 'O',
@@ -119,7 +119,7 @@ describe('updateCreateOrderModalFormValueAction', () => {
       },
     };
     let result = await runAction(updateCreateOrderModalFormValueAction, params);
-    expect(result.state.form.documentTitle).toBeUndefined();
+    expect(result.state.modal.documentTitle).toBeUndefined();
   });
 
   it('sets documentTitle to Order if new eventCode passed in is a generic order', async () => {
@@ -129,7 +129,7 @@ describe('updateCreateOrderModalFormValueAction', () => {
       },
       props: { key: 'eventCode', value: 'O' },
       state: {
-        form: {
+        modal: {
           documentTitle: 'Order of Dismissal and Decision',
           documentType: 'Order of Dismissal and Decision',
           eventCode: 'ODD',
@@ -137,7 +137,7 @@ describe('updateCreateOrderModalFormValueAction', () => {
       },
     };
     let result = await runAction(updateCreateOrderModalFormValueAction, params);
-    expect(result.state.form.documentTitle).toEqual('Order');
-    expect(result.state.form.documentType).toEqual('Order');
+    expect(result.state.modal.documentTitle).toEqual('Order');
+    expect(result.state.modal.documentType).toEqual('Order');
   });
 });

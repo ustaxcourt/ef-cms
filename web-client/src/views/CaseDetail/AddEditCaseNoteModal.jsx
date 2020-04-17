@@ -11,7 +11,12 @@ export const AddEditCaseNoteModal = connect(
     validateNoteSequence: sequences.validateNoteSequence,
     validationErrors: state.validationErrors,
   },
-  ({ modal, onConfirmSequence, validateNoteSequence, validationErrors }) => {
+  function AddEditCaseNoteModal({
+    modal,
+    onConfirmSequence,
+    validateNoteSequence,
+    validationErrors,
+  }) {
     return (
       <ConfirmModal
         cancelLabel="Cancel"

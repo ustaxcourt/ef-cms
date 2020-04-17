@@ -7,8 +7,8 @@ exports.verifyCaseForUser = async ({ applicationContext, caseId, userId }) => {
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `${userId}|case`,
-      ':sk': caseId,
+      ':pk': `user|${userId}`,
+      ':sk': `case|${caseId}`,
     },
     KeyConditionExpression: '#pk = :pk AND #sk = :sk',
     applicationContext,

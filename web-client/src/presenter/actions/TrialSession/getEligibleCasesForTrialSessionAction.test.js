@@ -1,23 +1,17 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getEligibleCasesForTrialSessionAction } from './getEligibleCasesForTrialSessionAction';
-import { presenter } from '../../presenter';
-import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
+import { presenter } from '../../presenter-mock';
 
-let getEligibleCasesForTrialSessionStub;
+import { runAction } from 'cerebral/test';
 
 describe('getEligibleCasesForTrialSessionAction', () => {
-  beforeEach(() => {
-    getEligibleCasesForTrialSessionStub = sinon.stub().resolves([
-      {
-        caseId: '345',
-      },
-    ]);
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        getEligibleCasesForTrialSessionInteractor: getEligibleCasesForTrialSessionStub,
-      }),
-    };
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+    applicationContext
+      .getUseCases()
+      .getEligibleCasesForTrialSessionInteractor.mockResolvedValue([
+        { caseId: '345' },
+      ]);
   });
 
   it('call the use case to get the eligible cases', async () => {
@@ -30,6 +24,9 @@ describe('getEligibleCasesForTrialSessionAction', () => {
       },
       state: {},
     });
-    expect(getEligibleCasesForTrialSessionStub.calledOnce).toEqual(true);
+    expect(
+      applicationContext.getUseCases()
+        .getEligibleCasesForTrialSessionInteractor,
+    ).toBeCalled();
   });
 });

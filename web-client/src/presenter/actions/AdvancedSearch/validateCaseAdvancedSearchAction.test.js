@@ -1,23 +1,17 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateCaseAdvancedSearchAction } from './validateCaseAdvancedSearchAction';
-import sinon from 'sinon';
+
+presenter.providers.applicationContext = applicationContext;
 
 describe('validateCaseAdvancedSearchAction', () => {
-  let validateCaseAdvancedSearchStub;
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
-    validateCaseAdvancedSearchStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateCaseAdvancedSearchInteractor: validateCaseAdvancedSearchStub,
-      }),
-    };
+  beforeAll(() => {
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     presenter.providers.path = {
       error: errorStub,
@@ -26,7 +20,9 @@ describe('validateCaseAdvancedSearchAction', () => {
   });
 
   it('validates advanced case search successfully', async () => {
-    validateCaseAdvancedSearchStub.returns({});
+    applicationContext
+      .getUseCases()
+      .validateCaseAdvancedSearchInteractor.mockReturnValue({});
 
     await runAction(validateCaseAdvancedSearchAction, {
       modules: {
@@ -35,12 +31,17 @@ describe('validateCaseAdvancedSearchAction', () => {
       state: { form: {} },
     });
 
-    expect(validateCaseAdvancedSearchStub.calledOnce).toEqual(true);
-    expect(successStub.calledOnce).toEqual(true);
+    expect(
+      applicationContext.getUseCases().validateCaseAdvancedSearchInteractor.mock
+        .calls.length,
+    ).toEqual(1);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('fails validation for advanced case search', async () => {
-    validateCaseAdvancedSearchStub.returns({ foo: 'bar' });
+    applicationContext
+      .getUseCases()
+      .validateCaseAdvancedSearchInteractor.mockReturnValue({ foo: 'bar' });
 
     await runAction(validateCaseAdvancedSearchAction, {
       modules: {
@@ -49,7 +50,10 @@ describe('validateCaseAdvancedSearchAction', () => {
       state: { form: {} },
     });
 
-    expect(validateCaseAdvancedSearchStub.calledOnce).toEqual(true);
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(
+      applicationContext.getUseCases().validateCaseAdvancedSearchInteractor.mock
+        .calls.length,
+    ).toEqual(1);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

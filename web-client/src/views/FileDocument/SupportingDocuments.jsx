@@ -12,7 +12,11 @@ export const SupportingDocuments = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
   },
-  ({ addSupportingDocumentToFormSequence, fileDocumentHelper, form }) => {
+  function SupportingDocuments({
+    addSupportingDocumentToFormSequence,
+    fileDocumentHelper,
+    form,
+  }) {
     return (
       <>
         {form.hasSupportingDocuments &&

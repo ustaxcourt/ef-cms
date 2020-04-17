@@ -9,7 +9,7 @@ export const SuccessNotification = connect(
     alertSuccess: state.alertSuccess,
     dismissAlertSequence: sequences.dismissAlertSequence,
   },
-  ({ alertSuccess, dismissAlertSequence }) => {
+  function SuccessNotification({ alertSuccess, dismissAlertSequence }) {
     const notificationRef = useRef(null);
     const isMessageOnly =
       alertSuccess && alertSuccess.message && !alertSuccess.title;
@@ -66,7 +66,7 @@ export const SuccessNotification = connect(
                       iconRight={true}
                       onClick={() => dismissAlertSequence()}
                     >
-                      Dismiss
+                      Clear
                     </Button>
                   </div>
                 </div>

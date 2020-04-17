@@ -12,14 +12,14 @@ export const DraftDocuments = connect(
       sequences.archiveDraftDocumentModalSequence,
     formattedCaseDetail: state.formattedCaseDetail,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
-  ({
+  function DraftDocuments({
     archiveDraftDocumentModalSequence,
     formattedCaseDetail,
     openConfirmEditModalSequence,
     showModal,
-  }) => {
+  }) {
     return (
       <>
         {formattedCaseDetail.formattedDraftDocuments.length === 0 && (

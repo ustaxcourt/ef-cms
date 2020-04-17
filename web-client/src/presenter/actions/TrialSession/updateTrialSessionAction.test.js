@@ -1,4 +1,5 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateTrialSessionAction } from './updateTrialSessionAction';
 
@@ -13,8 +14,6 @@ const MOCK_TRIAL = {
   trialSessionId: '123',
 };
 
-let updateTrialSessionMock;
-const setTrialSessionAsSwingSessionMock = jest.fn();
 const successMock = jest.fn();
 const errorMock = jest.fn();
 
@@ -24,15 +23,12 @@ presenter.providers.path = {
 };
 
 describe('updateTrialSessionAction', () => {
-  beforeEach(() => {
-    updateTrialSessionMock = jest.fn().mockResolvedValue(MOCK_TRIAL);
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        setTrialSessionAsSwingSessionInteractor: setTrialSessionAsSwingSessionMock,
-        updateTrialSessionInteractor: updateTrialSessionMock,
-      }),
-    };
+    applicationContext
+      .getUseCases()
+      .updateTrialSessionInteractor.mockResolvedValue(MOCK_TRIAL);
   });
 
   it('goes to success path if trial session is updated', async () => {
@@ -56,16 +52,25 @@ describe('updateTrialSessionAction', () => {
         form: { ...MOCK_TRIAL },
       },
     });
-    expect(updateTrialSessionMock).toHaveBeenCalled();
-    expect(setTrialSessionAsSwingSessionMock).toHaveBeenCalled();
-    expect(setTrialSessionAsSwingSessionMock.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().updateTrialSessionInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor
+        .mock.calls[0][0],
+    ).toMatchObject({
       swingSessionId: '123',
       trialSessionId: '456',
     });
   });
 
   it('goes to error path if error', async () => {
-    updateTrialSessionMock = jest.fn().mockRejectedValue(new Error('bad'));
+    applicationContext
+      .getUseCases()
+      .updateTrialSessionInteractor.mockRejectedValue(new Error('bad'));
     await runAction(updateTrialSessionAction, {
       modules: {
         presenter,

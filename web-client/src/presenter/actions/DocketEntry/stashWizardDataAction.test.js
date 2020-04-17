@@ -16,12 +16,12 @@ describe('stashWizardDataAction', () => {
           dateReceivedMonth: '01',
           dateReceivedYear: '2012',
           lodged: false,
+          partyIrsPractitioner: false,
           partyPrimary: false,
-          partyRespondent: false,
           partySecondary: false,
-          practitioner: {
+          privatePractitioners: {
             name: 'Test Practitioner',
-            partyPractitioner: false,
+            partyPrivatePractitioner: false,
           },
           secondaryDocument: {
             something: true,
@@ -41,12 +41,12 @@ describe('stashWizardDataAction', () => {
       dateReceivedMonth: '01',
       dateReceivedYear: '2012',
       lodged: false,
+      partyIrsPractitioner: false,
       partyPrimary: false,
-      partyRespondent: false,
       partySecondary: false,
-      practitioner: {
+      privatePractitioners: {
         name: 'Test Practitioner',
-        partyPractitioner: false,
+        partyPrivatePractitioner: false,
       },
     });
     expect(result.state.screenMetadata.secondary).toEqual({
@@ -55,12 +55,12 @@ describe('stashWizardDataAction', () => {
       dateReceivedMonth: '01',
       dateReceivedYear: '2012',
       lodged: true,
+      partyIrsPractitioner: false,
       partyPrimary: false,
-      partyRespondent: false,
       partySecondary: false,
-      practitioner: {
+      privatePractitioners: {
         name: 'Test Practitioner',
-        partyPractitioner: false,
+        partyPrivatePractitioner: false,
       },
     });
   });

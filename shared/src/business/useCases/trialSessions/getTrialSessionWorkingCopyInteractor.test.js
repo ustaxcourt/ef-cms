@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   getTrialSessionWorkingCopyInteractor,
 } = require('./getTrialSessionWorkingCopyInteractor');
 const { omit } = require('lodash');
@@ -13,37 +16,26 @@ const MOCK_WORKING_COPY = {
 };
 
 describe('Get trial session working copy', () => {
-  let applicationContext;
   let user;
-  let getTrialSessionWorkingCopyMock;
-  let getJudgeForUserChambersInteractorMock;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
-    getTrialSessionWorkingCopyMock = jest
-      .fn()
-      .mockResolvedValue(MOCK_WORKING_COPY);
-    getJudgeForUserChambersInteractorMock = jest.fn().mockReturnValue({
-      role: User.ROLES.judge,
-      userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-    });
-
     user = {
       role: User.ROLES.judge,
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     };
 
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => user,
-      getPersistenceGateway: () => ({
-        getTrialSessionWorkingCopy: getTrialSessionWorkingCopyMock,
-      }),
-      getUseCases: () => ({
-        getJudgeForUserChambersInteractor: getJudgeForUserChambersInteractorMock,
-      }),
-    };
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionWorkingCopy.mockResolvedValue(MOCK_WORKING_COPY);
+
+    applicationContext
+      .getUseCases()
+      .getJudgeForUserChambersInteractor.mockReturnValue({
+        role: User.ROLES.judge,
+        userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+      });
   });
 
   it('throws error if user is unauthorized', async () => {
@@ -61,9 +53,11 @@ describe('Get trial session working copy', () => {
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    getTrialSessionWorkingCopyMock = jest
-      .fn()
-      .mockResolvedValue(omit(MOCK_WORKING_COPY, 'userId'));
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionWorkingCopy.mockResolvedValue(
+        omit(MOCK_WORKING_COPY, 'userId'),
+      );
 
     await expect(
       getTrialSessionWorkingCopyInteractor({
@@ -84,7 +78,9 @@ describe('Get trial session working copy', () => {
   });
 
   it('does not return data if none is returned from persistence', async () => {
-    getTrialSessionWorkingCopyMock = jest.fn();
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionWorkingCopy.mockImplementation(() => {});
 
     const result = await getTrialSessionWorkingCopyInteractor({
       applicationContext,
@@ -98,13 +94,18 @@ describe('Get trial session working copy', () => {
       role: User.ROLES.trialClerk,
       userId: 'a9ae05ba-d48a-43a6-9981-ee536a7601be',
     };
-    getJudgeForUserChambersInteractorMock = jest.fn();
+    applicationContext
+      .getUseCases()
+      .getJudgeForUserChambersInteractor.mockImplementation(() => {});
 
     const result = await getTrialSessionWorkingCopyInteractor({
       applicationContext,
       trialSessionId: MOCK_WORKING_COPY.trialSessionId,
     });
-    expect(getTrialSessionWorkingCopyMock.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().getTrialSessionWorkingCopy.mock
+        .calls[0][0],
+    ).toMatchObject({
       userId: 'a9ae05ba-d48a-43a6-9981-ee536a7601be',
     });
     expect(result).toMatchObject(MOCK_WORKING_COPY);

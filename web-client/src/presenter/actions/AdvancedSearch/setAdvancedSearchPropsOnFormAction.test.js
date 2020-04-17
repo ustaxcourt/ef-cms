@@ -1,4 +1,4 @@
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setAdvancedSearchPropsOnFormAction } from './setAdvancedSearchPropsOnFormAction';
 
@@ -19,10 +19,12 @@ describe('setAdvancedSearchPropsOnFormAction', () => {
 
     expect(result.state.advancedSearchForm).toEqual({
       anotherThing: 'h',
-      countryType: 'c',
-      petitionerName: 'a',
-      petitionerState: 'b',
-      yearFiledMax: 'e',
+      caseSearchByName: {
+        countryType: 'c',
+        petitionerName: 'a',
+        petitionerState: 'b',
+        yearFiledMax: 'e',
+      },
     });
   });
 });

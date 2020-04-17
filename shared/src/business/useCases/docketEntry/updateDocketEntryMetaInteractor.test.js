@@ -1,17 +1,16 @@
 import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { NotFoundError } = require('../../../errors/errors');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
-let applicationContext;
-let addCoversheetInteractorMock;
-let getCaseCaseIdNumberMock;
-let updateCaseMock;
-let docketRecord;
-let documents;
-
 describe('updateDocketEntryMetaInteractor', () => {
+  let docketRecord;
+  let documents;
+
   beforeEach(() => {
     documents = [
       {
@@ -69,66 +68,36 @@ describe('updateDocketEntryMetaInteractor', () => {
       },
     };
 
-    addCoversheetInteractorMock = jest.fn();
-
-    getCaseCaseIdNumberMock = jest.fn(({ caseId }) => {
-      return caseByCaseId[caseId];
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.docketClerk,
+      userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
     });
 
-    updateCaseMock = jest.fn(({ caseToUpdate }) => {
-      caseByCaseId[caseToUpdate.caseId] = caseToUpdate;
-    });
-
-    applicationContext = {
-      getCurrentUser: () => ({
-        role: User.ROLES.docketClerk,
-        userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
-      }),
-      getPersistenceGateway: () => ({
-        getCaseByCaseId: getCaseCaseIdNumberMock,
-        updateCase: updateCaseMock,
-      }),
-      getUniqueId: () => 'unique-id-1',
-      getUseCases: () => ({
-        addCoversheetInteractor: addCoversheetInteractorMock,
-      }),
-    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockImplementation(({ caseId }) => {
+        return caseByCaseId[caseId];
+      });
   });
 
   it('should throw an Unauthorized error if the user is not authorized', async () => {
-    applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.petitioner, // only User.ROLES.docketClerk has the correct permission
-    });
+    applicationContext.getCurrentUser.mockReturnValue({});
 
-    let error;
-    try {
-      await updateDocketEntryMetaInteractor({
+    await expect(
+      updateDocketEntryMetaInteractor({
         applicationContext,
         caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
-      });
-    } catch (err) {
-      error = err;
-    }
-
-    expect(error.message).toContain('Unauthorized');
-    expect(error).toBeInstanceOf(UnauthorizedError);
+      }),
+    ).rejects.toThrow(UnauthorizedError);
   });
 
   it('should throw a Not Found error if the case does not exist', async () => {
-    let error;
-    try {
-      await updateDocketEntryMetaInteractor({
+    await expect(
+      updateDocketEntryMetaInteractor({
         applicationContext,
         caseId: 'xxxba5a9-b37b-479d-9201-067ec6e33xxx',
-      });
-    } catch (err) {
-      error = err;
-    }
-
-    expect(error.message).toContain(
-      'Case xxxba5a9-b37b-479d-9201-067ec6e33xxx was not found.',
-    );
-    expect(error).toBeInstanceOf(NotFoundError);
+      }),
+    ).rejects.toThrow(NotFoundError);
   });
 
   it('should call the persistence method to load the case by its docket number', async () => {
@@ -139,7 +108,9 @@ describe('updateDocketEntryMetaInteractor', () => {
       docketRecordIndex: 0,
     });
 
-    expect(getCaseCaseIdNumberMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toHaveBeenCalled();
   });
 
   it('should update the docket record action', async () => {
@@ -155,7 +126,6 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketRecord.find(
       record => record.index === 0,
     );
-
     expect(updatedDocketEntry.action).toEqual('Updated Action');
   });
 
@@ -172,7 +142,6 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketRecord.find(
       record => record.index === 0,
     );
-
     expect(updatedDocketEntry.description).toEqual('Updated Description');
   });
 
@@ -189,11 +158,9 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketRecord.find(
       record => record.index === 0,
     );
-
     const updatedDocument = result.documents.find(
       document => document.documentId === updatedDocketEntry.documentId,
     );
-
     expect(updatedDocketEntry.filedBy).toEqual('New Filer');
     expect(updatedDocument.filedBy).toEqual('New Filer');
   });
@@ -211,7 +178,6 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketRecord.find(
       record => record.index === 0,
     );
-
     expect(updatedDocketEntry.filingDate).toEqual('2020-01-01T00:01:00.000Z');
   });
 
@@ -228,11 +194,9 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketRecord.find(
       record => record.index === 0,
     );
-
     const updatedDocument = result.documents.find(
       document => document.documentId === updatedDocketEntry.documentId,
     );
-
     expect(updatedDocument.servedAt).toEqual('2020-01-01T00:01:00.000Z');
   });
 
@@ -246,7 +210,9 @@ describe('updateDocketEntryMetaInteractor', () => {
       docketRecordIndex: 0,
     });
 
-    expect(addCoversheetInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
   });
 
   it('should generate a new coversheet for the document if the filingDate field is changed', async () => {
@@ -259,7 +225,9 @@ describe('updateDocketEntryMetaInteractor', () => {
       docketRecordIndex: 0,
     });
 
-    expect(addCoversheetInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
   });
 
   it('should NOT generate a new coversheet for the document if the servedAt and filingDate fields are NOT changed', async () => {
@@ -273,7 +241,9 @@ describe('updateDocketEntryMetaInteractor', () => {
       docketRecordIndex: 0,
     });
 
-    expect(addCoversheetInteractorMock).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
   });
 
   it('should call the updateCase persistence method', async () => {
@@ -286,14 +256,14 @@ describe('updateDocketEntryMetaInteractor', () => {
       docketRecordIndex: 0,
     });
 
-    expect(updateCaseMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
   });
 
   it('should not throw an error when a null certificate of service date is passed for a docket entry without an associated document', async () => {
-    let error;
-
-    try {
-      await updateDocketEntryMetaInteractor({
+    await expect(
+      updateDocketEntryMetaInteractor({
         applicationContext,
         caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
         docketEntryMeta: {
@@ -304,11 +274,7 @@ describe('updateDocketEntryMetaInteractor', () => {
           filingDate: '2020-02-03',
         },
         docketRecordIndex: 2,
-      });
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeUndefined();
+      }),
+    ).resolves.not.toThrow();
   });
 });

@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * Sets the caseDetailPage.primaryTab view.
+ * Sets the currentViewMetadata.caseDetail.primaryTab view.
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object used for setting workQueueToDisplay
@@ -9,9 +9,15 @@ import { state } from 'cerebral';
  */
 export const setCaseDetailPageTabAction = ({ props, store }) => {
   if (props.isSecondary) {
-    store.set(state.caseDetailPage.primaryTab, 'caseInformation');
-    store.set(state.caseDetailPage.caseInformationTab, props.tab);
+    store.set(
+      state.currentViewMetadata.caseDetail.primaryTab,
+      'caseInformation',
+    );
+    store.set(
+      state.currentViewMetadata.caseDetail.caseInformationTab,
+      props.tab,
+    );
   } else {
-    store.set(state.caseDetailPage.primaryTab, props.tab);
+    store.set(state.currentViewMetadata.caseDetail.primaryTab, props.tab);
   }
 };

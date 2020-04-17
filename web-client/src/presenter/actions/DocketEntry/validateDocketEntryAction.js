@@ -40,7 +40,7 @@ export const validateDocketEntryAction = ({
       'objections',
       'partyPrimary',
       'partySecondary',
-      'partyRespondent',
+      'partyIrsPractitioner',
     ];
 
     return path.error({

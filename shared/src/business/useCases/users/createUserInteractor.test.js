@@ -1,6 +1,10 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   UnauthorizedError,
 } = require('../../../../../shared/src/errors/errors');
+
 const { createUserInteractor } = require('./createUserInteractor');
 const { User } = require('../../entities/User');
 
@@ -11,20 +15,13 @@ describe('create user', () => {
       role: User.ROLES.petitionsClerk,
       userId: 'petitionsclerk1@example.com',
     };
-    const applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: 'admin',
-          userId: 'admin',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          createUser: () => Promise.resolve(mockUser),
-        };
-      },
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: 'admin',
+      userId: 'admin',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .createUser.mockReturnValue(mockUser);
     const userToCreate = { userId: 'petitionsclerk1@example.com' };
     const user = await createUserInteractor({
       applicationContext,
@@ -39,20 +36,13 @@ describe('create user', () => {
       role: User.ROLES.petitioner,
       userId: 'petitioner1@example.com',
     };
-    const applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitioner,
-          userId: 'admin',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          createUser: () => Promise.resolve(mockUser),
-        };
-      },
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitioner,
+      userId: 'admin',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .createUser.mockReturnValue(mockUser);
     const userToCreate = { userId: 'petitioner1@example.com' };
     let error;
     try {

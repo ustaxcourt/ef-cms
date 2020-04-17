@@ -1,23 +1,14 @@
 const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const {
   getCalendaredCasesForTrialSession,
 } = require('./getCalendaredCasesForTrialSession');
-const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('getCalendaredCasesForTrialSession', () => {
-  const mockDocketRecord = [
-    {
-      docketRecordId: '2f2062a4-e019-441d-9aed-775b8d2ad1c0',
-      documentId: 'e23e1ab7-9559-4adc-8b0b-daf60dbbbd52',
-      index: 0,
-      pk: 'case|c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      sk: 'docket-record|2f2062a4-e019-441d-9aed-775b8d2ad1c0',
-    },
-  ];
-
   beforeEach(() => {
-    sinon.stub(client, 'get').resolves({
+    client.get = jest.fn().mockReturnValue({
       caseOrder: [
         {
           caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -27,43 +18,76 @@ describe('getCalendaredCasesForTrialSession', () => {
       ],
     });
 
-    sinon
-      .stub(client, 'batchGet')
-      .onCall(0)
-      .resolves([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }])
-      .onCall(1)
-      .resolves([
-        {
-          caseId: MOCK_CASE.caseId,
-          notes: 'hey this is a note',
-          pk: `judges-case-note|${MOCK_CASE.caseId}`,
-          sk: '123',
-        },
-      ]);
-
-    sinon.stub(client, 'query').resolves(mockDocketRecord);
-  });
-
-  afterEach(() => {
-    client.get.restore();
-    client.batchGet.restore();
+    client.query = jest.fn().mockReturnValue([
+      {
+        caseId: '123',
+        pk: 'case|123',
+        sk: 'case|23',
+        status: 'New',
+      },
+      {
+        pk: 'case|123',
+        sk: 'irsPractitioner|123',
+        userId: 'abc-123',
+      },
+      {
+        pk: 'case|123',
+        sk: 'privatePractitioner|123',
+        userId: 'abc-123',
+      },
+      {
+        docketRecordId: 'abc-123',
+        pk: 'case|123',
+        sk: 'docket-record|123',
+      },
+      {
+        documentId: 'abc-123',
+        pk: 'case|123',
+        sk: 'document|123',
+      },
+    ]);
   });
 
   it('should get the cases calendared for a trial session', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-    };
     const result = await getCalendaredCasesForTrialSession({
       applicationContext,
     });
-    expect(result).toMatchObject([
+    expect(result).toEqual([
       {
-        ...MOCK_CASE,
+        caseId: '123',
         disposition: 'something',
-        docketRecord: mockDocketRecord,
+        docketRecord: [
+          {
+            docketRecordId: 'abc-123',
+            pk: 'case|123',
+            sk: 'docket-record|123',
+          },
+        ],
+        documents: [
+          {
+            documentId: 'abc-123',
+            pk: 'case|123',
+            sk: 'document|123',
+          },
+        ],
+        irsPractitioners: [
+          {
+            pk: 'case|123',
+            sk: 'irsPractitioner|123',
+            userId: 'abc-123',
+          },
+        ],
+        pk: 'case|123',
+        privatePractitioners: [
+          {
+            pk: 'case|123',
+            sk: 'privatePractitioner|123',
+            userId: 'abc-123',
+          },
+        ],
         removedFromTrial: true,
+        sk: 'case|23',
+        status: 'New',
       },
     ]);
   });

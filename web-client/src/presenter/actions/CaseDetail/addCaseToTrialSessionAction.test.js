@@ -1,21 +1,16 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { addCaseToTrialSessionAction } from './addCaseToTrialSessionAction';
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
+presenter.providers.applicationContext = applicationContext;
+
+applicationContext
+  .getUseCases()
+  .addCaseToTrialSessionInteractor.mockReturnValue(MOCK_CASE);
+
 describe('addCaseToTrialSessionAction', () => {
-  const addCaseToTrialSessionInteractorSpy = jest
-    .fn()
-    .mockReturnValue(MOCK_CASE);
-
-  beforeEach(() => {
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        addCaseToTrialSessionInteractor: addCaseToTrialSessionInteractorSpy,
-      }),
-    };
-  });
-
   it('should call the addCaseToTrialSessionInteractor with the state.caseDetail.caseId and state.modal.trialSessionId and return alertSuccess and the caseDetail returned from the use case', async () => {
     const result = await runAction(addCaseToTrialSessionAction, {
       modules: {
@@ -32,8 +27,13 @@ describe('addCaseToTrialSessionAction', () => {
       },
     });
 
-    expect(addCaseToTrialSessionInteractorSpy).toHaveBeenCalled();
-    expect(addCaseToTrialSessionInteractorSpy.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().addCaseToTrialSessionInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addCaseToTrialSessionInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       caseId: '123',
       trialSessionId: '234',
     });

@@ -1,9 +1,11 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { EditOrderTitleModal } from './EditOrderTitleModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { SuccessNotification } from '../SuccessNotification';
+import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { TextEditor } from './TextEditor';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -11,29 +13,29 @@ import React from 'react';
 
 export const CreateOrder = connect(
   {
-    convertHtml2PdfAndOpenInNewTabSequence:
-      sequences.convertHtml2PdfAndOpenInNewTabSequence,
-    convertHtml2PdfSequence: sequences.convertHtml2PdfSequence,
     createOrderHelper: state.createOrderHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    showModal: state.showModal,
+    openEditOrderTitleModalSequence: sequences.openEditOrderTitleModalSequence,
+    refreshPdfWhenSwitchingCreateOrderTabSequence:
+      sequences.refreshPdfWhenSwitchingCreateOrderTabSequence,
+    showModal: state.modal.showModal,
     submitCourtIssuedOrderSequence: sequences.submitCourtIssuedOrderSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
-  ({
-    convertHtml2PdfAndOpenInNewTabSequence,
-    convertHtml2PdfSequence,
+  function CreateOrder({
     createOrderHelper,
     form,
     formCancelToggleCancelSequence,
+    openEditOrderTitleModalSequence,
+    refreshPdfWhenSwitchingCreateOrderTabSequence,
     showModal,
     submitCourtIssuedOrderSequence,
     updateFormValueSequence,
     updateScreenMetadataSequence,
-  }) => {
-    const { isEditing, pageTitle } = createOrderHelper;
+  }) {
+    const { pageTitle } = createOrderHelper;
 
     return (
       <>
@@ -41,46 +43,41 @@ export const CreateOrder = connect(
         {showModal === 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
         )}
+        {showModal === 'EditOrderTitleModal' && <EditOrderTitleModal />}
         <SuccessNotification />
         <ErrorNotification />
 
         <section className="usa-section grid-container DocumentDetail">
           <div className="grid-container padding-x-0">
-            <div className="grid-row grid-gap">
-              <div className="grid-col-8">
-                <h2 className="heading-1">{pageTitle}</h2>
-              </div>
-              <div className="grid-col-3">
-                <h2 className="heading-1">Quick Preview</h2>
-              </div>
-              <div className="grid-col-1">
-                <Button
-                  link
-                  className="margin-top-105 minw-10"
-                  icon="sync"
-                  onClick={() => {
-                    convertHtml2PdfSequence();
-                  }}
-                >
-                  Refresh
-                </Button>
-              </div>
-            </div>
+            <h1 className="heading-1">
+              {pageTitle}{' '}
+              <Button
+                link
+                className="margin-left-1"
+                icon="edit"
+                onClick={() => openEditOrderTitleModalSequence()}
+              >
+                Edit Title
+              </Button>
+            </h1>
 
-            <div className="grid-row grid-gap">
-              <div className="grid-col-8">
+            <Tabs
+              bind="createOrderTab"
+              className="tab-border tab-button-h2"
+              onSelect={() => refreshPdfWhenSwitchingCreateOrderTabSequence()}
+            >
+              <Tab id="tab-generate" tabName="generate" title="Generate">
                 <TextEditor
-                  defaultValue={isEditing ? form.richText : ''}
+                  defaultValue={form.richText}
                   form={form}
                   updateFormValueSequence={updateFormValueSequence}
                   updateScreenMetadataSequence={updateScreenMetadataSequence}
                 />
-              </div>
-
-              <div className="grid-col-4">
+              </Tab>
+              <Tab id="tab-preview" tabName="preview" title="Preview">
                 <PdfPreview />
-              </div>
-            </div>
+              </Tab>
+            </Tabs>
 
             <div className="grid-row grid-gap margin-top-4">
               <div className="grid-col-8">
@@ -98,17 +95,6 @@ export const CreateOrder = connect(
                   }}
                 >
                   Cancel
-                </Button>
-              </div>
-
-              <div className="grid-col-4">
-                <Button
-                  secondary
-                  onClick={() => {
-                    convertHtml2PdfAndOpenInNewTabSequence();
-                  }}
-                >
-                  View Full PDF
                 </Button>
               </div>
             </div>

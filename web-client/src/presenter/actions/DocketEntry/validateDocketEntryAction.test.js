@@ -1,28 +1,22 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateDocketEntryAction } from './validateDocketEntryAction';
-import sinon from 'sinon';
+
+presenter.providers.applicationContext = applicationContext;
 
 describe('validateDocketEntryAction', () => {
-  let validateDocketEntryStub;
   let successStub;
   let errorStub;
 
   let mockDocketEntry;
 
-  beforeEach(() => {
-    validateDocketEntryStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+  beforeAll(() => {
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     mockDocketEntry = {
       data: 'hello world',
-    };
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateDocketEntryInteractor: validateDocketEntryStub,
-      }),
     };
 
     presenter.providers.path = {
@@ -32,7 +26,10 @@ describe('validateDocketEntryAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateDocketEntryStub.returns(null);
+    applicationContext
+      .getUseCases()
+      .validateDocketEntryInteractor.mockReturnValue(null);
+
     await runAction(validateDocketEntryAction, {
       modules: {
         presenter,
@@ -42,11 +39,14 @@ describe('validateDocketEntryAction', () => {
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateDocketEntryStub.returns('error');
+    applicationContext
+      .getUseCases()
+      .validateDocketEntryInteractor.mockReturnValue('error');
+
     await runAction(validateDocketEntryAction, {
       modules: {
         presenter,
@@ -56,6 +56,6 @@ describe('validateDocketEntryAction', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

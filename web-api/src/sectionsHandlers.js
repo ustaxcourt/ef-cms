@@ -1,11 +1,12 @@
 module.exports = {
   getDocumentQCInboxForSectionLambda: require('./workitems/getDocumentQCInboxForSectionLambda')
-    .handler,
+    .getDocumentQCInboxForSectionLambda,
   getDocumentQCServedForSectionLambda: require('./workitems/getDocumentQCServedForSectionLambda')
-    .handler,
+    .getDocumentQCServedForSectionLambda,
   getInboxMessagesForSectionLambda: require('./workitems/getInboxMessagesForSectionLambda')
-    .handler,
+    .getInboxMessagesForSectionLambda,
   getSentMessagesForSectionLambda: require('./workitems/getSentMessagesForSectionLambda')
-    .handler,
-  getUsersInSectionLambda: require('./users/getUsersInSectionLambda').handler,
+    .getSentMessagesForSectionLambda,
+  getUsersInSectionLambda: require('./users/getUsersInSectionLambda')
+    .getUsersInSectionLambda,
 };

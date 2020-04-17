@@ -1,31 +1,35 @@
 module.exports = {
-  createAttorneyUserLambda: require('./users/createAttorneyUserLambda').handler,
-  createUserLambda: require('./users/createUserLambda').handler,
-  getCasesByUserLambda: require('./cases/getCasesByUserLambda').handler,
+  createPractitionerUserLambda: require('./users/createPractitionerUserLambda')
+    .createPractitionerUserLambda,
+  createUserLambda: require('./users/createUserLambda').createUserLambda,
+  getCasesByUserLambda: require('./cases/getCasesByUserLambda')
+    .getCasesByUserLambda,
   getConsolidatedCasesByUserLambda: require('./cases/getConsolidatedCasesByUserLambda')
-    .handler,
+    .getConsolidatedCasesByUserLambda,
   getDocumentQCInboxForUserLambda: require('./workitems/getDocumentQCInboxForUserLambda')
-    .handler,
+    .getDocumentQCInboxForUserLambda,
   getDocumentQCServedForUserLambda: require('./workitems/getDocumentQCServedForUserLambda')
-    .handler,
+    .getDocumentQCServedForUserLambda,
   getInboxMessagesForUserLambda: require('./workitems/getInboxMessagesForUserLambda')
-    .handler,
-  getInternalUsersLambda: require('./users/getInternalUsersLambda').handler,
-  getPractitionersBySearchKeyLambda: require('./users/getPractitionersBySearchKeyLambda')
-    .handler,
-  getRespondentsBySearchKeyLambda: require('./users/getRespondentsBySearchKeyLambda')
-    .handler,
+    .getInboxMessagesForUserLambda,
+  getInternalUsersLambda: require('./users/getInternalUsersLambda')
+    .getInternalUsersLambda,
+  getIrsPractitionersBySearchKeyLambda: require('./users/getIrsPractitionersBySearchKeyLambda')
+    .getIrsPractitionersBySearchKeyLambda,
+  getPrivatePractitionersBySearchKeyLambda: require('./users/getPrivatePractitionersBySearchKeyLambda')
+    .getPrivatePractitionersBySearchKeyLambda,
   getSentMessagesForUserLambda: require('./workitems/getSentMessagesForUserLambda')
-    .handler,
-  getUserByIdLambda: require('./users/getUserByIdLambda').handler,
-  getUserLambda: require('./users/getUserLambda').handler,
-  practitionerCaseAssociationLambda: require('./cases/practitionerCaseAssociationLambda')
-    .handler,
-  practitionerPendingCaseAssociationLambda: require('./cases/practitionerPendingCaseAssociationLambda')
-    .handler,
-  updateAttorneyUserLambda: require('./users/updateAttorneyUserLambda').handler,
+    .getSentMessagesForUserLambda,
+  getUserByIdLambda: require('./users/getUserByIdLambda').getUserByIdLambda,
+  getUserLambda: require('./users/getUserLambda').getUserLambda,
+  privatePractitionerCaseAssociationLambda: require('./cases/privatePractitionerCaseAssociationLambda')
+    .privatePractitionerCaseAssociationLambda,
+  privatePractitionerPendingCaseAssociationLambda: require('./cases/privatePractitionerPendingCaseAssociationLambda')
+    .privatePractitionerPendingCaseAssociationLambda,
+  updatePractitionerUserLambda: require('./users/updatePractitionerUserLambda')
+    .updatePractitionerUserLambda,
   updateUserContactInformationLambda: require('./users/updateUserContactInformationLambda')
-    .handler,
+    .updateUserContactInformationLambda,
   verifyPendingCaseForUserLambda: require('./cases/verifyPendingCaseForUserLambda')
-    .handler,
+    .verifyPendingCaseForUserLambda,
 };

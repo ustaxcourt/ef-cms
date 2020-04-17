@@ -1,16 +1,13 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { archiveDraftDocumentAction } from './archiveDraftDocumentAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-const archiveDraftDocumentInteractor = jest.fn();
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    archiveDraftDocumentInteractor,
-  }),
-};
-
 describe('archiveDraftDocumentAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('archives a drafted document successfully', async () => {
     const result = await runAction(archiveDraftDocumentAction, {
       modules: {
@@ -26,7 +23,9 @@ describe('archiveDraftDocumentAction', () => {
       },
     });
 
-    expect(archiveDraftDocumentInteractor).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().archiveDraftDocumentInteractor,
+    ).toHaveBeenCalled();
     expect(result.state.alertSuccess).toMatchObject({
       message: 'document-title-123',
       title: 'This document has been deleted:',
@@ -49,7 +48,9 @@ describe('archiveDraftDocumentAction', () => {
       },
     });
 
-    expect(archiveDraftDocumentInteractor).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().archiveDraftDocumentInteractor,
+    ).toHaveBeenCalled();
     expect(result.state.alertSuccess).toMatchObject({
       message: 'document-title-123',
       title: 'This document has been deleted:',

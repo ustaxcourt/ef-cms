@@ -11,12 +11,12 @@ export const EditDocketEntryMetaTabService = connect(
     validationErrors: state.modal.validationErrors,
     validationSequence: sequences.validateDocketRecordSequence,
   },
-  ({
+  function EditDocketEntryMetaTabService({
     form,
     updateDocketEntryMetaDocumentFormValueSequence,
     validationErrors,
     validationSequence,
-  }) => {
+  }) {
     return (
       <div className="blue-container">
         <FormGroup

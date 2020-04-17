@@ -1,26 +1,19 @@
 const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { getWorkItemById } = require('./getWorkItemById');
 
 describe('getWorkItemById', () => {
   beforeEach(() => {
-    sinon.stub(client, 'get').resolves({
+    client.get = jest.fn().mockReturnValue({
       pk: 'abc',
       sk: 'abc',
       workItemId: 'abc',
     });
   });
 
-  afterEach(() => {
-    client.get.restore();
-  });
-
   it('makes a post request to the expected endpoint with the expected data', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-    };
     const result = await getWorkItemById({
       applicationContext,
     });

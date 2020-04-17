@@ -19,7 +19,7 @@ function CourtIssuedDocumentTypeG(rawProps) {
   this.trialLocation = rawProps.trialLocation;
 }
 
-CourtIssuedDocumentTypeG.prototype.getDocumentTitle = function() {
+CourtIssuedDocumentTypeG.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
     formatDateString(this.date, 'MM-DD-YYYY'),
@@ -29,10 +29,7 @@ CourtIssuedDocumentTypeG.prototype.getDocumentTitle = function() {
 
 CourtIssuedDocumentTypeG.schema = {
   attachments: joi.boolean().required(),
-  date: joi
-    .date()
-    .iso()
-    .required(),
+  date: joi.date().iso().required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
   trialLocation: joi.string().required(),

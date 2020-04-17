@@ -1,11 +1,12 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   getCaseDeadlinesForCaseInteractor,
 } = require('./getCaseDeadlinesForCaseInteractor');
 const { User } = require('../../entities/User');
 
 describe('getCaseDeadlinesForCaseInteractor', () => {
-  let applicationContext;
-
   const mockCaseDeadline = {
     caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     caseTitle: 'My Case Title',
@@ -14,20 +15,22 @@ describe('getCaseDeadlinesForCaseInteractor', () => {
     docketNumber: '101-21',
   };
 
+  const mockUser = new User({
+    name: 'Test Petitionsclerk',
+    role: User.ROLES.petitionsClerk,
+    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  });
+
   it('gets the case deadlines', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () =>
-        new User({
-          name: 'Test Petitionsclerk',
-          role: User.ROLES.petitionsClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
-      getPersistenceGateway: () => ({
-        getCaseDeadlinesByCaseId: () => [mockCaseDeadline],
-      }),
-      getUniqueId: () => '6ba578e7-5736-435b-a41b-2de3eec29fe7',
-    };
+    applicationContext.environment.stage = 'local';
+    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseDeadlinesByCaseId.mockReturnValue([mockCaseDeadline]);
+    applicationContext.getUniqueId.mockReturnValue(
+      '6ba578e7-5736-435b-a41b-2de3eec29fe7',
+    );
 
     let error;
     let caseDeadlines;
@@ -35,7 +38,7 @@ describe('getCaseDeadlinesForCaseInteractor', () => {
     try {
       caseDeadlines = await getCaseDeadlinesForCaseInteractor({
         applicationContext,
-        caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        caseId: mockCaseDeadline.caseId,
       });
     } catch (e) {
       error = e;

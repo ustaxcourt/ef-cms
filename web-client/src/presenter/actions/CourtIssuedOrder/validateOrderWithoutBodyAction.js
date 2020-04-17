@@ -14,7 +14,7 @@ export const validateOrderWithoutBodyAction = ({
   get,
   path,
 }) => {
-  const orderMetadata = get(state.form);
+  const orderMetadata = get(state.modal);
 
   const errors = applicationContext
     .getUseCases()

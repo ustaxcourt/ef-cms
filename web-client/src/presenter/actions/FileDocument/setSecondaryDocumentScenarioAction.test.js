@@ -1,11 +1,11 @@
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setSecondaryDocumentScenarioAction } from './setSecondaryDocumentScenarioAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('setSecondaryDocumentScenarioAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   it('sets secondaryDocument scenario', async () => {
     const documentScenario = {
       category: 'Notice',

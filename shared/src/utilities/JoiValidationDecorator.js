@@ -105,7 +105,7 @@ function getFormattedValidationErrors(entity) {
  * @param {Function} customValidate a custom validation function
  * @param {object} errorToMessageMap the map of error fields and messages
  */
-exports.joiValidationDecorator = function(
+exports.joiValidationDecorator = function (
   entityConstructor,
   schema,
   customValidate,
@@ -115,15 +115,15 @@ exports.joiValidationDecorator = function(
     schema = joi.object().keys({ ...schema });
   }
 
-  entityConstructor.prototype.getErrorToMessageMap = function() {
+  entityConstructor.prototype.getErrorToMessageMap = function () {
     return errorToMessageMap;
   };
 
-  entityConstructor.prototype.getSchema = function() {
+  entityConstructor.prototype.getSchema = function () {
     return schema;
   };
 
-  entityConstructor.getSchema = function() {
+  entityConstructor.getSchema = function () {
     return schema;
   };
 
@@ -141,14 +141,15 @@ exports.joiValidationDecorator = function(
   entityConstructor.prototype.validate = function validate() {
     if (!this.isValid()) {
       throw new Error(
-        `The ${entityConstructor.validationName ||
-          ''} entity was invalid ${this.getValidationError()}`,
+        `The ${
+          entityConstructor.validationName || ''
+        } entity was invalid ${this.getValidationError()}`,
       );
     }
     return this;
   };
 
-  entityConstructor.prototype.getFormattedValidationErrors = function() {
+  entityConstructor.prototype.getFormattedValidationErrors = function () {
     return getFormattedValidationErrors(this);
   };
 
@@ -177,7 +178,7 @@ exports.joiValidationDecorator = function(
     return this;
   };
 
-  const toRawObjectPrototype = function() {
+  const toRawObjectPrototype = function () {
     return toRawObject(this);
   };
 
@@ -185,7 +186,7 @@ exports.joiValidationDecorator = function(
 
   entityConstructor.prototype.toRawObjectFromJoi = toRawObjectPrototype;
 
-  entityConstructor.validateRawCollection = function(
+  entityConstructor.validateRawCollection = function (
     collection,
     { applicationContext },
   ) {
@@ -196,7 +197,7 @@ exports.joiValidationDecorator = function(
     );
   };
 
-  entityConstructor.validateCollection = function(collection) {
+  entityConstructor.validateCollection = function (collection) {
     return collection.map(entity => entity.validate());
   };
 };

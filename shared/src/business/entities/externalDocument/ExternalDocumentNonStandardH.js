@@ -22,7 +22,7 @@ function ExternalDocumentNonStandardH(rawProps, ExternalDocumentFactory) {
   this.secondaryDocument = ExternalDocumentFactory.get(secondaryDocument || {});
 }
 
-ExternalDocumentNonStandardH.prototype.getDocumentTitle = function() {
+ExternalDocumentNonStandardH.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
     this.secondaryDocument.getDocumentTitle(),
@@ -43,7 +43,7 @@ ExternalDocumentNonStandardH.schema = {
 joiValidationDecorator(
   ExternalDocumentNonStandardH,
   ExternalDocumentNonStandardH.schema,
-  function() {
+  function () {
     return !this.getFormattedValidationErrors();
   },
   ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES,

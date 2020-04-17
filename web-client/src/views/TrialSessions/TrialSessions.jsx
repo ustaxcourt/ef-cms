@@ -14,7 +14,10 @@ export const TrialSessions = connect(
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
   },
-  ({ defaultTab, openTrialSessionPlanningModalSequence }) => {
+  function TrialSessions({
+    defaultTab,
+    openTrialSessionPlanningModalSequence,
+  }) {
     return (
       <>
         <BigHeader text="Trial Sessions" />
@@ -23,7 +26,7 @@ export const TrialSessions = connect(
           <ErrorNotification />
 
           <Tabs
-            bind="trialSessionsTab.group"
+            bind="currentViewMetadata.trialSessions.tab"
             defaultActiveTab={defaultTab || 'open'}
             id="trial-sessions-tabs"
           >
