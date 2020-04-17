@@ -9,7 +9,7 @@ describe('getPublicJudgesAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('gets the list of jugdges', async () => {
+  it('gets the list of judges', async () => {
     const mockJudges = [
       {
         name: 'Test Judge',

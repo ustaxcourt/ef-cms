@@ -2,6 +2,8 @@ const {
   orderAdvancedSearchInteractor,
 } = require('./orderAdvancedSearchInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { Document } = require('../../business/entities/Document');
+const { map } = require('lodash');
 
 describe('orderAdvancedSearchInteractor', () => {
   beforeEach(() => {
@@ -76,5 +78,22 @@ describe('orderAdvancedSearchInteractor', () => {
         signedJudgeName: 'Guy Fieri',
       },
     ]);
+  });
+
+  it('searches for documents that are of type orders', async () => {
+    const orderKeyword = 'keyword';
+    const orderEventCodes = map(Document.ORDER_DOCUMENT_TYPES, 'eventCode');
+
+    await orderAdvancedSearchInteractor({
+      applicationContext,
+      orderKeyword,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().orderKeywordSearch.mock
+        .calls[0][0],
+    ).toMatchObject({
+      orderEventCodes,
+    });
   });
 });
