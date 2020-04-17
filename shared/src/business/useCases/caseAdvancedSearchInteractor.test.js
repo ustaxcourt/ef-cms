@@ -98,6 +98,8 @@ describe('caseAdvancedSearchInteractor', () => {
           ],
         },
       },
+      { match: { 'pk.S': 'case|' } },
+      { match: { 'sk.S': 'case|' } },
     ]);
     expect(results).toEqual([{ caseId: '1' }, { caseId: '2' }]);
   });
@@ -129,6 +131,8 @@ describe('caseAdvancedSearchInteractor', () => {
           },
         },
       },
+      { match: { 'pk.S': 'case|' } },
+      { match: { 'sk.S': 'case|' } },
     ];
 
     applicationContext.getSearchClient().search.mockImplementation(args => {
