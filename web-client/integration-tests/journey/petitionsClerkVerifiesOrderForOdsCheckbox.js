@@ -1,3 +1,4 @@
+import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { ContactFactory } from '../../../shared/src/business/entities/contacts/ContactFactory';
 
 export const petitionsClerkVerifiesOrderForOdsCheckbox = (test, fakeFile) => {
@@ -19,6 +20,28 @@ export const petitionsClerkVerifiesOrderForOdsCheckbox = (test, fakeFile) => {
     });
 
     expect(test.getState('form.orderForOds')).toBeTruthy();
+
+    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+
+    expect(
+      test.getState('validationErrors.ownershipDisclosureFile'),
+    ).toBeUndefined();
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'orderForOds',
+      value: false,
+    });
+
+    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+
+    expect(test.getState('validationErrors.ownershipDisclosureFile')).toEqual(
+      CaseInternal.VALIDATION_ERROR_MESSAGES.ownershipDisclosureFile,
+    );
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'orderForOds',
+      value: true,
+    });
 
     // simulate switching to ODS document tab
     await test.runSequence('cerebralBindSimpleSetStateSequence', {
