@@ -30,18 +30,5 @@ exports.orderKeywordSearch = async ({
       startDate,
     });
 
-  for (const order of foundOrders) {
-    const { caseId } = order;
-
-    const matchingCase = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByCaseId({
-        applicationContext,
-        caseId,
-      });
-    order.docketNumberSuffix = matchingCase.docketNumberSuffix;
-    order.caseCaption = matchingCase.caseCaption;
-  }
-
   return foundOrders;
 };
