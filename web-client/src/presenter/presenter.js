@@ -300,6 +300,7 @@ import { unblockCaseFromTrialSequence } from './sequences/unblockCaseFromTrialSe
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
 import { unprioritizeCaseSequence } from './sequences/unprioritizeCaseSequence';
 import { unsetWorkQueueIsInternalSequence } from './sequences/unsetWorkQueueIsInternalSequence';
+import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAdvancedOrderSearchFormValueSequence';
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateBatchDownloadProgressSequence } from './sequences/updateBatchDownloadProgressSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
@@ -689,6 +690,7 @@ export const presenter = {
     unidentifiedUserErrorSequence,
     unprioritizeCaseSequence,
     unsetWorkQueueIsInternalSequence,
+    updateAdvancedOrderSearchFormValueSequence,
     updateAdvancedSearchFormValueSequence,
     updateBatchDownloadProgressSequence,
     updateCaseAssociationFormValueSequence,

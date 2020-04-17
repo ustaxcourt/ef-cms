@@ -16,6 +16,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
     "@hapi/joi": "^17.1.0",
+    "@hapi/joi-date": "^2.0.1",
     "archiver": "3.1.1",
     "autoprefixer": "^9.7.5",
     "aws-sdk": "^2.657.0",
@@ -220,5 +221,6 @@
   "staticFiles": {
     "staticPath": "node_modules/pdfjs-dist/build",
     "watcherGlob": false
-  }
+  },
+  "dependencies": {}
 }
