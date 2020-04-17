@@ -39,7 +39,11 @@ exports.orderKeywordSearch = async ({
   if (caseTitleOrPetitioner) {
     queryParams.push({
       simple_query_string: {
-        fields: ['caseCaption.S'],
+        fields: [
+          'caseCaption.S',
+          'contactPrimary.M.name.S',
+          'contactSecondary.M.name.S',
+        ],
         query: caseTitleOrPetitioner,
       },
     });
