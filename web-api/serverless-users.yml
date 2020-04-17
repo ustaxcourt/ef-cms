@@ -105,8 +105,7 @@ provider:
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
     EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
     EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
-    CIRCLE_HONEYBADGER_API_KEY_DEV: ${opt:circleHoneybadgerApiKeyDev}
-    CIRCLE_HONEYBADGER_API_KEY_STG: ${opt:circleHoneybadgerApiKeyStg}
+    CIRCLE_HONEYBADGER_API_KEY: ${opt:circleHoneybadgerApiKey}
 
 package:
   exclude:
@@ -198,11 +197,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  createAttorneyUser:
-    handler: web-api/${self:provider.dir}/usersHandlers.createAttorneyUserLambda
+  createPractitionerUser:
+    handler: web-api/${self:provider.dir}/usersHandlers.createPractitionerUserLambda
     events:
       - http:
-          path: /attorney
+          path: /practitioner
           method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -210,11 +209,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updateAttorneyUser:
-    handler: web-api/${self:provider.dir}/usersHandlers.updateAttorneyUserLambda
+  updatePractitionerUser:
+    handler: web-api/${self:provider.dir}/usersHandlers.updatePractitionerUserLambda
     events:
       - http:
-          path: /attorney
+          path: /practitioner
           method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -258,8 +257,8 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  practitionerCaseAssociation:
-    handler: web-api/${self:provider.dir}/usersHandlers.practitionerCaseAssociationLambda
+  privatePractitionerCaseAssociation:
+    handler: web-api/${self:provider.dir}/usersHandlers.privatePractitionerCaseAssociationLambda
     events:
       - http:
           path: /{userId}/case/{caseId}
@@ -270,8 +269,8 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  practitionerPendingCaseAssociation:
-    handler: web-api/${self:provider.dir}/usersHandlers.practitionerPendingCaseAssociationLambda
+  privatePractitionerPendingAssociation:
+    handler: web-api/${self:provider.dir}/usersHandlers.privatePractitionerPendingCaseAssociationLambda
     events:
       - http:
           path: /{userId}/case/{caseId}/pending
@@ -347,11 +346,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getPractitionersBySearchKey:
-    handler: web-api/${self:provider.dir}/usersHandlers.getPractitionersBySearchKeyLambda
+  getPrivatePractitionersBySearchKey:
+    handler: web-api/${self:provider.dir}/usersHandlers.getPrivatePractitionersBySearchKeyLambda
     events:
       - http:
-          path: /practitioners/search
+          path: /privatePractitioners/search
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -359,11 +358,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getRespondentsBySearchKey:
-    handler: web-api/${self:provider.dir}/usersHandlers.getRespondentsBySearchKeyLambda
+  getIrsPractitionersBySearchKey:
+    handler: web-api/${self:provider.dir}/usersHandlers.getIrsPractitionersBySearchKeyLambda
     events:
       - http:
-          path: /respondents/search
+          path: /irsPractitioners/search
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

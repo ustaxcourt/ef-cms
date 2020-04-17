@@ -13,7 +13,7 @@ exports.getUserCaseNote = async ({ applicationContext, caseId, userId }) => {
   return await client.get({
     Key: {
       pk: `user-case-note|${caseId}`,
-      sk: `${userId}`,
+      sk: `user|${userId}`,
     },
     applicationContext,
   });

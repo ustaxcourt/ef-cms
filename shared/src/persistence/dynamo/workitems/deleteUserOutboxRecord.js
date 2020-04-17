@@ -8,7 +8,7 @@ exports.deleteUserOutboxRecord = ({
   return client.delete({
     applicationContext,
     key: {
-      pk: `user-outbox-${userId}`,
+      pk: `user-outbox|${userId}`,
       sk: createdAt,
     },
   });

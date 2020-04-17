@@ -1,21 +1,15 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintableCaseInventoryReportAction } from './generatePrintableCaseInventoryReportAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('generatePrintableCaseInventoryReportAction', () => {
-  let applicationContext;
-  const generatePrintableCaseInventoryReportInteractorMock = jest
-    .fn()
-    .mockReturnValue('www.example.com');
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-
-    applicationContext = {
-      getUseCases: () => ({
-        generatePrintableCaseInventoryReportInteractor: generatePrintableCaseInventoryReportInteractorMock,
-      }),
-    };
+  beforeAll(() => {
+    applicationContext
+      .getUseCases()
+      .generatePrintableCaseInventoryReportInteractor.mockImplementation(() => {
+        return 'www.example.com';
+      });
     presenter.providers.applicationContext = applicationContext;
   });
 
@@ -32,7 +26,10 @@ describe('generatePrintableCaseInventoryReportAction', () => {
       },
     });
 
-    expect(generatePrintableCaseInventoryReportInteractorMock).toBeCalledWith({
+    expect(
+      applicationContext.getUseCases()
+        .generatePrintableCaseInventoryReportInteractor,
+    ).toBeCalledWith({
       applicationContext: expect.anything(),
       associatedJudge: 'Chief Judge',
       status: 'New',

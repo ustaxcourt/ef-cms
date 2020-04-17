@@ -1,7 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -15,9 +14,11 @@ export const CaseSearchByName = connect(
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     usStates: state.constants.US_STATES,
+    validateCaseAdvancedSearchFormSequence:
+      sequences.validateCaseAdvancedSearchFormSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function CaseSearchByName({
     advancedSearchForm,
     advancedSearchHelper,
     clearAdvancedSearchFormSequence,
@@ -25,32 +26,16 @@ export const CaseSearchByName = connect(
     submitAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence,
     usStates,
+    validateCaseAdvancedSearchFormSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <div className="header-with-blue-background display-flex flex-justify">
           <h3>Search by Name</h3>
-          <NonMobile>
-            <Button
-              link
-              className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-              icon={['fas', 'times-circle']}
-              onClick={() => {
-                clearAdvancedSearchFormSequence();
-              }}
-            >
-              Clear Search
-            </Button>
-          </NonMobile>
         </div>
         <div className="blue-container advanced-search__form-container">
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              submitAdvancedSearchSequence();
-            }}
-          >
+          <form>
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-6">
                 <FormGroup errorText={validationErrors.petitionerName}>
@@ -62,9 +47,15 @@ export const CaseSearchByName = connect(
                     id="petitioner-name"
                     name="petitionerName"
                     type="text"
-                    value={advancedSearchForm.petitionerName || ''}
+                    value={
+                      advancedSearchForm.caseSearchByName.petitionerName || ''
+                    }
+                    onBlur={() => {
+                      validateCaseAdvancedSearchFormSequence();
+                    }}
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
+                        formType: 'caseSearchByName',
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -92,9 +83,15 @@ export const CaseSearchByName = connect(
                         id="year-filed-min"
                         name="yearFiledMin"
                         type="text"
-                        value={advancedSearchForm.yearFiledMin || ''}
+                        value={
+                          advancedSearchForm.caseSearchByName.yearFiledMin || ''
+                        }
+                        onBlur={() => {
+                          validateCaseAdvancedSearchFormSequence();
+                        }}
                         onChange={e => {
                           updateAdvancedSearchFormValueSequence({
+                            formType: 'caseSearchByName',
                             key: e.target.name,
                             value: e.target.value,
                           });
@@ -110,9 +107,15 @@ export const CaseSearchByName = connect(
                         id="year-filed-max"
                         name="yearFiledMax"
                         type="text"
-                        value={advancedSearchForm.yearFiledMax || ''}
+                        value={
+                          advancedSearchForm.caseSearchByName.yearFiledMax || ''
+                        }
+                        onBlur={() => {
+                          validateCaseAdvancedSearchFormSequence();
+                        }}
                         onChange={e => {
                           updateAdvancedSearchFormValueSequence({
+                            formType: 'caseSearchByName',
                             key: e.target.name,
                             value: e.target.value,
                           });
@@ -132,7 +135,7 @@ export const CaseSearchByName = connect(
                       Country
                     </label>
                     <BindedSelect
-                      bind="advancedSearchForm.countryType"
+                      bind="advancedSearchForm.caseSearchByName.countryType"
                       id="country-type"
                       name="countryType"
                     >
@@ -151,7 +154,7 @@ export const CaseSearchByName = connect(
                         State
                       </label>
                       <BindedSelect
-                        bind="advancedSearchForm.petitionerState"
+                        bind="advancedSearchForm.caseSearchByName.petitionerState"
                         id="petitioner-state"
                         name="petitionerState"
                       >
@@ -186,33 +189,31 @@ export const CaseSearchByName = connect(
             </div>
 
             <div className="grid-row">
-              <div className="tablet:grid-col-5">
+              <div className="tablet:grid-col-6">
                 <Button
                   className="advanced-search__button"
                   id="advanced-search-button"
-                  type="submit"
+                  onClick={e => {
+                    e.preventDefault();
+                    submitAdvancedSearchSequence();
+                  }}
                 >
                   Search
                 </Button>
+                <Button
+                  link
+                  className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                  onClick={e => {
+                    e.preventDefault();
+                    clearAdvancedSearchFormSequence({
+                      formType: 'caseSearchByName',
+                    });
+                  }}
+                >
+                  Clear Search
+                </Button>
               </div>
             </div>
-
-            <Mobile>
-              <div className="grid-row">
-                <div className="tablet:grid-col-5 text-center">
-                  <Button
-                    link
-                    className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-                    icon={['fas', 'times-circle']}
-                    onClick={() => {
-                      clearAdvancedSearchFormSequence();
-                    }}
-                  >
-                    Clear Search
-                  </Button>
-                </div>
-              </div>
-            </Mobile>
           </form>
         </div>
       </>

@@ -1,14 +1,7 @@
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { Message } = require('./Message');
 
 describe('Message', () => {
-  let applicationContext;
-
-  beforeAll(() => {
-    applicationContext = {
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-  });
-
   describe('isValid', () => {
     it('should throw an error if app context is not passed in', () => {
       expect(() => new Message({}, {})).toThrow();

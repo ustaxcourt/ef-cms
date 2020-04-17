@@ -6,7 +6,9 @@ import { scanBatchPreviewerHelper as scanBatchPreviewerHelperComputed } from './
 import { withAppContextDecorator } from '../../withAppContext';
 
 const state = {
-  batches: [],
+  scanner: {
+    batches: [],
+  },
 };
 
 const { SCAN_MODES } = Scan;

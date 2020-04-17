@@ -6,8 +6,8 @@ exports.getTrialSessionById = async ({
 }) => {
   return await client.get({
     Key: {
-      pk: `trial-session-${trialSessionId}`,
-      sk: `trial-session-${trialSessionId}`,
+      pk: `trial-session|${trialSessionId}`,
+      sk: `trial-session|${trialSessionId}`,
     },
     applicationContext,
   });

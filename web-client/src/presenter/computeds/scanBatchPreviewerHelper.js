@@ -2,21 +2,24 @@ import { getScanModeLabel } from '../../utilities/getScanModeLabel';
 import { state } from 'cerebral';
 
 export const scanBatchPreviewerHelper = (get, applicationContext) => {
-  const selectedBatchIndex = get(state.selectedBatchIndex) || 0;
-  const documentSelectedForScan = get(state.documentSelectedForScan);
+  const selectedBatchIndex = get(state.scanner.selectedBatchIndex) || 0;
+  const documentSelectedForScan = get(
+    state.currentViewMetadata.documentSelectedForScan,
+  );
   const batches =
-    (documentSelectedForScan && get(state.batches[documentSelectedForScan])) ||
+    (documentSelectedForScan &&
+      get(state.scanner.batches[documentSelectedForScan])) ||
     [];
   const selectedBatch = batches.length
     ? batches.find(b => b.index === selectedBatchIndex)
     : { pages: [] };
-  const currentPageIndex = get(state.currentPageIndex);
-  const documentUploadMode = get(state.documentUploadMode);
+  const currentPageIndex = get(state.scanner.currentPageIndex);
+  const documentUploadMode = get(state.currentViewMetadata.documentUploadMode);
   let selectPageImage = null;
 
   const bufferToBase64 = buf => {
     const binstr = Array.prototype.map
-      .call(buf, function(ch) {
+      .call(buf, function (ch) {
         return String.fromCharCode(ch);
       })
       .join('');
@@ -52,7 +55,8 @@ export const scanBatchPreviewerHelper = (get, applicationContext) => {
       ? batches.find(b => b.index === selectedBatchIndex)
       : {},
     selectedPageImage: selectPageImage,
-    showScannerSourceModal: get(state.showModal) === 'SelectScannerSourceModal',
+    showScannerSourceModal:
+      get(state.modal.showModal) === 'SelectScannerSourceModal',
     totalPages: selectedBatch.pages.length,
     uploadMode: documentUploadMode,
   };

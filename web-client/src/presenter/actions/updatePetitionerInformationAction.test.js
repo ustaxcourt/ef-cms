@@ -1,20 +1,21 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updatePetitionerInformationAction } from './updatePetitionerInformationAction';
 
-const updatePetitionerInformationInteractorStub = jest.fn().mockReturnValue({
-  paperServiceParties: { paper: [{ name: 'abc' }] },
-  paperServicePdfUrl: 'www.example.com',
-  updatedCase: { caseId: '123', docketNumber: 'ayy' },
-});
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    updatePetitionerInformationInteractor: updatePetitionerInformationInteractorStub,
-  }),
-};
-
 describe('updatePetitionerInformationAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
+    applicationContext
+      .getUseCases()
+      .updatePetitionerInformationInteractor.mockReturnValue({
+        paperServiceParties: { paper: [{ name: 'abc' }] },
+        paperServicePdfUrl: 'www.example.com',
+        updatedCase: { caseId: '123', docketNumber: 'ayy' },
+      });
+  });
+
   it('updates primary contact for the current case', async () => {
     const result = await runAction(updatePetitionerInformationAction, {
       modules: {
@@ -28,7 +29,10 @@ describe('updatePetitionerInformationAction', () => {
       },
     });
 
-    expect(updatePetitionerInformationInteractorStub).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().updatePetitionerInformationInteractor,
+    ).toHaveBeenCalled();
+
     expect(result.output).toEqual({
       alertSuccess: {
         title: 'Your changes have been saved.',

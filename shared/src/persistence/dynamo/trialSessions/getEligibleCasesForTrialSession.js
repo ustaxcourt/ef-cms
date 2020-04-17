@@ -19,18 +19,31 @@ exports.getEligibleCasesForTrialSession = async ({
     applicationContext,
   });
 
-  const ids = mappings.map(metadata => metadata.caseId);
+  const caseIds = mappings.map(metadata => metadata.caseId);
 
   const results = await client.batchGet({
     applicationContext,
-    keys: ids.map(id => ({
-      pk: id,
-      sk: id,
+    keys: caseIds.map(caseId => ({
+      pk: `case|${caseId}`,
+      sk: `case|${caseId}`,
     })),
   });
 
-  const afterMapping = ids.map(m => ({
-    ...results.find(r => m === r.pk),
+  const aggregatedResults = [];
+
+  for (let result of results) {
+    const caseItems = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId({ applicationContext, caseId: result.caseId });
+
+    aggregatedResults.push({
+      ...result,
+      ...caseItems,
+    });
+  }
+
+  const afterMapping = caseIds.map(caseId => ({
+    ...aggregatedResults.find(r => caseId === r.caseId),
   }));
 
   return afterMapping;

@@ -1,14 +1,15 @@
 const joi = require('@hapi/joi');
 const {
-  CHIEF_JUDGE,
-  DOCKET_NUMBER_MATCHER,
-  TRIAL_LOCATION_MATCHER,
-} = require('./CaseConstants');
-const {
+  calculateDifferenceInDays,
   createISODateString,
   formatDateString,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
+const {
+  CHIEF_JUDGE,
+  DOCKET_NUMBER_MATCHER,
+  TRIAL_LOCATION_MATCHER,
+} = require('./CaseConstants');
 const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
@@ -19,10 +20,10 @@ const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes, isEmpty } = require('lodash');
+const { IrsPractitioner } = require('../IrsPractitioner');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
 const { Order } = require('../orders/Order');
-const { Practitioner } = require('../Practitioner');
-const { Respondent } = require('../Respondent');
+const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 
@@ -76,7 +77,7 @@ Case.STATUS_TYPES_MANUAL_UPDATE = [
   Case.STATUS_TYPES.submitted,
 ];
 
-Case.ANSWER_CUTOFF_AMOUNT = 45;
+Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
 Case.ANSWER_CUTOFF_UNIT = 'day';
 
 Case.CASE_TYPES_MAP = {
@@ -245,9 +246,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.highPriority = rawCase.highPriority;
     this.highPriorityReason = rawCase.highPriorityReason;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
+    this.status = rawCase.status || Case.STATUS_TYPES.new;
   }
 
-  this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.userId = rawCase.userId;
 
   this.caseCaption = rawCase.caseCaption;
@@ -260,7 +261,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
-  this.inProgress = rawCase.inProgress || false;
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.irsSendDate = rawCase.irsSendDate;
   this.isPaper = rawCase.isPaper;
@@ -276,9 +276,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt || createISODateString();
+  this.sealedDate = rawCase.sealedDate;
   this.sortableDocketNumber =
     rawCase.sortableDocketNumber || this.generateSortableDocketNumber();
-  this.sealedDate = rawCase.sealedDate;
   this.trialDate = rawCase.trialDate;
   this.trialLocation = rawCase.trialLocation;
   this.trialSessionId = rawCase.trialSessionId;
@@ -293,29 +293,29 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   }
 
   if (Array.isArray(rawCase.documents)) {
-    this.documents = rawCase.documents.map(
-      document => new Document(document, { applicationContext }),
-    );
+    this.documents = rawCase.documents
+      .map(document => new Document(document, { applicationContext }))
+      .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
   } else {
     this.documents = [];
   }
 
   this.hasPendingItems = this.documents.some(document => document.pending);
 
-  if (Array.isArray(rawCase.practitioners)) {
-    this.practitioners = rawCase.practitioners.map(
-      practitioner => new Practitioner(practitioner),
+  if (Array.isArray(rawCase.privatePractitioners)) {
+    this.privatePractitioners = rawCase.privatePractitioners.map(
+      practitioner => new PrivatePractitioner(practitioner),
     );
   } else {
-    this.practitioners = [];
+    this.privatePractitioners = [];
   }
 
-  if (Array.isArray(rawCase.respondents)) {
-    this.respondents = rawCase.respondents.map(
-      respondent => new Respondent(respondent),
+  if (Array.isArray(rawCase.irsPractitioners)) {
+    this.irsPractitioners = rawCase.irsPractitioners.map(
+      practitioner => new IrsPractitioner(practitioner),
     );
   } else {
-    this.respondents = [];
+    this.irsPractitioners = [];
   }
 
   this.documents.forEach(document => {
@@ -381,10 +381,7 @@ joiValidationDecorator(
     automaticBlockedDate: joi.when('automaticBlocked', {
       is: true,
       otherwise: joi.optional().allow(null),
-      then: joi
-        .date()
-        .iso()
-        .required(),
+      then: joi.date().iso().required(),
     }),
     automaticBlockedReason: joi.when('automaticBlocked', {
       is: true,
@@ -406,10 +403,7 @@ joiValidationDecorator(
       .when('blocked', {
         is: true,
         otherwise: joi.optional().allow(null),
-        then: joi
-          .date()
-          .iso()
-          .required(),
+        then: joi.date().iso().required(),
       })
       .meta({ tags: ['Restricted'] }),
     blockedReason: joi
@@ -448,16 +442,10 @@ joiValidationDecorator(
     closedDate: joi.when('status', {
       is: Case.STATUS_TYPES.closed,
       otherwise: joi.optional().allow(null),
-      then: joi
-        .date()
-        .iso()
-        .required(),
+      then: joi.date().iso().required(),
     }),
     contactPrimary: joi.object().required(),
-    contactSecondary: joi
-      .object()
-      .optional()
-      .allow(null),
+    contactSecondary: joi.object().optional().allow(null),
     createdAt: joi
       .date()
       .iso()
@@ -478,20 +466,15 @@ joiValidationDecorator(
     docketRecord: joi
       .array()
       .items(joi.object().meta({ entityName: 'DocketRecord' }))
-      .min(1)
       .required()
       .unique((a, b) => a.index === b.index)
       .description('List of DocketRecord Entities for the case.'),
     documents: joi
       .array()
       .items(joi.object().meta({ entityName: 'Document' }))
-      .min(1)
       .required()
       .description('List of Document Entities for the case.'),
-    entityName: joi
-      .string()
-      .valid('Case')
-      .required(),
+    entityName: joi.string().valid('Case').required(),
     filingType: joi
       .string()
       .valid(
@@ -500,10 +483,7 @@ joiValidationDecorator(
       )
       .optional(),
     hasIrsNotice: joi.boolean().optional(),
-    hasVerifiedIrsNotice: joi
-      .boolean()
-      .optional()
-      .allow(null),
+    hasVerifiedIrsNotice: joi.boolean().optional().allow(null),
     highPriority: joi
       .boolean()
       .optional()
@@ -532,6 +512,12 @@ joiValidationDecorator(
       .optional()
       .allow(null)
       .description('Last date that the petitioner is allowed to file before.'),
+    irsPractitioners: joi
+      .array()
+      .optional()
+      .description(
+        'List of IRS practitioners (also known as respondents) associated with the case.',
+      ),
     irsSendDate: joi
       .date()
       .iso()
@@ -550,15 +536,8 @@ joiValidationDecorator(
     mailingDate: joi
       .when('isPaper', {
         is: true,
-        otherwise: joi
-          .string()
-          .max(25)
-          .allow(null)
-          .optional(),
-        then: joi
-          .string()
-          .max(25)
-          .required(),
+        otherwise: joi.string().max(25).allow(null).optional(),
+        then: joi.string().max(25).required(),
       })
       .description('Date that petition was mailed to the court.'),
     noticeOfAttachments: joi
@@ -612,24 +591,14 @@ joiValidationDecorator(
     petitionPaymentDate: joi
       .when('petitionPaymentStatus', {
         is: Case.PAYMENT_STATUS.PAID,
-        otherwise: joi
-          .date()
-          .iso()
-          .optional()
-          .allow(null),
-        then: joi
-          .date()
-          .iso()
-          .required(),
+        otherwise: joi.date().iso().optional().allow(null),
+        then: joi.date().iso().required(),
       })
       .description('When the petitioner payed the case fee.'),
     petitionPaymentMethod: joi
       .when('petitionPaymentStatus', {
         is: Case.PAYMENT_STATUS.PAID,
-        otherwise: joi
-          .string()
-          .allow(null)
-          .optional(),
+        otherwise: joi.string().allow(null).optional(),
         then: joi.string().required(),
       })
       .description('How the petitioner payed the case fee.'),
@@ -641,21 +610,10 @@ joiValidationDecorator(
     petitionPaymentWaivedDate: joi
       .when('petitionPaymentStatus', {
         is: Case.PAYMENT_STATUS.WAIVED,
-        otherwise: joi
-          .date()
-          .iso()
-          .allow(null)
-          .optional(),
-        then: joi
-          .date()
-          .iso()
-          .required(),
+        otherwise: joi.date().iso().allow(null).optional(),
+        then: joi.date().iso().required(),
       })
       .description('When the case fee was waived.'),
-    practitioners: joi
-      .array()
-      .optional()
-      .description('List of practitioners associated with the case.'),
     preferredTrialCity: joi
       .alternatives()
       .try(
@@ -664,6 +622,10 @@ joiValidationDecorator(
       )
       .optional()
       .description('Where the petitioner would prefer to hold the case trial.'),
+    privatePractitioners: joi
+      .array()
+      .optional()
+      .description('List of private practitioners associated with the case.'),
     procedureType: joi
       .string()
       .valid(...Case.PROCEDURE_TYPES)
@@ -682,12 +644,6 @@ joiValidationDecorator(
       .required()
       .description(
         'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
-      ),
-    respondents: joi
-      .array()
-      .optional()
-      .description(
-        'List of respondents (from the IRS) associated with the case.',
       ),
     sealedDate: joi
       .date()
@@ -750,13 +706,13 @@ joiValidationDecorator(
       .meta({ tags: ['Restricted'] })
       .description('List of system messages associated with this case.'),
   }),
-  function() {
+  function () {
     return (
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents) &&
       DocketRecord.validateCollection(this.docketRecord) &&
-      Respondent.validateCollection(this.respondents) &&
-      Practitioner.validateCollection(this.practitioners)
+      IrsPractitioner.validateCollection(this.irsPractitioners) &&
+      PrivatePractitioner.validateCollection(this.privatePractitioners)
     );
   },
   Case.VALIDATION_ERROR_MESSAGES,
@@ -768,7 +724,7 @@ joiValidationDecorator(
  * @param {object} rawCase the raw case data
  * @returns {string} the generated case caption
  */
-Case.getCaseCaption = function(rawCase) {
+Case.getCaseCaption = function (rawCase) {
   let caseCaption;
   switch (rawCase.partyType) {
     case ContactFactory.PARTY_TYPES.corporation:
@@ -827,13 +783,17 @@ Case.getCaseCaption = function(rawCase) {
   return caseCaption;
 };
 
-Case.prototype.toRawObject = function() {
+Case.prototype.toRawObject = function (processPendingItems = true) {
   const result = this.toRawObjectFromJoi();
-  result.hasPendingItems = this.doesHavePendingItems();
+
+  if (processPendingItems) {
+    result.hasPendingItems = this.doesHavePendingItems();
+  }
+
   return result;
 };
 
-Case.prototype.doesHavePendingItems = function() {
+Case.prototype.doesHavePendingItems = function () {
   return this.documents.some(document => document.pending);
 };
 
@@ -843,74 +803,84 @@ Case.prototype.doesHavePendingItems = function() {
  * @param {string} caseCaption the original case caption
  * @returns {string} caseCaptionNames the case caption with the postfix removed
  */
-Case.getCaseCaptionNames = function(caseCaption) {
+Case.getCaseCaptionNames = function (caseCaption) {
   return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
 };
 
-Case.prototype.attachRespondent = function(respondent) {
-  this.respondents.push(respondent);
+/**
+ * attaches an IRS practitioner to the case
+ *
+ * @param {string} practitioner the irsPractitioner to add to the case
+ */
+Case.prototype.attachIrsPractitioner = function (practitioner) {
+  this.irsPractitioners.push(practitioner);
 };
 
 /**
- * updates a respondent on the case
+ * updates an IRS practitioner on the case
  *
- * @param {string} respondentToUpdate the respondent user object with updated info
- * @returns {void} modifies the respondents array on the case
+ * @param {string} practitionerToUpdate the irsPractitioner user object with updated info
+ * @returns {void} modifies the irsPractitioners array on the case
  */
-Case.prototype.updateRespondent = function(respondentToUpdate) {
-  const foundRespondent = this.respondents.find(
-    respondent => respondent.userId === respondentToUpdate.userId,
-  );
-  if (foundRespondent) Object.assign(foundRespondent, respondentToUpdate);
-};
-
-/**
- * removes the given respondent from the case
- *
- * @param {string} respondentToRemove the respondent user object to remove from the case
- * @returns {Case} the modified case entity
- */
-Case.prototype.removeRespondent = function(respondentToRemove) {
-  const index = this.respondents.findIndex(
-    respondent => respondent.userId === respondentToRemove.userId,
-  );
-  if (index > -1) this.respondents.splice(index, 1);
-  return this;
-};
-
-Case.prototype.attachPractitioner = function(practitioner) {
-  this.practitioners.push(practitioner);
-};
-
-/**
- * updates a practitioner on the case
- *
- * @param {string} practitionerToUpdate the practitioner user object with updated info
- */
-Case.prototype.updatePractitioner = function(practitionerToUpdate) {
-  const foundPractitioner = this.practitioners.find(
+Case.prototype.updateIrsPractitioner = function (practitionerToUpdate) {
+  const foundPractitioner = this.irsPractitioners.find(
     practitioner => practitioner.userId === practitionerToUpdate.userId,
   );
   if (foundPractitioner) Object.assign(foundPractitioner, practitionerToUpdate);
 };
 
 /**
- * removes the given practitioner from the case
+ * removes the given IRS practitioner from the case
+ *
+ * @param {string} practitionerToRemove the irsPractitioner user object to remove from the case
+ * @returns {Case} the modified case entity
+ */
+Case.prototype.removeIrsPractitioner = function (practitionerToRemove) {
+  const index = this.irsPractitioners.findIndex(
+    practitioner => practitioner.userId === practitionerToRemove.userId,
+  );
+  if (index > -1) this.irsPractitioners.splice(index, 1);
+  return this;
+};
+
+/**
+ * attaches a private practitioner to the case
+ *
+ * @param {string} practitioner the privatePractitioner to add to the case
+ */
+Case.prototype.attachPrivatePractitioner = function (practitioner) {
+  this.privatePractitioners.push(practitioner);
+};
+
+/**
+ * updates a private practitioner on the case
+ *
+ * @param {string} practitionerToUpdate the practitioner user object with updated info
+ */
+Case.prototype.updatePrivatePractitioner = function (practitionerToUpdate) {
+  const foundPractitioner = this.privatePractitioners.find(
+    practitioner => practitioner.userId === practitionerToUpdate.userId,
+  );
+  if (foundPractitioner) Object.assign(foundPractitioner, practitionerToUpdate);
+};
+
+/**
+ * removes the given private practitioner from the case
  *
  * @param {string} practitionerToRemove the practitioner user object to remove from the case
  */
-Case.prototype.removePractitioner = function(practitionerToRemove) {
-  const index = this.practitioners.findIndex(
+Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
+  const index = this.privatePractitioners.findIndex(
     practitioner => practitioner.userId === practitionerToRemove.userId,
   );
-  if (index > -1) this.practitioners.splice(index, 1);
+  if (index > -1) this.privatePractitioners.splice(index, 1);
 };
 
 /**
  *
  * @param {object} document the document to add to the case
  */
-Case.prototype.addDocument = function(document, { applicationContext }) {
+Case.prototype.addDocument = function (document, { applicationContext }) {
   document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 
@@ -933,12 +903,12 @@ Case.prototype.addDocument = function(document, { applicationContext }) {
  *
  * @param {object} document the document to add to the case
  */
-Case.prototype.addDocumentWithoutDocketRecord = function(document) {
+Case.prototype.addDocumentWithoutDocketRecord = function (document) {
   document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 };
 
-Case.prototype.closeCase = function() {
+Case.prototype.closeCase = function () {
   this.closedDate = createISODateString();
   this.status = Case.STATUS_TYPES.closed;
   this.unsetAsBlocked();
@@ -951,7 +921,7 @@ Case.prototype.closeCase = function() {
  * @param {Date} sendDate the time stamp when the case was sent to the IRS
  * @returns {Case} the updated case entity
  */
-Case.prototype.markAsSentToIRS = function(sendDate) {
+Case.prototype.markAsSentToIRS = function (sendDate) {
   this.irsSendDate = sendDate;
   this.status = Case.STATUS_TYPES.generalDocket;
   this.documents.forEach(document => {
@@ -972,7 +942,7 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateCaseTitleDocketRecord = function({ applicationContext }) {
+Case.prototype.updateCaseTitleDocketRecord = function ({ applicationContext }) {
   const caseTitleRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
   let lastTitle = this.initialTitle;
 
@@ -1007,7 +977,7 @@ Case.prototype.updateCaseTitleDocketRecord = function({ applicationContext }) {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketNumberRecord = function({ applicationContext }) {
+Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
   const docketNumberRegex = /^Docket Number is amended from '(.*)' to '(.*)'/;
 
   let lastDocketNumber =
@@ -1045,7 +1015,7 @@ Case.prototype.updateDocketNumberRecord = function({ applicationContext }) {
   return this;
 };
 
-Case.prototype.getDocumentById = function({ documentId }) {
+Case.prototype.getDocumentById = function ({ documentId }) {
   return this.documents.find(document => document.documentId === documentId);
 };
 
@@ -1053,7 +1023,7 @@ Case.prototype.getDocumentById = function({ documentId }) {
  *
  * @returns {boolean} whether to show case name for primary
  */
-Case.prototype.getShowCaseNameForPrimary = function() {
+Case.prototype.getShowCaseNameForPrimary = function () {
   return !(this.contactSecondary && this.contactSecondary.name);
 };
 
@@ -1062,7 +1032,7 @@ Case.prototype.getShowCaseNameForPrimary = function() {
  * @param {string} preferredTrialCity the preferred trial city
  * @returns {Case} the updated case entity
  */
-Case.prototype.setRequestForTrialDocketRecord = function(
+Case.prototype.setRequestForTrialDocketRecord = function (
   preferredTrialCity,
   { applicationContext },
 ) {
@@ -1093,7 +1063,7 @@ Case.prototype.setRequestForTrialDocketRecord = function(
  * @param {DocketRecord} docketRecordEntity the docket record entity to add to case's the docket record
  * @returns {Case} the updated case entity
  */
-Case.prototype.addDocketRecord = function(docketRecordEntity) {
+Case.prototype.addDocketRecord = function (docketRecordEntity) {
   const nextIndex =
     this.docketRecord.reduce(
       (maxIndex, docketRecord, currentIndex) =>
@@ -1110,7 +1080,7 @@ Case.prototype.addDocketRecord = function(docketRecordEntity) {
  * @param {DocketRecord} updatedDocketEntry the update docket entry data
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketRecordEntry = function(updatedDocketEntry) {
+Case.prototype.updateDocketRecordEntry = function (updatedDocketEntry) {
   const foundEntry = this.docketRecord.find(
     entry => entry.docketRecordId === updatedDocketEntry.docketRecordId,
   );
@@ -1124,7 +1094,7 @@ Case.prototype.updateDocketRecordEntry = function(updatedDocketEntry) {
  * @param {string} documentId the document id
  * @returns {DocketRecord|undefined} the updated case entity
  */
-Case.prototype.getDocketRecordByDocumentId = function(documentId) {
+Case.prototype.getDocketRecordByDocumentId = function (documentId) {
   const foundEntry = this.docketRecord.find(
     entry => entry.documentId === documentId,
   );
@@ -1138,7 +1108,7 @@ Case.prototype.getDocketRecordByDocumentId = function(documentId) {
  * @param {DocketRecord} docketRecordEntity the updated docket entry to update on the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketRecord = function(
+Case.prototype.updateDocketRecord = function (
   docketRecordIndex,
   docketRecordEntity,
 ) {
@@ -1151,7 +1121,7 @@ Case.prototype.updateDocketRecord = function(
  * @param {Document} updatedDocument the document to update on the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocument = function(updatedDocument) {
+Case.prototype.updateDocument = function (updatedDocument) {
   const foundDocument = this.documents.find(
     document => document.documentId === updatedDocument.documentId,
   );
@@ -1197,21 +1167,11 @@ Case.stripLeadingZeros = docketNumber => {
 };
 
 /**
- * getFilingTypes
- *
- * @param {string} userRole - the role of the user logged in
- * @returns {string[]} array of filing types for the user role
- */
-Case.getFilingTypes = userRole => {
-  return Case.FILING_TYPES[userRole] || Case.FILING_TYPES.petitioner;
-};
-
-/**
  * getWorkItems
  *
  * @returns {WorkItem[]} the work items on the case
  */
-Case.prototype.getWorkItems = function() {
+Case.prototype.getWorkItems = function () {
   let workItems = [];
   this.documents.forEach(
     document => (workItems = [...workItems, ...(document.workItems || [])]),
@@ -1225,11 +1185,8 @@ Case.prototype.getWorkItems = function() {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.checkForReadyForTrial = function() {
-  let docFiledCutoffDate = prepareDateFromString().subtract(
-    Case.ANSWER_CUTOFF_AMOUNT,
-    Case.ANSWER_CUTOFF_UNIT,
-  );
+Case.prototype.checkForReadyForTrial = function () {
+  const currentDate = prepareDateFromString().toISOString();
 
   const isCaseGeneralDocketNotAtIssue =
     this.status === Case.STATUS_TYPES.generalDocket;
@@ -1241,11 +1198,15 @@ Case.prototype.checkForReadyForTrial = function() {
         document.eventCode,
       );
 
-      const docFiledBeforeCutoff = prepareDateFromString(
+      const daysElapsedSinceDocumentWasFiled = calculateDifferenceInDays(
+        currentDate,
         document.createdAt,
-      ).isBefore(docFiledCutoffDate, Case.ANSWER_CUTOFF_UNIT);
+      );
 
-      if (isAnswerDocument && docFiledBeforeCutoff) {
+      const requiredTimeElapsedSinceFiling =
+        daysElapsedSinceDocumentWasFiled > Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS;
+
+      if (isAnswerDocument && requiredTimeElapsedSinceFiling) {
         this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
       }
     });
@@ -1259,7 +1220,7 @@ Case.prototype.checkForReadyForTrial = function() {
  *
  * @returns {string} the sortable docket number
  */
-Case.prototype.generateSortableDocketNumber = function() {
+Case.prototype.generateSortableDocketNumber = function () {
   if (!this.docketNumber) {
     return;
   }
@@ -1274,7 +1235,7 @@ Case.prototype.generateSortableDocketNumber = function() {
  *
  * @returns {object} the sort tags
  */
-Case.prototype.generateTrialSortTags = function() {
+Case.prototype.generateTrialSortTags = function () {
   const {
     caseId,
     caseType,
@@ -1328,7 +1289,7 @@ Case.prototype.generateTrialSortTags = function() {
  * @param {object} trialSessionEntity - the trial session that is associated with the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.setAsCalendared = function(trialSessionEntity) {
+Case.prototype.setAsCalendared = function (trialSessionEntity) {
   if (
     trialSessionEntity.isCalendared &&
     trialSessionEntity.judge &&
@@ -1354,13 +1315,27 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
  * @param {string} arguments.userId id of the user account
  * @returns {boolean} if the case is associated
  */
-const isAssociatedUser = function({ caseRaw, userId }) {
-  const isRespondent =
-    caseRaw.respondents && caseRaw.respondents.find(r => r.userId === userId);
-  const isPractitioner =
-    caseRaw.practitioners &&
-    caseRaw.practitioners.find(p => p.userId === userId);
-  return isRespondent || isPractitioner;
+const isAssociatedUser = function ({ caseRaw, user }) {
+  const isIrsPractitioner =
+    caseRaw.irsPractitioners &&
+    caseRaw.irsPractitioners.find(r => r.userId === user.userId);
+  const isPrivatePractitioner =
+    caseRaw.privatePractitioners &&
+    caseRaw.privatePractitioners.find(p => p.userId === user.userId);
+
+  const isIrsSuperuser = user.role === User.ROLES.irsSuperuser;
+
+  const petitionDocument = (caseRaw.documents || []).find(
+    doc => doc.documentType === 'Petition',
+  );
+
+  const isPetitionServed = petitionDocument && !!petitionDocument.servedAt;
+
+  return (
+    isIrsPractitioner ||
+    isPrivatePractitioner ||
+    (isIrsSuperuser && isPetitionServed)
+  );
 };
 
 /**
@@ -1368,7 +1343,7 @@ const isAssociatedUser = function({ caseRaw, userId }) {
  *
  * @returns {boolean} if the case is calendared
  */
-Case.prototype.isCalendared = function() {
+Case.prototype.isCalendared = function () {
   return this.status === Case.STATUS_TYPES.calendared;
 };
 
@@ -1377,7 +1352,7 @@ Case.prototype.isCalendared = function() {
  *
  * @returns {boolean} if the case is calendared
  */
-Case.prototype.isReadyForTrial = function() {
+Case.prototype.isReadyForTrial = function () {
   return this.status === Case.STATUS_TYPES.generalDocketReadyForTrial;
 };
 
@@ -1386,7 +1361,7 @@ Case.prototype.isReadyForTrial = function() {
  *
  * @returns {boolean} the value of if an order is needed for place of trial.
  */
-Case.getDefaultOrderDesignatingPlaceOfTrialValue = function({
+Case.getDefaultOrderDesignatingPlaceOfTrialValue = function ({
   isPaper,
   preferredTrialCity,
   rawValue,
@@ -1408,7 +1383,7 @@ Case.getDefaultOrderDesignatingPlaceOfTrialValue = function({
  * @param {string} blockedReason - the reason the case was blocked
  * @returns {Case} the updated case entity
  */
-Case.prototype.setAsBlocked = function(blockedReason) {
+Case.prototype.setAsBlocked = function (blockedReason) {
   this.blocked = true;
   this.blockedReason = blockedReason;
   this.blockedDate = createISODateString();
@@ -1420,7 +1395,7 @@ Case.prototype.setAsBlocked = function(blockedReason) {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.unsetAsBlocked = function() {
+Case.prototype.unsetAsBlocked = function () {
   this.blocked = false;
   this.blockedReason = undefined;
   this.blockedDate = undefined;
@@ -1434,7 +1409,7 @@ Case.prototype.unsetAsBlocked = function() {
  * @param {object} caseDeadlines - the case deadlines
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateAutomaticBlocked = function({ caseDeadlines }) {
+Case.prototype.updateAutomaticBlocked = function ({ caseDeadlines }) {
   const hasPendingItems = this.doesHavePendingItems();
   let automaticBlockedReason;
   if (hasPendingItems && !isEmpty(caseDeadlines)) {
@@ -1462,7 +1437,7 @@ Case.prototype.updateAutomaticBlocked = function({ caseDeadlines }) {
  * @param {string} highPriorityReason - the reason the case was set to high priority
  * @returns {Case} the updated case entity
  */
-Case.prototype.setAsHighPriority = function(highPriorityReason) {
+Case.prototype.setAsHighPriority = function (highPriorityReason) {
   this.highPriority = true;
   this.highPriorityReason = highPriorityReason;
   return this;
@@ -1473,7 +1448,7 @@ Case.prototype.setAsHighPriority = function(highPriorityReason) {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.unsetAsHighPriority = function() {
+Case.prototype.unsetAsHighPriority = function () {
   this.highPriority = false;
   this.highPriorityReason = undefined;
   return this;
@@ -1484,7 +1459,7 @@ Case.prototype.unsetAsHighPriority = function() {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.removeFromTrial = function() {
+Case.prototype.removeFromTrial = function () {
   this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
   this.associatedJudge = Case.CHIEF_JUDGE;
   this.trialDate = undefined;
@@ -1500,7 +1475,7 @@ Case.prototype.removeFromTrial = function() {
  * @param {string} associatedJudge (optional) the associated judge for the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.removeFromTrialWithAssociatedJudge = function(associatedJudge) {
+Case.prototype.removeFromTrialWithAssociatedJudge = function (associatedJudge) {
   if (associatedJudge) {
     this.associatedJudge = associatedJudge;
   }
@@ -1518,7 +1493,7 @@ Case.prototype.removeFromTrialWithAssociatedJudge = function(associatedJudge) {
  * @param {string} associatedJudge the judge to associate with the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.setAssociatedJudge = function(associatedJudge) {
+Case.prototype.setAssociatedJudge = function (associatedJudge) {
   this.associatedJudge = associatedJudge;
   return this;
 };
@@ -1529,7 +1504,7 @@ Case.prototype.setAssociatedJudge = function(associatedJudge) {
  * @param {string} caseStatus the case status to update
  * @returns {Case} the updated case entity
  */
-Case.prototype.setCaseStatus = function(caseStatus) {
+Case.prototype.setCaseStatus = function (caseStatus) {
   this.status = caseStatus;
   if (
     [
@@ -1550,7 +1525,7 @@ Case.prototype.setCaseStatus = function(caseStatus) {
  * @param {string} caseCaption the case caption to update
  * @returns {Case} the updated case entity
  */
-Case.prototype.setCaseCaption = function(caseCaption) {
+Case.prototype.setCaseCaption = function (caseCaption) {
   this.caseCaption = caseCaption;
   this.setCaseTitle(caseCaption);
   return this;
@@ -1562,7 +1537,7 @@ Case.prototype.setCaseCaption = function(caseCaption) {
  * @param {string} caseCaption the case caption to build the case title
  * @returns {Case} the updated case entity
  */
-Case.prototype.setCaseTitle = function(caseCaption) {
+Case.prototype.setCaseTitle = function (caseCaption) {
   this.caseTitle = `${caseCaption.trim()} ${Case.CASE_CAPTION_POSTFIX}`;
   return this;
 };
@@ -1573,13 +1548,13 @@ Case.prototype.setCaseTitle = function(caseCaption) {
  * @param {object} shape specific contact params to be returned
  * @returns {object} object containing case contacts
  */
-Case.prototype.getCaseContacts = function(shape) {
+Case.prototype.getCaseContacts = function (shape) {
   const caseContacts = {};
   [
     'contactPrimary',
     'contactSecondary',
-    'practitioners',
-    'respondents',
+    'privatePractitioners',
+    'irsPractitioners',
   ].forEach(contact => {
     if (!shape || (shape && shape[contact] === true)) {
       caseContacts[contact] = this[contact];
@@ -1595,7 +1570,7 @@ Case.prototype.getCaseContacts = function(shape) {
  * @param {object} caseEntity the pending case entity to check
  * @returns {object} object with canConsolidate flag and reason string
  */
-Case.prototype.getConsolidationStatus = function({ caseEntity }) {
+Case.prototype.getConsolidationStatus = function ({ caseEntity }) {
   let canConsolidate = true;
   const reason = [];
 
@@ -1642,7 +1617,7 @@ Case.prototype.getConsolidationStatus = function({ caseEntity }) {
  * @returns {boolean} true if eligible for consolidation, false otherwise
  * @param {object} caseToConsolidate (optional) case to check for consolidation eligibility
  */
-Case.prototype.canConsolidate = function(caseToConsolidate) {
+Case.prototype.canConsolidate = function (caseToConsolidate) {
   const ineligibleStatusTypes = [
     Case.STATUS_TYPES.new,
     Case.STATUS_TYPES.generalDocket,
@@ -1661,7 +1636,7 @@ Case.prototype.canConsolidate = function(caseToConsolidate) {
  * @param {string} leadCaseId the caseId of the lead case for consolidation
  * @returns {Case} the updated Case entity
  */
-Case.prototype.setLeadCase = function(leadCaseId) {
+Case.prototype.setLeadCase = function (leadCaseId) {
   this.leadCaseId = leadCaseId;
   return this;
 };
@@ -1671,7 +1646,7 @@ Case.prototype.setLeadCase = function(leadCaseId) {
  *
  * @returns {Case} the updated Case entity
  */
-Case.prototype.removeConsolidation = function() {
+Case.prototype.removeConsolidation = function () {
   this.leadCaseId = undefined;
   return this;
 };
@@ -1682,7 +1657,7 @@ Case.prototype.removeConsolidation = function() {
  * @param {Array} cases the cases to check for lead case computation
  * @returns {Case} the lead Case entity
  */
-Case.sortByDocketNumber = function(cases) {
+Case.sortByDocketNumber = function (cases) {
   const casesOrdered = cases.sort((a, b) => {
     const aSplit = a.docketNumber.split('-');
     const bSplit = b.docketNumber.split('-');
@@ -1706,7 +1681,7 @@ Case.sortByDocketNumber = function(cases) {
  * @param {Array} cases the cases to check for lead case computation
  * @returns {Case} the lead Case entity
  */
-Case.findLeadCaseForCases = function(cases) {
+Case.findLeadCaseForCases = function (cases) {
   const casesOrdered = Case.sortByDocketNumber([...cases]);
   return casesOrdered.shift();
 };
@@ -1715,7 +1690,7 @@ Case.findLeadCaseForCases = function(cases) {
  * @param {string} documentId the id of the document to check
  * @returns {boolean} true if the document is draft, false otherwise
  */
-Case.prototype.isDocumentDraft = function(documentId) {
+Case.prototype.isDocumentDraft = function (documentId) {
   const document = this.getDocumentById({ documentId });
 
   const isNotArchived = !document.archived;
@@ -1742,7 +1717,7 @@ Case.prototype.isDocumentDraft = function(documentId) {
  *
  * @returns {Case} this case entity
  */
-Case.prototype.setNoticeOfTrialDate = function() {
+Case.prototype.setNoticeOfTrialDate = function () {
   this.noticeOfTrialDate = createISODateString();
   return this;
 };
@@ -1755,7 +1730,7 @@ Case.prototype.setNoticeOfTrialDate = function() {
  * @param {string} providers.trialSessionId the id of the trial session to set qcCompleteForTrial for
  * @returns {Case} this case entity
  */
-Case.prototype.setQcCompleteForTrial = function({
+Case.prototype.setQcCompleteForTrial = function ({
   qcCompleteForTrial,
   trialSessionId,
 }) {
@@ -1768,7 +1743,7 @@ Case.prototype.setQcCompleteForTrial = function({
  *
  * @returns {Case} this case entity
  */
-Case.prototype.setAsSealed = function() {
+Case.prototype.setAsSealed = function () {
   this.sealedDate = createISODateString();
   this.isSealed = true;
   return this;
@@ -1778,7 +1753,7 @@ Case.prototype.setAsSealed = function() {
  *
  * @returns {string} this case confirmation pdf file name
  */
-Case.prototype.getCaseConfirmationGeneratedPdfFileName = function() {
+Case.prototype.getCaseConfirmationGeneratedPdfFileName = function () {
   return `case-${this.docketNumber}-confirmation.pdf`;
 };
 

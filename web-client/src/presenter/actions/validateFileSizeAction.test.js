@@ -1,26 +1,30 @@
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateFileSizeAction } from './validateFileSizeAction';
 
-presenter.providers.applicationContext = applicationContext;
-
-const fakeFile = {
-  name: 'fakefile.pdf',
-  size: 1048576,
-};
-
-const mockValid = jest.fn();
-const mockInvalid = jest.fn();
-
-global.alert = () => null;
-
-presenter.providers.path = {
-  invalid: mockInvalid,
-  valid: mockValid,
-};
-
 describe('validateFileSizeAction', () => {
+  let mockValid;
+  let mockInvalid;
+  let fakeFile;
+
+  beforeAll(() => {
+    mockValid = jest.fn();
+    mockInvalid = jest.fn();
+
+    global.alert = () => null;
+    fakeFile = {
+      name: 'fakefile.pdf',
+      size: 1048576,
+    };
+
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.path = {
+      invalid: mockInvalid,
+      valid: mockValid,
+    };
+  });
+
   it('should return the valid() path if the file size is less than the limit', async () => {
     await runAction(validateFileSizeAction, {
       modules: {

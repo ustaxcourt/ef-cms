@@ -8,7 +8,7 @@ export const FileCompressionErrorModal = connect(
     allowRetry: state.batchDownloads.allowRetry,
     trialSession: state.trialSession,
   },
-  ({ allowRetry, trialSession }) => {
+  function FileCompressionErrorModal({ allowRetry, trialSession }) {
     const trialSessionTitle = trialSession.trialLocation;
 
     return (

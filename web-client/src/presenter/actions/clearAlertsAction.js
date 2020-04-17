@@ -6,7 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function to retrieve state values
  * @param {object} providers.props the cerebral props object
- * @param {object} providers.store the cerebral store object used for clearing alertError, alertSuccess, caseDetailErrors
+ * @param {object} providers.store the cerebral store object used for clearing alertError, alertSuccess
  */
 export const clearAlertsAction = ({ get, props, store }) => {
   const saveAlerts = get(state.saveAlertsForNavigation);
@@ -15,7 +15,6 @@ export const clearAlertsAction = ({ get, props, store }) => {
     store.unset(state.alertSuccess);
     store.unset(state.alertWarning);
   }
-  store.set(state.caseDetailErrors, {});
   store.set(state.saveAlertsForNavigation, false);
   if (props.fromModal) {
     store.set(state.modal.validationErrors, {});

@@ -5,9 +5,8 @@ import React, { useEffect } from 'react';
 export const BatchDownloadProgress = connect(
   {
     batchDownloadHelper: state.batchDownloadHelper,
-    showModal: state.showModal,
   },
-  ({ batchDownloadHelper }) => {
+  function BatchDownloadProgress({ batchDownloadHelper }) {
     const windowUnload = e => {
       e.returnValue =
         'Are you sure you want to navigate away? Changes made will not be saved.';

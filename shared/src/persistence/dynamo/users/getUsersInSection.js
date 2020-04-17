@@ -5,7 +5,7 @@ const {
 exports.getUsersInSection = ({ applicationContext, section }) => {
   return getRecordsViaMapping({
     applicationContext,
-    key: section,
-    type: 'user',
+    pk: `section|${section}`,
+    prefix: 'user',
   });
 };

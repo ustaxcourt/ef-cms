@@ -6,18 +6,20 @@ import { getFormValueDocumentSizeAction } from '../actions/getFormValueDocumentS
 import { selectDocumentForPreviewSequence } from './selectDocumentForPreviewSequence';
 import { setDocumentUploadModeSequence } from './setDocumentUploadModeSequence';
 import { updateFormValueSequence } from './updateFormValueSequence';
+import { updateOrderForDesignatingPlaceOfTrialAction } from '../actions/updateOrderForDesignatingPlaceOfTrialAction';
 import { validateFileSizeAction } from '../actions/validateFileSizeAction';
 import { validatePetitionFromPaperSequence } from './validatePetitionFromPaperSequence';
 
 export const setDocumentForUploadSequence = [
   validateFileSizeAction,
   {
-    invalid: [set(state.isScanning, false)],
+    invalid: [set(state.scanner.isScanning, false)],
     valid: [
       getFormValueDocumentAction,
       updateFormValueSequence,
       getFormValueDocumentSizeAction,
       updateFormValueSequence,
+      updateOrderForDesignatingPlaceOfTrialAction,
       validatePetitionFromPaperSequence,
       selectDocumentForPreviewSequence,
       setDocumentUploadModeSequence,

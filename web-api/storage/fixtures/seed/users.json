@@ -115,10 +115,20 @@
   },
   {
     "role": "privatePractitioner",
+    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsStatus": "Active",
+    "birthYear": "1950",
+    "employer": "Private",
+    "isAdmitted": true,
+    "practitionerType": "Attorney",
     "name": "Test Private Practitioner",
     "section": "privatePractitioner",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatePractitioner",
+    "firmName": "GW Law Offices",
+    "alternateEmail": "privatePractitioner@example.com",
+    "additionalPhone": "111-111-1111",
+    "originalBarState": "Maryland",
     "barNumber": "PT1234",
     "contact": {
       "address1": "234 Main St",
@@ -129,14 +139,22 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Alabama"
   },
   {
     "role": "privatePractitioner",
+    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsStatus": "Active",
+    "birthYear": "1950",
+    "employer": "Private",
+    "isAdmitted": true,
+    "practitionerType": "Attorney",
     "name": "Test Private Practitioner",
     "section": "privatePractitioner",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "email": "privatePractitioner1",
+    "firmName": "Bogus Barristers",
     "barNumber": "PT5432",
     "contact": {
       "address1": "234 Main St",
@@ -147,14 +165,22 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Oregon"
   },
   {
     "role": "privatePractitioner",
+    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsStatus": "Active",
+    "birthYear": "1950",
+    "employer": "Private",
+    "isAdmitted": true,
+    "practitionerType": "Non-Attorney",
     "name": "Lilah Gilbert",
     "section": "privatePractitioner",
     "userId": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
     "email": "privatePractitioner2",
+    "firmName": "Lilah, Lilah",
     "barNumber": "GL1111",
     "contact": {
       "address1": "234 Main St",
@@ -165,14 +191,22 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "N/A"
   },
   {
     "role": "privatePractitioner",
+    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsStatus": "Active",
+    "birthYear": "1950",
+    "employer": "Private",
+    "isAdmitted": true,
+    "practitionerType": "Attorney",
     "name": "Clark Stark",
     "section": "privatePractitioner",
     "userId": "9f25dc2c-764a-435c-86dd-323e53634537",
     "email": "privatePractitioner3",
+    "firmName": "Iron Law",
     "barNumber": "SC2222",
     "contact": {
       "address1": "234 Main St",
@@ -183,14 +217,22 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Texas"
   },
   {
     "role": "privatePractitioner",
+    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsStatus": "Active",
+    "birthYear": "1950",
+    "employer": "Private",
+    "isAdmitted": true,
+    "practitionerType": "Attorney",
     "name": "Alden Rivas",
     "section": "privatePractitioner",
     "userId": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
     "email": "privatePractitioner4",
+    "firmName": "Law Offices of Rivas and Kathy Gee",
     "barNumber": "RA3333",
     "contact": {
       "address1": "234 Main St",
@@ -201,10 +243,17 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Florida"
   },
   {
     "role": "irsPractitioner",
+    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsStatus": "Active",
+    "birthYear": "1950",
+    "employer": "IRS",
+    "isAdmitted": true,
+    "practitionerType": "Attorney",
     "name": "Test IRS Practitioner",
     "section": "irsPractitioner",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
@@ -219,10 +268,17 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Maryland"
   },
   {
     "role": "irsPractitioner",
+    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsStatus": "Active",
+    "birthYear": "1950",
+    "employer": "IRS",
+    "isAdmitted": true,
+    "practitionerType": "Attorney",
     "name": "Test IRS Practitioner1",
     "section": "irsPractitioner",
     "userId": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
@@ -237,10 +293,17 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Arkansas"
   },
   {
     "role": "irsPractitioner",
+    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsStatus": "Active",
+    "birthYear": "1950",
+    "employer": "IRS",
+    "isAdmitted": true,
+    "practitionerType": "Attorney",
     "name": "Nero West",
     "section": "irsPractitioner",
     "userId": "2d9a7229-7d5a-459f-84ad-754504a9f10f",
@@ -255,10 +318,17 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Colorado"
   },
   {
     "role": "irsPractitioner",
+    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsStatus": "Active",
+    "birthYear": "1950",
+    "employer": "IRS",
+    "isAdmitted": true,
+    "practitionerType": "Attorney",
     "name": "Stuart Morrison",
     "section": "irsPractitioner",
     "userId": "5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
@@ -273,10 +343,17 @@
       "phone": "+1 (555) 555-5555",
       "postalCode": "61234",
       "state": "IL"
-    }
+    },
+    "originalBarState": "Nevada"
   },
   {
     "role": "irsPractitioner",
+    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsStatus": "Active",
+    "birthYear": "1950",
+    "employer": "IRS",
+    "isAdmitted": true,
+    "practitionerType": "Attorney",
     "name": "Jaquelyn Lane",
     "section": "irsPractitioner",
     "userId": "726c38b1-1432-49b3-9383-77a998c0ba4f",
@@ -284,7 +361,8 @@
     "address1": "3202 Elk Avenue",
     "address2": "Hanover, MI 49241",
     "barNumber": "LJ9999",
-    "phone": "517-563-1536"
+    "phone": "517-563-1536",
+    "originalBarState": "Tennessee"
   },
   {
     "role": "petitioner",
@@ -382,10 +460,24 @@
   },
   {
     "role": "inactivePractitioner",
+    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsStatus": "Inactive",
+    "birthYear": "1950",
+    "employer": "IRS",
+    "isAdmitted": false,
+    "practitionerType": "Attorney",
     "name": "Test Inactive Practitioner",
     "section": "inactivePractitioner",
     "barNumber": "IP1111",
     "userId": "c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
-    "email": "inactivePractitioner"
+    "email": "inactivePractitioner",
+    "originalBarState": "California"
+  },
+  {
+    "role": "irsSuperuser",
+    "name": "Test IRS Superuser",
+    "section": "irsSuperuser",
+    "userId": "02c9b614-e498-4dae-b0f5-751b9ab5e8b3",
+    "email": "irsSuperuser"
   }
 ]

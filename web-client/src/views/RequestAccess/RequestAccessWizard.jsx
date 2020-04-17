@@ -11,9 +11,9 @@ import React from 'react';
 
 export const RequestAccessWizard = connect(
   {
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
-  ({ showModal }) => {
+  function RequestAccessWizard({ showModal }) {
     return (
       <>
         <CaseDetailHeader hideActionButtons />

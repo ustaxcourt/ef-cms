@@ -1,22 +1,16 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseInventoryReportAction } from './getCaseInventoryReportAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getCaseInventoryReportAction', () => {
-  let applicationContext;
-  const getCaseInventoryReportInteractorMock = jest.fn().mockReturnValue({
-    foundCases: [{ docketNumber: '123-20' }],
-    totalCount: 12,
-  });
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-
-    applicationContext = {
-      getUseCases: () => ({
-        getCaseInventoryReportInteractor: getCaseInventoryReportInteractorMock,
-      }),
-    };
+  beforeAll(() => {
+    applicationContext
+      .getUseCases()
+      .getCaseInventoryReportInteractor.mockReturnValue({
+        foundCases: [{ docketNumber: '123-20' }],
+        totalCount: 12,
+      });
     presenter.providers.applicationContext = applicationContext;
   });
 
@@ -33,7 +27,9 @@ describe('getCaseInventoryReportAction', () => {
       },
     });
 
-    expect(getCaseInventoryReportInteractorMock).toBeCalledWith({
+    expect(
+      applicationContext.getUseCases().getCaseInventoryReportInteractor,
+    ).toBeCalledWith({
       applicationContext: expect.anything(),
       associatedJudge: 'Chief Judge',
       status: 'New',
@@ -58,7 +54,9 @@ describe('getCaseInventoryReportAction', () => {
       },
     });
 
-    expect(getCaseInventoryReportInteractorMock).not.toBeCalled();
+    expect(
+      applicationContext.getUseCases().getCaseInventoryReportInteractor,
+    ).not.toBeCalled();
     expect(result.state.caseInventoryReportData).toBeUndefined();
   });
 });

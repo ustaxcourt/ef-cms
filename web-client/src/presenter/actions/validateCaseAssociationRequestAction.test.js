@@ -1,19 +1,16 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateCaseAssociationRequestAction } from './validateCaseAssociationRequestAction';
-import sinon from 'sinon';
 
 describe('validateCaseAssociationRequest', () => {
-  let validateCaseAssociationRequestStub;
   let successStub;
   let errorStub;
-
   let mockCaseAssociationRequest;
 
-  beforeEach(() => {
-    validateCaseAssociationRequestStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+  beforeAll(() => {
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     mockCaseAssociationRequest = {
       certificateOfService: true,
@@ -26,12 +23,7 @@ describe('validateCaseAssociationRequest', () => {
       scenario: 'Standard',
     };
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateCaseAssociationRequestInteractor: validateCaseAssociationRequestStub,
-      }),
-    };
-
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -39,7 +31,10 @@ describe('validateCaseAssociationRequest', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateCaseAssociationRequestStub.returns(null);
+    applicationContext
+      .getUseCases()
+      .validateCaseAssociationRequestInteractor.mockReturnValue(null);
+
     await runAction(validateCaseAssociationRequestAction, {
       modules: {
         presenter,
@@ -49,11 +44,14 @@ describe('validateCaseAssociationRequest', () => {
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateCaseAssociationRequestStub.returns('error');
+    applicationContext
+      .getUseCases()
+      .validateCaseAssociationRequestInteractor.mockReturnValue('error');
+
     await runAction(validateCaseAssociationRequestAction, {
       modules: {
         presenter,
@@ -63,6 +61,6 @@ describe('validateCaseAssociationRequest', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

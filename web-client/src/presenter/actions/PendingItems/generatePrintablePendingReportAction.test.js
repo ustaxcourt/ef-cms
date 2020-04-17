@@ -1,19 +1,20 @@
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintablePendingReportAction } from './generatePrintablePendingReportAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('generatePrintablePendingReportAction', () => {
-  let generatePrintablePendingReportInteractorMock;
-  const resultUrl = 'https://example.com';
+  let resultUrl;
 
-  beforeEach(() => {
-    generatePrintablePendingReportInteractorMock = jest.fn(() => resultUrl);
+  beforeAll(() => {
+    resultUrl = 'https://example.com';
+    presenter.providers.applicationContext = applicationContextForClient;
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        generatePrintablePendingReportInteractor: generatePrintablePendingReportInteractorMock,
-      }),
-    };
+    applicationContextForClient
+      .getUseCases()
+      .generatePrintablePendingReportInteractor.mockImplementation(
+        () => resultUrl,
+      );
   });
 
   it('should call generatePrintablePendingReportInteractor and return caseDetail', async () => {
@@ -25,7 +26,10 @@ describe('generatePrintablePendingReportAction', () => {
       state: {},
     });
 
-    expect(generatePrintablePendingReportInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContextForClient.getUseCases()
+        .generatePrintablePendingReportInteractor,
+    ).toHaveBeenCalled();
     expect(result.output).toEqual({
       pdfUrl: resultUrl,
     });
@@ -40,7 +44,10 @@ describe('generatePrintablePendingReportAction', () => {
       state: {},
     });
 
-    expect(generatePrintablePendingReportInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContextForClient.getUseCases()
+        .generatePrintablePendingReportInteractor,
+    ).toHaveBeenCalled();
     expect(result.output).toEqual({
       pdfUrl: resultUrl,
     });
@@ -55,7 +62,10 @@ describe('generatePrintablePendingReportAction', () => {
       state: {},
     });
 
-    expect(generatePrintablePendingReportInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContextForClient.getUseCases()
+        .generatePrintablePendingReportInteractor,
+    ).toHaveBeenCalled();
     expect(result.output).toEqual({
       pdfUrl: resultUrl,
     });

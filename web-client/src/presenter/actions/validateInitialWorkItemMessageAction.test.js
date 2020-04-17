@@ -1,19 +1,17 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateInitialWorkItemMessageAction } from './validateInitialWorkItemMessageAction';
-import sinon from 'sinon';
 
 describe('validateInitialWorkItemMessage', () => {
-  let validateInitialWorkItemMessageStub;
   let successStub;
   let errorStub;
 
   let mockMessage;
 
-  beforeEach(() => {
-    validateInitialWorkItemMessageStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+  beforeAll(() => {
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     mockMessage = {
       message: 'hello world',
@@ -21,12 +19,7 @@ describe('validateInitialWorkItemMessage', () => {
       section: 'docket',
     };
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateInitialWorkItemMessageInteractor: validateInitialWorkItemMessageStub,
-      }),
-    };
-
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -34,7 +27,9 @@ describe('validateInitialWorkItemMessage', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateInitialWorkItemMessageStub.returns(null);
+    applicationContext
+      .getUseCases()
+      .validateInitialWorkItemMessageInteractor.mockReturnValue(null);
     await runAction(validateInitialWorkItemMessageAction, {
       modules: {
         presenter,
@@ -44,11 +39,13 @@ describe('validateInitialWorkItemMessage', () => {
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateInitialWorkItemMessageStub.returns('error');
+    applicationContext
+      .getUseCases()
+      .validateInitialWorkItemMessageInteractor.mockReturnValue('error');
     await runAction(validateInitialWorkItemMessageAction, {
       modules: {
         presenter,
@@ -58,6 +55,6 @@ describe('validateInitialWorkItemMessage', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

@@ -1,15 +1,16 @@
 module.exports = {
   fetchPendingItemsLambda: require('./pendingItems/fetchPendingItemsLambda')
-    .handler,
+    .fetchPendingItemsLambda,
   generatePrintableCaseInventoryReportLambda: require('./reports/generatePrintableCaseInventoryReportLambda')
-    .handler,
+    .generatePrintableCaseInventoryReportLambda,
   generatePrintablePendingReportLambda: require('./pendingItems/generatePrintablePendingReportLambda')
-    .handler,
+    .generatePrintablePendingReportLambda,
   generateTrialCalendarPdfLambda: require('./trialSessions/generateTrialCalendarPdfLambda')
-    .handler,
-  getBlockedCasesLambda: require('./reports/getBlockedCasesLambda').handler,
+    .generateTrialCalendarPdfLambda,
+  getBlockedCasesLambda: require('./reports/getBlockedCasesLambda')
+    .getBlockedCasesLambda,
   getCaseInventoryReportLambda: require('./reports/getCaseInventoryReportLambda')
-    .handler,
+    .getCaseInventoryReportLambda,
   runTrialSessionPlanningReportLambda: require('./trialSessions/runTrialSessionPlanningReportLambda')
-    .handler,
+    .runTrialSessionPlanningReportLambda,
 };

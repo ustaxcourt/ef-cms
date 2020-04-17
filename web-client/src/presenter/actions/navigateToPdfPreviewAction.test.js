@@ -1,11 +1,11 @@
 import { navigateToPdfPreviewAction } from './navigateToPdfPreviewAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('navigateToPdfPreviewAction', () => {
   let routeStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     routeStub = jest.fn();
 
     presenter.providers.router = {

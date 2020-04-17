@@ -1,10 +1,9 @@
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { shouldValidateAction } from './shouldValidateAction';
-import sinon from 'sinon';
 
-const validateSpy = sinon.spy();
-const ignoreSpy = sinon.spy();
+const validateSpy = jest.fn();
+const ignoreSpy = jest.fn();
 
 presenter.providers.path = {
   ignore: ignoreSpy,
@@ -22,7 +21,7 @@ describe('shouldValidateAction', () => {
         showValidation: false,
       },
     });
-    expect(ignoreSpy.called).toBeTruthy();
+    expect(ignoreSpy).toBeCalled();
   });
 
   it('calls path.validate if showValidation is true', async () => {
@@ -35,6 +34,6 @@ describe('shouldValidateAction', () => {
         showValidation: true,
       },
     });
-    expect(validateSpy.called).toBeTruthy();
+    expect(validateSpy).toBeCalled();
   });
 });

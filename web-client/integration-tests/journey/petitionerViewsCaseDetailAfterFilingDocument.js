@@ -2,7 +2,10 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default (test, overrides = {}) => {
+export const petitionerViewsCaseDetailAfterFilingDocument = (
+  test,
+  overrides = {},
+) => {
   return it('petitioner views case detail after filing a document', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -30,25 +33,35 @@ export default (test, overrides = {}) => {
 
     expect(caseDetail.documents.length).toEqual(6);
 
-    //verify that the documents were added in the correct order
-    expect(caseDetail.documents[0].eventCode).toEqual('P');
-    expect(caseDetail.documents[1].eventCode).toEqual('STIN');
+    //verify that the documents were added and served
+    expect(caseDetail.documents).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ eventCode: 'P' }),
+        expect.objectContaining({ eventCode: 'STIN' }),
+        expect.objectContaining({
+          eventCode: 'M014',
+          servedAt: expect.anything(),
+          status: 'served',
+        }),
+        expect.objectContaining({
+          eventCode: 'AFF',
+          servedAt: expect.anything(),
+          status: 'served',
+        }),
+        expect.objectContaining({
+          eventCode: 'MISL',
+          servedAt: expect.anything(),
+          status: 'served',
+        }),
+        expect.objectContaining({
+          eventCode: 'MISL',
+          servedAt: expect.anything(),
+          status: 'served',
+        }),
+      ]),
+    );
     expect(
       caseDetailFormatted.docketRecordWithDocument[1].record.eventCode,
     ).toEqual('RQT');
-    expect(caseDetail.documents[2].eventCode).toEqual('M014');
-    expect(caseDetail.documents[3].eventCode).toEqual('AFF');
-    expect(caseDetail.documents[4].eventCode).toEqual('MISL');
-    expect(caseDetail.documents[5].eventCode).toEqual('MISL');
-
-    //verify that the documents were auto-served
-    expect(caseDetail.documents[2].status).toEqual('served');
-    expect(caseDetail.documents[3].status).toEqual('served');
-    expect(caseDetail.documents[4].status).toEqual('served');
-    expect(caseDetail.documents[5].status).toEqual('served');
-    expect(caseDetail.documents[2].servedAt).toBeDefined();
-    expect(caseDetail.documents[3].servedAt).toBeDefined();
-    expect(caseDetail.documents[4].servedAt).toBeDefined();
-    expect(caseDetail.documents[5].servedAt).toBeDefined();
   });
 };

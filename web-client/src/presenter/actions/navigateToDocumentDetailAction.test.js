@@ -1,13 +1,12 @@
 import { navigateToDocumentDetailAction } from './navigateToDocumentDetailAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 describe('navigateToDocumentDetailAction', () => {
   let routeStub;
 
-  beforeEach(() => {
-    routeStub = sinon.stub();
+  beforeAll(() => {
+    routeStub = jest.fn();
 
     presenter.providers.router = {
       route: routeStub,
@@ -25,7 +24,7 @@ describe('navigateToDocumentDetailAction', () => {
       },
     });
 
-    expect(routeStub.calledOnce).toEqual(true);
+    expect(routeStub.mock.calls.length).toEqual(1);
   });
 
   it('does not navigate to document detail url when there is no caseId and documentId', async () => {
@@ -35,6 +34,6 @@ describe('navigateToDocumentDetailAction', () => {
       },
     });
 
-    expect(routeStub.calledOnce).toEqual(false);
+    expect(routeStub).not.toBeCalled();
   });
 });

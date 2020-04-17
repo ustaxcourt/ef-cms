@@ -10,7 +10,7 @@ presenter.providers.applicationContext = {
 };
 
 describe('navigateToPublicSiteAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     externalRouteMock = jest.fn();
     presenter.providers.router = {
       externalRoute: externalRouteMock,

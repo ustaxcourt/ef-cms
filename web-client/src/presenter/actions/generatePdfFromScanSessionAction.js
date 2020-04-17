@@ -16,9 +16,11 @@ export const generatePdfFromScanSessionAction = async ({
 }) => {
   // wait a bit so that the spinner shows up because generatePDFFromJPGDataInteractor blocks the browser
   await new Promise(resolve => setTimeout(resolve, 100));
-  const documentSelectedForScan = get(state.documentSelectedForScan);
+  const documentSelectedForScan = get(
+    state.currentViewMetadata.documentSelectedForScan,
+  );
 
-  const batches = get(state.batches[documentSelectedForScan]);
+  const batches = get(state.scanner.batches[documentSelectedForScan]);
 
   const scannedBuffer = [];
   batches.forEach(batch =>

@@ -6,9 +6,9 @@ import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketCle
 import { docketClerkUnconsolidatesCase } from './journey/docketClerkUnconsolidatesCase';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 // petitioner
-import petitionerVerifiesConsolidatedCases from './journey/petitionerVerifiesConsolidatedCases';
-import petitionerVerifiesUnconsolidatedCases from './journey/petitionerVerifiesUnconsolidatedCases';
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
+import { petitionerVerifiesConsolidatedCases } from './journey/petitionerVerifiesConsolidatedCases';
+import { petitionerVerifiesUnconsolidatedCases } from './journey/petitionerVerifiesUnconsolidatedCases';
+import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 const test = setupTest();
 const trialLocation = `Boise, Idaho, ${Date.now()}`;

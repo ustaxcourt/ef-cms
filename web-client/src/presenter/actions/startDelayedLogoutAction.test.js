@@ -1,15 +1,13 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { startDelayedLogoutAction } from './startDelayedLogoutAction';
 
-presenter.providers.applicationContext = {
-  getConstants: () => ({
-    SESSION_DEBOUNCE: 250,
-    SESSION_MODAL_TIMEOUT: 500,
-  }),
-};
-
 describe('startDelayedLogoutAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('creates a timer and stores it in state', async () => {
     const result = await runAction(startDelayedLogoutAction, {
       modules: {

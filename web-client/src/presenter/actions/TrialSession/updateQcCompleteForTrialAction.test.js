@@ -1,26 +1,23 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateQcCompleteForTrialAction } from './updateQcCompleteForTrialAction';
 
-let updateQcCompleteForTrialMock;
 const successMock = jest.fn();
 const errorMock = jest.fn();
 
-presenter.providers.path = {
-  error: errorMock,
-  success: successMock,
-};
-
 describe('updateQcCompleteForTrialAction', () => {
-  beforeEach(() => {
-    updateQcCompleteForTrialMock = jest.fn().mockResolvedValue(MOCK_CASE);
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        updateQcCompleteForTrialInteractor: updateQcCompleteForTrialMock,
-      }),
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.path = {
+      error: errorMock,
+      success: successMock,
     };
+
+    applicationContext
+      .getUseCases()
+      .updateQcCompleteForTrialInteractor.mockResolvedValue(MOCK_CASE);
   });
 
   it('goes to success path if case is updated', async () => {
@@ -42,9 +39,9 @@ describe('updateQcCompleteForTrialAction', () => {
   });
 
   it('goes to error path if the use case throws an error', async () => {
-    updateQcCompleteForTrialMock = jest
-      .fn()
-      .mockRejectedValue(new Error('bad'));
+    applicationContext
+      .getUseCases()
+      .updateQcCompleteForTrialInteractor.mockRejectedValue(new Error('bad'));
     await runAction(updateQcCompleteForTrialAction, {
       modules: {
         presenter,

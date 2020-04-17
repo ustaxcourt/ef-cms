@@ -10,18 +10,20 @@ import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkViewsDraftOrder from './journey/petitionsClerkViewsDraftOrder';
 // petitioner
-import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
-import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
-import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
-import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
+import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
+import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
+import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
+import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 
 const test = setupTest();
 test.draftOrders = [];
 
 describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   loginAs(test, 'petitioner');
-  petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);

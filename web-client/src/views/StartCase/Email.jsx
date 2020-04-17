@@ -7,7 +7,7 @@ export const Email = connect(
   {
     email: state[props.bind].email,
   },
-  ({ email }) => {
+  function Email({ email }) {
     return (
       <React.Fragment>
         <div className="grid-row grid-gap">

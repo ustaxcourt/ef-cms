@@ -1,10 +1,10 @@
-export default test => {
+export const petitionerCancelsCreateCase = test => {
   it('petitioner navigates to create case and cancels', async () => {
     await test.runSequence('gotoStartCaseWizardSequence', {
       step: '1',
       wizardStep: 'StartCaseStep1',
     });
-    expect(test.getState('showModal')).toBeFalsy();
+    expect(test.getState('modal.showModal')).toBeFalsy();
     expect(test.getState('form')).toEqual({
       contactPrimary: {},
       wizardStep: '1',
@@ -19,13 +19,13 @@ export default test => {
     );
 
     await test.runSequence('formCancelToggleCancelSequence'); // someone clicks cancel
-    expect(test.getState('showModal')).toBeTruthy();
+    expect(test.getState('modal.showModal')).toBeTruthy();
     await test.runSequence('formCancelToggleCancelSequence'); // someone aborts cancellation
     expect(test.getState('currentPage')).toEqual('StartCaseWizard');
 
     await test.runSequence('formCancelToggleCancelSequence');
     await test.runSequence('closeModalAndReturnToDashboardSequence');
-    expect(test.getState('showModal')).toBeFalsy();
+    expect(test.getState('modal.showModal')).toBeFalsy();
     expect(test.getState('currentPage')).toEqual('DashboardPetitioner');
   });
 };

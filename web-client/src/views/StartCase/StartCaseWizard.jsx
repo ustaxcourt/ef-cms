@@ -16,10 +16,10 @@ import React from 'react';
 
 export const StartCaseWizard = connect(
   {
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
   },
-  ({ showModal, submitFilePetitionSequence }) => {
+  function StartCaseWizard({ showModal, submitFilePetitionSequence }) {
     return (
       <>
         <BigHeader text="File a Petition" />

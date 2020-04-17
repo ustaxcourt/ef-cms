@@ -1,37 +1,28 @@
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { deleteUserConnection } = require('./deleteUserConnection');
 
 describe('deleteUserConnection', () => {
-  let applicationContext;
-  let deleteStub;
-  let queryStub;
+  beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
+  });
 
-  beforeEach(() => {
-    deleteStub = jest.fn(() => ({ promise: async () => null }));
-    queryStub = sinon.stub().returns({
+  it('attempts to to delete the user connection', async () => {
+    applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => ({
         Items: [{ pk: 'connections-123', sk: 'abc' }],
       }),
     });
 
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        batchWrite: deleteStub,
-        query: queryStub,
-      }),
-    };
-  });
-
-  it('attempts to to delete the user connection', async () => {
     await deleteUserConnection({
       applicationContext,
       connectionId: 'abc',
     });
 
-    expect(deleteStub).toHaveBeenCalledWith({
+    expect(
+      applicationContext.getDocumentClient().batchWrite,
+    ).toHaveBeenCalledWith({
       RequestItems: {
         'efcms-dev': [
           {

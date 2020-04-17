@@ -1,12 +1,14 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDefaultDocumentDetailTabAction } from './setDefaultDocumentDetailTabAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('setDefaultDocumentDetailTab', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('returns "Document Info" when the case status is new and the document type is Petition', async () => {
     const { state } = await runAction(setDefaultDocumentDetailTabAction, {
       modules: {
@@ -20,7 +22,7 @@ describe('setDefaultDocumentDetailTab', () => {
         documentId: 'abc',
       },
     });
-    expect(state.currentTab).toEqual('Document Info');
+    expect(state.currentViewMetadata.tab).toEqual('Document Info');
   });
 
   it('returns "Document Info" when the case status is in progress and the document type is Petition', async () => {
@@ -36,7 +38,7 @@ describe('setDefaultDocumentDetailTab', () => {
         documentId: 'abc',
       },
     });
-    expect(state.currentTab).toEqual('Document Info');
+    expect(state.currentViewMetadata.tab).toEqual('Document Info');
   });
 
   it('returns "Messages" when the case status is new and the document type is Answer', async () => {
@@ -52,7 +54,7 @@ describe('setDefaultDocumentDetailTab', () => {
         documentId: 'abc',
       },
     });
-    expect(state.currentTab).toEqual('Messages');
+    expect(state.currentViewMetadata.tab).toEqual('Messages');
   });
 
   it('returns "Messages" when the case status is general docket', async () => {
@@ -68,6 +70,6 @@ describe('setDefaultDocumentDetailTab', () => {
         documentId: 'abc',
       },
     });
-    expect(state.currentTab).toEqual('Messages');
+    expect(state.currentViewMetadata.tab).toEqual('Messages');
   });
 });

@@ -1,23 +1,20 @@
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { updateUserCaseNote } = require('./updateUserCaseNote');
 
 describe('updateUserCaseNote', () => {
   let putStub;
   beforeEach(() => {
-    putStub = sinon.stub().returns({
+    putStub = jest.fn().mockReturnValue({
       promise: async () => null,
     });
   });
 
   it('invokes the persistence layer with pk of user-case-note|{caseId}, sk of {userId} and other expected params', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        put: putStub,
-      }),
-    };
+    applicationContext.getDocumentClient.mockReturnValue({
+      put: putStub,
+    });
     await updateUserCaseNote({
       applicationContext,
       caseNoteToUpdate: {
@@ -26,13 +23,13 @@ describe('updateUserCaseNote', () => {
         userId: '123',
       },
     });
-    expect(putStub.getCall(0).args[0]).toMatchObject({
+    expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {
         notes: 'something!!!',
         pk: 'user-case-note|456',
-        sk: '123',
+        sk: 'user|123',
       },
-      applicationContext: { environment: { stage: 'dev' } },
+      applicationContext: { environment: { stage: 'local' } },
     });
   });
 });

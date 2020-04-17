@@ -1,26 +1,17 @@
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateOrderWithoutBodyAction } from './validateOrderWithoutBodyAction';
-import sinon from 'sinon';
 
 describe('validateOrderWithoutBodyAction', () => {
-  let validateOrderWithoutBodyStub;
-  let successStub;
-  let errorStub;
+  let validateOrderWithoutBodyStub = jest.fn();
 
-  let mockOrderWithoutBody;
+  let mockOrderWithoutBody = {
+    documentTitle: 'Order of Dismissal and Decision',
+    documentType: 'Order of Dismissal and Decision',
+    eventCode: 'ODD',
+  };
 
-  beforeEach(() => {
-    validateOrderWithoutBodyStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
-
-    mockOrderWithoutBody = {
-      documentTitle: 'Order of Dismissal and Decision',
-      documentType: 'Order of Dismissal and Decision',
-      eventCode: 'ODD',
-    };
-
+  beforeAll(() => {
     presenter.providers.applicationContext = {
       getUseCases: () => ({
         validateOrderWithoutBodyInteractor: validateOrderWithoutBodyStub,
@@ -28,36 +19,36 @@ describe('validateOrderWithoutBodyAction', () => {
     };
 
     presenter.providers.path = {
-      error: errorStub,
-      success: successStub,
+      error: jest.fn(),
+      success: jest.fn(),
     };
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateOrderWithoutBodyStub.returns(null);
+    validateOrderWithoutBodyStub.mockReturnValue(null);
     await runAction(validateOrderWithoutBodyAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockOrderWithoutBody,
+        modal: mockOrderWithoutBody,
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(presenter.providers.path.success).toHaveBeenCalled();
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateOrderWithoutBodyStub.returns('error');
+    validateOrderWithoutBodyStub.mockReturnValue('error');
     await runAction(validateOrderWithoutBodyAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockOrderWithoutBody,
+        modal: mockOrderWithoutBody,
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(presenter.providers.path.error).toHaveBeenCalled();
   });
 });

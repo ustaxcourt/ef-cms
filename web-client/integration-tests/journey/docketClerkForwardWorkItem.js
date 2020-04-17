@@ -52,6 +52,7 @@ export const docketClerkForwardWorkItem = test => {
     await test.runSequence('submitForwardSequence', {
       workItemId: test.workItemId,
     });
+
     const caseDetail = test.getState('caseDetail');
     let workItem;
     caseDetail.documents.forEach(document =>

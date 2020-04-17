@@ -68,13 +68,13 @@ module.exports = [
       'click element #tab-case-information',
       'wait for #tab-petitioner to be visible',
       'click element #tab-petitioner',
-      'wait for button#edit-practitioners-button to be visible',
-      'click element button#edit-practitioners-button',
+      'wait for button#edit-privatePractitioners-button to be visible',
+      'click element button#edit-privatePractitioners-button',
       'wait for #practitioner-representing-0 to be visible',
     ],
-    notes: 'checks a11y of edit practitioners modal',
+    notes: 'checks a11y of edit privatePractitioners modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=edit-practitioners-modal',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=edit-privatePractitioners-modal',
   },
   {
     actions: [
@@ -98,13 +98,13 @@ module.exports = [
       'click element #tab-case-information',
       'wait for #tab-respondent to be visible',
       'click element #tab-respondent',
-      'wait for button#edit-respondents-button to be visible',
-      'click element button#edit-respondents-button',
+      'wait for button#edit-irsPractitioners-button to be visible',
+      'click element button#edit-irsPractitioners-button',
       'wait for #respondent-0 to be visible',
     ],
-    notes: 'checks a11y of edit respondents modal',
+    notes: 'checks a11y of edit irsPractitioners modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-19&info=edit-respondents-modal',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-19&info=edit-irsPractitioners-modal',
   },
   {
     actions: [
@@ -116,6 +116,20 @@ module.exports = [
     notes: 'checks the confirm modal when editing a signed draft document',
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19&info=edit-signed-order-confirm-modal',
+  },
+  {
+    actions: [
+      'wait for #case-detail-menu-button to be visible',
+      'wait for .progress-indicator to be hidden',
+      'click element #case-detail-menu-button',
+      'wait for #menu-button-create-order to be visible',
+      'wait for .progress-indicator to be hidden',
+      'click element #menu-button-create-order',
+      'wait for #eventCode to be visible',
+    ],
+    notes: 'checks a11y of create order select document type modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=create-order-modal',
   },
   {
     actions: [
@@ -322,4 +336,18 @@ module.exports = [
   },
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/edit-trial-session/6b6975cf-2b10-4e84-bcae-91e162d2f9d1',
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-session-detail/5b18af9e-4fbd-459b-8db7-7b15108c7fa5&info=qc-complete-checkboxes',
+  {
+    actions: [
+      'wait for #tab-practitioner to be visible',
+      'click element #tab-practitioner',
+      'wait for #practitioner-name to be visible',
+      'set field #practitioner-name to test',
+      'click element #practitioner-search-by-name-button',
+      'wait for .search-results to be visible',
+    ],
+    notes: 'checks the advanced search practitioner tab and results table',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=practitioner-search-results',
+  },
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/practitioner-detail/PT1234',
 ];

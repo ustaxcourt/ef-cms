@@ -1,5 +1,6 @@
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
+import { wait } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkCreatesAnOrder = (test, data) => {
@@ -10,7 +11,7 @@ export const docketClerkCreatesAnOrder = (test, data) => {
 
     await test.runSequence('openCreateOrderChooseTypeModalSequence', {});
 
-    expect(test.getState('form.documentTitle')).toBeFalsy();
+    expect(test.getState('modal.documentTitle')).toBeFalsy();
 
     await test.runSequence('updateCreateOrderModalFormValueSequence', {
       key: 'eventCode',
@@ -18,11 +19,11 @@ export const docketClerkCreatesAnOrder = (test, data) => {
     });
 
     if (data.expectedDocumentType) {
-      expect(test.getState('form.documentType')).toEqual(
+      expect(test.getState('modal.documentType')).toEqual(
         data.expectedDocumentType,
       );
     } else {
-      expect(test.getState('form.documentType').length).toBeGreaterThan(0);
+      expect(test.getState('modal.documentType').length).toBeGreaterThan(0);
     }
 
     await test.runSequence('updateCreateOrderModalFormValueSequence', {
@@ -39,6 +40,14 @@ export const docketClerkCreatesAnOrder = (test, data) => {
 
     await test.runSequence('submitCourtIssuedOrderSequence');
 
+    //TODO - fix this when cerebral runSequence starts properly awaiting things
+    await wait(1000);
+
+    //skip signing and go back to caseDetail
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
@@ -47,7 +56,10 @@ export const docketClerkCreatesAnOrder = (test, data) => {
     );
 
     const caseDraftDocuments = caseDetailFormatted.draftDocuments;
-    const newDraftOrder = caseDraftDocuments[caseDraftDocuments.length - 1];
+    const newDraftOrder = caseDraftDocuments.reduce((prev, current) =>
+      prev.createdAt > current.createdAt ? prev : current,
+    );
+
     expect(newDraftOrder).toBeTruthy();
     test.draftOrders.push(newDraftOrder);
   });

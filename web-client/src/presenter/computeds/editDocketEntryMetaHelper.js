@@ -18,7 +18,7 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
     validationErrors &&
     (validationErrors.partyPrimary ||
       validationErrors.partySecondary ||
-      validationErrors.partyRespondent);
+      validationErrors.partyIrsPractitioner);
 
   const objectionDocumentTypes = [
     ...INTERNAL_CATEGORY_MAP['Motion'].map(entry => {
@@ -28,6 +28,8 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
     'Motion to Withdraw as Counsel',
     'Application to Take Deposition',
   ];
+
+  const amendmentEventCodes = ['AMAT', 'ADMT'];
 
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
@@ -47,7 +49,10 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
   return {
     partyValidationError,
     primary: optionsForCategory,
-    showObjection: objectionDocumentTypes.includes(form.documentType),
+    showObjection:
+      objectionDocumentTypes.includes(form.documentType) ||
+      (amendmentEventCodes.includes(form.eventCode) &&
+        objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     showSecondaryParty,
   };
 };

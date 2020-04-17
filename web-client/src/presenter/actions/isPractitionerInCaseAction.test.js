@@ -1,15 +1,14 @@
 import { isPractitionerInCaseAction } from './isPractitionerInCaseAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 let yesStub;
 let noStub;
 
 describe('isPractitionerInCaseAction', () => {
-  beforeEach(() => {
-    yesStub = sinon.stub();
-    noStub = sinon.stub();
+  beforeAll(() => {
+    yesStub = jest.fn();
+    noStub = jest.fn();
 
     presenter.providers.path = {
       no: noStub,
@@ -24,7 +23,7 @@ describe('isPractitionerInCaseAction', () => {
       },
       state: {
         caseDetail: {
-          practitioners: [{ userId: 'abc' }],
+          privatePractitioners: [{ userId: 'abc' }],
         },
         modal: {
           practitionerMatches: [{ userId: 'abc' }],
@@ -32,7 +31,7 @@ describe('isPractitionerInCaseAction', () => {
       },
     });
 
-    expect(yesStub.calledOnce).toEqual(true);
+    expect(yesStub.mock.calls.length).toEqual(1);
   });
 
   it('takes no path when practitioner is not already in case', async () => {
@@ -42,7 +41,7 @@ describe('isPractitionerInCaseAction', () => {
       },
       state: {
         caseDetail: {
-          practitioners: [{ userId: 'abc' }],
+          privatePractitioners: [{ userId: 'abc' }],
         },
         modal: {
           practitionerMatches: [{ userId: '123' }],
@@ -50,6 +49,6 @@ describe('isPractitionerInCaseAction', () => {
       },
     });
 
-    expect(noStub.calledOnce).toEqual(true);
+    expect(noStub.mock.calls.length).toEqual(1);
   });
 });

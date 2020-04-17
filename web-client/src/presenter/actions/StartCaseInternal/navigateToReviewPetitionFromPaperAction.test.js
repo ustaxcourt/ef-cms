@@ -1,13 +1,12 @@
 import { navigateToReviewPetitionFromPaperAction } from './navigateToReviewPetitionFromPaperAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 describe('navigateToReviewPetitionFromPaperAction', () => {
   let routeStub;
 
-  beforeEach(() => {
-    routeStub = sinon.stub();
+  beforeAll(() => {
+    routeStub = jest.fn();
 
     presenter.providers.router = {
       route: routeStub,
@@ -21,6 +20,6 @@ describe('navigateToReviewPetitionFromPaperAction', () => {
       },
     });
 
-    expect(routeStub.calledOnce).toEqual(true);
+    expect(routeStub.mock.calls.length).toEqual(1);
   });
 });

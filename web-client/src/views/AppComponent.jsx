@@ -13,20 +13,21 @@ import { CaseInventoryReport } from './CaseInventoryReport/CaseInventoryReport';
 import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryReportModal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
-import { CreateAttorneyUser } from './CreateAttorneyUser';
 import { CreateOrder } from './CreateOrder/CreateOrder';
+import { CreatePractitionerUser } from './CreatePractitionerUser';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
+import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
 import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocumentDetail } from './DocumentDetail/DocumentDetail';
-import { EditAttorneyUser } from './EditAttorneyUser';
 import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
 import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformation';
+import { EditPractitionerUser } from './EditPractitionerUser';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
 import { Error } from './Error';
@@ -40,6 +41,7 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { Messages } from './Messages/Messages';
 import { PendingReport } from './PendingReport/PendingReport';
+import { PractitionerDetail } from './PractitionerDetail';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintPreview } from './CourtIssuedDocketEntry/PrintPreview';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
@@ -82,20 +84,21 @@ const pages = {
   CaseInventoryReport,
   CaseSearchNoMatches,
   CourtIssuedDocketEntry,
-  CreateAttorneyUser,
   CreateOrder,
+  CreatePractitionerUser,
   DashboardChambers,
   DashboardInactive,
+  DashboardIrsSuperuser,
   DashboardJudge,
   DashboardPetitioner,
   DashboardPractitioner,
   DashboardRespondent,
   DocumentDetail,
-  EditAttorneyUser,
   EditDocketEntry,
   EditDocketEntryMeta,
   EditPetitionDetails,
   EditPetitionerInformation,
+  EditPractitionerUser,
   EditTrialSession,
   EditUploadCourtIssuedDocument,
   Error,
@@ -106,6 +109,7 @@ const pages = {
   LogIn,
   Messages,
   PendingReport,
+  PractitionerDetail,
   PrimaryContactEdit,
   PrintPreview,
   PrintableCaseInventoryReport,
@@ -136,11 +140,10 @@ const pages = {
 export const AppComponent = connect(
   {
     currentPage: state.currentPage,
-    currentPageHeader: state.currentPageHeader,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     zipInProgress: state.batchDownloads.zipInProgress,
   },
-  ({ currentPage, showModal, zipInProgress }) => {
+  function AppComponent({ currentPage, showModal, zipInProgress }) {
     const focusMain = e => {
       e && e.preventDefault();
       const header = document.querySelector('#main-content h1');

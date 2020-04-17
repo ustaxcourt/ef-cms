@@ -9,7 +9,11 @@ export const ArchiveDraftDocumentModal = connect(
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.archiveDraftDocumentSequence,
   },
-  ({ archiveDraftDocument, cancelSequence, confirmSequence }) => {
+  function ArchiveDraftDocumentModal({
+    archiveDraftDocument,
+    cancelSequence,
+    confirmSequence,
+  }) {
     return (
       <ModalDialog
         cancelLabel="No, Take Me Back"

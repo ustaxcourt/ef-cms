@@ -15,11 +15,13 @@ exports.getWebSocketConnectionsByUserId = async ({
   return await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
+      '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `connections-${userId}`,
+      ':pk': `user|${userId}`,
+      ':prefix': 'connection',
     },
-    KeyConditionExpression: '#pk = :pk',
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
   });
 };

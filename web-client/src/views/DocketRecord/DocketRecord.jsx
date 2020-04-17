@@ -13,14 +13,14 @@ export const DocketRecord = connect(
     docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     refreshCaseSequence: sequences.refreshCaseSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
-  ({
+  function DocketRecord({
     docketRecordHelper,
     formattedCaseDetail,
     refreshCaseSequence,
     showModal,
-  }) => {
+  }) {
     useEffect(() => {
       const interval = setInterval(() => {
         refreshCaseSequence();

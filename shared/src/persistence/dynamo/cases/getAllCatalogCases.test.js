@@ -1,28 +1,9 @@
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { getAllCatalogCases } = require('./getAllCatalogCases');
 
 describe('getAllCatalogCases', () => {
-  let applicationContext;
-  let queryStub;
-
-  beforeEach(() => {
-    queryStub = sinon.stub().returns({
-      promise: () =>
-        Promise.resolve({
-          Items: [],
-        }),
-    });
-
-    applicationContext = {
-      environment: {
-        stage: 'local',
-      },
-      getDocumentClient: () => ({
-        query: queryStub,
-      }),
-    };
-  });
-
   it('should return empty array if there are no records returned from persistence', async () => {
     const result = await getAllCatalogCases({
       applicationContext,
@@ -31,7 +12,7 @@ describe('getAllCatalogCases', () => {
   });
 
   it('should return records from persistence', async () => {
-    queryStub = sinon.stub().returns({
+    applicationContext.getDocumentClient().query.mockReturnValue({
       promise: () =>
         Promise.resolve({
           Items: [

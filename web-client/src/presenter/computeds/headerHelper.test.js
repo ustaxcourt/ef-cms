@@ -32,7 +32,7 @@ const external = [
 ];
 
 describe('headerHelper', () => {
-  it('should show search in header for users other than petitioner, practitioners and respondents', () => {
+  it('should show search in header for users other than petitioner, privatePractitioners and irsPractitioners', () => {
     let result = runCompute(headerHelper, {
       state: getBaseState({ role: User.ROLES.petitioner }),
     });
@@ -81,7 +81,25 @@ describe('headerHelper', () => {
       expect(result.showMyCases).toBeTruthy();
     });
   });
-  it('should NOT show search in header for practitioners or respondents', () => {
+  it('should not show cases for irsSuperuser', () => {
+    const result = runCompute(headerHelper, {
+      state: getBaseState({ role: User.ROLES.irsSuperuser }),
+    });
+    expect(result.showMyCases).toBeFalsy();
+  });
+  it('should show search nav item for irsSuperuser', () => {
+    const result = runCompute(headerHelper, {
+      state: getBaseState({ role: User.ROLES.irsSuperuser }),
+    });
+    expect(result.showSearchNavItem).toBeTruthy();
+  });
+  it('should NOT show search nav item for privatePractitioner', () => {
+    const result = runCompute(headerHelper, {
+      state: getBaseState({ role: User.ROLES.privatePractitioner }),
+    });
+    expect(result.showSearchNavItem).toBeFalsy();
+  });
+  it('should NOT show search in header for privatePractitioners, irsPractitioners, or irsSuperuser', () => {
     let result = runCompute(headerHelper, {
       state: getBaseState({ role: User.ROLES.privatePractitioner }),
     });
@@ -89,6 +107,11 @@ describe('headerHelper', () => {
 
     result = runCompute(headerHelper, {
       state: getBaseState({ role: User.ROLES.irsPractitioner }),
+    });
+    expect(result.showSearchInHeader).toBeFalsy();
+
+    result = runCompute(headerHelper, {
+      state: getBaseState({ role: User.ROLES.irsSuperuser }),
     });
     expect(result.showSearchInHeader).toBeFalsy();
   });
@@ -144,6 +167,15 @@ describe('headerHelper', () => {
       },
     });
     expect(result.pageIsMyCases).toBeTruthy();
+  });
+  it('should know when the page is Dashboard', () => {
+    const result = runCompute(headerHelper, {
+      state: {
+        ...getBaseState({ role: User.ROLES.irsSuperuser }),
+        currentPage: 'DashboardIrsSuperuser',
+      },
+    });
+    expect(result.pageIsDashboard).toBeTruthy();
   });
   it('should not set pageIsMessages or pageIsDocumentQC to true if currentPage is TrialSessions', () => {
     const result = runCompute(headerHelper, {

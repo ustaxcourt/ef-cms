@@ -14,7 +14,7 @@ export const completeDocumentSigningAction = async ({
   applicationContext,
   get,
 }) => {
-  const messageId = get(state.messageId);
+  const messageId = get(state.currentViewMetadata.messageId);
   const originalDocumentId = get(state.pdfForSigning.documentId);
   const caseId = get(state.caseDetail.caseId);
   const caseDetail = get(state.caseDetail);
@@ -48,7 +48,9 @@ export const completeDocumentSigningAction = async ({
         },
       });
 
-    const documentFile = new File([signedPdfBytes], 'myfile.pdf');
+    const documentFile = new File([signedPdfBytes], 'myfile.pdf', {
+      type: 'application/pdf',
+    });
 
     let documentIdToOverwrite = null;
     if (document.documentType !== 'Proposed Stipulated Decision') {

@@ -1,17 +1,10 @@
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { Batch } = require('./Batch');
 const { Scan } = require('./Scan');
 
 const { VALIDATION_ERROR_MESSAGES } = Scan;
 
 describe('Scan entity', () => {
-  let applicationContext;
-
-  beforeEach(() => {
-    applicationContext = {
-      getUniqueId: () => 'unique-id-1',
-    };
-  });
-
   it('adds a Batch entity to the Scan entity', () => {
     const scan = new Scan({
       applicationContext,

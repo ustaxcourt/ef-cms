@@ -1,4 +1,6 @@
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const {
   saveWorkItemForDocketClerkFilingExternalDocument,
 } = require('./saveWorkItemForDocketClerkFilingExternalDocument');
@@ -8,13 +10,13 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
   let getStub;
 
   beforeEach(() => {
-    putStub = sinon.stub().returns({
+    putStub = jest.fn().mockReturnValue({
       promise: async () => ({
         section: 'docket',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     });
-    getStub = sinon.stub().returns({
+    getStub = jest.fn().mockReturnValue({
       promise: async () => ({
         Item: {
           section: 'docket',
@@ -25,19 +27,14 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
   });
 
   it('invokes the persistence layer 4 times to store the work item, user and section outbox records, and work item mapping record', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getCurrentUser: () => ({
-        section: 'docket',
-        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-      getDocumentClient: () => ({
-        get: getStub,
-        put: putStub,
-      }),
-    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      section: 'docket',
+      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+    applicationContext.getDocumentClient.mockReturnValue({
+      get: getStub,
+      put: putStub,
+    });
     await saveWorkItemForDocketClerkFilingExternalDocument({
       applicationContext,
       workItem: {
@@ -48,28 +45,28 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
       },
     });
 
-    expect(putStub.getCall(0).args[0]).toMatchObject({
+    expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {
-        pk: 'workitem-123',
-        sk: 'workitem-123',
+        pk: 'work-item|123',
+        sk: 'work-item|123',
       },
     });
-    expect(putStub.getCall(1).args[0]).toMatchObject({
+    expect(putStub.mock.calls[1][0]).toMatchObject({
       Item: {
-        pk: 'section-outbox-docket',
+        pk: 'section-outbox|docket',
         workItemId: '123',
       },
     });
-    expect(putStub.getCall(2).args[0]).toMatchObject({
+    expect(putStub.mock.calls[2][0]).toMatchObject({
       Item: {
-        pk: 'user-outbox-1805d1ab-18d0-43ec-bafb-654e83405416',
+        pk: 'user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         workItemId: '123',
       },
     });
-    expect(putStub.getCall(3).args[0]).toMatchObject({
+    expect(putStub.mock.calls[3][0]).toMatchObject({
       Item: {
-        pk: '456|workItem',
-        sk: '123',
+        pk: 'case|456',
+        sk: 'work-item|123',
       },
     });
   });
