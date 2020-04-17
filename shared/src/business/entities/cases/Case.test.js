@@ -27,6 +27,7 @@ describe('Case entity', () => {
     expect(myCase).toMatchObject({
       isSealed: false,
       noticeOfAttachments: false,
+      orderDesignatingPlaceOfTrial: false,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
       orderForFilingFee: false,
@@ -34,42 +35,6 @@ describe('Case entity', () => {
       orderForRatification: false,
       orderToChangeDesignatedPlaceOfTrial: false,
       orderToShowCause: false,
-    });
-  });
-
-  it('defaults the orderDesignatingPlaceOfTrial to false if not a paper case or trial city is set', () => {
-    let myCase = new Case(MOCK_CASE, { applicationContext });
-    expect(myCase).toMatchObject({
-      orderDesignatingPlaceOfTrial: false,
-    });
-
-    myCase = new Case(
-      {
-        ...MOCK_CASE,
-        isPaper: true,
-      },
-      {
-        applicationContext,
-      },
-    );
-    expect(myCase).toMatchObject({
-      orderDesignatingPlaceOfTrial: false,
-    });
-  });
-
-  it('defaults the orderDesignatingPlaceOfTrial to true if paper case and trial city is not set', () => {
-    const myCase = new Case(
-      {
-        ...MOCK_CASE,
-        isPaper: true,
-        preferredTrialCity: undefined,
-      },
-      {
-        applicationContext,
-      },
-    );
-    expect(myCase).toMatchObject({
-      orderDesignatingPlaceOfTrial: true,
     });
   });
 
