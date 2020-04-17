@@ -1,4 +1,4 @@
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { shouldRefreshOrderPdfAction } from './shouldRefreshOrderPdfAction';
 
@@ -6,9 +6,7 @@ describe('shouldRefreshOrderPdfAction', () => {
   const noStub = jest.fn();
   const yesStub = jest.fn();
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-
+  beforeAll(() => {
     presenter.providers.path = {
       no: noStub,
       yes: yesStub,

@@ -1,16 +1,14 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateCaseAssociationRequestAction } from './validateCaseAssociationRequestAction';
 
 describe('validateCaseAssociationRequest', () => {
-  let validateCaseAssociationRequestStub;
   let successStub;
   let errorStub;
-
   let mockCaseAssociationRequest;
 
-  beforeEach(() => {
-    validateCaseAssociationRequestStub = jest.fn();
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
@@ -25,12 +23,7 @@ describe('validateCaseAssociationRequest', () => {
       scenario: 'Standard',
     };
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateCaseAssociationRequestInteractor: validateCaseAssociationRequestStub,
-      }),
-    };
-
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -38,7 +31,10 @@ describe('validateCaseAssociationRequest', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateCaseAssociationRequestStub = jest.fn().mockReturnValue(null);
+    applicationContext
+      .getUseCases()
+      .validateCaseAssociationRequestInteractor.mockReturnValue(null);
+
     await runAction(validateCaseAssociationRequestAction, {
       modules: {
         presenter,
@@ -52,7 +48,10 @@ describe('validateCaseAssociationRequest', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateCaseAssociationRequestStub = jest.fn().mockReturnValue('error');
+    applicationContext
+      .getUseCases()
+      .validateCaseAssociationRequestInteractor.mockReturnValue('error');
+
     await runAction(validateCaseAssociationRequestAction, {
       modules: {
         presenter,

@@ -1,13 +1,17 @@
 import { CerebralTest } from 'cerebral/test';
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
-
-let test;
-presenter.providers.applicationContext = applicationContext;
-
-test = CerebralTest(presenter);
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
+import { setWorkItemActionSequence } from '../sequences/setWorkItemActionSequence';
 
 describe('setWorkItemActionSequence', () => {
+  let test;
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+    presenter.sequences = {
+      setWorkItemActionSequence,
+    };
+    test = CerebralTest(presenter);
+  });
   it('should set the key of the workItemsAction if not already set', async () => {
     test.setState('workItemActions', {});
     await test.runSequence('setWorkItemActionSequence', {

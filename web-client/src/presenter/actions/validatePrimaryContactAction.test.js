@@ -1,16 +1,13 @@
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validatePrimaryContactAction } from './validatePrimaryContactAction';
-const {
-  ContactFactory,
-} = require('../../../../shared/src/business/entities/contacts/ContactFactory');
 
 describe('validatePrimaryContactAction', () => {
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
@@ -18,14 +15,13 @@ describe('validatePrimaryContactAction', () => {
       error: errorStub,
       success: successStub,
     };
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('runs validation on the primary contact with a successful result', async () => {
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validatePrimaryContactInteractor: jest.fn().mockReturnValue(null),
-      }),
-    };
+    applicationContext
+      .getUseCases()
+      .validatePrimaryContactInteractor.mockReturnValue(null);
 
     const result = await runAction(validatePrimaryContactAction, {
       modules: {
@@ -44,9 +40,11 @@ describe('validatePrimaryContactAction', () => {
   });
 
   it('runs validation on the primary contact with an invalid result', async () => {
-    presenter.providers.applicationContext = applicationContext;
+    applicationContext
+      .getUseCases()
+      .validatePrimaryContactInteractor.mockReturnValue('validation errors');
 
-    const result = await runAction(validatePrimaryContactAction, {
+    await runAction(validatePrimaryContactAction, {
       modules: {
         presenter,
       },
@@ -67,9 +65,6 @@ describe('validatePrimaryContactAction', () => {
       },
     });
 
-    expect(result.state.validationErrors.contactPrimary).toEqual({
-      address1: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.address1,
-    });
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

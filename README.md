@@ -14,13 +14,21 @@ API | Front-End | Shared Code
 
 [![Known Vulnerabilities](https://snyk.io//test/github/flexion/ef-cms/badge.svg?targetFile=package.json)](https://snyk.io//test/github/flexion/ef-cms?targetFile=package.json)
 
-## Screenshots
+## Screenshots of new system
 
-<a href="docs/images/screenshot_docket.png"><img src="docs/images/screenshot_docket.png" width="47%" style="float: left; margin: 0 4px;" /></a>
-<a href="docs/images/screenshot-case.png"><img src="docs/images/screenshot-case.png" width="47%" style="float: left; margin: 0 4px;" /></a>
+### Case detail page / Docket record
+<a href="docs/images/screenshot_docket.png"><img src="docs/images/screenshot_docket.png" width="80%" style="float: left; margin: 0 4px;" /></a>
 
-<a href="docs/images/screenshot-judge.png"><img src="docs/images/screenshot-judge.png" width="47%" style="float: left; margin: 4px 4px 0 0;" /></a>
-<a href="docs/images/screenshot-sessions.png"><img src="docs/images/screenshot-sessions.png" width="47%" style="float: left; margin: 4px 0 0 4px;" /></a>
+### Quality control for documents
+<a href="docs/images/screenshot_qc.png"><img src="docs/images/screenshot_qc.png" width="80%" style="float: left; margin: 0 4px;" /></a>
+
+### Validating a Petition
+
+<a href="docs/images/screenshot_petition.png"><img src="docs/images/screenshot_petition.png" width="80%" style="float: left; margin: 4px 4px 0 0;" /></a>
+
+### Trial session details
+
+<a href="docs/images/screenshot_trialsession.png"><img src="docs/images/screenshot_trialsession.png" width="80%" style="float: left; margin: 4px 0 0 4px;" /></a>
 
 <br clear="both">
 
@@ -128,6 +136,7 @@ privatePractitioner
 privatePractitioner1 - privatePractitioner4
 irsPractitioner
 irsPractitioner1 - irsPractitioner4
+irsSuperuser
 ```
 
 #### Internal Users
@@ -163,6 +172,7 @@ To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm
 petitioner1@example.com – petitioner5@example.com
 privatePractitioner1@example.com – privatePractitioner10@example.com
 irsPractitioner1@example.com – irsPractitioner10@example.com
+service.agent.test@irs.gov (IRS Superuser)
 ```
 
 #### Internal Users

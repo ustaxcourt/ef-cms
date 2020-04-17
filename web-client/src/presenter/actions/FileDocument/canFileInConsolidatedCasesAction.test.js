@@ -1,12 +1,12 @@
 import { canFileInConsolidatedCasesAction } from './canFileInConsolidatedCasesAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('canFileInConsolidatedCasesAction', () => {
   let yesStub;
   let noStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     yesStub = jest.fn();
     noStub = jest.fn();
 

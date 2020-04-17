@@ -1,6 +1,6 @@
-jest.mock('aws-sdk');
-const AWS = require('aws-sdk');
-
+const {
+  applicationContext,
+} = require('../business/test/createTestApplicationContext');
 const {
   batchGet,
   batchWrite,
@@ -15,84 +15,75 @@ const MOCK_ITEM = {
   caseId: '123',
 };
 
-let documentClientStub;
-
 describe('dynamodbClientService', function () {
-  let applicationContext;
-  let getStub = jest.fn().mockReturnValue({
-    promise: () =>
-      Promise.resolve({
-        Item: {
-          'aws:rep:deleting': 'a',
-          'aws:rep:updateregion': 'b',
-          'aws:rep:updatetime': 'c',
-          ...MOCK_ITEM,
-        },
-      }),
-  });
-  const deleteStub = jest
-    .fn()
-    .mockReturnValue({ promise: () => Promise.resolve(null) });
-  const batchWriteStub = jest
-    .fn()
-    .mockReturnValue({ promise: () => Promise.resolve(null) });
-
   beforeEach(() => {
-    jest.clearAllMocks();
-
-    applicationContext = {
-      environment: { stage: 'dev' },
-      getDocumentClient: () => ({
-        batchGet: jest.fn().mockReturnValue({
-          promise: () =>
-            Promise.resolve({
-              Responses: {
-                'efcms-dev': [
-                  {
-                    'aws:rep:deleting': 'a',
-                    'aws:rep:updateregion': 'b',
-                    'aws:rep:updatetime': 'c',
-                    ...MOCK_ITEM,
-                  },
-                ],
+    applicationContext.getDocumentClient().batchGet.mockReturnValue({
+      promise: () =>
+        Promise.resolve({
+          Responses: {
+            'efcms-local': [
+              {
+                'aws:rep:deleting': 'a',
+                'aws:rep:updateregion': 'b',
+                'aws:rep:updatetime': 'c',
+                ...MOCK_ITEM,
               },
-            }),
+            ],
+          },
         }),
-        batchWrite: batchWriteStub,
-        delete: deleteStub,
-        get: getStub,
-        put: jest
-          .fn()
-          .mockReturnValue({ promise: () => Promise.resolve(null) }),
-        query: jest.fn().mockReturnValue({
-          promise: () =>
-            Promise.resolve({
-              Items: [
-                {
-                  'aws:rep:deleting': 'a',
-                  'aws:rep:updateregion': 'b',
-                  'aws:rep:updatetime': 'c',
-                  ...MOCK_ITEM,
-                },
-              ],
-            }),
-        }),
-        update: jest.fn().mockReturnValue({
-          promise: () =>
-            Promise.resolve({
-              Attributes: {
-                id: '123',
-              },
-            }),
-        }),
-      }),
-    };
+    });
 
-    AWS.DynamoDB = { DocumentClient: () => documentClientStub };
-  });
+    applicationContext.getDocumentClient().get.mockReturnValue({
+      promise: () =>
+        Promise.resolve({
+          Item: {
+            'aws:rep:deleting': 'a',
+            'aws:rep:updateregion': 'b',
+            'aws:rep:updatetime': 'c',
+            ...MOCK_ITEM,
+          },
+        }),
+    });
 
-  afterAll(() => {
-    jest.restoreAllMocks();
+    applicationContext
+      .getDocumentClient()
+      .delete.mockReturnValue({ promise: () => Promise.resolve(null) });
+
+    applicationContext
+      .getDocumentClient()
+      .batchWrite.mockReturnValue({ promise: () => Promise.resolve(null) });
+
+    applicationContext.getDocumentClient().update.mockReturnValue({
+      promise: () => {
+        return Promise.resolve({
+          Attributes: {
+            id: '123',
+          },
+        });
+      },
+    });
+
+    applicationContext.getDocumentClient().updateConsistent.mockReturnValue({
+      promise: () => {
+        return Promise.resolve({
+          Attributes: {
+            id: '123',
+          },
+        });
+      },
+    });
+
+    applicationContext.getDocumentClient().query.mockReturnValue({
+      promise: () => {
+        return Promise.resolve({
+          Items: [
+            {
+              caseId: '123',
+            },
+          ],
+        });
+      },
+    });
   });
 
   describe('put', () => {
@@ -106,7 +97,7 @@ describe('dynamodbClientService', function () {
   });
 
   describe('updateConsistent', () => {
-    it('should return the  same Item property passed in in the params', async () => {
+    it('should return the same Item property passed in in the params', async () => {
       const result = await updateConsistent({ applicationContext });
       expect(result).toEqual('123');
     });
@@ -118,16 +109,16 @@ describe('dynamodbClientService', function () {
       expect(result).toEqual(MOCK_ITEM);
     });
     it('should throw an error if the item is not returned', async () => {
-      getStub = jest
-        .fn()
-        .mockReturnValue({ promise: () => Promise.resolve({}) });
+      applicationContext
+        .getDocumentClient()
+        .get.mockReturnValue({ promise: () => Promise.resolve({}) });
       const result = await get({ applicationContext });
       expect(result).toBeUndefined();
     });
     it('should return nothing if the promise is rejected', async () => {
-      getStub = jest
-        .fn()
-        .mockReturnValue({ promise: () => Promise.reject({}) });
+      applicationContext
+        .getDocumentClient()
+        .get.mockReturnValue({ promise: () => Promise.reject({}) });
       const result = await get({ applicationContext });
       expect(result).toBeUndefined();
     });
@@ -175,9 +166,11 @@ describe('dynamodbClientService', function () {
         items: [item],
         tableName: 'a',
       });
-      expect(batchWriteStub.mock.calls[0][0]).toEqual({
+      expect(
+        applicationContext.getDocumentClient().batchWrite.mock.calls[0][0],
+      ).toEqual({
         RequestItems: {
-          'efcms-dev': [
+          'efcms-local': [
             {
               PutRequest: {
                 ConditionExpression:
@@ -203,9 +196,11 @@ describe('dynamodbClientService', function () {
           pk: '123',
         },
       });
-      expect(deleteStub.mock.calls[0][0]).toEqual({
+      expect(
+        applicationContext.getDocumentClient().delete.mock.calls[0][0],
+      ).toEqual({
         Key: { pk: '123' },
-        TableName: 'efcms-dev',
+        TableName: 'efcms-local',
       });
     });
   });

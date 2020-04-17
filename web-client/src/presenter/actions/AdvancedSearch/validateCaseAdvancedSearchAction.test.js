@@ -1,22 +1,17 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateCaseAdvancedSearchAction } from './validateCaseAdvancedSearchAction';
 
+presenter.providers.applicationContext = applicationContext;
+
 describe('validateCaseAdvancedSearchAction', () => {
-  let validateCaseAdvancedSearchStub;
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
-    validateCaseAdvancedSearchStub = jest.fn();
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateCaseAdvancedSearchInteractor: validateCaseAdvancedSearchStub,
-      }),
-    };
 
     presenter.providers.path = {
       error: errorStub,
@@ -25,7 +20,9 @@ describe('validateCaseAdvancedSearchAction', () => {
   });
 
   it('validates advanced case search successfully', async () => {
-    validateCaseAdvancedSearchStub = jest.fn().mockReturnValue({});
+    applicationContext
+      .getUseCases()
+      .validateCaseAdvancedSearchInteractor.mockReturnValue({});
 
     await runAction(validateCaseAdvancedSearchAction, {
       modules: {
@@ -34,12 +31,17 @@ describe('validateCaseAdvancedSearchAction', () => {
       state: { form: {} },
     });
 
-    expect(validateCaseAdvancedSearchStub.mock.calls.length).toEqual(1);
+    expect(
+      applicationContext.getUseCases().validateCaseAdvancedSearchInteractor.mock
+        .calls.length,
+    ).toEqual(1);
     expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('fails validation for advanced case search', async () => {
-    validateCaseAdvancedSearchStub = jest.fn().mockReturnValue({ foo: 'bar' });
+    applicationContext
+      .getUseCases()
+      .validateCaseAdvancedSearchInteractor.mockReturnValue({ foo: 'bar' });
 
     await runAction(validateCaseAdvancedSearchAction, {
       modules: {
@@ -48,7 +50,10 @@ describe('validateCaseAdvancedSearchAction', () => {
       state: { form: {} },
     });
 
-    expect(validateCaseAdvancedSearchStub.mock.calls.length).toEqual(1);
+    expect(
+      applicationContext.getUseCases().validateCaseAdvancedSearchInteractor.mock
+        .calls.length,
+    ).toEqual(1);
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

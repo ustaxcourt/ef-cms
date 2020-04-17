@@ -3,7 +3,7 @@ import { fileDocumentHelper } from '../../src/presenter/computeds/fileDocumentHe
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default (test, fakeFile) => {
+export const petitionerFilesAmendedMotion = (test, fakeFile) => {
   return it('petitioner files amended motion', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

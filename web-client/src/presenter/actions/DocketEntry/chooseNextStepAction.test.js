@@ -1,12 +1,12 @@
 import { chooseNextStepAction } from './chooseNextStepAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('chooseNextStepAction', () => {
   let addAnotherEntryStub;
   let caseDetailStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     addAnotherEntryStub = jest.fn();
     caseDetailStub = jest.fn();
 

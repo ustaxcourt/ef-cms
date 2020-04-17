@@ -1,15 +1,15 @@
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateUploadCourtIssuedDocumentAction } from './validateUploadCourtIssuedDocumentAction';
-
-presenter.providers.applicationContext = applicationContext;
 
 describe('validateUploadCourtIssuedDocumentAction', () => {
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
     successStub = jest.fn();
     errorStub = jest.fn();
 

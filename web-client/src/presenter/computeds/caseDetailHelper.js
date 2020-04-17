@@ -126,7 +126,9 @@ export const caseDetailHelper = (get, applicationContext) => {
       get(state.modal.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
     showFilingFeeExternal:
-      isExternalUser && user.role !== USER_ROLES.irsPractitioner,
+      isExternalUser &&
+      user.role !== USER_ROLES.irsPractitioner &&
+      user.role !== USER_ROLES.irsSuperuser,
     showIrsServedDate: !!caseDetail.irsSendDate,
     showJudgesNotes,
     showPractitionerSection:

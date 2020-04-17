@@ -1,25 +1,22 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateTrialSessionWorkingCopyAction } from './updateTrialSessionWorkingCopyAction';
 
-let updateTrialSessionWorkingCopyStub;
-
 describe('updateTrialSessionWorkingCopyAction', () => {
-  beforeEach(() => {
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        updateTrialSessionWorkingCopyInteractor: updateTrialSessionWorkingCopyStub,
-      }),
-    };
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('call the use case to get the trial session working copy', async () => {
-    updateTrialSessionWorkingCopyStub = jest.fn().mockResolvedValue({
-      sort: 'practitioner',
-      sortOrder: 'desc',
-      trialSessionId: '123',
-      userId: '234',
-    });
+    applicationContext
+      .getUseCases()
+      .updateTrialSessionWorkingCopyInteractor.mockResolvedValue({
+        sort: 'practitioner',
+        sortOrder: 'desc',
+        trialSessionId: '123',
+        userId: '234',
+      });
 
     await runAction(updateTrialSessionWorkingCopyAction, {
       modules: {
@@ -34,10 +31,13 @@ describe('updateTrialSessionWorkingCopyAction', () => {
         },
       },
     });
-    expect(updateTrialSessionWorkingCopyStub.mock.calls.length).toEqual(1);
     expect(
-      updateTrialSessionWorkingCopyStub.mock.calls[0][0]
-        .trialSessionWorkingCopyToUpdate.trialSessionId,
+      applicationContext.getUseCases().updateTrialSessionWorkingCopyInteractor
+        .mock.calls.length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases().updateTrialSessionWorkingCopyInteractor
+        .mock.calls[0][0].trialSessionWorkingCopyToUpdate.trialSessionId,
     ).toEqual('123');
   });
 });

@@ -5,7 +5,6 @@ const filterRecords = records => {
   const filteredRecords = records.filter(
     record =>
       !record.dynamodb.Keys.pk.S.includes('work-item|') &&
-      !record.dynamodb.Keys.pk.S.includes('user|') &&
       ['INSERT', 'MODIFY'].includes(record.eventName),
   );
 

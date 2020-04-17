@@ -5,7 +5,12 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 export const docketClerkViewsMessages = test => {
   return it('Docket clerk views messages', async () => {
-    await test.runSequence('gotoMessagesSequence');
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'inbox',
+      queue: 'section',
+      workQueueIsInternal: false,
+    });
+
     expect(test.getState('currentPage')).toEqual('Messages');
     expect(test.getState('workQueue').length).toBeGreaterThan(0);
     expect(test.getState('users').length).toBeGreaterThan(0);

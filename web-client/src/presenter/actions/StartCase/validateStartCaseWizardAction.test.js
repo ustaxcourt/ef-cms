@@ -1,31 +1,17 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateStartCaseWizardAction } from './validateStartCaseWizardAction';
 
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    validateStartCaseWizardInteractor: () =>
-      'hello from validate start case wizard',
-  }),
-};
-
 describe('validateStartCaseWizardAction', () => {
-  let validateStartCaseWizardStub;
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
-    validateStartCaseWizardStub = jest.fn();
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateStartCaseWizardInteractor: validateStartCaseWizardStub,
-      }),
-    };
-
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -33,7 +19,9 @@ describe('validateStartCaseWizardAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateStartCaseWizardStub = jest.fn().mockReturnValue(null);
+    applicationContext
+      .getUseCases()
+      .validateStartCaseWizardInteractor.mockReturnValue(null);
     await runAction(validateStartCaseWizardAction, {
       modules: {
         presenter,
@@ -47,7 +35,9 @@ describe('validateStartCaseWizardAction', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateStartCaseWizardStub = jest.fn().mockReturnValue({ some: 'error' });
+    applicationContext
+      .getUseCases()
+      .validateStartCaseWizardInteractor.mockReturnValue({ some: 'error' });
     await runAction(validateStartCaseWizardAction, {
       modules: {
         presenter,
