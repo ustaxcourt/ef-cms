@@ -589,14 +589,14 @@ Case.validationRules = {
       otherwise: joi.date().iso().optional().allow(null),
       then: joi.date().iso().required(),
     })
-    .description('When the petitioner payed the case fee.'),
+    .description('When the petitioner paid the case fee.'),
   petitionPaymentMethod: joi
     .when('petitionPaymentStatus', {
       is: Case.PAYMENT_STATUS.PAID,
       otherwise: joi.string().allow(null).optional(),
       then: joi.string().required(),
     })
-    .description('How the petitioner payed the case fee.'),
+    .description('How the petitioner paid the case fee.'),
   petitionPaymentStatus: joi
     .string()
     .valid(...Object.values(Case.PAYMENT_STATUS))
