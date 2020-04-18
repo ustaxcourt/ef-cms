@@ -8,7 +8,7 @@ const {
 describe('orderPublicSearchInteractor', () => {
   beforeEach(() => {
     applicationContext
-      .getUseCaseHelpers()
+      .getPersistenceGateway()
       .orderKeywordSearch.mockResolvedValue([
         {
           caseCaption: 'Samson Workman, Petitioner',
