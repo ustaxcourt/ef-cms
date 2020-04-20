@@ -10,6 +10,7 @@ export const OrderSearch = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    judges: state.judges,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     validateOrderSearchSequence: sequences.validateOrderSearchSequence,
@@ -18,6 +19,7 @@ export const OrderSearch = connect(
   function OrderSearch({
     advancedSearchForm,
     clearAdvancedSearchFormSequence,
+    judges,
     submitAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence,
     validateOrderSearchSequence,
@@ -164,7 +166,12 @@ export const OrderSearch = connect(
                         });
                       }}
                     >
-                      <option value="">Select</option>
+                      <option value="">- Select -</option>
+                      {judges.map((judge, idx) => (
+                        <option key={idx} value={judge.userId}>
+                          {judge.name}
+                        </option>
+                      ))}
                     </BindedSelect>
                   </div>
                   <div className="grid-row date-search-row">
@@ -179,6 +186,11 @@ export const OrderSearch = connect(
                               hideLegend
                               id="start-date"
                               label="from Date"
+                              names={{
+                                day: 'startDay',
+                                month: 'startMonth',
+                                year: 'startYear',
+                              }}
                             />
                           </div>
                           <div className="grid-col-2">
@@ -189,6 +201,11 @@ export const OrderSearch = connect(
                               hideLegend
                               id="end-date"
                               label="to Date"
+                              names={{
+                                day: 'endDay',
+                                month: 'endMonth',
+                                year: 'endYear',
+                              }}
                             />
                           </div>
                         </div>
