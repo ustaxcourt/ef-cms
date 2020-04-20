@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { updateUserCaseNote } = require('./updateUserCaseNote');
 
 describe('updateUserCaseNote', () => {
@@ -9,14 +12,9 @@ describe('updateUserCaseNote', () => {
   });
 
   it('invokes the persistence layer with pk of user-case-note|{caseId}, sk of {userId} and other expected params', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        put: putStub,
-      }),
-    };
+    applicationContext.getDocumentClient.mockReturnValue({
+      put: putStub,
+    });
     await updateUserCaseNote({
       applicationContext,
       caseNoteToUpdate: {
@@ -31,7 +29,7 @@ describe('updateUserCaseNote', () => {
         pk: 'user-case-note|456',
         sk: 'user|123',
       },
-      applicationContext: { environment: { stage: 'dev' } },
+      applicationContext: { environment: { stage: 'local' } },
     });
   });
 });

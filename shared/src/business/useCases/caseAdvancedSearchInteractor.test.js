@@ -1,49 +1,35 @@
 const {
   caseAdvancedSearchInteractor,
 } = require('./caseAdvancedSearchInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 import { CaseSearch } from '../entities/cases/CaseSearch';
 import { formatNow } from '../utilities/DateHandler';
 
 describe('caseAdvancedSearchInteractor', () => {
-  let searchSpy;
   let mockUser;
-
-  const applicationContext = {
-    environment: { stage: 'local' },
-    getCurrentUser: () => mockUser,
-    getSearchClient: () => ({
-      search: searchSpy,
-    }),
-    getUtilities: () => ({
-      formatNow,
-    }),
-  };
 
   beforeEach(() => {
     mockUser = {
       role: 'petitionsclerk',
     };
+
+    applicationContext.environment.stage = 'local';
+    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
+
+    applicationContext.getSearchClient().search.mockResolvedValue({});
   });
 
   it('returns an unauthorized error on petitioner user role', async () => {
     mockUser.role = 'petitioner';
 
-    let error;
-    try {
-      await caseAdvancedSearchInteractor({
+    await expect(
+      caseAdvancedSearchInteractor({
         applicationContext,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain('Unauthorized');
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('returns empty array if no search params are passed in', async () => {
-    searchSpy = jest.fn(async () => {
-      return {};
-    });
-
     const results = await caseAdvancedSearchInteractor({
       applicationContext,
     });
@@ -52,23 +38,21 @@ describe('caseAdvancedSearchInteractor', () => {
   });
 
   it('calls search function with correct params and returns records for an exact match result', async () => {
-    searchSpy = jest.fn(async () => {
-      return {
-        hits: {
-          hits: [
-            {
-              _source: {
-                caseId: { S: '1' },
-              },
+    applicationContext.getSearchClient().search.mockResolvedValue({
+      hits: {
+        hits: [
+          {
+            _source: {
+              caseId: { S: '1' },
             },
-            {
-              _source: {
-                caseId: { S: '2' },
-              },
+          },
+          {
+            _source: {
+              caseId: { S: '2' },
             },
-          ],
-        },
-      };
+          },
+        ],
+      },
     });
 
     const results = await caseAdvancedSearchInteractor({
@@ -76,8 +60,11 @@ describe('caseAdvancedSearchInteractor', () => {
       petitionerName: 'test person',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must,
+    ).toEqual([
       {
         bool: {
           should: [
@@ -144,8 +131,7 @@ describe('caseAdvancedSearchInteractor', () => {
       },
     ];
 
-    searchSpy = jest.fn(async args => {
-      //expected args for an exact matches search
+    applicationContext.getSearchClient().search.mockImplementation(args => {
       if (args.body.query.bool.must[0].bool.should[0].bool) {
         return {
           hits: {},
@@ -179,8 +165,11 @@ describe('caseAdvancedSearchInteractor', () => {
       yearFiledMin: '2018',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must,
+    ).toEqual([
       {
         bool: {
           should: [
@@ -216,7 +205,10 @@ describe('caseAdvancedSearchInteractor', () => {
       },
       ...commonExpectedQuery,
     ]);
-    expect(searchSpy.mock.calls[1][0].body.query.bool.must).toEqual([
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[1][0].body.query
+        .bool.must,
+    ).toEqual([
       {
         bool: {
           should: [
@@ -232,16 +224,17 @@ describe('caseAdvancedSearchInteractor', () => {
   });
 
   it('uses a default minimum year when providing only a maximum year', async () => {
-    searchSpy = jest.fn();
-
     await caseAdvancedSearchInteractor({
       applicationContext,
       petitionerName: 'test person',
       yearFiledMax: '2018',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must[1].range).toEqual({
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must[1].range,
+    ).toEqual({
       'receivedAt.S': {
         format: 'yyyy',
         gte: `${CaseSearch.CASE_SEARCH_MIN_YEAR}||/y`,
@@ -251,7 +244,6 @@ describe('caseAdvancedSearchInteractor', () => {
   });
 
   it('uses a default maximum year when providing only a minimum year', async () => {
-    searchSpy = jest.fn();
     const currentYear = formatNow('YYYY');
 
     await caseAdvancedSearchInteractor({
@@ -260,8 +252,11 @@ describe('caseAdvancedSearchInteractor', () => {
       yearFiledMin: '2016',
     });
 
-    expect(searchSpy).toHaveBeenCalled();
-    expect(searchSpy.mock.calls[0][0].body.query.bool.must[1].range).toEqual({
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must[1].range,
+    ).toEqual({
       'receivedAt.S': {
         format: 'yyyy',
         gte: '2016||/y',

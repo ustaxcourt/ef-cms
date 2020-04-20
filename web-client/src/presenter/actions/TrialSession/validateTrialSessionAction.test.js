@@ -1,12 +1,7 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateTrialSessionAction } from './validateTrialSessionAction';
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    validateTrialSessionInteractor: () => 'hello from validate trial session',
-  }),
-};
 
 const MOCK_TRIAL = {
   maxCases: 100,
@@ -17,29 +12,30 @@ const MOCK_TRIAL = {
 };
 
 describe('validateTrialSessionAction', () => {
-  let validateTrialSessionStub;
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
-    validateTrialSessionStub = jest.fn();
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateTrialSessionInteractor: validateTrialSessionStub,
-      }),
-    };
-
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
     };
+
+    applicationContext
+      .getUseCases()
+      .validateTrialSessionInteractor.mockReturnValue(
+        'hello from validate trial session',
+      );
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateTrialSessionStub = jest.fn().mockReturnValue(null);
+    applicationContext
+      .getUseCases()
+      .validateTrialSessionInteractor.mockReturnValue(null);
     await runAction(validateTrialSessionAction, {
       modules: {
         presenter,
@@ -53,7 +49,9 @@ describe('validateTrialSessionAction', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateTrialSessionStub = jest.fn().mockReturnValue({ some: 'error' });
+    applicationContext
+      .getUseCases()
+      .validateTrialSessionInteractor.mockReturnValue({ some: 'error' });
     await runAction(validateTrialSessionAction, {
       modules: {
         presenter,
@@ -67,7 +65,9 @@ describe('validateTrialSessionAction', () => {
   });
 
   it('should call the error path when term is summer', async () => {
-    validateTrialSessionStub = jest.fn().mockReturnValue({ term: 'error' });
+    applicationContext
+      .getUseCases()
+      .validateTrialSessionInteractor.mockReturnValue({ term: 'error' });
     await runAction(validateTrialSessionAction, {
       modules: {
         presenter,

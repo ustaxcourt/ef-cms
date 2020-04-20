@@ -1,22 +1,17 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getEligibleCasesForTrialSessionAction } from './getEligibleCasesForTrialSessionAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
+
 import { runAction } from 'cerebral/test';
 
-let getEligibleCasesForTrialSessionStub;
-
 describe('getEligibleCasesForTrialSessionAction', () => {
-  beforeEach(() => {
-    getEligibleCasesForTrialSessionStub = jest.fn().mockResolvedValue([
-      {
-        caseId: '345',
-      },
-    ]);
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        getEligibleCasesForTrialSessionInteractor: getEligibleCasesForTrialSessionStub,
-      }),
-    };
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+    applicationContext
+      .getUseCases()
+      .getEligibleCasesForTrialSessionInteractor.mockResolvedValue([
+        { caseId: '345' },
+      ]);
   });
 
   it('call the use case to get the eligible cases', async () => {
@@ -29,6 +24,9 @@ describe('getEligibleCasesForTrialSessionAction', () => {
       },
       state: {},
     });
-    expect(getEligibleCasesForTrialSessionStub.mock.calls.length).toEqual(1);
+    expect(
+      applicationContext.getUseCases()
+        .getEligibleCasesForTrialSessionInteractor,
+    ).toBeCalled();
   });
 });

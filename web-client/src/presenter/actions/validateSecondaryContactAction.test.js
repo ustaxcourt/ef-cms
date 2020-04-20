@@ -1,19 +1,17 @@
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateSecondaryContactAction } from './validateSecondaryContactAction';
-const {
-  ContactFactory,
-} = require('../../../../shared/src/business/entities/contacts/ContactFactory');
 
 describe('validateSecondaryContactAction', () => {
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -21,11 +19,9 @@ describe('validateSecondaryContactAction', () => {
   });
 
   it('runs validation on the secondary contact with a successful result', async () => {
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateSecondaryContactInteractor: jest.fn().mockReturnValue(null),
-      }),
-    };
+    applicationContext
+      .getUseCases()
+      .validateSecondaryContactInteractor.mockReturnValue(null);
 
     const result = await runAction(validateSecondaryContactAction, {
       modules: {
@@ -44,9 +40,11 @@ describe('validateSecondaryContactAction', () => {
   });
 
   it('runs validation on the secondary contact with an invalid result', async () => {
-    presenter.providers.applicationContext = applicationContext;
+    applicationContext
+      .getUseCases()
+      .validateSecondaryContactInteractor.mockReturnValue('validation error');
 
-    const result = await runAction(validateSecondaryContactAction, {
+    await runAction(validateSecondaryContactAction, {
       modules: {
         presenter,
       },
@@ -67,9 +65,6 @@ describe('validateSecondaryContactAction', () => {
       },
     });
 
-    expect(result.state.validationErrors.contactSecondary).toEqual({
-      address1: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.address1,
-    });
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

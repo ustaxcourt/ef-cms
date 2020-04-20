@@ -1,20 +1,9 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
-import { CerebralTest } from 'cerebral/test';
-import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
-import { User } from '../../shared/src/business/entities/User';
-import { isFunction, mapValues } from 'lodash';
-import FormData from 'form-data';
-const {
-  ContactFactory,
-} = require('../../shared/src/business/entities/contacts/ContactFactory');
-import { Document } from '../../shared/src/business/entities/Document';
 import { adcMarksStipulatedWorkItemAsCompleted } from './journey/adcMarksStipulatedWorkItemAsCompleted';
 import { adcViewsCaseDetail } from './journey/adcViewsCaseDetail';
 import { adcViewsCaseDetailAfterComplete } from './journey/adcViewsCaseDetailAfterComplete';
 import { adcViewsDocumentDetail } from './journey/adcViewsDocumentDetail';
 import { adcViewsMessages } from './journey/adcViewsMessages';
 import { adcViewsMessagesAfterComplete } from './journey/adcViewsMessagesAfterComplete';
-import { applicationContext } from '../src/applicationContext';
 import { docketClerkAddsDocketEntries } from './journey/docketClerkAddsDocketEntries';
 import { docketClerkAssignWorkItems } from './journey/docketClerkAssignWorkItems';
 import { docketClerkDocketDashboard } from './journey/docketClerkDocketDashboard';
@@ -31,15 +20,13 @@ import { docketClerkViewsMessages } from './journey/docketClerkViewsMessages';
 import { docketClerkViewsMessagesAfterForward } from './journey/docketClerkViewsMessagesAfterForward';
 import { docketClerkViewsMessagesWithoutWorkItem } from './journey/docketClerkViewsMessagesWithoutWorkItem';
 import { docketClerkViewsOutboxAfterForward } from './journey/docketClerkViewsOutboxAfterForward';
-import { loginAs } from './helpers';
-import { presenter } from '../src/presenter/presenter';
-import { withAppContextDecorator } from '../src/withAppContext';
-import petitionerCancelsCreateCase from './journey/petitionerCancelsCreateCase';
-import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
-import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
-import petitionerCreatesNewCaseTestAllOptions from './journey/petitionerCreatesNewCaseTestAllOptions';
-import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
+import { fakeFile, loginAs, setupTest } from './helpers';
+import { petitionerCancelsCreateCase } from './journey/petitionerCancelsCreateCase';
+import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
+import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
+import { petitionerCreatesNewCaseTestAllOptions } from './journey/petitionerCreatesNewCaseTestAllOptions';
+import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
+import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import petitionsClerkAssignsWorkItemToOther from './journey/petitionsClerkAssignsWorkItemToOther';
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
@@ -53,64 +40,18 @@ import respondentAddsMotion from './journey/respondentAddsMotion';
 import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
 
-let test;
-global.FormData = FormData;
-global.Blob = () => {};
-presenter.providers.applicationContext = applicationContext;
-presenter.providers.router = {
-  createObjectURL: () => '/test-url',
-  externalRoute: () => {},
-  revokeObjectURL: () => {},
-  route: async url => {
-    if (url === `/case-detail/${test.docketNumber}`) {
-      await test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: test.docketNumber,
-      });
-    }
-
-    if (url === '/') {
-      await test.runSequence('gotoDashboardSequence');
-    }
-  },
-};
-
-presenter.state = mapValues(presenter.state, value => {
-  if (isFunction(value)) {
-    return withAppContextDecorator(value, applicationContext);
-  }
-  return value;
-});
-
-const fakeData =
-  'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
-
-const fakeFile = Buffer.from(fakeData, 'base64');
-fakeFile.name = 'fakeFile.pdf';
-
-test = CerebralTest(presenter);
+const test = setupTest();
 
 describe('Case journey', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
-      document: {},
+      ...global.window,
       localStorage: {
         removeItem: () => null,
         setItem: () => null,
       },
     };
-
-    test.setState('constants', {
-      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-      CATEGORIES: Document.CATEGORIES,
-      CATEGORY_MAP: Document.CATEGORY_MAP,
-      COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-      INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
-      PARTY_TYPES: ContactFactory.PARTY_TYPES,
-      STATUS_TYPES: Case.STATUS_TYPES,
-      TRIAL_CITIES: TrialSession.TRIAL_CITIES,
-      USER_ROLES: User.ROLES,
-    });
   });
 
   loginAs(test, 'petitioner');

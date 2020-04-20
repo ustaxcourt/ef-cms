@@ -1,11 +1,19 @@
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDocumentDetailPageTitleAction } from './setDocumentDetailPageTitleAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('setDocumentDetailPageTitleAction', () => {
+  beforeAll(() => {
+    global.window = {
+      document: {
+        title: '',
+      },
+    };
+
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('sets the page title with the docket number and document type from the case if the document is on the case', async () => {
     await runAction(setDocumentDetailPageTitleAction, {
       state: {
@@ -21,7 +29,7 @@ describe('setDocumentDetailPageTitleAction', () => {
         documentId: '321-cba-321-cba',
       },
     });
-    expect(window.document.title).toEqual(
+    expect(global.window.document.title).toEqual(
       'Docket 123-19 | Answer | U.S. Tax Court',
     );
   });
@@ -41,7 +49,7 @@ describe('setDocumentDetailPageTitleAction', () => {
         documentId: 'no',
       },
     });
-    expect(window.document.title).toEqual(
+    expect(global.window.document.title).toEqual(
       'Docket 123-19 | Document details | U.S. Tax Court',
     );
   });
@@ -55,7 +63,7 @@ describe('setDocumentDetailPageTitleAction', () => {
         documentId: '321-cba-321-cba',
       },
     });
-    expect(window.document.title).toEqual(
+    expect(global.window.document.title).toEqual(
       'Docket 123-19 | Document details | U.S. Tax Court',
     );
   });

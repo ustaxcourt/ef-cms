@@ -1,20 +1,23 @@
 import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setUserPermissionsAction } from './setUserPermissionsAction';
 
-const mockUser = { role: User.ROLES.docketClerk };
-
-presenter.providers.applicationContext = {
-  getCurrentUserPermissions: () => {
-    return getUserPermissions(mockUser);
-  },
-};
-
 describe('setUserPermissionsAction', () => {
+  const mockUser = { role: User.ROLES.docketClerk };
+
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('set state.permissions based on the user role', async () => {
+    applicationContext.getCurrentUserPermissions.mockReturnValue(
+      getUserPermissions(mockUser),
+    );
+
     const result = await runAction(setUserPermissionsAction, {
       modules: {
         presenter,
@@ -29,6 +32,8 @@ describe('setUserPermissionsAction', () => {
   });
 
   it('does not set state.permissions if permissions can not be computed', async () => {
+    applicationContext.getCurrentUserPermissions.mockReturnValue(undefined);
+
     presenter.providers.applicationContext.getCurrentUserPermissions = () => {
       return undefined;
     };

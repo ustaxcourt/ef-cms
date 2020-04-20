@@ -1,7 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -10,48 +9,33 @@ export const CaseSearchByName = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     advancedSearchHelper: state.advancedSearchHelper,
-    clearCaseSearchByNameFormSequence:
-      sequences.clearCaseSearchByNameFormSequence,
+    clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     constants: state.constants,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     usStates: state.constants.US_STATES,
+    validateCaseAdvancedSearchFormSequence:
+      sequences.validateCaseAdvancedSearchFormSequence,
     validationErrors: state.validationErrors,
   },
   function CaseSearchByName({
     advancedSearchForm,
     advancedSearchHelper,
-    clearCaseSearchByNameFormSequence,
+    clearAdvancedSearchFormSequence,
     constants,
     submitAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence,
     usStates,
+    validateCaseAdvancedSearchFormSequence,
     validationErrors,
   }) {
     return (
       <>
         <div className="header-with-blue-background display-flex flex-justify">
           <h3>Search by Name</h3>
-          <NonMobile>
-            <Button
-              link
-              className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-              icon={['fas', 'times-circle']}
-              onClick={() => {
-                clearCaseSearchByNameFormSequence();
-              }}
-            >
-              Clear Search
-            </Button>
-          </NonMobile>
         </div>
         <div className="blue-container advanced-search__form-container">
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              submitAdvancedSearchSequence();
-            }}
-          >
+          <form>
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-6">
                 <FormGroup errorText={validationErrors.petitionerName}>
@@ -66,6 +50,9 @@ export const CaseSearchByName = connect(
                     value={
                       advancedSearchForm.caseSearchByName.petitionerName || ''
                     }
+                    onBlur={() => {
+                      validateCaseAdvancedSearchFormSequence();
+                    }}
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
                         formType: 'caseSearchByName',
@@ -99,6 +86,9 @@ export const CaseSearchByName = connect(
                         value={
                           advancedSearchForm.caseSearchByName.yearFiledMin || ''
                         }
+                        onBlur={() => {
+                          validateCaseAdvancedSearchFormSequence();
+                        }}
                         onChange={e => {
                           updateAdvancedSearchFormValueSequence({
                             formType: 'caseSearchByName',
@@ -120,6 +110,9 @@ export const CaseSearchByName = connect(
                         value={
                           advancedSearchForm.caseSearchByName.yearFiledMax || ''
                         }
+                        onBlur={() => {
+                          validateCaseAdvancedSearchFormSequence();
+                        }}
                         onChange={e => {
                           updateAdvancedSearchFormValueSequence({
                             formType: 'caseSearchByName',
@@ -196,33 +189,31 @@ export const CaseSearchByName = connect(
             </div>
 
             <div className="grid-row">
-              <div className="tablet:grid-col-5">
+              <div className="tablet:grid-col-6">
                 <Button
                   className="advanced-search__button"
                   id="advanced-search-button"
-                  type="submit"
+                  onClick={e => {
+                    e.preventDefault();
+                    submitAdvancedSearchSequence();
+                  }}
                 >
                   Search
                 </Button>
+                <Button
+                  link
+                  className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                  onClick={e => {
+                    e.preventDefault();
+                    clearAdvancedSearchFormSequence({
+                      formType: 'caseSearchByName',
+                    });
+                  }}
+                >
+                  Clear Search
+                </Button>
               </div>
             </div>
-
-            <Mobile>
-              <div className="grid-row">
-                <div className="tablet:grid-col-5 text-center">
-                  <Button
-                    link
-                    className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-                    icon={['fas', 'times-circle']}
-                    onClick={() => {
-                      clearCaseSearchByNameFormSequence();
-                    }}
-                  >
-                    Clear Search
-                  </Button>
-                </div>
-              </div>
-            </Mobile>
           </form>
         </div>
       </>

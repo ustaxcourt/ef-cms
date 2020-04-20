@@ -1,13 +1,13 @@
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext.js';
 import { getShouldCopyPrimaryToSecondaryAddressAction } from './getShouldCopyPrimaryToSecondaryAddressAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getShouldCopyPrimaryToSecondaryAddressAction', () => {
   let yesMock;
   let noMock;
 
-  beforeEach(() => {
+  beforeAll(() => {
     yesMock = jest.fn();
     noMock = jest.fn();
 

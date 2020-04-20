@@ -40,12 +40,9 @@ export default test => {
 
     await test.runSequence('submitCourtIssuedOrderSequence');
 
-    //TODO - fix this when cerebral runSequence starts properly awaiting things
-    await wait(1000);
-
+    expect(test.getState('currentPage')).toEqual('DocumentDetail');
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
-    expect(test.getState('form.primaryDocumentFile')).toBeDefined();
 
     //skip signing and go back to caseDetail
     await test.runSequence('gotoCaseDetailSequence', {
@@ -63,10 +60,6 @@ export default test => {
       ? first(draftDocuments).documentId
       : undefined;
 
-    expect(test.currentRouteUrl).toEqual(
-      `/case-detail/${test.getState('caseDetail.caseId')}/documents/${
-        test.documentId
-      }`,
-    );
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
   });
 };

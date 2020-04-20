@@ -16,7 +16,6 @@ export const updateUserContactInformationAction = async ({
 }) => {
   const formUser = get(state.form);
   const currentUser = applicationContext.getCurrentUser();
-
   try {
     await applicationContext
       .getUseCases()

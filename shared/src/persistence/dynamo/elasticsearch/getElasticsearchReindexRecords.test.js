@@ -1,26 +1,17 @@
 const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+const {
   getElasticsearchReindexRecords,
 } = require('./getElasticsearchReindexRecords');
 
 describe('getElasticsearchReindexRecords', () => {
-  let applicationContext;
-  let queryStub;
-
-  beforeEach(() => {
-    queryStub = jest.fn().mockReturnValue({
+  beforeAll(() => {
+    applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => ({
         Items: [{ caseId: '123', pk: 'case-123', sk: 'abc' }],
       }),
     });
-
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        query: queryStub,
-      }),
-    };
   });
 
   it('returns the reindex records from persistence', async () => {
@@ -28,7 +19,9 @@ describe('getElasticsearchReindexRecords', () => {
       applicationContext,
     });
 
-    expect(queryStub.mock.calls[0][0]).toMatchObject({
+    expect(
+      applicationContext.getDocumentClient().query.mock.calls[0][0],
+    ).toMatchObject({
       ExpressionAttributeNames: {
         '#pk': 'pk',
       },

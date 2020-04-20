@@ -1,43 +1,30 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateUserContactInformationAction } from './updateUserContactInformationAction';
 
-const noChangeMock = jest.fn();
-const successMock = jest.fn();
-
-presenter.providers.path = {
-  noChange: noChangeMock,
-  success: successMock,
-};
-const updateUserMock = jest
-  .fn()
-  .mockImplementationOnce(() => {
-    return Promise.reject(new Error('other kind of failure'));
-  })
-  .mockImplementationOnce(() => {
-    const err = new Error('update failed');
-    err.originalError = {
-      response: {
-        data: 'there were no changes found needing to be updated',
-      },
-    };
-    return Promise.reject(err);
-  })
-
-  .mockImplementation(() => true);
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    updateUserContactInformationInteractor: updateUserMock,
-  }),
-};
-
 describe('updateUserContactInformationAction', () => {
+  let noChangeMock;
+  let successMock;
+
+  beforeAll(() => {
+    noChangeMock = jest.fn();
+    successMock = jest.fn();
+
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.path = {
+      noChange: noChangeMock,
+      success: successMock,
+    };
+  });
+
   it('should gracefully handle other failures', async () => {
-    presenter.providers.applicationContext.getCurrentUser = () => ({
-      contact: {},
-      userId: '123',
-    });
+    applicationContext
+      .getUseCases()
+      .updateUserContactInformationInteractor.mockImplementation(() => {
+        return Promise.reject(new Error('other kind of failure'));
+      });
+
     let result, error;
     try {
       result = await runAction(updateUserContactInformationAction, {
@@ -53,11 +40,21 @@ describe('updateUserContactInformationAction', () => {
     expect(result).not.toBeDefined();
     expect(noChangeMock).not.toHaveBeenCalled();
   });
+
   it('should gracefully handle "no change found" failures', async () => {
-    presenter.providers.applicationContext.getCurrentUser = () => ({
-      contact: {},
-      userId: '123',
-    });
+    const err = new Error('update failed');
+    err.originalError = {
+      response: {
+        data: 'there were no changes found needing to be updated',
+      },
+    };
+
+    applicationContext
+      .getUseCases()
+      .updateUserContactInformationInteractor.mockImplementation(() => {
+        return Promise.reject(err);
+      });
+
     await runAction(updateUserContactInformationAction, {
       modules: {
         presenter,
@@ -66,18 +63,21 @@ describe('updateUserContactInformationAction', () => {
     });
     expect(noChangeMock).toHaveBeenCalled();
   });
+
   it('should update the user and provide an alertSuccess message', async () => {
-    presenter.providers.applicationContext.getCurrentUser = () => ({
-      contact: {},
-      userId: '123',
-    });
+    applicationContext
+      .getUseCases()
+      .updateUserContactInformationInteractor.mockResolvedValue(true);
+
     await runAction(updateUserContactInformationAction, {
       modules: {
         presenter,
       },
       state: { form: { contact: {} } },
     });
-    expect(updateUserMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().updateUserContactInformationInteractor,
+    ).toHaveBeenCalled();
     expect(successMock).toBeCalled();
   });
 });

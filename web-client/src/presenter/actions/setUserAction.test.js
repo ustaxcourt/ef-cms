@@ -1,20 +1,13 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setUserAction } from './setUserAction';
 
-const setCurrentUserStub = jest.fn().mockReturnValue(null);
-const setItemInteractorStub = jest.fn();
-
 describe('setUserAction', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     process.env.USTC_ENV = 'dev';
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        setItemInteractor: setItemInteractorStub,
-      }),
-      setCurrentUser: setCurrentUserStub,
-    };
+    presenter.providers.applicationContext = applicationContext;
   });
 
   afterEach(() => {
@@ -35,10 +28,16 @@ describe('setUserAction', () => {
       },
       state: {},
     });
-    expect(setCurrentUserStub.mock.calls.length).toEqual(1);
-    expect(setCurrentUserStub.mock.calls[0][0]).toMatchObject(user);
-    expect(setItemInteractorStub.mock.calls.length).toEqual(1);
-    expect(setItemInteractorStub.mock.calls[0][0]).toMatchObject({
+    expect(applicationContext.setCurrentUser.mock.calls.length).toEqual(1);
+    expect(applicationContext.setCurrentUser.mock.calls[0][0]).toMatchObject(
+      user,
+    );
+    expect(
+      applicationContext.getUseCases().setItemInteractor.mock.calls.length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases().setItemInteractor.mock.calls[0][0],
+    ).toMatchObject({
       key: 'user',
       value: user,
     });

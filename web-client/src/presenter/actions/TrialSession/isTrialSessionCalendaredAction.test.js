@@ -1,12 +1,12 @@
 import { isTrialSessionCalendaredAction } from './isTrialSessionCalendaredAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('isTrialSessionCalendaredAction', () => {
   let pathYesStub;
   let pathNoStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     pathYesStub = jest.fn();
     pathNoStub = jest.fn();
 

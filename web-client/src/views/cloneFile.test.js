@@ -1,3 +1,4 @@
+import { JSDOM } from 'jsdom';
 import { cloneFile } from './cloneFile';
 
 describe('cloneFile', () => {
@@ -9,10 +10,19 @@ describe('cloneFile', () => {
   });
 
   beforeEach(() => {
+    const dom = new JSDOM(`<!DOCTYPE html>
+<body>
+  <input type="file" />
+</body>`);
+
+    const { window } = dom;
+    const { File, FileReader } = window;
+
+    global.File = File;
+    global.FileReader = FileReader;
     jest.clearAllMocks();
 
-    const FileReader = jest.spyOn(global, 'FileReader');
-    FileReader.mockImplementation(() => ({
+    jest.spyOn(global, 'FileReader').mockImplementation(() => ({
       addEventListener: addEventListenerSpy,
       readAsArrayBuffer: readAsArrayBufferSpy,
     }));

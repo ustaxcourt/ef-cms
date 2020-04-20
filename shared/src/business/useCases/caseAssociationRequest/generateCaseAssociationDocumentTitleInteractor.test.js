@@ -1,20 +1,12 @@
 const {
-  CaseAssociationRequestFactory,
-} = require('../../entities/CaseAssociationRequestFactory');
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const {
   generateCaseAssociationDocumentTitleInteractor,
 } = require('./generateCaseAssociationDocumentTitleInteractor');
 
 describe('generateCaseAssociationDocumentTitle', () => {
-  let applicationContext;
-
   it('generates a document title', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getEntityConstructors: () => ({
-        CaseAssociationRequestFactory,
-      }),
-    };
     const title = await generateCaseAssociationDocumentTitleInteractor({
       applicationContext,
       caseAssociationRequest: {
@@ -25,6 +17,7 @@ describe('generateCaseAssociationDocumentTitle', () => {
       contactPrimaryName: 'Test Petitioner',
       contactSecondaryName: 'Another Petitioner',
     });
+
     expect(title).toEqual('Substitution of Counsel for Petr. Test Petitioner');
   });
 });

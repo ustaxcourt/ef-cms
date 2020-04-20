@@ -85,7 +85,6 @@ module "ui-public-certificate" {
 }
 
 resource "aws_cloudfront_distribution" "public_distribution" {
-
   origin_group {
     origin_id = "group-public-${var.environment}.${var.dns_domain}"
 
