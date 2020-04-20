@@ -31,7 +31,7 @@
     "chrome-aws-lambda": "^2.1.1",
     "classnames": "^2.2.6",
     "core-js": "^3.6.5",
-    "csv-parse": "^4.8.8",
+    "csv-parse": "^4.8.9",
     "cypress": "^4.4.0",
     "deep-freeze": "0.0.1",
     "diff-arrays-of-objects": "^1.1.5",
