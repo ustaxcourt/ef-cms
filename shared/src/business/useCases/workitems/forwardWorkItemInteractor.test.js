@@ -151,7 +151,7 @@ describe('forwardWorkItemInteractor', () => {
     expect(workItem).toMatchObject({
       assigneeId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
       assigneeName: 'Docketclerk',
-      caseCaptionNames: undefined,
+      caseTitle: undefined,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseStatus: undefined,
       completedAt: undefined,

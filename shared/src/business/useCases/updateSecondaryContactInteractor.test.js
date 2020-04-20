@@ -67,7 +67,7 @@ describe('update secondary contact on a case', () => {
 
     applicationContext = {
       environment: { stage: 'local' },
-      getCaseCaptionNames: Case.getCaseCaptionNames,
+      getCaseTitle: Case.getCaseTitle,
       getChromiumBrowser: () => ({
         close: () => null,
         newPage: () => ({

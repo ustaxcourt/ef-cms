@@ -110,7 +110,7 @@ describe('updateCase', () => {
       applicationContext.getDocumentClient().update.mock.calls[1][0],
     ).toMatchObject({
       ExpressionAttributeValues: {
-        ':caseCaptionNames': 'New caption',
+        ':caseTitle': 'New caption',
       },
     });
     expect(

@@ -69,7 +69,7 @@ export const petitionsClerkEditsAnExistingCaseAndServesCase = test => {
       .find(x => x.docketNumber === test.docketNumber);
 
     expect(servedCase).toMatchObject({
-      caseCaptionNames: 'Mona Schultz',
+      caseTitle: 'Mona Schultz',
     });
     expect(servedCase.caseStatus).toEqual(Case.STATUS_TYPES.generalDocket);
   });
@@ -95,7 +95,7 @@ export const petitionsClerkEditsAnExistingCaseAndServesCase = test => {
       .find(x => x.docketNumber === test.docketNumber);
 
     expect(sectionServedCase).toMatchObject({
-      caseCaptionNames: 'Mona Schultz',
+      caseTitle: 'Mona Schultz',
     });
     expect(sectionServedCase.caseStatus).toEqual(
       Case.STATUS_TYPES.generalDocket,

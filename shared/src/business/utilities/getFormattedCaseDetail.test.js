@@ -272,7 +272,7 @@ describe('formatCase', () => {
       result.irsDateFormatted,
     );
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
-    expect(result.caseName).toEqual('Test Case Caption');
+    expect(result.caseTitle).toEqual('Test Case Caption');
     expect(result.formattedPreferredTrialCity).toEqual('No location selected');
   });
 

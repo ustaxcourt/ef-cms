@@ -732,7 +732,7 @@ describe('formattedCaseDetail', () => {
           validationErrors: {},
         },
       });
-      expect(result.caseName).toEqual('');
+      expect(result.caseTitle).toEqual('');
     });
 
     it("should remove ', Petitioner' from caseCaption", () => {
@@ -747,7 +747,7 @@ describe('formattedCaseDetail', () => {
           validationErrors: {},
         },
       });
-      expect(result.caseName).toEqual('Sisqo');
+      expect(result.caseTitle).toEqual('Sisqo');
     });
 
     it("should remove ', Petitioners' from caseCaption", () => {
@@ -762,7 +762,7 @@ describe('formattedCaseDetail', () => {
           validationErrors: {},
         },
       });
-      expect(result.caseName).toEqual('Sisqo and friends');
+      expect(result.caseTitle).toEqual('Sisqo and friends');
     });
 
     it("should remove ', Petitioner(s)' from caseCaption", () => {
@@ -777,7 +777,7 @@ describe('formattedCaseDetail', () => {
           validationErrors: {},
         },
       });
-      expect(result.caseName).toEqual("Sisqo's entourage,");
+      expect(result.caseTitle).toEqual("Sisqo's entourage,");
     });
   });
 

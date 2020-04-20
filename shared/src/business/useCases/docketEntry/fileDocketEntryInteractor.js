@@ -117,12 +117,10 @@ exports.fileDocketEntryInteractor = async ({
           assigneeId: null,
           assigneeName: null,
           associatedJudge: caseToUpdate.associatedJudge,
-          caseCaptionNames: Case.getCaseCaptionNames(
-            Case.getCaseCaption(caseEntity),
-          ),
           caseId: caseId,
           caseIsInProgress: caseEntity.inProgress,
           caseStatus: caseToUpdate.status,
+          caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
           docketNumber: caseToUpdate.docketNumber,
           docketNumberSuffix: caseToUpdate.docketNumberSuffix,
           document: {
