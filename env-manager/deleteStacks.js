@@ -1,7 +1,9 @@
+const { getCloudFormation } = require('./getCloudFormation');
 const { getStacks } = require('./getStacks');
 const { sleep } = require('./sleep');
 
-exports.deleteStacks = async ({ cloudFormation, environment }) => {
+exports.deleteStacks = async ({ environment }) => {
+  const cloudFormation = getCloudFormation({ environment });
   const stacks = await getStacks({
     cloudFormation,
     environment,
@@ -9,7 +11,7 @@ exports.deleteStacks = async ({ cloudFormation, environment }) => {
   for (const stack of stacks) {
     console.log('Delete ', stack.StackName);
     await cloudFormation.deleteStack({ StackName: stack.StackName }).promise();
-    await sleep(3000);
+    await sleep(5000);
   }
 
   let resourceCount = stacks.length;
