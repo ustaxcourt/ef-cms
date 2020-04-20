@@ -1,5 +1,5 @@
+const { Document } = require('../../entities/Document');
 const { map } = require('lodash');
-const { Order } = require('../../entities/orders/Order');
 
 /**
  * orderPublicSearchInteractor
@@ -18,7 +18,8 @@ exports.orderPublicSearchInteractor = async ({
   orderKeyword,
   startDate,
 }) => {
-  const orderEventCodes = map(Order.ORDER_TYPES, 'eventCode');
+  const orderEventCodes = map(Document.ORDER_DOCUMENT_TYPES, 'eventCode');
+
   return await applicationContext.getPersistenceGateway().orderKeywordSearch({
     applicationContext,
     caseTitleOrPetitioner,
