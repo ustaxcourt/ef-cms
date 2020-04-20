@@ -16,13 +16,12 @@ export const validatePrimaryContactAction = ({
   path,
   store,
 }) => {
-  const contactInfo = get(state.caseDetail.contactPrimary);
-  const partyType = get(state.caseDetail.partyType);
+  const { contactPrimary, partyType } = get(state.form);
 
   const errors = applicationContext
     .getUseCases()
     .validatePrimaryContactInteractor({
-      contactInfo,
+      contactInfo: contactPrimary,
       partyType,
     });
 

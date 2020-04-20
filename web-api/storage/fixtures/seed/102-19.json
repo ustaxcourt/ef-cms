@@ -13,66 +13,6 @@
       "state": "CO",
       "countryType": "international"
     },
-    "documents": [
-      {
-        "processingStatus": "complete",
-        "createdAt": "2019-03-01T21:42:29.073Z",
-        "filingDate": "2019-03-01T21:42:29.073Z",
-        "documentType": "Petition",
-        "filedBy": "Test Petitioner",
-        "workItems": [
-          {
-            "docketNumberSuffix": "P",
-            "caseStatus": "New",
-            "caseIsInProgress": false,
-            "document": {
-              "createdAt": "2019-03-01T21:42:29.073Z",
-              "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
-              "documentType": "Petition",
-              "documentTitle": "Petition",
-              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-              "filedBy": "Test Petitioner",
-              "workItems": []
-            },
-            "section": "petitions",
-            "workItemId": "4df3fa30-a1ad-45e1-ae1e-05256c538e72",
-            "isQC": true,
-            "isInitializeCase": true,
-            "assigneeId": null,
-            "sentBy": "petitioner",
-            "createdAt": "2019-03-01T21:42:29.073Z",
-            "assigneeName": null,
-            "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
-            "caseTitle": "Selma Horn & Cairo Harris",
-            "messages": [
-              {
-                "createdAt": "2019-03-01T21:42:29.073Z",
-                "messageId": "c0302b4c-ad47-4527-ae43-114805333157",
-                "message": "Petition filed by Selma Horn & Cairo Harris is ready for review.",
-                "from": "Test Petitioner",
-                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-              }
-            ],
-            "docketNumber": "102-19",
-            "updatedAt": "2019-03-01T21:42:29.073Z"
-          }
-        ],
-        "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
-        "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      },
-      {
-        "processingStatus": "complete",
-        "createdAt": "2019-03-05T17:34:13.491Z",
-        "filingDate": "2019-03-05T17:34:13.491Z",
-        "documentType": "Statement of Taxpayer Identification",
-        "filedBy": "Test Petitioner",
-        "workItems": [],
-        "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
-      }
-    ],
     "irsNoticeDate": "1983-03-02T00:00:00.000Z",
     "partyType": "Petitioner & spouse",
     "isSpouseDeceased": "No",
@@ -94,7 +34,7 @@
     "createdAt": "2019-03-01T21:42:29.073Z",
     "receivedAt": "2019-03-01T21:42:29.073Z",
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
-    "sk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "sk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
     "filingType": "Myself and my spouse",
     "hasIrsNotice": true,
     "petitioners": [
@@ -114,7 +54,7 @@
     "initialTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "preferredTrialCity": "Boise, Idaho",
-    "pk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
     "docketNumber": "102-19",
     "status": "New",
     "hasVerifiedIrsNotice": true,
@@ -140,12 +80,12 @@
     "sk": "docket-record|654441a9-e6d3-414e-b0dd-60b2898c298e"
   },
   {
-    "sk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
-    "pk": "102-19|case"
+    "sk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "pk": "case-by-docket-number|102-19"
   },
   {
-    "sk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "docketNumberSuffix": "P",
@@ -169,7 +109,7 @@
     "createdAt": "2019-03-01T21:42:29.073Z",
     "assigneeName": null,
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
-    "sk": "4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "sk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
     "caseTitle": "Selma Horn & Cairo Harris",
     "messages": [
       {
@@ -180,13 +120,13 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "pk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
     "docketNumber": "102-19",
     "updatedAt": "2019-03-01T21:42:29.073Z"
   },
   {
-    "sk": "workitem-4df3fa30-a1ad-45e1-ae1e-05256c538e72",
-    "pk": "section-petitions",
+    "sk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "pk": "section|petitions",
     "docketNumberSuffix": "P",
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -209,7 +149,7 @@
     "createdAt": "2019-03-01T21:42:29.073Z",
     "assigneeName": null,
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
-    "gsi1pk": "workitem-4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "gsi1pk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
     "caseTitle": "Selma Horn & Cairo Harris",
     "messages": [
       {
@@ -224,9 +164,9 @@
     "updatedAt": "2019-03-01T21:42:29.073Z"
   },
   {
-    "sk": "workitem-4df3fa30-a1ad-45e1-ae1e-05256c538e72",
-    "pk": "workitem-4df3fa30-a1ad-45e1-ae1e-05256c538e72",
-    "gsi1pk": "workitem-4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "sk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "pk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "gsi1pk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
     "docketNumberSuffix": "P",
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -262,8 +202,74 @@
     "updatedAt": "2019-03-01T21:42:29.073Z"
   },
   {
-    "sk": "case-fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "sk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "pk": "catalog"
+  },
+  {
+    "documentType": "Petition",
+    "filingDate": "2019-03-01T21:42:29.073Z",
+    "workItems": [
+      {
+        "associatedJudge": "Chief Judge",
+        "docketNumberSuffix": "P",
+        "caseStatus": "New",
+        "caseIsInProgress": false,
+        "document": {
+          "createdAt": "2019-03-01T21:42:29.073Z",
+          "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
+          "documentTitle": "Petition",
+          "documentType": "Petition",
+          "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+          "filedBy": "Test Petitioner"
+        },
+        "caseTitle": "Selma Horn & Cairo Harris",
+        "section": "petitions",
+        "workItemId": "4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+        "isInitializeCase": true,
+        "assigneeId": null,
+        "isQC": true,
+        "sentBy": "petitioner",
+        "createdAt": "2019-03-01T21:42:29.073Z",
+        "assigneeName": null,
+        "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+        "messages": [
+          {
+            "createdAt": "2019-03-01T21:42:29.073Z",
+            "messageId": "c0302b4c-ad47-4527-ae43-114805333157",
+            "from": "Test Petitioner",
+            "message": "Petition filed by Selma Horn & Cairo Harris is ready for review.",
+            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+          }
+        ],
+        "docketNumber": "102-19",
+        "updatedAt": "2019-03-01T21:42:29.073Z"
+      }
+    ],
+    "pending": false,
+    "receivedAt": "2020-03-06T20:04:07.432Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-03-01T21:42:29.073Z",
+    "processingStatus": "complete",
+    "filedBy": "Test Petitioner",
+    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "sk": "document|89c781f6-71ba-4ead-93d8-c681c2183a73",
+    "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
+    "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6"
+  },
+  {
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2019-03-05T17:34:13.491Z",
+    "workItems": [],
+    "pending": false,
+    "receivedAt": "2020-03-06T20:04:07.432Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-03-05T17:34:13.491Z",
+    "processingStatus": "complete",
+    "filedBy": "Test Petitioner",
+    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
+    "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
+    "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6"
   }
 ]

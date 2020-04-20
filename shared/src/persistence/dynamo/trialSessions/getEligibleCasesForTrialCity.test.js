@@ -1,12 +1,14 @@
 const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const {
   getEligibleCasesForTrialCity,
 } = require('./getEligibleCasesForTrialCity');
 
 describe('getEligibleCasesForTrialCity', () => {
   beforeEach(() => {
-    sinon.stub(client, 'query').resolves([
+    client.query = jest.fn().mockReturnValue([
       {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         pk: 'eligible-for-trial-case-catalog',
@@ -16,16 +18,7 @@ describe('getEligibleCasesForTrialCity', () => {
     ]);
   });
 
-  afterEach(() => {
-    client.query.restore();
-  });
-
   it('should get the cases for a trial city', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-    };
     const result = await getEligibleCasesForTrialCity({
       applicationContext,
       procedureType: 'Regular',

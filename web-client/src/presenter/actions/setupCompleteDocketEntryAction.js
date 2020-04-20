@@ -10,6 +10,9 @@ import { state } from 'cerebral';
 export const setupCompleteDocketEntryAction = ({ store }) => {
   store.set(state.isEditingDocketEntry, true);
   store.set(state.wizardStep, 'PrimaryDocumentForm');
-  store.set(state.documentUploadMode, 'scan');
-  store.set(state.documentSelectedForScan, 'primaryDocumentFile');
+  store.set(state.currentViewMetadata.documentUploadMode, 'scan');
+  store.set(
+    state.currentViewMetadata.documentSelectedForScan,
+    'primaryDocumentFile',
+  );
 };

@@ -38,7 +38,7 @@
       searchClientCache.indices.create({
         body: {
           settings: {
-            'index.mapping.total_fields.limit': '2500',
+            'index.mapping.total_fields.limit': '4000',
           },
         },
         index: 'efcms',
@@ -46,7 +46,7 @@
     } else {
       searchClientCache.indices.putSettings({
         body: {
-          'index.mapping.total_fields.limit': '2500',
+          'index.mapping.total_fields.limit': '4000',
         },
         index: 'efcms',
       });

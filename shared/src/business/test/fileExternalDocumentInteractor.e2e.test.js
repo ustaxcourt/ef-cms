@@ -1,44 +1,27 @@
-const sinon = require('sinon');
-const {
-  createTestApplicationContext,
-} = require('./createTestApplicationContext');
 const {
   fileExternalDocumentInteractor,
 } = require('../useCases/externalDocument/fileExternalDocumentInteractor');
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
-const {
-  updateCaseAutomaticBlock,
-} = require('../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 
-const CREATED_DATE = '2019-03-01T22:54:06.000Z';
-
 describe('fileExternalDocumentInteractor integration test', () => {
-  let applicationContext;
+  const CREATED_DATE = '2019-03-01T22:54:06.000Z';
 
-  beforeEach(() => {
-    sinon.stub(window.Date.prototype, 'toISOString').returns(CREATED_DATE);
-    applicationContext = createTestApplicationContext({
-      user: {
-        name: 'Test Petitioner',
-        role: User.ROLES.petitioner,
-        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    });
-    applicationContext.getUseCaseHelpers = () => ({
-      sendServedPartiesEmails: jest.fn(),
-      updateCaseAutomaticBlock,
-    });
-  });
+  beforeAll(() => {
+    window.Date.prototype.toISOString = jest.fn().mockReturnValue(CREATED_DATE);
 
-  afterEach(() => {
-    window.Date.prototype.toISOString.restore();
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Test Petitioner',
+      role: User.ROLES.petitioner,
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    });
   });
 
   it('should attach the expected documents to the case', async () => {
@@ -428,20 +411,20 @@ describe('fileExternalDocumentInteractor integration test', () => {
       orderForRatification: false,
       orderToShowCause: false,
       partyType: ContactFactory.PARTY_TYPES.petitioner,
-      practitioners: [],
       preferredTrialCity: 'Aberdeen, South Dakota',
+      privatePractitioners: [],
       procedureType: 'Small',
       status: Case.STATUS_TYPES.new,
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    applicationContext.getCurrentUser = () => {
-      return new User({
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
         name: 'Test Docketclerk',
         role: User.ROLES.docketClerk,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      });
-    };
+      }),
+    );
 
     const workItems = await getDocumentQCInboxForSectionInteractor({
       applicationContext,

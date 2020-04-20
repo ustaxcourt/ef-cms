@@ -17,7 +17,7 @@ exports.getSentMessagesForUser = async ({ applicationContext, userId }) => {
     },
     ExpressionAttributeValues: {
       ':afterDate': afterDate,
-      ':pk': `user-outbox-${userId}`,
+      ':pk': `user-outbox|${userId}`,
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,

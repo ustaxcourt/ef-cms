@@ -1,26 +1,19 @@
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { assignPetitionToAuthenticatedUserAction } from './assignPetitionToAuthenticatedUserAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
-
-const assignWorkItemsInteractorStub = jest.fn();
-
-presenter.providers.applicationContext = {
-  ...applicationContext,
-  getCurrentUser: () => ({
-    name: 'Some One',
-    userId: 'abc',
-  }),
-  getUseCases: () => ({
-    assignWorkItemsInteractor: assignWorkItemsInteractorStub,
-  }),
-};
-
 describe('assignPetitionToAuthenticatedUserAction', () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
+  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
+  const { assignWorkItemsInteractor } = applicationContext.getUseCases();
+
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Some One',
+      userId: 'abc',
+    });
   });
 
   it('should not assign the workitem if the qc work item is not present', async () => {
@@ -30,7 +23,7 @@ describe('assignPetitionToAuthenticatedUserAction', () => {
       },
     });
 
-    expect(assignWorkItemsInteractorStub).not.toHaveBeenCalled();
+    expect(assignWorkItemsInteractor).not.toHaveBeenCalled();
   });
 
   it('should assign the workitem if the qc work item is present', async () => {
@@ -50,6 +43,6 @@ describe('assignPetitionToAuthenticatedUserAction', () => {
       },
     });
 
-    expect(assignWorkItemsInteractorStub).toHaveBeenCalled();
+    expect(assignWorkItemsInteractor).toHaveBeenCalled();
   });
 });

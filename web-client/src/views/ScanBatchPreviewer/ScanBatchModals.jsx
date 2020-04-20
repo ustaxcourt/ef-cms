@@ -3,7 +3,7 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const EmptyHopperModal = connect({}, () => {
+export const EmptyHopperModal = connect({}, function EmptyHopperModal() {
   return (
     <ConfirmModal
       cancelLabel="Cancel"
@@ -18,25 +18,27 @@ export const EmptyHopperModal = connect({}, () => {
 });
 
 export const ConfirmRescanBatchModal = connect(
-  { batchIndex: state.batchIndexToRescan },
-  ({ batchIndex }) => (
-    <ConfirmModal
-      cancelLabel="No, Cancel"
-      confirmLabel="Yes, Rescan"
-      title={`Rescan Batch ${batchIndex + 1}`}
-      onCancelSequence="clearModalSequence"
-      onConfirmSequence="rescanBatchSequence"
-    >
-      Are you sure you want to rescan batch {batchIndex + 1}?
-    </ConfirmModal>
-  ),
+  { batchIndex: state.scanner.batchIndexToRescan },
+  function ConfirmRescanBatchModal({ batchIndex }) {
+    return (
+      <ConfirmModal
+        cancelLabel="No, Cancel"
+        confirmLabel="Yes, Rescan"
+        title={`Rescan Batch ${batchIndex + 1}`}
+        onCancelSequence="clearModalSequence"
+        onConfirmSequence="rescanBatchSequence"
+      >
+        Are you sure you want to rescan batch {batchIndex + 1}?
+      </ConfirmModal>
+    );
+  },
 );
 export const DeleteBatchModal = connect(
   {
-    batchIndex: state.batchIndexToDelete,
-    pageCount: state.batchToDeletePageCount,
+    batchIndex: state.scanner.batchIndexToDelete,
+    pageCount: state.scanner.batchToDeletePageCount,
   },
-  ({ batchIndex, pageCount }) => {
+  function DeleteBatchModal({ batchIndex, pageCount }) {
     return (
       <ConfirmModal
         cancelLabel="No, Cancel"
@@ -51,7 +53,7 @@ export const DeleteBatchModal = connect(
     );
   },
 );
-export const DeletePDFModal = connect({}, () => {
+export const DeletePDFModal = connect({}, function DeletePDFModal() {
   return (
     <ConfirmModal
       cancelLabel="No, Cancel"
@@ -64,7 +66,7 @@ export const DeletePDFModal = connect({}, () => {
     </ConfirmModal>
   );
 });
-export const ScanErrorModal = connect({}, () => {
+export const ScanErrorModal = connect({}, function ScanErrorModal() {
   return (
     <ConfirmModal
       noCancel
@@ -77,15 +79,20 @@ export const ScanErrorModal = connect({}, () => {
     </ConfirmModal>
   );
 });
-export const UnfinishedScansModal = connect({}, () => (
-  <ConfirmModal
-    noCancel
-    confirmLabel="OK"
-    title="You have unfinished scans"
-    onCancelSequence="clearModalSequence"
-    onConfirmSequence="clearModalSequence"
-  >
-    Please ensure your scans are completed and all PDFs have been created before
-    continuing.
-  </ConfirmModal>
-));
+export const UnfinishedScansModal = connect(
+  {},
+  function UnfinishedScansModal() {
+    return (
+      <ConfirmModal
+        noCancel
+        confirmLabel="OK"
+        title="You have unfinished scans"
+        onCancelSequence="clearModalSequence"
+        onConfirmSequence="clearModalSequence"
+      >
+        Please ensure your scans are completed and all PDFs have been created
+        before continuing.
+      </ConfirmModal>
+    );
+  },
+);

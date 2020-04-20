@@ -42,9 +42,7 @@ describe('DocketEntryFactory', () => {
     });
 
     it('should not allow received date be in the future', () => {
-      rawEntity.dateReceived = moment()
-        .add(1, 'days')
-        .format();
+      rawEntity.dateReceived = moment().add(1, 'days').format();
       expect(errors().dateReceived).toEqual(
         VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
       );
@@ -74,7 +72,7 @@ describe('DocketEntryFactory', () => {
       });
     });
 
-    it('should require one of [partyPrimary, partySecondary, partyRespondent] to be selected', () => {
+    it('should require one of [partyPrimary, partySecondary, partyIrsPractitioner] to be selected', () => {
       expect(errors().partyPrimary).toEqual(
         VALIDATION_ERROR_MESSAGES.partyPrimary,
       );
@@ -113,9 +111,7 @@ describe('DocketEntryFactory', () => {
         });
 
         it('should not allow certificate of service date be in the future', () => {
-          rawEntity.certificateOfServiceDate = moment()
-            .add(1, 'days')
-            .format();
+          rawEntity.certificateOfServiceDate = moment().add(1, 'days').format();
           expect(errors().certificateOfServiceDate).toEqual(
             VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
           );

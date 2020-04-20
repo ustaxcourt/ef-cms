@@ -7,10 +7,10 @@ import usFlag from '../../../node_modules/uswds/dist/img/us_flag_small.png';
 
 export const UsaBanner = connect(
   {
-    showDetails: state.usaBanner.showDetails,
+    showUsaBannerDetails: state.header.showUsaBannerDetails,
     toggleUsaBannerDetailsSequence: sequences.toggleUsaBannerDetailsSequence,
   },
-  ({ showDetails, toggleUsaBannerDetailsSequence }) => {
+  function UsaBanner({ showUsaBannerDetails, toggleUsaBannerDetailsSequence }) {
     return (
       <section className="site-banner usa-banner">
         <div className="usa-accordion">
@@ -34,7 +34,7 @@ export const UsaBanner = connect(
               </div>
               <button
                 aria-controls="gov-banner"
-                aria-expanded={showDetails}
+                aria-expanded={showUsaBannerDetails}
                 className="usa-accordion__button usa-banner__button"
                 onClick={() => toggleUsaBannerDetailsSequence()}
               >
@@ -44,7 +44,7 @@ export const UsaBanner = connect(
               </button>
             </div>
           </header>
-          {showDetails && (
+          {showUsaBannerDetails && (
             <div
               aria-hidden="false"
               className="usa-banner__content grid-container usa-accordion__content"

@@ -1,9 +1,8 @@
 import { navigateToStartCaseWizardNextStepAction } from './navigateToStartCaseWizardNextStepAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
-const routeStub = sinon.stub();
+const routeStub = jest.fn();
 
 presenter.providers.router = {
   route: routeStub,
@@ -21,7 +20,7 @@ describe('navigateToStartCaseWizardNextStepAction', () => {
     });
 
     expect(result.state.wizardStep).toEqual('StartCaseStep2');
-    expect(routeStub.calledOnce).toEqual(true);
-    expect(routeStub.getCall(0).args[0]).toEqual('/file-a-petition/step-2');
+    expect(routeStub.mock.calls.length).toEqual(1);
+    expect(routeStub.mock.calls[0][0]).toEqual('/file-a-petition/step-2');
   });
 });

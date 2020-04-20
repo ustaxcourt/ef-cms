@@ -19,12 +19,11 @@ export const SignStipDecision = connect(
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
     pdfSignerHelper: state.pdfSignerHelper,
-    saveDocumentSigningSequence: sequences.saveDocumentSigningSequence,
     setSignatureData: sequences.setPDFSignatureDataSequence,
     signatureApplied: state.pdfForSigning.signatureApplied,
     signatureData: state.pdfForSigning.signatureData,
   },
-  ({
+  function SignStipDecision({
     completeDocumentSigningSequence,
     currentPageNumber,
     docketNumber,
@@ -38,7 +37,7 @@ export const SignStipDecision = connect(
     setSignatureData,
     signatureApplied,
     signatureData,
-  }) => {
+  }) {
     const canvasRef = useRef(null);
     const signatureRef = useRef(null);
 

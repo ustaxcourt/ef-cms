@@ -1,36 +1,29 @@
-const sinon = require('sinon');
 const {
   updateCaseTrialSortTagsInteractor,
 } = require('./updateCaseTrialSortTagsInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
 const { User } = require('../entities/User');
 
 describe('Update case trial sort tags', () => {
-  let applicationContext;
   let mockCase;
-  let updateCaseTrialSortMappingRecordsStub = sinon.stub().resolves(null);
 
   beforeEach(() => {
     mockCase = MOCK_CASE;
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return new User({
-          name: 'bob',
-          role: User.ROLES.petitionsClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => {
-        return {
-          getCaseByCaseId: () => Promise.resolve(mockCase),
-          updateCaseTrialSortMappingRecords: updateCaseTrialSortMappingRecordsStub,
-        };
-      },
-      getUniqueId: () => 'unique-id-1',
-    };
+
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: User.ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(Promise.resolve(mockCase));
   });
 
   it('does not call persistence if case status is not ready for trial', async () => {
@@ -39,99 +32,70 @@ describe('Update case trial sort tags', () => {
       caseId: mockCase.caseId,
     });
 
-    expect(updateCaseTrialSortMappingRecordsStub.called).toBeFalsy();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateCaseTrialSortMappingRecords,
+    ).not.toBeCalled();
   });
 
   it('calls persistence if case status is ready for trial', async () => {
     mockCase.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
+
     await updateCaseTrialSortTagsInteractor({
       applicationContext,
       caseId: mockCase.caseId,
     });
 
-    expect(updateCaseTrialSortMappingRecordsStub.called).toBeTruthy();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateCaseTrialSortMappingRecords,
+    ).toBeCalled();
   });
 
   it('throws unauthorized error if user is unauthorized', async () => {
-    applicationContext.getCurrentUser = () => {
-      return { userId: 'notauser' };
-    };
-    let error;
-    try {
-      await updateCaseTrialSortTagsInteractor({
+    applicationContext.getCurrentUser.mockReturnValue({});
+
+    await expect(
+      updateCaseTrialSortTagsInteractor({
         applicationContext,
         caseId: mockCase.caseId,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain('Unauthorized for update case');
+      }),
+    ).rejects.toThrow('Unauthorized for update case');
   });
 
   it('case not found if caseId does not exist', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return new User({
-          name: 'Suzie Petitionsclerk',
-          role: User.ROLES.petitionsClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => {
-        return {
-          getCaseByCaseId: () => null,
-          updateCase: () => null,
-        };
-      },
-      getUniqueId: () => 'unique-id-1',
-    };
-    let error;
-    try {
-      await updateCaseTrialSortTagsInteractor({
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(null);
+
+    await expect(
+      updateCaseTrialSortTagsInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
-    expect(error.message).toContain(
+      }),
+    ).rejects.toThrow(
       'Case c54ba5a9-b37b-479d-9201-067ec6e335ba was not found',
     );
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return new User({
-          name: 'Suzie Petitionsclerk',
-          role: User.ROLES.petitionsClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => {
-        return {
-          getCaseByCaseId: () =>
-            Promise.resolve(omit(MOCK_CASE, 'docketNumber')),
-          updateCase: ({ caseToUpdate }) =>
-            Promise.resolve(new Case(caseToUpdate, { applicationContext })),
-        };
-      },
-      getUniqueId: () => 'unique-id-1',
-    };
-    let error;
-    try {
-      await updateCaseTrialSortTagsInteractor({
+    mockCase.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(omit(mockCase, 'docketNumber'));
+    applicationContext
+      .getPersistenceGateway()
+      .updateCase.mockImplementation(
+        ({ caseToUpdate }) => new Case(caseToUpdate, { applicationContext }),
+      );
+
+    await expect(
+      updateCaseTrialSortTagsInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         userId: 'petitionsclerk',
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain(
+      }),
+    ).rejects.toThrow(
       'The Case entity was invalid ValidationError: "docketNumber" is required',
     );
   });

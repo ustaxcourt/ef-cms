@@ -8,39 +8,29 @@ export const PractitionerSearchByName = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    submitPractitionerNameSearchSequence:
+      sequences.submitPractitionerNameSearchSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
+    validatePractitionerSearchByNameFormSequence:
+      sequences.validatePractitionerSearchByNameFormSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function PractitionerSearchByName({
     advancedSearchForm,
     clearAdvancedSearchFormSequence,
-    submitPractitionerBarNumberSearchSequence,
+    submitPractitionerNameSearchSequence,
     updateAdvancedSearchFormValueSequence,
+    validatePractitionerSearchByNameFormSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <div className="header-with-blue-background display-flex flex-justify">
           <h3>Search by Name</h3>
-          <Button
-            link
-            className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-            icon={['fas', 'times-circle']}
-            onClick={() => {
-              clearAdvancedSearchFormSequence();
-            }}
-          >
-            Clear Search
-          </Button>
         </div>
         <div className="blue-container">
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              submitPractitionerBarNumberSearchSequence();
-            }}
-          >
+          <form>
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-6">
                 <FormGroup errorText={validationErrors.practitionerName}>
@@ -53,9 +43,16 @@ export const PractitionerSearchByName = connect(
                     id="practitioner-name"
                     name="practitionerName"
                     type="text"
-                    value={advancedSearchForm.practitionerName || ''}
+                    value={
+                      advancedSearchForm.practitionerSearchByName
+                        .practitionerName || ''
+                    }
+                    onBlur={() => {
+                      validatePractitionerSearchByNameFormSequence();
+                    }}
                     onChange={e => {
                       updateAdvancedSearchFormValueSequence({
+                        formType: 'practitionerSearchByName',
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -66,12 +63,28 @@ export const PractitionerSearchByName = connect(
             </div>
 
             <div className="grid-row">
-              <div className="tablet:grid-col-5">
+              <div className="tablet:grid-col-6">
                 <Button
                   className="advanced-search__button margin-top-2"
-                  type="submit"
+                  id="practitioner-search-by-name-button"
+                  onClick={e => {
+                    e.preventDefault();
+                    submitPractitionerNameSearchSequence();
+                  }}
                 >
                   Search
+                </Button>
+                <Button
+                  link
+                  className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                  onClick={e => {
+                    e.preventDefault();
+                    clearAdvancedSearchFormSequence({
+                      formType: 'practitionerSearchByName',
+                    });
+                  }}
+                >
+                  Clear Search
                 </Button>
               </div>
             </div>

@@ -89,7 +89,6 @@ describe('formatCase', () => {
       ],
     });
     expect(result.documents[0].isPetition).toBeTruthy();
-    expect(result.documents[0].canEdit).toBeFalsy();
     expect(result.documents[0].qcWorkItemsCompleted).toBeTruthy();
     expect(result.documents[0].qcWorkItemsUntouched).toEqual(false);
 
@@ -226,23 +225,23 @@ describe('formatCase', () => {
     expect(result.pendingItemsDocketEntries).toEqual([]);
   });
 
-  it('should format respondents if the respondents array is set', () => {
+  it('should format irsPractitioners if the irsPractitioners array is set', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      respondents: [
+      irsPractitioners: [
         {
           name: 'Test Respondent',
         },
       ],
     });
 
-    expect(result.respondents[0].formattedName).toEqual('Test Respondent');
+    expect(result.irsPractitioners[0].formattedName).toEqual('Test Respondent');
   });
 
-  it('should format practitioners if the practitioners array is set', () => {
+  it('should format privatePractitioners if the privatePractitioners array is set', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      practitioners: [
+      privatePractitioners: [
         {
           barNumber: 'b1234',
           name: 'Test Practitioner',
@@ -250,7 +249,7 @@ describe('formatCase', () => {
       ],
     });
 
-    expect(result.practitioners[0].formattedName).toEqual(
+    expect(result.privatePractitioners[0].formattedName).toEqual(
       'Test Practitioner (b1234)',
     );
   });

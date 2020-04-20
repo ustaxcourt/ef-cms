@@ -2,20 +2,21 @@ const fs = require('fs');
 const path = require('path');
 const {
   generateSignedDocumentInteractor,
-} = require('./generateSignedDocumentInteractor.js');
+} = require('./generateSignedDocumentInteractor');
 const { PDFDocument } = require('pdf-lib');
 
-const testAssetsPath = path.join(__dirname, '../../../test-assets/');
-const testOutputPath = path.join(__dirname, '../../../test-output/');
-
-const testPdfDocBytes = () => {
-  return fs.readFileSync(testAssetsPath + 'sample.pdf');
-};
-
 describe('generateSignedDocument', () => {
+  const testAssetsPath = path.join(__dirname, '../../../test-assets/');
+  const testOutputPath = path.join(__dirname, '../../../test-output/');
+
+  const testPdfDocBytes = () => {
+    return fs.readFileSync(testAssetsPath + 'sample.pdf');
+  };
+
   let testDoc;
 
   beforeEach(() => {
+    jest.setTimeout(10000);
     testDoc = testPdfDocBytes();
   });
 

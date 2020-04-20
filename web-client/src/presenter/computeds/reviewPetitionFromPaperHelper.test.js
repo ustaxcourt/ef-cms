@@ -43,6 +43,8 @@ describe('reviewPetitionFromPaperHelper', () => {
           hasVerifiedIrsNotice: true,
           irsNoticeDate: '2020-01-05T03:30:45.007Z',
           mailingDate: '2020-01-05T03:30:45.007Z',
+          petitionPaymentDate: '2020-03-14T14:02:04.007Z',
+          petitionPaymentMethod: 'pay.gov',
           petitionPaymentStatus: PAYMENT_STATUS.PAID,
           preferredTrialCity: 'Cooper Station',
         },
@@ -53,7 +55,7 @@ describe('reviewPetitionFromPaperHelper', () => {
       hasIrsNoticeFormatted: 'Yes',
       hasOrders: false,
       irsNoticeDateFormatted: '01/04/2020',
-      petitionPaymentStatusFormatted: 'Paid',
+      petitionPaymentStatusFormatted: 'Paid 03/14/2020 pay.gov',
       preferredTrialCityFormatted: 'Cooper Station',
       receivedAtFormatted: '01/04/2020',
       shouldShowIrsNoticeDate: true,
@@ -65,6 +67,26 @@ describe('reviewPetitionFromPaperHelper', () => {
       state: {
         form: {
           orderForFilingFee: true,
+        },
+      },
+    });
+
+    expect(result).toEqual({
+      hasIrsNoticeFormatted: 'No',
+      hasOrders: true,
+      irsNoticeDateFormatted: undefined,
+      petitionPaymentStatusFormatted: 'Not paid',
+      preferredTrialCityFormatted: 'No requested place of trial',
+      receivedAtFormatted: undefined,
+      shouldShowIrsNoticeDate: false,
+    });
+  });
+
+  it('should show orders needed summary when order designating place of trial has been selected', () => {
+    const result = runCompute(reviewPetitionFromPaperHelper, {
+      state: {
+        form: {
+          orderForRequestedTrialLocation: true,
         },
       },
     });

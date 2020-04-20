@@ -6,14 +6,15 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handler = event =>
+exports.setNoticesForCalendaredTrialSessionLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { caseId } = JSON.parse(event.body);
+    const { trialSessionId } = event.pathParameters || event.path || {};
+
     return await applicationContext
       .getUseCases()
       .setNoticesForCalendaredTrialSessionInteractor({
         applicationContext,
-        caseId: caseId,
-        trialSessionId: event.pathParameters.trialSessionId,
+        trialSessionId,
+        ...event.body,
       });
   });

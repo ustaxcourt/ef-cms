@@ -15,21 +15,19 @@ export const StartCaseStep3 = connect(
     completeStartCaseWizardStepSequence:
       sequences.completeStartCaseWizardStepSequence,
     constants: state.constants,
-    filingTypes: state.filingTypes,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
     validateStartCaseWizardSequence: sequences.validateStartCaseWizardSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function StartCaseStep3({
     completeStartCaseWizardStepSequence,
     constants,
-    filingTypes,
     form,
     formCancelToggleCancelSequence,
     navigateBackSequence,
@@ -38,7 +36,7 @@ export const StartCaseStep3 = connect(
     updateStartCaseFormValueSequence,
     validateStartCaseWizardSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <Focus>
@@ -64,7 +62,7 @@ export const StartCaseStep3 = connect(
                   <legend htmlFor="filing-type-radios" id="filing-type-legend">
                     I am filing this petition on behalf of …
                   </legend>
-                  {filingTypes.map((filingType, idx) => (
+                  {startCaseHelper.filingTypes.map((filingType, idx) => (
                     <div className="usa-radio" key={filingType}>
                       <input
                         aria-describedby="filing-type-legend"

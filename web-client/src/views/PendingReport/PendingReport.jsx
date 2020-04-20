@@ -12,7 +12,7 @@ export const PendingReport = connect(
   {
     formattedPendingItems: state.formattedPendingItems,
   },
-  ({ formattedPendingItems }) => {
+  function PendingReport({ formattedPendingItems }) {
     return (
       <>
         <BigHeader text="Reports" />

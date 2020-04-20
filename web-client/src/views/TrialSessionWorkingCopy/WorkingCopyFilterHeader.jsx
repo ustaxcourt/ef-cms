@@ -9,11 +9,11 @@ export const WorkingCopyFilterHeader = connect(
     trialSessionWorkingCopy: state.trialSessionWorkingCopy,
     trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
   },
-  ({
+  function WorkingCopyFilterHeader({
     autoSaveTrialSessionWorkingCopySequence,
     trialSessionWorkingCopy,
     trialSessionWorkingCopyHelper,
-  }) => {
+  }) {
     return (
       <div className="working-copy-filters">
         <div className="working-copy-filters--header header-with-blue-background">

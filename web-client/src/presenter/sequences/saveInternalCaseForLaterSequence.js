@@ -4,6 +4,7 @@ import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStat
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
+import { getSaveCaseForLaterAlertSuccessAction } from '../actions/StartCaseInternal/getSaveCaseForLaterAlertSuccessAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -29,6 +30,7 @@ export const saveInternalCaseForLaterSequence = [
         setPetitionIdAction,
         setDocumentIdAction,
         closeFileUploadStatusModalAction,
+        getSaveCaseForLaterAlertSuccessAction,
         setAlertSuccessAction,
         setSaveAlertsForNavigationAction,
         navigateToDocumentQCAction,

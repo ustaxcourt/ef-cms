@@ -10,12 +10,14 @@ import { state } from 'cerebral';
  *
  */
 export const removeScannedPdfAction = async ({ get, store }) => {
-  const documentSelectedForScan = get(state.documentSelectedForScan);
+  const documentSelectedForScan = get(
+    state.currentViewMetadata.documentSelectedForScan,
+  );
 
   store.unset(state.form[documentSelectedForScan]);
   store.unset(state.form[`${documentSelectedForScan}Size`]);
-  store.set(state.currentPageIndex, 0);
-  store.set(state.selectedBatchIndex, 0);
+  store.set(state.scanner.currentPageIndex, 0);
+  store.set(state.scanner.selectedBatchIndex, 0);
 
   return {
     documentUploadMode: 'scan',

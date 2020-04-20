@@ -44,7 +44,7 @@ export const validateExternalDocumentInformationAction = ({
       'secondarySupportingDocuments',
       'partyPrimary',
       'partySecondary',
-      'partyRespondent',
+      'partyIrsPractitioner',
     ];
 
     const errorDisplayMap = {

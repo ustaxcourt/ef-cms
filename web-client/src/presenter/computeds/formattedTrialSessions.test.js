@@ -21,9 +21,7 @@ const formattedTrialSessions = withAppContextDecorator(
 );
 
 const getStartOfWeek = date => {
-  return prepareDateFromString(date)
-    .startOf('isoWeek')
-    .format('MMMM D, YYYY');
+  return prepareDateFromString(date).startOf('isoWeek').format('MMMM D, YYYY');
 };
 
 let nextYear;
@@ -47,10 +45,11 @@ const baseState = {
 let TRIAL_SESSIONS_LIST = [];
 
 describe('formattedTrialSessions', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     nextYear = (parseInt(formatNow('YYYY')) + 1).toString();
+  });
+  beforeEach(() => {
     currentUser = testJudgeUser;
-
     TRIAL_SESSIONS_LIST = [
       {
         caseOrder: [],
@@ -280,13 +279,15 @@ describe('formattedTrialSessions', () => {
     let result = runCompute(formattedTrialSessions, {
       state: {
         ...baseState,
+        currentViewMetadata: {
+          trialSessions: {
+            tab: 'open',
+          },
+        },
         screenMetadata: {
           trialSessionFilters: { judge: { userId: 'unassigned' } },
         },
         trialSessions: TRIAL_SESSIONS_LIST,
-        trialSessionsTab: {
-          group: 'open',
-        },
         user: testJudgeUser,
       },
     });

@@ -1,20 +1,17 @@
 const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const {
   updateDocumentProcessingStatus,
 } = require('./updateDocumentProcessingStatus');
 
-const applicationContext = {
-  environment: {
-    stage: 'local',
-  },
-  filterCaseMetadata: ({ cases }) => cases,
-  isAuthorizedForWorkItems: () => true,
-};
-
 describe('updateDocumentProcessingStatus', () => {
-  beforeEach(() => {
-    sinon.stub(client, 'update').resolves({
+  beforeAll(() => {
+    applicationContext.filterCaseMetadata.mockImplementation(
+      ({ cases }) => cases,
+    );
+    client.update = jest.fn().mockReturnValue({
       caseId: '123',
       pk: '123',
       sk: '123',
@@ -22,19 +19,15 @@ describe('updateDocumentProcessingStatus', () => {
     });
   });
 
-  afterEach(() => {
-    client.update.restore();
-  });
-
   it('should attempt to do a batch get in the same ids that were returned in the mapping records', async () => {
     await updateDocumentProcessingStatus({
       applicationContext,
       caseId: 'abc',
-      documentIndex: 3,
+      documentId: 3,
     });
-    expect(client.update.getCall(0).args[0]).toMatchObject({
-      Key: { pk: 'abc', sk: 'abc' },
-      UpdateExpression: 'SET #documents[3].#processingStatus = :status',
+    expect(client.update.mock.calls[0][0]).toMatchObject({
+      Key: { pk: 'case|abc', sk: 'document|3' },
+      UpdateExpression: 'SET #processingStatus = :status',
     });
   });
 });

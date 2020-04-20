@@ -1,19 +1,11 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { loadOriginalProposedStipulatedDecisionAction } from './loadOriginalProposedStipulatedDecisionAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 describe('loadOriginalProposedStipulatedDecisionAction', () => {
-  let loadPDFForSigningStub;
-
-  beforeEach(() => {
-    loadPDFForSigningStub = sinon.stub();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        loadPDFForSigningInteractor: loadPDFForSigningStub,
-      }),
-    };
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('does nothing if state.caseDetail does not exist', async () => {
@@ -31,7 +23,9 @@ describe('loadOriginalProposedStipulatedDecisionAction', () => {
   });
 
   it('loads original proposed stipulated decision', async () => {
-    loadPDFForSigningStub.returns({ foo: 'bar' });
+    applicationContext
+      .getUseCases()
+      .loadPDFForSigningInteractor.mockReturnValue({ foo: 'bar' });
 
     const result = await runAction(
       loadOriginalProposedStipulatedDecisionAction,

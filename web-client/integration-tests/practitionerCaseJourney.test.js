@@ -1,10 +1,9 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { fakeFile, loginAs, setupTest } from './helpers';
+import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { uploadPetition } from './helpers';
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import practitionerCreatesNewCase from './journey/practitionerCreatesNewCase';
 import practitionerFilesDocumentForOwnedCase from './journey/practitionerFilesDocumentForOwnedCase';
-import practitionerNavigatesToCreateCase from './journey/practitionerNavigatesToCreateCase';
 import practitionerRequestsAccessToCase from './journey/practitionerRequestsAccessToCase';
 import practitionerRequestsPendingAccessToCase from './journey/practitionerRequestsPendingAccessToCase';
 import practitionerSearchesForCase from './journey/practitionerSearchesForCase';
@@ -24,7 +23,6 @@ describe('Practitioner requests access to case', () => {
 
   //tests for practitioner starting a new case
   loginAs(test, 'privatePractitioner');
-  practitionerNavigatesToCreateCase(test);
   practitionerCreatesNewCase(test, fakeFile);
   practitionerViewsCaseDetailOfOwnedCase(test);
 

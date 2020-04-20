@@ -1,4 +1,3 @@
-const { createMappingRecord } = require('../helpers/createMappingRecord');
 const { createSectionInboxRecord } = require('./createSectionInboxRecord');
 const { createUserInboxRecord } = require('./createUserInboxRecord');
 const { put } = require('../../dynamodbClientService');
@@ -16,9 +15,9 @@ exports.saveWorkItemForDocketEntryWithoutFile = async ({
 }) => {
   await put({
     Item: {
-      gsi1pk: `workitem-${workItem.workItemId}`,
-      pk: `workitem-${workItem.workItemId}`,
-      sk: `workitem-${workItem.workItemId}`,
+      gsi1pk: `work-item|${workItem.workItemId}`,
+      pk: `work-item|${workItem.workItemId}`,
+      sk: `work-item|${workItem.workItemId}`,
       ...workItem,
     },
     applicationContext,
@@ -35,11 +34,12 @@ exports.saveWorkItemForDocketEntryWithoutFile = async ({
       userId: workItem.assigneeId,
       workItem,
     }),
-    createMappingRecord({
+    put({
+      Item: {
+        pk: `case|${workItem.caseId}`,
+        sk: `work-item|${workItem.workItemId}`,
+      },
       applicationContext,
-      pkId: workItem.caseId,
-      skId: workItem.workItemId,
-      type: 'workItem',
     }),
   ]);
 };

@@ -23,13 +23,13 @@ export const EditUploadCourtIssuedDocument = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     screenMetadata: state.screenMetadata,
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateUploadCourtIssuedDocumentSequence:
       sequences.validateUploadCourtIssuedDocumentSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function EditUploadCourtIssuedDocument({
     clearExistingDocumentSequence,
     constants,
     editUploadCourtIssuedDocumentSequence,
@@ -41,7 +41,7 @@ export const EditUploadCourtIssuedDocument = connect(
     updateFormValueSequence,
     validateUploadCourtIssuedDocumentSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <>
         <CaseDetailHeader />

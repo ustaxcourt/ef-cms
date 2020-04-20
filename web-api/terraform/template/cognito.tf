@@ -14,7 +14,7 @@ resource "aws_cognito_user_pool" "pool" {
   sms_authentication_message = "{####}"
 
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
   }
 
   lambda_config {

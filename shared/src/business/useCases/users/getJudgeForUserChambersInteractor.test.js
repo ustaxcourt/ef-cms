@@ -1,9 +1,10 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 import { getJudgeForUserChambersInteractor } from './getJudgeForUserChambersInteractor';
 const { User } = require('../../entities/User');
 
-let applicationContext;
-let getUserInteractorMock;
-let getUsersInSectionInteractorMock;
+let currentUser;
 
 const chambersUser = {
   role: User.ROLES.chambers,
@@ -44,34 +45,34 @@ const allUsers = [
 
 describe('getJudgeForUserChambersInteractor', () => {
   beforeEach(() => {
-    getUserInteractorMock = jest.fn();
-    getUsersInSectionInteractorMock = jest.fn();
-
-    applicationContext = {
-      getUseCases: () => ({
-        getUserInteractor: () => {
-          getUserInteractorMock();
-          const currentUser = applicationContext.getCurrentUser();
-          return allUsers.find(user => user.userId === currentUser.userId);
-        },
-        getUsersInSectionInteractor: ({ section }) => {
-          getUsersInSectionInteractorMock();
-          return allUsers.filter(user => user.section === section);
-        },
-      }),
-    };
+    applicationContext.getCurrentUser.mockImplementation(() => currentUser);
+    applicationContext
+      .getUseCases()
+      .getUserInteractor.mockImplementation(() => {
+        const currentUser = applicationContext.getCurrentUser();
+        return allUsers.find(user => user.userId === currentUser.userId);
+      });
+    applicationContext
+      .getUseCases()
+      .getUsersInSectionInteractor.mockImplementation(async ({ section }) => {
+        return allUsers.filter(user => user.section === section);
+      });
   });
 
   it('Fetches the judge associated with a given chambers user', async () => {
-    applicationContext.getCurrentUser = () => chambersUser;
+    currentUser = chambersUser;
 
     const result = await getJudgeForUserChambersInteractor({
       applicationContext,
       user: chambersUser,
     });
     expect(result).toMatchObject(judgeUser);
-    expect(getUserInteractorMock).not.toHaveBeenCalled();
-    expect(getUsersInSectionInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().getUserInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().getUsersInSectionInteractor,
+    ).toHaveBeenCalled();
   });
 
   it('Fetches the judge associated with a given chambers user when the user is a judge', async () => {
@@ -80,41 +81,49 @@ describe('getJudgeForUserChambersInteractor', () => {
       user: judgeUser,
     });
     expect(result).toMatchObject(judgeUser);
-    expect(getUserInteractorMock).not.toHaveBeenCalled();
-    expect(getUsersInSectionInteractorMock).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().getUserInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().getUsersInSectionInteractor,
+    ).not.toHaveBeenCalled();
   });
 
   it('Calls persistence methods to look up the user if the given `user.section` is undefined', async () => {
-    const userWithMissingSection = {
+    currentUser = {
       role: chambersUser.role,
       userId: chambersUser.userId,
     };
 
-    applicationContext.getCurrentUser = () => userWithMissingSection;
-
     const result = await getJudgeForUserChambersInteractor({
       applicationContext,
-      user: userWithMissingSection,
+      user: currentUser,
     });
     expect(result).toMatchObject(judgeUser);
-    expect(getUserInteractorMock).toHaveBeenCalled();
-    expect(getUsersInSectionInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().getUserInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().getUsersInSectionInteractor,
+    ).toHaveBeenCalled();
   });
 
   it('Returns no user if the given user is not associated with any chambers section', async () => {
-    const nonAssociatedUser = {
+    currentUser = {
       role: User.ROLES.docketClerk,
       userId: 'docketclerk1',
     };
 
-    applicationContext.getCurrentUser = () => nonAssociatedUser;
-
     const result = await getJudgeForUserChambersInteractor({
       applicationContext,
-      user: nonAssociatedUser,
+      user: currentUser,
     });
     expect(result).toBeUndefined();
-    expect(getUserInteractorMock).not.toHaveBeenCalled();
-    expect(getUsersInSectionInteractorMock).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().getUserInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().getUsersInSectionInteractor,
+    ).not.toHaveBeenCalled();
   });
 });

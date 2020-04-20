@@ -1,10 +1,9 @@
 import { getShouldMarkReadAction } from './getShouldMarkReadAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
-const markReadStub = sinon.stub();
-const noActionStub = sinon.stub();
+const markReadStub = jest.fn();
+const noActionStub = jest.fn();
 
 presenter.providers.path = {
   markRead: markReadStub,
@@ -21,7 +20,7 @@ describe('getShouldMarkReadAction', () => {
         workItemIdToMarkAsRead: '123',
       },
     });
-    expect(markReadStub.calledOnce).toEqual(true);
+    expect(markReadStub.mock.calls.length).toEqual(1);
   });
 
   it('should return the noAction path if not set', async () => {
@@ -33,7 +32,7 @@ describe('getShouldMarkReadAction', () => {
         workItemIdToMarkAsRead: null,
       },
     });
-    expect(noActionStub.calledOnce).toEqual(true);
+    expect(noActionStub.mock.calls.length).toEqual(1);
   });
 
   it('should set state.workItemId if props.workItemIdToMarkAsRead is set', async () => {

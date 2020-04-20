@@ -3,30 +3,30 @@
     "sk": "LasVegasNevada-H-B-20190816132910-58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "pk": "eligible-for-trial-case-catalog",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "gsi1pk": "eligible-for-trial-case-catalog-58c1f7a3-8062-42f0-a73e-8bd69b419878"
+    "gsi1pk": "eligible-for-trial-case-catalog|58c1f7a3-8062-42f0-a73e-8bd69b419878"
   },
   {
     "sk": "LasVegasNevada-R-B-20190816132910-58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "pk": "eligible-for-trial-case-catalog",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "gsi1pk": "eligible-for-trial-case-catalog-58c1f7a3-8062-42f0-a73e-8bd69b419878"
+    "gsi1pk": "eligible-for-trial-case-catalog|58c1f7a3-8062-42f0-a73e-8bd69b419878"
   },
   {
     "sk": "63d7c79e-1313-4969-9bf5-9170af46997c",
     "pk": "58c1f7a3-8062-42f0-a73e-8bd69b419878|workItem"
   },
   {
-    "sk": "case-58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "pk": "catalog"
   },
   {
-    "sk": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "pk": "5805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "sk": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "pk": "9805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "completedAt": "2019-08-16T17:30:10.526Z",
@@ -46,7 +46,7 @@
       "filingDate": "2019-08-16T17:29:10.132Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
-    "gsi1pk": "workitem-63d7c79e-1313-4969-9bf5-9170af46997c",
+    "gsi1pk": "work-item|63d7c79e-1313-4969-9bf5-9170af46997c",
     "section": "irsSystem",
     "workItemId": "63d7c79e-1313-4969-9bf5-9170af46997c",
     "isInitializeCase": true,
@@ -68,7 +68,7 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-outbox-petitions",
+    "pk": "section-outbox|petitions",
     "docketNumber": "107-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk",
@@ -92,7 +92,7 @@
       "filingDate": "2019-08-16T17:29:10.132Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
-    "gsi1pk": "workitem-63d7c79e-1313-4969-9bf5-9170af46997c",
+    "gsi1pk": "work-item|63d7c79e-1313-4969-9bf5-9170af46997c",
     "section": "irsSystem",
     "workItemId": "63d7c79e-1313-4969-9bf5-9170af46997c",
     "isInitializeCase": true,
@@ -125,95 +125,6 @@
     "contactSecondary": {},
     "isPaper": false,
     "initialTitle": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
-    "documents": [
-      {
-        "eventCode": "P",
-        "createdAt": "2019-08-16T17:29:10.132Z",
-        "processingStatus": "complete",
-        "documentType": "Petition",
-        "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
-        "workItems": [
-          {
-            "completedAt": "2019-08-16T17:30:10.526Z",
-            "docketNumberSuffix": "L",
-            "caseStatus": "New",
-            "caseIsInProgress": false,
-            "completedMessage": "Served on IRS",
-            "document": {
-              "eventCode": "P",
-              "createdAt": "2019-08-16T17:29:10.132Z",
-              "processingStatus": "pending",
-              "documentType": "Petition",
-              "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
-              "workItems": [],
-              "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
-              "receivedAt": "2019-08-16T17:29:10.132Z",
-              "filingDate": "2019-08-16T17:29:10.132Z",
-              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-            },
-            "section": "irsSystem",
-            "workItemId": "63d7c79e-1313-4969-9bf5-9170af46997c",
-            "isInitializeCase": true,
-            "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
-            "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-            "sentBy": "Test Petitionsclerk",
-            "sentBySection": "petitions",
-            "isQC": true,
-            "createdAt": "2019-08-16T17:29:10.133Z",
-            "assigneeName": "IRS Holding Queue",
-            "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-            "messages": [
-              {
-                "createdAt": "2019-08-16T17:29:10.133Z",
-                "messageId": "16d60c0c-6a71-4b5d-82ec-82303cf441bf",
-                "from": "Test Petitioner",
-                "message": "Petition filed by Tatum Craig, Wayne Obrien, Partnership Representative is ready for review.",
-                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-              }
-            ],
-            "docketNumber": "107-19",
-            "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-            "completedBy": "Test Petitionsclerk",
-            "updatedAt": "2019-08-16T17:29:10.133Z"
-          }
-        ],
-        "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-        "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
-        "servedAt": "2019-08-16T17:30:10.526Z",
-        "receivedAt": "2019-08-16T17:29:10.132Z",
-        "filingDate": "2019-08-16T17:29:10.132Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "status": "served"
-      },
-      {
-        "eventCode": "STIN",
-        "createdAt": "2019-08-16T17:29:10.133Z",
-        "processingStatus": "complete",
-        "documentType": "Statement of Taxpayer Identification",
-        "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
-        "workItems": [],
-        "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-        "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
-        "receivedAt": "2019-08-16T17:29:10.133Z",
-        "filingDate": "2019-08-16T17:29:10.133Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "status": "served"
-      },
-      {
-        "eventCode": "ODS",
-        "createdAt": "2019-08-16T17:29:10.133Z",
-        "processingStatus": "complete",
-        "documentType": "Ownership Disclosure Statement",
-        "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
-        "workItems": [],
-        "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
-        "receivedAt": "2019-08-16T17:29:10.133Z",
-        "filingDate": "2019-08-16T17:29:10.133Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "status": "served"
-      }
-    ],
     "irsNoticeDate": null,
     "orderForFilingFee": false,
     "partyType": "Partnership (as a partnership representative under the BBA regime)",
@@ -239,7 +150,7 @@
     "noticeOfAttachments": false,
     "caseCaption": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "sk": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "filingType": "A business",
     "orderForOds": false,
     "orderForRatification": false,
@@ -251,55 +162,8 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Las Vegas, Nevada",
-    "respondents": [
-      {
-        "role": "irsPractitioner",
-        "serviceIndicator": "Electronic",
-        "barNumber": "RT6789",
-        "contact": {
-          "address1": "234 Main St",
-          "address2": "Apartment 4",
-          "address3": "Under the stairs",
-          "city": "Chicago",
-          "countryType": "domestic",
-          "phone": "+1 (555) 555-5555",
-          "postalCode": "61234",
-          "state": "IL"
-        },
-        "sk": "5805d1ab-18d0-43ec-bafb-654e83405416",
-        "name": "Test IRS Practitioner",
-        "section": "irsPractitioner",
-        "pk": "5805d1ab-18d0-43ec-bafb-654e83405416",
-        "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-        "email": "irsPractitioner"
-      }
-    ],
-    "practitioners": [
-      {
-        "serviceIndicator": "Electronic",
-        "role": "privatePractitioner",
-        "section": "privatePractitioner",
-        "representingPrimary": true,
-        "contact": {
-          "address1": "234 Main St",
-          "address2": "Apartment 4",
-          "address3": "Under the stairs",
-          "city": "Chicago",
-          "countryType": "domestic",
-          "phone": "+1 (555) 555-5555",
-          "postalCode": "61234",
-          "state": "IL"
-        },
-        "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "barNumber": "PT1234",
-        "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "name": "Test Private Practitioner",
-        "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-        "email": "privatePractitioner"
-      }
-    ],
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "docketNumber": "107-19",
     "status": "General Docket - At Issue (Ready for Trial)",
     "associatedJudge": "Chief Judge"
@@ -366,7 +230,7 @@
     "createdAt": "2019-08-16T17:29:10.133Z",
     "assigneeName": "IRS Holding Queue",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "sk": "workitem-63d7c79e-1313-4969-9bf5-9170af46997c",
+    "sk": "work-item|63d7c79e-1313-4969-9bf5-9170af46997c",
     "messages": [
       {
         "createdAt": "2019-08-16T17:29:10.133Z",
@@ -376,19 +240,19 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "workitem-63d7c79e-1313-4969-9bf5-9170af46997c",
+    "pk": "work-item|63d7c79e-1313-4969-9bf5-9170af46997c",
     "docketNumber": "107-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk",
     "updatedAt": "2019-08-16T17:29:10.133Z"
   },
   {
-    "sk": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "sk": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "pk": "107-19|case"
+    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "case-by-docket-number|107-19"
   },
   {
     "caseTitle": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
@@ -396,18 +260,157 @@
     "createdAt": "2019-08-22T12:51:32.434Z",
     "deadlineDate": "2019-08-22T04:00:00.000Z",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "sk": "case-deadline-307fd0e4-eeed-41bc-bbc3-a9555fccc231",
+    "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
     "caseDeadlineId": "307fd0e4-eeed-41bc-bbc3-a9555fccc231",
     "description": "Filing fee due",
-    "pk": "case-deadline-307fd0e4-eeed-41bc-bbc3-a9555fccc231"
+    "pk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231"
   },
   {
-    "caseDeadlineId": "case-deadline-307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "sk": "case-deadline-307fd0e4-eeed-41bc-bbc3-a9555fccc231",
+    "caseDeadlineId": "307fd0e4-eeed-41bc-bbc3-a9555fccc231",
+    "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
     "pk": "case-deadline-catalog"
   },
   {
-    "sk": "case-deadline-307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "pk": "58c1f7a3-8062-42f0-a73e-8bd69b419878|case-deadline"
+    "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
+    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878"
+  },
+  {
+    "role": "irsPractitioner",
+    "serviceIndicator": "Electronic",
+    "barNumber": "RT6789",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test IRS Practitioner",
+    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "section": "irsPractitioner",
+    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "irsPractitioner"
+  },
+  {
+    "role": "privatePractitioner",
+    "serviceIndicator": "Electronic",
+    "barNumber": "PT1234",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test Private Practitioner",
+    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
+    "section": "privatePractitioner",
+    "representingPrimary": true,
+    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "privatePractitioner"
+  },
+  {
+    "documentType": "Ownership Disclosure Statement",
+    "filingDate": "2019-08-16T17:29:10.133Z",
+    "workItems": [],
+    "pending": false,
+    "receivedAt": "2019-08-16T17:29:10.133Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "ODS",
+    "createdAt": "2019-08-16T17:29:10.133Z",
+    "processingStatus": "complete",
+    "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
+    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "document|35306555-83f2-4f61-9be6-438bd107e5eb",
+    "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "status": "served"
+  },
+  {
+    "documentType": "Petition",
+    "filingDate": "2019-08-16T17:29:10.132Z",
+    "workItems": [
+      {
+        "associatedJudge": "Chief Judge",
+        "completedAt": "2019-08-16T17:30:10.526Z",
+        "docketNumberSuffix": "L",
+        "caseStatus": "New",
+        "completedMessage": "Served on IRS",
+        "caseIsInProgress": false,
+        "document": {
+          "eventCode": "P",
+          "createdAt": "2019-08-16T17:29:10.132Z",
+          "processingStatus": "pending",
+          "documentType": "Petition",
+          "filingDate": "2019-08-16T17:29:10.132Z",
+          "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
+          "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+          "receivedAt": "2019-08-16T17:29:10.132Z",
+          "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        "section": "irsSystem",
+        "workItemId": "63d7c79e-1313-4969-9bf5-9170af46997c",
+        "isInitializeCase": true,
+        "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
+        "isQC": true,
+        "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+        "sentBy": "Test Petitionsclerk",
+        "sentBySection": "petitions",
+        "createdAt": "2019-08-16T17:29:10.133Z",
+        "assigneeName": "IRS Holding Queue",
+        "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+        "messages": [
+          {
+            "createdAt": "2019-08-16T17:29:10.133Z",
+            "messageId": "16d60c0c-6a71-4b5d-82ec-82303cf441bf",
+            "from": "Test Petitioner",
+            "message": "Petition filed by Tatum Craig, Wayne Obrien, Partnership Representative is ready for review.",
+            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+          }
+        ],
+        "docketNumber": "107-19",
+        "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+        "completedBy": "Test Petitionsclerk",
+        "updatedAt": "2019-08-16T17:29:10.133Z"
+      }
+    ],
+    "pending": false,
+    "receivedAt": "2019-08-16T17:29:10.132Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "createdAt": "2019-08-16T17:29:10.132Z",
+    "processingStatus": "complete",
+    "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
+    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "document|5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+    "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+    "servedAt": "2019-08-16T17:30:10.526Z",
+    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "status": "served"
+  },
+  {
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2019-08-16T17:29:10.133Z",
+    "workItems": [],
+    "pending": false,
+    "receivedAt": "2019-08-16T17:29:10.133Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "STIN",
+    "createdAt": "2019-08-16T17:29:10.133Z",
+    "processingStatus": "complete",
+    "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
+    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "document|7a923abd-fc41-407a-b76b-7f724fa5d47f",
+    "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
+    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "status": "served"
   }
 ]

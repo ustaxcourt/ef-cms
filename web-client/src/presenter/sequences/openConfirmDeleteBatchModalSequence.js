@@ -5,7 +5,7 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 
 export const openConfirmDeleteBatchModalSequence = [
   clearModalStateAction,
-  set(state.batchIndexToDelete, props.batchIndexToDelete),
-  set(state.batchToDeletePageCount, props.batchPageCount),
+  set(state.scanner.batchIndexToDelete, props.batchIndexToDelete),
+  set(state.scanner.batchToDeletePageCount, props.batchPageCount),
   setShowModalFactoryAction('ConfirmDeleteBatchModal'),
 ];

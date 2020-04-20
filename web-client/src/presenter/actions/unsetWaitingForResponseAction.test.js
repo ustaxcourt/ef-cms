@@ -1,6 +1,5 @@
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-
 import { unsetWaitingForResponseAction } from './unsetWaitingForResponseAction';
 
 describe('unsetWaitingForResponseAction', () => {
@@ -10,11 +9,13 @@ describe('unsetWaitingForResponseAction', () => {
         presenter,
       },
       state: {
-        waitingForResponse: false,
-        waitingForResponseRequests: 0,
+        progressIndicator: {
+          waitingForResponse: false,
+          waitingForResponseRequests: 0,
+        },
       },
     });
-    expect(result.state).toMatchObject({
+    expect(result.state.progressIndicator).toMatchObject({
       waitingForResponse: false,
       waitingForResponseRequests: 0,
     });
@@ -26,11 +27,13 @@ describe('unsetWaitingForResponseAction', () => {
         presenter,
       },
       state: {
-        waitingForResponse: true,
-        waitingForResponseRequests: 1,
+        progressIndicator: {
+          waitingForResponse: true,
+          waitingForResponseRequests: 1,
+        },
       },
     });
-    expect(result.state).toMatchObject({
+    expect(result.state.progressIndicator).toMatchObject({
       waitingForResponse: false,
       waitingForResponseRequests: 0,
     });
@@ -42,34 +45,40 @@ describe('unsetWaitingForResponseAction', () => {
         presenter,
       },
       state: {
-        waitingForResponse: true,
-        waitingForResponseRequests: 2, // two requests waiting
+        progressIndicator: {
+          waitingForResponse: true,
+          waitingForResponseRequests: 2, // two requests waiting
+        },
       },
     });
-    expect(result.state).toMatchObject({
+    expect(result.state.progressIndicator).toMatchObject({
       waitingForResponse: true,
       waitingForResponseRequests: 1,
     });
 
     result = await runAction(unsetWaitingForResponseAction, {
       state: {
-        waitingForResponse: true,
-        waitingForResponseRequests: 1,
+        progressIndicator: {
+          waitingForResponse: true,
+          waitingForResponseRequests: 1,
+        },
       },
     });
-    expect(result.state).toMatchObject({
+    expect(result.state.progressIndicator).toMatchObject({
       waitingForResponse: false,
       waitingForResponseRequests: 0,
     });
 
     result = await runAction(unsetWaitingForResponseAction, {
       state: {
-        waitingForResponse: true,
-        waitingForResponseRequests: 0,
+        progressIndicator: {
+          waitingForResponse: true,
+          waitingForResponseRequests: 0,
+        },
       },
     });
     // After action has been called 3 times
-    expect(result.state).toMatchObject({
+    expect(result.state.progressIndicator).toMatchObject({
       waitingForResponse: false,
       waitingForResponseRequests: 0,
     });

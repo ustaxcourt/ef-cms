@@ -1,11 +1,11 @@
 import { navigateToMessagesAction } from './navigateToMessagesAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('navigateToMessagesAction', () => {
   let routeStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     routeStub = jest.fn();
 
     presenter.providers.router = {

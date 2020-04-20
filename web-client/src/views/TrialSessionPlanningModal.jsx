@@ -9,21 +9,20 @@ export const TrialSessionPlanningModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.runTrialSessionPlanningReportSequence,
-    modal: state.modal,
     trialYears: state.modal.trialYears,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateTrialSessionPlanningSequence:
       sequences.validateTrialSessionPlanningSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function TrialSessionPlanningModal({
     cancelSequence,
     confirmSequence,
     trialYears,
     updateModalValueSequence,
     validateTrialSessionPlanningSequence,
     validationErrors,
-  }) => {
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"

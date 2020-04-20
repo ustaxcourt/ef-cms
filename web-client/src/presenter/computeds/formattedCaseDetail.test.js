@@ -96,7 +96,7 @@ describe('formattedCaseDetail', () => {
       state: {
         ...getBaseState(petitionsClerkUser),
         caseDetail,
-        caseDetailErrors: {},
+        validationErrors: {},
       },
     });
     expect(result.docketRecord[0].createdAtFormatted).toEqual('02/28/19');
@@ -130,7 +130,7 @@ describe('formattedCaseDetail', () => {
       state: {
         ...getBaseState(petitionsClerkUser),
         caseDetail,
-        caseDetailErrors: {},
+        validationErrors: {},
       },
     });
     expect(result.docketRecordWithDocument[0].document.documentId).toEqual(
@@ -205,8 +205,8 @@ describe('formattedCaseDetail', () => {
           exhibits: true,
           hasSupportingDocuments: true,
           ordinalValue: 'First',
+          partyIrsPractitioner: true,
           partyPrimary: true,
-          partyRespondent: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           relationship: 'primaryDocument',
@@ -254,8 +254,8 @@ describe('formattedCaseDetail', () => {
           eventCode: 'USDL',
           freeText: 'Test',
           lodged: true,
-          partyPractitioner: true,
-          partyRespondent: true,
+          partyIrsPractitioner: true,
+          partyPrivatePractitioner: true,
           previousDocument: 'Amended Petition',
           relationship: 'primarySupportingDocument',
           scenario: 'Nonstandard C',
@@ -264,13 +264,13 @@ describe('formattedCaseDetail', () => {
       hasIrsNotice: false,
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
-      practitioner: { name: 'Test Practitioner' },
+      privatePractitioners: [{ name: 'Test Practitioner' }],
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
         ...getBaseState(petitionsClerkUser),
         caseDetail,
-        caseDetailErrors: {},
+        validationErrors: {},
       },
     });
     expect(result.docketRecordWithDocument).toMatchObject([
@@ -410,7 +410,7 @@ describe('formattedCaseDetail', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail,
-        caseDetailErrors: {},
+        validationErrors: {},
       },
     });
     expect(result.formattedDocketEntries).toMatchObject([
@@ -503,7 +503,7 @@ describe('formattedCaseDetail', () => {
       state: {
         ...getBaseState(petitionsClerkUser),
         caseDetail,
-        caseDetailErrors: {},
+        validationErrors: {},
       },
     });
 
@@ -521,7 +521,7 @@ describe('formattedCaseDetail', () => {
         showDocumentEditLink: true,
       },
       {
-        editLink: '/edit',
+        editLink: '',
         showDocumentEditLink: true,
       },
     ]);
@@ -529,7 +529,7 @@ describe('formattedCaseDetail', () => {
 
   describe('sorts docket records', () => {
     let sortedCaseDetail;
-    beforeEach(() => {
+    beforeAll(() => {
       sortedCaseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         caseId: 'abdc-1234-5678-xyz',
@@ -597,7 +597,7 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
       expect(result.docketRecordWithDocument[0]).toMatchObject({
@@ -627,10 +627,10 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
           sessionMetadata: {
             docketRecordSort: { [caseDetail.caseId]: 'byDateDesc' },
           },
+          validationErrors: {},
         },
       });
       expect(result.docketRecordWithDocument[3]).toMatchObject({
@@ -661,10 +661,10 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
           sessionMetadata: {
             docketRecordSort: { [caseDetail.caseId]: 'byIndex' },
           },
+          validationErrors: {},
         },
       });
       expect(result.docketRecordWithDocument[0]).toMatchObject({
@@ -694,10 +694,10 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
           sessionMetadata: {
             docketRecordSort: { [caseDetail.caseId]: 'byIndexDesc' },
           },
+          validationErrors: {},
         },
       });
       expect(result.docketRecordWithDocument[0]).toMatchObject({
@@ -732,7 +732,7 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
       expect(result.caseName).toEqual('');
@@ -747,7 +747,7 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
       expect(result.caseName).toEqual('Sisqo');
@@ -762,7 +762,7 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
       expect(result.caseName).toEqual('Sisqo and friends');
@@ -777,7 +777,7 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
       expect(result.caseName).toEqual("Sisqo's entourage,");
@@ -789,16 +789,16 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
         petitioners: [{ name: 'bob' }],
-        practitioners: [{ barNumber: '9999', name: 'Jackie Chan' }],
+        privatePractitioners: [{ barNumber: '9999', name: 'Jackie Chan' }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
-      expect(result.practitioners[0].formattedName).toEqual(
+      expect(result.privatePractitioners[0].formattedName).toEqual(
         'Jackie Chan (9999)',
       );
     });
@@ -806,16 +806,18 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
         petitioners: [{ name: 'bob' }],
-        practitioners: [{ name: 'Jackie Chan' }],
+        privatePractitioners: [{ name: 'Jackie Chan' }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
-      expect(result.practitioners[0].formattedName).toEqual('Jackie Chan');
+      expect(result.privatePractitioners[0].formattedName).toEqual(
+        'Jackie Chan',
+      );
     });
   });
 
@@ -834,7 +836,7 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
       expect(result.formattedTrialCity).toEqual('England is my City');
@@ -855,7 +857,7 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
       expect(result.formattedTrialCity).toEqual('England is my City');
@@ -886,7 +888,7 @@ describe('formattedCaseDetail', () => {
           ...getBaseState(petitionsClerkUser),
           caseDeadlines,
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
       expect(result.caseDeadlines.length).toEqual(3);
@@ -923,7 +925,7 @@ describe('formattedCaseDetail', () => {
           ...getBaseState(petitionsClerkUser),
           caseDeadlines,
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
       expect(result.caseDeadlines.length).toEqual(1);
@@ -939,7 +941,7 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
       expect(result.caseDeadlines.length).toEqual(0);
@@ -949,7 +951,7 @@ describe('formattedCaseDetail', () => {
   describe('draft documents', () => {
     let caseDetail;
 
-    beforeEach(() => {
+    beforeAll(() => {
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         docketRecord: [
@@ -994,7 +996,7 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
       expect(result.formattedDraftDocuments).toMatchObject([
@@ -1036,7 +1038,7 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(judgeUser),
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
       expect(result.formattedDraftDocuments).toMatchObject([
@@ -1099,7 +1101,7 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
 
@@ -1121,7 +1123,7 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
+          validationErrors: {},
         },
       });
 
@@ -1133,7 +1135,7 @@ describe('formattedCaseDetail', () => {
   describe('showEditDocketRecordEntry', () => {
     let caseDetail;
 
-    beforeEach(() => {
+    beforeAll(() => {
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         contactPrimary: {
@@ -1223,10 +1225,10 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
           permissions: {
             EDIT_DOCKET_ENTRY: true,
           },
+          validationErrors: {},
         },
       });
 
@@ -1243,10 +1245,10 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
           permissions: {
             EDIT_DOCKET_ENTRY: false,
           },
+          validationErrors: {},
         },
       });
 
@@ -1263,10 +1265,10 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
           permissions: {
             EDIT_DOCKET_ENTRY: true,
           },
+          validationErrors: {},
         },
       });
 
@@ -1280,10 +1282,10 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
           permissions: {
             EDIT_DOCKET_ENTRY: true,
           },
+          validationErrors: {},
         },
       });
 
@@ -1297,10 +1299,10 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
           permissions: {
             EDIT_DOCKET_ENTRY: true,
           },
+          validationErrors: {},
         },
       });
 
@@ -1314,10 +1316,10 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
           permissions: {
             EDIT_DOCKET_ENTRY: true,
           },
+          validationErrors: {},
         },
       });
 
@@ -1331,10 +1333,10 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
-          caseDetailErrors: {},
           permissions: {
             EDIT_DOCKET_ENTRY: true,
           },
+          validationErrors: {},
         },
       });
 

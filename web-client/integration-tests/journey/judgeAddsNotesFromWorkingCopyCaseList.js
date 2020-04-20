@@ -6,7 +6,7 @@ const trialSessionWorkingCopyHelper = withAppContextDecorator(
   trialSessionWorkingCopyHelperComputed,
 );
 
-export default test => {
+export const judgeAddsNotesFromWorkingCopyCaseList = test => {
   return it('Judge adds case notes from working copy case list', async () => {
     await test.runSequence('gotoTrialSessionWorkingCopySequence', {
       trialSessionId: test.trialSessionId,
@@ -27,6 +27,7 @@ export default test => {
       caseCaptionNames: 'Mona Schultz',
       caseId,
       notes: undefined,
+      showModal: 'AddEditUserCaseNoteModal',
     });
 
     await test.runSequence('cerebralBindSimpleSetStateSequence', {
@@ -38,6 +39,7 @@ export default test => {
       caseCaptionNames: 'Mona Schultz',
       caseId,
       notes: 'this is a note added from the modal',
+      showModal: 'AddEditUserCaseNoteModal',
     });
 
     await test.runSequence('updateUserCaseNoteOnWorkingCopySequence');

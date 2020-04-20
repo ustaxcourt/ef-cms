@@ -12,13 +12,12 @@ export const DocketRecordOverlay = connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
-    clearDocumentSequence: sequences.clearDocumentSequence,
     dismissModalSequence: sequences.dismissModalSequence,
     docketRecordIndex: state.docketRecordIndex,
     formattedCaseDetail: state.formattedCaseDetail,
     token: state.token,
   },
-  ({
+  function DocketRecordOverlay({
     baseUrl,
     caseDetail,
     dismissModalSequence,
@@ -26,7 +25,7 @@ export const DocketRecordOverlay = connect(
     formattedCaseDetail,
     runCancelSequence,
     token,
-  }) => {
+  }) {
     const elRef = React.useRef(null);
 
     const getEl = () => {

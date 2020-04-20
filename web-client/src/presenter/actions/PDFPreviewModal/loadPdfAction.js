@@ -12,10 +12,11 @@ export const loadPdfAction = ({ applicationContext, path, props, store }) => {
   const { ctx, file } = props;
   const isBase64Encoded = typeof file === 'string' && file.startsWith('data');
 
-  store.set(state.pdfPreviewModal.ctx, ctx);
+  store.set(state.modal.pdfPreviewModal, {});
+  store.set(state.modal.pdfPreviewModal.ctx, ctx);
 
   return new Promise((resolve, reject) => {
-    const reader = new (applicationContext.getFileReader())();
+    const reader = applicationContext.getFileReaderInstance();
 
     reader.onload = async () => {
       let binaryFile;
@@ -30,19 +31,19 @@ export const loadPdfAction = ({ applicationContext, path, props, store }) => {
         const pdfJs = await applicationContext.getPdfJs();
         const pdfDoc = await pdfJs.getDocument({ data: binaryFile }).promise;
 
-        store.set(state.pdfPreviewModal.pdfDoc, pdfDoc);
-        store.set(state.pdfPreviewModal.totalPages, pdfDoc.numPages);
-        store.set(state.pdfPreviewModal.currentPage, 1);
-        store.unset(state.pdfPreviewModal.error);
+        store.set(state.modal.pdfPreviewModal.pdfDoc, pdfDoc);
+        store.set(state.modal.pdfPreviewModal.totalPages, pdfDoc.numPages);
+        store.set(state.modal.pdfPreviewModal.currentPage, 1);
+        store.unset(state.modal.pdfPreviewModal.error);
         resolve(path.success());
       } catch (err) {
-        store.set(state.pdfPreviewModal.error, err);
+        store.set(state.modal.pdfPreviewModal.error, err);
         reject(path.error());
       }
     };
 
-    reader.onerror = function(err) {
-      store.set(state.pdfPreviewModal.error, err);
+    reader.onerror = function (err) {
+      store.set(state.modal.pdfPreviewModal.error, err);
       reject(path.error());
     };
 

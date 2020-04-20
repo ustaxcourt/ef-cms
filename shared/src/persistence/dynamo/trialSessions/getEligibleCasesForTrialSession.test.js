@@ -1,13 +1,23 @@
 const client = require('../../dynamodbClientService');
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const {
   getEligibleCasesForTrialSession,
 } = require('./getEligibleCasesForTrialSession');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('getEligibleCasesForTrialSession', () => {
+  let getCaseByCaseIdSpy;
+
   beforeEach(() => {
-    sinon.stub(client, 'query').resolves([
+    getCaseByCaseIdSpy = jest.fn().mockResolvedValue({
+      ...MOCK_CASE,
+      irsPractitioners: [{ userId: 'abc-123' }],
+      privatePractitioners: [{ userId: 'abc-123' }],
+    });
+
+    client.query = jest.fn().mockReturnValue([
       {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         pk: 'eligible-for-trial-case-catalog',
@@ -16,25 +26,26 @@ describe('getEligibleCasesForTrialSession', () => {
       },
     ]);
 
-    sinon
-      .stub(client, 'batchGet')
-      .resolves([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }]);
-  });
-
-  afterEach(() => {
-    client.query.restore();
-    client.batchGet.restore();
+    client.batchGet = jest
+      .fn()
+      .mockReturnValue([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }]);
   });
 
   it('should get the cases for a trial session', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockImplementation(getCaseByCaseIdSpy);
     const result = await getEligibleCasesForTrialSession({
       applicationContext,
     });
-    expect(result).toEqual([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }]);
+    expect(getCaseByCaseIdSpy).toHaveBeenCalled();
+    expect(result).toEqual([
+      {
+        ...MOCK_CASE,
+        irsPractitioners: [{ userId: 'abc-123' }],
+        pk: MOCK_CASE.caseId,
+        privatePractitioners: [{ userId: 'abc-123' }],
+      },
+    ]);
   });
 });

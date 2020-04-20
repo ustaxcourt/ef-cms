@@ -1,7 +1,7 @@
 import { generateCaseCaptionForSavedPetitionSequence } from './generateCaseCaptionForSavedPetitionSequence';
-import { updateCaseValueSequence } from './updateCaseValueSequence';
+import { setFormValueAction } from '../actions/setFormValueAction';
 
 export const updateCaseValueAndInternalCaseCaptionSequence = [
-  updateCaseValueSequence,
+  setFormValueAction,
   generateCaseCaptionForSavedPetitionSequence,
 ];

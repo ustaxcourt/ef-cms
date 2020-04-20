@@ -8,7 +8,7 @@ export const SetCalendarModalDialog = connect(
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.setTrialSessionCalendarSequence,
   },
-  ({ cancelSequence, confirmSequence }) => {
+  function SetCalendarModalDialog({ cancelSequence, confirmSequence }) {
     return (
       <ModalDialog
         cancelLabel="No, Cancel"

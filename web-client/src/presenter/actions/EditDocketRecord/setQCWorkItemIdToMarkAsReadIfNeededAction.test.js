@@ -1,9 +1,9 @@
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setQCWorkItemIdToMarkAsReadIfNeededAction } from './setQCWorkItemIdToMarkAsReadIfNeededAction';
 
-presenter.providers.applicationContext = applicationContext;
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('setQCWorkItemIdToMarkAsReadIfNeededAction', () => {
   it('sets the workItemIdToMarkAsRead for an unread qc work item', async () => {

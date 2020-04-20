@@ -7,11 +7,10 @@ import { chambersUserViewsDocumentDetail } from './journey/chambersUserViewsDocu
 import { chambersUserViewsDraftDocuments } from './journey/chambersUserViewsDraftDocuments';
 import { chambersUserViewsSignDraftDocument } from './journey/chambersUserViewsSignDraftDocument';
 import { fakeFile, loginAs, setupTest } from './helpers';
-import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
-import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
-import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
-import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
+import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
+import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
+import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
+import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 const test = setupTest({
   useCases: {
@@ -29,7 +28,6 @@ describe('Chambers dashboard', () => {
   });
 
   loginAs(test, 'petitioner');
-  petitionerNavigatesToCreateCase(test);
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);

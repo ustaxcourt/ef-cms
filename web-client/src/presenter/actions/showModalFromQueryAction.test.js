@@ -1,9 +1,9 @@
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { showModalFromQueryAction } from './showModalFromQueryAction';
 
 describe('showModalFromQueryAction', () => {
-  it('sets state.showModal from props.openModal', async () => {
+  it('sets state.modal.showModal from props.openModal', async () => {
     const result = await runAction(showModalFromQueryAction, {
       modules: {
         presenter,
@@ -11,19 +11,21 @@ describe('showModalFromQueryAction', () => {
       props: { openModal: 'SomeModal' },
       state: {},
     });
-    expect(result.state.showModal).toEqual('SomeModal');
+    expect(result.state.modal.showModal).toEqual('SomeModal');
   });
 
-  it('does not change state.showModal if props.openModal is undefined', async () => {
+  it('does not change state.modal.showModal if props.openModal is undefined', async () => {
     const result = await runAction(showModalFromQueryAction, {
       modules: {
         presenter,
       },
       props: {},
       state: {
-        showModal: 'SomeOtherModal',
+        modal: {
+          showModal: 'SomeOtherModal',
+        },
       },
     });
-    expect(result.state.showModal).toEqual('SomeOtherModal');
+    expect(result.state.modal.showModal).toEqual('SomeOtherModal');
   });
 });

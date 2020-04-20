@@ -8,5 +8,5 @@ import { state } from 'cerebral';
  * @param {Function} providers.store the cerebral store used for setting the state.form.caseCaption
  */
 export const setCaseCaptionForCaseInfoTabAction = ({ props, store }) => {
-  store.set(state.caseDetail.caseCaption, props.caseCaption);
+  store.set(state.form.caseCaption, props.caseCaption);
 };

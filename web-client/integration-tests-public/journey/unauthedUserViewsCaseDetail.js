@@ -17,33 +17,6 @@ export default test => {
     expect(test.getState('caseDetail.contactPrimary.name')).toBeDefined();
     expect(test.getState('caseDetail.contactPrimary.address1')).toBeUndefined();
 
-    expect(test.getState('caseDetail.docketRecord').length).toEqual(4);
-
-    expect(test.getState('caseDetail.docketRecord')).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ description: 'Petition' }),
-        expect.objectContaining({
-          description: 'Request for Place of Trial at Seattle, Washington',
-        }),
-        expect.objectContaining({
-          description: 'Order of Dismissal Entered, Judge Buch for Something',
-        }),
-        expect.objectContaining({
-          description: 'Transcript of Anything on 01-01-2019',
-        }),
-      ]),
-    );
-
-    expect(test.getState('caseDetail.documents').length).toEqual(4);
-    expect(test.getState('caseDetail.documents')).toMatchObject([
-      {
-        documentType: 'Petition',
-      },
-      { documentType: 'Statement of Taxpayer Identification' },
-      { documentType: 'OD - Order of Dismissal Entered,' },
-      { documentType: 'TRAN - Transcript' },
-    ]);
-
     const helper = runCompute(publicCaseDetailHelper, {
       state: test.getState(),
     });
@@ -77,5 +50,37 @@ export default test => {
         showServed: true,
       },
     ]);
+
+    expect(helper.formattedCaseDetail.docketRecord.length).toEqual(4);
+    expect(helper.formattedCaseDetail.docketRecord).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ description: 'Petition' }),
+        expect.objectContaining({
+          description: 'Request for Place of Trial at Seattle, Washington',
+        }),
+        expect.objectContaining({
+          description: 'Order of Dismissal Entered, Judge Buch for Something',
+        }),
+        expect.objectContaining({
+          description: 'Transcript of Anything on 01-01-2019',
+        }),
+      ]),
+    );
+
+    expect(helper.formattedCaseDetail.documents.length).toEqual(4);
+    expect(helper.formattedCaseDetail.documents).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          documentType: 'Petition',
+        }),
+        expect.objectContaining({
+          documentType: 'Statement of Taxpayer Identification',
+        }),
+        expect.objectContaining({
+          documentType: 'OD - Order of Dismissal Entered,',
+        }),
+        expect.objectContaining({ documentType: 'TRAN - Transcript' }),
+      ]),
+    );
   });
 };

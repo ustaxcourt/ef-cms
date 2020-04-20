@@ -1,4 +1,7 @@
+const baseConfig = require('../jest.config');
+
 module.exports = {
+  ...baseConfig,
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.js',
@@ -14,24 +17,17 @@ module.exports = {
     '!src/index-public.prod.js',
   ],
   coverageDirectory: './coverage',
-  coverageThreshold: {
-    global: {
-      branches: 95,
-      functions: 95,
-      lines: 95,
-      statements: 95,
-    },
-  },
   globals: {
+    File: function () {},
+    FileReader: () => {},
     atob: x => x,
-    window: { document: {} },
   },
   testEnvironment: 'node',
+  testTimeout: 30000,
   // this is to ignore imported html files
   transform: {
     '^.+\\.html?$': './htmlLoader.js',
     '^.+\\.js$': 'babel-jest',
     '^.+\\.jsx$': 'babel-jest',
   },
-  verbose: false,
 };

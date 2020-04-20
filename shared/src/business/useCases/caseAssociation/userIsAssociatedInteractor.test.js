@@ -1,12 +1,13 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { User } = require('../../entities/User');
 const { userIsAssociated } = require('./userIsAssociatedInteractor');
 
 describe('userIsAssociated', () => {
-  const applicationContext = {};
-
   it('returns true if the user.userId matches the case.userId', () => {
     const caseDetail = {
-      practitioners: [],
+      privatePractitioners: [],
       userId: 'abc-123',
     };
     const user = {
@@ -21,7 +22,7 @@ describe('userIsAssociated', () => {
 
   it('returns true if the user.userId matches the corresponding role', () => {
     const caseDetail = {
-      practitioners: [
+      privatePractitioners: [
         {
           userId: 'abc-123',
         },
@@ -37,7 +38,7 @@ describe('userIsAssociated', () => {
     expect(result).toEqual(true);
 
     user.role = User.ROLES.privatePractitioner;
-    caseDetail.respondents = [{ userId: 'abc-123' }];
+    caseDetail.irsPractitioners = [{ userId: 'abc-123' }];
 
     const result2 = userIsAssociated({ applicationContext, caseDetail, user });
     expect(result2).toEqual(true);
@@ -45,7 +46,7 @@ describe('userIsAssociated', () => {
 
   it('returns false if there are no associations between the user and the case', () => {
     const caseDetail = {
-      practitioners: [
+      privatePractitioners: [
         {
           userId: 'noop-123',
         },
@@ -61,9 +62,9 @@ describe('userIsAssociated', () => {
     expect(result).toEqual(false);
   });
 
-  it('returns false if the user role is not a practitioner or respondent', () => {
+  it('returns false if the user role is not a privatePractitioner or irsPractitioner', () => {
     const caseDetail = {
-      practitioners: [],
+      privatePractitioners: [],
       userId: 'def-321',
     };
     const user = {
