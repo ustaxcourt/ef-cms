@@ -19,7 +19,7 @@ const formattedCaseInfo = caseInfo => {
       : '';
   const formattedInfo = Object.assign(
     {
-      caseTitle: `${caseInfo.caseCaption} ${Case.CASE_CAPTION_POSTFIX}`,
+      caseCaptionWithPostfix: `${caseInfo.caseCaption} ${Case.CASE_CAPTION_POSTFIX}`,
       countryName,
       docketNumber: `${caseInfo.docketNumber}${
         caseInfo.docketNumberSuffix || ''
