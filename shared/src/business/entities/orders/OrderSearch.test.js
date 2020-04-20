@@ -61,20 +61,14 @@ describe('Order Search entity', () => {
     });
 
     it('should pass validation when a start date is provided without an end date', () => {
-      jest
-        .spyOn(global.Date, 'now')
-        .mockImplementationOnce(() =>
-          new Date('3000-05-14T11:01:58.135Z').valueOf(),
-        );
-
       const orderSearch = new OrderSearch({
         orderKeyword: 'sunglasses',
-        startDateDay: '2',
-        startDateMonth: '10',
+        startDateDay: '02',
+        startDateMonth: '02',
         startDateYear: '2020',
       });
 
-      const validationErrors = orderSearch.getFormattedValidationErrors();
+      const validationErrors = orderSearch.getValidationErrors();
 
       expect(validationErrors).toBeNull();
     });
