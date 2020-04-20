@@ -21,7 +21,6 @@
     "puppeteer-core": "^1.20.0"
   },
   "resolutions": {
-    "acorn": "^5.7.4",
     "minimist": "^1.2.5"
   }
 }
