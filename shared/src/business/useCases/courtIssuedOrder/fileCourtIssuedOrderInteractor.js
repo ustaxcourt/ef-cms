@@ -1,4 +1,3 @@
-const pdfParse = require('pdf-parse');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -44,6 +43,8 @@ exports.fileCourtIssuedOrderInteractor = async ({
     documentMetadata.freeText = documentMetadata.documentTitle;
   }
 
+  /* eslint-disable spellcheck/spell-checker */
+  /* POC for #4814 - leaving here for future work
   if (!documentMetadata.documentContents) {
     const { Body: pdfData } = await applicationContext
       .getStorageClient()
@@ -60,9 +61,10 @@ exports.fileCourtIssuedOrderInteractor = async ({
         documentMetadata.documentContents = parsedDocument.text;
       }
     } catch (e) {
-      console.log(e);
+      applicationContext.logger.info('Failed to parse PDF');
     }
-  }
+  } */
+  /* eslint-enable spellcheck/spell-checker */
 
   const documentEntity = new Document(
     {
