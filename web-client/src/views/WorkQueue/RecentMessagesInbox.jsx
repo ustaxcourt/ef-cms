@@ -8,7 +8,7 @@ export const RecentMessagesInbox = connect(
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ formattedWorkQueue, workQueueHelper }) => {
+  function RecentMessagesInbox({ formattedWorkQueue, workQueueHelper }) {
     return (
       <React.Fragment>
         <table

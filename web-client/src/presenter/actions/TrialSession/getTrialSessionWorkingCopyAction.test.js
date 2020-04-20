@@ -1,26 +1,22 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getTrialSessionWorkingCopyAction } from './getTrialSessionWorkingCopyAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
-
-let getTrialSessionWorkingCopyStub;
 
 describe('getTrialSessionWorkingCopyAction', () => {
-  beforeEach(() => {
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        getTrialSessionWorkingCopyInteractor: getTrialSessionWorkingCopyStub,
-      }),
-    };
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('call the use case to get the trial session working copy', async () => {
-    getTrialSessionWorkingCopyStub = sinon.stub().resolves({
-      sort: 'practitioner',
-      sortOrder: 'desc',
-      trialSessionId: '123',
-      userId: '234',
-    });
+    applicationContext
+      .getUseCases()
+      .getTrialSessionWorkingCopyInteractor.mockResolvedValue({
+        sort: 'practitioner',
+        sortOrder: 'desc',
+        trialSessionId: '123',
+        userId: '234',
+      });
 
     await runAction(getTrialSessionWorkingCopyAction, {
       modules: {
@@ -31,9 +27,13 @@ describe('getTrialSessionWorkingCopyAction', () => {
       },
       state: {},
     });
-    expect(getTrialSessionWorkingCopyStub.calledOnce).toEqual(true);
     expect(
-      getTrialSessionWorkingCopyStub.getCall(0).args[0].trialSessionId,
+      applicationContext.getUseCases().getTrialSessionWorkingCopyInteractor.mock
+        .calls.length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases().getTrialSessionWorkingCopyInteractor.mock
+        .calls[0][0].trialSessionId,
     ).toEqual('123');
   });
 });

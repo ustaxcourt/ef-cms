@@ -13,9 +13,9 @@ import React from 'react';
 
 export const FileDocumentWizard = connect(
   {
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
-  ({ showModal }) => {
+  function FileDocumentWizard({ showModal }) {
     return (
       <>
         <CaseDetailHeader hideActionButtons />

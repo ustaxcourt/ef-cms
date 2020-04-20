@@ -26,9 +26,7 @@ describe('generateStandingPretrialNoticeTemplate', () => {
           address2: 'Address 2',
           city: 'City',
           courthouseName: 'Courthouse Name',
-          judge: { name: 'Test Judge' },
-          postalCode: '12345',
-          respondents: [
+          irsPractitioners: [
             {
               contact: {
                 phone: '123-456-7890',
@@ -36,6 +34,8 @@ describe('generateStandingPretrialNoticeTemplate', () => {
               name: 'Guy Fieri',
             },
           ],
+          judge: { name: 'Test Judge' },
+          postalCode: '12345',
           startDate: '2020-02-02T05:00:00.000Z',
           startTime: '10:00',
           state: 'ST',
@@ -60,7 +60,7 @@ describe('generateStandingPretrialNoticeTemplate', () => {
     expect(result.indexOf('(Signed) Test Judge')).toBeGreaterThan(-1);
   });
 
-  it('does not return respondent information if the respondents field is NOT an array of respondent objects', async () => {
+  it('does not return respondent information if the irsPractitioners field is NOT an array of respondent objects', async () => {
     const result = await generateStandingPretrialNoticeTemplate({
       applicationContext,
       content: {
@@ -73,15 +73,15 @@ describe('generateStandingPretrialNoticeTemplate', () => {
           address2: 'Address 2',
           city: 'City',
           courthouseName: 'Courthouse Name',
-          judge: { name: 'Test Judge' },
-          postalCode: '12345',
-          respondents: {
+          irsPractitioners: {
             // will be ignored since it's not an array
             contact: {
               phone: '123-456-7890',
             },
             name: 'Guy Fieri',
           },
+          judge: { name: 'Test Judge' },
+          postalCode: '12345',
           startDate: '2020-02-02T05:00:00.000Z',
           startTime: '10:00',
           state: 'ST',

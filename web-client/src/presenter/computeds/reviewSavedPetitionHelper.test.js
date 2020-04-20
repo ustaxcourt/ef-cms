@@ -24,7 +24,7 @@ describe('reviewSavedPetitionHelper', () => {
   it('returns defaults when there is no form', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        caseDetail: {},
+        form: {},
       },
     });
     expect(result).toEqual({
@@ -34,6 +34,7 @@ describe('reviewSavedPetitionHelper', () => {
       ownershipDisclosureFile: undefined,
       petitionFile: undefined,
       petitionPaymentStatusFormatted: 'Not paid',
+      preferredTrialCityFormatted: 'No requested place of trial',
       receivedAtFormatted: undefined,
       requestForPlaceOfTrialFile: undefined,
       shouldShowIrsNoticeDate: false,
@@ -44,7 +45,7 @@ describe('reviewSavedPetitionHelper', () => {
   it('returns defaults when the are values', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
-        caseDetail: {
+        form: {
           documents: [
             { documentType: INITIAL_DOCUMENT_TYPES.petition.documentType },
             {
@@ -60,6 +61,8 @@ describe('reviewSavedPetitionHelper', () => {
           hasVerifiedIrsNotice: true,
           irsNoticeDate: '2020-01-05T03:30:45.007Z',
           orderForAmendedPetitionAndFilingFee: true,
+          petitionPaymentDate: '2020-03-14T14:02:04.007Z',
+          petitionPaymentMethod: 'pay.gov',
           petitionPaymentStatus: PAYMENT_STATUS.PAID,
           receivedAt: '2020-01-05T03:30:45.007Z',
         },
@@ -76,7 +79,8 @@ describe('reviewSavedPetitionHelper', () => {
       petitionFile: {
         documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       },
-      petitionPaymentStatusFormatted: 'Paid',
+      petitionPaymentStatusFormatted: 'Paid 03/14/2020 pay.gov',
+      preferredTrialCityFormatted: 'No requested place of trial',
       receivedAtFormatted: '01/04/2020',
       requestForPlaceOfTrialFile: {
         documentType:
@@ -84,6 +88,53 @@ describe('reviewSavedPetitionHelper', () => {
       },
       shouldShowIrsNoticeDate: true,
       stinFile: { documentType: INITIAL_DOCUMENT_TYPES.stin.documentType },
+    });
+  });
+
+  it('returns a message when preferred trial city has not been selected', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: {},
+      },
+    });
+
+    expect(result).toEqual({
+      hasIrsNoticeFormatted: 'No',
+      hasOrders: false,
+      irsNoticeDateFormatted: undefined,
+      ownershipDisclosureFile: undefined,
+      petitionFile: undefined,
+      petitionPaymentStatusFormatted: 'Not paid',
+      preferredTrialCityFormatted: 'No requested place of trial',
+      receivedAtFormatted: undefined,
+      requestForPlaceOfTrialFile: undefined,
+      shouldShowIrsNoticeDate: false,
+      stinFile: undefined,
+    });
+  });
+
+  it('returns a preferred trial city when it has been selected', () => {
+    const mockCity = 'Nowhere, USA';
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: {
+          preferredTrialCity: mockCity,
+        },
+      },
+    });
+
+    expect(result).toEqual({
+      hasIrsNoticeFormatted: 'No',
+      hasOrders: false,
+      irsNoticeDateFormatted: undefined,
+      ownershipDisclosureFile: undefined,
+      petitionFile: undefined,
+      petitionPaymentStatusFormatted: 'Not paid',
+      preferredTrialCityFormatted: mockCity,
+      receivedAtFormatted: undefined,
+      requestForPlaceOfTrialFile: undefined,
+      shouldShowIrsNoticeDate: false,
+      stinFile: undefined,
     });
   });
 });

@@ -1,39 +1,34 @@
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validatePrimaryContactAction } from './validatePrimaryContactAction';
-import sinon from 'sinon';
-const {
-  ContactFactory,
-} = require('../../../../shared/src/business/entities/contacts/ContactFactory');
 
 describe('validatePrimaryContactAction', () => {
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+  beforeAll(() => {
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
     };
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('runs validation on the primary contact with a successful result', async () => {
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validatePrimaryContactInteractor: sinon.stub().returns(null),
-      }),
-    };
+    applicationContext
+      .getUseCases()
+      .validatePrimaryContactInteractor.mockReturnValue(null);
 
     const result = await runAction(validatePrimaryContactAction, {
       modules: {
         presenter,
       },
       state: {
-        caseDetail: {
+        form: {
           contactPrimary: {},
           partyType: 'Petitioner',
         },
@@ -41,18 +36,20 @@ describe('validatePrimaryContactAction', () => {
     });
 
     expect(result.state.validationErrors.contactPrimary).toEqual({});
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('runs validation on the primary contact with an invalid result', async () => {
-    presenter.providers.applicationContext = applicationContext;
+    applicationContext
+      .getUseCases()
+      .validatePrimaryContactInteractor.mockReturnValue('validation errors');
 
-    const result = await runAction(validatePrimaryContactAction, {
+    await runAction(validatePrimaryContactAction, {
       modules: {
         presenter,
       },
       state: {
-        caseDetail: {
+        form: {
           contactPrimary: {
             address1: '',
             address2: 'asdf',
@@ -68,9 +65,6 @@ describe('validatePrimaryContactAction', () => {
       },
     });
 
-    expect(result.state.validationErrors.contactPrimary).toEqual({
-      address1: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.address1,
-    });
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

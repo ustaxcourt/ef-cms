@@ -19,11 +19,13 @@ exports.setPriorityOnAllWorkItems = async ({
   const workItemMappings = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
+      '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `${caseId}|workItem`,
+      ':pk': `case|${caseId}`,
+      ':prefix': 'work-item',
     },
-    KeyConditionExpression: '#pk = :pk',
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
   });
 
@@ -34,7 +36,7 @@ exports.setPriorityOnAllWorkItems = async ({
         '#gsi1pk': 'gsi1pk',
       },
       ExpressionAttributeValues: {
-        ':gsi1pk': `workitem-${mapping.sk}`,
+        ':gsi1pk': mapping.sk,
       },
       IndexName: 'gsi1',
       KeyConditionExpression: '#gsi1pk = :gsi1pk',

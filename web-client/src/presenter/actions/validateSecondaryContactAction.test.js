@@ -1,20 +1,17 @@
-import { applicationContext } from '../../applicationContext';
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateSecondaryContactAction } from './validateSecondaryContactAction';
-import sinon from 'sinon';
-const {
-  ContactFactory,
-} = require('../../../../shared/src/business/entities/contacts/ContactFactory');
 
 describe('validateSecondaryContactAction', () => {
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+  beforeAll(() => {
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -22,18 +19,16 @@ describe('validateSecondaryContactAction', () => {
   });
 
   it('runs validation on the secondary contact with a successful result', async () => {
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateSecondaryContactInteractor: sinon.stub().returns(null),
-      }),
-    };
+    applicationContext
+      .getUseCases()
+      .validateSecondaryContactInteractor.mockReturnValue(null);
 
     const result = await runAction(validateSecondaryContactAction, {
       modules: {
         presenter,
       },
       state: {
-        caseDetail: {
+        form: {
           contactSecondary: {},
           partyType: 'Petitioner & spouse',
         },
@@ -41,18 +36,20 @@ describe('validateSecondaryContactAction', () => {
     });
 
     expect(result.state.validationErrors.contactSecondary).toEqual({});
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('runs validation on the secondary contact with an invalid result', async () => {
-    presenter.providers.applicationContext = applicationContext;
+    applicationContext
+      .getUseCases()
+      .validateSecondaryContactInteractor.mockReturnValue('validation error');
 
-    const result = await runAction(validateSecondaryContactAction, {
+    await runAction(validateSecondaryContactAction, {
       modules: {
         presenter,
       },
       state: {
-        caseDetail: {
+        form: {
           contactSecondary: {
             address1: '',
             address2: 'asdf',
@@ -68,9 +65,6 @@ describe('validateSecondaryContactAction', () => {
       },
     });
 
-    expect(result.state.validationErrors.contactSecondary).toEqual({
-      address1: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.address1,
-    });
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

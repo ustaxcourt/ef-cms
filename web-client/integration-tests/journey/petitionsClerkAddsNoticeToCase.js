@@ -1,6 +1,7 @@
 import { OrderWithoutBody } from '../../../shared/src/business/entities/orders/OrderWithoutBody';
 import { applicationContext } from '../../src/applicationContext';
 import { first } from 'lodash';
+import { wait } from '../helpers';
 
 const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
@@ -26,7 +27,7 @@ export default test => {
       value: 'Notice to Need a Nap',
     });
 
-    expect(test.getState('form.documentType')).toEqual('Notice');
+    expect(test.getState('modal.documentType')).toEqual('Notice');
 
     await test.runSequence('submitCreateOrderModalSequence');
 
@@ -39,9 +40,14 @@ export default test => {
 
     await test.runSequence('submitCourtIssuedOrderSequence');
 
+    expect(test.getState('currentPage')).toEqual('DocumentDetail');
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
-    expect(test.getState('form.primaryDocumentFile')).toBeDefined();
+
+    //skip signing and go back to caseDetail
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
 
     const {
       draftDocuments,
@@ -54,10 +60,6 @@ export default test => {
       ? first(draftDocuments).documentId
       : undefined;
 
-    expect(test.currentRouteUrl).toEqual(
-      `/case-detail/${test.getState('caseDetail.caseId')}/documents/${
-        test.documentId
-      }`,
-    );
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
   });
 };

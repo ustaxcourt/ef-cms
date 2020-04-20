@@ -6,7 +6,7 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handler = event =>
+exports.generatePrintableFilingReceiptLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { documents } = JSON.parse(event.body);
 

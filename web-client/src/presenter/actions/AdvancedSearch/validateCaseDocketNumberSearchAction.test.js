@@ -1,4 +1,4 @@
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateCaseDocketNumberSearchAction } from './validateCaseDocketNumberSearchAction';
 
@@ -6,7 +6,7 @@ describe('validateCaseDocketNumberSearchAction', () => {
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
@@ -16,13 +16,15 @@ describe('validateCaseDocketNumberSearchAction', () => {
     };
   });
 
-  it('should call path.success and not path.error if docketNumber is on state.docketNumberSearchForm', async () => {
+  it('should call path.success and not path.error if docketNumber is on state.advancedSearchForm.docketNumberSearch', async () => {
     await runAction(validateCaseDocketNumberSearchAction, {
       modules: {
         presenter,
       },
       state: {
-        docketNumberSearchForm: { docketNumber: '123' },
+        advancedSearchForm: {
+          caseSearchByDocketNumber: { docketNumber: '123' },
+        },
       },
     });
 
@@ -30,13 +32,13 @@ describe('validateCaseDocketNumberSearchAction', () => {
     expect(errorStub).not.toHaveBeenCalled();
   });
 
-  it('should call path.error with an error message and not call path.success if docketNumber is not on state.docketNumberSearchForm', async () => {
+  it('should call path.error with an error message and not call path.success if docketNumber is not on state.advancedSearchForm.docketNumberSearch', async () => {
     await runAction(validateCaseDocketNumberSearchAction, {
       modules: {
         presenter,
       },
       state: {
-        docketNumberSearchForm: {},
+        advancedSearchForm: { caseSearchByDocketNumber: {} },
       },
     });
 

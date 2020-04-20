@@ -1,4 +1,5 @@
 const client = require('../../dynamodbClientService');
+const diff = require('diff-arrays-of-objects');
 const {
   updateWorkItemAssociatedJudge,
 } = require('../workitems/updateWorkItemAssociatedJudge');
@@ -18,6 +19,8 @@ const {
   updateWorkItemTrialDate,
 } = require('../workitems/updateWorkItemTrialDate');
 const { differenceWith, isEqual } = require('lodash');
+const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
+const { omit } = require('lodash');
 
 /**
  * updateCase
@@ -28,17 +31,14 @@ const { differenceWith, isEqual } = require('lodash');
  * @returns {Promise} the promise of the persistence calls
  */
 exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
-  const oldCase = await client.get({
-    Key: {
-      pk: caseToUpdate.caseId,
-      sk: caseToUpdate.caseId,
-    },
+  const oldCase = await getCaseByCaseId({
     applicationContext,
+    caseId: caseToUpdate.caseId,
   });
 
   const requests = [];
 
-  let updatedDocketRecord = differenceWith(
+  const updatedDocketRecord = differenceWith(
     caseToUpdate.docketRecord,
     oldCase.docketRecord,
     isEqual,
@@ -57,6 +57,102 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     );
   });
 
+  const updatedDocuments = differenceWith(
+    caseToUpdate.documents,
+    oldCase.documents,
+    isEqual,
+  );
+
+  updatedDocuments.forEach(document => {
+    requests.push(
+      client.put({
+        Item: {
+          pk: `case|${caseToUpdate.caseId}`,
+          sk: `document|${document.documentId}`,
+          ...document,
+        },
+        applicationContext,
+      }),
+    );
+  });
+
+  const oldIrsPractitioners = oldCase.irsPractitioners.map(irsPractitioner =>
+    omit(irsPractitioner, ['pk', 'sk']),
+  );
+  const {
+    added: addedIrsPractitioners,
+    removed: deletedIrsPractitioners,
+    updated: updatedIrsPractitioners,
+  } = diff(oldIrsPractitioners, caseToUpdate.irsPractitioners, 'userId');
+
+  deletedIrsPractitioners.forEach(practitioner => {
+    requests.push(
+      client.delete({
+        applicationContext,
+        key: {
+          pk: `case|${caseToUpdate.caseId}`,
+          sk: `irsPractitioner|${practitioner.userId}`,
+        },
+      }),
+    );
+  });
+
+  [...addedIrsPractitioners, ...updatedIrsPractitioners].forEach(
+    practitioner => {
+      requests.push(
+        client.put({
+          Item: {
+            pk: `case|${caseToUpdate.caseId}`,
+            sk: `irsPractitioner|${practitioner.userId}`,
+            ...practitioner,
+          },
+          applicationContext,
+        }),
+      );
+    },
+  );
+
+  const oldPrivatePractitioners = oldCase.privatePractitioners.map(
+    privatePractitioner => omit(privatePractitioner, ['pk', 'sk']),
+  );
+
+  const {
+    added: addedPrivatePractitioners,
+    removed: deletedPrivatePractitioners,
+    updated: updatedPrivatePractitioners,
+  } = diff(
+    oldPrivatePractitioners,
+    caseToUpdate.privatePractitioners,
+    'userId',
+  );
+
+  deletedPrivatePractitioners.forEach(practitioner => {
+    requests.push(
+      client.delete({
+        applicationContext,
+        key: {
+          pk: `case|${caseToUpdate.caseId}`,
+          sk: `privatePractitioner|${practitioner.userId}`,
+        },
+      }),
+    );
+  });
+
+  [...addedPrivatePractitioners, ...updatedPrivatePractitioners].forEach(
+    practitioner => {
+      requests.push(
+        client.put({
+          Item: {
+            pk: `case|${caseToUpdate.caseId}`,
+            sk: `privatePractitioner|${practitioner.userId}`,
+            ...practitioner,
+          },
+          applicationContext,
+        }),
+      );
+    },
+  );
+
   if (
     oldCase.status !== caseToUpdate.status ||
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
@@ -68,21 +164,24 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     const workItemMappings = await client.query({
       ExpressionAttributeNames: {
         '#pk': 'pk',
+        '#sk': 'sk',
       },
       ExpressionAttributeValues: {
-        ':pk': `${caseToUpdate.caseId}|workItem`,
+        ':pk': `case|${caseToUpdate.caseId}`,
+        ':prefix': 'work-item',
       },
-      KeyConditionExpression: '#pk = :pk',
+      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
       applicationContext,
     });
 
     for (let mapping of workItemMappings) {
+      const [, workItemId] = mapping.sk.split('|');
       if (oldCase.status !== caseToUpdate.status) {
         requests.push(
           updateWorkItemCaseStatus({
             applicationContext,
             caseStatus: caseToUpdate.status,
-            workItemId: mapping.sk,
+            workItemId,
           }),
         );
       }
@@ -91,7 +190,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           updateWorkItemCaseTitle({
             applicationContext,
             caseTitle: caseToUpdate.caseCaption,
-            workItemId: mapping.sk,
+            workItemId,
           }),
         );
       }
@@ -100,7 +199,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           updateWorkItemDocketNumberSuffix({
             applicationContext,
             docketNumberSuffix: caseToUpdate.docketNumberSuffix || null,
-            workItemId: mapping.sk,
+            workItemId,
           }),
         );
       }
@@ -109,7 +208,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           updateWorkItemTrialDate({
             applicationContext,
             trialDate: caseToUpdate.trialDate || null,
-            workItemId: mapping.sk,
+            workItemId,
           }),
         );
       }
@@ -118,7 +217,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           updateWorkItemAssociatedJudge({
             applicationContext,
             associatedJudge: caseToUpdate.associatedJudge,
-            workItemId: mapping.sk,
+            workItemId,
           }),
         );
       }
@@ -127,7 +226,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           updateWorkItemCaseIsInProgress({
             applicationContext,
             caseIsInProgress: caseToUpdate.inProgress,
-            workItemId: mapping.sk,
+            workItemId,
           }),
         );
       }
@@ -138,18 +237,23 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     ? { gsi1pk: caseToUpdate.leadCaseId }
     : {};
 
-  const [results] = await Promise.all([
+  await Promise.all([
     client.put({
       Item: {
-        pk: caseToUpdate.caseId,
-        sk: caseToUpdate.caseId,
+        pk: `case|${caseToUpdate.caseId}`,
+        sk: `case|${caseToUpdate.caseId}`,
         ...setLeadCase,
-        ...caseToUpdate,
+        ...omit(caseToUpdate, [
+          'documents',
+          'irsPractitioners',
+          'privatePractitioners',
+          'docketRecord',
+        ]),
       },
       applicationContext,
     }),
     ...requests,
   ]);
 
-  return results;
+  return caseToUpdate;
 };

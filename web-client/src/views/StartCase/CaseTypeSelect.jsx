@@ -14,7 +14,7 @@ export const CaseTypeSelect = connect(
     validationErrors: state.validationErrors,
     value: props.value,
   },
-  ({
+  function CaseTypeSelect({
     allowDefaultOption,
     caseTypes,
     className,
@@ -23,7 +23,7 @@ export const CaseTypeSelect = connect(
     validation,
     validationErrors,
     value,
-  }) => {
+  }) {
     return (
       <div className={classNames('subsection', className)}>
         <FormGroup

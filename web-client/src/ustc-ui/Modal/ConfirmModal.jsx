@@ -10,9 +10,9 @@ export const ConfirmModal = connect(
   {
     onCancel: sequences[props.onCancelSequence],
     onConfirm: sequences[props.onConfirmSequence],
-    showModal: state.showModal,
+    showModal: state.modal.showModal,
   },
-  ({
+  function ConfirmModal({
     cancelLabel,
     children,
     className,
@@ -30,7 +30,7 @@ export const ConfirmModal = connect(
     showModal,
     showModalWhen,
     title,
-  }) => {
+  }) {
     hasErrorState = hasErrorState || false;
     headerIcon = headerIcon || null;
     headerIconClassName = headerIconClassName || '';

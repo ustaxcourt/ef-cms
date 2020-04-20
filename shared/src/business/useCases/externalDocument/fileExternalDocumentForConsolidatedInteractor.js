@@ -73,7 +73,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
   const baseMetadata = pick(primaryDocumentMetadata, [
     'partyPrimary',
     'partySecondary',
-    'partyRespondent',
+    'partyIrsPractitioner',
     'practitioner',
     'caseId',
     'docketNumber',
@@ -261,7 +261,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
 
         saveCasesMap[
           caseEntity.caseId
-        ] = applicationContext.getPersistenceGateway().updateCase({
+        ] = await applicationContext.getPersistenceGateway().updateCase({
           applicationContext,
           caseToUpdate: caseEntity.validate().toRawObject(),
         });

@@ -12,13 +12,13 @@ export const WhatDocumentIsThis = connect(
     reasons: state.viewAllDocumentsHelper.reasons,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
-  ({
+  function WhatDocumentIsThis({
     chooseModalWizardStepSequence,
     clearModalSequence,
     overlayRef,
     reasons,
     updateModalValueSequence,
-  }) => {
+  }) {
     if (overlayRef && overlayRef.current) {
       overlayRef.current.scrollTo(0, 0);
     }

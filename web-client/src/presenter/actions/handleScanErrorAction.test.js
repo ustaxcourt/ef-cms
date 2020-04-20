@@ -1,5 +1,5 @@
 import { handleScanErrorAction } from './handleScanErrorAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('handleScanErrorAction', () => {
@@ -14,13 +14,15 @@ describe('handleScanErrorAction', () => {
         },
       },
       state: {
-        isScanning: true,
+        scanner: {
+          isScanning: true,
+        },
         showModal: '',
       },
     });
 
-    expect(result.state.showModal).toEqual('EmptyHopperModal');
-    expect(result.state.isScanning).toBeFalsy();
+    expect(result.state.modal.showModal).toEqual('EmptyHopperModal');
+    expect(result.state.scanner.isScanning).toBeFalsy();
   });
 
   it('should show the ScanErrorModal modal for all other errors', async () => {
@@ -34,12 +36,14 @@ describe('handleScanErrorAction', () => {
         },
       },
       state: {
-        isScanning: true,
+        scanner: {
+          isScanning: true,
+        },
         showModal: '',
       },
     });
 
-    expect(result.state.showModal).toEqual('ScanErrorModal');
-    expect(result.state.isScanning).toBeFalsy();
+    expect(result.state.modal.showModal).toEqual('ScanErrorModal');
+    expect(result.state.scanner.isScanning).toBeFalsy();
   });
 });

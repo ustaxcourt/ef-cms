@@ -1,15 +1,14 @@
 import { isGlobalReportAction } from './isGlobalReportAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 let yesStub;
 let noStub;
 
 describe('isGlobalReportAction', () => {
-  beforeEach(() => {
-    yesStub = sinon.stub();
-    noStub = sinon.stub();
+  beforeAll(() => {
+    yesStub = jest.fn();
+    noStub = jest.fn();
 
     presenter.providers.path = { no: noStub, yes: yesStub };
   });
@@ -22,7 +21,7 @@ describe('isGlobalReportAction', () => {
       props: {},
     });
 
-    expect(yesStub.calledOnce).toEqual(true);
+    expect(yesStub.mock.calls.length).toEqual(1);
   });
 
   it('takes no path when respondent is not already in case', async () => {
@@ -35,6 +34,6 @@ describe('isGlobalReportAction', () => {
       },
     });
 
-    expect(noStub.calledOnce).toEqual(true);
+    expect(noStub.mock.calls.length).toEqual(1);
   });
 });

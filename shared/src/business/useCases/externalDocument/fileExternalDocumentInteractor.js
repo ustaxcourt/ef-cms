@@ -59,7 +59,7 @@ exports.fileExternalDocumentInteractor = async ({
   const baseMetadata = pick(primaryDocumentMetadata, [
     'partyPrimary',
     'partySecondary',
-    'partyRespondent',
+    'partyIrsPractitioner',
     'practitioner',
     'caseId',
     'docketNumber',
@@ -206,16 +206,12 @@ exports.fileExternalDocumentInteractor = async ({
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
-  const workItemsSaved = [];
   for (let workItem of workItems) {
-    workItemsSaved.push(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-        applicationContext,
-        workItem: workItem.validate().toRawObject(),
-      }),
-    );
+    await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
+      applicationContext,
+      workItem: workItem.validate().toRawObject(),
+    });
   }
-  await Promise.all(workItemsSaved);
 
   return caseEntity.toRawObject();
 };

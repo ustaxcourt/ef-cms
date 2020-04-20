@@ -1,34 +1,24 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   getCaseInventoryReportInteractor,
 } = require('./getCaseInventoryReportInteractor');
 const { User } = require('../../entities/User');
 
 describe('getCaseInventoryReportInteractor', () => {
-  let applicationContext;
-  let user;
-  let getCaseInventoryReportMock = jest.fn();
-
   beforeEach(() => {
-    jest.clearAllMocks();
-
-    user = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.docketClerk,
       userId: '9754a349-1013-44fa-9e61-d39aba2637e0',
-    };
-
-    applicationContext = {
-      getCurrentUser: () => user,
-      getUseCaseHelpers: () => ({
-        getCaseInventoryReport: getCaseInventoryReportMock,
-      }),
-    };
+    });
   });
 
   it('throws an error if user is not authorized for case inventory report', async () => {
-    user = {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitioner, //petitioner does not have CASE_INVENTORY_REPORT permission
       userId: '8e20dd1b-d142-40f4-8362-6297f1be68bf',
-    };
+    });
 
     await expect(
       getCaseInventoryReportInteractor({
@@ -47,14 +37,17 @@ describe('getCaseInventoryReportInteractor', () => {
   });
 
   it('calls getCaseInventoryReport useCaseHelper with appropriate params and returns its result', async () => {
-    const mockCaseResult = {
-      associatedJudge: 'Chief Judge',
-      caseCaption: 'A Test Caption',
-      docketNumber: '123-20',
-      docketNumberSuffix: 'L',
-      status: 'New',
-    };
-    getCaseInventoryReportMock = jest.fn().mockReturnValue([mockCaseResult]);
+    applicationContext
+      .getUseCaseHelpers()
+      .getCaseInventoryReport.mockReturnValue([
+        {
+          associatedJudge: 'Chief Judge',
+          caseCaption: 'A Test Caption',
+          docketNumber: '123-20',
+          docketNumberSuffix: 'L',
+          status: 'New',
+        },
+      ]);
 
     const result = await getCaseInventoryReportInteractor({
       applicationContext,
@@ -62,11 +55,21 @@ describe('getCaseInventoryReportInteractor', () => {
       status: 'New',
     });
 
-    expect(getCaseInventoryReportMock).toBeCalledWith({
+    expect(
+      applicationContext.getUseCaseHelpers().getCaseInventoryReport,
+    ).toBeCalledWith({
       applicationContext: expect.anything(),
       associatedJudge: 'Chief Judge',
       status: 'New',
     });
-    expect(result).toEqual([mockCaseResult]);
+    expect(result).toEqual([
+      {
+        associatedJudge: 'Chief Judge',
+        caseCaption: 'A Test Caption',
+        docketNumber: '123-20',
+        docketNumberSuffix: 'L',
+        status: 'New',
+      },
+    ]);
   });
 });

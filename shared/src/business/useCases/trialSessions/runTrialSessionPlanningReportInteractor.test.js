@@ -1,8 +1,6 @@
-const sinon = require('sinon');
 const {
-  compareISODateStrings,
-  compareStrings,
-} = require('../../utilities/sortFunctions');
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const {
   getPreviousTerm,
   getTrialSessionPlanningReportData,
@@ -12,26 +10,22 @@ const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { User } = require('../../entities/User');
 
 describe('run trial session planning report', () => {
-  let applicationContext;
+  let user;
+
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+  });
 
   it('throws error if user is unauthorized', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getEligibleCasesForTrialCity: sinon.stub().returns([]),
-        };
-      },
-      getUtilities: () => {
-        return { compareISODateStrings, compareStrings };
-      },
+    user = {
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
     };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getEligibleCasesForTrialCity.mockReturnValue([]);
+
     await expect(
       runTrialSessionPlanningReportInteractor({
         applicationContext,
@@ -42,56 +36,44 @@ describe('run trial session planning report', () => {
   });
 
   it('returns the created pdf', async () => {
-    const generateTrialSessionPlanningReportTemplateStub = sinon.stub();
-    const generatePdfFromHtmlInteractorStub = sinon.stub();
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsClerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getEligibleCasesForTrialCity: sinon
-            .stub()
-            .returns([{ caseId: '123' }]),
-          getTrialSessions: sinon.stub().returns([
-            {
-              judge: { name: 'Judge Armen' },
-              sessionType: 'Regular',
-              startDate: '2020-05-01T21:40:46.415Z',
-              term: 'spring',
-              termYear: '2020',
-              trialLocation: 'Birmingham, Alabama',
-              trialSessionId: '123',
-            },
-          ]),
-        };
-      },
-      getTemplateGenerators: () => {
-        return {
-          generateTrialSessionPlanningReportTemplate: async ({
-            content: { previousTerms, rows, selectedTerm, selectedYear },
-          }) => {
-            generateTrialSessionPlanningReportTemplateStub();
-            return `<!DOCTYPE html>${previousTerms} ${rows} ${selectedTerm} ${selectedYear}</html>`;
-          },
-        };
-      },
-      getUseCases: () => {
-        return {
-          generatePdfFromHtmlInteractor: ({ contentHtml }) => {
-            generatePdfFromHtmlInteractorStub();
-            return contentHtml;
-          },
-        };
-      },
-      getUtilities: () => {
-        return { compareISODateStrings, compareStrings };
-      },
+    user = {
+      role: User.ROLES.petitionsClerk,
+      userId: 'petitionsClerk',
     };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getEligibleCasesForTrialCity.mockReturnValue([{ caseId: '123' }]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessions.mockReturnValue([
+        {
+          judge: { name: 'Judge Armen' },
+          sessionType: 'Regular',
+          startDate: '2020-05-01T21:40:46.415Z',
+          term: 'spring',
+          termYear: '2020',
+          trialLocation: 'Birmingham, Alabama',
+          trialSessionId: '123',
+        },
+      ]);
+
+    applicationContext
+      .getTemplateGenerators()
+      .generateTrialSessionPlanningReportTemplate.mockImplementation(
+        async ({
+          content: { previousTerms, rows, selectedTerm, selectedYear },
+        }) => {
+          return `<!DOCTYPE html>${previousTerms} ${rows} ${selectedTerm} ${selectedYear}</html>`;
+        },
+      );
+
+    applicationContext
+      .getUseCases()
+      .generatePdfFromHtmlInteractor.mockImplementation(({ contentHtml }) => {
+        return contentHtml;
+      });
 
     const result = await runTrialSessionPlanningReportInteractor({
       applicationContext,
@@ -99,17 +81,19 @@ describe('run trial session planning report', () => {
       year: '2020',
     });
 
-    expect(generateTrialSessionPlanningReportTemplateStub.called).toEqual(true);
-    expect(generatePdfFromHtmlInteractorStub.called).toEqual(true);
+    expect(
+      applicationContext.getTemplateGenerators()
+        .generateTrialSessionPlanningReportTemplate,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+    ).toBeCalled();
     expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
   });
 
   describe('getTrialSessionPlanningReportData', () => {
     it('returns previous terms and the trial locations and case counts', async () => {
-      const getEligibleCasesForTrialCityStub = sinon
-        .stub()
-        .returns([{ caseId: '123' }, { caseId: '123' }]);
-      const getTrialSessionsStub = sinon.stub().returns([
+      let mockTrialSessions = [
         {
           judge: { name: 'Judge Armen' },
           sessionType: 'Regular',
@@ -155,25 +139,23 @@ describe('run trial session planning report', () => {
           trialLocation: 'Birmingham, Alabama',
           trialSessionId: '456',
         },
-      ]);
-      applicationContext = {
-        environment: { stage: 'local' },
-        getCurrentUser: () => {
-          return {
-            role: User.ROLES.petitionsClerk,
-            userId: 'petitionsClerk',
-          };
-        },
-        getPersistenceGateway: () => {
-          return {
-            getEligibleCasesForTrialCity: getEligibleCasesForTrialCityStub,
-            getTrialSessions: getTrialSessionsStub,
-          };
-        },
-        getUtilities: () => {
-          return { compareISODateStrings, compareStrings };
-        },
+      ];
+      user = {
+        role: User.ROLES.petitionsClerk,
+        userId: 'petitionsClerk',
       };
+
+      applicationContext
+        .getPersistenceGateway()
+        .getEligibleCasesForTrialCity.mockReturnValue([
+          { caseId: '123' },
+          { caseId: '123' },
+        ]);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getTrialSessions.mockReturnValue(mockTrialSessions);
+
       const results = await getTrialSessionPlanningReportData({
         applicationContext,
         term: 'winter',

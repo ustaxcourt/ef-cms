@@ -1,20 +1,14 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { createWorkItemAction } from './createWorkItemAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
-
-let createWorkItemInteractorStub;
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    createWorkItemInteractor: createWorkItemInteractorStub,
-  }),
-};
 
 describe('createWorkItemAction', () => {
-  it('should call createWorkItemInteractor with the expected parameters for a message on props and return the alertSuccess', async () => {
-    createWorkItemInteractorStub = sinon.stub();
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
 
+  it('should call createWorkItemInteractor with the expected parameters for a message on props and return the alertSuccess', async () => {
     const result = await runAction(createWorkItemAction, {
       modules: {
         presenter,
@@ -30,8 +24,13 @@ describe('createWorkItemAction', () => {
       },
     });
 
-    expect(createWorkItemInteractorStub.called).toEqual(true);
-    expect(createWorkItemInteractorStub.getCall(0).args[0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().createWorkItemInteractor,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCases().createWorkItemInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       assigneeId: '111',
       caseId: '222',
       documentId: '333',
@@ -41,8 +40,6 @@ describe('createWorkItemAction', () => {
   });
 
   it('should call createWorkItemInteractor with the expected parameters for a message on state.form and return the alertSuccess', async () => {
-    createWorkItemInteractorStub = sinon.stub();
-
     const result = await runAction(createWorkItemAction, {
       modules: {
         presenter,
@@ -59,8 +56,13 @@ describe('createWorkItemAction', () => {
       },
     });
 
-    expect(createWorkItemInteractorStub.called).toEqual(true);
-    expect(createWorkItemInteractorStub.getCall(0).args[0]).toMatchObject({
+    expect(
+      applicationContext.getUseCases().createWorkItemInteractor,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCases().createWorkItemInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
       assigneeId: '123',
       caseId: '456',
       documentId: '789',

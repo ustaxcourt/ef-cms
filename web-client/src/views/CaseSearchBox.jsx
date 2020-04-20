@@ -2,14 +2,21 @@ import { Button } from '../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const CaseSearchBox = connect(
   {
-    searchTerm: state.searchTerm,
+    caseSearchBoxHelper: state.caseSearchBoxHelper,
+    searchTerm: state.header.searchTerm,
     submitCaseSearchSequence: sequences.submitCaseSearchSequence,
     updateSearchTermSequence: sequences.updateSearchTermSequence,
   },
-  ({ searchTerm, submitCaseSearchSequence, updateSearchTermSequence }) => {
+  function CaseSearchBox({
+    caseSearchBoxHelper,
+    searchTerm,
+    submitCaseSearchSequence,
+    updateSearchTermSequence,
+  }) {
     return (
       <>
         <form
@@ -26,15 +33,28 @@ export const CaseSearchBox = connect(
                     <h3>Search for a Case</h3>
                   </div>
                   <div className="tablet:grid-col-4 padding-top-05">
-                    <a className="usa-link float-right" href="/search">
+                    <a
+                      className="usa-link float-right"
+                      href="/search"
+                      id="advanced-search-button"
+                    >
                       Advanced Search
                     </a>
                   </div>
                 </div>
-                <p>
-                  To file an Entry of Appearance, Substitution of Counsel, etc.
-                </p>
-                <div className="usa-form-group margin-bottom-4">
+                {caseSearchBoxHelper.showSearchDescription && (
+                  <p>
+                    To file an Entry of Appearance, Substitution of Counsel,
+                    etc.
+                  </p>
+                )}
+                <div
+                  className={classNames(
+                    'usa-form-group margin-bottom-4',
+                    !caseSearchBoxHelper.showSearchDescription &&
+                      'margin-top-3',
+                  )}
+                >
                   <div>
                     <label className="usa-label" htmlFor="docket-search-field">
                       Docket number

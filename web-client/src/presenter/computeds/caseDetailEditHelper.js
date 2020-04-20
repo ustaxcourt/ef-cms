@@ -6,14 +6,14 @@ import { state } from 'cerebral';
  * and documents
  *
  * @param {Function} get the cerebral get function used
- * for getting state.caseDetail.partyType and state.constants
+ * for getting state.form.partyType and state.constants
  * @param {object} applicationContext the application context
  * @returns {object} partyTypes constant, showPrimary/SecondaryContact,
  * showOwnershipDisclosureStatement, and ownershipDisclosureStatementDocumentId
  */
 export const caseDetailEditHelper = (get, applicationContext) => {
   const { PARTY_TYPES, PAYMENT_STATUS } = applicationContext.getConstants();
-  const caseDetail = get(state.caseDetail);
+  const caseDetail = get(state.form);
   const showContacts = showContactsHelper(caseDetail.partyType, PARTY_TYPES);
 
   let showOwnershipDisclosureStatement = false;
@@ -49,11 +49,18 @@ export const caseDetailEditHelper = (get, applicationContext) => {
     }
   }
 
+  const shouldShowIrsNoticeDate =
+    caseDetail.hasVerifiedIrsNotice ||
+    ((caseDetail.hasVerifiedIrsNotice === null ||
+      caseDetail.hasVerifiedIrsNotice === undefined) &&
+      caseDetail.hasIrsNotice);
+
   return {
     ownershipDisclosureStatementDocumentId,
     partyTypes: PARTY_TYPES,
     requestForPlaceOfTrialDocumentId,
     requestForPlaceOfTrialDocumentTitle,
+    shouldShowIrsNoticeDate,
     showNoTrialLocationSelected:
       caseDetail.isPaper && !requestForPlaceOfTrialDocumentId,
     showOrderForFilingFee:

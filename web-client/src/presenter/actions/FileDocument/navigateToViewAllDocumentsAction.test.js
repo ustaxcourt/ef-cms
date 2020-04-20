@@ -1,9 +1,8 @@
 import { navigateToViewAllDocumentsAction } from './navigateToViewAllDocumentsAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
-const routeStub = sinon.stub();
+const routeStub = jest.fn();
 
 presenter.providers.router = {
   route: routeStub,
@@ -23,8 +22,8 @@ describe('navigateToViewAllDocumentsAction', () => {
     });
 
     expect(result.state.wizardStep).toEqual('ViewAllDocuments');
-    expect(routeStub.calledOnce).toEqual(true);
-    expect(routeStub.getCall(0).args[0]).toEqual(
+    expect(routeStub.mock.calls.length).toEqual(1);
+    expect(routeStub.mock.calls[0][0]).toEqual(
       '/case-detail/122-19/file-a-document/all-document-categories',
     );
   });

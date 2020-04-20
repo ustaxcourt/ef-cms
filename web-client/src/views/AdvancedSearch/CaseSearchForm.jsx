@@ -7,26 +7,30 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const CaseSearchForm = connect(
-  { searchMode: state.searchMode },
-  ({
-    searchMode,
+  { advancedSearchForm: state.advancedSearchForm },
+  function CaseSearchForm({
+    advancedSearchForm,
     submitAdvancedSearchSequence,
     submitDocketNumberSearchSequence,
-  }) => {
+  }) {
     return (
       <>
         <Mobile>
-          <BindedSelect bind="searchMode" id="search-mode" name="searchMode">
+          <BindedSelect
+            bind="advancedSearchForm.searchMode"
+            id="search-mode"
+            name="advancedSearchForm.searchMode"
+          >
             <option value={'byName'}>Search by Name</option>
             <option value={'byDocketNumber'}>Search by Docket number</option>
           </BindedSelect>
 
-          {searchMode === 'byName' && (
+          {advancedSearchForm.searchMode === 'byName' && (
             <CaseSearchByName
               submitAdvancedSearchSequence={submitAdvancedSearchSequence}
             />
           )}
-          {searchMode === 'byDocketNumber' && (
+          {advancedSearchForm.searchMode === 'byDocketNumber' && (
             <CaseSearchByDocketNumber
               submitDocketNumberSearchSequence={
                 submitDocketNumberSearchSequence

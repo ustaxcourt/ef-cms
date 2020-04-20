@@ -2,93 +2,6 @@
   {
     "procedureType": "Regular",
     "docketNumberSuffix": "W",
-    "documents": [
-      {
-        "createdAt": "2019-03-01T21:40:46.415Z",
-        "filingDate": "2019-03-01T21:40:46.415Z",
-        "documentType": "Petition",
-        "filedBy": "Test Petitioner",
-        "processingStatus": "complete",
-        "workItems": [
-          {
-            "docketNumberSuffix": "W",
-            "caseStatus": "New",
-            "caseIsInProgress": false,
-            "document": {
-              "createdAt": "2019-03-01T21:40:46.415Z",
-              "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
-              "documentType": "Petition",
-              "documentTitle": "Petition",
-              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-              "filedBy": "Test Petitioner",
-              "workItems": []
-            },
-            "section": "petitions",
-            "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
-            "isInternal": false,
-            "isInitializeCase": true,
-            "isQC": true,
-            "assigneeId": null,
-            "sentBy": "petitioner",
-            "createdAt": "2019-03-01T21:40:46.415Z",
-            "assigneeName": null,
-            "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
-            "caseTitle": "Brett Osborne",
-            "messages": [
-              {
-                "createdAt": "2019-03-01T21:40:46.415Z",
-                "messageId": "1aafec9c-b7b9-45e8-8850-893cca973ce7",
-                "message": "Petition filed by Brett Osborne is ready for review.",
-                "from": "Test Petitioner",
-                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-              }
-            ],
-            "docketNumber": "109-19",
-            "updatedAt": "2019-03-01T21:40:46.415Z"
-          }
-        ],
-        "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
-        "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      },
-      {
-        "processingStatus": "complete",
-        "createdAt": "2019-03-05T17:34:13.491Z",
-        "filingDate": "2019-03-05T17:34:13.491Z",
-        "documentType": "Statement of Taxpayer Identification",
-        "filedBy": "Test Petitioner",
-        "workItems": [],
-        "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
-      },
-      {
-        "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
-        "createdAt": "2019-10-07T14:29:30.288Z",
-        "filingDate": "2019-10-07T14:29:30.288Z",
-        "docketNumber": "109-19",
-        "documentId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
-        "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
-        "documentType": "Order of Dismissal for Lack of Jurisdiction",
-        "draftState": {
-          "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
-          "documentType": "Order of Dismissal for Lack of Jurisdiction",
-          "eventCode": "ODJ",
-          "richText": "<p>Testing</p>",
-          "docketNumber": "109-19",
-          "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02"
-        },
-        "signedAt": "2019-10-07T14:29:30.288Z",
-        "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-        "eventCode": "ODJ",
-        "filedBy": "Test Docketclerk",
-        "processingStatus": "complete",
-        "receivedAt": "2019-10-07T14:29:30.288Z",
-        "relationship": "primaryDocument",
-        "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-        "workItems": []
-      }
-    ],
     "partyType": "Petitioner",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "caseType": "Whistleblower",
@@ -110,7 +23,7 @@
     "createdAt": "2019-03-01T21:40:46.415Z",
     "receivedAt": "2019-03-01T21:40:46.415Z",
     "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
-    "sk": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
+    "sk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
     "automaticBlocked": true,
     "automaticBlockedDate": "2019-05-01T21:40:46.415Z",
     "automaticBlockedReason": "Due Date",
@@ -121,7 +34,7 @@
     "caseTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
     "initialTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
     "filingType": "Myself",
-    "pk": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
+    "pk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
     "hasIrsNotice": false,
     "petitioners": [
       {
@@ -163,22 +76,117 @@
     "createdAt": "2019-08-22T12:47:16.905Z",
     "deadlineDate": "2019-08-25T04:00:00.000Z",
     "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
-    "sk": "case-deadline-95b46eae-70f0-45df-91de-febdc610fed9",
+    "sk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
     "caseDeadlineId": "95b46eae-70f0-45df-91de-febdc610fed9",
     "description": "Final status report due to Judge Ashford",
-    "pk": "case-deadline-95b46eae-70f0-45df-91de-febdc610fed9"
+    "pk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9"
   },
   {
-    "sk": "case-deadline-95b46eae-70f0-45df-91de-febdc610fed9",
-    "pk": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02|case-deadline"
+    "sk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
+    "pk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02"
   },
   {
-    "caseDeadlineId": "case-deadline-95b46eae-70f0-45df-91de-febdc610fed9",
-    "sk": "case-deadline-95b46eae-70f0-45df-91de-febdc610fed9",
-    "pk": "case-deadline-catalog"
+    "caseDeadlineId": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
+    "sk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
+    "pk": "case-deadline|catalog"
   },
   {
-    "sk": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
-    "pk": "109-19|case"
+    "sk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
+    "pk": "case-by-docket-number|109-19"
+  },
+  {
+    "documentType": "Petition",
+    "filingDate": "2019-03-01T21:40:46.415Z",
+    "workItems": [
+      {
+        "associatedJudge": "Chief Judge",
+        "docketNumberSuffix": "W",
+        "caseStatus": "New",
+        "caseIsInProgress": false,
+        "document": {
+          "createdAt": "2019-03-01T21:40:46.415Z",
+          "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+          "documentTitle": "Petition",
+          "documentType": "Petition",
+          "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+          "filedBy": "Test Petitioner"
+        },
+        "caseTitle": "Brett Osborne",
+        "section": "petitions",
+        "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
+        "isInitializeCase": true,
+        "assigneeId": null,
+        "isQC": true,
+        "sentBy": "petitioner",
+        "createdAt": "2019-03-01T21:40:46.415Z",
+        "assigneeName": null,
+        "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
+        "messages": [
+          {
+            "createdAt": "2019-03-01T21:40:46.415Z",
+            "messageId": "1aafec9c-b7b9-45e8-8850-893cca973ce7",
+            "from": "Test Petitioner",
+            "message": "Petition filed by Brett Osborne is ready for review.",
+            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+          }
+        ],
+        "docketNumber": "109-19",
+        "updatedAt": "2019-03-01T21:40:46.415Z"
+      }
+    ],
+    "pending": false,
+    "receivedAt": "2020-03-06T20:04:07.530Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-03-01T21:40:46.415Z",
+    "processingStatus": "complete",
+    "filedBy": "Test Petitioner",
+    "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
+    "sk": "document|1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+    "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+    "pk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02"
+  },
+  {
+    "draftState": {
+      "eventCode": "ODJ",
+      "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
+      "richText": "<p>Testing</p>",
+      "documentType": "Order of Dismissal for Lack of Jurisdiction",
+      "docketNumber": "109-19",
+      "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02"
+    },
+    "documentType": "Order of Dismissal for Lack of Jurisdiction",
+    "filingDate": "2019-10-07T14:29:30.288Z",
+    "workItems": [],
+    "pending": false,
+    "receivedAt": "2019-10-07T14:29:30.288Z",
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "ODJ",
+    "createdAt": "2019-10-07T14:29:30.288Z",
+    "processingStatus": "complete",
+    "filedBy": "Test Docketclerk",
+    "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
+    "sk": "document|25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+    "signedAt": "2019-10-07T14:29:30.288Z",
+    "documentId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+    "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
+    "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
+    "relationship": "primaryDocument",
+    "docketNumber": "109-19"
+  },
+  {
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2019-03-05T17:34:13.491Z",
+    "workItems": [],
+    "pending": false,
+    "receivedAt": "2020-03-06T20:04:07.530Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-03-05T17:34:13.491Z",
+    "processingStatus": "complete",
+    "filedBy": "Test Petitioner",
+    "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
+    "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
+    "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
+    "pk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02"
   }
 ]

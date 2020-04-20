@@ -1,23 +1,18 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCalendaredCasesForTrialSessionAction } from './getCalendaredCasesForTrialSessionAction';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
-
-let getCalendaredCasesForTrialSessionStub;
 
 describe('getCalendaredCasesForTrialSessionAction', () => {
-  beforeEach(() => {
-    getCalendaredCasesForTrialSessionStub = sinon.stub().resolves([
-      {
-        caseId: '345',
-      },
-    ]);
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        getCalendaredCasesForTrialSessionInteractor: getCalendaredCasesForTrialSessionStub,
-      }),
-    };
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+    applicationContext
+      .getUseCases()
+      .getCalendaredCasesForTrialSessionInteractor.mockResolvedValue([
+        {
+          caseId: '345',
+        },
+      ]);
   });
 
   it('call the use case to get the calendared cases', async () => {
@@ -30,6 +25,10 @@ describe('getCalendaredCasesForTrialSessionAction', () => {
       },
       state: {},
     });
-    expect(getCalendaredCasesForTrialSessionStub.calledOnce).toEqual(true);
+
+    expect(
+      applicationContext.getUseCases()
+        .getCalendaredCasesForTrialSessionInteractor,
+    ).toBeCalled();
   });
 });

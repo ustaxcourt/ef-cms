@@ -1,38 +1,29 @@
-const sinon = require('sinon');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { createTrialSession } = require('./createTrialSession');
 
+const mockTrialSession = {
+  trialSessionId: '123',
+};
+
 describe('createTrialSession', () => {
-  let applicationContext;
-  let putStub;
-
-  const trialSession = {
-    trialSessionId: '123',
-  };
-
-  beforeEach(() => {
-    putStub = sinon.stub().returns({
-      promise: async () => null,
-    });
-
-    applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDocumentClient: () => ({
-        put: putStub,
-      }),
-    };
+  beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
   });
 
   it('attempts to persist the trial session', async () => {
     await createTrialSession({
       applicationContext,
-      trialSession,
+      trialSession: mockTrialSession,
     });
-    expect(putStub.getCall(0).args[0]).toMatchObject({
+
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0],
+    ).toMatchObject({
       Item: {
-        pk: 'trial-session-123',
-        sk: 'trial-session-123',
+        pk: 'trial-session|123',
+        sk: 'trial-session|123',
         trialSessionId: '123',
       },
       TableName: 'efcms-dev',

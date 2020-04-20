@@ -5,11 +5,11 @@ import { state } from 'cerebral';
  * was found
  *
  * @param {object} providers the providers object
- * @param {object} providers.props the cerebral props object containing the props.respondents
+ * @param {object} providers.props the cerebral props object containing the props.irsPractitioners
  * @param {object} providers.store the cerebral store used for setting the state.modal.respondentMatches
  */
 export const setRespondentsAction = ({ props, store }) => {
-  const respondentMatches = props.respondents;
+  const respondentMatches = props.irsPractitioners;
 
   store.set(state.modal.respondentMatches, respondentMatches);
 

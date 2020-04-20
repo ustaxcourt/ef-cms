@@ -32,7 +32,7 @@ export const gotoEditDocketEntry = [
   updateDocketEntryWizardDataAction,
   setDocumentIdAction,
   setQCWorkItemIdToMarkAsReadIfNeededAction,
-  set(state.currentTab, 'Document Info'),
+  set(state.currentViewMetadata.tab, 'Document Info'),
   setCurrentPageAction('EditDocketEntry'),
   getShouldMarkReadAction,
   {

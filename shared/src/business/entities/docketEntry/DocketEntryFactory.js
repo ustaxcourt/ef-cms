@@ -40,7 +40,7 @@ DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
  * @constructor
  */
 function DocketEntryFactory(rawProps) {
-  let entityConstructor = function(rawPropsParam) {
+  let entityConstructor = function (rawPropsParam) {
     this.addToCoversheet = rawPropsParam.addToCoversheet;
     this.additionalInfo = rawPropsParam.additionalInfo;
     this.additionalInfo2 = rawPropsParam.additionalInfo2;
@@ -58,7 +58,7 @@ function DocketEntryFactory(rawProps) {
     this.ordinalValue = rawPropsParam.ordinalValue;
     this.partyPrimary = rawPropsParam.partyPrimary;
     this.trialLocation = rawPropsParam.trialLocation;
-    this.partyRespondent = rawPropsParam.partyRespondent;
+    this.partyIrsPractitioner = rawPropsParam.partyIrsPractitioner;
     this.partySecondary = rawPropsParam.partySecondary;
     this.previousDocument = rawPropsParam.previousDocument;
     this.primaryDocumentFile = rawPropsParam.primaryDocumentFile;
@@ -77,11 +77,7 @@ function DocketEntryFactory(rawProps) {
     additionalInfo2: joi.string(),
     attachments: joi.boolean(),
     certificateOfService: joi.boolean(),
-    dateReceived: joi
-      .date()
-      .iso()
-      .max('now')
-      .required(),
+    dateReceived: joi.date().iso().max('now').required(),
     documentType: joi.string().optional(),
     eventCode: joi.string().required(),
     freeText: joi.string().optional(),
@@ -93,33 +89,17 @@ function DocketEntryFactory(rawProps) {
     primaryDocumentFileSize: joi.when('primaryDocumentFile', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),
-      then: joi
-        .number()
-        .required()
-        .min(1)
-        .max(MAX_FILE_SIZE_BYTES)
-        .integer(),
+      then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     }),
-    serviceDate: joi
-      .date()
-      .iso()
-      .max('now')
-      .optional(),
+    serviceDate: joi.date().iso().max('now').optional(),
     trialLocation: joi.string().optional(),
   });
 
   let schemaOptionalItems = {
-    certificateOfServiceDate: joi
-      .date()
-      .iso()
-      .max('now')
-      .required(),
+    certificateOfServiceDate: joi.date().iso().max('now').required(),
     objections: joi.string().required(),
-    partyPrimary: joi
-      .boolean()
-      .invalid(false)
-      .required(),
-    partyRespondent: joi.boolean().required(),
+    partyIrsPractitioner: joi.boolean().required(),
+    partyPrimary: joi.boolean().invalid(false).required(),
     partySecondary: joi.boolean().required(),
     secondaryDocumentFile: joi.object().optional(),
   };
@@ -172,7 +152,7 @@ function DocketEntryFactory(rawProps) {
   if (
     rawProps.partyPrimary !== true &&
     rawProps.partySecondary !== true &&
-    rawProps.partyRespondent !== true
+    rawProps.partyIrsPractitioner !== true
   ) {
     addToSchema('partyPrimary');
   }

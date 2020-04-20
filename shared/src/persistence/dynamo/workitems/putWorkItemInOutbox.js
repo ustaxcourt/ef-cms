@@ -7,8 +7,8 @@ exports.putWorkItemInOutbox = async ({ applicationContext, workItem }) => {
 
   const user = await get({
     Key: {
-      pk: authorizedUser.userId,
-      sk: authorizedUser.userId,
+      pk: `user|${authorizedUser.userId}`,
+      sk: `user|${authorizedUser.userId}`,
     },
     applicationContext,
   });

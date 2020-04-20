@@ -1,27 +1,29 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setPDFForSigningAction } from './setPDFForSigningAction';
 
-let mockPDFObj;
-let removeCoverMock;
-
 describe('setPDFForSigningAction', () => {
-  beforeEach(() => {
+  let mockPDFObj;
+  let removeCoverMock;
+
+  beforeAll(() => {
     mockPDFObj = {
       numPages: 1,
     };
+
     removeCoverMock = jest.fn();
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        loadPDFForSigningInteractor: ({ removeCover }) => {
-          if (removeCover === true) {
-            removeCoverMock();
-          }
-          return mockPDFObj;
-        },
-      }),
-    };
+    applicationContext
+      .getUseCases()
+      .loadPDFForSigningInteractor.mockImplementation(({ removeCover }) => {
+        if (removeCover === true) {
+          removeCoverMock();
+        }
+        return mockPDFObj;
+      });
+
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('Sets state.pdfForSigning.pdfjsObj and state.pdfForSigning.documentId', async () => {

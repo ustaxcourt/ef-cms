@@ -1,33 +1,24 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateCaseDeadlineAction } from './validateCaseDeadlineAction';
-import sinon from 'sinon';
+
+presenter.providers.applicationContext = applicationContext;
 
 describe('validateCaseDeadlineAction', () => {
-  let validateCaseDeadlineStub;
   let successStub;
   let errorStub;
 
   let mockCaseDeadline;
 
-  beforeEach(() => {
-    validateCaseDeadlineStub = sinon.stub();
-    successStub = sinon.stub();
-    errorStub = sinon.stub();
+  beforeAll(() => {
+    successStub = jest.fn();
+    errorStub = jest.fn();
 
     mockCaseDeadline = {
       caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       deadlineDate: '2019-03-01T21:42:29.073Z',
       description: 'hello world',
-    };
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateCaseDeadlineInteractor: validateCaseDeadlineStub,
-      }),
-      getUtilities: () => ({
-        createISODateString: () => '2019-03-01T21:42:29.073Z',
-      }),
     };
 
     presenter.providers.path = {
@@ -37,7 +28,10 @@ describe('validateCaseDeadlineAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateCaseDeadlineStub.returns(null);
+    applicationContext
+      .getUseCases()
+      .validateCaseDeadlineInteractor.mockReturnValue(null);
+
     await runAction(validateCaseDeadlineAction, {
       modules: {
         presenter,
@@ -47,11 +41,14 @@ describe('validateCaseDeadlineAction', () => {
       },
     });
 
-    expect(successStub.calledOnce).toEqual(true);
+    expect(successStub.mock.calls.length).toEqual(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateCaseDeadlineStub.returns('error');
+    applicationContext
+      .getUseCases()
+      .validateCaseDeadlineInteractor.mockReturnValue('error');
+
     await runAction(validateCaseDeadlineAction, {
       modules: {
         presenter,
@@ -61,6 +58,6 @@ describe('validateCaseDeadlineAction', () => {
       },
     });
 
-    expect(errorStub.calledOnce).toEqual(true);
+    expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

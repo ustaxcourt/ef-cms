@@ -1,4 +1,4 @@
-export default (test, getCaseIds) => {
+export const markAllCasesAsQCed = (test, getCaseIds) => {
   return it('Marks all the eligible cases as QCed', async () => {
     const caseIds = getCaseIds();
 

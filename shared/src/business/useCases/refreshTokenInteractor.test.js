@@ -1,22 +1,19 @@
-const sinon = require('sinon');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { refreshTokenInteractor } = require('./refreshTokenInteractor');
 
 describe('refreshToken', () => {
-  let applicationContext;
-
   it('returns a token', async () => {
-    applicationContext = {
-      getCognitoClientId: () => 'asdf',
-      getCognitoTokenUrl: () => 'http://example.com/oauth2/token',
-      getHttpClient: () => ({
-        post: sinon.stub().resolves({
-          data: {
-            id_token: '123',
-            refresh_token: 'abc',
-          },
-        }),
-      }),
-    };
+    applicationContext.getCognitoClientId.mockReturnValue('asdf');
+    applicationContext.getCognitoTokenUrl.mockReturnValue(
+      'http://example.com/oauth2/token',
+    );
+
+    applicationContext.getHttpClient().post.mockResolvedValue({
+      data: {
+        id_token: '123',
+        refresh_token: 'abc',
+      },
+    });
 
     let result = await refreshTokenInteractor({
       applicationContext,

@@ -5,33 +5,25 @@ import {
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
 
-import { AddPractitionerFactory } from '../../shared/src/business/entities/caseAssociation/AddPractitionerFactory';
-import { AddRespondent } from '../../shared/src/business/entities/caseAssociation/AddRespondent';
-import {
-  CHAMBERS_SECTION,
-  CHAMBERS_SECTIONS,
-  SECTIONS,
-} from '../../shared/src/business/entities/WorkQueue';
+import { AddIrsPractitioner } from '../../shared/src/business/entities/caseAssociation/AddIrsPractitioner';
+import { AddPrivatePractitionerFactory } from '../../shared/src/business/entities/caseAssociation/AddPrivatePractitionerFactory';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
 import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { CaseExternal } from '../../shared/src/business/entities/cases/CaseExternal';
 import { CaseExternalInformationFactory } from '../../shared/src/business/entities/cases/CaseExternalInformationFactory';
 import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
-import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { CourtIssuedDocumentFactory } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentFactory';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { DocketRecord } from '../../shared/src/business/entities/DocketRecord';
 import { Document } from '../../shared/src/business/entities/Document';
-import { EditPractitionerFactory } from '../../shared/src/business/entities/caseAssociation/EditPractitionerFactory';
+import { EditPrivatePractitionerFactory } from '../../shared/src/business/entities/caseAssociation/EditPrivatePractitionerFactory';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
-import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/cases/CaseConstants';
-import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { Scan } from '../../shared/src/business/entities/Scan';
+import { OrderSearch } from '../../shared/src/business/entities/orders/OrderSearch';
 import {
   compareISODateStrings,
   compareStrings,
@@ -44,37 +36,20 @@ import { validateDocketRecordInteractor } from '../../shared/src/business/useCas
 const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
-import {
-  FORMATS,
-  createISODateString,
-  createISODateStringFromObject,
-  deconstructDate,
-  formatDateString,
-  formatNow,
-  isStringISOFormatted,
-  isValidDateString,
-  prepareDateFromString,
-} from '../../shared/src/business/utilities/DateHandler';
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
-import {
-  MAX_FILE_SIZE_BYTES,
-  MAX_FILE_SIZE_MB,
-} from '../../shared/src/persistence/s3/getUploadPolicy';
+import { NewPractitioner } from '../../shared/src/business/entities/NewPractitioner';
 import { NewTrialSession } from '../../shared/src/business/entities/trialSessions/NewTrialSession';
 import { Note } from '../../shared/src/business/entities/notes/Note';
-import { Order } from '../../shared/src/business/entities/orders/Order';
 import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
-import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
-import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
 import { archiveDraftDocumentInteractor } from '../../shared/src/proxies/archiveDraftDocumentProxy';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
-import { associatePractitionerWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associatePractitionerWithCaseProxy';
-import { associateRespondentWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associateRespondentWithCaseProxy';
+import { associateIrsPractitionerWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associateIrsPractitionerWithCaseProxy';
+import { associatePrivatePractitionerWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associatePrivatePractitionerWithCaseProxy';
 import { authorizeCodeInteractor } from '../../shared/src/business/useCases/authorizeCodeInteractor';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
@@ -88,11 +63,21 @@ import {
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { completeDocketEntryQCInteractor } from '../../shared/src/proxies/editDocketEntry/completeDocketEntryQCProxy';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
-import { createAttorneyUserInteractor } from '../../shared/src/proxies/createAttorneyUserProxy';
 import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
+import {
+  createISODateString,
+  createISODateStringFromObject,
+  deconstructDate,
+  formatDateString,
+  formatNow,
+  isStringISOFormatted,
+  isValidDateString,
+  prepareDateFromString,
+} from '../../shared/src/business/utilities/DateHandler';
+import { createPractitionerUserInteractor } from '../../shared/src/proxies/createPractitionerUserProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { createWorkItemInteractor } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
@@ -132,7 +117,6 @@ import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/pr
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
-import { getCaseTypesInteractor } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getConsolidatedCasesByUserInteractor } from '../../shared/src/proxies/getConsolidatedCasesByUserProxy';
@@ -142,16 +126,16 @@ import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/wo
 import { getDocumentQCServedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
 import { getDocumentQCServedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
-import { getFilingTypesInteractor } from '../../shared/src/business/useCases/getFilingTypesInteractor';
 import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
 import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
 import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsersProxy';
+import { getIrsPractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getIrsPractitionersBySearchKeyProxy';
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
-import { getPractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getPractitionersBySearchKeyProxy';
-import { getProcedureTypesInteractor } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
-import { getRespondentsBySearchKeyInteractor } from '../../shared/src/proxies/users/getRespondentsBySearchKeyProxy';
+import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
+import { getPractitionersByNameInteractor } from '../../shared/src/proxies/practitioners/getPractitionersByNameProxy';
+import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getPrivatePractitionersBySearchKeyProxy';
 import { getSentMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
 import { getSentMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
@@ -192,7 +176,6 @@ import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { unblockCaseFromTrialInteractor } from '../../shared/src/proxies/unblockCaseFromTrialProxy';
 import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritizeCaseProxy';
-import { updateAttorneyUserInteractor } from '../../shared/src/proxies/updateAttorneyUserProxy';
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
@@ -203,6 +186,7 @@ import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/
 import { updateDocketEntryMetaInteractor } from '../../shared/src/proxies/documents/updateDocketEntryMetaProxy';
 import { updatePetitionDetailsInteractor } from '../../shared/src/proxies/updatePetitionDetailsProxy';
 import { updatePetitionerInformationInteractor } from '../../shared/src/proxies/updatePetitionerInformationProxy';
+import { updatePractitionerUserInteractor } from '../../shared/src/proxies/updatePractitionerUserProxy';
 import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
 import { updateQcCompleteForTrialInteractor } from '../../shared/src/proxies/updateQcCompleteForTrialProxy';
 import { updateSecondaryContactInteractor } from '../../shared/src/proxies/updateSecondaryContactProxy';
@@ -215,20 +199,22 @@ import { uploadDocumentInteractor } from '../../shared/src/business/useCases/ext
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadOrderDocumentInteractor';
 import { uploadPdfFromClient } from '../../shared/src/persistence/s3/uploadPdfFromClient';
-import { validateAddPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddPractitionerInteractor';
-import { validateAddRespondentInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddRespondentInteractor';
+import { validateAddIrsPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddIrsPractitionerInteractor';
+import { validateAddPractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validateAddPractitionerInteractor';
+import { validateAddPrivatePractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddPrivatePractitionerInteractor';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
 import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/validateCaseDeadlineInteractor';
 import { validateCaseDetailInteractor } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { validateCourtIssuedDocketEntryInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/validateCourtIssuedDocketEntryInteractor';
 import { validateDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/validateDocketEntryInteractor';
-import { validateEditPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateEditPractitionerInteractor';
+import { validateEditPrivatePractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateEditPrivatePractitionerInteractor';
 import { validateExternalDocumentInformationInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateForwardMessageInteractor } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validateInitialWorkItemMessageInteractor } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validateNoteInteractor } from '../../shared/src/business/useCases/caseNote/validateNoteInteractor';
+import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
 import { validateOrderWithoutBodyInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/validateOrderWithoutBodyInteractor';
 import { validatePdfInteractor } from '../../shared/src/proxies/documents/validatePdfProxy';
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
@@ -244,7 +230,7 @@ import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virus
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
 
-const MINUTES = 60 * 1000;
+import { getConstants } from './getConstants';
 
 let user;
 
@@ -269,8 +255,8 @@ const allUseCases = {
   addCoversheetInteractor,
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
-  associatePractitionerWithCaseInteractor,
-  associateRespondentWithCaseInteractor,
+  associateIrsPractitionerWithCaseInteractor,
+  associatePrivatePractitionerWithCaseInteractor,
   authorizeCodeInteractor,
   batchDownloadTrialSessionInteractor,
   blockCaseFromTrialInteractor,
@@ -278,11 +264,11 @@ const allUseCases = {
   caseAdvancedSearchInteractor,
   completeDocketEntryQCInteractor,
   completeWorkItemInteractor,
-  createAttorneyUserInteractor,
   createCaseDeadlineInteractor,
   createCaseFromPaperInteractor,
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
+  createPractitionerUserInteractor,
   createTrialSessionInteractor,
   createWorkItemInteractor,
   deleteCaseDeadlineInteractor,
@@ -315,7 +301,6 @@ const allUseCases = {
   getCaseDeadlinesForCaseInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
-  getCaseTypesInteractor,
   getCasesByUserInteractor,
   getConsolidatedCasesByCaseInteractor,
   getConsolidatedCasesByUserInteractor,
@@ -324,16 +309,16 @@ const allUseCases = {
   getDocumentQCServedForSectionInteractor,
   getDocumentQCServedForUserInteractor,
   getEligibleCasesForTrialSessionInteractor,
-  getFilingTypesInteractor,
   getInboxMessagesForSectionInteractor,
   getInboxMessagesForUserInteractor,
   getInternalUsersInteractor,
+  getIrsPractitionersBySearchKeyInteractor,
   getItemInteractor,
   getJudgeForUserChambersInteractor,
   getNotificationsInteractor,
-  getPractitionersBySearchKeyInteractor,
-  getProcedureTypesInteractor,
-  getRespondentsBySearchKeyInteractor,
+  getPractitionerByBarNumberInteractor,
+  getPractitionersByNameInteractor,
+  getPrivatePractitionersBySearchKeyInteractor,
   getSentMessagesForSectionInteractor,
   getSentMessagesForUserInteractor,
   getTrialSessionDetailsInteractor,
@@ -370,7 +355,6 @@ const allUseCases = {
   submitPendingCaseAssociationRequestInteractor,
   unblockCaseFromTrialInteractor,
   unprioritizeCaseInteractor,
-  updateAttorneyUserInteractor,
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseTrialSortTagsInteractor,
@@ -381,6 +365,7 @@ const allUseCases = {
   updateDocketEntryMetaInteractor,
   updatePetitionDetailsInteractor,
   updatePetitionerInformationInteractor,
+  updatePractitionerUserInteractor,
   updatePrimaryContactInteractor,
   updateQcCompleteForTrialInteractor,
   updateSecondaryContactInteractor,
@@ -391,8 +376,9 @@ const allUseCases = {
   uploadDocumentInteractor,
   uploadExternalDocumentsInteractor,
   uploadOrderDocumentInteractor,
+  validateAddIrsPractitionerInteractor,
   validateAddPractitionerInteractor,
-  validateAddRespondentInteractor,
+  validateAddPrivatePractitionerInteractor,
   validateCaseAdvancedSearchInteractor,
   validateCaseAssociationRequestInteractor,
   validateCaseDeadlineInteractor,
@@ -400,12 +386,13 @@ const allUseCases = {
   validateCourtIssuedDocketEntryInteractor,
   validateDocketEntryInteractor,
   validateDocketRecordInteractor,
-  validateEditPractitionerInteractor,
+  validateEditPrivatePractitionerInteractor,
   validateExternalDocumentInformationInteractor,
   validateExternalDocumentInteractor,
   validateForwardMessageInteractor,
   validateInitialWorkItemMessageInteractor,
   validateNoteInteractor,
+  validateOrderAdvancedSearchInteractor,
   validateOrderWithoutBodyInteractor,
   validatePdfInteractor,
   validatePetitionFromPaperInteractor,
@@ -446,54 +433,7 @@ const applicationContext = {
     );
   },
   getConstants: () =>
-    (process.env.USTC_DEBUG ? i => i : deepFreeze)({
-      BUSINESS_TYPES: ContactFactory.BUSINESS_TYPES,
-      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-      CASE_INVENTORY_PAGE_SIZE: 2,
-      CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-      CATEGORIES: Document.CATEGORIES,
-      CATEGORY_MAP: Document.CATEGORY_MAP,
-      CHAMBERS_SECTION,
-      CHAMBERS_SECTIONS,
-      CHIEF_JUDGE: Case.CHIEF_JUDGE,
-      CONTACT_CHANGE_DOCUMENT_TYPES: Document.CONTACT_CHANGE_DOCUMENT_TYPES,
-      COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-      COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
-      DATE_FORMATS: FORMATS,
-      ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
-      INITIAL_DOCUMENT_TYPES: Document.INITIAL_DOCUMENT_TYPES,
-      INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
-      MAX_FILE_SIZE_BYTES,
-      MAX_FILE_SIZE_MB,
-      NOTICE_EVENT_CODES: Document.NOTICE_EVENT_CODES,
-      ORDER_TYPES_MAP: Order.ORDER_TYPES,
-      OTHER_TYPES: ContactFactory.OTHER_TYPES,
-      PARTY_TYPES: ContactFactory.PARTY_TYPES,
-      PAYMENT_STATUS: Case.PAYMENT_STATUS,
-      REFRESH_INTERVAL: 20 * MINUTES,
-      ROLE_PERMISSIONS,
-      SCAN_MODES: Scan.SCAN_MODES,
-      SECTIONS,
-      SERVICE_INDICATOR_TYPES,
-      SERVICE_STAMP_OPTIONS,
-      SESSION_DEBOUNCE: 250,
-      SESSION_MODAL_TIMEOUT: 5 * MINUTES,
-      SESSION_STATUS_GROUPS: TrialSession.SESSION_STATUS_GROUPS,
-      SESSION_TIMEOUT:
-        (process.env.SESSION_TIMEOUT &&
-          parseInt(process.env.SESSION_TIMEOUT)) ||
-        55 * MINUTES,
-      STATUS_TYPES: Case.STATUS_TYPES,
-      STATUS_TYPES_MANUAL_UPDATE: Case.STATUS_TYPES_MANUAL_UPDATE,
-      STATUS_TYPES_WITH_ASSOCIATED_JUDGE:
-        Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
-      TRANSCRIPT_EVENT_CODE: Document.TRANSCRIPT_EVENT_CODE,
-      TRIAL_CITIES: TrialSession.TRIAL_CITIES,
-      TRIAL_SESSION_TYPES: TrialSession.SESSION_TYPES,
-      TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-      US_STATES: ContactFactory.US_STATES,
-      USER_ROLES: User.ROLES,
-    }),
+    (process.env.USTC_DEBUG ? i => i : deepFreeze)(getConstants()),
   getCurrentUser,
   getCurrentUserPermissions: () => {
     const user = getCurrentUser();
@@ -501,8 +441,8 @@ const applicationContext = {
   },
   getCurrentUserToken,
   getEntityConstructors: () => ({
-    AddPractitionerFactory,
-    AddRespondent,
+    AddIrsPractitioner,
+    AddPrivatePractitionerFactory,
     Case,
     CaseAssociationRequestFactory,
     CaseDeadline,
@@ -514,13 +454,15 @@ const applicationContext = {
     DocketEntryFactory,
     DocketRecord,
     Document,
-    EditPractitionerFactory,
+    EditPrivatePractitionerFactory,
     ExternalDocumentFactory,
     ExternalDocumentInformationFactory,
     ForwardMessage,
     InitialWorkItemMessage,
+    NewPractitioner,
     NewTrialSession,
     Note,
+    OrderSearch,
     OrderWithoutBody,
     TrialSession,
     User,
@@ -528,7 +470,7 @@ const applicationContext = {
   getError: e => {
     return ErrorFactory.getError(e);
   },
-  getFileReader: () => FileReader,
+  getFileReaderInstance: () => new FileReader(),
   getHttpClient: () => axios,
   getPdfJs: async () => {
     const pdfjsLib = await import('pdfjs-dist');
@@ -600,15 +542,8 @@ const applicationContext = {
     };
   },
   initHoneybadger: async () => {
-    if (process.env.USTC_ENV === 'prod' && process.env.ENV) {
-      const stagingApiKey = process.env.CIRCLE_HONEYBADGER_API_KEY_STG;
-      const devApiKey = process.env.CIRCLE_HONEYBADGER_API_KEY_DEV;
-      const apiKey =
-        process.env.ENV === 'stg'
-          ? stagingApiKey
-          : process.env.ENV === 'dev'
-          ? devApiKey
-          : null;
+    if (process.env.USTC_ENV === 'prod') {
+      const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
 
       if (apiKey) {
         const Honeybadger = await import('honeybadger-js'); // browser version

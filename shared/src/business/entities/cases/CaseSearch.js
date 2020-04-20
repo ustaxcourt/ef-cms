@@ -40,22 +40,14 @@ CaseSearch.schema = joi.object().keys({
   petitionerState: joi.string().optional(),
   yearFiledMax: joi.when('yearFiledMin', {
     is: joi.number(),
-    otherwise: joi
-      .number()
-      .integer()
-      .min(1900)
-      .max(new Date().getFullYear()),
+    otherwise: joi.number().integer().min(1900).max(new Date().getFullYear()),
     then: joi
       .number()
       .integer()
       .min(joi.ref('yearFiledMin'))
       .max(new Date().getFullYear()),
   }),
-  yearFiledMin: joi
-    .number()
-    .integer()
-    .min(1900)
-    .max(new Date().getFullYear()),
+  yearFiledMin: joi.number().integer().min(1900).max(new Date().getFullYear()),
 });
 
 joiValidationDecorator(

@@ -8,7 +8,7 @@ export const PDFPreviewErrorModal = connect(
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.dismissModalSequence,
   },
-  ({ cancelSequence, confirmSequence, title }) => {
+  function PDFPreviewErrorModal({ cancelSequence, confirmSequence, title }) {
     return (
       <ModalDialog
         cancelSequence={cancelSequence}

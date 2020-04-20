@@ -8,7 +8,7 @@ exports.deleteSectionOutboxRecord = ({
   return client.delete({
     applicationContext,
     key: {
-      pk: `section-outbox-${section}`,
+      pk: `section-outbox|${section}`,
       sk: createdAt,
     },
   });

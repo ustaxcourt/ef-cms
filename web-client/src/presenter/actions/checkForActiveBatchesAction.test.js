@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 describe('checkForActiveBatchesAction', () => {
   let presenter;
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter = {
       providers: {
         path: {
@@ -24,12 +24,14 @@ describe('checkForActiveBatchesAction', () => {
         key: 'certificateOfService',
       },
       state: {
-        batches: {
-          petition: [
-            {
-              index: 1,
-            },
-          ],
+        scanner: {
+          batches: {
+            petition: [
+              {
+                index: 1,
+              },
+            ],
+          },
         },
       },
     });
@@ -46,8 +48,10 @@ describe('checkForActiveBatchesAction', () => {
         key: 'certificateOfService',
       },
       state: {
-        batches: {
-          petition: [],
+        scanner: {
+          batches: {
+            petition: [],
+          },
         },
       },
     });

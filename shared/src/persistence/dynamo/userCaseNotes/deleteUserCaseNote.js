@@ -14,7 +14,7 @@ exports.deleteUserCaseNote = async ({ applicationContext, caseId, userId }) => {
     applicationContext,
     key: {
       pk: `user-case-note|${caseId}`,
-      sk: `${userId}`,
+      sk: `user|${userId}`,
     },
   });
 };

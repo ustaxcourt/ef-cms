@@ -1,6 +1,6 @@
-import { AddPractitionerModal } from './AddPractitionerModal';
+import { AddPrivatePractitionerModal } from './AddPrivatePractitionerModal';
 import { Button } from '../../ustc-ui/Button/Button';
-import { EditPractitionersModal } from './EditPractitionersModal';
+import { EditPrivatePractitionersModal } from './EditPrivatePractitionersModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -53,26 +53,26 @@ const PetitionerInformation = connect(
     constants: state.constants,
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
-    openAddPractitionerModalSequence:
-      sequences.openAddPractitionerModalSequence,
-    openEditPractitionersModalSequence:
-      sequences.openEditPractitionersModalSequence,
-    showModal: state.showModal,
+    openAddPrivatePractitionerModalSequence:
+      sequences.openAddPrivatePractitionerModalSequence,
+    openEditPrivatePractitionersModalSequence:
+      sequences.openEditPrivatePractitionersModalSequence,
+    showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  ({
+  function PetitionerInformation({
     caseDetailHelper,
     caseInformationHelper,
     constants,
     form,
     formattedCaseDetail,
-    openAddPractitionerModalSequence,
-    openEditPractitionersModalSequence,
+    openAddPrivatePractitionerModalSequence,
+    openEditPrivatePractitionersModalSequence,
     showModal,
     updateFormValueSequence,
     validationErrors,
-  }) => {
+  }) {
     const mainPartyInformation = () => (
       <div className="grid-row grid-gap-6">
         <div className="tablet:grid-col-6">
@@ -185,46 +185,48 @@ const PetitionerInformation = connect(
     const practitionerPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
-          {formattedCaseDetail.practitioners &&
-            formattedCaseDetail.practitioners.map((practitioner, index) => (
-              <div
-                className={classNames(
-                  'tablet:grid-col-3 counsel-information',
-                  index > 3 && 'margin-top-3',
-                )}
-                key={index}
-              >
-                <address aria-labelledby="practitioner-label">
-                  {practitioner.name &&
-                    AddressDisplay(
-                      {
-                        ...practitioner,
-                        ...practitioner.contact,
-                      },
-                      constants,
-                      {
-                        nameOverride: practitioner.name,
-                      },
-                    )}
-                </address>
-                {practitioner.serviceIndicator && (
-                  <div className="margin-top-4">
-                    <span className="semi-bold">Service: </span>
-                    {practitioner.serviceIndicator}
-                  </div>
-                )}
-                <p className="label representing-label margin-top-2">
-                  Representing
-                </p>
-                {practitioner.representingPrimary &&
-                  formattedCaseDetail.contactPrimary.name}
-                {practitioner.representingPrimary &&
-                  practitioner.representingSecondary && <br />}
-                {practitioner.representingSecondary &&
-                  formattedCaseDetail.contactSecondary &&
-                  formattedCaseDetail.contactSecondary.name}
-              </div>
-            ))}
+          {formattedCaseDetail.privatePractitioners &&
+            formattedCaseDetail.privatePractitioners.map(
+              (practitioner, index) => (
+                <div
+                  className={classNames(
+                    'tablet:grid-col-3 counsel-information',
+                    index > 3 && 'margin-top-3',
+                  )}
+                  key={index}
+                >
+                  <address aria-labelledby="practitioner-label">
+                    {practitioner.name &&
+                      AddressDisplay(
+                        {
+                          ...practitioner,
+                          ...practitioner.contact,
+                        },
+                        constants,
+                        {
+                          nameOverride: practitioner.name,
+                        },
+                      )}
+                  </address>
+                  {practitioner.serviceIndicator && (
+                    <div className="margin-top-4">
+                      <span className="semi-bold">Service: </span>
+                      {practitioner.serviceIndicator}
+                    </div>
+                  )}
+                  <p className="label representing-label margin-top-2">
+                    Representing
+                  </p>
+                  {practitioner.representingPrimary &&
+                    formattedCaseDetail.contactPrimary.name}
+                  {practitioner.representingPrimary &&
+                    practitioner.representingSecondary && <br />}
+                  {practitioner.representingSecondary &&
+                    formattedCaseDetail.contactSecondary &&
+                    formattedCaseDetail.contactSecondary.name}
+                </div>
+              ),
+            )}
         </div>
       </div>
     );
@@ -248,7 +250,7 @@ const PetitionerInformation = connect(
               className="usa-search"
               onSubmit={e => {
                 e.preventDefault();
-                openAddPractitionerModalSequence();
+                openAddPrivatePractitionerModalSequence();
               }}
             >
               <div role="search">
@@ -306,12 +308,14 @@ const PetitionerInformation = connect(
                     id="practitioner-label"
                   >
                     <h3>Petitioner Counsel</h3>
-                    {caseInformationHelper.showEditPractitioners && (
+                    {caseInformationHelper.showEditPrivatePractitioners && (
                       <Button
                         link
                         className="margin-left-205 padding-0 height-3"
-                        id="edit-practitioners-button"
-                        onClick={() => openEditPractitionersModalSequence()}
+                        id="edit-privatePractitioners-button"
+                        onClick={() =>
+                          openEditPrivatePractitionersModalSequence()
+                        }
                       >
                         <FontAwesomeIcon icon="edit" size="sm" />
                         Edit
@@ -328,8 +332,12 @@ const PetitionerInformation = connect(
         {caseDetailHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />
         )}
-        {showModal === 'AddPractitionerModal' && <AddPractitionerModal />}
-        {showModal === 'EditPractitionersModal' && <EditPractitionersModal />}
+        {showModal === 'AddPrivatePractitionerModal' && (
+          <AddPrivatePractitionerModal />
+        )}
+        {showModal === 'EditPrivatePractitionersModal' && (
+          <EditPrivatePractitionersModal />
+        )}
         {showModal === 'PractitionerExistsModal' && <PractitionerExistsModal />}
       </>
     );

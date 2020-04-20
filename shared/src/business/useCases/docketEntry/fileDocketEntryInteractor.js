@@ -62,7 +62,7 @@ exports.fileDocketEntryInteractor = async ({
   const baseMetadata = pick(primaryDocumentMetadata, [
     'partyPrimary',
     'partySecondary',
-    'partyRespondent',
+    'partyIrsPractitioner',
     'practitioner',
   ]);
 
