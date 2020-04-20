@@ -128,6 +128,7 @@
     "uswds": "^2.6.0",
     "uuid": "^7.0.2",
     "webpack": "^4.42.1",
+    "readline": "^1.3.0",
     "websocket": "^1.0.31",
     "wicg-inert": "^3.0.2"
   },
@@ -224,5 +225,8 @@
   },
   "resolutions": {
     "minimist": "^1.2.5"
+  },
+  "dependencies": {
+    "jwk-to-pem": "^2.0.3"
   }
 }
