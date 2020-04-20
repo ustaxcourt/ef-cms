@@ -57,9 +57,9 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
             {
               assigneeId: 'bob',
               assigneeName: 'bob',
-              caseTitle: 'testing',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
               caseStatus: Case.STATUS_TYPES.new,
+              caseTitle: 'testing',
               docketNumber: '101-18',
               docketNumberSuffix: 'S',
               document: {},
