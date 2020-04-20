@@ -336,4 +336,18 @@ module.exports = [
   },
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/edit-trial-session/6b6975cf-2b10-4e84-bcae-91e162d2f9d1',
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-session-detail/5b18af9e-4fbd-459b-8db7-7b15108c7fa5&info=qc-complete-checkboxes',
+  {
+    actions: [
+      'wait for #tab-practitioner to be visible',
+      'click element #tab-practitioner',
+      'wait for #practitioner-name to be visible',
+      'set field #practitioner-name to test',
+      'click element #practitioner-search-by-name-button',
+      'wait for .search-results to be visible',
+    ],
+    notes: 'checks the advanced search practitioner tab and results table',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=practitioner-search-results',
+  },
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/practitioner-detail/PT1234',
 ];

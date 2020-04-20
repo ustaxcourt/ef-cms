@@ -2,7 +2,7 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default test => {
+export const petitionerEditsCaseSecondaryContactAddressAndPhone = test => {
   return it('petitioner updates secondary contact address and phone', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'contactSecondary.address1',

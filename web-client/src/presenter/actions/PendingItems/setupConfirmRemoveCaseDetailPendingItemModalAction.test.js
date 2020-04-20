@@ -1,4 +1,3 @@
-import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setupConfirmRemoveCaseDetailPendingItemModalAction } from './setupConfirmRemoveCaseDetailPendingItemModalAction';
 
@@ -7,9 +6,6 @@ describe('setupConfirmRemoveCaseDetailPendingItemModalAction', () => {
     const result = await runAction(
       setupConfirmRemoveCaseDetailPendingItemModalAction,
       {
-        modules: {
-          presenter,
-        },
         props: {
           caseDetail: {
             documents: [
@@ -34,9 +30,6 @@ describe('setupConfirmRemoveCaseDetailPendingItemModalAction', () => {
     const result = await runAction(
       setupConfirmRemoveCaseDetailPendingItemModalAction,
       {
-        modules: {
-          presenter,
-        },
         props: {
           caseDetail: {
             documents: [

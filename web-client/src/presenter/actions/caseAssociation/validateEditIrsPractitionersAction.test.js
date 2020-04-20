@@ -1,5 +1,5 @@
 import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/cases/CaseConstants';
-import { presenter } from '../../presenter';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateEditIrsPractitionersAction } from './validateEditIrsPractitionersAction';
 
@@ -7,9 +7,7 @@ describe('validateEditIrsPractitionersAction', () => {
   let successStub;
   let errorStub;
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 

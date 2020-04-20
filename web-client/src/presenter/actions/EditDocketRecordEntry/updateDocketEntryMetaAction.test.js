@@ -1,27 +1,21 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateDocketEntryMetaAction } from './updateDocketEntryMetaAction';
 
+presenter.providers.applicationContext = applicationContext;
+
 describe('updateDocketEntryMetaAction', () => {
-  let updateDocketEntryMetaInteractorStub;
   let errorMock;
   let successMock;
 
-  beforeEach(() => {
-    updateDocketEntryMetaInteractorStub = jest.fn();
-
+  beforeAll(() => {
     errorMock = jest.fn();
     successMock = jest.fn();
 
     presenter.providers.path = {
       error: errorMock,
       success: successMock,
-    };
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        updateDocketEntryMetaInteractor: updateDocketEntryMetaInteractorStub,
-      }),
     };
   });
 
@@ -39,16 +33,18 @@ describe('updateDocketEntryMetaAction', () => {
       },
     });
 
-    expect(updateDocketEntryMetaInteractorStub).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().updateDocketEntryMetaInteractor,
+    ).toHaveBeenCalled();
     expect(successMock).toHaveBeenCalled();
   });
 
   it('returns the error path calling the interactor generates an error', async () => {
-    presenter.providers.applicationContext.getUseCases = () => ({
-      updateDocketEntryMetaInteractor: () => {
+    applicationContext
+      .getUseCases()
+      .updateDocketEntryMetaInteractor.mockImplementation(() => {
         throw new Error('Guy Fieri has connected to the server.');
-      },
-    });
+      });
 
     await runAction(updateDocketEntryMetaAction, {
       modules: { presenter },

@@ -1,5 +1,5 @@
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateDocketEntryWizardDataAction } from './updateDocketEntryWizardDataAction';
 
@@ -25,7 +25,7 @@ const caseDetail = {
   ],
 };
 
-presenter.providers.applicationContext = applicationContext;
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('updateDocketEntryWizardDataAction', () => {
   it('clear Certificate Of Service date items when certificateOfService is updated', async () => {

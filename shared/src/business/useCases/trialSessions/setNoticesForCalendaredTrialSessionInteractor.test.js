@@ -1,13 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const {
-  appendPaperServiceAddressPageToPdf,
-} = require('../../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
 const { Document } = require('../../entities/Document');
-const { formatDateString, formatNow } = require('../../utilities/DateHandler');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
@@ -35,7 +34,6 @@ fakeFile.name = 'fakeFile.pdf';
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
 const testPdfDocBytes = () => {
-  // sample.pdf is a 1 page document
   return fs.readFileSync(testAssetsPath + 'sample.pdf');
 };
 
@@ -50,23 +48,12 @@ const MOCK_TRIAL = {
 
 const testPdfDoc = testPdfDocBytes();
 
-let applicationContext;
+let user;
 let calendaredCases;
-let generateNoticeOfTrialIssuedInteractorMock = jest.fn();
-let generateStandingPretrialNoticeInteractorMock = jest.fn();
-let generateStandingPretrialOrderInteractorMock = jest.fn();
-let generatePaperServiceAddressPagePdfMock = jest
-  .fn()
-  .mockResolvedValue(testPdfDoc);
-let saveDocumentFromLambdaMock = jest.fn();
-let updateTrialSessionMock = jest.fn();
-let sendServedPartiesEmailsMock = jest.fn();
 let trialSession;
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-
     const case0 = {
       // should get electronic service
       ...MOCK_CASE,
@@ -96,71 +83,76 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     trialSession = { ...MOCK_TRIAL };
 
-    applicationContext = {
-      getCurrentUser: () => {
-        return new User({
-          name: 'Docket Clerk',
-          role: User.ROLES.docketClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    user = new User({
+      name: 'Docket Clerk',
+      role: User.ROLES.docketClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue(calendaredCases);
+
+    applicationContext
+      .getNotificationGateway()
+      .sendNotificationToUser.mockReturnValue(null);
+
+    applicationContext
+      .getPersistenceGateway()
+      .deleteCaseTrialSortMappingRecords.mockReturnValue({});
+
+    applicationContext
+      .getPersistenceGateway()
+      .deleteCaseTrialSortMappingRecords.mockReturnValue(calendaredCases);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockReturnValue('http://example.com');
+
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockImplementation(() => trialSession);
+
+    applicationContext
+      .getPersistenceGateway()
+      .updateTrialSession.mockImplementation(({ trialSessionToUpdate }) => {
+        trialSession = trialSessionToUpdate;
+      });
+
+    applicationContext
+      .getPersistenceGateway()
+      .updateCase.mockImplementation(({ caseToUpdate }) => {
+        calendaredCases.some((caseRecord, index) => {
+          if (caseRecord.caseId === caseToUpdate.caseId) {
+            calendaredCases[index] = caseToUpdate;
+            return true;
+          }
         });
-      },
-      getNotificationGateway: () => ({
-        sendNotificationToUser: () => null,
-      }),
-      getPersistenceGateway: () => ({
-        deleteCaseTrialSortMappingRecords: () => {},
-        getCalendaredCasesForTrialSession: () => calendaredCases,
-        getDownloadPolicyUrl: () => 'http://example.com',
-        getTrialSessionById: () => trialSession,
-        saveDocumentFromLambda: saveDocumentFromLambdaMock,
-        updateCase: ({ caseToUpdate }) => {
-          calendaredCases.some((caseRecord, index) => {
-            if (caseRecord.caseId === caseToUpdate.caseId) {
-              calendaredCases[index] = caseToUpdate;
-              return true;
-            }
-          });
-        },
-        updateTrialSession: ({ trialSessionToUpdate }) => {
-          updateTrialSessionMock();
-          trialSession = trialSessionToUpdate;
-        },
-      }),
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      getUseCaseHelpers: () => ({
-        appendPaperServiceAddressPageToPdf,
-        generatePaperServiceAddressPagePdf: generatePaperServiceAddressPagePdfMock,
-        sendServedPartiesEmails: sendServedPartiesEmailsMock,
-      }),
-      getUseCases: () => ({
-        generateNoticeOfTrialIssuedInteractor: () => {
-          generateNoticeOfTrialIssuedInteractorMock();
-          return fakeFile;
-        },
-        generateStandingPretrialNoticeInteractor: () => {
-          generateStandingPretrialNoticeInteractorMock();
-          return fakeFile;
-        },
-        generateStandingPretrialOrderInteractor: () => {
-          generateStandingPretrialOrderInteractorMock();
-          return fakeFile;
-        },
-      }),
-      getUtilities: () => ({
-        formatDateString,
-        formatNow,
-      }),
-    };
+      });
+
+    applicationContext
+      .getUseCaseHelpers()
+      .generatePaperServiceAddressPagePdf.mockResolvedValue(testPdfDoc);
+
+    applicationContext
+      .getUseCases()
+      .generateNoticeOfTrialIssuedInteractor.mockReturnValue(fakeFile);
+    applicationContext
+      .getUseCases()
+      .generateStandingPretrialNoticeInteractor.mockReturnValue(fakeFile);
+    applicationContext
+      .getUseCases()
+      .generateStandingPretrialOrderInteractor.mockReturnValue(fakeFile);
   });
 
   it('Should return an unauthorized error if the user does not have the TRIAL_SESSIONS permission', async () => {
-    applicationContext.getCurrentUser = () => {
-      return new User({
-        name: 'Petitioner',
-        role: User.ROLES.petitioner, // Petitioners do not have the TRIAL_SESSIONS role, per authorizationClientService.js
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      });
-    };
+    user = new User({
+      name: 'Petitioner',
+      role: User.ROLES.petitioner, // Petitioners do not have the TRIAL_SESSIONS role, per authorizationClientService.js
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
 
     let error;
 
@@ -177,17 +169,21 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should return immediately if there are no calendared cases to be set', async () => {
-    applicationContext.getPersistenceGateway = () => ({
-      getCalendaredCasesForTrialSession: () => [], // returning no cases
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([]); // returning no cases
 
     const result = await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(generateNoticeOfTrialIssuedInteractorMock).not.toHaveBeenCalled();
-    expect(saveDocumentFromLambdaMock).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
     expect(result).toBeUndefined();
   });
 
@@ -197,8 +193,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0])).toBeTruthy();
     expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
@@ -236,8 +236,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0]).status).toEqual('served');
     expect(findNoticeOfTrial(calendaredCases[1]).status).toEqual('served');
@@ -249,8 +253,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0]).servedAt).toBeTruthy();
     expect(findNoticeOfTrial(calendaredCases[1]).servedAt).toBeTruthy();
@@ -262,8 +270,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
 
     expect(
       findNoticeOfTrial(calendaredCases[0]).servedParties.length,
@@ -279,7 +291,9 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalled();
   });
 
   it('Should set the noticeIssuedDate on the trial session and then call updateTrialSession', async () => {
@@ -289,7 +303,9 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(trialSession.noticeIssuedDate).toBeTruthy();
-    expect(updateTrialSessionMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession,
+    ).toHaveBeenCalled();
   });
 
   it('Should NOT overwrite the noticeIssuedDate on the trial session NOR call updateTrialSession if a caseId is set', async () => {
@@ -303,7 +319,9 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(trialSession.noticeIssuedDate).toEqual(oldDate); // Should not be updated
-    expect(updateTrialSessionMock).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession,
+    ).not.toHaveBeenCalled();
   });
 
   it('Should only generate a Notice of Trial for a single case if a caseId is set', async () => {
@@ -313,8 +331,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy();
     expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
@@ -355,8 +377,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy(); // Document should not exist on this case
     expect(findNoticeOfTrial(calendaredCases[1]).status).toEqual('served');
@@ -369,7 +395,9 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(generateStandingPretrialOrderInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
+    ).toHaveBeenCalled();
   });
 
   it('Should generate a Standing Pretrial Notice for SMALL cases', async () => {
@@ -379,7 +407,9 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(generateStandingPretrialNoticeInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generateStandingPretrialNoticeInteractor,
+    ).toHaveBeenCalled();
   });
 
   it('Should set the status of the Standing Pretrial Document as served for each case', async () => {
@@ -388,8 +418,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
 
     expect(findStandingPretrialDocument(calendaredCases[0]).status).toEqual(
       'served',
@@ -405,8 +439,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
 
     expect(
       findStandingPretrialDocument(calendaredCases[0]).servedAt,
@@ -422,8 +460,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
 
     expect(
       findStandingPretrialDocument(calendaredCases[0]).servedParties.length,

@@ -1,8 +1,13 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { batchDownloadTrialSessionAction } from './batchDownloadTrialSessionAction';
-import { presenter } from '../presenter';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-const batchDownloadTrialSessionInteractorStub = jest.fn();
+presenter.providers.applicationContext = applicationContext;
+
+const {
+  batchDownloadTrialSessionInteractor,
+} = applicationContext.getUseCases();
 const pathSuccessStub = jest.fn();
 const pathErrorStub = jest.fn();
 
@@ -11,17 +16,7 @@ presenter.providers.path = {
   success: pathSuccessStub,
 };
 
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    batchDownloadTrialSessionInteractor: batchDownloadTrialSessionInteractorStub,
-  }),
-};
-
 describe('batchDownloadTrialSessionAction', () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   it('initializes the batch download for a trial session', async () => {
     await runAction(batchDownloadTrialSessionAction, {
       modules: {
@@ -29,27 +24,21 @@ describe('batchDownloadTrialSessionAction', () => {
       },
     });
 
-    expect(batchDownloadTrialSessionInteractorStub).toHaveBeenCalled();
+    expect(batchDownloadTrialSessionInteractor).toHaveBeenCalled();
     expect(pathSuccessStub).toHaveBeenCalled();
   });
 
   it('calls the error path if an exception is thrown', async () => {
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        batchDownloadTrialSessionInteractor: batchDownloadTrialSessionInteractorStub.mockImplementation(
-          () => {
-            throw new Error('Guy Fieri has connected to the server.');
-          },
-        ),
-      }),
-    };
-    await runAction(batchDownloadTrialSessionAction, {
-      modules: {
-        presenter,
-      },
-    });
+    batchDownloadTrialSessionInteractor.mockImplementation(() => {
+      throw new Error('Guy Fieri has connected to the server.');
+    }),
+      await runAction(batchDownloadTrialSessionAction, {
+        modules: {
+          presenter,
+        },
+      });
 
-    expect(batchDownloadTrialSessionInteractorStub).toThrow();
+    expect(batchDownloadTrialSessionInteractor).toThrow();
     expect(pathErrorStub).toHaveBeenCalled();
   });
 });

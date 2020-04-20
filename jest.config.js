@@ -5,6 +5,7 @@ module.exports = {
   clearMocks: true,
   collectCoverage: false,
   coverageDirectory: './coverage',
+  coverageProvider: 'babel',
   coverageThreshold: {
     global: {
       branches: 95,
@@ -13,5 +14,5 @@ module.exports = {
       statements: 95,
     },
   },
-  verbose: true,
+  verbose: false,
 };

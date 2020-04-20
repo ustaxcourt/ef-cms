@@ -1,5 +1,8 @@
 const client = require('../../dynamodbClientService');
 const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
+const {
   getEligibleCasesForTrialSession,
 } = require('./getEligibleCasesForTrialSession');
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -29,14 +32,9 @@ describe('getEligibleCasesForTrialSession', () => {
   });
 
   it('should get the cases for a trial session', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getPersistenceGateway: () => ({
-        getCaseByCaseId: getCaseByCaseIdSpy,
-      }),
-    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockImplementation(getCaseByCaseIdSpy);
     const result = await getEligibleCasesForTrialSession({
       applicationContext,
     });

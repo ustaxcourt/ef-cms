@@ -1,16 +1,15 @@
-import { presenter } from '../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateInitialWorkItemMessageAction } from './validateInitialWorkItemMessageAction';
 
 describe('validateInitialWorkItemMessage', () => {
-  let validateInitialWorkItemMessageStub;
   let successStub;
   let errorStub;
 
   let mockMessage;
 
-  beforeEach(() => {
-    validateInitialWorkItemMessageStub = jest.fn();
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
@@ -20,12 +19,7 @@ describe('validateInitialWorkItemMessage', () => {
       section: 'docket',
     };
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateInitialWorkItemMessageInteractor: validateInitialWorkItemMessageStub,
-      }),
-    };
-
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -33,7 +27,9 @@ describe('validateInitialWorkItemMessage', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateInitialWorkItemMessageStub = jest.fn().mockReturnValue(null);
+    applicationContext
+      .getUseCases()
+      .validateInitialWorkItemMessageInteractor.mockReturnValue(null);
     await runAction(validateInitialWorkItemMessageAction, {
       modules: {
         presenter,
@@ -47,7 +43,9 @@ describe('validateInitialWorkItemMessage', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateInitialWorkItemMessageStub = jest.fn().mockReturnValue('error');
+    applicationContext
+      .getUseCases()
+      .validateInitialWorkItemMessageInteractor.mockReturnValue('error');
     await runAction(validateInitialWorkItemMessageAction, {
       modules: {
         presenter,

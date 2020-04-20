@@ -1,19 +1,11 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateDateFromCalendarAction } from './updateDateFromCalendarAction';
-const {
-  createISODateString,
-} = require('../../../../../shared/src/business/utilities/DateHandler');
+
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('updateDateFromCalendarAction', () => {
-  beforeEach(() => {
-    presenter.providers.applicationContext = {
-      getUtilities: () => {
-        return { createISODateString };
-      },
-    };
-  });
-
   it('sets only state.screenMetadata.filterStartDate to the formatted props.startDate if props.endDate is not passed in', async () => {
     const testDate = new Date('2019-05-14T07:12:12.457Z');
 

@@ -89,7 +89,6 @@ resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
 }
 
 resource "aws_cloudfront_distribution" "distribution" {
-  
   origin_group {
     origin_id = "group-${var.environment}.${var.dns_domain}"
 

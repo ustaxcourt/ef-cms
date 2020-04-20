@@ -1,16 +1,14 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateAddIrsPractitionerAction } from './validateAddIrsPractitionerAction';
 
 describe('validateAddIrsPractitioner', () => {
-  let validateAddIrsPractitionerInteractorStub;
   let successStub;
   let errorStub;
-
   let mockAddIrsPractitioner;
 
-  beforeEach(() => {
-    validateAddIrsPractitionerInteractorStub = jest.fn();
+  beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
@@ -18,12 +16,7 @@ describe('validateAddIrsPractitioner', () => {
       user: { userId: 'abc' },
     };
 
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateAddIrsPractitionerInteractor: validateAddIrsPractitionerInteractorStub,
-      }),
-    };
-
+    presenter.providers.applicationContext = applicationContextForClient;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -31,7 +24,10 @@ describe('validateAddIrsPractitioner', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateAddIrsPractitionerInteractorStub = jest.fn().mockReturnValue(null);
+    applicationContextForClient
+      .getUseCases()
+      .validateAddIrsPractitionerInteractor.mockReturnValue(null);
+
     await runAction(validateAddIrsPractitionerAction, {
       modules: {
         presenter,
@@ -41,13 +37,18 @@ describe('validateAddIrsPractitioner', () => {
       },
     });
 
-    expect(successStub.mock.calls.length).toEqual(1);
+    expect(
+      applicationContextForClient.getUseCases()
+        .validateAddIrsPractitionerInteractor,
+    ).toHaveBeenCalled();
+    expect(successStub).toHaveBeenCalledTimes(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateAddIrsPractitionerInteractorStub = jest
-      .fn()
-      .mockReturnValue('error');
+    applicationContextForClient
+      .getUseCases()
+      .validateAddIrsPractitionerInteractor.mockReturnValue('error');
+
     await runAction(validateAddIrsPractitionerAction, {
       modules: {
         presenter,
@@ -57,6 +58,10 @@ describe('validateAddIrsPractitioner', () => {
       },
     });
 
-    expect(errorStub.mock.calls.length).toEqual(1);
+    expect(
+      applicationContextForClient.getUseCases()
+        .validateAddIrsPractitionerInteractor,
+    ).toHaveBeenCalled();
+    expect(errorStub).toHaveBeenCalledTimes(1);
   });
 });

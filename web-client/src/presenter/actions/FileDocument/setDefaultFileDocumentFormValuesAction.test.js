@@ -1,12 +1,12 @@
 import { User } from '../../../../../shared/src/business/entities/User';
-import { applicationContext } from '../../../applicationContext';
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDefaultFileDocumentFormValuesAction } from './setDefaultFileDocumentFormValuesAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('setDefaultFileDocumentFormValuesAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   it('sets form.partyPrimary to true if the user is a petitioner', async () => {
     applicationContext.getCurrentUser = () => ({
       role: User.ROLES.petitioner,

@@ -1,3 +1,4 @@
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { migrateCaseInteractor } = require('./migrateCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase.js');
@@ -5,53 +6,40 @@ const { User } = require('../entities/User');
 
 const DATE = '2018-11-21T20:49:28.192Z';
 
-let applicationContext;
 let adminUser;
-let caseMetadata;
-let getCurrentUserMock;
-let getUserByIdMock;
-let createCaseMock;
 let createdCases;
+let caseMetadata;
 
 describe('migrateCaseInteractor', () => {
   beforeEach(() => {
     window.Date.prototype.toISOString = jest.fn(() => DATE);
 
     adminUser = new User({
-      name: 'Olivia Jade',
+      name: 'Joe Exotic',
       role: 'admin',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    getCurrentUserMock = jest.fn(() => adminUser);
+    createdCases = [];
 
-    getUserByIdMock = jest.fn(() => ({
+    applicationContext.environment.stage = 'local';
+
+    applicationContext.getCurrentUser.mockImplementation(() => adminUser);
+
+    applicationContext
+      .getPersistenceGateway()
+      .createCase.mockImplementation(({ caseToCreate }) => {
+        createdCases.push(caseToCreate);
+      });
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       ...adminUser,
       section: 'admin',
-    }));
-
-    createdCases = [];
-    createCaseMock = jest.fn(({ caseToCreate }) => {
-      createdCases.push(caseToCreate);
     });
 
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: getCurrentUserMock,
-      getPersistenceGateway: () => {
-        return {
-          createCase: createCaseMock,
-          getUserById: getUserByIdMock,
-        };
-      },
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      getUseCases: () => ({
-        getUserInteractor: () => ({
-          name: 'john doe',
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        }),
-      }),
-    };
+    applicationContext.getUseCases().getUserInteractor.mockReturnValue({
+      name: 'john doe',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
 
     caseMetadata = {
       caseType: 'Other',
@@ -90,19 +78,14 @@ describe('migrateCaseInteractor', () => {
       caseMetadata,
     });
 
-    expect(getCurrentUserMock).toHaveBeenCalled();
+    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
   });
 
   it('throws an error if the user is not valid or authorized', async () => {
-    applicationContext = {
-      getCurrentUser: () => {
-        return {};
-      },
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-    let error;
-    try {
-      await migrateCaseInteractor({
+    applicationContext.getCurrentUser.mockReturnValue({});
+
+    await expect(
+      migrateCaseInteractor({
         applicationContext,
         caseMetadata: {
           caseType: 'Other',
@@ -113,11 +96,8 @@ describe('migrateCaseInteractor', () => {
           preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
         },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain('Unauthorized');
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('should pull the current user record from persistence', async () => {
@@ -126,7 +106,9 @@ describe('migrateCaseInteractor', () => {
       caseMetadata,
     });
 
-    expect(getUserByIdMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getUserById,
+    ).toHaveBeenCalled();
   });
 
   it('should create a case successfully', async () => {
@@ -146,42 +128,32 @@ describe('migrateCaseInteractor', () => {
 
     expect(error).toBeUndefined();
     expect(result).toBeDefined();
-    expect(createCaseMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().createCase,
+    ).toHaveBeenCalled();
     expect(createdCases.length).toEqual(1);
   });
 
   describe('validation', () => {
     it('should fail to migrate a case when the case is invalid', async () => {
-      let error;
-
-      try {
-        await migrateCaseInteractor({
+      await expect(
+        migrateCaseInteractor({
           applicationContext,
           caseMetadata: {},
-        });
-      } catch (e) {
-        error = e;
-      }
-
-      expect(error.message).toContain('The Case entity was invalid');
+        }),
+      ).rejects.toThrow('The Case entity was invalid');
     });
 
     it('should fail to migrate a case when the docket record is invalid', async () => {
-      let error;
-
-      try {
-        await migrateCaseInteractor({
+      await expect(
+        migrateCaseInteractor({
           applicationContext,
           caseMetadata: {
             ...caseMetadata,
             docketRecord: [{}],
           },
-        });
-      } catch (e) {
-        error = e;
-      }
-
-      expect(error.message).toContain('The DocketRecord entity was invalid');
+        }),
+      ).rejects.toThrow('The DocketRecord entity was invalid');
     });
   });
 });

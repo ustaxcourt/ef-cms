@@ -1,27 +1,26 @@
-import { presenter } from '../../presenter';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateExternalDocumentInformationAction } from './validateExternalDocumentInformationAction';
 
 describe('validateExternalDocumentInformationAction', () => {
-  let validateExternalDocumentInformationStub;
+  const {
+    validateExternalDocumentInformationInteractor,
+  } = applicationContext.getUseCases();
+
   let successStub;
   let errorStub;
 
   let mockDocInfo;
 
-  beforeEach(() => {
-    validateExternalDocumentInformationStub = jest.fn();
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
     successStub = jest.fn();
     errorStub = jest.fn();
 
     mockDocInfo = {
       data: 'hello world',
-    };
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateExternalDocumentInformationInteractor: validateExternalDocumentInformationStub,
-      }),
     };
 
     presenter.providers.path = {
@@ -31,7 +30,7 @@ describe('validateExternalDocumentInformationAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    validateExternalDocumentInformationStub = jest.fn().mockReturnValue(null);
+    validateExternalDocumentInformationInteractor.mockReturnValue(null);
     await runAction(validateExternalDocumentInformationAction, {
       modules: {
         presenter,
@@ -45,9 +44,7 @@ describe('validateExternalDocumentInformationAction', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    validateExternalDocumentInformationStub = jest
-      .fn()
-      .mockReturnValue('error');
+    validateExternalDocumentInformationInteractor.mockReturnValue('error');
     await runAction(validateExternalDocumentInformationAction, {
       modules: {
         presenter,
