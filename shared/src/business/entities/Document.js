@@ -23,6 +23,9 @@ Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
 Document.PETITION_DOCUMENT_TYPES = ['Petition'];
+Document.ORDER_DOCUMENT_TYPES = Document.COURT_ISSUED_EVENT_CODES.filter(
+  document => document.documentType.includes('Order'),
+);
 Document.validationName = 'Document';
 
 /**
