@@ -2,8 +2,8 @@ const jwk = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
 const request = require('request');
 
-const issMain = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_MAIN}`
-const issIrs = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_IRS}`
+const issMain = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_MAIN}`;
+const issIrs = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_IRS}`;
 
 let pem;
 
@@ -33,7 +33,7 @@ const verify = (token, pem, cb) => {
       cb(null, generatePolicy(decoded.sub, 'Allow', event.methodArn));
     }
   });
-}
+};
 
 module.exports.handler = (event, context, cb) => {
   console.log('Auth function invoked');
@@ -41,12 +41,12 @@ module.exports.handler = (event, context, cb) => {
     // Remove 'bearer ' from token:
     const token = event.authorizationToken.substring(7);
 
-    const { iss } = jwt.decode(token);
+    const { iss } = jwk.decode(token);
     if (pem) {
       verify(token, pem, cb);
     } else {
       request(
-        { url: `${iss}/.well-known/jwks.json`, json: true },
+        { json: true, url: `${iss}/.well-known/jwks.json` },
         (error, response, body) => {
           if (error || response.statusCode !== 200) {
             console.log('Request error:', error);
@@ -55,13 +55,14 @@ module.exports.handler = (event, context, cb) => {
           const keys = body;
           const k = keys.keys[0];
           const jwkArray = {
+            e: k.e,
             kty: k.kty,
             n: k.n,
-            e: k.e,
           };
           pem = jwkToPem(jwkArray);
           verify(token, pem, cb);
-        });
+        },
+      );
     }
   } else {
     console.log('No authorizationToken found in the header.');
