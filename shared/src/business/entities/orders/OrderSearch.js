@@ -38,7 +38,6 @@ function OrderSearch(rawProps = {}) {
 OrderSearch.VALIDATION_ERROR_MESSAGES = {
   chooseOneValue:
     'Enter either a Docket number or a Case name/Petitioner name, not both',
-  dateRangeRequired: 'Please provide a start and end date',
   endDate: 'Enter a valid end date',
   orderKeyword: 'Enter a keyword or phrase',
   startDate: 'Enter a valid start date',
@@ -99,10 +98,6 @@ OrderSearch.prototype.getValidationErrors = function () {
   if (validationErrors && validationErrors['object.oxor']) {
     validationErrors['chooseOneValue'] = validationErrors['object.oxor'];
     delete validationErrors['object.oxor'];
-  }
-  if (validationErrors && validationErrors['object.and']) {
-    validationErrors['dateRangeRequired'] = validationErrors['object.and'];
-    delete validationErrors['object.and'];
   }
 
   return validationErrors;
