@@ -170,11 +170,15 @@ export const OrderSearch = connect(
                       <div className="grid-row text-bold padding-top-2">
                         <span className="usa-label padding-top-1">Date</span>
                       </div>
-                      <FormGroup errorText={validationErrors.orderDateRange}>
+                      <FormGroup>
                         <div className="grid-row">
                           <div className="grid-col-5">
                             <DateInput
                               hideLegend
+                              errorText={
+                                validationErrors.dateRangeRequired ||
+                                validationErrors.startDate
+                              }
                               id="start-date"
                               label="from Date"
                               names={{
@@ -202,6 +206,10 @@ export const OrderSearch = connect(
                           <div className="grid-col-5">
                             <DateInput
                               hideLegend
+                              errorText={
+                                validationErrors.dateRangeRequired ||
+                                validationErrors.endDate
+                              }
                               id="end-date"
                               label="to Date"
                               names={{

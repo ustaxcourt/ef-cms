@@ -4,6 +4,12 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 
 OrderSearch.ORDER_SEARCH_PAGE_LOAD_SIZE = 6;
+OrderSearch.VALID_DATE_SEARCH_FORMATS = [
+  'YYYY/MM/DD',
+  'YYYY/MM/D',
+  'YYYY/M/DD',
+  'YYYY/M/D',
+];
 
 OrderSearch.validationName = 'OrderSearch';
 
@@ -49,16 +55,34 @@ OrderSearch.schema = joi
   .keys({
     caseTitleOrPetitioner: joi.string().empty(''),
     docketNumber: joi.string().empty(''),
-    endDate: joi.when('startDate', {
-      is: null,
-      otherwise: joi.date().format('YYYY/MM/DD').min(joi.ref('startDate')),
-      then: joi.any(),
+    endDate: joi.alternatives().conditional('startDate', {
+      is: joi.exist().not(null),
+      otherwise: joi
+        .date()
+        .format(OrderSearch.VALID_DATE_SEARCH_FORMATS)
+        .optional(),
+      then: joi
+        .date()
+        .format(OrderSearch.VALID_DATE_SEARCH_FORMATS)
+        .min(joi.ref('startDate'))
+        .optional(),
     }),
     orderKeyword: joi.string().required(),
-    startDate: joi.date().format('YYYY/MM/DD').allow(null),
+    startDate: joi.alternatives().conditional('endDate', {
+      is: joi.exist().not(null),
+      otherwise: joi
+        .date()
+        .format(OrderSearch.VALID_DATE_SEARCH_FORMATS)
+        .max('now')
+        .optional(),
+      then: joi
+        .date()
+        .format(OrderSearch.VALID_DATE_SEARCH_FORMATS)
+        .max('now')
+        .required(),
+    }),
   })
-  .oxor('caseTitleOrPetitioner', 'docketNumber')
-  .and('startDate', 'endDate');
+  .oxor('caseTitleOrPetitioner', 'docketNumber');
 
 joiValidationDecorator(
   OrderSearch,

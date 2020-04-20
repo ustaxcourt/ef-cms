@@ -33,59 +33,103 @@ describe('Order Search entity', () => {
     );
   });
 
-  it('should not validate end date ad start date when no date range is provided', () => {
-    const orderSearch = new OrderSearch({
-      orderKeyword: 'sunglasses',
+  describe('date search validation', () => {
+    it('should not validate end date and start date when no date range is provided', () => {
+      const orderSearch = new OrderSearch({
+        orderKeyword: 'sunglasses',
+      });
+
+      const validationErrors = orderSearch.getFormattedValidationErrors();
+
+      expect(validationErrors).toBeNull();
     });
 
-    const validationErrors = orderSearch.getFormattedValidationErrors();
+    it('should fail validation when the start date is greater than the end date', () => {
+      const orderSearch = new OrderSearch({
+        endDateDay: '2',
+        endDateMonth: '10',
+        endDateYear: '2020',
+        orderKeyword: 'sunglasses',
+        startDateDay: '10',
+        startDateMonth: '10',
+        startDateYear: '2020',
+      });
 
-    expect(validationErrors).toBeNull();
-  });
+      const validationErrors = orderSearch.getFormattedValidationErrors();
 
-  it('fails validation when the start date is greater than the end date', () => {
-    const orderSearch = new OrderSearch({
-      endDateDay: '2',
-      endDateMonth: '10',
-      endDateYear: '2020',
-      orderKeyword: 'sunglasses',
-      stateDateDay: '10',
-      stateDateMonth: '10',
-      stateDateYear: '2020',
+      expect(validationErrors.endDate).toEqual('Enter a valid end date');
     });
 
-    const validationErrors = orderSearch.getFormattedValidationErrors();
+    it('should pass validation when a start date is provided without an end date', () => {
+      jest
+        .spyOn(global.Date, 'now')
+        .mockImplementationOnce(() =>
+          new Date('3000-05-14T11:01:58.135Z').valueOf(),
+        );
 
-    expect(validationErrors.endDate).toEqual('Enter a valid date range');
-  });
+      const orderSearch = new OrderSearch({
+        orderKeyword: 'sunglasses',
+        startDateDay: '2',
+        startDateMonth: '10',
+        startDateYear: '2020',
+      });
 
-  it('fails validation when the there is a start date and no end date', () => {
-    const orderSearch = new OrderSearch({
-      orderKeyword: 'sunglasses',
-      startDateDay: '2',
-      startDateMonth: '10',
-      startDateYear: '2020',
+      const validationErrors = orderSearch.getFormattedValidationErrors();
+
+      expect(validationErrors).toBeNull();
     });
 
-    const validationErrors = orderSearch.getFormattedValidationErrors();
+    it('should fail validation when an end date is provided without a start date', () => {
+      const orderSearch = new OrderSearch({
+        endDateDay: '02',
+        endDateMonth: '10',
+        endDateYear: '2020',
+        orderKeyword: 'sunglasses',
+      });
 
-    expect(validationErrors.dateRangeRequired).toEqual(
-      'Please provide a start and end date',
-    );
-  });
+      const validationErrors = orderSearch.getFormattedValidationErrors();
 
-  it('fails validation when the end date year is not provided', () => {
-    const orderSearch = new OrderSearch({
-      endDateDay: '12',
-      endDateMonth: '10',
-      orderKeyword: 'sunglasses',
-      startDateYear: '2020',
-      stateDateDay: '10',
-      stateDateMonth: '10',
+      expect(validationErrors.startDate).toEqual('Enter a valid start date');
     });
 
-    const validationErrors = orderSearch.getFormattedValidationErrors();
+    it('should fail validation when the end date year is not provided', () => {
+      const orderSearch = new OrderSearch({
+        endDateDay: '12',
+        endDateMonth: '10',
+        orderKeyword: 'sunglasses',
+        startDateDay: '10',
+        startDateMonth: '10',
+        startDateYear: '2020',
+      });
 
-    expect(validationErrors.endDate).toEqual('Enter a valid date range');
+      const validationErrors = orderSearch.getFormattedValidationErrors();
+
+      expect(validationErrors.endDate).toEqual('Enter a valid end date');
+    });
+
+    it('should fail validation when the start date year is not provided', () => {
+      const orderSearch = new OrderSearch({
+        orderKeyword: 'sunglasses',
+        startDateDay: '10',
+        startDateMonth: '10',
+      });
+
+      const validationErrors = orderSearch.getFormattedValidationErrors();
+
+      expect(validationErrors.startDate).toEqual('Enter a valid start date');
+    });
+
+    it('should fail validation when the start date is in the future', () => {
+      const orderSearch = new OrderSearch({
+        orderKeyword: 'sunglasses',
+        startDateDay: '10',
+        startDateMonth: '10',
+        startDateYear: '3000',
+      });
+
+      const validationErrors = orderSearch.getFormattedValidationErrors();
+
+      expect(validationErrors.startDate).toEqual('Enter a valid start date');
+    });
   });
 });
