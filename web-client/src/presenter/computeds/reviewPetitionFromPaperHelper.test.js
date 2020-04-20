@@ -86,7 +86,7 @@ describe('reviewPetitionFromPaperHelper', () => {
     const result = runCompute(reviewPetitionFromPaperHelper, {
       state: {
         form: {
-          orderForRequestedTrialLocation: true,
+          orderDesignatingPlaceOfTrial: true,
         },
       },
     });

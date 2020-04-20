@@ -11,6 +11,7 @@ describe('CaseInternal entity', () => {
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
         caseCaption: VALIDATION_ERROR_MESSAGES.caseCaption,
         caseType: VALIDATION_ERROR_MESSAGES.caseType,
+        chooseAtLeastOneValue: VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
         mailingDate: VALIDATION_ERROR_MESSAGES.mailingDate,
         partyType: VALIDATION_ERROR_MESSAGES.partyType,
         petitionFile: VALIDATION_ERROR_MESSAGES.petitionFile,
@@ -41,8 +42,11 @@ describe('CaseInternal entity', () => {
         petitionFile: { anObject: true },
         petitionFileSize: 1,
         petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+        preferredTrialCity: 'Boise, Idaho',
         procedureType: 'Small',
         receivedAt: new Date().toISOString(),
+        requestForPlaceOfTrialFile: { anObject: true },
+        requestForPlaceOfTrialFileSize: 1,
         stinFile: { anObject: true },
         stinFileSize: 1,
       });
@@ -67,6 +71,7 @@ describe('CaseInternal entity', () => {
           state: 'AK',
         },
         mailingDate: 'test',
+        orderDesignatingPlaceOfTrial: true,
         ownershipDisclosureFile: { anObject: true },
         ownershipDisclosureFileSize: 1,
         partyType: ContactFactory.PARTY_TYPES.corporation,
@@ -99,6 +104,7 @@ describe('CaseInternal entity', () => {
           state: 'AK',
         },
         mailingDate: 'test',
+        orderDesignatingPlaceOfTrial: true,
         orderForOds: true,
         partyType: ContactFactory.PARTY_TYPES.corporation,
         petitionFile: { anObject: true },
@@ -243,6 +249,75 @@ describe('CaseInternal entity', () => {
       expect(
         caseInternal.getFormattedValidationErrors().requestForPlaceOfTrialFile,
       ).toEqual(VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile);
+    });
+
+    it('fails validation if one of preferredTrialCity, RQT file, or orderDesignatingPlaceOfTrial is not selected', () => {
+      const caseInternal = new CaseInternal({
+        caseCaption: 'Dr. Leo Marvin, Petitioner',
+        caseType: 'Other',
+        contactPrimary: {
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'someone@example.com',
+          inCareOf: 'Someone',
+          name: 'Jimmy Dean',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+        mailingDate: 'test',
+        ownershipDisclosureFile: { anObject: true },
+        ownershipDisclosureFileSize: 1,
+        partyType: ContactFactory.PARTY_TYPES.corporation,
+        petitionFile: { anObject: true },
+        petitionFileSize: 1,
+        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+        procedureType: 'Small',
+        receivedAt: new Date().toISOString(),
+        stinFile: { anObject: true },
+        stinFileSize: 1,
+      });
+      expect(caseInternal.isValid()).toEqual(false);
+      expect(caseInternal.getFormattedValidationErrors()).toEqual({
+        chooseAtLeastOneValue: VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+      });
+    });
+
+    it('fails validation if only orderDesignatingPlaceOfTrial is present and it is false', () => {
+      const caseInternal = new CaseInternal({
+        caseCaption: 'Dr. Leo Marvin, Petitioner',
+        caseType: 'Other',
+        contactPrimary: {
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'someone@example.com',
+          inCareOf: 'Someone',
+          name: 'Jimmy Dean',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+        mailingDate: 'test',
+        orderDesignatingPlaceOfTrial: false,
+        ownershipDisclosureFile: { anObject: true },
+        ownershipDisclosureFileSize: 1,
+        partyType: ContactFactory.PARTY_TYPES.corporation,
+        petitionFile: { anObject: true },
+        petitionFileSize: 1,
+        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+        procedureType: 'Small',
+        receivedAt: new Date().toISOString(),
+        stinFile: { anObject: true },
+        stinFileSize: 1,
+      });
+      expect(caseInternal.isValid()).toEqual(false);
+      expect(caseInternal.getFormattedValidationErrors()).toEqual({
+        chooseAtLeastOneValue: VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+      });
     });
   });
 });
