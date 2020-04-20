@@ -9,14 +9,17 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * orderAdvancedSearchInteractor
  *
- * @param {object} providers the providers object containing applicationContext, orderKeyword
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.orderKeyword the search term to look for in documents
+ * @param {object} providers the providers object containing applicationContext, orderKeyword, caseTitleOrPetitioner, docketNumber, judge, startDate, endDate
  * @returns {object} the orders data
  */
 exports.orderAdvancedSearchInteractor = async ({
   applicationContext,
+  caseTitleOrPetitioner,
+  docketNumber,
+  endDate,
+  judge,
   orderKeyword,
+  startDate,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -26,9 +29,14 @@ exports.orderAdvancedSearchInteractor = async ({
 
   const orderEventCodes = map(Document.ORDER_DOCUMENT_TYPES, 'eventCode');
 
-  return await applicationContext.getUseCaseHelpers().orderKeywordSearch({
+  return await applicationContext.getPersistenceGateway().orderKeywordSearch({
     applicationContext,
+    caseTitleOrPetitioner,
+    docketNumber,
+    endDate,
+    judge,
     orderEventCodes,
     orderKeyword,
+    startDate,
   });
 };

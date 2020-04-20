@@ -132,6 +132,11 @@ const aggregateCommonQueryParams = ({
     });
   }
 
+  commonQuery.push(
+    { match: { 'pk.S': 'case|' } },
+    { match: { 'sk.S': 'case|' } },
+  );
+
   return {
     commonQuery,
     exactMatchesQuery,

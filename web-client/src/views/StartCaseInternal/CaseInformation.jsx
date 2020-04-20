@@ -149,19 +149,20 @@ export const CaseInformation = connect(
             validatePetitionFromPaperSequence();
           }}
         />
-        <FormGroup>
+        <FormGroup errorText={validationErrors.chooseAtLeastOneValue}>
           <div className="order-checkbox">
             <input
-              checked={form.orderForRequestedTrialLocation || false}
+              checked={form.orderDesignatingPlaceOfTrial || false}
               className="usa-checkbox__input"
               id="order-for-requested-trial-location"
-              name="orderForRequestedTrialLocation"
+              name="orderDesignatingPlaceOfTrial"
               type="checkbox"
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
                   value: e.target.checked,
                 });
+                validatePetitionFromPaperSequence();
               }}
             />
             <label
