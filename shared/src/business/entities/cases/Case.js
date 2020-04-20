@@ -185,11 +185,11 @@ Case.VALIDATION_ERROR_MESSAGES = {
     },
     'Your Petition file size is empty',
   ],
-  petitionPaymentDate: 'Enter a payment date',
+  petitionPaymentDate: 'Enter a valid payment date',
   petitionPaymentMethod: 'Enter payment method',
   petitionPaymentStatus: 'Enter payment status',
-  petitionPaymentWaivedDate: 'Enter date of waiver',
-  preferredTrialCity: 'Select a preferred trial location',
+  petitionPaymentWaivedDate: 'Enter a valid date waived',
+  preferredTrialCity: 'Select a trial location',
   procedureType: 'Select a case procedure',
   receivedAt: [
     {
@@ -206,7 +206,7 @@ Case.VALIDATION_ERROR_MESSAGES = {
     'Your Request for Place of Trial file size is empty',
   ],
   sortableDocketNumber: 'Sortable docket number is required',
-  stinFile: 'Upload a statement of taxpayer identification',
+  stinFile: 'Upload a Statement of Taxpayer Identification Number (STIN)',
   stinFileSize: [
     {
       contains: 'must be less than or equal to',
