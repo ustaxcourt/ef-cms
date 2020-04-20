@@ -64,7 +64,7 @@ function CaseInternal(rawCase) {
 
 CaseInternal.VALIDATION_ERROR_MESSAGES = {
   ...Case.VALIDATION_ERROR_MESSAGES,
-  applicationForWaiverOfFilingFeeFile: 'Upload or scan an APW',
+  applicationForWaiverOfFilingFeeFile: 'Upload or scan an Application for Waiver of Filing Fee (APW)',
   chooseAtLeastOneValue:
     'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
   ownershipDisclosureFile: 'Upload or scan Ownership Disclosure Statement(ODS)',
@@ -78,7 +78,8 @@ CaseInternal.VALIDATION_ERROR_MESSAGES = {
   ],
   petitionPaymentStatus: 'Select a filing fee option',
   preferredTrialCity: 'Select a preferred trial location',
-  requestForPlaceOfTrialFile: 'Upload or scan a Request for Place of Trial (RQT)',
+  requestForPlaceOfTrialFile:
+    'Upload or scan a Request for Place of Trial (RQT)',
 };
 
 const paperRequirements = joi
