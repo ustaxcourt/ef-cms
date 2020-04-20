@@ -64,7 +64,8 @@ function CaseInternal(rawCase) {
 
 CaseInternal.VALIDATION_ERROR_MESSAGES = {
   ...Case.VALIDATION_ERROR_MESSAGES,
-  applicationForWaiverOfFilingFeeFile: 'Upload or scan an Application for Waiver of Filing Fee (APW)',
+  applicationForWaiverOfFilingFeeFile:
+    'Upload or scan an Application for Waiver of Filing Fee (APW)',
   chooseAtLeastOneValue:
     'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
   ownershipDisclosureFile: 'Upload or scan Ownership Disclosure Statement(ODS)',
