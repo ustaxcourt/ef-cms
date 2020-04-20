@@ -7,6 +7,8 @@ module.exports = {
     .getPublicCaseLambda,
   getPublicDocumentDownloadUrlLambda: require('./public-api/getPublicDocumentDownloadUrlLambda')
     .getPublicDocumentDownloadUrlLambda,
+  getPublicJudgesLambda: require('./public-api/getPublicJudgesLambda')
+    .getPublicJudgesLambda,
   orderPublicSearchLambda: require('./public-api/orderPublicSearchLambda')
     .orderPublicSearchLambda,
 };

@@ -185,11 +185,11 @@ Case.VALIDATION_ERROR_MESSAGES = {
     },
     'Your Petition file size is empty',
   ],
-  petitionPaymentDate: 'Enter a payment date',
+  petitionPaymentDate: 'Enter a valid payment date',
   petitionPaymentMethod: 'Enter payment method',
   petitionPaymentStatus: 'Enter payment status',
-  petitionPaymentWaivedDate: 'Enter date of waiver',
-  preferredTrialCity: 'Select a preferred trial location',
+  petitionPaymentWaivedDate: 'Enter a valid date waived',
+  preferredTrialCity: 'Select a trial location',
   procedureType: 'Select a case procedure',
   receivedAt: [
     {
@@ -206,7 +206,7 @@ Case.VALIDATION_ERROR_MESSAGES = {
     'Your Request for Place of Trial file size is empty',
   ],
   sortableDocketNumber: 'Sortable docket number is required',
-  stinFile: 'Upload a statement of taxpayer identification',
+  stinFile: 'Upload a Statement of Taxpayer Identification Number (STIN)',
   stinFileSize: [
     {
       contains: 'must be less than or equal to',
@@ -333,6 +333,8 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
   this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
+  this.orderDesignatingPlaceOfTrial =
+    rawCase.orderDesignatingPlaceOfTrial || false;
   this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
   this.orderForAmendedPetitionAndFilingFee =
     rawCase.orderForAmendedPetitionAndFilingFee || false;
@@ -342,14 +344,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.orderToShowCause = rawCase.orderToShowCause || false;
   this.orderToChangeDesignatedPlaceOfTrial =
     rawCase.orderToChangeDesignatedPlaceOfTrial || false;
-
-  this.orderDesignatingPlaceOfTrial = Case.getDefaultOrderDesignatingPlaceOfTrialValue(
-    {
-      isPaper: rawCase.isPaper,
-      preferredTrialCity: rawCase.preferredTrialCity,
-      rawValue: rawCase.orderDesignatingPlaceOfTrial,
-    },
-  );
 
   const contacts = ContactFactory.createContacts({
     contactInfo: {
@@ -544,6 +538,12 @@ Case.validationRules = {
     .iso()
     .optional()
     .description('Reminder for clerks to review the notice of trial date.'),
+  orderDesignatingPlaceOfTrial: joi
+    .boolean()
+    .optional()
+    .description(
+      'Reminder for clerks to review the Order Designating Place of Trial.',
+    ),
   orderForAmendedPetition: joi
     .boolean()
     .optional()
@@ -589,14 +589,14 @@ Case.validationRules = {
       otherwise: joi.date().iso().optional().allow(null),
       then: joi.date().iso().required(),
     })
-    .description('When the petitioner payed the case fee.'),
+    .description('When the petitioner paid the case fee.'),
   petitionPaymentMethod: joi
     .when('petitionPaymentStatus', {
       is: Case.PAYMENT_STATUS.PAID,
       otherwise: joi.string().allow(null).optional(),
       then: joi.string().required(),
     })
-    .description('How the petitioner payed the case fee.'),
+    .description('How the petitioner paid the case fee.'),
   petitionPaymentStatus: joi
     .string()
     .valid(...Object.values(Case.PAYMENT_STATUS))
@@ -1353,27 +1353,6 @@ Case.prototype.isCalendared = function () {
  */
 Case.prototype.isReadyForTrial = function () {
   return this.status === Case.STATUS_TYPES.generalDocketReadyForTrial;
-};
-
-/**
- * getDefaultOrderDesignatingPlaceOfTrialValue
- *
- * @returns {boolean} the value of if an order is needed for place of trial.
- */
-Case.getDefaultOrderDesignatingPlaceOfTrialValue = function ({
-  isPaper,
-  preferredTrialCity,
-  rawValue,
-}) {
-  let orderDesignatingPlaceOfTrial;
-  if (rawValue || rawValue === false) {
-    orderDesignatingPlaceOfTrial = rawValue;
-  } else if (isPaper && !preferredTrialCity) {
-    orderDesignatingPlaceOfTrial = true;
-  } else {
-    orderDesignatingPlaceOfTrial = false;
-  }
-  return orderDesignatingPlaceOfTrial;
 };
 
 /**

@@ -101,7 +101,7 @@ ZAP Scanning Report
                 <th width="60%" height="24">Name</th><th width="20%" align="center">Risk Level</th><th width="20%" align="center">Number of Instances</th>
             </tr>
             <tr bgcolor="#e8e8e8">
-                <td>Cross-Domain Misconfiguration</td><td align="center">Medium</td><td align="center">9</td>
+                <td>Cross-Domain Misconfiguration</td><td align="center">Medium</td><td align="center">10</td>
             </tr>
             <tr bgcolor="#e8e8e8">
                 <td>Content Security Policy (CSP) Header Not Set</td><td align="center">Low</td><td align="center">1</td>
@@ -110,19 +110,19 @@ ZAP Scanning Report
                 <td>Cross-Domain JavaScript Source File Inclusion</td><td align="center">Low</td><td align="center">1</td>
             </tr>
             <tr bgcolor="#e8e8e8">
-                <td>Strict-Transport-Security Header Not Set</td><td align="center">Low</td><td align="center">204</td>
+                <td>Strict-Transport-Security Header Not Set</td><td align="center">Low</td><td align="center">207</td>
             </tr>
             <tr bgcolor="#e8e8e8">
-                <td>Unexpected Content-Type was returned</td><td align="center">Low</td><td align="center">870</td>
+                <td>Unexpected Content-Type was returned</td><td align="center">Low</td><td align="center">872</td>
             </tr>
             <tr bgcolor="#e8e8e8">
-                <td>A Client Error response code was returned by the server</td><td align="center">Informational</td><td align="center">2000</td>
+                <td>A Client Error response code was returned by the server</td><td align="center">Informational</td><td align="center">2104</td>
             </tr>
             <tr bgcolor="#e8e8e8">
                 <td>ELMAH Information Leak</td><td align="center">Informational</td><td align="center">1</td>
             </tr>
             <tr bgcolor="#e8e8e8">
-                <td>Timestamp Disclosure - Unix</td><td align="center">Informational</td><td align="center">5</td>
+                <td>Timestamp Disclosure - Unix</td><td align="center">Informational</td><td align="center">10</td>
             </tr>
         </table>
         <div class="spacer-lg"></div>
@@ -261,6 +261,20 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/public-api/order-search</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">Access-Control-Allow-Origin: *</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
                 <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/swagger.json</td>
             </tr>
               
@@ -275,7 +289,7 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%">Instances</td><td width="80%">9</td>
+                <td width="20%">Instances</td><td width="80%">10</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -508,6 +522,26 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/practitioners?name=ZAP</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">POST</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/public-api/order-search</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
                 <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/docket-entry</td>
             </tr>
               
@@ -628,27 +662,7 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/external-document</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/trial-sessions/trialSessionId/working-copy</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%">Instances</td><td width="80%">204</td>
+                <td width="20%">Instances</td><td width="80%">207</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -722,21 +736,7 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/case-inventory-report?associatedJudge=associatedJudge&amp;from=1.2&amp;pageSize=1.2&amp;status=any%3F%0D%0ASet-cookie%3A+Tamper%3De9af4728-784d-47d9-b8be-46332d68557c%0D%0A</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/case-inventory-report?associatedJudge=associatedJudge&amp;from=http%3A%2F%2F8283624898332935041.owasp.org&amp;pageSize=1.2&amp;status=status</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/case-inventory-report?associatedJudge=associatedJudge&amp;from=1.2&amp;pageSize=1.2&amp;status=any%3F%0D%0ASet-cookie%3A+Tamper%3D065a5613-315d-40e3-bc6c-b9267111449e%0D%0A</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -848,6 +848,20 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/case-inventory-report?associatedJudge=associatedJudge&amp;from=1.2&amp;pageSize=1.2&amp;status=http%3A%2F%2F594803987206587882.owasp.org</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
                 <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/work-items/workItemId/</td>
             </tr>
               
@@ -862,7 +876,35 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/printable-case-inventory-report?associatedJudge=associatedJudge&amp;status=HtTpS%3A%2F%2F594803987206587882.owasp.org</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
                 <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/case-inventory-report?associatedJudge=%22%3E%3C%21--%23EXEC+cmd%3D%22ls+%2F%22--%3E%3C&amp;from=1.2&amp;pageSize=1.2&amp;status=status</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/case-inventory-report?associatedJudge=associatedJudge&amp;from=1.2&amp;pageSize=1.2&amp;status=%2F%2F594803987206587882.owasp.org</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -918,6 +960,20 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/practitioners?name=http%3A%2F%2F594803987206587882.owasp.org</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
                 <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/printable-case-inventory-report?associatedJudge=associatedJudge&amp;status=%3B</td>
             </tr>
               
@@ -932,49 +988,7 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/printable-case-inventory-report?associatedJudge=associatedJudge&amp;status=status%22%3Bstart-sleep+-s+15</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/case-inventory-report?associatedJudge=associatedJudge&amp;from=1.2&amp;pageSize=1.2%27%7Ctype+%25SYSTEMROOT%25%5Cwin.ini&amp;status=status</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/case-inventory-report?associatedJudge=associatedJudge&amp;from=1.2&amp;pageSize=1.2&amp;status=%22%3E%3C%21--%23EXEC+cmd%3D%22ls+%2F%22--%3E%3C</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%">Instances</td><td width="80%">870</td>
+                <td width="20%">Instances</td><td width="80%">872</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -1026,6 +1040,20 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/practitioners?name=%3B</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">POST</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
                 <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/printable-case-inventory-report?associatedJudge=associatedJudge%26cat+%2Fetc%2Fpasswd%26&amp;status=status</td>
             </tr>
               
@@ -1054,20 +1082,6 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/printable-case-inventory-report?associatedJudge=%2F%2F8283624898332935041.owasp.org&amp;status=status</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
                 <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/case-inventory-report?associatedJudge=associatedJudge&amp;from=1.2&amp;pageSize=1.2&amp;status=ZAP</td>
             </tr>
               
@@ -1077,6 +1091,20 @@ ZAP Scanning Report
               
             <tr bgcolor="#e8e8e8">
                 <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/practitioners?name=%5D%5D%3E</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">POST</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
             </tr>
               
   
@@ -1096,15 +1124,15 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/printable-case-inventory-report?associatedJudge=8283624898332935041.owasp.org&amp;status=status</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/printable-case-inventory-report?associatedJudge=594803987206587882.owasp.org&amp;status=status</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
             </tr>
               
   
@@ -1166,7 +1194,35 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/printable-case-inventory-report?associatedJudge=associatedJudge&amp;status=any%0D%0ASet-cookie%3A+Tamper%3D2ec4aa66-87c7-4f1d-b5f2-a40cbde40355%0D%0A</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/printable-case-inventory-report?associatedJudge=associatedJudge&amp;status=https%3A%5C%5C594803987206587882.owasp.org</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/practitioners/</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">POST</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/case-inventory-report?associatedJudge=associatedJudge&amp;from=1.2&amp;pageSize=1.2&amp;status=any%0D%0ASet-cookie%3A+Tamper%3D414225ba-8d11-4208-aff0-2c95401cad39</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -1180,15 +1236,15 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/case-inventory-report?associatedJudge=associatedJudge&amp;from=1.2&amp;pageSize=1.2&amp;status=HtTpS%3A%2F%2F8283624898332935041.owasp.org</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/practitioners?name=PLuxhWSkINMCEKTmFvNaWgYZibSGsHLLrfcoKDQJduXCLQLvADFoHElKwXmHIkEteEmnsxOkrlYhYfMFiaKOhphjRFRhYeqJtWQljVBpMpHcFUgpwQjEGlnbAmgQBXQYvjwEFsskLycXGSvxqTSLbLBXxicuLEIaIQfDFwuXmyEayaEEgtiZZGllnEWMTQLWqkTgjnbAdRJptSPJsEZIpXGHWUGrvuLQoEOmtmvHPQgMnUTjBoobtcmudNVUiuBbHIUhkbJjslmWXgpiqpHNgoKJyLLuOJMQqEIufGSWKhATosVaXgESEiUkJTXvcbNPQYhLtPQRGCtGTEuHBwoRTEjEACPGbfiNEImGChkgdTCSbVqDQoIXHaoZsXBhMRewIhqiYYxVoTUiGqClRChyPSOVZMgrIIdnscPGIPZYsTHnCnqsHAerCsLoTWhcPKUVcUQyflJZFwZENNkoLZMmATUIdUbPiksEOPWQlwQuAtlelZdKyCYXugCykOvHQUwSPKLSEKWGNrblGIbRFIhRSLdnxIaDmTifVnKflVtqEZvnEUgVOfOfTlMgTQmIaJibEeaHPPQOtEtiMFLaXfCkVNyRfldUsSaKPkpwPdVOtKoNArViJghFEuBQJHyCqGxtujKCWaCTxeugWvTtrBrbSVnZsRfqCvcaMOWyfoExQjLRcQUhHboiuDRPIHXKlhLFDwJmTSZACCpSeXTXaUOTiEFkPuTHNOiXPKrUNSpBVIPAnYYvSbMCbUZpFJfISpFnstEgalvPuXyHodXLrmQfBtIwGNSGMBVDccvMkKniKUfovpvexFGPOeqdhlHnOcyiHwIgxuOBpErBZynCeVmQBZNyrWoMCobxsTEWpJHSebitPyKKLXjVHCKFnfhNksSOaSVLJspAAJFOcqkoNeHpYsNrEBKvCpObbAfnDOKOHTJxuvgEwLQFIkNBoguCeCiVmlGElMNhGcDFGxDvVroKBLUIxDxhHYLjsHsSyfcNfqwnAvbMMyVOVBdBDTeGkTgcXMGePOVqZSGpComnJxycdpasjyRqMqFEbiaVYgohoXyalPTgCqSdknXnHnQAVxhFyOIYGDYQvtFTPArIgrfAqpkytLQBUBGnrTMoraDHCdWvXSinCWJeyrIMutlNoexhFnZArANdXOFgtsdMXSAHYWQDAUBvlNgufgFPVfWJUVuhYngCTmglnTekWhcMeQxDGSAGrmEyBaMoVJwwCVgXCEXHvNTOVxEUOCkIUmxxkMcsjdeSNWZXngUBdhmthYRTbSpfrLUvdANLPFPsLklssKrwSpoBQtHtVXHZqiSaofqQUZpJOTQHtjrySGFDajikRmysjLObLUEJRafDXKgVUpOVxpLiFaPOCdATrmKFRcndTiZJecjWhLUgqEaUHnavVyeiKbGegApvxHgVarBAdupSywjHBqAJTwXCyntPrcLwmaOQeiCKWNeAZMYeqIjjwrjPVSSZIUdmRHHwwMEnjZpuiylYhQyshNCEDPpjLfMQRHhQebvfgHEbnjprhMPevQiuPJLaZpbbdfxFUiOqsmdwlZhfTuFvMklEVfWPMVhSpMouPoYAAuErInsFedXqevyNllnLRPQQTGJpVOKAueupQhuRsqXBtciVydgrEDRrLrbmOFTqHIOOEfQsqbmpHYmhDWVinULWtkAViLtElLcYjriinuGMCDtavBZITiCWkJMVMuOykCFUxjkUAucUkFlhkTJNurjQEwNHThZeyKNqsArDwTVsbeMpMMjDqWdnUYiSkVxJXyoWovfIalBowkroCEnCKdTMJJulUEZxwZnBIcBXDuRrMGssgoQvjEYxAOjObCCwwTMgZdWLedeMwJyDJyYUKqLYJuYpWhrvhcIDRXZAlDVIobXGQuwalGlIxUyfJhOSEaTADHyHYXpVhBXEIqsSZdDWRgfpsgJGyGukNQbOMsaARehgqCGlqfJDNQnQfcCpfKVWqPdCxQYTUulWBolnruftfjlVjiOHsrfQuGrWjOGVTNFJowZRjGLwEZaIejBjgvTfRvPwdOwGJCswSBxKhnRqeJRIqIZwDawViPoISZsDvxduUNPTLyiExanVjXnZ</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+                <td width="20%" class="indent2">Method</td><td width="80%">POST</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
             </tr>
               
   
@@ -1208,15 +1264,15 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/case-inventory-report?associatedJudge=associatedJudge&amp;from=1.2&amp;pageSize=any%0D%0ASet-cookie%3A+Tamper%3De9af4728-784d-47d9-b8be-46332d68557c%0D%0A&amp;status=status</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/case-inventory-report?associatedJudge=%2F%2F594803987206587882.owasp.org&amp;from=1.2&amp;pageSize=1.2&amp;status=status</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
             </tr>
               
   
@@ -1236,7 +1292,7 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/case-inventory-report?associatedJudge=associatedJudge&amp;from=1.2&amp;pageSize=1.2%27+OR+%271%27%3D%271%27+--+&amp;status=status</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/practitioners?name=any%3F%0ASet-cookie%3A+Tamper%3D3b37a7e6-70e3-4d5d-84b0-d553581563ec</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -1250,49 +1306,7 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-parties/caseId/contact-primary/</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/public-api/cases/1971023364843611152</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 404</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/printable-case-inventory-report?associatedJudge=associatedJudge%7Ctype+%25SYSTEMROOT%25%5Cwin.ini&amp;status=status</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%">Instances</td><td width="80%">2000</td>
+                <td width="20%">Instances</td><td width="80%">2104</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -1405,6 +1419,48 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/pending-report</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">09261399</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/public-api/order-search</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">53178981</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/docket-record-pdf</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">POST</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">58954958</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
                 <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/docket-entry</td>
             </tr>
               
@@ -1413,7 +1469,49 @@ ZAP Scanning Report
             </tr>
               
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">89863141</td>
+                <td width="20%" class="indent2">Evidence</td><td width="80%">29042066</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/trial-sessions/trialSessionId/getAssociatedCases</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">75814246</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-meta/caseId/block</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">18152264</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/public-api/order-search</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">08439178</td>
             </tr>
               
   
@@ -1427,27 +1525,13 @@ ZAP Scanning Report
             </tr>
               
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">21610110</td>
+                <td width="20%" class="indent2">Evidence</td><td width="80%">12282687</td>
             </tr>
               
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/court-issued-docket-entry</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">57038777</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/public-api/search</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/sections/section/users</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -1455,13 +1539,13 @@ ZAP Scanning Report
             </tr>
               
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">49808014</td>
+                <td width="20%" class="indent2">Evidence</td><td width="80%">93232388</td>
             </tr>
               
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/trial-sessions/trialSessionId/working-copy</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/reports/printable-case-inventory-report?associatedJudge=associatedJudge&amp;status=status</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -1469,13 +1553,13 @@ ZAP Scanning Report
             </tr>
               
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">32868074</td>
+                <td width="20%" class="indent2">Evidence</td><td width="80%">07827687</td>
             </tr>
               
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%">Instances</td><td width="80%">5</td>
+                <td width="20%">Instances</td><td width="80%">10</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -1483,7 +1567,7 @@ ZAP Scanning Report
             </tr>
               
             <tr bgcolor="#e8e8e8">
-                <td width="20%">Other information</td><td width="80%"><p>89863141, which evaluates to: 1972-11-06 01:59:01</p></td>
+                <td width="20%">Other information</td><td width="80%"><p>09261399, which evaluates to: 1970-04-18 04:36:39</p></td>
             </tr>
             <TR vAlign="top">
                 <TD colspan="2"></TD>

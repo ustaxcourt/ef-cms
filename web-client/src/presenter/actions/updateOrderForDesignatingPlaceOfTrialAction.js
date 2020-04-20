@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * updates the orderForRequestedTrialLocation based on the preferredTrialCity
+ * updates the orderDesignatingPlaceOfTrial based on the preferredTrialCity
  * and requestForPlaceOfTrialFile on the form
  *
  * @param {object} providers the providers object
@@ -20,9 +20,9 @@ export const updateOrderForDesignatingPlaceOfTrialAction = ({
     const { preferredTrialCity, requestForPlaceOfTrialFile } = get(state.form);
 
     if (!preferredTrialCity && !requestForPlaceOfTrialFile) {
-      store.set(state.form.orderForRequestedTrialLocation, true);
+      store.set(state.form.orderDesignatingPlaceOfTrial, true);
     } else {
-      store.set(state.form.orderForRequestedTrialLocation, false);
+      store.set(state.form.orderDesignatingPlaceOfTrial, false);
     }
   }
 };
