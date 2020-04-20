@@ -798,9 +798,9 @@ Case.prototype.doesHavePendingItems = function () {
  * get the case caption without the ", Petitioner/s/(s)" postfix
  *
  * @param {string} caseCaption the original case caption
- * @returns {string} caseCaptionNames the case caption with the postfix removed
+ * @returns {string} caseTitle the case caption with the postfix removed
  */
-Case.getCaseCaptionNames = function (caseCaption) {
+Case.getCaseTitle = function (caseCaption) {
   return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
 };
 
@@ -1020,9 +1020,9 @@ Case.prototype.getDocumentById = function ({ documentId }) {
 
 /**
  *
- * @returns {boolean} whether to show case name for primary
+ * @returns {boolean} whether to show case title for primary
  */
-Case.prototype.getShowCaseNameForPrimary = function () {
+Case.prototype.getShowCaseTitleForPrimary = function () {
   return !(this.contactSecondary && this.contactSecondary.name);
 };
 

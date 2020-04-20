@@ -39,10 +39,10 @@ export const startCaseHelper = (get, applicationContext) => {
 
   const { Case } = applicationContext.getEntityConstructors();
   const caseCaption = Case.getCaseCaption(form) || '';
-  const caseName = Case.getCaseCaptionNames(caseCaption);
+  const caseTitle = Case.getCaseTitle(caseCaption);
 
   return {
-    caseName,
+    caseTitle,
     contactPrimaryLabel,
     contactSecondaryLabel,
     deceasedSpouseLegend:
@@ -60,7 +60,7 @@ export const startCaseHelper = (get, applicationContext) => {
         ? 'Did you receive a notice from the IRS?'
         : 'Do you have a notice from the IRS?',
     showBusinessFilingTypeOptions: form.filingType === 'A business',
-    showCaseNameForPrimary: !hasContactSecondary,
+    showCaseTitleForPrimary: !hasContactSecondary,
     showEstateFilingOptions: form.otherType === 'An estate or trust',
     showHasIrsNoticeOptions: form.hasIrsNotice === true,
     showMinorIncompetentFilingOptions:

@@ -868,7 +868,7 @@ module.exports = (appContextUser = {}) => {
     barNumberGenerator,
     docketNumberGenerator,
     environment,
-    getCaseCaptionNames: Case.getCaseCaptionNames,
+    getCaseTitle: Case.getCaseTitle,
     getChromiumBrowser,
     getCognito: () => {
       if (environment.stage === 'local') {

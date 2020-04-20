@@ -57,13 +57,13 @@ const batchDownloadTrialSessionInteractor = async ({
   sessionCases = sessionCases
     .filter(caseToFilter => caseToFilter.status !== Case.STATUS_TYPES.closed)
     .map(caseToBatch => {
-      const caseName = Case.getCaseCaptionNames(caseToBatch.caseCaption);
-      const caseFolder = `${caseToBatch.docketNumber}, ${caseName}`;
+      const caseTitle = Case.getCaseTitle(caseToBatch.caseCaption);
+      const caseFolder = `${caseToBatch.docketNumber}, ${caseTitle}`;
 
       return {
         ...caseToBatch,
         caseFolder,
-        caseName,
+        caseTitle,
       };
     });
 

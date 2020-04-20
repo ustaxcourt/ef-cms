@@ -16,9 +16,7 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
     result.docketNumberSuffix ? result.docketNumberSuffix : ''
   }`;
 
-  result.caseCaptionNames = applicationContext.getCaseCaptionNames(
-    result.caseCaption || '',
-  );
+  result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
   result.fullStateNamePrimary =
     US_STATES[result.contactPrimary.state] || result.contactPrimary.state;

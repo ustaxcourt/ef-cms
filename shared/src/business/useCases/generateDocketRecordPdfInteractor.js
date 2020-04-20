@@ -30,7 +30,7 @@ exports.generateDocketRecordPdfInteractor = async ({
       caseDetail: caseEntity,
       docketRecordSort,
     });
-  formattedCaseDetail.showCaseNameForPrimary = caseEntity.getShowCaseNameForPrimary();
+  formattedCaseDetail.showCaseTitleForPrimary = caseEntity.getShowCaseTitleForPrimary();
 
   const getPartyInfoContent = detail => {
     const {
@@ -63,8 +63,8 @@ exports.generateDocketRecordPdfInteractor = async ({
     };
 
     const getContactPrimary = () => {
-      const name = detail.showCaseNameForPrimary
-        ? detail.caseName
+      const name = detail.showCaseTitleForPrimary
+        ? detail.caseTitle
         : contactPrimary.name;
 
       return `
