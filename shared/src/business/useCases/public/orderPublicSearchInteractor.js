@@ -11,10 +11,22 @@ const { Order } = require('../../entities/orders/Order');
  */
 exports.orderPublicSearchInteractor = async ({
   applicationContext,
+  caseTitleOrPetitioner,
+  docketNumber,
+  endDate,
+  judge,
   orderKeyword,
+  startDate,
 }) => {
   const orderEventCodes = map(Order.ORDER_TYPES, 'eventCode');
-  return await applicationContext
-    .getUseCaseHelpers()
-    .orderKeywordSearch({ applicationContext, orderEventCodes, orderKeyword });
+  return await applicationContext.getPersistenceGateway().orderKeywordSearch({
+    applicationContext,
+    caseTitleOrPetitioner,
+    docketNumber,
+    endDate,
+    judge,
+    orderEventCodes,
+    orderKeyword,
+    startDate,
+  });
 };

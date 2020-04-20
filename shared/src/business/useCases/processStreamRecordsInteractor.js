@@ -89,6 +89,33 @@ const filterRecords = async ({ applicationContext, records }) => {
         eventName: 'MODIFY',
       });
     }
+
+    if (caseRecord.dynamodb.Keys.sk.S.includes('document|')) {
+      const documentWithCaseInfo = {
+        ...AWS.DynamoDB.Converter.marshall(fullCase),
+        ...caseRecord.dynamodb.NewImage,
+        docketRecord: undefined,
+        documents: undefined,
+        entityName: undefined,
+        irsPractitioners: undefined,
+        privatePractitioners: undefined,
+      };
+
+      filteredRecords.push({
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: caseRecord.dynamodb.Keys.pk.S,
+            },
+            sk: {
+              S: caseRecord.dynamodb.Keys.sk.S,
+            },
+          },
+          NewImage: documentWithCaseInfo,
+        },
+        eventName: 'MODIFY',
+      });
+    }
   }
 
   return filteredRecords.map(deleteDynamicAndNestedFields);

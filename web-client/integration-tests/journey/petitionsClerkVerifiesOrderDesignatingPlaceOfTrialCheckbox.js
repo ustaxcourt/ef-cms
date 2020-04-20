@@ -1,27 +1,46 @@
+import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
+
 export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
   test,
   fakeFile,
 ) => {
-  return it('Petitions clerk verifies that the Order Requesting Place of Trial checkbox is correctly checked and unchecked', async () => {
+  return it('Petitions clerk verifies that the Order Designating Place of Trial checkbox is correctly checked and unchecked', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
 
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
 
-    expect(test.getState('form.orderForRequestedTrialLocation')).toBeTruthy();
+    expect(test.getState('form.orderDesignatingPlaceOfTrial')).toBeTruthy();
+
+    await test.runSequence('updateOrderForDesignatingPlaceOfTrialSequence', {
+      key: 'orderDesignatingPlaceOfTrial',
+      value: false,
+    });
+
+    await test.runSequence('reviewPetitionFromPaperSequence');
+
+    expect(test.getState('validationErrors')).toMatchObject({
+      chooseAtLeastOneValue:
+        CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+    });
+
+    await test.runSequence('updateOrderForDesignatingPlaceOfTrialSequence', {
+      key: 'orderDesignatingPlaceOfTrial',
+      value: true,
+    });
 
     await test.runSequence('updateOrderForDesignatingPlaceOfTrialSequence', {
       key: 'preferredTrialCity',
       value: 'Boise, Idaho',
     });
 
-    expect(test.getState('form.orderForRequestedTrialLocation')).toBeFalsy();
+    expect(test.getState('form.orderDesignatingPlaceOfTrial')).toBeFalsy();
 
     await test.runSequence('updateOrderForDesignatingPlaceOfTrialSequence', {
       key: 'preferredTrialCity',
       value: '',
     });
 
-    expect(test.getState('form.orderForRequestedTrialLocation')).toBeTruthy();
+    expect(test.getState('form.orderDesignatingPlaceOfTrial')).toBeTruthy();
 
     // simulate switching to RQT document tab
     await test.runSequence('cerebralBindSimpleSetStateSequence', {
@@ -39,7 +58,7 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
       file: fakeFile,
     });
 
-    expect(test.getState('form.orderForRequestedTrialLocation')).toBeFalsy();
+    expect(test.getState('form.orderDesignatingPlaceOfTrial')).toBeFalsy();
 
     await test.runSequence('openConfirmDeletePDFModalSequence');
 
@@ -48,10 +67,10 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
     await test.runSequence('removeScannedPdfSequence');
 
     expect(test.getState('form.requestForPlaceOfTrialFile')).toBeUndefined();
-    expect(test.getState('form.orderForRequestedTrialLocation')).toBeTruthy();
+    expect(test.getState('form.orderDesignatingPlaceOfTrial')).toBeTruthy();
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'orderForRequestedTrialLocation',
+      key: 'orderDesignatingPlaceOfTrial',
       value: false,
     });
 
@@ -70,6 +89,6 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
       file: fakeFile,
     });
 
-    expect(test.getState('form.orderForRequestedTrialLocation')).toBeFalsy();
+    expect(test.getState('form.orderDesignatingPlaceOfTrial')).toBeFalsy();
   });
 };

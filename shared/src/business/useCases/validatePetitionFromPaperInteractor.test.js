@@ -25,6 +25,7 @@ describe('validate petition from paper', () => {
       'procedureType',
       'receivedAt',
       'stinFile',
+      'chooseAtLeastOneValue',
     ]);
   });
 
@@ -39,6 +40,7 @@ describe('validate petition from paper', () => {
         caseCaption: 'testing',
         caseType: 'testing',
         mailingDate: 'testing',
+        orderDesignatingPlaceOfTrial: true,
         partyType: 'testing',
         petitionFile: {},
         petitionFileSize: 100,
