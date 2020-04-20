@@ -41,6 +41,8 @@ exports.getCaseInventoryReport = async ({
             {
               match: { 'entityName.S': 'Case' },
             },
+            { match: { 'pk.S': 'case|' } },
+            { match: { 'sk.S': 'case|' } },
           ],
         },
       },

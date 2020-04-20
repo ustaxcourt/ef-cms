@@ -9,7 +9,10 @@ describe('aggregateCommonQueryParams', () => {
     const result = aggregateCommonQueryParams({}, {});
 
     expect(result).toMatchObject({
-      commonQuery: [],
+      commonQuery: [
+        { match: { 'pk.S': 'case|' } },
+        { match: { 'sk.S': 'case|' } },
+      ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
     });
@@ -24,7 +27,10 @@ describe('aggregateCommonQueryParams', () => {
     const result = aggregateCommonQueryParams(queryParams);
 
     expect(result).toMatchObject({
-      commonQuery: [],
+      commonQuery: [
+        { match: { 'pk.S': 'case|' } },
+        { match: { 'sk.S': 'case|' } },
+      ],
       exactMatchesQuery: [
         {
           bool: {
@@ -127,6 +133,8 @@ describe('aggregateCommonQueryParams', () => {
             ],
           },
         },
+        { match: { 'pk.S': 'case|' } },
+        { match: { 'sk.S': 'case|' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -159,6 +167,8 @@ describe('aggregateCommonQueryParams', () => {
             ],
           },
         },
+        { match: { 'pk.S': 'case|' } },
+        { match: { 'sk.S': 'case|' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -184,6 +194,8 @@ describe('aggregateCommonQueryParams', () => {
             },
           },
         },
+        { match: { 'pk.S': 'case|' } },
+        { match: { 'sk.S': 'case|' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -208,6 +220,8 @@ describe('aggregateCommonQueryParams', () => {
             },
           },
         },
+        { match: { 'pk.S': 'case|' } },
+        { match: { 'sk.S': 'case|' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -232,6 +246,8 @@ describe('aggregateCommonQueryParams', () => {
             },
           },
         },
+        { match: { 'pk.S': 'case|' } },
+        { match: { 'sk.S': 'case|' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],

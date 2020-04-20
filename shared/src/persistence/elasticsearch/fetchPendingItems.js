@@ -6,7 +6,11 @@ exports.fetchPendingItems = async ({ applicationContext, judge, source }) => {
       _source: source,
       query: {
         bool: {
-          must: [{ match: { 'hasPendingItems.BOOL': true } }],
+          must: [
+            { match: { 'pk.S': 'case|' } },
+            { match: { 'sk.S': 'case|' } },
+            { match: { 'hasPendingItems.BOOL': true } },
+          ],
         },
       },
       size: 5000,

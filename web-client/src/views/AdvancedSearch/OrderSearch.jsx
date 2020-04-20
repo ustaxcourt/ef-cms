@@ -186,6 +186,11 @@ export const OrderSearch = connect(
                               hideLegend
                               id="start-date"
                               label="from Date"
+                              names={{
+                                day: 'startDay',
+                                month: 'startMonth',
+                                year: 'startYear',
+                              }}
                             />
                           </div>
                           <div className="grid-col-2">
@@ -196,6 +201,11 @@ export const OrderSearch = connect(
                               hideLegend
                               id="end-date"
                               label="to Date"
+                              names={{
+                                day: 'endDay',
+                                month: 'endMonth',
+                                year: 'endYear',
+                              }}
                             />
                           </div>
                         </div>
