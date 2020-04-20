@@ -90,7 +90,7 @@ describe('orderAdvancedSearchInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().orderKeywordSearch.mock
+      applicationContext.getPersistenceGateway().orderKeywordSearch.mock
         .calls[0][0],
     ).toMatchObject({
       orderEventCodes,
