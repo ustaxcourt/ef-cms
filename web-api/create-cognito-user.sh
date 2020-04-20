@@ -1,9 +1,9 @@
 #!/bin/bash -e
-
 # usage:
 #   ./create-cognito-user.sh $ENV $email $password $role $section "$name"
 #   where $ENV is dev|stg|prod|test|...
 #   see shared/src/business/entities/User.js for valid roles and sections 
+#   $USTC_ADMIN_PASS must be set as an environment variable.
 
 ENV=$1
 REGION="us-east-1"
@@ -60,12 +60,14 @@ createAccount() {
     --client-id "${CLIENT_ID}" \
     --region "${REGION}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
+    --output json \
     --auth-parameters USERNAME="ustcadmin@example.com"',PASSWORD'="${USTC_ADMIN_PASS}")
 
   adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${adminToken}" \
     --request POST \
+    --output json \
     --data "$(generate_post_data "${email}" "${password}" "${role}" "${section}" "${name}")" \
       "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"
 
@@ -74,24 +76,49 @@ createAccount() {
     --client-id "${CLIENT_ID}" \
     --region "${REGION}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
-    --auth-parameters USERNAME="${email}",PASSWORD="${password}")
-  
+    --output json \
+    --auth-parameters USERNAME="${email}",PASSWORD="${password}")  
   session=$(echo "${response}" | jq -r ".Session")
-  
+
   if [ "$session" != "null" ]; then
     aws cognito-idp admin-respond-to-auth-challenge \
       --user-pool-id  "${USER_POOL_ID}" \
       --client-id "${CLIENT_ID}" \
       --region "${REGION}" \
+      --output json \
       --challenge-name NEW_PASSWORD_REQUIRED \
       --challenge-responses NEW_PASSWORD="${password}",USERNAME="${email}" \
       --session "${session}"
   fi
 }
 
+if [[ "$#" -ne 6 ]]; then
+  echo "Error: Insufficient number of parameters"
+  echo "$#"
+  exit 1
+fi
+
+if [[ -z "$USTC_ADMIN_PASS" ]]; then
+  echo "Error: USTC_ADMIN_PASS not set as an environment variable"
+  exit 1
+fi
+
 email=$2
 password=$3
 role=$4
 section=$5
 name=$6
+
+if [[ ${#password} -lt 8 ]]; then
+  echo "Error: Password is too short"
+elif [[ "$password"  =~ ^[:upper:] ]]; then
+  echo "Error: Password needs an uppercase character"
+elif [[ "$password"  =~ ^[:lower:] ]]; then
+  echo "Error: Password needs a lowercase character"
+elif [[ "$password"  =~ ^[:digit:] ]]; then
+  echo "Error: Password needs a number"
+elif [[ "$password"  =~ [:punct:] ]]; then
+  echo "Error: Password needs a special character"
+fi
+
 createAccount "${email}" "${password}" "${role}" "${section}" "${name}"

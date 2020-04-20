@@ -4,6 +4,8 @@ const {
 const {
   orderPublicSearchInteractor,
 } = require('./orderPublicSearchInteractor');
+const { Document } = require('../../entities/Document');
+const { map } = require('lodash');
 
 describe('orderPublicSearchInteractor', () => {
   beforeEach(() => {
@@ -32,6 +34,24 @@ describe('orderPublicSearchInteractor', () => {
           signedJudgeName: 'Guy Fieri',
         },
       ]);
+  });
+
+  it('should only search for order document types', async () => {
+    const expectedOrderEventCodes = map(
+      Document.ORDER_DOCUMENT_TYPES,
+      'eventCode',
+    );
+
+    await orderPublicSearchInteractor({
+      applicationContext,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().orderKeywordSearch.mock
+        .calls[0][0],
+    ).toMatchObject({
+      orderEventCodes: expectedOrderEventCodes,
+    });
   });
 
   it('returns results with an authorized user role (petitionsclerk)', async () => {
