@@ -64,21 +64,23 @@ function CaseInternal(rawCase) {
 
 CaseInternal.VALIDATION_ERROR_MESSAGES = {
   ...Case.VALIDATION_ERROR_MESSAGES,
-  applicationForWaiverOfFilingFeeFile: 'Upload or scan an APW',
+  applicationForWaiverOfFilingFeeFile:
+    'Upload or scan an Application for Waiver of Filing Fee (APW)',
   chooseAtLeastOneValue:
-    'Select Preferred Trial Location and Upload RQT or Select Order Designating Place of Trial',
-  ownershipDisclosureFile: 'Upload or scan Ownership Disclosure Statement',
-  petitionFile: 'Upload or scan a petition',
+    'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
+  ownershipDisclosureFile: 'Upload or scan Ownership Disclosure Statement(ODS)',
+  petitionFile: 'Upload or scan a Petition',
   petitionPaymentDate: [
     {
       contains: 'must be less than or equal to',
       message: 'Payment date cannot be in the future. Enter a valid date.',
     },
-    'Enter a payment date',
+    'Enter a valid payment date',
   ],
   petitionPaymentStatus: 'Select a filing fee option',
   preferredTrialCity: 'Select a preferred trial location',
-  requestForPlaceOfTrialFile: 'Upload or scan a requested place of trial',
+  requestForPlaceOfTrialFile:
+    'Upload or scan a Request for Place of Trial (RQT)',
 };
 
 const paperRequirements = joi
