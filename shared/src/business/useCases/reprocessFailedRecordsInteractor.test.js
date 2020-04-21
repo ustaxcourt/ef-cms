@@ -29,6 +29,18 @@ describe('reprocessFailedRecordsInteractor', () => {
       .indexRecord.mockReturnValue(null);
   });
 
+  it('checks the current mapping count', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getElasticsearchReindexRecords.mockResolvedValue([]);
+
+    await reprocessFailedRecordsInteractor({
+      applicationContext,
+    });
+
+    expect(applicationContext.checkSearchClientMappings).toHaveBeenCalled();
+  });
+
   it('does not call index function if there are no records to process', async () => {
     applicationContext
       .getPersistenceGateway()
