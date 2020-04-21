@@ -121,7 +121,7 @@
     "serverless-plugin-tracing": "^2.0.0",
     "serverless-plugin-warmup": "^4.9.0",
     "serverless-prune-plugin": "^1.4.2",
-    "stylelint": "^13.3.2",
+    "stylelint": "^13.3.3",
     "stylelint-config-idiomatic-order": "^8.1.0",
     "stylelint-config-standard": "^20.0.0",
     "swagger-cli": "^4.0.2",
