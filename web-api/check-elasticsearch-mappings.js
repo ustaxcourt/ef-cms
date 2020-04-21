@@ -46,7 +46,7 @@ module.exports = (async () => {
    */
   function countValues(object, key) {
     let count = 0;
-    Object.keys(object).some(function (k) {
+    Object.keys(object).forEach(k => {
       if (k === key) {
         count++;
       }

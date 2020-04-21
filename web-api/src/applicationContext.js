@@ -912,13 +912,13 @@ module.exports = (appContextUser = {}) => {
       }
 
       const currentPercent = (total / limit) * 100;
-      if (currentPercent >= 90) {
-        sendToHoneybadger(
-          `Warning: Search Client Mappings have reached the 90% threshold - currently ${currentPercent}%`,
-        );
-      } else if (currentPercent >= 75) {
+      if (currentPercent >= 75) {
         sendToHoneybadger(
           `Warning: Search Client Mappings have reached the 75% threshold - currently ${currentPercent}%`,
+        );
+      } else if (currentPercent >= 50) {
+        sendToHoneybadger(
+          `Warning: Search Client Mappings have reached the 50% threshold - currently ${currentPercent}%`,
         );
       }
     },
