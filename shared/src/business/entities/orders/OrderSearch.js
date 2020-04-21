@@ -1,15 +1,13 @@
 const joi = require('@hapi/joi').extend(require('@hapi/joi-date'));
 const {
+  createEndOfDayISO,
+  createStartOfDayISO,
+} = require('../../utilities/DateHandler');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
 OrderSearch.ORDER_SEARCH_PAGE_LOAD_SIZE = 6;
-OrderSearch.VALID_DATE_SEARCH_FORMATS = [
-  'YYYY/MM/DD',
-  'YYYY/MM/D',
-  'YYYY/M/DD',
-  'YYYY/M/D',
-];
 
 OrderSearch.validationName = 'OrderSearch';
 
@@ -22,16 +20,25 @@ OrderSearch.validationName = 'OrderSearch';
 function OrderSearch(rawProps = {}) {
   this.orderKeyword = rawProps.orderKeyword;
   this.docketNumber = rawProps.docketNumber;
-  this.startDate = OrderSearch.dateFormat(
-    rawProps.startDateYear,
-    rawProps.startDateMonth,
-    rawProps.startDateDay,
-  );
-  this.endDate = OrderSearch.dateFormat(
-    rawProps.endDateYear,
-    rawProps.endDateMonth,
-    rawProps.endDateDay,
-  );
+  if (
+    rawProps.startDateDay ||
+    rawProps.startDateMonth ||
+    rawProps.startDateYear
+  ) {
+    this.startDate = createStartOfDayISO({
+      day: rawProps.startDateDay,
+      month: rawProps.startDateMonth,
+      year: rawProps.startDateYear,
+    });
+  }
+
+  if (rawProps.endDateDay || rawProps.endDateMonth || rawProps.endDateYear) {
+    this.endDate = createEndOfDayISO({
+      day: rawProps.endDateDay,
+      month: rawProps.endDateMonth,
+      year: rawProps.endDateYear,
+    });
+  }
   this.caseTitleOrPetitioner = rawProps.caseTitleOrPetitioner;
 }
 
@@ -41,12 +48,6 @@ OrderSearch.VALIDATION_ERROR_MESSAGES = {
   endDate: 'Enter a valid end date',
   orderKeyword: 'Enter a keyword or phrase',
   startDate: 'Enter a valid start date',
-};
-
-OrderSearch.dateFormat = (year, month, day) => {
-  if (year || month || day) {
-    return `${year}/${month}/${day}`;
-  }
 };
 
 OrderSearch.schema = joi
