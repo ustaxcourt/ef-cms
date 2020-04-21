@@ -213,9 +213,8 @@ functions:
                 caseId: true
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
+            arn: arn:aws:lambda:us-east-1:${opt:accountId}:function:cognito_authorizer_lambda_${self:provider.stage}
+            managedExternally: true
 
   caseAdvancedSearch:
     handler: web-api/${self:provider.dir}/casesHandlers.caseAdvancedSearchLambda
