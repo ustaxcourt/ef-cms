@@ -168,7 +168,12 @@ export const OrderSearch = connect(
                   <div className="grid-row date-search-row">
                     <div className="grid-container padding-left-0 padding-right-0 margin-left-0 margin-right-0">
                       <div className="grid-row text-bold padding-top-2">
-                        <span className="usa-label padding-top-1">Date</span>
+                        <span className="usa-label padding-top-1 grid-col-7">
+                          Start Date
+                        </span>
+                        <span className="usa-label padding-top-1 grid-col-5">
+                          End Date <span className="usa-hint">(Optional)</span>
+                        </span>
                       </div>
                       <FormGroup>
                         <div className="grid-row">
