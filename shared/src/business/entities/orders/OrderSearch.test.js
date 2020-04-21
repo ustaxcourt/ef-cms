@@ -41,6 +41,7 @@ describe('Order Search entity', () => {
 
     const validationErrors = orderSearch.getFormattedValidationErrors();
 
+    expect(orderSearch.judge).toBeUndefined();
     expect(validationErrors).toBeNull();
   });
 
