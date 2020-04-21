@@ -1,3 +1,5 @@
+const { NewPractitioner } = require('../../entities/NewPractitioner');
+
 /**
  * validatePractitionerInteractor
  *
@@ -10,9 +12,9 @@ exports.validateAddPractitionerInteractor = ({
   applicationContext,
   practitioner,
 }) => {
-  const errors = new (applicationContext.getEntityConstructors().NewPractitioner)(
-    practitioner,
-  ).getFormattedValidationErrors();
+  const errors = new NewPractitioner(practitioner, {
+    applicationContext,
+  }).getFormattedValidationErrors();
 
   if (!errors) return null;
   return errors;

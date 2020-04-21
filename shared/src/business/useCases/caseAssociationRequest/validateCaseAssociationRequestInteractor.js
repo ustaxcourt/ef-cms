@@ -1,3 +1,7 @@
+const {
+  CaseAssociationRequestFactory,
+} = require('../../entities/CaseAssociationRequestFactory');
+
 /**
  * validateCaseAssociationRequestInteractor
  *
@@ -10,9 +14,8 @@ exports.validateCaseAssociationRequestInteractor = ({
   applicationContext,
   caseAssociationRequest,
 }) => {
-  const errors = applicationContext
-    .getEntityConstructors()
-    .CaseAssociationRequestFactory(caseAssociationRequest)
-    .getFormattedValidationErrors();
+  const errors = CaseAssociationRequestFactory(caseAssociationRequest, {
+    applicationContext,
+  }).getFormattedValidationErrors();
   return errors || null;
 };
