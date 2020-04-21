@@ -46,7 +46,7 @@ export const AllCases = connect(
                     </span>
                   )}
                 </td>
-                <td>{item.caseCaptionNames}</td>
+                <td>{item.caseTitle}</td>
                 <td>{item.status}</td>
                 <td>{item.disposition}</td>
                 <td>{item.removedFromTrialDateFormatted}</td>

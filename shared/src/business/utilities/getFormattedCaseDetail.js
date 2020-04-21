@@ -309,7 +309,7 @@ const formatCase = (applicationContext, caseDetail) => {
       result.hasVerifiedIrsNotice === undefined) &&
       result.hasIrsNotice);
 
-  result.caseName = applicationContext.getCaseCaptionNames(
+  result.caseTitle = applicationContext.getCaseTitle(
     caseDetail.caseCaption || '',
   );
 

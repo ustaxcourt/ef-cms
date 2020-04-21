@@ -4,6 +4,7 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { Document } = require('../../business/entities/Document');
 const { map } = require('lodash');
+const { OrderSearch } = require('../../business/entities/orders/OrderSearch');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -16,10 +17,14 @@ exports.orderAdvancedSearchInteractor = async ({
   applicationContext,
   caseTitleOrPetitioner,
   docketNumber,
-  endDate,
+  endDateDay,
+  endDateMonth,
+  endDateYear,
   judge,
   orderKeyword,
-  startDate,
+  startDateDay,
+  startDateMonth,
+  startDateYear,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -29,14 +34,24 @@ exports.orderAdvancedSearchInteractor = async ({
 
   const orderEventCodes = map(Document.ORDER_DOCUMENT_TYPES, 'eventCode');
 
-  return await applicationContext.getPersistenceGateway().orderKeywordSearch({
-    applicationContext,
+  const orderSearch = new OrderSearch({
     caseTitleOrPetitioner,
     docketNumber,
-    endDate,
+    endDateDay,
+    endDateMonth,
+    endDateYear,
     judge,
-    orderEventCodes,
     orderKeyword,
-    startDate,
+    startDateDay,
+    startDateMonth,
+    startDateYear,
+  });
+
+  const rawSearch = orderSearch.validate().toRawObject();
+
+  return await applicationContext.getPersistenceGateway().orderKeywordSearch({
+    applicationContext,
+    orderEventCodes,
+    ...rawSearch,
   });
 };

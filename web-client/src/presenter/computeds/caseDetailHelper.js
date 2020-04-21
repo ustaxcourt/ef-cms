@@ -49,7 +49,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     }
   }
 
-  const showCaseNameForPrimary = ![
+  const showCaseTitleForPrimary = ![
     PARTY_TYPES.petitioner,
     PARTY_TYPES.petitionerDeceasedSpouse,
   ].includes(caseDetail.partyType);
@@ -114,7 +114,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
     showCaseInformationExternal: isExternalUser,
-    showCaseNameForPrimary,
+    showCaseTitleForPrimary,
     showDocketRecordInProgressState: !isExternalUser,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContacts,
