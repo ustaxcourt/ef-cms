@@ -35,7 +35,7 @@ describe('createOrderAction', () => {
       },
     });
 
-    expect(applicationContextForClient.getCaseCaptionNames).toBeCalled();
+    expect(applicationContextForClient.getCaseTitle).toBeCalled();
     expect(applicationContextForClient.getPdfStyles).toBeCalled();
     expect(result.output.htmlString.indexOf('Guy Fieri')).toBeTruthy();
     expect(
@@ -62,7 +62,7 @@ describe('createOrderAction', () => {
       },
     });
 
-    expect(applicationContextForClient.getCaseCaptionNames).toBeCalled();
+    expect(applicationContextForClient.getCaseTitle).toBeCalled();
     expect(applicationContextForClient.getPdfStyles).toBeCalled();
     expect(
       applicationContextForClient.getClerkOfCourtNameForSigning,

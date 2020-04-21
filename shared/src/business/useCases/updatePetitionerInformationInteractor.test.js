@@ -69,7 +69,7 @@ const userData = {
 let userObj = userData;
 const applicationContext = {
   environment: { stage: 'local' },
-  getCaseCaptionNames: Case.getCaseCaptionNames,
+  getCaseTitle: Case.getCaseTitle,
   getChromiumBrowser: () => ({
     close: () => null,
     newPage: () => ({

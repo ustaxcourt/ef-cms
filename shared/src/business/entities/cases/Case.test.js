@@ -734,26 +734,24 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getCaseCaptionNames', () => {
+  describe('getCaseTitle', () => {
     it('party type Petitioner', () => {
-      const caseCaptionNames = Case.getCaseCaptionNames(
-        'Test Petitioner, Petitioner',
-      );
-      expect(caseCaptionNames).toEqual('Test Petitioner');
+      const caseTitle = Case.getCaseTitle('Test Petitioner, Petitioner');
+      expect(caseTitle).toEqual('Test Petitioner');
     });
 
     it('party type Petitioner & Spouse', () => {
-      const caseCaptionNames = Case.getCaseCaptionNames(
+      const caseTitle = Case.getCaseTitle(
         'Test Petitioner & Test Petitioner 2, Petitioners',
       );
-      expect(caseCaptionNames).toEqual('Test Petitioner & Test Petitioner 2');
+      expect(caseTitle).toEqual('Test Petitioner & Test Petitioner 2');
     });
 
     it('party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
-      const caseCaptionNames = Case.getCaseCaptionNames(
+      const caseTitle = Case.getCaseTitle(
         'Estate of Test Petitioner 2, Deceased, Test Petitioner, Executor, Petitioner(s)',
       );
-      expect(caseCaptionNames).toEqual(
+      expect(caseTitle).toEqual(
         'Estate of Test Petitioner 2, Deceased, Test Petitioner, Executor',
       );
     });
@@ -1191,9 +1189,9 @@ describe('Case entity', () => {
         {
           assigneeId: 'bob',
           assigneeName: 'bob',
-          caseCaptionNames: 'testing',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: Case.STATUS_TYPES.new,
+          caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
           isQC: true,
@@ -1208,9 +1206,9 @@ describe('Case entity', () => {
         {
           assigneeId: 'bob',
           assigneeName: 'bob',
-          caseCaptionNames: 'testing',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: Case.STATUS_TYPES.new,
+          caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
           isQC: true,

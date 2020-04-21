@@ -19,7 +19,7 @@
       "filingDate": "2020-01-21T16:41:39.481Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
-    "caseCaptionNames": "Eve Brewer",
+    "caseTitle": "Eve Brewer",
     "section": "petitions",
     "workItemId": "77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "isInitializeCase": true,
@@ -80,7 +80,7 @@
       "filingDate": "2020-01-21T16:41:39.481Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
-    "caseCaptionNames": "Eve Brewer",
+    "caseTitle": "Eve Brewer",
     "section": "petitions",
     "workItemId": "77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "isInitializeCase": true,
@@ -268,7 +268,7 @@
           "receivedAt": "2020-01-21T16:41:39.481Z",
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
         },
-        "caseCaptionNames": "Eve Brewer",
+        "caseTitle": "Eve Brewer",
         "section": "petitions",
         "workItemId": "77d8449a-ffe1-48e5-b056-a6112a819a4b",
         "isInitializeCase": true,

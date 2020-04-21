@@ -74,7 +74,7 @@ exports.generateCoverPagePdf = async ({ applicationContext, content }) => {
 
       <div style="margin-top: 40px; font-size:${fontSizeCaption}px;">
         <div class="width-60 float-left">
-          ${content.caseCaptionNames}
+          ${content.caseTitle}
           <br /><br />
           <div class="text-indent">
             ${content.caseCaptionExtension}
