@@ -9,6 +9,9 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
   applicationContext.logger.info('Time', createISODateString());
   const honeybadger = applicationContext.initHoneybadger();
 
+  // Check mapping counts
+  applicationContext.checkSearchClientMappings();
+
   const recordsToProcess = await applicationContext
     .getPersistenceGateway()
     .getElasticsearchReindexRecords({ applicationContext });

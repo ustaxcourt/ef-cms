@@ -135,9 +135,6 @@ exports.processStreamRecordsInteractor = async ({
   const searchClient = applicationContext.getSearchClient();
   const honeybadger = applicationContext.initHoneybadger();
 
-  // Check mapping counts
-  applicationContext.checkSearchClientMappings();
-
   const filteredRecords = await filterRecords({
     applicationContext,
     records: recordsToProcess,
