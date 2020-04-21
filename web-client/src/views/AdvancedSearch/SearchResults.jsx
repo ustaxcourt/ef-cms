@@ -63,7 +63,7 @@ export const SearchResults = connect(
                       </td>
                       <NonMobile>
                         <td>{result.formattedFiledDate}</td>
-                        <td>{result.caseCaptionNames}</td>
+                        <td>{result.caseTitle}</td>
                         <td>
                           {result.fullStateNamePrimary}
                           {result.fullStateNameSecondary && (
@@ -76,7 +76,7 @@ export const SearchResults = connect(
                       </NonMobile>
                       <Mobile>
                         <td>
-                          <div>{result.caseCaptionNames}</div>
+                          <div>{result.caseTitle}</div>
                           <div className="margin-top-2">
                             Filed {result.formattedFiledDate}
                           </div>

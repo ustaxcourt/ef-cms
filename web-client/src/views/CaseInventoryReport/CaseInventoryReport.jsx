@@ -124,7 +124,7 @@ export const CaseInventoryReport = connect(
                             <td>
                               <CaseLink formattedCase={row} />
                             </td>
-                            <td>{row.caseName}</td>
+                            <td>{row.caseTitle}</td>
                             {caseInventoryReportHelper.showJudgeColumn && (
                               <td>{row.associatedJudge}</td>
                             )}

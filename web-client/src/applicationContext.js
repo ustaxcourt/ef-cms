@@ -420,7 +420,7 @@ const applicationContext = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000';
   },
-  getCaseCaptionNames: Case.getCaseCaptionNames,
+  getCaseTitle: Case.getCaseTitle,
   getChiefJudgeNameForSigning: () => chiefJudgeNameForSigning,
   getClerkOfCourtNameForSigning: () => clerkOfCourtNameForSigning,
   getCognitoClientId: () => {
