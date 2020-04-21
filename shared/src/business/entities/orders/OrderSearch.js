@@ -18,6 +18,7 @@ OrderSearch.validationName = 'OrderSearch';
  * @constructor
  */
 function OrderSearch(rawProps = {}) {
+  this.judge = rawProps.judge;
   this.orderKeyword = rawProps.orderKeyword;
   this.docketNumber = rawProps.docketNumber;
   if (
@@ -67,6 +68,7 @@ OrderSearch.schema = joi
         .min(joi.ref('startDate'))
         .optional(),
     }),
+    judge: joi.string().optional().empty(''),
     orderKeyword: joi.string().required(),
     startDate: joi.alternatives().conditional('endDate', {
       is: joi.exist().not(null),
