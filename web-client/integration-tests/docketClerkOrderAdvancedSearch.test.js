@@ -17,7 +17,7 @@ describe('docket clerk order advanced search', () => {
     jest.setTimeout(30000);
     test.draftOrders = [];
   });
-
+  const signedByJudge = 'Maurice B. Foley';
   let caseDetail;
 
   loginAs(test, 'petitioner');
@@ -243,6 +243,66 @@ describe('docket clerk order advanced search', () => {
     expect(test.getState('searchResults')).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({ documentId: test.draftOrders[1].documentId }),
+      ]),
+    );
+  });
+
+  it('search for a judge that has not signed any served orders', async () => {
+    const invalidJudge = 'Judge Exotic';
+
+    test.setState('advancedSearchForm', {
+      orderSearch: {
+        judge: invalidJudge,
+        orderKeyword: 'dismissal',
+      },
+    });
+
+    await test.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(test.getState('searchResults')).toEqual([]);
+  });
+
+  it('search for a judge that has signed served orders', async () => {
+    const seedData = {
+      caseCaption: 'Hanan Al Hroub, Petitioner',
+      caseId: '1a92894e-83a5-48ba-9994-3ada44235deb',
+      contactPrimary: {
+        address1: '123 Teachers Way',
+        city: 'Haifa',
+        country: 'Palestine',
+        countryType: 'international',
+        name: 'Hanan Al Hroub',
+        postalCode: '123456',
+        serviceIndicator: 'Paper',
+      },
+      contactSecondary: {},
+      docketNumber: '104-20',
+      docketNumberSuffix: 'R',
+      documentContents:
+        'Déjà vu, this is a seed order filed on Apr 13 at 11:01pm ET',
+      documentId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+      documentTitle: 'Order of Dismissal and Decision Entered, Judge Buch',
+      filingDate: '2020-04-14T03:01:15.215Z',
+      signedJudgeName: 'Maurice B. Foley',
+    };
+
+    test.setState('advancedSearchForm', {
+      orderSearch: {
+        judge: signedByJudge,
+        orderKeyword: 'dismissal',
+      },
+    });
+
+    await test.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(test.getState('searchResults')).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ documentId: seedData.documentId }),
+      ]),
+    );
+    expect(test.getState('searchResults')).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ documentId: test.draftOrders[2].documentId }),
       ]),
     );
   });
