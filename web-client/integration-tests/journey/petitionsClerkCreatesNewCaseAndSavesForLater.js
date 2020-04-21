@@ -183,7 +183,7 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
       value: true,
     });
     await test.runSequence(
-      'updateFormValueAndInternalCaseCaptionSequence',
+      'updateFormValueAndCaseCaptionSequence',
       primaryContactName,
     );
     await test.runSequence('validatePetitionFromPaperSequence');
@@ -215,7 +215,7 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
   });
 
   it('should regenerate case caption when primary contact name is changed', async () => {
-    await test.runSequence('updateFormValueAndInternalCaseCaptionSequence', {
+    await test.runSequence('updateFormValueAndCaseCaptionSequence', {
       key: 'contactPrimary.name',
       value: 'Ada Lovelace',
     });
