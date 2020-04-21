@@ -5,7 +5,6 @@ const {
   orderPublicSearchInteractor,
 } = require('./orderPublicSearchInteractor');
 const { Document } = require('../../entities/Document');
-const { map } = require('lodash');
 
 describe('orderPublicSearchInteractor', () => {
   beforeEach(() => {
@@ -37,11 +36,6 @@ describe('orderPublicSearchInteractor', () => {
   });
 
   it('should only search for order document types', async () => {
-    const expectedOrderEventCodes = map(
-      Document.ORDER_DOCUMENT_TYPES,
-      'eventCode',
-    );
-
     await orderPublicSearchInteractor({
       applicationContext,
       orderKeyword: 'fish',
@@ -51,7 +45,7 @@ describe('orderPublicSearchInteractor', () => {
       applicationContext.getPersistenceGateway().orderKeywordSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      orderEventCodes: expectedOrderEventCodes,
+      orderEventCodes: Document.ORDER_DOCUMENT_TYPES,
     });
   });
 

@@ -3,7 +3,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Document } = require('../../business/entities/Document');
-const { map } = require('lodash');
 const { OrderSearch } = require('../../business/entities/orders/OrderSearch');
 const { UnauthorizedError } = require('../../errors/errors');
 
