@@ -1,3 +1,5 @@
+const { OrderWithoutBody } = require('../../entities/orders/OrderWithoutBody');
+
 /**
  * validateOrderWithoutBodyInteractor
  *
@@ -10,9 +12,9 @@ exports.validateOrderWithoutBodyInteractor = ({
   applicationContext,
   orderMetadata,
 }) => {
-  const orderWithoutBody = new (applicationContext.getEntityConstructors().OrderWithoutBody)(
-    orderMetadata,
-  );
+  const orderWithoutBody = new OrderWithoutBody(orderMetadata, {
+    applicationContext,
+  });
 
   return orderWithoutBody.getFormattedValidationErrors();
 };

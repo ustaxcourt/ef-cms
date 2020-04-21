@@ -236,7 +236,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     makeRequired('objections');
   }
 
-  if (documentMetadata.scenario.toLowerCase().trim() === 'nonstandard h') {
+  if (
+    documentMetadata.scenario &&
+    documentMetadata.scenario.toLowerCase().trim() === 'nonstandard h'
+  ) {
     if (
       includes(
         documentMetadata.documentType,

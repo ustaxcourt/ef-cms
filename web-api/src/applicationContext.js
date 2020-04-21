@@ -63,20 +63,11 @@ const {
   caseAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
 const {
-  CaseExternalIncomplete,
-} = require('../../shared/src/business/entities/cases/CaseExternalIncomplete');
-const {
-  CaseInternal,
-} = require('../../shared/src/business/entities/cases/CaseInternal');
-const {
   casePublicSearch: casePublicSearchPersistence,
 } = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
 const {
   casePublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
-const {
-  CaseSearch,
-} = require('../../shared/src/business/entities/cases/CaseSearch');
 const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
@@ -95,9 +86,6 @@ const {
 const {
   completeWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
-const {
-  ContactFactory,
-} = require('../../shared/src/business/entities/contacts/ContactFactory');
 const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
@@ -218,12 +206,6 @@ const {
 const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
-const {
-  DocketRecord,
-} = require('../../shared/src/business/entities/DocketRecord');
-const {
-  ExternalDocumentFactory,
-} = require('../../shared/src/business/entities/externalDocument/ExternalDocumentFactory');
 const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
@@ -817,7 +799,6 @@ const { exec } = require('child_process');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 const { User } = require('../../shared/src/business/entities/User');
 const { v4: uuidv4 } = require('uuid');
-const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 
 // increase the timeout for zip uploads to S3
 AWS.config.httpOptions.timeout = 300000;
@@ -935,18 +916,6 @@ module.exports = (appContextUser = {}) => {
     getEntityByName: name => {
       return entitiesByName[name];
     },
-    getEntityConstructors: () => ({
-      Case,
-      CaseExternal: CaseExternalIncomplete,
-      CaseInternal: CaseInternal,
-      CaseSearch,
-      ContactFactory,
-      DocketRecord,
-      ExternalDocumentFactory,
-      TrialSession,
-      User,
-      WorkItem,
-    }),
     getMigrations: () => ({
       migrateCaseInteractor,
     }),
