@@ -1,20 +1,13 @@
 const {
   validateDocketRecordInteractor,
 } = require('./validateDocketRecordInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { DocketRecord } = require('../entities/DocketRecord');
-const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('validateDocketRecordInteractor', () => {
   it('returns the expected errors object on an empty docket record', () => {
     const errors = validateDocketRecordInteractor({
-      applicationContext: {
-        getCurrentUser: () =>
-          MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-        getEntityConstructors: () => ({
-          DocketRecord,
-        }),
-        getUniqueId: () => 'unique-id-1',
-      },
+      applicationContext,
       docketRecord: {},
     });
 
@@ -25,14 +18,7 @@ describe('validateDocketRecordInteractor', () => {
 
   it('returns null when there are no errors', () => {
     const result = validateDocketRecordInteractor({
-      applicationContext: {
-        getCurrentUser: () =>
-          MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-        getEntityConstructors: () => ({
-          DocketRecord,
-        }),
-        getUniqueId: () => 'unique-id-1',
-      },
+      applicationContext,
       docketRecord: {
         description: 'Test Description',
         eventCode: 'O',
