@@ -39,7 +39,7 @@ describe('CaseExternalInformationFactory entity', () => {
     });
 
     describe('STIN file size', () => {
-      it('should inform you if stin file size is greater than 500MB', () => {
+      it('should inform you if stin file size is greater than the PDF max file size', () => {
         const caseExternal = new CaseExternalInformationFactory({
           stinFile: new File([], 'test.pdf'),
           stinFileSize: MAX_FILE_SIZE_BYTES + 5,
@@ -161,7 +161,7 @@ describe('CaseExternalInformationFactory entity', () => {
     });
 
     describe('petition file size', () => {
-      it('should inform you if petition file size is greater than 500MB', () => {
+      it('should inform you if petition file size is greater than the PDF max file size', () => {
         const caseExternal = new CaseExternalInformationFactory({
           petitionFile: new File([], 'test.pdf'),
           petitionFileSize: MAX_FILE_SIZE_BYTES + 5,
@@ -336,7 +336,7 @@ describe('CaseExternalInformationFactory entity', () => {
     });
 
     describe('ownership disclosure file size', () => {
-      it('should inform you if ownership disclosure file size is greater than 500MB', () => {
+      it('should inform you if ownership disclosure file size is greater than the PDF max file size', () => {
         const caseExternal = new CaseExternalInformationFactory({
           ownershipDisclosureFile: new File([], 'test.pdf'),
           ownershipDisclosureFileSize: MAX_FILE_SIZE_BYTES + 5,
