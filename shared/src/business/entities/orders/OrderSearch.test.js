@@ -39,7 +39,7 @@ describe('Order Search entity', () => {
         orderKeyword: 'sunglasses',
       });
 
-      const validationErrors = orderSearch.getValidationErrors();
+      const validationErrors = orderSearch.getFormattedValidationErrors();
 
       expect(validationErrors).toBeNull();
     });
