@@ -543,6 +543,7 @@ const applicationContext = {
       getTrialSessionStatus,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
+      isPendingOnCreation: Document.isPendingOnCreation,
       isStringISOFormatted,
       isValidDateString,
       prepareDateFromString,

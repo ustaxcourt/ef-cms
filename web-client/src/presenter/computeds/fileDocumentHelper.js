@@ -125,9 +125,8 @@ export const fileDocumentHelper = (get, applicationContext) => {
       docketNumber,
     }));
 
-    const sortedDocketNumbers = applicationContext
-      .getEntityConstructors()
-      .Case.sortByDocketNumber(selectedDocketNumbers)
+    const sortedDocketNumbers = selectedDocketNumbers
+      .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
       .map(({ docketNumber }) => docketNumber);
 
     formattedDocketNumbers = [
