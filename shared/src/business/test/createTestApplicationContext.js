@@ -344,7 +344,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     },
     filterCaseMetadata: jest.fn(),
     getBaseUrl: () => 'http://localhost',
-    getCaseCaptionNames: jest.fn().mockImplementation(Case.getCaseCaptionNames),
+    getCaseTitle: jest.fn().mockImplementation(Case.getCaseTitle),
     getChiefJudgeNameForSigning: jest.fn(),
     getChromiumBrowser: jest.fn().mockImplementation(() => {
       return mockGetChromiumBrowserReturnValue;

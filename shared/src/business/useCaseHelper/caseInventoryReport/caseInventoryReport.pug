@@ -24,7 +24,7 @@ html(lang="en")
           each formattedCase in formattedCases
             tr
               td.no-wrap #{formattedCase.docketNumber}#{formattedCase.docketNumberSuffix}
-              td= formattedCase.caseCaptionNames
+              td= formattedCase.caseTitle
               if showStatusColumn
                 td= formattedCase.status
               if showJudgeColumn
