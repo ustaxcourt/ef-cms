@@ -56,11 +56,11 @@ exports.generateCoverSheetData = ({
     '';
 
   const caseCaption = caseEntity.caseCaption || Case.getCaseCaption(caseEntity);
-  let caseCaptionNames = applicationContext.getCaseCaptionNames(caseCaption);
+  let caseTitle = applicationContext.getCaseTitle(caseCaption);
   let caseCaptionExtension = '';
-  if (caseCaptionNames !== caseCaption) {
-    caseCaptionNames += ', ';
-    caseCaptionExtension = caseCaption.replace(caseCaptionNames, '');
+  if (caseTitle !== caseCaption) {
+    caseTitle += ', ';
+    caseCaptionExtension = caseCaption.replace(caseTitle, '');
   }
 
   let documentTitle =
@@ -74,7 +74,7 @@ exports.generateCoverSheetData = ({
 
   const coverSheetData = {
     caseCaptionExtension,
-    caseCaptionNames,
+    caseTitle,
     certificateOfService:
       documentEntity.certificateOfService === true
         ? 'Certificate of Service'

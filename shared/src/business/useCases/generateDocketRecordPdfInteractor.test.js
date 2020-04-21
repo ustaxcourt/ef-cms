@@ -278,7 +278,7 @@ describe('generateDocketRecordPdfInteractor', () => {
     expect(result.includes('Address Three')).toEqual(true);
   });
 
-  it('Displays caseName instead of contactPrimary name when showCaseNameForPrimary is set', async () => {
+  it('Displays caseTitle instead of contactPrimary name when showCaseTitleForPrimary is set', async () => {
     const result = await generateDocketRecordPdfInteractor({
       applicationContext,
       caseDetail: { ...caseDetail },
