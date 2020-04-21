@@ -32,8 +32,6 @@ exports.orderAdvancedSearchInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const orderEventCodes = map(Document.ORDER_DOCUMENT_TYPES, 'eventCode');
-
   const orderSearch = new OrderSearch({
     caseTitleOrPetitioner,
     docketNumber,
@@ -51,7 +49,7 @@ exports.orderAdvancedSearchInteractor = async ({
 
   return await applicationContext.getPersistenceGateway().orderKeywordSearch({
     applicationContext,
-    orderEventCodes,
+    orderEventCodes: Document.ORDER_DOCUMENT_TYPES,
     ...rawSearch,
   });
 };
