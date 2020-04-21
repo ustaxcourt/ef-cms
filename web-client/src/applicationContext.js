@@ -5,25 +5,9 @@ import {
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
 
-import { AddIrsPractitioner } from '../../shared/src/business/entities/caseAssociation/AddIrsPractitioner';
-import { AddPrivatePractitionerFactory } from '../../shared/src/business/entities/caseAssociation/AddPrivatePractitionerFactory';
 import { Case } from '../../shared/src/business/entities/cases/Case';
-import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
-import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
-import { CaseExternal } from '../../shared/src/business/entities/cases/CaseExternal';
-import { CaseExternalInformationFactory } from '../../shared/src/business/entities/cases/CaseExternalInformationFactory';
-import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
-import { CourtIssuedDocumentFactory } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentFactory';
-import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
-import { DocketRecord } from '../../shared/src/business/entities/DocketRecord';
 import { Document } from '../../shared/src/business/entities/Document';
-import { EditPrivatePractitionerFactory } from '../../shared/src/business/entities/caseAssociation/EditPrivatePractitionerFactory';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
-import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
-import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
-import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
-import { OrderSearch } from '../../shared/src/business/entities/orders/OrderSearch';
 import {
   compareISODateStrings,
   compareStrings,
@@ -37,12 +21,6 @@ import { validateDocketRecordInteractor } from '../../shared/src/business/useCas
 const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
-import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
-import { NewPractitioner } from '../../shared/src/business/entities/NewPractitioner';
-import { NewTrialSession } from '../../shared/src/business/entities/trialSessions/NewTrialSession';
-import { Note } from '../../shared/src/business/entities/notes/Note';
-import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
-import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { User } from '../../shared/src/business/entities/User';
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
@@ -446,33 +424,6 @@ const applicationContext = {
     return getUserPermissions(user);
   },
   getCurrentUserToken,
-  getEntityConstructors: () => ({
-    AddIrsPractitioner,
-    AddPrivatePractitionerFactory,
-    Case,
-    CaseAssociationRequestFactory,
-    CaseDeadline,
-    CaseExternal,
-    CaseExternalInformationFactory,
-    CaseInternal,
-    ContactFactory,
-    CourtIssuedDocumentFactory,
-    DocketEntryFactory,
-    DocketRecord,
-    Document,
-    EditPrivatePractitionerFactory,
-    ExternalDocumentFactory,
-    ExternalDocumentInformationFactory,
-    ForwardMessage,
-    InitialWorkItemMessage,
-    NewPractitioner,
-    NewTrialSession,
-    Note,
-    OrderSearch,
-    OrderWithoutBody,
-    TrialSession,
-    User,
-  }),
   getError: e => {
     return ErrorFactory.getError(e);
   },
