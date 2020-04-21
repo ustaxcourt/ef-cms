@@ -84,7 +84,7 @@ export const CaseDeadlines = connect(
                         <td className="smaller-column semi-bold">
                           <CaseLink formattedCase={item} />
                         </td>
-                        <td>{item.caseCaptionNames}</td>
+                        <td>{item.caseTitle}</td>
                         <td className="padding-extra">{item.description}</td>
                         <td className="no-wrap">
                           {item.associatedJudgeFormatted}

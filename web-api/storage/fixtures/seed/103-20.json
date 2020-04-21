@@ -84,7 +84,7 @@
       "relationship": "primaryDocument",
       "docketNumber": "103-20"
     },
-    "caseCaptionNames": "Reuben Blair",
+    "caseTitle": "Reuben Blair",
     "section": "docket",
     "trialDate": "2020-11-27T05:00:00.000Z",
     "workItemId": "2a3955ca-baad-4ca7-be23-d862d2ef5310",
@@ -147,7 +147,7 @@
       "relationship": "primaryDocument",
       "docketNumber": "103-20"
     },
-    "caseCaptionNames": "Reuben Blair",
+    "caseTitle": "Reuben Blair",
     "section": "docket",
     "trialDate": "2020-11-27T05:00:00.000Z",
     "workItemId": "2a3955ca-baad-4ca7-be23-d862d2ef5310",
@@ -192,7 +192,7 @@
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "gsi1pk": "work-item|1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
-    "caseCaptionNames": "Reuben Blair",
+    "caseTitle": "Reuben Blair",
     "section": "petitions",
     "trialDate": "2020-11-27T05:00:00.000Z",
     "workItemId": "1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
@@ -373,7 +373,7 @@
           "relationship": "primaryDocument",
           "docketNumber": "103-20"
         },
-        "caseCaptionNames": "Reuben Blair",
+        "caseTitle": "Reuben Blair",
         "section": "docket",
         "trialDate": "2020-11-27T05:00:00.000Z",
         "workItemId": "2a3955ca-baad-4ca7-be23-d862d2ef5310",
@@ -457,7 +457,7 @@
           "receivedAt": "2020-01-23T21:44:54.043Z",
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
         },
-        "caseCaptionNames": "Reuben Blair",
+        "caseTitle": "Reuben Blair",
         "section": "petitions",
         "workItemId": "1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
         "isInitializeCase": true,

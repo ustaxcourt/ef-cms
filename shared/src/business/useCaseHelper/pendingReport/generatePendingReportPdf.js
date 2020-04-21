@@ -62,9 +62,7 @@ exports.generatePendingReportPdf = async ({
       /^Judge\s+/,
       '',
     ),
-    caseCaptionNames: applicationContext.getCaseCaptionNames(
-      pendingItem.caseCaption || '',
-    ),
+    caseTitle: applicationContext.getCaseTitle(pendingItem.caseCaption || ''),
     formattedFiledDate: applicationContext
       .getUtilities()
       .formatDateString(pendingItem.receivedAt, 'MMDDYY'),

@@ -28,13 +28,13 @@ const getCaseRow = ({
             <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
           </div>
         </td>
-        <td className="hide-on-mobile">{formattedCase.caseName}</td>
+        <td className="hide-on-mobile">{formattedCase.caseTitle}</td>
         <td>{formattedCase.createdAtFormatted}</td>
         <td className="show-on-mobile">
           <div className={isNestedCase ? 'margin-left-2' : ''}>
             <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
           </div>
-          {formattedCase.caseName}
+          {formattedCase.caseTitle}
         </td>
       </tr>
       {formattedCase.consolidatedCases &&

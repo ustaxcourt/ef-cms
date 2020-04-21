@@ -82,7 +82,7 @@ describe('updateCase', () => {
       applicationContext,
       caseToUpdate: {
         associatedJudge: 'Judge Buch',
-        caseCaption: 'New caption',
+        caseCaption: 'Johnny Joe Jacobson, Petitioner',
         caseId: '123',
         docketNumber: '101-18',
         docketNumberSuffix: 'W',
@@ -110,7 +110,7 @@ describe('updateCase', () => {
       applicationContext.getDocumentClient().update.mock.calls[1][0],
     ).toMatchObject({
       ExpressionAttributeValues: {
-        ':caseCaptionNames': 'New caption',
+        ':caseTitle': 'Johnny Joe Jacobson',
       },
     });
     expect(
