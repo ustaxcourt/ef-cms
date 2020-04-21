@@ -33,6 +33,17 @@ describe('Order Search entity', () => {
     );
   });
 
+  it('should pass validation when judge provided is empty', () => {
+    const orderSearch = new OrderSearch({
+      judge: '',
+      orderKeyword: 'sunglasses',
+    });
+
+    const validationErrors = orderSearch.getFormattedValidationErrors();
+
+    expect(validationErrors).toBeNull();
+  });
+
   describe('date search validation', () => {
     it('should not validate end date and start date when no date range is provided', () => {
       const orderSearch = new OrderSearch({
