@@ -110,6 +110,11 @@ resource "aws_cognito_user_pool" "irs_pool" {
     enabled = true
   }
 
+  device_configuration {
+    challenge_required_on_new_device = true
+    device_only_remembered_on_user_prompt = false
+  }
+
   auto_verified_attributes = ["email"]
 
   username_attributes = ["email"]
