@@ -334,6 +334,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     barNumberGenerator: {
       createBarNumber: jest.fn().mockReturnValue('CS20001'),
     },
+    checkSearchClientMappings: jest.fn(),
     convertBlobToUInt8Array: jest
       .fn()
       .mockImplementation(() => new Uint8Array([])),
