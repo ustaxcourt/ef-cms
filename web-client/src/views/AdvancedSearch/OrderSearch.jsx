@@ -172,7 +172,7 @@ export const OrderSearch = connect(
                           Start Date
                         </span>
                         <span className="usa-label padding-top-1 grid-col-5">
-                          End Date <span className="usa-hint">(Optional)</span>
+                          End Date <span className="usa-hint">(optional)</span>
                         </span>
                       </div>
                       <FormGroup>
