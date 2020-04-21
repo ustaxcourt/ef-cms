@@ -1,4 +1,4 @@
-(async () => {
+module.exports = (async () => {
   const AWS = require('aws-sdk');
   AWS.config.region = 'us-east-1';
 
@@ -61,15 +61,33 @@
   const indexMapping = await searchClientCache.indices.getMapping({
     index: 'efcms',
   });
+
+  const indexSettings = await searchClientCache.indices.getSettings({
+    index: 'efcms',
+  });
+
+  const mappingLimit =
+    indexSettings.efcms.settings.index.mapping.total_fields.limit;
+
   const fields = indexMapping.efcms.mappings.properties;
 
   let totalTypes = 0;
+  const fieldTypeMatches = {};
+
   for (let field of Object.keys(fields)) {
     const typeMatches = countValues(fields[field], 'type');
     if (typeMatches > 50) {
-      console.log('Mapping for object higher than 50:', field, typeMatches);
+      fieldTypeMatches[field] = typeMatches;
     }
     totalTypes += typeMatches;
   }
-  console.log('Total mappings:', totalTypes);
+
+  const output = {
+    fields: fieldTypeMatches,
+    limit: mappingLimit,
+    total: totalTypes,
+  };
+
+  console.log(JSON.stringify(output));
+  return output;
 })();

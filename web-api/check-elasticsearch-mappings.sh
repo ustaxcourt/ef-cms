@@ -12,4 +12,5 @@ else
   popd
 fi
 
-node ./web-api/check-elasticsearch-mappings.js
+mappingCounts=$(node ./web-api/check-elasticsearch-mappings.js)
+echo $mappingCounts

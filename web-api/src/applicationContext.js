@@ -864,11 +864,64 @@ const entitiesByName = {
   Case: Case,
 };
 
+const initHoneybadger = () => {
+  if (process.env.NODE_ENV === 'production') {
+    const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
+
+    if (apiKey) {
+      const config = {
+        apiKey,
+        environment: 'api',
+      };
+      Honeybadger.configure(config);
+      return Honeybadger;
+    }
+  }
+};
+
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
   return {
     barNumberGenerator,
+    checkSearchClientMappings: async () => {
+      if (!process.env.ELASTICSEARCH_ENDPOINT) {
+        // TODO: Maybe think of a better way to do this
+        process.env.ELASTICSEARCH_ENDPOINT = environment.elasticsearchEndpoint;
+      }
+
+      const sendToHoneybadger = msg => {
+        const honeybadger = initHoneybadger();
+
+        if (honeybadger) {
+          honeybadger.notify(msg);
+        } else {
+          console.log(msg);
+        }
+      };
+
+      const {
+        fields,
+        limit,
+        total,
+      } = await require('../check-elasticsearch-mappings');
+
+      if (fields.length > 0) {
+        // TODO: Create alert based on fields
+        console.log(fields);
+      }
+
+      const currentPercent = (total / limit) * 100;
+      if (currentPercent >= 90) {
+        sendToHoneybadger(
+          `Warning: Search Client Mappings have reached the 90% threshold - currently ${currentPercent}%`,
+        );
+      } else if (currentPercent >= 75) {
+        sendToHoneybadger(
+          `Warning: Search Client Mappings have reached the 75% threshold - currently ${currentPercent}%`,
+        );
+      }
+    },
     docketNumberGenerator,
     environment,
     getCaseCaptionNames: Case.getCaseCaptionNames,
@@ -1307,20 +1360,7 @@ module.exports = (appContextUser = {}) => {
         setServiceIndicatorsForCase,
       };
     },
-    initHoneybadger: () => {
-      if (process.env.NODE_ENV === 'production') {
-        const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
-
-        if (apiKey) {
-          const config = {
-            apiKey,
-            environment: 'api',
-          };
-          Honeybadger.configure(config);
-          return Honeybadger;
-        }
-      }
-    },
+    initHoneybadger,
     isAuthorized,
     isAuthorizedForWorkItems: () =>
       isAuthorized(user, ROLE_PERMISSIONS.WORKITEM),
