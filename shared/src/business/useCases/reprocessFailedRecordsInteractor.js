@@ -10,7 +10,7 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
   const honeybadger = applicationContext.initHoneybadger();
 
   // Check mapping counts
-  applicationContext.checkSearchClientMappings();
+  applicationContext.checkSearchClientMappings({ applicationContext });
 
   const recordsToProcess = await applicationContext
     .getPersistenceGateway()
