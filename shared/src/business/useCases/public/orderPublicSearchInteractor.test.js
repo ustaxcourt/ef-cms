@@ -44,6 +44,7 @@ describe('orderPublicSearchInteractor', () => {
 
     await orderPublicSearchInteractor({
       applicationContext,
+      orderKeyword: 'fish',
     });
 
     expect(
@@ -57,6 +58,7 @@ describe('orderPublicSearchInteractor', () => {
   it('returns results with an authorized user role (petitionsclerk)', async () => {
     const result = await orderPublicSearchInteractor({
       applicationContext,
+      orderKeyword: 'fish',
     });
 
     expect(result).toMatchObject([
