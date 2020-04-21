@@ -42,7 +42,7 @@ export const RecentMessagesInbox = connect(
                     <span className="no-wrap">{item.received}</span>
                   </td>
                   <td className="message-queue-row">
-                    <span>{item.caseCaptionNames}</span>
+                    <span>{item.caseTitle}</span>
                   </td>
 
                   <td className="message-queue-row message-queue-document">
