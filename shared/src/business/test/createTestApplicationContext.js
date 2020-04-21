@@ -9,22 +9,9 @@ const {
   appendPaperServiceAddressPageToPdf,
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
-  CaseAssociationRequestFactory,
-} = require('../entities/CaseAssociationRequestFactory');
-const {
-  CaseExternalIncomplete,
-} = require('../entities/cases/CaseExternalIncomplete');
-const {
   compareISODateStrings,
   compareStrings,
 } = require('../utilities/sortFunctions');
-const {
-  CourtIssuedDocumentFactory,
-} = require('../entities/courtIssuedDocument/CourtIssuedDocumentFactory');
-const {
-  formattedTrialSessionDetails,
-} = require('../utilities/getFormattedTrialSessionDetails');
-
 const {
   createDocketNumber,
 } = require('../../persistence/dynamo/cases/docketNumberGenerator');
@@ -47,11 +34,11 @@ const {
   deleteWorkItemFromInbox,
 } = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 const {
-  ExternalDocumentFactory,
-} = require('../entities/externalDocument/ExternalDocumentFactory');
-const {
   formatDocument,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
+const {
+  formattedTrialSessionDetails,
+} = require('../utilities/getFormattedTrialSessionDetails');
 const {
   getCaseByCaseId,
 } = require('../../persistence/dynamo/cases/getCaseByCaseId');
@@ -113,20 +100,15 @@ const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { Case } = require('../entities/cases/Case');
-const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
-const { DocketRecord } = require('../entities/DocketRecord');
-const { Document } = require('../entities/Document');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { setItem } = require('../../persistence/localStorage/setItem');
-const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
-const { WorkItem } = require('../entities/WorkItem');
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
@@ -376,19 +358,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityByName: jest.fn(),
-    getEntityConstructors: () => ({
-      Case,
-      CaseAssociationRequestFactory,
-      CaseExternal: CaseExternalIncomplete,
-      CaseInternal: CaseInternal,
-      CourtIssuedDocumentFactory,
-      DocketRecord,
-      Document,
-      ExternalDocumentFactory: ExternalDocumentFactory,
-      TrialSession: TrialSession,
-      User,
-      WorkItem: WorkItem,
-    }),
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),

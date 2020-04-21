@@ -31,7 +31,10 @@ describe('canSetTrialSessionToCalendarAction', () => {
   it('should return the no path when the trial session address is not valid and a judge has not been selected', async () => {
     applicationContext
       .getUseCases()
-      .canSetTrialSessionAsCalendaredInteractor.mockReturnValue(false);
+      .canSetTrialSessionAsCalendaredInteractor.mockReturnValue({
+        canSetAsCalendared: false,
+        emptyFields: ['address1', 'judge'],
+      });
 
     await runAction(canSetTrialSessionToCalendarAction, {
       modules: {
@@ -60,7 +63,10 @@ describe('canSetTrialSessionToCalendarAction', () => {
   it('should return the no path when the trial session address is not valid', async () => {
     applicationContext
       .getUseCases()
-      .canSetTrialSessionAsCalendaredInteractor.mockReturnValue(false);
+      .canSetTrialSessionAsCalendaredInteractor.mockReturnValue({
+        canSetAsCalendared: false,
+        emptyFields: ['address1'],
+      });
 
     await runAction(canSetTrialSessionToCalendarAction, {
       modules: {
@@ -90,7 +96,10 @@ describe('canSetTrialSessionToCalendarAction', () => {
   it('should return the no path when a judge has not been selected', async () => {
     applicationContext
       .getUseCases()
-      .canSetTrialSessionAsCalendaredInteractor.mockReturnValue(false);
+      .canSetTrialSessionAsCalendaredInteractor.mockReturnValue({
+        canSetAsCalendared: false,
+        emptyFields: ['judge'],
+      });
 
     await runAction(canSetTrialSessionToCalendarAction, {
       modules: {
@@ -121,7 +130,10 @@ describe('canSetTrialSessionToCalendarAction', () => {
   it('should return the yes path if all criteria for calendaring a trial session have been met', async () => {
     applicationContext
       .getUseCases()
-      .canSetTrialSessionAsCalendaredInteractor.mockReturnValue(true);
+      .canSetTrialSessionAsCalendaredInteractor.mockReturnValue({
+        canSetAsCalendared: true,
+        emptyFields: [],
+      });
 
     await runAction(canSetTrialSessionToCalendarAction, {
       modules: {
