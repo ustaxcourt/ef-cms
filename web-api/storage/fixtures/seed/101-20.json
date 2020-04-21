@@ -121,7 +121,7 @@
           "receivedAt": "2020-01-02T16:05:45.979Z",
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
         },
-        "caseCaptionNames": "Bill Burr",
+        "caseTitle": "Bill Burr",
         "section": "petitions",
         "workItemId": "c4b34a7e-2b0a-4b6b-a406-b53b19d08cc4",
         "isInitializeCase": true,

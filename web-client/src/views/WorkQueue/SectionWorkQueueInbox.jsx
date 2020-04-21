@@ -131,7 +131,7 @@ export const SectionWorkQueueInbox = connect(
                   <span className="no-wrap">{item.received}</span>
                 </td>
                 <td className="message-queue-row message-queue-case-title">
-                  {item.caseCaptionNames}
+                  {item.caseTitle}
                 </td>
                 {!workQueueHelper.hideIconColumn && (
                   <td className="message-queue-row has-icon padding-right-0">

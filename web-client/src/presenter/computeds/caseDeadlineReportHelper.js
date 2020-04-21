@@ -64,9 +64,7 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
       associatedJudgeFormatted: applicationContext
         .getUtilities()
         .formatJudgeName(d.associatedJudge),
-      caseCaptionNames: applicationContext.getCaseCaptionNames(
-        d.caseCaption || '',
-      ),
+      caseTitle: applicationContext.getCaseTitle(d.caseCaption || ''),
       deadlineDateReal: applicationContext
         .getUtilities()
         .prepareDateFromString(d.deadlineDate),
