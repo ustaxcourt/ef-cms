@@ -92,7 +92,7 @@ export const Parties = connect(
               }
               useSameAsPrimary={true}
               onBlur="validatePetitionFromPaperSequence"
-              onChange="updateFormValueAndInternalCaseCaptionSequence"
+              onChange="updateFormValueAndCaseCaptionSequence"
             />
           </div>
         )}
