@@ -69,6 +69,10 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 
 exports.createUser = async ({ applicationContext, user }) => {
   let userId;
+  let userPoolId =
+    user.role === 'irsSuperuser'
+      ? process.env.USER_POOL_IRS_ID
+      : process.env.USER_POOL_ID;
 
   try {
     const response = await applicationContext
@@ -94,7 +98,7 @@ exports.createUser = async ({ applicationContext, user }) => {
             Value: user.name,
           },
         ],
-        UserPoolId: process.env.USER_POOL_ID,
+        UserPoolId: userPoolId,
         Username: user.email,
       })
       .promise();
@@ -104,7 +108,7 @@ exports.createUser = async ({ applicationContext, user }) => {
     const response = await applicationContext
       .getCognito()
       .adminGetUser({
-        UserPoolId: process.env.USER_POOL_ID,
+        UserPoolId: userPoolId,
         Username: user.email,
       })
       .promise();
@@ -118,7 +122,7 @@ exports.createUser = async ({ applicationContext, user }) => {
             Value: user.role,
           },
         ],
-        UserPoolId: process.env.USER_POOL_ID,
+        UserPoolId: userPoolId,
         Username: response.Username,
       })
       .promise();
