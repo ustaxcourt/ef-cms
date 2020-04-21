@@ -85,7 +85,7 @@ exports.orderKeywordSearch = async ({
     queryParams.push({
       range: {
         'receivedAt.S': {
-          format: 'yyyy-MM-dd',
+          format: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
           gte: startDate,
           lte: endDate,
         },

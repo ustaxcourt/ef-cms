@@ -133,9 +133,9 @@ describe('orderKeywordSearch', () => {
   it('does a date range search for filing / received date', async () => {
     await orderKeywordSearch({
       applicationContext,
-      endDate: '2020-02-20',
+      endDate: '2020-02-21T04:59:59.999Z',
       orderEventCodes,
-      startDate: '2020-02-20',
+      startDate: '2020-02-20T05:00:00.000Z',
     });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
@@ -143,9 +143,9 @@ describe('orderKeywordSearch', () => {
       {
         range: {
           'receivedAt.S': {
-            format: 'yyyy-MM-dd',
-            gte: '2020-02-20',
-            lte: '2020-02-20',
+            format: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
+            gte: '2020-02-20T05:00:00.000Z',
+            lte: '2020-02-21T04:59:59.999Z',
           },
         },
       },
@@ -156,7 +156,7 @@ describe('orderKeywordSearch', () => {
     await orderKeywordSearch({
       applicationContext,
       orderEventCodes,
-      startDate: '2020-02-20',
+      startDate: '2020-02-20T00:00:00.000Z',
     });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual(
@@ -167,7 +167,7 @@ describe('orderKeywordSearch', () => {
   it('does a NOT search for date range if just given endDate', async () => {
     await orderKeywordSearch({
       applicationContext,
-      endDate: '2020-02-20',
+      endDate: '2020-02-20T04:59:59.999Z',
       orderEventCodes,
     });
 
