@@ -6,6 +6,7 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { isEmpty } = require('lodash');
 
 OrderSearch.ORDER_SEARCH_PAGE_LOAD_SIZE = 6;
 
@@ -18,9 +19,16 @@ OrderSearch.validationName = 'OrderSearch';
  * @constructor
  */
 function OrderSearch(rawProps = {}) {
-  this.judge = rawProps.judge;
+  if (!isEmpty(rawProps.judge)) {
+    this.judge = rawProps.judge;
+  }
+
   this.orderKeyword = rawProps.orderKeyword;
-  this.docketNumber = rawProps.docketNumber;
+
+  if (!isEmpty(rawProps.docketNumber)) {
+    this.docketNumber = rawProps.docketNumber;
+  }
+
   if (
     rawProps.startDateDay ||
     rawProps.startDateMonth ||
@@ -40,7 +48,10 @@ function OrderSearch(rawProps = {}) {
       year: rawProps.endDateYear,
     });
   }
-  this.caseTitleOrPetitioner = rawProps.caseTitleOrPetitioner;
+
+  if (!isEmpty(rawProps.caseTitleOrPetitioner)) {
+    this.caseTitleOrPetitioner = rawProps.caseTitleOrPetitioner;
+  }
 }
 
 OrderSearch.VALIDATION_ERROR_MESSAGES = {
@@ -54,8 +65,8 @@ OrderSearch.VALIDATION_ERROR_MESSAGES = {
 OrderSearch.schema = joi
   .object()
   .keys({
-    caseTitleOrPetitioner: joi.string().empty(''),
-    docketNumber: joi.string().empty(''),
+    caseTitleOrPetitioner: joi.string(),
+    docketNumber: joi.string(),
     endDate: joi.alternatives().conditional('startDate', {
       is: joi.exist().not(null),
       otherwise: joi
@@ -68,7 +79,7 @@ OrderSearch.schema = joi
         .min(joi.ref('startDate'))
         .optional(),
     }),
-    judge: joi.string().optional().empty(''),
+    judge: joi.string().optional(),
     orderKeyword: joi.string().required(),
     startDate: joi.alternatives().conditional('endDate', {
       is: joi.exist().not(null),
