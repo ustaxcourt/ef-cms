@@ -53,6 +53,7 @@ describe('orderAdvancedSearchInteractor', () => {
   it('returns results with an authorized user role (petitionsclerk)', async () => {
     const result = await orderAdvancedSearchInteractor({
       applicationContext,
+      orderKeyword: 'candy',
     });
 
     expect(result).toMatchObject([
