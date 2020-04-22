@@ -16,15 +16,16 @@ export const getConsolidatedCasesByCaseAction = async ({
   let consolidatedCases = [];
 
   if (leadCaseId) {
-    consolidatedCases = await applicationContext
+    const unsortedConsolidatedCases = await applicationContext
       .getUseCases()
       .getConsolidatedCasesByCaseInteractor({
         applicationContext,
         caseId: leadCaseId,
       });
 
-    const { Case } = applicationContext.getEntityConstructors();
-    consolidatedCases = Case.sortByDocketNumber(consolidatedCases);
+    consolidatedCases = unsortedConsolidatedCases.sort(
+      applicationContext.getUtilities().compareCasesByDocketNumber,
+    );
   }
 
   return { consolidatedCases };

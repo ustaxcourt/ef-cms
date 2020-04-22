@@ -24,8 +24,8 @@ export const judgeAddsNotesFromWorkingCopyCaseList = test => {
     });
 
     expect(test.getState('modal')).toEqual({
-      caseCaptionNames: 'Mona Schultz',
       caseId,
+      caseTitle: 'Mona Schultz',
       notes: undefined,
       showModal: 'AddEditUserCaseNoteModal',
     });
@@ -36,8 +36,8 @@ export const judgeAddsNotesFromWorkingCopyCaseList = test => {
     });
 
     expect(test.getState('modal')).toEqual({
-      caseCaptionNames: 'Mona Schultz',
       caseId,
+      caseTitle: 'Mona Schultz',
       notes: 'this is a note added from the modal',
       showModal: 'AddEditUserCaseNoteModal',
     });
