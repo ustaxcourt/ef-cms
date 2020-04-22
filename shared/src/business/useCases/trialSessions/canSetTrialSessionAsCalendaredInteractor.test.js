@@ -19,7 +19,6 @@ let user;
 
 describe('canSetTrialSessionAsCalendaredInteractor', () => {
   beforeEach(() => {
-    applicationContext.environment.stage = 'local';
     applicationContext.getCurrentUser.mockImplementation(() => user);
   });
 
@@ -57,6 +56,9 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
       trialSession: MOCK_TRIAL,
     });
 
-    expect(result).toEqual(false);
+    expect(result).toEqual({
+      canSetAsCalendared: false,
+      emptyFields: ['address1', 'city', 'state', 'postalCode', 'judge'],
+    });
   });
 });

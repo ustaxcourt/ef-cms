@@ -21,6 +21,11 @@ else
   echo "dynamodb lock table already exists"
 fi
 
+# build the cognito authorizer using parcel
+pushd ../template/cognito-authorizer
+npx parcel build index.js --target node --bundle-node-modules
+popd
+
 # exit on any failure
 set -eo pipefail
 

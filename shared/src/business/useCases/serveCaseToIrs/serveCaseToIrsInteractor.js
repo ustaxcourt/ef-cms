@@ -6,7 +6,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
+const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { PDFDocument } = require('pdf-lib');
 const { PETITIONS_SECTION } = require('../../entities/WorkQueue');
@@ -16,8 +18,6 @@ exports.addDocketEntryForPaymentStatus = ({
   applicationContext,
   caseEntity,
 }) => {
-  const { Case, DocketRecord } = applicationContext.getEntityConstructors();
-
   if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
     caseEntity.addDocketRecord(
       new DocketRecord(
@@ -107,7 +107,6 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
       caseId: caseId,
     });
 
-  const { Case } = applicationContext.getEntityConstructors();
   const caseEntity = new Case(caseToBatch, { applicationContext });
 
   const servedParties = aggregatePartiesForService(caseEntity);

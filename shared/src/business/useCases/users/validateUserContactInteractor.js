@@ -1,3 +1,5 @@
+const { User } = require('../../entities/User');
+
 /**
  * validateUserContactInteractor
  *
@@ -7,8 +9,8 @@
  * @returns {object} errors (null if no errors)
  */
 exports.validateUserContactInteractor = ({ applicationContext, user }) => {
-  const errors = new (applicationContext.getEntityConstructors().User)(
-    user,
-  ).getFormattedValidationErrors();
+  const errors = new User(user, {
+    applicationContext,
+  }).getFormattedValidationErrors();
   return errors || null;
 };

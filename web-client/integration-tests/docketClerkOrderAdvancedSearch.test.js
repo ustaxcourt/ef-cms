@@ -17,7 +17,7 @@ describe('docket clerk order advanced search', () => {
     jest.setTimeout(30000);
     test.draftOrders = [];
   });
-
+  const signedByJudge = 'Maurice B. Foley';
   let caseDetail;
 
   loginAs(test, 'petitioner');
@@ -84,7 +84,7 @@ describe('docket clerk order advanced search', () => {
     expect(test.getState('searchResults')).toEqual([]);
   });
 
-  it('search for a keyword which is present in served orders', async () => {
+  it('search for a keyword that is present in served orders', async () => {
     test.setState('advancedSearchForm', {
       orderSearch: {
         orderKeyword: 'dismissal',
@@ -101,6 +101,208 @@ describe('docket clerk order advanced search', () => {
     expect(test.getState('searchResults')).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({ documentId: test.draftOrders[1].documentId }),
+      ]),
+    );
+  });
+
+  it('search for a docket number that is not present in any served orders', async () => {
+    const docketNumberNoOrders = '999-99';
+
+    test.setState('advancedSearchForm', {
+      orderSearch: {
+        docketNumber: docketNumberNoOrders,
+        orderKeyword: 'dismissal',
+      },
+    });
+
+    await test.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(test.getState('searchResults')).toEqual([]);
+  });
+
+  it('search for a docket number that is present in served orders', async () => {
+    test.setState('advancedSearchForm', {
+      orderSearch: {
+        docketNumber: caseDetail.docketNumber,
+        orderKeyword: 'dismissal',
+      },
+    });
+
+    await test.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(test.getState('searchResults')).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ documentId: test.draftOrders[2].documentId }),
+      ]),
+    );
+    expect(test.getState('searchResults')).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ documentId: test.draftOrders[1].documentId }),
+      ]),
+    );
+  });
+
+  it('clears search fields', async () => {
+    test.setState('advancedSearchForm', {
+      orderSearch: {
+        caseTitleOrPetitioner: caseDetail.caseCaption,
+        docketNumber: caseDetail.docketNumber,
+        orderKeyword: 'dismissal',
+      },
+    });
+
+    await test.runSequence('clearAdvancedSearchFormSequence', {
+      formType: 'orderSearch',
+    });
+
+    expect(test.getState('advancedSearchForm.orderSearch')).toEqual({
+      orderKeyword: '',
+    });
+  });
+
+  it('search for a case title that is not present in any served orders', async () => {
+    const caseCaptionNoOrders = 'abcdefghijk';
+
+    test.setState('advancedSearchForm', {
+      orderSearch: {
+        caseTitleOrPetitioner: caseCaptionNoOrders,
+        orderKeyword: 'dismissal',
+      },
+    });
+
+    await test.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(test.getState('searchResults')).toEqual([]);
+  });
+
+  it('search for a case title that is present in served orders', async () => {
+    test.setState('advancedSearchForm', {
+      orderSearch: {
+        caseTitleOrPetitioner: caseDetail.caseCaption,
+        orderKeyword: 'dismissal',
+      },
+    });
+
+    await test.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(test.getState('searchResults')).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ documentId: test.draftOrders[2].documentId }),
+      ]),
+    );
+    expect(test.getState('searchResults')).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ documentId: test.draftOrders[1].documentId }),
+      ]),
+    );
+  });
+
+  it('search for a date range that does not contain served orders', async () => {
+    test.setState('advancedSearchForm', {
+      orderSearch: {
+        endDateDay: '03',
+        endDateMonth: '01',
+        endDateYear: '2005',
+        orderKeyword: 'dismissal',
+        startDateDay: '01',
+        startDateMonth: '01',
+        startDateYear: '2005',
+      },
+    });
+
+    await test.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(test.getState('searchResults')).toEqual([]);
+  });
+
+  it('search for a date range that contains served orders', async () => {
+    const currentDate = new Date();
+    const orderCreationYear = currentDate.getUTCFullYear();
+    const orderCreationMonth = currentDate.getUTCMonth() + 1;
+    const orderCreationDate = currentDate.getDate();
+
+    test.setState('advancedSearchForm', {
+      orderSearch: {
+        endDateDay: orderCreationDate,
+        endDateMonth: orderCreationMonth,
+        endDateYear: orderCreationYear,
+        orderKeyword: 'dismissal',
+        startDateDay: orderCreationDate,
+        startDateMonth: orderCreationMonth,
+        startDateYear: orderCreationYear,
+      },
+    });
+
+    await test.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(test.getState('searchResults')).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ documentId: test.draftOrders[2].documentId }),
+      ]),
+    );
+    expect(test.getState('searchResults')).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ documentId: test.draftOrders[1].documentId }),
+      ]),
+    );
+  });
+
+  it('search for a judge that has not signed any served orders', async () => {
+    const invalidJudge = 'Judge Exotic';
+
+    test.setState('advancedSearchForm', {
+      orderSearch: {
+        judge: invalidJudge,
+        orderKeyword: 'dismissal',
+      },
+    });
+
+    await test.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(test.getState('searchResults')).toEqual([]);
+  });
+
+  it('search for a judge that has signed served orders', async () => {
+    const seedData = {
+      caseCaption: 'Hanan Al Hroub, Petitioner',
+      caseId: '1a92894e-83a5-48ba-9994-3ada44235deb',
+      contactPrimary: {
+        address1: '123 Teachers Way',
+        city: 'Haifa',
+        country: 'Palestine',
+        countryType: 'international',
+        name: 'Hanan Al Hroub',
+        postalCode: '123456',
+        serviceIndicator: 'Paper',
+      },
+      contactSecondary: {},
+      docketNumber: '104-20',
+      docketNumberSuffix: 'R',
+      documentContents:
+        'Déjà vu, this is a seed order filed on Apr 13 at 11:01pm ET',
+      documentId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+      documentTitle: 'Order of Dismissal and Decision Entered, Judge Buch',
+      filingDate: '2020-04-14T03:01:15.215Z',
+      signedJudgeName: 'Maurice B. Foley',
+    };
+
+    test.setState('advancedSearchForm', {
+      orderSearch: {
+        judge: signedByJudge,
+        orderKeyword: 'dismissal',
+      },
+    });
+
+    await test.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(test.getState('searchResults')).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ documentId: seedData.documentId }),
+      ]),
+    );
+    expect(test.getState('searchResults')).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ documentId: test.draftOrders[2].documentId }),
       ]),
     );
   });
