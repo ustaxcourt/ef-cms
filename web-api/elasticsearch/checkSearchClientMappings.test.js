@@ -317,4 +317,60 @@ describe('checkSearchClientMappings', () => {
 
     expect(notifyMock).not.toHaveBeenCalled();
   });
+
+  it('sends a warning when when the number of fields indexed on a given object exceed 50', async () => {
+    jest.mock('elasticsearch', () => ({
+      Client: function Client() {
+        return {
+          indices: {
+            getMapping: () => ({
+              efcms: {
+                mappings: {
+                  properties: {
+                    field1: {
+                      properties: {
+                        S: {
+                          type: 'text',
+                        },
+                      },
+                    },
+                    field2: {
+                      properties: (() => {
+                        const fiftyOneProperties = {};
+                        for (let i = 0; i < 51; i++) {
+                          fiftyOneProperties[`prop_${i}`] = { type: 'text' };
+                        }
+                        return fiftyOneProperties;
+                      })(),
+                    },
+                  },
+                },
+              },
+            }),
+            getSettings: () => ({
+              efcms: {
+                settings: {
+                  index: {
+                    mapping: {
+                      total_fields: {
+                        limit: 10,
+                      },
+                    },
+                  },
+                },
+              },
+            }),
+          },
+        };
+      },
+    }));
+
+    await checkSearchClientMappings({ applicationContext });
+    expect(notifyMock.mock.calls[0]).toEqual([
+      'Warning: Search Client creating greater than 50 indexes on the following fields: field2: 51',
+    ]);
+    expect(notifyMock.mock.calls[1]).toEqual([
+      'Warning: Search Client Mappings have reached the 75% threshold - currently 520%',
+    ]);
+  });
 });
