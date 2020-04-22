@@ -71,11 +71,6 @@ const {
 const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
-
-const {
-  checkSearchClientMappings,
-} = require('../elasticsearch/checkSearchClientMappings');
-
 const {
   compareCasesByDocketNumber,
   formatCase: formatCaseForTrialSession,
@@ -420,6 +415,12 @@ const {
 const {
   getInboxMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getInboxMessagesForUserInteractor');
+const {
+  getIndexMappingFields,
+} = require('../../shared/src/persistence/elasticsearch/getIndexMappingFields');
+const {
+  getIndexMappingLimit,
+} = require('../../shared/src/persistence/elasticsearch/getIndexMappingLimit');
 const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
@@ -855,7 +856,6 @@ module.exports = (appContextUser = {}) => {
 
   return {
     barNumberGenerator,
-    checkSearchClientMappings,
     docketNumberGenerator,
     environment,
     getCaseTitle: Case.getCaseTitle,
@@ -953,7 +953,6 @@ module.exports = (appContextUser = {}) => {
         associateUserWithCase,
         associateUserWithCasePending,
         bulkIndexRecords,
-
         caseAdvancedSearch,
         casePublicSearch: casePublicSearchPersistence,
         createCase,
@@ -1003,6 +1002,8 @@ module.exports = (appContextUser = {}) => {
         getEligibleCasesForTrialSession,
         getInboxMessagesForSection,
         getInboxMessagesForUser,
+        getIndexMappingFields,
+        getIndexMappingLimit,
         getInternalUsers,
         getPractitionerByBarNumber,
         getPractitionersByName,
