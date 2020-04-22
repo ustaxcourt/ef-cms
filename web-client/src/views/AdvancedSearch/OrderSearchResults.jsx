@@ -46,7 +46,7 @@ export const OrderSearchResults = connect(
                       <td>
                         <CaseLink formattedCase={result} />
                       </td>
-                      <td>{result.caseCaption}</td>
+                      <td>{result.caseTitle}</td>
                       <td>
                         <a
                           href={`${baseUrl}/case-documents/${result.caseId}/${result.documentId}/document-download-url?token=${token}`}

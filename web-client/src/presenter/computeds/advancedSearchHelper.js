@@ -41,6 +41,8 @@ export const formatOrderSearchResultRecord = (
     .getUtilities()
     .formatDateString(result.filingDate, 'MMDDYY');
 
+  result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
+
   result.docketNumberWithSuffix = `${result.docketNumber}${
     result.docketNumberSuffix ? result.docketNumberSuffix : ''
   }`;
