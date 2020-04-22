@@ -160,6 +160,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-03-01T21:40:46.415Z",
     "workItems": [
       {
@@ -232,6 +233,7 @@
     "sk": "document|25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
     "signedAt": "2019-10-07T14:29:30.288Z",
     "documentId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+    "entityName": "Document",
     "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
@@ -249,6 +251,7 @@
     "processingStatus": "complete",
     "filedBy": "Test Petitioner",
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "entityName": "Document",
     "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "pk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02"

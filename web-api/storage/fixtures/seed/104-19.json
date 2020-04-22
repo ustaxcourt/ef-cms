@@ -217,6 +217,7 @@
   },
   {
     "documentType": "Ownership Disclosure Statement",
+    "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
     "pending": false,
@@ -232,6 +233,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
     "pending": false,
@@ -247,6 +249,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.490Z",
     "workItems": [
       {

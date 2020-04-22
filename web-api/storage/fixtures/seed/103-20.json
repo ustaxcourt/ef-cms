@@ -328,6 +328,7 @@
     ],
     "attachments": false,
     "documentType": "Administrative Record",
+    "entityName": "Document",
     "filingDate": "2020-01-23T21:45:34.520Z",
     "partyPrimary": true,
     "pending": false,
@@ -415,6 +416,7 @@
       }
     ],
     "documentType": "Notice of Trial",
+    "entityName": "Document",
     "filingDate": "2020-01-23T21:45:14.136Z",
     "workItems": [],
     "pending": false,
@@ -434,6 +436,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2020-01-23T21:44:54.043Z",
     "practitioner": [],
     "partyPrimary": true,
@@ -495,6 +498,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2020-01-23T21:44:54.044Z",
     "practitioner": [],
     "partyPrimary": true,
