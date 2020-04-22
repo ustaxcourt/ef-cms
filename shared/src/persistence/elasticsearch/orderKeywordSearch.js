@@ -112,7 +112,7 @@ exports.orderKeywordSearch = async ({
       },
       size: 5000,
     },
-    index: 'efcms',
+    index: 'efcms-document',
   };
 
   const { results } = await search({
