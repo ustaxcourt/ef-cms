@@ -92,7 +92,7 @@ describe('Document entity', () => {
       expect(() => new Document({}, {})).toThrow();
     });
 
-    fit('Creates a valid document', () => {
+    it('Creates a valid document', () => {
       const myDoc = new Document(A_VALID_DOCUMENT, { applicationContext });
       myDoc.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
       expect(myDoc.isValid()).toBeTruthy();
