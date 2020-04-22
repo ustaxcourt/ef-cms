@@ -27,7 +27,6 @@ User.ROLES = {
 
 const userDecorator = (obj, rawObj) => {
   obj.entityName = 'User';
-
   obj.barNumber = rawObj.barNumber;
   obj.email = rawObj.email;
   obj.name = rawObj.name;
