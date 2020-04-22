@@ -1,53 +1,30 @@
-exports.getIndexNameForRecord = document => {
+exports.getIndexNameForRecord = record => {
   let index = 'efcms';
 
-  const userValidationNames = [
+  const userEntityNames = [
     'User',
     'PrivatePractitioner',
     'IrsPractitioner',
     'Practitioner',
   ];
 
-  const isCaseRecord = record => {
-    if (
-      (record.validationName && record.validationName === 'Case') ||
-      (record.entityName && record.entityName === 'Case') ||
-      (record.recordSk && record.recordSk.includes('case|')) || // called from indexRecord
-      (record.sk && record.sk.S && record.sk.S.includes('case|')) // called from bulkIndexRecords
-    ) {
-      return true;
+  const isRecordOfType = (record, type) => {
+    if (record.entityName && record.entityName.S) {
+      if (type === 'User' && userEntityNames.includes(record.entityName.S)) {
+        return true;
+      }
+
+      if (record.entityName.S === type) {
+        return true;
+      }
     }
   };
 
-  const isDocumentRecord = record => {
-    if (
-      (record.validationName && record.validationName === 'Document') ||
-      (record.entityName && record.entityName === 'Document') ||
-      (record.recordSk && record.recordSk.includes('document|')) || // called from indexRecord
-      (record.sk && record.sk.S && record.sk.S.includes('document|')) // called from bulkIndexRecords
-    ) {
-      return true;
-    }
-  };
-
-  const isUserRecord = record => {
-    if (
-      (record.validationName &&
-        userValidationNames.includes(record.validationName)) ||
-      (record.entityName &&
-        userValidationNames.includes(record.validationName)) ||
-      (record.recordSk && record.recordSk.includes('user|')) || // called from indexRecord
-      (record.sk && record.sk.S && record.sk.S.includes('user|')) // called from bulkIndexRecords
-    ) {
-      return true;
-    }
-  };
-
-  if (isCaseRecord(document)) {
+  if (isRecordOfType(record, 'Case')) {
     index = 'efcms-case';
-  } else if (isDocumentRecord(document)) {
+  } else if (isRecordOfType(record, 'Document')) {
     index = 'efcms-document';
-  } else if (isUserRecord(document)) {
+  } else if (isRecordOfType(record, 'User')) {
     index = 'efcms-user';
   }
 
