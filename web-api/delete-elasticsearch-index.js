@@ -29,6 +29,7 @@
     log: 'warning',
   });
 
+  // TODO: DRY up index names array
   ['efcms', 'efcms-case', 'efcms-document', 'efcms-user'].map(async index => {
     try {
       const indexExists = await searchClientCache.indices.exists({
