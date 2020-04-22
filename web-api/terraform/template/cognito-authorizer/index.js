@@ -5,7 +5,7 @@ const request = require('request');
 const issMain = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_MAIN}`;
 const issIrs = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_IRS}`;
 
-let pem;
+let keys;
 
 const generatePolicy = (principalId, effect, resource) => {
   const authResponse = {};
@@ -24,13 +24,16 @@ const generatePolicy = (principalId, effect, resource) => {
   return authResponse;
 };
 
-const verify = (token, pem, cb) => {
+const verify = (methodArn, token, keys, kid, cb) => {
+  const k = keys.keys.find(k => k.kid === kid);
+  const pem = jwkToPem(k);
+
   jwk.verify(token, pem, { issuer: [issMain, issIrs] }, (err, decoded) => {
     if (err) {
       console.log('Unauthorized user:', err.message);
       cb('Unauthorized');
     } else {
-      cb(null, generatePolicy(decoded.sub, 'Allow', event.methodArn));
+      cb(null, generatePolicy(decoded.sub, 'Allow', methodArn));
     }
   });
 };
@@ -38,12 +41,13 @@ const verify = (token, pem, cb) => {
 module.exports.handler = (event, context, cb) => {
   console.log('Auth function invoked');
   if (event.authorizationToken) {
-    // Remove 'bearer ' from token:
     const token = event.authorizationToken.substring(7);
 
-    const { iss } = jwk.decode(token);
-    if (pem) {
-      verify(token, pem, cb);
+    const { header, payload } = jwk.decode(token, { complete: true });
+    const { iss } = payload;
+    const { kid } = header;
+    if (keys) {
+      verify(event.methodArn, token, keys, kid, cb);
     } else {
       request(
         { json: true, url: `${iss}/.well-known/jwks.json` },
@@ -52,15 +56,8 @@ module.exports.handler = (event, context, cb) => {
             console.log('Request error:', error);
             cb('Unauthorized');
           }
-          const keys = body;
-          const k = keys.keys[0];
-          const jwkArray = {
-            e: k.e,
-            kty: k.kty,
-            n: k.n,
-          };
-          pem = jwkToPem(jwkArray);
-          verify(token, pem, cb);
+          keys = body;
+          verify(event.methodArn, token, keys, kid, cb);
         },
       );
     }
