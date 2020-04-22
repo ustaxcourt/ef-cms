@@ -74,13 +74,13 @@ exports.checkSearchClientMappings = async ({ applicationContext }) => {
   const fields = indexMapping.efcms.mappings.properties;
 
   let totalTypes = 0;
-  const fieldTypeMatches = {};
+  let fieldText = '';
 
   for (let field of Object.keys(fields)) {
     const typeMatches = countValues(fields[field], 'type');
 
     if (typeMatches > 50) {
-      fieldTypeMatches[field] = typeMatches;
+      fieldText += `${field}: ${typeMatches}, `;
     }
     totalTypes += typeMatches;
   }
@@ -95,9 +95,13 @@ exports.checkSearchClientMappings = async ({ applicationContext }) => {
     }
   };
 
-  if (fieldTypeMatches.length > 0) {
-    // TODO: Create alert based on fields
-    console.log(fields);
+  if (fieldText !== '') {
+    sendToHoneybadger(
+      `Warning: Search Client creating greater than 50 indexes on the following fields: ${fieldText.substring(
+        0,
+        fieldText.length - 2,
+      )}`,
+    );
   }
 
   const currentPercent = (totalTypes / mappingLimit) * 100;
