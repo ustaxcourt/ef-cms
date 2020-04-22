@@ -1,17 +1,13 @@
 const {
   validatePetitionFromPaperInteractor,
 } = require('./validatePetitionFromPaperInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
-const { CaseInternal } = require('../entities/cases/CaseInternal');
 
 describe('validate petition from paper', () => {
   it('returns the expected errors object on an empty petition', () => {
     const errors = validatePetitionFromPaperInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          CaseInternal,
-        }),
-      },
+      applicationContext,
       petition: {},
     });
 
@@ -31,11 +27,7 @@ describe('validate petition from paper', () => {
 
   it('returns null if no errors exist', () => {
     const errors = validatePetitionFromPaperInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          CaseInternal,
-        }),
-      },
+      applicationContext,
       petition: {
         caseCaption: 'testing',
         caseType: 'testing',

@@ -69,8 +69,7 @@ import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCou
 import { fetchPendingItemsSequence } from './sequences/pending/fetchPendingItemsSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
-import { generateCaseCaptionForSavedPetitionSequence } from './sequences/generateCaseCaptionForSavedPetitionSequence';
-import { generateInternalCaseCaptionSequence } from './sequences/generateInternalCaseCaptionSequence';
+import { generateCaseCaptionSequence } from './sequences/generateCaseCaptionSequence';
 import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getBlockedCasesByTrialLocationSequence } from './sequences/getBlockedCasesByTrialLocationSequence';
 import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryReportSequence';
@@ -307,7 +306,6 @@ import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAs
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
 import { updateCaseNoteSequence } from './sequences/updateCaseNoteSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
-import { updateCaseValueAndInternalCaseCaptionSequence } from './sequences/updateCaseValueAndInternalCaseCaptionSequence';
 import { updateCaseWorkingCopyUserNoteSequence } from './sequences/updateCaseWorkingCopyUserNoteSequence';
 import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
 import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updateCourtIssuedDocketEntryFormValueSequence';
@@ -317,7 +315,7 @@ import { updateDocketEntryMetaDocumentFormValueSequence } from './sequences/upda
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
 import { updateFormPartyTypeSequence } from './sequences/updateFormPartyTypeSequence';
-import { updateFormValueAndInternalCaseCaptionSequence } from './sequences/updateFormValueAndInternalCaseCaptionSequence';
+import { updateFormValueAndCaseCaptionSequence } from './sequences/updateFormValueAndCaseCaptionSequence';
 import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/updateFormValueAndSecondaryContactInfoSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateForwardFormValueSequence } from './sequences/updateForwardFormValueSequence';
@@ -461,8 +459,7 @@ export const presenter = {
     fetchPendingItemsSequence,
     fetchUserNotificationsSequence,
     formCancelToggleCancelSequence,
-    generateCaseCaptionForSavedPetitionSequence,
-    generateInternalCaseCaptionSequence,
+    generateCaseCaptionSequence,
     generatePdfFromScanSessionSequence,
     getBlockedCasesByTrialLocationSequence,
     getCaseInventoryReportSequence,
@@ -697,7 +694,6 @@ export const presenter = {
     updateCaseDeadlineSequence,
     updateCaseNoteSequence,
     updateCasePartyTypeSequence,
-    updateCaseValueAndInternalCaseCaptionSequence,
     updateCaseWorkingCopyUserNoteSequence,
     updateCompleteFormValueSequence,
     updateCourtIssuedDocketEntryFormValueSequence,
@@ -707,7 +703,7 @@ export const presenter = {
     updateDocketNumberSearchFormSequence,
     updateFileDocumentWizardFormValueSequence,
     updateFormPartyTypeSequence,
-    updateFormValueAndInternalCaseCaptionSequence,
+    updateFormValueAndCaseCaptionSequence,
     updateFormValueAndSecondaryContactInfoSequence,
     updateFormValueSequence,
     updateForwardFormValueSequence,
