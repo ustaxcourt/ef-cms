@@ -40,6 +40,15 @@
   },
   {
     "role": "judge",
+    "name": "Chief Judge Foley",
+    "section": "foleysChambers",
+    "userId": "659789b4-acc5-40b7-9318-3354e7eb8604",
+    "email": "judgeFoley",
+    "judgeFullName": "Maurice B. Foley",
+    "judgeTitle": "Chief Judge"
+  },
+  {
+    "role": "judge",
     "name": "Judge Buch",
     "section": "buchsChambers",
     "userId": "dabbad02-18d0-43ec-bafb-654e83405416",

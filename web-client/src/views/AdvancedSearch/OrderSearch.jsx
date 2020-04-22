@@ -159,7 +159,7 @@ export const OrderSearch = connect(
                     >
                       <option value="">- Select -</option>
                       {judges.map((judge, idx) => (
-                        <option key={idx} value={judge.userId}>
+                        <option key={idx} value={judge.judgeFullName}>
                           {judge.name}
                         </option>
                       ))}
