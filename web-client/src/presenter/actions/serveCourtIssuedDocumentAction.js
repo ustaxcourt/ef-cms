@@ -12,12 +12,11 @@ import { state } from 'cerebral';
 export const serveCourtIssuedDocumentAction = async ({
   applicationContext,
   get,
-  router,
 }) => {
   const documentId = get(state.documentId);
   const caseId = get(state.caseDetail.caseId);
 
-  const paperServicePdfData = await applicationContext
+  const paperServicePdfUrl = await applicationContext
     .getUseCases()
     .serveCourtIssuedDocumentInteractor({
       applicationContext,
@@ -25,22 +24,10 @@ export const serveCourtIssuedDocumentAction = async ({
       documentId,
     });
 
-  let pdfUrl = null;
-  if (
-    paperServicePdfData &&
-    (paperServicePdfData.size > 0 || paperServicePdfData.length > 0)
-  ) {
-    const pdfFile = new Blob([paperServicePdfData], {
-      type: 'application/pdf',
-    });
-
-    pdfUrl = router.createObjectURL(pdfFile);
-  }
-
   return {
     alertSuccess: {
       message: 'Document served. ',
     },
-    pdfUrl,
+    pdfUrl: paperServicePdfUrl.url,
   };
 };
