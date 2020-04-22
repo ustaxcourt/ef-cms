@@ -38,6 +38,7 @@ const roleMap = {
 
 Practitioner.prototype.init = function (rawUser) {
   userDecorator(this, rawUser);
+  this.entityName = 'Practitioner';
   this.name = Practitioner.getFullName(rawUser);
   this.firstName = rawUser.firstName;
   this.lastName = rawUser.lastName;
@@ -126,6 +127,7 @@ const validationRules = {
     .valid(...EMPLOYER_OPTIONS)
     .required()
     .description('The employer designation for the practitioner.'),
+  entityName: joi.string().valid('Practitioner').required(),
   firmName: joi
     .string()
     .optional()
