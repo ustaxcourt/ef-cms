@@ -11,6 +11,15 @@ resource "aws_iam_role_policy" "authorizer_invocation_policy" {
       "Action": "lambda:InvokeFunction",
       "Effect": "Allow",
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:*:*:*"
     }
   ]
 }
@@ -27,7 +36,10 @@ resource "aws_iam_role" "authorizer_lambda" {
     {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "Service": "lambda.amazonaws.com"
+        "Service": [
+          "lambda.amazonaws.com", 
+          "apigateway.amazonaws.com"
+        ]
       },
       "Effect": "Allow",
       "Sid": ""
