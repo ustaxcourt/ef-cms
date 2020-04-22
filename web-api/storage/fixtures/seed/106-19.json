@@ -749,6 +749,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2019-07-12T17:09:41.027Z",
     "workItems": [],
     "pending": false,
@@ -764,6 +765,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-07-12T17:09:41.026Z",
     "workItems": [
       {
@@ -819,6 +821,7 @@
     "isPaper": true,
     "serviceDate": null,
     "documentType": "Proposed Stipulated Decision",
+    "entityName": "Document",
     "filingDate": "1990-10-10",
     "practitioner": [],
     "partyPrimary": true,
