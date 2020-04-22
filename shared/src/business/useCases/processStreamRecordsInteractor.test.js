@@ -139,7 +139,7 @@ describe('processStreamRecordsInteractor', () => {
         pk: { S: '4' },
         sk: { S: '4' },
       },
-      { index: { _id: 'user|5_user|5', _index: 'efcms' } },
+      { index: { _id: 'user|5_user|5', _index: 'efcms-user' } },
       {
         pk: { S: 'user|5' },
         sk: { S: 'user|5' },
@@ -375,11 +375,11 @@ describe('processStreamRecordsInteractor', () => {
     expect(
       applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
     ).toEqual([
-      { index: { _id: 'case|1_document|1', _index: 'efcms' } },
+      { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
       { caseId: { S: '1' }, pk: { S: 'case|1' }, sk: { S: 'document|1' } },
-      { index: { _id: 'case|4_case|4', _index: 'efcms' } },
+      { index: { _id: 'case|4_case|4', _index: 'efcms-case' } },
       { caseId: { S: '4' }, pk: { S: 'case|4' }, sk: { S: 'case|4' } },
-      { index: { _id: 'case|1_case|1', _index: 'efcms' } },
+      { index: { _id: 'case|1_case|1', _index: 'efcms-case' } },
       {
         caseId: { S: '1' },
         documents: { L: [{ M: { documentId: { S: '1' } } }] },
@@ -387,9 +387,9 @@ describe('processStreamRecordsInteractor', () => {
         sk: { S: 'case|1' },
       },
       // calls documents again because they are indexed again after the case
-      { index: { _id: 'case|1_document|1', _index: 'efcms' } },
+      { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
       { caseId: { S: '1' }, pk: { S: 'case|1' }, sk: { S: 'document|1' } },
-      { index: { _id: 'case|4_case|4', _index: 'efcms' } },
+      { index: { _id: 'case|4_case|4', _index: 'efcms-case' } },
       {
         caseId: { S: '4' },
         documents: { L: [{ M: { documentId: { S: '1' } } }] },
@@ -429,9 +429,9 @@ describe('processStreamRecordsInteractor', () => {
       applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
     ).toEqual([
       // calls multiple times because documents are indexed after the case is indexed
-      { index: { _id: 'case|1_document|1', _index: 'efcms' } },
+      { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
       { caseId: { S: '1' }, pk: { S: 'case|1' }, sk: { S: 'document|1' } },
-      { index: { _id: 'case|1_document|1', _index: 'efcms' } },
+      { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
       { caseId: { S: '1' }, pk: { S: 'case|1' }, sk: { S: 'document|1' } },
     ]);
   });
@@ -464,7 +464,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(
       applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
     ).toEqual([
-      { index: { _id: 'user|1_user|1', _index: 'efcms' } },
+      { index: { _id: 'user|1_user|1', _index: 'efcms-user' } },
       { pk: { S: 'user|1' }, sk: { S: 'user|1' }, userId: { S: '1' } },
     ]);
   });
