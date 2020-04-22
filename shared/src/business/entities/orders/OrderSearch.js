@@ -1,15 +1,14 @@
 const joi = require('@hapi/joi').extend(require('@hapi/joi-date'));
 const {
+  createEndOfDayISO,
+  createStartOfDayISO,
+} = require('../../utilities/DateHandler');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { isEmpty } = require('lodash');
 
 OrderSearch.ORDER_SEARCH_PAGE_LOAD_SIZE = 6;
-OrderSearch.VALID_DATE_SEARCH_FORMATS = [
-  'YYYY/MM/DD',
-  'YYYY/MM/D',
-  'YYYY/M/DD',
-  'YYYY/M/D',
-];
 
 OrderSearch.validationName = 'OrderSearch';
 
@@ -20,19 +19,39 @@ OrderSearch.validationName = 'OrderSearch';
  * @constructor
  */
 function OrderSearch(rawProps = {}) {
+  if (!isEmpty(rawProps.judge)) {
+    this.judge = rawProps.judge;
+  }
+
   this.orderKeyword = rawProps.orderKeyword;
-  this.docketNumber = rawProps.docketNumber;
-  this.startDate = OrderSearch.dateFormat(
-    rawProps.startDateYear,
-    rawProps.startDateMonth,
-    rawProps.startDateDay,
-  );
-  this.endDate = OrderSearch.dateFormat(
-    rawProps.endDateYear,
-    rawProps.endDateMonth,
-    rawProps.endDateDay,
-  );
-  this.caseTitleOrPetitioner = rawProps.caseTitleOrPetitioner;
+
+  if (!isEmpty(rawProps.docketNumber)) {
+    this.docketNumber = rawProps.docketNumber;
+  }
+
+  if (
+    rawProps.startDateDay ||
+    rawProps.startDateMonth ||
+    rawProps.startDateYear
+  ) {
+    this.startDate = createStartOfDayISO({
+      day: rawProps.startDateDay,
+      month: rawProps.startDateMonth,
+      year: rawProps.startDateYear,
+    });
+  }
+
+  if (rawProps.endDateDay || rawProps.endDateMonth || rawProps.endDateYear) {
+    this.endDate = createEndOfDayISO({
+      day: rawProps.endDateDay,
+      month: rawProps.endDateMonth,
+      year: rawProps.endDateYear,
+    });
+  }
+
+  if (!isEmpty(rawProps.caseTitleOrPetitioner)) {
+    this.caseTitleOrPetitioner = rawProps.caseTitleOrPetitioner;
+  }
 }
 
 OrderSearch.VALIDATION_ERROR_MESSAGES = {
@@ -43,17 +62,11 @@ OrderSearch.VALIDATION_ERROR_MESSAGES = {
   startDate: 'Enter a valid start date',
 };
 
-OrderSearch.dateFormat = (year, month, day) => {
-  if (year || month || day) {
-    return `${year}/${month}/${day}`;
-  }
-};
-
 OrderSearch.schema = joi
   .object()
   .keys({
-    caseTitleOrPetitioner: joi.string().empty(''),
-    docketNumber: joi.string().empty(''),
+    caseTitleOrPetitioner: joi.string(),
+    docketNumber: joi.string(),
     endDate: joi.alternatives().conditional('startDate', {
       is: joi.exist().not(null),
       otherwise: joi
@@ -66,6 +79,7 @@ OrderSearch.schema = joi
         .min(joi.ref('startDate'))
         .optional(),
     }),
+    judge: joi.string().optional(),
     orderKeyword: joi.string().required(),
     startDate: joi.alternatives().conditional('endDate', {
       is: joi.exist().not(null),

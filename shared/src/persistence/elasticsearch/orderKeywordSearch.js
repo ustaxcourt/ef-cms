@@ -85,7 +85,7 @@ exports.orderKeywordSearch = async ({
     queryParams.push({
       range: {
         'receivedAt.S': {
-          format: 'yyyy-MM-dd',
+          format: 'strict_date_time', // ISO-8601 time stamp
           gte: startDate,
           lte: endDate,
         },

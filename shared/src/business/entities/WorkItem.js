@@ -20,10 +20,10 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.associatedJudge = rawWorkItem.associatedJudge || CHIEF_JUDGE;
   this.assigneeId = rawWorkItem.assigneeId;
   this.assigneeName = rawWorkItem.assigneeName;
-  this.caseCaptionNames = rawWorkItem.caseCaptionNames;
   this.caseId = rawWorkItem.caseId;
   this.caseIsInProgress = rawWorkItem.caseIsInProgress;
   this.caseStatus = rawWorkItem.caseStatus;
+  this.caseTitle = rawWorkItem.caseTitle;
   this.completedAt = rawWorkItem.completedAt;
   this.completedBy = rawWorkItem.completedBy;
   this.completedByUserId = rawWorkItem.completedByUserId;
@@ -58,7 +58,6 @@ joiValidationDecorator(
     assigneeId: joi.string().allow(null).optional(),
     assigneeName: joi.string().allow(null).optional(), // should be a Message entity at some point
     associatedJudge: joi.string().required(),
-    caseCaptionNames: joi.string().optional(),
     caseId: joi
       .string()
       .uuid({
@@ -67,6 +66,7 @@ joiValidationDecorator(
       .required(),
     caseIsInProgress: joi.boolean().optional(),
     caseStatus: joi.string().optional(),
+    caseTitle: joi.string().optional(),
     completedAt: joi.date().iso().optional(),
     completedBy: joi.string().optional().allow(null),
     completedByUserId: joi

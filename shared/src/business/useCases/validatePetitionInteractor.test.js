@@ -1,14 +1,10 @@
-const { CaseExternal } = require('../entities/cases/CaseExternal');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { validatePetitionInteractor } = require('./validatePetitionInteractor');
 
 describe('validatePetitionInteractor', () => {
   it('returns the expected errors object on an empty petition', () => {
     const errors = validatePetitionInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          CaseExternal,
-        }),
-      },
+      applicationContext,
       petition: {},
     });
 
@@ -25,11 +21,7 @@ describe('validatePetitionInteractor', () => {
 
   it('returns the expected errors object when caseType is defined', () => {
     const errors = validatePetitionInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          CaseExternal,
-        }),
-      },
+      applicationContext,
       petition: {
         caseType: 'defined',
         hasIrsNotice: true,
@@ -49,11 +41,7 @@ describe('validatePetitionInteractor', () => {
 
   it('returns the expected errors object', () => {
     const errors = validatePetitionInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          CaseExternal,
-        }),
-      },
+      applicationContext,
       petition: {
         caseType: 'defined',
         filingType: 'defined',
