@@ -73,7 +73,10 @@ export const OrderSearch = connect(
 
             <div className="grid-col" id="order-advanced">
               <h4>Narrow your search (optional)</h4>
-              <FormGroup errorText={validationErrors.chooseOneValue}>
+              <FormGroup
+                className="margin-bottom-0"
+                errorText={validationErrors.chooseOneValue}
+              >
                 <div className="grid-row">
                   <div className="grid-col-3">
                     <label className="usa-label" htmlFor="docket-number">
@@ -144,23 +147,17 @@ export const OrderSearch = connect(
                   </BindedSelect>
                 </div>
                 <div className="grid-row date-search-row">
-                  <div className="grid-container padding-left-0 padding-right-0 margin-left-0 margin-right-0">
+                  <div className="grid-container padding-top-2 padding-left-0 padding-right-0 margin-left-0 margin-right-0">
                     <Mobile>
                       <FormGroup>
-                        <div className="grid-row text-bold padding-top-2">
-                          <span className="usa-label padding-top-1">
-                            Start Date
-                          </span>
-                        </div>
                         <div className="grid-row">
                           <DateInput
-                            hideLegend
                             errorText={
                               validationErrors.dateRangeRequired ||
                               validationErrors.startDate
                             }
                             id="start-date"
-                            label="from Date"
+                            label="Start Date"
                             names={{
                               day: 'startDateDay',
                               month: 'startDateMonth',
@@ -180,23 +177,19 @@ export const OrderSearch = connect(
                           />
                         </div>
                         <div className="grid-row">
-                          <div className="text-center padding-top-2">to</div>
-                        </div>
-                        <div className="grid-row text-bold padding-top-2">
-                          <span className="usa-label padding-top-1">
-                            End Date{' '}
-                            <span className="usa-hint">(optional)</span>
-                          </span>
+                          <div className="text-center padding-top-2 padding-bottom-2">
+                            to
+                          </div>
                         </div>
                         <div className="grid-row">
                           <DateInput
-                            hideLegend
+                            optional
                             errorText={
                               validationErrors.dateRangeRequired ||
                               validationErrors.endDate
                             }
                             id="end-date"
-                            label="to Date"
+                            label="End Date"
                             names={{
                               day: 'endDateDay',
                               month: 'endDateMonth',
@@ -217,25 +210,16 @@ export const OrderSearch = connect(
                       </FormGroup>
                     </Mobile>
                     <NonMobile>
-                      <div className="grid-row text-bold padding-top-2">
-                        <span className="usa-label padding-top-1 grid-col-7">
-                          Start Date
-                        </span>
-                        <span className="usa-label padding-top-1 grid-col-5">
-                          End Date <span className="usa-hint">(optional)</span>
-                        </span>
-                      </div>
                       <FormGroup>
                         <div className="grid-row">
                           <div className="grid-col-5">
                             <DateInput
-                              hideLegend
                               errorText={
                                 validationErrors.dateRangeRequired ||
                                 validationErrors.startDate
                               }
                               id="start-date"
-                              label="from Date"
+                              label="Start Date"
                               names={{
                                 day: 'startDateDay',
                                 month: 'startDateMonth',
@@ -255,18 +239,18 @@ export const OrderSearch = connect(
                               }
                             />
                           </div>
-                          <div className="grid-col-2">
-                            <div className="text-center padding-top-2">to</div>
+                          <div className="grid-col-2 padding-left-1">
+                            <div className="text-center padding-top-6">to</div>
                           </div>
                           <div className="grid-col-5">
                             <DateInput
-                              hideLegend
+                              optional
                               errorText={
                                 validationErrors.dateRangeRequired ||
                                 validationErrors.endDate
                               }
                               id="end-date"
-                              label="to Date"
+                              label="End Date"
                               names={{
                                 day: 'endDateDay',
                                 month: 'endDateMonth',
