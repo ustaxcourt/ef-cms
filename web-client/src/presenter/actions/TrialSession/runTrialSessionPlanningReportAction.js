@@ -10,11 +10,10 @@ import { state } from 'cerebral';
 export const runTrialSessionPlanningReportAction = async ({
   applicationContext,
   get,
-  router,
 }) => {
   const { term, year } = get(state.modal);
 
-  const planningReportPdf = await applicationContext
+  const planningReportPdfUrl = await applicationContext
     .getUseCases()
     .runTrialSessionPlanningReportInteractor({
       applicationContext,
@@ -22,9 +21,5 @@ export const runTrialSessionPlanningReportAction = async ({
       year,
     });
 
-  const pdfFile = new Blob([planningReportPdf], { type: 'application/pdf' });
-
-  const pdfUrl = router.createObjectURL(pdfFile);
-
-  return { pdfUrl };
+  return { pdfUrl: planningReportPdfUrl.url };
 };
