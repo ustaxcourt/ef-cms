@@ -1,7 +1,7 @@
 /*
-This is an example script for creating an IRS Super User and setting up their MFA.  
+This is an example script for setting up MFA for the irs super user.
 
-This script isn't actually used in any manual or automated deploy process
+This script isn't actually used in any manual or automated deploy process.
 */
 
 const readline = require('readline');
@@ -30,21 +30,6 @@ const askQuestion = query => {
 
 const registerUser = async () => {
   let response;
-
-  // response = await cognito
-  //   .adminCreateUser({
-  //     TemporaryPassword: 'Testing1234$',
-  //     UserAttributes: [
-  //       {
-  //         Name: 'email',
-  //         Value: email,
-  //       },
-  //     ],
-  //     UserPoolId,
-  //     Username: email,
-  //   })
-  //   .promise();
-  // console.log('user created');
 
   response = await cognito
     .initiateAuth({

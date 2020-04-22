@@ -70,7 +70,7 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 exports.createUser = async ({ applicationContext, user }) => {
   let userId;
   let userPoolId =
-    user.role === 'irsSuperuser'
+    user.role === User.ROLES.irsSuperuser
       ? process.env.USER_POOL_IRS_ID
       : process.env.USER_POOL_ID;
 
