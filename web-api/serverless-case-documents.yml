@@ -217,6 +217,9 @@ functions:
           path: /{caseId}/{documentId}
           method: delete
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
+            managedExternally: true
 
   fileExternalDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileExternalDocumentToCaseLambda
