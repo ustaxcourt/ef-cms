@@ -805,6 +805,7 @@ const {
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { exec } = require('child_process');
+const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 const { User } = require('../../shared/src/business/entities/User');
 const { v4: uuidv4 } = require('uuid');
@@ -995,6 +996,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByCaseIds,
         getCasesByLeadCaseId,
         getCasesByUser,
+        getDocument,
         getDocumentQCInboxForSection,
         getDocumentQCInboxForUser,
         getDocumentQCServedForSection,

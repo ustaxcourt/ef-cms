@@ -128,8 +128,16 @@ const batchDownloadTrialSessionInteractor = async ({
           includePartyDetail: true,
         })
         .then(async result => {
+          const document = await applicationContext
+            .getPersistenceGateway()
+            .getDocument({
+              applicationContext,
+              caseId,
+              documentId: result.fileId,
+              protocol: 'S3',
+            });
           await onDocketRecordCreation(caseId);
-          return result;
+          return document;
         }),
     );
     extraFileNames.push(
