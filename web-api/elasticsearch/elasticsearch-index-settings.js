@@ -3,7 +3,7 @@
   AWS.config.region = 'us-east-1';
   const connectionClass = require('http-aws-es');
   const elasticsearch = require('elasticsearch');
-  const settings = require('./elasticsearch-settings');
+  const { mappings, settings } = require('./elasticsearch-settings');
 
   AWS.config.httpOptions.timeout = 300000;
 
@@ -19,7 +19,7 @@
       credentials: new EnvironmentCredentials('AWS'),
       region: environment.region,
     },
-    apiVersion: '7.1',
+    apiVersion: '7.5',
     connectionClass: connectionClass,
     host: {
       host: environment.elasticsearchEndpoint,
@@ -39,6 +39,7 @@
         if (!indexExists) {
           searchClientCache.indices.create({
             body: {
+              mappings,
               settings,
             },
             index,
