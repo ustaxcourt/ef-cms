@@ -13,6 +13,7 @@ const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/ba
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
+const elasticsearchIndexes = require('../elasticsearch/elasticsearch-indexes');
 const util = require('util');
 const {
   addCaseToTrialSessionInteractor,
@@ -927,6 +928,7 @@ module.exports = (appContextUser = {}) => {
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
     },
+    getElasticsearchIndexes: () => elasticsearchIndexes,
     getEmailClient: () => {
       if (!sesCache) {
         sesCache = new SES({
