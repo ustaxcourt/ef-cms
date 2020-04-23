@@ -29,27 +29,29 @@
     log: 'warning',
   });
 
-  ['efcms', 'efcms-case', 'efcms-document', 'efcms-user'].map(async index => {
-    try {
-      const indexExists = await searchClientCache.indices.exists({
-        body: {},
-        index,
-      });
-      if (!indexExists) {
-        searchClientCache.indices.create({
-          body: {
-            settings,
-          },
+  await Promise.all(
+    ['efcms', 'efcms-case', 'efcms-document', 'efcms-user'].map(async index => {
+      try {
+        const indexExists = await searchClientCache.indices.exists({
+          body: {},
           index,
         });
-      } else {
-        searchClientCache.indices.putSettings({
-          body: { 'index.mapping.total_fields.limit': '4000' }, // TODO: Lower this
-          index,
-        });
+        if (!indexExists) {
+          searchClientCache.indices.create({
+            body: {
+              settings,
+            },
+            index,
+          });
+        } else {
+          searchClientCache.indices.putSettings({
+            body: { 'index.mapping.total_fields.limit': '4000' }, // TODO: Lower this
+            index,
+          });
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
-    }
-  });
+    }),
+  );
 })();

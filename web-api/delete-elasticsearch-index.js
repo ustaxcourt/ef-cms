@@ -30,19 +30,21 @@
   });
 
   // TODO: DRY up index names array
-  ['efcms', 'efcms-case', 'efcms-document', 'efcms-user'].map(async index => {
-    try {
-      const indexExists = await searchClientCache.indices.exists({
-        body: {},
-        index,
-      });
-      if (indexExists) {
-        searchClientCache.indices.delete({
+  await Promise.all(
+    ['efcms', 'efcms-case', 'efcms-document', 'efcms-user'].map(async index => {
+      try {
+        const indexExists = await searchClientCache.indices.exists({
+          body: {},
           index,
         });
+        if (indexExists) {
+          searchClientCache.indices.delete({
+            index,
+          });
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
-    }
-  });
+    }),
+  );
 })();
