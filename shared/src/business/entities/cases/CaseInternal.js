@@ -18,6 +18,8 @@ CaseInternal.DEFAULT_PROCEDURE_TYPE = Case.PROCEDURE_TYPES[0];
  * @constructor
  */
 function CaseInternal(rawCase) {
+  this.entityName = 'CaseInternal';
+
   this.applicationForWaiverOfFilingFeeFile =
     rawCase.applicationForWaiverOfFilingFeeFile;
   this.applicationForWaiverOfFilingFeeFileSize =

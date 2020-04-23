@@ -17,6 +17,8 @@ const { PublicDocument } = require('./PublicDocument');
  * @constructor
  */
 function PublicCase(rawCase, { applicationContext }) {
+  this.entityName = 'PublicCase';
+
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId;
   this.createdAt = rawCase.createdAt;

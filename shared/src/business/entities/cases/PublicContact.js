@@ -10,6 +10,8 @@ const {
  * @constructor
  */
 function PublicContact(rawContact) {
+  this.entityName = 'PublicContact';
+
   this.name = rawContact.name;
   this.state = rawContact.state;
 }

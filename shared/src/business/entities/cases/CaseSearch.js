@@ -15,6 +15,8 @@ CaseSearch.validationName = 'CaseSearch';
  * @constructor
  */
 function CaseSearch(rawProps) {
+  this.entityName = 'CaseSearch';
+
   this.petitionerName = rawProps.petitionerName;
   this.yearFiledMin = rawProps.yearFiledMin || CaseSearch.CASE_SEARCH_MIN_YEAR;
   this.yearFiledMax = rawProps.yearFiledMax || undefined;

@@ -10,6 +10,8 @@ const {
  * @constructor
  */
 function PublicDocketRecordEntry(rawDocketEntry) {
+  this.entityName = 'PublicDocketRecordEntry';
+
   this.description = rawDocketEntry.description;
   this.documentId = rawDocketEntry.documentId;
   this.filedBy = rawDocketEntry.filedBy;

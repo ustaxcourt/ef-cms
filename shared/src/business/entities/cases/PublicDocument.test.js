@@ -26,6 +26,7 @@ describe('PublicDocument', () => {
       createdAt: 'testing',
       documentId: 'testing',
       documentType: 'testing',
+      entityName: 'PublicDocument',
       eventCode: 'testing',
       filedBy: 'testing',
       isPaper: true,

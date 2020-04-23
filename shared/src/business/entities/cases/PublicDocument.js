@@ -10,6 +10,8 @@ const {
  * @constructor
  */
 function PublicDocument(rawDocument) {
+  this.entityName = 'PublicDocument';
+
   this.additionalInfo = rawDocument.additionalInfo;
   this.additionalInfo2 = rawDocument.additionalInfo2;
   this.caseId = rawDocument.caseId;

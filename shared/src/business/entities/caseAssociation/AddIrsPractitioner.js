@@ -9,6 +9,8 @@ const {
  * @constructor
  */
 function AddIrsPractitioner(rawProps) {
+  this.entityName = 'AddIrsPractitioner';
+
   Object.assign(this, {
     user: rawProps.user,
   });
