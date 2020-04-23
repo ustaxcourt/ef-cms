@@ -79,6 +79,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2020-01-02T16:05:45.980Z",
     "practitioner": [],
     "partyPrimary": true,
@@ -98,6 +99,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2020-01-02T16:05:45.979Z",
     "practitioner": [],
     "partyPrimary": true,
