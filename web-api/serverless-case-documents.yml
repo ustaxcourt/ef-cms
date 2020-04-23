@@ -377,6 +377,9 @@ functions:
           authorizer:
             arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
             managedExternally: true
+            identitySource: method.request.querystring.token
+            type: request
+
 
   orderAdvancedSearch:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.orderAdvancedSearchLambda
