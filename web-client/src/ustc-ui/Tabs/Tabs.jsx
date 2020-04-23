@@ -47,7 +47,10 @@ export function TabsComponent({
     defaultActiveTab || getDefaultAttribute(children, 'tabName');
 
   if (bind) {
-    const useCerebralState = useCerebralStateFactory(simpleSetter, value);
+    const useCerebralState = useCerebralStateFactory(
+      simpleSetter,
+      value || defaultActiveTab,
+    );
     [activeKey, setTab] = useCerebralState(bind, defaultActiveTab);
   } else {
     [activeKey, setTab] = useState(defaultActiveTab);

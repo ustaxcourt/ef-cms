@@ -142,7 +142,7 @@ describe('orderKeywordSearch', () => {
       ...baseQueryParams,
       {
         range: {
-          'receivedAt.S': {
+          'filingDate.S': {
             format: 'strict_date_time',
             gte: '2020-02-20T05:00:00.000Z',
             lte: '2020-02-21T04:59:59.999Z',
