@@ -23,7 +23,7 @@ fi
 
 # build the cognito authorizer using parcel
 pushd ../template/cognito-authorizer
-npx parcel build index.js --target node --bundle-node-modules
+npx parcel build index.js --target node --bundle-node-modules --no-minify
 popd
 
 # exit on any failure

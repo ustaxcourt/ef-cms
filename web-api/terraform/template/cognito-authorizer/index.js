@@ -33,7 +33,14 @@ const verify = (methodArn, token, keys, kid, cb) => {
       console.log('Unauthorized user:', err.message);
       cb('Unauthorized');
     } else {
-      cb(null, generatePolicy(decoded.sub, 'Allow', methodArn));
+      cb(
+        null,
+        generatePolicy(
+          decoded.sub,
+          'Allow',
+          methodArn.split('/').slice(0, 2).join('/') + '/*',
+        ),
+      );
     }
   });
 };
