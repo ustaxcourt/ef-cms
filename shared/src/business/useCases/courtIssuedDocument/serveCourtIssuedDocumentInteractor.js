@@ -199,7 +199,6 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   let paperServicePdfUrl;
 
-
   if (servedParties.paper.length > 0) {
     const courtIssuedOrderDoc = await PDFDocument.load(newPdfData);
 
@@ -232,7 +231,6 @@ exports.serveCourtIssuedDocumentInteractor = async ({
         documentId: paperServicePdfId,
         useTempBucket: true,
       });
-
   }
 
   return paperServicePdfUrl;
