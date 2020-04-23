@@ -35,8 +35,8 @@ layers:
       exclude:
         - clamav_lambda_layer.tar.gz
         - var/lib/clamav/main.cvd
-  clamav-main:
-    name: ${self:provider.stage}-clamav-main
+  clamavm:
+    name: ${self:provider.stage}-clamavm
     compatibleRuntimes:
       - nodejs12.x
     path: web-api/runtimes/clamav/
