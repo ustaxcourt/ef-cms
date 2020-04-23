@@ -13,7 +13,9 @@ export const runTrialSessionPlanningReportAction = async ({
 }) => {
   const { term, year } = get(state.modal);
 
-  const planningReportPdfUrl = await applicationContext
+  const {
+    url,
+  } = await applicationContext
     .getUseCases()
     .runTrialSessionPlanningReportInteractor({
       applicationContext,
@@ -21,5 +23,5 @@ export const runTrialSessionPlanningReportAction = async ({
       year,
     });
 
-  return { pdfUrl: planningReportPdfUrl.url };
+  return { pdfUrl: url };
 };
