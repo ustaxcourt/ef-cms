@@ -27,5 +27,8 @@ exports.canSetTrialSessionAsCalendaredInteractor = ({
     applicationContext,
   });
 
-  return trialSessionEntity.canSetAsCalendared();
+  const canSetAsCalendared = trialSessionEntity.canSetAsCalendared();
+  const emptyFields = trialSessionEntity.getEmptyFields();
+
+  return { canSetAsCalendared, emptyFields };
 };

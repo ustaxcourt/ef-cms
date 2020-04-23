@@ -23,9 +23,46 @@ Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
 Document.PETITION_DOCUMENT_TYPES = ['Petition'];
-Document.ORDER_DOCUMENT_TYPES = Document.COURT_ISSUED_EVENT_CODES.filter(
-  document => document.documentType.includes('Order'),
-);
+Document.ORDER_DOCUMENT_TYPES = [
+  'O',
+  'OAJ',
+  'OAL',
+  'OAP',
+  'OAPF',
+  'OAR',
+  'OAS',
+  'OASL',
+  'OAW',
+  'OAX',
+  'OCA',
+  'OD',
+  'ODD',
+  'ODL',
+  'ODP',
+  'ODR',
+  'ODS',
+  'ODSL',
+  'ODW',
+  'ODX',
+  'OF',
+  'OFAB',
+  'OFFX',
+  'OFWD',
+  'OFX',
+  'OIP',
+  'OJR',
+  'OODS',
+  'OPFX',
+  'OPX',
+  'ORAP',
+  'OROP',
+  'OSC',
+  'OSCP',
+  'OST',
+  'OSUB',
+  'OAD',
+  'ODJ',
+];
 Document.validationName = 'Document';
 
 /**
