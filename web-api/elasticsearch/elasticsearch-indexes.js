@@ -1,1 +1,6 @@
-module.exports = ['efcms', 'efcms-case', 'efcms-document', 'efcms-user'];
+exports.elasticsearchIndexes = [
+  'efcms',
+  'efcms-case',
+  'efcms-document',
+  'efcms-user',
+];
