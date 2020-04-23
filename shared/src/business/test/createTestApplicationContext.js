@@ -356,6 +356,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
     getDocumentClient: jest.fn().mockImplementation(() => mockDocumentClient),
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
+    getElasticsearchIndexes: () => ['efcms'],
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityByName: jest.fn(),
     getFileReaderInstance: jest.fn(),
