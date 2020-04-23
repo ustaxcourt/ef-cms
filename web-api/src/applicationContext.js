@@ -612,6 +612,9 @@ const {
   saveDocumentFromLambda,
 } = require('../../shared/src/persistence/s3/saveDocumentFromLambda');
 const {
+  saveFileAndGenerateUrl,
+} = require('../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl');
+const {
   saveIntermediateDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/editDocketEntry/saveIntermediateDocketEntryInteractor');
 const {
@@ -1126,6 +1129,7 @@ module.exports = (appContextUser = {}) => {
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
         getCaseInventoryReport,
+        saveFileAndGenerateUrl,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
       };
