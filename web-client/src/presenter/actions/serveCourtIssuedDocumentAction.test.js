@@ -6,7 +6,7 @@ import { serveCourtIssuedDocumentAction } from './serveCourtIssuedDocumentAction
 describe('serveCourtIssuedDocumentAction', () => {
   global.window = global;
   global.Blob = () => {};
-  let mockPdfUrl = { url: 'https://therevolvinginternet.com/' };
+  let mockPdfUrl = { url: 'www.example.com' };
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;

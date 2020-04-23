@@ -24,7 +24,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   let testPdfDoc;
   let extendCase;
 
-  const mockPdfUrl = 'http://www.therestartpage.com/#';
+  const mockPdfUrl = 'www.example.com';
 
   const testPdfDocBytes = () => {
     // sample.pdf is a 1 page document

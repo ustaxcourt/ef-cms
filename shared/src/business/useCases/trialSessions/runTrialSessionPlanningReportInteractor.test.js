@@ -10,7 +10,7 @@ const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { User } = require('../../entities/User');
 
 describe('run trial session planning report', () => {
-  const mockPdfUrl = 'www.yesyoucan.com';
+  const mockPdfUrl = 'www.example.com';
   let user;
 
   beforeEach(() => {
