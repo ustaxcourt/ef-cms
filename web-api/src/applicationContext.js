@@ -573,6 +573,9 @@ const {
   orderPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
 const {
+  Practitioner,
+} = require('../../shared/src/business/entities/Practitioner');
+const {
   prioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/prioritizeCaseInteractor');
 const {
@@ -853,6 +856,7 @@ const entitiesByName = {
   Case: Case,
   Document: Document,
   IrsPractitioner: IrsPractitioner,
+  Practitioner: Practitioner,
   PrivatePractitioner: PrivatePractitioner,
   User: User,
 };
