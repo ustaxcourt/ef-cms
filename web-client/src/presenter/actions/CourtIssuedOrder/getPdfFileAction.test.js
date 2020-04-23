@@ -25,8 +25,13 @@ describe('getPdfFileAction', () => {
     ).rejects.toThrow();
   });
 
-  it('gets the pdf file/blob for a court issued document', async () => {
-    await runAction(getPdfFileAction, {
+  it('gets the pdf file url for a court issued document', async () => {
+    const mockPdf = { url: 'www.example.com' };
+    applicationContextForClient
+      .getUseCases()
+      .createCourtIssuedOrderPdfFromHtmlInteractor.mockReturnValue(mockPdf);
+
+    const result = await runAction(getPdfFileAction, {
       modules: {
         presenter,
       },
@@ -41,7 +46,6 @@ describe('getPdfFileAction', () => {
     expect(
       applicationContextForClient.getUtilities().formatDocketNumberWithSuffix,
     ).toBeCalled();
-    expect(createObjectURLStub).toBeCalled();
-    expect(global.File).toBeCalled();
+    expect(result.output.pdfUrl).toBe(mockPdf);
   });
 });
