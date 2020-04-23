@@ -3,6 +3,8 @@ import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInte
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
+const mockId = '12345';
+const mockPdfUrlAndID = { fileId: mockId, url: 'www.example.com' };
 const caseDetail = {
   caseCaption: 'Test Case Caption',
   caseId: 'ca-123',
@@ -73,6 +75,10 @@ beforeAll(() => {
       return contentHtml;
     });
   applicationContext
+    .getUseCaseHelpers()
+    .saveFileAndGenerateUrl.mockReturnValue(mockPdfUrlAndID);
+  applicationContext.getUniqueId.mockReturnValue(mockId);
+  applicationContext
     .getTemplateGenerators()
     .generatePrintableDocketRecordTemplate.mockImplementation(
       async ({ content }) => {
@@ -83,13 +89,12 @@ beforeAll(() => {
 
 describe('generateDocketRecordPdfInteractor', () => {
   it('Calls generatePdfFromHtmlInteractor and generatePrintableDocketRecordTemplate to build a PDF', async () => {
-    const result = await generateDocketRecordPdfInteractor({
+    await generateDocketRecordPdfInteractor({
       applicationContext,
       caseDetail,
       includePartyDetail: true,
     });
 
-    expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
     expect(
       applicationContext.getTemplateGenerators()
         .generatePrintableDocketRecordTemplate,
@@ -97,6 +102,19 @@ describe('generateDocketRecordPdfInteractor', () => {
     expect(
       applicationContext.getUseCases().generatePdfFromHtmlInteractor,
     ).toHaveBeenCalled();
+  });
+
+  it('Returns a file ID and url to the generated file', async () => {
+    const result = await generateDocketRecordPdfInteractor({
+      applicationContext,
+      caseDetail,
+      includePartyDetail: true,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,
+    ).toHaveBeenCalled();
+    expect(result).toEqual(mockPdfUrlAndID);
   });
 
   it('Displays contactSecondary if associated with the case', async () => {
@@ -118,17 +136,23 @@ describe('generateDocketRecordPdfInteractor', () => {
         partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
       }));
 
-    const result = await generateDocketRecordPdfInteractor({
+    await generateDocketRecordPdfInteractor({
       applicationContext,
       caseId: 'ca123',
       includePartyDetail: true,
     });
 
-    expect(result.includes('Test Secondary')).toEqual(true);
+    expect(
+      applicationContext
+        .getTemplateGenerators()
+        .generatePrintableDocketRecordTemplate.mock.calls[0][0].content.partyInfo.includes(
+          'Test Secondary',
+        ),
+    ).toEqual(true);
   });
 
   it('displays no party information if "includePartyDetail" flag is undefined or falsy', async () => {
-    let result = await generateDocketRecordPdfInteractor({
+    await generateDocketRecordPdfInteractor({
       applicationContext: {
         ...applicationContext,
         getPersistenceGateway: () => ({
@@ -150,7 +174,13 @@ describe('generateDocketRecordPdfInteractor', () => {
       // includePartyDetail not provided, is undefined
     });
 
-    expect(result.includes('Test Secondary')).toEqual(false);
+    expect(
+      applicationContext
+        .getTemplateGenerators()
+        .generatePrintableDocketRecordTemplate.mock.calls[0][0].content.partyInfo.includes(
+          'Test Secondary',
+        ),
+    ).toEqual(false);
 
     result = await generateDocketRecordPdfInteractor({
       applicationContext: {
@@ -174,11 +204,17 @@ describe('generateDocketRecordPdfInteractor', () => {
       includePartyDetail: false,
     });
 
-    expect(result.includes('Test Secondary')).toEqual(false);
+    expect(
+      applicationContext
+        .getTemplateGenerators()
+        .generatePrintableDocketRecordTemplate.mock.calls[0][0].content.partyInfo.includes(
+          'Test Secondary',
+        ),
+    ).toEqual(false);
   });
 
   it('Displays privatePractitioners associated with the case', async () => {
-    const result = await generateDocketRecordPdfInteractor({
+    await generateDocketRecordPdfInteractor({
       applicationContext: {
         ...applicationContext,
         getPersistenceGateway: () => ({
@@ -218,12 +254,25 @@ describe('generateDocketRecordPdfInteractor', () => {
       includePartyDetail: true,
     });
 
-    expect(result.includes('Test Practitioner')).toEqual(true);
-    expect(result.includes('Test Practitioner 2')).toEqual(true);
+    expect(
+      applicationContext
+        .getTemplateGenerators()
+        .generatePrintableDocketRecordTemplate.mock.calls[0][0].content.partyInfo.includes(
+          'Test Practitioner',
+        ),
+    ).toEqual(true);
+
+    expect(
+      applicationContext
+        .getTemplateGenerators()
+        .generatePrintableDocketRecordTemplate.mock.calls[0][0].content.partyInfo.includes(
+          'Test Practitioner 2',
+        ),
+    ).toEqual(true);
   });
 
   it('Displays irsPractitioners associated with the case', async () => {
-    const result = await generateDocketRecordPdfInteractor({
+    await generateDocketRecordPdfInteractor({
       applicationContext: {
         ...applicationContext,
         getPersistenceGateway: () => ({
@@ -246,8 +295,21 @@ describe('generateDocketRecordPdfInteractor', () => {
       includePartyDetail: true,
     });
 
-    expect(result.includes('Respondent Counsel')).toEqual(true);
-    expect(result.includes('Test Respondent')).toEqual(true);
+    expect(
+      applicationContext
+        .getTemplateGenerators()
+        .generatePrintableDocketRecordTemplate.mock.calls[0][0].content.partyInfo.includes(
+          'Respondent Counsel',
+        ),
+    ).toEqual(true);
+
+    expect(
+      applicationContext
+        .getTemplateGenerators()
+        .generatePrintableDocketRecordTemplate.mock.calls[0][0].content.partyInfo.includes(
+          'Test Respondent',
+        ),
+    ).toEqual(true);
   });
 
   it('Displays optional contact information if present', async () => {
@@ -266,25 +328,55 @@ describe('generateDocketRecordPdfInteractor', () => {
         };
       });
 
-    const result = await generateDocketRecordPdfInteractor({
+    await generateDocketRecordPdfInteractor({
       applicationContext,
       caseId: 'ca-123',
       includePartyDetail: true,
     });
 
-    expect(result.includes('Test C/O')).toEqual(true);
-    expect(result.includes('Test Title')).toEqual(true);
-    expect(result.includes('Address Two')).toEqual(true);
-    expect(result.includes('Address Three')).toEqual(true);
+    expect(
+      applicationContext
+        .getTemplateGenerators()
+        .generatePrintableDocketRecordTemplate.mock.calls[0][0].content.partyInfo.includes(
+          'Test C/O',
+        ),
+    ).toEqual(true);
+
+    expect(
+      applicationContext
+        .getTemplateGenerators()
+        .generatePrintableDocketRecordTemplate.mock.calls[0][0].content.partyInfo.includes(
+          'Test Title',
+        ),
+    ).toEqual(true);
+
+    expect(
+      applicationContext
+        .getTemplateGenerators()
+        .generatePrintableDocketRecordTemplate.mock.calls[0][0].content.partyInfo.includes(
+          'Address Two',
+        ),
+    ).toEqual(true);
+
+    expect(
+      applicationContext
+        .getTemplateGenerators()
+        .generatePrintableDocketRecordTemplate.mock.calls[0][0].content.partyInfo.includes(
+          'Address Three',
+        ),
+    ).toEqual(true);
   });
 
   it('Displays caseTitle instead of contactPrimary name when showCaseTitleForPrimary is set', async () => {
-    const result = await generateDocketRecordPdfInteractor({
+    await generateDocketRecordPdfInteractor({
       applicationContext,
       caseDetail: { ...caseDetail },
       includePartyDetail: true,
     });
 
-    expect(result.includes(caseDetail.caseCaption)).toEqual(true);
+    expect(
+      applicationContext.getTemplateGenerators()
+        .generatePrintableDocketRecordTemplate.mock.calls[0][0].content.caption,
+    ).toBeDefined();
   });
 });
