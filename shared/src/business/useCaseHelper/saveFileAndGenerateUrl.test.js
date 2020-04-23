@@ -2,11 +2,13 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 const { saveFileAndGenerateUrl } = require('./saveFileAndGenerateUrl');
 
 describe('saveFileAndGenerateUrl', () => {
-  it('saves the file to s3 and returns the url to the file', async () => {
-    const mockPdfUrl = 'www.example.com';
+  it('saves the file to s3 and returns the file ID and url to the file', async () => {
+    const mockUUID = '12345';
+    const mockPdfUrlAndId = { fileId: mockUUID, url: 'www.example.com' };
     applicationContext
       .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockReturnValue(mockPdfUrl);
+      .getDownloadPolicyUrl.mockReturnValue(mockPdfUrlAndId);
+    applicationContext.getUniqueId.mockReturnValue(mockUUID);
 
     const result = await saveFileAndGenerateUrl({
       applicationContext,
@@ -20,6 +22,6 @@ describe('saveFileAndGenerateUrl', () => {
     expect(
       applicationContext.getPersistenceGateway().getDownloadPolicyUrl,
     ).toBeCalled();
-    expect(result).toBe(mockPdfUrl);
+    expect(result).toEqual(mockPdfUrlAndId);
   });
 });
