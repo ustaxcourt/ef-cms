@@ -6,16 +6,10 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.props the passed in props
- * @returns {object} pdfFile, pdfUrl
+ * @returns {object} pdfUrl
  */
-export const getPdfFileAction = async ({
-  applicationContext,
-  get,
-  props,
-  router,
-}) => {
+export const getPdfFileAction = async ({ applicationContext, get, props }) => {
   const { htmlString } = props;
-  const documentTitle = get(state.form.documentTitle);
   const caseDetail = get(state.caseDetail);
 
   if (!htmlString) {
@@ -26,7 +20,9 @@ export const getPdfFileAction = async ({
     .getUtilities()
     .formatDocketNumberWithSuffix(caseDetail);
 
-  const pdfBlob = await applicationContext
+  const {
+    url,
+  } = await applicationContext
     .getUseCases()
     .createCourtIssuedOrderPdfFromHtmlInteractor({
       applicationContext,
@@ -34,10 +30,5 @@ export const getPdfFileAction = async ({
       htmlString,
     });
 
-  const pdfFile = new File([pdfBlob], documentTitle, {
-    type: 'application/pdf',
-  });
-  const pdfUrl = router.createObjectURL(pdfFile);
-
-  return { pdfFile, pdfUrl };
+  return { pdfUrl: url };
 };
