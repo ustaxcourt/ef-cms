@@ -3,7 +3,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Document } = require('../../business/entities/Document');
-const { map } = require('lodash');
 const { OrderSearch } = require('../../business/entities/orders/OrderSearch');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -32,8 +31,6 @@ exports.orderAdvancedSearchInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const orderEventCodes = map(Document.ORDER_DOCUMENT_TYPES, 'eventCode');
-
   const orderSearch = new OrderSearch({
     caseTitleOrPetitioner,
     docketNumber,
@@ -51,7 +48,7 @@ exports.orderAdvancedSearchInteractor = async ({
 
   return await applicationContext.getPersistenceGateway().orderKeywordSearch({
     applicationContext,
-    orderEventCodes,
+    orderEventCodes: Document.ORDER_DOCUMENT_TYPES,
     ...rawSearch,
   });
 };

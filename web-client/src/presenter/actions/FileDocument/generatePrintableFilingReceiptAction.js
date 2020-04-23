@@ -17,54 +17,14 @@ export const generatePrintableFilingReceiptAction = async ({
   props,
 }) => {
   const { documentsFiled } = props;
-  const { Document } = applicationContext.getEntityConstructors();
-  const caseDetail = get(state.caseDetail);
-
-  const getDocumentInfo = documentData => {
-    const document = new Document(documentData, { applicationContext });
-    document.generateFiledBy(caseDetail);
-    return {
-      attachments: document.attachments,
-      certificateOfService: document.certificateOfService,
-      certificateOfServiceDate: document.certificateOfServiceDate,
-      documentTitle: document.documentTitle,
-      filedBy: document.filedBy,
-      objections: document.objections,
-      receivedAt: document.receivedAt,
-    };
-  };
-
-  const documents = {
-    caseId: documentsFiled.caseId,
-    docketNumber: documentsFiled.docketNumber,
-    primaryDocument: getDocumentInfo(documentsFiled),
-    supportingDocuments: [],
-  };
-
-  if (documentsFiled.hasSupportingDocuments) {
-    documents.supportingDocuments = documentsFiled.supportingDocuments.map(
-      supportingDocument => getDocumentInfo(supportingDocument),
-    );
-  }
-
-  if (documentsFiled.secondaryDocumentFile) {
-    documents.secondaryDocument = getDocumentInfo(
-      documentsFiled.secondaryDocument,
-    );
-  }
-
-  if (documentsFiled.hasSecondarySupportingDocuments) {
-    documents.secondarySupportingDocuments = documentsFiled.secondarySupportingDocuments.map(
-      secondarySupportingDocument =>
-        getDocumentInfo(secondarySupportingDocument),
-    );
-  }
+  const caseId = get(state.caseDetail.caseId);
 
   const filingReceiptUrl = await applicationContext
     .getUseCases()
     .generatePrintableFilingReceiptInteractor({
       applicationContext,
-      documents,
+      caseId,
+      documentsFiled,
     });
 
   return { printReceiptLink: filingReceiptUrl };

@@ -174,7 +174,24 @@ exports.runTrialSessionPlanningReportInteractor = async ({
       headerHtml: ' ',
     });
 
-  return pdf;
+  const trialSessionPlanningReportPdfId = applicationContext.getUniqueId();
+
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: pdf,
+    documentId: trialSessionPlanningReportPdfId,
+    useTempBucket: true,
+  });
+
+  const trialSessionPlanningReportPdfUrl = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      documentId: trialSessionPlanningReportPdfId,
+      useTempBucket: true,
+    });
+
+  return trialSessionPlanningReportPdfUrl;
 };
 
 exports.getPreviousTerm = getPreviousTerm;

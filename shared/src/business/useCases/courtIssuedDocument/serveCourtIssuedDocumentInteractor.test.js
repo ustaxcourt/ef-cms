@@ -24,6 +24,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   let testPdfDoc;
   let extendCase;
 
+  const mockPdfUrl = 'www.example.com';
+
   const testPdfDocBytes = () => {
     // sample.pdf is a 1 page document
     return fs.readFileSync(testAssetsPath + 'sample.pdf');
@@ -219,6 +221,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       });
     applicationContext
       .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockReturnValue(mockPdfUrl);
+    applicationContext
+      .getPersistenceGateway()
       .updateCase.mockImplementation(caseToUpdate => caseToUpdate);
     applicationContext
       .getUseCaseHelpers()
@@ -382,7 +387,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     });
 
-    expect(result).toBeDefined();
+    expect(result).toBe(mockPdfUrl);
   });
 
   it('should remove the case from the trial session if the case has a trialSessionId', async () => {

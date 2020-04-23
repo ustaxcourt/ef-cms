@@ -84,7 +84,7 @@ exports.orderKeywordSearch = async ({
   if (startDate && endDate) {
     queryParams.push({
       range: {
-        'receivedAt.S': {
+        'filingDate.S': {
           format: 'strict_date_time', // ISO-8601 time stamp
           gte: startDate,
           lte: endDate,

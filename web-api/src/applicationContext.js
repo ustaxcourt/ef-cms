@@ -416,6 +416,12 @@ const {
   getInboxMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getInboxMessagesForUserInteractor');
 const {
+  getIndexMappingFields,
+} = require('../../shared/src/persistence/elasticsearch/getIndexMappingFields');
+const {
+  getIndexMappingLimit,
+} = require('../../shared/src/persistence/elasticsearch/getIndexMappingLimit');
+const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
 const {
@@ -963,7 +969,6 @@ module.exports = (appContextUser = {}) => {
         associateUserWithCase,
         associateUserWithCasePending,
         bulkIndexRecords,
-
         caseAdvancedSearch,
         casePublicSearch: casePublicSearchPersistence,
         createCase,
@@ -1013,6 +1018,8 @@ module.exports = (appContextUser = {}) => {
         getEligibleCasesForTrialSession,
         getInboxMessagesForSection,
         getInboxMessagesForUser,
+        getIndexMappingFields,
+        getIndexMappingLimit,
         getInternalUsers,
         getPractitionerByBarNumber,
         getPractitionersByName,

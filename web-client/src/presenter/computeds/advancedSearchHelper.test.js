@@ -452,6 +452,7 @@ describe('advancedOrderSearchHelper', () => {
         advancedSearchForm: { currentPage: 1 },
         searchResults: [
           {
+            caseCaption: 'Test Petitioner, Petitioner',
             docketNumber: '101-19',
             docketNumberSuffix: 'Z',
             documentContents: 'Test Petitioner, Petitioner',
@@ -460,6 +461,7 @@ describe('advancedOrderSearchHelper', () => {
             judge: 'Judge Buch',
           },
           {
+            caseCaption: 'Test Petitioner, Petitioner',
             docketNumber: '102-19',
             docketNumberSuffix: 'P',
             documentContents: 'Test Petitioner, Petitioner',
@@ -473,6 +475,7 @@ describe('advancedOrderSearchHelper', () => {
 
     expect(result.formattedSearchResults).toMatchObject([
       {
+        caseTitle: 'Test Petitioner',
         docketNumber: '101-19',
         docketNumberSuffix: 'Z',
         docketNumberWithSuffix: '101-19Z',
@@ -483,6 +486,7 @@ describe('advancedOrderSearchHelper', () => {
         judge: 'Judge Buch',
       },
       {
+        caseTitle: 'Test Petitioner',
         docketNumber: '102-19',
         docketNumberSuffix: 'P',
         docketNumberWithSuffix: '102-19P',
