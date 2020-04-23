@@ -266,9 +266,15 @@ exports.generateDocketRecordPdfInteractor = async ({
       },
     });
 
-  return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
-    applicationContext,
-    contentHtml,
-    docketNumber,
-  });
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml,
+      docketNumber,
+    });
+
+  return await applicationContext
+    .getUseCaseHelpers()
+    .saveFileAndGenerateUrl({ applicationContext, file: pdf });
 };
