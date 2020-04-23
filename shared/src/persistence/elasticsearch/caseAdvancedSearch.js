@@ -40,7 +40,7 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
           },
           size: 5000,
         },
-        index: 'efcms',
+        index: 'efcms-case',
       },
     })
   ).results;
@@ -66,7 +66,7 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
               },
             },
           },
-          index: 'efcms',
+          index: 'efcms-case',
         },
       })
     ).results;

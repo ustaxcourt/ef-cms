@@ -76,6 +76,8 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
     throw new TypeError('applicationContext must be defined');
   }
 
+  this.entityName = 'Document';
+
   if (
     !filtered ||
     User.isInternalUser(applicationContext.getCurrentUser().role)
@@ -366,6 +368,7 @@ joiValidationDecorator(
       .required()
       .description('The type of this document.'),
     draftState: joi.object().allow(null).optional(),
+    entityName: joi.string().valid('Document').required(),
     eventCode: joi.string().optional(),
     filedBy: joi.string().allow('').optional(),
     filingDate: joi

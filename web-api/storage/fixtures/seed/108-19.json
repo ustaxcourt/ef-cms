@@ -227,6 +227,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2019-08-16T19:21:46.147Z",
     "workItems": [],
     "pending": false,
@@ -244,6 +245,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-08-16T19:21:46.146Z",
     "workItems": [
       {
