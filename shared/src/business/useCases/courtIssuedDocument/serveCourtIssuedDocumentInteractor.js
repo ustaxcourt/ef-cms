@@ -197,7 +197,8 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     servedParties,
   });
 
-  let paperServicePdfBuffer;
+  let paperServicePdfUrl;
+
   if (servedParties.paper.length > 0) {
     const courtIssuedOrderDoc = await PDFDocument.load(newPdfData);
 
@@ -214,8 +215,23 @@ exports.serveCourtIssuedDocumentInteractor = async ({
       });
 
     const paperServicePdfData = await newPdfDoc.save();
-    paperServicePdfBuffer = Buffer.from(paperServicePdfData);
+    const paperServicePdfId = applicationContext.getUniqueId();
+
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: paperServicePdfData,
+      documentId: paperServicePdfId,
+      useTempBucket: true,
+    });
+
+    paperServicePdfUrl = await applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl({
+        applicationContext,
+        documentId: paperServicePdfId,
+        useTempBucket: true,
+      });
   }
 
-  return paperServicePdfBuffer;
+  return paperServicePdfUrl;
 };
