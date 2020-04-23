@@ -13,6 +13,7 @@ describe('PublicDocketRecordEntry', () => {
     expect(entity.toRawObject()).toEqual({
       description: 'testing',
       documentId: 'testing',
+      entityName: 'PublicDocketRecordEntry',
       filedBy: 'testing',
       filingDate: 'testing',
       index: 'testing',

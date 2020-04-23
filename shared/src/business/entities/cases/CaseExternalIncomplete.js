@@ -15,6 +15,8 @@ const { ContactFactory } = require('../contacts/ContactFactory');
  * @constructor
  */
 function CaseExternalIncomplete(rawCase) {
+  this.entityName = 'CaseExternalIncomplete';
+
   this.businessType = rawCase.businessType;
   this.caseType = rawCase.caseType;
   this.contactPrimary = rawCase.contactPrimary;

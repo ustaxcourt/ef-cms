@@ -33,6 +33,8 @@ CaseExternal.prototype.initContacts = function (rawCase) {
 };
 
 CaseExternal.prototype.init = function (rawCase) {
+  this.entityName = 'CaseExternal';
+
   this.businessType = rawCase.businessType;
   this.caseType = rawCase.caseType;
   this.contactPrimary = rawCase.contactPrimary;
