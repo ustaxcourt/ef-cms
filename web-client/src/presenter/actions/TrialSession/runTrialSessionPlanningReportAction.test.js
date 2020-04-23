@@ -5,13 +5,13 @@ import { runTrialSessionPlanningReportAction } from './runTrialSessionPlanningRe
 
 describe('runTrialSessionPlanningReportAction', () => {
   beforeAll(() => {
-    const fakeUrl = 'www.heyYouCoolCatsAndKittens';
+    const mockPdfUrl = 'www.example.com';
 
     presenter.providers.applicationContext = applicationContext;
 
     applicationContext
       .getUseCases()
-      .runTrialSessionPlanningReportInteractor.mockResolvedValue(fakeUrl);
+      .runTrialSessionPlanningReportInteractor.mockResolvedValue(mockPdfUrl);
   });
   it('returns a url to the newly created report pdf', async () => {
     const result = await runAction(runTrialSessionPlanningReportAction, {
