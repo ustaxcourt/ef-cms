@@ -853,12 +853,12 @@ let sesCache;
 let searchClientCache;
 
 const entitiesByName = {
-  Case: Case,
-  Document: Document,
-  IrsPractitioner: IrsPractitioner,
-  Practitioner: Practitioner,
-  PrivatePractitioner: PrivatePractitioner,
-  User: User,
+  Case,
+  Document,
+  IrsPractitioner,
+  Practitioner,
+  PrivatePractitioner,
+  User,
 };
 
 module.exports = (appContextUser = {}) => {
