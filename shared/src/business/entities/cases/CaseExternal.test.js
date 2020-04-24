@@ -60,7 +60,7 @@ describe('CaseExternal entity', () => {
   });
 
   describe('Petition file size', () => {
-    it('should inform you if petition file size is greater than 500MB', () => {
+    it('should inform you if petition file size is greater than the PDF max file size', () => {
       const caseExternal = new CaseExternal({
         caseType: 'Other',
         filingType: 'Myself',
@@ -123,7 +123,7 @@ describe('CaseExternal entity', () => {
   });
 
   describe('STIN file size', () => {
-    it('should inform you if stin file size is greater than 500MB', () => {
+    it('should inform you if stin file size is greater than the file max size', () => {
       const caseExternal = new CaseExternal({
         caseType: 'Other',
         filingType: 'Myself',
@@ -186,7 +186,7 @@ describe('CaseExternal entity', () => {
   });
 
   describe('ownership disclosure file size', () => {
-    it('should inform you if ownership disclosure file size is greater than 500MB', () => {
+    it('should inform you if ownership disclosure file size is greater than the PDF max file size', () => {
       const caseExternal = new CaseExternal({
         caseType: 'Other',
         filingType: 'Myself',

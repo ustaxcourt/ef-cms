@@ -189,6 +189,7 @@ functions:
     timeout: 900
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-clamav:latest
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-clamavm:latest
     events:
       - http:
           path: /{documentId}/virus-scan

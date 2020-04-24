@@ -93,6 +93,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-03-01T21:40:46.415Z",
     "workItems": [
       {
@@ -152,6 +153,7 @@
       "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02"
     },
     "documentType": "Order of Dismissal for Lack of Jurisdiction",
+    "entityName": "Document",
     "filingDate": "2019-10-07T14:29:30.288Z",
     "workItems": [],
     "pending": false,
@@ -173,6 +175,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
     "pending": false,

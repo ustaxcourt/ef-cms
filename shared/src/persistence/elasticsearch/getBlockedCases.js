@@ -44,7 +44,7 @@ exports.getBlockedCases = async ({ applicationContext, trialLocation }) => {
         },
         size: 5000,
       },
-      index: 'efcms',
+      index: 'efcms-case',
     },
   });
 

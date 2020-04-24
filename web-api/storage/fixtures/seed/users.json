@@ -4,21 +4,24 @@
     "name": "Test Admin",
     "section": "admin",
     "userId": "86c3f87b-350b-477d-92c3-43bd095cb006",
-    "email": "admin"
+    "email": "admin",
+    "entityName": "User"
   },
   {
     "role": "docketclerk",
     "name": "Test Docketclerk",
     "section": "docket",
     "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "docketclerk"
+    "email": "docketclerk",
+    "entityName": "User"
   },
   {
     "role": "docketclerk",
     "name": "Test Docketclerk1",
     "section": "docket",
     "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "docketclerk1"
+    "email": "docketclerk1",
+    "entityName": "User"
   },
   {
     "role": "judge",
@@ -27,7 +30,8 @@
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "email": "judgeArmen",
     "judgeFullName": "Robert N. Armen, Jr.",
-    "judgeTitle": "Special Trial Judge"
+    "judgeTitle": "Special Trial Judge",
+    "entityName": "User"
   },
   {
     "role": "judge",
@@ -36,7 +40,8 @@
     "userId": "dabbad01-18d0-43ec-bafb-654e83405416",
     "email": "judgeAshford",
     "judgeFullName": "Tamara W. Ashford",
-    "judgeTitle": "Judge"
+    "judgeTitle": "Judge",
+    "entityName": "User"
   },
   {
     "role": "judge",
@@ -54,7 +59,8 @@
     "userId": "dabbad02-18d0-43ec-bafb-654e83405416",
     "email": "judgeBuch",
     "judgeFullName": "Ronald L. Buch",
-    "judgeTitle": "Judge"
+    "judgeTitle": "Judge",
+    "entityName": "User"
   },
   {
     "role": "judge",
@@ -63,7 +69,8 @@
     "userId": "dabbad03-18d0-43ec-bafb-654e83405416",
     "email": "judgeCarluzzo",
     "judgeFullName": "Lewis R. Carluzzo",
-    "judgeTitle": "Chief Special Trial Judge"
+    "judgeTitle": "Chief Special Trial Judge",
+    "entityName": "User"
   },
   {
     "role": "judge",
@@ -72,7 +79,8 @@
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416",
     "email": "judgeCohen",
     "judgeFullName": "Mary Ann Cohen",
-    "judgeTitle": "Judge"
+    "judgeTitle": "Judge",
+    "entityName": "User"
   },
   {
     "role": "judge",
@@ -81,7 +89,8 @@
     "userId": "dabbad05-18d0-43ec-bafb-654e83405416",
     "email": "judgeGustafson",
     "judgeFullName": "David Gustafson",
-    "judgeTitle": "Judge"
+    "judgeTitle": "Judge",
+    "entityName": "User"
   },
   {
     "role": "judge",
@@ -90,7 +99,8 @@
     "userId": "dabbad06-18d0-43ec-bafb-654e83405416",
     "email": "judgePugh",
     "judgeFullName": "Cary Douglas Pugh",
-    "judgeTitle": "Judge"
+    "judgeTitle": "Judge",
+    "entityName": "User"
   },
   {
     "role": "judge",
@@ -99,28 +109,32 @@
     "userId": "dabbad0a-18d0-43ec-bafb-654e83405416",
     "email": "judgeUrda",
     "judgeFullName": "Patrick J. Urda",
-    "judgeTitle": "Judge"
+    "judgeTitle": "Judge",
+    "entityName": "User"
   },
   {
     "role": "adc",
     "name": "Test ADC",
     "section": "adc",
     "userId": "6805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "adc"
+    "email": "adc",
+    "entityName": "User"
   },
   {
     "role": "petitionsclerk",
     "name": "Test Petitionsclerk",
     "section": "petitions",
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "petitionsclerk"
+    "email": "petitionsclerk",
+    "entityName": "User"
   },
   {
     "role": "petitionsclerk",
     "name": "Test Petitionsclerk1",
     "section": "petitions",
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "petitionsclerk1"
+    "email": "petitionsclerk1",
+    "entityName": "User"
   },
   {
     "role": "privatePractitioner",
@@ -136,6 +150,7 @@
     "suffix": "",
     "section": "privatePractitioner",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "entityName": "PrivatePractitioner",
     "email": "privatePractitioner",
     "firmName": "GW Law Offices",
     "alternateEmail": "privatePractitioner@example.com",
@@ -167,6 +182,7 @@
     "suffix": "",
     "section": "privatePractitioner",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
+    "entityName": "PrivatePractitioner",
     "email": "privatePractitioner1",
     "firmName": "Bogus Barristers",
     "barNumber": "PT5432",
@@ -209,7 +225,8 @@
       "postalCode": "61234",
       "state": "IL"
     },
-    "originalBarState": "N/A"
+    "originalBarState": "N/A",
+    "entityName": "PrivatePractitioner"
   },
   {
     "role": "privatePractitioner",
@@ -238,7 +255,8 @@
       "postalCode": "61234",
       "state": "IL"
     },
-    "originalBarState": "Texas"
+    "originalBarState": "Texas",
+    "entityName": "PrivatePractitioner"
   },
   {
     "role": "privatePractitioner",
@@ -267,7 +285,8 @@
       "postalCode": "61234",
       "state": "IL"
     },
-    "originalBarState": "Florida"
+    "originalBarState": "Florida",
+    "entityName": "PrivatePractitioner"
   },
   {
     "role": "irsPractitioner",
@@ -295,7 +314,8 @@
       "postalCode": "61234",
       "state": "IL"
     },
-    "originalBarState": "Maryland"
+    "originalBarState": "Maryland",
+    "entityName": "IrsPractitioner"
   },
   {
     "role": "irsPractitioner",
@@ -323,7 +343,8 @@
       "postalCode": "61234",
       "state": "IL"
     },
-    "originalBarState": "Arkansas"
+    "originalBarState": "Arkansas",
+    "entityName": "IrsPractitioner"
   },
   {
     "role": "irsPractitioner",
@@ -351,7 +372,8 @@
       "postalCode": "61234",
       "state": "IL"
     },
-    "originalBarState": "Colorado"
+    "originalBarState": "Colorado",
+    "entityName": "IrsPractitioner"
   },
   {
     "role": "irsPractitioner",
@@ -379,7 +401,8 @@
       "postalCode": "61234",
       "state": "IL"
     },
-    "originalBarState": "Nevada"
+    "originalBarState": "Nevada",
+    "entityName": "IrsPractitioner"
   },
   {
     "role": "irsPractitioner",
@@ -400,7 +423,8 @@
     "address2": "Hanover, MI 49241",
     "barNumber": "LJ9999",
     "phone": "517-563-1536",
-    "originalBarState": "Tennessee"
+    "originalBarState": "Tennessee",
+    "entityName": "IrsPractitioner"
   },
   {
     "role": "petitioner",
@@ -410,91 +434,104 @@
     "email": "petitioner",
     "address1": "3202 Elk Avenue",
     "address2": "Hanover, MI 49241",
-    "phone": "517-563-1536"
+    "phone": "517-563-1536",
+    "entityName": "User"
   },
   {
     "role": "admissionsclerk",
     "name": "Test Admissions Clerk",
     "section": "admissions",
     "userId": "9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
-    "email": "admissionsclerk"
+    "email": "admissionsclerk",
+    "entityName": "User"
   },
   {
     "role": "clerkofcourt",
     "name": "Test Clerk of Court",
     "section": "clerkofcourt",
     "userId": "23dd8806-c0c7-4265-81f0-5f264ef78248",
-    "email": "clerkofcourt"
+    "email": "clerkofcourt",
+    "entityName": "User"
   },
   {
     "role": "trialclerk",
     "name": "Test Trial Clerk",
     "section": "trialClerks",
     "userId": "f0a1e52a-876f-4c03-853c-f66e407e5a1e",
-    "email": "trialclerk"
+    "email": "trialclerk",
+    "entityName": "User"
   },
   {
     "role": "chambers",
     "name": "Test Armen's Chambers",
     "section": "armensChambers",
     "userId": "9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
-    "email": "armensChambers"
+    "email": "armensChambers",
+    "entityName": "User"
   },
   {
     "role": "chambers",
     "name": "Test Ashford's Chambers",
     "section": "ashfordsChambers",
     "userId": "817b48c5-d4e5-4544-9e11-9ba0102918f4",
-    "email": "ashfordsChambers"
+    "email": "ashfordsChambers",
+    "entityName": "User"
   },
   {
     "role": "chambers",
     "name": "Test Buch's Chambers",
     "section": "buchsChambers",
     "userId": "49421c68-0c09-4b4b-b32c-a535279be8d0",
-    "email": "buchsChambers"
+    "email": "buchsChambers",
+    "entityName": "User"
   },
   {
     "role": "chambers",
     "name": "Test Carluzzo's Chambers",
     "section": "carluzzosChambers",
     "userId": "8c0902ab-d156-4cca-b80d-43f595aa5ab0",
-    "email": "carluzzosChambers"
+    "email": "carluzzosChambers",
+    "entityName": "User"
   },
   {
     "role": "chambers",
     "name": "Test Cohen's Chambers",
     "section": "cohensChambers",
     "userId": "0bd3bc49-4e46-4caa-adeb-4960c56e17c8",
-    "email": "cohensChambers"
+    "email": "cohensChambers",
+    "entityName": "User"
   },
   {
     "role": "chambers",
     "name": "Test Gustafson's Chambers",
     "section": "gustafsonsChambers",
     "userId": "3ce1dad5-87ee-4b00-a4fb-f7f80296a5c2",
-    "email": "gustafsonsChambers"
+    "email": "gustafsonsChambers",
+    "entityName": "User"
   },
   {
     "role": "chambers",
     "name": "Test Pugh's Chambers",
     "section": "pughsChambers",
     "userId": "9fbae83a-a55b-4132-96df-e04a8ee675e3",
-    "email": "pughsChambers"
+    "email": "pughsChambers",
+    "entityName": "User"
   },
   {
     "role": "chambers",
     "name": "Test Urda's Chambers",
     "section": "urdasChambers",
     "userId": "44f02385-e4c6-49f9-a554-ecf93531d8a3",
-    "email": "urdasChambers"
+    "email": "urdasChambers",
+    "entityName": "User"
   },
   {
     "role": "floater",
     "name": "Test Floater",
     "section": "floater",
     "userId": "9ef02385-e4c6-49f9-a554-ecf93531d8a4",
-    "email": "testFloater"
+    "email": "testFloater",
+    "entityName": "User"
   },
   {
     "role": "inactivePractitioner",
@@ -522,13 +559,15 @@
       "postalCode": "61234",
       "state": "IL"
     },
-    "originalBarState": "California"
+    "originalBarState": "California",
+    "entityName": "Practitioner"
   },
   {
     "role": "irsSuperuser",
     "name": "Test IRS Superuser",
     "section": "irsSuperuser",
     "userId": "02c9b614-e498-4dae-b0f5-751b9ab5e8b3",
-    "email": "irsSuperuser"
+    "email": "irsSuperuser",
+    "entityName": "User"
   }
 ]

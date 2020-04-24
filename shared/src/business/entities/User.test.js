@@ -68,6 +68,7 @@ describe('User entity', () => {
       userId: 'Tester',
     });
     expect(user.isValid()).toBeTruthy();
+    expect(user.entityName).toEqual('User');
   });
 
   it('Creates a valid privatePractitioner user', () => {
