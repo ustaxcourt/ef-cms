@@ -23,15 +23,23 @@ exports.getDocument = async ({
   caseId,
   documentId,
   protocol,
+  useTempBucket = false,
 }) => {
   // TODO: Fix protocol flag
   if (protocol === 'S3') {
+    let Bucket = applicationContext.getDocumentsBucketName();
+    if (useTempBucket) {
+      Bucket = applicationContext.getTempDocumentsBucketName();
+    }
+
     // TODO: should this be in the persistence gateway?
     const S3 = applicationContext.getStorageClient();
-    return S3.getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: documentId,
-    });
+    return (
+      await S3.getObject({
+        Bucket,
+        Key: documentId,
+      }).promise()
+    ).Body;
   } else {
     const url = await getDownloadPolicy({
       applicationContext,
