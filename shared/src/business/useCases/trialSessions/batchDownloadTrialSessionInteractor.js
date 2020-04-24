@@ -135,6 +135,7 @@ const batchDownloadTrialSessionInteractor = async ({
               caseId,
               documentId: result.fileId,
               protocol: 'S3',
+              useTempBucket: true,
             });
           await onDocketRecordCreation(caseId);
           return document;
