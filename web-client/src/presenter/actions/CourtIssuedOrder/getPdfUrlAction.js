@@ -1,14 +1,14 @@
 import { state } from 'cerebral';
 
 /**
- * get the pdf file and pdf blob url from the passed in htmlString
+ * get the url of the pdf created from the passed in html string
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.props the passed in props
  * @returns {object} pdfUrl
  */
-export const getPdfFileAction = async ({ applicationContext, get, props }) => {
+export const getPdfUrlAction = async ({ applicationContext, get, props }) => {
   const { htmlString } = props;
   const caseDetail = get(state.caseDetail);
 

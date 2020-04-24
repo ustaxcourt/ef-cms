@@ -1,3 +1,5 @@
+const { getPdfFromUrl } = require('./getPdfFromUrl');
+
 const getDownloadPolicy = async ({
   applicationContext,
   caseId,
@@ -46,11 +48,7 @@ exports.getDocument = async ({
       caseId,
       documentId,
     });
-    const { data: fileBlob } = await applicationContext.getHttpClient()({
-      method: 'GET',
-      responseType: 'blob',
-      url,
-    });
-    return new Blob([fileBlob], { type: 'application/pdf' });
+
+    return getPdfFromUrl({ applicationContext, url });
   }
 };

@@ -1,6 +1,6 @@
 import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
 import { createOrderAction } from '../actions/CourtIssuedOrder/createOrderAction';
-import { getPdfFileAction } from '../actions/CourtIssuedOrder/getPdfFileAction';
+import { getPdfUrlAction } from '../actions/CourtIssuedOrder/getPdfUrlAction';
 import { setMetadataAsPristineAction } from '../actions/setMetadataAsPristineAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { shouldRefreshOrderPdfAction } from '../actions/CourtIssuedOrder/shouldRefreshOrderPdfAction';
@@ -13,7 +13,7 @@ export const refreshPdfWhenSwitchingCreateOrderTabSequence = [
     yes: showProgressSequenceDecorator([
       createOrderAction,
       clearPdfPreviewUrlAction,
-      getPdfFileAction,
+      getPdfUrlAction,
       setPdfPreviewUrlAction,
       setMetadataAsPristineAction,
     ]),

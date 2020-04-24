@@ -1,9 +1,9 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getPdfFileAction } from './getPdfFileAction';
+import { getPdfUrlAction } from './getPdfUrlAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('getPdfFileAction', () => {
+describe('getPdfUrlAction', () => {
   let createObjectURLStub;
 
   beforeAll(() => {
@@ -18,7 +18,7 @@ describe('getPdfFileAction', () => {
 
   it('throws error if htmlString is empty', async () => {
     await expect(
-      runAction(getPdfFileAction, {
+      runAction(getPdfUrlAction, {
         props: { htmlString: '' },
         state: {},
       }),
@@ -31,7 +31,7 @@ describe('getPdfFileAction', () => {
       .getUseCases()
       .createCourtIssuedOrderPdfFromHtmlInteractor.mockReturnValue(mockPdf);
 
-    const result = await runAction(getPdfFileAction, {
+    const result = await runAction(getPdfUrlAction, {
       modules: {
         presenter,
       },
