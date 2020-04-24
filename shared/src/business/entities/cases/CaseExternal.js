@@ -65,6 +65,7 @@ CaseExternal.commonRequirements = {
   contactPrimary: joi.object().optional(),
   contactSecondary: joi.object().optional(),
   countryType: joi.string().optional(),
+  entityName: joi.string().valid('CaseExternal').required(),
   filingType: joi.string().required(),
   hasIrsNotice: joi.boolean().required(),
   ownershipDisclosureFile: joi.object().when('filingType', {

@@ -38,6 +38,7 @@ CaseSearch.VALIDATION_ERROR_MESSAGES = {
 
 CaseSearch.schema = joi.object().keys({
   countryType: joi.string().optional(),
+  entityName: joi.string().valid('CaseSearch').required(),
   petitionerName: joi.string().required(),
   petitionerState: joi.string().optional(),
   yearFiledMax: joi.when('yearFiledMin', {

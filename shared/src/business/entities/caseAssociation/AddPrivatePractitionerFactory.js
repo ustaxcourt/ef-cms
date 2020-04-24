@@ -35,6 +35,7 @@ AddPrivatePractitionerFactory.get = metadata => {
   };
 
   let schema = {
+    entityName: joi.string().valid('AddPrivatePractitionerFactory').required(),
     user: joi.object().required(),
   };
 

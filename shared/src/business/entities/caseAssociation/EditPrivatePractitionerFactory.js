@@ -34,7 +34,9 @@ EditPrivatePractitionerFactory.get = metadata => {
     });
   };
 
-  let schema = {};
+  let schema = {
+    entityName: joi.string().valid('EditPrivatePractitionerFactory').required(),
+  };
 
   let schemaOptionalItems = {
     representingPrimary: joi.boolean().invalid(false),

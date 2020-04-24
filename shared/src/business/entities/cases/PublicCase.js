@@ -57,6 +57,7 @@ const publicCaseSchema = {
   createdAt: joi.date().iso().optional(),
   docketNumber: joi.string().optional(),
   docketNumberSuffix: joi.string().allow(null).optional(),
+  entityName: joi.string().valid('PublicCase').required(),
   isSealed: joi.boolean(),
   receivedAt: joi.date().iso().optional(),
 };
