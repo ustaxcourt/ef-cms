@@ -46,6 +46,6 @@ describe('getPdfFileAction', () => {
     expect(
       applicationContextForClient.getUtilities().formatDocketNumberWithSuffix,
     ).toBeCalled();
-    expect(result.output.pdfUrl).toBe(mockPdf);
+    expect(result.output.pdfUrl).toBe(mockPdf.url);
   });
 });
