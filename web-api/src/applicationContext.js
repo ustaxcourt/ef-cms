@@ -551,6 +551,9 @@ const {
   indexRecord,
 } = require('../../shared/src/persistence/elasticsearch/indexRecord');
 const {
+  IrsPractitioner,
+} = require('../../shared/src/business/entities/IrsPractitioner');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../shared/src/authorization/authorizationClientService');
@@ -576,8 +579,14 @@ const {
   orderPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
 const {
+  Practitioner,
+} = require('../../shared/src/business/entities/Practitioner');
+const {
   prioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/prioritizeCaseInteractor');
+const {
+  PrivatePractitioner,
+} = require('../../shared/src/business/entities/PrivatePractitioner');
 const {
   processStreamRecordsInteractor,
 } = require('../../shared/src/business/useCases/processStreamRecordsInteractor');
@@ -804,10 +813,12 @@ const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
+const { Document } = require('../../shared/src/business/entities/Document');
 const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 const { User } = require('../../shared/src/business/entities/User');
+
 const { v4: uuidv4 } = require('uuid');
 
 // increase the timeout for zip uploads to S3
@@ -852,7 +863,12 @@ let sesCache;
 let searchClientCache;
 
 const entitiesByName = {
-  Case: Case,
+  Case,
+  Document,
+  IrsPractitioner,
+  Practitioner,
+  PrivatePractitioner,
+  User,
 };
 
 module.exports = (appContextUser = {}) => {

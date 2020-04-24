@@ -5,8 +5,6 @@
   const elasticsearch = require('elasticsearch');
   const settings = require('./elasticsearch-settings');
 
-  const index = 'efcms';
-
   AWS.config.httpOptions.timeout = 300000;
 
   const { EnvironmentCredentials } = AWS;
@@ -31,25 +29,29 @@
     log: 'warning',
   });
 
-  try {
-    const indexExists = await searchClientCache.indices.exists({
-      body: {},
-      index,
-    });
-    if (!indexExists) {
-      searchClientCache.indices.create({
-        body: {
-          settings,
-        },
-        index,
-      });
-    } else {
-      searchClientCache.indices.putSettings({
-        body: { 'index.mapping.total_fields.limit': '4000' },
-        index,
-      });
-    }
-  } catch (e) {
-    console.log(e);
-  }
+  await Promise.all(
+    ['efcms', 'efcms-case', 'efcms-document', 'efcms-user'].map(async index => {
+      try {
+        const indexExists = await searchClientCache.indices.exists({
+          body: {},
+          index,
+        });
+        if (!indexExists) {
+          searchClientCache.indices.create({
+            body: {
+              settings,
+            },
+            index,
+          });
+        } else {
+          searchClientCache.indices.putSettings({
+            body: { 'index.mapping.total_fields.limit': '4000' }, // TODO: Lower this
+            index,
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }),
+  );
 })();

@@ -51,7 +51,7 @@ exports.casePublicSearch = async ({
           },
           size: 5000,
         },
-        index: 'efcms',
+        index: 'efcms-case',
       },
     })
   ).results;
@@ -76,7 +76,7 @@ exports.casePublicSearch = async ({
               },
             },
           },
-          index: 'efcms',
+          index: 'efcms-case',
         },
       })
     ).results;
