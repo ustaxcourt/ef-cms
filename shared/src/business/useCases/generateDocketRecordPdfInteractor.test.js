@@ -182,7 +182,7 @@ describe('generateDocketRecordPdfInteractor', () => {
         ),
     ).toEqual(false);
 
-    result = await generateDocketRecordPdfInteractor({
+    await generateDocketRecordPdfInteractor({
       applicationContext: {
         ...applicationContext,
         getPersistenceGateway: () => ({
