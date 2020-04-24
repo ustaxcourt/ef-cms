@@ -6,8 +6,17 @@
   const { mappings, settings } = require('./elasticsearch-settings');
 
   AWS.config.httpOptions.timeout = 300000;
-
   const { EnvironmentCredentials } = AWS;
+
+  // eslint-disable-next-line spellcheck/spell-checker
+  /*
+    Supported versions can be found at 
+    https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version
+    Changes to the API version ought to also be reflected in
+    - elasticsearch.tf
+    - delete-elasticsearch-index.js
+  */
+  const ELASTICSEARCH_API_VERSION = '7.4';
 
   const environment = {
     elasticsearchEndpoint: process.env.ELASTICSEARCH_ENDPOINT,
@@ -19,7 +28,7 @@
       credentials: new EnvironmentCredentials('AWS'),
       region: environment.region,
     },
-    apiVersion: '7.5',
+    apiVersion: ELASTICSEARCH_API_VERSION,
     connectionClass: connectionClass,
     host: {
       host: environment.elasticsearchEndpoint,
