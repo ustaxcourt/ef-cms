@@ -65,9 +65,13 @@ describe('getUserByIdInteractor', () => {
     });
 
     expect(user).toEqual({
+      barNumber: undefined,
+      email: undefined,
+      entityName: 'User',
       name: 'Test Practitioner',
       role: User.ROLES.privatePractitioner,
       section: 'privatePractitioner',
+      token: undefined,
       userId: '4f67802c-1948-4749-b070-38f7316b15c5',
     });
   });
