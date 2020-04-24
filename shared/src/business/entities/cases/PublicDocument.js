@@ -49,6 +49,7 @@ joiValidationDecorator(
       .optional(),
     documentTitle: joi.string().optional(),
     documentType: joi.string().optional(),
+    entityName: joi.string().valid('PublicDocument').required(),
     eventCode: joi.string().optional(),
     filedBy: joi.string().optional(),
     isPaper: joi.boolean().optional(),

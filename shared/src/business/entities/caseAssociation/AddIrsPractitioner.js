@@ -21,6 +21,7 @@ AddIrsPractitioner.VALIDATION_ERROR_MESSAGES = {
 };
 
 AddIrsPractitioner.schema = joi.object().keys({
+  entityName: joi.string().valid('AddIrsPractitioner').required(),
   user: joi.object().required(),
 });
 

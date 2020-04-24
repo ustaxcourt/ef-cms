@@ -19,6 +19,7 @@ function PublicContact(rawContact) {
 joiValidationDecorator(
   PublicContact,
   joi.object().keys({
+    entityName: joi.string().valid('PublicContact').required(),
     name: joi.string().optional(),
     state: joi.string().optional(),
   }),

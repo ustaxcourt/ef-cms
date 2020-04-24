@@ -50,6 +50,7 @@ joiValidationDecorator(
     contactPrimary: joi.object().optional(),
     contactSecondary: joi.object().optional(),
     countryType: CaseExternal.commonRequirements.countryType,
+    entityName: joi.string().valid('CaseExternalIncomplete').required(),
     filingType: CaseExternal.commonRequirements.filingType,
     hasIrsNotice: CaseExternal.commonRequirements.hasIrsNotice,
     partyType: CaseExternal.commonRequirements.partyType,
