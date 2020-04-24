@@ -94,6 +94,7 @@ describe('processStreamRecordsInteractor', () => {
           dynamodb: {
             Keys: { pk: { S: 'user|5' } },
             NewImage: {
+              entityName: { S: 'User' },
               pk: { S: 'user|5' },
               sk: { S: 'user|5' },
               userId: { S: '5' },
@@ -132,15 +133,16 @@ describe('processStreamRecordsInteractor', () => {
       { caseId: { S: '1' }, pk: { S: '1' }, sk: { S: '1' } },
       { index: { _id: '3_3', _index: 'efcms' } },
       { caseId: { S: '3' }, pk: { S: '3' }, sk: { S: '3' } },
-      { index: { _id: '4_4', _index: 'efcms' } },
+      { index: { _id: '4_4', _index: 'efcms-case' } },
       {
         caseId: { S: '4' },
         entityName: { S: 'Case' },
         pk: { S: '4' },
         sk: { S: '4' },
       },
-      { index: { _id: 'user|5_user|5', _index: 'efcms' } },
+      { index: { _id: 'user|5_user|5', _index: 'efcms-user' } },
       {
+        entityName: { S: 'User' },
         pk: { S: 'user|5' },
         sk: { S: 'user|5' },
         userId: { S: '5' },
@@ -330,6 +332,7 @@ describe('processStreamRecordsInteractor', () => {
       .getCaseByCaseId.mockImplementation(({ caseId }) => ({
         caseId,
         documents: [{ documentId: '1' }],
+        entityName: 'Case',
         pk: `case|${caseId}`,
         sk: `case|${caseId}`,
       }));
@@ -350,9 +353,10 @@ describe('processStreamRecordsInteractor', () => {
         },
         {
           dynamodb: {
-            Keys: { pk: { S: 'case|4' }, sk: { S: 'case|1' } },
+            Keys: { pk: { S: 'case|4' }, sk: { S: 'case|4' } },
             NewImage: {
               caseId: { S: '4' },
+              entityName: { S: 'Case' },
               pk: { S: 'case|4' },
               sk: { S: 'case|4' },
             },
@@ -376,23 +380,45 @@ describe('processStreamRecordsInteractor', () => {
       applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
     ).toEqual([
       { index: { _id: 'case|1_document|1', _index: 'efcms' } },
-      { caseId: { S: '1' }, pk: { S: 'case|1' }, sk: { S: 'document|1' } },
-      { index: { _id: 'case|4_case|4', _index: 'efcms' } },
-      { caseId: { S: '4' }, pk: { S: 'case|4' }, sk: { S: 'case|4' } },
-      { index: { _id: 'case|1_case|1', _index: 'efcms' } },
+      {
+        caseId: { S: '1' },
+        pk: { S: 'case|1' },
+        sk: { S: 'document|1' },
+      },
+      { index: { _id: 'case|4_case|4', _index: 'efcms-case' } },
+      {
+        caseId: { S: '4' },
+        entityName: { S: 'Case' },
+        pk: { S: 'case|4' },
+        sk: { S: 'case|4' },
+      },
+      { index: { _id: 'case|1_case|1', _index: 'efcms-case' } },
       {
         caseId: { S: '1' },
         documents: { L: [{ M: { documentId: { S: '1' } } }] },
+        entityName: { S: 'Case' },
         pk: { S: 'case|1' },
         sk: { S: 'case|1' },
       },
       // calls documents again because they are indexed again after the case
-      { index: { _id: 'case|1_document|1', _index: 'efcms' } },
-      { caseId: { S: '1' }, pk: { S: 'case|1' }, sk: { S: 'document|1' } },
-      { index: { _id: 'case|4_case|4', _index: 'efcms' } },
+      { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
+      {
+        caseId: { S: '1' },
+        docketRecord: undefined,
+        documents: undefined,
+        entityName: { S: 'Document' },
+        irsPractitioners: undefined,
+        pk: { S: 'case|1' },
+        privatePractitioners: undefined,
+        sk: { S: 'document|1' },
+      },
+      {
+        index: { _id: 'case|4_case|4', _index: 'efcms-case' },
+      },
       {
         caseId: { S: '4' },
         documents: { L: [{ M: { documentId: { S: '1' } } }] },
+        entityName: { S: 'Case' },
         pk: { S: 'case|4' },
         sk: { S: 'case|4' },
       },
@@ -412,6 +438,7 @@ describe('processStreamRecordsInteractor', () => {
             Keys: { pk: { S: 'case|1' }, sk: { S: 'document|1' } },
             NewImage: {
               caseId: { S: '1' },
+              entityName: { S: 'Document' },
               pk: { S: 'case|1' },
               sk: { S: 'document|1' },
             },
@@ -429,10 +456,24 @@ describe('processStreamRecordsInteractor', () => {
       applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
     ).toEqual([
       // calls multiple times because documents are indexed after the case is indexed
-      { index: { _id: 'case|1_document|1', _index: 'efcms' } },
-      { caseId: { S: '1' }, pk: { S: 'case|1' }, sk: { S: 'document|1' } },
-      { index: { _id: 'case|1_document|1', _index: 'efcms' } },
-      { caseId: { S: '1' }, pk: { S: 'case|1' }, sk: { S: 'document|1' } },
+      { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
+      {
+        caseId: { S: '1' },
+        docketRecord: undefined,
+        documents: undefined,
+        entityName: { S: 'Document' },
+        irsPractitioners: undefined,
+        pk: { S: 'case|1' },
+        privatePractitioners: undefined,
+        sk: { S: 'document|1' },
+      },
+      { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
+      {
+        caseId: { S: '1' },
+        entityName: { S: 'Document' },
+        pk: { S: 'case|1' },
+        sk: { S: 'document|1' },
+      },
     ]);
   });
 
@@ -444,6 +485,7 @@ describe('processStreamRecordsInteractor', () => {
           dynamodb: {
             Keys: { pk: { S: 'user|1' }, sk: { S: 'user|1' } },
             NewImage: {
+              entityName: { S: 'User' },
               pk: { S: 'user|1' },
               sk: { S: 'user|1' },
               userId: { S: '1' },
@@ -464,8 +506,13 @@ describe('processStreamRecordsInteractor', () => {
     expect(
       applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
     ).toEqual([
-      { index: { _id: 'user|1_user|1', _index: 'efcms' } },
-      { pk: { S: 'user|1' }, sk: { S: 'user|1' }, userId: { S: '1' } },
+      { index: { _id: 'user|1_user|1', _index: 'efcms-user' } },
+      {
+        entityName: { S: 'User' },
+        pk: { S: 'user|1' },
+        sk: { S: 'user|1' },
+        userId: { S: '1' },
+      },
     ]);
   });
 });

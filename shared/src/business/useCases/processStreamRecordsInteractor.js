@@ -1,4 +1,7 @@
 const AWS = require('aws-sdk');
+const {
+  getIndexNameForRecord,
+} = require('../../persistence/elasticsearch/getIndexNameForRecord');
 const { createISODateString } = require('../utilities/DateHandler');
 
 /**
@@ -96,7 +99,7 @@ const filterRecords = async ({ applicationContext, records }) => {
         ...caseRecord.dynamodb.NewImage,
         docketRecord: undefined,
         documents: undefined,
-        entityName: undefined,
+        entityName: { S: 'Document' },
         irsPractitioners: undefined,
         privatePractitioners: undefined,
       };
@@ -151,11 +154,13 @@ exports.processStreamRecordsInteractor = async ({
 
       if (failedRecords.length) {
         for (const failedRecord of failedRecords) {
+          const index = getIndexNameForRecord(failedRecord);
+
           try {
             await searchClient.index({
               body: { ...failedRecord },
               id: `${failedRecord.pk.S}_${failedRecord.sk.S}`,
-              index: 'efcms',
+              index,
             });
           } catch (e) {
             await applicationContext

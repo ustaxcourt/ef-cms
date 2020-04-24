@@ -18,23 +18,19 @@ describe('getUserInteractor', () => {
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    let error;
-    let user;
+    const user = await getUserInteractor({
+      applicationContext,
+      caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
 
-    try {
-      user = await getUserInteractor({
-        applicationContext,
-        caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      });
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeUndefined();
     expect(user).toEqual({
+      barNumber: undefined,
+      email: undefined,
+      entityName: 'User',
       name: 'Test Petitionsclerk',
       role: User.ROLES.petitionsClerk,
       section: 'petitions',
+      token: undefined,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
   });
@@ -54,23 +50,19 @@ describe('getUserInteractor', () => {
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    let error;
-    let user;
+    const user = await getUserInteractor({
+      applicationContext,
+      caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
 
-    try {
-      user = await getUserInteractor({
-        applicationContext,
-        caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      });
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeUndefined();
     expect(user).toEqual({
+      barNumber: undefined,
+      email: undefined,
+      entityName: 'User',
       name: 'Test Judge',
       role: User.ROLES.judge,
       section: 'judge',
+      token: undefined,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
   });

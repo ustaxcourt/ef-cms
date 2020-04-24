@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const { getIndexNameForRecord } = require('./getIndexNameForRecord');
 
 exports.indexRecord = async ({
   applicationContext,
@@ -7,6 +8,7 @@ exports.indexRecord = async ({
   record,
 }) => {
   const searchClient = applicationContext.getSearchClient();
+  const index = getIndexNameForRecord(record);
 
   const body = isAlreadyMarshalled
     ? fullRecord
@@ -15,6 +17,6 @@ exports.indexRecord = async ({
   await searchClient.index({
     body,
     id: `${record.recordPk}_${record.recordSk}`,
-    index: 'efcms',
+    index,
   });
 };
