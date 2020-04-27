@@ -8,7 +8,7 @@ const {
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id for the trial session
- * @returns {Uint8Array} trial session calendar pdf url
+ * @returns {string} trial session calendar pdf url
  */
 exports.generateTrialCalendarPdfInteractor = async ({
   applicationContext,
