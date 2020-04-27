@@ -95,15 +95,11 @@ describe('addCoversheetInteractor', () => {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
-    const newPdfData = await addCoversheetInteractor(params);
-
-    const newPdfDoc = await PDFDocument.load(newPdfData);
-    const newPdfDocPages = newPdfDoc.getPages();
+    await addCoversheetInteractor(params);
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-    expect(newPdfDocPages.length).toEqual(2);
     expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
   });
 
@@ -126,14 +122,11 @@ describe('addCoversheetInteractor', () => {
       documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
     };
 
-    const newPdfData = await addCoversheetInteractor(params);
+    await addCoversheetInteractor(params);
 
-    const newPdfDoc = await PDFDocument.load(newPdfData);
-    const newPdfDocPages = newPdfDoc.getPages();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-    expect(newPdfDocPages.length).toEqual(2);
   });
 
   describe('coversheet data generator', () => {
