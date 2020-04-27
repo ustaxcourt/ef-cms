@@ -80,7 +80,7 @@ describe('Order Search entity', () => {
         startDateYear: '2020',
       });
 
-      const validationErrors = orderSearch.getValidationErrors();
+      const validationErrors = orderSearch.getFormattedValidationErrors();
 
       expect(validationErrors).toBeNull();
     });

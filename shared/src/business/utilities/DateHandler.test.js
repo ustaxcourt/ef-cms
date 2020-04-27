@@ -8,6 +8,14 @@ describe('DateHandler', () => {
     });
   });
 
+  describe('getTimestampSchema', () => {
+    it('returns a schema with a validate function compatible with joi', () => {
+      const result = DateHandler.getTimestampSchema();
+      expect(result).toBeDefined();
+      expect(typeof result.validate).toBe('function');
+    });
+  });
+
   describe('createISODateStringFromObject', () => {
     it('should return expected date when using single digit month and day', () => {
       const myDate = DateHandler.createISODateStringFromObject({
@@ -177,6 +185,12 @@ describe('DateHandler', () => {
         '2001-01-01T00:00:00.000Z',
       ); // Jan 1, 2001 at the stroke of midnight, GMT
       expect(myDate).toBe('2001-01-01T00:00:00.000Z');
+    });
+
+    it('creates timestamps that strictly adhere to Joi formatting rules', () => {
+      const thisDate = DateHandler.createISODateString();
+      const schema = DateHandler.getTimestampSchema();
+      expect(schema.validate(thisDate).error).toBeUndefined();
     });
   });
 
