@@ -46,7 +46,7 @@
           });
         } else {
           searchClientCache.indices.putSettings({
-            body: { 'index.mapping.total_fields.limit': '4000' }, // TODO: Lower this
+            body: { 'index.mapping.total_fields.limit': '1000' },
             index,
           });
         }
