@@ -157,6 +157,7 @@ describe('update primary contact on a case', () => {
       ...getUtilities,
       getDocumentTypeForAddressChange: () => undefined, // returns undefined when there is no diff
     });
+
     const caseDetail = await updatePrimaryContactInteractor({
       applicationContext,
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
@@ -172,11 +173,11 @@ describe('update primary contact on a case', () => {
       },
     });
 
-    expect(caseDetail.contactSecondary.name).not.toBe(
+    expect(caseDetail.contactPrimary.name).not.toBe(
       'Secondary Party Name Changed',
     );
-    expect(caseDetail.contactSecondary.name).toBe('Test Petitioner');
-    expect(caseDetail.contactSecondary.email).not.toBe('hello123@example.com');
-    expect(caseDetail.contactSecondary.email).toBe('petitioner@example.com');
+    expect(caseDetail.contactPrimary.name).toBe('Test Petitioner');
+    expect(caseDetail.contactPrimary.email).not.toBe('hello123@example.com');
+    expect(caseDetail.contactPrimary.email).toBe('petitioner@example.com');
   });
 });
