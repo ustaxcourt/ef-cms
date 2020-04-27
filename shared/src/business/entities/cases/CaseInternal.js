@@ -18,8 +18,6 @@ CaseInternal.DEFAULT_PROCEDURE_TYPE = Case.PROCEDURE_TYPES[0];
  * @constructor
  */
 function CaseInternal(rawCase) {
-  this.entityName = 'CaseInternal';
-
   this.applicationForWaiverOfFilingFeeFile =
     rawCase.applicationForWaiverOfFilingFeeFile;
   this.applicationForWaiverOfFilingFeeFileSize =
@@ -103,7 +101,6 @@ const paperRequirements = joi
     ),
     caseCaption: joi.string().required(),
     caseType: joi.string().required(),
-    entityName: joi.string().valid('CaseInternal').required(),
     mailingDate: joi.string().max(25).required(),
     orderDesignatingPlaceOfTrial:
       Case.validationRules.orderDesignatingPlaceOfTrial,

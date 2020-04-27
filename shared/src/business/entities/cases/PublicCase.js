@@ -17,8 +17,6 @@ const { PublicDocument } = require('./PublicDocument');
  * @constructor
  */
 function PublicCase(rawCase, { applicationContext }) {
-  this.entityName = 'PublicCase';
-
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId;
   this.createdAt = rawCase.createdAt;
@@ -57,7 +55,6 @@ const publicCaseSchema = {
   createdAt: joi.date().iso().optional(),
   docketNumber: joi.string().optional(),
   docketNumberSuffix: joi.string().allow(null).optional(),
-  entityName: joi.string().valid('PublicCase').required(),
   isSealed: joi.boolean(),
   receivedAt: joi.date().iso().optional(),
 };

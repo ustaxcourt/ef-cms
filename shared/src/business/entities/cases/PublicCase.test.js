@@ -77,12 +77,10 @@ describe('PublicCase', () => {
       caseCaption: 'testing',
       caseId: 'testing',
       contactPrimary: {
-        entityName: 'PublicContact',
         name: undefined,
         state: undefined,
       },
       contactSecondary: {
-        entityName: 'PublicContact',
         name: undefined,
         state: undefined,
       },
@@ -91,7 +89,6 @@ describe('PublicCase', () => {
       docketNumberSuffix: 'testing',
       docketRecord: [],
       documents: [],
-      entityName: 'PublicCase',
       isSealed: false,
       receivedAt: 'testing',
     });
@@ -124,7 +121,6 @@ describe('PublicCase', () => {
       docketNumberSuffix: 'testing',
       docketRecord: [],
       documents: [],
-      entityName: 'PublicCase',
       isSealed: false,
       receivedAt: 'testing',
     });
@@ -167,7 +163,6 @@ describe('PublicCase', () => {
         {
           description: undefined,
           documentId: '123',
-          entityName: 'PublicDocketRecordEntry',
           filedBy: undefined,
           filingDate: undefined,
           index: undefined,
@@ -182,7 +177,6 @@ describe('PublicCase', () => {
           documentId: '123',
           documentTitle: undefined,
           documentType: 'OAJ - Order that case is assigned',
-          entityName: 'PublicDocument',
           eventCode: undefined,
           filedBy: undefined,
           isPaper: undefined,
@@ -200,7 +194,6 @@ describe('PublicCase', () => {
           documentId: '345',
           documentTitle: undefined,
           documentType: 'Petition',
-          entityName: 'PublicDocument',
           eventCode: undefined,
           filedBy: undefined,
           isPaper: undefined,
@@ -218,7 +211,6 @@ describe('PublicCase', () => {
           documentId: '987',
           documentTitle: undefined,
           documentType: undefined,
-          entityName: 'PublicDocument',
           eventCode: 'TRAN',
           filedBy: undefined,
           isPaper: undefined,
@@ -229,7 +221,6 @@ describe('PublicCase', () => {
           status: undefined,
         },
       ],
-      entityName: 'PublicCase',
       isSealed: false,
       receivedAt: 'testing',
     });

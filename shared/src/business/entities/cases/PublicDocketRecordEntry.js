@@ -10,8 +10,6 @@ const {
  * @constructor
  */
 function PublicDocketRecordEntry(rawDocketEntry) {
-  this.entityName = 'PublicDocketRecordEntry';
-
   this.description = rawDocketEntry.description;
   this.documentId = rawDocketEntry.documentId;
   this.filedBy = rawDocketEntry.filedBy;
@@ -24,7 +22,6 @@ joiValidationDecorator(
   joi.object().keys({
     description: joi.string().optional(),
     documentId: joi.string().optional(),
-    entityName: joi.string().valid('PublicDocketRecordEntry').required(),
     filedBy: joi.date().iso().optional(),
     filingDate: joi.date().max('now').iso().optional(), // Required on DocketRecord so probably should be required here.
     index: joi.number().integer().optional(),

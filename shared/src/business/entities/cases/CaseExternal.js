@@ -33,8 +33,6 @@ CaseExternal.prototype.initContacts = function (rawCase) {
 };
 
 CaseExternal.prototype.init = function (rawCase) {
-  this.entityName = 'CaseExternal';
-
   this.businessType = rawCase.businessType;
   this.caseType = rawCase.caseType;
   this.contactPrimary = rawCase.contactPrimary;
@@ -65,7 +63,6 @@ CaseExternal.commonRequirements = {
   contactPrimary: joi.object().optional(),
   contactSecondary: joi.object().optional(),
   countryType: joi.string().optional(),
-  entityName: joi.string().valid('CaseExternal').required(),
   filingType: joi.string().required(),
   hasIrsNotice: joi.boolean().required(),
   ownershipDisclosureFile: joi.object().when('filingType', {
