@@ -179,7 +179,6 @@ describe('update secondary contact on a case', () => {
       applicationContext,
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactInfo: {
-        // Matches current contact info
         address1: 'nothing',
         city: 'Somewhere',
         countryType: 'domestic',

@@ -37,8 +37,21 @@ exports.updatePrimaryContactInteractor = async ({
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
+  const contactInfoUpdated = {
+    address1: contactInfo.address1,
+    address2: contactInfo.address2,
+    address3: contactInfo.address3,
+    city: contactInfo.city,
+    country: contactInfo.country,
+    countryType: contactInfo.countryType,
+    email: caseToUpdate.contactPrimary.email,
+    name: caseToUpdate.contactPrimary.name,
+    phone: contactInfo.phone,
+    postalCode: contactInfo.postalCode,
+  };
+
   const caseEntity = new Case(
-    { ...caseToUpdate, contactPrimary: contactInfo },
+    { ...caseToUpdate, contactPrimary: contactInfoUpdated },
     { applicationContext },
   );
 
