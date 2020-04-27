@@ -15,8 +15,6 @@ const { ContactFactory } = require('../contacts/ContactFactory');
  * @constructor
  */
 function CaseExternalIncomplete(rawCase) {
-  this.entityName = 'CaseExternalIncomplete';
-
   this.businessType = rawCase.businessType;
   this.caseType = rawCase.caseType;
   this.contactPrimary = rawCase.contactPrimary;
@@ -50,7 +48,6 @@ joiValidationDecorator(
     contactPrimary: joi.object().optional(),
     contactSecondary: joi.object().optional(),
     countryType: CaseExternal.commonRequirements.countryType,
-    entityName: joi.string().valid('CaseExternalIncomplete').required(),
     filingType: CaseExternal.commonRequirements.filingType,
     hasIrsNotice: CaseExternal.commonRequirements.hasIrsNotice,
     partyType: CaseExternal.commonRequirements.partyType,

@@ -25,8 +25,6 @@ AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES = {
  */
 AddPrivatePractitionerFactory.get = metadata => {
   let entityConstructor = function (rawProps) {
-    this.entityName = 'AddPrivatePractitionerFactory';
-
     Object.assign(this, {
       representingPrimary: rawProps.representingPrimary,
       representingSecondary: rawProps.representingSecondary,
@@ -35,7 +33,6 @@ AddPrivatePractitionerFactory.get = metadata => {
   };
 
   let schema = {
-    entityName: joi.string().valid('AddPrivatePractitionerFactory').required(),
     user: joi.object().required(),
   };
 

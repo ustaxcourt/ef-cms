@@ -10,8 +10,6 @@ const {
  * @constructor
  */
 function PublicDocument(rawDocument) {
-  this.entityName = 'PublicDocument';
-
   this.additionalInfo = rawDocument.additionalInfo;
   this.additionalInfo2 = rawDocument.additionalInfo2;
   this.caseId = rawDocument.caseId;
@@ -49,7 +47,6 @@ joiValidationDecorator(
       .optional(),
     documentTitle: joi.string().optional(),
     documentType: joi.string().optional(),
-    entityName: joi.string().valid('PublicDocument').required(),
     eventCode: joi.string().optional(),
     filedBy: joi.string().optional(),
     isPaper: joi.boolean().optional(),
