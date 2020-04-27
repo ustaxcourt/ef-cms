@@ -26,6 +26,12 @@ exports.updateCounselOnCaseInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
+  const editableFields = {
+    representingPrimary: userData.representingPrimary,
+    representingSecondary: userData.representingSecondary,
+    serviceIndicator: userData.serviceIndicator,
+  };
+
   if (!isAuthorized(user, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -47,13 +53,15 @@ exports.updateCounselOnCaseInteractor = async ({
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (userToUpdate.role === User.ROLES.privatePractitioner) {
-    caseEntity.updatePrivatePractitioner(
-      new PrivatePractitioner({ userId: userToUpdate.userId, ...userData }),
-    );
+    caseEntity.updatePrivatePractitioner({
+      userId: userToUpdate.userId,
+      ...editableFields,
+    });
   } else if (userToUpdate.role === User.ROLES.irsPractitioner) {
-    caseEntity.updateIrsPractitioner(
-      new IrsPractitioner({ userId: userToUpdate.userId, ...userData }),
-    );
+    caseEntity.updateIrsPractitioner({
+      userId: userToUpdate.userId,
+      ...editableFields,
+    });
   } else {
     throw new Error('User is not a practitioner');
   }
