@@ -63,7 +63,6 @@ describe('update primary contact on a case', () => {
         name: 'Bill Burr',
         phone: '1234567890',
         postalCode: '99999',
-        serviceIndicator: 'Electronic',
         state: 'PA',
       },
     });
@@ -81,9 +80,6 @@ describe('update primary contact on a case', () => {
       applicationContext.getUseCases().generatePdfFromHtmlInteractor,
     ).toHaveBeenCalled();
     expect(caseDetail.documents[4].servedAt).toBeDefined();
-    expect(caseDetail.documents[4].servedParties).toEqual([
-      { email: 'petitioner', name: 'Bill Burr' },
-    ]);
   });
 
   it('throws an error if the case was not found', async () => {
@@ -153,5 +149,34 @@ describe('update primary contact on a case', () => {
     expect(
       applicationContext.getUseCases().generatePdfFromHtmlInteractor,
     ).not.toHaveBeenCalled();
+  });
+
+  it('does not update the contact primary email or name', async () => {
+    const getUtilities = applicationContext.getUtilities();
+    applicationContext.getUtilities = () => ({
+      ...getUtilities,
+      getDocumentTypeForAddressChange: () => undefined, // returns undefined when there is no diff
+    });
+    const caseDetail = await updatePrimaryContactInteractor({
+      applicationContext,
+      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      contactInfo: {
+        address1: 'nothing',
+        city: 'Somewhere',
+        countryType: 'domestic',
+        email: 'hello123@example.com',
+        name: 'Secondary Party Name Changed',
+        phone: '9876543210',
+        postalCode: '12345',
+        state: 'TN',
+      },
+    });
+
+    expect(caseDetail.contactSecondary.name).not.toBe(
+      'Secondary Party Name Changed',
+    );
+    expect(caseDetail.contactSecondary.name).toBe('Test Petitioner');
+    expect(caseDetail.contactSecondary.email).not.toBe('hello123@example.com');
+    expect(caseDetail.contactSecondary.email).toBe('petitioner@example.com');
   });
 });
