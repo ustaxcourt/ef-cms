@@ -35,6 +35,7 @@ exports.updatePrimaryContactInteractor = async ({
     countryType: contactInfo.countryType,
     phone: contactInfo.phone,
     postalCode: contactInfo.postalCode,
+    state: contactInfo.state,
   };
 
   const caseToUpdate = await applicationContext

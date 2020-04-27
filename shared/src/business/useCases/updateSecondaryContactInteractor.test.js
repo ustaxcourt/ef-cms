@@ -5,19 +5,20 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
-describe('update secondary contact on a case', () => {
+describe('updateSecondaryContactInteractor', () => {
+  const mockContactSecondary = {
+    address1: 'nothing',
+    city: 'Somewhere',
+    countryType: 'domestic',
+    email: 'secondary@example.com',
+    name: 'Secondary Party',
+    phone: '9876543210',
+    postalCode: '12345',
+    state: 'TN',
+  };
   let mockCase = {
     ...MOCK_CASE,
-    contactSecondary: {
-      address1: 'nothing',
-      city: 'Somewhere',
-      countryType: 'domestic',
-      email: 'secondary@example.com',
-      name: 'Secondary Party',
-      phone: '9876543210',
-      postalCode: '12345',
-      state: 'TN',
-    },
+    contactSecondary: mockContactSecondary,
     partyType: 'Petitioner & spouse',
   };
   const fakeData =
@@ -64,7 +65,7 @@ describe('update secondary contact on a case', () => {
       });
   });
 
-  it('updates contactSecondary', async () => {
+  it('should update contactSecondary editable fields', async () => {
     const caseDetail = await updateSecondaryContactInteractor({
       applicationContext,
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
@@ -81,8 +82,18 @@ describe('update secondary contact on a case', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.contactSecondary,
+    ).toMatchObject({
+      address1: '453 Electric Ave',
+      city: 'Philadelphia',
+      countryType: 'domestic',
+      email: mockContactSecondary.email,
+      name: mockContactSecondary.name,
+      phone: '1234567890',
+      postalCode: '99999',
+      state: 'PA',
+    });
     expect(
       applicationContext.getTemplateGenerators()
         .generateChangeOfAddressTemplate,
@@ -159,16 +170,7 @@ describe('update secondary contact on a case', () => {
   it('does not update the contact secondary email or name', async () => {
     mockCase = {
       ...MOCK_CASE,
-      contactSecondary: {
-        address1: 'nothing',
-        city: 'Somewhere',
-        countryType: 'domestic',
-        email: 'secondary@example.com',
-        name: 'Secondary Party',
-        phone: '9876543210',
-        postalCode: '12345',
-        state: 'TN',
-      },
+      contactSecondary: mockContactSecondary,
       partyType: 'Petitioner & spouse',
     };
     applicationContext
@@ -193,8 +195,8 @@ describe('update secondary contact on a case', () => {
     expect(caseDetail.contactSecondary.name).not.toBe(
       'Secondary Party Name Changed',
     );
-    expect(caseDetail.contactSecondary.name).toBe('Secondary Party');
+    expect(caseDetail.contactSecondary.name).toBe(mockContactSecondary.name);
     expect(caseDetail.contactSecondary.email).not.toBe('hello123@example.com');
-    expect(caseDetail.contactSecondary.email).toBe('secondary@example.com');
+    expect(caseDetail.contactSecondary.email).toBe(mockContactSecondary.email);
   });
 });

@@ -51,7 +51,7 @@ describe('update primary contact on a case', () => {
       });
   });
 
-  it('updates contactPrimary', async () => {
+  it('should update contactPrimary editable fields', async () => {
     const caseDetail = await updatePrimaryContactInteractor({
       applicationContext,
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
@@ -67,8 +67,18 @@ describe('update primary contact on a case', () => {
       },
     });
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.contactPrimary,
+    ).toMatchObject({
+      address1: '453 Electric Ave',
+      city: 'Philadelphia',
+      countryType: 'domestic',
+      email: MOCK_CASE.contactPrimary.email,
+      name: MOCK_CASE.contactPrimary.name,
+      phone: '1234567890',
+      postalCode: '99999',
+      state: 'PA',
+    });
     expect(
       applicationContext.getTemplateGenerators()
         .generateChangeOfAddressTemplate,
