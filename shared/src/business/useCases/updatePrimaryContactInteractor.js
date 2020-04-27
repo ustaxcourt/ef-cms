@@ -68,7 +68,7 @@ exports.updatePrimaryContactInteractor = async ({
   const documentType = applicationContext
     .getUtilities()
     .getDocumentTypeForAddressChange({
-      newData: contactInfo,
+      newData: editableFields,
       oldData: caseToUpdate.contactPrimary,
     });
 
@@ -83,8 +83,8 @@ exports.updatePrimaryContactInteractor = async ({
             caseEntity.docketNumberSuffix || ''
           }`,
           documentTitle: documentType.title,
-          name: contactInfo.name,
-          newData: contactInfo,
+          name: caseToUpdate.contactPrimary.name,
+          newData: editableFields,
           oldData: caseToUpdate.contactPrimary,
         },
       });
@@ -104,7 +104,7 @@ exports.updatePrimaryContactInteractor = async ({
     const changeOfAddressDocument = new Document(
       {
         addToCoversheet: true,
-        additionalInfo: `for ${contactInfo.name}`,
+        additionalInfo: `for ${caseToUpdate.contactPrimary.name}`,
         caseId,
         documentId: newDocumentId,
         documentTitle: documentType.title,
