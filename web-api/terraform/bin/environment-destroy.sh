@@ -7,6 +7,16 @@ KEY="documents-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
+if [ -z "$ENVIRONMENT" ]; then
+  echo "Please specify the environment"
+  exit 1
+fi
+
+if [ -z "$EFCMS_DOMAIN" ]; then
+  echo "Please export the EFCMS_DOMAIN variable in your shell"
+  exit 1
+fi
+
 rm -rf .terraform
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
