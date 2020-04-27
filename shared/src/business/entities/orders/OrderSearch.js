@@ -2,11 +2,14 @@ const joi = require('@hapi/joi').extend(require('@hapi/joi-date'));
 const {
   createEndOfDayISO,
   createStartOfDayISO,
+  getTimestampSchema,
 } = require('../../utilities/DateHandler');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { isEmpty } = require('lodash');
+
+const joiStrictTimestamp = getTimestampSchema();
 
 OrderSearch.ORDER_SEARCH_PAGE_LOAD_SIZE = 6;
 
@@ -69,30 +72,15 @@ OrderSearch.schema = joi
     docketNumber: joi.string(),
     endDate: joi.alternatives().conditional('startDate', {
       is: joi.exist().not(null),
-      otherwise: joi
-        .date()
-        .format(OrderSearch.VALID_DATE_SEARCH_FORMATS)
-        .optional(),
-      then: joi
-        .date()
-        .format(OrderSearch.VALID_DATE_SEARCH_FORMATS)
-        .min(joi.ref('startDate'))
-        .optional(),
+      otherwise: joiStrictTimestamp.optional(),
+      then: joiStrictTimestamp.min(joi.ref('startDate')).optional(),
     }),
     judge: joi.string().optional(),
     orderKeyword: joi.string().required(),
     startDate: joi.alternatives().conditional('endDate', {
       is: joi.exist().not(null),
-      otherwise: joi
-        .date()
-        .format(OrderSearch.VALID_DATE_SEARCH_FORMATS)
-        .max('now')
-        .optional(),
-      then: joi
-        .date()
-        .format(OrderSearch.VALID_DATE_SEARCH_FORMATS)
-        .max('now')
-        .required(),
+      otherwise: joiStrictTimestamp.max('now').optional(),
+      then: joiStrictTimestamp.max('now').required(),
     }),
   })
   .oxor('caseTitleOrPetitioner', 'docketNumber');

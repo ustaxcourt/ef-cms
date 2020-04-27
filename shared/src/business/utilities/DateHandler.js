@@ -1,3 +1,4 @@
+const joi = require('@hapi/joi').extend(require('@hapi/joi-date'));
 const moment = require('moment-timezone');
 
 const FORMATS = {
@@ -13,6 +14,9 @@ const FORMATS = {
 };
 
 const USTC_TZ = 'America/New_York';
+
+// must specifically match the ISO format above.
+const getTimestampSchema = () => joi.date().iso().format(FORMATS.ISO);
 
 const isStringISOFormatted = dateString => {
   return moment.utc(dateString, FORMATS.ISO, true).isValid();
@@ -191,6 +195,7 @@ module.exports = {
   deconstructDate,
   formatDateString,
   formatNow,
+  getTimestampSchema,
   isStringISOFormatted,
   isValidDateString,
   prepareDateFromString,
