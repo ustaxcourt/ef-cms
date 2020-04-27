@@ -49,11 +49,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     }
   }
 
-  const showCaseTitleForPrimary = ![
-    PARTY_TYPES.petitioner,
-    PARTY_TYPES.petitionerDeceasedSpouse,
-  ].includes(caseDetail.partyType);
-
   let showEditContacts = false;
 
   if (user.role === USER_ROLES.petitioner) {
@@ -114,7 +109,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
     showCaseInformationExternal: isExternalUser,
-    showCaseTitleForPrimary,
     showDocketRecordInProgressState: !isExternalUser,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContacts,

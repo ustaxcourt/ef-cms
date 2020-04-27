@@ -118,7 +118,7 @@ const PetitionerInformation = connect(
                         constants,
                         {
                           nameOverride:
-                            caseDetailHelper.showCaseTitleForPrimary &&
+                            formattedCaseDetail.showCaseTitleForPrimary &&
                             formattedCaseDetail.caseTitle,
                         },
                       )}
