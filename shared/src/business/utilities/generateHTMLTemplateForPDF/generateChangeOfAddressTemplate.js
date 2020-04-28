@@ -1,5 +1,6 @@
 const React = require('react');
 const ReactDOM = require('react-dom/server');
+const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
 const { Case } = require('../../entities/cases/Case');
 
@@ -18,7 +19,10 @@ const ChangeOfAddress = require('../pdfGenerator/documentTemplates/ChangeOfAddre
  * @param {object} deconstructed.content content to be injected into the template
  * @returns {string} hydrated HTML content in string form
  */
-const generateChangeOfAddressTemplate = async ({ content }) => {
+const generateChangeOfAddressTemplate = async ({
+  applicationContext,
+  content,
+}) => {
   const {
     caption,
     docketNumberWithSuffix,
@@ -45,7 +49,15 @@ const generateChangeOfAddressTemplate = async ({ content }) => {
     }),
   );
 
-  return reactNoticeHTMLTemplate;
+  const htmlTemplate = generateHTMLTemplateForPDF({
+    applicationContext,
+    content: reactNoticeHTMLTemplate,
+    options: {
+      title: 'Change of Contact Information',
+    },
+  });
+
+  return htmlTemplate;
 };
 
 module.exports = {
