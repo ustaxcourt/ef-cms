@@ -3,8 +3,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { IrsPractitioner } = require('../../entities/IrsPractitioner');
-const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
