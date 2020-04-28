@@ -1,19 +1,19 @@
 #!/bin/bash
-echo "killing dynamo if already running"
-pkill -f DynamoDBLocal
+# echo "killing dynamo if already running"
+# pkill -f DynamoDBLocal
 
-echo "starting dynamo"
-./web-api/start-dynamo.sh &
-DYNAMO_PID=$!
-./wait-until.sh http://localhost:8000/shell
+# echo "starting dynamo"
+# ./web-api/start-dynamo.sh &
+# DYNAMO_PID=$!
+# ./wait-until.sh http://localhost:8000/shell
 
-echo "killing elasticsearch if already running"
-pkill -f elasticsearch
+# echo "killing elasticsearch if already running"
+# pkill -f elasticsearch
 
-echo "starting elasticsearch"
-./web-api/start-elasticsearch.sh &
-ESEARCH_PID=$!
-./wait-until.sh http://localhost:9200/ 200
+# echo "starting elasticsearch"
+# ./web-api/start-elasticsearch.sh &
+# ESEARCH_PID=$!
+# ./wait-until.sh http://localhost:9200/ 200
 
 npm run build:assets
 
