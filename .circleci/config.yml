@@ -1,13 +1,14 @@
 version: 2
 jobs:
   bundle:
+    resource_class: large
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
-        command: -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
+        command: -Xmx1G -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
       - image: elasticsearch:7.5.2
         environment:
           discovery.type: single-node
