@@ -91,10 +91,10 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
 
   // Check mapping counts
   const elasticsearchIndexes = applicationContext.getElasticsearchIndexes();
-  Promise.all(
-    elasticsearchIndexes.map(async index => {
-      await checkSearchClientMappings({ applicationContext, index });
-    }),
+  await Promise.all(
+    elasticsearchIndexes.map(index =>
+      checkSearchClientMappings({ applicationContext, index }),
+    ),
   );
 
   const recordsToProcess = await applicationContext
