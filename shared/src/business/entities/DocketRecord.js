@@ -3,7 +3,9 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { getAllEventCodes } = require('../../utilities/getAllEventCodes');
+const { getTimestampSchema } = require('../../utilities/dateSchema');
 
+const joiStrictTimestamp = getTimestampSchema();
 /**
  * DocketRecord constructor
  *
@@ -78,10 +80,8 @@ joiValidationDecorator(
       .allow(null)
       .meta({ tags: ['Restricted'] })
       .description('ID of the user that filed this Docket Record item.'),
-    filingDate: joi
-      .date()
+    filingDate: joiStrictTimestamp
       .max('now')
-      .iso()
       .required()
       .description('Date that this Docket Record item was filed.'),
     index: joi

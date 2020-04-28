@@ -1,15 +1,16 @@
-const joi = require('@hapi/joi').extend(require('@hapi/joi-date'));
+const joi = require('@hapi/joi');
 const {
   createEndOfDayISO,
   createStartOfDayISO,
-  getTimestampSchema,
 } = require('../../utilities/DateHandler');
+
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
+const joiStrictTimestamp = getTimestampSchema();
+
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { isEmpty } = require('lodash');
-
-const joiStrictTimestamp = getTimestampSchema();
 
 OrderSearch.ORDER_SEARCH_PAGE_LOAD_SIZE = 6;
 

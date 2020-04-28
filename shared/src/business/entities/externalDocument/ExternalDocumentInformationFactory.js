@@ -17,7 +17,10 @@ const {
   SupportingDocumentInformationFactory,
 } = require('./SupportingDocumentInformationFactory');
 const { Document } = require('../Document');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { includes, isEqual, reduce, some, sortBy, values } = require('lodash');
+
+const joiStrictTimestamp = getTimestampSchema();
 
 const VALIDATION_ERROR_MESSAGES = {
   attachments: 'Enter selection for Attachments.',
@@ -177,7 +180,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   };
 
   let schemaOptionalItems = {
-    certificateOfServiceDate: joi.date().iso().max('now'),
+    certificateOfServiceDate: joiStrictTimestamp.max('now'),
     hasSecondarySupportingDocuments: joi.boolean(),
     objections: joi.string(),
     partyIrsPractitioner: joi.boolean(),

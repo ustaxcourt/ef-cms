@@ -4,9 +4,10 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const { CHIEF_JUDGE } = require('./cases/CaseConstants');
 const { createISODateString } = require('../utilities/DateHandler');
+const { getTimestampSchema } = require('../../utilities/dateSchema');
 const { Message } = require('./Message');
 const { omit, orderBy } = require('lodash');
-
+const joiStrictTimestamp = getTimestampSchema();
 /**
  * constructor
  *
@@ -67,7 +68,7 @@ joiValidationDecorator(
     caseIsInProgress: joi.boolean().optional(),
     caseStatus: joi.string().optional(),
     caseTitle: joi.string().optional(),
-    completedAt: joi.date().iso().optional(),
+    completedAt: joiStrictTimestamp.optional(),
     completedBy: joi.string().optional().allow(null),
     completedByUserId: joi
       .string()
@@ -77,7 +78,7 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     completedMessage: joi.string().optional().allow(null),
-    createdAt: joi.date().iso().optional(),
+    createdAt: joiStrictTimestamp.optional(),
     docketNumber: joi.string().required(),
     docketNumberSuffix: joi.string().allow(null).optional(),
     document: joi.object().required(),
@@ -97,8 +98,8 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
-    trialDate: joi.date().iso().optional().allow(null),
-    updatedAt: joi.date().iso().required(),
+    trialDate: joiStrictTimestamp.optional().allow(null),
+    updatedAt: joiStrictTimestamp.required(),
     workItemId: joi
       .string()
       .uuid({

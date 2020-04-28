@@ -3,8 +3,9 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
+const { getTimestampSchema } = require('../../utilities/dateSchema');
 const { remove } = require('lodash');
-
+const joiStrictTimestamp = getTimestampSchema();
 /**
  * constructor
  *
@@ -80,7 +81,7 @@ Scan.VALIDATION_ERROR_MESSAGES = {
 
 Scan.schema = joi.object().keys({
   batches: joi.array().min(1).required(),
-  createdAt: joi.date().iso().required(),
+  createdAt: joiStrictTimestamp.required(),
   scanId: joi
     .string()
     .uuid({
