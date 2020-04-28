@@ -24,8 +24,7 @@ export const unblockCaseFromTrialAction = async ({
   return {
     alertSuccess: {
       message:
-        'This case will be eligible to be set for the next available trial session.',
-      title: 'The block on this case has been removed',
+        'Block removed. Case is eligible for next available trial session.',
     },
     caseDetail,
   };

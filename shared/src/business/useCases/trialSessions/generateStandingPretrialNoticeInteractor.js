@@ -1,5 +1,3 @@
-const { Case } = require('../../entities/cases/Case');
-
 /**
  * generateStandingPretrialNoticeInteractor
  *
@@ -47,7 +45,7 @@ exports.generateStandingPretrialNoticeInteractor = async ({
     .generateStandingPretrialNoticeTemplate({
       applicationContext,
       content: {
-        caption: Case.getCaseCaptionNames(caseCaption),
+        caseCaption,
         docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
         trialInfo: {
           address1,

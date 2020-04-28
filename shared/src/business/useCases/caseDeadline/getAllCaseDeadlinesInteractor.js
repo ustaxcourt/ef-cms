@@ -4,6 +4,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { CaseDeadline } = require('../../entities/CaseDeadline');
+const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -26,12 +27,46 @@ exports.getAllCaseDeadlinesInteractor = async ({ applicationContext }) => {
       applicationContext,
     });
 
-  const rawCaseDeadlines = allCaseDeadlines.map(caseDeadline => ({
-    ...caseDeadline,
-    caseTitle: Case.getCaseCaptionNames(caseDeadline.caseTitle),
-  }));
+  const validatedCaseDeadlines = CaseDeadline.validateRawCollection(
+    allCaseDeadlines,
+    {
+      applicationContext,
+    },
+  );
 
-  return CaseDeadline.validateRawCollection(rawCaseDeadlines, {
+  // get the needed cases info data for caseDeadlines
+  const caseIds = Object.keys(
+    validatedCaseDeadlines.reduce((acc, item) => {
+      acc[item.caseId] = true;
+      return acc;
+    }, {}),
+  );
+
+  const allCaseData = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByCaseIds({
+      applicationContext,
+      caseIds,
+    });
+
+  const validatedCaseData = Case.validateRawCollection(allCaseData, {
     applicationContext,
   });
+
+  const caseMap = validatedCaseData.reduce((acc, item) => {
+    acc[item.caseId] = item;
+    return acc;
+  }, {});
+
+  const afterCaseMapping = validatedCaseDeadlines.map(deadline => ({
+    ...deadline,
+    ...pick(caseMap[deadline.caseId], [
+      'associatedJudge',
+      'caseCaption',
+      'docketNumber',
+      'docketNumberSuffix',
+    ]),
+  }));
+
+  return afterCaseMapping;
 };

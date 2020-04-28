@@ -26,8 +26,7 @@ export const deleteCaseDeadlineAction = async ({
 
   return path.success({
     alertSuccess: {
-      message: 'You can see the remaining deadlines below.',
-      title: 'Your deadline was removed successfully.',
+      message: 'Deadline removed.',
     },
   });
 };

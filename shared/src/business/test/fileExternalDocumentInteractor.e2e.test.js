@@ -125,8 +125,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
     expect(caseAfterDocument).toMatchObject({
       caseCaption: 'Test Petitioner, Petitioner',
       caseId,
-      caseTitle:
-        'Test Petitioner, Petitioner v. Commissioner of Internal Revenue, Respondent',
       caseType: 'Innocent Spouse',
       contactPrimary: {
         address1: '19 First Freeway',
@@ -399,9 +397,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
       ],
       filingType: 'Myself',
       hasIrsNotice: false,
+      initialCaption: 'Test Petitioner, Petitioner',
       initialDocketNumberSuffix: 'S',
-      initialTitle:
-        'Test Petitioner, Petitioner v. Commissioner of Internal Revenue, Respondent',
       isPaper: false,
       noticeOfAttachments: false,
       orderForAmendedPetition: false,

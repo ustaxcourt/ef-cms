@@ -11,11 +11,13 @@ import classNames from 'classnames';
 
 export const CaseDetailHeader = connect(
   {
+    CASE_CAPTION_POSTFIX: state.constants.CASE_CAPTION_POSTFIX,
     caseDetailHeaderHelper: state.caseDetailHeaderHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     hideActionButtons: props.hideActionButtons,
   },
   function CaseDetailHeader({
+    CASE_CAPTION_POSTFIX,
     caseDetailHeaderHelper,
     className,
     formattedCaseDetail,
@@ -94,7 +96,9 @@ export const CaseDetailHeader = connect(
                     )}
                 </div>
                 <p className="margin-y-0" id="case-title">
-                  <span>{formattedCaseDetail.caseTitle}</span>
+                  <span>
+                    {formattedCaseDetail.caseCaption} {CASE_CAPTION_POSTFIX}
+                  </span>
                 </p>
               </div>
 

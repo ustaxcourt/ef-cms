@@ -1008,6 +1008,13 @@ hr.lighter {
   }
 }
 
+#order-advanced {
+  .grid-container .usa-form-group:last-child,
+  .grid-container .usa-fieldset:last-child {
+    margin-bottom: 5px;
+  }
+}
+
 .document-type-read-only {
   .nonstandard-form {
     .usa-form-group:last-of-type {

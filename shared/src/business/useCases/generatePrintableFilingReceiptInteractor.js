@@ -1,3 +1,5 @@
+const { Case } = require('../entities/cases/Case');
+
 /**
  * generateHtmlForFilingReceipt
  *
@@ -17,8 +19,6 @@ const generateHtmlForFilingReceipt = async ({
     secondarySupportingDocuments,
     supportingDocuments,
   } = documents;
-  const { Case } = applicationContext.getEntityConstructors();
-  const caseCaptionPostfix = Case.CASE_CAPTION_POSTFIX;
 
   const caseSource = await applicationContext
     .getPersistenceGateway()
@@ -112,7 +112,6 @@ const generateHtmlForFilingReceipt = async ({
       applicationContext,
       content: {
         caption: caseCaption,
-        captionPostfix: caseCaptionPostfix,
         docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
         documentsFiledContent,
         filedAt: applicationContext

@@ -21,26 +21,28 @@ export const createOrderAction = async ({ applicationContext, get }) => {
     /\t/g,
     '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
   );
-  const caseCaption = get(state.caseDetail.caseCaption) || '';
+  const caseDetail = get(state.caseDetail);
+  const caseCaption = caseDetail.caseCaption || '';
   const isOrderEvent = get(state.form.eventCode) == 'NOT'; // 'NOT' === 'notice'
   let caseCaptionNames = applicationContext.getCaseCaptionNames(caseCaption);
-  let caseCaptionPostfix = '';
+  let caseCaptionExtension = '';
   if (caseCaptionNames !== caseCaption) {
     caseCaptionNames += ', ';
-    caseCaptionPostfix = caseCaption.replace(caseCaptionNames, '');
+    caseCaptionExtension = caseCaption.replace(caseCaptionNames, '');
   }
   let signatureForNotice = '';
   if (isOrderEvent) {
     signatureForNotice = `<p>${applicationContext.getClerkOfCourtNameForSigning()}<br />Clerk of the Court</p>`;
   }
-  const docketNumberWithSuffix = get(
-    state.formattedCaseDetail.docketNumberWithSuffix,
-  );
+
+  const docketNumberWithSuffix = applicationContext
+    .getUtilities()
+    .formatDocketNumberWithSuffix(caseDetail);
 
   const doc = replaceWithID(
     {
+      '#caseCaptionExtension': caseCaptionExtension,
       '#caseCaptionNames': caseCaptionNames,
-      '#caseCaptionPostfix': caseCaptionPostfix,
       '#docketNumber': docketNumberWithSuffix,
       '#orderBody': richText,
       '#orderTitleHeader': documentTitle,
