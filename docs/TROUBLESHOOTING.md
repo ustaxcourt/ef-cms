@@ -15,6 +15,10 @@ If you're standing up a new environment, it is critical that you run the scripts
 > ``` ROLLBACK_COMPLETE ```
 If you see this error in the AWS Cloudformation Stacks for your `$ENVIRONMENT`, there was an error configuring this stack. This stack will need to be DELETED prior to attempting to deploy again.  We hope to identify the causes of these situations as well as avoid downtime by utilizing blue/green deploy strategies.
 
+#### Limit for stack has been exceeded
+
+If the deploy process fails with `ServerlessError: Limit for stack has been exceeded`, that means that the number of stacks in CloudFormation has exceeded AWS’s allowable limits. By default, [the maximum number is 200](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html), and AWS’s proposed solution is to "delete stacks that you don't need or request an increase in the maximum number of stacks in your AWS account."
+
 #### repository xxxxx.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1 not found
 
 > ```Error response from daemon: repository xxxxx.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1 not found```
