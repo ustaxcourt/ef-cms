@@ -183,8 +183,6 @@ jobs:
             -Dproject.settings="web-client/sonar-project.properties" \
             -Dsonar.login="${UI_SONAR_TOKEN}" \
             -Dsonar.host.url="https://sonarcloud.io"
-      - store_artifacts:
-          path: ~/project/combined-coverage
 
   e2e-pa11y:
     docker:
