@@ -5,7 +5,7 @@ const PDFDocumentHeader = require('../components/PDFDocumentHeader.jsx')
 
 const renderTable = ({ data, label, options }) => {
   return (
-    <table>
+    <table id={`contact_info_${label}`}>
       <thead>
         <tr>
           <th>{label} Contact Information</th>
