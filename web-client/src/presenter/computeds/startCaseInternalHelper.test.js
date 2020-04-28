@@ -233,7 +233,7 @@ describe('case detail edit computed', () => {
     expect(result.showSecondaryContact).toBeFalsy();
   });
 
-  it('sets showOwnershipDisclosureStatement true if partyType is corporation', () => {
+  it('sets showOrderForOwnershipDisclosureStatement true if partyType is corporation', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         form: {
@@ -241,10 +241,10 @@ describe('case detail edit computed', () => {
         },
       },
     });
-    expect(result.showOwnershipDisclosureStatement).toBeTruthy();
+    expect(result.showOrderForOwnershipDisclosureStatement).toBeTruthy();
   });
 
-  it('sets showOwnershipDisclosureStatement false if partyType is petitioner', () => {
+  it('sets showOrderForOwnershipDisclosureStatement false if partyType is petitioner', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         form: {
@@ -252,7 +252,7 @@ describe('case detail edit computed', () => {
         },
       },
     });
-    expect(result.showOwnershipDisclosureStatement).toBeFalsy();
+    expect(result.showOrderForOwnershipDisclosureStatement).toBeFalsy();
   });
 
   it('sets showOrderForFilingFee true if petitionPaymentStatus is unpaid', () => {
@@ -277,27 +277,5 @@ describe('case detail edit computed', () => {
       },
     });
     expect(result.showOrderForFilingFee).toBeFalsy();
-  });
-
-  it('sets showOrderForRequestedTrialLocation true if Requested Trial Location is not specified', () => {
-    const result = runCompute(startCaseInternalHelper, {
-      state: {
-        form: {
-          preferredTrialCity: undefined,
-        },
-      },
-    });
-    expect(result.showOrderForRequestedTrialLocation).toBe(true);
-  });
-
-  it('sets showOrderForRequestedTrialLocation false if Requested Trial Location is specified', () => {
-    const result = runCompute(startCaseInternalHelper, {
-      state: {
-        form: {
-          preferredTrialCity: 'FlavorTown',
-        },
-      },
-    });
-    expect(result.showOrderForRequestedTrialLocation).toBe(false);
   });
 });

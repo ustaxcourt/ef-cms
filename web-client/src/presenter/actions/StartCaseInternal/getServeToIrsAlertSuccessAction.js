@@ -6,8 +6,7 @@
 export const getServeToIrsAlertSuccessAction = () => {
   return {
     alertSuccess: {
-      message: 'The case has been created and served to the IRS.',
-      title: 'The petition has been successfully submitted.',
+      message: 'Petition served to IRS.',
     },
   };
 };

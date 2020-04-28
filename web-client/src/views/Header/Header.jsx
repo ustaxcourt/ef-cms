@@ -39,7 +39,7 @@ const BetaBar = toggleBetaBarSequence => {
 
 const NavigationItems = (
   helper,
-  { isReportsMenuOpen, toggleMobileMenuSequence },
+  { isReportsMenuOpen, signOutSequence, toggleMobileMenuSequence },
 ) => {
   return (
     <ul className="usa-nav__primary usa-accordion ustc-navigation-items">
@@ -146,6 +146,16 @@ const NavigationItems = (
           <ReportsMenu isExpanded={isReportsMenuOpen} />
         </li>
       )}
+      <li className="usa-nav__primary-item nav-medium">
+        <a
+          className="usa-nav__link"
+          href="/"
+          id="log-out"
+          onClick={() => signOutSequence()}
+        >
+          Log Out
+        </a>
+      </li>
     </ul>
   );
 };
@@ -158,6 +168,7 @@ export const Header = connect(
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
     showBetaBar: state.header.showBetaBar,
     showMobileMenu: state.header.showMobileMenu,
+    signOutSequence: sequences.signOutSequence,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     user: state.user,
@@ -169,6 +180,7 @@ export const Header = connect(
     resetHeaderAccordionsSequence,
     showBetaBar,
     showMobileMenu,
+    signOutSequence,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
     user,
@@ -243,6 +255,7 @@ export const Header = connect(
                 {user &&
                   NavigationItems(headerHelper, {
                     isReportsMenuOpen,
+                    signOutSequence,
                     toggleMobileMenuSequence,
                   })}
                 {headerHelper.showSearchInHeader && <SearchBox />}

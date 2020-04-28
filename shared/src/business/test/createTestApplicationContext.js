@@ -222,7 +222,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     appendPaperServiceAddressPageToPdf: jest
       .fn()
       .mockImplementation(appendPaperServiceAddressPageToPdf),
-    fetchPendingItems: jest.fn(),
     generatePendingReportPdf: jest.fn(),
     updateCaseAutomaticBlock: jest
       .fn()
@@ -268,6 +267,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteSectionOutboxRecord,
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
+    fetchPendingItems: jest.fn(),
     getAllCaseDeadlines: jest.fn(),
     getAllCatalogCases: jest.fn(),
     getCalendaredCasesForTrialSession: jest.fn(),

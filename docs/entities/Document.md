@@ -56,6 +56,10 @@ Docket Number of the associated Case in XXXXX-YY format.
 
 `/^(\d{3,5}-\d{2})$/`
 
+### documentContents
+
+> `string` | optional
+
 ### documentId
 
 
@@ -432,13 +436,11 @@ The type of this document.
 
 > `object` | optional
 
+##### Can be null.
+
 ### eventCode
 
 > `string` | optional
-
-### exhibits
-
-> `boolean` | optional
 
 ### filedBy
 
@@ -587,6 +589,12 @@ A secondary date associated with the document, typically related to time-restric
 ##### Can be null.
 
 ### signedByUserId
+
+> `string` | optional
+
+##### Can be null.
+
+### signedJudgeName
 
 > `string` | optional
 

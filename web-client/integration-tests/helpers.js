@@ -20,6 +20,9 @@ import { presenter } from '../src/presenter/presenter';
 import { runCompute } from 'cerebral/test';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
+import { userMap } from '../../shared/src/test/mockUserTokenMap';
+import jwt from 'jsonwebtoken';
+
 import { withAppContextDecorator } from '../src/withAppContext';
 import axios from 'axios';
 
@@ -309,10 +312,12 @@ export const forwardWorkItem = async (test, to, workItemId, message) => {
   });
 };
 
-export const uploadPetition = async (test, overrides = {}) => {
-  await test.runSequence('gotoStartCaseWizardSequence');
-
-  test.setState('form', {
+export const uploadPetition = async (
+  test,
+  overrides = {},
+  loginUsername = 'petitioner',
+) => {
+  const petitionMetadata = {
     caseType: overrides.caseType || 'CDP (Lien/Levy)',
     contactPrimary: {
       address1: '734 Cowley Parkway',
@@ -329,17 +334,37 @@ export const uploadPetition = async (test, overrides = {}) => {
     filingType: 'Myself',
     hasIrsNotice: false,
     partyType: overrides.partyType || ContactFactory.PARTY_TYPES.petitioner,
-    petitionFile: fakeFile,
-    petitionFileSize: 1,
     preferredTrialCity: overrides.preferredTrialCity || 'Seattle, Washington',
     procedureType: overrides.procedureType || 'Regular',
-    stinFile: fakeFile,
-    stinFileSize: 1,
-    wizardStep: '4',
-  });
+  };
 
-  await test.runSequence('submitFilePetitionSequence');
-  return test.getState('caseDetail');
+  const petitionFileId = '1f1aa3f7-e2e3-43e6-885d-4ce341588c76';
+  const stinFileId = '2efcd272-da92-4e31-bedc-28cdad2e08b0';
+
+  //create token
+  const user = {
+    ...userMap[loginUsername],
+    sub: userMap[loginUsername].userId,
+  };
+  const userToken = jwt.sign(user, 'secret');
+
+  const response = await axios.post(
+    'http://localhost:3002/',
+    {
+      petitionFileId,
+      petitionMetadata,
+      stinFileId,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    },
+  );
+
+  test.setState('caseDetail', response.data);
+
+  return response.data;
 };
 
 export const loginAs = (test, user) => {
@@ -379,6 +404,8 @@ export const setupTest = ({ useCases = {} } = {}) => {
     }
     return value;
   });
+
+  presenter.state.baseUrl = process.env.API_URL || 'http://localhost:3000';
 
   presenter.providers.applicationContext = Object.assign(applicationContext, {
     getScanner: getScannerInterface,

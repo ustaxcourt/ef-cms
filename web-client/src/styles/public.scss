@@ -1,5 +1,5 @@
 .header-public {
-  @media only screen and (max-width: 1024px) {
+  @media only screen and (max-width: $large-screen) {
     margin-bottom: 44px;
   }
 

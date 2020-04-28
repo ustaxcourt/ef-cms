@@ -31,8 +31,7 @@
     "blockedDate": "2019-03-01T21:40:46.415Z",
     "blockedReason": "petitioner is in jail",
     "caseCaption": "Brett Osborne, Petitioner",
-    "caseTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
-    "initialTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Brett Osborne, Petitioner",
     "filingType": "Myself",
     "pk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
     "hasIrsNotice": false,
@@ -71,8 +70,6 @@
     "sk": "docket-record|42649425-7325-41b8-a927-82a46e071663"
   },
   {
-    "caseTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
-    "docketNumber": "109-19",
     "createdAt": "2019-08-22T12:47:16.905Z",
     "deadlineDate": "2019-08-25T04:00:00.000Z",
     "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
@@ -111,7 +108,7 @@
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
           "filedBy": "Test Petitioner"
         },
-        "caseTitle": "Brett Osborne",
+        "caseCaptionNames": "Brett Osborne",
         "section": "petitions",
         "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
         "isInitializeCase": true,
