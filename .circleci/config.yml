@@ -28,11 +28,6 @@ jobs:
       - run:
           name: NPM - Install
           command: npm ci && npm rebuild node-sass
-      - run:
-          name: API Run Check
-          command: |
-            SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci &
-            ./wait-until.sh http://localhost:3000/api/swagger
       - persist_to_workspace:
           root: ~/
           paths:
