@@ -14,5 +14,6 @@ module.exports = {
       statements: 95,
     },
   },
+  setupFilesAfterEnv: ['./enzyme.config.js'],
   verbose: false,
 };
