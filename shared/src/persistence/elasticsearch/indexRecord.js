@@ -8,7 +8,7 @@ exports.indexRecord = async ({
   record,
 }) => {
   const searchClient = applicationContext.getSearchClient();
-  const index = getIndexNameForRecord(record);
+  const index = getIndexNameForRecord(fullRecord);
 
   if (index) {
     const body = isAlreadyMarshalled
