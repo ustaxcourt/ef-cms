@@ -8,12 +8,10 @@ We utilize a package called `pa11y-ci` which runs tests found in the `pa11y/` di
 ### AWS-related
 
 #### ServerlessError
-
 > ```deploy failed with ServerlessError: An error occurred: YourLambdaFunction - The role defined for the function cannot be assumed by Lambda. (Service: AWSLambdaInternal; Status Code: 400; Error Code: InvalidParameterValueException; Request ID: ae81b07e-8a75-4f98-9473-2096a5da63f9).```
 If you're standing up a new environment, it is critical that you run the scripts (mentioned above and found in SETUP.md) to create Lambda roles & policies.
 
 #### ROLLBACK_COMPLETE
-
 > ``` ROLLBACK_COMPLETE ```
 If you see this error in the AWS Cloudformation Stacks for your `$ENVIRONMENT`, there was an error configuring this stack. This stack will need to be DELETED prior to attempting to deploy again.  We hope to identify the causes of these situations as well as avoid downtime by utilizing blue/green deploy strategies.
 
@@ -29,10 +27,6 @@ When a deploy fails due to a permissions error with AWS, it’s likely that the 
 ```
 cd iam/terraform/account-specific/main && ../bin/deploy-app.sh && cd ../../environment-specific/main && ../bin/deploy-app.sh stg
 ```
-
-#### Limit for stack has been exceeded
-
-If the deploy process fails with `ServerlessError: Limit for stack has been exceeded`, that means that the number of stacks in CloudFormation has exceeded AWS’s allowable limits. By default, [the maximum number is 200](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html), and AWS’s proposed solution is to "delete stacks that you don't need or request an increase in the maximum number of stacks in your AWS account."
 
 ### Serverless 1.61.1
 
