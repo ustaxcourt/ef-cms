@@ -9,8 +9,7 @@ jobs:
       - image: amazon/dynamodb-local
         command: -jar DynamoDBLocal.jar -inMemory
       - image: elasticsearch:7.5.2
-          discovery:
-            type: single-node
+          discovery.type: single-node
     steps:
       - restore_cache:
           name: Source - Restoring Cache
