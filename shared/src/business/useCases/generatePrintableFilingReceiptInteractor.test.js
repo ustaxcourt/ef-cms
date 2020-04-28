@@ -63,7 +63,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         attachments: true,
         certificateOfService: true,
-        certificateOfServiceDate: '10-31-1983',
+        certificateOfServiceDate: '1983-10-31T09:03:07.173Z',
         documentTitle: 'Test Primary Document',
         primaryDocumentFile: {},
       },
@@ -143,7 +143,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         attachments: true,
         certificateOfService: true,
-        certificateOfServiceDate: '10-31-1983',
+        certificateOfServiceDate: '1983-10-31T06:25:41.239Z',
         documentTitle: 'Test Primary Document',
         hasSupportingDocuments: true,
         primaryDocumentFile: {},
@@ -170,7 +170,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         attachments: true,
         certificateOfService: true,
-        certificateOfServiceDate: '10-31-1983',
+        certificateOfServiceDate: '1983-10-31T06:25:41.239Z',
         documentTitle: 'Test Primary Document',
         primaryDocumentFile: {},
         secondaryDocument: {
@@ -195,7 +195,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         attachments: true,
         certificateOfService: true,
-        certificateOfServiceDate: '10-31-1983',
+        certificateOfServiceDate: '1983-10-31T06:25:41.239Z',
         documentTitle: 'Test Primary Document',
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: false,
@@ -231,7 +231,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         attachments: true,
         certificateOfService: true,
-        certificateOfServiceDate: '10-31-1983',
+        certificateOfServiceDate: '1983-10-31T06:25:41.239Z',
         documentTitle: 'Test Primary Document',
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,

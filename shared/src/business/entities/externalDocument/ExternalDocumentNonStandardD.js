@@ -6,7 +6,10 @@ const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
 const { formatDateString } = require('../../utilities/DateHandler');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
+
+const joiStrictTimestamp = getTimestampSchema();
 
 /**
  *
@@ -44,7 +47,7 @@ ExternalDocumentNonStandardD.schema = {
       documentType: joi.string().required(),
     })
     .required(),
-  serviceDate: joi.date().iso().max('now').required(),
+  serviceDate: joiStrictTimestamp.max('now').required(),
 };
 
 joiValidationDecorator(

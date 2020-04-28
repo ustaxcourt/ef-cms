@@ -1,18 +1,12 @@
 const DateHandler = require('./DateHandler');
+const { getTimestampSchema } = require('../../utilities/dateSchema');
+const joiStrictTimestamp = getTimestampSchema();
 
 describe('DateHandler', () => {
   describe('prepareDateFromString', () => {
     it("Creates a new moment object for 'now' when given no inputs'", () => {
       const myMoment = DateHandler.prepareDateFromString();
       expect(myMoment).toBeDefined();
-    });
-  });
-
-  describe('getTimestampSchema', () => {
-    it('returns a schema with a validate function compatible with joi', () => {
-      const result = DateHandler.getTimestampSchema();
-      expect(result).toBeDefined();
-      expect(typeof result.validate).toBe('function');
     });
   });
 
@@ -189,8 +183,7 @@ describe('DateHandler', () => {
 
     it('creates timestamps that strictly adhere to Joi formatting rules', () => {
       const thisDate = DateHandler.createISODateString();
-      const schema = DateHandler.getTimestampSchema();
-      expect(schema.validate(thisDate).error).toBeUndefined();
+      expect(joiStrictTimestamp.validate(thisDate).error).toBeUndefined();
     });
   });
 
