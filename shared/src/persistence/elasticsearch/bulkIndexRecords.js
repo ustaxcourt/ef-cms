@@ -10,11 +10,14 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
     .flatMap(doc => {
       const index = getIndexNameForRecord(doc);
 
-      return [
-        { index: { _id: `${doc.pk.S}_${doc.sk.S}`, _index: index } },
-        doc,
-      ];
-    });
+      if (index) {
+        return [
+          { index: { _id: `${doc.pk.S}_${doc.sk.S}`, _index: index } },
+          doc,
+        ];
+      }
+    })
+    .filter(item => item);
 
   const response = await searchClient.bulk({
     body,
