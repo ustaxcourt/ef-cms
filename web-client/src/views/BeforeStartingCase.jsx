@@ -13,8 +13,8 @@ export const BeforeStartingCase = () => (
         <div className="grid-row">
           <div className="tablet:grid-col-6">
             <h1 className="captioned" tabIndex="-1">
-              <NonMobile>File a Petition</NonMobile>
-              <Mobile>Petition Filing Guide</Mobile>
+              <NonMobile>Create a Case</NonMobile>
+              <Mobile>How to Create a Case</Mobile>
             </h1>
           </div>
         </div>
@@ -201,7 +201,7 @@ export const BeforeStartingCase = () => (
         </div>
       </div>
       <Button href="/file-a-petition/step-1">
-        Got It, Letʼs File My Petition
+        Got It, Letʼs Start a Case
       </Button>
       <Button link href="/">
         Cancel

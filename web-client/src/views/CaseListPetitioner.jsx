@@ -27,7 +27,7 @@ export const CaseListPetitioner = connect(
                 icon="file"
                 id="file-a-petition"
               >
-                File a Petition
+                Create a Case
               </Button>
             </div>
           </div>
