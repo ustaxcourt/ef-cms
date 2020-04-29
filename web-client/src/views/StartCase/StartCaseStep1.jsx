@@ -35,15 +35,16 @@ export const StartCaseStep1 = connect(
             id="start-case-header"
             tabIndex="-1"
           >
-            1. Provide Statement of Identity
+            1. Statement of Taxpayer Identification Number (STIN)
           </h2>
         </Focus>
         <Hint>
-          The Statement of Taxpayer Identification is the only document that
-          should include personal information (such as Social Security Numbers,
-          Taxpayer Identification Numbers, or Employer Identification Numbers).
-          It’s sent to the IRS to help identify you, but is never viewed by the
-          Court or stored as part of the public record.
+          The Statement of Taxpayer Identification Number is the only document
+          that should include personal information (such as Social Security
+          Numbers, Numbers, Taxpayer Identification Numbers, or Employer
+          Employer Employer Employer Employer Employer Identification It’s sent
+          IRS to help viewed by the Court or stored as part of the public
+          record.
         </Hint>
 
         <div className="blue-container margin-bottom-5">
@@ -61,15 +62,28 @@ export const StartCaseStep1 = connect(
               htmlFor="stin-file"
               id="stin-file-label"
             >
-              Upload your Statement of Taxpayer Identification{' '}
-              <span className="success-message">
-                <FontAwesomeIcon icon="check-circle" size="1x" />
-              </span>
+              Upload your Statement of Taxpayer Identification Number{' '}
             </label>
             <span className="usa-hint">
               File must be in PDF format (.pdf). Max file size{' '}
               {constants.MAX_FILE_SIZE_MB}MB.
             </span>
+            <p className="margin-top-0">
+              <FontAwesomeIcon
+                className="fa-icon-blue"
+                icon="file-pdf"
+                size="1x"
+              />
+              <a
+                className="margin-right-1"
+                href="https://www.ustaxcourt.gov/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Download T.C. Form 4
+              </a>
+              if you haven&apos;t already done so{' '}
+            </p>
             <StateDrivenFileInput
               aria-describedby="stin-file-label"
               id="stin-file"

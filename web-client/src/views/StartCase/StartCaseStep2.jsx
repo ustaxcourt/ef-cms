@@ -41,17 +41,16 @@ export const StartCaseStep2 = connect(
       <>
         <Focus>
           <h2 className="focusable margin-bottom-105" tabIndex="-1">
-            2. Tell Us About Your Petition
+            2. Your Petition
           </h2>
         </Focus>
-        <p className="margin-bottom-3 margin-top-0 required-statement">
-          *All fields required unless otherwise noted
-        </p>
-        <h3>Upload Your Petition</h3>
         <Hint>
           Don’t forget to remove or redact your personal information on all your
           documents, including any IRS notice(s).
         </Hint>
+        <p className="margin-bottom-3 margin-top-0 required-statement">
+          *All fields required unless otherwise noted
+        </p>
         <div className="blue-container grid-container padding-x-0">
           <div className="grid-row grid-gap">
             <div className="mobile-lg:grid-col-5">
@@ -69,15 +68,28 @@ export const StartCaseStep2 = connect(
                   htmlFor="petition-file"
                   id="petition-file-label"
                 >
-                  Upload your petition{' '}
-                  <span className="success-message">
-                    <FontAwesomeIcon icon="check-circle" size="1x" />
-                  </span>
+                  Upload your Petition{' '}
                 </label>
                 <span className="usa-hint">
                   File must be in PDF format (.pdf). Max file size{' '}
                   {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
+                <p className="margin-top-0">
+                  <FontAwesomeIcon
+                    className="fa-icon-blue"
+                    icon="file-pdf"
+                    size="1x"
+                  />
+                  <a
+                    className="margin-right-1"
+                    href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Download T.C. Form 2
+                  </a>
+                  if you haven&apos;t already done so{' '}
+                </p>
                 <StateDrivenFileInput
                   aria-describedby="petition-file-label"
                   id="petition-file"
