@@ -36,9 +36,15 @@ exports.orderPublicSearchInteractor = async ({
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  return await applicationContext.getPersistenceGateway().orderKeywordSearch({
-    applicationContext,
-    orderEventCodes: Document.ORDER_DOCUMENT_TYPES,
-    ...rawSearch,
-  });
+  const results = await applicationContext
+    .getPersistenceGateway()
+    .orderKeywordSearch({
+      applicationContext,
+      orderEventCodes: Document.ORDER_DOCUMENT_TYPES,
+      ...rawSearch,
+    });
+
+  const filteredResults = results.filter(item => !item.isSealed);
+
+  return filteredResults;
 };
