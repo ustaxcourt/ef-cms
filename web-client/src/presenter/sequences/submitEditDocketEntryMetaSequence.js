@@ -4,6 +4,7 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
+import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
@@ -11,6 +12,7 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setFormDateAction } from '../actions/setFormDateAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -25,6 +27,8 @@ export const submitEditDocketEntryMetaSequence = [
   startShowValidationAction,
   computeFilingFormDateAction,
   computeCertificateOfServiceFormDateAction,
+  computeFormDateAction,
+  setFormDateAction,
   primePropsFromEditDocketEntryMetaModalAction,
   chooseMetaTypePathAction,
   {

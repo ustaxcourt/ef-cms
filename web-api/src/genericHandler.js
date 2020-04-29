@@ -8,21 +8,25 @@ exports.dataSecurityFilter = (data, { applicationContext }) => {
     const entityConstructor = applicationContext.getEntityByName(
       data[0].entityName,
     );
-    returnData = data.map(
-      result =>
-        new entityConstructor(result, {
-          applicationContext,
-          filtered: true,
-        }),
-    );
+    if (entityConstructor) {
+      returnData = data.map(
+        result =>
+          new entityConstructor(result, {
+            applicationContext,
+            filtered: true,
+          }),
+      );
+    }
   } else if (data && data.entityName) {
     const entityConstructor = applicationContext.getEntityByName(
       data.entityName,
     );
-    returnData = new entityConstructor(data, {
-      applicationContext,
-      filtered: true,
-    });
+    if (entityConstructor) {
+      returnData = new entityConstructor(data, {
+        applicationContext,
+        filtered: true,
+      });
+    }
   }
   return returnData;
 };
