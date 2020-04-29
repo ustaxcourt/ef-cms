@@ -37,6 +37,13 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
   color: color($theme-color-warning);
 }
 
+.iconSealed {
+  margin-top: 4px;
+  margin-right: -22px;
+  color: #b51d09;
+  float: right;
+}
+
 .iconStatusUnassigned {
   color: color($theme-color-warning);
 }
