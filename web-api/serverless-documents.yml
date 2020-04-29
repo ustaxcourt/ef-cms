@@ -188,8 +188,8 @@ functions:
     memorySize: 3008
     timeout: 900
     layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-clamav:latest
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-clamavm:latest
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-av:latest
+      # - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-avm:latest
     events:
       - http:
           path: /{documentId}/virus-scan

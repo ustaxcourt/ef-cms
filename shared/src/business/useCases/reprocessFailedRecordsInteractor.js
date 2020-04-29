@@ -1,6 +1,6 @@
 const { createISODateString } = require('../utilities/DateHandler');
 
-const checkSearchClientMappings = async ({ applicationContext }) => {
+const checkSearchClientMappings = async ({ applicationContext, index }) => {
   /**
    * recursively searches the provided object for the provided key
    * and returns the count of instances of that key
@@ -27,14 +27,14 @@ const checkSearchClientMappings = async ({ applicationContext }) => {
     .getPersistenceGateway()
     .getIndexMappingFields({
       applicationContext,
-      index: 'efcms',
+      index,
     });
 
   const mappingLimit = await applicationContext
     .getPersistenceGateway()
     .getIndexMappingLimit({
       applicationContext,
-      index: 'efcms',
+      index,
     });
 
   let totalTypes = 0;
@@ -61,7 +61,7 @@ const checkSearchClientMappings = async ({ applicationContext }) => {
 
   if (fieldText !== '') {
     sendToHoneybadger(
-      `Warning: Search Client creating greater than 50 indexes on the following fields: ${fieldText.substring(
+      `Warning: Search Client creating greater than 50 indexes for ${index} on the following fields: ${fieldText.substring(
         0,
         fieldText.length - 2,
       )}`,
@@ -71,11 +71,11 @@ const checkSearchClientMappings = async ({ applicationContext }) => {
   const currentPercent = (totalTypes / mappingLimit) * 100;
   if (currentPercent >= 75) {
     sendToHoneybadger(
-      `Warning: Search Client Mappings have reached the 75% threshold - currently ${currentPercent}%`,
+      `Warning: Search Client Mappings have reached the 75% threshold for ${index} - currently ${currentPercent}%`,
     );
   } else if (currentPercent >= 50) {
     sendToHoneybadger(
-      `Warning: Search Client Mappings have reached the 50% threshold - currently ${currentPercent}%`,
+      `Warning: Search Client Mappings have reached the 50% threshold for ${index} - currently ${currentPercent}%`,
     );
   }
 };
@@ -90,7 +90,12 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
   const honeybadger = applicationContext.initHoneybadger();
 
   // Check mapping counts
-  await checkSearchClientMappings({ applicationContext });
+  const elasticsearchIndexes = applicationContext.getElasticsearchIndexes();
+  await Promise.all(
+    elasticsearchIndexes.map(index =>
+      checkSearchClientMappings({ applicationContext, index }),
+    ),
+  );
 
   const recordsToProcess = await applicationContext
     .getPersistenceGateway()

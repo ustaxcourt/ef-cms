@@ -2,6 +2,7 @@ import { ContactFactory } from '../../shared/src/business/entities/contacts/Cont
 import { docketClerkAddsDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
+import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSealsCase';
 import { docketClerkServesOrder } from '../integration-tests/journey/docketClerkServesOrder';
 import {
   loginAs,
@@ -12,6 +13,7 @@ import { setupTest } from './helpers';
 import unauthedUserInvalidSearchForOrder from './journey/unauthedUserInvalidSearchForOrder';
 import unauthedUserNavigatesToPublicSite from './journey/unauthedUserNavigatesToPublicSite';
 import unauthedUserSearchesForOrderByKeyword from './journey/unauthedUserSearchesForOrderByKeyword';
+import unauthedUserSearchesForSealedCaseOrderByKeyword from './journey/unauthedUserSearchesForSealedCaseOrderByKeyword';
 
 const test = setupTest();
 const testClient = setupTestClient({
@@ -77,4 +79,14 @@ describe('Unauthed user searches for an order by keyword', () => {
   unauthedUserNavigatesToPublicSite(test);
   unauthedUserInvalidSearchForOrder(test);
   unauthedUserSearchesForOrderByKeyword(test, testClient);
+});
+
+describe('Docket clerk seals case', () => {
+  loginAs(testClient, 'docketclerk');
+  docketClerkSealsCase(testClient);
+});
+
+describe('Unauthed user searches for an order by keyword and does not see sealed cases', () => {
+  unauthedUserNavigatesToPublicSite(test);
+  unauthedUserSearchesForSealedCaseOrderByKeyword(test, testClient);
 });

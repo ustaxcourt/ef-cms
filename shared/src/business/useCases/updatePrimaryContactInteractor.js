@@ -28,6 +28,18 @@ exports.updatePrimaryContactInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
+  const editableFields = {
+    address1: contactInfo.address1,
+    address2: contactInfo.address2,
+    address3: contactInfo.address3,
+    city: contactInfo.city,
+    country: contactInfo.country,
+    countryType: contactInfo.countryType,
+    phone: contactInfo.phone,
+    postalCode: contactInfo.postalCode,
+    state: contactInfo.state,
+  };
+
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
@@ -40,7 +52,10 @@ exports.updatePrimaryContactInteractor = async ({
   }
 
   const caseEntity = new Case(
-    { ...caseToUpdate, contactPrimary: contactInfo },
+    {
+      ...caseToUpdate,
+      contactPrimary: { ...caseToUpdate.contactPrimary, ...editableFields },
+    },
     { applicationContext },
   );
 
@@ -55,7 +70,7 @@ exports.updatePrimaryContactInteractor = async ({
   const documentType = applicationContext
     .getUtilities()
     .getDocumentTypeForAddressChange({
-      newData: contactInfo,
+      newData: editableFields,
       oldData: caseToUpdate.contactPrimary,
     });
 
@@ -80,7 +95,7 @@ exports.updatePrimaryContactInteractor = async ({
     const changeOfAddressDocument = new Document(
       {
         addToCoversheet: true,
-        additionalInfo: `for ${contactInfo.name}`,
+        additionalInfo: `for ${caseToUpdate.contactPrimary.name}`,
         caseId,
         documentId: newDocumentId,
         documentTitle: documentType.title,
