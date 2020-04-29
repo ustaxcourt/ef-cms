@@ -1,5 +1,9 @@
+import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
+
 export default (test, testClient) => {
   return it('Search for order by keyword', async () => {
+    await refreshElasticsearchIndex();
+
     test.setState('advancedSearchForm', {
       orderSearch: {
         orderKeyword: 'osteodontolignikeratic',
@@ -13,7 +17,7 @@ export default (test, testClient) => {
 
     test.setState('advancedSearchForm', {
       orderSearch: {
-        orderKeyword: 'dismissal',
+        orderKeyword: 'dismissed',
       },
     });
 
