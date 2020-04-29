@@ -35,7 +35,7 @@ export const startCaseHelper = (get, applicationContext) => {
   }
 
   const hasContactSecondary =
-    form.contactSecondary && Object.keys(form.contactSecondary).length > 0;
+    form.contactSecondary && form.contactSecondary.name;
 
   const caseCaption =
     applicationContext.getUtilities().getCaseCaption(form) || '';
