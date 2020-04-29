@@ -195,7 +195,7 @@ import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequen
 import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
-import { refreshPdfWhenSwitchingCreateOrderTabSequence } from './sequences/refreshPdfWhenSwitchingCreateOrderTabSequence';
+import { refreshPdfSequence } from './sequences/refreshPdfSequence';
 import { removeBatchSequence } from './sequences/removeBatchSequence';
 import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetailPendingItemSequence';
 import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequence';
@@ -585,7 +585,7 @@ export const presenter = {
     prioritizeCaseSequence,
     redirectToLoginSequence,
     refreshCaseSequence,
-    refreshPdfWhenSwitchingCreateOrderTabSequence,
+    refreshPdfSequence,
     removeBatchSequence,
     removeCaseDetailPendingItemSequence,
     removeCaseFromTrialSequence,
