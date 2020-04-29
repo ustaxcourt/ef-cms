@@ -1,6 +1,5 @@
 #!/bin/bash
 
-curl -X DELETE "localhost:9200/efcms"
 curl -X DELETE "localhost:9200/efcms-case"
 curl -X DELETE "localhost:9200/efcms-document"
 curl -X DELETE "localhost:9200/efcms-user"
