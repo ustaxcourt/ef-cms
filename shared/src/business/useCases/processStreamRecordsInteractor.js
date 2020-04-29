@@ -1,7 +1,4 @@
 const AWS = require('aws-sdk');
-const {
-  getIndexNameForRecord,
-} = require('../../persistence/elasticsearch/getIndexNameForRecord');
 const { createISODateString } = require('../utilities/DateHandler');
 
 /**
@@ -135,7 +132,6 @@ exports.processStreamRecordsInteractor = async ({
   recordsToProcess,
 }) => {
   applicationContext.logger.info('Time', createISODateString());
-  const searchClient = applicationContext.getSearchClient();
   const honeybadger = applicationContext.initHoneybadger();
 
   const filteredRecords = await filterRecords({
@@ -154,13 +150,15 @@ exports.processStreamRecordsInteractor = async ({
 
       if (failedRecords.length) {
         for (const failedRecord of failedRecords) {
-          const index = getIndexNameForRecord(failedRecord);
-
           try {
-            await searchClient.index({
-              body: { ...failedRecord },
-              id: `${failedRecord.pk.S}_${failedRecord.sk.S}`,
-              index,
+            await applicationContext.getPersistenceGateway().indexRecord({
+              applicationContext,
+              fullRecord: { ...failedRecord },
+              isAlreadyMarshalled: true,
+              record: {
+                recordPk: failedRecord.pk.S,
+                recordSk: failedRecord.sk.S,
+              },
             });
           } catch (e) {
             await applicationContext

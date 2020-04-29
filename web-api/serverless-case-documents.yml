@@ -271,6 +271,10 @@ functions:
 
   updateDocketEntryMeta:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateDocketEntryMetaLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
     events:
       - http:
           path: /{caseId}/docket-entry-meta
@@ -377,6 +381,9 @@ functions:
           authorizer:
             arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
             managedExternally: true
+            identitySource: method.request.querystring.token
+            type: request
+
 
   orderAdvancedSearch:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.orderAdvancedSearchLambda
