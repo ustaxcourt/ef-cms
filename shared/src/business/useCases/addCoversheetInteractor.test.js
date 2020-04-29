@@ -7,7 +7,6 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { getChromiumBrowser } = require('../utilities/getChromiumBrowser');
-const { PDFDocument } = require('pdf-lib');
 
 describe('addCoversheetInteractor', () => {
   const testAssetsPath = path.join(__dirname, '../../../test-assets/');

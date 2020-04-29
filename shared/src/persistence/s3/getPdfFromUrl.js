@@ -4,5 +4,6 @@ exports.getPdfFromUrl = async ({ applicationContext, url }) => {
     responseType: 'blob',
     url,
   });
+
   return new Blob([fileBlob], { type: 'application/pdf' });
 };
