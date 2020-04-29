@@ -16,6 +16,5 @@ module.exports = {
     '!src/test/**/*.js',
     '!src/**/*_.js',
   ],
-  setupFilesAfterEnv: ['../enzyme.config.js'],
   verbose: false,
 };
