@@ -1,19 +1,22 @@
 #!/bin/bash
-echo "killing dynamo if already running"
-pkill -f DynamoDBLocal
 
-echo "starting dynamo"
-./web-api/start-dynamo.sh &
-DYNAMO_PID=$!
-./wait-until.sh http://localhost:8000/shell
+# if [ ! -e "$CIRCLECI" ]; then
+  echo "killing dynamo if already running"
+  pkill -f DynamoDBLocal
 
-echo "killing elasticsearch if already running"
-pkill -f elasticsearch
+  echo "starting dynamo"
+  ./web-api/start-dynamo.sh &
+  DYNAMO_PID=$!
+  ./wait-until.sh http://localhost:8000/shell
 
-echo "starting elasticsearch"
-./web-api/start-elasticsearch.sh &
-ESEARCH_PID=$!
-./wait-until.sh http://localhost:9200/ 200
+  echo "killing elasticsearch if already running"
+  pkill -f elasticsearch
+
+  echo "starting elasticsearch"
+  ./web-api/start-elasticsearch.sh &
+  ESEARCH_PID=$!
+  ./wait-until.sh http://localhost:9200/ 200
+# fi
 
 npm run build:assets
 
