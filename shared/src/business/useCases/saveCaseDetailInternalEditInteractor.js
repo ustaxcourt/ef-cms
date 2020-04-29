@@ -55,6 +55,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     orderToShowCause: caseToUpdate.orderToShowCause,
     partyType: caseToUpdate.partyType,
     petitionPaymentDate: caseToUpdate.petitionPaymentDate,
+    petitionPaymentMethod: caseToUpdate.petitionPaymentMethod,
     petitionPaymentStatus: caseToUpdate.petitionPaymentStatus,
     petitionPaymentWaivedDate: caseToUpdate.petitionPaymentWaivedDate,
     procedureType: caseToUpdate.procedureType,
