@@ -13,7 +13,11 @@ const { UnauthorizedError } = require('../../errors/errors');
  */
 exports.caseAdvancedSearchInteractor = async ({
   applicationContext,
-  ...searchTerms
+  countryType,
+  petitionerName,
+  petitionerState,
+  yearFiledMax,
+  yearFiledMin,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -23,7 +27,16 @@ exports.caseAdvancedSearchInteractor = async ({
 
   let foundCases = await applicationContext
     .getPersistenceGateway()
-    .caseAdvancedSearch({ applicationContext, searchTerms });
+    .caseAdvancedSearch({
+      applicationContext,
+      searchTerms: {
+        countryType,
+        petitionerName,
+        petitionerState,
+        yearFiledMax,
+        yearFiledMin,
+      },
+    });
 
   const filteredCases = caseSearchFilter(foundCases, authorizedUser);
 
