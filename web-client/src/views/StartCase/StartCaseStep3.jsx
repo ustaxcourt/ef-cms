@@ -2,6 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { Contacts } from './Contacts';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Hint } from '../../ustc-ui/Hint/Hint';
 import { SpousePermissionConfirmModal } from './SpousePermissionConfirmModal';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { ValidationText } from '../../ustc-ui/Text/ValidationText';
@@ -363,20 +364,12 @@ export const StartCaseStep3 = connect(
         {startCaseHelper.showOwnershipDisclosure && (
           <>
             <h2 className="margin-top-4">Ownership Disclosure Statement</h2>
-            <p>
+            <Hint>
               Tax Court Rules of Practice and Procedure (Rule 60) requires a
               corporation, partnership, or limited liability company, filing a
               Petition with the Court to also file an Ownership Disclosure
-              Statement (ODS). Complete your{' '}
-              <a
-                href="https://www.ustaxcourt.gov/forms/Ownership_Disclosure_Statement_Form_6.pdf"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                Ownership Disclosure Statement Form 6
-              </a>
-              .
-            </p>
+              Statement (ODS).{' '}
+            </Hint>
             <div className="blue-container">
               <label
                 className={classNames(
@@ -387,14 +380,27 @@ export const StartCaseStep3 = connect(
                 id="ownership-disclosure-file-label"
               >
                 Upload your Ownership Disclosure Statement
-                <span className="success-message">
-                  <FontAwesomeIcon icon="check-circle" size="1x" />
-                </span>
               </label>
               <span className="usa-hint">
                 File must be in PDF format (.pdf). Max file size{' '}
                 {constants.MAX_FILE_SIZE_MB}MB.
               </span>
+              <p className="margin-top-0">
+                <FontAwesomeIcon
+                  className="fa-icon-blue"
+                  icon="file-pdf"
+                  size="1x"
+                />
+                <a
+                  className="margin-right-1"
+                  href="https://www.ustaxcourt.gov/forms/Ownership_Disclosure_Statement_Form_6.pdf"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Download ODS Form 6
+                </a>
+                if you haven&apos;t already done so{' '}
+              </p>
               <StateDrivenFileInput
                 aria-describedby="ownership-disclosure-file-label"
                 id="ownership-disclosure-file"
