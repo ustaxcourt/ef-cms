@@ -26,9 +26,13 @@ export const setDocketEntryMetaFormForEditAction = ({
     if (date) {
       const { day, month, year } = deconstructDate(date);
 
-      deconstructedDate[`${fieldName}Day`] = day;
-      deconstructedDate[`${fieldName}Month`] = month;
-      deconstructedDate[`${fieldName}Year`] = year;
+      const dayFieldName = fieldName ? `${fieldName}Day` : 'day';
+      const monthFieldName = fieldName ? `${fieldName}Month` : 'month';
+      const yearFieldName = fieldName ? `${fieldName}Year` : 'year';
+
+      deconstructedDate[dayFieldName] = day;
+      deconstructedDate[monthFieldName] = month;
+      deconstructedDate[yearFieldName] = year;
     }
     return deconstructedDate;
   };
@@ -74,6 +78,7 @@ export const setDocketEntryMetaFormForEditAction = ({
         documentDetail && documentDetail.certificateOfServiceDate,
         'certificateOfService',
       ),
+      ...deconstructDateWrapper(documentDetail && documentDetail.date),
     });
 
     // TODO: add to unit test
