@@ -6,7 +6,7 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export default test => {
+export const petitionsClerkAddsRespondentsToCase = test => {
   return it('Petitions clerk manually adds multiple irsPractitioners to case', async () => {
     expect(test.getState('caseDetail.irsPractitioners')).toEqual([]);
 
