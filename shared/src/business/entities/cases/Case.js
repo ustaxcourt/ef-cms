@@ -1007,14 +1007,6 @@ Case.prototype.getDocumentById = function ({ documentId }) {
 
 /**
  *
- * @returns {boolean} whether to show case title for primary
- */
-Case.prototype.getShowCaseTitleForPrimary = function () {
-  return !(this.contactSecondary && this.contactSecondary.name);
-};
-
-/**
- *
  * @param {string} preferredTrialCity the preferred trial city
  * @returns {Case} the updated case entity
  */

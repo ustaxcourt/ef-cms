@@ -233,6 +233,21 @@ describe('genericHandler', () => {
       });
     });
 
+    it('returns data without passing through entity constructor if entityName is not present in getEntityConstructors', () => {
+      applicationContext.getEntityByName.mockImplementation(() => null);
+      const data = {
+        entityName: 'MockEntity2',
+        private: 'private',
+        public: 'public',
+      };
+      const result = dataSecurityFilter(data, { applicationContext });
+      expect(result).toEqual({
+        entityName: 'MockEntity2',
+        private: 'private',
+        public: 'public',
+      });
+    });
+
     it('returns array data after passing through entity constructor if entityName is present on array element', () => {
       const data = [
         {
@@ -248,6 +263,35 @@ describe('genericHandler', () => {
       ];
       const result = dataSecurityFilter(data, { applicationContext });
       expect(result).toEqual([{ public: 'public' }, { public: 'public' }]);
+    });
+
+    it('returns array data after passing through entity constructor if entityName is present on array element', () => {
+      applicationContext.getEntityByName.mockImplementation(() => null);
+      const data = [
+        {
+          entityName: 'MockEntity2',
+          private: 'private',
+          public: 'public',
+        },
+        {
+          entityName: 'MockEntity2',
+          private: 'private',
+          public: 'public',
+        },
+      ];
+      const result = dataSecurityFilter(data, { applicationContext });
+      expect(result).toEqual([
+        {
+          entityName: 'MockEntity2',
+          private: 'private',
+          public: 'public',
+        },
+        {
+          entityName: 'MockEntity2',
+          private: 'private',
+          public: 'public',
+        },
+      ]);
     });
   });
 });

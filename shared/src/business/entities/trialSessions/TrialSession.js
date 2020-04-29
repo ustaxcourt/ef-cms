@@ -143,6 +143,8 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.entityName = 'TrialSession';
+
   this.address1 = rawSession.address1;
   this.address2 = rawSession.address2;
   this.caseOrder = (rawSession.caseOrder || []).map(caseOrder => ({
@@ -208,6 +210,7 @@ TrialSession.validationRules = {
     courtReporter: joi.string().optional(),
     courthouseName: joi.string().allow('').optional(),
     createdAt: joiStrictTimestamp.optional(),
+    entityName: joi.string().valid('TrialSession').required(),
     irsCalendarAdministrator: joi.string().optional(),
     isCalendared: joi.boolean().required(),
     judge: joi.object().optional(),

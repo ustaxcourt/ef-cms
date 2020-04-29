@@ -26,8 +26,8 @@ provider:
     serverSideEncryption: AES256
 
 layers:
-  clamav:
-    name: ${self:provider.stage}-clamav
+  av:
+    name: ${self:provider.stage}-av
     compatibleRuntimes:
       - nodejs12.x
     path: web-api/runtimes/clamav
@@ -35,8 +35,8 @@ layers:
       exclude:
         - clamav_lambda_layer.tar.gz
         - var/lib/clamav/main.cvd
-  clamavm:
-    name: ${self:provider.stage}-clamavm
+  avm:
+    name: ${self:provider.stage}-avm
     compatibleRuntimes:
       - nodejs12.x
     path: web-api/runtimes/clamav/
