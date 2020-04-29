@@ -34,6 +34,7 @@ export const OrderSearchResults = connect(
                   <th>Docket number</th>
                   <th>Case title</th>
                   <th>Order</th>
+                  <th>Pages</th>
                   <th>Date</th>
                   <th>Judge</th>
                 </tr>
@@ -56,6 +57,7 @@ export const OrderSearchResults = connect(
                           {result.documentTitle}
                         </a>
                       </td>
+                      <td>{result.numberOfPages}</td>
                       <td>{result.formattedFiledDate}</td>
                       <td>{result.formattedSignedJudgeName}</td>
                     </tr>

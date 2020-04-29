@@ -37,6 +37,13 @@ exports.fileCourtIssuedOrderInteractor = async ({
       caseId,
     });
 
+  const numberOfPages = await applicationContext
+    .getPersistenceGateway()
+    .countPagesInDocument({
+      applicationContext,
+      documentId: primaryDocumentFileId,
+    });
+
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
@@ -72,6 +79,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
       documentId: primaryDocumentFileId,
       documentType: documentMetadata.documentType,
       filedBy: user.name,
+      numberOfPages,
       relationship: 'primaryDocument',
       userId: user.userId,
     },
