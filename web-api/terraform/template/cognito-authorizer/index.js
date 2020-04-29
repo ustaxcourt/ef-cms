@@ -47,14 +47,20 @@ const verify = (methodArn, token, keys, kid, cb) => {
 
 module.exports.handler = (event, context, cb) => {
   console.log('Auth function invoked');
-  if (event.authorizationToken) {
-    const token = event.authorizationToken.substring(7);
 
-    const { header, payload } = jwk.decode(token, { complete: true });
+  let requestToken = null;
+  if (event.authorizationToken) {
+    requestToken = event.authorizationToken.substring(7);
+  } else if (event.queryStringParameters.token) {
+    requestToken = event.queryStringParameters.token;
+  }
+
+  if (requestToken) {
+    const { header, payload } = jwk.decode(requestToken, { complete: true });
     const { iss } = payload;
     const { kid } = header;
     if (keys) {
-      verify(event.methodArn, token, keys, kid, cb);
+      verify(event.methodArn, requestToken, keys, kid, cb);
     } else {
       request(
         { json: true, url: `${iss}/.well-known/jwks.json` },
@@ -64,7 +70,7 @@ module.exports.handler = (event, context, cb) => {
             cb('Unauthorized');
           }
           keys = body;
-          verify(event.methodArn, token, keys, kid, cb);
+          verify(event.methodArn, requestToken, keys, kid, cb);
         },
       );
     }

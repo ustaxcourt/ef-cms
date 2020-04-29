@@ -1,7 +1,4 @@
 const AWS = require('aws-sdk');
-const {
-  getIndexNameForRecord,
-} = require('../../persistence/elasticsearch/getIndexNameForRecord');
 const { createISODateString } = require('../utilities/DateHandler');
 
 /**
@@ -91,32 +88,35 @@ const filterRecords = async ({ applicationContext, records }) => {
         },
         eventName: 'MODIFY',
       });
-    }
 
-    if (caseRecord.dynamodb.Keys.sk.S.includes('document|')) {
-      const documentWithCaseInfo = {
-        ...AWS.DynamoDB.Converter.marshall(fullCase),
-        ...caseRecord.dynamodb.NewImage,
-        docketRecord: undefined,
-        documents: undefined,
-        entityName: { S: 'Document' },
-        irsPractitioners: undefined,
-        privatePractitioners: undefined,
-      };
+      //also reindex all of the documents on the case
+      const { documents } = fullCase;
+      documents.forEach(document => {
+        const documentWithCaseInfo = {
+          ...AWS.DynamoDB.Converter.marshall(fullCase),
+          ...AWS.DynamoDB.Converter.marshall(document),
+          docketRecord: undefined,
+          documents: undefined,
+          entityName: { S: 'Document' },
+          irsPractitioners: undefined,
+          privatePractitioners: undefined,
+          sk: { S: `document|${document.documentId}` },
+        };
 
-      filteredRecords.push({
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: caseRecord.dynamodb.Keys.pk.S,
+        filteredRecords.push({
+          dynamodb: {
+            Keys: {
+              pk: {
+                S: caseRecord.dynamodb.Keys.pk.S,
+              },
+              sk: {
+                S: `document|${document.documentId}`,
+              },
             },
-            sk: {
-              S: caseRecord.dynamodb.Keys.sk.S,
-            },
+            NewImage: documentWithCaseInfo,
           },
-          NewImage: documentWithCaseInfo,
-        },
-        eventName: 'MODIFY',
+          eventName: 'MODIFY',
+        });
       });
     }
   }
@@ -135,7 +135,6 @@ exports.processStreamRecordsInteractor = async ({
   recordsToProcess,
 }) => {
   applicationContext.logger.info('Time', createISODateString());
-  const searchClient = applicationContext.getSearchClient();
   const honeybadger = applicationContext.initHoneybadger();
 
   const filteredRecords = await filterRecords({
@@ -154,13 +153,15 @@ exports.processStreamRecordsInteractor = async ({
 
       if (failedRecords.length) {
         for (const failedRecord of failedRecords) {
-          const index = getIndexNameForRecord(failedRecord);
-
           try {
-            await searchClient.index({
-              body: { ...failedRecord },
-              id: `${failedRecord.pk.S}_${failedRecord.sk.S}`,
-              index,
+            await applicationContext.getPersistenceGateway().indexRecord({
+              applicationContext,
+              fullRecord: { ...failedRecord },
+              isAlreadyMarshalled: true,
+              record: {
+                recordPk: failedRecord.pk.S,
+                recordSk: failedRecord.sk.S,
+              },
             });
           } catch (e) {
             await applicationContext

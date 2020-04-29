@@ -14,6 +14,8 @@ function CaseDeadline(rawProps, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.entityName = 'CaseDeadline';
+
   this.caseDeadlineId =
     rawProps.caseDeadlineId || applicationContext.getUniqueId();
   this.caseId = rawProps.caseId;
@@ -67,6 +69,7 @@ CaseDeadline.schema = joi.object().keys({
     .min(1)
     .required()
     .description('User provided description of the Case Deadline.'),
+  entityName: joi.string().valid('CaseDeadline').required(),
 });
 
 joiValidationDecorator(
