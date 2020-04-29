@@ -10,6 +10,8 @@ const { Message } = require('../entities/Message');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
 
+const { changeOfAddress } = require('../utilities/documentGenerators');
+
 /**
  * updatePrimaryContactInteractor
  *
@@ -58,31 +60,20 @@ exports.updatePrimaryContactInteractor = async ({
     });
 
   if (documentType) {
-    const pdfContentHtml = await applicationContext
-      .getTemplateGenerators()
-      .generateChangeOfAddressTemplate({
-        applicationContext,
-        content: {
-          caption: caseEntity.caseCaption,
-          docketNumberWithSuffix: `${caseEntity.docketNumber}${
-            caseEntity.docketNumberSuffix || ''
-          }`,
-          documentTitle: documentType.title,
-          name: contactInfo.name,
-          newData: contactInfo,
-          oldData: caseToUpdate.contactPrimary,
-        },
-      });
-
-    const docketRecordPdf = await applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor({
-        applicationContext,
-        contentHtml: pdfContentHtml,
-        displayHeaderFooter: false,
+    const changeOfAddressPdf = changeOfAddress({
+      applicationContext,
+      content: {
+        caption: caseEntity.caseCaption,
         docketNumber: caseEntity.docketNumber,
-        headerHtml: null,
-      });
+        docketNumberWithSuffix: `${caseEntity.docketNumber}${
+          caseEntity.docketNumberSuffix || ''
+        }`,
+        documentTitle: documentType.title,
+        name: contactInfo.name,
+        newData: contactInfo,
+        oldData: caseToUpdate.contactPrimary,
+      },
+    });
 
     const newDocumentId = applicationContext.getUniqueId();
 
@@ -154,16 +145,16 @@ exports.updatePrimaryContactInteractor = async ({
 
     caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
 
-    const docketRecordPdfWithCover = await addCoverToPdf({
+    const changeOfAddressPdfWithCover = await addCoverToPdf({
       applicationContext,
       caseEntity,
       documentEntity: changeOfAddressDocument,
-      pdfData: docketRecordPdf,
+      pdfData: changeOfAddressPdf,
     });
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
-      document: docketRecordPdfWithCover,
+      document: changeOfAddressPdfWithCover,
       documentId: newDocumentId,
     });
 
