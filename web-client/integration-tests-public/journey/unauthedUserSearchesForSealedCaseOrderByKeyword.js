@@ -1,8 +1,12 @@
+import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
+
 export default (test, testClient) => {
   return it('Search for sealed case order by keyword', async () => {
+    await refreshElasticsearchIndex();
+
     test.setState('advancedSearchForm', {
       orderSearch: {
-        orderKeyword: 'dismiss',
+        orderKeyword: 'dismissal',
       },
     });
 
