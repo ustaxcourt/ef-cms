@@ -98,8 +98,6 @@ const filterRecords = async ({ applicationContext, records }) => {
           docketRecord: undefined,
           documents: undefined,
           entityName: { S: 'Document' },
-          irsPractitioners: undefined,
-          privatePractitioners: undefined,
           sk: { S: `document|${document.documentId}` },
         };
 

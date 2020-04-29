@@ -2,6 +2,7 @@ import { OrderSearch } from '../../shared/src/business/entities/orders/OrderSear
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesOrder } from './journey/docketClerkServesOrder';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { refreshElasticsearchIndex } from './helpers';
@@ -58,6 +59,7 @@ describe('docket clerk order advanced search', () => {
   });
   docketClerkAddsDocketEntryFromOrder(test, 3);
   docketClerkServesOrder(test, 3);
+  docketClerkSealsCase(test);
 
   it('go to advanced order search tab', async () => {
     await refreshElasticsearchIndex();
@@ -95,7 +97,10 @@ describe('docket clerk order advanced search', () => {
 
     expect(test.getState('searchResults')).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ documentId: test.draftOrders[2].documentId }),
+        expect.objectContaining({
+          documentId: test.draftOrders[2].documentId,
+          isSealed: true,
+        }),
       ]),
     );
     expect(test.getState('searchResults')).not.toEqual(
