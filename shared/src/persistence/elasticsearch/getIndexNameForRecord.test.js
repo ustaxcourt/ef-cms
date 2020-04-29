@@ -1,11 +1,11 @@
 const { getIndexNameForRecord } = require('./getIndexNameForRecord');
 
 describe('getIndexNameForRecord', () => {
-  it('returns efcms as a default', () => {
+  it('returns null as a default', () => {
     const record = {};
 
     const result = getIndexNameForRecord(record);
-    expect(result).toEqual('efcms');
+    expect(result).toEqual(null);
   });
 
   it('returns efcms-case for Case records', () => {

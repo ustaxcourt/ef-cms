@@ -71,6 +71,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
         description: 'A deadline!',
         docketNumber: '101-19',
         docketNumberSuffix: 'L',
+        entityName: 'CaseDeadline',
       },
     ]);
   });
