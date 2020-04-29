@@ -1,5 +1,5 @@
 exports.getIndexNameForRecord = record => {
-  let index = 'efcms';
+  let index = null;
 
   const userEntityNames = [
     'User',

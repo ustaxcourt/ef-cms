@@ -28,7 +28,6 @@ const generateHtmlForFilingReceipt = async ({
       applicationContext,
       caseDetail: caseEntity,
     });
-  formattedCaseDetail.showCaseTitleForPrimary = caseEntity.getShowCaseTitleForPrimary();
 
   const getDocumentContent = document => {
     const hasDocumentIncludes =

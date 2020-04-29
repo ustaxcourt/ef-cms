@@ -1,8 +1,8 @@
-export const docketClerkVerifiesDocketEntryMetaUpdates = (
+export const docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates = (
   test,
   docketRecordIndex = 1,
 ) => {
-  return it('docket clerk verifies docket entry meta update', async () => {
+  return it('docket clerk verifies docket entry meta update for court-issued doc', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -14,10 +14,8 @@ export const docketClerkVerifiesDocketEntryMetaUpdates = (
       entry => entry.index === docketRecordIndex,
     );
 
-    expect(docketRecordEntry.filingDate).toEqual('2020-01-04T05:00:00.000Z');
-    expect(docketRecordEntry.filedBy).toEqual('Resp. & Petr. Mona Schultz');
     expect(docketRecordEntry.description).toEqual(
-      'First Request for Admissions',
+      'Order for Amended Petition on 04-04-2050 be free',
     );
   });
 };
