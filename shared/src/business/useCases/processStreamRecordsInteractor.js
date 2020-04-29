@@ -88,32 +88,35 @@ const filterRecords = async ({ applicationContext, records }) => {
         },
         eventName: 'MODIFY',
       });
-    }
 
-    if (caseRecord.dynamodb.Keys.sk.S.includes('document|')) {
-      const documentWithCaseInfo = {
-        ...AWS.DynamoDB.Converter.marshall(fullCase),
-        ...caseRecord.dynamodb.NewImage,
-        docketRecord: undefined,
-        documents: undefined,
-        entityName: { S: 'Document' },
-        irsPractitioners: undefined,
-        privatePractitioners: undefined,
-      };
+      //also reindex all of the documents on the case
+      const { documents } = fullCase;
+      documents.forEach(document => {
+        const documentWithCaseInfo = {
+          ...AWS.DynamoDB.Converter.marshall(fullCase),
+          ...AWS.DynamoDB.Converter.marshall(document),
+          docketRecord: undefined,
+          documents: undefined,
+          entityName: { S: 'Document' },
+          irsPractitioners: undefined,
+          privatePractitioners: undefined,
+          sk: { S: `document|${document.documentId}` },
+        };
 
-      filteredRecords.push({
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: caseRecord.dynamodb.Keys.pk.S,
+        filteredRecords.push({
+          dynamodb: {
+            Keys: {
+              pk: {
+                S: caseRecord.dynamodb.Keys.pk.S,
+              },
+              sk: {
+                S: `document|${document.documentId}`,
+              },
             },
-            sk: {
-              S: caseRecord.dynamodb.Keys.sk.S,
-            },
+            NewImage: documentWithCaseInfo,
           },
-          NewImage: documentWithCaseInfo,
-        },
-        eventName: 'MODIFY',
+          eventName: 'MODIFY',
+        });
       });
     }
   }
