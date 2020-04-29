@@ -13,7 +13,7 @@ export default (test, testClient) => {
 
     test.setState('advancedSearchForm', {
       orderSearch: {
-        orderKeyword: 'dismiss',
+        orderKeyword: 'dismissal',
       },
     });
 
