@@ -49,6 +49,6 @@ exports.getDocument = async ({
       documentId,
     });
 
-    return getPdfFromUrl({ applicationContext, url });
+    return await getPdfFromUrl({ applicationContext, url });
   }
 };
