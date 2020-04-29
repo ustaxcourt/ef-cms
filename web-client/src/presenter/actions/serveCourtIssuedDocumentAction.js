@@ -17,7 +17,7 @@ export const serveCourtIssuedDocumentAction = async ({
   const caseId = get(state.caseDetail.caseId);
 
   const {
-    url,
+    pdfUrl,
   } = await applicationContext
     .getUseCases()
     .serveCourtIssuedDocumentInteractor({
@@ -30,6 +30,6 @@ export const serveCourtIssuedDocumentAction = async ({
     alertSuccess: {
       message: 'Document served. ',
     },
-    pdfUrl: url,
+    pdfUrl,
   };
 };
