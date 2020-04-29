@@ -34,9 +34,8 @@ export const startCaseHelper = (get, applicationContext) => {
     contactSecondaryLabel = 'Spouse’s contact information';
   }
 
-  const hasContactSecondary = !(
-    form.contactSecondary && form.contactSecondary.name
-  );
+  const hasContactSecondary =
+    form.contactSecondary && form.contactSecondary.name;
 
   const caseCaption =
     applicationContext.getUtilities().getCaseCaption(form) || '';
