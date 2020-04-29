@@ -511,6 +511,10 @@ select[disabled] {
   color: color($theme-color-base);
 }
 
+.small-column {
+  width: 1%;
+}
+
 .icon-column {
   width: 40px;
 }
