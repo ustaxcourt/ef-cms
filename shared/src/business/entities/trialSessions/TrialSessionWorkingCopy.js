@@ -28,6 +28,8 @@ function TrialSessionWorkingCopy(rawSession) {
 }
 
 TrialSessionWorkingCopy.prototype.init = function (rawSession) {
+  this.entityName = 'TrialSessionWorkingCopy';
+
   this.caseMetadata = rawSession.caseMetadata || {};
   this.filters = rawSession.filters || {
     aBasisReached: true,
@@ -60,6 +62,7 @@ TrialSessionWorkingCopy.validationRules = {
       }),
     )
     .optional(),
+  entityName: joi.string().valid('TrialSessionWorkingCopy').required(),
   filters: joi
     .object()
     .keys({

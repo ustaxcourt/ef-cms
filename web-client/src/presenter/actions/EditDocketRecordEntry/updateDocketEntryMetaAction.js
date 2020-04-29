@@ -1,12 +1,13 @@
 import { state } from 'cerebral';
 
 /**
- * update props from modal state to pass to through sequence
+ * calls use case to update docket entry meta
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context needed for getting the utility method
- * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
- * @returns {object} the new props
+ * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.path the cerebral path which contains the next path in the sequence
+ * @returns {Function} the next path in the sequence
  */
 export const updateDocketEntryMetaAction = async ({
   applicationContext,
