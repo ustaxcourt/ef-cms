@@ -1,5 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const {
+  generatePdfFromHtmlInteractor,
+} = require('../useCases/generatePdfFromHtmlInteractor');
 const { getChromiumBrowser } = require('./getChromiumBrowser');
 
 const { changeOfAddress } = require('./documentGenerators');
@@ -28,11 +31,12 @@ describe('documentGenerators', () => {
         // eslint-disable-next-line security/detect-non-literal-require
         return require('p' + 'ug');
       }),
+      getUseCases: () => ({
+        generatePdfFromHtmlInteractor,
+      }),
       logger: jest.fn(),
     };
   });
-
-  describe('generatePdfFromHtml', () => {});
 
   describe('changeOfAddress', () => {
     it('Generates a Change of Address document', async () => {
