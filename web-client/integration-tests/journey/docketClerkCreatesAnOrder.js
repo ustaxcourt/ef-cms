@@ -37,6 +37,10 @@ export const docketClerkCreatesAnOrder = (test, data) => {
       key: 'richText',
       value: 'Some order content',
     });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'documentContents',
+      value: data.documentContents || 'Some order content',
+    });
 
     await test.runSequence('submitCourtIssuedOrderSequence');
 
