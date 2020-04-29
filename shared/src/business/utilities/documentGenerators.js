@@ -89,13 +89,13 @@ const generatePdfFromHtml = async ({
   return result;
 };
 
-const changeOfAddress = ({ applicationContext, content }) => {
-  const pdfContentHtml = generateChangeOfAddressTemplate({
+const changeOfAddress = async ({ applicationContext, content }) => {
+  const pdfContentHtml = await generateChangeOfAddressTemplate({
     applicationContext,
     content,
   });
 
-  const pdf = generatePdfFromHtml({
+  const pdf = await generatePdfFromHtml({
     applicationContext,
     contentHtml: pdfContentHtml,
     displayHeaderFooter: false,
