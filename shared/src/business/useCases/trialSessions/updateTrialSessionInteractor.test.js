@@ -26,6 +26,7 @@ describe('updateTrialSessionInteractor', () => {
   const MOCK_TRIAL_ID_3 = '76cfdfee-795a-4056-a383-8622e5d527d1';
   const MOCK_TRIAL_ID_4 = '195bd58c-e81e-44b5-90e2-b9f0a39575d6';
   const MOCK_TRIAL_ID_5 = '5674b900-517d-4ffc-81c0-140302c10010';
+  const MOCK_TRIAL_ID_6 = 'd0293e71-155d-4cdd-9f3d-b21a72b64e51';
 
   beforeEach(() => {
     mockTrialsById = {
@@ -52,6 +53,12 @@ describe('updateTrialSessionInteractor', () => {
         ...MOCK_TRIAL,
         judge: { userId: 'd7d90c05-f6cd-442c-a168-202db587f16f' },
         trialSessionId: MOCK_TRIAL_ID_5,
+      },
+      [MOCK_TRIAL_ID_6]: {
+        ...MOCK_TRIAL,
+        isCalendared: false,
+        judge: { userId: 'd7d90c05-f6cd-442c-a168-202db587f16f' },
+        trialSessionId: MOCK_TRIAL_ID_6,
       },
     };
 
@@ -254,5 +261,23 @@ describe('updateTrialSessionInteractor', () => {
     expect(updateCaseMock.mock.calls[0][0].caseToUpdate).toMatchObject({
       trialDate: '2025-12-02T00:00:00.000Z',
     });
+  });
+
+  it('does not update non-editable fields', async () => {
+    await updateTrialSessionInteractor({
+      applicationContext,
+      trialSession: {
+        ...mockTrialsById[MOCK_TRIAL_ID_6],
+        isCalendared: true,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession.mock
+        .calls[0][0].trialSessionToUpdate.isCalendared,
+    ).toEqual(false);
   });
 });
