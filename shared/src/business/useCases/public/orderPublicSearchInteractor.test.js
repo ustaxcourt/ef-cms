@@ -32,6 +32,17 @@ describe('orderPublicSearchInteractor', () => {
           eventCode: 'ODD',
           signedJudgeName: 'Guy Fieri',
         },
+        {
+          caseCaption: 'Gal Fieri, Petitioner',
+          caseId: '3',
+          docketNumber: '104-19',
+          docketNumberSuffix: 'AAA',
+          documentContents: 'Baby Ruth is gross',
+          documentTitle: 'Order for Baby Ruth',
+          eventCode: 'ODD',
+          isSealed: true,
+          signedJudgeName: 'Gal Fieri',
+        },
       ]);
   });
 
@@ -49,7 +60,7 @@ describe('orderPublicSearchInteractor', () => {
     });
   });
 
-  it('returns results with an authorized user role (petitionsclerk)', async () => {
+  it('returns results with sealed cases filtered out', async () => {
     const result = await orderPublicSearchInteractor({
       applicationContext,
       orderKeyword: 'fish',
