@@ -9,6 +9,7 @@ import {
   revokeObjectURL,
   router,
 } from '../src/router';
+import { elasticsearchIndexes } from '../../web-api/elasticsearch/elasticsearch-indexes';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import {
@@ -558,7 +559,11 @@ export const wait = time => {
 };
 
 export const refreshElasticsearchIndex = async () => {
-  await axios.post('http://localhost:9200/efcms/_refresh');
+  await Promise.all(
+    elasticsearchIndexes.map(async index => {
+      await axios.post(`http://localhost:9200/${index}/_refresh`);
+    }),
+  );
   return await wait(1500);
 };
 
