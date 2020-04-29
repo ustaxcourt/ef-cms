@@ -43,6 +43,9 @@ describe('external users perform an advanced search for orders', () => {
   });
   docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkServesOrder(test, 0);
+  it('refresh elasticsearch index', async () => {
+    await refreshElasticsearchIndex();
+  });
 
   loginAs(test, 'privatePractitioner');
   associatedUserSearchesForServedOrder(test, {
