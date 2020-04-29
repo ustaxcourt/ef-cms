@@ -3,7 +3,7 @@ import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDo
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesOrder } from './journey/docketClerkServesOrder';
-import { loginAs, setupTest } from './helpers';
+import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
@@ -70,6 +70,9 @@ describe('external users perform an advanced search for orders', () => {
 
   loginAs(test, 'docketclerk');
   docketClerkSealsCase(test);
+  it('refresh elasticsearch index', async () => {
+    await refreshElasticsearchIndex();
+  });
 
   loginAs(test, 'privatePractitioner');
   associatedUserSearchesForServedOrder(test, {
