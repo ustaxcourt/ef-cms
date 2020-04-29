@@ -22,6 +22,7 @@ exports.orderKeywordSearch = async ({
     'signedJudgeName',
     'caseId',
     'documentId',
+    'isSealed',
   ];
 
   const queryParams = [

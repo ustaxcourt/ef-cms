@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -42,7 +43,17 @@ export const OrderSearchResults = connect(
                 {advancedOrderSearchHelper.formattedSearchResults.map(
                   (result, idx) => (
                     <tr className="search-result" key={idx}>
-                      <td aria-hidden="true">{idx + 1}</td>
+                      <td aria-hidden="true">
+                        {idx + 1}
+                        {result.isSealed && (
+                          <Icon
+                            aria-label="sealed"
+                            className="iconSealed"
+                            icon={['fa', 'lock']}
+                            size="1x"
+                          />
+                        )}
+                      </td>
                       <td>
                         <CaseLink formattedCase={result} />
                       </td>
