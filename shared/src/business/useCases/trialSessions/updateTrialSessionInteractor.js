@@ -41,8 +41,31 @@ exports.updateTrialSessionInteractor = async ({
     throw new Error('Trial session cannot be updated after its start date');
   }
 
+  const editableFields = {
+    address1: trialSession.address1,
+    address2: trialSession.address2,
+    city: trialSession.city,
+    courtReporter: trialSession.courtReporter,
+    courthouseName: trialSession.courthouseName,
+    irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
+    judge: trialSession.judge,
+    maxCases: trialSession.maxCases,
+    notes: trialSession.notes,
+    postalCode: trialSession.postalCode,
+    sessionType: trialSession.sessionType,
+    startDate: trialSession.startDate,
+    startTime: trialSession.startTime,
+    state: trialSession.state,
+    swingSession: trialSession.swingSession,
+    swingSessionId: trialSession.swingSessionId,
+    term: trialSession.term,
+    termYear: trialSession.termYear,
+    trialClerk: trialSession.trialClerk,
+    trialLocation: trialSession.trialLocation,
+  };
+
   const newTrialSessionEntity = new TrialSession(
-    { ...currentTrialSession, ...trialSession },
+    { ...currentTrialSession, ...editableFields },
     {
       applicationContext,
     },

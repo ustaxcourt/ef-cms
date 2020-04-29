@@ -18,6 +18,8 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.entityName = 'WorkItem';
+
   this.associatedJudge = rawWorkItem.associatedJudge || CHIEF_JUDGE;
   this.assigneeId = rawWorkItem.assigneeId;
   this.assigneeName = rawWorkItem.assigneeName;
@@ -82,6 +84,7 @@ joiValidationDecorator(
     docketNumber: joi.string().required(),
     docketNumberSuffix: joi.string().allow(null).optional(),
     document: joi.object().required(),
+    entityName: joi.string().valid('WorkItem').required(),
     hideFromPendingMessages: joi.boolean().optional(),
     highPriority: joi.boolean().optional(),
     inProgress: joi.boolean().optional(),

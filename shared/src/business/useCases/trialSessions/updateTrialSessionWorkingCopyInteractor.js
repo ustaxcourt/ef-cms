@@ -24,15 +24,35 @@ exports.updateTrialSessionWorkingCopyInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const updatedTrialSessionWorkingCopy = await applicationContext
+  const oldWorkingCopy = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionWorkingCopy({
+      applicationContext,
+      trialSessionId: trialSessionWorkingCopyToUpdate.trialSessionId,
+      userId: trialSessionWorkingCopyToUpdate.userId,
+    });
+
+  const editableFields = {
+    caseMetadata: trialSessionWorkingCopyToUpdate.caseMetadata,
+    filters: trialSessionWorkingCopyToUpdate.filters,
+    sessionNotes: trialSessionWorkingCopyToUpdate.sessionNotes,
+    sort: trialSessionWorkingCopyToUpdate.sort,
+    sortOrder: trialSessionWorkingCopyToUpdate.sortOrder,
+  };
+
+  const updatedTrialSessionWorkingCopy = new TrialSessionWorkingCopy({
+    ...oldWorkingCopy,
+    ...editableFields,
+  })
+    .validate()
+    .toRawObject();
+
+  await applicationContext
     .getPersistenceGateway()
     .updateTrialSessionWorkingCopy({
       applicationContext,
-      trialSessionWorkingCopyToUpdate,
+      trialSessionWorkingCopyToUpdate: updatedTrialSessionWorkingCopy,
     });
 
-  const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy(
-    updatedTrialSessionWorkingCopy,
-  ).validate();
-  return trialSessionWorkingCopyEntity.toRawObject();
+  return updatedTrialSessionWorkingCopy;
 };

@@ -313,6 +313,10 @@ const formatCase = (applicationContext, caseDetail) => {
     caseDetail.caseCaption || '',
   );
 
+  result.showCaseTitleForPrimary = !(
+    caseDetail.contactSecondary && caseDetail.contactSecondary.name
+  );
+
   result.formattedPreferredTrialCity =
     result.preferredTrialCity || 'No location selected';
 

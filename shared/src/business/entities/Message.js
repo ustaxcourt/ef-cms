@@ -15,6 +15,8 @@ function Message(rawMessage, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.entityName = 'Message';
+
   this.createdAt = rawMessage.createdAt || createISODateString();
   this.from = rawMessage.from;
   this.fromUserId = rawMessage.fromUserId;
@@ -30,6 +32,7 @@ joiValidationDecorator(
   Message,
   joi.object().keys({
     createdAt: joiStrictTimestamp.optional(),
+    entityName: joi.string().valid('Message').required(),
     from: joi.string().required(),
     fromUserId: joi
       .string()
