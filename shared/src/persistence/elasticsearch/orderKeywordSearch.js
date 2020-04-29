@@ -21,6 +21,7 @@ exports.orderKeywordSearch = async ({
     'filingDate',
     'signedJudgeName',
     'caseId',
+    'numberOfPages',
     'documentId',
     'isSealed',
   ];
