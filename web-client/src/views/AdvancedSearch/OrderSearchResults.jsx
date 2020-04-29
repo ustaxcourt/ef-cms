@@ -31,7 +31,8 @@ export const OrderSearchResults = connect(
             <table className="usa-table search-results responsive-table row-border-only">
               <thead>
                 <tr>
-                  <th aria-hidden="true"></th>
+                  <th aria-hidden="true" className="small-column"></th>
+                  <th aria-hidden="true" className="small-column"></th>
                   <th>Docket number</th>
                   <th>Case title</th>
                   <th>Order</th>
@@ -43,8 +44,10 @@ export const OrderSearchResults = connect(
                 {advancedOrderSearchHelper.formattedSearchResults.map(
                   (result, idx) => (
                     <tr className="search-result" key={idx}>
-                      <td aria-hidden="true">
+                      <td aria-hidden="true" className="small-column">
                         {idx + 1}
+                      </td>
+                      <td aria-hidden="true" className="small-column">
                         {result.isSealed && (
                           <Icon
                             aria-label="sealed"
