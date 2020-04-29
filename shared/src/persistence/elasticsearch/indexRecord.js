@@ -8,15 +8,17 @@ exports.indexRecord = async ({
   record,
 }) => {
   const searchClient = applicationContext.getSearchClient();
-  const index = getIndexNameForRecord(record);
+  const index = getIndexNameForRecord(fullRecord);
 
-  const body = isAlreadyMarshalled
-    ? fullRecord
-    : { ...AWS.DynamoDB.Converter.marshall(fullRecord) };
+  if (index) {
+    const body = isAlreadyMarshalled
+      ? fullRecord
+      : { ...AWS.DynamoDB.Converter.marshall(fullRecord) };
 
-  await searchClient.index({
-    body,
-    id: `${record.recordPk}_${record.recordSk}`,
-    index,
-  });
+    await searchClient.index({
+      body,
+      id: `${record.recordPk}_${record.recordSk}`,
+      index,
+    });
+  }
 };

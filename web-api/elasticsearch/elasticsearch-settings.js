@@ -60,7 +60,6 @@ module.exports = {
         },
       },
       'mapping.total_fields.limit': '4000',
-
       number_of_replicas: 1,
       number_of_shards: 5,
     },
