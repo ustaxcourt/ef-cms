@@ -12,17 +12,20 @@ exports.orderKeywordSearch = async ({
 }) => {
   const sourceFields = [
     'caseCaption',
-    'documentContents',
-    'docketNumber',
-    'documentTitle',
-    'docketNumberSuffix',
+    'caseId',
     'contactPrimary',
     'contactSecondary',
-    'filingDate',
-    'signedJudgeName',
-    'caseId',
+    'docketNumber',
+    'docketNumberSuffix',
+    'documentContents',
     'documentId',
+    'documentTitle',
+    'filingDate',
+    'irsPractitioners',
     'isSealed',
+    'privatePractitioners',
+    'sealedDate',
+    'signedJudgeName',
   ];
 
   const queryParams = [
