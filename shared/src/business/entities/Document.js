@@ -111,6 +111,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.certificateOfService = rawDocument.certificateOfService;
   this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
   this.createdAt = rawDocument.createdAt || createISODateString();
+  this.date = rawDocument.date;
   this.docketNumber = rawDocument.docketNumber;
   this.documentId = rawDocument.documentId;
   this.documentTitle = rawDocument.documentTitle;
@@ -345,6 +346,14 @@ joiValidationDecorator(
       .iso()
       .required()
       .description('When the Document was added to the system.'),
+    date: joi
+      .date()
+      .iso()
+      .optional()
+      .allow(null)
+      .description(
+        'An optional date used when generating a fully concatenated document title.',
+      ),
     docketNumber: joi
       .string()
       .regex(DOCKET_NUMBER_MATCHER)

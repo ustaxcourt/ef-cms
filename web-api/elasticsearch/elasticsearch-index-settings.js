@@ -1,5 +1,6 @@
 (async () => {
   const AWS = require('aws-sdk');
+  const elasticsearchIndexes = require('./elasticsearch-indexes');
   AWS.config.region = 'us-east-1';
   const connectionClass = require('http-aws-es');
   const elasticsearch = require('elasticsearch');
@@ -30,7 +31,7 @@
   });
 
   await Promise.all(
-    ['efcms', 'efcms-case', 'efcms-document', 'efcms-user'].map(async index => {
+    elasticsearchIndexes.map(async index => {
       try {
         const indexExists = await searchClientCache.indices.exists({
           body: {},
@@ -45,7 +46,7 @@
           });
         } else {
           searchClientCache.indices.putSettings({
-            body: { 'index.mapping.total_fields.limit': '4000' }, // TODO: Lower this
+            body: { 'index.mapping.total_fields.limit': '1000' },
             index,
           });
         }
