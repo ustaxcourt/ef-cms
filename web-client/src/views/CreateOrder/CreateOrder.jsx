@@ -14,11 +14,11 @@ import React from 'react';
 export const CreateOrder = connect(
   {
     createOrderHelper: state.createOrderHelper,
-    form: state.form,
+    editorDelta: state.form.editorDelta,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     openEditOrderTitleModalSequence: sequences.openEditOrderTitleModalSequence,
-    refreshPdfWhenSwitchingCreateOrderTabSequence:
-      sequences.refreshPdfWhenSwitchingCreateOrderTabSequence,
+    refreshPdfSequence: sequences.refreshPdfSequence,
+    richText: state.form.richText,
     showModal: state.modal.showModal,
     submitCourtIssuedOrderSequence: sequences.submitCourtIssuedOrderSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -26,10 +26,11 @@ export const CreateOrder = connect(
   },
   function CreateOrder({
     createOrderHelper,
-    form,
+    editorDelta,
     formCancelToggleCancelSequence,
     openEditOrderTitleModalSequence,
-    refreshPdfWhenSwitchingCreateOrderTabSequence,
+    refreshPdfSequence,
+    richText,
     showModal,
     submitCourtIssuedOrderSequence,
     updateFormValueSequence,
@@ -64,12 +65,14 @@ export const CreateOrder = connect(
             <Tabs
               bind="createOrderTab"
               className="tab-border tab-button-h2"
-              onSelect={() => refreshPdfWhenSwitchingCreateOrderTabSequence()}
+              onSelect={selectedTabName =>
+                selectedTabName === 'preview' && refreshPdfSequence()
+              }
             >
               <Tab id="tab-generate" tabName="generate" title="Generate">
                 <TextEditor
-                  defaultValue={form.richText}
-                  form={form}
+                  defaultValue={richText}
+                  editorDelta={editorDelta}
                   updateFormValueSequence={updateFormValueSequence}
                   updateScreenMetadataSequence={updateScreenMetadataSequence}
                 />

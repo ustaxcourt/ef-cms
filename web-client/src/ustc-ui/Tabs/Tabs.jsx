@@ -64,7 +64,7 @@ export function TabsComponent({
     const isActiveTab = tabName === activeKey;
     const tabContentId = asSwitch ? '' : `tabContent-${camelCase(tabName)}`;
 
-    var liClass = classNames({
+    var liClass = classNames('ustc-ui-tabs', {
       active: isActiveTab,
       'grid-col': boxed,
     });
@@ -146,7 +146,10 @@ export function TabsComponent({
     <div {...baseProps}>
       {hasNav && (
         <nav className={classNames({ 'grid-container padding-x-0': boxed })}>
-          <ul className={classNames({ 'grid-row': boxed })} role="tablist">
+          <ul
+            className={classNames('ustc-ui-tabs', { 'grid-row': boxed })}
+            role="tablist"
+          >
             {map(children, renderTab)}
           </ul>
         </nav>
