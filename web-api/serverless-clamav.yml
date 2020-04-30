@@ -34,15 +34,15 @@ layers:
     package:
       exclude:
         - clamav_lambda_layer.tar.gz
-  #       - var/lib/clamav/main.cvd
-  # avm:
-  #   name: ${self:provider.stage}-avm
-  #   compatibleRuntimes:
-  #     - nodejs12.x
-  #   path: web-api/runtimes/clamav/
-  #   package:
-  #     exclude:
-  #       - ./**
-  #     include:
-  #       - var/lib/clamav/main.cvd
-  #     excludeDevDependencies: true
+        - var/lib/clamav/main.cvd
+  avm:
+    name: ${self:provider.stage}-avm
+    compatibleRuntimes:
+      - nodejs12.x
+    path: web-api/runtimes/clamav/
+    package:
+      exclude:
+        - ./**
+      include:
+        - var/lib/clamav/main.cvd
+      excludeDevDependencies: true
