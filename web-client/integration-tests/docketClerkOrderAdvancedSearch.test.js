@@ -270,7 +270,7 @@ describe('docket clerk order advanced search', () => {
   it('search for a judge that has signed served orders', async () => {
     const seedData = {
       caseCaption: 'Hanan Al Hroub, Petitioner',
-      caseId: '1a92894e-83a5-48ba-9994-3ada44235deb',
+      caseId: 'f1aa4aa3-c214-424c-8870-d0049c5744d7',
       contactPrimary: {
         address1: '123 Teachers Way',
         city: 'Haifa',

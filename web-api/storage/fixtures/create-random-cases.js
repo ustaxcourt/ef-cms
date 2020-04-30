@@ -34,7 +34,7 @@ const main = () => {
 
   const authToken = `Bearer ${jwtToken}`;
   const petitionFileId = '5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c';
-  const stinFileId = '2da6d239-555a-40e8-af81-1949c8270cd7';
+  const stinFileId = 'f1aa4aa3-c214-424c-8870-d0049c5744d7';
 
   const instance = axios.create({
     headers: { Authorization: authToken },
