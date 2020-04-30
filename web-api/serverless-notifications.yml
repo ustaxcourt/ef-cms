@@ -119,33 +119,36 @@ resources:
     #####
     # This Authorizer is used for validating the JWT token before invoking the lambda
     #####
-    # ApiGatewayAuthorizer:
-    #   Type: AWS::ApiGateway::Authorizer
-    #   Properties:
-    #     Name: CognitoUserPool
-    #     Type: COGNITO_USER_POOLS
-    #     IdentitySource: method.request.header.Authorization
-    #     RestApiId:
-    #       Ref: ApiGatewayRestApi
-    #     ProviderARNs:
-    #       - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
-    #####
+    ApiGatewayAuthorizer:
+      Type: AWS::ApiGateway::Authorizer
+      Properties:
+        Name: CognitoUserPool
+        Type: COGNITO_USER_POOLS
+        IdentitySource:
+          - method.request.header.Authorization
+          - method.request.querystring.token
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        ProviderARNs:
+          - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
+
+    ####
     # Begin Stage for API Gateway Logging
     #####
-    # ApiGatewayStage:
-    #   Type: AWS::ApiGateway::Stage
-    #   Properties:
-    #     DeploymentId:
-    #       Ref: __deployment__
-    #     RestApiId:
-    #       Ref: ApiGatewayRestApi
-    #     StageName: ${opt:stage}
-    #     MethodSettings:
-    #       - DataTraceEnabled: true
-    #         HttpMethod: '*'
-    #         LoggingLevel: INFO
-    #         ResourcePath: '/*'
-    #         MetricsEnabled: true
+    ApiGatewayStage:
+      Type: AWS::ApiGateway::Stage
+      Properties:
+        DeploymentId:
+          Ref: __deployment__
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        StageName: ${opt:stage}
+        MethodSettings:
+          - DataTraceEnabled: true
+            HttpMethod: '*'
+            LoggingLevel: INFO
+            ResourcePath: '/*'
+            MetricsEnabled: true
 
 functions:
   connectHandler:
@@ -153,9 +156,17 @@ functions:
     events:
       - websocket:
           route: $connect
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
 
   disconnectHandler:
     handler: web-api/${self:provider.dir}/notificationHandlers.disconnectLambda
     events:
       - websocket:
           route: $disconnect
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
