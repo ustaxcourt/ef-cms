@@ -242,11 +242,17 @@ export const StartCaseStep5 = connect(
                     STIN.
                   </li>
                   <li>
-                  Do not include any additional documents with your Petition, except for the IRS notice. <em>Documents that might be evidence can be submitted at a later time.
+                    Do not include any additional documents with your Petition,
+                    except for the IRS notice.{' '}
+                    <em>
+                      Documents that might be evidence can be submitted at a
+                      later time.
                     </em>
                   </li>
                   <li>
-                  Confirm that all information being submitted appears as you want it to. You <strong>WILL NOT</strong> be able to edit your case after you submit.
+                    Confirm that all information being submitted appears as you
+                    want it to. You <strong>WILL NOT</strong> be able to edit
+                    your case after you submit.
                   </li>
                 </ol>
               </div>
