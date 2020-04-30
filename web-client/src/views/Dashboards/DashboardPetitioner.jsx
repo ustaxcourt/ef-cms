@@ -68,17 +68,29 @@ export const DashboardPetitioner = connect(
                 <div className="content-wrapper gray">
                   <h3>Other Filing Options</h3>
                   <hr />
-                  <p><strong>To file by mail:</strong><br />
-Send required forms and filing fee to:<br />
-United States Tax Court<br />
-400 Second Street, NW<br />
-Washington, DC 20217</p>
+                  <p>
+                    <strong>To file by mail:</strong>
+                    <br />
+                    Send required forms and filing fee to:
+                    <br />
+                    United States Tax Court
+                    <br />
+                    400 Second Street, NW
+                    <br />
+                    Washington, DC 20217
+                  </p>
 
-<p><strong>To file in person:</strong><br />
-Please bring your forms and filing fee to:<br />
-United States Tax Court<br />
-400 Second Street, NW<br />
-Washington, DC 20217</p>
+                  <p>
+                    <strong>To file in person:</strong>
+                    <br />
+                    Please bring your forms and filing fee to:
+                    <br />
+                    United States Tax Court
+                    <br />
+                    400 Second Street, NW
+                    <br />
+                    Washington, DC 20217
+                  </p>
                 </div>
               </div>
             </div>

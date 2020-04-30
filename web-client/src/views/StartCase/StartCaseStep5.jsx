@@ -230,11 +230,11 @@ export const StartCaseStep5 = connect(
                 <ol className="numbered-list">
                   <li>
                     Double check your IRS Notice to ensure your Petition is
-                    timely.{' '}
+                    timely.
                     <i>
                       The Court must receive your case no later than 11:59
                       Eastern Time on the last date to file.
-                    </i>{' '}
+                    </i>
                   </li>
                   <li>
                     Be sure you have removed or redacted all personal
@@ -243,7 +243,7 @@ export const StartCaseStep5 = connect(
                   </li>
                   <li>
                     Do not include any additional documents with your Petition,
-                    except for the IRS notice.{' '}
+                    except for the IRS notice.
                     <i>
                       Documents that might be evidence can be submitted at a
                       submitted at a later time.
@@ -251,7 +251,7 @@ export const StartCaseStep5 = connect(
                   </li>
                   <li>
                     Confirm that all information being submitted appears as y
-                    your case after you want it to. You{' '}
+                    your case after you want it to. You
                     <strong> WILL NOT</strong> be able to edit your case after
                     submit.
                   </li>

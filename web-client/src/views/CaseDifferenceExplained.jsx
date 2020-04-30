@@ -71,7 +71,7 @@ export const CaseDifferenceExplained = () => {
           ].map(caseType => (
             <tr key={caseType}>
               <td>{caseType}</td>
-              <td>Not eligible for Small tax case procedure</td>
+              <td>Not eligible for small tax case procedure</td>
             </tr>
           ))}
         </tbody>

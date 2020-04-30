@@ -200,9 +200,7 @@ export const BeforeStartingCase = () => (
           </div>
         </div>
       </div>
-      <Button href="/file-a-petition/step-1">
-        Got It, Letʼs Start a Case
-      </Button>
+      <Button href="/file-a-petition/step-1">Got It, Letʼs Start a Case</Button>
       <Button link href="/">
         Cancel
       </Button>
