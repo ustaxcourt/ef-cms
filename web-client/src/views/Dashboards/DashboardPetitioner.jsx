@@ -39,7 +39,7 @@ export const DashboardPetitioner = connect(
                       rel="noopener noreferrer"
                       target="_blank"
                     >
-                      Petition Filing Guide
+                      How to Create a Case
                     </a>
                   </p>
                   <p>
@@ -49,7 +49,7 @@ export const DashboardPetitioner = connect(
                       rel="noopener noreferrer"
                       target="_blank"
                     >
-                      Find a court location
+                      Find a Court Location
                     </a>
                   </p>
                   <p>
@@ -59,7 +59,7 @@ export const DashboardPetitioner = connect(
                       rel="noopener noreferrer"
                       target="_blank"
                     >
-                      View forms
+                      View Forms
                     </a>
                   </p>
                 </div>
@@ -69,14 +69,27 @@ export const DashboardPetitioner = connect(
                   <h3>Other Filing Options</h3>
                   <hr />
                   <p>
-                    <a
-                      className="usa-link--external"
-                      href="/"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      How to file a case by mail or in person
-                    </a>
+                    <strong>To file by mail:</strong>
+                    <br />
+                    Send required forms and filing fee to:
+                    <br />
+                    United States Tax Court
+                    <br />
+                    400 Second Street, NW
+                    <br />
+                    Washington, DC 20217
+                  </p>
+
+                  <p>
+                    <strong>To file in person:</strong>
+                    <br />
+                    Please bring your forms and filing fee to:
+                    <br />
+                    United States Tax Court
+                    <br />
+                    400 Second Street, NW
+                    <br />
+                    Washington, DC 20217
                   </p>
                 </div>
               </div>
