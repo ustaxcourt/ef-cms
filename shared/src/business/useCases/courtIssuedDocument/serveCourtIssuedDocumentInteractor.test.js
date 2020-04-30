@@ -25,6 +25,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   let extendCase;
 
   const mockPdfUrl = 'www.example.com';
+  const mockDocumentId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
 
   const testPdfDocBytes = () => {
     // sample.pdf is a 1 page document
@@ -103,8 +104,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         {
           description: 'Docket Record 1',
-          docketRecordId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
-          documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
+          docketRecordId: mockDocumentId,
+          documentId: mockDocumentId,
           eventCode: 'OAJ',
           filingDate: createISODateString(),
           index: 1,
@@ -121,7 +122,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           workItems: [mockWorkItem],
         },
         {
-          documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
+          documentId: mockDocumentId,
           documentType: 'OAJ - Order that case is assigned',
           eventCode: 'OAJ',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
@@ -168,8 +169,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         {
           description: 'Docket Record 0',
-          docketRecordId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
-          documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
+          docketRecordId: mockDocumentId,
+          documentId: mockDocumentId,
           eventCode: 'OAJ',
           filingDate: createISODateString(),
           index: 1,
@@ -186,7 +187,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           workItems: [mockWorkItem],
         },
         {
-          documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
+          documentId: mockDocumentId,
           documentType: 'OAJ - Order that case is assigned',
           eventCode: 'OAJ',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
@@ -334,6 +335,26 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('should set the number of pages present in the document to be served', async () => {
+    await serveCourtIssuedDocumentInteractor({
+      applicationContext,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documentId: mockDocumentId,
+    });
+
+    const updatedCase = applicationContext.getPersistenceGateway().updateCase
+      .mock.calls[0][0].caseToUpdate;
+    const updatedDocument = updatedCase.documents.find(
+      document => document.documentId === mockDocumentId,
+    );
+
+    expect(updatedDocument.numberOfPages).toBe(1);
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument.mock
+        .calls[0][0],
+    ).toMatchObject({ documentId: mockDocumentId });
+  });
+
   it('should set the document as served and update the case and work items for a non-generic order document', async () => {
     applicationContext
       .getPersistenceGateway()
@@ -347,14 +368,13 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await serveCourtIssuedDocumentInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
+      documentId: mockDocumentId,
     });
 
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
       .mock.calls[0][0].caseToUpdate;
     const updatedDocument = updatedCase.documents.find(
-      document =>
-        document.documentId === 'cf105788-5d34-4451-aa8d-dfd9a851b675',
+      document => document.documentId === mockDocumentId,
     );
 
     expect(updatedDocument.status).toEqual('served');
