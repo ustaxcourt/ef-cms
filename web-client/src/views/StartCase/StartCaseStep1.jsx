@@ -38,11 +38,11 @@ export const StartCaseStep1 = connect(
           </h2>
         </Focus>
         <Hint>
-          The Statement of Taxpayer Identification Number is the only document
-          that should include personal information (such as Social Security
-          Numbers, Taxpayer Identification Numbers, or Employer Identification
-          It’s sent IRS to help viewed by the Court or stored as part of the
-          public record.
+        The Statement of Taxpayer Identification is the only document that
+        should include personal information (such as Social Security Numbers,
+        Taxpayer Identification Numbers, or Employer Identification Numbers).
+        It’s sent to the IRS to help identify you, but is never viewed by the
+        Court or stored as part of the public record.
         </Hint>
 
         <div className="blue-container margin-bottom-5">

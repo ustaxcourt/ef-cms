@@ -231,10 +231,10 @@ export const StartCaseStep5 = connect(
                   <li>
                     Double check your IRS Notice to ensure your Petition is
                     timely.
-                    <i>
-                      The Court must receive your case no later than 11:59
+                    <em>
+                      The Court must receive your case no later than 11:59 pm
                       Eastern Time on the last date to file.
-                    </i>
+                    </em>
                   </li>
                   <li>
                     Be sure you have removed or redacted all personal
@@ -242,18 +242,11 @@ export const StartCaseStep5 = connect(
                     STIN.
                   </li>
                   <li>
-                    Do not include any additional documents with your Petition,
-                    except for the IRS notice.
-                    <i>
-                      Documents that might be evidence can be submitted at a
-                      submitted at a later time.
-                    </i>
+                  Do not include any additional documents with your Petition, except for the IRS notice. <em>Documents that might be evidence can be submitted at a later time.
+                    </em>
                   </li>
                   <li>
-                    Confirm that all information being submitted appears as y
-                    your case after you want it to. You
-                    <strong> WILL NOT</strong> be able to edit your case after
-                    submit.
+                  Confirm that all information being submitted appears as you want it to. You <strong>WILL NOT</strong> be able to edit your case after you submit.
                   </li>
                 </ol>
               </div>
