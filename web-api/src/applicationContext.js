@@ -70,6 +70,9 @@ const {
   casePublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
 const {
+  changeOfAddress,
+} = require('../../shared/src/business/utilities/documentGenerators');
+const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
 const {
@@ -625,6 +628,9 @@ const {
   saveDocumentFromLambda,
 } = require('../../shared/src/persistence/s3/saveDocumentFromLambda');
 const {
+  saveFileAndGenerateUrl,
+} = require('../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl');
+const {
   saveIntermediateDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/editDocketEntry/saveIntermediateDocketEntryInteractor');
 const {
@@ -929,6 +935,9 @@ module.exports = (appContextUser = {}) => {
       }
       return dynamoClientCache[type];
     },
+    getDocumentGenerators: () => ({
+      changeOfAddress,
+    }),
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
     },
@@ -1150,6 +1159,7 @@ module.exports = (appContextUser = {}) => {
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
         getCaseInventoryReport,
+        saveFileAndGenerateUrl,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
       };

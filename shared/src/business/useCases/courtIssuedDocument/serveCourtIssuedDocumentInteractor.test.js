@@ -410,7 +410,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     });
 
-    expect(result).toBe(mockPdfUrl);
+    expect(result.pdfUrl).toBe(mockPdfUrl.url);
   });
 
   it('should remove the case from the trial session if the case has a trialSessionId', async () => {
