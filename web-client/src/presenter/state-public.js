@@ -28,6 +28,7 @@ export const state = {
     showUsaBannerDetails: false,
   },
   currentPage: 'Interstitial',
+  isPublic: true,
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
     waitingForResponse: false,
