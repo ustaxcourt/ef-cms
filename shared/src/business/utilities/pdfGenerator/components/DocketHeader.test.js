@@ -4,7 +4,7 @@ const { shallow } = require('enzyme');
 
 describe('DocketHeader', () => {
   it('renders the case caption from props', () => {
-    let wrapper = shallow(<DocketHeader caseTitle="Test Petitioner" />);
+    let wrapper = shallow(<DocketHeader caption="Test Petitioner" />);
     expect(wrapper.find('#caption-title').text()).toEqual('Test Petitioner');
   });
 

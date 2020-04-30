@@ -41,7 +41,7 @@ const ChangeOfAddress = ({ name, newData, oldData, options }) => {
     <>
       <PrimaryHeader />
       <DocketHeader
-        caseCaptionWithPostfix={options.caseCaptionWithPostfix}
+        caption={options.caption}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
         h3={options.h3}
       />
