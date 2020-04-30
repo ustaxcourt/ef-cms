@@ -38,7 +38,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
     });
 
   const numberOfPages = await applicationContext
-    .getPersistenceGateway()
+    .getUseCaseHelpers()
     .countPagesInDocument({
       applicationContext,
       documentId: primaryDocumentFileId,

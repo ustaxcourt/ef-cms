@@ -52,7 +52,6 @@ export const submitCourtIssuedOrderAction = async ({
         documentMetadata,
       });
   } else {
-    console.log('WE ARE HERE AGAIN');
     caseDetail = await applicationContext
       .getUseCases()
       .fileCourtIssuedOrderInteractor({

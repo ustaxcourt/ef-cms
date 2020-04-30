@@ -38,7 +38,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
     });
 
   const numberOfPages = await applicationContext
-    .getPersistenceGateway()
+    .getUseCaseHelpers()
     .countPagesInDocument({
       applicationContext,
       documentId: documentIdToEdit,
