@@ -32,12 +32,11 @@ describe('getDocument', () => {
   });
 
   it('calls S3.getObject when S3 protocol is set', async () => {
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
-        Body: '',
+    applicationContext.getStorageClient.mockReturnValue({
+      getObject: jest.fn().mockReturnValue({
+        promise: () => ({ Body: null }),
       }),
     });
-
     await getDocument({
       applicationContext,
       protocol: 'S3',

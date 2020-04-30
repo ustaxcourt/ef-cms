@@ -88,6 +88,9 @@ const {
   completeWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
+  countPagesInDocument,
+} = require('../../shared/src/business/useCaseHelper/countPagesInDocument');
+const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
 const {
@@ -1143,6 +1146,7 @@ module.exports = (appContextUser = {}) => {
     getUseCaseHelpers: () => {
       return {
         appendPaperServiceAddressPageToPdf,
+        countPagesInDocument,
         fetchPendingItems,
         generateCaseConfirmationPdf,
         generateCaseInventoryReportPdf,
@@ -1170,6 +1174,7 @@ module.exports = (appContextUser = {}) => {
         checkForReadyForTrialCasesInteractor,
         completeDocketEntryQCInteractor,
         completeWorkItemInteractor,
+
         createCaseDeadlineInteractor,
         createCaseFromPaperInteractor,
         createCaseInteractor,
