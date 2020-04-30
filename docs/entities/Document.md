@@ -577,7 +577,10 @@ A lodged document is awaiting action by the judge to enact or refuse.
 
 
  - `primaryDocument`
+ - `primarySupportingDocument`
  - `secondaryDocument`
+ - `secondarySupportingDocument`
+ - `supportingDocument`
 
 ### scenario
 
