@@ -18,9 +18,5 @@ exports.generateTrialCalendarPdfInteractor = ({
       trialSessionId,
     },
     endpoint: '/reports/trial-calendar-pdf',
-    headers: {
-      Accept: 'application/pdf',
-    },
-    options: { responseType: 'blob' },
   });
 };

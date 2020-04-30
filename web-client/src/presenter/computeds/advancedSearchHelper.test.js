@@ -421,6 +421,29 @@ describe('advancedOrderSearchHelper', () => {
     });
   });
 
+  it('returns isPublic false if state.isPublic is not defined', () => {
+    const result = runCompute(advancedOrderSearchHelper, {
+      state: {
+        advancedSearchForm: { currentPage: 1 },
+        searchResults: [],
+      },
+    });
+
+    expect(result.isPublic).toBeFalsy();
+  });
+
+  it('returns isPublic true if state.isPublic is true', () => {
+    const result = runCompute(advancedOrderSearchHelper, {
+      state: {
+        advancedSearchForm: { currentPage: 1 },
+        isPublic: true,
+        searchResults: [],
+      },
+    });
+
+    expect(result).toBeTruthy();
+  });
+
   it('returns showNoMatches false, showSearchResults true, and the resultsCount when searchResults are not empty', () => {
     const result = runCompute(advancedOrderSearchHelper, {
       state: {

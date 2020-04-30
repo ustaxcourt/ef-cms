@@ -1,9 +1,9 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getPdfFileAction } from './getPdfFileAction';
+import { getPdfUrlAction } from './getPdfUrlAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('getPdfFileAction', () => {
+describe('getPdfUrlAction', () => {
   let createObjectURLStub;
 
   beforeAll(() => {
@@ -18,15 +18,20 @@ describe('getPdfFileAction', () => {
 
   it('throws error if htmlString is empty', async () => {
     await expect(
-      runAction(getPdfFileAction, {
+      runAction(getPdfUrlAction, {
         props: { htmlString: '' },
         state: {},
       }),
     ).rejects.toThrow();
   });
 
-  it('gets the pdf file/blob for a court issued document', async () => {
-    await runAction(getPdfFileAction, {
+  it('gets the pdf file url for a court issued document', async () => {
+    const mockPdf = { url: 'www.example.com' };
+    applicationContextForClient
+      .getUseCases()
+      .createCourtIssuedOrderPdfFromHtmlInteractor.mockReturnValue(mockPdf);
+
+    const result = await runAction(getPdfUrlAction, {
       modules: {
         presenter,
       },
@@ -41,7 +46,6 @@ describe('getPdfFileAction', () => {
     expect(
       applicationContextForClient.getUtilities().formatDocketNumberWithSuffix,
     ).toBeCalled();
-    expect(createObjectURLStub).toBeCalled();
-    expect(global.File).toBeCalled();
+    expect(result.output.pdfUrl).toBe(mockPdf.url);
   });
 });
