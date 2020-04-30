@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const { caseSearchFilter } = require('../utilities/caseFilter');
 const { Document } = require('../../business/entities/Document');
 const { OrderSearch } = require('../../business/entities/orders/OrderSearch');
 const { UnauthorizedError } = require('../../errors/errors');
@@ -46,9 +47,15 @@ exports.orderAdvancedSearchInteractor = async ({
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  return await applicationContext.getPersistenceGateway().orderKeywordSearch({
-    applicationContext,
-    orderEventCodes: Document.ORDER_DOCUMENT_TYPES,
-    ...rawSearch,
-  });
+  const results = await applicationContext
+    .getPersistenceGateway()
+    .orderKeywordSearch({
+      applicationContext,
+      orderEventCodes: Document.ORDER_DOCUMENT_TYPES,
+      ...rawSearch,
+    });
+
+  const filteredResults = caseSearchFilter(results, authorizedUser);
+
+  return filteredResults;
 };

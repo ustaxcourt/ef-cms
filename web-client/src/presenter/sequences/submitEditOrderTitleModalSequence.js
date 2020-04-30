@@ -1,6 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
-import { refreshPdfWhenSwitchingCreateOrderTabSequence } from './refreshPdfWhenSwitchingCreateOrderTabSequence';
+import { refreshPdfSequence } from './refreshPdfSequence';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder/setCreateOrderModalDataOnFormAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -16,7 +16,7 @@ export const submitEditOrderTitleModalSequence = [
     success: [
       clearModalAction,
       setCreateOrderModalDataOnFormAction,
-      refreshPdfWhenSwitchingCreateOrderTabSequence,
+      refreshPdfSequence,
     ],
   },
 ];
