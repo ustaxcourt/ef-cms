@@ -130,6 +130,18 @@ module.exports = [
     notes: 'checks a11y of advanced order search',
     url: 'http://localhost:1234/mock-login?token=docketclerk&path=/search',
   },
+  {
+    actions: [
+      'wait for #tab-order to be visible',
+      'click element #tab-order',
+      'wait for #order-search to be visible',
+      'set field #order-search to meow',
+      'click element button#advanced-search-button',
+      'wait for table.search-results to be visible',
+    ],
+    notes: 'checks a11y of advanced order search of a sealed case',
+    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/search',
+  },
   'http://localhost:1234/mock-login?token=docketclerk&path=/print-preview/110-19/',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-19/edit-petitioner-information',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19?openModal=PaperServiceConfirmModal',
