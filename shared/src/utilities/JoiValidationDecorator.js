@@ -1,4 +1,5 @@
 const joi = require('@hapi/joi');
+const { isEmpty } = require('lodash');
 
 /**
  *
@@ -128,10 +129,8 @@ exports.joiValidationDecorator = function (
   };
 
   entityConstructor.prototype.isValid = function isValid() {
-    return (
-      !!schema.validate(this, { allowUnknown: true }).error === false &&
-      (customValidate ? customValidate.call(this) : true)
-    );
+    const validationErrors = this.getFormattedValidationErrors();
+    return isEmpty(validationErrors);
   };
 
   entityConstructor.prototype.getValidationError = function getValidationError() {
