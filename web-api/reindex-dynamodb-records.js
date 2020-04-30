@@ -41,12 +41,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
               RequestItems: {
                 [`efcms-${env}`]: c.map(item => ({
                   PutRequest: {
-                    ConditionExpression:
-                      'attribute_not_exists(#pk) and attribute_not_exists(#sk)',
-                    ExpressionAttributeNames: {
-                      '#pk': item.pk,
-                      '#sk': item.sk,
-                    },
                     Item: item,
                   },
                 })),
