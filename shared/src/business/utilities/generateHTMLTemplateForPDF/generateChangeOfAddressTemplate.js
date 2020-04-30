@@ -38,7 +38,7 @@ const generateChangeOfAddressTemplate = async ({
       newData,
       oldData,
       options: {
-        caseCaptionWithPostfix: `${caption} ${Case.CASE_CAPTION_POSTFIX}`,
+        caption,
         docketNumberWithSuffix,
         h3: documentTitle,
         showAddressAndPhoneChange:
