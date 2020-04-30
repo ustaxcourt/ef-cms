@@ -79,7 +79,7 @@ export const OrderSearchResults = connect(
             </table>
           </>
         )}
-        {!advancedOrderSearchHelper.showLoadMore && (
+        {advancedOrderSearchHelper.showLoadMore && (
           <Button
             secondary
             aria-label={`load ${pageSize} more results`}
