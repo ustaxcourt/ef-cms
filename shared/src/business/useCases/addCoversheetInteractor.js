@@ -1,9 +1,8 @@
-const { Case } = require('../entities/cases/Case');
-const { PDFDocument } = require('pdf-lib');
-
 const {
   generateCoverPagePdf,
 } = require('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
+const { Case } = require('../entities/cases/Case');
+const { PDFDocument } = require('pdf-lib');
 
 /**
  * a helper function which assembles the correct data to be used in the generation of a PDF
@@ -140,7 +139,6 @@ exports.addCoverToPdf = async ({
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the case id
  * @param {string} providers.documentId the document id
- * @returns {Uint8Array} the new pdf data
  */
 exports.addCoversheetInteractor = async ({
   applicationContext,
@@ -197,6 +195,4 @@ exports.addCoversheetInteractor = async ({
     document: newPdfData,
     documentId,
   });
-
-  return newPdfData;
 };

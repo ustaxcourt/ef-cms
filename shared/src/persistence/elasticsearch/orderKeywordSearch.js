@@ -18,6 +18,7 @@ exports.orderKeywordSearch = async ({
     'docketNumber',
     'docketNumberSuffix',
     'documentContents',
+    'numberOfPages',
     'documentId',
     'documentTitle',
     'filingDate',
