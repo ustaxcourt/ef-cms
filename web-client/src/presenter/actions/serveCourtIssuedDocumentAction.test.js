@@ -6,7 +6,7 @@ import { serveCourtIssuedDocumentAction } from './serveCourtIssuedDocumentAction
 describe('serveCourtIssuedDocumentAction', () => {
   global.window = global;
   global.Blob = () => {};
-  let mockPdfUrl = { url: 'www.example.com' };
+  let mockPdfUrl = { pdfUrl: 'www.example.com' };
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -37,11 +37,11 @@ describe('serveCourtIssuedDocumentAction', () => {
       applicationContext.getUseCases().serveCourtIssuedDocumentInteractor.mock
         .calls.length,
     ).toEqual(1);
-    expect(result.output.pdfUrl).toBe(mockPdfUrl.url);
+    expect(result.output.pdfUrl).toBe(mockPdfUrl.pdfUrl);
   });
 
   it('should call the interactor that serves court issued documents and not generate a pdf url if a result is not returned', async () => {
-    mockPdfUrl = { url: null };
+    mockPdfUrl = { pdfUrl: null };
 
     const result = await runAction(serveCourtIssuedDocumentAction, {
       modules: {

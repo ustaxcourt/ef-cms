@@ -31,7 +31,30 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
         caseId: '123',
         documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
-    ).rejects.toThrow();
+    ).rejects.toThrow('Unauthorized');
+  });
+
+  it('should throw an error for a document that is part of a sealed case', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+    );
+    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
+      ...MOCK_CASE,
+      sealedDate: '2019-03-01T21:40:46.415Z',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getPublicDownloadPolicyUrl.mockReturnValue(
+        'http://example.com/document/c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      );
+
+    await expect(
+      getPublicDownloadPolicyUrlInteractor({
+        applicationContext,
+        caseId: '123',
+        documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      }),
+    ).rejects.toThrow('Unauthorized to access documents in a sealed case');
   });
 
   it('should return a url for a document that is public accessible', async () => {

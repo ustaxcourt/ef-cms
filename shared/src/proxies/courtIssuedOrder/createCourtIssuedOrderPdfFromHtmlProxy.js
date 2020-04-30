@@ -21,11 +21,5 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = ({
       htmlString,
     },
     endpoint: '/api/court-issued-order',
-    headers: {
-      Accept: 'application/pdf',
-    },
-    options: {
-      responseType: 'blob',
-    },
   });
 };
