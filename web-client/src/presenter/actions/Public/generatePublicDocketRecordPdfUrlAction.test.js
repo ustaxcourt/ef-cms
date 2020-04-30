@@ -1,21 +1,19 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePublicDocketRecordPdfUrlAction } from './generatePublicDocketRecordPdfUrlAction';
 import { presenter } from '../../presenter-public';
 import { runAction } from 'cerebral/test';
 
 describe('generatePublicDocketRecordPdfUrlAction', () => {
-  let createObjectURLStub;
   beforeAll(() => {
-    global.Blob = jest.fn();
-    createObjectURLStub = jest.fn().mockReturnValue('pdf url');
-
-    presenter.providers.applicationContext = applicationContextForClient;
-    presenter.providers.router = {
-      createObjectURL: createObjectURLStub,
-    };
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('generates a public docket record pdf url', async () => {
+    const mockPdf = { url: 'www.example.com' };
+    applicationContext
+      .getUseCases()
+      .generatePublicDocketRecordPdfInteractor.mockReturnValue(mockPdf);
+
     const result = await runAction(generatePublicDocketRecordPdfUrlAction, {
       modules: {
         presenter,
@@ -28,13 +26,10 @@ describe('generatePublicDocketRecordPdfUrlAction', () => {
     });
 
     expect(result.output).toMatchObject({
-      pdfUrl: 'pdf url',
+      pdfUrl: mockPdf.url,
     });
     expect(
-      applicationContextForClient.getUseCases()
-        .generatePublicDocketRecordPdfInteractor,
+      applicationContext.getUseCases().generatePublicDocketRecordPdfInteractor,
     ).toBeCalled();
-    expect(global.Blob).toBeCalled();
-    expect(createObjectURLStub).toBeCalled();
   });
 });

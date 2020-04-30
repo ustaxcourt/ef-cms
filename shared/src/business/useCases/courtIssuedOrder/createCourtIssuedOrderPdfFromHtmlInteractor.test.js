@@ -1,47 +1,33 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('./createCourtIssuedOrderPdfFromHtmlInteractor');
 
-const PDF_MOCK_BUFFER = 'Hello World';
-const pageMock = {
-  addStyleTag: () => {},
-  pdf: () => {
-    return PDF_MOCK_BUFFER;
-  },
-  setContent: () => {},
-};
-
-const chromiumBrowserMock = {
-  close: () => {},
-  newPage: () => pageMock,
-};
 describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
-  it('returns the pdf buffer produced by chromium', async () => {
+  it('returns the pdf url', async () => {
+    const mockPdfUrl = 'www.example.com';
+    applicationContext
+      .getUseCaseHelpers()
+      .saveFileAndGenerateUrl.mockReturnValue(mockPdfUrl);
+
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor({
-      applicationContext: {
-        getChromiumBrowser: () => chromiumBrowserMock,
-        logger: { error: () => {}, info: () => {} },
-      },
-      htmlString: 'Hello World from the use case',
+      applicationContext,
     });
 
-    expect(result).toEqual(PDF_MOCK_BUFFER);
+    expect(result).toEqual(mockPdfUrl);
   });
 
   it('should catch, log, and rethrow an error thrown by chromium', async () => {
-    const loggerErrorMock = jest.fn();
+    applicationContext.getChromiumBrowser.mockImplementation(() => {
+      throw new Error('some chromium error');
+    });
+
     await expect(
       createCourtIssuedOrderPdfFromHtmlInteractor({
-        applicationContext: {
-          getChromiumBrowser: () => {
-            throw new Error('some chromium error');
-          },
-          logger: { error: loggerErrorMock, info: () => {} },
-        },
-        htmlString: 'Hello World from the use case',
+        applicationContext,
       }),
-    ).rejects.toThrow();
-
-    expect(loggerErrorMock).toHaveBeenCalled();
+    ).rejects.toThrow('some chromium error');
   });
 });

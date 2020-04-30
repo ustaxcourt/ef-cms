@@ -24,7 +24,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   let testPdfDoc;
   let extendCase;
 
-  const mockPdfUrl = 'www.example.com';
+  const mockPdfUrl = { url: 'www.example.com' };
 
   const testPdfDocBytes = () => {
     // sample.pdf is a 1 page document
@@ -228,6 +228,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .generatePaperServiceAddressPagePdf.mockResolvedValue(testPdfDoc);
+    applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument.mockResolvedValue(1);
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: async () => ({
         Body: testPdfDoc,
@@ -387,7 +390,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     });
 
-    expect(result).toBe(mockPdfUrl);
+    expect(result.pdfUrl).toBe(mockPdfUrl.url);
   });
 
   it('should remove the case from the trial session if the case has a trialSessionId', async () => {

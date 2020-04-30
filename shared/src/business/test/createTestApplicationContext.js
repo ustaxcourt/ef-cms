@@ -265,6 +265,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
+    getDownloadPolicyUrl: jest.fn(),
     getElasticsearchReindexRecords: jest.fn(),
     getInboxMessagesForSection: jest
       .fn()
@@ -282,6 +283,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     incrementCounter,
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
+    saveDocumentFromLambda: jest.fn(),
     saveWorkItemForNonPaper: jest
       .fn()
       .mockImplementation(saveWorkItemForNonPaper),
