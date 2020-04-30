@@ -98,7 +98,6 @@ describe('Joi Validation Decorator', () => {
       const invalidEntity = new MockEntity3({
         anotherItem: 'this is another item',
       });
-      expect(invalidEntity.isValid()).toBe(false);
       const errors = invalidEntity.getFormattedValidationErrors();
       expect(errors).toEqual({
         mockEntity2: {
@@ -109,6 +108,7 @@ describe('Joi Validation Decorator', () => {
           obj1: '"obj1" is required',
         },
       });
+      expect(invalidEntity.isValid()).toBe(false);
     });
 
     it('should correctly return strings as items in an array of strings', () => {
