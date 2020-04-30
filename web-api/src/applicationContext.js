@@ -88,6 +88,9 @@ const {
   completeWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
+  countPagesInDocument,
+} = require('../../shared/src/business/useCaseHelper/countPagesInDocument');
+const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
 const {
@@ -622,6 +625,9 @@ const {
   saveDocumentFromLambda,
 } = require('../../shared/src/persistence/s3/saveDocumentFromLambda');
 const {
+  saveFileAndGenerateUrl,
+} = require('../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl');
+const {
   saveIntermediateDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/editDocketEntry/saveIntermediateDocketEntryInteractor');
 const {
@@ -813,6 +819,7 @@ const {
 const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { Document } = require('../../shared/src/business/entities/Document');
 const { exec } = require('child_process');
+const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 const { User } = require('../../shared/src/business/entities/User');
 
@@ -1010,6 +1017,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByCaseIds,
         getCasesByLeadCaseId,
         getCasesByUser,
+        getDocument,
         getDocumentQCInboxForSection,
         getDocumentQCInboxForUser,
         getDocumentQCServedForSection,
@@ -1138,12 +1146,14 @@ module.exports = (appContextUser = {}) => {
     getUseCaseHelpers: () => {
       return {
         appendPaperServiceAddressPageToPdf,
+        countPagesInDocument,
         fetchPendingItems,
         generateCaseConfirmationPdf,
         generateCaseInventoryReportPdf,
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
         getCaseInventoryReport,
+        saveFileAndGenerateUrl,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
       };
@@ -1164,6 +1174,7 @@ module.exports = (appContextUser = {}) => {
         checkForReadyForTrialCasesInteractor,
         completeDocketEntryQCInteractor,
         completeWorkItemInteractor,
+
         createCaseDeadlineInteractor,
         createCaseFromPaperInteractor,
         createCaseInteractor,
