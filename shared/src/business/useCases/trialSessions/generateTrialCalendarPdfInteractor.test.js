@@ -7,6 +7,8 @@ const {
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('generateTrialCalendarPdfInteractor', () => {
+  const mockPdfUrl = { url: 'www.example.com' };
+
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -19,6 +21,10 @@ describe('generateTrialCalendarPdfInteractor', () => {
     applicationContext
       .getTemplateGenerators()
       .generateTrialCalendarTemplate.mockReturnValue(true);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockReturnValue(mockPdfUrl);
   });
 
   it('should find the cases for a trial session successfully', async () => {
@@ -51,5 +57,16 @@ describe('generateTrialCalendarPdfInteractor', () => {
       applicationContext.getUseCases().generatePdfFromHtmlInteractor.mock.calls
         .length,
     ).toBe(1);
+  });
+
+  it('should return the trial session calendar pdf url', async () => {
+    const result = await generateTrialCalendarPdfInteractor({
+      applicationContext,
+      content: {
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+    });
+
+    expect(result.url).toBe(mockPdfUrl.url);
   });
 });
