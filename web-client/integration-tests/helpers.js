@@ -384,7 +384,9 @@ export const loginAs = (test, user) => {
 export const setupTest = ({ useCases = {} } = {}) => {
   let test;
   global.FormData = FormData;
-  global.Blob = () => {};
+  global.Blob = () => {
+    return fakeFile;
+  };
   global.File = () => {
     return fakeFile;
   };

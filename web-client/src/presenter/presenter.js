@@ -46,7 +46,6 @@ import { completeStartCaseWizardStepSequence } from './sequences/completeStartCa
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { contactPrimaryCountryTypeChangeSequence } from './sequences/contactPrimaryCountryTypeChangeSequence';
 import { contactSecondaryCountryTypeChangeSequence } from './sequences/contactSecondaryCountryTypeChangeSequence';
-import { convertHtml2PdfAndOpenInNewTabSequence } from './sequences/convertHtml2PdfAndOpenInNewTabSequence';
 import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
 import { copyPrimaryContactSequence } from './sequences/copyPrimaryContactSequence';
 import { countryTypeFormContactChangeSequence } from './sequences/countryTypeFormContactChangeSequence';
@@ -436,7 +435,6 @@ export const presenter = {
     confirmStayLoggedInSequence,
     contactPrimaryCountryTypeChangeSequence,
     contactSecondaryCountryTypeChangeSequence,
-    convertHtml2PdfAndOpenInNewTabSequence,
     convertHtml2PdfSequence,
     copyPrimaryContactSequence,
     countryTypeFormContactChangeSequence,
