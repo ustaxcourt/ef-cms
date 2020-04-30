@@ -14,6 +14,9 @@
 
 ### archived
 
+
+A document that was archived instead of added to the Docket Record.
+
 > `boolean` | optional
 
 ### caseId
@@ -43,6 +46,15 @@ Otherwise, this field is `any` and is `optional`.
 When the Document was added to the system.
 
 > `date` | required
+
+### date
+
+
+An optional date used when generating a fully concatenated document title.
+
+> `date` | optional
+
+##### Can be null.
 
 ### docketNumber
 
@@ -438,6 +450,12 @@ The type of this document.
 
 ##### Can be null.
 
+### entityName
+
+> `string` | required
+
+##### Can be Document.
+
 ### eventCode
 
 > `string` | optional
@@ -490,6 +508,12 @@ The judge associated with the document.
 A lodged document is awaiting action by the judge to enact or refuse.
 
 > `boolean` | optional
+
+### numberOfPages
+
+> `number` | optional
+
+##### Can be null.
 
 ### objections
 
@@ -549,9 +573,36 @@ A lodged document is awaiting action by the judge to enact or refuse.
 
 > `string` | optional
 
+##### Allowed Values
+
+
+ - `primaryDocument`
+ - `secondaryDocument`
+
 ### scenario
 
 > `string` | optional
+
+##### Allowed Values
+
+
+ - `Standard`
+ - `Nonstandard A`
+ - `Nonstandard B`
+ - `Nonstandard C`
+ - `Nonstandard D`
+ - `Nonstandard E`
+ - `Nonstandard F`
+ - `Nonstandard G`
+ - `Nonstandard H`
+ - `Type A`
+ - `Type B`
+ - `Type C`
+ - `Type D`
+ - `Type E`
+ - `Type F`
+ - `Type G`
+ - `Type H`
 
 ### secondaryDate
 
