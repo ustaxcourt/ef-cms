@@ -138,7 +138,7 @@ module.exports = [
       'wait for #order-search to be visible',
       'set field #order-search to meow',
       'click element button#advanced-search-button',
-      'wait for td.svg.iconSealed to be visible',
+      'wait for svg.iconSealed to be visible',
     ],
     notes: 'checks a11y of advanced order search of a sealed case',
     url:
