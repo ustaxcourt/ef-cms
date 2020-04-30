@@ -64,7 +64,11 @@ export const OrderSearchResults = connect(
                       <td>{result.caseTitle}</td>
                       <td>
                         <a
-                          href={`${baseUrl}/case-documents/${result.caseId}/${result.documentId}/document-download-url?token=${token}`}
+                          href={
+                            advancedOrderSearchHelper.isPublic
+                              ? `${baseUrl}/public-api/${result.caseId}/${result.documentId}/public-document-download-url`
+                              : `${baseUrl}/case-documents/${result.caseId}/${result.documentId}/document-download-url?token=${token}`
+                          }
                           rel="noopener noreferrer"
                           target="_blank"
                         >
@@ -82,7 +86,11 @@ export const OrderSearchResults = connect(
           </>
         )}
         {advancedOrderSearchHelper.showLoadMore && (
-          <Button secondary onClick={() => showMoreResultsSequence()}>
+          <Button
+            secondary
+            aria-label={`load ${pageSize} more results`}
+            onClick={() => showMoreResultsSequence()}
+          >
             Load {pageSize} More
           </Button>
         )}
