@@ -82,7 +82,11 @@ export const OrderSearchResults = connect(
           </>
         )}
         {advancedOrderSearchHelper.showLoadMore && (
-          <Button secondary onClick={() => showMoreResultsSequence()}>
+          <Button
+            secondary
+            aria-label={`load ${pageSize} more results`}
+            onClick={() => showMoreResultsSequence()}
+          >
             Load {pageSize} More
           </Button>
         )}
