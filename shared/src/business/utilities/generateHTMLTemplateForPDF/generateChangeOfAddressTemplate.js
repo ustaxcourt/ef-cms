@@ -51,8 +51,10 @@ const generateChangeOfAddressTemplate = async ({
 
   const htmlTemplate = generateHTMLTemplateForPDF({
     applicationContext,
-    content: reactNoticeHTMLTemplate,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: reactNoticeHTMLTemplate },
     options: {
+      overwriteMain: true,
       title: 'Change of Contact Information',
     },
   });

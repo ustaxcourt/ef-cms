@@ -10,8 +10,6 @@ const { Message } = require('../entities/Message');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
 
-const { changeOfAddress } = require('../utilities/documentGenerators');
-
 /**
  * updatePrimaryContactInteractor
  *
@@ -75,20 +73,22 @@ exports.updatePrimaryContactInteractor = async ({
     });
 
   if (documentType) {
-    const changeOfAddressPdf = changeOfAddress({
-      applicationContext,
-      content: {
-        caption: caseEntity.caseCaption,
-        docketNumber: caseEntity.docketNumber,
-        docketNumberWithSuffix: `${caseEntity.docketNumber}${
-          caseEntity.docketNumberSuffix || ''
-        }`,
-        documentTitle: documentType.title,
-        name: contactInfo.name,
-        newData: contactInfo,
-        oldData: caseToUpdate.contactPrimary,
-      },
-    });
+    const changeOfAddressPdf = await applicationContext
+      .getDocumentGenerators()
+      .changeOfAddress({
+        applicationContext,
+        content: {
+          caption: caseEntity.caseCaption,
+          docketNumber: caseEntity.docketNumber,
+          docketNumberWithSuffix: `${caseEntity.docketNumber}${
+            caseEntity.docketNumberSuffix || ''
+          }`,
+          documentTitle: documentType.title,
+          name: contactInfo.name,
+          newData: contactInfo,
+          oldData: caseToUpdate.contactPrimary,
+        },
+      });
 
     const newDocumentId = applicationContext.getUniqueId();
 
