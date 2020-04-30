@@ -5,7 +5,7 @@ const { generateChangeOfAddress } = require('./generateChangeOfAddress');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('generateChangeOfAddress', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: 'docketclerk',
       userId: 'docketclerk',
