@@ -1,7 +1,7 @@
 version: 2
 jobs:
   bundle:
-    resource_class: large
+    resource_class: medium
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
         aws_auth:
@@ -72,7 +72,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
-    resource_class: xlarge
+    resource_class: medium
     steps:
       - attach_workspace:
           at: ~/
@@ -102,8 +102,8 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
-      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
-    resource_class: xlarge
+      _JAVA_OPTIONS: '-Xms512m -Xmx1024m'
+    resource_class: medium
     steps:
       - attach_workspace:
           at: ~/
@@ -122,8 +122,8 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
-      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
-    resource_class: xlarge
+      _JAVA_OPTIONS: '-Xms512m -Xmx1024m'
+    resource_class: medium
     parallelism: 2
     steps:
       - attach_workspace:
@@ -186,8 +186,8 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
-      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
-    resource_class: xlarge
+      _JAVA_OPTIONS: '-Xms512m -Xmx1024m'
+    resource_class: medium
     steps:
       - attach_workspace:
           at: ~/
@@ -238,7 +238,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: xlarge
+    resource_class: medium
     steps:
       - attach_workspace:
           at: ~/
