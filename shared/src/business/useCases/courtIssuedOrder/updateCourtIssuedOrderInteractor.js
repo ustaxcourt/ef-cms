@@ -37,13 +37,6 @@ exports.updateCourtIssuedOrderInteractor = async ({
       caseId,
     });
 
-  const numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      documentId: documentIdToEdit,
-    });
-
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const documentEntity = new Document(
@@ -52,7 +45,6 @@ exports.updateCourtIssuedOrderInteractor = async ({
       documentId: documentIdToEdit,
       documentType: documentMetadata.documentType,
       filedBy: user.name,
-      numberOfPages,
       relationship: 'primaryDocument',
       userId: user.userId,
     },

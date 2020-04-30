@@ -87,6 +87,13 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     throw new NotFoundError(`Document ${documentId} was not found.`);
   }
 
+  courtIssuedDocument.numberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({
+      applicationContext,
+      documentId,
+    });
+
   const docketEntry = caseEntity.getDocketRecordByDocumentId(documentId);
 
   // Serve on all parties
