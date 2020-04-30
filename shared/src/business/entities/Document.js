@@ -138,6 +138,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.secondaryDate = rawDocument.secondaryDate; // TODO: look into this
   this.secondaryDocument = rawDocument.secondaryDocument; // TODO: look into this
   this.servedAt = rawDocument.servedAt;
+  this.numberOfPages = rawDocument.numberOfPages;
   this.servedParties = rawDocument.servedParties;
   this.serviceDate = rawDocument.serviceDate;
   this.serviceStamp = rawDocument.serviceStamp;
@@ -402,6 +403,7 @@ joiValidationDecorator(
       .description(
         'A lodged document is awaiting action by the judge to enact or refuse.',
       ),
+    numberOfPages: joi.number().optional().allow(null),
     objections: joi.string().optional(),
     ordinalValue: joi.string().optional(),
     partyIrsPractitioner: joi.boolean().optional(),
