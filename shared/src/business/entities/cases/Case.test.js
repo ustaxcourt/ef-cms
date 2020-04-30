@@ -167,6 +167,19 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeTruthy();
     });
 
+    it('Creates an invalid case with an invalid nested contact object', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary: {},
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
+    });
+
     it('Creates an invalid case with a document', () => {
       const myCase = new Case(
         {
