@@ -99,6 +99,7 @@ export const advancedSearchHelper = (get, applicationContext) => {
 export const advancedOrderSearchHelper = (get, applicationContext) => {
   let paginatedResults = {};
   const searchResults = get(state.searchResults);
+  const isPublic = get(state.isPublic);
 
   if (searchResults) {
     paginatedResults = paginationHelper(
@@ -113,7 +114,10 @@ export const advancedOrderSearchHelper = (get, applicationContext) => {
     );
   }
 
-  return paginatedResults;
+  return {
+    ...paginatedResults,
+    isPublic,
+  };
 };
 
 const paginationHelper = (searchResults, currentPage, pageSize) => {
