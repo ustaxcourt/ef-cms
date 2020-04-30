@@ -78,7 +78,7 @@ exports.updatePrimaryContactInteractor = async ({
       .changeOfAddress({
         applicationContext,
         content: {
-          caption: caseEntity.caseCaption,
+          caseTitle: caseEntity.caseTitle,
           docketNumber: caseEntity.docketNumber,
           docketNumberWithSuffix: `${caseEntity.docketNumber}${
             caseEntity.docketNumberSuffix || ''
