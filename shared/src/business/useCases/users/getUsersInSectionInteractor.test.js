@@ -19,6 +19,20 @@ const MOCK_SECTION = [
     userId: 'petitioner2@example.com',
   },
 ];
+
+const MOCK_JUDGE_SECTION = [
+  {
+    name: 'Test Judge',
+    role: User.ROLES.judge,
+    userId: 'judge@example.com',
+  },
+  {
+    name: 'Test Judge2',
+    role: User.ROLES.judge,
+    userId: 'judge2@example.com',
+  },
+];
+
 describe('Get users in section', () => {
   it('retrieves the users in the petitions section', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
@@ -82,5 +96,39 @@ describe('Get users in section', () => {
       }
     }
     expect(result).toEqual('error');
+  });
+
+  it('retrieves the users in the judge section when the current user has the appropriate permissions', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.docketClerk,
+      userId: 'docketClerk',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getUsersInSection.mockReturnValue(MOCK_JUDGE_SECTION);
+    const sectionToGet = { section: 'judge' };
+    const section = await getUsersInSectionInteractor({
+      applicationContext,
+      sectionToGet,
+    });
+    expect(section.length).toEqual(2);
+    expect(section[0].userId).toEqual('judge@example.com');
+  });
+
+  it('returns unauthorizederror when the desired section is judge and current user does not have appropriate permissions', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitioner,
+      userId: 'petitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getUsersInSection.mockReturnValue(MOCK_JUDGE_SECTION);
+    const sectionToGet = { section: 'judge' };
+    await expect(
+      getUsersInSectionInteractor({
+        applicationContext,
+        sectionToGet,
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 });

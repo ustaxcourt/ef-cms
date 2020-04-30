@@ -27,13 +27,11 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
         if (docketNumber === '123-45') {
           return {
             caseCaption: 'Test Case Caption',
-            caseCaptionPostfix: 'Test Caption Postfix',
             docketNumber: '123-45',
           };
         } else {
           return {
             caseCaption: 'Test Case Caption',
-            caseCaptionPostfix: 'Test Caption Postfix',
             docketNumber: '234-56',
             docketNumberSuffix: 'S',
           };

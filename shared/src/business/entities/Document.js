@@ -23,6 +23,9 @@ Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
 Document.PETITION_DOCUMENT_TYPES = ['Petition'];
+Document.ORDER_DOCUMENT_TYPES = Document.COURT_ISSUED_EVENT_CODES.filter(
+  document => document.documentType.includes('Order'),
+);
 Document.validationName = 'Document';
 
 /**
@@ -53,6 +56,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
     this.qcByUserId = rawDocument.qcByUserId;
     this.signedAt = rawDocument.signedAt;
     this.signedByUserId = rawDocument.signedByUserId;
+    this.signedJudgeName = rawDocument.signedJudgeName;
     this.workItems = (rawDocument.workItems || []).map(
       workItem => new WorkItem(workItem, { applicationContext }),
     );
@@ -63,6 +67,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.addToCoversheet = rawDocument.addToCoversheet;
   this.archived = rawDocument.archived; // TODO: look into this
   this.attachments = rawDocument.attachments;
+  this.documentContents = rawDocument.documentContents;
   this.caseId = rawDocument.caseId;
   this.certificateOfService = rawDocument.certificateOfService;
   this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
@@ -306,6 +311,7 @@ joiValidationDecorator(
       .regex(DOCKET_NUMBER_MATCHER)
       .optional()
       .description('Docket Number of the associated Case in XXXXX-YY format.'),
+    documentContents: joi.string().optional(),
     documentId: joi
       .string()
       .uuid({
@@ -322,7 +328,7 @@ joiValidationDecorator(
       .valid(...Document.getDocumentTypes())
       .required()
       .description('The type of this document.'),
-    draftState: joi.object().optional(),
+    draftState: joi.object().allow(null).optional(),
     eventCode: joi.string().optional(),
     filedBy: joi.string().allow('').optional(),
     filingDate: joi
@@ -377,6 +383,7 @@ joiValidationDecorator(
     serviceStamp: joi.string().optional(),
     signedAt: joi.date().iso().optional().allow(null),
     signedByUserId: joi.string().optional().allow(null),
+    signedJudgeName: joi.string().optional().allow(null),
     status: joi.string().valid('served').optional(),
     supportingDocument: joi.string().optional().allow(null),
     trialLocation: joi
@@ -414,6 +421,8 @@ Document.prototype.archive = function () {
 Document.prototype.setAsServed = function (servedParties = null) {
   this.status = 'served';
   this.servedAt = createISODateString();
+  this.draftState = null;
+
   if (servedParties) {
     this.servedParties = servedParties;
   }
@@ -469,10 +478,12 @@ Document.prototype.generateFiledBy = function (caseDetail, force = false) {
  * attaches a signedAt date to the document
  *
  * @param {string} signByUserId the user id of the user who signed the document
+ * @param {string} signedJudgeName the judge's signature for the document
  *
  */
-Document.prototype.setSigned = function (signByUserId) {
+Document.prototype.setSigned = function (signByUserId, signedJudgeName) {
   this.signedByUserId = signByUserId;
+  this.signedJudgeName = signedJudgeName;
   this.signedAt = createISODateString();
 };
 
@@ -488,6 +499,7 @@ Document.prototype.setQCed = function (user) {
 
 Document.prototype.unsignDocument = function () {
   this.signedAt = null;
+  this.signedJudgeName = null;
   this.signedByUserId = null;
 };
 

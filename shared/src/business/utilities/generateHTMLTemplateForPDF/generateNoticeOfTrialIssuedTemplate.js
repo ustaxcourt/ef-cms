@@ -4,6 +4,7 @@ const {
   formatDateString,
   formatNow,
 } = require('../DateHandler');
+const { Case } = require('../../entities/cases/Case');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
 /**
@@ -18,7 +19,7 @@ const generateNoticeOfTrialIssuedTemplate = async ({
   applicationContext,
   content,
 }) => {
-  const { caption, docketNumberWithSuffix, trialInfo } = content;
+  const { caseCaption, docketNumberWithSuffix, trialInfo } = content;
 
   const pug = applicationContext.getPug();
 
@@ -27,16 +28,24 @@ const generateNoticeOfTrialIssuedTemplate = async ({
   trialInfo.startTime = formatDateString(trialStartTimeIso, 'hh:mm A');
   trialInfo.startDate = formatDateString(trialInfo.startDate, 'MMDDYYYY');
 
+  let caseName = Case.getCaseCaptionNames(caseCaption);
+  let caseCaptionExtension = '';
+  if (caseName !== caseCaption) {
+    caseName += ', ';
+    caseCaptionExtension = caseCaption.replace(caseName, '');
+  }
+
   const compiledFunction = pug.compile(template);
   const main = compiledFunction({
-    caption,
+    caseCaptionExtension,
+    caseName,
     docketNumberWithSuffix,
     headerDate,
     trialInfo,
   });
 
   const templateContent = {
-    caption,
+    caseCaptionWithPostfix: `${caseCaption} ${Case.CASE_CAPTION_POSTFIX}`,
     docketNumberWithSuffix,
     main,
   };

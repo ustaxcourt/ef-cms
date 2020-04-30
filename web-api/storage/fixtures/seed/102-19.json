@@ -50,8 +50,7 @@
     ],
     "docketNumberSuffix": "P",
     "caseCaption": "Selma Horn & Cairo Harris, Petitioners",
-    "caseTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
-    "initialTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Selma Horn & Cairo Harris, Petitioners",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "preferredTrialCity": "Boise, Idaho",
     "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
@@ -110,7 +109,7 @@
     "assigneeName": null,
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "sk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
-    "caseTitle": "Selma Horn & Cairo Harris",
+    "caseCaptionNames": "Selma Horn & Cairo Harris",
     "messages": [
       {
         "createdAt": "2019-03-01T21:42:29.073Z",
@@ -150,7 +149,7 @@
     "assigneeName": null,
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "gsi1pk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
-    "caseTitle": "Selma Horn & Cairo Harris",
+    "caseCaptionNames": "Selma Horn & Cairo Harris",
     "messages": [
       {
         "createdAt": "2019-03-01T21:42:29.073Z",
@@ -188,7 +187,7 @@
     "createdAt": "2019-03-01T21:42:29.073Z",
     "assigneeName": null,
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
-    "caseTitle": "Selma Horn & Cairo Harris",
+    "caseCaptionNames": "Selma Horn & Cairo Harris",
     "messages": [
       {
         "createdAt": "2019-03-01T21:42:29.073Z",
@@ -223,7 +222,7 @@
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
           "filedBy": "Test Petitioner"
         },
-        "caseTitle": "Selma Horn & Cairo Harris",
+        "caseCaptionNames": "Selma Horn & Cairo Harris",
         "section": "petitions",
         "workItemId": "4df3fa30-a1ad-45e1-ae1e-05256c538e72",
         "isInitializeCase": true,

@@ -66,7 +66,7 @@ export const IndividualWorkQueueOutbox = connect(
                   </td>
                 )}
                 <td className="message-queue-row message-queue-case-title">
-                  {item.caseTitle}
+                  {item.caseCaptionNames}
                 </td>
                 <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">

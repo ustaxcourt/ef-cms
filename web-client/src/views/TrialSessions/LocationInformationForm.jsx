@@ -214,14 +214,11 @@ export const LocationInformationForm = connect(
           </div>
 
           <FormGroup errorText={validationErrors.postalCode}>
-            <label
-              aria-label="zip code"
-              className="usa-label"
-              htmlFor="postal-code"
-            >
+            <label aria-hidden className="usa-label" htmlFor="postal-code">
               ZIP code <span className="usa-hint">(optional)</span>
             </label>
             <input
+              aria-label="zip code"
               autoCapitalize="none"
               className="usa-input max-width-200 usa-input--medium"
               id="postal-code"

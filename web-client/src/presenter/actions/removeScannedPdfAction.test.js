@@ -19,7 +19,7 @@ describe('removeScannedPdfAction', () => {
     expect(state.form.petitionSize).toBeUndefined();
   });
 
-  it('should return the documentUploadMode', async () => {
+  it('should return the documentUploadMode and documentType', async () => {
     const result = await runAction(removeScannedPdfAction, {
       props: {},
       state: {
@@ -33,5 +33,6 @@ describe('removeScannedPdfAction', () => {
       },
     });
     expect(result.output.documentUploadMode).toEqual('scan');
+    expect(result.output.documentType).toEqual('petition');
   });
 });

@@ -120,8 +120,7 @@ export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
 
     expect(test.getState('alertSuccess')).toEqual({
       message:
-        'Your receipt will appear under the Case Information tab in your case once your petition is processed by the court.',
-      title: 'Your petition has been successfully submitted.',
+        'Petition filed. Your receipt will be available once your petition is processed.',
     });
 
     test.docketNumber = test.getState('cases.0.docketNumber');

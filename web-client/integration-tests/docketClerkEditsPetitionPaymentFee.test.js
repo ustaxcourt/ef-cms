@@ -1,6 +1,5 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
-
 import { Case } from '../../shared/src/business/entities/cases/Case';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest();
 
