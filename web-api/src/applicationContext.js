@@ -89,7 +89,7 @@ const {
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
   countPagesInDocument,
-} = require('../../shared/src/business/useCases/countPagesInDocument');
+} = require('../../shared/src/business/useCaseHelper/countPagesInDocument');
 const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
@@ -977,7 +977,6 @@ module.exports = (appContextUser = {}) => {
         bulkIndexRecords,
         caseAdvancedSearch,
         casePublicSearch: casePublicSearchPersistence,
-        countPagesInDocument,
         createCase,
         createCaseCatalogRecord,
         createCaseDeadline,
@@ -1144,6 +1143,7 @@ module.exports = (appContextUser = {}) => {
     getUseCaseHelpers: () => {
       return {
         appendPaperServiceAddressPageToPdf,
+        countPagesInDocument,
         fetchPendingItems,
         generateCaseConfirmationPdf,
         generateCaseInventoryReportPdf,
