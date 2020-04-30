@@ -49,6 +49,10 @@ beforeAll(() => {
     role: User.ROLES.petitionsClerk,
     userId: 'petitionsclerk',
   });
+
+  applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId.mockReturnValue(MOCK_CASE);
 });
 
 describe('updateCase', () => {
@@ -59,7 +63,6 @@ describe('updateCase', () => {
         applicationContext,
         caseId: MOCK_CASE.caseId,
         caseToUpdate: omit(MOCK_CASE, 'docketNumber'),
-        petitioners: [{ name: 'Test Petitioner' }],
       });
     } catch (err) {
       error = err;
@@ -76,7 +79,6 @@ describe('updateCase', () => {
       await saveCaseDetailInternalEditInteractor({
         applicationContext,
         caseId: MOCK_CASE.caseId,
-        petitioners: [{ name: 'Test Petitioner' }],
       });
     } catch (err) {
       error = err;
@@ -95,7 +97,6 @@ describe('updateCase', () => {
       applicationContext,
       caseId: caseToUpdate.caseId,
       caseToUpdate: caseToUpdate,
-      petitioners: [{ name: 'Test Petitioner' }],
     });
 
     const returnedDocument = omit(updatedCase.documents[0], [
@@ -172,7 +173,6 @@ describe('updateCase', () => {
           contactPrimary: null,
           contactSecondary: {},
         },
-        petitioners: [{ name: 'Test Petitioner' }],
       });
     } catch (err) {
       error = err;
@@ -192,7 +192,6 @@ describe('updateCase', () => {
         applicationContext,
         caseId: MOCK_CASE.caseId,
         caseToUpdate: MOCK_CASE,
-        petitioners: [{ name: 'Test Petitioner' }],
       });
     } catch (err) {
       error = err;
