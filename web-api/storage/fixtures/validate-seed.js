@@ -21,11 +21,10 @@ stdin.on('data', function (chunk) {
   }
 });
 
+let hasPrintedWarning = false;
 stdin.on('end', () => {
-  if (Object.keys(documentIds).length > 0) {
-    console.warn('WARNING: missing s3 seed data files!');
-  }
   Object.entries(documentIds).forEach(([docId, seedFile]) => {
+    hasPrintedWarning = true;
     const path = seedPath(docId);
     checkFileExists(path, seedFile);
   });
@@ -38,6 +37,9 @@ stdin.on('end', () => {
 function checkFileExists(path, seedFile) {
   fs.access(path, fs.F_OK, err => {
     if (err) {
+      if (!hasPrintedWarning) {
+        console.warn('WARNING: missing s3 seed data files!');
+      }
       console.warn(seedFile, ': Could not find ', path);
     }
   });
