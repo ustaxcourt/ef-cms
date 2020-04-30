@@ -1,3 +1,5 @@
+const { applicationContext } = require('../test/createTestApplicationContext');
+
 const fs = require('fs');
 const path = require('path');
 const {
@@ -18,24 +20,28 @@ describe('documentGenerators', () => {
     fs.writeFileSync(path, data);
   };
 
-  let applicationContext;
+  beforeAll(() => {
+    if (!process.env.CIRCLE_SHA1) {
+      applicationContext.getChromiumBrowser.mockImplementation(
+        getChromiumBrowser,
+      );
 
-  beforeEach(() => {
-    applicationContext = {
-      getChromiumBrowser: jest.fn(() => getChromiumBrowser()),
-      getNodeSass: jest.fn(() => {
+      applicationContext.getNodeSass.mockImplementation(() => {
         // eslint-disable-next-line security/detect-non-literal-require
         return require('node-' + 'sass');
-      }),
-      getPug: jest.fn(() => {
+      });
+
+      applicationContext.getPug.mockImplementation(() => {
         // eslint-disable-next-line security/detect-non-literal-require
         return require('p' + 'ug');
-      }),
-      getUseCases: () => ({
-        generatePdfFromHtmlInteractor,
-      }),
-      logger: jest.fn(),
-    };
+      });
+
+      applicationContext
+        .getUseCases()
+        .generatePdfFromHtmlInteractor.mockImplementation(
+          generatePdfFromHtmlInteractor,
+        );
+    }
   });
 
   describe('changeOfAddress', () => {
@@ -70,9 +76,12 @@ describe('documentGenerators', () => {
       // Do not write PDF when running on CircleCI
       if (!process.env.CIRCLE_SHA1) {
         writePdfFile('Change_Of_Address', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 
-      expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
       expect(applicationContext.getNodeSass).toHaveBeenCalled();
       expect(applicationContext.getPug).toHaveBeenCalled();
     });
