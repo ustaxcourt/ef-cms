@@ -2,8 +2,6 @@ const React = require('react');
 const ReactDOM = require('react-dom/server');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
-const { Case } = require('../../entities/cases/Case');
-
 require('regenerator-runtime');
 require('@babel/register')({
   presets: ['@babel/preset-react', '@babel/preset-env'],
