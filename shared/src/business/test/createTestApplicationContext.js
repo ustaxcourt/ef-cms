@@ -110,6 +110,16 @@ const { setItem } = require('../../persistence/localStorage/setItem');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 
+const fakeData =
+  'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
+
+// TODO: Abstract for use elsewhere
+const getFakeFile = () => {
+  const fakeFile = Buffer.from(fakeData, 'base64');
+  fakeFile.name = 'fakeFile.pdf';
+  return fakeFile;
+};
+
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
 const appContextProxy = (initial = {}, makeMock = true) => {
@@ -210,6 +220,10 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
   });
+
+  const getDocumentGeneratorsReturnMock = {
+    changeOfAddress: jest.fn().mockImplementation(getFakeFile),
+  };
 
   const getTemplateGeneratorsReturnMock = {
     generateChangeOfAddressTemplate: jest.fn().mockResolvedValue('<div></div>'),
@@ -357,6 +371,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       sendBulkTemplatedEmail: jest.fn(),
     }),
     getDocumentClient: jest.fn().mockImplementation(() => mockDocumentClient),
+    getDocumentGenerators: jest
+      .fn()
+      .mockReturnValue(getDocumentGeneratorsReturnMock),
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getElasticsearchIndexes: () => ['efcms-case'],
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
@@ -369,7 +386,11 @@ const createTestApplicationContext = ({ user } = {}) => {
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfStyles: jest.fn(),
     getPersistenceGateway: mockGetPersistenceGateway,
-    getPug: jest.fn(),
+    getPug: jest.fn(() => ({
+      compile: () => {
+        return () => null;
+      },
+    })),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: appContextProxy(),
