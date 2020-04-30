@@ -27,7 +27,7 @@ export const CaseDifferenceExplained = () => {
         <thead>
           <tr>
             <th>Case Type</th>
-            <th>Dollar Limit to Qualify for Small Tax Case</th>
+            <th>Dollar Limit to Qualify for Small Tax Case Procedure</th>
           </tr>
         </thead>
         <tbody>
