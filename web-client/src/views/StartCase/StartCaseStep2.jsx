@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseTypeSelect } from './CaseTypeSelect';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
@@ -53,7 +52,7 @@ export const StartCaseStep2 = connect(
         </p>
         <div className="blue-container grid-container padding-x-0">
           <div className="grid-row grid-gap">
-            <div className="mobile-lg:grid-col-5">
+            <div className="mobile-lg:grid-col-6">
               <FormGroup
                 errorText={[
                   validationErrors.petitionFile,
@@ -68,27 +67,26 @@ export const StartCaseStep2 = connect(
                   htmlFor="petition-file"
                   id="petition-file-label"
                 >
-                  Upload your Petition{' '}
+                  Upload your Petition
                 </label>
                 <span className="usa-hint">
                   File must be in PDF format (.pdf). Max file size{' '}
                   {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
                 <p className="margin-top-0">
-                  <FontAwesomeIcon
-                    className="fa-icon-blue"
-                    icon="file-pdf"
-                    size="1x"
-                  />
-                  <a
-                    className="margin-right-1"
+                  <Button
+                    link
+                    className="usa-link--external"
                     href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
+                    icon="file-pdf"
+                    iconColor="blue"
+                    overrideMargin="margin-right-1"
                     rel="noopener noreferrer"
                     target="_blank"
                   >
                     Download T.C. Form 2
-                  </a>
-                  if you haven&apos;t already done so{' '}
+                  </Button>
+                  if you haven‘t already done so
                 </p>
                 <StateDrivenFileInput
                   aria-describedby="petition-file-label"

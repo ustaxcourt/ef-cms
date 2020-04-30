@@ -1,6 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
@@ -41,10 +40,9 @@ export const StartCaseStep1 = connect(
         <Hint>
           The Statement of Taxpayer Identification Number is the only document
           that should include personal information (such as Social Security
-          Numbers, Numbers, Taxpayer Identification Numbers, or Employer
-          Employer Employer Employer Employer Employer Identification It’s sent
-          IRS to help viewed by the Court or stored as part of the public
-          record.
+          Numbers, Taxpayer Identification Numbers, or Employer Identification
+          It’s sent IRS to help viewed by the Court or stored as part of the
+          public record.
         </Hint>
 
         <div className="blue-container margin-bottom-5">
@@ -62,27 +60,26 @@ export const StartCaseStep1 = connect(
               htmlFor="stin-file"
               id="stin-file-label"
             >
-              Upload your Statement of Taxpayer Identification Number{' '}
+              Upload your Statement of Taxpayer Identification Number
             </label>
             <span className="usa-hint">
               File must be in PDF format (.pdf). Max file size{' '}
               {constants.MAX_FILE_SIZE_MB}MB.
             </span>
             <p className="margin-top-0">
-              <FontAwesomeIcon
-                className="fa-icon-blue"
-                icon="file-pdf"
-                size="1x"
-              />
-              <a
-                className="margin-right-1"
+              <Button
+                link
+                className="usa-link--external"
                 href="https://www.ustaxcourt.gov/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
+                icon="file-pdf"
+                iconColor="blue"
+                overrideMargin="margin-right-1"
                 rel="noopener noreferrer"
                 target="_blank"
               >
                 Download T.C. Form 4
-              </a>
-              if you haven&apos;t already done so{' '}
+              </Button>
+              if you haven‘t already done so
             </p>
             <StateDrivenFileInput
               aria-describedby="stin-file-label"
