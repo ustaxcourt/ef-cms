@@ -29,7 +29,7 @@ export const WhatToExpect = () => (
           </p>
           <p>
             This is used to help the IRS identify who you are. Everyone will
-            need to upload this to create a case. 
+            need to upload this to create a case.
             <br />
             <Button
               link
@@ -48,7 +48,7 @@ export const WhatToExpect = () => (
           <p>
             This is where you can explain why you disagree with the IRS. You can
             use the provided form or create your own Petition that complies with
-            the requirements of the Tax Court Rules of Practice and Procedure.
+            the requirements of the Tax Court Rules of Practice and Procedure.
             <br />
             <Button
               link
