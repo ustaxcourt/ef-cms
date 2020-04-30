@@ -309,7 +309,7 @@ describe('generateChangeOfAddressTemplate', () => {
       },
     });
 
-    expect(result.indexOf('c/o Guy Fieri')).toBeGreaterThan(-1);
-    expect(result.indexOf('c/o Rachel Ray')).toBeGreaterThan(-1);
+    expect(result.indexOf('Guy Fieri')).toBeGreaterThan(-1);
+    expect(result.indexOf('Rachel Ray')).toBeGreaterThan(-1);
   });
 });
