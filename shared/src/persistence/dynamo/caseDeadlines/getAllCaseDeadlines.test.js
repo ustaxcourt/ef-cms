@@ -7,6 +7,15 @@ const {
 } = require('../../../business/test/createTestApplicationContext');
 
 describe('getAllCaseDeadlines', () => {
+  const mockDeadlines = [
+    {
+      caseDeadlineId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      caseId: MOCK_CASE.caseId,
+      pk: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      sk: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    },
+  ];
+
   beforeEach(() => {
     client.query = jest.fn().mockReturnValue([
       {
@@ -14,23 +23,13 @@ describe('getAllCaseDeadlines', () => {
         pk: 'case-deadline-catalog',
       },
     ]);
-    client.batchGet = jest
-      .fn()
-      .mockReturnValueOnce([
-        {
-          caseDeadlineId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          caseId: MOCK_CASE.caseId,
-          pk: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          sk: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
-      ])
-      .mockReturnValueOnce([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }]);
+    client.batchGet = jest.fn().mockReturnValue(mockDeadlines);
   });
 
-  it('should get the all cases deadlines', async () => {
+  it('should get all case deadlines', async () => {
     const result = await getAllCaseDeadlines({
       applicationContext,
     });
-    expect(result[0].docketNumber).toEqual('101-18');
+    expect(result).toEqual(mockDeadlines);
   });
 });

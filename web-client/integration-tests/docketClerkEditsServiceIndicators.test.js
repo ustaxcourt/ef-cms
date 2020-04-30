@@ -7,9 +7,9 @@ import { docketClerkEditsServiceIndicatorForPetitioner } from './journey/docketC
 import { docketClerkEditsServiceIndicatorForPractitioner } from './journey/docketClerkEditsServiceIndicatorForPractitioner';
 import { docketClerkEditsServiceIndicatorForRespondent } from './journey/docketClerkEditsServiceIndicatorForRespondent';
 import { docketClerkServesOrderOnPaperParties } from './journey/docketClerkServesOrderOnPaperParties';
-import petitionsClerkAddsPractitionersToCase from './journey/petitionsClerkAddsPractitionersToCase';
+import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import petitionsClerkAddsRespondentsToCase from './journey/petitionsClerkAddsRespondentsToCase';
-import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
+import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
 const test = setupTest({
   useCases: {

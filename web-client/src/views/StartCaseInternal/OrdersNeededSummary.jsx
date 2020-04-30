@@ -55,7 +55,7 @@ export const OrdersNeededSummary = ({ caseInformation }) => {
                   {caseInformation.orderForRatification && (
                     <div>Order for Ratification of Petition</div>
                   )}
-                  {caseInformation.orderForRequestedTrialLocation && (
+                  {caseInformation.orderDesignatingPlaceOfTrial && (
                     <div>Order Designating Place of Trial</div>
                   )}
                   {caseInformation.orderToShowCause && (

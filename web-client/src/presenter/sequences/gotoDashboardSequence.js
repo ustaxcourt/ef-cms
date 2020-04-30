@@ -2,6 +2,7 @@ import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getConsolidatedCasesByUserAction } from '../actions/caseConsolidation/getConsolidatedCasesByUserAction';
+import { getConstants } from '../../getConstants';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserAction } from '../actions/getUserAction';
@@ -18,6 +19,7 @@ import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessions
 import { setUserAction } from '../actions/setUserAction';
 import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
+const { USER_ROLES } = getConstants();
 
 const proceedToMessages = [navigateToMessagesAction];
 
@@ -32,14 +34,14 @@ const goToDashboard = [
   {
     ...takePathForRoles(
       [
-        'admin',
-        'adc',
-        'admissionsclerk',
-        'clerkofcourt',
-        'docketclerk',
-        'floater',
-        'petitionsclerk',
-        'trialclerk',
+        USER_ROLES.admin,
+        USER_ROLES.adc,
+        USER_ROLES.admissionsClerk,
+        USER_ROLES.clerkOfCourt,
+        USER_ROLES.docketClerk,
+        USER_ROLES.floater,
+        USER_ROLES.petitionsClerk,
+        USER_ROLES.trialClerk,
       ],
       proceedToMessages,
     ),

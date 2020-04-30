@@ -44,8 +44,7 @@
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "sk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "caseCaption": "Brett Osborne, Petitioner",
-    "caseTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
-    "initialTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Brett Osborne, Petitioner",
     "filingType": "Myself",
     "pk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "hasIrsNotice": false,
@@ -100,7 +99,7 @@
     "assigneeName": null,
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "gsi1pk": "work-item|2611344f-f7bf-4f47-8ba0-60c70cb25446",
-    "caseTitle": "Brett Osborne",
+    "caseCaptionNames": "Brett Osborne",
     "messages": [
       {
         "createdAt": "2019-03-01T21:40:46.415Z",
@@ -141,7 +140,7 @@
     "assigneeName": null,
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "gsi1pk": "work-item|2611344f-f7bf-4f47-8ba0-60c70cb25446",
-    "caseTitle": "Brett Osborne",
+    "caseCaptionNames": "Brett Osborne",
     "messages": [
       {
         "createdAt": "2019-03-01T21:40:46.415Z",
@@ -176,7 +175,7 @@
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
           "filedBy": "Test Petitioner"
         },
-        "caseTitle": "Brett Osborne",
+        "caseCaptionNames": "Brett Osborne",
         "section": "petitions",
         "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
         "isInitializeCase": true,

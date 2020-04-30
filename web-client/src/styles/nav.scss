@@ -4,8 +4,21 @@
     .usa-nav-container {
       width: 100%;
 
+      .nav-large {
+        display: none;
+      }
+
+      .nav-medium {
+        display: block;
+      }
+
       .usa-navbar {
         justify-content: space-between;
+      }
+
+      .usa-logo {
+        max-width: 46px;
+        margin-top: 5px;
       }
 
       .usa-nav__primary {
@@ -53,16 +66,22 @@
         text-decoration: none;
       }
     }
-    .usa-logo {
-      max-width: 46px;
-    }
   }
-  /* big screens: */
+
+  /* medium screens: */
   @media only screen and (min-width: $medium-screen) {
     .usa-nav-container {
       width: 100%;
       max-width: unset;
       padding: 0;
+
+      .nav-large {
+        display: none;
+      }
+
+      .nav-medium {
+        display: block;
+      }
 
       .ustc-navigation-items {
         flex-grow: 1;
@@ -70,6 +89,68 @@
 
       .usa-navbar {
         width: unset;
+        justify-content: space-between;
+      }
+
+      .usa-logo {
+        width: 46px;
+        max-width: 46px;
+        margin-top: 2px;
+        margin-left:0px;
+      }
+
+
+
+      nav.ustc-nav {
+        justify-content: space-between;
+      }
+
+      .usa-nav__close {
+        width: 100px;
+        font-weight: $font-semibold;
+        text-decoration: none;
+      }
+    }
+
+    .usa-search.ustc-search {
+      [role='search'] {
+        max-width: unset;
+      }
+      .usa-input {
+        width: 200px;
+        height: 34px;
+      }
+      .usa-button {
+        &.ustc-search-button {
+          min-width: 46px;
+          height: 34px;
+        }
+        .usa-search-submit-text {
+          display: none;
+        }
+
+        .usa-sr-only {
+          display: none;
+        }
+      }
+      .usa-link.advanced {
+        display: inline-block;
+        padding: 0.5em;
+        color: color($theme-color-primary);
+        font-size: 15px;
+      }
+    }
+  }
+
+  /* large screens: */
+  @media only screen and (min-width: $large-screen) {
+    .usa-nav-container {
+      .nav-large {
+        display: block;
+      }
+
+      .nav-medium {
+        display: none;
       }
 
       .usa-logo {
@@ -149,40 +230,28 @@
           }
         }
       }
+      .usa-search.ustc-search {
+        .usa-button {
+          &.ustc-search-button {
+            min-width: 90px;
+            height: 34px;
+            background-image: none;
+          }
+
+          .usa-search-submit-text {
+            display: block;
+          }
+        }
+      }
 
       nav.ustc-nav {
         height: 100px;
         justify-content: space-between;
       }
     }
-
-    .usa-search.ustc-search {
-      [role='search'] {
-        max-width: unset;
-      }
-      .usa-input {
-        width: 200px;
-        height: 34px;
-      }
-      .usa-button {
-        &.ustc-search-button {
-          min-width: 90px;
-          height: 34px;
-          background-image: none;
-        }
-        .usa-sr-only {
-          display: none;
-        }
-      }
-      .usa-link.advanced {
-        display: inline-block;
-        padding: 0.5em;
-        color: color($theme-color-primary);
-        font-size: 15px;
-      }
-    }
   }
 }
+
 
 /* small screens: */
 @media only screen and (max-width: $medium-screen - 1px) {

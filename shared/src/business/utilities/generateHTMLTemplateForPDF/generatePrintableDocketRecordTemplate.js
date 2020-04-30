@@ -1,3 +1,4 @@
+const { Case } = require('../../entities/cases/Case');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
 /**
@@ -12,13 +13,7 @@ const generatePrintableDocketRecordTemplate = async ({
   applicationContext,
   content,
 }) => {
-  const {
-    caption,
-    captionPostfix,
-    docketNumberWithSuffix,
-    docketRecord,
-    partyInfo,
-  } = content;
+  const { caption, docketNumberWithSuffix, docketRecord, partyInfo } = content;
 
   const styles = `
     .party-info {
@@ -51,8 +46,7 @@ const generatePrintableDocketRecordTemplate = async ({
   `;
 
   const templateContent = {
-    caption,
-    captionPostfix,
+    caseCaptionWithPostfix: `${caption} ${Case.CASE_CAPTION_POSTFIX}`,
     docketNumberWithSuffix,
     main: `
     ${partyInfo}

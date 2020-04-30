@@ -7,6 +7,7 @@ const {
 const {
   generateHTMLTemplateForPDF,
 } = require('../../utilities/generateHTMLTemplateForPDF');
+const { Case } = require('../../entities/cases/Case');
 
 /**
  * HTML template generator for a Standing Pretrial Notice
@@ -20,7 +21,7 @@ const generateStandingPretrialNoticeTemplate = async ({
   applicationContext,
   content,
 }) => {
-  const { caption, docketNumberWithSuffix, trialInfo } = content;
+  const { caseCaption, docketNumberWithSuffix, trialInfo } = content;
 
   const pug = applicationContext.getPug();
 
@@ -35,6 +36,13 @@ const generateStandingPretrialNoticeTemplate = async ({
   );
   trialInfo.startDate = formatDateString(trialInfo.startDate, 'MMDDYYYY');
 
+  let caseName = Case.getCaseCaptionNames(caseCaption);
+  let caseCaptionExtension = '';
+  if (caseName !== caseCaption) {
+    caseName += ', ';
+    caseCaptionExtension = caseCaption.replace(caseName, '');
+  }
+
   let respondentContactText = 'not available at this time';
   if (trialInfo.irsPractitioners && trialInfo.irsPractitioners.length) {
     const firstRespondent = trialInfo.irsPractitioners[0];
@@ -44,7 +52,8 @@ const generateStandingPretrialNoticeTemplate = async ({
 
   const compiledFunction = pug.compile(template);
   const main = compiledFunction({
-    caption,
+    caseCaptionExtension,
+    caseName,
     docketNumberWithSuffix,
     footerDate,
     headerDate,
@@ -52,7 +61,7 @@ const generateStandingPretrialNoticeTemplate = async ({
   });
 
   const templateContent = {
-    caption,
+    caseCaptionWithPostfix: `${caseCaption} ${Case.CASE_CAPTION_POSTFIX}`,
     docketNumberWithSuffix,
     main,
   };
