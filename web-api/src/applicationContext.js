@@ -70,6 +70,9 @@ const {
   casePublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
 const {
+  changeOfAddress,
+} = require('../../shared/src/business/utilities/documentGenerators');
+const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
 const {
@@ -932,6 +935,9 @@ module.exports = (appContextUser = {}) => {
       }
       return dynamoClientCache[type];
     },
+    getDocumentGenerators: () => ({
+      changeOfAddress,
+    }),
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
     },
