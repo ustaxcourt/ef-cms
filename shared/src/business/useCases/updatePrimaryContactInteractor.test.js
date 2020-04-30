@@ -80,14 +80,10 @@ describe('update primary contact on a case', () => {
       state: 'PA',
     });
     expect(
-      applicationContext.getTemplateGenerators()
-        .generateChangeOfAddressTemplate,
+      applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
     ).toHaveBeenCalled();
     expect(caseDetail.documents[4].servedAt).toBeDefined();
   });
