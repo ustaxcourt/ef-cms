@@ -228,6 +228,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .generatePaperServiceAddressPagePdf.mockResolvedValue(testPdfDoc);
+    applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument.mockResolvedValue(1);
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: async () => ({
         Body: testPdfDoc,
