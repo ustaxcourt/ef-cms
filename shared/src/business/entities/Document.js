@@ -85,7 +85,13 @@ Document.SCENARIOS = [
   'Type H',
 ];
 
-Document.RELATIONSHIPS = ['primaryDocument', 'secondaryDocument'];
+Document.RELATIONSHIPS = [
+  'primaryDocument',
+  'primarySupportingDocument',
+  'secondaryDocument',
+  'secondarySupportingDocument',
+  'supportingDocument',
+];
 
 /**
  * constructor
