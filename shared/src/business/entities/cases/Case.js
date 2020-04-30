@@ -283,6 +283,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.trialSessionId = rawCase.trialSessionId;
   this.trialTime = rawCase.trialTime;
 
+  if (applicationContext.getCurrentUser().userId === rawCase.userId)
+    this.userId = rawCase.userId;
+
   this.initialDocketNumberSuffix =
     rawCase.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
 
