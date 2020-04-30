@@ -15,6 +15,11 @@ export const CaseDifferenceExplained = () => {
       <h3 className="margin-bottom-4">
         Do I Qualify for a Small Tax Case Procedure?
       </h3>
+      <p>
+        For specific case types, the amount of the tax owed will affect whether
+        or not you qualify to select a small tax case procedure. And if you do
+        qualify, you don’t have to select a small case procedure.
+      </p>
       <table
         aria-labelledby="small-case-qualifications"
         className="usa-table responsive-table ustc-table small-case-qualifications-table"
@@ -22,7 +27,7 @@ export const CaseDifferenceExplained = () => {
         <thead>
           <tr>
             <th>Case Type</th>
-            <th>Dollar Limit to Qualify for Small Tax Case</th>
+            <th>Dollar Limit to Qualify for Small Tax Case Procedure</th>
           </tr>
         </thead>
         <tbody>
@@ -66,7 +71,7 @@ export const CaseDifferenceExplained = () => {
           ].map(caseType => (
             <tr key={caseType}>
               <td>{caseType}</td>
-              <td>Not eligible for “S” status</td>
+              <td>Not eligible for small tax case procedure</td>
             </tr>
           ))}
         </tbody>
