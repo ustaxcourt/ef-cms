@@ -41,7 +41,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
               RequestItems: {
                 [`efcms-${env}`]: c.map(item => ({
                   PutRequest: {
-                    Item: item,
+                    Item: { ...item, indexedTimestamp: Date.now() },
                   },
                 })),
               },
