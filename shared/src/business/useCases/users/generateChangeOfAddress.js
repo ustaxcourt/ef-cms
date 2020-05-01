@@ -86,12 +86,18 @@ exports.generateChangeOfAddress = async ({
 
       if (!documentType) return;
 
+      const caseTitle = Case.getCaseTitle(caseDetail.caseCaption);
+      const caseCaptionExtension = caseDetail.caseCaption
+        .replace(caseTitle, '')
+        .replace(', ', '');
+
       const pdfContentHtml = await applicationContext
         .getTemplateGenerators()
         .generateChangeOfAddressTemplate({
           applicationContext,
           content: {
-            caption: caseDetail.caseCaption,
+            caseCaptionExtension,
+            caseTitle,
             docketNumberWithSuffix: `${caseDetail.docketNumber}${
               caseDetail.docketNumberSuffix || ''
             }`,
