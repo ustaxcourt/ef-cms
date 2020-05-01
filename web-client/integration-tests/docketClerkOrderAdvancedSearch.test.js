@@ -36,7 +36,7 @@ describe('docket clerk order advanced search', () => {
     docketNumberSuffix: 'R',
     documentContents:
       'Déjà vu, this is a seed order filed on Apr 13 at 11:01pm ET',
-    documentId: 'f1aa4aa3-c214-424c-8870-d0049c5744d7',
+    documentId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
     documentTitle: 'Order of Dismissal and Decision Entered, Judge Buch',
     filingDate: '2020-04-14T03:01:15.215Z',
     signedJudgeName: 'Maurice B. Foley',
