@@ -68,6 +68,7 @@
     "is-reachable": "^4.0.0",
     "isomorphic-fetch": "^2.2.1",
     "jest": "^25.5.2",
+    "js-yaml": "^3.13.1",
     "jsdoc": "^3.6.4",
     "jsdom": "^16.2.2",
     "json2md": "^1.7.0",

@@ -155,7 +155,7 @@ functions:
     handler: web-api/${self:provider.dir}/apiHandlers.getNotificationsLambda
     events:
       - http:
-          path: notifications
+          path: /notifications
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -172,17 +172,25 @@ functions:
     handler: web-api/${self:provider.dir}/apiHandlers.swaggerLambda
     events:
       - http:
-          path: swagger
+          path: /swagger
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
 
   swaggerJson:
     handler: web-api/${self:provider.dir}/apiHandlers.swaggerJsonLambda
     events:
       - http:
-          path: swagger.json
+          path: /swagger.json
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
 
   createCourtIssuedOrderPdfFromHtml:
     handler: web-api/${self:provider.dir}/apiHandlers.createCourtIssuedOrderPdfFromHtmlLambda
@@ -192,7 +200,7 @@ functions:
     timeout: 900
     events:
       - http:
-          path: court-issued-order
+          path: /court-issued-order
           method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -208,7 +216,7 @@ functions:
     timeout: 900
     events:
       - http:
-          path: docket-record-pdf
+          path: /docket-record-pdf
           method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
