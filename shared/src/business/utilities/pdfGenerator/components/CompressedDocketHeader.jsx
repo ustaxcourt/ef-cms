@@ -1,12 +1,17 @@
 const React = require('react');
 
-const CompressedDocketHeader = ({ caption, docketNumberWithSuffix, h3 }) => {
+const CompressedDocketHeader = ({
+  caseCaptionExtension,
+  caseTitle,
+  docketNumberWithSuffix,
+  h3,
+}) => {
   return (
     <>
       <div className="case-information">
         <div id="caption">
-          {caption}, Petitioner(s) v. Commissioner of Internal Revenue,
-          Respondent
+          {caseTitle}, {caseCaptionExtension} v. Commissioner of Internal
+          Revenue, Respondent
         </div>
         <div className="condensed" id="docket-number">
           Docket Number {docketNumberWithSuffix}
