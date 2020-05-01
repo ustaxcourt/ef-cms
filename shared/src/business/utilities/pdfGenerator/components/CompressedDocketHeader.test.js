@@ -4,9 +4,14 @@ const { shallow } = require('enzyme');
 
 describe('CompressedDocketHeader', () => {
   it('renders the case caption from props', () => {
-    let wrapper = shallow(<CompressedDocketHeader caption="Test Petitioner" />);
+    let wrapper = shallow(
+      <CompressedDocketHeader
+        caseCaptionExtension="Petitioner"
+        caseTitle="Test Petitioner"
+      />,
+    );
     expect(wrapper.find('#caption').text()).toEqual(
-      'Test Petitioner, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
+      'Test Petitioner, Petitioner v. Commissioner of Internal Revenue, Respondent',
     );
   });
 
