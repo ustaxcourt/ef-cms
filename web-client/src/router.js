@@ -693,10 +693,10 @@ const router = {
     );
 
     registerRoute(
-      '/print-preview/*',
+      '/print-paper-service/*',
       ifHasAccess(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
-        return app.getSequence('gotoPrintPreviewSequence')({
+        return app.getSequence('gotoPrintPaperServiceSequence')({
           alertWarning: {
             message:
               'Document electronically served. Print and mail all paper service documents now.',
