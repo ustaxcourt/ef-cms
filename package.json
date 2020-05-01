@@ -75,7 +75,7 @@
     "jwk-to-pem": "^2.0.3",
     "lodash": "^4.17.15",
     "madge": "^3.7.0",
-    "moment": "^2.24.0",
+    "moment": "2.24.0",
     "moment-timezone": "^0.5.27",
     "node-sass": "^4.14.0",
     "npm-force-resolutions": "0.0.3",
