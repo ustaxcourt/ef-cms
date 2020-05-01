@@ -79,7 +79,7 @@ describe('addCoversheetInteractor', () => {
     });
 
     applicationContext.getChromiumBrowser.mockImplementation(
-      async () => await getChromiumBrowser(),
+      getChromiumBrowser,
     );
   });
 
