@@ -32,7 +32,6 @@ joiValidationDecorator(
       .valid(...Object.values(SERVICE_INDICATOR_TYPES))
       .required(),
   }),
-  undefined,
   VALIDATION_ERROR_MESSAGES,
 );
 

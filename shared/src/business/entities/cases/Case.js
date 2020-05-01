@@ -703,7 +703,6 @@ Case.validationRules = {
 joiValidationDecorator(
   Case,
   joi.object().keys(Case.validationRules),
-  undefined,
   Case.VALIDATION_ERROR_MESSAGES,
 );
 

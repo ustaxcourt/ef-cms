@@ -56,7 +56,6 @@ joiValidationDecorator(
     servedParties: joi.array().optional(),
     status: joi.string().optional(),
   }),
-  undefined,
   {},
 );
 

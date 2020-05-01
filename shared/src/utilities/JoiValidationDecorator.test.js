@@ -24,7 +24,6 @@ joiValidationDecorator(
     hasNickname: joi.boolean().required(),
     name: joi.string().required(),
   }),
-  undefined,
   MockEntity1.errorToMessageMap,
 );
 
@@ -44,7 +43,7 @@ const MockEntity2Schema = joi.object().keys({
   obj1: joi.object().keys({ foo: joi.string().required() }).required(),
 });
 
-joiValidationDecorator(MockEntity2, MockEntity2Schema, undefined, {
+joiValidationDecorator(MockEntity2, MockEntity2Schema, {
   arry1: 'That is required',
   foo: 'lend me some sugar',
 });
@@ -58,7 +57,7 @@ const MockEntity3Schema = joi.object().keys({
   anotherItem: joi.string().required(),
 });
 
-joiValidationDecorator(MockEntity3, MockEntity3Schema, undefined, {
+joiValidationDecorator(MockEntity3, MockEntity3Schema, {
   anotherItem: 'Another item is required',
 });
 

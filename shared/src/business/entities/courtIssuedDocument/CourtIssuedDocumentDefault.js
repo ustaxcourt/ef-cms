@@ -25,7 +25,6 @@ CourtIssuedDocumentDefault.schema = {
 joiValidationDecorator(
   CourtIssuedDocumentDefault,
   CourtIssuedDocumentDefault.schema,
-  undefined,
   VALIDATION_ERROR_MESSAGES,
 );
 

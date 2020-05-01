@@ -39,8 +39,6 @@ EditPrivatePractitionerFactory.get = metadata => {
     representingSecondary: joi.boolean(),
   };
 
-  let customValidate;
-
   const makeRequired = itemName => {
     makeRequiredHelper({
       itemName,
@@ -59,7 +57,6 @@ EditPrivatePractitionerFactory.get = metadata => {
   joiValidationDecorator(
     entityConstructor,
     schema,
-    customValidate,
     EditPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES,
   );
 

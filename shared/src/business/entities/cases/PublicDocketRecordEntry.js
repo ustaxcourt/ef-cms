@@ -26,7 +26,6 @@ joiValidationDecorator(
     filingDate: joi.date().max('now').iso().optional(), // Required on DocketRecord so probably should be required here.
     index: joi.number().integer().optional(),
   }),
-  undefined,
   {},
 );
 
