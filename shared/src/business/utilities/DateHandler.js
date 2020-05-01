@@ -10,6 +10,7 @@ const FORMATS = {
   TIME: 'hh:mm a',
   TIME_TZ: 'h:mm a [ET]',
   YEAR: 'YYYY',
+  YYYYMMDD: 'YYYY-MM-DD',
 };
 
 const USTC_TZ = 'America/New_York';
