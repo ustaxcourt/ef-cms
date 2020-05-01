@@ -60,7 +60,8 @@ describe('documentGenerators', () => {
       const pdf = await changeOfAddress({
         applicationContext,
         content: {
-          caption: 'Test Petitioner',
+          caseCaptionExtension: 'Practitioner(s)',
+          caseTitle: 'Test Petitioner',
           docketNumber: '123-45',
           docketNumberWithSuffix: '123-45S',
           documentTitle: 'Notice of Change of Address',

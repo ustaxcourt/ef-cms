@@ -33,7 +33,8 @@ describe('ChangeOfAddress', () => {
     };
 
     options = {
-      caption: 'Test Petitioner',
+      caseCaptionExtension: 'Petitioner(s)',
+      caseTitle: 'Test Petitioner',
       docketNumberWithSuffix: '123-45S',
     };
   });
