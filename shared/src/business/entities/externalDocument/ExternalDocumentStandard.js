@@ -42,7 +42,6 @@ ExternalDocumentStandard.schema = joi.object({
 joiValidationDecorator(
   ExternalDocumentStandard,
   ExternalDocumentStandard.schema,
-  undefined,
   ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES,
 );
 
