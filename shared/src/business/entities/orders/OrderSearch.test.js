@@ -75,8 +75,8 @@ describe('Order Search entity', () => {
     it('should pass validation when a start date is provided without an end date', () => {
       const orderSearch = new OrderSearch({
         orderKeyword: 'sunglasses',
-        startDateDay: '02',
-        startDateMonth: '02',
+        startDateDay: '2',
+        startDateMonth: '2',
         startDateYear: '2020',
       });
 

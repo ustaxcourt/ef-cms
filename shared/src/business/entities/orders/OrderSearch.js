@@ -69,32 +69,15 @@ OrderSearch.schema = joi
     docketNumber: joi.string(),
     endDate: joi.alternatives().conditional('startDate', {
       is: joi.exist().not(null),
-      otherwise: joi
-        .date()
-        .format(OrderSearch.VALID_DATE_SEARCH_FORMATS)
-        .max('now')
-        .optional(),
-      then: joi
-        .date()
-        .format(OrderSearch.VALID_DATE_SEARCH_FORMATS)
-        .min(joi.ref('startDate'))
-        .max('now')
-        .optional(),
+      otherwise: joi.date().max('now').optional(),
+      then: joi.date().min(joi.ref('startDate')).max('now').optional(),
     }),
     judge: joi.string().optional(),
     orderKeyword: joi.string().required(),
     startDate: joi.alternatives().conditional('endDate', {
       is: joi.exist().not(null),
-      otherwise: joi
-        .date()
-        .format(OrderSearch.VALID_DATE_SEARCH_FORMATS)
-        .max('now')
-        .optional(),
-      then: joi
-        .date()
-        .format(OrderSearch.VALID_DATE_SEARCH_FORMATS)
-        .max('now')
-        .required(),
+      otherwise: joi.date().max('now').optional(),
+      then: joi.date().max('now').required(),
     }),
   })
   .oxor('caseTitleOrPetitioner', 'docketNumber');
