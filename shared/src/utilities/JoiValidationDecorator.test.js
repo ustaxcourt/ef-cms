@@ -178,7 +178,7 @@ describe('Joi Validation Decorator', () => {
     }
 
     expect(error).toBeDefined();
-    expect(error.message).toContain('ValidationError');
+    expect(error.message).toContain('The MockEntity1 entity was invalid');
   });
 
   it('should return an empty array when calling validateRawCollection with an empty collection', () => {

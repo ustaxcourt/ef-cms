@@ -894,37 +894,6 @@ describe('Case entity', () => {
       expect(error).toBeTruthy();
     });
   });
-  describe('validateWithError', () => {
-    it('passes back an error passed in if invalid', () => {
-      let error = null;
-      const caseRecord = new Case(
-        {},
-        {
-          applicationContext,
-        },
-      );
-      try {
-        caseRecord.validateWithError(new Error("I'm a real error"));
-      } catch (e) {
-        error = e;
-      }
-      expect(error).toBeDefined();
-      expect(error.message).toContain("I'm a real error");
-    });
-
-    it('does not pass back an error passed in if valid', () => {
-      let error;
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      try {
-        caseRecord.validateWithError(new Error("I'm a real error"));
-      } catch (e) {
-        error = e;
-      }
-      expect(error).not.toBeDefined();
-    });
-  });
 
   describe('attachIrsPractitioner', () => {
     it('adds the user to the irsPractitioners', () => {

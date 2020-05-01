@@ -195,8 +195,6 @@ describe('Get case', () => {
         applicationContext,
         caseId: '00101-08',
       }),
-    ).rejects.toThrow(
-      'The Case entity was invalid ValidationError: "docketNumber" is required',
-    );
+    ).rejects.toThrow('The Case entity was invalid');
   });
 });
