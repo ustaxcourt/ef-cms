@@ -47,14 +47,14 @@ function OrderSearch(rawProps = {}) {
       month: rawProps.endDateMonth,
       year: rawProps.endDateYear,
     });
+
+    this.tomorrow = new Date();
+    this.tomorrow.setDate(this.tomorrow.getDate() + 1);
   }
 
   if (!isEmpty(rawProps.caseTitleOrPetitioner)) {
     this.caseTitleOrPetitioner = rawProps.caseTitleOrPetitioner;
   }
-
-  this.tomorrow = new Date();
-  this.tomorrow.setDate(this.tomorrow.getDate() + 1);
 }
 
 OrderSearch.VALIDATION_ERROR_MESSAGES = {
