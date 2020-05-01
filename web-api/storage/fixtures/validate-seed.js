@@ -3,10 +3,9 @@
 const fs = require('fs');
 const { stdin } = process;
 
-const seedPath = uuid =>
-  `${__dirname}/s3/noop-documents-local-us-east-1/${uuid}._S3rver_object`;
+const EXISTING_UUID = '1f1aa3f7-e2e3-43e6-885d-4ce341588c76';
 
-const uuidMatch = /([-\d]+\.json).*?([-0-9a-f]{30,})/gims;
+const uuidMatch = /([-\d]+\.json).*?([-0-9a-f]{36})/gims;
 
 stdin.setEncoding('utf8');
 stdin.on('error', console.error);
@@ -20,27 +19,28 @@ stdin.on('data', function (chunk) {
     documentIds[uuid] = match[1];
   }
 });
-
-let hasPrintedWarning = false;
 stdin.on('end', () => {
-  Object.entries(documentIds).forEach(([docId, seedFile]) => {
-    hasPrintedWarning = true;
-    const path = seedPath(docId);
-    checkFileExists(path, seedFile);
-  });
+  Object.entries(documentIds).forEach(checkFilesExist);
 });
 
 /**
- * @param {string} path to the seedFile which ought to exist
- * @param {string} seedFile the dynamo seed file which referenced it
+ * @param {Array} entry to the seedFile which ought to exist
+ * @param {string} entry.seedFile the seed file that referenced the documentId
+ * @param {string} entry.uuid the documentId's UUID
  */
-function checkFileExists(path, seedFile) {
-  fs.access(path, fs.F_OK, err => {
-    if (err) {
-      if (!hasPrintedWarning) {
-        console.warn('WARNING: missing s3 seed data files!');
+function checkFilesExist([uuid, seedFile]) {
+  const createFiles = {
+    [`${__dirname}/s3/noop-documents-local-us-east-1/${uuid}._S3rver_metadata.json`]: `${__dirname}/s3/noop-documents-local-us-east-1/${EXISTING_UUID}._S3rver_metadata.json`,
+    [`${__dirname}/s3/noop-documents-local-us-east-1/${uuid}._S3rver_object`]: `${__dirname}/s3/noop-documents-local-us-east-1/${EXISTING_UUID}._S3rver_object`,
+    [`${__dirname}/s3/noop-documents-local-us-east-1/${uuid}._S3rver_object.md5`]: `${__dirname}/s3/noop-documents-local-us-east-1/${EXISTING_UUID}._S3rver_object.md5`,
+  };
+
+  Object.entries(createFiles).forEach(([desired, copyFrom]) => {
+    fs.access(desired, fs.F_OK, err => {
+      if (err) {
+        // console.warn(`WARNING: missing s3 seed data files from ${seedFile}!`);
+        console.warn(`cp "${copyFrom}" "${desired}"`);
       }
-      console.warn(seedFile, ': Could not find ', path);
-    }
+    });
   });
 }
