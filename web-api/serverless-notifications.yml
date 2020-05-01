@@ -158,12 +158,9 @@ functions:
           authorizer:
             arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
             managedExternally: true
-<<<<<<< HEAD
             identitySource:
               - route.request.querystring.token
             type: request
-=======
->>>>>>> 94732c3b0... removing disconnect authorizer
 
   disconnectHandler:
     handler: web-api/${self:provider.dir}/notificationHandlers.disconnectLambda
