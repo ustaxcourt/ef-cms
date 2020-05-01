@@ -54,11 +54,6 @@ joiValidationDecorator(
     preferredTrialCity: CaseExternal.commonRequirements.preferredTrialCity,
     procedureType: CaseExternal.commonRequirements.procedureType,
   }),
-  //TODO - remove all customValidation functions - they are not being used anymore
-  // function () {
-  //   return !this.getFormattedValidationErrors();
-  // },
-  undefined,
   CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES,
 );
 

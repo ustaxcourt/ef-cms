@@ -104,8 +104,6 @@ function DocketEntryFactory(rawProps) {
     secondaryDocumentFile: joi.object().optional(),
   };
 
-  let customValidate;
-
   const addToSchema = itemName => {
     schema = schema.keys({
       [itemName]: schemaOptionalItems[itemName],
@@ -160,7 +158,6 @@ function DocketEntryFactory(rawProps) {
   joiValidationDecorator(
     entityConstructor,
     schema,
-    customValidate,
     DocketEntryFactory.VALIDATION_ERROR_MESSAGES,
   );
 

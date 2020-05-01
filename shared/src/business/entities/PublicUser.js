@@ -50,7 +50,6 @@ function PublicUser(rawUser) {
 joiValidationDecorator(
   PublicUser,
   joi.object().keys(userValidation),
-  undefined,
   VALIDATION_ERROR_MESSAGES,
 );
 
