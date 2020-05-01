@@ -6,7 +6,7 @@ const applicationContext = createApplicationContext({});
 
 describe('generateChangeOfAddressTemplate', () => {
   const caseDetail = {
-    caseCaption: 'Test Case Caption',
+    caseTitle: 'Test Case Title',
     contactPrimary: {
       address1: 'address 1',
       city: 'City',
@@ -23,7 +23,8 @@ describe('generateChangeOfAddressTemplate', () => {
     const result = await generateChangeOfAddressTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
+        caseCaptionExtension: 'Petitioner(s)',
+        caseTitle: caseDetail.caseTitle,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -36,7 +37,7 @@ describe('generateChangeOfAddressTemplate', () => {
     });
 
     expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
-    expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
+    expect(result.indexOf('Test Case Title')).toBeGreaterThan(-1);
     expect(result.indexOf('Notice of Change of Address')).toBeGreaterThan(-1);
     expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
     expect(result.indexOf('address 1')).toBeGreaterThan(-1);
@@ -50,7 +51,8 @@ describe('generateChangeOfAddressTemplate', () => {
     const result = await generateChangeOfAddressTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
+        caseCaptionExtension: 'Petitioner(s)',
+        caseTitle: caseDetail.caseTitle,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Test Document Title',
@@ -69,7 +71,8 @@ describe('generateChangeOfAddressTemplate', () => {
     const result = await generateChangeOfAddressTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
+        caseCaptionExtension: 'Petitioner(s)',
+        caseTitle: caseDetail.caseTitle,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -94,7 +97,8 @@ describe('generateChangeOfAddressTemplate', () => {
     const result = await generateChangeOfAddressTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
+        caseCaptionExtension: 'Petitioner(s)',
+        caseTitle: caseDetail.caseTitle,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Telephone Number',
@@ -106,7 +110,6 @@ describe('generateChangeOfAddressTemplate', () => {
       },
     });
 
-    console.log(result);
     expect(
       result.indexOf('Notice of Change of Telephone Number'),
     ).toBeGreaterThan(-1);
@@ -122,7 +125,8 @@ describe('generateChangeOfAddressTemplate', () => {
     const result = await generateChangeOfAddressTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
+        caseCaptionExtension: 'Petitioner(s)',
+        caseTitle: caseDetail.caseTitle,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address and Telephone Number',
@@ -150,7 +154,8 @@ describe('generateChangeOfAddressTemplate', () => {
     const result = await generateChangeOfAddressTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
+        caseCaptionExtension: 'Petitioner(s)',
+        caseTitle: caseDetail.caseTitle,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -171,7 +176,8 @@ describe('generateChangeOfAddressTemplate', () => {
     const result = await generateChangeOfAddressTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
+        caseCaptionExtension: 'Petitioner(s)',
+        caseTitle: caseDetail.caseTitle,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -195,7 +201,8 @@ describe('generateChangeOfAddressTemplate', () => {
     const result = await generateChangeOfAddressTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
+        caseCaptionExtension: 'Petitioner(s)',
+        caseTitle: caseDetail.caseTitle,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -220,7 +227,8 @@ describe('generateChangeOfAddressTemplate', () => {
     const result = await generateChangeOfAddressTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
+        caseCaptionExtension: 'Petitioner(s)',
+        caseTitle: caseDetail.caseTitle,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -242,7 +250,8 @@ describe('generateChangeOfAddressTemplate', () => {
     const result = await generateChangeOfAddressTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
+        caseCaptionExtension: 'Petitioner(s)',
+        caseTitle: caseDetail.caseTitle,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -265,7 +274,8 @@ describe('generateChangeOfAddressTemplate', () => {
     const result = await generateChangeOfAddressTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
+        caseCaptionExtension: 'Petitioner(s)',
+        caseTitle: caseDetail.caseTitle,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',
@@ -290,7 +300,8 @@ describe('generateChangeOfAddressTemplate', () => {
     const result = await generateChangeOfAddressTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
+        caseCaptionExtension: 'Petitioner(s)',
+        caseTitle: caseDetail.caseTitle,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         documentTitle: 'Notice of Change of Address',

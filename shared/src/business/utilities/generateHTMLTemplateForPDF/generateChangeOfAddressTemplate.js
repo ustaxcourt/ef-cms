@@ -22,7 +22,8 @@ const generateChangeOfAddressTemplate = async ({
   content,
 }) => {
   const {
-    caption,
+    caseCaptionExtension,
+    caseTitle,
     docketNumberWithSuffix,
     documentTitle,
     name,
@@ -36,7 +37,8 @@ const generateChangeOfAddressTemplate = async ({
       newData,
       oldData,
       options: {
-        caption,
+        caseCaptionExtension,
+        caseTitle,
         docketNumberWithSuffix,
         h3: documentTitle,
         showAddressAndPhoneChange:

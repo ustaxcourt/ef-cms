@@ -73,12 +73,18 @@ exports.updateSecondaryContactInteractor = async ({
     });
 
   if (documentType) {
+    const caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
+    const caseCaptionExtension = caseEntity.caseCaption
+      .replace(caseTitle, '')
+      .replace(', ', '');
+
     const pdfContentHtml = await applicationContext
       .getTemplateGenerators()
       .generateChangeOfAddressTemplate({
         applicationContext,
         content: {
-          caption: caseEntity.caseCaption,
+          caseCaptionExtension,
+          caseTitle,
           docketNumberWithSuffix: `${caseEntity.docketNumber}${
             caseEntity.docketNumberSuffix || ''
           }`,
