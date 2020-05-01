@@ -49,6 +49,19 @@ joiValidationDecorator(MockEntity2, MockEntity2Schema, undefined, {
   foo: 'lend me some sugar',
 });
 
+const MockEntity3 = function (raw) {
+  this.anotherItem = raw.anotherItem;
+  this.mockEntity2 = new MockEntity2(raw.mockEntity2);
+};
+
+const MockEntity3Schema = joi.object().keys({
+  anotherItem: joi.string().required(),
+});
+
+joiValidationDecorator(MockEntity3, MockEntity3Schema, undefined, {
+  anotherItem: 'Another item is required',
+});
+
 describe('Joi Validation Decorator', () => {
   describe('validation errors with arrays', () => {
     it('returns validation errors', () => {
@@ -79,6 +92,23 @@ describe('Joi Validation Decorator', () => {
       const errors = invalidEntity.getFormattedValidationErrors();
       const joiGeneratedMessageNotFromErrorToMessageMap = errors.hasNickname;
       expect(joiGeneratedMessageNotFromErrorToMessageMap).toBeDefined();
+    });
+
+    it('should correctly validate nested entities', () => {
+      const invalidEntity = new MockEntity3({
+        anotherItem: 'this is another item',
+      });
+      const errors = invalidEntity.getFormattedValidationErrors();
+      expect(errors).toEqual({
+        mockEntity2: {
+          arry1: 'That is required',
+          favoriteNumber: '"favoriteNumber" is required',
+          hasNickname: '"hasNickname" is required',
+          name: '"name" is required',
+          obj1: '"obj1" is required',
+        },
+      });
+      expect(invalidEntity.isValid()).toBe(false);
     });
 
     it('should correctly return strings as items in an array of strings', () => {
@@ -148,7 +178,7 @@ describe('Joi Validation Decorator', () => {
     }
 
     expect(error).toBeDefined();
-    expect(error.message).toContain('ValidationError');
+    expect(error.message).toContain('The MockEntity1 entity was invalid');
   });
 
   it('should return an empty array when calling validateRawCollection with an empty collection', () => {

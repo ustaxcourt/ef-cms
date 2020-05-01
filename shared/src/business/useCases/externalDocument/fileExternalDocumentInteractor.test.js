@@ -18,8 +18,14 @@ describe('fileExternalDocumentInteractor', () => {
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseType: 'Deficiency',
       contactPrimary: {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: 'domestic',
         email: 'fieri@example.com',
         name: 'Guy Fieri',
+        phone: '1234567890',
+        postalCode: '12345',
+        state: 'CA',
       },
       createdAt: '',
       docketNumber: '45678-18',
@@ -97,25 +103,18 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
-    let error;
+    const updatedCase = await fileExternalDocumentInteractor({
+      applicationContext,
+      documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        docketNumber: '45678-18',
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'A',
+      },
+    });
 
-    let updatedCase;
-    try {
-      updatedCase = await fileExternalDocumentInteractor({
-        applicationContext,
-        documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
-        documentMetadata: {
-          caseId: caseRecord.caseId,
-          docketNumber: '45678-18',
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'A',
-        },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
     expect(
       applicationContext.getPersistenceGateway().getCaseByCaseId,
     ).toBeCalled();
