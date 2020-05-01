@@ -26,6 +26,16 @@ describe('saveIntermediateDocketEntryInteractor', () => {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     caseType: 'Deficiency',
+    contactPrimary: {
+      address1: '123 Main St',
+      city: 'Somewhere',
+      countryType: 'domestic',
+      email: 'fieri@example.com',
+      name: 'Guy Fieri',
+      phone: '1234567890',
+      postalCode: '12345',
+      state: 'CA',
+    },
     createdAt: '',
     docketNumber: '45678-18',
     docketRecord: [

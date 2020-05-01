@@ -9,7 +9,7 @@ const test = setupTest();
 
 describe('Petitions clerk paper case flow', () => {
   beforeAll(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(40000);
   });
 
   loginAs(test, 'petitionsclerk');

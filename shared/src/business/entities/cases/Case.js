@@ -703,15 +703,7 @@ Case.validationRules = {
 joiValidationDecorator(
   Case,
   joi.object().keys(Case.validationRules),
-  function () {
-    return (
-      Case.isValidDocketNumber(this.docketNumber) &&
-      Document.validateCollection(this.documents) &&
-      DocketRecord.validateCollection(this.docketRecord) &&
-      IrsPractitioner.validateCollection(this.irsPractitioners) &&
-      PrivatePractitioner.validateCollection(this.privatePractitioners)
-    );
-  },
+  undefined,
   Case.VALIDATION_ERROR_MESSAGES,
 );
 
