@@ -1,7 +1,7 @@
 const React = require('react');
 
-const PDFDocumentHeader = require('../components/PDFDocumentHeader.jsx')
-  .default;
+const DocketHeader = require('../components/DocketHeader.jsx').default;
+const PrimaryHeader = require('../components/PrimaryHeader.jsx').default;
 
 const renderTable = ({ data, label, options }) => {
   return (
@@ -39,8 +39,10 @@ const renderTable = ({ data, label, options }) => {
 const ChangeOfAddress = ({ name, newData, oldData, options }) => {
   return (
     <>
-      <PDFDocumentHeader
-        caseCaptionWithPostfix={options.caseCaptionWithPostfix}
+      <PrimaryHeader />
+      <DocketHeader
+        caseCaptionExtension={options.caseCaptionExtension}
+        caseTitle={options.caseTitle}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
         h3={options.h3}
       />
