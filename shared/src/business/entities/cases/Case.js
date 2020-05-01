@@ -247,9 +247,8 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.highPriorityReason = rawCase.highPriorityReason;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
     this.status = rawCase.status || Case.STATUS_TYPES.new;
+    this.userId = rawCase.userId;
   }
-
-  this.userId = rawCase.userId;
 
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
@@ -283,6 +282,10 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.trialLocation = rawCase.trialLocation;
   this.trialSessionId = rawCase.trialSessionId;
   this.trialTime = rawCase.trialTime;
+
+  if (applicationContext.getCurrentUser().userId === rawCase.userId) {
+    this.userId = rawCase.userId;
+  }
 
   this.initialDocketNumberSuffix =
     rawCase.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
