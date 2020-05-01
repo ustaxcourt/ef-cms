@@ -72,11 +72,13 @@ OrderSearch.schema = joi
       otherwise: joi
         .date()
         .format(OrderSearch.VALID_DATE_SEARCH_FORMATS)
+        .max('now')
         .optional(),
       then: joi
         .date()
         .format(OrderSearch.VALID_DATE_SEARCH_FORMATS)
         .min(joi.ref('startDate'))
+        .max('now')
         .optional(),
     }),
     judge: joi.string().optional(),

@@ -55,20 +55,12 @@ const createISODateString = (dateString, inputFormat) => {
 const createEndOfDayISO = ({ day, month, year }) => {
   const composedDate = `${year}-${month}-${day}T23:59:59.999`;
   const composedFormat = 'YYYY-M-DTHH:mm:ss.SSS';
-  const isValid = isValidDateString(composedDate, [composedFormat]);
-  if (!isValid) {
-    return false;
-  }
   return prepareDateFromString(composedDate, composedFormat).toISOString();
 };
 
 const createStartOfDayISO = ({ day, month, year }) => {
   const composedDate = `${year}-${month}-${day}T00:00:00.000`;
   const composedFormat = 'YYYY-M-DTHH:mm:ss.SSS';
-  const isValid = isValidDateString(composedDate, [composedFormat]);
-  if (!isValid) {
-    return false;
-  }
   return prepareDateFromString(composedDate, composedFormat).toISOString();
 };
 

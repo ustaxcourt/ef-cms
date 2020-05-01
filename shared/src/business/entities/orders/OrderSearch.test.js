@@ -137,5 +137,21 @@ describe('Order Search entity', () => {
 
       expect(validationErrors.startDate).toEqual('Enter a valid start date');
     });
+
+    it('should fail validation when the end date is in the future', () => {
+      const orderSearch = new OrderSearch({
+        endDateDay: '20',
+        endDateMonth: '20',
+        endDateYear: '3000',
+        orderKeyword: 'sunglasses',
+        startDateDay: '10',
+        startDateMonth: '10',
+        startDateYear: '2000',
+      });
+
+      const validationErrors = orderSearch.getFormattedValidationErrors();
+
+      expect(validationErrors.endDate).toEqual('Enter a valid end date');
+    });
   });
 });
