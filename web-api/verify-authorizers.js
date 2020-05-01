@@ -8,7 +8,7 @@ axios.interceptors.request.use(function (config) {
   return config;
 });
 
-(async () => {
+const main = async () => {
   const serverlessYmlFiles = process.argv
     .slice(2)
     .filter(path => !path.includes('public-api'));
@@ -59,6 +59,7 @@ axios.interceptors.request.use(function (config) {
         ', ',
       )}`,
     );
+    process.exit(1);
   }
 
   if (no401Response.length) {
@@ -67,5 +68,11 @@ axios.interceptors.request.use(function (config) {
         '\n',
       )}`,
     );
+    process.exit(1);
   }
-})();
+};
+
+main().catch(err => {
+  console.error(err);
+  process.exit(1);
+});
