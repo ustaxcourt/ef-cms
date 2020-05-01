@@ -109,7 +109,7 @@ import { gotoPdfPreviewSequence } from './sequences/gotoPdfPreviewSequence';
 import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence';
 import { gotoPractitionerDetailSequence } from './sequences/gotoPractitionerDetailSequence';
 import { gotoPrimaryContactEditSequence } from './sequences/gotoPrimaryContactEditSequence';
-import { gotoPrintPreviewSequence } from './sequences/gotoPrintPreviewSequence';
+import { gotoPrintPaperServiceSequence } from './sequences/gotoPrintPaperServiceSequence';
 import { gotoPrintableCaseConfirmationSequence } from './sequences/gotoPrintableCaseConfirmationSequence';
 import { gotoPrintableCaseInventoryReportSequence } from './sequences/gotoPrintableCaseInventoryReportSequence';
 import { gotoPrintableDocketRecordSequence } from './sequences/gotoPrintableDocketRecordSequence';
@@ -140,7 +140,7 @@ import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSe
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
 import { navigateToEditSavedPetitionSequence } from './sequences/navigateToEditSavedPetitionSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
-import { navigateToPrintPreviewSequence } from './sequences/navigateToPrintPreviewSequence';
+import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrintPaperServiceSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { navigateToPrintableDocketRecordSequence } from './sequences/navigateToPrintableDocketRecordSequence';
 import { navigateToReviewSavedPetitionSequence } from './sequences/navigateToReviewSavedPetitionSequence';
@@ -498,7 +498,7 @@ export const presenter = {
     gotoPendingReportSequence,
     gotoPractitionerDetailSequence,
     gotoPrimaryContactEditSequence,
-    gotoPrintPreviewSequence,
+    gotoPrintPaperServiceSequence,
     gotoPrintableCaseConfirmationSequence,
     gotoPrintableCaseInventoryReportSequence,
     gotoPrintableDocketRecordSequence,
@@ -529,7 +529,7 @@ export const presenter = {
     navigateToEditOrderSequence,
     navigateToEditSavedPetitionSequence,
     navigateToPathSequence,
-    navigateToPrintPreviewSequence,
+    navigateToPrintPaperServiceSequence,
     navigateToPrintableCaseConfirmationSequence,
     navigateToPrintableDocketRecordSequence,
     navigateToReviewSavedPetitionSequence,
