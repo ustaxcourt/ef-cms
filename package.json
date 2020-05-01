@@ -228,7 +228,6 @@
     "watcherGlob": false
   },
   "resolutions": {
-    "minimist": "^1.2.5",
-    "yargs-parser": "^18.1.2"
+    "minimist": "^1.2.5"
   }
 }
