@@ -32,7 +32,6 @@ joiValidationDecorator(
     message: joi.string().required(),
     section: joi.string().required(),
   }),
-  undefined,
   InitialWorkItemMessage.VALIDATION_ERROR_MESSAGES,
 );
 

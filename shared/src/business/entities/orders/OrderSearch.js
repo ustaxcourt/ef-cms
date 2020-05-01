@@ -100,7 +100,6 @@ OrderSearch.schema = joi
 joiValidationDecorator(
   OrderSearch,
   OrderSearch.schema,
-  undefined,
   OrderSearch.VALIDATION_ERROR_MESSAGES,
 );
 

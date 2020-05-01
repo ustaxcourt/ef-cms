@@ -448,9 +448,6 @@ joiValidationDecorator(
     userId: joi.string().required(),
     workItems: joi.array().optional(),
   }),
-  function () {
-    return WorkItem.validateCollection(this.workItems);
-  },
 );
 
 /**

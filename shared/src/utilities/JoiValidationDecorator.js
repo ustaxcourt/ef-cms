@@ -103,13 +103,11 @@ function getFormattedValidationErrors(entity) {
  *
  * @param {Function} entityConstructor the entity constructor
  * @param {object} schema the joi validation schema
- * @param {Function} customValidate a custom validation function
  * @param {object} errorToMessageMap the map of error fields and messages
  */
 exports.joiValidationDecorator = function (
   entityConstructor,
   schema,
-  customValidate,
   errorToMessageMap = {},
 ) {
   if (!schema.validate && typeof schema === 'object') {

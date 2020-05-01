@@ -38,7 +38,6 @@ CourtIssuedDocumentTypeH.schema = {
 joiValidationDecorator(
   CourtIssuedDocumentTypeH,
   CourtIssuedDocumentTypeH.schema,
-  undefined,
   VALIDATION_ERROR_MESSAGES,
 );
 

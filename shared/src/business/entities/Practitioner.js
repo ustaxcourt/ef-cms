@@ -169,7 +169,6 @@ joiValidationDecorator(
   joi.object().keys({
     ...validationRules,
   }),
-  undefined,
   VALIDATION_ERROR_MESSAGES,
 );
 

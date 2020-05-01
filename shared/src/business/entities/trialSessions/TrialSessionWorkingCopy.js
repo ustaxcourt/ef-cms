@@ -98,9 +98,6 @@ TrialSessionWorkingCopy.validationRules = {
 joiValidationDecorator(
   TrialSessionWorkingCopy,
   joi.object().keys(TrialSessionWorkingCopy.validationRules),
-  function () {
-    return !this.getFormattedValidationErrors();
-  },
   TrialSessionWorkingCopy.VALIDATION_ERROR_MESSAGES,
 );
 
