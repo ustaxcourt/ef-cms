@@ -521,6 +521,9 @@ jobs:
       - run:
           name: 'Deploy - Pa11y Smoke Tests'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "ENV=${ENV} npm run test:pa11y:smoketests"
+      - run:
+          name: 'Deploy - Cognito Authorizer Check'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "find web-api/*.yml | ENV=${ENV} xargs node web-api/verify-authorizers.js"
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
 
