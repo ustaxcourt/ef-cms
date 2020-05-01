@@ -187,7 +187,7 @@
     "print:success": "echo 'Build successful. You can access the site at http://localhost:1234'",
     "seed:db": "node ./web-api/create-dynamo-tables.js && node ./web-api/seed-dynamo.js",
     "seed:elasticsearch": "./web-api/seed-elasticsearch.sh",
-    "seed:s3": "npm run seed:s3:lint && cp -R ./web-api/storage/fixtures/s3/* ./web-api/storage/s3",
+    "seed:s3": "cp -R ./web-api/storage/fixtures/s3/* ./web-api/storage/s3",
     "seed:s3:lint": "pushd ./web-api/storage/fixtures && grep documentId seed/*json | ./validate-seed.js && popd",
     "seed": "run-p seed:db seed:s3",
     "start:api:ci": "CI=true npm run start:api",
