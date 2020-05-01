@@ -169,7 +169,7 @@ describe('updateCase', () => {
           contactSecondary: {},
         },
       }),
-    ).rejects.toThrow();
+    ).rejects.toThrow('The Case entity was invalid');
   });
 
   it('should throw an error if the user is unauthorized to update a case', async () => {
