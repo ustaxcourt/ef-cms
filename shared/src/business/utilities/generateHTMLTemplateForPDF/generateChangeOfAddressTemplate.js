@@ -2,8 +2,6 @@ const React = require('react');
 const ReactDOM = require('react-dom/server');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
-const { Case } = require('../../entities/cases/Case');
-
 require('regenerator-runtime');
 require('@babel/register')({
   presets: ['@babel/preset-react', '@babel/preset-env'],
@@ -24,7 +22,8 @@ const generateChangeOfAddressTemplate = async ({
   content,
 }) => {
   const {
-    caption,
+    caseCaptionExtension,
+    caseTitle,
     docketNumberWithSuffix,
     documentTitle,
     name,
@@ -38,7 +37,8 @@ const generateChangeOfAddressTemplate = async ({
       newData,
       oldData,
       options: {
-        caseCaptionWithPostfix: `${caption} ${Case.CASE_CAPTION_POSTFIX}`,
+        caseCaptionExtension,
+        caseTitle,
         docketNumberWithSuffix,
         h3: documentTitle,
         showAddressAndPhoneChange:
