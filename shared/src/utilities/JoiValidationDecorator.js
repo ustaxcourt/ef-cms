@@ -133,16 +133,14 @@ exports.joiValidationDecorator = function (
     return isEmpty(validationErrors);
   };
 
-  entityConstructor.prototype.getValidationError = function getValidationError() {
-    return schema.validate(this, { allowUnknown: true }).error;
-  };
-
   entityConstructor.prototype.validate = function validate() {
     if (!this.isValid()) {
       throw new Error(
         `The ${
           entityConstructor.validationName || ''
-        } entity was invalid ${this.getValidationError()}`,
+        } entity was invalid ${JSON.stringify(
+          this.getFormattedValidationErrors(),
+        )}`,
       );
     }
     return this;
@@ -167,14 +165,6 @@ exports.joiValidationDecorator = function (
       }
     });
     return errors;
-  };
-
-  entityConstructor.prototype.validateWithError = function validate(error) {
-    if (!this.isValid()) {
-      error.message = `${error.message} ${this.getValidationError()}`;
-      throw error;
-    }
-    return this;
   };
 
   const toRawObjectPrototype = function () {

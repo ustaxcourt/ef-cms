@@ -73,9 +73,7 @@ describe('updateCase', () => {
         caseId: MOCK_CASE.caseId,
         caseToUpdate: omit(MOCK_CASE, 'docketNumber'),
       }),
-    ).rejects.toThrow(
-      'The Case entity was invalid ValidationError: "docketNumber" is required',
-    );
+    ).rejects.toThrow('The Case entity was invalid');
   });
 
   it('should throw an error if caseToUpdate is not passed in', async () => {
