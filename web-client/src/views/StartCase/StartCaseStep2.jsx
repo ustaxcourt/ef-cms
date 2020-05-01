@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseTypeSelect } from './CaseTypeSelect';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
@@ -41,20 +40,19 @@ export const StartCaseStep2 = connect(
       <>
         <Focus>
           <h2 className="focusable margin-bottom-105" tabIndex="-1">
-            2. Tell Us About Your Petition
+            2. Your Petition
           </h2>
         </Focus>
-        <p className="margin-bottom-3 margin-top-0 required-statement">
-          *All fields required unless otherwise noted
-        </p>
-        <h3>Upload Your Petition</h3>
         <Hint>
           Don’t forget to remove or redact your personal information on all your
           documents, including any IRS notice(s).
         </Hint>
+        <p className="margin-bottom-3 margin-top-0 required-statement">
+          *All fields required unless otherwise noted
+        </p>
         <div className="blue-container grid-container padding-x-0">
           <div className="grid-row grid-gap">
-            <div className="mobile-lg:grid-col-5">
+            <div className="mobile-lg:grid-col-6">
               <FormGroup
                 errorText={[
                   validationErrors.petitionFile,
@@ -69,15 +67,27 @@ export const StartCaseStep2 = connect(
                   htmlFor="petition-file"
                   id="petition-file-label"
                 >
-                  Upload your petition{' '}
-                  <span className="success-message">
-                    <FontAwesomeIcon icon="check-circle" size="1x" />
-                  </span>
+                  Upload your Petition
                 </label>
                 <span className="usa-hint">
                   File must be in PDF format (.pdf). Max file size{' '}
                   {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
+                <p className="margin-top-0">
+                  <Button
+                    link
+                    className="usa-link--external"
+                    href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
+                    icon="file-pdf"
+                    iconColor="blue"
+                    overrideMargin="margin-right-1"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Download T.C. Form 2
+                  </Button>
+                  if you haven‘t already done so
+                </p>
                 <StateDrivenFileInput
                   aria-describedby="petition-file-label"
                   id="petition-file"
