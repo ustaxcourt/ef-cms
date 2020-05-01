@@ -456,11 +456,11 @@ joiValidationDecorator(
     receivedAt: joi.date().iso().optional(),
     relationship: joi
       .string()
-      .valid(...Object.values(Document.RELATIONSHIPS))
+      .valid(...Document.RELATIONSHIPS)
       .optional(),
     scenario: joi
       .string()
-      .valid(...Object.values(Document.SCENARIOS))
+      .valid(...Document.SCENARIOS)
       .optional(),
     secondaryDate: joi
       .date()
