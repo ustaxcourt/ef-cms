@@ -18,7 +18,7 @@ axios.interceptors.request.use(function (config) {
   );
 
   const missingAuthorizers = [];
-  const no403Response = [];
+  const no401Response = [];
 
   console.log('verifying the follwing urls:');
 
@@ -29,7 +29,6 @@ axios.interceptors.request.use(function (config) {
     const { functions } = config;
 
     for (const [funName, funConfig] of Object.entries(functions)) {
-      // console.log('funConfig', funConfig);
       const event = funConfig.events[0];
       const def = event.http;
       if (!def) continue;
@@ -49,7 +48,7 @@ axios.interceptors.request.use(function (config) {
         responseStatus = err.response.status;
       }
       if (responseStatus !== 401) {
-        no403Response.push(urlToVerify);
+        no401Response.push(urlToVerify);
       }
     }
   }
@@ -62,9 +61,9 @@ axios.interceptors.request.use(function (config) {
     );
   }
 
-  if (no403Response.length) {
+  if (no401Response.length) {
     console.log(
-      `\n\nThe following urls functions are missing authorizers:\n${no403Response.join(
+      `\n\nThe following urls functions are missing authorizers:\n${no401Response.join(
         '\n',
       )}`,
     );
