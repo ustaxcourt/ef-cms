@@ -8,9 +8,10 @@ import React from 'react';
 
 export const PrintPaperService = connect(
   {
-    navigateBackSequence: sequences.navigateBackSequence,
+    navigateToCaseDetailFromPaperServiceSequence:
+      sequences.navigateToCaseDetailFromPaperServiceSequence,
   },
-  function PrintPaperService({ navigateBackSequence }) {
+  function PrintPaperService({ navigateToCaseDetailFromPaperServiceSequence }) {
     return (
       <>
         <CaseDetailHeader hideActionButtons />
@@ -22,8 +23,9 @@ export const PrintPaperService = connect(
             </div>
             <div className="grid-col-4">
               <Button
+                className="push-right margin-right-0 margin-top-6"
                 onClick={() => {
-                  navigateBackSequence();
+                  navigateToCaseDetailFromPaperServiceSequence();
                 }}
               >
                 Done

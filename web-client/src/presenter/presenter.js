@@ -136,6 +136,7 @@ import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
+import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
 import { navigateToEditSavedPetitionSequence } from './sequences/navigateToEditSavedPetitionSequence';
@@ -525,6 +526,7 @@ export const presenter = {
     loginWithCodeSequence,
     loginWithTokenSequence,
     navigateBackSequence,
+    navigateToCaseDetailFromPaperServiceSequence,
     navigateToCaseDetailSequence,
     navigateToEditOrderSequence,
     navigateToEditSavedPetitionSequence,
