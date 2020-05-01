@@ -7,8 +7,8 @@ import { state } from 'cerebral';
  * @param {object} providers.router the riot.router object that is used for changing the route
  * @returns {Promise} asynchronous action
  */
-export const navigateToPrintPreviewAction = async ({ get, router }) => {
+export const navigateToPrintPaperServiceAction = async ({ get, router }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  await router.route(`/print-preview/${docketNumber}`);
+  await router.route(`/print-paper-service/${docketNumber}`);
 };

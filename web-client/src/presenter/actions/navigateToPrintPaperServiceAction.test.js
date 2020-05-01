@@ -1,8 +1,8 @@
-import { navigateToPrintPreviewAction } from './navigateToPrintPreviewAction';
+import { navigateToPrintPaperServiceAction } from './navigateToPrintPaperServiceAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('navigateToPrintPreviewAction', () => {
+describe('navigateToPrintPaperServiceAction', () => {
   let routeStub;
 
   beforeAll(() => {
@@ -14,7 +14,7 @@ describe('navigateToPrintPreviewAction', () => {
   });
 
   it('navigates to print preview for the state.caseDetail.docketNumber', async () => {
-    await runAction(navigateToPrintPreviewAction, {
+    await runAction(navigateToPrintPaperServiceAction, {
       modules: {
         presenter,
       },
@@ -25,6 +25,6 @@ describe('navigateToPrintPreviewAction', () => {
       },
     });
 
-    expect(routeStub).toHaveBeenCalledWith('/print-preview/101-20');
+    expect(routeStub).toHaveBeenCalledWith('/print-paper-service/101-20');
   });
 });

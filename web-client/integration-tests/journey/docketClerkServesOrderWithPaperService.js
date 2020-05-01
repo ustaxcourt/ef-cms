@@ -50,7 +50,7 @@ export const docketClerkServesOrderWithPaperService = (
     ]);
     await test.runSequence('serveCourtIssuedDocumentSequence');
 
-    expect(test.getState('currentPage')).toEqual('PrintPreview');
+    expect(test.getState('currentPage')).toEqual('PrintPaperService');
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
   });
 };

@@ -43,7 +43,7 @@ import { Messages } from './Messages/Messages';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PractitionerDetail } from './Practitioners/PractitionerDetail';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
-import { PrintPreview } from './CourtIssuedDocketEntry/PrintPreview';
+import { PrintPaperService } from './PrintPaperService';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
@@ -111,7 +111,7 @@ const pages = {
   PendingReport,
   PractitionerDetail,
   PrimaryContactEdit,
-  PrintPreview,
+  PrintPaperService,
   PrintableCaseInventoryReport,
   PrintableDocketRecord,
   PrintableTrialCalendar,

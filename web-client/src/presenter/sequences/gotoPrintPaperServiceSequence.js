@@ -6,7 +6,7 @@ import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
-export const gotoPrintPreviewSequence = [
+export const gotoPrintPaperServiceSequence = [
   setCurrentPageAction('Interstitial'),
   clearModalAction,
   clearFormAction,
@@ -14,5 +14,5 @@ export const gotoPrintPreviewSequence = [
   getCaseAction,
   setCaseAction,
   setAlertWarningAction,
-  setCurrentPageAction('PrintPreview'),
+  setCurrentPageAction('PrintPaperService'),
 ];
