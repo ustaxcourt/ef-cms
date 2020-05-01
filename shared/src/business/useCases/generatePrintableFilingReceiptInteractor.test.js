@@ -63,11 +63,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         attachments: true,
         certificateOfService: true,
-<<<<<<< HEAD
-        certificateOfServiceDate: '1983-10-31T09:03:07.173Z',
-=======
         certificateOfServiceDate: '1983-10-31T09:38:18.614Z',
->>>>>>> cb0e6f38e57beb71bcdceaf4165168673cf03fd7
         documentTitle: 'Test Primary Document',
         primaryDocumentFile: {},
       },
