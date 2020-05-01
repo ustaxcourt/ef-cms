@@ -6,6 +6,7 @@ const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
 const { DOCKET_SECTION } = require('../entities/WorkQueue');
 const { Document } = require('../entities/Document');
+const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { Message } = require('../entities/Message');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
@@ -73,10 +74,7 @@ exports.updatePrimaryContactInteractor = async ({
     });
 
   if (documentType) {
-    const caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
-    const caseCaptionExtension = caseEntity.caseCaption
-      .replace(caseTitle, '')
-      .replace(', ', '');
+    const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
     const changeOfAddressPdf = await applicationContext
       .getDocumentGenerators()

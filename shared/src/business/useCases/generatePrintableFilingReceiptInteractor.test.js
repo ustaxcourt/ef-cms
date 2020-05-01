@@ -6,7 +6,7 @@ const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('generatePrintableFilingReceiptInteractor', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
     );
@@ -22,7 +22,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       .getTemplateGenerators()
       .generatePrintableFilingReceiptTemplate.mockImplementation(
         ({ content }) => {
-          return `<!DOCTYPE html>${content.documentsFiledContent}</html>`;
+          return `<!DOCTYPE html><html>${content.documentsFiledContent}</html>`;
         },
       );
     applicationContext
@@ -63,7 +63,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         attachments: true,
         certificateOfService: true,
-        certificateOfServiceDate: '10-31-1983',
+        certificateOfServiceDate: '1983-10-31T09:38:18.614Z',
         documentTitle: 'Test Primary Document',
         primaryDocumentFile: {},
       },
@@ -143,7 +143,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         attachments: true,
         certificateOfService: true,
-        certificateOfServiceDate: '10-31-1983',
+        certificateOfServiceDate: '1983-10-31T09:38:18.614Z',
         documentTitle: 'Test Primary Document',
         hasSupportingDocuments: true,
         primaryDocumentFile: {},
@@ -170,7 +170,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         attachments: true,
         certificateOfService: true,
-        certificateOfServiceDate: '10-31-1983',
+        certificateOfServiceDate: '1983-10-31T09:38:18.614Z',
         documentTitle: 'Test Primary Document',
         primaryDocumentFile: {},
         secondaryDocument: {
@@ -195,7 +195,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         attachments: true,
         certificateOfService: true,
-        certificateOfServiceDate: '10-31-1983',
+        certificateOfServiceDate: '1983-10-31T09:38:18.614Z',
         documentTitle: 'Test Primary Document',
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: false,
@@ -231,7 +231,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         attachments: true,
         certificateOfService: true,
-        certificateOfServiceDate: '10-31-1983',
+        certificateOfServiceDate: '1983-10-31T09:38:18.614Z',
         documentTitle: 'Test Primary Document',
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,
