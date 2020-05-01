@@ -52,6 +52,16 @@ describe('updateCounselOnCaseInteractor', () => {
         caseCaption: 'Caption',
         caseId,
         caseType: 'Deficiency',
+        contactPrimary: {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          countryType: 'domestic',
+          email: 'fieri@example.com',
+          name: 'Guy Fieri',
+          phone: '1234567890',
+          postalCode: '12345',
+          state: 'CA',
+        },
         docketNumber: '123-19',
         docketRecord: [
           {

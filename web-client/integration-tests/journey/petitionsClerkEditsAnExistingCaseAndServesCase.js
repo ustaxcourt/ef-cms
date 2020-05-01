@@ -9,8 +9,8 @@ export const petitionsClerkEditsAnExistingCaseAndServesCase = test => {
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'partyType',
-      value: 'Guardian',
+      key: 'contactPrimary.name',
+      value: 'New Name',
     });
 
     await test.runSequence('validatePetitionFromPaperSequence');
