@@ -1,12 +1,17 @@
 const React = require('react');
 
-const DocketHeader = ({ caption, docketNumberWithSuffix, h3 }) => {
+const DocketHeader = ({
+  caseCaptionExtension,
+  caseTitle,
+  docketNumberWithSuffix,
+  h3,
+}) => {
   return (
     <>
       <div className="case-information">
         <div id="caption">
-          <div id="caption-title">{caption}</div>
-          <div id="caption-petitioners">Petitioner(s)</div>
+          <div id="caption-title">{caseTitle}</div>
+          <div id="caption-extension">{caseCaptionExtension}</div>
           <div id="caption-v">v.</div>
           <div id="caption-commissioner">Commissioner of Internal Revenue</div>
           <div id="caption-respondent">Respondent</div>
