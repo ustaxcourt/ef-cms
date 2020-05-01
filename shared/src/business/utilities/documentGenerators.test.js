@@ -10,7 +10,7 @@ const { getChromiumBrowser } = require('./getChromiumBrowser');
 const { changeOfAddress } = require('./documentGenerators');
 
 describe('documentGenerators', () => {
-  const testOutputPath = path.join(
+  const testOutputPath = path.resolve(
     __dirname,
     '../../../test-output/document-generation/',
   );

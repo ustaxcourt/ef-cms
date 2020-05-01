@@ -10,6 +10,7 @@ const { capitalize, clone } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { Document } = require('../../entities/Document');
+const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { Message } = require('../../entities/Message');
 const { User } = require('../../entities/User');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -86,10 +87,9 @@ exports.generateChangeOfAddress = async ({
 
       if (!documentType) return;
 
-      const caseTitle = Case.getCaseTitle(caseDetail.caseCaption);
-      const caseCaptionExtension = caseDetail.caseCaption
-        .replace(caseTitle, '')
-        .replace(', ', '');
+      const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(
+        caseDetail,
+      );
 
       const pdfContentHtml = await applicationContext
         .getTemplateGenerators()
