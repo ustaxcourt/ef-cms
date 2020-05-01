@@ -52,6 +52,9 @@ function OrderSearch(rawProps = {}) {
   if (!isEmpty(rawProps.caseTitleOrPetitioner)) {
     this.caseTitleOrPetitioner = rawProps.caseTitleOrPetitioner;
   }
+
+  this.tomorrow = new Date();
+  this.tomorrow.setDate(this.tomorrow.getDate() + 1);
 }
 
 OrderSearch.VALIDATION_ERROR_MESSAGES = {
@@ -69,8 +72,12 @@ OrderSearch.schema = joi
     docketNumber: joi.string(),
     endDate: joi.alternatives().conditional('startDate', {
       is: joi.exist().not(null),
-      otherwise: joi.date().max('now').optional(),
-      then: joi.date().min(joi.ref('startDate')).max('now').optional(),
+      otherwise: joi.date().less(joi.ref('tomorrow')).optional(),
+      then: joi
+        .date()
+        .min(joi.ref('startDate'))
+        .less(joi.ref('tomorrow'))
+        .optional(),
     }),
     judge: joi.string().optional(),
     orderKeyword: joi.string().required(),
@@ -79,6 +86,7 @@ OrderSearch.schema = joi
       otherwise: joi.date().max('now').optional(),
       then: joi.date().max('now').required(),
     }),
+    tomorrow: joi.optional(),
   })
   .oxor('caseTitleOrPetitioner', 'docketNumber');
 
