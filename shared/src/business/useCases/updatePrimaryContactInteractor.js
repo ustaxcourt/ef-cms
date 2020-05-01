@@ -73,12 +73,18 @@ exports.updatePrimaryContactInteractor = async ({
     });
 
   if (documentType) {
+    const caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
+    const caseCaptionExtension = caseEntity.caseCaption
+      .replace(caseTitle, '')
+      .replace(', ', '');
+
     const changeOfAddressPdf = await applicationContext
       .getDocumentGenerators()
       .changeOfAddress({
         applicationContext,
         content: {
-          caption: caseEntity.caseCaption,
+          caseCaptionExtension,
+          caseTitle,
           docketNumber: caseEntity.docketNumber,
           docketNumberWithSuffix: `${caseEntity.docketNumber}${
             caseEntity.docketNumberSuffix || ''

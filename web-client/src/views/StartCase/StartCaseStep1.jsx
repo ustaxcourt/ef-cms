@@ -1,6 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
@@ -35,7 +34,7 @@ export const StartCaseStep1 = connect(
             id="start-case-header"
             tabIndex="-1"
           >
-            1. Provide Statement of Identity
+            1. Statement of Taxpayer Identification Number (STIN)
           </h2>
         </Focus>
         <Hint>
@@ -61,15 +60,27 @@ export const StartCaseStep1 = connect(
               htmlFor="stin-file"
               id="stin-file-label"
             >
-              Upload your Statement of Taxpayer Identification{' '}
-              <span className="success-message">
-                <FontAwesomeIcon icon="check-circle" size="1x" />
-              </span>
+              Upload your Statement of Taxpayer Identification Number
             </label>
             <span className="usa-hint">
               File must be in PDF format (.pdf). Max file size{' '}
               {constants.MAX_FILE_SIZE_MB}MB.
             </span>
+            <p className="margin-top-0">
+              <Button
+                link
+                className="usa-link--external"
+                href="https://www.ustaxcourt.gov/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
+                icon="file-pdf"
+                iconColor="blue"
+                overrideMargin="margin-right-1"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Download T.C. Form 4
+              </Button>
+              if you haven‘t already done so
+            </p>
             <StateDrivenFileInput
               aria-describedby="stin-file-label"
               id="stin-file"
