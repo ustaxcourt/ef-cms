@@ -31,8 +31,8 @@
     "noticeOfAttachments": false,
     "entityName": "Case",
     "caseCaption": "Astra Santiago, Petitioner",
-    "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
-    "sk": "case|f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -50,7 +50,7 @@
     "hasPendingItems": false,
     "petitionPaymentDate": null,
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "case|f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "docketNumber": "105-20",
     "petitionPaymentWaivedDate": null,
     "status": "General Docket - Not at Issue"
@@ -64,8 +64,8 @@
     "sk": "docket-record|96f78072-858a-4eb5-bde9-ec68ff16dd2d",
     "description": "Petition",
     "index": 1,
-    "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
-    "pk": "case|f1aa4aa3-c214-424c-8870-d0049c5744d7"
+    "documentId": "af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
+    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
   },
   {
     "eventCode": "RQT",
@@ -75,7 +75,7 @@
     "sk": "docket-record|b9471b59-fbe3-436f-a695-2583f013b975",
     "description": "Request for Place of Trial at New York City, New York",
     "index": 2,
-    "pk": "case|f1aa4aa3-c214-424c-8870-d0049c5744d7"
+    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
   },
   {
     "eventCode": "O",
@@ -85,9 +85,9 @@
     "sk": "docket-record|cb57802b-4571-43ad-8f35-b54ac7fb7399",
     "description": "Order that this case is sealed",
     "index": 3,
-    "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
-    "editState": "{\"eventCode\":\"O\",\"documentType\":\"O - Order\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Order that this case is sealed\",\"serviceStamp\":\"Served\",\"generatedDocumentTitle\":\"Order that this case is sealed\",\"caseId\":\"f1aa4aa3-c214-424c-8870-d0049c5744d7\",\"documentId\":\"f1aa4aa3-c214-424c-8870-d0049c5744d7\"}",
-    "pk": "case|f1aa4aa3-c214-424c-8870-d0049c5744d7"
+    "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
+    "editState": "{\"eventCode\":\"O\",\"documentType\":\"O - Order\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Order that this case is sealed\",\"serviceStamp\":\"Served\",\"generatedDocumentTitle\":\"Order that this case is sealed\",\"caseId\":\"28caad58-df69-4a4d-af15-6554aee7fbd6\",\"documentId\":\"06f60736-5f37-4590-b62a-5c7edf84ffc6\"}",
+    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
   },
   {
     "draftState": null,
@@ -107,8 +107,8 @@
     "createdAt": "2020-04-29T15:52:05.725Z",
     "scenario": "Type A",
     "entityName": "Document",
-    "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
-    "sk": "document|f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "sk": "document|06f60736-5f37-4590-b62a-5c7edf84ffc6",
     "documentTitle": "Order that this case is sealed",
     "relationship": "primaryDocument",
     "workItems": [
@@ -136,7 +136,7 @@
           "createdAt": "2020-04-29T15:52:05.725Z",
           "scenario": "Type A",
           "entityName": "Document",
-          "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+          "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
           "documentTitle": "Order that this case is sealed",
           "relationship": "primaryDocument",
           "documentContents": "We are sealing this case right meow.\n",
@@ -146,7 +146,7 @@
           "processingStatus": "complete",
           "freeText": "Order that this case is sealed",
           "signedAt": "2020-04-29T15:52:05.726Z",
-          "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+          "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
           "signedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
           "servedAt": "2020-04-29T15:52:16.484Z",
           "docketNumber": "105-20",
@@ -163,7 +163,7 @@
         "createdAt": "2020-04-29T15:52:15.627Z",
         "assigneeName": "Test Petitionsclerk",
         "entityName": "WorkItem",
-        "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+        "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
         "hideFromPendingMessages": true,
         "messages": [
           {
@@ -188,8 +188,8 @@
     "processingStatus": "complete",
     "freeText": "Order that this case is sealed",
     "signedAt": "2020-04-29T15:52:05.726Z",
-    "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
-    "pk": "case|f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
+    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "signedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "servedAt": "2020-04-29T15:52:16.484Z",
     "docketNumber": "105-20",
@@ -215,11 +215,11 @@
     "createdAt": "2020-04-29T15:50:41.699Z",
     "entityName": "Document",
     "filedBy": "Petr. Astra Santiago",
-    "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
-    "sk": "document|f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "sk": "document|abba69d5-a96a-423c-937f-b4d1c5442bf4",
     "partySecondary": false,
-    "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
-    "pk": "case|f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "documentId": "abba69d5-a96a-423c-937f-b4d1c5442bf4",
+    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "servedAt": "2020-04-29T15:51:29.168Z",
     "privatePractitioners": [],
     "status": "served"
@@ -254,7 +254,7 @@
           "entityName": "Document",
           "filedBy": "Petr. Astra Santiago",
           "partySecondary": false,
-          "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+          "documentId": "af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
           "privatePractitioners": []
         },
         "caseTitle": "Astra Santiago",
@@ -268,7 +268,7 @@
         "createdAt": "2020-04-29T15:50:41.698Z",
         "assigneeName": null,
         "entityName": "WorkItem",
-        "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+        "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
         "messages": [
           {
             "createdAt": "2020-04-29T15:50:41.699Z",
@@ -293,11 +293,11 @@
     "createdAt": "2020-04-29T15:50:41.698Z",
     "entityName": "Document",
     "filedBy": "Petr. Astra Santiago",
-    "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
-    "sk": "document|f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "sk": "document|af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
     "partySecondary": false,
-    "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
-    "pk": "case|f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "documentId": "af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
+    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "servedAt": "2020-04-29T15:51:29.168Z",
     "privatePractitioners": [],
     "status": "served"
@@ -320,18 +320,18 @@
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Private Practitioner",
     "section": "privatePractitioner",
-    "pk": "case|f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatePractitioner"
   },
   {
     "sk": "work-item|332026fb-8844-49b6-bb13-66eff6882f00",
-    "pk": "case|f1aa4aa3-c214-424c-8870-d0049c5744d7"
+    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
   },
   {
-    "sk": "case|f1aa4aa3-c214-424c-8870-d0049c5744d7",
-    "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "pk": "catalog"
   },
   {
@@ -350,7 +350,7 @@
       "entityName": "Document",
       "filedBy": "Petr. Astra Santiago",
       "partySecondary": false,
-      "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+      "documentId": "af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
       "privatePractitioners": []
     },
     "gsi1pk": "work-item|332026fb-8844-49b6-bb13-66eff6882f00",
@@ -361,7 +361,7 @@
     "createdAt": "2020-04-29T15:50:41.698Z",
     "assigneeName": null,
     "entityName": "WorkItem",
-    "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "sk": "2020-04-29T15:50:41.698Z",
     "updatedAt": "2020-04-29T15:50:41.699Z",
     "completedAt": "2020-04-29T15:51:29.331Z",
@@ -407,7 +407,7 @@
       "createdAt": "2020-04-29T15:52:05.725Z",
       "scenario": "Type A",
       "entityName": "Document",
-      "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+      "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
       "documentTitle": "Order that this case is sealed",
       "relationship": "primaryDocument",
       "workItems": [
@@ -420,7 +420,7 @@
             "draftState": {
               "eventCode": "O",
               "documentType": "Order",
-              "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+              "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
               "documentContents": "We are sealing this case right meow.\n",
               "documentTitle": "Order that this case is sealed",
               "richText": "<p>We are sealing this case right meow.</p>",
@@ -441,10 +441,10 @@
             "createdAt": "2020-04-29T15:52:05.725Z",
             "scenario": "Type A",
             "entityName": "Document",
-            "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+            "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
             "freeText": "Order that this case is sealed",
             "signedAt": "2020-04-29T15:52:05.726Z",
-            "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+            "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
             "signedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
             "documentTitle": "Order that this case is sealed",
             "relationship": "primaryDocument",
@@ -460,7 +460,7 @@
           "createdAt": "2020-04-29T15:52:15.627Z",
           "assigneeName": "Test Petitionsclerk",
           "entityName": "WorkItem",
-          "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+          "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
           "hideFromPendingMessages": true,
           "messages": [
             {
@@ -484,7 +484,7 @@
       "processingStatus": "complete",
       "freeText": "Order that this case is sealed",
       "signedAt": "2020-04-29T15:52:05.726Z",
-      "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+      "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
       "signedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
       "servedAt": "2020-04-29T15:52:16.484Z",
       "docketNumber": "105-20",
@@ -497,7 +497,7 @@
     "createdAt": "2020-04-29T15:52:15.627Z",
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
-    "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "sk": "2020-04-29T15:52:15.627Z",
     "updatedAt": "2020-04-29T15:52:15.628Z",
     "completedAt": "2020-04-29T15:52:16.578Z",
@@ -542,7 +542,7 @@
       "entityName": "Document",
       "filedBy": "Petr. Astra Santiago",
       "partySecondary": false,
-      "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+      "documentId": "af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
       "privatePractitioners": []
     },
     "caseTitle": "Astra Santiago",
@@ -556,7 +556,7 @@
     "createdAt": "2020-04-29T15:50:41.698Z",
     "assigneeName": null,
     "entityName": "WorkItem",
-    "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "sk": "work-item|332026fb-8844-49b6-bb13-66eff6882f00",
     "messages": [
       {
@@ -589,7 +589,7 @@
       "entityName": "Document",
       "filedBy": "Petr. Astra Santiago",
       "partySecondary": false,
-      "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+      "documentId": "af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
       "privatePractitioners": []
     },
     "gsi1pk": "work-item|332026fb-8844-49b6-bb13-66eff6882f00",
@@ -600,7 +600,7 @@
     "createdAt": "2020-04-29T15:50:41.698Z",
     "assigneeName": null,
     "entityName": "WorkItem",
-    "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "sk": "2020-04-29T15:50:41.698Z",
     "updatedAt": "2020-04-29T15:50:41.699Z",
     "completedAt": "2020-04-29T15:51:29.331Z",
@@ -646,7 +646,7 @@
       "createdAt": "2020-04-29T15:52:05.725Z",
       "scenario": "Type A",
       "entityName": "Document",
-      "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+      "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
       "documentTitle": "Order that this case is sealed",
       "relationship": "primaryDocument",
       "workItems": [
@@ -659,7 +659,7 @@
             "draftState": {
               "eventCode": "O",
               "documentType": "Order",
-              "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+              "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
               "documentContents": "We are sealing this case right meow.\n",
               "documentTitle": "Order that this case is sealed",
               "richText": "<p>We are sealing this case right meow.</p>",
@@ -680,10 +680,10 @@
             "createdAt": "2020-04-29T15:52:05.725Z",
             "scenario": "Type A",
             "entityName": "Document",
-            "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+            "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
             "freeText": "Order that this case is sealed",
             "signedAt": "2020-04-29T15:52:05.726Z",
-            "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+            "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
             "signedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
             "documentTitle": "Order that this case is sealed",
             "relationship": "primaryDocument",
@@ -699,7 +699,7 @@
           "createdAt": "2020-04-29T15:52:15.627Z",
           "assigneeName": "Test Petitionsclerk",
           "entityName": "WorkItem",
-          "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+          "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
           "hideFromPendingMessages": true,
           "messages": [
             {
@@ -723,7 +723,7 @@
       "processingStatus": "complete",
       "freeText": "Order that this case is sealed",
       "signedAt": "2020-04-29T15:52:05.726Z",
-      "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+      "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
       "signedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
       "servedAt": "2020-04-29T15:52:16.484Z",
       "docketNumber": "105-20",
@@ -736,7 +736,7 @@
     "createdAt": "2020-04-29T15:52:15.627Z",
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
-    "caseId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "sk": "2020-04-29T15:52:15.627Z",
     "updatedAt": "2020-04-29T15:52:15.628Z",
     "completedAt": "2020-04-29T15:52:16.578Z",
@@ -763,15 +763,15 @@
     "completedBy": "Test Petitionsclerk"
   },
   {
-    "sk": "case|f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "sk": "case|f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "sk": "case|f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "pk": "case-by-docket-number|105-20"
   }
 ]
