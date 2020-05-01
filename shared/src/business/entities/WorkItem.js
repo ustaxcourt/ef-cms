@@ -109,9 +109,6 @@ joiValidationDecorator(
       })
       .required(),
   }),
-  function () {
-    return Message.validateCollection(this.messages);
-  },
 );
 
 /**

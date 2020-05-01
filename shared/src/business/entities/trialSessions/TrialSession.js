@@ -274,9 +274,6 @@ joiValidationDecorator(
     ),
     isCalendared: joi.boolean().required(),
   }),
-  function () {
-    return !this.getFormattedValidationErrors();
-  },
   TrialSession.VALIDATION_ERROR_MESSAGES,
 );
 

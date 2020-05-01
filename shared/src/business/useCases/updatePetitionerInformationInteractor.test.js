@@ -137,17 +137,19 @@ describe('update petitioner contact information on a case', () => {
     expect(updateCaseStub).toHaveBeenCalled();
   });
 
-  it('updates case but does not generate a notice if contactSecondary does not contain a name', async () => {
-    await updatePetitionerInformationInteractor({
-      applicationContext,
-      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-      contactPrimary: MOCK_CASE.contactPrimary,
-      contactSecondary: { countryType: 'domestic' },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
-    });
+  it('throws an error if contactSecondary is required for the party type and is not valid', async () => {
+    await expect(
+      updatePetitionerInformationInteractor({
+        applicationContext,
+        caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        contactPrimary: MOCK_CASE.contactPrimary,
+        contactSecondary: { countryType: 'domestic' },
+        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      }),
+    ).rejects.toThrow();
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
-    expect(updateCaseStub).toHaveBeenCalled();
+    expect(updateCaseStub).not.toHaveBeenCalled();
   });
 
   it('updates petitioner contact when primary contact info changes and serves the notice created', async () => {
@@ -160,6 +162,7 @@ describe('update petitioner contact information on a case', () => {
         countryType: 'domestic',
         email: 'test@example.com',
         name: 'Test Petitioner',
+        phone: '1234567',
         postalCode: '12345',
         state: 'TN',
         title: 'Executor',
@@ -182,6 +185,7 @@ describe('update petitioner contact information on a case', () => {
         city: 'Somewhere',
         countryType: 'domestic',
         name: 'Test Petitioner',
+        phone: '1234567',
         postalCode: '12345',
         state: 'TN',
         title: 'Executor',
@@ -202,6 +206,7 @@ describe('update petitioner contact information on a case', () => {
         city: 'Somewhere',
         countryType: 'domestic',
         name: 'Test Petitioner',
+        phone: '1234567',
         postalCode: '12345',
         state: 'TN',
         title: 'Executor',
@@ -218,6 +223,7 @@ describe('update petitioner contact information on a case', () => {
         city: 'Somewhere',
         countryType: 'domestic',
         name: 'Test Petitioner',
+        phone: '1234567',
         postalCode: '12345',
         state: 'TN',
         title: 'Executor',
