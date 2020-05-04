@@ -4,7 +4,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { Document } = require('../../entities/Document');
-const { UnauthorizedError } = require('../../../errors/errors');
+const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 /**
  *
@@ -39,12 +39,16 @@ exports.updateCourtIssuedOrderInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const oldDocument = caseEntity.documents.find(
-    document => document.documentId === documentIdToEdit,
-  );
+  const currentDocument = caseEntity.getDocumentById({
+    documentId: documentIdToEdit,
+  });
+
+  if (!currentDocument) {
+    throw new NotFoundError('Document not found');
+  }
 
   if (documentMetadata.documentContents) {
-    const { documentContentsId } = oldDocument;
+    const { documentContentsId } = currentDocument;
 
     const contentToStore = {
       documentContents: documentMetadata.documentContents,
@@ -73,7 +77,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
 
   const documentEntity = new Document(
     {
-      ...oldDocument,
+      ...currentDocument,
       ...editableFields,
       documentId: documentIdToEdit,
       filedBy: user.name,
