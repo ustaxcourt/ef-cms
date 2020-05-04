@@ -52,10 +52,11 @@ table {
 
 th,
 td {
-  padding: 12px 8px;
+  padding: 8px;
   border-bottom: 1px solid #ccc;
   text-align: left;
   vertical-align: top;
+  font-family: 'nimbus_roman', serif;
   font-size: 10px;
 }
 
@@ -102,16 +103,8 @@ th {
   line-height: 18px;
   border-right: 1px dashed;
 
-  #caption-extension {
-    padding-left: 50%;
-  }
-
-  #caption-v {
-    padding-left: 50%;
-  }
-
-  #caption-respondent {
-    padding-left: 50%;
+  #caption-extension, #caption-v, #caption-respondent {
+    padding-left: 25%;
   }
 }
 
@@ -120,7 +113,7 @@ th {
 }
 
 .case-information #docket-number {
-  width: 50%;
+  width: 48%;
   float: right;
   text-indent: 5px;
   font-size: 14px;
@@ -244,7 +237,7 @@ th {
 #reports-header {
   font-family: 'nimbus_roman', serif;
   text-align: centeer;
-  
+
   h1 {
     font-size: 20px;
   }
