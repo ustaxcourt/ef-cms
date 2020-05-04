@@ -414,6 +414,12 @@ export const setupTest = ({ useCases = {} } = {}) => {
     getScanner: getScannerInterface,
   });
 
+  presenter.providers.applicationContext = applicationContext;
+  const { initialize: initializeSocketProvider, start, stop } = socketProvider({
+    socketRouter,
+  });
+  presenter.providers.socket = { start, stop };
+
   test = CerebralTest(presenter);
   test.getSequence = name => async obj => await test.runSequence(name, obj);
   test.closeSocket = stop;
@@ -451,12 +457,6 @@ export const setupTest = ({ useCases = {} } = {}) => {
     },
     location: {},
   };
-
-  presenter.providers.applicationContext = applicationContext;
-  const { initialize: initializeSocketProvider, start, stop } = socketProvider({
-    socketRouter,
-  });
-  presenter.providers.socket = { start, stop };
 
   const originalUseCases = applicationContext.getUseCases();
   presenter.providers.applicationContext.getUseCases = () => {
