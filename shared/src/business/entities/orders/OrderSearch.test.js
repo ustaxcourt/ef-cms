@@ -75,8 +75,8 @@ describe('Order Search entity', () => {
     it('should pass validation when a start date is provided without an end date', () => {
       const orderSearch = new OrderSearch({
         orderKeyword: 'sunglasses',
-        startDateDay: '02',
-        startDateMonth: '02',
+        startDateDay: '2',
+        startDateMonth: '2',
         startDateYear: '2020',
       });
 
@@ -136,6 +136,22 @@ describe('Order Search entity', () => {
       const validationErrors = orderSearch.getFormattedValidationErrors();
 
       expect(validationErrors.startDate).toEqual('Enter a valid start date');
+    });
+
+    it('should fail validation when the end date is in the future', () => {
+      const orderSearch = new OrderSearch({
+        endDateDay: '20',
+        endDateMonth: '20',
+        endDateYear: '3000',
+        orderKeyword: 'sunglasses',
+        startDateDay: '10',
+        startDateMonth: '10',
+        startDateYear: '2000',
+      });
+
+      const validationErrors = orderSearch.getFormattedValidationErrors();
+
+      expect(validationErrors.endDate).toEqual('Enter a valid end date');
     });
   });
 });
