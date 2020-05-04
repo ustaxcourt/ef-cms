@@ -330,4 +330,39 @@ describe('docket clerk order advanced search', () => {
       ]),
     );
   });
+
+  it('clears validation errors when switching tabs', async () => {
+    test.setState('advancedSearchForm', {
+      orderSearch: {},
+    });
+
+    await test.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(test.getState('alertError')).toEqual({
+      messages: ['Enter a keyword or phrase'],
+      title: 'Please correct the following errors:',
+    });
+
+    await test.runSequence('advancedSearchTabChangeSequence');
+
+    expect(test.getState('alertError')).not.toBeDefined();
+  });
+
+  it('includes the number of pages present in each document in the search results', async () => {
+    test.setState('advancedSearchForm', {
+      orderSearch: {
+        orderKeyword: 'Order of Dismissal Entered',
+      },
+    });
+
+    await test.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(test.getState('searchResults')).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          numberOfPages: 1,
+        }),
+      ]),
+    );
+  });
 });
