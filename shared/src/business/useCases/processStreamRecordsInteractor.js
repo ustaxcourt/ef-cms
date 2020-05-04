@@ -91,7 +91,21 @@ const filterRecords = async ({ applicationContext, records }) => {
 
       //also reindex all of the documents on the case
       const { documents } = fullCase;
-      documents.forEach(document => {
+      for (const document of documents) {
+        if (document.documentContentsId) {
+          const buffer = await applicationContext
+            .getPersistenceGateway()
+            .getDocument({
+              applicationContext,
+              documentId: document.documentContentsId,
+              protocol: 'S3',
+              useTempBucket: true,
+            });
+
+          const { documentContents } = JSON.parse(buffer.toString());
+          document.documentContents = documentContents;
+        }
+
         const documentWithCaseInfo = {
           ...AWS.DynamoDB.Converter.marshall(fullCase),
           ...AWS.DynamoDB.Converter.marshall(document),
@@ -115,7 +129,7 @@ const filterRecords = async ({ applicationContext, records }) => {
           },
           eventName: 'MODIFY',
         });
-      });
+      }
     }
   }
 
