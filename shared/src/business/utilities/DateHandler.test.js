@@ -114,6 +114,7 @@ describe('DateHandler', () => {
       expect(result).toEqual('2000-01-01T00:00:00.000Z');
     });
   });
+
   describe('createISODateString', () => {
     it('creates a date anew', () => {
       const myDate = DateHandler.createISODateString();
@@ -213,6 +214,29 @@ describe('DateHandler', () => {
 
       result = DateHandler.dateStringsCompared(date2, date1);
       expect(result).toEqual(86400000); // 1 day in milliseconds
+    });
+  });
+
+  describe('calendarDatesCompared', () => {
+    const pastDate = '2001-01-01';
+    const futureDate = '2061-01-02';
+
+    it('should return -1 when the first date is occurs before the second', () => {
+      const result = DateHandler.calendarDatesCompared(pastDate, futureDate);
+
+      expect(result).toEqual(-1);
+    });
+
+    it('should return 1 when the first date occurs after the second', () => {
+      const result = DateHandler.calendarDatesCompared(futureDate, pastDate);
+
+      expect(result).toEqual(1);
+    });
+
+    it('should return 0 when the two dates are the same calendar date', () => {
+      const result = DateHandler.calendarDatesCompared(futureDate, futureDate);
+
+      expect(result).toEqual(0);
     });
   });
 
