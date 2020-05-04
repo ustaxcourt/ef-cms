@@ -7,7 +7,9 @@ const {
 } = require('../../../persistence/s3/getUploadPolicy');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
 
+const joiStrictTimestamp = getTimestampSchema();
 CaseInternal.DEFAULT_PROCEDURE_TYPE = Case.PROCEDURE_TYPES[0];
 
 /**
@@ -134,8 +136,8 @@ const paperRequirements = joi
     }),
     petitionPaymentDate: joi.when('petitionPaymentStatus', {
       is: Case.PAYMENT_STATUS.PAID,
-      otherwise: joi.date().iso().optional().allow(null),
-      then: joi.date().iso().max('now').required(),
+      otherwise: joiStrictTimestamp.optional().allow(null),
+      then: joiStrictTimestamp.max('now').required(),
     }),
     petitionPaymentMethod: Case.validationRules.petitionPaymentMethod,
     petitionPaymentStatus: Case.validationRules.petitionPaymentStatus,
@@ -148,7 +150,7 @@ const paperRequirements = joi
         then: joi.string().required(),
       }),
     procedureType: joi.string().required(),
-    receivedAt: joi.date().iso().max('now').required(),
+    receivedAt: joiStrictTimestamp.max('now').required(),
     requestForPlaceOfTrialFile: joi
       .alternatives()
       .conditional('preferredTrialCity', {

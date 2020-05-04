@@ -1,4 +1,6 @@
 const DateHandler = require('./DateHandler');
+const { getTimestampSchema } = require('../../utilities/dateSchema');
+const joiStrictTimestamp = getTimestampSchema();
 
 describe('DateHandler', () => {
   describe('prepareDateFromString', () => {
@@ -177,6 +179,11 @@ describe('DateHandler', () => {
         '2001-01-01T00:00:00.000Z',
       ); // Jan 1, 2001 at the stroke of midnight, GMT
       expect(myDate).toBe('2001-01-01T00:00:00.000Z');
+    });
+
+    it('creates timestamps that strictly adhere to Joi formatting rules', () => {
+      const thisDate = DateHandler.createISODateString();
+      expect(joiStrictTimestamp.validate(thisDate).error).toBeUndefined();
     });
   });
 
