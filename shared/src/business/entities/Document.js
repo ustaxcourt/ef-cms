@@ -153,10 +153,10 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.mailingDate = rawDocument.mailingDate;
   this.objections = rawDocument.objections;
   this.ordinalValue = rawDocument.ordinalValue;
-  this.partyPrimary = rawDocument.partyPrimary; // TODO: add info about purpose
+  this.partyPrimary = rawDocument.partyPrimary;
   this.partyIrsPractitioner = rawDocument.partyIrsPractitioner;
-  this.partySecondary = rawDocument.partySecondary; // TODO: add info about purpose
-  this.privatePractitioners = rawDocument.privatePractitioners; // TODO: look into this
+  this.partySecondary = rawDocument.partySecondary;
+  this.privatePractitioners = rawDocument.privatePractitioners;
   this.receivedAt = rawDocument.receivedAt || createISODateString();
   this.relationship = rawDocument.relationship;
   this.scenario = rawDocument.scenario;
@@ -437,11 +437,23 @@ joiValidationDecorator(
     objections: joi.string().optional(),
     ordinalValue: joi.string().optional(),
     partyIrsPractitioner: joi.boolean().optional(),
-    partyPrimary: joi.boolean().optional(),
-    partySecondary: joi.boolean().optional(),
+    partyPrimary: joi
+      .boolean()
+      .optional()
+      .description('Use the primary contact to compose the filedBy text.'),
+    partySecondary: joi
+      .boolean()
+      .optional()
+      .description('Use the secondary contact to compose the filedBy text.'),
     pending: joi.boolean().optional(),
     previousDocument: joi.object().optional(),
-    privatePractitioners: joi.array().optional(),
+    privatePractitioners: joi
+      .array()
+      .items({ name: joi.string().required() })
+      .optional()
+      .description(
+        'Practitioner names to be used to compose the filedBy text.',
+      ),
     processingStatus: joi.string().optional(),
     qcAt: joi.date().iso().optional(),
     qcByUser: joi.object().optional(),
