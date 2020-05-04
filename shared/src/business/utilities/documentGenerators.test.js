@@ -12,11 +12,11 @@ const { changeOfAddress } = require('./documentGenerators');
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
     __dirname,
-    '../../../test-output/document-generation/',
+    '../../../test-output/document-generation',
   );
 
   const writePdfFile = (name, data) => {
-    const path = `${testOutputPath}${name}.pdf`;
+    const path = `${testOutputPath}/${name}.pdf`;
     fs.writeFileSync(path, data);
   };
 
