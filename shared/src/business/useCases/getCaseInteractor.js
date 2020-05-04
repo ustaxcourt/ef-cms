@@ -24,9 +24,11 @@ const getDocumentContentsForDocuments = async ({
 
       const documentContentsData = JSON.parse(documentContentsFile.toString());
       document.documentContents = documentContentsData.documentContents;
-      document.draftState.documentContents =
-        documentContentsData.documentContents;
-      document.draftState.richText = documentContentsData.richText;
+      document.draftState = {
+        ...document.draftState,
+        documentContents: documentContentsData.documentContents,
+        richText: documentContentsData.richText,
+      };
     }
   }
 
