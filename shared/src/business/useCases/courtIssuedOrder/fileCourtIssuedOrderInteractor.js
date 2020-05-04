@@ -43,6 +43,28 @@ exports.fileCourtIssuedOrderInteractor = async ({
     documentMetadata.freeText = documentMetadata.documentTitle;
   }
 
+  if (documentMetadata.documentContents) {
+    const documentContentsId = applicationContext.getUniqueId();
+
+    const contentToStore = {
+      documentContents: documentMetadata.documentContents,
+      richText: documentMetadata.draftState.richText,
+    };
+
+    applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: Buffer.from(JSON.stringify(contentToStore)),
+      documentId: documentContentsId,
+      useTempBucket: true,
+    });
+
+    delete documentMetadata.documentContents;
+    delete documentMetadata.draftState.documentContents;
+    delete documentMetadata.draftState.richText;
+    delete documentMetadata.draftState.editorDelta;
+    documentMetadata.documentContentsId = documentContentsId;
+  }
+
   /* eslint-disable spellcheck/spell-checker */
   /* POC for #4814 - leaving here for future work
   if (!documentMetadata.documentContents) {

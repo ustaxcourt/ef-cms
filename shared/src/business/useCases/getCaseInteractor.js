@@ -7,6 +7,32 @@ const { caseSealedFormatter } = require('../utilities/caseFilter');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
 
+const getDocumentContentsForDocuments = async ({
+  applicationContext,
+  documents,
+}) => {
+  for (const document of documents) {
+    if (document.documentContentsId) {
+      const documentContentsFile = await applicationContext
+        .getPersistenceGateway()
+        .getDocument({
+          applicationContext,
+          documentId: document.documentContentsId,
+          protocol: 'S3',
+          useTempBucket: true,
+        });
+
+      const documentContentsData = JSON.parse(documentContentsFile.toString());
+      document.documentContents = documentContentsData.documentContents;
+      document.draftState.documentContents =
+        documentContentsData.documentContents;
+      document.draftState.richText = documentContentsData.richText;
+    }
+  }
+
+  return documents;
+};
+
 /**
  * getCaseInteractor
  *
@@ -49,7 +75,7 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let caseDetail;
+  let caseDetailRaw;
 
   if (caseRecord.sealedDate) {
     let isAuthorizedUser =
@@ -63,19 +89,35 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
         user: applicationContext.getCurrentUser(),
       });
     if (isAuthorizedUser) {
-      caseDetail = new Case(caseRecord, {
+      caseDetailRaw = new Case(caseRecord, {
         applicationContext,
+      })
+        .validate()
+        .toRawObject();
+
+      caseDetailRaw.documents = await getDocumentContentsForDocuments({
+        applicationContext,
+        documents: caseDetailRaw.documents,
       });
     } else {
       caseRecord = caseSealedFormatter(caseRecord);
-      caseDetail = new PublicCase(caseRecord, {
+      caseDetailRaw = new PublicCase(caseRecord, {
         applicationContext,
-      });
+      })
+        .validate()
+        .toRawObject();
     }
   } else {
-    caseDetail = new Case(caseRecord, {
+    caseDetailRaw = new Case(caseRecord, {
       applicationContext,
+    })
+      .validate()
+      .toRawObject();
+
+    caseDetailRaw.documents = await getDocumentContentsForDocuments({
+      applicationContext,
+      documents: caseDetailRaw.documents,
     });
   }
-  return caseDetail.validate().toRawObject();
+  return caseDetailRaw;
 };
