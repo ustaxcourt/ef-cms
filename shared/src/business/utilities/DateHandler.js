@@ -118,7 +118,7 @@ const dateStringsCompared = (a, b) => {
  * @param {string} b the second date to be compared
  * @returns {number} -1 if date a is larger, 1 if date b is larger, 0 if dates are equal
  */
-const calendarDateCompared = (a, b) => {
+const calendarDatesCompared = (a, b) => {
   const aFormatEst = formatDateString(a, FORMATS.SORTABLE_CALENDAR);
   const bFormatEst = formatDateString(b, FORMATS.SORTABLE_CALENDAR);
 
@@ -182,7 +182,7 @@ module.exports = {
   FORMATS,
   calculateDifferenceInDays,
   calculateISODate,
-  calendarDateCompared,
+  calendarDatesCompared,
   createISODateString,
   createISODateStringFromObject,
   dateStringsCompared,

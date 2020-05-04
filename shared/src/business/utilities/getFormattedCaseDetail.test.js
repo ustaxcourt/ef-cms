@@ -855,10 +855,10 @@ describe('sortDocketRecords', () => {
         index: '2',
       },
       {
-        index: '3',
+        index: '4',
       },
       {
-        index: '4',
+        index: '3',
       },
       {
         index: '5',
