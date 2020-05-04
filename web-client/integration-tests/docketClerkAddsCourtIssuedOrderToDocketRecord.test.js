@@ -13,6 +13,7 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import petitionsClerkViewsDocketEntry from './journey/petitionsClerkViewsDocketEntry';
 import petitionsClerkViewsDraftOrder from './journey/petitionsClerkViewsDraftOrder';
 // petitioner
+import { docketClerkAddsDocketEntryFromOrderWithDate } from './journey/docketClerkAddsDocketEntryFromOrderWithDate';
 import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
@@ -62,10 +63,16 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
   docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsSavedCourtIssuedDocketEntryInProgress(test, 1);
+  docketClerkCreatesAnOrder(test, {
+    documentTitle: 'Order to do something',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+  });
+  docketClerkAddsDocketEntryFromOrderWithDate(test, 2);
 
   loginAs(test, 'petitionsclerk');
   petitionsClerkViewsDocketEntry(test, 1);
 
   loginAs(test, 'petitioner');
-  petitionerViewsCaseDetail(test, { documentCount: 4 });
+  petitionerViewsCaseDetail(test, { documentCount: 5 });
 });

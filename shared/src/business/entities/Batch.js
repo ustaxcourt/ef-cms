@@ -62,11 +62,6 @@ Batch.schema = joi.object().keys({
   pages: joi.array().min(1).required(),
 });
 
-joiValidationDecorator(
-  Batch,
-  Batch.schema,
-  undefined,
-  Batch.VALIDATION_ERROR_MESSAGES,
-);
+joiValidationDecorator(Batch, Batch.schema, Batch.VALIDATION_ERROR_MESSAGES);
 
 module.exports = { Batch };

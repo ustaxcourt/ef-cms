@@ -67,6 +67,34 @@ Document.ORDER_DOCUMENT_TYPES = [
 ];
 Document.validationName = 'Document';
 
+Document.SCENARIOS = [
+  'Standard',
+  'Nonstandard A',
+  'Nonstandard B',
+  'Nonstandard C',
+  'Nonstandard D',
+  'Nonstandard E',
+  'Nonstandard F',
+  'Nonstandard G',
+  'Nonstandard H',
+  'Type A',
+  'Type B',
+  'Type C',
+  'Type D',
+  'Type E',
+  'Type F',
+  'Type G',
+  'Type H',
+];
+
+Document.RELATIONSHIPS = [
+  'primaryDocument',
+  'primarySupportingDocument',
+  'secondaryDocument',
+  'secondarySupportingDocument',
+  'supportingDocument',
+];
+
 /**
  * constructor
  *
@@ -91,13 +119,14 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
         ? Document.isPendingOnCreation(rawDocument)
         : rawDocument.pending;
     this.previousDocument = rawDocument.previousDocument;
-    this.processingStatus = rawDocument.processingStatus || 'pending'; // TODO: restricted
+    this.processingStatus = rawDocument.processingStatus || 'pending';
     this.qcAt = rawDocument.qcAt;
     this.qcByUser = rawDocument.qcByUser;
     this.qcByUserId = rawDocument.qcByUserId;
     this.signedAt = rawDocument.signedAt;
     this.signedByUserId = rawDocument.signedByUserId;
     this.signedJudgeName = rawDocument.signedJudgeName;
+    this.userId = rawDocument.userId;
     this.workItems = (rawDocument.workItems || []).map(
       workItem => new WorkItem(workItem, { applicationContext }),
     );
@@ -106,7 +135,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.additionalInfo = rawDocument.additionalInfo;
   this.additionalInfo2 = rawDocument.additionalInfo2;
   this.addToCoversheet = rawDocument.addToCoversheet;
-  this.archived = rawDocument.archived; // TODO: look into this
+  this.archived = rawDocument.archived;
   this.attachments = rawDocument.attachments;
   this.documentContents = rawDocument.documentContents;
   this.caseId = rawDocument.caseId;
@@ -135,8 +164,8 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.partySecondary = rawDocument.partySecondary; // TODO: add info about purpose
   this.privatePractitioners = rawDocument.privatePractitioners; // TODO: look into this
   this.receivedAt = rawDocument.receivedAt || createISODateString();
-  this.relationship = rawDocument.relationship; // TODO: look into this
-  this.scenario = rawDocument.scenario; // TODO: look into this
+  this.relationship = rawDocument.relationship;
+  this.scenario = rawDocument.scenario;
   this.secondaryDate = rawDocument.secondaryDate; // TODO: look into this
   this.secondaryDocument = rawDocument.secondaryDocument; // TODO: look into this
   this.servedAt = rawDocument.servedAt;
@@ -147,7 +176,10 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.status = rawDocument.status; // TODO: look into this
   this.supportingDocument = rawDocument.supportingDocument;
   this.trialLocation = rawDocument.trialLocation; // TODO: look into this
-  this.userId = rawDocument.userId; // TODO: restricted
+
+  if (applicationContext.getCurrentUser().userId === rawDocument.userId) {
+    this.userId = rawDocument.userId;
+  }
 
   this.generateFiledBy(rawDocument);
 }
@@ -333,7 +365,12 @@ joiValidationDecorator(
     addToCoversheet: joi.boolean().optional(),
     additionalInfo: joi.string().optional(),
     additionalInfo2: joi.string().optional(),
-    archived: joi.boolean().optional(),
+    archived: joi
+      .boolean()
+      .optional()
+      .description(
+        'A document that was archived instead of added to the Docket Record.',
+      ),
     caseId: joi
       .string()
       .optional()
@@ -415,14 +452,20 @@ joiValidationDecorator(
     qcByUser: joi.object().optional(),
     qcByUserId: joi.string().optional().allow(null),
     receivedAt: joiStrictTimestamp.optional(),
-    relationship: joi.string().optional(),
-    scenario: joi.string().optional(),
+    relationship: joi
+      .string()
+      .valid(...Document.RELATIONSHIPS)
+      .optional(),
+    scenario: joi
+      .string()
+      .valid(...Document.SCENARIOS)
+      .optional(),
     secondaryDate: joiStrictTimestamp
       .optional()
       .description(
         'A secondary date associated with the document, typically related to time-restricted availability.',
       ),
-    // TODO: What's the difference between servedAt and serviceDate?
+    // TODO: What's the difference between servedAt and serviceDate? (certificate of service date)
     secondaryDocument: joi.object().optional(),
     servedAt: joiStrictTimestamp.optional(),
     servedParties: joi.array().optional(),
@@ -444,9 +487,6 @@ joiValidationDecorator(
     userId: joi.string().required(),
     workItems: joi.array().optional(),
   }),
-  function () {
-    return WorkItem.validateCollection(this.workItems);
-  },
 );
 
 /**

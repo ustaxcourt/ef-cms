@@ -60,9 +60,7 @@ describe('Get case note', () => {
     } catch (err) {
       error = err;
     }
-    expect(error.message).toContain(
-      'The UserCaseNote entity was invalid ValidationError: "userId" is required',
-    );
+    expect(error.message).toContain('The UserCaseNote entity was invalid');
   });
 
   it('correctly returns data from persistence', async () => {

@@ -291,12 +291,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     }
   }
 
-  joiValidationDecorator(
-    entityConstructor,
-    schema,
-    undefined,
-    VALIDATION_ERROR_MESSAGES,
-  );
+  joiValidationDecorator(entityConstructor, schema, VALIDATION_ERROR_MESSAGES);
 
   return new entityConstructor(documentMetadata);
 };

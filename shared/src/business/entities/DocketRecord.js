@@ -97,7 +97,6 @@ joiValidationDecorator(
       .optional()
       .description('Served parties code to override system-computed code.'),
   }),
-  undefined,
   DocketRecord.VALIDATION_ERROR_MESSAGES,
 );
 

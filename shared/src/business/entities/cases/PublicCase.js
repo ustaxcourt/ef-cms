@@ -80,7 +80,6 @@ joiValidationDecorator(
   joi.object(publicCaseSchema).when(joi.object({ isSealed: true }).unknown(), {
     then: joi.object(sealedCaseSchemaRestricted),
   }),
-  undefined,
   {},
 );
 

@@ -260,6 +260,29 @@ describe('DateHandler', () => {
     });
   });
 
+  describe('calendarDatesCompared', () => {
+    const pastDate = '2001-01-01';
+    const futureDate = '2061-01-02';
+
+    it('should return -1 when the first date is occurs before the second', () => {
+      const result = DateHandler.calendarDatesCompared(pastDate, futureDate);
+
+      expect(result).toEqual(-1);
+    });
+
+    it('should return 1 when the first date occurs after the second', () => {
+      const result = DateHandler.calendarDatesCompared(futureDate, pastDate);
+
+      expect(result).toEqual(1);
+    });
+
+    it('should return 0 when the two dates are the same calendar date', () => {
+      const result = DateHandler.calendarDatesCompared(futureDate, futureDate);
+
+      expect(result).toEqual(0);
+    });
+  });
+
   describe('isValidDateString', () => {
     it('should return true on valid date strings', () => {
       ['01-01-2001', '1-1-2001', '01/01/2001', '1/1/2001'].forEach(date => {

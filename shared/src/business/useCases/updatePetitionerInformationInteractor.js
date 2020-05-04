@@ -58,7 +58,7 @@ exports.updatePetitionerInformationInteractor = async ({
     oldCase.contactSecondary.name
       ? applicationContext.getUtilities().getDocumentTypeForAddressChange({
           newData: contactSecondary,
-          oldData: oldCase.contactSecondary || {},
+          oldData: oldCase.contactSecondary,
         })
       : undefined;
 
@@ -228,7 +228,7 @@ exports.updatePetitionerInformationInteractor = async ({
     });
 
   return {
-    paperServiceParties: servedParties && servedParties.paper,
+    paperServiceParties: servedParties.paper,
     paperServicePdfUrl,
     updatedCase,
   };

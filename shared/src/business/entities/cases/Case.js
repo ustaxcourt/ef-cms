@@ -248,9 +248,8 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.highPriorityReason = rawCase.highPriorityReason;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
     this.status = rawCase.status || Case.STATUS_TYPES.new;
+    this.userId = rawCase.userId;
   }
-
-  this.userId = rawCase.userId;
 
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
@@ -284,6 +283,10 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.trialLocation = rawCase.trialLocation;
   this.trialSessionId = rawCase.trialSessionId;
   this.trialTime = rawCase.trialTime;
+
+  if (applicationContext.getCurrentUser().userId === rawCase.userId) {
+    this.userId = rawCase.userId;
+  }
 
   this.initialDocketNumberSuffix =
     rawCase.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
@@ -690,15 +693,6 @@ Case.validationRules = {
 joiValidationDecorator(
   Case,
   joi.object().keys(Case.validationRules),
-  function () {
-    return (
-      Case.isValidDocketNumber(this.docketNumber) &&
-      Document.validateCollection(this.documents) &&
-      DocketRecord.validateCollection(this.docketRecord) &&
-      IrsPractitioner.validateCollection(this.irsPractitioners) &&
-      PrivatePractitioner.validateCollection(this.privatePractitioners)
-    );
-  },
   Case.VALIDATION_ERROR_MESSAGES,
 );
 
