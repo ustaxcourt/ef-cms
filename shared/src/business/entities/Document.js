@@ -3,16 +3,12 @@ const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
 const joi = require('@hapi/joi');
 const {
-  DOCKET_NUMBER_MATCHER,
-  TRIAL_LOCATION_MATCHER,
-} = require('./cases/CaseConstants');
-const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
+const { DOCKET_NUMBER_MATCHER } = require('./cases/CaseConstants');
 const { flatten } = require('lodash');
 const { Order } = require('./orders/Order');
-const { TrialSession } = require('./trialSessions/TrialSession');
 const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
 
@@ -171,9 +167,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.servedParties = rawDocument.servedParties;
   this.serviceDate = rawDocument.serviceDate;
   this.serviceStamp = rawDocument.serviceStamp;
-  this.status = rawDocument.status; // TODO: look into this
   this.supportingDocument = rawDocument.supportingDocument;
-  this.trialLocation = rawDocument.trialLocation; // TODO: look into this
 
   if (applicationContext.getCurrentUser().userId === rawDocument.userId) {
     this.userId = rawDocument.userId;
@@ -478,16 +472,7 @@ joiValidationDecorator(
     signedAt: joi.date().iso().optional().allow(null),
     signedByUserId: joi.string().optional().allow(null),
     signedJudgeName: joi.string().optional().allow(null),
-    status: joi.string().valid('served').optional(),
     supportingDocument: joi.string().optional().allow(null),
-    trialLocation: joi
-      .alternatives()
-      .try(
-        joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
-        joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
-        joi.string().allow(null),
-      )
-      .optional(),
     userId: joi.string().required(),
     workItems: joi.array().optional(),
   }),
