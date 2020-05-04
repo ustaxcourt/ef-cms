@@ -26,5 +26,12 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
       user,
     });
 
+  //check role
+  //new up entity based on role
+  //validate entity
+  //create new User from that created entity - dont forget to add validation for role type in both entities
+  //MAYBE return? check if return value being used (probably returning for logging)
+  //after, try running setup cognito users.sh maybe on exp branch
+
   return new User(createdUser, { applicationContext }).validate().toRawObject();
 };
