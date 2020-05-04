@@ -247,17 +247,17 @@ describe('docket clerk order advanced search', () => {
   it('search for a date range that contains served orders', async () => {
     const currentDate = new Date();
     const orderCreationYear = currentDate.getUTCFullYear();
-    const orderCreationMonth = currentDate.getUTCMonth() + 1;
+    const orderCreationMonth = currentDate.getUTCMonth();
     const orderCreationDate = currentDate.getDate();
 
     test.setState('advancedSearchForm', {
       orderSearch: {
         endDateDay: orderCreationDate,
-        endDateMonth: orderCreationMonth,
+        endDateMonth: orderCreationMonth + 1,
         endDateYear: orderCreationYear,
         orderKeyword: 'dismissal',
         startDateDay: orderCreationDate,
-        startDateMonth: orderCreationMonth,
+        startDateMonth: orderCreationMonth - 1,
         startDateYear: orderCreationYear,
       },
     });
