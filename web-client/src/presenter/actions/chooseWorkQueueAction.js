@@ -20,11 +20,11 @@ export const chooseWorkQueueAction = ({ get, path, props, store }) => {
     );
   }
 
-  if (props && props.queue) {
+  if (props.queue) {
     store.set(state.workQueueToDisplay.queue, props.queue);
   }
 
-  if (props && props.box) {
+  if (props.box) {
     store.set(state.workQueueToDisplay.box, props.box);
   }
 
