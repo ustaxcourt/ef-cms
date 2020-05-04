@@ -178,7 +178,7 @@ describe('Document entity', () => {
         error = err;
       }
 
-      expect(document.documentContents).toBeDefined();
+      expect(document.documentContents).not.toBeDefined();
       expect(error).not.toBeDefined();
     });
 

@@ -131,7 +131,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.addToCoversheet = rawDocument.addToCoversheet;
   this.archived = rawDocument.archived;
   this.attachments = rawDocument.attachments;
-  this.documentContents = rawDocument.documentContents;
   this.caseId = rawDocument.caseId;
   this.certificateOfService = rawDocument.certificateOfService;
   this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
@@ -139,6 +138,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.date = rawDocument.date;
   this.docketNumber = rawDocument.docketNumber;
   this.documentId = rawDocument.documentId;
+  this.documentContentsId = rawDocument.documentContentsId;
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
   this.eventCode = rawDocument.eventCode;
@@ -390,7 +390,13 @@ joiValidationDecorator(
       .regex(DOCKET_NUMBER_MATCHER)
       .optional()
       .description('Docket Number of the associated Case in XXXXX-YY format.'),
-    documentContents: joi.string().optional(),
+    documentContentsId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .optional()
+      .description('The S3 ID containing the text contents of the document.'),
     documentId: joi
       .string()
       .uuid({
