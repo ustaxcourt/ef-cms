@@ -160,8 +160,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.receivedAt = rawDocument.receivedAt || createISODateString();
   this.relationship = rawDocument.relationship;
   this.scenario = rawDocument.scenario;
-  this.secondaryDate = rawDocument.secondaryDate; // TODO: look into this
-  this.secondaryDocument = rawDocument.secondaryDocument; // TODO: look into this
+  this.secondaryDate = rawDocument.secondaryDate;
   this.servedAt = rawDocument.servedAt;
   this.numberOfPages = rawDocument.numberOfPages;
   this.servedParties = rawDocument.servedParties;
@@ -464,7 +463,6 @@ joiValidationDecorator(
         'A secondary date associated with the document, typically related to time-restricted availability.',
       ),
     // TODO: What's the difference between servedAt and serviceDate? (certificate of service date)
-    secondaryDocument: joi.object().optional(),
     servedAt: joi.date().iso().optional(),
     servedParties: joi.array().optional(),
     serviceDate: joi.date().iso().max('now').optional().allow(null),
