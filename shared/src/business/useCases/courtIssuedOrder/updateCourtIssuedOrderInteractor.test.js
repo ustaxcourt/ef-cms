@@ -97,6 +97,30 @@ describe('updateCourtIssuedOrderInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
+  it('should throw an error if document is not found', async () => {
+    mockUser = new User({
+      name: 'Olivia Jade',
+      role: User.ROLES.petitionsClerk,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+      name: 'bob',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    await expect(
+      updateCourtIssuedOrderInteractor({
+        applicationContext,
+        documentIdToEdit: '986fece3-6325-4418-bb28-a7095e6707b4',
+        documentMetadata: {
+          caseId: caseRecord.caseId,
+          documentType: 'Order to Show Cause',
+        },
+      }),
+    ).rejects.toThrow('Document not found');
+  });
+
   it('update existing document within case', async () => {
     mockUser = new User({
       name: 'Olivia Jade',
