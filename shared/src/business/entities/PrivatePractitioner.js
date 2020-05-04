@@ -3,6 +3,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { SERVICE_INDICATOR_TYPES } = require('./cases/CaseConstants');
+const { User } = require('./User');
 const { userDecorator, userValidation } = require('./User');
 
 /**
@@ -16,6 +17,7 @@ function PrivatePractitioner(rawUser) {
   this.entityName = 'PrivatePractitioner';
   this.representingPrimary = rawUser.representingPrimary;
   this.representingSecondary = rawUser.representingSecondary;
+  this.role = User.ROLES.privatePractitioner;
   this.serviceIndicator =
     rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 }
@@ -27,6 +29,7 @@ joiValidationDecorator(
     entityName: joi.string().valid('PrivatePractitioner').required(),
     representingPrimary: joi.boolean().optional(),
     representingSecondary: joi.boolean().optional(),
+    role: joi.string().required().valid(User.ROLES.privatePractitioner),
     serviceIndicator: joi
       .string()
       .valid(...Object.values(SERVICE_INDICATOR_TYPES))
