@@ -26,7 +26,7 @@ describe('PrivatePractitioner', () => {
 
   it('Creates an invalid', () => {
     const user = new PrivatePractitioner({
-      role: User.ROLES.privatePractitioner,
+      role: User.ROLES.irsPractitioner,
     });
     expect(user.isValid()).toBeFalsy();
   });
