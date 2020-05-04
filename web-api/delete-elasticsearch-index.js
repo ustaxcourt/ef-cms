@@ -1,6 +1,8 @@
 (async () => {
   const AWS = require('aws-sdk');
-  const elasticsearchIndexes = require('./elasticsearch/elasticsearch-indexes');
+  const {
+    elasticsearchIndexes,
+  } = require('./elasticsearch/elasticsearch-indexes');
   AWS.config.region = 'us-east-1';
 
   const connectionClass = require('http-aws-es');

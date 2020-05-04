@@ -133,7 +133,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.addToCoversheet = rawDocument.addToCoversheet;
   this.archived = rawDocument.archived;
   this.attachments = rawDocument.attachments;
-  this.documentContents = rawDocument.documentContents;
   this.caseId = rawDocument.caseId;
   this.certificateOfService = rawDocument.certificateOfService;
   this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
@@ -141,6 +140,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.date = rawDocument.date;
   this.docketNumber = rawDocument.docketNumber;
   this.documentId = rawDocument.documentId;
+  this.documentContentsId = rawDocument.documentContentsId;
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
   this.eventCode = rawDocument.eventCode;
@@ -162,8 +162,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.receivedAt = rawDocument.receivedAt || createISODateString();
   this.relationship = rawDocument.relationship;
   this.scenario = rawDocument.scenario;
-  this.secondaryDate = rawDocument.secondaryDate; // TODO: look into this
-  this.secondaryDocument = rawDocument.secondaryDocument; // TODO: look into this
+  this.secondaryDate = rawDocument.secondaryDate;
   this.servedAt = rawDocument.servedAt;
   this.numberOfPages = rawDocument.numberOfPages;
   this.servedParties = rawDocument.servedParties;
@@ -391,7 +390,13 @@ joiValidationDecorator(
       .regex(DOCKET_NUMBER_MATCHER)
       .optional()
       .description('Docket Number of the associated Case in XXXXX-YY format.'),
-    documentContents: joi.string().optional(),
+    documentContentsId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .optional()
+      .description('The S3 ID containing the text contents of the document.'),
     documentId: joi
       .string()
       .uuid({
@@ -460,7 +465,6 @@ joiValidationDecorator(
         'A secondary date associated with the document, typically related to time-restricted availability.',
       ),
     // TODO: What's the difference between servedAt and serviceDate? (certificate of service date)
-    secondaryDocument: joi.object().optional(),
     servedAt: joiStrictTimestamp.optional(),
     servedParties: joi.array().optional(),
     serviceDate: joiStrictTimestamp.max('now').optional().allow(null),

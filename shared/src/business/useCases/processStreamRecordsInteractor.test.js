@@ -469,6 +469,89 @@ describe('processStreamRecordsInteractor', () => {
     ]);
   });
 
+  it('calls getDocument to get documentContents if a document contains documentContentsId', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockImplementation(({ caseId }) => ({
+        caseId,
+        documents: [{ documentContentsId: '5', documentId: '1' }],
+        entityName: 'Case',
+        pk: `case|${caseId}`,
+        sk: `case|${caseId}`,
+      }));
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockReturnValue(
+        Buffer.from(
+          JSON.stringify({ documentContents: 'I am some document contents' }),
+        ),
+      );
+
+    await processStreamRecordsInteractor({
+      applicationContext,
+      recordsToProcess: [
+        {
+          dynamodb: {
+            Keys: { pk: { S: 'case|1' }, sk: { S: 'document|1' } },
+            NewImage: {
+              caseId: { S: '1' },
+              documentContentsId: { S: '5' },
+              entityName: { S: 'Document' },
+              pk: { S: 'case|1' },
+              sk: { S: 'document|1' },
+            },
+          },
+          eventName: 'INSERT',
+        },
+      ],
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
+    ).toEqual([
+      { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
+      {
+        caseId: { S: '1' },
+        documentContentsId: { S: '5' },
+        entityName: { S: 'Document' },
+        pk: { S: 'case|1' },
+        sk: { S: 'document|1' },
+      },
+      { index: { _id: 'case|1_case|1', _index: 'efcms-case' } },
+      {
+        caseId: { S: '1' },
+        documents: {
+          L: [
+            { M: { documentContentsId: { S: '5' }, documentId: { S: '1' } } },
+          ],
+        },
+        entityName: { S: 'Case' },
+        pk: { S: 'case|1' },
+        sk: { S: 'case|1' },
+      },
+      // calls documents again because they are indexed again after the case
+      { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
+      {
+        caseId: { S: '1' },
+        docketRecord: undefined,
+        documentContents: {
+          S: 'I am some document contents',
+        },
+        documentContentsId: { S: '5' },
+        documentId: { S: '1' },
+        documents: undefined,
+        entityName: { S: 'Document' },
+        irsPractitioners: undefined,
+        pk: { S: 'case|1' },
+        privatePractitioners: undefined,
+        sk: { S: 'document|1' },
+      },
+    ]);
+  });
+
   it('does not attempt to index a case record if getCaseByCaseId does not return a case', async () => {
     applicationContext
       .getPersistenceGateway()
