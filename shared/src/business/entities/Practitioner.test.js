@@ -1,3 +1,4 @@
+const { omit } = require('lodash');
 const { Practitioner } = require('./Practitioner');
 const { User } = require('./User');
 
@@ -123,6 +124,45 @@ describe('Practitioner', () => {
       userId: 'practitioner',
     });
     expect(user.isValid()).toBeFalsy();
+  });
+
+  it('should fail validation when role is "inactivePractitioner" and admissionsStatus is Active', () => {
+    const user = new Practitioner({
+      admissionsStatus: 'Active',
+      employer: 'IRS',
+      role: User.ROLES.inactivePractitioner,
+    });
+    expect(user.isValid()).toBeFalsy();
+  });
+
+  it.only('should pass validation when role is "inactivePractitioner" and admissionsStatus is not Active', () => {
+    const user = new Practitioner({
+      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsStatus: 'Deceased',
+      barNumber: 'PT20001',
+      birthYear: 2019,
+      contact: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        country: 'Brazil',
+        countryType: 'international',
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
+      employer: 'Private',
+      firmName: 'GW Law Offices',
+      firstName: 'Test',
+      lastName: 'Practitioner',
+      name: 'Test Practitioner',
+      originalBarState: 'Illinois',
+      practitionerType: 'Attorney',
+      role: User.ROLES.inactivePractitioner,
+      userId: 'practitioner',
+    });
+    expect(user.isValid()).toBeTruthy();
   });
 
   it('should set the role to "irsPractitioner" when employer is "IRS" and admissionsStatus is Active', () => {
