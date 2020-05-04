@@ -1,7 +1,7 @@
 const {
   calculateISODate,
+  calendarDatesCompared,
   createISODateString,
-  dateStringsCompared,
 } = require('./DateHandler');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty } = require('lodash');
@@ -408,7 +408,7 @@ const formatCase = (applicationContext, caseDetail) => {
 const getDocketRecordSortFunc = sortBy => {
   const byIndex = (a, b) => a.index - b.index;
   const byDate = (a, b) => {
-    const compared = dateStringsCompared(
+    const compared = calendarDatesCompared(
       a.record.filingDate,
       b.record.filingDate,
     );

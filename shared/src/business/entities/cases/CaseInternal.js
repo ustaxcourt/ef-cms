@@ -179,9 +179,6 @@ const paperRequirements = joi
 joiValidationDecorator(
   CaseInternal,
   paperRequirements,
-  function () {
-    return !this.getFormattedValidationErrors();
-  },
   CaseInternal.VALIDATION_ERROR_MESSAGES,
 );
 

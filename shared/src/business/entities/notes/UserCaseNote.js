@@ -43,7 +43,6 @@ UserCaseNote.schema = joi.object().keys({
 joiValidationDecorator(
   UserCaseNote,
   UserCaseNote.schema,
-  undefined,
   UserCaseNote.VALIDATION_ERROR_MESSAGES,
 );
 

@@ -73,7 +73,6 @@ CaseDeadline.schema = joi.object().keys({
 joiValidationDecorator(
   CaseDeadline,
   CaseDeadline.schema,
-  undefined,
   CaseDeadline.VALIDATION_ERROR_MESSAGES,
 );
 

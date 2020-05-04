@@ -64,9 +64,7 @@ describe('Update trial session working copy', () => {
         applicationContext,
         trialSessionWorkingCopyToUpdate: MOCK_WORKING_COPY,
       }),
-    ).rejects.toThrow(
-      'The TrialSessionWorkingCopy entity was invalid ValidationError: "userId" is required',
-    );
+    ).rejects.toThrow('The TrialSessionWorkingCopy entity was invalid');
   });
 
   it('correctly returns data from persistence', async () => {

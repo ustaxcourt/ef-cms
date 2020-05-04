@@ -140,8 +140,6 @@ function CaseAssociationRequestFactory(rawProps) {
     supportingDocuments: joi.array().optional(),
   };
 
-  let customValidate;
-
   const makeRequired = itemName => {
     schema[itemName] = schemaOptionalItems[itemName];
   };
@@ -177,7 +175,6 @@ function CaseAssociationRequestFactory(rawProps) {
   joiValidationDecorator(
     entityConstructor,
     schema,
-    customValidate,
     CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES,
   );
 

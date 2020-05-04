@@ -311,6 +311,13 @@ Reminder for clerks to review the notice of trial date.
 
 > `date` | optional
 
+### orderDesignatingPlaceOfTrial
+
+
+Reminder for clerks to review the Order Designating Place of Trial.
+
+> `boolean` | optional
+
 ### orderForAmendedPetition
 
 

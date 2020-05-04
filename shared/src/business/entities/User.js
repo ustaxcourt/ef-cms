@@ -144,7 +144,6 @@ User.validationName = 'User';
 joiValidationDecorator(
   User,
   joi.object().keys(userValidation),
-  undefined,
   VALIDATION_ERROR_MESSAGES,
 );
 

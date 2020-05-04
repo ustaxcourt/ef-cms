@@ -29,9 +29,6 @@ joiValidationDecorator(
     ...TrialSession.validationRules.COMMON,
     startDate: joiStrictTimestamp.min('now').required(),
   }),
-  function () {
-    return !this.getFormattedValidationErrors();
-  },
   NewTrialSession.VALIDATION_ERROR_MESSAGES,
 );
 
