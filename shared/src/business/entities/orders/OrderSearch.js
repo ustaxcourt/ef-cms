@@ -3,14 +3,12 @@ const {
   createEndOfDayISO,
   createStartOfDayISO,
 } = require('../../utilities/DateHandler');
-
-const { getTimestampSchema } = require('../../../utilities/dateSchema');
-const joiStrictTimestamp = getTimestampSchema();
-
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { isEmpty } = require('lodash');
+const joiStrictTimestamp = getTimestampSchema();
 
 OrderSearch.ORDER_SEARCH_PAGE_LOAD_SIZE = 6;
 
@@ -51,6 +49,9 @@ function OrderSearch(rawProps = {}) {
       month: rawProps.endDateMonth,
       year: rawProps.endDateYear,
     });
+
+    this.tomorrow = new Date();
+    this.tomorrow.setDate(this.tomorrow.getDate() + 1);
   }
 
   if (!isEmpty(rawProps.caseTitleOrPetitioner)) {
@@ -69,20 +70,58 @@ OrderSearch.VALIDATION_ERROR_MESSAGES = {
 OrderSearch.schema = joi
   .object()
   .keys({
-    caseTitleOrPetitioner: joi.string(),
-    docketNumber: joi.string(),
+    caseTitleOrPetitioner: joi
+      .string()
+      .description(
+        'The case title or petitioner name to filter the search results by',
+      ),
+    docketNumber: joi
+      .string()
+      .description('The docket number to filter the search results by'),
     endDate: joi.alternatives().conditional('startDate', {
       is: joi.exist().not(null),
-      otherwise: joiStrictTimestamp.optional(),
-      then: joiStrictTimestamp.min(joi.ref('startDate')).optional(),
+      otherwise: joiStrictTimestamp
+        .less(joi.ref('tomorrow'))
+        .optional()
+        .description(
+          'The end date search filter is not required if there is no start date',
+        ),
+      then: joiStrictTimestamp
+        .min(joi.ref('startDate'))
+        .less(joi.ref('tomorrow'))
+        .optional()
+        .description(
+          'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
+        ),
     }),
-    judge: joi.string().optional(),
-    orderKeyword: joi.string().required(),
+    judge: joi
+      .string()
+      .optional()
+      .description('The name of the judge to filter the search results by'),
+    orderKeyword: joi
+      .string()
+      .required()
+      .description('The only required field to filter the search by'),
     startDate: joi.alternatives().conditional('endDate', {
       is: joi.exist().not(null),
-      otherwise: joiStrictTimestamp.max('now').optional(),
-      then: joiStrictTimestamp.max('now').required(),
+      otherwise: joiStrictTimestamp
+        .max('now')
+        .optional()
+        .description(
+          'The start date to search by, which cannot be greater than the current date, and is optional when there is no end date provided',
+        ),
+      then: joiStrictTimestamp
+        .max('now')
+        .required()
+        .description(
+          'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+        ),
     }),
+    tomorrow: joi
+      .optional()
+      .description(
+        'The computed value to validate the endDate against, in order to verify that the endDate is less than or equal to the current date',
+      ),
   })
   .oxor('caseTitleOrPetitioner', 'docketNumber');
 
