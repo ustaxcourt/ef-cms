@@ -68,25 +68,62 @@ OrderSearch.VALIDATION_ERROR_MESSAGES = {
 OrderSearch.schema = joi
   .object()
   .keys({
-    caseTitleOrPetitioner: joi.string(),
-    docketNumber: joi.string(),
+    caseTitleOrPetitioner: joi
+      .string()
+      .description(
+        'The case title or petitioner name to filter the search results by',
+      ),
+    docketNumber: joi
+      .string()
+      .description('The docket number to filter the search results by'),
     endDate: joi.alternatives().conditional('startDate', {
       is: joi.exist().not(null),
-      otherwise: joi.date().less(joi.ref('tomorrow')).optional(),
+      otherwise: joi
+        .date()
+        .less(joi.ref('tomorrow'))
+        .optional()
+        .description(
+          'The end date search filter is not required if there is no start date',
+        ),
       then: joi
         .date()
         .min(joi.ref('startDate'))
         .less(joi.ref('tomorrow'))
-        .optional(),
+        .optional()
+        .description(
+          'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
+        ),
     }),
-    judge: joi.string().optional(),
-    orderKeyword: joi.string().required(),
+    judge: joi
+      .string()
+      .optional()
+      .description('The name of the judge to filter the search results by'),
+    orderKeyword: joi
+      .string()
+      .required()
+      .description('The only required field to filter the search by'),
     startDate: joi.alternatives().conditional('endDate', {
       is: joi.exist().not(null),
-      otherwise: joi.date().max('now').optional(),
-      then: joi.date().max('now').required(),
+      otherwise: joi
+        .date()
+        .max('now')
+        .optional()
+        .description(
+          'The start date to search by, which cannot be greater than the current date, and is optional when there is no end date provided',
+        ),
+      then: joi
+        .date()
+        .max('now')
+        .required()
+        .description(
+          'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+        ),
     }),
-    tomorrow: joi.optional(),
+    tomorrow: joi
+      .optional()
+      .description(
+        'The computed value to validate the endDate against, in order to verify that the endDate is less than or equal to the current date',
+      ),
   })
   .oxor('caseTitleOrPetitioner', 'docketNumber');
 
