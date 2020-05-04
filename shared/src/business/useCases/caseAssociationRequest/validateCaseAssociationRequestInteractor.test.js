@@ -28,7 +28,7 @@ describe('validateCaseAssociationRequest', () => {
       applicationContext,
       caseAssociationRequest: {
         certificateOfService: true,
-        certificateOfServiceDate: '1212-12-12',
+        certificateOfServiceDate: '1987-08-06T07:53:09.001Z',
         documentTitleTemplate: 'Entry of Appearance for [Petitioner Names]',
         documentType: 'Entry of Appearance',
         eventCode: '123',

@@ -6,7 +6,10 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../../utilities/DateHandler');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { isEmpty } = require('lodash');
+
+const joiStrictTimestamp = getTimestampSchema();
 
 const COMMON_CITIES = [
   { city: 'Birmingham', state: 'Alabama' },
@@ -206,20 +209,20 @@ TrialSession.validationRules = {
     city: joi.string().allow('').optional(),
     courtReporter: joi.string().optional(),
     courthouseName: joi.string().allow('').optional(),
-    createdAt: joi.date().iso().optional(),
+    createdAt: joiStrictTimestamp.optional(),
     entityName: joi.string().valid('TrialSession').required(),
     irsCalendarAdministrator: joi.string().optional(),
     isCalendared: joi.boolean().required(),
     judge: joi.object().optional(),
     maxCases: joi.number().greater(0).integer().required(),
     notes: joi.string().max(400).optional(),
-    noticeIssuedDate: joi.date().iso().optional(),
+    noticeIssuedDate: joiStrictTimestamp.optional(),
     postalCode: JoiValidationConstants.US_POSTAL_CODE.optional(),
     sessionType: joi
       .string()
       .valid(...TrialSession.SESSION_TYPES)
       .required(),
-    startDate: joi.date().iso().required(),
+    startDate: joiStrictTimestamp.required(),
     startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES,
     state: joi.string().allow('').optional(),
     swingSession: joi.boolean().optional(),
@@ -268,7 +271,7 @@ joiValidationDecorator(
         removedFromTrialDate: joi.when('removedFromTrial', {
           is: true,
           otherwise: joi.optional().allow(null),
-          then: joi.date().iso().required(),
+          then: joiStrictTimestamp.required(),
         }),
       }),
     ),

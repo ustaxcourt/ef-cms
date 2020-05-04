@@ -271,7 +271,7 @@ describe('updateDocketEntryMetaInteractor', () => {
           certificateOfServiceDate: null,
           description: 'Request for Place of Trial at Houston, Texas',
           eventCode: 'RQT',
-          filingDate: '2020-02-03',
+          filingDate: '2020-02-03T08:06:07.539Z',
         },
         docketRecordIndex: 2,
       }),

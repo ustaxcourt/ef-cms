@@ -3,7 +3,8 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
-
+const { getTimestampSchema } = require('../../utilities/dateSchema');
+const joiStrictTimestamp = getTimestampSchema();
 /**
  * constructor
  *
@@ -30,7 +31,7 @@ Message.validationName = 'Message';
 joiValidationDecorator(
   Message,
   joi.object().keys({
-    createdAt: joi.date().iso().optional(),
+    createdAt: joiStrictTimestamp.optional(),
     entityName: joi.string().valid('Message').required(),
     from: joi.string().required(),
     fromUserId: joi
