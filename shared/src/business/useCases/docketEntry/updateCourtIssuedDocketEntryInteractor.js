@@ -57,17 +57,21 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     secondaryDate = documentMeta.date;
   }
 
+  const editableFields = {
+    attachments: documentMeta.attachments,
+    documentTitle: documentMeta.generatedDocumentTitle,
+    documentType: documentMeta.documentType,
+    eventCode: documentMeta.eventCode,
+    freeText: documentMeta.freeText,
+    scenario: documentMeta.scenario,
+    serviceStamp: documentMeta.serviceStamp,
+  };
+
   const documentEntity = new Document(
     {
       ...currentDocument,
-      attachments: documentMeta.attachments,
-      documentTitle: documentMeta.generatedDocumentTitle,
-      documentType: documentMeta.documentType,
-      eventCode: documentMeta.eventCode,
-      freeText: documentMeta.freeText,
-      scenario: documentMeta.scenario,
+      ...editableFields,
       secondaryDate,
-      serviceStamp: documentMeta.serviceStamp,
       userId: user.userId,
     },
     { applicationContext },
@@ -80,9 +84,9 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
   const docketRecordEntry = new DocketRecord(
     {
       ...existingDocketRecordEntry,
-      description: documentMeta.generatedDocumentTitle,
+      description: editableFields.generatedDocumentTitle,
       documentId: documentEntity.documentId,
-      editState: JSON.stringify(documentMeta),
+      editState: JSON.stringify(editableFields),
       eventCode: documentEntity.eventCode,
       filingDate: documentEntity.receivedAt,
     },
