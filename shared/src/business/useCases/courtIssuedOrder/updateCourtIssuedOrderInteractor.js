@@ -39,11 +39,43 @@ exports.updateCourtIssuedOrderInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
+  const oldDocument = caseEntity.documents.find(
+    document => document.documentId === documentIdToEdit,
+  );
+
+  if (documentMetadata.documentContents) {
+    const { documentContentsId } = oldDocument;
+
+    const contentToStore = {
+      documentContents: documentMetadata.documentContents,
+      richText: documentMetadata.draftState.richText,
+    };
+
+    applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: Buffer.from(JSON.stringify(contentToStore)),
+      documentId: documentContentsId,
+      useTempBucket: true,
+    });
+
+    delete documentMetadata.documentContents;
+    delete documentMetadata.draftState.documentContents;
+    delete documentMetadata.draftState.richText;
+    delete documentMetadata.draftState.editorDelta;
+  }
+
+  const editableFields = {
+    documentTitle: documentMetadata.documentTitle,
+    documentType: documentMetadata.documentType,
+    draftState: documentMetadata.draftState,
+    freeText: documentMetadata.freeText,
+  };
+
   const documentEntity = new Document(
     {
-      ...documentMetadata,
+      ...oldDocument,
+      ...editableFields,
       documentId: documentIdToEdit,
-      documentType: documentMetadata.documentType,
       filedBy: user.name,
       relationship: 'primaryDocument',
       userId: user.userId,
