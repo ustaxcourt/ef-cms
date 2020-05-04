@@ -9,22 +9,9 @@ const {
   appendPaperServiceAddressPageToPdf,
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
-  CaseAssociationRequestFactory,
-} = require('../entities/CaseAssociationRequestFactory');
-const {
-  CaseExternalIncomplete,
-} = require('../entities/cases/CaseExternalIncomplete');
-const {
   compareISODateStrings,
   compareStrings,
 } = require('../utilities/sortFunctions');
-const {
-  CourtIssuedDocumentFactory,
-} = require('../entities/courtIssuedDocument/CourtIssuedDocumentFactory');
-const {
-  formattedTrialSessionDetails,
-} = require('../utilities/getFormattedTrialSessionDetails');
-
 const {
   createDocketNumber,
 } = require('../../persistence/dynamo/cases/docketNumberGenerator');
@@ -47,11 +34,11 @@ const {
   deleteWorkItemFromInbox,
 } = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 const {
-  ExternalDocumentFactory,
-} = require('../entities/externalDocument/ExternalDocumentFactory');
-const {
   formatDocument,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
+const {
+  formattedTrialSessionDetails,
+} = require('../utilities/getFormattedTrialSessionDetails');
 const {
   getCaseByCaseId,
 } = require('../../persistence/dynamo/cases/getCaseByCaseId');
@@ -113,20 +100,25 @@ const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { Case } = require('../entities/cases/Case');
-const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
-const { DocketRecord } = require('../entities/DocketRecord');
-const { Document } = require('../entities/Document');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { setItem } = require('../../persistence/localStorage/setItem');
-const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
-const { WorkItem } = require('../entities/WorkItem');
+
+const fakeData =
+  'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
+
+// TODO: Abstract for use elsewhere
+const getFakeFile = () => {
+  const fakeFile = Buffer.from(fakeData, 'base64');
+  fakeFile.name = 'fakeFile.pdf';
+  return fakeFile;
+};
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
@@ -191,6 +183,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(formattedTrialSessionDetails),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
+    getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
     getFormattedCaseDetail: jest
       .fn()
@@ -222,12 +215,15 @@ const createTestApplicationContext = ({ user } = {}) => {
     appendPaperServiceAddressPageToPdf: jest
       .fn()
       .mockImplementation(appendPaperServiceAddressPageToPdf),
-    fetchPendingItems: jest.fn(),
     generatePendingReportPdf: jest.fn(),
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
   });
+
+  const getDocumentGeneratorsReturnMock = {
+    changeOfAddress: jest.fn().mockImplementation(getFakeFile),
+  };
 
   const getTemplateGeneratorsReturnMock = {
     generateChangeOfAddressTemplate: jest.fn().mockResolvedValue('<div></div>'),
@@ -268,6 +264,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteSectionOutboxRecord,
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
+    fetchPendingItems: jest.fn(),
     getAllCaseDeadlines: jest.fn(),
     getAllCatalogCases: jest.fn(),
     getCalendaredCasesForTrialSession: jest.fn(),
@@ -282,6 +279,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
+    getDownloadPolicyUrl: jest.fn(),
     getElasticsearchReindexRecords: jest.fn(),
     getInboxMessagesForSection: jest
       .fn()
@@ -299,6 +297,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     incrementCounter,
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
+    saveDocumentFromLambda: jest.fn(),
     saveWorkItemForNonPaper: jest
       .fn()
       .mockImplementation(saveWorkItemForNonPaper),
@@ -344,7 +343,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     },
     filterCaseMetadata: jest.fn(),
     getBaseUrl: () => 'http://localhost',
-    getCaseCaptionNames: jest.fn().mockImplementation(Case.getCaseCaptionNames),
+    getCaseTitle: jest.fn().mockImplementation(Case.getCaseTitle),
     getChiefJudgeNameForSigning: jest.fn(),
     getChromiumBrowser: jest.fn().mockImplementation(() => {
       return mockGetChromiumBrowserReturnValue;
@@ -372,22 +371,13 @@ const createTestApplicationContext = ({ user } = {}) => {
       sendBulkTemplatedEmail: jest.fn(),
     }),
     getDocumentClient: jest.fn().mockImplementation(() => mockDocumentClient),
+    getDocumentGenerators: jest
+      .fn()
+      .mockReturnValue(getDocumentGeneratorsReturnMock),
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
+    getElasticsearchIndexes: () => ['efcms-case'],
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityByName: jest.fn(),
-    getEntityConstructors: () => ({
-      Case,
-      CaseAssociationRequestFactory,
-      CaseExternal: CaseExternalIncomplete,
-      CaseInternal: CaseInternal,
-      CourtIssuedDocumentFactory,
-      DocketRecord,
-      Document,
-      ExternalDocumentFactory: ExternalDocumentFactory,
-      TrialSession: TrialSession,
-      User,
-      WorkItem: WorkItem,
-    }),
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
@@ -396,7 +386,11 @@ const createTestApplicationContext = ({ user } = {}) => {
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfStyles: jest.fn(),
     getPersistenceGateway: mockGetPersistenceGateway,
-    getPug: jest.fn(),
+    getPug: jest.fn(() => ({
+      compile: () => {
+        return () => null;
+      },
+    })),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: appContextProxy(),

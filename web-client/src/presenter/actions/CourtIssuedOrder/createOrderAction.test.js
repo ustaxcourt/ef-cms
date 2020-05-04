@@ -35,9 +35,12 @@ describe('createOrderAction', () => {
       },
     });
 
-    expect(applicationContextForClient.getCaseCaptionNames).toBeCalled();
+    expect(applicationContextForClient.getCaseTitle).toBeCalled();
     expect(applicationContextForClient.getPdfStyles).toBeCalled();
     expect(result.output.htmlString.indexOf('Guy Fieri')).toBeTruthy();
+    expect(
+      applicationContextForClient.getUtilities().formatDocketNumberWithSuffix,
+    ).toBeCalled();
   });
 
   it('creates an order for a notice', async () => {
@@ -59,12 +62,15 @@ describe('createOrderAction', () => {
       },
     });
 
-    expect(applicationContextForClient.getCaseCaptionNames).toBeCalled();
+    expect(applicationContextForClient.getCaseTitle).toBeCalled();
     expect(applicationContextForClient.getPdfStyles).toBeCalled();
     expect(
       applicationContextForClient.getClerkOfCourtNameForSigning,
     ).toBeCalled();
     expect(result.output.htmlString.indexOf('Guy Fieri')).toBeTruthy();
     expect(result.output.htmlString.indexOf('Bobby Flay')).toBeTruthy();
+    expect(
+      applicationContextForClient.getUtilities().formatDocketNumberWithSuffix,
+    ).toBeCalled();
   });
 });

@@ -1,3 +1,7 @@
+const {
+  CourtIssuedDocumentFactory,
+} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentFactory');
+
 /**
  * validateCourtIssuedDocketEntryInteractor
  *
@@ -10,9 +14,9 @@ exports.validateCourtIssuedDocketEntryInteractor = ({
   applicationContext,
   entryMetadata,
 }) => {
-  const courtIssuedDocument = applicationContext
-    .getEntityConstructors()
-    .CourtIssuedDocumentFactory.get(entryMetadata);
+  const courtIssuedDocument = CourtIssuedDocumentFactory.get(entryMetadata, {
+    applicationContext,
+  });
 
   return courtIssuedDocument.getFormattedValidationErrors();
 };

@@ -25,8 +25,7 @@
     "noticeOfAttachments": false,
     "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "caseCaption": "Caryn Wall, Petitioner",
-    "initialTitle": "Caryn Wall, Petitioner v. Commissioner of Internal Revenue, Respondent",
-    "caseTitle": "Caryn Wall, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Caryn Wall, Petitioner",
     "sk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "filingType": "Individual petitioner",
     "orderForOds": false,
@@ -181,6 +180,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-03-27T21:53:00.297Z",
     "workItems": [
       {
@@ -231,6 +231,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2019-03-27T21:53:00.298Z",
     "workItems": [],
     "pending": false,

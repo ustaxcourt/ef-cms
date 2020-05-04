@@ -10,10 +10,14 @@ const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { User } = require('../../entities/User');
 
 describe('run trial session planning report', () => {
+  const mockPdfUrl = 'www.example.com';
   let user;
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockImplementation(() => user);
+    applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockReturnValue(mockPdfUrl);
   });
 
   it('throws error if user is unauthorized', async () => {
@@ -81,6 +85,7 @@ describe('run trial session planning report', () => {
       year: '2020',
     });
 
+    expect(result).toBe(mockPdfUrl);
     expect(
       applicationContext.getTemplateGenerators()
         .generateTrialSessionPlanningReportTemplate,
@@ -88,7 +93,13 @@ describe('run trial session planning report', () => {
     expect(
       applicationContext.getUseCases().generatePdfFromHtmlInteractor,
     ).toBeCalled();
-    expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
+    expect(applicationContext.getUniqueId).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getDownloadPolicyUrl,
+    ).toBeCalled();
   });
 
   describe('getTrialSessionPlanningReportData', () => {

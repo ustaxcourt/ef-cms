@@ -236,7 +236,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     makeRequired('objections');
   }
 
-  if (documentMetadata.scenario.toLowerCase().trim() === 'nonstandard h') {
+  if (
+    documentMetadata.scenario &&
+    documentMetadata.scenario.toLowerCase().trim() === 'nonstandard h'
+  ) {
     if (
       includes(
         documentMetadata.documentType,
@@ -285,12 +288,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     }
   }
 
-  joiValidationDecorator(
-    entityConstructor,
-    schema,
-    undefined,
-    VALIDATION_ERROR_MESSAGES,
-  );
+  joiValidationDecorator(entityConstructor, schema, VALIDATION_ERROR_MESSAGES);
 
   return new entityConstructor(documentMetadata);
 };

@@ -20,13 +20,15 @@ export const updatePractitionerUserAction = async ({
       .getUseCases()
       .updatePractitionerUserInteractor({
         applicationContext,
+        barNumber: user.barNumber,
         user,
       });
     return path.success({
       alertSuccess: {
-        title: 'The Practitioner User has been updated.',
+        message: 'Practitioner updated.',
       },
-      practitionerUser,
+      barNumber: practitionerUser.barNumber,
+      practitionerDetail: practitionerUser,
     });
   } catch (err) {
     return path.error();

@@ -13,5 +13,8 @@ export const clearAdvancedSearchFormAction = ({ props, store }) => {
   if (formType === 'caseSearchByName') {
     emptyForm.countryType = 'domestic';
   }
+  if (formType === 'orderSearch') {
+    emptyForm.orderKeyword = '';
+  }
   store.set(state.advancedSearchForm[formType], emptyForm);
 };

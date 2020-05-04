@@ -31,6 +31,7 @@ web-api/runtimes/clamav/clamav_lambda_layer.tar.gz
 web-api/runtimes/clamav/lib
 web-api/storage/s3/*
 web-api/terraform/template/cognito-triggers/index.js.zip
+web-api/terraform/template/cognito-authorizer/index.js.zip
 web-client/.cache/
 web-client/coverage-e2e
 web-client/coverage-integration/*

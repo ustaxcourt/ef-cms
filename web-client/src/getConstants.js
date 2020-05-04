@@ -4,6 +4,7 @@ import {
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
 import { Case } from '../../shared/src/business/entities/cases/Case';
+import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
 import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { Document } from '../../shared/src/business/entities/Document';
@@ -25,6 +26,7 @@ import { User } from '../../shared/src/business/entities/User';
 const MINUTES = 60 * 1000;
 
 export const getConstants = () => ({
+  ADMISSIONS_STATUS_OPTIONS: Practitioner.ADMISSIONS_STATUS_OPTIONS,
   BUSINESS_TYPES: ContactFactory.BUSINESS_TYPES,
   CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
   CASE_INVENTORY_PAGE_SIZE: 2,
@@ -39,6 +41,7 @@ export const getConstants = () => ({
   COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
   DATE_FORMATS: FORMATS,
+  DEFAULT_PROCEDURE_TYPE: CaseInternal.DEFAULT_PROCEDURE_TYPE,
   EMPLOYER_OPTIONS: Practitioner.EMPLOYER_OPTIONS,
   ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
   FILING_TYPES: Case.FILING_TYPES,
@@ -69,6 +72,7 @@ export const getConstants = () => ({
   STATUS_TYPES: Case.STATUS_TYPES,
   STATUS_TYPES_MANUAL_UPDATE: Case.STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE: Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
+  SYSTEM_GENERATED_DOCUMENT_TYPES: Document.SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRANSCRIPT_EVENT_CODE: Document.TRANSCRIPT_EVENT_CODE,
   TRIAL_CITIES: TrialSession.TRIAL_CITIES,
   TRIAL_SESSION_TYPES: TrialSession.SESSION_TYPES,

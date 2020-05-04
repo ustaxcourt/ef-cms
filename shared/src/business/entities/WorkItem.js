@@ -17,12 +17,14 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.entityName = 'WorkItem';
+
   this.associatedJudge = rawWorkItem.associatedJudge || CHIEF_JUDGE;
   this.assigneeId = rawWorkItem.assigneeId;
   this.assigneeName = rawWorkItem.assigneeName;
   this.caseId = rawWorkItem.caseId;
-  this.caseStatus = rawWorkItem.caseStatus;
   this.caseIsInProgress = rawWorkItem.caseIsInProgress;
+  this.caseStatus = rawWorkItem.caseStatus;
   this.caseTitle = rawWorkItem.caseTitle;
   this.completedAt = rawWorkItem.completedAt;
   this.completedBy = rawWorkItem.completedBy;
@@ -81,6 +83,7 @@ joiValidationDecorator(
     docketNumber: joi.string().required(),
     docketNumberSuffix: joi.string().allow(null).optional(),
     document: joi.object().required(),
+    entityName: joi.string().valid('WorkItem').required(),
     hideFromPendingMessages: joi.boolean().optional(),
     highPriority: joi.boolean().optional(),
     inProgress: joi.boolean().optional(),
@@ -106,9 +109,6 @@ joiValidationDecorator(
       })
       .required(),
   }),
-  function () {
-    return Message.validateCollection(this.messages);
-  },
 );
 
 /**

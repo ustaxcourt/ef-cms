@@ -1,40 +1,36 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   validateAddPractitionerInteractor,
 } = require('./validateAddPractitionerInteractor');
-const { NewPractitioner } = require('../../entities/NewPractitioner');
 
 describe('validateAddPractitionerInteractor', () => {
   it('returns the expected errors object on an empty practitioner', () => {
     const errors = validateAddPractitionerInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          NewPractitioner,
-        }),
-      },
+      applicationContext,
       practitioner: {},
     });
 
     expect(Object.keys(errors)).toEqual([
       'email',
       'admissionsDate',
+      'admissionsStatus',
       'birthYear',
       'employer',
-      'originalBarState',
-      'practitionerType',
       'firstName',
       'lastName',
+      'originalBarState',
+      'practitionerType',
     ]);
   });
 
   it('returns null on no errors', () => {
     const errors = validateAddPractitionerInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          NewPractitioner,
-        }),
-      },
+      applicationContext,
       practitioner: {
         admissionsDate: '2019-03-01T21:40:46.415Z',
+        admissionsStatus: 'Active',
         birthYear: '2009',
         email: 'test@example.com',
         employer: 'IRS',

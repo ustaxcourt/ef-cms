@@ -26,9 +26,7 @@ export const removeCaseFromTrialAction = async ({
 
   return {
     alertSuccess: {
-      message:
-        'This case may be eligible for the next available trial session.',
-      title: 'This case has been removed from this trial session',
+      message: 'Case removed from trial.',
     },
     caseDetail,
   };

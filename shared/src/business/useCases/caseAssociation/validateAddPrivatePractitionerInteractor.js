@@ -1,3 +1,7 @@
+const {
+  AddPrivatePractitionerFactory,
+} = require('../../entities/caseAssociation/AddPrivatePractitionerFactory');
+
 /**
  * validateAddPrivatePractitionerInteractor
  *
@@ -10,10 +14,9 @@ exports.validateAddPrivatePractitionerInteractor = ({
   applicationContext,
   counsel,
 }) => {
-  const errors = applicationContext
-    .getEntityConstructors()
-    .AddPrivatePractitionerFactory.get(counsel)
-    .getFormattedValidationErrors();
+  const errors = AddPrivatePractitionerFactory.get(counsel, {
+    applicationContext,
+  }).getFormattedValidationErrors();
 
   if (!errors) return null;
   return errors;

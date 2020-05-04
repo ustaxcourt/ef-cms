@@ -25,9 +25,6 @@ joiValidationDecorator(
     documentType: joi.string().required(),
     eventCode: joi.string().required(),
   }),
-  function () {
-    return !this.getFormattedValidationErrors();
-  },
   OrderWithoutBody.VALIDATION_ERROR_MESSAGES,
 );
 

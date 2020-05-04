@@ -14,7 +14,7 @@ import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryRep
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
-import { CreatePractitionerUser } from './CreatePractitionerUser';
+import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
@@ -27,7 +27,7 @@ import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
 import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformation';
-import { EditPractitionerUser } from './EditPractitionerUser';
+import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
 import { Error } from './Error';
@@ -41,9 +41,9 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { Messages } from './Messages/Messages';
 import { PendingReport } from './PendingReport/PendingReport';
-import { PractitionerDetail } from './PractitionerDetail';
+import { PractitionerDetail } from './Practitioners/PractitionerDetail';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
-import { PrintPreview } from './CourtIssuedDocketEntry/PrintPreview';
+import { PrintPaperService } from './PrintPaperService';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
@@ -111,7 +111,7 @@ const pages = {
   PendingReport,
   PractitionerDetail,
   PrimaryContactEdit,
-  PrintPreview,
+  PrintPaperService,
   PrintableCaseInventoryReport,
   PrintableDocketRecord,
   PrintableTrialCalendar,

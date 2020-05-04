@@ -1,6 +1,7 @@
 version: 2
 jobs:
   bundle:
+    resource_class: large
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
         aws_auth:
@@ -71,7 +72,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
-    resource_class: 2xlarge
+    resource_class: xlarge
     steps:
       - attach_workspace:
           at: ~/
@@ -102,7 +103,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
-    resource_class: 2xlarge
+    resource_class: xlarge
     steps:
       - attach_workspace:
           at: ~/
@@ -122,7 +123,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
-    resource_class: 2xlarge
+    resource_class: xlarge
     parallelism: 2
     steps:
       - attach_workspace:
@@ -177,8 +178,6 @@ jobs:
             -Dproject.settings="web-client/sonar-project.properties" \
             -Dsonar.login="${UI_SONAR_TOKEN}" \
             -Dsonar.host.url="https://sonarcloud.io"
-      - store_artifacts:
-          path: ~/project/combined-coverage
 
   e2e-pa11y:
     docker:
@@ -188,7 +187,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
-    resource_class: 2xlarge
+    resource_class: xlarge
     steps:
       - attach_workspace:
           at: ~/
@@ -207,7 +206,6 @@ jobs:
       - run:
           name: Pa11y - Web Client 2
           command: |
-            npm run build:all
             SKIP_CACHE_INVALIDATION=true SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-2.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
@@ -216,7 +214,6 @@ jobs:
       - run:
           name: Pa11y - Web Client 3
           command: |
-            npm run build:all
             SKIP_CACHE_INVALIDATION=true SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-3.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
@@ -225,9 +222,11 @@ jobs:
       - run:
           name: Pa11y - Public Site
           command: |
-            SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public > /tmp/pa11y/pa11y-server-public.txt &
+            SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public:ci start:api:ci > /tmp/pa11y/pa11y-server-public.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
             sleep 15
-            npm run test:pa11y:public
+            npm run test:pa11y:public --node-flags --max-old-space-size=1024
       - store_artifacts:
           path: /tmp/pa11y
 
@@ -239,7 +238,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: 2xlarge
+    resource_class: xlarge
     steps:
       - attach_workspace:
           at: ~/
@@ -276,18 +275,9 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
-              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-            fi
-
-            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
-              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
-            fi
-
+            cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+            cd web-api/runtimes/clamav && ./build.sh && cd ../../..
             docker build -t efcms -f Dockerfile .
-      - run:
-          name: Setup Post Confirmation Arn
-          command: echo "export POST_CONFIRMATION_ROLE_ARN=$(./get-post-confirmation-role-arn.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: Setup Dynamsoft Keys
           command: echo "export DYNAMSOFT_PRODUCT_KEYS='$(./get-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
@@ -296,13 +286,13 @@ jobs:
           command: echo "export ES_INSTANCE_COUNT='$(./get-es-instance-count.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: 'Deploy - Web API - Terraform'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" -e "POST_CONFIRMATION_ROLE_ARN=${POST_CONFIRMATION_ROLE_ARN}" -e "CLOUDWATCH_ROLE_ARN=${CLOUDWATCH_ROLE_ARN}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - Terraform'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}" -e "DYNAMSOFT_URL=${DYNAMSOFT_URL}" -e "DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}" -e "IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
       - run:
           name: 'Setup SNS Subscription'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" -e "POST_CONFIRMATION_ROLE_ARN=${POST_CONFIRMATION_ROLE_ARN}" -e "CLOUDWATCH_ROLE_ARN=${CLOUDWATCH_ROLE_ARN}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" --rm efcms /bin/sh -c "cd web-api && ./setup-sns-subscriptions.sh ${ENV}"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" --rm efcms /bin/sh -c "cd web-api && ./setup-sns-subscriptions.sh ${ENV}"
       - run:
           name: Setup Elasticsearch Index Settings
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/setup-elasticsearch-index.sh ${ENV}"
@@ -318,24 +308,18 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
-              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-            fi
-
-            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
-              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
-            fi
-
+            cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+            cd web-api/runtimes/clamav && ./build.sh && cd ../../..
             docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Honeybadger Keys
           command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: 'Deploy - Web API - Layers - Puppeteer - us-east-1'
-          command: if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-east-1"; fi;
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Layers - ClamAV - us-east-1'
-          command: if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-clamav.sh ${ENV} us-east-1"; fi;
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-clamav.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - Public API - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-public-api.sh ${ENV} us-east-1"
@@ -402,24 +386,18 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
-              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-            fi
-
-            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
-              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
-            fi
-
+            cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+            cd web-api/runtimes/clamav && ./build.sh && cd ../../..
             docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Honeybadger Keys
           command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: 'Deploy - Web API - Layers - Puppeteer - us-west-1'
-          command: if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-west-1"; fi;
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Layers - ClamAV - us-west-1'
-          command: if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-clamav.sh ${ENV} us-west-1"; fi;
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-clamav.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Serverless - Public API - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-public-api.sh ${ENV} us-west-1"
@@ -480,14 +458,8 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/puppeteer) = "true" ]]; then
-              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-            fi
-
-            if [[ $(./web-api/deploy-diff.sh $ENV web-api/runtimes/clamav) = "true" ]]; then
-              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
-            fi
-
+            cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+            cd web-api/runtimes/clamav && ./build.sh && cd ../../..
             docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Honeybadger Keys
@@ -549,6 +521,9 @@ jobs:
       - run:
           name: 'Deploy - Pa11y Smoke Tests'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "ENV=${ENV} npm run test:pa11y:smoketests"
+      - run:
+          name: 'Deploy - Cognito Authorizer Check'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "find web-api/*.yml | ENV=${ENV} xargs node web-api/verify-authorizers.js"
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
 

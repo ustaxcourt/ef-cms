@@ -16,7 +16,8 @@ custom:
   #enabled: true
 
   jetpack:
-    mode: yarn
+    mode: npm
+    lockfile: ../package-lock.json
 
   prune:
     automatic: true
@@ -300,6 +301,10 @@ functions:
           method: get
           async: true
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
 
   removeCaseFromTrial:
     handler: web-api/${self:provider.dir}/trialSessionsHandlers.removeCaseFromTrialLambda
