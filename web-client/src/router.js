@@ -566,9 +566,11 @@ const router = {
 
     registerRoute(
       '/users/edit-practitioner/*',
-      ifHasAccess(userId => {
+      ifHasAccess(barNumber => {
         setPageTitle('EF-CMS User Management - Edit Practitioner User');
-        return app.getSequence('gotoEditPractitionerUserSequence')({ userId });
+        return app.getSequence('gotoEditPractitionerUserSequence')({
+          barNumber,
+        });
       }),
     );
 
@@ -691,14 +693,13 @@ const router = {
     );
 
     registerRoute(
-      '/print-preview/*',
+      '/print-paper-service/*',
       ifHasAccess(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
-        return app.getSequence('gotoPrintPreviewSequence')({
+        return app.getSequence('gotoPrintPaperServiceSequence')({
           alertWarning: {
             message:
-              'This case has parties receiving paper service. Print and mail all paper service documents below.',
-            title: 'This document has been electronically served',
+              'Document electronically served. Print and mail all paper service documents now.',
           },
           docketNumber,
         });

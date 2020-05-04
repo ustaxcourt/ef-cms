@@ -16,7 +16,8 @@ custom:
   #enabled: true
 
   jetpack:
-    mode: yarn
+    mode: npm
+    lockfile: ../package-lock.json
 
   prune:
     automatic: true
@@ -83,6 +84,7 @@ provider:
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
   userPoolId: us-east-1_7uRkF0Axn
+  userPoolIrsId: us-east-1_7uRkF0Axn
   masterDynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
@@ -101,6 +103,7 @@ provider:
     MASTER_REGION: ${self:provider.masterRegion}
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
+    USER_POOL_IRS_ID: ${opt:userPoolIrsId, self:provider.userPoolIrsId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
     EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
@@ -157,9 +160,8 @@ functions:
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
+            arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
+            managedExternally: true
 
   getUserById:
     handler: web-api/${self:provider.dir}/usersHandlers.getUserByIdLambda

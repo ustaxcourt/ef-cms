@@ -24,7 +24,6 @@ function PublicCase(rawCase, { applicationContext }) {
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
   this.receivedAt = rawCase.receivedAt;
   this.isSealed = !!rawCase.sealedDate;
-  this.caseTitle = rawCase.caseTitle;
 
   this.contactPrimary = rawCase.contactPrimary
     ? new PublicContact(rawCase.contactPrimary)
@@ -53,7 +52,6 @@ const publicCaseSchema = {
       version: ['uuidv4'],
     })
     .optional(),
-  caseTitle: joi.string().optional(),
   createdAt: joi.date().iso().optional(),
   docketNumber: joi.string().optional(),
   docketNumberSuffix: joi.string().allow(null).optional(),
@@ -63,7 +61,6 @@ const publicCaseSchema = {
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
   caseId: joi.string(),
-  caseTitle: joi.any().forbidden(),
   contactPrimary: joi.any().forbidden(),
   contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),
@@ -80,7 +77,6 @@ joiValidationDecorator(
   joi.object(publicCaseSchema).when(joi.object({ isSealed: true }).unknown(), {
     then: joi.object(sealedCaseSchemaRestricted),
   }),
-  undefined,
   {},
 );
 

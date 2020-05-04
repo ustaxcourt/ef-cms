@@ -1,4 +1,6 @@
+const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+
 /**
  * generateDocketRecordPdfInteractor
  *
@@ -13,9 +15,6 @@ exports.generateDocketRecordPdfInteractor = async ({
   docketRecordSort,
   includePartyDetail = false,
 }) => {
-  const { Case } = applicationContext.getEntityConstructors();
-  const caseCaptionPostfix = Case.CASE_CAPTION_POSTFIX;
-
   const caseSource = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
@@ -31,7 +30,6 @@ exports.generateDocketRecordPdfInteractor = async ({
       caseDetail: caseEntity,
       docketRecordSort,
     });
-  formattedCaseDetail.showCaseNameForPrimary = caseEntity.getShowCaseNameForPrimary();
 
   const getPartyInfoContent = detail => {
     const {
@@ -64,8 +62,8 @@ exports.generateDocketRecordPdfInteractor = async ({
     };
 
     const getContactPrimary = () => {
-      const name = detail.showCaseNameForPrimary
-        ? detail.caseName
+      const name = detail.showCaseTitleForPrimary
+        ? detail.caseTitle
         : contactPrimary.name;
 
       return `
@@ -259,7 +257,6 @@ exports.generateDocketRecordPdfInteractor = async ({
       applicationContext,
       content: {
         caption: caseCaption,
-        captionPostfix: caseCaptionPostfix,
         docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
         docketRecord: getDocketRecordContent(formattedCaseDetail),
         partyInfo: includePartyDetail
@@ -268,9 +265,15 @@ exports.generateDocketRecordPdfInteractor = async ({
       },
     });
 
-  return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
-    applicationContext,
-    contentHtml,
-    docketNumber,
-  });
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml,
+      docketNumber,
+    });
+
+  return await applicationContext
+    .getUseCaseHelpers()
+    .saveFileAndGenerateUrl({ applicationContext, file: pdf });
 };

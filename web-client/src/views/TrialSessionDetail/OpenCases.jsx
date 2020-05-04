@@ -45,7 +45,7 @@ export const OpenCases = connect(
                     </span>
                   )}
                 </td>
-                <td>{item.caseCaptionNames}</td>
+                <td>{item.caseTitle}</td>
                 <td>
                   {item.privatePractitioners.map((practitioner, idx) => (
                     <div key={idx}>{practitioner.name}</div>

@@ -115,6 +115,42 @@ describe('DateHandler', () => {
     });
   });
 
+  describe('createStartOfDayISO', () => {
+    it('creates a timestamp exactly at midnight, the first moment of the day according to Eastern Timezone', () => {
+      const startOfDay = DateHandler.createStartOfDayISO({
+        day: '7',
+        month: '4',
+        year: '2020',
+      });
+      expect(startOfDay).toBe('2020-04-07T04:00:00.000Z');
+
+      // now confirm it converts "back" to originally desired time
+      const formattedInEastern = DateHandler.formatDateString(
+        startOfDay,
+        DateHandler.FORMATS.DATE_TIME,
+      );
+      expect(formattedInEastern).toEqual('04/07/20 12:00 am'); // the stroke of midnight
+    });
+  });
+
+  describe('createEndOfDayISO', () => {
+    it('creates a timestamp one millisecond before midnight, the last moment of the day according to Eastern Timezone', () => {
+      const endOfDay = DateHandler.createEndOfDayISO({
+        day: '7',
+        month: '4',
+        year: '2020',
+      });
+      expect(endOfDay).toEqual('2020-04-08T03:59:59.999Z');
+
+      // now confirm it converts "back" to originally desired time
+      const formattedInEastern = DateHandler.formatDateString(
+        endOfDay,
+        DateHandler.FORMATS.DATE_TIME,
+      );
+      expect(formattedInEastern).toEqual('04/07/20 11:59 pm'); // the moment before midnight the next day
+    });
+  });
+
   describe('createISODateString', () => {
     it('creates a date anew', () => {
       const myDate = DateHandler.createISODateString();

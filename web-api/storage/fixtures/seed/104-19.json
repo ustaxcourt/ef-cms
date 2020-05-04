@@ -43,8 +43,7 @@
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "caseCaption": "Mufutau Wade, Petitioner",
-    "caseTitle": "Mufutau Wade, Petitioner v. Commissioner of Internal Revenue, Respondent",
-    "initialTitle": "Mufutau Wade, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Mufutau Wade, Petitioner",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": true,
     "orderToShowCause": true,
@@ -177,8 +176,6 @@
   },
   {
     "createdAt": "2019-08-22T12:47:16.905Z",
-    "caseTitle": "Mufutau Wade",
-    "docketNumber": "104-19",
     "deadlineDate": "2019-08-25T04:00:00.000Z",
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "sk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
@@ -205,8 +202,6 @@
     "pk": "case-deadline-catalog"
   },
   {
-    "caseTitle": "Mufutau Wade",
-    "docketNumber": "104-19",
     "createdAt": "2019-08-22T12:46:01.052Z",
     "deadlineDate": "2019-08-22T04:00:00.000Z",
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
@@ -222,6 +217,7 @@
   },
   {
     "documentType": "Ownership Disclosure Statement",
+    "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
     "pending": false,
@@ -237,6 +233,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
     "pending": false,
@@ -252,6 +249,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.490Z",
     "workItems": [
       {

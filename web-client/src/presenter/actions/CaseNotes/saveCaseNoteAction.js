@@ -22,7 +22,7 @@ export const saveCaseNoteAction = async ({ applicationContext, get }) => {
 
   return {
     alertSuccess: {
-      message: 'Your note has been saved',
+      message: 'Note saved.',
     },
     caseDetail,
   };

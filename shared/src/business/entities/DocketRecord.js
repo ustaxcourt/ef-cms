@@ -14,6 +14,7 @@ function DocketRecord(rawDocketRecord, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.entityName = 'DocketRecord';
 
   this.docketRecordId =
     rawDocketRecord.docketRecordId || applicationContext.getUniqueId();
@@ -65,6 +66,7 @@ joiValidationDecorator(
       .optional()
       .meta({ tags: ['Restricted'] })
       .description('JSON representation of the in-progress edit of this item.'),
+    entityName: joi.string().valid('DocketRecord').required(),
     eventCode: joi
       .string()
       .valid(...getAllEventCodes())
@@ -95,7 +97,6 @@ joiValidationDecorator(
       .optional()
       .description('Served parties code to override system-computed code.'),
   }),
-  undefined,
   DocketRecord.VALIDATION_ERROR_MESSAGES,
 );
 

@@ -4,7 +4,7 @@
     "procedureType": "Regular",
     "contactSecondary": {},
     "isPaper": false,
-    "initialTitle": "Letti Toretto, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Letti Toretto, Petitioner",
     "gsi1pk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
     "orderForFilingFee": false,
     "partyType": "Petitioner",
@@ -35,7 +35,6 @@
     "initialDocketNumberSuffix": "L",
     "docketNumberSuffix": "L",
     "orderToChangeDesignatedPlaceOfTrial": false,
-    "caseTitle": "Letti Toretto, Petitioner v. Commissioner of Internal Revenue, Respondent",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -77,6 +76,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2019-12-11T16:02:31.176Z",
     "partyPrimary": true,
     "workItems": [],
@@ -95,6 +95,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-12-11T16:02:31.174Z",
     "partyPrimary": true,
     "workItems": [

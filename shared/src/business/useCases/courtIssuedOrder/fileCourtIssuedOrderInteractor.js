@@ -43,6 +43,29 @@ exports.fileCourtIssuedOrderInteractor = async ({
     documentMetadata.freeText = documentMetadata.documentTitle;
   }
 
+  /* eslint-disable spellcheck/spell-checker */
+  /* POC for #4814 - leaving here for future work
+  if (!documentMetadata.documentContents) {
+    const { Body: pdfData } = await applicationContext
+      .getStorageClient()
+      .getObject({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: primaryDocumentFileId,
+      })
+      .promise();
+
+    try {
+      const parsedDocument = await pdfParse(pdfData);
+
+      if (parsedDocument.text) {
+        documentMetadata.documentContents = parsedDocument.text;
+      }
+    } catch (e) {
+      applicationContext.logger.info('Failed to parse PDF');
+    }
+  } */
+  /* eslint-enable spellcheck/spell-checker */
+
   const documentEntity = new Document(
     {
       ...documentMetadata,

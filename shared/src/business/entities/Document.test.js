@@ -96,6 +96,7 @@ describe('Document entity', () => {
       const myDoc = new Document(A_VALID_DOCUMENT, { applicationContext });
       myDoc.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
       expect(myDoc.isValid()).toBeTruthy();
+      expect(myDoc.entityName).toEqual('Document');
     });
 
     it('Creates an invalid document with no document type', () => {
@@ -136,7 +137,7 @@ describe('Document entity', () => {
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: 'new',
-          caseTitle: 'testing',
+          caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
           isQC: true,
@@ -162,13 +163,22 @@ describe('Document entity', () => {
   describe('validate', () => {
     it('should do nothing if valid', () => {
       let error;
+      let document;
       try {
-        const document = new Document(A_VALID_DOCUMENT, { applicationContext });
+        document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentContents: 'this is the content of the document',
+          },
+          { applicationContext },
+        );
         document.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
         document.validate();
       } catch (err) {
         error = err;
       }
+
+      expect(document.documentContents).toBeDefined();
       expect(error).not.toBeDefined();
     });
 
@@ -810,14 +820,16 @@ describe('Document entity', () => {
   describe('unsignDocument', () => {
     it('signs and unsigns the document', () => {
       const document = new Document(A_VALID_DOCUMENT, { applicationContext });
-      document.setSigned('abc-123');
+      document.setSigned('abc-123', 'Joe Exotic');
 
       expect(document.signedByUserId).toEqual('abc-123');
+      expect(document.signedJudgeName).toEqual('Joe Exotic');
       expect(document.signedAt).toBeDefined();
 
       document.unsignDocument();
 
       expect(document.signedByUserId).toEqual(null);
+      expect(document.signedJudgeName).toEqual(null);
       expect(document.signedAt).toEqual(null);
     });
   });
@@ -844,7 +856,7 @@ describe('Document entity', () => {
               assigneeName: 'bill',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
-              caseTitle: 'testing',
+              caseTitle: 'Johnny Joe Jacobson',
               docketNumber: '101-18',
               document: {},
               isQC: false,
@@ -864,7 +876,7 @@ describe('Document entity', () => {
               assigneeName: 'bob',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
-              caseTitle: 'testing',
+              caseTitle: 'Johnny Joe Jacobson',
               docketNumber: '101-18',
               document: {},
               isQC: true,
@@ -899,7 +911,7 @@ describe('Document entity', () => {
               assigneeName: 'bill',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
-              caseTitle: 'testing',
+              caseTitle: 'Johnny Joe Jacobson',
               docketNumber: '101-18',
               document: {},
               isQC: false,
@@ -970,6 +982,48 @@ describe('Document entity', () => {
         { applicationContext },
       );
       expect(document.isAutoServed()).toBeFalsy();
+    });
+  });
+
+  describe('setAsServed', () => {
+    it('sets the Document as served', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          draftState: {
+            documentContents: 'Yee to the haw',
+          },
+        },
+        { applicationContext },
+      );
+      document.setAsServed();
+
+      expect(document.status).toEqual('served');
+      expect(document.servedAt).toBeDefined();
+      expect(document.draftState).toEqual(null);
+    });
+
+    it('sets the Document as served with served parties', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          draftState: {
+            documentContents: 'Yee to the haw',
+          },
+        },
+        { applicationContext },
+      );
+
+      document.setAsServed([
+        {
+          name: 'Served Party',
+        },
+      ]);
+
+      expect(document.status).toEqual('served');
+      expect(document.servedAt).toBeDefined();
+      expect(document.draftState).toEqual(null);
+      expect(document.servedParties).toMatchObject([{ name: 'Served Party' }]);
     });
   });
 });

@@ -49,7 +49,6 @@ ExternalDocumentNonStandardF.schema = {
 joiValidationDecorator(
   ExternalDocumentNonStandardF,
   ExternalDocumentNonStandardF.schema,
-  undefined,
   ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES,
 );
 

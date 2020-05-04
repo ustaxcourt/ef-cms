@@ -232,19 +232,19 @@ If `highPriority` = `true`, then this field is `string` and is `required.`
 
 Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
-### initialDocketNumberSuffix
+### initialCaption
 
 
-Case docket number suffix before modification.
+Case caption before modification.
 
 > `string` | optional
 
 ##### Can be null.
 
-### initialTitle
+### initialDocketNumberSuffix
 
 
-Case title before modification.
+Case docket number suffix before modification.
 
 > `string` | optional
 
@@ -310,6 +310,13 @@ Reminder for clerks to review the notice of attachments.
 Reminder for clerks to review the notice of trial date.
 
 > `date` | optional
+
+### orderDesignatingPlaceOfTrial
+
+
+Reminder for clerks to review the Order Designating Place of Trial.
+
+> `boolean` | optional
 
 ### orderForAmendedPetition
 
@@ -406,7 +413,7 @@ Status of the case fee payment.
 ### petitionPaymentDate
 
 
-When the petitioner payed the case fee.
+When the petitioner paid the case fee.
 
 > `any`
 
@@ -419,7 +426,7 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 ### petitionPaymentMethod
 
 
-How the petitioner payed the case fee.
+How the petitioner paid the case fee.
 
 > `any`
 

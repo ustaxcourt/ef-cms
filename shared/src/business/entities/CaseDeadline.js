@@ -2,9 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { Case } = require('./cases/Case');
 const { createISODateString } = require('../utilities/DateHandler');
-const { DOCKET_NUMBER_MATCHER } = require('./cases/CaseConstants');
 
 /**
  * Case Deadline entity
@@ -16,23 +14,20 @@ function CaseDeadline(rawProps, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-  this.associatedJudge = rawProps.associatedJudge || Case.CHIEF_JUDGE;
+  this.entityName = 'CaseDeadline';
+
   this.caseDeadlineId =
     rawProps.caseDeadlineId || applicationContext.getUniqueId();
   this.caseId = rawProps.caseId;
-  this.caseTitle = rawProps.caseTitle;
   this.createdAt = rawProps.createdAt || createISODateString();
   this.deadlineDate = rawProps.deadlineDate;
   this.description = rawProps.description;
-  this.docketNumber = rawProps.docketNumber;
-  this.docketNumberSuffix = rawProps.docketNumberSuffix;
 }
 
 CaseDeadline.validationName = 'CaseDeadline';
 
 CaseDeadline.VALIDATION_ERROR_MESSAGES = {
   caseId: 'You must have a case ID.',
-  caseTitle: 'You must have a case title.',
   deadlineDate: 'Enter a valid deadline date',
   description: [
     {
@@ -41,14 +36,9 @@ CaseDeadline.VALIDATION_ERROR_MESSAGES = {
     },
     'Enter a description of this deadline',
   ],
-  docketNumber: 'Enter a valid docket number',
 };
 
 CaseDeadline.schema = joi.object().keys({
-  associatedJudge: joi
-    .string()
-    .required()
-    .description('Judge assigned to this Case. Defaults to Chief Judge.'),
   caseDeadlineId: joi
     .string()
     .uuid({
@@ -63,7 +53,6 @@ CaseDeadline.schema = joi.object().keys({
     })
     .required()
     .description('Unique Case ID only used by the system.'),
-  caseTitle: joi.string().min(1).required().description('Title of the Case.'),
   createdAt: joi
     .date()
     .iso()
@@ -80,18 +69,12 @@ CaseDeadline.schema = joi.object().keys({
     .min(1)
     .required()
     .description('User provided description of the Case Deadline.'),
-  docketNumber: joi
-    .string()
-    .regex(DOCKET_NUMBER_MATCHER)
-    .required()
-    .description('Unique Case ID in XXXXX-YY format.'),
-  docketNumberSuffix: joi.string().optional().allow(null),
+  entityName: joi.string().valid('CaseDeadline').required(),
 });
 
 joiValidationDecorator(
   CaseDeadline,
   CaseDeadline.schema,
-  undefined,
   CaseDeadline.VALIDATION_ERROR_MESSAGES,
 );
 

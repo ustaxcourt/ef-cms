@@ -1,6 +1,6 @@
-import { props, state } from 'cerebral';
 import { resetContactsAction } from '../actions/StartCaseInternal/resetContactsAction';
-import { set } from 'cerebral/factories';
+import { setFormValueAction } from '../actions/setFormValueAction';
+import { updateOrderForOdsAction } from '../actions/StartCaseInternal/updateOrderForOdsAction';
 
 /**
  * set state.form.partyType to the passed
@@ -8,6 +8,7 @@ import { set } from 'cerebral/factories';
  * to clear the contacts
  */
 export const updateStartCaseInternalPartyTypeSequence = [
-  set(state.form.partyType, props.value),
+  setFormValueAction,
+  updateOrderForOdsAction,
   resetContactsAction,
 ];

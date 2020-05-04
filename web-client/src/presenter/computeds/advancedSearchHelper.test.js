@@ -1,36 +1,38 @@
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { User } from '../../../../shared/src/business/entities/User';
-import { advancedSearchHelper as advancedSearchHelperComputed } from './advancedSearchHelper';
+import {
+  advancedOrderSearchHelper as advancedOrderSearchHelperComputed,
+  advancedSearchHelper as advancedSearchHelperComputed,
+} from './advancedSearchHelper';
 import { applicationContext } from '../../applicationContext';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-let pageSizeOverride = 5;
-
-let globalUser;
-
-const getBaseState = user => {
-  globalUser = user;
-  return {
-    permissions: getUserPermissions(user),
-  };
-};
-
-const advancedSearchHelper = withAppContextDecorator(
-  advancedSearchHelperComputed,
-  {
-    ...applicationContext,
-    getConstants: () => {
-      return {
-        ...applicationContext.getConstants(),
-        CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
-      };
-    },
-  },
-);
-
 describe('advancedSearchHelper', () => {
+  let pageSizeOverride = 5;
+  let globalUser;
+
+  const getBaseState = user => {
+    globalUser = user;
+    return {
+      permissions: getUserPermissions(user),
+    };
+  };
+
+  const advancedSearchHelper = withAppContextDecorator(
+    advancedSearchHelperComputed,
+    {
+      ...applicationContext,
+      getConstants: () => {
+        return {
+          ...applicationContext.getConstants(),
+          CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
+        };
+      },
+    },
+  );
+
   beforeEach(() => {
     globalUser = {
       role: User.ROLES.docketClerk,
@@ -188,7 +190,7 @@ describe('advancedSearchHelper', () => {
     });
     expect(result.formattedSearchResults).toMatchObject([
       {
-        caseCaptionNames: 'Test Petitioner',
+        caseTitle: 'Test Petitioner',
         contactPrimaryName:
           'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
         contactSecondaryName: undefined,
@@ -197,7 +199,7 @@ describe('advancedSearchHelper', () => {
         fullStateNamePrimary: 'Tennessee',
       },
       {
-        caseCaptionNames: 'Test Petitioner & Another Petitioner',
+        caseTitle: 'Test Petitioner & Another Petitioner',
         contactPrimaryName:
           'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
         contactSecondaryName: 'Another Person',
@@ -245,7 +247,7 @@ describe('advancedSearchHelper', () => {
     expect(result.formattedSearchResults.length).toEqual(1);
     expect(result.formattedSearchResults).toMatchObject([
       {
-        caseCaptionNames: 'Test Petitioner',
+        caseTitle: 'Test Petitioner',
         contactPrimaryName:
           'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
         docketNumberWithSuffix: '101-19',
@@ -302,7 +304,7 @@ describe('advancedSearchHelper', () => {
     expect(result.formattedSearchResults.length).toEqual(4);
     expect(result.formattedSearchResults).toMatchObject([
       {
-        caseCaptionNames: 'Test Petitioner',
+        caseTitle: 'Test Petitioner',
         contactPrimaryName:
           'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
         contactSecondaryName: undefined,
@@ -311,7 +313,7 @@ describe('advancedSearchHelper', () => {
         fullStateNamePrimary: 'Tennessee',
       },
       {
-        caseCaptionNames: 'Test Petitioner & Another Petitioner',
+        caseTitle: 'Test Petitioner & Another Petitioner',
         contactPrimaryName:
           'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
         contactSecondaryName: 'Another Person',
@@ -320,7 +322,7 @@ describe('advancedSearchHelper', () => {
         fullStateNamePrimary: 'Texas',
       },
       {
-        caseCaptionNames: 'Test Petitioner & Another Petitioner',
+        caseTitle: 'Test Petitioner & Another Petitioner',
         contactPrimaryName: 'Test Petitioner',
         contactSecondaryName: 'Another Petitioner',
         docketNumberWithSuffix: '101-18W',
@@ -329,7 +331,7 @@ describe('advancedSearchHelper', () => {
         fullStateNameSecondary: 'Tennessee',
       },
       {
-        caseCaptionNames: '',
+        caseTitle: '',
         contactPrimaryName: undefined,
         contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
@@ -342,6 +344,7 @@ describe('advancedSearchHelper', () => {
 
   it('does not attempt to format results but only returns results that should be currently shown based on form.currentPage for a practitioner search', () => {
     pageSizeOverride = 1;
+
     let result = runCompute(advancedSearchHelper, {
       state: {
         ...getBaseState(globalUser),
@@ -350,6 +353,7 @@ describe('advancedSearchHelper', () => {
         searchResults: [{ barNumber: '1111' }, { barNumber: '2222' }],
       },
     });
+
     expect(result.showLoadMore).toEqual(true);
     expect(result.formattedSearchResults.length).toEqual(1);
     expect(result.formattedSearchResults).toMatchObject([
@@ -357,6 +361,7 @@ describe('advancedSearchHelper', () => {
     ]);
 
     pageSizeOverride = 3;
+
     result = runCompute(advancedSearchHelper, {
       state: {
         ...getBaseState(globalUser),
@@ -365,11 +370,155 @@ describe('advancedSearchHelper', () => {
         searchResults: [{ barNumber: '1111' }, { barNumber: '2222' }],
       },
     });
+
     expect(result.showLoadMore).toEqual(false);
     expect(result.formattedSearchResults.length).toEqual(2);
     expect(result.formattedSearchResults).toMatchObject([
       { barNumber: '1111' },
       { barNumber: '2222' },
+    ]);
+  });
+});
+
+describe('advancedOrderSearchHelper', () => {
+  const pageSizeOverride = 5;
+
+  const advancedOrderSearchHelper = withAppContextDecorator(
+    advancedOrderSearchHelperComputed,
+    {
+      ...applicationContext,
+      getConstants: () => {
+        return {
+          ...applicationContext.getConstants(),
+          CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
+        };
+      },
+    },
+  );
+
+  it('returns an empty object when searchResults is undefined', () => {
+    const result = runCompute(advancedOrderSearchHelper, {
+      state: {
+        advancedSearchForm: {},
+      },
+    });
+
+    expect(result).toEqual({});
+  });
+
+  it('returns showNoMatches true and showSearchResults false when searchResults are empty', () => {
+    const result = runCompute(advancedOrderSearchHelper, {
+      state: {
+        advancedSearchForm: { currentPage: 1 },
+        searchResults: [],
+      },
+    });
+
+    expect(result).toMatchObject({
+      showLoadMore: false,
+      showNoMatches: true,
+      showSearchResults: false,
+    });
+  });
+
+  it('returns isPublic false if state.isPublic is not defined', () => {
+    const result = runCompute(advancedOrderSearchHelper, {
+      state: {
+        advancedSearchForm: { currentPage: 1 },
+        searchResults: [],
+      },
+    });
+
+    expect(result.isPublic).toBeFalsy();
+  });
+
+  it('returns isPublic true if state.isPublic is true', () => {
+    const result = runCompute(advancedOrderSearchHelper, {
+      state: {
+        advancedSearchForm: { currentPage: 1 },
+        isPublic: true,
+        searchResults: [],
+      },
+    });
+
+    expect(result).toBeTruthy();
+  });
+
+  it('returns showNoMatches false, showSearchResults true, and the resultsCount when searchResults are not empty', () => {
+    const result = runCompute(advancedOrderSearchHelper, {
+      state: {
+        advancedSearchForm: { currentPage: 1 },
+        searchResults: [
+          {
+            docketNumber: '101-19',
+            docketNumberSuffix: 'Z',
+            documentContents: 'Test Petitioner, Petitioner',
+            documentTitle: 'Order',
+            filingDate: '2019-03-01T05:00:00.000Z',
+            judge: 'Judge Buch',
+          },
+        ],
+      },
+    });
+
+    expect(result).toMatchObject({
+      searchResultsCount: 1,
+      showLoadMore: false,
+      showNoMatches: false,
+      showSearchResults: true,
+    });
+  });
+
+  it('formats search results for an order search', () => {
+    const result = runCompute(advancedOrderSearchHelper, {
+      state: {
+        advancedSearchForm: { currentPage: 1 },
+        searchResults: [
+          {
+            caseCaption: 'Test Petitioner, Petitioner',
+            docketNumber: '101-19',
+            docketNumberSuffix: 'Z',
+            documentContents: 'Test Petitioner, Petitioner',
+            documentTitle: 'Order',
+            filingDate: '2019-03-01T05:00:00.000Z',
+            judge: 'Judge Buch',
+          },
+          {
+            caseCaption: 'Test Petitioner, Petitioner',
+            docketNumber: '102-19',
+            docketNumberSuffix: 'P',
+            documentContents: 'Test Petitioner, Petitioner',
+            documentTitle: 'Order for Stuff',
+            filingDate: '2019-03-01T05:00:00.000Z',
+            judge: 'Judge Cohen',
+          },
+        ],
+      },
+    });
+
+    expect(result.formattedSearchResults).toMatchObject([
+      {
+        caseTitle: 'Test Petitioner',
+        docketNumber: '101-19',
+        docketNumberSuffix: 'Z',
+        docketNumberWithSuffix: '101-19Z',
+        documentContents: 'Test Petitioner, Petitioner',
+        documentTitle: 'Order',
+        filingDate: '2019-03-01T05:00:00.000Z',
+        formattedFiledDate: '03/01/19',
+        judge: 'Judge Buch',
+      },
+      {
+        caseTitle: 'Test Petitioner',
+        docketNumber: '102-19',
+        docketNumberSuffix: 'P',
+        docketNumberWithSuffix: '102-19P',
+        documentContents: 'Test Petitioner, Petitioner',
+        documentTitle: 'Order for Stuff',
+        filingDate: '2019-03-01T05:00:00.000Z',
+        formattedFiledDate: '03/01/19',
+        judge: 'Judge Cohen',
+      },
     ]);
   });
 });

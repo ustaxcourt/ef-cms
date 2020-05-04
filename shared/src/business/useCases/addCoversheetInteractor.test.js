@@ -7,7 +7,6 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { getChromiumBrowser } = require('../utilities/getChromiumBrowser');
-const { PDFDocument } = require('pdf-lib');
 
 describe('addCoversheetInteractor', () => {
   const testAssetsPath = path.join(__dirname, '../../../test-assets/');
@@ -80,7 +79,7 @@ describe('addCoversheetInteractor', () => {
     });
 
     applicationContext.getChromiumBrowser.mockImplementation(
-      async () => await getChromiumBrowser(),
+      getChromiumBrowser,
     );
   });
 
@@ -95,15 +94,11 @@ describe('addCoversheetInteractor', () => {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
-    const newPdfData = await addCoversheetInteractor(params);
-
-    const newPdfDoc = await PDFDocument.load(newPdfData);
-    const newPdfDocPages = newPdfDoc.getPages();
+    await addCoversheetInteractor(params);
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-    expect(newPdfDocPages.length).toEqual(2);
     expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
   });
 
@@ -126,14 +121,11 @@ describe('addCoversheetInteractor', () => {
       documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
     };
 
-    const newPdfData = await addCoversheetInteractor(params);
+    await addCoversheetInteractor(params);
 
-    const newPdfDoc = await PDFDocument.load(newPdfData);
-    const newPdfDocPages = newPdfDoc.getPages();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-    expect(newPdfDocPages.length).toEqual(2);
   });
 
   describe('coversheet data generator', () => {
@@ -607,7 +599,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.petitionerLabel).toEqual('Petitioners');
+      expect(result.caseCaptionExtension).toEqual('Petitioners');
     });
 
     it('generates cover sheet data appropriate for a single petitioner', async () => {
@@ -630,10 +622,10 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.petitionerLabel).toEqual('Petitioner');
+      expect(result.caseCaptionExtension).toEqual('Petitioner');
     });
 
-    it('generates empty string for caseCaptionPostfix if the caseCaption is not in the proper format', async () => {
+    it('generates empty string for caseCaptionExtension if the caseCaption is not in the proper format', async () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -653,7 +645,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.petitionerLabel).toEqual('');
+      expect(result.caseCaptionExtension).toEqual('');
     });
   });
 });

@@ -65,12 +65,14 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     {
       ...omit(document, 'filedBy'),
       attachments: documentMeta.attachments,
+      date: documentMeta.date,
       documentTitle: documentMeta.generatedDocumentTitle,
       documentType: documentMeta.documentType,
       eventCode: documentMeta.eventCode,
       filedBy: undefined,
       freeText: documentMeta.freeText,
       isFileAttached: true,
+      judge: documentMeta.judge,
       scenario: documentMeta.scenario,
       secondaryDate,
       serviceStamp: documentMeta.serviceStamp,
@@ -87,7 +89,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       caseId: caseId,
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
-      caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
+      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
       docketNumber: caseToUpdate.docketNumber,
       docketNumberSuffix: caseToUpdate.docketNumberSuffix,
       document: {

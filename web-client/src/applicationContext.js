@@ -5,25 +5,9 @@ import {
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
 
-import { AddIrsPractitioner } from '../../shared/src/business/entities/caseAssociation/AddIrsPractitioner';
-import { AddPrivatePractitionerFactory } from '../../shared/src/business/entities/caseAssociation/AddPrivatePractitionerFactory';
 import { Case } from '../../shared/src/business/entities/cases/Case';
-import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
-import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
-import { CaseExternal } from '../../shared/src/business/entities/cases/CaseExternal';
-import { CaseExternalInformationFactory } from '../../shared/src/business/entities/cases/CaseExternalInformationFactory';
-import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
-import { CourtIssuedDocumentFactory } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentFactory';
-import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
-import { DocketRecord } from '../../shared/src/business/entities/DocketRecord';
 import { Document } from '../../shared/src/business/entities/Document';
-import { EditPrivatePractitionerFactory } from '../../shared/src/business/entities/caseAssociation/EditPrivatePractitionerFactory';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
-import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
-import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
-import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
-import { OrderSearch } from '../../shared/src/business/entities/orders/OrderSearch';
 import {
   compareISODateStrings,
   compareStrings,
@@ -31,17 +15,12 @@ import {
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
+import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getUserCaseNoteForCasesInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteForCasesProxy';
 import { validateDocketRecordInteractor } from '../../shared/src/business/useCases/validateDocketRecordInteractor';
 const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
-import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
-import { NewPractitioner } from '../../shared/src/business/entities/NewPractitioner';
-import { NewTrialSession } from '../../shared/src/business/entities/trialSessions/NewTrialSession';
-import { Note } from '../../shared/src/business/entities/notes/Note';
-import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
-import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { User } from '../../shared/src/business/entities/User';
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
@@ -53,6 +32,7 @@ import { associatePrivatePractitionerWithCaseInteractor } from '../../shared/src
 import { authorizeCodeInteractor } from '../../shared/src/business/useCases/authorizeCodeInteractor';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
+import { canConsolidateInteractor } from '../../shared/src/business/useCases/caseConsolidation/canConsolidateInteractor';
 import { canSetTrialSessionAsCalendaredInteractor } from '../../shared/src/business/useCases/trialSessions/canSetTrialSessionAsCalendaredInteractor';
 import { caseAdvancedSearchInteractor } from '../../shared/src/proxies/caseAdvancedSearchProxy';
 import {
@@ -96,6 +76,7 @@ import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEm
 import {
   formatCase,
   formatCaseDeadlines,
+  formatDocketNumberWithSuffix,
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
@@ -133,6 +114,8 @@ import { getIrsPractitionersBySearchKeyInteractor } from '../../shared/src/proxi
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
+import { getPdfFromUrl } from '../../shared/src/persistence/s3/getPdfFromUrl';
+import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/document/getPdfFromUrlInteractor';
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
 import { getPractitionersByNameInteractor } from '../../shared/src/proxies/practitioners/getPractitionersByNameProxy';
 import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getPrivatePractitionersBySearchKeyProxy';
@@ -149,6 +132,7 @@ import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getU
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForPreviewInteractor } from '../../shared/src/business/useCases/loadPDFForPreviewInteractor';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
+import { orderAdvancedSearchInteractor } from '../../shared/src/proxies/orderAdvancedSearchProxy';
 import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCaseProxy';
 import { refreshTokenInteractor } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { removeCaseFromTrialInteractor } from '../../shared/src/proxies/trialSessions/removeCaseFromTrialProxy';
@@ -260,6 +244,7 @@ const allUseCases = {
   authorizeCodeInteractor,
   batchDownloadTrialSessionInteractor,
   blockCaseFromTrialInteractor,
+  canConsolidateInteractor,
   canSetTrialSessionAsCalendaredInteractor,
   caseAdvancedSearchInteractor,
   completeDocketEntryQCInteractor,
@@ -316,6 +301,7 @@ const allUseCases = {
   getItemInteractor,
   getJudgeForUserChambersInteractor,
   getNotificationsInteractor,
+  getPdfFromUrlInteractor,
   getPractitionerByBarNumberInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
@@ -332,6 +318,7 @@ const allUseCases = {
   getWorkItemInteractor,
   loadPDFForPreviewInteractor,
   loadPDFForSigningInteractor,
+  orderAdvancedSearchInteractor,
   prioritizeCaseInteractor,
   refreshTokenInteractor,
   removeCaseFromTrialInteractor,
@@ -416,7 +403,7 @@ const applicationContext = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000';
   },
-  getCaseCaptionNames: Case.getCaseCaptionNames,
+  getCaseTitle: Case.getCaseTitle,
   getChiefJudgeNameForSigning: () => chiefJudgeNameForSigning,
   getClerkOfCourtNameForSigning: () => clerkOfCourtNameForSigning,
   getCognitoClientId: () => {
@@ -440,33 +427,6 @@ const applicationContext = {
     return getUserPermissions(user);
   },
   getCurrentUserToken,
-  getEntityConstructors: () => ({
-    AddIrsPractitioner,
-    AddPrivatePractitionerFactory,
-    Case,
-    CaseAssociationRequestFactory,
-    CaseDeadline,
-    CaseExternal,
-    CaseExternalInformationFactory,
-    CaseInternal,
-    ContactFactory,
-    CourtIssuedDocumentFactory,
-    DocketEntryFactory,
-    DocketRecord,
-    Document,
-    EditPrivatePractitionerFactory,
-    ExternalDocumentFactory,
-    ExternalDocumentInformationFactory,
-    ForwardMessage,
-    InitialWorkItemMessage,
-    NewPractitioner,
-    NewTrialSession,
-    Note,
-    OrderSearch,
-    OrderWithoutBody,
-    TrialSession,
-    User,
-  }),
   getError: e => {
     return ErrorFactory.getError(e);
   },
@@ -485,6 +445,7 @@ const applicationContext = {
     return {
       getDocument,
       getItem,
+      getPdfFromUrl,
       removeItem,
       setItem,
       uploadDocumentFromClient,
@@ -525,15 +486,19 @@ const applicationContext = {
       formatCaseDeadlines,
       formatCaseForTrialSession,
       formatDateString,
+      formatDocketNumberWithSuffix,
       formatDocument,
       formatJudgeName,
       formatNow,
       formattedTrialSessionDetails,
+      getCaseCaption: Case.getCaseCaption,
       getFilingsAndProceedings,
       getFormattedCaseDetail,
+      getJudgeLastName,
       getTrialSessionStatus,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
+      isPendingOnCreation: Document.isPendingOnCreation,
       isStringISOFormatted,
       isValidDateString,
       prepareDateFromString,

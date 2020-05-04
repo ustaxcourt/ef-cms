@@ -1,5 +1,4 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('./cases/Case');
 const { CaseDeadline } = require('./CaseDeadline');
 
 const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
@@ -19,10 +18,8 @@ describe('CaseDeadline', () => {
       const caseDeadline = new CaseDeadline({}, { applicationContext });
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({
         caseId: VALIDATION_ERROR_MESSAGES.caseId,
-        caseTitle: VALIDATION_ERROR_MESSAGES.caseTitle,
         deadlineDate: VALIDATION_ERROR_MESSAGES.deadlineDate,
         description: VALIDATION_ERROR_MESSAGES.description[1],
-        docketNumber: VALIDATION_ERROR_MESSAGES.docketNumber,
       });
     });
 
@@ -30,11 +27,8 @@ describe('CaseDeadline', () => {
       const caseDeadline = new CaseDeadline(
         {
           caseId: UUID,
-          caseTitle: 'My Case Title',
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: 'One small step',
-          docketNumber: '101-21',
-          docketNumberSuffix: 'L',
         },
         { applicationContext },
       );
@@ -45,7 +39,6 @@ describe('CaseDeadline', () => {
       const caseDeadline = new CaseDeadline(
         {
           caseId: UUID,
-          caseTitle: 'My Case Title',
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: `I got the horses in the back
 Horse tack is attached
@@ -55,45 +48,12 @@ Ridin' on a horse, ha
 You can whip your Porsche
 I been in the valley
 You ain't been up off that porch, now`,
-          docketNumber: '101-21',
         },
         { applicationContext },
       );
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({
         description: VALIDATION_ERROR_MESSAGES.description[0].message,
       });
-    });
-
-    it('should use associated judge if one is provided', () => {
-      const mockJudgeName = 'Dumbledore';
-      const caseDeadlineWithJudge = new CaseDeadline(
-        {
-          associatedJudge: mockJudgeName,
-          caseId: UUID,
-          caseTitle: 'My Case Title',
-          deadlineDate: '2019-03-01T21:42:29.073Z',
-          description: 'One small step',
-        },
-        { applicationContext },
-      );
-
-      expect(caseDeadlineWithJudge.associatedJudge).toEqual(mockJudgeName);
-    });
-
-    it('should use default judge if one is not provided', () => {
-      const caseDeadlineWithoutJudge = new CaseDeadline(
-        {
-          caseId: UUID,
-          caseTitle: 'My Case Title',
-          deadlineDate: '2019-03-01T21:42:29.073Z',
-          description: 'One small step',
-        },
-        { applicationContext },
-      );
-
-      expect(caseDeadlineWithoutJudge.associatedJudge).toEqual(
-        Case.CHIEF_JUDGE,
-      );
     });
   });
 });

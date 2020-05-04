@@ -53,6 +53,26 @@ const createISODateString = (dateString, inputFormat) => {
   return result.toISOString();
 };
 
+const createEndOfDayISO = ({ day, month, year }) => {
+  const composedDate = `${year}-${month}-${day}T23:59:59.999`;
+  const composedFormat = 'YYYY-M-DTHH:mm:ss.SSS';
+  const isValid = isValidDateString(composedDate, [composedFormat]);
+  if (!isValid) {
+    return false;
+  }
+  return prepareDateFromString(composedDate, composedFormat).toISOString();
+};
+
+const createStartOfDayISO = ({ day, month, year }) => {
+  const composedDate = `${year}-${month}-${day}T00:00:00.000`;
+  const composedFormat = 'YYYY-M-DTHH:mm:ss.SSS';
+  const isValid = isValidDateString(composedDate, [composedFormat]);
+  if (!isValid) {
+    return false;
+  }
+  return prepareDateFromString(composedDate, composedFormat).toISOString();
+};
+
 /**
  * @param {object} options the date options containing year, month, day
  * @returns {string} a formatted ISO date string
@@ -183,8 +203,10 @@ module.exports = {
   calculateDifferenceInDays,
   calculateISODate,
   calendarDatesCompared,
+  createEndOfDayISO,
   createISODateString,
   createISODateStringFromObject,
+  createStartOfDayISO,
   dateStringsCompared,
   deconstructDate,
   formatDateString,

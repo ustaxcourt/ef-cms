@@ -21,26 +21,28 @@ export const createOrderAction = async ({ applicationContext, get }) => {
     /\t/g,
     '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
   );
-  const caseCaption = get(state.caseDetail.caseCaption) || '';
+  const caseDetail = get(state.caseDetail);
+  const caseCaption = caseDetail.caseCaption || '';
   const isOrderEvent = get(state.form.eventCode) == 'NOT'; // 'NOT' === 'notice'
-  let caseCaptionNames = applicationContext.getCaseCaptionNames(caseCaption);
-  let caseCaptionPostfix = '';
-  if (caseCaptionNames !== caseCaption) {
-    caseCaptionNames += ', ';
-    caseCaptionPostfix = caseCaption.replace(caseCaptionNames, '');
+  let caseTitle = applicationContext.getCaseTitle(caseCaption);
+  let caseCaptionExtension = '';
+  if (caseTitle !== caseCaption) {
+    caseTitle += ', ';
+    caseCaptionExtension = caseCaption.replace(caseTitle, '');
   }
   let signatureForNotice = '';
   if (isOrderEvent) {
     signatureForNotice = `<p>${applicationContext.getClerkOfCourtNameForSigning()}<br />Clerk of the Court</p>`;
   }
-  const docketNumberWithSuffix = get(
-    state.formattedCaseDetail.docketNumberWithSuffix,
-  );
+
+  const docketNumberWithSuffix = applicationContext
+    .getUtilities()
+    .formatDocketNumberWithSuffix(caseDetail);
 
   const doc = replaceWithID(
     {
-      '#caseCaptionNames': caseCaptionNames,
-      '#caseCaptionPostfix': caseCaptionPostfix,
+      '#caseCaptionExtension': caseCaptionExtension,
+      '#caseTitle': caseTitle,
       '#docketNumber': docketNumberWithSuffix,
       '#orderBody': richText,
       '#orderTitleHeader': documentTitle,

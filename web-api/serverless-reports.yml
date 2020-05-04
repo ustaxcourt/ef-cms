@@ -16,7 +16,8 @@ custom:
   #enabled: true
 
   jetpack:
-    mode: yarn
+    mode: npm
+    lockfile: ../package-lock.json
 
   prune:
     automatic: true
@@ -195,7 +196,7 @@ functions:
     handler: web-api/${self:provider.dir}/reportsHandlers.fetchPendingItemsLambda
     events:
       - http:
-          path: pending-items
+          path: /pending-items
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -211,7 +212,7 @@ functions:
     timeout: 900
     events:
       - http:
-          path: pending-report
+          path: /pending-report
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -227,7 +228,7 @@ functions:
     timeout: 900
     events:
       - http:
-          path: trial-calendar-pdf
+          path: /trial-calendar-pdf
           method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

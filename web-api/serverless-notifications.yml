@@ -13,7 +13,8 @@ plugins:
 
 custom:
   jetpack:
-    mode: yarn
+    mode: npm
+    lockfile: ../package-lock.json
 
   prune:
     automatic: true
@@ -113,45 +114,18 @@ package:
 
   excludeDevDependencies: true
 
-resources:
-  Resources:
-    #####
-    # This Authorizer is used for validating the JWT token before invoking the lambda
-    #####
-    # ApiGatewayAuthorizer:
-    #   Type: AWS::ApiGateway::Authorizer
-    #   Properties:
-    #     Name: CognitoUserPool
-    #     Type: COGNITO_USER_POOLS
-    #     IdentitySource: method.request.header.Authorization
-    #     RestApiId:
-    #       Ref: ApiGatewayRestApi
-    #     ProviderARNs:
-    #       - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
-    #####
-    # Begin Stage for API Gateway Logging
-    #####
-    # ApiGatewayStage:
-    #   Type: AWS::ApiGateway::Stage
-    #   Properties:
-    #     DeploymentId:
-    #       Ref: __deployment__
-    #     RestApiId:
-    #       Ref: ApiGatewayRestApi
-    #     StageName: ${opt:stage}
-    #     MethodSettings:
-    #       - DataTraceEnabled: true
-    #         HttpMethod: '*'
-    #         LoggingLevel: INFO
-    #         ResourcePath: '/*'
-    #         MetricsEnabled: true
-
 functions:
   connectHandler:
     handler: web-api/${self:provider.dir}/notificationHandlers.connectLambda
     events:
       - websocket:
           route: $connect
+          authorizer:
+            arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
+            managedExternally: true
+            identitySource:
+              - route.request.querystring.token
+            type: request
 
   disconnectHandler:
     handler: web-api/${self:provider.dir}/notificationHandlers.disconnectLambda

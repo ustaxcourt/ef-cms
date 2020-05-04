@@ -259,19 +259,19 @@ describe('formattedTrialSessionDetails', () => {
     expect(result.formattedEligibleCases[0].docketNumberWithSuffix).toEqual(
       '101-18',
     );
-    expect(result.formattedEligibleCases[0].caseCaptionNames).toEqual(
+    expect(result.formattedEligibleCases[0].caseTitle).toEqual(
       'Test Petitioner',
     );
     expect(result.formattedEligibleCases[1].docketNumberWithSuffix).toEqual(
       '101-18W',
     );
-    expect(result.formattedEligibleCases[1].caseCaptionNames).toEqual(
+    expect(result.formattedEligibleCases[1].caseTitle).toEqual(
       'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons & Someone Else',
     );
     expect(result.formattedEligibleCases[2].docketNumberWithSuffix).toEqual(
       '103-19',
     );
-    expect(result.formattedEligibleCases[2].caseCaptionNames).toEqual('');
+    expect(result.formattedEligibleCases[2].caseTitle).toEqual('');
   });
 
   it('formats docket numbers with suffixes and case caption names without postfix on calendared cases and splits them by open and closed cases', () => {
@@ -296,9 +296,9 @@ describe('formattedTrialSessionDetails', () => {
     });
     expect(result.allCases.length).toEqual(2);
     expect(result.allCases[0].docketNumberWithSuffix).toEqual('101-18');
-    expect(result.allCases[0].caseCaptionNames).toEqual('Test Petitioner');
+    expect(result.allCases[0].caseTitle).toEqual('Test Petitioner');
     expect(result.allCases[1].docketNumberWithSuffix).toEqual('101-18W');
-    expect(result.allCases[1].caseCaptionNames).toEqual(
+    expect(result.allCases[1].caseTitle).toEqual(
       'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons & Someone Else',
     );
 

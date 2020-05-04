@@ -1,10 +1,12 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
+import { ContactFactory } from '../../../shared/src/business/entities/contacts/ContactFactory';
 
-const {
-  ContactFactory,
-} = require('../../../shared/src/business/entities/contacts/ContactFactory');
-
-export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
+export const petitionsClerkCreatesNewCaseAndSavesForLater = (
+  test,
+  fakeFile,
+  trialLocation = 'Birmingham, Alabama',
+) => {
   const primaryContactName = {
     key: 'contactPrimary.name',
     value: 'Shawn Johnson',
@@ -128,11 +130,27 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       key: 'contactSecondary.inCareOf',
       value: 'Nora Stanton Barney',
     },
+    {
+      key: 'petitionPaymentStatus',
+      value: Case.PAYMENT_STATUS.WAIVED,
+    },
+    {
+      key: 'paymentDateWaivedDay',
+      value: '05',
+    },
+    {
+      key: 'paymentDateWaivedMonth',
+      value: '05',
+    },
+    {
+      key: 'paymentDateWaivedYear',
+      value: '2005',
+    },
   ];
 
   it('should default to parties tab when creating a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('StartCaseInternal');
     expect(test.getState('currentViewMetadata.startCaseInternal.tab')).toBe(
@@ -140,9 +158,24 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     );
   });
 
+  it('should default to Regular procedureType when creating a new case', async () => {
+    expect(test.getState('form.procedureType')).toEqual(
+      CaseInternal.DEFAULT_PROCEDURE_TYPE,
+    );
+  });
+
   it('should generate case caption from primary and secondary contact information', async () => {
     for (const item of formValues) {
-      await test.runSequence('updateFormValueSequence', item);
+      if (item.key === 'partyType') {
+        await test.runSequence(
+          'updateStartCaseInternalPartyTypeSequence',
+          item,
+        );
+      } else if (item.key === 'petitionPaymentStatus') {
+        await test.runSequence('updatePetitionPaymentFormValueSequence', item);
+      } else {
+        await test.runSequence('updateFormValueSequence', item);
+      }
     }
 
     await test.runSequence('updateFormValueAndSecondaryContactInfoSequence', {
@@ -150,7 +183,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: true,
     });
     await test.runSequence(
-      'updateFormValueAndInternalCaseCaptionSequence',
+      'updateFormValueAndCaseCaptionSequence',
       primaryContactName,
     );
     await test.runSequence('validatePetitionFromPaperSequence');
@@ -182,7 +215,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
   });
 
   it('should regenerate case caption when primary contact name is changed', async () => {
-    await test.runSequence('updateFormValueAndInternalCaseCaptionSequence', {
+    await test.runSequence('updateFormValueAndCaseCaptionSequence', {
       key: 'contactPrimary.name',
       value: 'Ada Lovelace',
     });
@@ -215,7 +248,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
   });
 
   it('should navigate to review screen when case information has been validated', async () => {
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
   });
@@ -241,7 +274,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: 'One fish, two fish',
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
     expect(test.getState('form.caseCaption')).toBe('One fish, two fish');
@@ -264,7 +297,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: Case.CASE_TYPES_MAP.interestAbatement,
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
     expect(test.getState('form.caseType')).toBe(
@@ -283,7 +316,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: fakeFile,
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
     expect(test.getState('form.stinFile').name).toBe('differentFakeFile.pdf');
@@ -343,7 +376,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: 1,
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
     expect(test.getState('form.petitionFile')).toBe(fakeFile);
   });
@@ -374,7 +407,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: 1,
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
     expect(test.getState('form.stinFile')).toBe(fakeFile);
   });
@@ -405,7 +438,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: 1,
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
     expect(test.getState('form.requestForPlaceOfTrialFile')).toBe(fakeFile);
@@ -432,7 +465,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: 1,
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
     expect(test.getState('form.odsFile')).toBe(fakeFile);
@@ -459,7 +492,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: 1,
     });
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
     expect(test.getState('form.apwFile')).toBe(fakeFile);
@@ -520,12 +553,12 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('form.orderForRatification')).toBe(true);
   });
 
-  it('should contain an order for requested trial location', async () => {
+  it('should contain an order designating place of trial', async () => {
     await test.runSequence('updateFormValueSequence', {
-      key: 'orderForRequestedTrialLocation',
+      key: 'orderDesignatingPlaceOfTrial',
       value: true,
     });
-    expect(test.getState('form.orderForRequestedTrialLocation')).toBe(true);
+    expect(test.getState('form.orderDesignatingPlaceOfTrial')).toBe(true);
   });
 
   it('should contain an order to show cause', async () => {
@@ -537,7 +570,10 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
   });
 
   it('should navigate to Document QC inbox page when saving an in progress case for later', async () => {
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('reviewPetitionFromPaperSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
+
     expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
 
     await test.runSequence('saveInternalCaseForLaterSequence');

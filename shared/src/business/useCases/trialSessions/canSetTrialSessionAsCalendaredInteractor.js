@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -22,10 +23,12 @@ exports.canSetTrialSessionAsCalendaredInteractor = ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { TrialSession } = applicationContext.getEntityConstructors();
   const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
   });
 
-  return trialSessionEntity.canSetAsCalendared();
+  const canSetAsCalendared = trialSessionEntity.canSetAsCalendared();
+  const emptyFields = trialSessionEntity.getEmptyFields();
+
+  return { canSetAsCalendared, emptyFields };
 };

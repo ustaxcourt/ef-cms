@@ -18,7 +18,7 @@ export const removeSignatureFromOrderSequence = showProgressSequenceDecorator([
     success: [
       submitCourtIssuedOrderAction,
       set(state.alertSuccess, {
-        message: 'Your signature has been removed',
+        message: 'Signature removed.',
         title: '',
       }),
       setCaseAction,

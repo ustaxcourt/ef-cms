@@ -50,13 +50,6 @@ This is pointing to our own fork which includes the functionality required to ho
 These libaries are locked to version 24.x because upgrading them causes Sonarcloud to report 0% coverage.
 
 
-### aws-sdk version 2.642.0
-
-This library is locked to version 2.642.x because upgrading to 2.643.x causes this error in cypress smoke tests in post-deploy:
-
-`Error: Cannot find module './dist-tools/transform.js' from '/home/app/node_modules/aws-sdk'`
-
-
 ### Issues with terraform deploy - first time
 
 ```
@@ -80,7 +73,7 @@ If this occurs, rerun the build.
 
 ```
   Serverless Error ---------------------------------------
- 
+
   ServerlessError: An error occurred: CasePublicSearchLambdaFunction - Code storage limit exceeded. (Service: AWSLambdaInternal; Status Code: 400; Error Code: CodeStorageExceededException
 ```
 
@@ -110,3 +103,12 @@ After this successfully runs, you can navigate to the project root (via `cd ../.
 - `./web-api/run-serverless-clamav.sh <env> <region>`, where `<env>` would be your environment (dev, stg, prod, etc.) and `<region>` would be your AWS region (us-east-1, us-west-1, etc.)
 
 To revert your `serverless-prune-plugin`, just change `before` back to `after` or run `npm i` again.
+
+
+### Elasticsearch total field limit
+
+`[illegal_argument_exception] Limit of total fields [4000] in index [efcms] has been exceeded`
+
+This error often occurs when we are indexing too many dynamic keys or nested objects with Elasticsearch and reach our total field limit.
+
+To filter data from indexing, add fields or keys to the filtering functions in `processStreamRecordsInteractor.js`.

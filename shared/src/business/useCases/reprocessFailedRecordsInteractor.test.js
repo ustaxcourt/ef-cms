@@ -4,6 +4,8 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('reprocessFailedRecordsInteractor', () => {
+  const notifySpy = jest.fn();
+
   beforeEach(() => {
     applicationContext.environment.stage = 'local';
 
@@ -24,6 +26,104 @@ describe('reprocessFailedRecordsInteractor', () => {
       pk: 'abc|123',
       sk: 'abc',
     });
+
+    applicationContext
+      .getPersistenceGateway()
+      .indexRecord.mockReturnValue(null);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getIndexMappingLimit.mockReturnValue(20);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getIndexMappingFields.mockReturnValue({
+        field1: {
+          properties: {
+            S: {
+              type: 'text',
+            },
+          },
+        },
+        field2: {
+          properties: {
+            S: {
+              type: 'text',
+            },
+          },
+        },
+        field3: {
+          properties: {
+            S: {
+              type: 'text',
+            },
+          },
+        },
+        field4: {
+          properties: {
+            S: {
+              type: 'text',
+            },
+          },
+        },
+        field5: {
+          properties: {
+            S: {
+              type: 'text',
+            },
+          },
+        },
+      });
+    applicationContext.initHoneybadger.mockReturnValue({ notify: notifySpy });
+  });
+
+  it('checks the current mapping count and notifies if it is at 50% of the limit', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getIndexMappingLimit.mockReturnValue(10);
+
+    await reprocessFailedRecordsInteractor({
+      applicationContext,
+    });
+
+    expect(notifySpy).toHaveBeenCalled();
+    expect(notifySpy.mock.calls[0][0]).toContain('50% threshold');
+  });
+
+  it('checks the current mapping count and notifies if it is at 75% of the limit', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getIndexMappingLimit.mockReturnValue(6);
+
+    await reprocessFailedRecordsInteractor({
+      applicationContext,
+    });
+
+    expect(notifySpy).toHaveBeenCalled();
+    expect(notifySpy.mock.calls[0][0]).toContain('75% threshold');
+  });
+
+  it('checks the current mapping count and notifies for fields over 50 matches', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getIndexMappingFields.mockReturnValue({
+        field1: {
+          properties: (() => {
+            const fiftyOneProperties = {};
+            for (let i = 0; i < 51; i++) {
+              fiftyOneProperties[`prop_${i}`] = { type: 'text' };
+            }
+            return fiftyOneProperties;
+          })(),
+        },
+      });
+
+    await reprocessFailedRecordsInteractor({
+      applicationContext,
+    });
+
+    expect(notifySpy).toHaveBeenCalled();
+    expect(notifySpy.mock.calls[0][0]).toContain('greater than 50 indexes');
   });
 
   it('does not call index function if there are no records to process', async () => {
@@ -35,7 +135,9 @@ describe('reprocessFailedRecordsInteractor', () => {
       applicationContext,
     });
 
-    expect(applicationContext.getSearchClient().index).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().indexRecord,
+    ).not.toHaveBeenCalled();
   });
 
   it('calls index function for a non-case record, then deletes the record', async () => {
@@ -43,12 +145,16 @@ describe('reprocessFailedRecordsInteractor', () => {
       applicationContext,
     });
 
-    expect(applicationContext.getSearchClient().index).toHaveBeenCalled();
     expect(
-      applicationContext.getSearchClient().index.mock.calls[0][0],
+      applicationContext.getPersistenceGateway().indexRecord,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().indexRecord.mock.calls[0][0]
+        .fullRecord,
     ).toMatchObject({
-      body: { caseId: { S: '123' }, pk: { S: 'abc|123' }, sk: { S: 'abc' } },
-      id: 'abc|123_abc',
+      caseId: '123',
+      pk: 'abc|123',
+      sk: 'abc',
     });
     expect(
       applicationContext.getPersistenceGateway()
@@ -74,14 +180,14 @@ describe('reprocessFailedRecordsInteractor', () => {
       applicationContext,
     });
 
-    expect(applicationContext.getSearchClient().index).toHaveBeenCalled();
     expect(
-      applicationContext.getSearchClient().index.mock.calls[0][0],
+      applicationContext.getPersistenceGateway().indexRecord,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().indexRecord.mock.calls[0][0]
+        .fullRecord,
     ).toMatchObject({
-      body: {
-        caseId: { S: 'case|123' },
-      },
-      id: 'case|123_case|123',
+      caseId: 'case|123',
     });
     expect(
       applicationContext.getPersistenceGateway().getCaseByCaseId,
@@ -122,14 +228,14 @@ describe('reprocessFailedRecordsInteractor', () => {
       applicationContext,
     });
 
-    expect(applicationContext.getSearchClient().index).toHaveBeenCalled();
     expect(
-      applicationContext.getSearchClient().index.mock.calls[0][0],
+      applicationContext.getPersistenceGateway().indexRecord,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().indexRecord.mock.calls[0][0]
+        .fullRecord,
     ).toMatchObject({
-      body: {
-        caseId: { S: '123' },
-      },
-      id: 'case|123_case|123',
+      caseId: '123',
     });
     expect(
       applicationContext.getPersistenceGateway().getCaseByCaseId,
@@ -154,15 +260,19 @@ describe('reprocessFailedRecordsInteractor', () => {
   });
 
   it('catches an error with indexing and does not delete the record', async () => {
-    applicationContext.getSearchClient().index.mockImplementation(() => {
-      throw new Error('oh no');
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .indexRecord.mockImplementation(() => {
+        throw new Error('oh no');
+      });
 
     await reprocessFailedRecordsInteractor({
       applicationContext,
     });
 
-    expect(applicationContext.getSearchClient().index).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().indexRecord,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
         .deleteElasticsearchReindexRecord,

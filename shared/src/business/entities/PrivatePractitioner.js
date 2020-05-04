@@ -13,6 +13,7 @@ const { userDecorator, userValidation } = require('./User');
  */
 function PrivatePractitioner(rawUser) {
   userDecorator(this, rawUser);
+  this.entityName = 'PrivatePractitioner';
   this.representingPrimary = rawUser.representingPrimary;
   this.representingSecondary = rawUser.representingSecondary;
   this.serviceIndicator =
@@ -23,6 +24,7 @@ joiValidationDecorator(
   PrivatePractitioner,
   joi.object().keys({
     ...userValidation,
+    entityName: joi.string().valid('PrivatePractitioner').required(),
     representingPrimary: joi.boolean().optional(),
     representingSecondary: joi.boolean().optional(),
     serviceIndicator: joi
@@ -30,7 +32,6 @@ joiValidationDecorator(
       .valid(...Object.values(SERVICE_INDICATOR_TYPES))
       .required(),
   }),
-  undefined,
   {},
 );
 

@@ -68,9 +68,6 @@ describe('formattedCaseDetail', () => {
           irsSendDate: '2018-11-21T20:49:28.192Z',
           petitioners: [{ name: 'bob' }],
         },
-        constants: {
-          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-        },
         form: {},
       },
     });
@@ -735,7 +732,7 @@ describe('formattedCaseDetail', () => {
           validationErrors: {},
         },
       });
-      expect(result.caseName).toEqual('');
+      expect(result.caseTitle).toEqual('');
     });
 
     it("should remove ', Petitioner' from caseCaption", () => {
@@ -750,7 +747,7 @@ describe('formattedCaseDetail', () => {
           validationErrors: {},
         },
       });
-      expect(result.caseName).toEqual('Sisqo');
+      expect(result.caseTitle).toEqual('Sisqo');
     });
 
     it("should remove ', Petitioners' from caseCaption", () => {
@@ -765,7 +762,7 @@ describe('formattedCaseDetail', () => {
           validationErrors: {},
         },
       });
-      expect(result.caseName).toEqual('Sisqo and friends');
+      expect(result.caseTitle).toEqual('Sisqo and friends');
     });
 
     it("should remove ', Petitioner(s)' from caseCaption", () => {
@@ -780,7 +777,7 @@ describe('formattedCaseDetail', () => {
           validationErrors: {},
         },
       });
-      expect(result.caseName).toEqual("Sisqo's entourage,");
+      expect(result.caseTitle).toEqual("Sisqo's entourage,");
     });
   });
 

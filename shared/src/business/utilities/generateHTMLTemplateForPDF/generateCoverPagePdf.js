@@ -1,4 +1,5 @@
 const ustcLogoBufferBase64 = require('../../../../static/images/ustc_seal.png_');
+
 /**
  * generateCoverPagePdf
  *
@@ -73,15 +74,15 @@ exports.generateCoverPagePdf = async ({ applicationContext, content }) => {
 
       <div style="margin-top: 40px; font-size:${fontSizeCaption}px;">
         <div class="width-60 float-left">
-          ${content.caseCaptionPetitioner}
+          ${content.caseTitle}
           <br /><br />
           <div class="text-indent">
-            ${content.petitionerLabel}
+            ${content.caseCaptionExtension}
             <br /><br />
             v.
           </div>
           <br />
-          ${content.caseCaptionRespondent}
+          Commissioner of Internal Revenue,
           <br /><br />
           <div class="text-indent">
             Respondent

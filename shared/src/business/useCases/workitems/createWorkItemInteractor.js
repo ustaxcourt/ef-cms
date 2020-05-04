@@ -74,7 +74,7 @@ exports.createWorkItemInteractor = async ({
       caseId: caseId,
       caseIsInProgress: theCase.inProgress,
       caseStatus: theCase.status,
-      caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
+      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
       docketNumber: theCase.docketNumber,
       docketNumberSuffix: theCase.docketNumberSuffix,
       document: {

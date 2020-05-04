@@ -89,11 +89,6 @@ Scan.schema = joi.object().keys({
     .required(),
 });
 
-joiValidationDecorator(
-  Scan,
-  Scan.schema,
-  undefined,
-  Scan.VALIDATION_ERROR_MESSAGES,
-);
+joiValidationDecorator(Scan, Scan.schema, Scan.VALIDATION_ERROR_MESSAGES);
 
 module.exports = { Scan };

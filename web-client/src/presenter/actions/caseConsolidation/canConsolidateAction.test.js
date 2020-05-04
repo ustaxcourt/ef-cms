@@ -1,4 +1,4 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { canConsolidateAction } from './canConsolidateAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -6,27 +6,14 @@ import { runAction } from 'cerebral/test';
 describe('canConsolidateAction', () => {
   let yesStub;
   let noStub;
-  let consolidationStub;
 
   beforeAll(() => {
     yesStub = jest.fn();
     noStub = jest.fn();
-    consolidationStub = jest.fn();
 
     presenter.providers.path = { error: noStub, success: yesStub };
-    const currentEntityConstructors = applicationContextForClient.getEntityConstructors();
 
-    presenter.providers.applicationContext = {
-      ...applicationContextForClient,
-      getEntityConstructors: () => ({
-        ...currentEntityConstructors,
-        Case: () => {
-          return {
-            getConsolidationStatus: consolidationStub,
-          };
-        },
-      }),
-    };
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('should return false when no case is confirmed', async () => {
@@ -41,7 +28,7 @@ describe('canConsolidateAction', () => {
   });
 
   it('should return false when cases are not consolidatable', async () => {
-    consolidationStub.mockReturnValue({
+    applicationContext.getUseCases().canConsolidateInteractor.mockReturnValue({
       canConsolidate: false,
       reason: 'Something',
     });
@@ -61,10 +48,11 @@ describe('canConsolidateAction', () => {
   });
 
   it('should return yes when case is consolidatable', async () => {
-    consolidationStub.mockReturnValue({
+    applicationContext.getUseCases().canConsolidateInteractor.mockReturnValue({
       canConsolidate: true,
       reason: '',
     });
+
     await runAction(canConsolidateAction, {
       modules: {
         presenter,

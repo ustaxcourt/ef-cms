@@ -1,7 +1,7 @@
 [
   {
     "procedureType": "Small",
-    "initialTitle": "Samson Workman, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Samson Workman, Petitioner",
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Deficiency",
@@ -31,7 +31,6 @@
     "hasIrsNotice": false,
     "initialDocketNumberSuffix": "S",
     "docketNumberSuffix": "S",
-    "caseTitle": "Samson Workman, Petitioner v. Commissioner of Internal Revenue, Respondent",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -483,6 +482,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2019-08-14T20:35:52.915Z",
     "workItems": [],
     "pending": false,
@@ -498,6 +498,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-08-14T20:35:52.915Z",
     "workItems": [
       {
@@ -552,6 +553,7 @@
     "attachments": true,
     "serviceDate": null,
     "documentType": "Simultaneous Answering Brief",
+    "entityName": "Document",
     "filingDate": "2020-03-06T20:04:07.354Z",
     "partyPrimary": true,
     "pending": false,
@@ -638,6 +640,7 @@
   },
   {
     "documentType": "Answer",
+    "entityName": "Document",
     "filingDate": "2019-08-14T20:35:52.915Z",
     "workItems": [
       {

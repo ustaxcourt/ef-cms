@@ -7,6 +7,7 @@ const {
 const {
   generateHTMLTemplateForPDF,
 } = require('../../utilities/generateHTMLTemplateForPDF');
+const { Case } = require('../../entities/cases/Case');
 
 /**
  * HTML template generator for a Standing Pretrial Order
@@ -20,7 +21,7 @@ const generateStandingPretrialOrderTemplate = async ({
   applicationContext,
   content,
 }) => {
-  const { caption, docketNumberWithSuffix, trialInfo } = content;
+  const { caseCaption, docketNumberWithSuffix, trialInfo } = content;
 
   const pug = applicationContext.getPug();
 
@@ -34,9 +35,17 @@ const generateStandingPretrialOrderTemplate = async ({
   );
   trialInfo.startDate = formatDateString(trialInfo.startDate, 'MMDDYYYY');
 
+  let caseTitle = Case.getCaseTitle(caseCaption);
+  let caseCaptionExtension = '';
+  if (caseTitle !== caseCaption) {
+    caseTitle += ', ';
+    caseCaptionExtension = caseCaption.replace(caseTitle, '');
+  }
+
   const compiledFunction = pug.compile(template);
   const main = compiledFunction({
-    caption,
+    caseCaptionExtension,
+    caseTitle,
     docketNumberWithSuffix,
     footerDate,
     headerDate,
@@ -44,7 +53,7 @@ const generateStandingPretrialOrderTemplate = async ({
   });
 
   const templateContent = {
-    caption,
+    caseCaptionWithPostfix: `${caseCaption} ${Case.CASE_CAPTION_POSTFIX}`,
     docketNumberWithSuffix,
     main,
   };

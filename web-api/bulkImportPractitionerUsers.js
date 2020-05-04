@@ -17,13 +17,10 @@ const formatRecord = record => {
     }
   });
 
-  const nameArray = [
-    record.firstName,
-    record.middleName,
-    record.lastName,
-    record.suffix,
-  ].filter(item => item);
-  returnData.name = nameArray.join(' ');
+  returnData.firstName = record.firstName;
+  returnData.middleName = record.middleName;
+  returnData.lastName = record.lastName;
+  returnData.suffix = record.suffix;
 
   returnData.admissionsDate = createISODateString(
     record.unformattedAdmissionsDate,
@@ -31,8 +28,6 @@ const formatRecord = record => {
   );
 
   returnData.birthYear = parseInt(record.birthYear) || undefined;
-
-  returnData.isAdmitted = record.admissionsStatus === 'Active';
 
   if (record.isIrsEmployee === 'Y') {
     returnData.employer = 'IRS';
@@ -153,13 +148,13 @@ const formatRecord = record => {
           },
         );
         if (result.status === 200) {
-          console.log(`SUCCESS ${record.name} ${record.barNumber}`);
+          console.log(`SUCCESS ${record.barNumber}`);
         } else {
-          console.log(`ERROR ${record.name} ${record.barNumber}`);
+          console.log(`ERROR ${record.barNumber}`);
           console.log(result);
         }
       } catch (err) {
-        console.log(`ERROR ${record.name} ${record.barNumber}`);
+        console.log(`ERROR ${record.barNumber}`);
         console.log(err);
       }
     }

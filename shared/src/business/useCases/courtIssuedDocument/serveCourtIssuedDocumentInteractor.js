@@ -13,6 +13,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const {
+  saveFileAndGenerateUrl,
+} = require('../../useCaseHelper/saveFileAndGenerateUrl');
 const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
@@ -86,6 +89,13 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   if (!courtIssuedDocument) {
     throw new NotFoundError(`Document ${documentId} was not found.`);
   }
+
+  courtIssuedDocument.numberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({
+      applicationContext,
+      documentId,
+    });
 
   const docketEntry = caseEntity.getDocketRecordByDocumentId(documentId);
 
@@ -197,7 +207,6 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     servedParties,
   });
 
-  let paperServicePdfBuffer;
   if (servedParties.paper.length > 0) {
     const courtIssuedOrderDoc = await PDFDocument.load(newPdfData);
 
@@ -214,8 +223,11 @@ exports.serveCourtIssuedDocumentInteractor = async ({
       });
 
     const paperServicePdfData = await newPdfDoc.save();
-    paperServicePdfBuffer = Buffer.from(paperServicePdfData);
-  }
+    const { url } = await saveFileAndGenerateUrl({
+      applicationContext,
+      file: paperServicePdfData,
+    });
 
-  return paperServicePdfBuffer;
+    return { pdfUrl: url };
+  }
 };

@@ -13,6 +13,7 @@ export const Button = props => {
     iconSize = '1x',
     link,
     marginDirection = 'right',
+    overrideMargin = false,
     secondary,
     ...remainingProps
   } = props;
@@ -21,7 +22,9 @@ export const Button = props => {
 
   const classes = classNames(
     className,
-    `usa-button margin-${marginDirection}-205`,
+    'usa-button',
+    !overrideMargin && `margin-${marginDirection}-205`,
+    overrideMargin,
     icon && 'no-wrap',
     secondary && 'usa-button--outline',
     link && 'usa-button--unstyled ustc-button--unstyled',

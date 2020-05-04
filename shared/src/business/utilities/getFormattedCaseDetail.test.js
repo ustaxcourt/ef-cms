@@ -257,9 +257,7 @@ describe('formatCase', () => {
   it('should format the general properties of case details', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      caseCaption: 'Test Case Caption',
-      caseTitle:
-        'Test Case Caption, Petitioners v. Internal Revenue, Respondent',
+      caseCaption: 'Johnny Joe Jacobson, Petitioner',
       docketNumberSuffix: undefined,
       hasVerifiedIrsNotice: true,
       trialTime: 11,
@@ -274,7 +272,7 @@ describe('formatCase', () => {
       result.irsDateFormatted,
     );
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
-    expect(result.caseName).toEqual('Test Case Caption');
+    expect(result.caseTitle).toEqual('Johnny Joe Jacobson');
     expect(result.formattedPreferredTrialCity).toEqual('No location selected');
   });
 

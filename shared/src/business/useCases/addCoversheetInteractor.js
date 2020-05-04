@@ -1,9 +1,8 @@
-const { Case } = require('../entities/cases/Case');
-const { PDFDocument } = require('pdf-lib');
-
 const {
   generateCoverPagePdf,
 } = require('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
+const { Case } = require('../entities/cases/Case');
+const { PDFDocument } = require('pdf-lib');
 
 /**
  * a helper function which assembles the correct data to be used in the generation of a PDF
@@ -56,11 +55,11 @@ exports.generateCoverSheetData = ({
     '';
 
   const caseCaption = caseEntity.caseCaption || Case.getCaseCaption(caseEntity);
-  let caseCaptionNames = applicationContext.getCaseCaptionNames(caseCaption);
-  let caseCaptionPostfix = '';
-  if (caseCaptionNames !== caseCaption) {
-    caseCaptionNames += ', ';
-    caseCaptionPostfix = caseCaption.replace(caseCaptionNames, '');
+  let caseTitle = applicationContext.getCaseTitle(caseCaption);
+  let caseCaptionExtension = '';
+  if (caseTitle !== caseCaption) {
+    caseTitle += ', ';
+    caseCaptionExtension = caseCaption.replace(caseTitle, '');
   }
 
   let documentTitle =
@@ -73,8 +72,8 @@ exports.generateCoverSheetData = ({
     caseEntity.docketNumber + (caseEntity.docketNumberSuffix || '');
 
   const coverSheetData = {
-    caseCaptionPetitioner: caseCaptionNames,
-    caseCaptionRespondent: 'Commissioner of Internal Revenue',
+    caseCaptionExtension,
+    caseTitle,
     certificateOfService:
       documentEntity.certificateOfService === true
         ? 'Certificate of Service'
@@ -87,7 +86,6 @@ exports.generateCoverSheetData = ({
     documentTitle,
     electronicallyFiled: documentEntity.isPaper ? '' : 'Electronically Filed',
     mailingDate: documentEntity.mailingDate || '',
-    petitionerLabel: caseCaptionPostfix,
   };
   return coverSheetData;
 };
@@ -141,7 +139,6 @@ exports.addCoverToPdf = async ({
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the case id
  * @param {string} providers.documentId the document id
- * @returns {Uint8Array} the new pdf data
  */
 exports.addCoversheetInteractor = async ({
   applicationContext,
@@ -198,6 +195,4 @@ exports.addCoversheetInteractor = async ({
     document: newPdfData,
     documentId,
   });
-
-  return newPdfData;
 };

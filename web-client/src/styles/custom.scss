@@ -511,6 +511,10 @@ select[disabled] {
   color: color($theme-color-base);
 }
 
+.small-column {
+  width: 1%;
+}
+
 .icon-column {
   width: 40px;
 }
@@ -1005,6 +1009,13 @@ hr.lighter {
   .blue-container .usa-form-group:last-child,
   .blue-container .usa-fieldset:last-child {
     margin-bottom: 0;
+  }
+}
+
+#order-advanced {
+  .grid-container .usa-form-group:last-child,
+  .grid-container .usa-fieldset:last-child {
+    margin-bottom: 5px;
   }
 }
 

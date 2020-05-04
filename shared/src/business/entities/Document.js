@@ -23,7 +23,75 @@ Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
 Document.PETITION_DOCUMENT_TYPES = ['Petition'];
+Document.ORDER_DOCUMENT_TYPES = [
+  'O',
+  'OAJ',
+  'OAL',
+  'OAP',
+  'OAPF',
+  'OAR',
+  'OAS',
+  'OASL',
+  'OAW',
+  'OAX',
+  'OCA',
+  'OD',
+  'ODD',
+  'ODL',
+  'ODP',
+  'ODR',
+  'ODS',
+  'ODSL',
+  'ODW',
+  'ODX',
+  'OF',
+  'OFAB',
+  'OFFX',
+  'OFWD',
+  'OFX',
+  'OIP',
+  'OJR',
+  'OODS',
+  'OPFX',
+  'OPX',
+  'ORAP',
+  'OROP',
+  'OSC',
+  'OSCP',
+  'OST',
+  'OSUB',
+  'OAD',
+  'ODJ',
+];
 Document.validationName = 'Document';
+
+Document.SCENARIOS = [
+  'Standard',
+  'Nonstandard A',
+  'Nonstandard B',
+  'Nonstandard C',
+  'Nonstandard D',
+  'Nonstandard E',
+  'Nonstandard F',
+  'Nonstandard G',
+  'Nonstandard H',
+  'Type A',
+  'Type B',
+  'Type C',
+  'Type D',
+  'Type E',
+  'Type F',
+  'Type G',
+  'Type H',
+];
+
+Document.RELATIONSHIPS = [
+  'primaryDocument',
+  'primarySupportingDocument',
+  'secondaryDocument',
+  'secondarySupportingDocument',
+  'supportingDocument',
+];
 
 /**
  * constructor
@@ -36,6 +104,8 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
     throw new TypeError('applicationContext must be defined');
   }
 
+  this.entityName = 'Document';
+
   if (
     !filtered ||
     User.isInternalUser(applicationContext.getCurrentUser().role)
@@ -47,12 +117,14 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
         ? Document.isPendingOnCreation(rawDocument)
         : rawDocument.pending;
     this.previousDocument = rawDocument.previousDocument;
-    this.processingStatus = rawDocument.processingStatus || 'pending'; // TODO: restricted
+    this.processingStatus = rawDocument.processingStatus || 'pending';
     this.qcAt = rawDocument.qcAt;
     this.qcByUser = rawDocument.qcByUser;
     this.qcByUserId = rawDocument.qcByUserId;
     this.signedAt = rawDocument.signedAt;
     this.signedByUserId = rawDocument.signedByUserId;
+    this.signedJudgeName = rawDocument.signedJudgeName;
+    this.userId = rawDocument.userId;
     this.workItems = (rawDocument.workItems || []).map(
       workItem => new WorkItem(workItem, { applicationContext }),
     );
@@ -61,12 +133,14 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.additionalInfo = rawDocument.additionalInfo;
   this.additionalInfo2 = rawDocument.additionalInfo2;
   this.addToCoversheet = rawDocument.addToCoversheet;
-  this.archived = rawDocument.archived; // TODO: look into this
+  this.archived = rawDocument.archived;
   this.attachments = rawDocument.attachments;
+  this.documentContents = rawDocument.documentContents;
   this.caseId = rawDocument.caseId;
   this.certificateOfService = rawDocument.certificateOfService;
   this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
   this.createdAt = rawDocument.createdAt || createISODateString();
+  this.date = rawDocument.date;
   this.docketNumber = rawDocument.docketNumber;
   this.documentId = rawDocument.documentId;
   this.documentTitle = rawDocument.documentTitle;
@@ -88,18 +162,22 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.partySecondary = rawDocument.partySecondary; // TODO: add info about purpose
   this.privatePractitioners = rawDocument.privatePractitioners; // TODO: look into this
   this.receivedAt = rawDocument.receivedAt || createISODateString();
-  this.relationship = rawDocument.relationship; // TODO: look into this
-  this.scenario = rawDocument.scenario; // TODO: look into this
+  this.relationship = rawDocument.relationship;
+  this.scenario = rawDocument.scenario;
   this.secondaryDate = rawDocument.secondaryDate; // TODO: look into this
   this.secondaryDocument = rawDocument.secondaryDocument; // TODO: look into this
   this.servedAt = rawDocument.servedAt;
+  this.numberOfPages = rawDocument.numberOfPages;
   this.servedParties = rawDocument.servedParties;
   this.serviceDate = rawDocument.serviceDate;
   this.serviceStamp = rawDocument.serviceStamp;
   this.status = rawDocument.status; // TODO: look into this
   this.supportingDocument = rawDocument.supportingDocument;
   this.trialLocation = rawDocument.trialLocation; // TODO: look into this
-  this.userId = rawDocument.userId; // TODO: restricted
+
+  if (applicationContext.getCurrentUser().userId === rawDocument.userId) {
+    this.userId = rawDocument.userId;
+  }
 
   this.generateFiledBy(rawDocument);
 }
@@ -285,7 +363,12 @@ joiValidationDecorator(
     addToCoversheet: joi.boolean().optional(),
     additionalInfo: joi.string().optional(),
     additionalInfo2: joi.string().optional(),
-    archived: joi.boolean().optional(),
+    archived: joi
+      .boolean()
+      .optional()
+      .description(
+        'A document that was archived instead of added to the Docket Record.',
+      ),
     caseId: joi
       .string()
       .optional()
@@ -301,11 +384,20 @@ joiValidationDecorator(
       .iso()
       .required()
       .description('When the Document was added to the system.'),
+    date: joi
+      .date()
+      .iso()
+      .optional()
+      .allow(null)
+      .description(
+        'An optional date used when generating a fully concatenated document title.',
+      ),
     docketNumber: joi
       .string()
       .regex(DOCKET_NUMBER_MATCHER)
       .optional()
       .description('Docket Number of the associated Case in XXXXX-YY format.'),
+    documentContents: joi.string().optional(),
     documentId: joi
       .string()
       .uuid({
@@ -322,7 +414,8 @@ joiValidationDecorator(
       .valid(...Document.getDocumentTypes())
       .required()
       .description('The type of this document.'),
-    draftState: joi.object().optional(),
+    draftState: joi.object().allow(null).optional(),
+    entityName: joi.string().valid('Document').required(),
     eventCode: joi.string().optional(),
     filedBy: joi.string().allow('').optional(),
     filingDate: joi
@@ -347,6 +440,7 @@ joiValidationDecorator(
       .description(
         'A lodged document is awaiting action by the judge to enact or refuse.',
       ),
+    numberOfPages: joi.number().optional().allow(null),
     objections: joi.string().optional(),
     ordinalValue: joi.string().optional(),
     partyIrsPractitioner: joi.boolean().optional(),
@@ -360,8 +454,14 @@ joiValidationDecorator(
     qcByUser: joi.object().optional(),
     qcByUserId: joi.string().optional().allow(null),
     receivedAt: joi.date().iso().optional(),
-    relationship: joi.string().optional(),
-    scenario: joi.string().optional(),
+    relationship: joi
+      .string()
+      .valid(...Document.RELATIONSHIPS)
+      .optional(),
+    scenario: joi
+      .string()
+      .valid(...Document.SCENARIOS)
+      .optional(),
     secondaryDate: joi
       .date()
       .iso()
@@ -369,7 +469,7 @@ joiValidationDecorator(
       .description(
         'A secondary date associated with the document, typically related to time-restricted availability.',
       ),
-    // TODO: What's the difference between servedAt and serviceDate?
+    // TODO: What's the difference between servedAt and serviceDate? (certificate of service date)
     secondaryDocument: joi.object().optional(),
     servedAt: joi.date().iso().optional(),
     servedParties: joi.array().optional(),
@@ -377,6 +477,7 @@ joiValidationDecorator(
     serviceStamp: joi.string().optional(),
     signedAt: joi.date().iso().optional().allow(null),
     signedByUserId: joi.string().optional().allow(null),
+    signedJudgeName: joi.string().optional().allow(null),
     status: joi.string().valid('served').optional(),
     supportingDocument: joi.string().optional().allow(null),
     trialLocation: joi
@@ -390,9 +491,6 @@ joiValidationDecorator(
     userId: joi.string().required(),
     workItems: joi.array().optional(),
   }),
-  function () {
-    return WorkItem.validateCollection(this.workItems);
-  },
 );
 
 /**
@@ -414,6 +512,8 @@ Document.prototype.archive = function () {
 Document.prototype.setAsServed = function (servedParties = null) {
   this.status = 'served';
   this.servedAt = createISODateString();
+  this.draftState = null;
+
   if (servedParties) {
     this.servedParties = servedParties;
   }
@@ -469,10 +569,12 @@ Document.prototype.generateFiledBy = function (caseDetail, force = false) {
  * attaches a signedAt date to the document
  *
  * @param {string} signByUserId the user id of the user who signed the document
+ * @param {string} signedJudgeName the judge's signature for the document
  *
  */
-Document.prototype.setSigned = function (signByUserId) {
+Document.prototype.setSigned = function (signByUserId, signedJudgeName) {
   this.signedByUserId = signByUserId;
+  this.signedJudgeName = signedJudgeName;
   this.signedAt = createISODateString();
 };
 
@@ -488,6 +590,7 @@ Document.prototype.setQCed = function (user) {
 
 Document.prototype.unsignDocument = function () {
   this.signedAt = null;
+  this.signedJudgeName = null;
   this.signedByUserId = null;
 };
 

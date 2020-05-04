@@ -5,9 +5,13 @@ import React from 'react';
 
 export const PublicCaseDetailHeader = connect(
   {
+    CASE_CAPTION_POSTFIX: state.constants.CASE_CAPTION_POSTFIX,
     publicCaseDetailHeaderHelper: state.publicCaseDetailHeaderHelper,
   },
-  function PublicCaseDetailHeader({ publicCaseDetailHeaderHelper }) {
+  function PublicCaseDetailHeader({
+    CASE_CAPTION_POSTFIX,
+    publicCaseDetailHeaderHelper,
+  }) {
     return (
       <>
         {publicCaseDetailHeaderHelper.isCaseSealed && (
@@ -33,7 +37,10 @@ export const PublicCaseDetailHeader = connect(
                   </h1>
                   {!publicCaseDetailHeaderHelper.isCaseSealed && (
                     <p className="margin-top-1 margin-bottom-0" id="case-title">
-                      <span>{publicCaseDetailHeaderHelper.caseTitle}</span>
+                      <span>
+                        {publicCaseDetailHeaderHelper.caseCaption}{' '}
+                        {CASE_CAPTION_POSTFIX}
+                      </span>
                     </p>
                   )}
                 </div>

@@ -3,13 +3,11 @@
 ## Prerequisites
 - [Create an AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/).
 - [Install the AWS CLI on your local system](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) and [configure it to use your IAM credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
-- [Install Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) on your local system.
-- (e.g. `ef-cms.example.gov.`).
+- [Install Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) version 0.11 on your local system. (Version 0.12 will not work.)
 - Create a `CircleCI` user in [AWS Identity and Access Management](https://console.aws.amazon.com/iam/):
      - Create the IAM policy for Circle CI via the project Terraform scripts:
           - Make the intended domain name available on your local system, e.g. `export EFCMS_DOMAIN="ef-cms.example.gov"`
           - Create the policies on your local system: `cd iam/terraform/account-specific/main && ../bin/deploy-app.sh`
-               - Make a note of the `cloudwatch_role_arn` that is output, to use shortly for the CircleCI setup.
      - In IAM, attach the `circle_ci_policy` to your `CircleCI` user.
      - Note the AWS-generated access key and secret access key — it will needed shortly for the CircleCI setup.
 - [Create a Route53 Hosted Zone](https://console.aws.amazon.com/route53/home) This will be used for setting up the domains for the UI and API.  Create the desired domain name (e.g. `ef-cms.example.gov.`) and make sure it is a `Public Hosted Zone`. This is the value you will set for `EFCMS_DOMAIN` in CircleCI.  Make sure the domain name ends with a period.
@@ -60,11 +58,6 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
      - `DYNAMSOFT_PRODUCT_KEYS_TEST`  (the product key provided after purchasing Dynamic Web TWAIN)
      - `DYNAMSOFT_PRODUCT_KEYS_PROD`  (the product key provided after purchasing Dynamic Web TWAIN)
      - `DYNAMSOFT_S3_ZIP_PATH` (the full S3 path to the Dynamic Web TWAIN ZIP, e.g. `s3://ef-cms.ustaxcourt.gov-software/Dynamsoft/dynamic-web-twain-sdk-14.3.1.tar.gz`)
-     - `CLOUDWATCH_ROLE_ARN` (the ARN output after running Terraform in the `iam/terraform/account-specific/main` dir)
-     - `POST_CONFIRMATION_ROLE_ARN_DEV` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
-     - `POST_CONFIRMATION_ROLE_ARN_STG` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
-     - `POST_CONFIRMATION_ROLE_ARN_TEST` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
-     - `POST_CONFIRMATION_ROLE_ARN_PROD` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
      - `SES_DMARC_EMAIL` (email address used with SES to which aggregate DMARC validations are sent)
 8. Run a build in CircleCI.
 
@@ -74,18 +67,21 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
 3. Add CircleCI badge link to the README.md according to `$BRANCH`
 4. Edit `get-es-instance-count.sh`, adding a new `elif` statement for your `$BRANCH` which returns the appropriate number of ElasticSearch instances.
 5. Edit `get-keys.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the `$ENVIRONMENT`-specific Dynamsoft licensing keys; licensing requires that each environment use their own unique keys.
-6. Edit `get-post-confirmation-role-arn.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the correct Amazon resource name for your `$ENVIRONMENT` (see SETUP.md)
-7. Create the `config/$ENVIRONMENT.yml` (e.g. `config/stg.yml`)
-8. Create the `web-api/config/$ENVIRONMENT.yml` (e.g. `web-api/config/stg.yml`)
-9. Add mention of your environment, if appropriate, to `SETUP.md`
+6. Edit `get-env.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the environment name.
+7. Edit `get-post-confirmation-role-arn.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the correct Amazon resource name for your `$ENVIRONMENT` (see SETUP.md)
+8. Create the `config/$ENVIRONMENT.yml` (e.g. `config/stg.yml`)
+9. Create the `web-api/config/$ENVIRONMENT.yml` (e.g. `web-api/config/stg.yml`)
+10. Add mention of your environment, if appropriate, to `SETUP.md`
     - to create Lambda roles & policies:
       - e.g. `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh $ENVIRONMENT`
     - mention your `DYNAMSOFT_PRODUCT_KEYS_$ENVIRONMENT`
     - mention your `POST_CONFIRMATION_ROLE_ARN_$ENVIRONMENT`
-10. Run the `deploy-app.sh` command that you just added to `SETUP.md`.
-11. Mention your `$ENVIRONMENT`, if necessary, in `web-api/deploy-sandbox.sh` within the `run_development` function
-12. For all files matching `web-api/serverless-*yml`, include your `$ENVIRONMENT` within the list of `custom.alerts.stages` if you want your `$ENVIRONMENT` to be included in those which are monitored & emails delivered upon alarm.
-13. Modify `.circleci/config.yml` to add `$ENVIRONMENT` to every step under `build-and-deploy` where you want it to be built and deployed.
-14. Update CircleCI to have all the new environment variables needed:
+11. Run the `deploy-app.sh` command that you just added to `SETUP.md`.
+12. Mention your `$ENVIRONMENT`, if necessary, in `web-api/deploy-sandbox.sh` within the `run_development` function
+13. For all files matching `web-api/serverless-*yml`, include your `$ENVIRONMENT` within the list of `custom.alerts.stages` if you want your `$ENVIRONMENT` to be included in those which are monitored & emails delivered upon alarm.
+14. Modify `.circleci/config.yml` to add `$ENVIRONMENT` to every step under `build-and-deploy` where you want it to be built and deployed.
+15. Update CircleCI to have all the new environment variables needed:
      - DYNAMSOFT_PRODUCT_KEYS_`$ENVIRONMENT`
      - POST_CONFIRMATION_ROLE_ARN_`$ENVIRONMENT`
+
+A deploy of a new environment is likely to require _two_ attempts to work, due to Terraform limitations. See [the troubleshooting guide](TROUBLESHOOTING.md) for solutions to problems that may arise during this deploy process.

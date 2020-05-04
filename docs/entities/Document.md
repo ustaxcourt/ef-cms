@@ -14,6 +14,9 @@
 
 ### archived
 
+
+A document that was archived instead of added to the Docket Record.
+
 > `boolean` | optional
 
 ### caseId
@@ -44,6 +47,15 @@ When the Document was added to the system.
 
 > `date` | required
 
+### date
+
+
+An optional date used when generating a fully concatenated document title.
+
+> `date` | optional
+
+##### Can be null.
+
 ### docketNumber
 
 
@@ -55,6 +67,10 @@ Docket Number of the associated Case in XXXXX-YY format.
 
 
 `/^(\d{3,5}-\d{2})$/`
+
+### documentContents
+
+> `string` | optional
 
 ### documentId
 
@@ -432,13 +448,17 @@ The type of this document.
 
 > `object` | optional
 
+##### Can be null.
+
+### entityName
+
+> `string` | required
+
+##### Can be Document.
+
 ### eventCode
 
 > `string` | optional
-
-### exhibits
-
-> `boolean` | optional
 
 ### filedBy
 
@@ -488,6 +508,12 @@ The judge associated with the document.
 A lodged document is awaiting action by the judge to enact or refuse.
 
 > `boolean` | optional
+
+### numberOfPages
+
+> `number` | optional
+
+##### Can be null.
 
 ### objections
 
@@ -547,9 +573,39 @@ A lodged document is awaiting action by the judge to enact or refuse.
 
 > `string` | optional
 
+##### Allowed Values
+
+
+ - `primaryDocument`
+ - `primarySupportingDocument`
+ - `secondaryDocument`
+ - `secondarySupportingDocument`
+ - `supportingDocument`
+
 ### scenario
 
 > `string` | optional
+
+##### Allowed Values
+
+
+ - `Standard`
+ - `Nonstandard A`
+ - `Nonstandard B`
+ - `Nonstandard C`
+ - `Nonstandard D`
+ - `Nonstandard E`
+ - `Nonstandard F`
+ - `Nonstandard G`
+ - `Nonstandard H`
+ - `Type A`
+ - `Type B`
+ - `Type C`
+ - `Type D`
+ - `Type E`
+ - `Type F`
+ - `Type G`
+ - `Type H`
 
 ### secondaryDate
 
@@ -587,6 +643,12 @@ A secondary date associated with the document, typically related to time-restric
 ##### Can be null.
 
 ### signedByUserId
+
+> `string` | optional
+
+##### Can be null.
+
+### signedJudgeName
 
 > `string` | optional
 

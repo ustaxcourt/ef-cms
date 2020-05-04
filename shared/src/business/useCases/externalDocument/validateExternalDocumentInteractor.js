@@ -1,3 +1,7 @@
+const {
+  ExternalDocumentFactory,
+} = require('../../entities/externalDocument/ExternalDocumentFactory');
+
 /**
  * validateExternalDocumentInteractor
  *
@@ -10,9 +14,9 @@ exports.validateExternalDocumentInteractor = ({
   applicationContext,
   documentMetadata,
 }) => {
-  const externalDocument = applicationContext
-    .getEntityConstructors()
-    .ExternalDocumentFactory.get(documentMetadata);
+  const externalDocument = ExternalDocumentFactory.get(documentMetadata, {
+    applicationContext,
+  });
 
   return externalDocument.getFormattedValidationErrors();
 };
