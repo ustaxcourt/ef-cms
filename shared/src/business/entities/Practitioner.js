@@ -8,6 +8,7 @@ const {
   userValidation,
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
 } = require('./User');
+const { omit } = require('lodash');
 
 const EMPLOYER_OPTIONS = ['IRS', 'DOJ', 'Private'];
 const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
@@ -157,6 +158,11 @@ const validationRules = {
     .valid(...PRACTITIONER_TYPE_OPTIONS)
     .required()
     .description('The type of practitioner - either Attorney or Non-Attorney.'),
+  role: joi.alternatives().conditional('admissionsStatus', {
+    is: joi.valid('Active'),
+    otherwise: joi.string().valid(User.ROLES.inactivePractitioner).required(),
+    then: joi.string().valid(omit(User.ROLES, User.ROLES.inactivePractitioner)),
+  }),
   suffix: joi
     .string()
     .optional()
