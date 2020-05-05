@@ -9,21 +9,31 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - restore_cache:
-          name: Source & NPM Modules - Restoring Cache
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - restore_cache:
+          name: npm_modules - Restoring Cache
           keys:
             - deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
             - deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
             - deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
             - deps-{{ .Environment.CACHE_VERSION }}-
-      - checkout
       - run:
           name: NPM - Install
           command: npm ci && npm rebuild node-sass
-      - save_cache:
-          name: Source & NPM Modules - Save Cache
+      - run:
+          name: npm_modules - Save Cache
           key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
           paths:
-            - '.git'
             - 'node_modules'
       - persist_to_workspace:
           root: ~/
