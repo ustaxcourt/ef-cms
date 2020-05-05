@@ -30,7 +30,7 @@ jobs:
       - run:
           name: NPM - Install
           command: npm ci && npm rebuild node-sass
-      - run:
+      - save_cache:
           name: npm_modules - Save Cache
           key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
           paths:
