@@ -21,7 +21,7 @@ describe('clearCourtIssuedDocketEntryFormValuesAction', () => {
             freeText: 'something',
             judge: 'Judge Armen',
             month: '12',
-            triaLocation: 'Boise, Idaho',
+            trialLocation: 'Boise, Idaho',
             year: '2012',
           },
         },
@@ -38,7 +38,7 @@ describe('clearCourtIssuedDocketEntryFormValuesAction', () => {
       freeText: 'something',
       judge: 'Judge Armen',
       month: '12',
-      triaLocation: 'Boise, Idaho',
+      trialLocation: 'Boise, Idaho',
       year: '2012',
     };
 

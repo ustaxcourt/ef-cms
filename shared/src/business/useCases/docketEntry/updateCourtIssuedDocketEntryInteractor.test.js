@@ -226,7 +226,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
         caseId: caseRecord.caseId,
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         documentType: 'Order',
-        judge: 'Judge Coral',
+        objections: 'No',
       },
     });
 
@@ -235,7 +235,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[3].judge,
+        .caseToUpdate.documents[3].objections,
     ).toBeUndefined();
   });
 });
