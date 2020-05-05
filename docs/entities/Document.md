@@ -68,7 +68,10 @@ Docket Number of the associated Case in XXXXX-YY format.
 
 `/^(\d{3,5}-\d{2})$/`
 
-### documentContents
+### documentContentsId
+
+
+The S3 ID containing the text contents of the document.
 
 > `string` | optional
 
@@ -628,13 +631,22 @@ A secondary date associated with the document, typically related to time-restric
 
 ### servedAt
 
+
+When the document is served on the parties.
+
 > `date` | optional
 
 ### servedParties
 
 > `array` | optional
 
+
+An array of objects.
+
 ### serviceDate
+
+
+Certificate of service date.
 
 > `date` | optional
 
