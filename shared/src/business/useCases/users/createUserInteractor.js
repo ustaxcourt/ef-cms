@@ -29,7 +29,7 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
       user,
     });
 
-  let userEntity;
+  let userEntity = createdUser;
 
   //check role
   //new up entity based on role
@@ -50,7 +50,7 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
       .toRawObject();
   }
 
-  //create new User from that created entity - dont forget to add validation for role type in both entities
+  //create new User from that created entity - don't forget to add validation for role type in both entities
   //MAYBE return? check if return value being used (probably returning for logging)
   return new User(userEntity, { applicationContext }).validate().toRawObject();
 

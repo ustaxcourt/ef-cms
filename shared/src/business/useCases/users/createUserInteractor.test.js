@@ -23,10 +23,12 @@ describe('create user', () => {
       .getPersistenceGateway()
       .createUser.mockReturnValue(mockUser);
     const userToCreate = { userId: 'petitionsclerk1@example.com' };
+
     const user = await createUserInteractor({
       applicationContext,
       user: userToCreate,
     });
+
     expect(user).not.toBeUndefined();
   });
 
