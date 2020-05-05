@@ -118,7 +118,7 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
-        command: ["-jar" "DynamoDBLocal.jar" "-sharedDb"]
+        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
       - image: elastic/elasticsearch:7.5.2
     resource_class: xlarge
     parallelism: 2
@@ -183,7 +183,7 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
-        command: ["-jar" "DynamoDBLocal.jar" "-sharedDb"]
+        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
       - image: elastic/elasticsearch:7.5.2
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
@@ -237,7 +237,7 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
-        command: ["-jar" "DynamoDBLocal.jar" "-sharedDb"]
+        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
       - image: elastic/elasticsearch:7.5.2
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
