@@ -120,6 +120,8 @@ jobs:
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
       - image: elastic/elasticsearch:7.5.2
+        environment:
+          discovery.seed_hosts: []
     resource_class: xlarge
     parallelism: 2
     steps:
@@ -185,6 +187,8 @@ jobs:
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
       - image: elastic/elasticsearch:7.5.2
+        environment:
+          discovery.seed_hosts: []
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: xlarge
@@ -239,6 +243,8 @@ jobs:
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
       - image: elastic/elasticsearch:7.5.2
+        environment:
+          discovery.seed_hosts: []
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: xlarge
