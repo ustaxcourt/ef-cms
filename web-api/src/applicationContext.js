@@ -71,6 +71,7 @@ const {
 } = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
 const {
   changeOfAddress,
+  docketRecord,
 } = require('../../shared/src/business/utilities/documentGenerators');
 const {
   checkForReadyForTrialCasesInteractor,
@@ -937,6 +938,7 @@ module.exports = (appContextUser = {}) => {
     },
     getDocumentGenerators: () => ({
       changeOfAddress,
+      docketRecord,
     }),
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
