@@ -6,11 +6,14 @@ const {
 } = require('./addCoversheetInteractor.js');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
-const { getChromiumBrowser } = require('../utilities/getChromiumBrowser');
+
+jest.mock('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
+const {
+  generateCoverPagePdf,
+} = require('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
 
 describe('addCoversheetInteractor', () => {
   const testAssetsPath = path.join(__dirname, '../../../test-assets/');
-  const testOutputPath = path.join(__dirname, '../../../test-output/');
 
   const testPdfDocBytes = () => {
     // sample.pdf is a 1 page document
@@ -72,15 +75,13 @@ describe('addCoversheetInteractor', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
 
+    generateCoverPagePdf.mockImplementation(testPdfDocBytes);
+
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: async () => ({
         Body: testPdfDoc,
       }),
     });
-
-    applicationContext.getChromiumBrowser.mockImplementation(
-      getChromiumBrowser,
-    );
   });
 
   it('adds a cover page to a pdf document', async () => {
@@ -99,21 +100,12 @@ describe('addCoversheetInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-    expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
   });
 
   it('adds a cover page to a pdf document with optional data', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId.mockReturnValue(optionalTestingCaseData);
-    applicationContext
-      .getPersistenceGateway()
-      .saveDocumentFromLambda.mockImplementation(({ document: newPdfData }) => {
-        fs.writeFileSync(
-          testOutputPath + 'addCoverToPDFDocument_2.pdf',
-          newPdfData,
-        );
-      });
 
     const params = {
       applicationContext,
