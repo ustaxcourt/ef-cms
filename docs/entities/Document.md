@@ -68,7 +68,10 @@ Docket Number of the associated Case in XXXXX-YY format.
 
 `/^(\d{3,5}-\d{2})$/`
 
-### documentContents
+### documentContentsId
+
+
+The S3 ID containing the text contents of the document.
 
 > `string` | optional
 
@@ -529,9 +532,15 @@ A lodged document is awaiting action by the judge to enact or refuse.
 
 ### partyPrimary
 
+
+Use the primary contact to compose the filedBy text.
+
 > `boolean` | optional
 
 ### partySecondary
+
+
+Use the secondary contact to compose the filedBy text.
 
 > `boolean` | optional
 
@@ -545,7 +554,13 @@ A lodged document is awaiting action by the judge to enact or refuse.
 
 ### privatePractitioners
 
+
+Practitioner names to be used to compose the filedBy text.
+
 > `array` | optional
+
+
+An array of objects.
 
 ### processingStatus
 
@@ -614,11 +629,10 @@ A secondary date associated with the document, typically related to time-restric
 
 > `date` | optional
 
-### secondaryDocument
-
-> `object` | optional
-
 ### servedAt
+
+
+When the document is served on the parties.
 
 > `date` | optional
 
@@ -626,7 +640,13 @@ A secondary date associated with the document, typically related to time-restric
 
 > `array` | optional
 
+
+An array of objects.
+
 ### serviceDate
+
+
+Certificate of service date.
 
 > `date` | optional
 
@@ -654,119 +674,9 @@ A secondary date associated with the document, typically related to time-restric
 
 ##### Can be null.
 
-### status
-
-> `string` | optional
-
-##### Can be served.
-
 ### supportingDocument
 
 > `string` | optional
-
-##### Can be null.
-
-### trialLocation
-
-> `conditional` | optional
-
-
-*Must match 1 of the following conditions:*
-
-#### Condition #1 for `trialLocation`: 
-
-> `string`
-
-##### Allowed Values
-
-
- - `Fresno, California`
- - `Tallahassee, Florida`
- - `Pocatello, Idaho`
- - `Peoria, Illinois`
- - `Wichita, Kansas`
- - `Shreveport, Louisiana`
- - `Portland, Maine`
- - `Billings, Montana`
- - `Albany, New York`
- - `Syracuse, New York`
- - `Bismarck, North Dakota`
- - `Aberdeen, South Dakota`
- - `Burlington, Vermont`
- - `Roanoke, Virginia`
- - `Cheyenne, Wyoming`
- - `Birmingham, Alabama`
- - `Mobile, Alabama`
- - `Anchorage, Alaska`
- - `Phoenix, Arizona`
- - `Little Rock, Arkansas`
- - `Los Angeles, California`
- - `San Diego, California`
- - `San Francisco, California`
- - `Denver, Colorado`
- - `Hartford, Connecticut`
- - `Washington, District of Columbia`
- - `Jacksonville, Florida`
- - `Miami, Florida`
- - `Tampa, Florida`
- - `Atlanta, Georgia`
- - `Honolulu, Hawaii`
- - `Boise, Idaho`
- - `Chicago, Illinois`
- - `Indianapolis, Indiana`
- - `Des Moines, Iowa`
- - `Louisville, Kentucky`
- - `New Orleans, Louisiana`
- - `Baltimore, Maryland`
- - `Boston, Massachusetts`
- - `Detroit, Michigan`
- - `St. Paul, Minnesota`
- - `Jackson, Mississippi`
- - `Kansas City, Missouri`
- - `St. Louis, Missouri`
- - `Helena, Montana`
- - `Omaha, Nebraska`
- - `Las Vegas, Nevada`
- - `Reno, Nevada`
- - `Albuquerque, New Mexico`
- - `Buffalo, New York`
- - `New York City, New York`
- - `Winston-Salem, North Carolina`
- - `Cincinnati, Ohio`
- - `Cleveland, Ohio`
- - `Columbus, Ohio`
- - `Oklahoma City, Oklahoma`
- - `Portland, Oregon`
- - `Philadelphia, Pennsylvania`
- - `Pittsburgh, Pennsylvania`
- - `Columbia, South Carolina`
- - `Knoxville, Tennessee`
- - `Memphis, Tennessee`
- - `Nashville, Tennessee`
- - `Dallas, Texas`
- - `El Paso, Texas`
- - `Houston, Texas`
- - `Lubbock, Texas`
- - `San Antonio, Texas`
- - `Salt Lake City, Utah`
- - `Richmond, Virginia`
- - `Seattle, Washington`
- - `Spokane, Washington`
- - `Charleston, West Virginia`
- - `Milwaukee, Wisconsin`
-
-#### Condition #2 for `trialLocation`: 
-
-> `string`
-
-##### Regex Pattern
-
-
-`/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/`
-
-#### Condition #3 for `trialLocation`: 
-
-> `string`
 
 ##### Can be null.
 
