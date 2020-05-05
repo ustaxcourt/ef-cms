@@ -43,7 +43,7 @@ describe('setDocketEntryMetaFormForEditAction', () => {
           filingDate: '2020-01-01',
           lodged: false,
           servedAt: '2020-01-01',
-          servedParties: [],
+          servedParties: [{ name: 'Party Man' }],
         },
         {
           certificateOfService: true,
