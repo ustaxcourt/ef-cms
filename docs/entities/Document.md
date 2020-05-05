@@ -68,6 +68,13 @@ Docket Number of the associated Case in XXXXX-YY format.
 
 `/^(\d{3,5}-\d{2})$/`
 
+### docketNumbers
+
+
+Optional Docket Number text used when generating a fully concatenated document title.
+
+> `string` | optional
+
 ### documentContentsId
 
 
@@ -570,10 +577,6 @@ An array of objects.
 
 > `date` | optional
 
-### qcByUser
-
-> `object` | optional
-
 ### qcByUserId
 
 > `string` | optional
@@ -675,6 +678,15 @@ Certificate of service date.
 ##### Can be null.
 
 ### supportingDocument
+
+> `string` | optional
+
+##### Can be null.
+
+### trialLocation
+
+
+An optional trial location used when generating a fully concatenated document title.
 
 > `string` | optional
 
