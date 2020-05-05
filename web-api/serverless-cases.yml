@@ -157,116 +157,102 @@ resources:
             MetricsEnabled: true
 
 functions:
-  # saveCaseDetailInternalEdit:
-  #   handler: web-api/${self:provider.dir}/casesHandlers.saveCaseDetailInternalEditLambda
-  #   events:
-  #     - http:
-  #         path: /{caseId}
-  #         method: put
-  #         cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-  #         authorizer:
-  #           type: COGNITO_USER_POOLS
-  #           authorizerId:
-  #             Ref: ApiGatewayAuthorizer
-
-  # removeCasePendingItem:
-  #   handler: web-api/${self:provider.dir}/casesHandlers.removeCasePendingItemLambda
-  #   events:
-  #     - http:
-  #         path: /{caseId}/remove-pending/{documentId}
-  #         method: delete
-  #         cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-  #         authorizer:
-  #           type: COGNITO_USER_POOLS
-  #           authorizerId:
-  #             Ref: ApiGatewayAuthorizer
-
-  # createCase:
-  #   handler: web-api/${self:provider.dir}/casesHandlers.createCaseLambda
-  #   events:
-  #     - http:
-  #         path: /
-  #         method: post
-  #         cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-  #         authorizer:
-  #           type: COGNITO_USER_POOLS
-  #           authorizerId:
-  #             Ref: ApiGatewayAuthorizer
-
-  # createCaseFromPaper:
-  #   handler: web-api/${self:provider.dir}/casesHandlers.createCaseFromPaperLambda
-  #   events:
-  #     - http:
-  #         path: /paper
-  #         method: post
-  #         cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-  #         authorizer:
-  #           type: COGNITO_USER_POOLS
-  #           authorizerId:
-  #             Ref: ApiGatewayAuthorizer
-
-  # getCase:
-  #   handler: web-api/${self:provider.dir}/casesHandlers.getCaseLambda
-  #   events:
-  #     - http:
-  #         path: /{caseId}
-  #         method: get
-  #         request:
-  #           parameters:
-  #             paths:
-  #               caseId: true
-  #         cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-  #         authorizer:
-  #           arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
-  #           managedExternally: true
-
-  # caseAdvancedSearch:
-  #   handler: web-api/${self:provider.dir}/casesHandlers.caseAdvancedSearchLambda
-  #   events:
-  #     - http:
-  #         path: /search
-  #         method: get
-  #         cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-  #         authorizer:
-  #           arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
-  #           managedExternally: true
-
-  # getConsolidatedCasesByCase:
-  #   handler: web-api/${self:provider.dir}/casesHandlers.getConsolidatedCasesByCaseLambda
-  #   events:
-  #     - http:
-  #         path: /{caseId}/consolidated-cases
-  #         method: get
-  #         cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-  #         authorizer:
-  #           type: COGNITO_USER_POOLS
-  #           authorizerId:
-  #             Ref: ApiGatewayAuthorizer
-
-  # serveCaseToIrs:
-  #   handler: web-api/${self:provider.dir}/casesHandlers.serveCaseToIrsLambda
-  #   layers:
-  #     - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-  #   memorySize: 3008
-  #   timeout: 900
-  #   events:
-  #     - http:
-  #         path: /{caseId}/serve-to-irs
-  #         method: post
-  #         cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-  #         authorizer:
-  #           type: COGNITO_USER_POOLS
-  #           authorizerId:
-  #             Ref: ApiGatewayAuthorizer
-
-  timeout:
-    handler: web-api/${self:provider.dir}/casesHandlers.timeoutLambda
-    memorySize: 128
-    timeout: 1
+  saveCaseDetailInternalEdit:
+    handler: web-api/${self:provider.dir}/casesHandlers.saveCaseDetailInternalEditLambda
     events:
       - http:
-          path: /timeout
+          path: /{caseId}
+          method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  removeCasePendingItem:
+    handler: web-api/${self:provider.dir}/casesHandlers.removeCasePendingItemLambda
+    events:
+      - http:
+          path: /{caseId}/remove-pending/{documentId}
+          method: delete
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createCase:
+    handler: web-api/${self:provider.dir}/casesHandlers.createCaseLambda
+    events:
+      - http:
+          path: /
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createCaseFromPaper:
+    handler: web-api/${self:provider.dir}/casesHandlers.createCaseFromPaperLambda
+    events:
+      - http:
+          path: /paper
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getCase:
+    handler: web-api/${self:provider.dir}/casesHandlers.getCaseLambda
+    events:
+      - http:
+          path: /{caseId}
           method: get
+          request:
+            parameters:
+              paths:
+                caseId: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
+            managedExternally: true
+
+  caseAdvancedSearch:
+    handler: web-api/${self:provider.dir}/casesHandlers.caseAdvancedSearchLambda
+    events:
+      - http:
+          path: /search
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
+            managedExternally: true
+
+  getConsolidatedCasesByCase:
+    handler: web-api/${self:provider.dir}/casesHandlers.getConsolidatedCasesByCaseLambda
+    events:
+      - http:
+          path: /{caseId}/consolidated-cases
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  serveCaseToIrs:
+    handler: web-api/${self:provider.dir}/casesHandlers.serveCaseToIrsLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: /{caseId}/serve-to-irs
+          method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
