@@ -9,11 +9,15 @@ plugins:
   - serverless-plugin-tracing
   - serverless-latest-layer-version
   - serverless-jetpack
+  - serverless-log-forwarding
   # - serverless-plugin-warmup
 
 custom:
   #warmup:
   #enabled: true
+  logForwarding:
+    destinationARN: arn:aws:lambda:${opt:region}:${opt:accountId}:function:log_forwarder_${opt:stage}
+    filterPattern: 'ERROR'
 
   jetpack:
     mode: npm
@@ -249,6 +253,20 @@ functions:
       - http:
           path: /{caseId}/serve-to-irs
           method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  timeout:
+    handler: web-api/${self:provider.dir}/casesHandlers.timeoutLambda
+    memorySize: 128
+    timeout: 1
+    events:
+      - http:
+          path: /timeout
+          method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
