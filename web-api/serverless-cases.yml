@@ -13,11 +13,11 @@ plugins:
   # - serverless-plugin-warmup
 
 custom:
-  #warmup:
-  #enabled: true
   logForwarding:
     destinationARN: arn:aws:lambda:${opt:region}:${opt:accountId}:function:log_forwarder_${opt:stage}
     filterPattern: 'ERROR'
+  #warmup:
+  #enabled: true
 
   jetpack:
     mode: npm

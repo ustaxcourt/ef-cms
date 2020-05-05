@@ -4,6 +4,9 @@ plugins:
   - serverless-prune-plugin
 
 custom:
+  logForwarding:
+    destinationARN: arn:aws:lambda:${opt:region}:${opt:accountId}:function:log_forwarder_${opt:stage}
+    filterPattern: 'ERROR'
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   prune:
