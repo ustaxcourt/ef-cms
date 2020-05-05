@@ -8,9 +8,11 @@ const {
 const { createISODateString } = require('../utilities/DateHandler');
 const { DOCKET_NUMBER_MATCHER } = require('./cases/CaseConstants');
 const { flatten } = require('lodash');
+const { getTimestampSchema } = require('../../utilities/dateSchema');
 const { Order } = require('./orders/Order');
 const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
+const joiStrictTimestamp = getTimestampSchema();
 
 Document.CATEGORIES = Object.keys(documentMapExternal);
 Document.CATEGORY_MAP = documentMapExternal;
@@ -370,11 +372,9 @@ joiValidationDecorator(
     certificateOfServiceDate: joi.when('certificateOfService', {
       is: true,
       otherwise: joi.optional(),
-      then: joi.date().iso().required(),
+      then: joiStrictTimestamp.required(),
     }),
-    createdAt: joi
-      .date()
-      .iso()
+    createdAt: joiStrictTimestamp
       .required()
       .description('When the Document was added to the system.'),
     date: joi
@@ -417,10 +417,8 @@ joiValidationDecorator(
     entityName: joi.string().valid('Document').required(),
     eventCode: joi.string().optional(),
     filedBy: joi.string().allow('').optional(),
-    filingDate: joi
-      .date()
+    filingDate: joiStrictTimestamp
       .max('now')
-      .iso()
       .required()
       .description('Date that this Document was filed.'),
     freeText: joi.string().optional(),
@@ -461,10 +459,10 @@ joiValidationDecorator(
         'Practitioner names to be used to compose the filedBy text.',
       ),
     processingStatus: joi.string().optional(),
-    qcAt: joi.date().iso().optional(),
+    qcAt: joiStrictTimestamp.optional(),
     qcByUser: joi.object().optional(),
     qcByUserId: joi.string().optional().allow(null),
-    receivedAt: joi.date().iso().optional(),
+    receivedAt: joiStrictTimestamp.optional(),
     relationship: joi
       .string()
       .valid(...Document.RELATIONSHIPS)
@@ -473,31 +471,25 @@ joiValidationDecorator(
       .string()
       .valid(...Document.SCENARIOS)
       .optional(),
-    secondaryDate: joi
-      .date()
-      .iso()
+    secondaryDate: joiStrictTimestamp
       .optional()
       .description(
         'A secondary date associated with the document, typically related to time-restricted availability.',
       ),
-    servedAt: joi
-      .date()
-      .iso()
+    servedAt: joiStrictTimestamp
       .optional()
       .description('When the document is served on the parties.'),
     servedParties: joi
       .array()
       .items({ email: joi.string().required(), name: joi.string().required() })
       .optional(),
-    serviceDate: joi
-      .date()
-      .iso()
+    serviceDate: joiStrictTimestamp
       .max('now')
       .optional()
       .allow(null)
       .description('Certificate of service date.'),
     serviceStamp: joi.string().optional(),
-    signedAt: joi.date().iso().optional().allow(null),
+    signedAt: joiStrictTimestamp.optional().allow(null),
     signedByUserId: joi.string().optional().allow(null),
     signedJudgeName: joi.string().optional().allow(null),
     supportingDocument: joi.string().optional().allow(null),

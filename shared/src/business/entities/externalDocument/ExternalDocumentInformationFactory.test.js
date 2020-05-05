@@ -1,4 +1,7 @@
-const moment = require('moment');
+const {
+  calculateISODate,
+  createISODateString,
+} = require('../../utilities/DateHandler');
 const {
   ExternalDocumentInformationFactory,
   VALIDATION_ERROR_MESSAGES,
@@ -47,12 +50,15 @@ describe('ExternalDocumentInformationFactory', () => {
         expect(errors().certificateOfServiceDate).toEqual(
           VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
         );
-        baseDoc.certificateOfServiceDate = moment().format();
+        baseDoc.certificateOfServiceDate = createISODateString();
         expect(errors().certificateOfServiceDate).toEqual(undefined);
       });
 
       it('should not allow certificate of service date to be in the future', () => {
-        baseDoc.certificateOfServiceDate = moment().add(1, 'days').format();
+        baseDoc.certificateOfServiceDate = calculateISODate({
+          howMuch: 1,
+          unit: 'days',
+        });
         expect(errors().certificateOfServiceDate).toEqual(
           VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
         );
@@ -141,7 +147,7 @@ describe('ExternalDocumentInformationFactory', () => {
         expect(
           errors().supportingDocuments[0].certificateOfServiceDate,
         ).toEqual(VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1]);
-        baseDoc.supportingDocuments[0].certificateOfServiceDate = moment().format();
+        baseDoc.supportingDocuments[0].certificateOfServiceDate = createISODateString();
         expect(errors().supportingDocuments).toEqual(undefined);
       });
 
@@ -314,7 +320,7 @@ describe('ExternalDocumentInformationFactory', () => {
             expect(
               errors().secondarySupportingDocuments[0].certificateOfServiceDate,
             ).toEqual(VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1]);
-            baseDoc.secondarySupportingDocuments[0].certificateOfServiceDate = moment().format();
+            baseDoc.secondarySupportingDocuments[0].certificateOfServiceDate = createISODateString();
             expect(errors().secondarySupportingDocuments).toEqual(undefined);
           });
 
