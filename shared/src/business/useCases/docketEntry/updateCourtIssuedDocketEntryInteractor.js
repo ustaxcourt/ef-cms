@@ -59,12 +59,16 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
 
   const editableFields = {
     attachments: documentMeta.attachments,
+    date: documentMeta.date,
+    docketNumbers: documentMeta.docketNumbers,
     documentTitle: documentMeta.generatedDocumentTitle,
     documentType: documentMeta.documentType,
     eventCode: documentMeta.eventCode,
     freeText: documentMeta.freeText,
+    judge: documentMeta.judge,
     scenario: documentMeta.scenario,
     serviceStamp: documentMeta.serviceStamp,
+    trialLocation: documentMeta.trialLocation,
   };
 
   const documentEntity = new Document(
@@ -84,7 +88,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
   const docketRecordEntry = new DocketRecord(
     {
       ...existingDocketRecordEntry,
-      description: editableFields.generatedDocumentTitle,
+      description: editableFields.documentTitle,
       documentId: documentEntity.documentId,
       editState: JSON.stringify(editableFields),
       eventCode: documentEntity.eventCode,
