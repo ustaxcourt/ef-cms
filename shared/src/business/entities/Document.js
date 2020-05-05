@@ -117,7 +117,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
     this.previousDocument = rawDocument.previousDocument;
     this.processingStatus = rawDocument.processingStatus || 'pending';
     this.qcAt = rawDocument.qcAt;
-    this.qcByUser = rawDocument.qcByUser;
     this.qcByUserId = rawDocument.qcByUserId;
     this.signedAt = rawDocument.signedAt;
     this.signedByUserId = rawDocument.signedByUserId;
@@ -156,10 +155,9 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.mailingDate = rawDocument.mailingDate;
   this.objections = rawDocument.objections;
   this.ordinalValue = rawDocument.ordinalValue;
-  this.partyPrimary = rawDocument.partyPrimary; // TODO: add info about purpose
+  this.partyPrimary = rawDocument.partyPrimary;
   this.partyIrsPractitioner = rawDocument.partyIrsPractitioner;
-  this.partySecondary = rawDocument.partySecondary; // TODO: add info about purpose
-  this.privatePractitioners = rawDocument.privatePractitioners; // TODO: look into this
+  this.partySecondary = rawDocument.partySecondary;
   this.receivedAt = rawDocument.receivedAt || createISODateString();
   this.relationship = rawDocument.relationship;
   this.scenario = rawDocument.scenario;
@@ -172,8 +170,19 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.supportingDocument = rawDocument.supportingDocument;
   this.trialLocation = rawDocument.trialLocation;
 
+  // only share the userId with an external user if it is the logged in user
   if (applicationContext.getCurrentUser().userId === rawDocument.userId) {
     this.userId = rawDocument.userId;
+  }
+
+  // only use the privatePractitioner name
+  if (Array.isArray(rawDocument.privatePractitioners)) {
+    this.privatePractitioners = rawDocument.privatePractitioners.map(item => {
+      return {
+        name: item.name,
+        partyPrivatePractitioner: item.partyPrivatePractitioner,
+      };
+    });
   }
 
   this.generateFiledBy(rawDocument);
@@ -449,14 +458,25 @@ joiValidationDecorator(
     objections: joi.string().optional(),
     ordinalValue: joi.string().optional(),
     partyIrsPractitioner: joi.boolean().optional(),
-    partyPrimary: joi.boolean().optional(),
-    partySecondary: joi.boolean().optional(),
+    partyPrimary: joi
+      .boolean()
+      .optional()
+      .description('Use the primary contact to compose the filedBy text.'),
+    partySecondary: joi
+      .boolean()
+      .optional()
+      .description('Use the secondary contact to compose the filedBy text.'),
     pending: joi.boolean().optional(),
     previousDocument: joi.object().optional(),
-    privatePractitioners: joi.array().optional(),
+    privatePractitioners: joi
+      .array()
+      .items({ name: joi.string().required() })
+      .optional()
+      .description(
+        'Practitioner names to be used to compose the filedBy text.',
+      ),
     processingStatus: joi.string().optional(),
     qcAt: joiStrictTimestamp.optional(),
-    qcByUser: joi.object().optional(),
     qcByUserId: joi.string().optional().allow(null),
     receivedAt: joiStrictTimestamp.optional(),
     relationship: joi
@@ -472,10 +492,18 @@ joiValidationDecorator(
       .description(
         'A secondary date associated with the document, typically related to time-restricted availability.',
       ),
-    // TODO: What's the difference between servedAt and serviceDate? (certificate of service date)
-    servedAt: joiStrictTimestamp.optional(),
-    servedParties: joi.array().optional(),
-    serviceDate: joiStrictTimestamp.max('now').optional().allow(null),
+    servedAt: joiStrictTimestamp
+      .optional()
+      .description('When the document is served on the parties.'),
+    servedParties: joi
+      .array()
+      .items({ name: joi.string().required() })
+      .optional(),
+    serviceDate: joiStrictTimestamp
+      .max('now')
+      .optional()
+      .allow(null)
+      .description('Certificate of service date.'),
     serviceStamp: joi.string().optional(),
     signedAt: joiStrictTimestamp.optional().allow(null),
     signedByUserId: joi.string().optional().allow(null),
@@ -510,7 +538,6 @@ Document.prototype.archive = function () {
 };
 
 Document.prototype.setAsServed = function (servedParties = null) {
-  this.status = 'served';
   this.servedAt = createISODateString();
   this.draftState = null;
 
