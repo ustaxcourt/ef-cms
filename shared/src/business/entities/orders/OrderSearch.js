@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi').extend(require('@hapi/joi-date'));
+const joi = require('@hapi/joi');
 const {
   createEndOfDayISO,
   createStartOfDayISO,
@@ -6,7 +6,9 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { isEmpty } = require('lodash');
+const joiStrictTimestamp = getTimestampSchema();
 
 OrderSearch.ORDER_SEARCH_PAGE_LOAD_SIZE = 6;
 
@@ -78,15 +80,13 @@ OrderSearch.schema = joi
       .description('The docket number to filter the search results by'),
     endDate: joi.alternatives().conditional('startDate', {
       is: joi.exist().not(null),
-      otherwise: joi
-        .date()
+      otherwise: joiStrictTimestamp
         .less(joi.ref('tomorrow'))
         .optional()
         .description(
           'The end date search filter is not required if there is no start date',
         ),
-      then: joi
-        .date()
+      then: joiStrictTimestamp
         .min(joi.ref('startDate'))
         .less(joi.ref('tomorrow'))
         .optional()
@@ -104,15 +104,13 @@ OrderSearch.schema = joi
       .description('The only required field to filter the search by'),
     startDate: joi.alternatives().conditional('endDate', {
       is: joi.exist().not(null),
-      otherwise: joi
-        .date()
+      otherwise: joiStrictTimestamp
         .max('now')
         .optional()
         .description(
           'The start date to search by, which cannot be greater than the current date, and is optional when there is no end date provided',
         ),
-      then: joi
-        .date()
+      then: joiStrictTimestamp
         .max('now')
         .required()
         .description(

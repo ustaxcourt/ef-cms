@@ -1,4 +1,3 @@
-const { omit } = require('lodash');
 const { Practitioner } = require('./Practitioner');
 const { User } = require('./User');
 

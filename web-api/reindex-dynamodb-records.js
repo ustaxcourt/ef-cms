@@ -7,6 +7,11 @@ if (args.length < 1) {
   process.exit(1);
 }
 
+const sleep = time => {
+  return new Promise(resolve => {
+    setTimeout(resolve, time);
+  });
+};
 const env = args[0];
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
@@ -47,6 +52,8 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
               },
             })
             .promise();
+
+          await sleep(3000);
         }
       });
   }

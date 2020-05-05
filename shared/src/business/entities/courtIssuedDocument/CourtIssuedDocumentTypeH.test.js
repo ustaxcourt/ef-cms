@@ -1,4 +1,4 @@
-const moment = require('moment');
+const { calculateISODate } = require('../../utilities/DateHandler');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
@@ -17,7 +17,7 @@ describe('CourtIssuedDocumentTypeH', () => {
     });
 
     it('should have error message for future date', () => {
-      const date = moment().add(5, 'days').format();
+      const date = calculateISODate({ howMuch: 5, unit: 'days' });
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,
         date,
