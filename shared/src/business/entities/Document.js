@@ -117,7 +117,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
     this.previousDocument = rawDocument.previousDocument;
     this.processingStatus = rawDocument.processingStatus || 'pending';
     this.qcAt = rawDocument.qcAt;
-    this.qcByUser = rawDocument.qcByUser;
     this.qcByUserId = rawDocument.qcByUserId;
     this.signedAt = rawDocument.signedAt;
     this.signedByUserId = rawDocument.signedByUserId;
@@ -158,7 +157,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.partyPrimary = rawDocument.partyPrimary;
   this.partyIrsPractitioner = rawDocument.partyIrsPractitioner;
   this.partySecondary = rawDocument.partySecondary;
-  this.privatePractitioners = rawDocument.privatePractitioners;
   this.receivedAt = rawDocument.receivedAt || createISODateString();
   this.relationship = rawDocument.relationship;
   this.scenario = rawDocument.scenario;
@@ -170,8 +168,19 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.serviceStamp = rawDocument.serviceStamp;
   this.supportingDocument = rawDocument.supportingDocument;
 
+  // only share the userId with an external user if it is the logged in user
   if (applicationContext.getCurrentUser().userId === rawDocument.userId) {
     this.userId = rawDocument.userId;
+  }
+
+  // only use the privatePractitioner name
+  if (Array.isArray(rawDocument.privatePractitioners)) {
+    this.privatePractitioners = rawDocument.privatePractitioners.map(item => {
+      return {
+        name: item.name,
+        partyPrivatePractitioner: item.partyPrivatePractitioner,
+      };
+    });
   }
 
   this.generateFiledBy(rawDocument);
@@ -460,7 +469,6 @@ joiValidationDecorator(
       ),
     processingStatus: joi.string().optional(),
     qcAt: joiStrictTimestamp.optional(),
-    qcByUser: joi.object().optional(),
     qcByUserId: joi.string().optional().allow(null),
     receivedAt: joiStrictTimestamp.optional(),
     relationship: joi
@@ -481,7 +489,7 @@ joiValidationDecorator(
       .description('When the document is served on the parties.'),
     servedParties: joi
       .array()
-      .items({ email: joi.string().required(), name: joi.string().required() })
+      .items({ name: joi.string().required() })
       .optional(),
     serviceDate: joiStrictTimestamp
       .max('now')
