@@ -220,7 +220,7 @@
     "test:pa11y": "npm run test:pa11y:1 && npm run test:pa11y:2 && npm run test:pa11y:3",
     "test:pdf": "npm run build:assets && node ./shared/pdf-tests/pdfReportTester.js",
     "test:public:integration": "npm run test:_client -- \"web-client/integration-tests-public/.*\\.test\\.js\"",
-    "test:shared": "npm run build:assets && jest --maxWorkers=75% --config shared/jest.config.js \"shared/.*\\.test\\.js\"",
+    "test:shared": "npm run build:assets && jest --maxWorkers=50% --config shared/jest.config.js \"shared/.*\\.test\\.js\"",
     "test:watch": "jest --watch .*test\\.js$",
     "test": "echo 'Best run with start:api:ci and start:client:ci' && sleep 3 && CI=true npx run-s test:shared test:api test:client test:pa11y cypress lint",
     "watch": "nodemon -e yml --exec sls offline start"
