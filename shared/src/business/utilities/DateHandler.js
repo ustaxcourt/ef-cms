@@ -11,6 +11,7 @@ const FORMATS = {
   TIME: 'hh:mm a',
   TIME_TZ: 'h:mm a [ET]',
   YEAR: 'YYYY',
+  YYYYMMDD: 'YYYY-MM-DD',
 };
 
 const USTC_TZ = 'America/New_York';
@@ -32,7 +33,7 @@ const prepareDateFromString = (dateString, inputFormat) => {
 const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
   if (!howMuch) return dateString;
 
-  return prepareDateFromString(dateString, FORMATS.ISO)
+  return prepareDateFromString(dateString || createISODateString(), FORMATS.ISO)
     .add(howMuch, units)
     .toISOString();
 };

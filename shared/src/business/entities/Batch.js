@@ -3,6 +3,8 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
+const { getTimestampSchema } = require('../../utilities/dateSchema');
+const joiStrictTimestamp = getTimestampSchema();
 
 /**
  * constructor
@@ -56,7 +58,7 @@ Batch.schema = joi.object().keys({
     })
     .required(),
   batchIndex: joi.number().integer().min(0).required(),
-  createdAt: joi.date().iso().required(),
+  createdAt: joiStrictTimestamp.required(),
   pages: joi.array().min(1).required(),
 });
 

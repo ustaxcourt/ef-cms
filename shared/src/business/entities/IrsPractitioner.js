@@ -3,7 +3,6 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
-  ROLES,
   userDecorator,
   userValidation,
   VALIDATION_ERROR_MESSAGES,
