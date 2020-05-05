@@ -15,7 +15,8 @@ resource "aws_lambda_function" "log_forwarder" {
 
   environment {
     variables = {
-      TEST = "abc"
+      CIRCLE_HONEYBADGER_API_KEY = "${var.honeybadger_key}"
+      NODE_ENV = "production"
     }
   }
 }
@@ -32,7 +33,8 @@ resource "aws_lambda_function" "log_forwarder_west" {
 
   environment {
     variables = {
-      TEST = "abc"
+      CIRCLE_HONEYBADGER_API_KEY = "${var.honeybadger_key}"
+      NODE_ENV = "production"
     }
   }
 
