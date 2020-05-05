@@ -44,9 +44,10 @@ export const setDocketEntryMetaFormForEditAction = ({
   store.set(state.docketRecordIndex, docketRecordIndex);
 
   if (docketRecordEntry.documentId) {
-    const documentDetail = documents.find(
-      document => docketRecordEntry.documentId === document.documentId,
-    );
+    const documentDetail =
+      documents.find(
+        document => docketRecordEntry.documentId === document.documentId,
+      ) || {};
 
     // TODO: Abstract this (also in getFormattedCaseDetail)
     if (docketRecordEntry.servedPartiesCode) {
