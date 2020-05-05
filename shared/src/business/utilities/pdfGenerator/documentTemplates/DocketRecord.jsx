@@ -4,9 +4,8 @@ const CompressedDocketHeader = require('../components/CompressedDocketHeader.jsx
   .default;
 const PrimaryHeader = require('../components/PrimaryHeader.jsx').default;
 
-const RenderAddress = ({ contact }) => {
-  // TODO: Refactor this
-  const isInternational = contact.countryType === 'international';
+const RenderAddress = ({ contact, countryTypes }) => {
+  const isInternational = contact.countryType === countryTypes.INTERNATIONAL;
 
   return (
     <>
@@ -26,13 +25,18 @@ const RenderAddress = ({ contact }) => {
   );
 };
 
-const RenderContact = ({ caseTitle, contact, showCaseTitleForPrimary }) => {
+const RenderContact = ({
+  caseTitle,
+  contact,
+  countryTypes,
+  showCaseTitleForPrimary,
+}) => {
   const name = showCaseTitleForPrimary ? caseTitle : contact.name;
 
   return (
     <div className="party-details">
       <p>{name}</p>
-      <RenderAddress contact={contact} />
+      <RenderAddress contact={contact} countryTypes={countryTypes} />
     </div>
   );
 };
@@ -40,6 +44,7 @@ const RenderContact = ({ caseTitle, contact, showCaseTitleForPrimary }) => {
 const RenderPractitioner = ({
   contactPrimary,
   contactSecondary,
+  countryTypes,
   practitioner,
 }) => {
   const { representingPrimary, representingSecondary } = practitioner;
@@ -55,6 +60,7 @@ const RenderPractitioner = ({
           ...practitioner.contact,
           name: practitioner.name,
         }}
+        countryTypes={countryTypes}
       />
 
       {(showRepresentingPrimary || showRepresentingSecondary) && (
@@ -69,7 +75,7 @@ const RenderPractitioner = ({
   );
 };
 
-const DocketRecord = ({ caseDetail, entries, options }) => {
+const DocketRecord = ({ caseDetail, countryTypes, entries, options }) => {
   return (
     <div id="document-docket-record">
       <PrimaryHeader />
@@ -85,10 +91,14 @@ const DocketRecord = ({ caseDetail, entries, options }) => {
           <RenderContact
             caseTitle={options.caseTitle}
             contact={caseDetail.contactPrimary}
+            countryTypes={countryTypes}
             showCaseTitleForPrimary={caseDetail.showCaseTitleForPrimary}
           />
           {caseDetail.contactSecondary && (
-            <RenderContact contact={caseDetail.contactSecondary} />
+            <RenderContact
+              contact={caseDetail.contactSecondary}
+              countryTypes={countryTypes}
+            />
           )}
         </div>
       </div>
@@ -103,6 +113,7 @@ const DocketRecord = ({ caseDetail, entries, options }) => {
                   <RenderPractitioner
                     contactPrimary={caseDetail.contactPrimary}
                     contactSecondary={caseDetail.contactSecondary}
+                    countryTypes={countryTypes}
                     key={practitioner.barNumber}
                     practitioner={practitioner}
                   />
@@ -120,6 +131,7 @@ const DocketRecord = ({ caseDetail, entries, options }) => {
             {caseDetail.irsPractitioners.map(practitioner => {
               return (
                 <RenderPractitioner
+                  countryTypes={countryTypes}
                   key={practitioner.barNumber}
                   practitioner={practitioner}
                 />
@@ -158,7 +170,7 @@ const DocketRecord = ({ caseDetail, entries, options }) => {
                 <tr key={index}>
                   <td>{index}</td>
                   <td>{record.createdAtFormatted || ''}</td>
-                  <td>{(document && document.eventCode) || ''}</td>
+                  <td>{record.eventCode || ''}</td>
                   <td>
                     <strong>{record.description}</strong>{' '}
                     {record.filingsAndProceedings &&

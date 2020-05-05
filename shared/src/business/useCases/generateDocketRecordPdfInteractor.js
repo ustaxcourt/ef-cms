@@ -1,5 +1,4 @@
 const { Case } = require('../entities/cases/Case');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 
 /**

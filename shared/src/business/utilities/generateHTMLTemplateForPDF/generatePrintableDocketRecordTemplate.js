@@ -1,3 +1,5 @@
+const { ContactFactory } = require('../../entities/contacts/ContactFactory');
+
 const React = require('react');
 const ReactDOM = require('react-dom/server');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
@@ -32,6 +34,7 @@ const generatePrintableDocketRecordTemplate = async ({
   const reactDocketRecordTemplate = ReactDOM.renderToString(
     React.createElement(DocketRecord, {
       caseDetail,
+      countryTypes: ContactFactory.COUNTRY_TYPES,
       entries,
       options: {
         caseCaptionExtension,
