@@ -7,7 +7,7 @@ const {
 } = require('../useCases/generatePdfFromHtmlInteractor');
 const { getChromiumBrowser } = require('./getChromiumBrowser');
 
-const { changeOfAddress } = require('./documentGenerators');
+const { changeOfAddress, docketRecord } = require('./documentGenerators');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -21,7 +21,7 @@ describe('documentGenerators', () => {
   };
 
   beforeAll(() => {
-    if (!process.env.CIRCLE_SHA1) {
+    if (process.env.PDF_OUTPUT) {
       applicationContext.getChromiumBrowser.mockImplementation(
         getChromiumBrowser,
       );
@@ -75,8 +75,99 @@ describe('documentGenerators', () => {
       });
 
       // Do not write PDF when running on CircleCI
-      if (!process.env.CIRCLE_SHA1) {
+      if (process.env.PDF_OUTPUT) {
         writePdfFile('Change_Of_Address', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('docketRecord', () => {
+    it('Generates a Printable Docket Record document', async () => {
+      const pdf = await docketRecord({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Practitioner(s)',
+          caseDetail: {
+            contactPrimary: {
+              address1: 'Address 1',
+              address2: 'Address 2',
+              address3: 'Address 3',
+              city: 'City',
+              country: 'USA',
+              name: 'Test Petitioner',
+              phone: '123-124-1234',
+              postalCode: '12345',
+              state: 'STATE',
+            },
+            irsPractitioners: [
+              {
+                barNumber: 'PT20002',
+                contact: {
+                  address1: 'Address 1',
+                  address2: 'Address 2',
+                  address3: 'Address 3',
+                  city: 'City',
+                  country: 'USA',
+                  phone: '234-123-4567',
+                  postalCode: '12345',
+                  state: 'STATE',
+                },
+                name: 'Test IRS Practitioner',
+              },
+            ],
+            privatePractitioners: [
+              {
+                barNumber: 'PT20001',
+                contact: {
+                  address1: 'Address 1',
+                  address2: 'Address 2',
+                  address3: 'Address 3',
+                  city: 'City',
+                  country: 'USA',
+                  phone: '234-123-4567',
+                  postalCode: '12345',
+                  state: 'STATE',
+                },
+                formattedName: 'Test Private Practitioner (PT20001)',
+                name: 'Test Private Practitioner',
+              },
+            ],
+          },
+          caseTitle: 'Test Petitioner',
+          docketNumber: '123-45',
+          docketNumberWithSuffix: '123-45S',
+          entries: [
+            {
+              document: {
+                filedBy: 'Test Filer',
+                isNotServedCourtIssuedDocument: false,
+                isStatusServed: true,
+                servedAtFormatted: '02/02/20',
+                servedPartiesCode: 'B',
+              },
+              index: 1,
+              record: {
+                action: 'Axun',
+                createdAtFormatted: '01/01/20',
+                description: 'Test Description',
+                eventCode: 'T',
+                filingsAndProceedings: 'Test Filings And Proceedings',
+              },
+            },
+          ],
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Docket_Record', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 
