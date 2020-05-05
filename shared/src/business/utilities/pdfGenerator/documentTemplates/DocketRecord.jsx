@@ -83,6 +83,7 @@ const DocketRecord = ({ caseDetail, countryTypes, entries, options }) => {
         caseCaptionExtension={options.caseCaptionExtension}
         caseTitle={options.caseTitle}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
+        h3="Printable Docket Record"
       />
 
       <div className="party-info" id="petitioner-contacts">

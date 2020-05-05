@@ -60,7 +60,7 @@ describe('documentGenerators', () => {
       const pdf = await changeOfAddress({
         applicationContext,
         content: {
-          caseCaptionExtension: 'Practitioner(s)',
+          caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Test Petitioner',
           docketNumber: '123-45',
           docketNumberWithSuffix: '123-45S',
@@ -93,7 +93,7 @@ describe('documentGenerators', () => {
       const pdf = await docketRecord({
         applicationContext,
         data: {
-          caseCaptionExtension: 'Practitioner(s)',
+          caseCaptionExtension: 'Petitioner(s)',
           caseDetail: {
             contactPrimary: {
               address1: 'Address 1',
@@ -122,6 +122,7 @@ describe('documentGenerators', () => {
                 name: 'Test IRS Practitioner',
               },
             ],
+            partyType: 'Petitioner',
             privatePractitioners: [
               {
                 barNumber: 'PT20001',
