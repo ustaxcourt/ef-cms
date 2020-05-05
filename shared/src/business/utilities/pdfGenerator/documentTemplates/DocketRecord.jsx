@@ -9,7 +9,7 @@ const RenderAddress = ({ contact, countryTypes }) => {
 
   return (
     <>
-      {contact.inCareOf && <div>{contact.inCareOf}</div>}
+      {contact.inCareOf && <div>c/o {contact.inCareOf}</div>}
       {contact.title && <div>{contact.title}</div>}
       {contact.address1 && <div>{contact.address1}</div>}
       {contact.address2 && <div>{contact.address2}</div>}
@@ -54,7 +54,7 @@ const RenderPractitioner = ({
 
   return (
     <div className="party-details">
-      <p>{practitioner.formattedName}</p>
+      <p>{practitioner.formattedName || practitioner.name}</p>
       <RenderAddress
         contact={{
           ...practitioner.contact,
@@ -64,12 +64,12 @@ const RenderPractitioner = ({
       />
 
       {(showRepresentingPrimary || showRepresentingSecondary) && (
-        <p>
+        <div className="extra-margin-top">
           <strong>Representing</strong>
           <br />
           {showRepresentingPrimary && <div>{contactPrimary.name}</div>}
           {showRepresentingSecondary && <div>{contactSecondary.name}</div>}
-        </p>
+        </div>
       )}
     </div>
   );
@@ -85,7 +85,7 @@ const DocketRecord = ({ caseDetail, countryTypes, entries, options }) => {
         docketNumberWithSuffix={options.docketNumberWithSuffix}
       />
 
-      <div className="party-info">
+      <div className="party-info" id="petitioner-contacts">
         <div className="party-info-header">{caseDetail.partyType}</div>
         <div className="party-info-content">
           <RenderContact
@@ -104,7 +104,7 @@ const DocketRecord = ({ caseDetail, countryTypes, entries, options }) => {
       </div>
 
       {caseDetail.privatePractitioners.length > 0 && (
-        <div className="party-info">
+        <div className="party-info" id="private-practitioner-contacts">
           <div className="party-info-header">Petitioner Counsel</div>
           <div className="party-info-content">
             {caseDetail.privatePractitioners.map(practitioner => {
@@ -125,7 +125,7 @@ const DocketRecord = ({ caseDetail, countryTypes, entries, options }) => {
       )}
 
       {caseDetail.irsPractitioners.length > 0 && (
-        <div className="party-info">
+        <div className="party-info" id="irs-practitioner-contacts">
           <div className="party-info-header">Respondent Counsel</div>
           <div className="party-info-content">
             {caseDetail.irsPractitioners.map(practitioner => {
