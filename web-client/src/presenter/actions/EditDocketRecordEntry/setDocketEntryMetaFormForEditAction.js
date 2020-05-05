@@ -53,7 +53,6 @@ export const setDocketEntryMetaFormForEditAction = ({
       documentDetail.servedPartiesCode = docketRecordEntry.servedPartiesCode;
     } else {
       if (
-        documentDetail &&
         !!documentDetail.servedAt &&
         documentDetail.servedParties &&
         documentDetail.servedParties.length > 0
@@ -70,15 +69,14 @@ export const setDocketEntryMetaFormForEditAction = ({
       ...documentDetail,
       lodged: !!documentDetail.lodged,
       ...deconstructDateWrapper(
-        (documentDetail && documentDetail.filingDate) ||
-          docketRecordEntry.filingDate,
+        documentDetail.filingDate || docketRecordEntry.filingDate,
         'filingDate',
       ),
       ...deconstructDateWrapper(
-        documentDetail && documentDetail.certificateOfServiceDate,
+        documentDetail.certificateOfServiceDate,
         'certificateOfService',
       ),
-      ...deconstructDateWrapper(documentDetail && documentDetail.date),
+      ...deconstructDateWrapper(documentDetail.date),
     });
 
     // TODO: add to unit test
