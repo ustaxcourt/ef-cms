@@ -480,10 +480,22 @@ joiValidationDecorator(
       .description(
         'A secondary date associated with the document, typically related to time-restricted availability.',
       ),
-    // TODO: What's the difference between servedAt and serviceDate? (certificate of service date)
-    servedAt: joi.date().iso().optional(),
-    servedParties: joi.array().optional(),
-    serviceDate: joi.date().iso().max('now').optional().allow(null),
+    servedAt: joi
+      .date()
+      .iso()
+      .optional()
+      .description('When the document is served on the parties.'),
+    servedParties: joi
+      .array()
+      .items({ email: joi.string().required(), name: joi.string().required() })
+      .optional(),
+    serviceDate: joi
+      .date()
+      .iso()
+      .max('now')
+      .optional()
+      .allow(null)
+      .description('Certificate of service date.'),
     serviceStamp: joi.string().optional(),
     signedAt: joi.date().iso().optional().allow(null),
     signedByUserId: joi.string().optional().allow(null),
@@ -511,7 +523,6 @@ Document.prototype.archive = function () {
 };
 
 Document.prototype.setAsServed = function (servedParties = null) {
-  this.status = 'served';
   this.servedAt = createISODateString();
   this.draftState = null;
 
