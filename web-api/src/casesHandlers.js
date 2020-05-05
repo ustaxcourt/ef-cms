@@ -13,4 +13,5 @@ module.exports = {
     .saveCaseDetailInternalEditLambda,
   serveCaseToIrsLambda: require('./cases/serveCaseToIrsLambda')
     .serveCaseToIrsLambda,
+  timeoutLambda: require('./cases/timeoutLambda'),
 };

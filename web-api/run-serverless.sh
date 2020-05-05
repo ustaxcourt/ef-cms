@@ -46,6 +46,8 @@ else
   NEW_COLOR='green'
 fi
 
+NEW_COLOR='blue'
+
 echo "new color: ${NEW_COLOR}"
 
 set -- \
