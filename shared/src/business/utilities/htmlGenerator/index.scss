@@ -27,8 +27,8 @@ p.heading-address {
 }
 
 h3 {
-  margin-top: 40px;
-  margin-bottom: 30px;
+  margin-top: 30px;
+  margin-bottom: 20px;
   font-family: 'nimbus_roman', serif;
   font-size: 14px;
   text-align: center;
@@ -251,7 +251,7 @@ th {
   // TODO: These are basically cards, and could be refactored for more reusability
   .party-info {
     border: 1px solid #ccc;
-    margin: 15px 0 30px 0;
+    margin: 12px 0 12px 0;
   }
 
   .party-info-header {
