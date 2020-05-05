@@ -16,7 +16,7 @@ const RenderAddress = ({ contact, countryTypes }) => {
       {contact.address3 && <div>{contact.address3}</div>}
       <div>
         {contact.city && <span>{contact.city}, </span>}
-        {contact.state && <span>{contact.state}, </span>}
+        {contact.state && <span>{contact.state} </span>}
         {contact.postalCode && <span>{contact.postalCode}</span>}
       </div>
       {isInternational && <span>{contact.country}</span>}
