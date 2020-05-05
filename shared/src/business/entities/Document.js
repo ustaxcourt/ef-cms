@@ -365,8 +365,8 @@ joiValidationDecorator(
   Document,
   joi.object().keys({
     addToCoversheet: joi.boolean().optional(),
-    additionalInfo: joi.string().optional(),
-    additionalInfo2: joi.string().optional(),
+    additionalInfo: joi.string().max(250).optional(),
+    additionalInfo2: joi.string().max(250).optional(),
     archived: joi
       .boolean()
       .optional()
@@ -375,6 +375,9 @@ joiValidationDecorator(
       ),
     caseId: joi
       .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
       .optional()
       .description('Unique ID of the associated Case.'),
     certificateOfService: joi.boolean().optional(),
@@ -415,6 +418,7 @@ joiValidationDecorator(
       .description('ID of the associated PDF document in the S3 bucket.'),
     documentTitle: joi
       .string()
+      .max(250)
       .optional()
       .description('The title of this document.'),
     documentType: joi
@@ -424,19 +428,20 @@ joiValidationDecorator(
       .description('The type of this document.'),
     draftState: joi.object().allow(null).optional(),
     entityName: joi.string().valid('Document').required(),
-    eventCode: joi.string().optional(),
-    filedBy: joi.string().allow('').optional(),
+    eventCode: joi.string().optional(), // TODO: add enum
+    filedBy: joi.string().max(250).allow('').optional(),
     filingDate: joiStrictTimestamp
       .max('now')
       .required()
       .description('Date that this Document was filed.'),
-    freeText: joi.string().optional(),
-    freeText2: joi.string().optional(),
+    freeText: joi.string().max(250).optional(),
+    freeText2: joi.string().max(250).optional(),
     hasSupportingDocuments: joi.boolean().optional(),
     isFileAttached: joi.boolean().optional(),
     isPaper: joi.boolean().optional(),
     judge: joi
       .string()
+      .max(50)
       .allow(null)
       .optional()
       .description('The judge associated with the document.'),
@@ -447,8 +452,8 @@ joiValidationDecorator(
         'A lodged document is awaiting action by the judge to enact or refuse.',
       ),
     numberOfPages: joi.number().optional().allow(null),
-    objections: joi.string().optional(),
-    ordinalValue: joi.string().optional(),
+    objections: joi.string().max(50).optional(),
+    ordinalValue: joi.string().max(50).optional(),
     partyIrsPractitioner: joi.boolean().optional(),
     partyPrimary: joi
       .boolean()
@@ -462,14 +467,14 @@ joiValidationDecorator(
     previousDocument: joi.object().optional(),
     privatePractitioners: joi
       .array()
-      .items({ name: joi.string().required() })
+      .items({ name: joi.string().max(250).required() })
       .optional()
       .description(
         'Practitioner names to be used to compose the filedBy text.',
       ),
-    processingStatus: joi.string().optional(),
+    processingStatus: joi.string().max(50).optional(),
     qcAt: joiStrictTimestamp.optional(),
-    qcByUserId: joi.string().optional().allow(null),
+    qcByUserId: joi.string().max(50).optional().allow(null),
     receivedAt: joiStrictTimestamp.optional(),
     relationship: joi
       .string()
@@ -489,19 +494,19 @@ joiValidationDecorator(
       .description('When the document is served on the parties.'),
     servedParties: joi
       .array()
-      .items({ name: joi.string().required() })
+      .items({ name: joi.string().max(250).required() })
       .optional(),
     serviceDate: joiStrictTimestamp
       .max('now')
       .optional()
       .allow(null)
       .description('Certificate of service date.'),
-    serviceStamp: joi.string().optional(),
+    serviceStamp: joi.string().max(50).optional(),
     signedAt: joiStrictTimestamp.optional().allow(null),
-    signedByUserId: joi.string().optional().allow(null),
-    signedJudgeName: joi.string().optional().allow(null),
+    signedByUserId: joi.string().max(50).optional().allow(null),
+    signedJudgeName: joi.string().max(50).optional().allow(null),
     supportingDocument: joi.string().optional().allow(null),
-    userId: joi.string().required(),
+    userId: joi.string().max(50).required(),
     workItems: joi.array().optional(),
   }),
 );
