@@ -160,7 +160,12 @@ const validationRules = {
   role: joi.alternatives().conditional('admissionsStatus', {
     is: joi.valid('Active'),
     otherwise: joi.string().valid(User.ROLES.inactivePractitioner).required(),
-    then: joi.string().valid(omit(User.ROLES, User.ROLES.inactivePractitioner)),
+    then: joi
+      .string()
+      .valid(
+        ...Object.values(omit(User.ROLES, User.ROLES.inactivePractitioner)),
+      )
+      .required(),
   }),
   suffix: joi
     .string()
