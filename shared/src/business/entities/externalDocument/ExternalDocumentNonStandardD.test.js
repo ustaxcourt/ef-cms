@@ -1,4 +1,7 @@
-const moment = require('moment');
+const {
+  calculateISODate,
+  createISODateString,
+} = require('../../utilities/DateHandler');
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
@@ -19,7 +22,7 @@ describe('ExternalDocumentNonStandardD', () => {
     });
 
     it('should have error message for future date', () => {
-      const serviceDate = moment().add(1, 'days').format();
+      const serviceDate = calculateISODate({ howMuch: 1, unit: 'days' });
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',
@@ -34,7 +37,7 @@ describe('ExternalDocumentNonStandardD', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const serviceDate = moment().format();
+      const serviceDate = createISODateString();
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',

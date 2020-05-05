@@ -37,19 +37,20 @@ describe('updateCourtIssuedOrderInteractor', () => {
     documents: [
       {
         docketNumber: '45678-18',
+        documentContentsId: '442f46fd-727b-485c-8998-a0138593cebe',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         userId: 'irsPractitioner',
       },
       {
         docketNumber: '45678-18',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentId: 'a75e4cc8-deed-42d0-b7b0-3846004fe3f9',
         documentType: 'Answer',
         userId: 'irsPractitioner',
       },
       {
         docketNumber: '45678-18',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentId: 'd3cc11ab-bbee-4d09-bc66-da267f3cfd07',
         documentType: 'Answer',
         userId: 'irsPractitioner',
       },
@@ -96,6 +97,30 @@ describe('updateCourtIssuedOrderInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
+  it('should throw an error if document is not found', async () => {
+    mockUser = new User({
+      name: 'Olivia Jade',
+      role: User.ROLES.petitionsClerk,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+      name: 'bob',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    await expect(
+      updateCourtIssuedOrderInteractor({
+        applicationContext,
+        documentIdToEdit: '986fece3-6325-4418-bb28-a7095e6707b4',
+        documentMetadata: {
+          caseId: caseRecord.caseId,
+          documentType: 'Order to Show Cause',
+        },
+      }),
+    ).rejects.toThrow('Document not found');
+  });
+
   it('update existing document within case', async () => {
     mockUser = new User({
       name: 'Olivia Jade',
@@ -103,25 +128,91 @@ describe('updateCourtIssuedOrderInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    let error;
-    try {
-      applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
-        name: 'bob',
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      });
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+      name: 'bob',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
 
-      await updateCourtIssuedOrderInteractor({
-        applicationContext,
-        documentMetadata: {
-          caseId: caseRecord.caseId,
-          documentType: 'Order to Show Cause',
+    await updateCourtIssuedOrderInteractor({
+      applicationContext,
+      documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        documentType: 'Order to Show Cause',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents.length,
+    ).toEqual(3);
+  });
+
+  it('stores documentContents in S3 if present', async () => {
+    mockUser = new User({
+      name: 'Olivia Jade',
+      role: User.ROLES.petitionsClerk,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+      name: 'bob',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    await updateCourtIssuedOrderInteractor({
+      applicationContext,
+      documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        documentContents: 'the contents!',
+        documentType: 'Order to Show Cause',
+        draftState: {
+          documentContents: 'the contents!',
+          richText: '<b>the contents!</b>',
         },
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
+        richText: '<b>the contents!</b>',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents[2].documentContents,
+    ).toBeUndefined();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents[2].draftState,
+    ).toBeUndefined();
+  });
+
+  it('does not update non-editable fields on document', async () => {
+    mockUser = new User({
+      name: 'Olivia Jade',
+      role: User.ROLES.petitionsClerk,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+      name: 'bob',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    await updateCourtIssuedOrderInteractor({
+      applicationContext,
+      documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        documentType: 'Order to Show Cause',
+        judge: 'Judge Judgy',
+      },
+    });
+
     expect(
       applicationContext.getPersistenceGateway().getCaseByCaseId,
     ).toBeCalled();
