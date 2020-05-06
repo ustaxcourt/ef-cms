@@ -1,11 +1,7 @@
 import { Accordion, AccordionItem } from '../ustc-ui/Accordion/Accordion';
 import { Button } from '../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { MAX_FILE_SIZE_MB } from '../../../shared/src/persistence/s3/getUploadPolicy';
 import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
 import React from 'react';
-import howToMergePDFs from '../pdfs/how-to-merge-pdfs.pdf';
-import paperclipSlashIcon from '../images/paperclip-no-icon.svg';
 
 export const BeforeStartingCase = () => (
   <>
@@ -91,7 +87,7 @@ export const BeforeStartingCase = () => (
                 <span className="usa-hint">
                   *This is the only document that should contain your Social
                   Security Number (SSN), Taxpayer Identification Number (TIN),
-                  or Employer Identification Number (EIN).{' '}
+                  or Employer Identification  Number (EIN).{' '}
                   <strong>Do not include</strong> your SSN, TIN, or EIN on any
                   other document you file with the Court.
                 </span>
@@ -130,7 +126,7 @@ export const BeforeStartingCase = () => (
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  Download Petiton form (T.C. Form 2)
+                  Download Petition form (T.C. Form 2)
                 </Button>
                 <br />
                 <span className="usa-hint">
@@ -147,18 +143,18 @@ export const BeforeStartingCase = () => (
               </p>
               <p className="margin-top-0">
                 Scan your Petition and IRS notice into one Petition PDF (max
-                file size of 250MB) or combine them digitally. ({' '}
+                file size of 250MB) or combine them digitally.
                 <Button
                   link
                   className="usa-link--external"
                   href="https://ui-dev.ustc-case-mgmt.flexion.us/how-to-merge-pdfs.8733e415.pdf"
                   icon="file-pdf"
                   iconColor="blue"
-                  overrideMargin="margin-right-1"
+                  overrideMargin="margin-right-1 margin-left-1"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  Learn more about how to merge files into one PDF.)
+                  Learn more about how to merge files into one PDF.
                 </Button>
                 <br />
                 <span className="usa-hint">
@@ -175,8 +171,8 @@ export const BeforeStartingCase = () => (
               iconClassName="bullet-icon"
               iconSize="lg"
               iconTypes={['far', 'user']}
-              key="If You’re Filing Jointly with a Spouse, for Someone Else or for a Business..."
-              title="If You’re Filing Jointly with a Spouse, for Someone Else or for a Business..."
+              key="If You’re Filing Jointly with a Spouse, for Someone Else or for a Business …"
+              title="If You’re Filing Jointly with a Spouse, for Someone Else or for a Business …"
             >
               <p className="label">Joint Petition With A Spouse</p>
               <p>
@@ -221,7 +217,7 @@ export const BeforeStartingCase = () => (
           </Accordion>
           <p>
             Next you’ll continue to follow the steps to upload your documents
-            and fill in the requested information that will create your case.{' '}
+            and fill in the requested information that will create your case.
           </p>
         </div>
       </div>
