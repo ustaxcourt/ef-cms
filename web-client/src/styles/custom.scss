@@ -594,12 +594,12 @@ select[disabled] {
   }
 
   .caseItem__icon {
-    position: absolute;
     top: 0;
     display: inline-block;
-    width: 75px;
-    height: 75px;
-    padding: 20px;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    margin-right: 10px;
     background-color: color($theme-color-primary-dark);
     border-radius: 55px;
 
@@ -621,9 +621,10 @@ select[disabled] {
     }
 
     @media only screen and (min-width: $medium-screen) {
-      width: 75px;
-      height: 75px;
-      padding: 20px;
+      width: 40px;
+      height: 40px;
+      padding: 8px;
+      margin-right: 10px;
     }
   }
 

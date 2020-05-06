@@ -34,6 +34,10 @@ export const BeforeStartingCase = () => (
         <div className="grid-row grid-gap">
           <Accordion headingLevel="3">
             <AccordionItem
+              displayIcon="true"
+              iconClassName="bullet-icon"
+              iconSize="lg"
+              iconTypes={['far', 'user']}
               key="Check the Deadline for Filing"
               title="Check the Deadline for Filing"
             >
