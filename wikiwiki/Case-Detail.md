@@ -1,3 +1,5 @@
+[Return to Directory](wikiwiki/README.md)
+
 ## Case Header
 **Docket number**
 * Do not display leading zeros in docket number or URL
@@ -42,7 +44,7 @@
 
 #### Petition Details
 * Docket Clerks / Clerk of the Court role is able to edit petition details from the Case Detail screen
-* Docket Clerks / Clerk of the Court role is able to seal a case (See [Sealed Cases](Sealed-Cases.md)
+* Docket Clerks / Clerk of the Court role is able to seal a case (See [Sealed Cases](Sealed-Cases.md))
 
 #### Trial information
 * Displays the current trial status of the case:
