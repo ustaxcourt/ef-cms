@@ -138,6 +138,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.createdAt = rawDocument.createdAt || createISODateString();
   this.date = rawDocument.date;
   this.docketNumber = rawDocument.docketNumber;
+  this.docketNumbers = rawDocument.docketNumbers;
   this.documentId = rawDocument.documentId;
   this.documentContentsId = rawDocument.documentContentsId;
   this.documentTitle = rawDocument.documentTitle;
@@ -167,6 +168,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.serviceDate = rawDocument.serviceDate;
   this.serviceStamp = rawDocument.serviceStamp;
   this.supportingDocument = rawDocument.supportingDocument;
+  this.trialLocation = rawDocument.trialLocation;
 
   // only share the userId with an external user if it is the logged in user
   if (applicationContext.getCurrentUser().userId === rawDocument.userId) {
@@ -399,6 +401,12 @@ joiValidationDecorator(
       .regex(DOCKET_NUMBER_MATCHER)
       .optional()
       .description('Docket Number of the associated Case in XXXXX-YY format.'),
+    docketNumbers: joi
+      .string()
+      .optional()
+      .description(
+        'Optional Docket Number text used when generating a fully concatenated document title.',
+      ),
     documentContentsId: joi
       .string()
       .uuid({
@@ -501,6 +509,13 @@ joiValidationDecorator(
     signedByUserId: joi.string().optional().allow(null),
     signedJudgeName: joi.string().optional().allow(null),
     supportingDocument: joi.string().optional().allow(null),
+    trialLocation: joi
+      .string()
+      .optional()
+      .allow(null)
+      .description(
+        'An optional trial location used when generating a fully concatenated document title.',
+      ),
     userId: joi.string().required(),
     workItems: joi.array().optional(),
   }),
