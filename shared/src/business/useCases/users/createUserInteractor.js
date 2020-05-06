@@ -27,14 +27,14 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
     user.role === User.ROLES.irsPractitione ||
     user.role === User.ROLES.inactivePractitioner
   ) {
-    const barNumber = await applicationContext.barNumberGenerator.createBarNumber(
-      {
+    const barNumber =
+      user.barNumber ||
+      (await applicationContext.barNumberGenerator.createBarNumber({
         applicationContext,
         initials:
           user.lastName.charAt(0).toUpperCase() +
           user.firstName.charAt(0).toUpperCase(),
-      },
-    );
+      }));
 
     userEntity = new Practitioner({
       ...user,
