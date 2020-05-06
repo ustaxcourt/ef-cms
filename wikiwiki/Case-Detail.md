@@ -1,4 +1,4 @@
-[Return to Directory](wikiwiki/README.md)
+[Return to Directory](/README.md)
 
 ## Case Header
 **Docket number**
