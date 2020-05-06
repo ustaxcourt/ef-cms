@@ -22,7 +22,7 @@ export const petitionsClerkEditsAnExistingCaseAndServesCase = test => {
   it('should save edits to an in progress case', async () => {
     await test.runSequence('submitPetitionFromPaperSequence');
 
-    expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+    expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
 
     await test.runSequence('saveSavedCaseForLaterSequence');
     await wait(500);
