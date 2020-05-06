@@ -21,7 +21,7 @@
     "autoprefixer": "^9.7.5",
     "aws-sdk": "^2.666.0",
     "aws-sdk-mock": "^5.0.0",
-    "aws-xray-sdk": "^3.0.1",
+    "aws-xray-sdk": "^2.5.0",
     "axios": "^0.19.2",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^25.5.1",
