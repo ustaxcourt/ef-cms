@@ -137,4 +137,28 @@ describe('reviewSavedPetitionHelper', () => {
       stinFile: undefined,
     });
   });
+
+  [
+    'orderForAmendedPetition',
+    'orderForAmendedPetitionAndFilingFee',
+    'orderForFilingFee',
+    'orderForOds',
+    'orderForRatification',
+    'orderToShowCause',
+    'noticeOfAttachments',
+  ].forEach(order => {
+    it(`verify hasOrders is true if ${order} is set`, () => {
+      const result = runCompute(reviewSavedPetitionHelper, {
+        state: {
+          form: {
+            [order]: true,
+          },
+        },
+      });
+
+      expect(result).toMatchObject({
+        hasOrders: true,
+      });
+    });
+  });
 });
