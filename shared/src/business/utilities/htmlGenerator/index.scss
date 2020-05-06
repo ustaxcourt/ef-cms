@@ -1,7 +1,7 @@
 body {
   margin: 35px 50px;
   font-family: 'nimbus_roman', serif;
-  font-size: 10px;
+  font-size: 14px;
 }
 
 h1 {
@@ -57,7 +57,7 @@ td {
   text-align: left;
   vertical-align: top;
   font-family: 'nimbus_roman', serif;
-  font-size: 10px;
+  font-size: 14px;
 }
 
 th {
@@ -105,6 +105,11 @@ th {
 
   #caption-extension, #caption-v, #caption-respondent {
     padding-left: 25%;
+    margin-top: 8px;
+  }
+
+  #caption-commissioner {
+    margin-top: 8px;
   }
 }
 
@@ -117,6 +122,7 @@ th {
   float: right;
   text-indent: 5px;
   font-size: 14px;
+  margin-top: 50px;
 
   .condensed {
     font-size: 12px;
@@ -137,7 +143,7 @@ th {
 }
 
 .info-box-header {
-  padding: 10px;
+  padding: 14px;
   border-bottom: 1px solid #ccc;
   background: #f0f0f0;
   font-weight: bold;
