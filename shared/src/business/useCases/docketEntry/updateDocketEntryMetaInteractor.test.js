@@ -18,7 +18,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentType: 'Order',
         filingDate: '2019-01-01T00:01:00.000Z',
         servedAt: '2019-01-01T00:01:00.000Z',
-        servedParties: ['Some Party'],
+        servedParties: [{ name: 'Some Party' }],
         userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
       },
       {
@@ -26,7 +26,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentType: 'Order',
         filingDate: '2019-01-01T00:01:00.000Z',
         servedAt: '2019-01-02T00:01:00.000Z',
-        servedParties: ['Some Other Party'],
+        servedParties: [{ name: 'Some Other Party' }],
         userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
       },
     ];
